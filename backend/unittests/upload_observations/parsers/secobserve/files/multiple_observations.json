@@ -1,0 +1,34 @@
+{
+    "format": "SecObserve",
+    "observations": [
+        {
+            "title": "title_1",
+            "description": "description_1",
+            "recommendation": "recommendation_1",
+            "parser_severity": "Critical",
+            "scanner_observation_id": "scanner_observation_id_1",
+            "vulnerability_id": "vulnerability_id_1",
+            "origin_component_name": "origin_component_name_1",
+            "origin_component_version": "origin_component_version_1",
+            "origin_component_name_version": "origin_component_name_version_1",
+            "origin_component_purl": "origin_component_purl_1",
+            "origin_component_cpe": "origin_component_cpe_1",
+            "origin_docker_image_name": "origin_docker_image_name_1",
+            "origin_docker_image_tag": "origin_docker_image_tag_1",
+            "origin_docker_image_name_tag": "origin_docker_image_name_tag_1",
+            "origin_endpoint_url": "origin_endpoint_url_1",
+            "origin_service_name": "origin_service_name_1",
+            "origin_source_file": "origin_source_file_1",
+            "origin_source_line_start": 10,
+            "origin_source_line_end": 11,
+            "cvss3_score": 1.1,
+            "cvss3_vector": "cvss3_vector_1",
+            "cwe": 1,
+            "scanner": "scanner_1"
+        },
+        {
+            "title": "title_2",
+            "reference": "https://example.com"
+        }
+    ]
+}

@@ -1,0 +1,77 @@
+dev_addr: 127.0.0.1:9000
+
+site_name: SecObserve
+
+theme:
+  name: material
+  logo: assets/images/secobserve_white_icon.svg
+  icon:
+    repo: fontawesome/brands/git-alt
+  features:
+    - navigation.top
+    - navigation.tabs
+    - navigation.tabs.top
+    - navigation.footer
+  custom_dir: docs/overrides
+  palette:
+    accent: light blue
+  font:
+    text: Poppins
+
+extra_css:
+  - assets/stylesheets/secobserve.css
+
+markdown_extensions:
+  - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.tilde
+  - attr_list
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
+repo_url: https://gitlab.maibornwolff.de/department-csec/secobserve/secobserve
+repo_name: department-csec/secobserve/secobserve
+
+copyright: Copyright &copy; 2023 MaibornWolff GmbH
+
+# Page tree
+nav:
+  - Home: index.md
+  - Getting started:
+    - About SecObserve: getting_started/about.md
+    - Architecture: getting_started/architecture.md
+    - Data model: getting_started/data_model.md
+    - Anatomy of an observation: getting_started/anatomy_of_an_observation.md
+    - Installation: getting_started/installation.md
+    - Configuration: getting_started/configuration.md
+    - Upgrading: getting_started/upgrading.md
+  - Usage:
+    - Import observations: usage/import_observations.md
+    - Assess observations: usage/assess_observations.md
+    - Rule engine: usage/rule_engine.md
+    - Supported scanners: usage/supported_scanners.md
+    - GitLab CI templates: usage/gitlab_ci_templates.md
+    - Security gates: usage/security_gates.md
+    - Users and permissions: usage/users_permissions.md
+  - Integrations:
+    - Source code repositories: integrations/source_code_repositories.md
+    - Notifications to Microsoft Teams: integrations/notifications.md
+    - Export of observations: integrations/observations_export.md
+    - CodeCharta: integrations/codecharta.md
+    - REST API: integrations/rest_api.md
+  # - Development:
+  #   - Overview: development/overview.md

@@ -1,0 +1,168 @@
+from enum import IntEnum
+
+
+class Roles(IntEnum):
+    Reader = 1
+    Upload = 2
+    Writer = 3
+    Maintainer = 4
+    Owner = 5
+
+    @classmethod
+    def has_value(cls, value):
+        try:
+            Roles(value)
+            return True
+        except ValueError:
+            return False
+
+
+class Permissions(IntEnum):
+    Product_View = 1101
+    Product_Edit = 1102
+    Product_Delete = 1103
+    Product_Create = 1104
+    Product_Import_Observations = 1105
+
+    Product_Member_View = 1201
+    Product_Member_Edit = 1202
+    Product_Member_Delete = 1203
+    Product_Member_Create = 1204
+
+    Product_Rule_View = 1301
+    Product_Rule_Edit = 1302
+    Product_Rule_Delete = 1303
+    Product_Rule_Create = 1304
+    Product_Rule_Apply = 1305
+
+    Observation_View = 2001
+    Observation_Edit = 2002
+    Observation_Delete = 2003
+    Observation_Create = 2004
+    Observation_Assessment = 2005
+
+    Api_Configuration_View = 3001
+    Api_Configuration_Edit = 3002
+    Api_Configuration_Delete = 3003
+    Api_Configuration_Create = 3004
+
+    @classmethod
+    def has_value(cls, value):
+        try:
+            Permissions(value)
+            return True
+        except ValueError:
+            return False
+
+    @classmethod
+    def get_observation_permissions(cls):
+        return {
+            Permissions.Observation_View,
+            Permissions.Observation_Edit,
+            Permissions.Observation_Delete,
+            Permissions.Observation_Create,
+            Permissions.Observation_Assessment,
+        }
+
+    @classmethod
+    def get_product_member_permissions(cls):
+        return {
+            Permissions.Product_Member_View,
+            Permissions.Product_Member_Edit,
+            Permissions.Product_Member_Delete,
+        }
+
+    @classmethod
+    def get_product_rule_permissions(cls):
+        return {
+            Permissions.Product_Rule_View,
+            Permissions.Product_Rule_Edit,
+            Permissions.Product_Rule_Delete,
+            Permissions.Product_Rule_Create,
+            Permissions.Product_Rule_Apply,
+        }
+
+    @classmethod
+    def get_api_configuration_permissions(cls):
+        return {
+            Permissions.Api_Configuration_View,
+            Permissions.Api_Configuration_Edit,
+            Permissions.Api_Configuration_Delete,
+            Permissions.Api_Configuration_Create,
+        }
+
+
+def get_roles_with_permissions():
+    return {
+        Roles.Reader: {
+            Permissions.Product_View,
+            Permissions.Product_Member_View,
+            Permissions.Product_Rule_View,
+            Permissions.Observation_View,
+            Permissions.Api_Configuration_View,
+        },
+        Roles.Upload: {
+            Permissions.Product_Import_Observations,
+        },
+        Roles.Writer: {
+            Permissions.Product_View,
+            Permissions.Product_Import_Observations,
+            Permissions.Product_Member_View,
+            Permissions.Product_Rule_View,
+            Permissions.Observation_View,
+            Permissions.Observation_Edit,
+            Permissions.Observation_Create,
+            Permissions.Observation_Assessment,
+            Permissions.Api_Configuration_View,
+        },
+        Roles.Maintainer: {
+            Permissions.Product_View,
+            Permissions.Product_Edit,
+            Permissions.Product_Import_Observations,
+            Permissions.Product_Member_View,
+            Permissions.Product_Member_Edit,
+            Permissions.Product_Member_Delete,
+            Permissions.Product_Member_Create,
+            Permissions.Product_Rule_View,
+            Permissions.Product_Rule_Edit,
+            Permissions.Product_Rule_Delete,
+            Permissions.Product_Rule_Create,
+            Permissions.Product_Rule_Apply,
+            Permissions.Observation_View,
+            Permissions.Observation_Edit,
+            Permissions.Observation_Create,
+            Permissions.Observation_Assessment,
+            Permissions.Api_Configuration_View,
+            Permissions.Api_Configuration_Edit,
+            Permissions.Api_Configuration_Delete,
+            Permissions.Api_Configuration_Create,
+        },
+        Roles.Owner: {
+            Permissions.Product_View,
+            Permissions.Product_Edit,
+            Permissions.Product_Delete,
+            Permissions.Product_Import_Observations,
+            Permissions.Product_Member_View,
+            Permissions.Product_Member_Edit,
+            Permissions.Product_Member_Delete,
+            Permissions.Product_Member_Create,
+            Permissions.Product_Rule_View,
+            Permissions.Product_Rule_Edit,
+            Permissions.Product_Rule_Delete,
+            Permissions.Product_Rule_Create,
+            Permissions.Product_Rule_Apply,
+            Permissions.Observation_View,
+            Permissions.Observation_Edit,
+            Permissions.Observation_Create,
+            Permissions.Observation_Delete,
+            Permissions.Observation_Assessment,
+            Permissions.Api_Configuration_View,
+            Permissions.Api_Configuration_Edit,
+            Permissions.Api_Configuration_Delete,
+            Permissions.Api_Configuration_Create,
+        },
+    }
+
+
+def get_permissions_for_role(role: int) -> list[Permissions]:
+    return get_roles_with_permissions().get(role)

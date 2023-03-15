@@ -1,0 +1,174 @@
+from json import load, dumps
+from django.core.files.base import File
+
+from application.core.models import Observation, Parser
+from application.import_observations.parsers.base_parser import (
+    BaseParser,
+    BaseFileParser,
+)
+
+
+REFERENCES = {
+    "Access-Control-Allow-Origin": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#access-control-allow-origin",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin",
+    ],
+    "Cache-Control": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html#security-headers",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control",
+    ],
+    "Content-Security-Policy": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP",
+        "https://scotthelme.co.uk/content-security-policy-an-introduction/",
+        "https://scotthelme.co.uk/csp-cheat-sheet/",
+    ],
+    "Cross-Origin-Embedder-Policy": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#cross-origin-embedder-policy",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cross-Origin-Embedder-Policy",
+        "https://scotthelme.co.uk/coop-and-coep/",
+    ],
+    "Cross-Origin-Opener-Policy": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#cross-origin-opener-policy",
+        "https://cheatsheetseries.owasp.org/cheatsheets/XS_Leaks_Cheat_Sheet.html#cross-origin-opener-policy-coop",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cross-Origin-Opener-Policy",
+        "https://scotthelme.co.uk/coop-and-coep/",
+    ],
+    "Pragma": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Pragma",
+    ],
+    "Referrer-Policy": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#referrer-policy",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy",
+        "https://scotthelme.co.uk/a-new-security-header-referrer-policy/",
+    ],
+    "Server": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#server",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server",
+    ],
+    "Set-Cookie": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#set-cookie",
+        "https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html#cookies",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/set-cookie",
+        "https://scotthelme.co.uk/tough-cookies/",
+    ],
+    "Strict-Transport-Security": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Strict_Transport_Security_Cheat_Sheet.html",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security",
+        "https://scotthelme.co.uk/hsts-the-missing-link-in-tls/",
+        "https://scotthelme.co.uk/hsts-cheat-sheet/",
+    ],
+    "User-Agent": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent",
+    ],
+    "X-AspNet-Version": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#x-aspnet-version",
+    ],
+    "X-Content-Type-Options": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#x-content-type-options",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options",
+    ],
+    "X-Forwarded-For": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For",
+    ],
+    "X-Frame-Options": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#x-frame-options",
+        "https://cheatsheetseries.owasp.org/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html#x-frame-options-header-types",  # noqa: E501
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options",
+    ],
+    "X-Powered-By": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#x-powered-by",
+    ],
+    "X-XSS-Protection": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#x-xss-protection",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection",
+    ],
+}
+
+
+class DrHEADerParser(BaseParser, BaseFileParser):
+    @classmethod
+    def get_name(cls) -> str:
+        return "DrHeader"
+
+    @classmethod
+    def get_type(cls) -> str:
+        return Parser.TYPE_DAST
+
+    def check_format(self, file: File) -> tuple[bool, list[str], dict]:
+        try:
+            data = load(file)
+        except Exception:
+            return False, ["File is not valid JSON"], None
+
+        if not type(data) is list:
+            return False, ["File is not a DrHeader format, data is not a list"], None
+
+        if len(data) >= 1:
+            first_element = data[0]
+            if type(first_element) is not dict:
+                return (
+                    False,
+                    ["File is not a DrHeader format, element is not a dictionary"],
+                    None,
+                )
+            if not first_element.get("rule"):
+                return (
+                    False,
+                    [
+                        "Data is not a DrHeader format, element doesn't have a rule entry"
+                    ],
+                    None,
+                )
+
+        return True, [], data
+
+    def get_observations(self, data: list) -> list[Observation]:
+        observations = []
+
+        for drheader_observation in data:
+            rule = drheader_observation.get("rule")
+            message = drheader_observation.get("message")
+            severity = drheader_observation.get("severity", Observation.SEVERITY_UNKOWN)
+            value = drheader_observation.get("value")
+            expected = drheader_observation.get("expected")
+            delimiter = drheader_observation.get("delimiter")
+
+            if not rule:
+                title = "No rule name"
+            else:
+                title = "Header: " + rule
+
+            description = ""
+            if message:
+                description += message + "\n\n"
+            if value:
+                description += "**Value:** " + value + "\n\n"
+            if expected:
+                if type(expected) is list:
+                    if len(expected) == 1:
+                        description += "**Expected:** " + expected[0]
+                    elif delimiter:
+                        description += "**Expected:** "
+                        description += (delimiter + " ").join(expected)
+                    else:
+                        description += "**Expected:** \n* "
+                        description += "\n* ".join(expected)
+                else:
+                    description += "**Expected:** " + str(expected)
+
+            observation = Observation(
+                title=title, parser_severity=severity.title(), description=description
+            )
+
+            evidence = []
+            evidence.append("Result")
+            evidence.append(dumps(drheader_observation))
+            observation.unsaved_evidences.append(evidence)
+
+            references = REFERENCES.get(rule)
+            if references:
+                observation.unsaved_references = references
+
+            observations.append(observation)
+        return observations

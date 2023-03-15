@@ -1,0 +1,142 @@
+from datetime import timedelta
+
+from django.utils import timezone
+from django_filters import (
+    CharFilter,
+    FilterSet,
+    OrderingFilter,
+    ChoiceFilter,
+    NumberFilter,
+)
+from application.core.models import Observation, Product, Product_Member, Parser
+
+AGE_DAY = "Today"
+AGE_WEEK = "Past 7 days"
+AGE_MONTH = "Past 30 days"
+AGE_QUARTER = "Past 90 days"
+AGE_YEAR = "Past 365 days"
+
+AGE_CHOICES = [
+    (AGE_DAY, AGE_DAY),
+    (AGE_WEEK, AGE_WEEK),
+    (AGE_MONTH, AGE_MONTH),
+    (AGE_QUARTER, AGE_QUARTER),
+    (AGE_YEAR, AGE_YEAR),
+]
+
+
+class ProductFilter(FilterSet):
+    name = CharFilter(field_name="name", lookup_expr="icontains")
+
+    ordering = OrderingFilter(
+        # tuple-mapping retains order
+        fields=(("name", "name"), ("security_gate_passed", "security_gate_passed")),
+    )
+
+    class Meta:
+        model = Product
+        fields = ["name", "security_gate_passed"]
+
+
+class ProductMemberFilter(FilterSet):
+    product = NumberFilter(field_name="product")
+
+    ordering = OrderingFilter(
+        # tuple-mapping retains order
+        fields=(
+            ("user__full_name", "user_data.full_name"),
+            ("role", "role"),
+        ),
+    )
+
+    class Meta:
+        model = Product_Member
+        fields = ["product", "user", "role"]
+
+
+class ParserFilter(FilterSet):
+    name = CharFilter(field_name="name", lookup_expr="icontains")
+    type = ChoiceFilter(field_name="type", choices=Parser.TYPE_CHOICES)
+    source = ChoiceFilter(field_name="source", choices=Parser.SOURCE_CHOICES)
+
+    ordering = OrderingFilter(
+        # tuple-mapping retains order
+        fields=(("name", "name"), ("type", "type"), ("source", "source")),
+    )
+
+    class Meta:
+        model = Parser
+        fields = ["name", "type", "source"]
+
+
+class ObservationFilter(FilterSet):
+    title = CharFilter(field_name="title", lookup_expr="icontains")
+    origin_component_name_version = CharFilter(
+        field_name="origin_component_name_version", lookup_expr="icontains"
+    )
+    origin_docker_image_name_tag_short = CharFilter(
+        field_name="origin_docker_image_name_tag_short", lookup_expr="icontains"
+    )
+    origin_service_name = CharFilter(
+        field_name="origin_service_name", lookup_expr="icontains"
+    )
+    origin_endpoint_hostname = CharFilter(
+        field_name="origin_endpoint_hostname", lookup_expr="icontains"
+    )
+    origin_source_file = CharFilter(
+        field_name="origin_source_file", lookup_expr="icontains"
+    )
+    scanner = CharFilter(field_name="scanner", lookup_expr="icontains")
+
+    age = ChoiceFilter(field_name="age", method="get_age", choices=AGE_CHOICES)
+
+    ordering = OrderingFilter(
+        # tuple-mapping retains order
+        fields=(
+            ("product__name", "product_data.name"),
+            ("title", "title"),
+            ("numerical_severity", "current_severity"),
+            ("current_status", "current_status"),
+            ("origin_component_name_version", "origin_component_name_version"),
+            ("origin_docker_image_name_tag_short", "origin_docker_image_name_tag_short"),
+            ("origin_service_name", "origin_service_name"),
+            ("origin_endpoint_hostname", "origin_endpoint_hostname"),
+            ("origin_source_file", "origin_source_file"),
+            ("parser__name", "parser_data.name"),
+            ("parser__type", "parser_data.type"),
+            ("scanner", "scanner_name"),
+            ("last_observation_log", "last_observation_log"),
+        ),
+    )
+
+    class Meta:
+        model = Observation
+        fields = [
+            "product",
+            "title",
+            "current_severity",
+            "current_status",
+            "parser",
+            "scanner",
+        ]
+
+    def get_age(self, queryset, field_name, value):
+        if value == AGE_DAY:
+            days = 0
+        elif value == AGE_WEEK:
+            days = 7
+        elif value == AGE_MONTH:
+            days = 30
+        elif value == AGE_QUARTER:
+            days = 90
+        elif value == AGE_YEAR:
+            days = 365
+        else:
+            days = None
+
+        if days is not None:
+            today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+            time_threshold = today - timedelta(days=int(days))
+            return queryset.filter(last_observation_log__gte=time_threshold)
+        else:
+            return queryset

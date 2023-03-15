@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+python manage.py migrate
+
+coverage run --branch /app/manage.py test unittests
+coverage report --skip-empty --show-missing

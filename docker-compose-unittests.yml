@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: ./docker/backend/unittests/django/Dockerfile
+    image: secobserve_backend_unittests
+    environment:
+      # --- Admin user ---
+      ADMIN_USER: admin
+      ADMIN_PASSWORD: admin
+      ADMIN_EMAIL: admin@example.com
+      # --- Database ---
+      DATABASE_ENGINE: django.db.backends.sqlite3
+      DATABASE_HOST: dummy
+      DATABASE_PORT: 9999
+      DATABASE_DB: dummy
+      DATABASE_USER: dummy
+      DATABASE_PASSWORD: dummy
+      # --- Security ---
+      ALLOWED_HOSTS: localhost
+      CORS_ALLOWED_ORIGINS: http://localhost:3000
+      DJANGO_SECRET_KEY: NxYPEF5lNGgk3yonndjSbwP77uNJxOvfKTjF5aVBqsHktNlf1wfJHHvJ8iifk32r
+      FIELD_ENCRYPTION_KEY: DtlkqVb3wlaVdJK_BU-3mB4wwuuf8xx8YNInajiJ7GU=
+      # --- Azure AD ---
+      AAD_CLIENT_ID: dummy
+      AAD_TENANT_ID: dummy
+    command: /start

@@ -1,0 +1,44 @@
+# Import observations
+
+## Import from CI pipelines via the API
+
+The [GitLab CI templates](./gitlab_ci_templates.md) to run vulnerability checks automatically import the results into SecObserve via the API.
+
+## Import from the frontend
+
+Alternatively observations can be imported via the user interface. When showing a product, there are buttons to either upload a file or to import from an API:
+
+![Start import](../assets/images/screenshot_import_1.png)
+
+#### Upload of files
+
+![Upload of files](../assets/images/screenshot_import_2.png){ width="50%" style="display: block; margin: 0 auto" }
+
+A file and a respective parser for the file format need to be selected. Optional are attributes for the origin as Service, Docker image and Endpoint URL.
+
+#### API import
+
+![API import](../assets/images/screenshot_import_3.png){ width="50%" style="display: block; margin: 0 auto" }
+
+Before importing observations from an API, an API configuration needs to be created for the product. This API configuration specifies how to access the API (URL, API key, ...). Optional for the import are attributes for the origin as Service, Docker image and Endpoint URL.
+
+## Import algorithm
+
+The import algorithm has to decide, if an observation already exists and needs to be updated or it is new and needs to be created. But how does the import algorithm identifies an observation to make this decision? Two terms help to understand how that works:
+
+* **Identity hash**: The `identity hash` is a SHA256 hash code of the concatenation of the observation's title and all its origins. Two observations with the same `identity hash` are defined as identical.
+* **Vulnerability check**: An import for one product, with one parser and one file name resp. one API configuration is a so-called vulnerability check.
+
+A flowchart visualizes the import algorithm:
+
+```mermaid
+    flowchart TD
+    read(Read observations for a vulnerability check) --> all_observations{For all observations\nof this vulnerability check}
+    all_observations -- with observation --> identity{Identical observation\nin the same\nvulnerability check?}
+    subgraph Create or update
+    identity -- yes --> update(Update existing observation)
+    identity -- no --> create(Create new observation)
+    end
+    all_observations -- finished ----> resolved(Set status to `Resolved` for all untouched observations of this vulnerability check)
+
+```

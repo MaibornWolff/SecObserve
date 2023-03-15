@@ -1,0 +1,269 @@
+from unittest.mock import patch
+
+from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.test import APIClient
+
+from unittests.base_test_case import BaseTestCase
+
+
+class TestAuthentication(BaseTestCase):
+    def _check_not_authenticated(self, methods: list[str], url: str):
+
+        api_client = APIClient()
+
+        for method in methods:
+            if method.lower() == "delete":
+                response = api_client.delete(url)
+            elif method.lower() == "get":
+                response = api_client.get(url)
+            elif method.lower() == "patch":
+                response = api_client.patch(url)
+            elif method.lower() == "post":
+                response = api_client.post(url)
+            elif method.lower() == "put":
+                response = api_client.put(url)
+            else:
+                raise Exception(f"Unkown method: {method}")
+
+            self.assertEqual(401, response.status_code)
+
+    @patch(
+        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
+    )
+    def _check_api_token_not_authenticated(
+        self, methods: list[str], url: str, mock_authentication
+    ):
+        mock_authentication.side_effect = AuthenticationFailed(
+            "authentication failed message"
+        )
+
+        api_client = APIClient()
+
+        for method in methods:
+            if method.lower() == "delete":
+                response = api_client.delete(url)
+            elif method.lower() == "get":
+                response = api_client.get(url)
+            elif method.lower() == "patch":
+                response = api_client.patch(url)
+            elif method.lower() == "post":
+                response = api_client.post(url)
+            elif method.lower() == "put":
+                response = api_client.put(url)
+            else:
+                raise Exception(f"Unkown method: {method}")
+
+            self.assertEqual(401, response.status_code)
+            self.assertEqual(
+                "authentication failed message", response.data.get("message")
+            )
+            mock_authentication.assert_called_once()
+            mock_authentication.reset_mock()
+
+    @patch(
+        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
+    )
+    def _check_api_token_authenticated(
+        self, methods: list[str], url: str, mock_authentication
+    ):
+        mock_authentication.return_value = self.user_admin, None
+
+        api_client = APIClient()
+
+        for method in methods:
+            if method.lower() == "delete":
+                response = api_client.delete(url)
+            elif method.lower() == "get":
+                response = api_client.get(url)
+            elif method.lower() == "patch":
+                response = api_client.patch(url)
+            elif method.lower() == "post":
+                response = api_client.post(url)
+            elif method.lower() == "put":
+                response = api_client.put(url)
+            else:
+                raise Exception(f"Unkown method: {method}")
+
+            self.assertTrue(response.status_code in [200, 400, 404])
+            mock_authentication.assert_called_once()
+            mock_authentication.reset_mock()
+
+    @patch(
+        "application.access_control.services.jwt_authentication.JWTAuthentication.authenticate"
+    )
+    def _check_jwt_not_authenticated(
+        self, methods: list[str], url: str, mock_authentication
+    ):
+        mock_authentication.side_effect = AuthenticationFailed(
+            "authentication failed message"
+        )
+
+        api_client = APIClient()
+
+        for method in methods:
+            if method.lower() == "delete":
+                response = api_client.delete(url)
+            elif method.lower() == "get":
+                response = api_client.get(url)
+            elif method.lower() == "patch":
+                response = api_client.patch(url)
+            elif method.lower() == "post":
+                response = api_client.post(url)
+            elif method.lower() == "put":
+                response = api_client.put(url)
+            else:
+                raise Exception(f"Unkown method: {method}")
+
+            self.assertEqual(401, response.status_code)
+            self.assertEqual(
+                "authentication failed message", response.data.get("message")
+            )
+            mock_authentication.assert_called_once()
+            mock_authentication.reset_mock()
+
+    @patch(
+        "application.access_control.services.jwt_authentication.JWTAuthentication.authenticate"
+    )
+    def _check_jwt_authenticated(
+        self, methods: list[str], url: str, mock_authentication
+    ):
+        mock_authentication.return_value = self.user_admin, None
+
+        api_client = APIClient()
+
+        for method in methods:
+            if method.lower() == "delete":
+                response = api_client.delete(url)
+            elif method.lower() == "get":
+                response = api_client.get(url)
+            elif method.lower() == "patch":
+                response = api_client.patch(url)
+            elif method.lower() == "post":
+                response = api_client.post(url)
+            elif method.lower() == "put":
+                response = api_client.put(url)
+            else:
+                raise Exception(f"Unkown method: {method}")
+
+            self.assertTrue(response.status_code in [200, 400, 404])
+            mock_authentication.assert_called_once()
+            mock_authentication.reset_mock()
+
+    @patch("django_auth_adfs.rest_framework.AdfsAccessTokenAuthentication.authenticate")
+    def _check_adfs_not_authenticated(
+        self, methods: list[str], url: str, mock_authentication
+    ):
+        mock_authentication.side_effect = AuthenticationFailed(
+            "authentication failed message"
+        )
+
+        api_client = APIClient()
+
+        for method in methods:
+            if method.lower() == "delete":
+                response = api_client.delete(url)
+            elif method.lower() == "get":
+                response = api_client.get(url)
+            elif method.lower() == "patch":
+                response = api_client.patch(url)
+            elif method.lower() == "post":
+                response = api_client.post(url)
+            elif method.lower() == "put":
+                response = api_client.put(url)
+            else:
+                raise Exception(f"Unkown method: {method}")
+
+            self.assertEqual(401, response.status_code)
+            self.assertEqual(
+                "authentication failed message", response.data.get("message")
+            )
+            mock_authentication.assert_called_once()
+            mock_authentication.reset_mock()
+
+    @patch("django_auth_adfs.rest_framework.AdfsAccessTokenAuthentication.authenticate")
+    def _check_adfs_authenticated(
+        self, methods: list[str], url: str, mock_authentication
+    ):
+        mock_authentication.return_value = self.user_admin, None
+
+        api_client = APIClient()
+
+        for method in methods:
+            if method.lower() == "delete":
+                response = api_client.delete(url)
+            elif method.lower() == "get":
+                response = api_client.get(url)
+            elif method.lower() == "patch":
+                response = api_client.patch(url)
+            elif method.lower() == "post":
+                response = api_client.post(url)
+            elif method.lower() == "put":
+                response = api_client.put(url)
+            else:
+                raise Exception(f"Unkown method: {method}")
+
+            self.assertTrue(response.status_code in [200, 400, 404])
+            mock_authentication.assert_called_once()
+            mock_authentication.reset_mock()
+
+    def _check_authentication(self, methods: list[str], url: str):
+        self._check_not_authenticated(methods, url)
+        self._check_api_token_not_authenticated(methods, url)
+        self._check_api_token_authenticated(methods, url)
+        self._check_jwt_not_authenticated(methods, url)
+        self._check_jwt_authenticated(methods, url)
+        self._check_adfs_not_authenticated(methods, url)
+        self._check_adfs_authenticated(methods, url)
+
+    @patch("application.commons.services.global_request.get_current_user")
+    def test_authentication(self, mock_user):
+        mock_user.return_value = self.user_admin
+
+        self._check_authentication(["get", "post"], "/api/api_configurations/")
+        self._check_authentication(
+            ["delete", "get", "put", "patch"], "/api/api_configurations/1/"
+        )
+
+        self._check_authentication(["get", "post"], "/api/general_rules/")
+        self._check_authentication(
+            ["delete", "get", "put", "patch"], "/api/general_rules/1/"
+        )
+
+        self._check_authentication(["get"], "/api/metrics/severity_counts/")
+        self._check_authentication(["get"], "/api/metrics/status_counts/")
+
+        self._check_authentication(["get"], "/api/observations/")
+        self._check_authentication(
+            ["delete", "get", "put", "patch"], "/api/observations/1/"
+        )
+        self._check_authentication(["patch"], "/api/observations/1/assessment/")
+        self._check_authentication(["patch"], "/api/observations/1/remove_assessment/")
+
+        self._check_authentication(["get"], "/api/parsers/")
+        self._check_authentication(["get"], "/api/parsers/1/")
+
+        self._check_authentication(["get", "post"], "/api/product_members/")
+        self._check_authentication(
+            ["delete", "get", "put", "patch"], "/api/product_members/1/"
+        )
+
+        self._check_authentication(["get", "post"], "/api/product_rules/")
+        self._check_authentication(
+            ["delete", "get", "put", "patch"], "/api/product_rules/1/"
+        )
+
+        self._check_authentication(["get", "post"], "/api/products/")
+        self._check_authentication(
+            ["delete", "get", "put", "patch"], "/api/products/1/"
+        )
+        self._check_authentication(["put"], "/api/products/1/apply_rules/")
+
+        self._check_authentication(["get"], "/api/evidences/1/")
+
+        self._check_authentication(["get"], "/api/status/commit_id/")
+
+    def test_authentication_users(self):
+        self._check_authentication(["get"], "/api/users/me/")
+        self._check_authentication(["get"], "/api/users/")
+        self._check_authentication(["get"], "/api/users/1/")
+        self._check_authentication(["patch"], "/api/users/my_settings/")

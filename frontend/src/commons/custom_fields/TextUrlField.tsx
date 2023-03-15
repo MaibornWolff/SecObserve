@@ -1,0 +1,60 @@
+import LaunchIcon from "@mui/icons-material/Launch";
+import { useStyles } from "../../commons/layout/themes";
+
+interface TextUrlFieldProps {
+    text: string | number;
+    url: string;
+    label: string;
+}
+
+function is_valid_url(urlString: string): boolean {
+    const SAFE_URL_PATTERN =
+        /^(?:(?:https?|mailto|ftp|tel|file|sms):|[^&:/?#]*(?:[/?#]|$))/gi;
+
+    try {
+        return Boolean(new URL(urlString) && urlString.match(SAFE_URL_PATTERN));
+    } catch (e) {
+        return false;
+    }
+}
+
+const TextUrlField = (props: TextUrlFieldProps) => {
+    const { classes } = useStyles();
+
+    return (
+        <div>
+            {is_valid_url(props.url) && (
+                <a
+                    href={props.url} // nosemgrep: typescript.react.security.audit.react-href-var.react-href-var
+                    // nosemgrep because is_valid_url() sanitizes the url
+                    target="_blank"
+                    rel="noreferrer"
+                    className={classes.link}
+                    style={{
+                        fontSize: "0.875rem",
+                        fontFamily: "Roboto",
+                        lineHeight: 1.43,
+                    }}
+                >
+                    {props.text} &nbsp;
+                    <LaunchIcon sx={{ fontSize: "0.8rem" }} />
+                </a>
+            )}
+            {!is_valid_url(props.url) && (
+                <span
+                    style={{
+                        fontSize: "0.875rem",
+                        fontFamily: "Roboto",
+                        lineHeight: 1.43,
+                    }}
+                >
+                    {props.text}
+                </span>
+            )}
+        </div>
+    );
+};
+
+TextUrlField.defaultProps = { label: "" };
+
+export default TextUrlField;

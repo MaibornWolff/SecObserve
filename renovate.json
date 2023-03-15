@@ -1,0 +1,44 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "config:base"
+    ],
+    "baseBranches": [
+        "dev"
+    ],
+    "binarySource": "install",
+    "branchConcurrentLimit": 10,
+    "dependencyDashboard": true,
+    "dependencyDashboardApproval": false,
+    "labels": [
+        "dependencies"
+    ],
+    "lockFileMaintenance": {
+        "enabled": true
+    },
+    "rebaseWhen": "conflicted",
+    "pip_requirements": {
+        "fileMatch": [
+            "mkdocs_requirements.txt",
+            "backend/requirements/base.txt",
+            "backend/requirements/dev.txt",
+            "backend/requirements/prod.txt",
+            "\\.requirements$"
+        ]
+    },
+    "packageRules": [
+        {
+            "matchPackageNames": [
+                "django"
+            ],
+            "allowedVersions": "<4"
+        },
+        {
+            "matchPackageNames": [
+                "node"
+            ],
+            "allowedVersions": "<19"
+        }
+    ],
+    "prHourlyLimit": 10
+}

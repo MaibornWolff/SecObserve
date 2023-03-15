@@ -1,0 +1,5 @@
+-r base.txt
+
+coverage==6.5.0  # https://github.com/nedbat/coveragepy
+django-extensions==3.2.1  # https://github.com/django-extensions/django-extensions
+django-coverage-plugin==2.0.4  # https://github.com/nedbat/django_coverage_plugin
