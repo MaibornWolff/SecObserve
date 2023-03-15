@@ -1,0 +1,10 @@
+.vscode/settings.json
+node_modules
+docs/assets/images/.$secobserve_architecture.drawio.bkp
+docs/assets/images/.$secobserve_process.drawio.bkp
+docs/assets/images/.$secobserve_process.drawio.dtmp
+.scannerwork
+frontend/cypress/screenshots
+frontend/cypress/videos
+frontend/public/runtime-env.js
+frontend/.env
