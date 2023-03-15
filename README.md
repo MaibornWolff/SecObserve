@@ -25,7 +25,7 @@ This repository contains the vulnerability management system SecObserve. The Git
 
 ## Documentation
 
-The full documentation how to install and use Secobserve can be found here: [https://department-csec.maibornwolff.io/secobserve/secobserve/](https://department-csec.maibornwolff.io/secobserve/secobserve/)
+The full documentation how to install and use Secobserve can be found here: [https://maibornwolff.github.io/SecObserve/](https://maibornwolff.github.io/SecObserve/)
 
 ## Code of Conduct
 
