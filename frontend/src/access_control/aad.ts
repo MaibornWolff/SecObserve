@@ -7,7 +7,7 @@ const config = {
         clientId: window.__RUNTIME_CONFIG__.AAD_CLIENT_ID as string,
         redirectUri: window.__RUNTIME_CONFIG__.AAD_REDIRECT_URI,
         postLogoutRedirectUri:
-        window.__RUNTIME_CONFIG__.AAD_POST_LOGOUT_REDIRECT_URI,
+            window.__RUNTIME_CONFIG__.AAD_POST_LOGOUT_REDIRECT_URI,
         navigateToLoginRequestUrl: true,
     },
     cache: {
