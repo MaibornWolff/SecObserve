@@ -14,8 +14,7 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v3
-        with:
-          ref: v${{ github.event.inputs.release }}
+      - run: git checkout tags/v${{ github.event.inputs.release }}
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v2
