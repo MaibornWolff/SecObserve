@@ -14,11 +14,11 @@ jobs:
         with:
           python-version: 3.11
       - name: Install dependencies
+        working-directory: ./backend
         run: |
-          working-directory: ./backend
           python -m pip install --upgrade pip
           pip install flake8
       - name: Lint with flake8
+        working-directory: ./backend
         run: |
-          working-directory: ./backend
           flake8 . --count --show-source --statistics
