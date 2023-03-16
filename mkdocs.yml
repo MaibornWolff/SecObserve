@@ -64,7 +64,7 @@ nav:
     - Assess observations: usage/assess_observations.md
     - Rule engine: usage/rule_engine.md
     - Supported scanners: usage/supported_scanners.md
-    - GitLab CI templates: usage/gitlab_ci_templates.md
+    # - GitLab CI templates: usage/gitlab_ci_templates.md
     - Security gates: usage/security_gates.md
     - Users and permissions: usage/users_permissions.md
   - Integrations:
