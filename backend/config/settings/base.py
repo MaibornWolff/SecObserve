@@ -187,8 +187,10 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 
+
 def whitenoise_security_headers(headers, path, url):
     headers["Permissions-Policy"] = "geolocation=() camera=(), microphone=()"
+
 
 # https://whitenoise.evans.io/en/stable/django.html#WHITENOISE_ADD_HEADERS_FUNCTION
 WHITENOISE_ADD_HEADERS_FUNCTION = whitenoise_security_headers
@@ -374,7 +376,7 @@ else:
         "application.access_control.services.jwt_authentication.JWTAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     )
-    
+
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": DEFAULT_AUTHENTICATION_CLASSES,
     "DEFAULT_RENDERER_CLASSES": [

@@ -66,7 +66,7 @@ const MetricStatus = (props: MetricStatusProps) => {
         setLoading(true);
 
         let url =
-        window.__RUNTIME_CONFIG__.API_BASE_URL + "/metrics/status_counts/";
+            window.__RUNTIME_CONFIG__.API_BASE_URL + "/metrics/status_counts/";
         if (props.product_id) {
             url += "?product_id=" + props.product_id;
         }

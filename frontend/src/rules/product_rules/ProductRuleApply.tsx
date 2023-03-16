@@ -18,7 +18,7 @@ const ProductRuleApply = (props: ProductRuleApplyProps) => {
 
     const handleConfirm = async () => {
         const url =
-        window.__RUNTIME_CONFIG__.API_BASE_URL +
+            window.__RUNTIME_CONFIG__.API_BASE_URL +
             "/products/" +
             props.product.id +
             "/apply_rules/";

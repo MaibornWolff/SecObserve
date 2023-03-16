@@ -96,17 +96,17 @@ const authProvider: AuthProvider = {
 };
 
 const getUserInfo = async () => {
-    return httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/users/me/").then(
-        (response) => {
-            const before_theme = getSettingTheme();
-            localStorage.setItem("user", JSON.stringify(response.json));
-            const after_theme = getSettingTheme();
-            if (before_theme != after_theme) {
-                window.location.reload();
-            }
-            return response.json;
+    return httpClient(
+        window.__RUNTIME_CONFIG__.API_BASE_URL + "/users/me/"
+    ).then((response) => {
+        const before_theme = getSettingTheme();
+        localStorage.setItem("user", JSON.stringify(response.json));
+        const after_theme = getSettingTheme();
+        if (before_theme != after_theme) {
+            window.location.reload();
         }
-    );
+        return response.json;
+    });
 };
 
 export function aad_signed_in(): boolean {

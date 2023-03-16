@@ -27,7 +27,6 @@ from application.access_control.services.roles_permissions import (
 from application.access_control.api.serializers import UserSerializer
 from application.commons.services.global_request import get_current_user
 from application.core.queries.product import get_product_member
-from application.core.queries.observation import get_observation_by_id
 from application.core.services.observation_log import create_observation_log
 
 
