@@ -34,7 +34,7 @@ jobs:
         with:
           context: .
           file: ./docker/backend/prod/django/Dockerfile
-          push: false
+          push: true
           tags: maibornwolff/secobserve-backend:${{ github.event.inputs.release }}
       -
         name: Build and push backend latest
@@ -42,7 +42,7 @@ jobs:
         with:
           context: .
           file: ./docker/backend/prod/django/Dockerfile
-          push: false
+          push: true
           tags: maibornwolff/secobserve-backend:latest
       -
         name: Build and push frontend version
@@ -50,7 +50,7 @@ jobs:
         with:
           context: .
           file: ./docker/frontend/Dockerfile
-          push: false
+          push: true
           tags: maibornwolff/secobserve-frontend:${{ github.event.inputs.release }}
       -
         name: Build and push frontend latest
@@ -58,5 +58,5 @@ jobs:
         with:
           context: .
           file: ./docker/frontend/Dockerfile
-          push: false
+          push: true
           tags: maibornwolff/secobserve-frontend:latest
