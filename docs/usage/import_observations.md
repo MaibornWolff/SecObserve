@@ -2,7 +2,7 @@
 
 ## Import from CI pipelines via the API
 
-The [GitLab CI templates](./gitlab_ci_templates.md) to run vulnerability checks automatically import the results into SecObserve via the API.
+GitLab CI templates and GitHub actions to run vulnerability checks and import the results into SecObserve via the API are not yet publicly available, but will soon be released as open source.
 
 ## Import from the frontend
 

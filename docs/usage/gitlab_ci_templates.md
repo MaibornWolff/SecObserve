@@ -19,7 +19,7 @@ Most of the templates use the same set of variables:
 | `RULES` | *optional, only for DrHeader* | Custom rules to be used with DrHeader. |
 | **Importing** |
 | `SO_UPLOAD` | *optional* | No upload of observations into SecObserve if value is not `true`, default is `true`. |
-| `SO_API_BASE_URL` | *mandatory* | Base URL of the SecObserve backend, e.g. `https://secobserve-backend.rd.maibornwolff.de`. |
+| `SO_API_BASE_URL` | *mandatory* | Base URL of the SecObserve backend, e.g. `https://secobserve-backend.example.com`. |
 | `SO_API_TOKEN` | *mandatory* | API token of the user to be used for the import. The users needs at least the `Upload` role. |
 | `SO_PRODUCT_NAME` | *mandatory* | Name of the product which observations are imported. The product has to exist before starting the import. |
 | `SO_PARSER_NAME` | *optional* | Name of the parser to read the import file or import API. It is set by the template. |
@@ -165,15 +165,15 @@ kics:
 drheader:
   extends: .drheader
   variables:
-    TARGET: "https://secobserve.maibornwolff.de"
+    TARGET: "https://secobserve.example.com"
     REPORT_NAME: "drheader.json"
-    SO_ORIGIN_ENDPOINT_URL: "https://secobserve.maibornwolff.de"
+    SO_ORIGIN_ENDPOINT_URL: "https://secobserve.example.com"
 needs: []
 
 sslyze:
   extends: .sslyze
   variables:
-    TARGET: "secobserve.maibornwolff.de"
+    TARGET: "secobserve.example.com"
     REPORT_NAME: "sslyze.json"
   needs: []
 ```

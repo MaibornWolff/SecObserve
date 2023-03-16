@@ -46,4 +46,4 @@ These scanners have been tested with SecObserve:
 
 **^1)^** This is the exception to the rule. Even though SARIF is more suited for static code analysis, it works for Dependency Check.
 
-There are predefined [GitLab CI templates](../usage/gitlab_ci_templates.md) available for most of the file-based scanners.
+GitLab CI templates and GitHub actions to run vulnerability checks and import the results into SecObserve via the API are not yet publicly available, but will soon be released as open source.
