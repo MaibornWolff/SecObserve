@@ -48,7 +48,7 @@
         "not op_mini all"
     ],
     "devDependencies": {
-        "@types/jest": "29.4.1",
+        "@types/jest": "29.4.4",
         "@types/node": "18.15.3",
         "@types/prop-types": "15.7.5",
         "@types/react": "18.0.28",
@@ -63,6 +63,6 @@
         "eslint-plugin-react-hooks": "4.6.0",
         "@microsoft/eslint-formatter-sarif": "3.0.0",
         "react-scripts": "5.0.1",
-        "cypress": "12.8.0"
+        "cypress": "12.8.1"
     }
 }

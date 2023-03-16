@@ -62,7 +62,8 @@ const MetricSeverities = (props: MetricSeveritiesProps) => {
         setLoading(true);
 
         let url =
-        window.__RUNTIME_CONFIG__.API_BASE_URL + "/metrics/severity_counts/";
+            window.__RUNTIME_CONFIG__.API_BASE_URL +
+            "/metrics/severity_counts/";
         if (props.product_id) {
             url += "?product_id=" + props.product_id;
         }

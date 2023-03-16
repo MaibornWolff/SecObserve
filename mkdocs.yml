@@ -43,8 +43,8 @@ markdown_extensions:
   - pymdownx.snippets
   - pymdownx.superfences
 
-repo_url: https://gitlab.maibornwolff.de/department-csec/secobserve/secobserve
-repo_name: department-csec/secobserve/secobserve
+repo_url: https://github.com/MaibornWolff/SecObserve
+repo_name: maibornwolff/secobserve
 
 copyright: Copyright &copy; 2023 MaibornWolff GmbH
 
@@ -64,7 +64,7 @@ nav:
     - Assess observations: usage/assess_observations.md
     - Rule engine: usage/rule_engine.md
     - Supported scanners: usage/supported_scanners.md
-    - GitLab CI templates: usage/gitlab_ci_templates.md
+    # - GitLab CI templates: usage/gitlab_ci_templates.md
     - Security gates: usage/security_gates.md
     - Users and permissions: usage/users_permissions.md
   - Integrations:

@@ -43,10 +43,8 @@ from application.core.api.permissions import (
     UserHasProductMemberPermission,
     UserHasProductPermission,
     UserHasObservationPermission,
-    UserHasEvidencePermission,
 )
 from application.core.models import (
-    Evidence,
     Observation,
     Observation_Log,
     Product,

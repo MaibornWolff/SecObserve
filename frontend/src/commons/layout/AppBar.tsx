@@ -21,7 +21,7 @@ const DocumentationMenu = React.forwardRef(() => {
     return (
         <MenuItem
             component="a"
-            href="https://department-csec.maibornwolff.io/secobserve/secobserve/"
+            href="https://maibornwolff.github.io/SecObserve/"
             target="_blank"
             rel="noreferrer"
             onClick={() => {

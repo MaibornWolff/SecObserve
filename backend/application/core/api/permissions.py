@@ -5,7 +5,7 @@ from application.access_control.api.permissions import (
     check_object_permission,
 )
 from application.access_control.services.roles_permissions import Permissions, Roles
-from application.core.models import Product, Observation
+from application.core.models import Product
 from application.core.queries.product import get_product_member
 
 
