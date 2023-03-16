@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       release:
-        description: 'SecObserve release (without the v)'
+        description: 'SecObserve release'
         required: true
 
 jobs:
@@ -15,7 +15,7 @@ jobs:
         name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: 'v${{ github.event.inputs.release }}'
+          ref: v'${{ github.event.inputs.release }}'
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v2
