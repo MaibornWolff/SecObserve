@@ -15,7 +15,7 @@ jobs:
         name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: v'${{ github.event.inputs.release }}'
+          ref: v${{ github.event.inputs.release }}
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -35,7 +35,7 @@ jobs:
           context: .
           file: ./docker/backend/prod/django/Dockerfile
           push: false
-          tags: maibornwolff/secobserve-backend:'${{ github.event.inputs.release }}'
+          tags: maibornwolff/secobserve-backend:${{ github.event.inputs.release }}
       -
         name: Build and push backend latest
         uses: docker/build-push-action@v4
@@ -51,7 +51,7 @@ jobs:
           context: .
           file: ./docker/frontend/Dockerfile
           push: false
-          tags: maibornwolff/secobserve-frontend:'${{ github.event.inputs.release }}'
+          tags: maibornwolff/secobserve-frontend:${{ github.event.inputs.release }}
       -
         name: Build and push frontend latest
         uses: docker/build-push-action@v4
