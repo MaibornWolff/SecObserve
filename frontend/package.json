@@ -22,7 +22,7 @@
         "tss-react": "4.8.1",
         "chart.js": "4.2.1",
         "react-chartjs-2": "5.2.0",
-        "markdown-to-jsx": "7.1.9",
+        "markdown-to-jsx": "7.2.0",
         "@azure/msal-react": "1.5.4",
         "@azure/msal-browser": "2.34.0",
         "@fortawesome/fontawesome-svg-core": "6.3.0",
