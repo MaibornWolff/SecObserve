@@ -29,34 +29,24 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        name: Build and push backend version
+        name: Build and push backend
         uses: docker/build-push-action@v4
         with:
           context: .
           file: ./docker/backend/prod/django/Dockerfile
           push: false
-          tags: maibornwolff/secobserve-backend:'${{ github.event.inputs.release }}'
+          tags: 
+            maibornwolff/secobserve-backend:'${{ github.event.inputs.release }}'
+            maibornwolff/secobserve-backend:latest
+          build-args:
+            VERSION='${{ github.event.inputs.release }}'
       -
-        name: Build and push backend latest
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          file: ./docker/backend/prod/django/Dockerfile
-          push: false
-          tags: maibornwolff/secobserve-backend:latest
-      -
-        name: Build and push frontend version
+        name: Build and push frontend
         uses: docker/build-push-action@v4
         with:
           context: .
           file: ./docker/frontend/Dockerfile
           push: false
-          tags: maibornwolff/secobserve-frontend:'${{ github.event.inputs.release }}'
-      -
-        name: Build and push frontend latest
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          file: ./docker/frontend/Dockerfile
-          push: false
-          tags: maibornwolff/secobserve-frontend:latest
+          tags:
+            maibornwolff/secobserve-frontend:'${{ github.event.inputs.release }}'
+            maibornwolff/secobserve-frontend:latest

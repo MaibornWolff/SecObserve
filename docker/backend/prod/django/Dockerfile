@@ -23,7 +23,7 @@ FROM python as python-run-stage
 
 ARG BUILD_ENVIRONMENT=prod
 ARG APP_HOME=/app
-ARG COMMIT_ID=undefined
+ARG VERSION=unkown
 
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -64,8 +64,8 @@ RUN addgroup -g 1001 -S ${group} \
     && chmod +x /entrypoint \
     && chmod +x /start \
     && chmod +x /wait-for-it.sh \
-    # insert commit id for status endpoint
-    && sed -i 's/placeholder/'"${COMMIT_ID}"'/g' ${APP_HOME}/application/commons/api/views.py \
+    # insert version for status endpoint
+    && sed -i 's/unkown/'"${VERSION}"'/g' ${APP_HOME}/application/commons/api/views.py \
     # make staticfiles writeable 
     && mkdir ${APP_HOME}/application/staticfiles \
     && chmod ugo+w ${APP_HOME}/application/staticfiles

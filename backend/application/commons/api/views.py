@@ -2,17 +2,17 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from application.commons.api.serializers import CommitSerializer
+from application.commons.api.serializers import VersionSerializer
 
 
-class StatusView(APIView):
+class VersionView(APIView):
 
-    serializer_class = CommitSerializer
+    serializer_class = VersionSerializer
 
-    @action(detail=True, methods=["get"], url_name="commit_id")
+    @action(detail=True, methods=["get"], url_name="version")
     def get(self, request, format=None):
         content = {
-            "commit_id": "placeholder",
+            "version": "unkown",
         }
         return Response(content)
 
