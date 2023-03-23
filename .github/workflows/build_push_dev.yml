@@ -29,6 +29,8 @@ jobs:
           file: ./docker/backend/prod/django/Dockerfile
           push: true
           tags: maibornwolff/secobserve-backend:dev
+          build-args:
+            VERSION=dev
       -
         name: Build and push frontend
         uses: docker/build-push-action@v4
@@ -37,3 +39,5 @@ jobs:
           file: ./docker/frontend/Dockerfile
           push: true
           tags: maibornwolff/secobserve-frontend:dev
+          build-args:
+            VERSION=dev

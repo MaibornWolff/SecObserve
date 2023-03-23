@@ -1,4 +1,4 @@
-from application.commons.api.views import HealthView, StatusView
+from application.commons.api.views import HealthView, VersionView
 from application.commons.views import empty_view
 from application.access_control.api.views import (
     CreateAPITokenView,
@@ -39,7 +39,7 @@ urlpatterns = [
 urlpatterns += [
     # API base url
     path("api/", include("config.api_router")),
-    path("api/status/commit_id/", StatusView.as_view()),
+    path("api/status/version/", VersionView.as_view()),
     path("api/status/health/", HealthView.as_view()),
     path(
         "api/authentication/authenticate/",
