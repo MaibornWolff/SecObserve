@@ -27,7 +27,7 @@ jobs:
         with:
           context: .
           file: ./docker/backend/prod/django/Dockerfile
-          push: false
+          push: true
           tags: maibornwolff/secobserve-backend:dev
           build-args:
             VERSION=dev
@@ -37,7 +37,7 @@ jobs:
         with:
           context: .
           file: ./docker/frontend/Dockerfile
-          push: false
+          push: true
           tags: maibornwolff/secobserve-frontend:dev
           build-args:
             VERSION=dev
