@@ -12,7 +12,7 @@ class VersionView(APIView):
     @action(detail=True, methods=["get"], url_name="version")
     def get(self, request, format=None):
         content = {
-            "version": "unkown",
+            "version": "version_unkown",
         }
         return Response(content)
 

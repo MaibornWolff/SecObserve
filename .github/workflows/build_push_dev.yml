@@ -39,3 +39,5 @@ jobs:
           file: ./docker/frontend/Dockerfile
           push: false
           tags: maibornwolff/secobserve-frontend:dev
+          build-args:
+            VERSION=dev

@@ -50,3 +50,5 @@ jobs:
           tags: |
             maibornwolff/secobserve-frontend:${{ github.event.inputs.release }}
             maibornwolff/secobserve-frontend:latest
+          build-args:
+            VERSION=${{ github.event.inputs.release }}

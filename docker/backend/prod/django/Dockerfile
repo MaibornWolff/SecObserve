@@ -65,7 +65,7 @@ RUN addgroup -g 1001 -S ${group} \
     && chmod +x /start \
     && chmod +x /wait-for-it.sh \
     # insert version for status endpoint
-    && sed -i 's/unkown/'"${VERSION}"'/g' ${APP_HOME}/application/commons/api/views.py \
+    && sed -i 's/version_unkown/'"${VERSION}"'/g' ${APP_HOME}/application/commons/api/views.py \
     # make staticfiles writeable 
     && mkdir ${APP_HOME}/application/staticfiles \
     && chmod ugo+w ${APP_HOME}/application/staticfiles
