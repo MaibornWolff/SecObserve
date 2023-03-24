@@ -1,5 +1,7 @@
 version: "3"
 
+name: "secobserve_prod"
+
 volumes:
   prod_mysql_data:
 
@@ -11,12 +13,13 @@ services:
 
   traefik:
     image: "traefik:v3.0"
-    container_name: "traefik"
+    container_name: "prod_traefik"
     command:
       - "--log.level=INFO"
       - "--api.dashboard=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=secobserve_prod_traefik"
       - "--entrypoints.web.address=:80"
     labels:
       - "traefik.enable=true"
@@ -30,10 +33,12 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     networks:
+      - default
       - traefik
 
   frontend:
     image: maibornwolff/secobserve-frontend:0.9.0
+    container_name: "prod_secobserve_frontend"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=Host(`secobserve.localhost`)"
@@ -51,6 +56,7 @@ services:
 
   backend:
     image: maibornwolff/secobserve-backend:0.9.0
+    container_name: "prod_secobserve_backend"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend.rule=Host(`secobserve-backend.localhost`)"
@@ -84,6 +90,7 @@ services:
 
   mysql:
     image: mysql:8.0.32
+    container_name: "prod_mysql"
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: ${SO_MYSQL_RANDOM_ROOT_PASSWORD:-yes}
       MYSQL_DATABASE: ${SO_MYSQL_DATABASE:-secobserve}
