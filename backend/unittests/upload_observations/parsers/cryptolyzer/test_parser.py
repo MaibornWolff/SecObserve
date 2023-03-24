@@ -4,7 +4,7 @@ from application.import_observations.parsers.cryptolyzer.parser import Cryptolyz
 from application.core.models import Observation
 
 
-class TestSSLyzeParser(TestCase):
+class TestCryptolyzeParser(TestCase):
     def test_no_json(self):
         with open(path.dirname(__file__) + "/test_parser.py") as testfile:
             parser = CryptolyzerParser()
