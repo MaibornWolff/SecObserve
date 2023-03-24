@@ -40,10 +40,12 @@ These scanners have been tested with SecObserve:
 | [Trivy](https://aquasecurity.github.io/trivy) | SARIF | Infrastructure SAST | File |
 | [Gitleaks](https://gitleaks.io) | SARIF | Secrets | File |
 | [Trivy](https://aquasecurity.github.io/trivy) | SARIF | Secrets | File |
+| [Cryptolyzer](https://gitlab.com/coroner/cryptolyzer) ^2)^ | Cryptolyzer | DAST | File |
 | [DrHeader](https://github.com/Santandersecurityresearch/DrHeader) | DrHeader | DAST | File |
-| [SSLyze](https://github.com/nabla-c0d3/sslyze) | SSLyze | DAST | File |
 | [OWASP ZAP](https://www.zaproxy.org) | OWASP ZAP | DAST | File |
 
-**^1)^** This is the exception to the rule. Even though SARIF is more suited for static code analysis, it works for Dependency Check.
+^1)^ This is the exception to the rule. Even though SARIF is more suited for static code analysis, it works for Dependency Check.
+
+^2)^ The Cryptolyzer parser checks the results (TLS versions, cipher suites, elliptic curves and signature algorithms) against BSI (Bundesamt für Sicherheit in der Informationssicherheit) recommendations.
 
 GitLab CI templates and GitHub actions to run vulnerability checks and import the results into SecObserve via the API are not yet publicly available, but will soon be released as open source.
