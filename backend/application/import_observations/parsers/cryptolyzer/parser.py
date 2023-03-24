@@ -110,10 +110,10 @@ RECOMMENDED_SIGNATURE_ALGORITHMS = [
 BSI_LINK = "https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TG02102/BSI-TR-02102-2.pdf?__blob=publicationFile&v=5"  # noqa: E501
 
 
-class CryptolyzerParser(BaseParser, BaseFileParser):
+class CryptoLyzerParser(BaseParser, BaseFileParser):
     @classmethod
     def get_name(cls) -> str:
-        return "Cryptolyzer"
+        return "CryptoLyzer"
 
     @classmethod
     def get_type(cls) -> str:
@@ -131,7 +131,7 @@ class CryptolyzerParser(BaseParser, BaseFileParser):
             or not data.get("ciphers")
             or not data.get("curves")
         ):
-            return False, ["File is not a valid Cryptolyzer format"], None
+            return False, ["File is not a valid CryptoLyzer format"], None
 
         return True, [], data
 

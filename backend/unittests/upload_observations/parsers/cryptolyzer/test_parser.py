@@ -1,13 +1,13 @@
 from os import path
 from unittest import TestCase
-from application.import_observations.parsers.cryptolyzer.parser import CryptolyzerParser
+from application.import_observations.parsers.cryptolyzer.parser import CryptoLyzerParser
 from application.core.models import Observation
 
 
 class TestCryptolyzeParser(TestCase):
     def test_no_json(self):
         with open(path.dirname(__file__) + "/test_parser.py") as testfile:
-            parser = CryptolyzerParser()
+            parser = CryptoLyzerParser()
             check, messages, data = parser.check_format(testfile)
 
             self.assertFalse(check)
@@ -17,17 +17,17 @@ class TestCryptolyzeParser(TestCase):
 
     def test_wrong_format(self):
         with open(path.dirname(__file__) + "/files/wrong_format.json") as testfile:
-            parser = CryptolyzerParser()
+            parser = CryptoLyzerParser()
             check, messages, data = parser.check_format(testfile)
 
             self.assertFalse(check)
             self.assertEqual(1, len(messages))
-            self.assertEqual("File is not a valid Cryptolyzer format", messages[0])
+            self.assertEqual("File is not a valid CryptoLyzer format", messages[0])
             self.assertIsNone(data)
 
     def test_no_observations(self):
         with open(path.dirname(__file__) + "/files/no_observations.json") as testfile:
-            parser = CryptolyzerParser()
+            parser = CryptoLyzerParser()
             check, messages, data = parser.check_format(testfile)
             observations = parser.get_observations(data)
 
@@ -39,7 +39,7 @@ class TestCryptolyzeParser(TestCase):
         with open(
             path.dirname(__file__) + "/files/multiple_observations.json"
         ) as testfile:
-            parser = CryptolyzerParser()
+            parser = CryptoLyzerParser()
             check, messages, data = parser.check_format(testfile)
             observations = parser.get_observations(data)
 
@@ -57,7 +57,7 @@ class TestCryptolyzeParser(TestCase):
             self.assertEqual(
                 "https://www.example.org:443", observation.origin_endpoint_url
             )
-            self.assertEqual("Cryptolyzer", observation.scanner)
+            self.assertEqual("CryptoLyzer", observation.scanner)
             self.assertEqual(
                 "https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TG02102/BSI-TR-02102-2.pdf?__blob=publicationFile&v=5",
                 observation.unsaved_references[0],
@@ -78,7 +78,7 @@ class TestCryptolyzeParser(TestCase):
             self.assertEqual(
                 "https://www.example.org:443", observation.origin_endpoint_url
             )
-            self.assertEqual("Cryptolyzer", observation.scanner)
+            self.assertEqual("CryptoLyzer", observation.scanner)
             self.assertEqual(
                 "https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TG02102/BSI-TR-02102-2.pdf?__blob=publicationFile&v=5",
                 observation.unsaved_references[0],
@@ -98,7 +98,7 @@ class TestCryptolyzeParser(TestCase):
             self.assertEqual(
                 "https://www.example.org:443", observation.origin_endpoint_url
             )
-            self.assertEqual("Cryptolyzer", observation.scanner)
+            self.assertEqual("CryptoLyzer", observation.scanner)
             self.assertEqual(
                 "https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TG02102/BSI-TR-02102-2.pdf?__blob=publicationFile&v=5",
                 observation.unsaved_references[0],
@@ -116,7 +116,7 @@ class TestCryptolyzeParser(TestCase):
             self.assertEqual(
                 "https://www.example.org:443", observation.origin_endpoint_url
             )
-            self.assertEqual("Cryptolyzer", observation.scanner)
+            self.assertEqual("CryptoLyzer", observation.scanner)
             self.assertEqual(
                 "https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TG02102/BSI-TR-02102-2.pdf?__blob=publicationFile&v=5",
                 observation.unsaved_references[0],
@@ -126,7 +126,7 @@ class TestCryptolyzeParser(TestCase):
 
     def test_weak_tls(self):
         with open(path.dirname(__file__) + "/files/tls10.json") as testfile:
-            parser = CryptolyzerParser()
+            parser = CryptoLyzerParser()
             check, messages, data = parser.check_format(testfile)
             observations = parser.get_observations(data)
 
@@ -144,7 +144,7 @@ class TestCryptolyzeParser(TestCase):
             self.assertEqual(
                 "https://tls-v1-0.badssl.com:443", observation.origin_endpoint_url
             )
-            self.assertEqual("Cryptolyzer", observation.scanner)
+            self.assertEqual("CryptoLyzer", observation.scanner)
             self.assertEqual(
                 "https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TG02102/BSI-TR-02102-2.pdf?__blob=publicationFile&v=5",
                 observation.unsaved_references[0],
