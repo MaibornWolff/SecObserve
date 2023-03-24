@@ -106,7 +106,7 @@ RECOMMENDED_SIGNATURE_ALGORITHMS = [
     "ecdsa_brainpoolP384r1tls13_sha384",
     "ecdsa_brainpoolP512r1tls13_sha512",
 ]
-    
+
 BSI_LINK = "https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TG02102/BSI-TR-02102-2.pdf?__blob=publicationFile&v=5"  # noqa: E501
 
 
@@ -142,10 +142,14 @@ class CryptolyzerParser(BaseParser, BaseFileParser):
         if observation:
             observations.append(observation)
 
-        observation = self.check_ciphers("tls1_2", "TLS 1.2", TLS12_RECOMMENDED_CIPHERS, data)
+        observation = self.check_ciphers(
+            "tls1_2", "TLS 1.2", TLS12_RECOMMENDED_CIPHERS, data
+        )
         if observation:
             observations.append(observation)
-        observation = self.check_ciphers("tls1_3", "TLS 1.3", TLS13_RECOMMENDED_CIPHERS, data)
+        observation = self.check_ciphers(
+            "tls1_3", "TLS 1.3", TLS13_RECOMMENDED_CIPHERS, data
+        )
         if observation:
             observations.append(observation)
 
@@ -166,7 +170,10 @@ class CryptolyzerParser(BaseParser, BaseFileParser):
             versions.remove("tls1_2")
         if "tls1_3" in versions:
             versions.remove("tls1_3")
-        description = "**Weak protocols according to BSI recommendations:**\n* " + "\n* ".join(versions)
+        description = (
+            "**Weak protocols according to BSI recommendations:**\n* "
+            + "\n* ".join(versions)
+        )
         if versions:
             observation = Observation(
                 title="Weak protocols detected",
@@ -202,7 +209,7 @@ class CryptolyzerParser(BaseParser, BaseFileParser):
                 cipher_suites = cipher.get("cipher_suites", {})
                 for cipher_suite in cipher_suites:
                     keys = cipher_suite.keys()
-                    for key in keys: 
+                    for key in keys:
                         if key not in recommended_cipher_suites:
                             unrecommended_cipher_suites.append(key)
 
