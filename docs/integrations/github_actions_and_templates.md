@@ -4,7 +4,7 @@ Integrating vulnerability scanners in a CI/CD pipeline can be cumbersome. Every 
 
 All actions and templates run the scanner, import the results into SecObserve and make the report available as an artifact.
 
-[https://github.com/MaibornWolff/secobserve_actions_templates](https://github.com/MaibornWolff/secobserve_actions_templates) is the repository, where the actions and the templates are stored.
+ The actions and the templates are stored in the repository [https://github.com/MaibornWolff/secobserve_actions_templates](https://github.com/MaibornWolff/secobserve_actions_templates).
 
 ## Variables
 
@@ -25,28 +25,28 @@ Most of the actions and templates use the same set of variables:
 | `SO_API_BASE_URL` | *mandatory* | Base URL of the SecObserve backend, e.g. `https://secobserve-backend.example.com`. |
 | `SO_API_TOKEN` | *mandatory* | API token of the user to be used for the import. The users needs at least the `Upload` role. |
 | `SO_PRODUCT_NAME` | *mandatory* | Name of the product which observations are imported. The product has to exist before starting the import. |
-| `SO_PARSER_NAME` | *optional* | Name of the parser to read the import file or import API. It is set by the template. |
 | `SO_ORIGIN_SERVICE` | *optional* | Service name to be set for all imported observations. |
 | `SO_ORIGIN_DOCKER_IMAGE_NAME_TAG` | *optional* | Name:Tag of Docker image to be set for all imported observations. |
 | `SO_ORIGIN_ENDPOINT_URL` | *optional* | URL of endpoint to be set for all imported observations. |
 
+## Available actions and templates
 
-## Supported scanners
-
-| Template | Scanner | File format | `TARGET` |
+| Scanner | GitHub Action | GitLab CI Template | License |
 |----------|---------|-------------|--------|
-| `templates/SAST/bandit.yml` | [Bandit](https://bandit.readthedocs.io/en/latest) | SARIF | Path |
-| `templates/SAST/eslint.yml` | [ESLint](https://github.com/nodesecurity/eslint-plugin-security) | SARIF | Path |
-| `templates/SAST/semgrep.yml` | [Semgrep](https://semgrep.dev/docs) | Semgrep |Path |
-| `templates/SAST/checkov.yml` | [Checkov](https://www.checkov.io/1.Welcome/Quick%20Start.html) | SARIF | Path |
-| `templates/SAST/kics.yml` | [KICS](https://docs.kics.io/latest) | SARIF | Path |
-| `templates/SCA/grype_image.yml` | [Grype](https://github.com/anchore/grype) | CycloneDX | Docker image |
-| `templates/SCA/trivy_filesystem.yml` | [Trivy](https://aquasecurity.github.io/trivy) | CycloneDX | Path |
-| `templates/SCA/trivy_image.yml` | [Trivy](https://aquasecurity.github.io/trivy) | CycloneDX | Docker image |
-| `templates/secrets/gitleaks.yml` | [Gitleaks](https://gitleaks.io) | Gitleaks | Path |
-| `templates/DAST/drheader.yml` | [DrHeader](https://github.com/Santandersecurityresearch/DrHeader) | DrHeader | URL |
-| `templates/DAST/owasp_zap.yml` | [OWASP ZAP](https://github.com/zaproxy/zaproxy) | OWASP ZAP | URL |
-| `templates/DAST/sslyze.yml` | [SSLyze](https://github.com/nabla-c0d3/sslyze) | SSLyze | Hostname |
+| [Bandit](https://bandit.readthedocs.io/en/latest)                 | `actions/SAST/bandit` | `templates/SAST/bandit.yml` | [Apache 2.0](https://github.com/PyCQA/bandit/blob/main/LICENSE) |
+| [ESLint](https://github.com/eslint/eslint)                        | `actions/SAST/eslint` | `templates/SAST/eslint.yml` | [MIT](https://github.com/eslint/eslint/blob/main/LICENSE) |
+| [Semgrep](https://semgrep.dev/docs)                               | `actions/SAST/semgrep` | `templates/SAST/semgrep.yml` |[LGPL 2.1](https://github.com/returntocorp/semgrep/blob/develop/LICENSE) |
+| [Checkov](https://www.checkov.io/1.Welcome/Quick%20Start.html)    | `actions/SAST/checkov` | `templates/SAST/checkov.yml` | [Apache 2.0](https://github.com/bridgecrewio/checkov/blob/main/LICENSE) |
+| [KICS](https://docs.kics.io/latest)                               | `actions/SAST/kics` | `templates/SAST/kics.yml` | [Apache 2.0](https://github.com/Checkmarx/kics/blob/master/LICENSE) |
+| [Grype](https://github.com/anchore/grype)                         | `actions/SCA/grype_image` | `templates/SCA/grype_image.yml` | [Apache 2.0](https://github.com/anchore/grype/blob/main/LICENSE) |
+| [Trivy](https://aquasecurity.github.io/trivy)                     | `actions/SCA/trivy_filesystem` | `templates/SCA/trivy_filesystem.yml` | [Apache 2.0](https://github.com/aquasecurity/trivy/blob/main/LICENSE) |
+| [Trivy](https://aquasecurity.github.io/trivy)                     | `actions/SCA/trivy_image` | `templates/SCA/trivy_image.yml` | [Apache 2.0](https://github.com/aquasecurity/trivy/blob/main/LICENSE) |
+| [Gitleaks](https://gitleaks.io)                                   | `actions/secrets/gitleaks` | `templates/secrets/gitleaks.yml` | [MIT](https://github.com/gitleaks/gitleaks/blob/master/LICENSE) |
+| [CryptoLyzer](https://gitlab.com/coroner/cryptolyzer)             | `actions/DAST/cryptolyzer` | `templates/DAST/cryptolyzer.yml` | [MPL 2.0](https://gitlab.com/coroner/cryptolyzer/-/blob/master/LICENSE.txt) |
+| [DrHeader](https://github.com/Santandersecurityresearch/DrHeader) | `actions/DAST/drheader` | `templates/DAST/drheader.yml` | [MIT](https://github.com/Santandersecurityresearch/DrHeader/blob/master/LICENSE) |
+| [OWASP ZAP](https://github.com/zaproxy/zaproxy)                   | `actions/DAST/owasp_zap` | `templates/DAST/owasp_zap.yml` | [Apache 2.0](https://github.com/zaproxy/zaproxy/blob/main/LICENSE) |
+
+All GitHub actions and GitLab CI templates use a pre-built Docker image that contains all scanners and the SecObserve importer.
 
 ##  Examplary workflow for GitHub actions
 
@@ -66,7 +66,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run Bandit
-        uses: StefanFl/secobserve_github_actions/actions/SAST/bandit@main
+        uses: MaibornWolff/secobserve_actions_templates/actions/SAST/bandit@main
         with:
           target: 'dd_import'
           report_name: 'dd_import_bandit.sarif'
@@ -75,7 +75,7 @@ jobs:
           so_product_name: ${{ vars.SO_PRODUCT_NAME }}
 
       - name: Run Semgrep
-        uses: StefanFl/secobserve_github_actions/actions/SAST/semgrep@main
+        uses: MaibornWolff/secobserve_actions_templates/actions/SAST/semgrep@main
         with:
           target: 'dd_import'
           report_name: 'dd_import_semgrep.json'
@@ -85,7 +85,7 @@ jobs:
           so_product_name: ${{ vars.SO_PRODUCT_NAME }}
 
       - name: Run KICS
-        uses: StefanFl/secobserve_github_actions/actions/SAST/kics@main
+        uses: MaibornWolff/secobserve_actions_templates/actions/SAST/kics@main
         with:
           target: '.'
           report_name: 'dd_import_kics.sarif'
@@ -94,7 +94,7 @@ jobs:
           so_product_name: ${{ vars.SO_PRODUCT_NAME }}
 
       - name: Run Checkov
-        uses: StefanFl/secobserve_github_actions/actions/SAST/checkov@main
+        uses: MaibornWolff/secobserve_actions_templates/actions/SAST/checkov@main
         with:
           target: '.'
           report_name: 'dd_import_checkov.sarif'
@@ -103,7 +103,7 @@ jobs:
           so_product_name: ${{ vars.SO_PRODUCT_NAME }}
 
       - name: Run Trivy image
-        uses: StefanFl/secobserve_github_actions/actions/SCA/trivy_image@main
+        uses: MaibornWolff/secobserve_actions_templates/actions/SCA/trivy_image@main
         with:
           target: 'maibornwolff/dd-import:latest'
           report_name: 'dd_import_trivy_image.json'
@@ -112,7 +112,7 @@ jobs:
           so_product_name: ${{ vars.SO_PRODUCT_NAME }}
 
       - name: Run Grype image
-        uses: StefanFl/secobserve_github_actions/actions/SCA/grype_image@main
+        uses: MaibornWolff/secobserve_actions_templates/actions/SCA/grype_image@main
         with:
           target: 'maibornwolff/dd-import:latest'
           report_name: 'dd_import_grype_image.json'
@@ -121,7 +121,7 @@ jobs:
           so_product_name: ${{ vars.SO_PRODUCT_NAME }}
 
       - name: Run Gitleaks
-        uses: StefanFl/secobserve_github_actions/actions/secrets/gitleaks@main
+        uses: MaibornWolff/secobserve_actions_templates/actions/secrets/gitleaks@main
         with:
           report_name: 'dd_import_gitleaks.sarif'
           so_api_base_url: ${{ vars.SO_API_BASE_URL }}
@@ -139,7 +139,8 @@ jobs:
             dd_import_checkov.sarif
             dd_import_trivy_image.json
             dd_import_grype_image.json
-            dd_import_gitleaks.sarif```
+            dd_import_gitleaks.sarif
+```
 
 ##  Examplary pipeline for GitLab CI templates
 
@@ -149,7 +150,7 @@ jobs:
 ```yaml
 include:
   - "https://raw.githubusercontent.com/MaibornWolff/secobserve_actions_templates/main/templates/DAST/drheader.yml"
-  - "https://raw.githubusercontent.com/MaibornWolff/secobserve_actions_templates/main/templates/DAST/sslyze.yml"
+  - "https://raw.githubusercontent.com/MaibornWolff/secobserve_actions_templates/main/templates/DAST/cryptolyzer.yml"
   - "https://raw.githubusercontent.com/MaibornWolff/secobserve_actions_templates/main/templates/SAST/bandit.yml"
   - "https://raw.githubusercontent.com/MaibornWolff/secobserve_actions_templates/main/templates/SAST/checkov.yml"
   - "https://raw.githubusercontent.com/MaibornWolff/secobserve_actions_templates/main/templates/SAST/eslint.yml"
@@ -260,10 +261,10 @@ drheader:
     SO_ORIGIN_ENDPOINT_URL: "https://secobserve.example.com"
 needs: []
 
-sslyze:
-  extends: .sslyze
+cryptolyzer:
+  extends: .cryptolyzer
   variables:
     TARGET: "secobserve.example.com"
-    REPORT_NAME: "sslyze.json"
+    REPORT_NAME: "cryptolyzer.json"
   needs: []
 ```
