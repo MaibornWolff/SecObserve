@@ -37,7 +37,6 @@ These scanners have been tested with SecObserve:
 | [Semgrep](https://semgrep.dev/docs) | SARIF | Application SAST | File |
 | [Checkov](https://www.checkov.io/1.Welcome/Quick%20Start.html) | SARIF | Infrastructure SAST | File |
 | [KICS](https://docs.kics.io/latest) | SARIF | Infrastructure SAST | File |
-| [Trivy](https://aquasecurity.github.io/trivy) | SARIF | Infrastructure SAST | File |
 | [Gitleaks](https://gitleaks.io) | SARIF | Secrets | File |
 | [Trivy](https://aquasecurity.github.io/trivy) | SARIF | Secrets | File |
 | [CryptoLyzer](https://gitlab.com/coroner/cryptolyzer) ^2)^ | CryptoLyzer | DAST | File |
@@ -48,4 +47,4 @@ These scanners have been tested with SecObserve:
 
 ^2)^ The CryptoLyzer parser checks the results (TLS versions, cipher suites, elliptic curves and signature algorithms) against BSI (Bundesamt für Sicherheit in der Informationssicherheit) recommendations.
 
-GitLab CI templates and GitHub actions to run vulnerability checks and import the results into SecObserve via the API are not yet publicly available, but will soon be released as open source.
+[GitHub actions and GitLab CI templates](../integrations/github_actions_and_templates.md) support running vulnerability checks and importing the results into SecObserve via GitHub workflows or GitLab CI pipelines in an efficient way.

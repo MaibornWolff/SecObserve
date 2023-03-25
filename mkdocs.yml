@@ -61,13 +61,13 @@ nav:
     - Upgrading: getting_started/upgrading.md
   - Usage:
     - Import observations: usage/import_observations.md
+    - Supported scanners: usage/supported_scanners.md
     - Assess observations: usage/assess_observations.md
     - Rule engine: usage/rule_engine.md
-    - Supported scanners: usage/supported_scanners.md
-    # - GitLab CI templates: usage/gitlab_ci_templates.md
     - Security gates: usage/security_gates.md
     - Users and permissions: usage/users_permissions.md
   - Integrations:
+    - GitHub actions and GitLab CI templates: integrations/github_actions_and_templates.md
     - Source code repositories: integrations/source_code_repositories.md
     - Notifications to Microsoft Teams: integrations/notifications.md
     - Export of observations: integrations/observations_export.md
