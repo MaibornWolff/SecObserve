@@ -37,7 +37,7 @@ services:
       - traefik
 
   frontend:
-    image: maibornwolff/secobserve-frontend:0.9.0
+    image: maibornwolff/secobserve-frontend:0.9.1
     container_name: "prod_secobserve_frontend"
     labels:
       - "traefik.enable=true"
@@ -55,7 +55,7 @@ services:
       - traefik
 
   backend:
-    image: maibornwolff/secobserve-backend:0.9.0
+    image: maibornwolff/secobserve-backend:0.9.1
     container_name: "prod_secobserve_backend"
     labels:
       - "traefik.enable=true"
