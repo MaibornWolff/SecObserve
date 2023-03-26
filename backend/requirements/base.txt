@@ -17,7 +17,7 @@ django-crispy-forms==2.0  # https://github.com/django-crispy-forms/django-crispy
 crispy-bootstrap5==0.7  # https://github.com/django-crispy-forms/crispy-bootstrap5
 # --- Celery/Redis is currently unused ---
 # django-redis==5.2.0  # https://github.com/jazzband/django-redis
-django-filter==22.1  # https://github.com/carltongibson/django-filter 
+django-filter==23.1  # https://github.com/carltongibson/django-filter 
 django-csp==3.7  # https://github.com/mozilla/django-csp
 django-constance==2.9.1  # https://github.com/jazzband/django-constance
 django-constance[database]==2.9.1  # https://github.com/jazzband/django-constance
