@@ -1,0 +1,751 @@
+{
+    "target": {
+        "scheme": "tls",
+        "address": "www.example.org",
+        "ip": "192.168.0.1",
+        "port": 443,
+        "proto_version": null
+    },
+    "versions": {
+        "target": {
+            "scheme": "tls",
+            "address": "www.example.org",
+            "ip": "192.168.0.1",
+            "port": 443,
+            "proto_version": null
+        },
+        "versions": [
+            "tls1_2",
+            "tls1_3"
+        ],
+        "alerts_unsupported_tls_version": true
+    },
+    "ciphers": [
+        {
+            "target": {
+                "scheme": "tls",
+                "address": "www.example.org",
+                "ip": "192.168.0.1",
+                "port": 443,
+                "proto_version": "tls1_2"
+            },
+            "cipher_suites": [
+                {
+                    "TLS_DHE_RSA_WITH_AES_128_GCM_SHA256": {
+                        "code": 158,
+                        "iana_name": "TLS_DHE_RSA_WITH_AES_128_GCM_SHA256",
+                        "openssl_name": "DHE-RSA-AES128-GCM-SHA256",
+                        "key_exchange": {
+                            "DHE": {
+                                "name": "Diffie\u2013Hellman Ephemeral (DHE)",
+                                "forward_secret": true
+                            }
+                        },
+                        "authentication": {
+                            "RSA": {
+                                "name": "Rivest\u2013Shamir\u2013Adleman (RSA)",
+                                "oid": "1.2.840.113549.1.1.1",
+                                "anonymous": false
+                            }
+                        },
+                        "bulk_cipher": {
+                            "AES_128": {
+                                "name": "AES-128",
+                                "key_size": 128,
+                                "block_size": 128
+                            }
+                        },
+                        "block_cipher_mode": {
+                            "GCM": {
+                                "name": "Galois/Counter Mode (GCM)"
+                            }
+                        },
+                        "mac": {
+                            "SHA2_256": {
+                                "name": "SHA2-256",
+                                "oid": "1.2.840.113549.2.9",
+                                "hash_algo": {
+                                    "SHA2_256": {
+                                        "name": "SHA-256",
+                                        "oid": "2.16.840.1.101.3.4.2.1",
+                                        "digest_size": 256
+                                    }
+                                }
+                            }
+                        },
+                        "authenticated_encryption": true,
+                        "initial_version": "tls1_2",
+                        "last_version": "tls1_2",
+                        "export_grade": false
+                    }
+                },
+                {
+                    "TLS_DHE_RSA_WITH_AES_256_GCM_SHA384": {
+                        "code": 159,
+                        "iana_name": "TLS_DHE_RSA_WITH_AES_256_GCM_SHA384",
+                        "openssl_name": "DHE-RSA-AES256-GCM-SHA384",
+                        "key_exchange": {
+                            "DHE": {
+                                "name": "Diffie\u2013Hellman Ephemeral (DHE)",
+                                "forward_secret": true
+                            }
+                        },
+                        "authentication": {
+                            "RSA": {
+                                "name": "Rivest\u2013Shamir\u2013Adleman (RSA)",
+                                "oid": "1.2.840.113549.1.1.1",
+                                "anonymous": false
+                            }
+                        },
+                        "bulk_cipher": {
+                            "AES_256": {
+                                "name": "AES-256",
+                                "key_size": 256,
+                                "block_size": 128
+                            }
+                        },
+                        "block_cipher_mode": {
+                            "GCM": {
+                                "name": "Galois/Counter Mode (GCM)"
+                            }
+                        },
+                        "mac": {
+                            "SHA2_384": {
+                                "name": "SHA2-384",
+                                "oid": "1.2.840.113549.2.10",
+                                "hash_algo": {
+                                    "SHA2_384": {
+                                        "name": "SHA-384",
+                                        "oid": "2.16.840.1.101.3.4.2.2",
+                                        "digest_size": 384
+                                    }
+                                }
+                            }
+                        },
+                        "authenticated_encryption": true,
+                        "initial_version": "tls1_2",
+                        "last_version": "tls1_2",
+                        "export_grade": false
+                    }
+                },
+                {
+                    "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256": {
+                        "code": 49199,
+                        "iana_name": "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+                        "openssl_name": "ECDHE-RSA-AES128-GCM-SHA256",
+                        "key_exchange": {
+                            "ECDHE": {
+                                "name": "Elliptic-curve Diffie\u2013Hellman Ephemeral (ECDHE)",
+                                "forward_secret": true
+                            }
+                        },
+                        "authentication": {
+                            "RSA": {
+                                "name": "Rivest\u2013Shamir\u2013Adleman (RSA)",
+                                "oid": "1.2.840.113549.1.1.1",
+                                "anonymous": false
+                            }
+                        },
+                        "bulk_cipher": {
+                            "AES_128": {
+                                "name": "AES-128",
+                                "key_size": 128,
+                                "block_size": 128
+                            }
+                        },
+                        "block_cipher_mode": {
+                            "GCM": {
+                                "name": "Galois/Counter Mode (GCM)"
+                            }
+                        },
+                        "mac": {
+                            "SHA2_256": {
+                                "name": "SHA2-256",
+                                "oid": "1.2.840.113549.2.9",
+                                "hash_algo": {
+                                    "SHA2_256": {
+                                        "name": "SHA-256",
+                                        "oid": "2.16.840.1.101.3.4.2.1",
+                                        "digest_size": 256
+                                    }
+                                }
+                            }
+                        },
+                        "authenticated_encryption": true,
+                        "initial_version": "tls1_2",
+                        "last_version": "tls1_2",
+                        "export_grade": false
+                    }
+                },
+                {
+                    "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384": {
+                        "code": 49200,
+                        "iana_name": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+                        "openssl_name": "ECDHE-RSA-AES256-GCM-SHA384",
+                        "key_exchange": {
+                            "ECDHE": {
+                                "name": "Elliptic-curve Diffie\u2013Hellman Ephemeral (ECDHE)",
+                                "forward_secret": true
+                            }
+                        },
+                        "authentication": {
+                            "RSA": {
+                                "name": "Rivest\u2013Shamir\u2013Adleman (RSA)",
+                                "oid": "1.2.840.113549.1.1.1",
+                                "anonymous": false
+                            }
+                        },
+                        "bulk_cipher": {
+                            "AES_256": {
+                                "name": "AES-256",
+                                "key_size": 256,
+                                "block_size": 128
+                            }
+                        },
+                        "block_cipher_mode": {
+                            "GCM": {
+                                "name": "Galois/Counter Mode (GCM)"
+                            }
+                        },
+                        "mac": {
+                            "SHA2_384": {
+                                "name": "SHA2-384",
+                                "oid": "1.2.840.113549.2.10",
+                                "hash_algo": {
+                                    "SHA2_384": {
+                                        "name": "SHA-384",
+                                        "oid": "2.16.840.1.101.3.4.2.2",
+                                        "digest_size": 384
+                                    }
+                                }
+                            }
+                        },
+                        "authenticated_encryption": true,
+                        "initial_version": "tls1_2",
+                        "last_version": "tls1_2",
+                        "export_grade": false
+                    }
+                },
+                {
+                    "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256": {
+                        "code": 52392,
+                        "iana_name": "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256",
+                        "openssl_name": "ECDHE-RSA-CHACHA20-POLY1305",
+                        "key_exchange": {
+                            "ECDHE": {
+                                "name": "Elliptic-curve Diffie\u2013Hellman Ephemeral (ECDHE)",
+                                "forward_secret": true
+                            }
+                        },
+                        "authentication": {
+                            "RSA": {
+                                "name": "Rivest\u2013Shamir\u2013Adleman (RSA)",
+                                "oid": "1.2.840.113549.1.1.1",
+                                "anonymous": false
+                            }
+                        },
+                        "bulk_cipher": {
+                            "CHACHA20": {
+                                "name": "ChaCha20",
+                                "key_size": 128,
+                                "block_size": null
+                            }
+                        },
+                        "block_cipher_mode": null,
+                        "mac": {
+                            "POLY1305": {
+                                "name": "POLY1305",
+                                "oid": null,
+                                "digest_size": 128
+                            }
+                        },
+                        "authenticated_encryption": true,
+                        "initial_version": "tls1_2",
+                        "last_version": "tls1_2",
+                        "export_grade": false
+                    }
+                }
+            ],
+            "cipher_suite_preference": false,
+            "long_cipher_suite_list_intolerance": false
+        },
+        {
+            "target": {
+                "scheme": "tls",
+                "address": "www.example.org",
+                "ip": "192.168.0.1",
+                "port": 443,
+                "proto_version": "tls1_3"
+            },
+            "cipher_suites": [
+                {
+                    "TLS_AES_128_GCM_SHA256": {
+                        "code": 4865,
+                        "iana_name": "TLS_AES_128_GCM_SHA256",
+                        "openssl_name": "TLS_AES_128_GCM_SHA256",
+                        "key_exchange": null,
+                        "authentication": null,
+                        "bulk_cipher": {
+                            "AES_128": {
+                                "name": "AES-128",
+                                "key_size": 128,
+                                "block_size": 128
+                            }
+                        },
+                        "block_cipher_mode": {
+                            "GCM": {
+                                "name": "Galois/Counter Mode (GCM)"
+                            }
+                        },
+                        "mac": {
+                            "SHA2_256": {
+                                "name": "SHA2-256",
+                                "oid": "1.2.840.113549.2.9",
+                                "hash_algo": {
+                                    "SHA2_256": {
+                                        "name": "SHA-256",
+                                        "oid": "2.16.840.1.101.3.4.2.1",
+                                        "digest_size": 256
+                                    }
+                                }
+                            }
+                        },
+                        "authenticated_encryption": true,
+                        "initial_version": "tls1_3_draft15",
+                        "last_version": "tls1_3",
+                        "export_grade": false
+                    }
+                },
+                {
+                    "TLS_AES_256_GCM_SHA384": {
+                        "code": 4866,
+                        "iana_name": "TLS_AES_256_GCM_SHA384",
+                        "openssl_name": "TLS_AES_256_GCM_SHA384",
+                        "key_exchange": null,
+                        "authentication": null,
+                        "bulk_cipher": {
+                            "AES_256": {
+                                "name": "AES-256",
+                                "key_size": 256,
+                                "block_size": 128
+                            }
+                        },
+                        "block_cipher_mode": {
+                            "GCM": {
+                                "name": "Galois/Counter Mode (GCM)"
+                            }
+                        },
+                        "mac": {
+                            "SHA2_384": {
+                                "name": "SHA2-384",
+                                "oid": "1.2.840.113549.2.10",
+                                "hash_algo": {
+                                    "SHA2_384": {
+                                        "name": "SHA-384",
+                                        "oid": "2.16.840.1.101.3.4.2.2",
+                                        "digest_size": 384
+                                    }
+                                }
+                            }
+                        },
+                        "authenticated_encryption": true,
+                        "initial_version": "tls1_3_draft15",
+                        "last_version": "tls1_3",
+                        "export_grade": false
+                    }
+                },
+                {
+                    "TLS_CHACHA20_POLY1305_SHA256": {
+                        "code": 4867,
+                        "iana_name": "TLS_CHACHA20_POLY1305_SHA256",
+                        "openssl_name": "TLS_CHACHA20_POLY1305_SHA256",
+                        "key_exchange": null,
+                        "authentication": null,
+                        "bulk_cipher": {
+                            "CHACHA20": {
+                                "name": "ChaCha20",
+                                "key_size": 128,
+                                "block_size": null
+                            }
+                        },
+                        "block_cipher_mode": null,
+                        "mac": {
+                            "POLY1305": {
+                                "name": "POLY1305",
+                                "oid": null,
+                                "digest_size": 128
+                            }
+                        },
+                        "authenticated_encryption": true,
+                        "initial_version": "tls1_3_draft15",
+                        "last_version": "tls1_3",
+                        "export_grade": false
+                    }
+                },
+                {
+                    "TLS_AES_128_CCM_SHA256": {
+                        "code": 4868,
+                        "iana_name": "TLS_AES_128_CCM_SHA256",
+                        "openssl_name": "TLS_AES_128_CCM_SHA256",
+                        "key_exchange": null,
+                        "authentication": null,
+                        "bulk_cipher": {
+                            "AES_128": {
+                                "name": "AES-128",
+                                "key_size": 128,
+                                "block_size": 128
+                            }
+                        },
+                        "block_cipher_mode": {
+                            "CCM": {
+                                "name": "Counter with CBC-MAC (CCM)"
+                            }
+                        },
+                        "mac": {
+                            "SHA2_256": {
+                                "name": "SHA2-256",
+                                "oid": "1.2.840.113549.2.9",
+                                "hash_algo": {
+                                    "SHA2_256": {
+                                        "name": "SHA-256",
+                                        "oid": "2.16.840.1.101.3.4.2.1",
+                                        "digest_size": 256
+                                    }
+                                }
+                            }
+                        },
+                        "authenticated_encryption": true,
+                        "initial_version": "tls1_3_draft15",
+                        "last_version": "tls1_3",
+                        "export_grade": false
+                    }
+                }
+            ],
+            "cipher_suite_preference": false,
+            "long_cipher_suite_list_intolerance": false
+        }
+    ],
+    "curves": {
+        "target": {
+            "scheme": "tls",
+            "address": "www.example.org",
+            "ip": "192.168.0.1",
+            "port": 443,
+            "proto_version": "tls1_2"
+        },
+        "curves": [
+            {
+                "SECP256R1": {
+                    "code": 23,
+                    "named_group": {
+                        "PRIME256V1": {
+                            "name": "prime256v1",
+                            "oid": "1.2.840.10045.3.1.7",
+                            "size": 256,
+                            "group_type": {
+                                "ELLIPTIC_CURVE": 1
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "SECP384R1": {
+                    "code": 24,
+                    "named_group": {
+                        "SECP384R1": {
+                            "name": "secp384r1",
+                            "oid": "1.3.132.0.34",
+                            "size": 384,
+                            "group_type": {
+                                "ELLIPTIC_CURVE": 1
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "SECP521R1": {
+                    "code": 25,
+                    "named_group": {
+                        "SECP521R1": {
+                            "name": "secp521r1",
+                            "oid": "1.3.132.0.35",
+                            "size": 521,
+                            "group_type": {
+                                "ELLIPTIC_CURVE": 1
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "X25519": {
+                    "code": 29,
+                    "named_group": {
+                        "CURVE25519": {
+                            "name": "Curve25519",
+                            "oid": "1.3.101.110",
+                            "size": 256,
+                            "group_type": {
+                                "ELLIPTIC_CURVE": 1
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "X448": {
+                    "code": 30,
+                    "named_group": {
+                        "CURVE448": {
+                            "name": "Curve448",
+                            "oid": "1.3.101.111",
+                            "size": 448,
+                            "group_type": {
+                                "ELLIPTIC_CURVE": 1
+                            }
+                        }
+                    }
+                }
+            }
+        ],
+        "extension_supported": true
+    },
+    "sigalgos": {
+        "target": {
+            "scheme": "tls",
+            "address": "www.example.org",
+            "ip": "192.168.0.1",
+            "port": 443,
+            "proto_version": "tls1_2"
+        },
+        "sig_algos": [
+            {
+                "RSA_SHA1": {
+                    "code": 513,
+                    "hash_algorithm": {
+                        "SHA1": {
+                            "name": "SHA-1",
+                            "oid": "1.3.14.3.2.18",
+                            "digest_size": 160
+                        }
+                    },
+                    "signature_algorithm": {
+                        "RSA": {
+                            "name": "Rivest\u2013Shamir\u2013Adleman (RSA)",
+                            "oid": "1.2.840.113549.1.1.1",
+                            "anonymous": false
+                        }
+                    }
+                }
+            },
+            {
+                "RSA_SHA224": {
+                    "code": 769,
+                    "hash_algorithm": {
+                        "SHA2_224": {
+                            "name": "SHA-224",
+                            "oid": "2.16.840.1.101.3.4.2.4",
+                            "digest_size": 224
+                        }
+                    },
+                    "signature_algorithm": {
+                        "RSA": {
+                            "name": "Rivest\u2013Shamir\u2013Adleman (RSA)",
+                            "oid": "1.2.840.113549.1.1.1",
+                            "anonymous": false
+                        }
+                    }
+                }
+            },
+            {
+                "RSA_SHA256": {
+                    "code": 1025,
+                    "hash_algorithm": {
+                        "SHA2_256": {
+                            "name": "SHA-256",
+                            "oid": "2.16.840.1.101.3.4.2.1",
+                            "digest_size": 256
+                        }
+                    },
+                    "signature_algorithm": {
+                        "RSA": {
+                            "name": "Rivest\u2013Shamir\u2013Adleman (RSA)",
+                            "oid": "1.2.840.113549.1.1.1",
+                            "anonymous": false
+                        }
+                    }
+                }
+            },
+            {
+                "RSA_SHA384": {
+                    "code": 1281,
+                    "hash_algorithm": {
+                        "SHA2_384": {
+                            "name": "SHA-384",
+                            "oid": "2.16.840.1.101.3.4.2.2",
+                            "digest_size": 384
+                        }
+                    },
+                    "signature_algorithm": {
+                        "RSA": {
+                            "name": "Rivest\u2013Shamir\u2013Adleman (RSA)",
+                            "oid": "1.2.840.113549.1.1.1",
+                            "anonymous": false
+                        }
+                    }
+                }
+            },
+            {
+                "RSA_SHA512": {
+                    "code": 1537,
+                    "hash_algorithm": {
+                        "SHA2_512": {
+                            "name": "SHA-512",
+                            "oid": "2.16.840.1.101.3.4.2.3",
+                            "digest_size": 512
+                        }
+                    },
+                    "signature_algorithm": {
+                        "RSA": {
+                            "name": "Rivest\u2013Shamir\u2013Adleman (RSA)",
+                            "oid": "1.2.840.113549.1.1.1",
+                            "anonymous": false
+                        }
+                    }
+                }
+            },
+            {
+                "RSA_PSS_RSAE_SHA256": {
+                    "code": 2052,
+                    "hash_algorithm": {
+                        "SHA2_256": {
+                            "name": "SHA-256",
+                            "oid": "2.16.840.1.101.3.4.2.1",
+                            "digest_size": 256
+                        }
+                    },
+                    "signature_algorithm": {
+                        "RSA": {
+                            "name": "Rivest\u2013Shamir\u2013Adleman (RSA)",
+                            "oid": "1.2.840.113549.1.1.1",
+                            "anonymous": false
+                        }
+                    }
+                }
+            },
+            {
+                "RSA_PSS_RSAE_SHA384": {
+                    "code": 2053,
+                    "hash_algorithm": {
+                        "SHA2_384": {
+                            "name": "SHA-384",
+                            "oid": "2.16.840.1.101.3.4.2.2",
+                            "digest_size": 384
+                        }
+                    },
+                    "signature_algorithm": {
+                        "RSA": {
+                            "name": "Rivest\u2013Shamir\u2013Adleman (RSA)",
+                            "oid": "1.2.840.113549.1.1.1",
+                            "anonymous": false
+                        }
+                    }
+                }
+            },
+            {
+                "RSA_PSS_RSAE_SHA512": {
+                    "code": 2054,
+                    "hash_algorithm": {
+                        "SHA2_512": {
+                            "name": "SHA-512",
+                            "oid": "2.16.840.1.101.3.4.2.3",
+                            "digest_size": 512
+                        }
+                    },
+                    "signature_algorithm": {
+                        "RSA": {
+                            "name": "Rivest\u2013Shamir\u2013Adleman (RSA)",
+                            "oid": "1.2.840.113549.1.1.1",
+                            "anonymous": false
+                        }
+                    }
+                }
+            }
+        ]
+    },
+    "extensions": {
+        "target": {
+            "scheme": "tls",
+            "address": "www.example.org",
+            "ip": "192.168.0.1",
+            "port": 443,
+            "proto_version": "tls1_2"
+        },
+        "next_protocols": [],
+        "application_layer_protocols": [
+            {
+                "H2": {
+                    "code": "h2"
+                }
+            },
+            {
+                "HTTP_1_1": {
+                    "code": "http/1.1"
+                }
+            }
+        ],
+        "compression_methods": "{TlsCompressionMethod.NULL}",
+        "clock_is_accurate": false,
+        "renegotiation_supported": true,
+        "session_cache_supported": true,
+        "session_ticket_supported": true,
+        "extended_master_secret_supported": true,
+        "encrypt_then_mac_supported": null,
+        "ec_point_formats": [
+            {
+                "UNCOMPRESSED": {
+                    "code": 0
+                }
+            },
+            {
+                "ANSIX962_COMPRESSED_PRIME": {
+                    "code": 1
+                }
+            },
+            {
+                "ANSIX962_COMPRESSED_CHAR2": {
+                    "code": 2
+                }
+            }
+        ]
+    },
+    "vulns": {
+        "target": {
+            "address": "www.example.org",
+            "port": 443,
+            "timeout": null,
+            "ip": "192.168.0.1",
+            "l4_transfer": null
+        },
+        "ciphers": {
+            "lucky13": false,
+            "sweet32": false,
+            "freak": false,
+            "anonymous_dh": false,
+            "null_encryption": false,
+            "rc4": false,
+            "non_forward_secret": true,
+            "export_grade": false
+        },
+        "dhparams": {
+            "logjam": false,
+            "dheat": false
+        },
+        "versions": {
+            "drown": false,
+            "early_tls_version": false
+        }
+    }
+}

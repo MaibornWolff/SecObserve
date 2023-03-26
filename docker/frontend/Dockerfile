@@ -1,13 +1,20 @@
 # build environment
 FROM node:18.15.0-alpine as build
 
+ARG VERSION=unkown
+
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 COPY frontend/package.json ./
 COPY frontend/package-lock.json ./
 COPY frontend/.npmrc ./
+
+
 RUN npm ci
 COPY ./frontend ./
+# insert version for status endpoint
+RUN sed -i 's/version_unkown/'"${VERSION}"'/g' ./src/commons/about/About.tsx
+
 RUN npm run build
 
 # production environment

@@ -9,6 +9,8 @@ services:
     build:
       context: .
       dockerfile: ./docker/frontend/Dockerfile
+      args:
+        VERSION: prod_test
     image: secobserve_frontend
     environment:
       API_BASE_URL: ${SO_API_BASE_URL:-http://localhost:5000/api}
@@ -25,6 +27,8 @@ services:
     build:
       context: .
       dockerfile: ./docker/backend/prod/django/Dockerfile
+      args:
+        VERSION: prod_test
     image: secobserve_backend_prod
     depends_on:
       - postgres

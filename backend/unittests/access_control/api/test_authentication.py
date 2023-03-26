@@ -260,7 +260,7 @@ class TestAuthentication(BaseTestCase):
 
         self._check_authentication(["get"], "/api/evidences/1/")
 
-        self._check_authentication(["get"], "/api/status/commit_id/")
+        self._check_authentication(["get"], "/api/status/version/")
 
     def test_authentication_users(self):
         self._check_authentication(["get"], "/api/users/me/")

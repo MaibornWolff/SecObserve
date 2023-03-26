@@ -9,14 +9,14 @@ class TestViews(BaseTestCase):
     @patch(
         "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
     )
-    def test_commit(self, mock_authentication):
+    def test_version(self, mock_authentication):
         mock_authentication.return_value = self.user_internal, None
 
         api_client = APIClient()
-        response = api_client.get("/api/status/commit_id/")
+        response = api_client.get("/api/status/version/")
 
         self.assertEqual(HTTP_200_OK, response.status_code)
-        self.assertEqual({"commit_id": "unittest_commit_id"}, response.data)
+        self.assertEqual({"version": "unittest_version"}, response.data)
 
     def test_health(self):
         api_client = APIClient()

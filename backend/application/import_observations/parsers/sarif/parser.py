@@ -71,6 +71,8 @@ class SARIFParser(BaseParser, BaseFileParser):
         for run in data.get("runs", []):
             sarif_scanner = run.get("tool", {}).get("driver", {}).get("name")
             sarif_version = run.get("tool", {}).get("driver", {}).get("version")
+            if not sarif_version:
+                sarif_version = run.get("tool", {}).get("driver", {}).get("semanticVersion")
             if sarif_version:
                 sarif_scanner += " / " + sarif_version
 

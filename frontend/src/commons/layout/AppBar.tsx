@@ -9,9 +9,11 @@ import {
     MenuItem,
     ListItemIcon,
     ListItemText,
+    Divider,
 } from "@mui/material";
-import InfoIcon from "@mui/icons-material/Info";
+import ArticleIcon from "@mui/icons-material/Article";
 import SettingsIcon from "@mui/icons-material/Settings";
+import About from "../about/About";
 
 import Logo from "./Logo";
 
@@ -29,7 +31,7 @@ const DocumentationMenu = React.forwardRef(() => {
             }}
         >
             <ListItemIcon>
-                <InfoIcon />
+                <ArticleIcon />
             </ListItemIcon>
             <ListItemText>Documentation</ListItemText>
         </MenuItem>
@@ -54,11 +56,15 @@ const SettingsMenu = React.forwardRef(() => {
         </MenuItem>
     );
 });
+
 const CustomUserMenu = () => {
     return (
         <UserMenu>
-            <DocumentationMenu />
             <SettingsMenu />
+            <Divider />
+            <DocumentationMenu />
+            <About />
+            <Divider />
             <Logout />
         </UserMenu>
     );
