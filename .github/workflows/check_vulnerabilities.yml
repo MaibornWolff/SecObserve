@@ -30,8 +30,8 @@ jobs:
             grype_backend_image.json
             grype_frontend_image.json
             kics.sarif
-            semgrep_backend.json
-            semgrep_frontend.json
+            semgrep_backend.sarif
+            semgrep_frontend.sarif
             trivy_frontend_npm.json
             trivy_backend_image.json
             trivy_frontend_image.json

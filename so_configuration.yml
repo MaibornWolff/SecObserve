@@ -46,7 +46,7 @@ semgrep_backend:
   RUN_DIRECTORY: "."
   CONFIGURATION: "r/python"
   TARGET: "backend"
-  REPORT_NAME: "semgrep_backend.json"
+  REPORT_NAME: "semgrep_backend.sarif"
   SO_ORIGIN_SERVICE: "backend"
 
 semgrep_frontend:
@@ -54,7 +54,7 @@ semgrep_frontend:
   RUN_DIRECTORY: "."
   CONFIGURATION: "r/typescript"
   TARGET: "frontend/src"
-  REPORT_NAME: "semgrep_frontend.json"
+  REPORT_NAME: "semgrep_frontend.sarif"
   SO_ORIGIN_SERVICE: "frontend"
 
 trivy_filesystem_frontend:
