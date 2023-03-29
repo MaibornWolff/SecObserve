@@ -1,0 +1,80 @@
+bandit_backend:
+  SCANNER: bandit
+  RUN_DIRECTORY: "."
+  TARGET: backend
+  REPORT_NAME: bandit_backend.sarif
+  SO_ORIGIN_SERVICE: backend
+
+checkov:
+  SCANNER: checkov
+  RUN_DIRECTORY: "."
+  TARGET: "."
+  REPORT_NAME: checkov.sarif
+
+eslint_frontend:
+  SCANNER: eslint
+  RUN_DIRECTORY: "frontend"
+  TARGET: "src"
+  REPORT_NAME: "eslint_frontend.sarif"
+  SO_ORIGIN_SERVICE: "frontend"
+
+gitleaks:
+  SCANNER: gitleaks
+  RUN_DIRECTORY: "."
+  REPORT_NAME: "gitleaks.sarif"
+
+grype_image_backend:
+  SCANNER: grype_image
+  TARGET: "maibornwolff/secobserve-backend:dev"
+  REPORT_NAME: "grype_backend_image.json"
+  SO_ORIGIN_SERVICE: "backend"
+
+grype_image_frontend:
+  SCANNER: grype_image
+  TARGET: "maibornwolff/secobserve-frontend:dev"
+  REPORT_NAME: "grype_frontend_image.json"
+  SO_ORIGIN_SERVICE: "frontend"
+
+kics:
+  SCANNER: kics
+  RUN_DIRECTORY: "."
+  TARGET: "."
+  REPORT_NAME: "kics.sarif"
+
+semgrep_backend:
+  SCANNER: semgrep
+  RUN_DIRECTORY: "."
+  CONFIGURATION: "r/python"
+  TARGET: "backend"
+  REPORT_NAME: "semgrep_backend.json"
+  SO_ORIGIN_SERVICE: "backend"
+
+semgrep_frontend:
+  SCANNER: semgrep
+  RUN_DIRECTORY: "."
+  CONFIGURATION: "r/typescript"
+  TARGET: "frontend/src"
+  REPORT_NAME: "semgrep_frontend.json"
+  SO_ORIGIN_SERVICE: "frontend"
+
+trivy_filesystem_frontend:
+  SCANNER: trivy_filesystem
+  RUN_DIRECTORY: "."
+  TARGET: "frontend/package-lock.json"
+  REPORT_NAME: "trivy_frontend_npm.json"
+  SO_ORIGIN_SERVICE: "frontend"
+
+trivy_image_backend:
+  SCANNER: trivy_image
+  TARGET: "maibornwolff/secobserve-backend:dev"
+  REPORT_NAME: "trivy_backend_image.json"
+  SO_ORIGIN_SERVICE: "backend"
+
+trivy_image_frontend:
+  SCANNER: trivy_image
+  TARGET: "maibornwolff/secobserve-frontend:dev"
+  REPORT_NAME: "trivy_frontend_image.json"
+  SO_ORIGIN_SERVICE: "frontend"
+
+importer:
+  SO_UPLOAD: "false"
