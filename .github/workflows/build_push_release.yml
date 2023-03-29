@@ -7,6 +7,8 @@ on:
         description: 'SecObserve release (without the v)'
         required: true
 
+permissions: read-all
+
 jobs:
   docker:
     runs-on: ubuntu-latest
