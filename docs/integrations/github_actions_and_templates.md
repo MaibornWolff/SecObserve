@@ -2,9 +2,7 @@
 
 Integrating vulnerability scanners in a CI/CD pipeline can be cumbersome. Every tool is different to install and has different parameters. Our repository of GitHub actions and GitLab CI templates makes this process very straightforward, with a unified way to start the tools. The tools in the template repository will be updated regularly, so that all the latest features and bugfixes are available.
 
-All actions and templates run the scanner, import the results into SecObserve and make the report available as an artifact.
-
- The actions and the templates are stored in the repository [https://github.com/MaibornWolff/secobserve_actions_templates](https://github.com/MaibornWolff/secobserve_actions_templates).
+The actions and the templates are stored in the repository [https://github.com/MaibornWolff/secobserve_actions_templates](https://github.com/MaibornWolff/secobserve_actions_templates).
 
 ## Variables
 
@@ -29,7 +27,10 @@ Most of the actions and templates use the same set of variables:
 | `SO_ORIGIN_DOCKER_IMAGE_NAME_TAG` | *optional* | Name:Tag of Docker image to be set for all imported observations. |
 | `SO_ORIGIN_ENDPOINT_URL` | *optional* | URL of endpoint to be set for all imported observations. |
 
-## Available actions and templates
+## Actions and templates per scanner
+
+For most of the supported scanners there is a GitHub action and a GitLab CI template to run it in a CI/CD pipeline. All actions and templates run the scanner, import the results into SecObserve and make the report available as an artifact.
+
 
 | Scanner | GitHub Action | GitLab CI Template | License |
 |----------|---------|-------------|--------|
@@ -48,7 +49,7 @@ Most of the actions and templates use the same set of variables:
 
 All GitHub actions and GitLab CI templates use a pre-built Docker image that contains all scanners and the SecObserve importer.
 
-##  Examplary workflow for GitHub actions
+#### Examplary workflow for GitHub actions
 
 !!! tip
     The mandatory variables for importing (`SO_API_BASE_URL`, `SO_API_TOKEN` and `SO_PRODUCT_NAME`) can be set as secrets and variables in the settings of the project in GitHub.
@@ -142,7 +143,7 @@ jobs:
             dd_import_gitleaks.sarif
 ```
 
-##  Examplary pipeline for GitLab CI templates
+#### Examplary pipeline for GitLab CI templates
 
 !!! tip
     The mandatory variables for importing (`SO_API_BASE_URL`, `SO_API_TOKEN` and `SO_PRODUCT_NAME`) can be set as variables in the CI/CD settings of the project in GitLab. Then they don't need to be set in each job.
@@ -160,6 +161,10 @@ include:
   - "https://raw.githubusercontent.com/MaibornWolff/secobserve_actions_templates/main/templates/SCA/trivy_filesystem.yml"
   - "https://raw.githubusercontent.com/MaibornWolff/secobserve_actions_templates/main/templates/SCA/trivy_image.yml"
   - "https://raw.githubusercontent.com/MaibornWolff/secobserve_actions_templates/main/templates/secrets/gitleaks.yml"
+
+stages:
+  - test
+  - ...
 
 grype_image_backend:
   extends: .grype_image
@@ -252,19 +257,231 @@ kics:
     TARGET: "."
     REPORT_NAME: "kics.sarif"
   needs: []
+```
 
-drheader:
-  extends: .drheader
-  variables:
-    TARGET: "https://secobserve.example.com"
-    REPORT_NAME: "drheader.json"
-    SO_ORIGIN_ENDPOINT_URL: "https://secobserve.example.com"
-needs: []
+## One action / template for all scanners
 
-cryptolyzer:
-  extends: .cryptolyzer
+There is a GitHub action and a GitLab CI template that runs all scanners sequentially in one step. It needs a configuration file, that defines which scanners to run and their parameters.
+
+* **GitHub action:** `actions/vulnerability_scanner`
+* **GitLab CI template:** `templates/SAST/bandit.yml`
+
+#### Examplary workflow for GitHub actions
+
+```yaml
+name: Check for vulnerabilities
+
+on: [push]
+
+permissions: read-all
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run vulnerability scanners
+        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@main
+        with:
+          so_configuration: 'so_configuration.yml'
+          so_api_token: ${{ secrets.SO_API_TOKEN }}
+
+      - name: Upload results
+        uses: actions/upload-artifact@v3
+        with:
+          name: secobserve
+          path: |
+            bandit_backend.sarif
+            checkov.sarif
+            eslint_frontend.sarif
+            gitleaks.sarif
+            grype_backend_image.json
+            grype_frontend_image.json
+            kics.sarif
+            semgrep_backend.sarif
+            semgrep_frontend.sarif
+            trivy_frontend_npm.json
+            trivy_backend_image.json
+            trivy_frontend_image.json
+```
+
+#### Examplary pipeline for GitLab CI templates
+
+This examples assumes `SO_API_TOKEN` is stored as a CI/CD variable in GitLab.
+
+```yaml
+include:
+  - "https://raw.githubusercontent.com/MaibornWolff/secobserve_actions_templates/main/templates/vulnerability_scanner.yml"
+
+stages:
+  - test
+  - ...
+
+vulnerability_scans_test_stage:
+  stage: test
+  extends: .vulnerability_scanner
   variables:
-    TARGET: "secobserve.example.com"
-    REPORT_NAME: "cryptolyzer.json"
-  needs: []
+    SO_CONFIGURATION: "so_configuration.yml"
+```
+
+#### Examplary configuration file
+
+The YAML file has one section per scan. Each section has a unique name, the name of the scanner with the keyword `SCANNER` and then the variables needed for the scanner.
+
+Additionally there is a mandatory section `importer` with the variables needed for uploading the results to SecObserve. The variable `SO_API_TOKEN` cannot be set in the configuration file due to security reasons. It has to be set as a secret in GitHub or protected and masked variable in GitLab.
+
+```yaml
+bandit_backend:
+  SCANNER: bandit
+  RUN_DIRECTORY: "."
+  TARGET: backend
+  REPORT_NAME: bandit_backend.sarif
+  SO_ORIGIN_SERVICE: backend
+
+checkov:
+  SCANNER: checkov
+  RUN_DIRECTORY: "."
+  TARGET: "."
+  REPORT_NAME: checkov.sarif
+
+eslint_frontend:
+  SCANNER: eslint
+  RUN_DIRECTORY: "frontend"
+  TARGET: "src"
+  REPORT_NAME: "eslint_frontend.sarif"
+  SO_ORIGIN_SERVICE: "frontend"
+
+gitleaks:
+  SCANNER: gitleaks
+  RUN_DIRECTORY: "."
+  REPORT_NAME: "gitleaks.sarif"
+
+grype_image_backend:
+  SCANNER: grype_image
+  TARGET: "maibornwolff/secobserve-backend:dev"
+  REPORT_NAME: "grype_backend_image.json"
+  SO_ORIGIN_SERVICE: "backend"
+
+grype_image_frontend:
+  SCANNER: grype_image
+  TARGET: "maibornwolff/secobserve-frontend:dev"
+  REPORT_NAME: "grype_frontend_image.json"
+  SO_ORIGIN_SERVICE: "frontend"
+
+kics:
+  SCANNER: kics
+  RUN_DIRECTORY: "."
+  TARGET: "."
+  REPORT_NAME: "kics.sarif"
+
+semgrep_backend:
+  SCANNER: semgrep
+  RUN_DIRECTORY: "."
+  CONFIGURATION: "r/python"
+  TARGET: "backend"
+  REPORT_NAME: "semgrep_backend.sarif"
+  SO_ORIGIN_SERVICE: "backend"
+
+semgrep_frontend:
+  SCANNER: semgrep
+  RUN_DIRECTORY: "."
+  CONFIGURATION: "r/typescript"
+  TARGET: "frontend/src"
+  REPORT_NAME: "semgrep_frontend.sarif"
+  SO_ORIGIN_SERVICE: "frontend"
+
+trivy_filesystem_frontend:
+  SCANNER: trivy_filesystem
+  RUN_DIRECTORY: "."
+  TARGET: "frontend/package-lock.json"
+  REPORT_NAME: "trivy_frontend_npm.json"
+  SO_ORIGIN_SERVICE: "frontend"
+
+trivy_image_backend:
+  SCANNER: trivy_image
+  TARGET: "maibornwolff/secobserve-backend:dev"
+  REPORT_NAME: "trivy_backend_image.json"
+  SO_ORIGIN_SERVICE: "backend"
+
+trivy_image_frontend:
+  SCANNER: trivy_image
+  TARGET: "maibornwolff/secobserve-frontend:dev"
+  REPORT_NAME: "trivy_frontend_image.json"
+  SO_ORIGIN_SERVICE: "frontend"
+
+importer:
+  SO_UPLOAD: "true"
+  SO_API_BASE_URL: "https://secobserve-backend.example.com"
+  SO_PRODUCT_NAME: "SecObserve"
+```
+
+## Importer
+
+If a vulnerability scanner is used for which no GitHub action or GitLab CI template exists, but which can export the `SARIF` or `CycloneDX` format, the results can be imported into SecObserve using the `importer` action or template.
+
+* **GitHub action:** `actions/importer`
+* **GitLab CI template:** `templates/importer.yml`
+
+#### Examplary workflow for GitHub actions
+
+```yaml
+name: Vulnerability checks
+
+on: [push]
+
+permissions: read-all
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run your vulnerability scanner
+        ...
+
+      - name: Import observations
+        uses: MaibornWolff/secobserve_actions_templates/actions/importer@main
+        with:
+          so_api_base_url: ${{ vars.SO_API_BASE_URL }}
+          so_api_token: ${{ secrets.SO_API_TOKEN }}
+          so_product_name: ${{ vars.SO_PRODUCT_NAME }}
+          so_file_name: 'observations.sarif'
+          so_parser_name: SARIF
+```
+
+#### Examplary pipeline for GitLab CI templates
+
+This examples assumes `SO_API_BASE_URL`, `SO_API_TOKEN` and `SO_PRODUCT_NAME` are stored as CI/CD variables in GitLab.
+
+```yaml
+include:
+  - "https://raw.githubusercontent.com/MaibornWolff/secobserve_actions_templates/main/templates/importer.yml"
+
+stages:
+  - test
+  - import
+  - ...
+
+your_vulnerability_scanner:
+  stage: test
+  ...
+  artifacts:
+    when: always
+    paths: 
+      - observations.sarif
+
+import_observations:
+  stage: import
+  extends: .importer
+  variables:
+    SO_FILE_NAME: observations.sarif
+    SO_PARSER_NAME: SARIF
+  needs:
+    - your_vulnerability_scanner
 ```
