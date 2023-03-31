@@ -44,7 +44,7 @@ requests==2.28.2  # https://github.com/psf/requests
 
 # Azure Active Directory
 # ------------------------------------------------------------------------------
-django-auth-adfs==1.11.4  # https://github.com/snok/django-auth-adfs
+django-auth-adfs==1.11.5  # https://github.com/snok/django-auth-adfs
 
 # MySQL
 # ------------------------------------------------------------------------------
