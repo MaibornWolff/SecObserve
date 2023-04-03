@@ -1,0 +1,2522 @@
+[
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_app_services_is_on-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/AppServices",
+        "Provider": "azure",
+        "CheckID": "defender_ensure_defender_for_app_services_is_on",
+        "CheckTitle": "Ensure That Microsoft Defender for App Services Is Set To 'On' ",
+        "CheckType": [],
+        "ServiceName": "defender",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Defender plan Defender for App Services from subscription Example_Subscription - XAKS is set to OFF (pricing tier not standard)",
+        "Severity": "high",
+        "ResourceType": "AzureDefenderPlan",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure That Microsoft Defender for App Services Is Set To 'On' ",
+        "Risk": "Turning on Microsoft Defender for App Service enables threat detection for App Service, providing threat intelligence, anomaly detection, and behavior analytics in the Microsoft Defender for Cloud.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-azure-defender-is-set-to-on-for-app-service#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-app-service.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-app-service.html"
+            },
+            "Recommendation": {
+                "Text": "By default, Microsoft Defender for Cloud is not enabled for your App Service instances. Enabling the Defender security service for App Service instances allows for advanced security defense using threat detection capabilities provided by Microsoft Security Response Center.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/AppServices",
+        "ResourceName": "Defender plan App Services"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_app_services_is_on-Example_Subscription - Partner Subscription 01-/subscriptions/f17730ec-1c6d-467f-8087-a673ae7ddfd2/providers/Microsoft.Security/pricings/AppServices",
+        "Provider": "azure",
+        "CheckID": "defender_ensure_defender_for_app_services_is_on",
+        "CheckTitle": "Ensure That Microsoft Defender for App Services Is Set To 'On' ",
+        "CheckType": [],
+        "ServiceName": "defender",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Defender plan Defender for App Services from subscription Example_Subscription - Partner Subscription 01 is set to OFF (pricing tier not standard)",
+        "Severity": "high",
+        "ResourceType": "AzureDefenderPlan",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure That Microsoft Defender for App Services Is Set To 'On' ",
+        "Risk": "Turning on Microsoft Defender for App Service enables threat detection for App Service, providing threat intelligence, anomaly detection, and behavior analytics in the Microsoft Defender for Cloud.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-azure-defender-is-set-to-on-for-app-service#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-app-service.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-app-service.html"
+            },
+            "Recommendation": {
+                "Text": "By default, Microsoft Defender for Cloud is not enabled for your App Service instances. Enabling the Defender security service for App Service instances allows for advanced security defense using threat detection capabilities provided by Microsoft Security Response Center.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - Partner Subscription 01",
+        "ResourceId": "/subscriptions/f17730ec-1c6d-467f-8087-a673ae7ddfd2/providers/Microsoft.Security/pricings/AppServices",
+        "ResourceName": "Defender plan App Services"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_arm_is_on-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/Arm",
+        "Provider": "azure",
+        "CheckID": "defender_ensure_defender_for_arm_is_on",
+        "CheckTitle": "Ensure That Microsoft Defender for Azure Resource Manager Is Set To 'On' ",
+        "CheckType": [],
+        "ServiceName": "defender",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Defender plan Defender for ARM from subscription Example_Subscription - XAKS is set to OFF (pricing tier not standard)",
+        "Severity": "high",
+        "ResourceType": "AzureDefenderPlan",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure That Microsoft Defender for Azure Resource Manager Is Set To 'On' ",
+        "Risk": "Scanning resource requests lets you be alerted every time there is suspicious activity in order to prevent a security threat from being introduced.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "",
+                "CLI": "",
+                "Other": ""
+            },
+            "Recommendation": {
+                "Text": "Enable  Microsoft Defender for Azure Resource Manager",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/Arm",
+        "ResourceName": "Defender planARM"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_arm_is_on-Example_Subscription - Partner Subscription 01-/subscriptions/f17730ec-1c6d-467f-8087-a673ae7ddfd2/providers/Microsoft.Security/pricings/Arm",
+        "Provider": "azure",
+        "CheckID": "defender_ensure_defender_for_arm_is_on",
+        "CheckTitle": "Ensure That Microsoft Defender for Azure Resource Manager Is Set To 'On' ",
+        "CheckType": [],
+        "ServiceName": "defender",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Defender plan Defender for ARM from subscription Example_Subscription - Partner Subscription 01 is set to OFF (pricing tier not standard)",
+        "Severity": "high",
+        "ResourceType": "AzureDefenderPlan",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure That Microsoft Defender for Azure Resource Manager Is Set To 'On' ",
+        "Risk": "Scanning resource requests lets you be alerted every time there is suspicious activity in order to prevent a security threat from being introduced.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "",
+                "CLI": "",
+                "Other": ""
+            },
+            "Recommendation": {
+                "Text": "Enable  Microsoft Defender for Azure Resource Manager",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - Partner Subscription 01",
+        "ResourceId": "/subscriptions/f17730ec-1c6d-467f-8087-a673ae7ddfd2/providers/Microsoft.Security/pricings/Arm",
+        "ResourceName": "Defender planARM"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_azure_sql_databases_is_on-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/SqlServers",
+        "Provider": "azure",
+        "CheckID": "defender_ensure_defender_for_azure_sql_databases_is_on",
+        "CheckTitle": "Ensure That Microsoft Defender for Azure SQL Databases Is Set To 'On'  ",
+        "CheckType": [],
+        "ServiceName": "defender",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Defender plan Defender for Azure sql db servers from subscription Example_Subscription - XAKS is set to OFF (pricing tier not standard)",
+        "Severity": "high",
+        "ResourceType": "AzureDefenderPlan",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure That Microsoft Defender for Azure SQL Databases Is Set To 'On'  ",
+        "Risk": "Turning on Microsoft Defender for Azure SQL Databases enables threat detection for Azure SQL database servers, providing threat intelligence, anomaly detection, and behavior analytics in the Microsoft Defender for Cloud.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-azure-defender-is-set-to-on-for-azure-sql-database-servers#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-azure-sql.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-azure-sql.html"
+            },
+            "Recommendation": {
+                "Text": "By default, Microsoft Defender for Cloud is disabled for all your SQL database servers. Defender for Cloud monitors your SQL database servers for threats such as SQL injection, brute-force attacks, and privilege abuse. The security service provides action-oriented security alerts with details of the suspicious activity and guidance on how to mitigate the security threats.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/SqlServers",
+        "ResourceName": "Defender plan Azure sql db servers"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_azure_sql_databases_is_on-Example_Subscription - Partner Subscription 01-/subscriptions/f17730ec-1c6d-467f-8087-a673ae7ddfd2/providers/Microsoft.Security/pricings/SqlServers",
+        "Provider": "azure",
+        "CheckID": "defender_ensure_defender_for_azure_sql_databases_is_on",
+        "CheckTitle": "Ensure That Microsoft Defender for Azure SQL Databases Is Set To 'On'  ",
+        "CheckType": [],
+        "ServiceName": "defender",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Defender plan Defender for Azure sql db servers from subscription Example_Subscription - Partner Subscription 01 is set to OFF (pricing tier not standard)",
+        "Severity": "high",
+        "ResourceType": "AzureDefenderPlan",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure That Microsoft Defender for Azure SQL Databases Is Set To 'On'  ",
+        "Risk": "Turning on Microsoft Defender for Azure SQL Databases enables threat detection for Azure SQL database servers, providing threat intelligence, anomaly detection, and behavior analytics in the Microsoft Defender for Cloud.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-azure-defender-is-set-to-on-for-azure-sql-database-servers#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-azure-sql.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-azure-sql.html"
+            },
+            "Recommendation": {
+                "Text": "By default, Microsoft Defender for Cloud is disabled for all your SQL database servers. Defender for Cloud monitors your SQL database servers for threats such as SQL injection, brute-force attacks, and privilege abuse. The security service provides action-oriented security alerts with details of the suspicious activity and guidance on how to mitigate the security threats.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - Partner Subscription 01",
+        "ResourceId": "/subscriptions/f17730ec-1c6d-467f-8087-a673ae7ddfd2/providers/Microsoft.Security/pricings/SqlServers",
+        "ResourceName": "Defender plan Azure sql db servers"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_containers_is_on-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/Containers",
+        "Provider": "azure",
+        "CheckID": "defender_ensure_defender_for_containers_is_on",
+        "CheckTitle": "Ensure That Microsoft Defender for Containers Is Set To 'On' ",
+        "CheckType": [],
+        "ServiceName": "defender",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Defender plan Defender for Containers from subscription Example_Subscription - XAKS is set to OFF (pricing tier not standard)",
+        "Severity": "high",
+        "ResourceType": "AzureDefenderPlan",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure That Microsoft Defender for Containers Is Set To 'On' ",
+        "Risk": "Ensure that Microsoft Defender for Cloud is enabled for all your Azure containers. Turning on the Defender for Cloud service enables threat detection for containers, providing threat intelligence, anomaly detection, and behavior analytics.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-azure-defender-is-set-to-on-for-container-registries#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-container.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-container.html"
+            },
+            "Recommendation": {
+                "Text": "By default, Microsoft Defender for Cloud is not enabled for your Azure cloud containers. Enabling the Defender security service for Azure containers allows for advanced security defense against threats, using threat detection capabilities provided by the Microsoft Security Response Center (MSRC).",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/Containers",
+        "ResourceName": "Defender plan Container Registries"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_containers_is_on-Example_Subscription - Partner Subscription 01-/subscriptions/f17730ec-1c6d-467f-8087-a673ae7ddfd2/providers/Microsoft.Security/pricings/Containers",
+        "Provider": "azure",
+        "CheckID": "defender_ensure_defender_for_containers_is_on",
+        "CheckTitle": "Ensure That Microsoft Defender for Containers Is Set To 'On' ",
+        "CheckType": [],
+        "ServiceName": "defender",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Defender plan Defender for Containers from subscription Example_Subscription - Partner Subscription 01 is set to OFF (pricing tier not standard)",
+        "Severity": "high",
+        "ResourceType": "AzureDefenderPlan",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure That Microsoft Defender for Containers Is Set To 'On' ",
+        "Risk": "Ensure that Microsoft Defender for Cloud is enabled for all your Azure containers. Turning on the Defender for Cloud service enables threat detection for containers, providing threat intelligence, anomaly detection, and behavior analytics.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-azure-defender-is-set-to-on-for-container-registries#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-container.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-container.html"
+            },
+            "Recommendation": {
+                "Text": "By default, Microsoft Defender for Cloud is not enabled for your Azure cloud containers. Enabling the Defender security service for Azure containers allows for advanced security defense against threats, using threat detection capabilities provided by the Microsoft Security Response Center (MSRC).",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - Partner Subscription 01",
+        "ResourceId": "/subscriptions/f17730ec-1c6d-467f-8087-a673ae7ddfd2/providers/Microsoft.Security/pricings/Containers",
+        "ResourceName": "Defender plan Container Registries"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_cosmosdb_is_on-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/CosmosDbs",
+        "Provider": "azure",
+        "CheckID": "defender_ensure_defender_for_cosmosdb_is_on",
+        "CheckTitle": "Ensure That Microsoft Defender for Cosmos DB Is Set To 'On' ",
+        "CheckType": [],
+        "ServiceName": "defender",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Defender plan Defender for Cosmos DB from subscription Example_Subscription - XAKS is set to OFF (pricing tier not standard)",
+        "Severity": "high",
+        "ResourceType": "AzureDefenderPlan",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure That Microsoft Defender for Cosmos DB Is Set To 'On' ",
+        "Risk": "In scanning Cosmos DB requests within a subscription, requests are compared to a heuristic list of potential security threats. These threats could be a result of a security breach within your services, thus scanning for them could prevent a potential security threat from being introduced.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "",
+                "CLI": "",
+                "Other": ""
+            },
+            "Recommendation": {
+                "Text": "By default, Microsoft Defender for Cloud is not enabled for your App Service instances. Enabling the Defender security service for App Service instances allows for advanced security defense using threat detection capabilities provided by Microsoft Security Response Center.",
+                "Url": "Enable Microsoft Defender for Cosmos DB"
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/CosmosDbs",
+        "ResourceName": "Defender plan Cosmos DB"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_cosmosdb_is_on-Example_Subscription - Partner Subscription 01-/subscriptions/f17730ec-1c6d-467f-8087-a673ae7ddfd2/providers/Microsoft.Security/pricings/CosmosDbs",
+        "Provider": "azure",
+        "CheckID": "defender_ensure_defender_for_cosmosdb_is_on",
+        "CheckTitle": "Ensure That Microsoft Defender for Cosmos DB Is Set To 'On' ",
+        "CheckType": [],
+        "ServiceName": "defender",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Defender plan Defender for Cosmos DB from subscription Example_Subscription - Partner Subscription 01 is set to OFF (pricing tier not standard)",
+        "Severity": "high",
+        "ResourceType": "AzureDefenderPlan",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure That Microsoft Defender for Cosmos DB Is Set To 'On' ",
+        "Risk": "In scanning Cosmos DB requests within a subscription, requests are compared to a heuristic list of potential security threats. These threats could be a result of a security breach within your services, thus scanning for them could prevent a potential security threat from being introduced.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "",
+                "CLI": "",
+                "Other": ""
+            },
+            "Recommendation": {
+                "Text": "By default, Microsoft Defender for Cloud is not enabled for your App Service instances. Enabling the Defender security service for App Service instances allows for advanced security defense using threat detection capabilities provided by Microsoft Security Response Center.",
+                "Url": "Enable Microsoft Defender for Cosmos DB"
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - Partner Subscription 01",
+        "ResourceId": "/subscriptions/f17730ec-1c6d-467f-8087-a673ae7ddfd2/providers/Microsoft.Security/pricings/CosmosDbs",
+        "ResourceName": "Defender plan Cosmos DB"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_databases_is_on-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/SqlServers",
+        "Provider": "azure",
+        "CheckID": "defender_ensure_defender_for_databases_is_on",
+        "CheckTitle": "Ensure That Microsoft Defender for Databases Is Set To 'On' ",
+        "CheckType": [],
+        "ServiceName": "defender",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Defender plan Defender for Databases from subscription Example_Subscription - XAKS is set to OFF (pricing tier not standard)",
+        "Severity": "high",
+        "ResourceType": "AzureDefenderPlan",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure That Microsoft Defender for Databases Is Set To 'On' ",
+        "Risk": "Enabling Microsoft Defender for Azure SQL Databases allows your organization more granular control of the infrastructure running your database software",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "",
+                "CLI": "",
+                "Other": ""
+            },
+            "Recommendation": {
+                "Text": "Enable Microsoft Defender for Azure SQL Databases",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/SqlServers",
+        "ResourceName": "Defender plan Databases"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_databases_is_on-Example_Subscription - Partner Subscription 01-/subscriptions/f17730ec-1c6d-467f-8087-a673ae7ddfd2/providers/Microsoft.Security/pricings/SqlServers",
+        "Provider": "azure",
+        "CheckID": "defender_ensure_defender_for_databases_is_on",
+        "CheckTitle": "Ensure That Microsoft Defender for Databases Is Set To 'On' ",
+        "CheckType": [],
+        "ServiceName": "defender",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Defender plan Defender for Databases from subscription Example_Subscription - Partner Subscription 01 is set to OFF (pricing tier not standard)",
+        "Severity": "high",
+        "ResourceType": "AzureDefenderPlan",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure That Microsoft Defender for Databases Is Set To 'On' ",
+        "Risk": "Enabling Microsoft Defender for Azure SQL Databases allows your organization more granular control of the infrastructure running your database software",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "",
+                "CLI": "",
+                "Other": ""
+            },
+            "Recommendation": {
+                "Text": "Enable Microsoft Defender for Azure SQL Databases",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - Partner Subscription 01",
+        "ResourceId": "/subscriptions/f17730ec-1c6d-467f-8087-a673ae7ddfd2/providers/Microsoft.Security/pricings/SqlServers",
+        "ResourceName": "Defender plan Databases"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_dns_is_on-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/Dns",
+        "Provider": "azure",
+        "CheckID": "defender_ensure_defender_for_dns_is_on",
+        "CheckTitle": "Ensure That Microsoft Defender for DNS Is Set To 'On' ",
+        "CheckType": [],
+        "ServiceName": "defender",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Defender plan Defender for DNS from subscription Example_Subscription - XAKS is set to OFF (pricing tier not standard)",
+        "Severity": "high",
+        "ResourceType": "AzureDefenderPlan",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure That Microsoft Defender for DNS Is Set To 'On' ",
+        "Risk": "DNS lookups within a subscription are scanned and compared to a dynamic list of websites that might be potential security threats. These threats could be a result of a security breach within your services, thus scanning for them could prevent a potential security threat from being introduced.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "",
+                "CLI": "",
+                "Other": ""
+            },
+            "Recommendation": {
+                "Text": "By default, Microsoft Defender for Cloud is not enabled for your App Service instances. Enabling the Defender security service for App Service instances allows for advanced security defense using threat detection capabilities provided by Microsoft Security Response Center.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/Dns",
+        "ResourceName": "Defender plan DNS"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_dns_is_on-Example_Subscription - Partner Subscription 01-/subscriptions/f17730ec-1c6d-467f-8087-a673ae7ddfd2/providers/Microsoft.Security/pricings/Dns",
+        "Provider": "azure",
+        "CheckID": "defender_ensure_defender_for_dns_is_on",
+        "CheckTitle": "Ensure That Microsoft Defender for DNS Is Set To 'On' ",
+        "CheckType": [],
+        "ServiceName": "defender",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Defender plan Defender for DNS from subscription Example_Subscription - Partner Subscription 01 is set to OFF (pricing tier not standard)",
+        "Severity": "high",
+        "ResourceType": "AzureDefenderPlan",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure That Microsoft Defender for DNS Is Set To 'On' ",
+        "Risk": "DNS lookups within a subscription are scanned and compared to a dynamic list of websites that might be potential security threats. These threats could be a result of a security breach within your services, thus scanning for them could prevent a potential security threat from being introduced.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "",
+                "CLI": "",
+                "Other": ""
+            },
+            "Recommendation": {
+                "Text": "By default, Microsoft Defender for Cloud is not enabled for your App Service instances. Enabling the Defender security service for App Service instances allows for advanced security defense using threat detection capabilities provided by Microsoft Security Response Center.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - Partner Subscription 01",
+        "ResourceId": "/subscriptions/f17730ec-1c6d-467f-8087-a673ae7ddfd2/providers/Microsoft.Security/pricings/Dns",
+        "ResourceName": "Defender plan DNS"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_keyvault_is_on-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/KeyVaults",
+        "Provider": "azure",
+        "CheckID": "defender_ensure_defender_for_keyvault_is_on",
+        "CheckTitle": "Ensure That Microsoft Defender for KeyVault Is Set To 'On' ",
+        "CheckType": [],
+        "ServiceName": "defender",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Defender plan Defender for KeyVaults subscription from Example_Subscription - XAKS is set to OFF (pricing tier not standard)",
+        "Severity": "high",
+        "ResourceType": "AzureDefenderPlan",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure That Microsoft Defender for KeyVault Is Set To 'On' ",
+        "Risk": "By default, Microsoft Defender for Cloud is disabled for Azure key vaults. Defender for Cloud detects unusual and potentially harmful attempts to access or exploit your Azure Key Vault data. This layer of protection allows you to address threats without being a security expert, and without the need to use and manage third-party security monitoring tools or services.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-azure-defender-is-set-to-on-for-key-vault#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-key-vault.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-key-vault.html"
+            },
+            "Recommendation": {
+                "Text": "Ensure that Microsoft Defender for Cloud is enabled for Azure key vaults. Key Vault is the Azure cloud service that safeguards encryption keys and secrets like certificates, connection-based strings, and passwords.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/KeyVaults",
+        "ResourceName": "Defender plan KeyVaults"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_keyvault_is_on-Example_Subscription - Partner Subscription 01-/subscriptions/f17730ec-1c6d-467f-8087-a673ae7ddfd2/providers/Microsoft.Security/pricings/KeyVaults",
+        "Provider": "azure",
+        "CheckID": "defender_ensure_defender_for_keyvault_is_on",
+        "CheckTitle": "Ensure That Microsoft Defender for KeyVault Is Set To 'On' ",
+        "CheckType": [],
+        "ServiceName": "defender",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Defender plan Defender for KeyVaults subscription from Example_Subscription - Partner Subscription 01 is set to OFF (pricing tier not standard)",
+        "Severity": "high",
+        "ResourceType": "AzureDefenderPlan",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure That Microsoft Defender for KeyVault Is Set To 'On' ",
+        "Risk": "By default, Microsoft Defender for Cloud is disabled for Azure key vaults. Defender for Cloud detects unusual and potentially harmful attempts to access or exploit your Azure Key Vault data. This layer of protection allows you to address threats without being a security expert, and without the need to use and manage third-party security monitoring tools or services.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-azure-defender-is-set-to-on-for-key-vault#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-key-vault.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-key-vault.html"
+            },
+            "Recommendation": {
+                "Text": "Ensure that Microsoft Defender for Cloud is enabled for Azure key vaults. Key Vault is the Azure cloud service that safeguards encryption keys and secrets like certificates, connection-based strings, and passwords.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - Partner Subscription 01",
+        "ResourceId": "/subscriptions/f17730ec-1c6d-467f-8087-a673ae7ddfd2/providers/Microsoft.Security/pricings/KeyVaults",
+        "ResourceName": "Defender plan KeyVaults"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_os_relational_databases_is_on-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/OpenSourceRelationalDatabases",
+        "Provider": "azure",
+        "CheckID": "defender_ensure_defender_for_os_relational_databases_is_on",
+        "CheckTitle": "Ensure That Microsoft Defender for Open-Source Relational Databases Is Set To 'On' ",
+        "CheckType": [],
+        "ServiceName": "defender",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Defender plan Defender for Open-Source Relational Databases from subscription Example_Subscription - XAKS  is set to OFF (pricing tier not standard)",
+        "Severity": "high",
+        "ResourceType": "AzureDefenderPlan",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure That Microsoft Defender for Open-Source Relational Databases Is Set To 'On' ",
+        "Risk": "Turning on Microsoft Defender for Open-source relational databases enables threat detection for Open-source relational databases, providing threat intelligence, anomaly detection, and behavior analytics in the Microsoft Defender for Cloud.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "",
+                "CLI": "",
+                "Other": ""
+            },
+            "Recommendation": {
+                "Text": "Enabling Microsoft Defender for Open-source relational databases allows for greater defense-in-depth, with threat detection provided by the Microsoft Security Response Center (MSRC).",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/OpenSourceRelationalDatabases",
+        "ResourceName": "Defender plan Open-Source Relational Databases"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_os_relational_databases_is_on-Example_Subscription - Partner Subscription 01-/subscriptions/f17730ec-1c6d-467f-8087-a673ae7ddfd2/providers/Microsoft.Security/pricings/OpenSourceRelationalDatabases",
+        "Provider": "azure",
+        "CheckID": "defender_ensure_defender_for_os_relational_databases_is_on",
+        "CheckTitle": "Ensure That Microsoft Defender for Open-Source Relational Databases Is Set To 'On' ",
+        "CheckType": [],
+        "ServiceName": "defender",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Defender plan Defender for Open-Source Relational Databases from subscription Example_Subscription - Partner Subscription 01  is set to OFF (pricing tier not standard)",
+        "Severity": "high",
+        "ResourceType": "AzureDefenderPlan",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure That Microsoft Defender for Open-Source Relational Databases Is Set To 'On' ",
+        "Risk": "Turning on Microsoft Defender for Open-source relational databases enables threat detection for Open-source relational databases, providing threat intelligence, anomaly detection, and behavior analytics in the Microsoft Defender for Cloud.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "",
+                "CLI": "",
+                "Other": ""
+            },
+            "Recommendation": {
+                "Text": "Enabling Microsoft Defender for Open-source relational databases allows for greater defense-in-depth, with threat detection provided by the Microsoft Security Response Center (MSRC).",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - Partner Subscription 01",
+        "ResourceId": "/subscriptions/f17730ec-1c6d-467f-8087-a673ae7ddfd2/providers/Microsoft.Security/pricings/OpenSourceRelationalDatabases",
+        "ResourceName": "Defender plan Open-Source Relational Databases"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_server_is_on-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/VirtualMachines",
+        "Provider": "azure",
+        "CheckID": "defender_ensure_defender_for_server_is_on",
+        "CheckTitle": "Ensure That Microsoft Defender for Servers Is Set to 'On'",
+        "CheckType": [],
+        "ServiceName": "defender",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Defender plan Defender for Servers from subscription Example_Subscription - XAKS  is set to OFF (pricing tier not standard)",
+        "Severity": "high",
+        "ResourceType": "AzureDefenderPlan",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure That Microsoft Defender for Servers Is Set to 'On'",
+        "Risk": "Turning on Microsoft Defender for Servers enables threat detection for Servers, providing threat intelligence, anomaly detection, and behavior analytics in the Microsoft Defender for Cloud.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-azure-defender-is-set-to-on-for-servers#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/microsoft-defender-vm-server.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/microsoft-defender-vm-server.html"
+            },
+            "Recommendation": {
+                "Text": "Enabling Microsoft Defender for Cloud standard pricing tier allows for better security assessment with threat detection provided by the Microsoft Security Response Center (MSRC), advanced security policies, adaptive application control, network threat detection, and regulatory compliance management.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/VirtualMachines",
+        "ResourceName": "Defender plan Servers"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_server_is_on-Example_Subscription - Partner Subscription 01-/subscriptions/f17730ec-1c6d-467f-8087-a673ae7ddfd2/providers/Microsoft.Security/pricings/VirtualMachines",
+        "Provider": "azure",
+        "CheckID": "defender_ensure_defender_for_server_is_on",
+        "CheckTitle": "Ensure That Microsoft Defender for Servers Is Set to 'On'",
+        "CheckType": [],
+        "ServiceName": "defender",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Defender plan Defender for Servers from subscription Example_Subscription - Partner Subscription 01  is set to OFF (pricing tier not standard)",
+        "Severity": "high",
+        "ResourceType": "AzureDefenderPlan",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure That Microsoft Defender for Servers Is Set to 'On'",
+        "Risk": "Turning on Microsoft Defender for Servers enables threat detection for Servers, providing threat intelligence, anomaly detection, and behavior analytics in the Microsoft Defender for Cloud.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-azure-defender-is-set-to-on-for-servers#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/microsoft-defender-vm-server.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/microsoft-defender-vm-server.html"
+            },
+            "Recommendation": {
+                "Text": "Enabling Microsoft Defender for Cloud standard pricing tier allows for better security assessment with threat detection provided by the Microsoft Security Response Center (MSRC), advanced security policies, adaptive application control, network threat detection, and regulatory compliance management.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - Partner Subscription 01",
+        "ResourceId": "/subscriptions/f17730ec-1c6d-467f-8087-a673ae7ddfd2/providers/Microsoft.Security/pricings/VirtualMachines",
+        "ResourceName": "Defender plan Servers"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_sql_servers_is_on-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/SqlServerVirtualMachines",
+        "Provider": "azure",
+        "CheckID": "defender_ensure_defender_for_sql_servers_is_on",
+        "CheckTitle": "Ensure That Microsoft Defender for SQL Servers on Machines Is Set To 'On' ",
+        "CheckType": [],
+        "ServiceName": "defender",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Defender plan Defender for SQL Server VMs from subscription Example_Subscription - XAKS  is set to OFF (pricing tier not standard)",
+        "Severity": "high",
+        "ResourceType": "AzureDefenderPlan",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure That Microsoft Defender for SQL Servers on Machines Is Set To 'On' ",
+        "Risk": "Turning on Microsoft Defender for SQL servers on machines enables threat detection for SQL servers on machines, providing threat intelligence, anomaly detection, and behavior analytics in the Microsoft Defender for Cloud.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-azure-defender-is-set-to-on-for-sql-servers-on-machines#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-sql-server-virtual-machines.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-sql-server-virtual-machines.html"
+            },
+            "Recommendation": {
+                "Text": "By default, Microsoft Defender for Cloud is disabled for the Microsoft SQL servers running on virtual machines. Defender for Cloud for SQL Server virtual machines continuously monitors your SQL database servers for threats such as SQL injection, brute-force attacks, and privilege abuse. The security service provides security alerts together with details of the suspicious activity and guidance on how to mitigate to the security threats.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/SqlServerVirtualMachines",
+        "ResourceName": "Defender plan SQL Server VMs"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_sql_servers_is_on-Example_Subscription - Partner Subscription 01-/subscriptions/f17730ec-1c6d-467f-8087-a673ae7ddfd2/providers/Microsoft.Security/pricings/SqlServerVirtualMachines",
+        "Provider": "azure",
+        "CheckID": "defender_ensure_defender_for_sql_servers_is_on",
+        "CheckTitle": "Ensure That Microsoft Defender for SQL Servers on Machines Is Set To 'On' ",
+        "CheckType": [],
+        "ServiceName": "defender",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Defender plan Defender for SQL Server VMs from subscription Example_Subscription - Partner Subscription 01  is set to OFF (pricing tier not standard)",
+        "Severity": "high",
+        "ResourceType": "AzureDefenderPlan",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure That Microsoft Defender for SQL Servers on Machines Is Set To 'On' ",
+        "Risk": "Turning on Microsoft Defender for SQL servers on machines enables threat detection for SQL servers on machines, providing threat intelligence, anomaly detection, and behavior analytics in the Microsoft Defender for Cloud.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-azure-defender-is-set-to-on-for-sql-servers-on-machines#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-sql-server-virtual-machines.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-sql-server-virtual-machines.html"
+            },
+            "Recommendation": {
+                "Text": "By default, Microsoft Defender for Cloud is disabled for the Microsoft SQL servers running on virtual machines. Defender for Cloud for SQL Server virtual machines continuously monitors your SQL database servers for threats such as SQL injection, brute-force attacks, and privilege abuse. The security service provides security alerts together with details of the suspicious activity and guidance on how to mitigate to the security threats.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - Partner Subscription 01",
+        "ResourceId": "/subscriptions/f17730ec-1c6d-467f-8087-a673ae7ddfd2/providers/Microsoft.Security/pricings/SqlServerVirtualMachines",
+        "ResourceName": "Defender plan SQL Server VMs"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_storage_is_on-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/StorageAccounts",
+        "Provider": "azure",
+        "CheckID": "defender_ensure_defender_for_storage_is_on",
+        "CheckTitle": "Ensure That Microsoft Defender for Storage Is Set To 'On' ",
+        "CheckType": [],
+        "ServiceName": "defender",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Defender plan Defender for Storage Accounts from subscription Example_Subscription - XAKS  is set to OFF (pricing tier not standard)",
+        "Severity": "high",
+        "ResourceType": "AzureDefenderPlan",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure That Microsoft Defender for Storage Is Set To 'On' ",
+        "Risk": "Ensure that Microsoft Defender for Cloud is enabled for your Microsoft Azure storage accounts. Defender for storage accounts is an Azure-native layer of security intelligence that detects unusual and potentially harmful attempts to access or exploit your Azure cloud storage accounts.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-azure-defender-is-set-to-on-for-storage#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-storage.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-storage.html"
+            },
+            "Recommendation": {
+                "Text": "By default, Microsoft Defender for Cloud is disabled for your storage accounts. Enabling the Defender security service for Azure storage accounts allows for advanced security defense using threat detection capabilities provided by the Microsoft Security Response Center (MSRC). MSRC investigates all reports of security vulnerabilities affecting Microsoft products and services, including Azure cloud services.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/StorageAccounts",
+        "ResourceName": "Defender plan Storage Accounts"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_storage_is_on-Example_Subscription - Partner Subscription 01-/subscriptions/f17730ec-1c6d-467f-8087-a673ae7ddfd2/providers/Microsoft.Security/pricings/StorageAccounts",
+        "Provider": "azure",
+        "CheckID": "defender_ensure_defender_for_storage_is_on",
+        "CheckTitle": "Ensure That Microsoft Defender for Storage Is Set To 'On' ",
+        "CheckType": [],
+        "ServiceName": "defender",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Defender plan Defender for Storage Accounts from subscription Example_Subscription - Partner Subscription 01  is set to OFF (pricing tier not standard)",
+        "Severity": "high",
+        "ResourceType": "AzureDefenderPlan",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure That Microsoft Defender for Storage Is Set To 'On' ",
+        "Risk": "Ensure that Microsoft Defender for Cloud is enabled for your Microsoft Azure storage accounts. Defender for storage accounts is an Azure-native layer of security intelligence that detects unusual and potentially harmful attempts to access or exploit your Azure cloud storage accounts.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-azure-defender-is-set-to-on-for-storage#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-storage.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-storage.html"
+            },
+            "Recommendation": {
+                "Text": "By default, Microsoft Defender for Cloud is disabled for your storage accounts. Enabling the Defender security service for Azure storage accounts allows for advanced security defense using threat detection capabilities provided by the Microsoft Security Response Center (MSRC). MSRC investigates all reports of security vulnerabilities affecting Microsoft products and services, including Azure cloud services.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - Partner Subscription 01",
+        "ResourceId": "/subscriptions/f17730ec-1c6d-467f-8087-a673ae7ddfd2/providers/Microsoft.Security/pricings/StorageAccounts",
+        "ResourceName": "Defender plan Storage Accounts"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-iam_subscription_roles_owner_custom_not_created-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Authorization/roleDefinitions/076cc402-b7a3-459f-b29e-81f3de45c423",
+        "Provider": "azure",
+        "CheckID": "iam_subscription_roles_owner_custom_not_created",
+        "CheckTitle": "Ensure that no custom subscription owner roles are created",
+        "CheckType": [],
+        "ServiceName": "iam",
+        "SubServiceName": "",
+        "Status": "PASS",
+        "StatusExtended": "Role AKS Cluster Configuration Reader from subscription Example_Subscription - XAKS is not a custom owner role",
+        "Severity": "high",
+        "ResourceType": "AzureRole",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that no custom subscription owner roles are created",
+        "Risk": "Subscription ownership should not include permission to create custom owner roles. The principle of least privilege should be followed and only necessary privileges should be assigned instead of allowing full administrative access.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "",
+                "CLI": "",
+                "Other": ""
+            },
+            "Recommendation": {
+                "Text": "Subscriptions will need to be handled by Administrators with permissions.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Authorization/roleDefinitions/076cc402-b7a3-459f-b29e-81f3de45c423",
+        "ResourceName": "AKS Cluster Configuration Reader"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_blob_public_access_level_is_disabled-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mc_xaks-aks-westeurope-rg_xaks-aks-westeurope_westeurope/providers/Microsoft.Storage/storageAccounts/f0cddb3e0696a488e8afd20",
+        "Provider": "azure",
+        "CheckID": "storage_blob_public_access_level_is_disabled",
+        "CheckTitle": "Ensure that the 'Public access level' is set to 'Private (no anonymous access)' for all blob containers in your storage account",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "PASS",
+        "StatusExtended": "Storage account f0cddb3e0696a488e8afd20 from subscription Example_Subscription - XAKS has allow blob public access disabled",
+        "Severity": "medium",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that the 'Public access level' configuration setting is set to 'Private (no anonymous access)' for all blob containers in your storage account in order to block anonymous access to these Microsoft Azure resources.",
+        "Risk": "A user that accesses blob containers anonymously can use constructors that do not require credentials such as shared access signatures.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-storage-accounts-disallow-public-access#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/secure-transfer-required.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/secure-transfer-required.html"
+            },
+            "Recommendation": {
+                "Text": "Set 'Public access level' configuration setting to 'Private (no anonymous access)'",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mc_xaks-aks-westeurope-rg_xaks-aks-westeurope_westeurope/providers/Microsoft.Storage/storageAccounts/f0cddb3e0696a488e8afd20",
+        "ResourceName": "f0cddb3e0696a488e8afd20"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_blob_public_access_level_is_disabled-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-public-nodes-westeurope-rg/providers/Microsoft.Storage/storageAccounts/f2aebdbe187044155ba7e25",
+        "Provider": "azure",
+        "CheckID": "storage_blob_public_access_level_is_disabled",
+        "CheckTitle": "Ensure that the 'Public access level' is set to 'Private (no anonymous access)' for all blob containers in your storage account",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Storage account f2aebdbe187044155ba7e25 from subscription Example_Subscription - XAKS has allow blob public access enabled",
+        "Severity": "medium",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that the 'Public access level' configuration setting is set to 'Private (no anonymous access)' for all blob containers in your storage account in order to block anonymous access to these Microsoft Azure resources.",
+        "Risk": "A user that accesses blob containers anonymously can use constructors that do not require credentials such as shared access signatures.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-storage-accounts-disallow-public-access#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/secure-transfer-required.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/secure-transfer-required.html"
+            },
+            "Recommendation": {
+                "Text": "Set 'Public access level' configuration setting to 'Private (no anonymous access)'",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-public-nodes-westeurope-rg/providers/Microsoft.Storage/storageAccounts/f2aebdbe187044155ba7e25",
+        "ResourceName": "f2aebdbe187044155ba7e25"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_blob_public_access_level_is_disabled-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-tfstate-westeurope-rg/providers/Microsoft.Storage/storageAccounts/xaksgpstfstatewesteurope",
+        "Provider": "azure",
+        "CheckID": "storage_blob_public_access_level_is_disabled",
+        "CheckTitle": "Ensure that the 'Public access level' is set to 'Private (no anonymous access)' for all blob containers in your storage account",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "PASS",
+        "StatusExtended": "Storage account xaksgpstfstatewesteurope from subscription Example_Subscription - XAKS has allow blob public access disabled",
+        "Severity": "medium",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that the 'Public access level' configuration setting is set to 'Private (no anonymous access)' for all blob containers in your storage account in order to block anonymous access to these Microsoft Azure resources.",
+        "Risk": "A user that accesses blob containers anonymously can use constructors that do not require credentials such as shared access signatures.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-storage-accounts-disallow-public-access#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/secure-transfer-required.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/secure-transfer-required.html"
+            },
+            "Recommendation": {
+                "Text": "Set 'Public access level' configuration setting to 'Private (no anonymous access)'",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-tfstate-westeurope-rg/providers/Microsoft.Storage/storageAccounts/xaksgpstfstatewesteurope",
+        "ResourceName": "xaksgpstfstatewesteurope"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_blob_public_access_level_is_disabled-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mysql_logs/providers/Microsoft.Storage/storageAccounts/mysqllogs2023",
+        "Provider": "azure",
+        "CheckID": "storage_blob_public_access_level_is_disabled",
+        "CheckTitle": "Ensure that the 'Public access level' is set to 'Private (no anonymous access)' for all blob containers in your storage account",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "PASS",
+        "StatusExtended": "Storage account mysqllogs2023 from subscription Example_Subscription - XAKS has allow blob public access disabled",
+        "Severity": "medium",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that the 'Public access level' configuration setting is set to 'Private (no anonymous access)' for all blob containers in your storage account in order to block anonymous access to these Microsoft Azure resources.",
+        "Risk": "A user that accesses blob containers anonymously can use constructors that do not require credentials such as shared access signatures.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-storage-accounts-disallow-public-access#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/secure-transfer-required.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/secure-transfer-required.html"
+            },
+            "Recommendation": {
+                "Text": "Set 'Public access level' configuration setting to 'Private (no anonymous access)'",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mysql_logs/providers/Microsoft.Storage/storageAccounts/mysqllogs2023",
+        "ResourceName": "mysqllogs2023"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_blob_public_access_level_is_disabled-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-backup-westeurope-rg/providers/Microsoft.Storage/storageAccounts/velerodde884b289bb",
+        "Provider": "azure",
+        "CheckID": "storage_blob_public_access_level_is_disabled",
+        "CheckTitle": "Ensure that the 'Public access level' is set to 'Private (no anonymous access)' for all blob containers in your storage account",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "PASS",
+        "StatusExtended": "Storage account velerodde884b289bb from subscription Example_Subscription - XAKS has allow blob public access disabled",
+        "Severity": "medium",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that the 'Public access level' configuration setting is set to 'Private (no anonymous access)' for all blob containers in your storage account in order to block anonymous access to these Microsoft Azure resources.",
+        "Risk": "A user that accesses blob containers anonymously can use constructors that do not require credentials such as shared access signatures.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-storage-accounts-disallow-public-access#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/secure-transfer-required.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/secure-transfer-required.html"
+            },
+            "Recommendation": {
+                "Text": "Set 'Public access level' configuration setting to 'Private (no anonymous access)'",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-backup-westeurope-rg/providers/Microsoft.Storage/storageAccounts/velerodde884b289bb",
+        "ResourceName": "velerodde884b289bb"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_default_network_access_rule_is_denied-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mc_xaks-aks-westeurope-rg_xaks-aks-westeurope_westeurope/providers/Microsoft.Storage/storageAccounts/f0cddb3e0696a488e8afd20",
+        "Provider": "azure",
+        "CheckID": "storage_default_network_access_rule_is_denied",
+        "CheckTitle": "Ensure Default Network Access Rule for Storage Accounts is Set to Deny",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Storage account f0cddb3e0696a488e8afd20 from subscription Example_Subscription - XAKS has network access rule set to Allow",
+        "Severity": "medium",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure Default Network Access Rule for Storage Accounts is Set to Deny",
+        "Risk": "By restricting access to your storage account default network, you add a new layer of security, since the default action is to accept connections from clients on any network.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/set-default-network-access-rule-for-storage-accounts-to-deny#terraform",
+                "CLI": "az storage account update --name <StorageAccountName> --resource-group <resourceGroupName> --default-action Deny",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/restrict-default-network-access.html"
+            },
+            "Recommendation": {
+                "Text": "To limit access to selected networks or IP addresses, you must first change the default action from 'Allow' to 'Deny'",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mc_xaks-aks-westeurope-rg_xaks-aks-westeurope_westeurope/providers/Microsoft.Storage/storageAccounts/f0cddb3e0696a488e8afd20",
+        "ResourceName": "f0cddb3e0696a488e8afd20"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_default_network_access_rule_is_denied-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-public-nodes-westeurope-rg/providers/Microsoft.Storage/storageAccounts/f2aebdbe187044155ba7e25",
+        "Provider": "azure",
+        "CheckID": "storage_default_network_access_rule_is_denied",
+        "CheckTitle": "Ensure Default Network Access Rule for Storage Accounts is Set to Deny",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Storage account f2aebdbe187044155ba7e25 from subscription Example_Subscription - XAKS has network access rule set to Allow",
+        "Severity": "medium",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure Default Network Access Rule for Storage Accounts is Set to Deny",
+        "Risk": "By restricting access to your storage account default network, you add a new layer of security, since the default action is to accept connections from clients on any network.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/set-default-network-access-rule-for-storage-accounts-to-deny#terraform",
+                "CLI": "az storage account update --name <StorageAccountName> --resource-group <resourceGroupName> --default-action Deny",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/restrict-default-network-access.html"
+            },
+            "Recommendation": {
+                "Text": "To limit access to selected networks or IP addresses, you must first change the default action from 'Allow' to 'Deny'",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-public-nodes-westeurope-rg/providers/Microsoft.Storage/storageAccounts/f2aebdbe187044155ba7e25",
+        "ResourceName": "f2aebdbe187044155ba7e25"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_default_network_access_rule_is_denied-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-tfstate-westeurope-rg/providers/Microsoft.Storage/storageAccounts/xaksgpstfstatewesteurope",
+        "Provider": "azure",
+        "CheckID": "storage_default_network_access_rule_is_denied",
+        "CheckTitle": "Ensure Default Network Access Rule for Storage Accounts is Set to Deny",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Storage account xaksgpstfstatewesteurope from subscription Example_Subscription - XAKS has network access rule set to Allow",
+        "Severity": "medium",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure Default Network Access Rule for Storage Accounts is Set to Deny",
+        "Risk": "By restricting access to your storage account default network, you add a new layer of security, since the default action is to accept connections from clients on any network.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/set-default-network-access-rule-for-storage-accounts-to-deny#terraform",
+                "CLI": "az storage account update --name <StorageAccountName> --resource-group <resourceGroupName> --default-action Deny",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/restrict-default-network-access.html"
+            },
+            "Recommendation": {
+                "Text": "To limit access to selected networks or IP addresses, you must first change the default action from 'Allow' to 'Deny'",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-tfstate-westeurope-rg/providers/Microsoft.Storage/storageAccounts/xaksgpstfstatewesteurope",
+        "ResourceName": "xaksgpstfstatewesteurope"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_default_network_access_rule_is_denied-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mysql_logs/providers/Microsoft.Storage/storageAccounts/mysqllogs2023",
+        "Provider": "azure",
+        "CheckID": "storage_default_network_access_rule_is_denied",
+        "CheckTitle": "Ensure Default Network Access Rule for Storage Accounts is Set to Deny",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "PASS",
+        "StatusExtended": "Storage account mysqllogs2023 from subscription Example_Subscription - XAKS has network access rule set to Deny",
+        "Severity": "medium",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure Default Network Access Rule for Storage Accounts is Set to Deny",
+        "Risk": "By restricting access to your storage account default network, you add a new layer of security, since the default action is to accept connections from clients on any network.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/set-default-network-access-rule-for-storage-accounts-to-deny#terraform",
+                "CLI": "az storage account update --name <StorageAccountName> --resource-group <resourceGroupName> --default-action Deny",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/restrict-default-network-access.html"
+            },
+            "Recommendation": {
+                "Text": "To limit access to selected networks or IP addresses, you must first change the default action from 'Allow' to 'Deny'",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mysql_logs/providers/Microsoft.Storage/storageAccounts/mysqllogs2023",
+        "ResourceName": "mysqllogs2023"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_default_network_access_rule_is_denied-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-backup-westeurope-rg/providers/Microsoft.Storage/storageAccounts/velerodde884b289bb",
+        "Provider": "azure",
+        "CheckID": "storage_default_network_access_rule_is_denied",
+        "CheckTitle": "Ensure Default Network Access Rule for Storage Accounts is Set to Deny",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Storage account velerodde884b289bb from subscription Example_Subscription - XAKS has network access rule set to Allow",
+        "Severity": "medium",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure Default Network Access Rule for Storage Accounts is Set to Deny",
+        "Risk": "By restricting access to your storage account default network, you add a new layer of security, since the default action is to accept connections from clients on any network.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/set-default-network-access-rule-for-storage-accounts-to-deny#terraform",
+                "CLI": "az storage account update --name <StorageAccountName> --resource-group <resourceGroupName> --default-action Deny",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/restrict-default-network-access.html"
+            },
+            "Recommendation": {
+                "Text": "To limit access to selected networks or IP addresses, you must first change the default action from 'Allow' to 'Deny'",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-backup-westeurope-rg/providers/Microsoft.Storage/storageAccounts/velerodde884b289bb",
+        "ResourceName": "velerodde884b289bb"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_ensure_azure_services_are_trusted_to_access_is_enabled-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mc_xaks-aks-westeurope-rg_xaks-aks-westeurope_westeurope/providers/Microsoft.Storage/storageAccounts/f0cddb3e0696a488e8afd20",
+        "Provider": "azure",
+        "CheckID": "storage_ensure_azure_services_are_trusted_to_access_is_enabled",
+        "CheckTitle": "Ensure that 'Allow trusted Microsoft services to access this storage account' is enabled for storage accounts",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "PASS",
+        "StatusExtended": "Storage account f0cddb3e0696a488e8afd20 from subscription Example_Subscription - XAKS allows trusted Microsoft services to access this storage account",
+        "Severity": "medium",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that 'Allow trusted Microsoft services to access this storage account' is enabled within your Azure Storage account configuration settings to grant access to trusted cloud services.",
+        "Risk": "Not allowing to access storage account by Azure services the following services: Azure Backup, Azure Event Grid, Azure Site Recovery, Azure DevTest Labs, Azure Event Hubs, Azure Networking, Azure Monitor and Azure SQL Data Warehouse (when registered in the subscription), are not granted access to your storage account",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/enable-trusted-microsoft-services-for-storage-account-access#terraform",
+                "CLI": "az storage account update --name <StorageAccountName> --resource-group <resourceGroupName> --bypass AzureServices",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/enable-trusted-microsoft-services.html"
+            },
+            "Recommendation": {
+                "Text": "To allow these Azure services to work as intended and be able to access your storage account resources, you have to add an exception so that the trusted Microsoft Azure services can bypass your network rules",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mc_xaks-aks-westeurope-rg_xaks-aks-westeurope_westeurope/providers/Microsoft.Storage/storageAccounts/f0cddb3e0696a488e8afd20",
+        "ResourceName": "f0cddb3e0696a488e8afd20"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_ensure_azure_services_are_trusted_to_access_is_enabled-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-public-nodes-westeurope-rg/providers/Microsoft.Storage/storageAccounts/f2aebdbe187044155ba7e25",
+        "Provider": "azure",
+        "CheckID": "storage_ensure_azure_services_are_trusted_to_access_is_enabled",
+        "CheckTitle": "Ensure that 'Allow trusted Microsoft services to access this storage account' is enabled for storage accounts",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "PASS",
+        "StatusExtended": "Storage account f2aebdbe187044155ba7e25 from subscription Example_Subscription - XAKS allows trusted Microsoft services to access this storage account",
+        "Severity": "medium",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that 'Allow trusted Microsoft services to access this storage account' is enabled within your Azure Storage account configuration settings to grant access to trusted cloud services.",
+        "Risk": "Not allowing to access storage account by Azure services the following services: Azure Backup, Azure Event Grid, Azure Site Recovery, Azure DevTest Labs, Azure Event Hubs, Azure Networking, Azure Monitor and Azure SQL Data Warehouse (when registered in the subscription), are not granted access to your storage account",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/enable-trusted-microsoft-services-for-storage-account-access#terraform",
+                "CLI": "az storage account update --name <StorageAccountName> --resource-group <resourceGroupName> --bypass AzureServices",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/enable-trusted-microsoft-services.html"
+            },
+            "Recommendation": {
+                "Text": "To allow these Azure services to work as intended and be able to access your storage account resources, you have to add an exception so that the trusted Microsoft Azure services can bypass your network rules",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-public-nodes-westeurope-rg/providers/Microsoft.Storage/storageAccounts/f2aebdbe187044155ba7e25",
+        "ResourceName": "f2aebdbe187044155ba7e25"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_ensure_azure_services_are_trusted_to_access_is_enabled-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-tfstate-westeurope-rg/providers/Microsoft.Storage/storageAccounts/xaksgpstfstatewesteurope",
+        "Provider": "azure",
+        "CheckID": "storage_ensure_azure_services_are_trusted_to_access_is_enabled",
+        "CheckTitle": "Ensure that 'Allow trusted Microsoft services to access this storage account' is enabled for storage accounts",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "PASS",
+        "StatusExtended": "Storage account xaksgpstfstatewesteurope from subscription Example_Subscription - XAKS allows trusted Microsoft services to access this storage account",
+        "Severity": "medium",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that 'Allow trusted Microsoft services to access this storage account' is enabled within your Azure Storage account configuration settings to grant access to trusted cloud services.",
+        "Risk": "Not allowing to access storage account by Azure services the following services: Azure Backup, Azure Event Grid, Azure Site Recovery, Azure DevTest Labs, Azure Event Hubs, Azure Networking, Azure Monitor and Azure SQL Data Warehouse (when registered in the subscription), are not granted access to your storage account",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/enable-trusted-microsoft-services-for-storage-account-access#terraform",
+                "CLI": "az storage account update --name <StorageAccountName> --resource-group <resourceGroupName> --bypass AzureServices",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/enable-trusted-microsoft-services.html"
+            },
+            "Recommendation": {
+                "Text": "To allow these Azure services to work as intended and be able to access your storage account resources, you have to add an exception so that the trusted Microsoft Azure services can bypass your network rules",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-tfstate-westeurope-rg/providers/Microsoft.Storage/storageAccounts/xaksgpstfstatewesteurope",
+        "ResourceName": "xaksgpstfstatewesteurope"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_ensure_azure_services_are_trusted_to_access_is_enabled-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mysql_logs/providers/Microsoft.Storage/storageAccounts/mysqllogs2023",
+        "Provider": "azure",
+        "CheckID": "storage_ensure_azure_services_are_trusted_to_access_is_enabled",
+        "CheckTitle": "Ensure that 'Allow trusted Microsoft services to access this storage account' is enabled for storage accounts",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "PASS",
+        "StatusExtended": "Storage account mysqllogs2023 from subscription Example_Subscription - XAKS allows trusted Microsoft services to access this storage account",
+        "Severity": "medium",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that 'Allow trusted Microsoft services to access this storage account' is enabled within your Azure Storage account configuration settings to grant access to trusted cloud services.",
+        "Risk": "Not allowing to access storage account by Azure services the following services: Azure Backup, Azure Event Grid, Azure Site Recovery, Azure DevTest Labs, Azure Event Hubs, Azure Networking, Azure Monitor and Azure SQL Data Warehouse (when registered in the subscription), are not granted access to your storage account",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/enable-trusted-microsoft-services-for-storage-account-access#terraform",
+                "CLI": "az storage account update --name <StorageAccountName> --resource-group <resourceGroupName> --bypass AzureServices",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/enable-trusted-microsoft-services.html"
+            },
+            "Recommendation": {
+                "Text": "To allow these Azure services to work as intended and be able to access your storage account resources, you have to add an exception so that the trusted Microsoft Azure services can bypass your network rules",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mysql_logs/providers/Microsoft.Storage/storageAccounts/mysqllogs2023",
+        "ResourceName": "mysqllogs2023"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_ensure_azure_services_are_trusted_to_access_is_enabled-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-backup-westeurope-rg/providers/Microsoft.Storage/storageAccounts/velerodde884b289bb",
+        "Provider": "azure",
+        "CheckID": "storage_ensure_azure_services_are_trusted_to_access_is_enabled",
+        "CheckTitle": "Ensure that 'Allow trusted Microsoft services to access this storage account' is enabled for storage accounts",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "PASS",
+        "StatusExtended": "Storage account velerodde884b289bb from subscription Example_Subscription - XAKS allows trusted Microsoft services to access this storage account",
+        "Severity": "medium",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that 'Allow trusted Microsoft services to access this storage account' is enabled within your Azure Storage account configuration settings to grant access to trusted cloud services.",
+        "Risk": "Not allowing to access storage account by Azure services the following services: Azure Backup, Azure Event Grid, Azure Site Recovery, Azure DevTest Labs, Azure Event Hubs, Azure Networking, Azure Monitor and Azure SQL Data Warehouse (when registered in the subscription), are not granted access to your storage account",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/enable-trusted-microsoft-services-for-storage-account-access#terraform",
+                "CLI": "az storage account update --name <StorageAccountName> --resource-group <resourceGroupName> --bypass AzureServices",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/enable-trusted-microsoft-services.html"
+            },
+            "Recommendation": {
+                "Text": "To allow these Azure services to work as intended and be able to access your storage account resources, you have to add an exception so that the trusted Microsoft Azure services can bypass your network rules",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-backup-westeurope-rg/providers/Microsoft.Storage/storageAccounts/velerodde884b289bb",
+        "ResourceName": "velerodde884b289bb"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_ensure_encryption_with_customer_managed_keys-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mc_xaks-aks-westeurope-rg_xaks-aks-westeurope_westeurope/providers/Microsoft.Storage/storageAccounts/f0cddb3e0696a488e8afd20",
+        "Provider": "azure",
+        "CheckID": "storage_ensure_encryption_with_customer_managed_keys",
+        "CheckTitle": "Ensure that your Microsoft Azure Storage accounts are using Customer Managed Keys (CMKs) instead of Microsoft Managed Keys",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Storage account f0cddb3e0696a488e8afd20 from subscription Example_Subscription - XAKS does not encrypt with CMKs",
+        "Severity": "high",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that your Microsoft Azure Storage accounts are using Customer Managed Keys (CMKs) instead of Microsoft Managed Keys",
+        "Risk": "If you want to control and manage storage account contents encryption key yourself you must specify a customer-managed key",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-storage-accounts-use-customer-managed-key-for-encryption#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/cmk-encryption.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/cmk-encryption.html"
+            },
+            "Recommendation": {
+                "Text": "Enable sensitive data encryption at rest using Customer Managed Keys rather than Microsoft Managed keys.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mc_xaks-aks-westeurope-rg_xaks-aks-westeurope_westeurope/providers/Microsoft.Storage/storageAccounts/f0cddb3e0696a488e8afd20",
+        "ResourceName": "f0cddb3e0696a488e8afd20"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_ensure_encryption_with_customer_managed_keys-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-public-nodes-westeurope-rg/providers/Microsoft.Storage/storageAccounts/f2aebdbe187044155ba7e25",
+        "Provider": "azure",
+        "CheckID": "storage_ensure_encryption_with_customer_managed_keys",
+        "CheckTitle": "Ensure that your Microsoft Azure Storage accounts are using Customer Managed Keys (CMKs) instead of Microsoft Managed Keys",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Storage account f2aebdbe187044155ba7e25 from subscription Example_Subscription - XAKS does not encrypt with CMKs",
+        "Severity": "high",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that your Microsoft Azure Storage accounts are using Customer Managed Keys (CMKs) instead of Microsoft Managed Keys",
+        "Risk": "If you want to control and manage storage account contents encryption key yourself you must specify a customer-managed key",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-storage-accounts-use-customer-managed-key-for-encryption#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/cmk-encryption.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/cmk-encryption.html"
+            },
+            "Recommendation": {
+                "Text": "Enable sensitive data encryption at rest using Customer Managed Keys rather than Microsoft Managed keys.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-public-nodes-westeurope-rg/providers/Microsoft.Storage/storageAccounts/f2aebdbe187044155ba7e25",
+        "ResourceName": "f2aebdbe187044155ba7e25"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_ensure_encryption_with_customer_managed_keys-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-tfstate-westeurope-rg/providers/Microsoft.Storage/storageAccounts/xaksgpstfstatewesteurope",
+        "Provider": "azure",
+        "CheckID": "storage_ensure_encryption_with_customer_managed_keys",
+        "CheckTitle": "Ensure that your Microsoft Azure Storage accounts are using Customer Managed Keys (CMKs) instead of Microsoft Managed Keys",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Storage account xaksgpstfstatewesteurope from subscription Example_Subscription - XAKS does not encrypt with CMKs",
+        "Severity": "high",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that your Microsoft Azure Storage accounts are using Customer Managed Keys (CMKs) instead of Microsoft Managed Keys",
+        "Risk": "If you want to control and manage storage account contents encryption key yourself you must specify a customer-managed key",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-storage-accounts-use-customer-managed-key-for-encryption#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/cmk-encryption.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/cmk-encryption.html"
+            },
+            "Recommendation": {
+                "Text": "Enable sensitive data encryption at rest using Customer Managed Keys rather than Microsoft Managed keys.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-tfstate-westeurope-rg/providers/Microsoft.Storage/storageAccounts/xaksgpstfstatewesteurope",
+        "ResourceName": "xaksgpstfstatewesteurope"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_ensure_encryption_with_customer_managed_keys-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mysql_logs/providers/Microsoft.Storage/storageAccounts/mysqllogs2023",
+        "Provider": "azure",
+        "CheckID": "storage_ensure_encryption_with_customer_managed_keys",
+        "CheckTitle": "Ensure that your Microsoft Azure Storage accounts are using Customer Managed Keys (CMKs) instead of Microsoft Managed Keys",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Storage account mysqllogs2023 from subscription Example_Subscription - XAKS does not encrypt with CMKs",
+        "Severity": "high",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that your Microsoft Azure Storage accounts are using Customer Managed Keys (CMKs) instead of Microsoft Managed Keys",
+        "Risk": "If you want to control and manage storage account contents encryption key yourself you must specify a customer-managed key",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-storage-accounts-use-customer-managed-key-for-encryption#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/cmk-encryption.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/cmk-encryption.html"
+            },
+            "Recommendation": {
+                "Text": "Enable sensitive data encryption at rest using Customer Managed Keys rather than Microsoft Managed keys.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mysql_logs/providers/Microsoft.Storage/storageAccounts/mysqllogs2023",
+        "ResourceName": "mysqllogs2023"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_ensure_encryption_with_customer_managed_keys-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-backup-westeurope-rg/providers/Microsoft.Storage/storageAccounts/velerodde884b289bb",
+        "Provider": "azure",
+        "CheckID": "storage_ensure_encryption_with_customer_managed_keys",
+        "CheckTitle": "Ensure that your Microsoft Azure Storage accounts are using Customer Managed Keys (CMKs) instead of Microsoft Managed Keys",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Storage account velerodde884b289bb from subscription Example_Subscription - XAKS does not encrypt with CMKs",
+        "Severity": "high",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that your Microsoft Azure Storage accounts are using Customer Managed Keys (CMKs) instead of Microsoft Managed Keys",
+        "Risk": "If you want to control and manage storage account contents encryption key yourself you must specify a customer-managed key",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-storage-accounts-use-customer-managed-key-for-encryption#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/cmk-encryption.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/cmk-encryption.html"
+            },
+            "Recommendation": {
+                "Text": "Enable sensitive data encryption at rest using Customer Managed Keys rather than Microsoft Managed keys.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-backup-westeurope-rg/providers/Microsoft.Storage/storageAccounts/velerodde884b289bb",
+        "ResourceName": "velerodde884b289bb"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_ensure_minimum_tls_version_12-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mc_xaks-aks-westeurope-rg_xaks-aks-westeurope_westeurope/providers/Microsoft.Storage/storageAccounts/f0cddb3e0696a488e8afd20",
+        "Provider": "azure",
+        "CheckID": "storage_ensure_minimum_tls_version_12",
+        "CheckTitle": "Ensure the 'Minimum TLS version' for storage accounts is set to 'Version 1.2'",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "PASS",
+        "StatusExtended": "Storage account f0cddb3e0696a488e8afd20 from subscription Example_Subscription - XAKS has TLS version set to 1.2",
+        "Severity": "medium",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure the 'Minimum TLS version' for storage accounts is set to 'Version 1.2'",
+        "Risk": "TLS versions 1.0 and 1.1 are known to be susceptible to certain Common Vulnerabilities and Exposures (CVE) weaknesses and attacks such as POODLE and BEAST",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/bc_azr_storage_2#terraform",
+                "CLI": "https://docs.bridgecrew.io/docs/bc_azr_storage_2#cli-command",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/minimum-tls-version.html"
+            },
+            "Recommendation": {
+                "Text": "Ensure that all your Microsoft Azure Storage accounts are using the latest available version of the TLS protoco",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mc_xaks-aks-westeurope-rg_xaks-aks-westeurope_westeurope/providers/Microsoft.Storage/storageAccounts/f0cddb3e0696a488e8afd20",
+        "ResourceName": "f0cddb3e0696a488e8afd20"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_ensure_minimum_tls_version_12-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-public-nodes-westeurope-rg/providers/Microsoft.Storage/storageAccounts/f2aebdbe187044155ba7e25",
+        "Provider": "azure",
+        "CheckID": "storage_ensure_minimum_tls_version_12",
+        "CheckTitle": "Ensure the 'Minimum TLS version' for storage accounts is set to 'Version 1.2'",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "PASS",
+        "StatusExtended": "Storage account f2aebdbe187044155ba7e25 from subscription Example_Subscription - XAKS has TLS version set to 1.2",
+        "Severity": "medium",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure the 'Minimum TLS version' for storage accounts is set to 'Version 1.2'",
+        "Risk": "TLS versions 1.0 and 1.1 are known to be susceptible to certain Common Vulnerabilities and Exposures (CVE) weaknesses and attacks such as POODLE and BEAST",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/bc_azr_storage_2#terraform",
+                "CLI": "https://docs.bridgecrew.io/docs/bc_azr_storage_2#cli-command",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/minimum-tls-version.html"
+            },
+            "Recommendation": {
+                "Text": "Ensure that all your Microsoft Azure Storage accounts are using the latest available version of the TLS protoco",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-public-nodes-westeurope-rg/providers/Microsoft.Storage/storageAccounts/f2aebdbe187044155ba7e25",
+        "ResourceName": "f2aebdbe187044155ba7e25"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_ensure_minimum_tls_version_12-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-tfstate-westeurope-rg/providers/Microsoft.Storage/storageAccounts/xaksgpstfstatewesteurope",
+        "Provider": "azure",
+        "CheckID": "storage_ensure_minimum_tls_version_12",
+        "CheckTitle": "Ensure the 'Minimum TLS version' for storage accounts is set to 'Version 1.2'",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Storage account xaksgpstfstatewesteurope from subscription Example_Subscription - XAKS does not have TLS version set to 1.2",
+        "Severity": "medium",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure the 'Minimum TLS version' for storage accounts is set to 'Version 1.2'",
+        "Risk": "TLS versions 1.0 and 1.1 are known to be susceptible to certain Common Vulnerabilities and Exposures (CVE) weaknesses and attacks such as POODLE and BEAST",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/bc_azr_storage_2#terraform",
+                "CLI": "https://docs.bridgecrew.io/docs/bc_azr_storage_2#cli-command",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/minimum-tls-version.html"
+            },
+            "Recommendation": {
+                "Text": "Ensure that all your Microsoft Azure Storage accounts are using the latest available version of the TLS protoco",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-tfstate-westeurope-rg/providers/Microsoft.Storage/storageAccounts/xaksgpstfstatewesteurope",
+        "ResourceName": "xaksgpstfstatewesteurope"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_ensure_minimum_tls_version_12-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mysql_logs/providers/Microsoft.Storage/storageAccounts/mysqllogs2023",
+        "Provider": "azure",
+        "CheckID": "storage_ensure_minimum_tls_version_12",
+        "CheckTitle": "Ensure the 'Minimum TLS version' for storage accounts is set to 'Version 1.2'",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "PASS",
+        "StatusExtended": "Storage account mysqllogs2023 from subscription Example_Subscription - XAKS has TLS version set to 1.2",
+        "Severity": "medium",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure the 'Minimum TLS version' for storage accounts is set to 'Version 1.2'",
+        "Risk": "TLS versions 1.0 and 1.1 are known to be susceptible to certain Common Vulnerabilities and Exposures (CVE) weaknesses and attacks such as POODLE and BEAST",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/bc_azr_storage_2#terraform",
+                "CLI": "https://docs.bridgecrew.io/docs/bc_azr_storage_2#cli-command",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/minimum-tls-version.html"
+            },
+            "Recommendation": {
+                "Text": "Ensure that all your Microsoft Azure Storage accounts are using the latest available version of the TLS protoco",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mysql_logs/providers/Microsoft.Storage/storageAccounts/mysqllogs2023",
+        "ResourceName": "mysqllogs2023"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_ensure_minimum_tls_version_12-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-backup-westeurope-rg/providers/Microsoft.Storage/storageAccounts/velerodde884b289bb",
+        "Provider": "azure",
+        "CheckID": "storage_ensure_minimum_tls_version_12",
+        "CheckTitle": "Ensure the 'Minimum TLS version' for storage accounts is set to 'Version 1.2'",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Storage account velerodde884b289bb from subscription Example_Subscription - XAKS does not have TLS version set to 1.2",
+        "Severity": "medium",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure the 'Minimum TLS version' for storage accounts is set to 'Version 1.2'",
+        "Risk": "TLS versions 1.0 and 1.1 are known to be susceptible to certain Common Vulnerabilities and Exposures (CVE) weaknesses and attacks such as POODLE and BEAST",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/bc_azr_storage_2#terraform",
+                "CLI": "https://docs.bridgecrew.io/docs/bc_azr_storage_2#cli-command",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/minimum-tls-version.html"
+            },
+            "Recommendation": {
+                "Text": "Ensure that all your Microsoft Azure Storage accounts are using the latest available version of the TLS protoco",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-backup-westeurope-rg/providers/Microsoft.Storage/storageAccounts/velerodde884b289bb",
+        "ResourceName": "velerodde884b289bb"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_infrastructure_encryption_is_enabled-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mc_xaks-aks-westeurope-rg_xaks-aks-westeurope_westeurope/providers/Microsoft.Storage/storageAccounts/f0cddb3e0696a488e8afd20",
+        "Provider": "azure",
+        "CheckID": "storage_infrastructure_encryption_is_enabled",
+        "CheckTitle": "Ensure that 'Enable Infrastructure Encryption' for Each Storage Account in Azure Storage is Set to 'enabled' ",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Storage account f0cddb3e0696a488e8afd20 from subscription Example_Subscription - XAKS has infrastructure encryption disabled",
+        "Severity": "low",
+        "ResourceType": "AzureRole",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that 'Enable Infrastructure Encryption' for Each Storage Account in Azure Storage is Set to 'enabled' ",
+        "Risk": "Double encryption of Azure Storage data protects against a scenario where one of the encryption algorithms or keys may be compromised",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "",
+                "CLI": "",
+                "Other": ""
+            },
+            "Recommendation": {
+                "Text": "Enabling double encryption at the hardware level on top of the default software encryption for Storage Accounts accessing Azure storage solutions.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mc_xaks-aks-westeurope-rg_xaks-aks-westeurope_westeurope/providers/Microsoft.Storage/storageAccounts/f0cddb3e0696a488e8afd20",
+        "ResourceName": "f0cddb3e0696a488e8afd20"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_infrastructure_encryption_is_enabled-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-public-nodes-westeurope-rg/providers/Microsoft.Storage/storageAccounts/f2aebdbe187044155ba7e25",
+        "Provider": "azure",
+        "CheckID": "storage_infrastructure_encryption_is_enabled",
+        "CheckTitle": "Ensure that 'Enable Infrastructure Encryption' for Each Storage Account in Azure Storage is Set to 'enabled' ",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Storage account f2aebdbe187044155ba7e25 from subscription Example_Subscription - XAKS has infrastructure encryption disabled",
+        "Severity": "low",
+        "ResourceType": "AzureRole",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that 'Enable Infrastructure Encryption' for Each Storage Account in Azure Storage is Set to 'enabled' ",
+        "Risk": "Double encryption of Azure Storage data protects against a scenario where one of the encryption algorithms or keys may be compromised",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "",
+                "CLI": "",
+                "Other": ""
+            },
+            "Recommendation": {
+                "Text": "Enabling double encryption at the hardware level on top of the default software encryption for Storage Accounts accessing Azure storage solutions.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-public-nodes-westeurope-rg/providers/Microsoft.Storage/storageAccounts/f2aebdbe187044155ba7e25",
+        "ResourceName": "f2aebdbe187044155ba7e25"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_infrastructure_encryption_is_enabled-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-tfstate-westeurope-rg/providers/Microsoft.Storage/storageAccounts/xaksgpstfstatewesteurope",
+        "Provider": "azure",
+        "CheckID": "storage_infrastructure_encryption_is_enabled",
+        "CheckTitle": "Ensure that 'Enable Infrastructure Encryption' for Each Storage Account in Azure Storage is Set to 'enabled' ",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Storage account xaksgpstfstatewesteurope from subscription Example_Subscription - XAKS has infrastructure encryption disabled",
+        "Severity": "low",
+        "ResourceType": "AzureRole",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that 'Enable Infrastructure Encryption' for Each Storage Account in Azure Storage is Set to 'enabled' ",
+        "Risk": "Double encryption of Azure Storage data protects against a scenario where one of the encryption algorithms or keys may be compromised",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "",
+                "CLI": "",
+                "Other": ""
+            },
+            "Recommendation": {
+                "Text": "Enabling double encryption at the hardware level on top of the default software encryption for Storage Accounts accessing Azure storage solutions.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-tfstate-westeurope-rg/providers/Microsoft.Storage/storageAccounts/xaksgpstfstatewesteurope",
+        "ResourceName": "xaksgpstfstatewesteurope"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_infrastructure_encryption_is_enabled-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mysql_logs/providers/Microsoft.Storage/storageAccounts/mysqllogs2023",
+        "Provider": "azure",
+        "CheckID": "storage_infrastructure_encryption_is_enabled",
+        "CheckTitle": "Ensure that 'Enable Infrastructure Encryption' for Each Storage Account in Azure Storage is Set to 'enabled' ",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Storage account mysqllogs2023 from subscription Example_Subscription - XAKS has infrastructure encryption disabled",
+        "Severity": "low",
+        "ResourceType": "AzureRole",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that 'Enable Infrastructure Encryption' for Each Storage Account in Azure Storage is Set to 'enabled' ",
+        "Risk": "Double encryption of Azure Storage data protects against a scenario where one of the encryption algorithms or keys may be compromised",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "",
+                "CLI": "",
+                "Other": ""
+            },
+            "Recommendation": {
+                "Text": "Enabling double encryption at the hardware level on top of the default software encryption for Storage Accounts accessing Azure storage solutions.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mysql_logs/providers/Microsoft.Storage/storageAccounts/mysqllogs2023",
+        "ResourceName": "mysqllogs2023"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_infrastructure_encryption_is_enabled-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-backup-westeurope-rg/providers/Microsoft.Storage/storageAccounts/velerodde884b289bb",
+        "Provider": "azure",
+        "CheckID": "storage_infrastructure_encryption_is_enabled",
+        "CheckTitle": "Ensure that 'Enable Infrastructure Encryption' for Each Storage Account in Azure Storage is Set to 'enabled' ",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Storage account velerodde884b289bb from subscription Example_Subscription - XAKS has infrastructure encryption disabled",
+        "Severity": "low",
+        "ResourceType": "AzureRole",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that 'Enable Infrastructure Encryption' for Each Storage Account in Azure Storage is Set to 'enabled' ",
+        "Risk": "Double encryption of Azure Storage data protects against a scenario where one of the encryption algorithms or keys may be compromised",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "",
+                "CLI": "",
+                "Other": ""
+            },
+            "Recommendation": {
+                "Text": "Enabling double encryption at the hardware level on top of the default software encryption for Storage Accounts accessing Azure storage solutions.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-backup-westeurope-rg/providers/Microsoft.Storage/storageAccounts/velerodde884b289bb",
+        "ResourceName": "velerodde884b289bb"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_secure_transfer_required_is_enabled-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mc_xaks-aks-westeurope-rg_xaks-aks-westeurope_westeurope/providers/Microsoft.Storage/storageAccounts/f0cddb3e0696a488e8afd20",
+        "Provider": "azure",
+        "CheckID": "storage_secure_transfer_required_is_enabled",
+        "CheckTitle": "Ensure that all data transferred between clients and your Azure Storage account is encrypted using the HTTPS protocol.",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "PASS",
+        "StatusExtended": "Storage account f0cddb3e0696a488e8afd20 from subscription Example_Subscription - XAKS has secure transfer required enabled",
+        "Severity": "medium",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that all data transferred between clients and your Azure Storage account is encrypted using the HTTPS protocol.",
+        "Risk": "Requests to the storage account sent outside of a secure connection can be eavesdropped",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-storage-account-enables-secure-transfer",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/secure-transfer-required.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/secure-transfer-required.html"
+            },
+            "Recommendation": {
+                "Text": "Enable data encryption in transit.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mc_xaks-aks-westeurope-rg_xaks-aks-westeurope_westeurope/providers/Microsoft.Storage/storageAccounts/f0cddb3e0696a488e8afd20",
+        "ResourceName": "f0cddb3e0696a488e8afd20"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_secure_transfer_required_is_enabled-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-public-nodes-westeurope-rg/providers/Microsoft.Storage/storageAccounts/f2aebdbe187044155ba7e25",
+        "Provider": "azure",
+        "CheckID": "storage_secure_transfer_required_is_enabled",
+        "CheckTitle": "Ensure that all data transferred between clients and your Azure Storage account is encrypted using the HTTPS protocol.",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "PASS",
+        "StatusExtended": "Storage account f2aebdbe187044155ba7e25 from subscription Example_Subscription - XAKS has secure transfer required enabled",
+        "Severity": "medium",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that all data transferred between clients and your Azure Storage account is encrypted using the HTTPS protocol.",
+        "Risk": "Requests to the storage account sent outside of a secure connection can be eavesdropped",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-storage-account-enables-secure-transfer",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/secure-transfer-required.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/secure-transfer-required.html"
+            },
+            "Recommendation": {
+                "Text": "Enable data encryption in transit.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-public-nodes-westeurope-rg/providers/Microsoft.Storage/storageAccounts/f2aebdbe187044155ba7e25",
+        "ResourceName": "f2aebdbe187044155ba7e25"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_secure_transfer_required_is_enabled-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-tfstate-westeurope-rg/providers/Microsoft.Storage/storageAccounts/xaksgpstfstatewesteurope",
+        "Provider": "azure",
+        "CheckID": "storage_secure_transfer_required_is_enabled",
+        "CheckTitle": "Ensure that all data transferred between clients and your Azure Storage account is encrypted using the HTTPS protocol.",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "PASS",
+        "StatusExtended": "Storage account xaksgpstfstatewesteurope from subscription Example_Subscription - XAKS has secure transfer required enabled",
+        "Severity": "medium",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that all data transferred between clients and your Azure Storage account is encrypted using the HTTPS protocol.",
+        "Risk": "Requests to the storage account sent outside of a secure connection can be eavesdropped",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-storage-account-enables-secure-transfer",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/secure-transfer-required.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/secure-transfer-required.html"
+            },
+            "Recommendation": {
+                "Text": "Enable data encryption in transit.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-tfstate-westeurope-rg/providers/Microsoft.Storage/storageAccounts/xaksgpstfstatewesteurope",
+        "ResourceName": "xaksgpstfstatewesteurope"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_secure_transfer_required_is_enabled-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mysql_logs/providers/Microsoft.Storage/storageAccounts/mysqllogs2023",
+        "Provider": "azure",
+        "CheckID": "storage_secure_transfer_required_is_enabled",
+        "CheckTitle": "Ensure that all data transferred between clients and your Azure Storage account is encrypted using the HTTPS protocol.",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "PASS",
+        "StatusExtended": "Storage account mysqllogs2023 from subscription Example_Subscription - XAKS has secure transfer required enabled",
+        "Severity": "medium",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that all data transferred between clients and your Azure Storage account is encrypted using the HTTPS protocol.",
+        "Risk": "Requests to the storage account sent outside of a secure connection can be eavesdropped",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-storage-account-enables-secure-transfer",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/secure-transfer-required.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/secure-transfer-required.html"
+            },
+            "Recommendation": {
+                "Text": "Enable data encryption in transit.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mysql_logs/providers/Microsoft.Storage/storageAccounts/mysqllogs2023",
+        "ResourceName": "mysqllogs2023"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_secure_transfer_required_is_enabled-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-backup-westeurope-rg/providers/Microsoft.Storage/storageAccounts/velerodde884b289bb",
+        "Provider": "azure",
+        "CheckID": "storage_secure_transfer_required_is_enabled",
+        "CheckTitle": "Ensure that all data transferred between clients and your Azure Storage account is encrypted using the HTTPS protocol.",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "PASS",
+        "StatusExtended": "Storage account velerodde884b289bb from subscription Example_Subscription - XAKS has secure transfer required enabled",
+        "Severity": "medium",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that all data transferred between clients and your Azure Storage account is encrypted using the HTTPS protocol.",
+        "Risk": "Requests to the storage account sent outside of a secure connection can be eavesdropped",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-storage-account-enables-secure-transfer",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/secure-transfer-required.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/secure-transfer-required.html"
+            },
+            "Recommendation": {
+                "Text": "Enable data encryption in transit.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/xaks-backup-westeurope-rg/providers/Microsoft.Storage/storageAccounts/velerodde884b289bb",
+        "ResourceName": "velerodde884b289bb"
+    }
+]

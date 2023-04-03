@@ -4,10 +4,11 @@ on:
   push:
     branches:
       - main
-      - documentation
+      - documentation_home
 
 permissions:
   contents: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest

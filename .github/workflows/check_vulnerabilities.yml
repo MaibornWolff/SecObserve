@@ -1,0 +1,37 @@
+name: Check for vulnerabilities
+
+on: [push]
+
+permissions: read-all
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run vulnerability scanners
+        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@main
+        with:
+          so_configuration: 'so_configuration.yml'
+
+      - name: Upload results
+        uses: actions/upload-artifact@v3
+        with:
+          name: secobserve
+          path: |
+            bandit_backend.sarif
+            checkov.sarif
+            eslint_frontend.sarif
+            gitleaks.sarif
+            grype_backend_image.json
+            grype_frontend_image.json
+            kics.sarif
+            semgrep_backend.sarif
+            semgrep_frontend.sarif
+            trivy_frontend_npm.json
+            trivy_backend_image.json
+            trivy_frontend_image.json

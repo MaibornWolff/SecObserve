@@ -32,14 +32,16 @@
 
     /* Hide main content for now */
     .md-content {
-      display: none;
-    }    
+        display: none;
+    }
+
     .md-sidebar--secondary {
         display: none;
-      }
-      .md-sidebar--primary {
+    }
+
+    .md-sidebar--primary {
         display: none;
-      }
+    }
 
     .tx-container {
         padding-top: .0rem;
@@ -107,6 +109,7 @@
         .md-sidebar--secondary {
             display: none
         }
+
         .md-sidebar--primary {
             display: none
         }
@@ -118,7 +121,7 @@
         }
 
         .tx-hero__content {
-            padding-top: 15%;
+            padding-top: 10%;
         }
     }
 
@@ -126,6 +129,7 @@
         .md-sidebar--primary {
             display: none
         }
+
         .md-sidebar--secondary {
             display: none
         }
@@ -159,21 +163,51 @@
             border-radius: 3px;
         }
     }
+
+    .row {
+        display: flex;
+    }
+
+    /* Create two equal columns that sits next to each other */
+    .column_1 {
+        flex: 55%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .column_2 {
+        flex: 45%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 150px;
+    }
 </style>
 
 <!-- Main site Entry button descriptions -->
 <section class="tx-container">
     <div class="md-typeset">
-      <div class="tx-hero">
-        <div class="tx-hero__content">
-          <h1>Vulnerability Management</h1>
-          <p>with</p>
-          <p><img src = "assets/images/secobserve_white.svg" alt="SecObserve" width="500px"/></p>
-          <a href="{{ page.next_page.url | url }}" title="{{ page.next_page.title | striptags }}" class="md-button md-button--primary">
-            Get started
-          </a>
+        <div class="tx-hero">
+            <div class="tx-hero__content">
+                <div class="row">
+                    <div class="column_1">
+                        <div>
+                            <h1>Vulnerability Management</h1>
+                            <p>with</p>
+                            <p><img src="assets/images/secobserve_white.svg" alt="SecObserve" width="500px" /></p>
+                            <a href="{{ page.next_page.url | url }}" title="{{ page.next_page.title | striptags }}"
+                                class="md-button md-button--primary">
+                                Get started
+                            </a>
+                        </div>
+                    </div>
+                    <div class="column_2">
+                        <p><img src="assets/images/secobserve_home.png" alt="SecObserve" width="900px" /></p>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
+    </div>
     </div>
 </section>
 

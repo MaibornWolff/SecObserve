@@ -12,19 +12,19 @@ def save_assessment(
 ) -> None:
     previous_severity = observation.current_severity
     previous_assessment_severity = observation.assessment_severity
-    severity = ""
-    if new_severity and new_severity != observation.assessment_severity:
+    log_severity = ""
+    if new_severity and new_severity != observation.current_severity:
         observation.assessment_severity = new_severity
         observation.current_severity = get_current_severity(observation)
-        severity = observation.current_severity
+        log_severity = observation.current_severity
 
     previous_status = observation.current_status
     previous_assessment_status = observation.assessment_status
-    status = ""
-    if new_status and new_status != observation.assessment_status:
+    log_status = ""
+    if new_status and new_status != observation.current_status:
         observation.assessment_status = new_status
         observation.current_status = get_current_status(observation)
-        status = observation.current_status
+        log_status = observation.current_status
 
     if (
         previous_severity != observation.current_severity
@@ -38,7 +38,7 @@ def save_assessment(
         previous_severity != observation.current_severity
         or previous_status != observation.current_status
     ):
-        create_observation_log(observation, severity, status, comment)
+        create_observation_log(observation, log_severity, log_status, comment)
 
     check_security_gate(observation.product)
 

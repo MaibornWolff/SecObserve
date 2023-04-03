@@ -2,6 +2,8 @@ name: Check backend
 
 on: [push]
 
+permissions: read-all
+
 jobs:
   build:
 

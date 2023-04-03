@@ -2,6 +2,8 @@ name: Build and push dev images
 
 on: workflow_dispatch
 
+permissions: read-all
+
 jobs:
   docker:
     runs-on: ubuntu-latest
