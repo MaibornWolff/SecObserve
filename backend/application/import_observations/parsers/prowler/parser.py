@@ -15,7 +15,7 @@ class ProwlerParser(BaseParser, BaseFileParser):
 
     @classmethod
     def get_type(cls) -> str:
-        return Parser.TYPE_DAST
+        return Parser.TYPE_INFRASTRUCTURE
 
     def check_format(self, file: File) -> tuple[bool, list[str], dict]:
         try:
@@ -34,7 +34,9 @@ class ProwlerParser(BaseParser, BaseFileParser):
                     ["File is not a Prowler format, element is not a dictionary"],
                     None,
                 )
-            if not first_element.get("StatusExtended") or not first_element.get("Status"):
+            if not first_element.get("StatusExtended") or not first_element.get(
+                "Status"
+            ):
                 return (
                     False,
                     [
@@ -52,7 +54,9 @@ class ProwlerParser(BaseParser, BaseFileParser):
             if prowler_observation.get("Status", "").lower() == "fail":
                 check_title = prowler_observation.get("CheckTitle")
                 status_extended = prowler_observation.get("StatusExtended")
-                severity = prowler_observation.get("Severity", Observation.SEVERITY_UNKOWN).capitalize()
+                severity = prowler_observation.get(
+                    "Severity", Observation.SEVERITY_UNKOWN
+                ).capitalize()
                 if severity == "Informational":
                     severity = Observation.SEVERITY_NONE
                 resource_type = prowler_observation.get("ResourceType")
@@ -60,9 +64,19 @@ class ProwlerParser(BaseParser, BaseFileParser):
                 prowler_description = prowler_observation.get("Description")
                 risk = prowler_observation.get("Risk")
                 related_url = prowler_observation.get("RelatedUrl")
-                recommendation_text = prowler_observation.get("Remediation", {}).get("Recommendation", {}).get("Text")
-                recommendation_url = prowler_observation.get("Remediation", {}).get("Recommendation", {}).get("Url")
-                recommendation_code = prowler_observation.get("Remediation", {}).get("Code")
+                recommendation_text = (
+                    prowler_observation.get("Remediation", {})
+                    .get("Recommendation", {})
+                    .get("Text")
+                )
+                recommendation_url = (
+                    prowler_observation.get("Remediation", {})
+                    .get("Recommendation", {})
+                    .get("Url")
+                )
+                recommendation_code = prowler_observation.get("Remediation", {}).get(
+                    "Code"
+                )
                 subscription = prowler_observation.get("Subscription")
                 account_id = prowler_observation.get("AccountId")
 
@@ -88,11 +102,13 @@ class ProwlerParser(BaseParser, BaseFileParser):
                 if recommendation_code:
                     for key in recommendation_code.keys():
                         if recommendation_code.get(key):
-                            recommendation += f"\n\n* **{key}:** {recommendation_code.get(key)}"
+                            recommendation += (
+                                f"\n\n* **{key}:** {recommendation_code.get(key)}"
+                            )
 
                 observation = Observation(
                     title=status_extended,
-                    parser_severity=severity.title(), 
+                    parser_severity=severity.title(),
                     description=description,
                     recommendation=recommendation,
                 )
