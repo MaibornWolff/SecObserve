@@ -1,0 +1,170 @@
+[
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_app_services_is_on-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/AppServices",
+        "Provider": "azure",
+        "CheckID": "defender_ensure_defender_for_app_services_is_on",
+        "CheckTitle": "Ensure That Microsoft Defender for App Services Is Set To 'On' ",
+        "CheckType": [],
+        "ServiceName": "defender",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Defender plan Defender for App Services from subscription Example_Subscription - XAKS is set to OFF (pricing tier not standard)",
+        "Severity": "high",
+        "ResourceType": "AzureDefenderPlan",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure That Microsoft Defender for App Services Is Set To 'On' ",
+        "Risk": "Turning on Microsoft Defender for App Service enables threat detection for App Service, providing threat intelligence, anomaly detection, and behavior analytics in the Microsoft Defender for Cloud.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-azure-defender-is-set-to-on-for-app-service#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-app-service.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-app-service.html"
+            },
+            "Recommendation": {
+                "Text": "By default, Microsoft Defender for Cloud is not enabled for your App Service instances. Enabling the Defender security service for App Service instances allows for advanced security defense using threat detection capabilities provided by Microsoft Security Response Center.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/AppServices",
+        "ResourceName": "Defender plan App Services"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-defender_ensure_defender_for_app_services_is_on-Example_Subscription - Partner Subscription 01-/subscriptions/f17730ec-1c6d-467f-8087-a673ae7ddfd2/providers/Microsoft.Security/pricings/AppServices",
+        "Provider": "azure",
+        "CheckID": "defender_ensure_defender_for_app_services_is_on",
+        "CheckTitle": "Ensure That Microsoft Defender for App Services Is Set To 'On' ",
+        "CheckType": [],
+        "ServiceName": "defender",
+        "SubServiceName": "",
+        "Status": "FAIL",
+        "StatusExtended": "Defender plan Defender for App Services from subscription Example_Subscription - Partner Subscription 01 is set to OFF (pricing tier not standard)",
+        "Severity": "high",
+        "ResourceType": "AzureDefenderPlan",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure That Microsoft Defender for App Services Is Set To 'On' ",
+        "Risk": "Turning on Microsoft Defender for App Service enables threat detection for App Service, providing threat intelligence, anomaly detection, and behavior analytics in the Microsoft Defender for Cloud.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-azure-defender-is-set-to-on-for-app-service#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-app-service.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-app-service.html"
+            },
+            "Recommendation": {
+                "Text": "By default, Microsoft Defender for Cloud is not enabled for your App Service instances. Enabling the Defender security service for App Service instances allows for advanced security defense using threat detection capabilities provided by Microsoft Security Response Center.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - Partner Subscription 01",
+        "ResourceId": "/subscriptions/f17730ec-1c6d-467f-8087-a673ae7ddfd2/providers/Microsoft.Security/pricings/AppServices",
+        "ResourceName": "Defender plan App Services"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-iam_subscription_roles_owner_custom_not_created-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Authorization/roleDefinitions/076cc402-b7a3-459f-b29e-81f3de45c423",
+        "Provider": "azure",
+        "CheckID": "iam_subscription_roles_owner_custom_not_created",
+        "CheckTitle": "Ensure that no custom subscription owner roles are created",
+        "CheckType": [],
+        "ServiceName": "iam",
+        "SubServiceName": "",
+        "Status": "PASS",
+        "StatusExtended": "Role AKS Cluster Configuration Reader from subscription Example_Subscription - XAKS is not a custom owner role",
+        "Severity": "high",
+        "ResourceType": "AzureRole",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that no custom subscription owner roles are created",
+        "Risk": "Subscription ownership should not include permission to create custom owner roles. The principle of least privilege should be followed and only necessary privileges should be assigned instead of allowing full administrative access.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "",
+                "CLI": "",
+                "Other": ""
+            },
+            "Recommendation": {
+                "Text": "Subscriptions will need to be handled by Administrators with permissions.",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Authorization/roleDefinitions/076cc402-b7a3-459f-b29e-81f3de45c423",
+        "ResourceName": "AKS Cluster Configuration Reader"
+    },
+    {
+        "AssessmentStartTime": "2023-03-15T10:37:00.927355",
+        "FindingUniqueId": "prowler-azure-storage_blob_public_access_level_is_disabled-Example_Subscription - XAKS-/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mc_xaks-aks-westeurope-rg_xaks-aks-westeurope_westeurope/providers/Microsoft.Storage/storageAccounts/f0cddb3e0696a488e8afd20",
+        "Provider": "azure",
+        "CheckID": "storage_blob_public_access_level_is_disabled",
+        "CheckTitle": "Ensure that the 'Public access level' is set to 'Private (no anonymous access)' for all blob containers in your storage account",
+        "CheckType": [],
+        "ServiceName": "storage",
+        "SubServiceName": "",
+        "Status": "PASS",
+        "StatusExtended": "Storage account f0cddb3e0696a488e8afd20 from subscription Example_Subscription - XAKS has allow blob public access disabled",
+        "Severity": "medium",
+        "ResourceType": "AzureStorageAccount",
+        "ResourceDetails": "",
+        "Tags": {
+            "Tag1Key": "value",
+            "Tag2Key": "value"
+        },
+        "Description": "Ensure that the 'Public access level' configuration setting is set to 'Private (no anonymous access)' for all blob containers in your storage account in order to block anonymous access to these Microsoft Azure resources.",
+        "Risk": "A user that accesses blob containers anonymously can use constructors that do not require credentials such as shared access signatures.",
+        "RelatedUrl": "",
+        "Remediation": {
+            "Code": {
+                "NativeIaC": "",
+                "Terraform": "https://docs.bridgecrew.io/docs/ensure-that-storage-accounts-disallow-public-access#terraform",
+                "CLI": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/secure-transfer-required.html",
+                "Other": "https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/StorageAccounts/secure-transfer-required.html"
+            },
+            "Recommendation": {
+                "Text": "Set 'Public access level' configuration setting to 'Private (no anonymous access)'",
+                "Url": ""
+            }
+        },
+        "Categories": [],
+        "DependsOn": [],
+        "RelatedTo": [],
+        "Notes": "",
+        "Tenant_Domain": null,
+        "Subscription": "Example_Subscription - XAKS",
+        "ResourceId": "/subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/resourceGroups/mc_xaks-aks-westeurope-rg_xaks-aks-westeurope_westeurope/providers/Microsoft.Storage/storageAccounts/f0cddb3e0696a488e8afd20",
+        "ResourceName": "f0cddb3e0696a488e8afd20"
+    }
+]

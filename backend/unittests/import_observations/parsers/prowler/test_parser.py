@@ -115,7 +115,7 @@ Auto Minor Version Upgrade is a feature that you can enable to have your databas
 
             self.assertTrue(check)
             self.assertEqual(0, len(messages))
-            self.assertEqual(41, len(observations))
+            self.assertEqual(2, len(observations))
 
             observation = observations[0]
             self.assertEqual(
