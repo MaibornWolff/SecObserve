@@ -1,12 +1,12 @@
-from json import load, dumps
+from json import dumps, load
 from typing import Optional
 
 from django.core.files.base import File
 
 from application.core.models import Observation, Parser
 from application.import_observations.parsers.base_parser import (
-    BaseParser,
     BaseFileParser,
+    BaseParser,
 )
 
 # Recommended cipher suites according to German BSI as of 2020

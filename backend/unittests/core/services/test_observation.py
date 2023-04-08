@@ -1,14 +1,14 @@
 from copy import deepcopy
 
-from unittests.base_test_case import BaseTestCase
 from application.core.models import Observation
 from application.core.services.observation import (
-    get_identity_hash,
     _get_string_to_hash,
     get_current_severity,
     get_current_status,
+    get_identity_hash,
     normalize_observation_fields,
 )
+from unittests.base_test_case import BaseTestCase
 
 
 class TestObservation(BaseTestCase):

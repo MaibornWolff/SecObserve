@@ -1,15 +1,14 @@
-from json import load, dumps
+from json import dumps, load
 from typing import Optional
-from django.core.files.base import File
 
+from django.core.files.base import File
 from packageurl import PackageURL
 
 from application.core.models import Observation, Parser
 from application.import_observations.parsers.base_parser import (
-    BaseParser,
     BaseFileParser,
+    BaseParser,
 )
-
 
 SEVERITIES = {
     "error": Observation.SEVERITY_HIGH,

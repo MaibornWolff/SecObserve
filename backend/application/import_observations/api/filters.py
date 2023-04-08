@@ -1,7 +1,4 @@
-from django_filters import (
-    FilterSet,
-    OrderingFilter,
-)
+from django_filters import FilterSet, OrderingFilter
 
 from application.import_observations.models import Api_Configuration
 

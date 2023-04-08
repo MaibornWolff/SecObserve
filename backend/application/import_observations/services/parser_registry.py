@@ -1,14 +1,14 @@
 import logging
 from typing import Optional, Type
 
+from application.commons.services.log_message import format_log_message
 from application.core.models import Parser
 from application.core.queries.parser import get_parser_by_name
 from application.import_observations.parsers.base_parser import (
-    BaseParser,
     BaseAPIParser,
     BaseFileParser,
+    BaseParser,
 )
-from application.commons.services.log_message import format_log_message
 
 logger = logging.getLogger("secobserve.import_observations")
 

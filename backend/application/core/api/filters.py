@@ -3,12 +3,13 @@ from datetime import timedelta
 from django.utils import timezone
 from django_filters import (
     CharFilter,
-    FilterSet,
-    OrderingFilter,
     ChoiceFilter,
+    FilterSet,
     NumberFilter,
+    OrderingFilter,
 )
-from application.core.models import Observation, Product, Product_Member, Parser
+
+from application.core.models import Observation, Parser, Product, Product_Member
 
 AGE_DAY = "Today"
 AGE_WEEK = "Past 7 days"

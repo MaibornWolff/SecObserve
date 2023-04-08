@@ -1,10 +1,11 @@
 from unittest.mock import patch
+
+from django.urls import reverse
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.test import APIClient
-from django.urls import reverse
 
-from unittests.base_test_case import BaseTestCase
 from application.access_control.api.views import get_authenticated_user
+from unittests.base_test_case import BaseTestCase
 
 
 class TestAPIToken(BaseTestCase):

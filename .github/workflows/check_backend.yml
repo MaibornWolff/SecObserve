@@ -27,6 +27,16 @@ jobs:
         run: |
           flake8 . --count --show-source --statistics
 
+      - name: Black
+        working-directory: ./backend
+        run: |
+          black . --check
+
+      - name: isort
+        working-directory: ./backend
+        run: |
+          isort . -c
+
       - name: MyPy
         working-directory: ./backend
         run: |

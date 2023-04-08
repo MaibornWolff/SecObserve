@@ -1,5 +1,5 @@
-from django.dispatch import receiver
 from constance.signals import config_updated
+from django.dispatch import receiver
 
 from application.core.queries.product import get_products
 from application.core.services.security_gate import check_security_gate

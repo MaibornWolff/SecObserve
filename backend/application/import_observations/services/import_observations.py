@@ -1,35 +1,30 @@
 from datetime import datetime
 from typing import Tuple
+
 from django.core.files.base import File
 from django.utils.timezone import make_aware
 from rest_framework.exceptions import ValidationError
 
-from application.core.models import (
-    Observation,
-    Product,
-    Reference,
-    Parser,
-    Evidence,
-)
+from application.core.models import Evidence, Observation, Parser, Product, Reference
 from application.core.queries.observation import (
     get_observations_for_vulnerability_check,
 )
 from application.core.services.observation import (
-    get_identity_hash,
+    clip_fields,
     get_current_severity,
     get_current_status,
+    get_identity_hash,
     normalize_observation_fields,
-    clip_fields,
 )
 from application.core.services.observation_log import create_observation_log
 from application.core.services.security_gate import check_security_gate
 from application.import_observations.models import Api_Configuration
-from application.import_observations.services.parser_registry import get_parser_class
 from application.import_observations.parsers.base_parser import (
-    BaseParser,
     BaseAPIParser,
     BaseFileParser,
+    BaseParser,
 )
+from application.import_observations.services.parser_registry import get_parser_class
 from application.rules.services.rule_engine import Rule_Engine
 
 

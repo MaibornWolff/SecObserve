@@ -1,11 +1,5 @@
-from django.db.models import (
-    Model,
-    CharField,
-    BooleanField,
-    OneToOneField,
-    CASCADE,
-)
 from django.contrib.auth.models import AbstractUser
+from django.db.models import CASCADE, BooleanField, CharField, Model, OneToOneField
 from encrypted_model_fields.fields import EncryptedCharField
 
 

@@ -1,6 +1,7 @@
 import logging
 
 from django.db import migrations
+
 from application.commons.services.log_message import format_log_message
 
 logger = logging.getLogger("secobserve.migration")

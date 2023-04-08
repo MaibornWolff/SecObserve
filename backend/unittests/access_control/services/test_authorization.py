@@ -2,17 +2,17 @@ from unittest.mock import patch
 
 from rest_framework.exceptions import PermissionDenied
 
-from unittests.base_test_case import BaseTestCase
 from application.access_control.services.authorization import (
-    user_has_permission,
-    user_has_permission_or_403,
-    get_user_permissions,
-    role_has_permission,
+    NoAuthorizationImplementedError,
     PermissionDoesNotExistError,
     RoleDoesNotExistError,
-    NoAuthorizationImplementedError,
+    get_user_permissions,
+    role_has_permission,
+    user_has_permission,
+    user_has_permission_or_403,
 )
 from application.access_control.services.roles_permissions import Permissions, Roles
+from unittests.base_test_case import BaseTestCase
 
 
 class TestAuthorization(BaseTestCase):

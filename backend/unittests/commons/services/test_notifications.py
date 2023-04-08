@@ -1,19 +1,20 @@
 from datetime import datetime, timedelta
-from requests import Response
-from unittest.mock import patch, ANY
-from constance.test import override_config
+from unittest.mock import ANY, patch
 
-from unittests.base_test_case import BaseTestCase
+from constance.test import override_config
+from requests import Response
+
 from application.commons.services.notifications import (
-    send_product_security_gate_notification,
-    send_exception_notification,
-    _send_notification,
+    LAST_EXCEPTIONS,
     _create_notification_message,
     _get_base_url_frontend,
     _get_classname,
     _ratelimit_exception,
-    LAST_EXCEPTIONS,
+    _send_notification,
+    send_exception_notification,
+    send_product_security_gate_notification,
 )
+from unittests.base_test_case import BaseTestCase
 
 
 class TestNotifications(BaseTestCase):

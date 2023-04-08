@@ -1,5 +1,5 @@
-import resource
 import os
+import resource
 
 from django.apps import AppConfig
 

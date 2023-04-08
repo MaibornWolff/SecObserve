@@ -1,10 +1,11 @@
 from unittest.mock import patch
+
 from django.db.models.deletion import ProtectedError
 from rest_framework.exceptions import (
+    APIException,
     AuthenticationFailed,
     PermissionDenied,
     ValidationError,
-    APIException,
 )
 from rest_framework.status import (
     HTTP_400_BAD_REQUEST,
@@ -14,8 +15,8 @@ from rest_framework.status import (
     HTTP_500_INTERNAL_SERVER_ERROR,
 )
 
-from unittests.base_test_case import BaseTestCase
 from application.commons.api.exception_handler import custom_exception_handler
+from unittests.base_test_case import BaseTestCase
 
 
 class TestExceptionHandler(BaseTestCase):

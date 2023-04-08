@@ -1,11 +1,12 @@
 from unittest.mock import patch
+
 from django.contrib.auth.models import AnonymousUser
 from django.db.models.deletion import ProtectedError
 from django.http.request import HttpRequest
 from rest_framework.response import Response
 
-from unittests.base_test_case import BaseTestCase
 from application.commons.services.log_message import format_log_message
+from unittests.base_test_case import BaseTestCase
 
 
 class TestLogMessage(BaseTestCase):

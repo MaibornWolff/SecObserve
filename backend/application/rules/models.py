@@ -1,13 +1,13 @@
 from django.db.models import (
-    Model,
+    CASCADE,
+    BooleanField,
     CharField,
     ForeignKey,
+    Model,
     TextField,
-    BooleanField,
-    CASCADE,
 )
 
-from application.core.models import Product, Parser, Observation
+from application.core.models import Observation, Parser, Product
 
 
 class Rule(Model):

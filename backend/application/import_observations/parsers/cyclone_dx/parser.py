@@ -1,10 +1,11 @@
-from json import load, dumps
+from json import dumps, load
+
 from django.core.files.base import File
 
 from application.core.models import Observation, Parser
 from application.import_observations.parsers.base_parser import (
-    BaseParser,
     BaseFileParser,
+    BaseParser,
 )
 
 

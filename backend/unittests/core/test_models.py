@@ -1,7 +1,7 @@
 from unittest.mock import patch
 
+from application.core.models import Observation, Parser, Product
 from unittests.base_test_case import BaseTestCase
-from application.core.models import Product, Observation, Parser
 
 
 class TestProduct(BaseTestCase):

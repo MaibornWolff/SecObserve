@@ -1,70 +1,65 @@
 import csv
 from tempfile import NamedTemporaryFile
 
-from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Prefetch
 from django.http import HttpResponse
-
-from rest_framework.mixins import (
-    ListModelMixin,
-    RetrieveModelMixin,
-)
-from rest_framework.viewsets import GenericViewSet, ModelViewSet
-from rest_framework.exceptions import ValidationError, NotFound
-from rest_framework.filters import SearchFilter
-from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework.decorators import action
+from rest_framework.exceptions import NotFound, ValidationError
+from rest_framework.filters import SearchFilter
+from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.status import HTTP_204_NO_CONTENT
-
-from drf_spectacular.utils import extend_schema, OpenApiParameter
+from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from application.access_control.services.authorization import user_has_permission_or_403
 from application.access_control.services.roles_permissions import Permissions
 from application.core.api.filters import (
     ObservationFilter,
+    ParserFilter,
     ProductFilter,
     ProductMemberFilter,
-    ParserFilter,
+)
+from application.core.api.permissions import (
+    UserHasObservationPermission,
+    UserHasProductMemberPermission,
+    UserHasProductPermission,
 )
 from application.core.api.serializers import (
     EvidenceSerializer,
-    ObservationSerializer,
-    ObservationListSerializer,
     ObservationAssessmentSerializer,
-    ObservationRemoveAssessmentSerializer,
-    ObservationUpdateSerializer,
     ObservationCreateSerializer,
+    ObservationListSerializer,
+    ObservationRemoveAssessmentSerializer,
+    ObservationSerializer,
+    ObservationUpdateSerializer,
+    ParserSerializer,
     ProductMemberSerializer,
     ProductSerializer,
-    ParserSerializer,
-)
-from application.core.api.permissions import (
-    UserHasProductMemberPermission,
-    UserHasProductPermission,
-    UserHasObservationPermission,
 )
 from application.core.models import (
     Observation,
     Observation_Log,
+    Parser,
     Product,
     Product_Member,
-    Parser,
 )
 from application.core.queries.observation import (
+    get_evidences,
     get_observation_by_id,
     get_observations,
-    get_evidences,
 )
 from application.core.queries.product import (
+    get_product_by_id,
     get_product_members,
     get_products,
-    get_product_by_id,
 )
-from application.core.services.assessment import save_assessment, remove_assessment
+from application.core.services.assessment import remove_assessment, save_assessment
 from application.core.services.export_observations import (
-    export_observations_excel,
     export_observations_csv,
+    export_observations_excel,
 )
 from application.metrics.services.metrics import get_codecharta_metrics
 from application.rules.services.rule_engine import Rule_Engine
@@ -134,7 +129,9 @@ class ProductViewSet(ModelViewSet):
         workbook = export_observations_excel(product, status)
 
         with NamedTemporaryFile() as tmp:
-            workbook.save(tmp.name)  # nosemgrep: python.lang.correctness.tempfile.flush.tempfile-without-flush
+            workbook.save(
+                tmp.name
+            )  # nosemgrep: python.lang.correctness.tempfile.flush.tempfile-without-flush
             # export works fine without .flush()
             tmp.seek(0)
             stream = tmp.read()

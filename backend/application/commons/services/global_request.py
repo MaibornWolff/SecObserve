@@ -2,6 +2,7 @@ from threading import current_thread
 from typing import Optional
 
 from django.http.request import HttpRequest
+
 from application.access_control.models import User
 
 _requests: dict[str, HttpRequest] = {}

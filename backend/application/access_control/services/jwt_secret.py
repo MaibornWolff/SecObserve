@@ -1,5 +1,5 @@
-import string
 import secrets
+import string
 
 from application.access_control.models import JWT_Secret
 

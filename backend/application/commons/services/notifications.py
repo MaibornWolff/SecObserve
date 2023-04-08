@@ -1,9 +1,9 @@
 import logging
-import requests
-
-from constance import config
 from datetime import datetime, timedelta
 from typing import Optional
+
+import requests
+from constance import config
 from django.template.loader import render_to_string
 
 from application.commons.services.log_message import format_log_message

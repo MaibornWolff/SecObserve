@@ -1,4 +1,5 @@
 from typing import Optional
+
 from django.db.models.query import QuerySet
 
 from application.access_control.models import User

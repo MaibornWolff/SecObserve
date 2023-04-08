@@ -2,32 +2,32 @@ from datetime import datetime
 from typing import Optional
 
 from django.utils.timezone import make_aware
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.serializers import (
-    ModelSerializer,
-    Serializer,
     CharField,
     ChoiceField,
+    ModelSerializer,
+    Serializer,
     SerializerMethodField,
     ValidationError,
 )
-from rest_framework.exceptions import PermissionDenied
 
-from application.core.models import (
-    Observation,
-    Evidence,
-    Observation_Log,
-    Product,
-    Product_Member,
-    Reference,
-    Parser,
-)
+from application.access_control.api.serializers import UserSerializer
 from application.access_control.services.roles_permissions import (
     Permissions,
     Roles,
     get_permissions_for_role,
 )
-from application.access_control.api.serializers import UserSerializer
 from application.commons.services.global_request import get_current_user
+from application.core.models import (
+    Evidence,
+    Observation,
+    Observation_Log,
+    Parser,
+    Product,
+    Product_Member,
+    Reference,
+)
 from application.core.queries.product import get_product_member
 from application.core.services.observation_log import create_observation_log
 

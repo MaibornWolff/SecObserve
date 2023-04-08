@@ -1,11 +1,10 @@
 import csv
-
 from datetime import datetime
 from typing import Any
-from openpyxl import Workbook
-from openpyxl.styles import Font
 
 from django.http import HttpResponse
+from openpyxl import Workbook
+from openpyxl.styles import Font
 
 from application.core.models import Observation, Product
 
@@ -64,7 +63,9 @@ def export_observations_excel(product: Product, status: str = None) -> Workbook:
 def export_observations_csv(
     response: HttpResponse, product: Product, status: str = None
 ) -> None:
-    writer = csv.writer(response)  # nosemgrep: python.lang.security.use-defusedcsv.use-defusedcsv
+    writer = csv.writer(
+        response
+    )  # nosemgrep: python.lang.security.use-defusedcsv.use-defusedcsv
     # Ony a closed user group can import observations, risk is accepted
 
     first_row = True

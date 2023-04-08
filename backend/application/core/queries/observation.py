@@ -5,11 +5,11 @@ from django.db.models.query import QuerySet
 
 from application.commons.services.global_request import get_current_user
 from application.core.models import (
-    Observation,
-    Product,
-    Parser,
-    Product_Member,
     Evidence,
+    Observation,
+    Parser,
+    Product,
+    Product_Member,
 )
 
 

@@ -1,9 +1,10 @@
 from rest_framework.serializers import (
     CharField,
-    Serializer,
     ModelSerializer,
+    Serializer,
     SerializerMethodField,
 )
+
 from application.access_control.models import User
 from application.access_control.services.authorization import get_user_permissions
 from application.access_control.services.roles_permissions import Permissions

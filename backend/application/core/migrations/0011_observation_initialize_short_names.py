@@ -1,4 +1,5 @@
 from django.db import migrations
+
 from application.core.services.observation import normalize_observation_fields
 
 

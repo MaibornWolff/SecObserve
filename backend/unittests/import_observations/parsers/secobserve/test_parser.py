@@ -1,5 +1,6 @@
 from os import path
 from unittest import TestCase
+
 from application.import_observations.parsers.secobserve.parser import SecObserveParser
 
 

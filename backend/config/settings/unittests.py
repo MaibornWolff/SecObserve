@@ -5,7 +5,7 @@ DATABASES = {
         "ATOMIC_REQUESTS": True,
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": "./sqlite_unittests.db",
-        "TEST": {}
+        "TEST": {},
     }
 }
 # Basically disable throttling for unit tests

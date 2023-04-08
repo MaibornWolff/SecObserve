@@ -1,15 +1,16 @@
-import jwt
 from datetime import timedelta
 from unittest.mock import patch
+
+import jwt
 from django.http import HttpRequest
 from django.utils import timezone
 from rest_framework.exceptions import AuthenticationFailed
 
-from unittests.base_test_case import BaseTestCase
 from application.access_control.services.jwt_authentication import (
-    create_jwt,
     JWTAuthentication,
+    create_jwt,
 )
+from unittests.base_test_case import BaseTestCase
 
 
 class TestFunctions(BaseTestCase):

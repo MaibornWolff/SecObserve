@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
-from application.core.models import Product_Member, Product, Parser, Observation
+
+from application.core.models import Observation, Parser, Product, Product_Member
 
 
 @admin.register(Product)

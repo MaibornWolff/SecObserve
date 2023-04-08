@@ -1,15 +1,15 @@
 from unittest.mock import patch
 
-from django.http import HttpRequest, Http404
+from django.http import Http404, HttpRequest
 from rest_framework.exceptions import ParseError
 
-from unittests.base_test_case import BaseTestCase
 from application.access_control.api.permissions import (
     check_object_permission,
     check_post_permission,
 )
 from application.access_control.services.roles_permissions import Permissions
 from application.core.models import Product
+from unittests.base_test_case import BaseTestCase
 
 
 class TestPermissions(BaseTestCase):

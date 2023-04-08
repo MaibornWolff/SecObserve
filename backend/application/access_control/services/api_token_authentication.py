@@ -1,17 +1,13 @@
-import string
 import secrets
-
+import string
 from typing import Optional
+
 from argon2 import PasswordHasher
 from argon2.profiles import RFC_9106_LOW_MEMORY
+from rest_framework.authentication import BaseAuthentication, get_authorization_header
+from rest_framework.exceptions import AuthenticationFailed, ValidationError
 
-from rest_framework.authentication import (
-    BaseAuthentication,
-    get_authorization_header,
-)
-from rest_framework.exceptions import ValidationError, AuthenticationFailed
-
-from application.access_control.models import User, API_Token
+from application.access_control.models import API_Token, User
 
 API_TOKEN_PREFIX = "APIToken"
 

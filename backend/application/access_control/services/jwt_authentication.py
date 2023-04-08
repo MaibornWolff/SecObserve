@@ -1,13 +1,10 @@
-import jwt
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Optional
 
+import jwt
 from constance import config
+from rest_framework.authentication import BaseAuthentication, get_authorization_header
 from rest_framework.exceptions import AuthenticationFailed
-from rest_framework.authentication import (
-    BaseAuthentication,
-    get_authorization_header,
-)
 
 from application.access_control.models import User
 from application.access_control.queries.user import get_user_by_username

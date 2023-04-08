@@ -1,7 +1,8 @@
 from os import path
 from unittest import TestCase
-from application.import_observations.parsers.cryptolyzer.parser import CryptoLyzerParser
+
 from application.core.models import Observation
+from application.import_observations.parsers.cryptolyzer.parser import CryptoLyzerParser
 
 
 class TestCryptolyzeParser(TestCase):

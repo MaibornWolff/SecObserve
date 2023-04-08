@@ -1,7 +1,8 @@
 from os import path
 from unittest import TestCase
-from application.import_observations.parsers.prowler.parser import ProwlerParser
+
 from application.core.models import Observation
+from application.import_observations.parsers.prowler.parser import ProwlerParser
 
 
 class TestCryptolyzeParser(TestCase):

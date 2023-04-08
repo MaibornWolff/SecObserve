@@ -1,9 +1,9 @@
 from unittest.mock import patch
 
-from unittests.base_test_case import BaseTestCase
 from application.access_control.services.roles_permissions import Permissions, Roles
 from application.core.api.serializers import ProductSerializer
 from application.core.models import Observation, Product_Member
+from unittests.base_test_case import BaseTestCase
 
 
 class TestProductSerializer(BaseTestCase):

@@ -1,6 +1,6 @@
 import re
 
-from application.core.models import Product, Parser, Observation
+from application.core.models import Observation, Parser, Product
 from application.core.services.observation import (
     get_current_severity,
     get_current_status,

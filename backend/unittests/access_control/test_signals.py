@@ -1,11 +1,11 @@
 from unittest.mock import patch
 
-from unittests.base_test_case import BaseTestCase
 from application.access_control.signals import (
     signal_user_logged_in,
     signal_user_logged_out,
     signal_user_login_failed,
 )
+from unittests.base_test_case import BaseTestCase
 
 
 class TestSignals(BaseTestCase):

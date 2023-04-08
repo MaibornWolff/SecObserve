@@ -1,14 +1,14 @@
 import json
-import requests
-
 from typing import Optional
 
+import requests
+
 from application.core.models import Observation, Parser
-from application.import_observations.parsers.base_parser import (
-    BaseParser,
-    BaseAPIParser,
-)
 from application.import_observations.models import Api_Configuration
+from application.import_observations.parsers.base_parser import (
+    BaseAPIParser,
+    BaseParser,
+)
 
 STATUS_MAPPING = {
     "NOT_SET": "",
