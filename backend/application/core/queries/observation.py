@@ -1,5 +1,3 @@
-from typing import Optional
-
 from django.db.models import Exists, OuterRef
 from django.db.models.query import QuerySet
 
