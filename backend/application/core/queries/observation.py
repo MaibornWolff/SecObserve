@@ -13,7 +13,7 @@ from application.core.models import (
 )
 
 
-def get_observation_by_id(id: int) -> Optional[Observation]:
+def get_observation_by_id(id: int) -> Observation:
     try:
         return Observation.objects.get(id=id)
     except Observation.DoesNotExist:
