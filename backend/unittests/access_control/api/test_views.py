@@ -8,7 +8,6 @@ from application.access_control.api.views import get_authenticated_user
 
 
 class TestAPIToken(BaseTestCase):
-
     # --- create_api_token ---
 
     @patch("application.access_control.api.views.get_authenticated_user")

@@ -13,7 +13,6 @@ from application.core.models import Product
 
 
 class TestPermissions(BaseTestCase):
-
     # --- check_post_permission ---
 
     def test_check_post_permission_not_post(self):

@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("rules", "0003_rename_new_parser_severity_rule_new_severity"),
     ]

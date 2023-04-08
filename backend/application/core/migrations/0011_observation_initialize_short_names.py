@@ -5,7 +5,6 @@ from application.core.services.observation import normalize_observation_fields
 def touch_observations(apps, schema_editor):
     Observation = apps.get_model("core", "Observation")
     for observation in Observation.objects.all():
-
         if observation.origin_docker_image_name_tag:
             origin_docker_image_name_tag_parts = (
                 observation.origin_docker_image_name_tag.split("/")
@@ -22,7 +21,6 @@ def touch_observations(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("core", "0010_observation_short_names"),
     ]

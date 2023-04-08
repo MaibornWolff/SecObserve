@@ -4,35 +4,98 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0008_evidence'),
+        ("core", "0008_evidence"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='observation',
-            name='assessment_status',
-            field=models.CharField(blank=True, choices=[('Open', 'Open'), ('Resolved', 'Resolved'), ('Duplicate', 'Duplicate'), ('False positive', 'False positive'), ('In review', 'In review'), ('Not affected', 'Not affected'), ('Not security', 'Not security'), ('Risk accepted', 'Risk accepted')], max_length=16),
+            model_name="observation",
+            name="assessment_status",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("Open", "Open"),
+                    ("Resolved", "Resolved"),
+                    ("Duplicate", "Duplicate"),
+                    ("False positive", "False positive"),
+                    ("In review", "In review"),
+                    ("Not affected", "Not affected"),
+                    ("Not security", "Not security"),
+                    ("Risk accepted", "Risk accepted"),
+                ],
+                max_length=16,
+            ),
         ),
         migrations.AlterField(
-            model_name='observation',
-            name='current_status',
-            field=models.CharField(choices=[('Open', 'Open'), ('Resolved', 'Resolved'), ('Duplicate', 'Duplicate'), ('False positive', 'False positive'), ('In review', 'In review'), ('Not affected', 'Not affected'), ('Not security', 'Not security'), ('Risk accepted', 'Risk accepted')], max_length=16),
+            model_name="observation",
+            name="current_status",
+            field=models.CharField(
+                choices=[
+                    ("Open", "Open"),
+                    ("Resolved", "Resolved"),
+                    ("Duplicate", "Duplicate"),
+                    ("False positive", "False positive"),
+                    ("In review", "In review"),
+                    ("Not affected", "Not affected"),
+                    ("Not security", "Not security"),
+                    ("Risk accepted", "Risk accepted"),
+                ],
+                max_length=16,
+            ),
         ),
         migrations.AlterField(
-            model_name='observation',
-            name='parser_status',
-            field=models.CharField(blank=True, choices=[('Open', 'Open'), ('Resolved', 'Resolved'), ('Duplicate', 'Duplicate'), ('False positive', 'False positive'), ('In review', 'In review'), ('Not affected', 'Not affected'), ('Not security', 'Not security'), ('Risk accepted', 'Risk accepted')], max_length=16),
+            model_name="observation",
+            name="parser_status",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("Open", "Open"),
+                    ("Resolved", "Resolved"),
+                    ("Duplicate", "Duplicate"),
+                    ("False positive", "False positive"),
+                    ("In review", "In review"),
+                    ("Not affected", "Not affected"),
+                    ("Not security", "Not security"),
+                    ("Risk accepted", "Risk accepted"),
+                ],
+                max_length=16,
+            ),
         ),
         migrations.AlterField(
-            model_name='observation',
-            name='rule_status',
-            field=models.CharField(blank=True, choices=[('Open', 'Open'), ('Resolved', 'Resolved'), ('Duplicate', 'Duplicate'), ('False positive', 'False positive'), ('In review', 'In review'), ('Not affected', 'Not affected'), ('Not security', 'Not security'), ('Risk accepted', 'Risk accepted')], max_length=16),
+            model_name="observation",
+            name="rule_status",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("Open", "Open"),
+                    ("Resolved", "Resolved"),
+                    ("Duplicate", "Duplicate"),
+                    ("False positive", "False positive"),
+                    ("In review", "In review"),
+                    ("Not affected", "Not affected"),
+                    ("Not security", "Not security"),
+                    ("Risk accepted", "Risk accepted"),
+                ],
+                max_length=16,
+            ),
         ),
         migrations.AlterField(
-            model_name='observation_log',
-            name='status',
-            field=models.CharField(blank=True, choices=[('Open', 'Open'), ('Resolved', 'Resolved'), ('Duplicate', 'Duplicate'), ('False positive', 'False positive'), ('In review', 'In review'), ('Not affected', 'Not affected'), ('Not security', 'Not security'), ('Risk accepted', 'Risk accepted')], max_length=16),
+            model_name="observation_log",
+            name="status",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("Open", "Open"),
+                    ("Resolved", "Resolved"),
+                    ("Duplicate", "Duplicate"),
+                    ("False positive", "False positive"),
+                    ("In review", "In review"),
+                    ("Not affected", "Not affected"),
+                    ("Not security", "Not security"),
+                    ("Risk accepted", "Risk accepted"),
+                ],
+                max_length=16,
+            ),
         ),
     ]

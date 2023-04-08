@@ -296,7 +296,9 @@ class TestObservation(BaseTestCase):
 
         before_observation.origin_docker_image_name = "docker_image_name"
         before_observation.origin_docker_image_tag = "docker_image_tag"
-        before_observation.origin_docker_image_name_tag_short = "docker_image_name:docker_image_tag"
+        before_observation.origin_docker_image_name_tag_short = (
+            "docker_image_name:docker_image_tag"
+        )
 
         normalize_observation_fields(after_observation)
         self.assertEqual(before_observation, after_observation)

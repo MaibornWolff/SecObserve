@@ -137,7 +137,6 @@ class ApiImportObservationsByName(APIView):
 
 
 class FileUploadObservationsById(APIView):
-
     parser_classes = [MultiPartParser]
 
     @extend_schema(
@@ -187,7 +186,6 @@ class FileUploadObservationsById(APIView):
 
 
 class FileUploadObservationsByName(APIView):
-
     parser_classes = [MultiPartParser]
 
     @extend_schema(

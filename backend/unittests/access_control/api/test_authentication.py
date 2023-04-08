@@ -8,7 +8,6 @@ from unittests.base_test_case import BaseTestCase
 
 class TestAuthentication(BaseTestCase):
     def _check_not_authenticated(self, methods: list[str], url: str):
-
         api_client = APIClient()
 
         for method in methods:

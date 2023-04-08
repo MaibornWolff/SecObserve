@@ -144,7 +144,7 @@ def get_authenticated_user(data) -> User:
     username = request_serializer.validated_data.get("username")
     password = request_serializer.validated_data.get("password")
 
-    user: User = django_authenticate(username=username, password=password) # type: ignore[assignment]
+    user: User = django_authenticate(username=username, password=password)  # type: ignore[assignment]
     # We always get a User from our model
     if not user:
         raise PermissionDenied("Invalid credentials")

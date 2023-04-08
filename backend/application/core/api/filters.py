@@ -98,7 +98,10 @@ class ObservationFilter(FilterSet):
             ("numerical_severity", "current_severity"),
             ("current_status", "current_status"),
             ("origin_component_name_version", "origin_component_name_version"),
-            ("origin_docker_image_name_tag_short", "origin_docker_image_name_tag_short"),
+            (
+                "origin_docker_image_name_tag_short",
+                "origin_docker_image_name_tag_short",
+            ),
             ("origin_service_name", "origin_service_name"),
             ("origin_endpoint_hostname", "origin_endpoint_hostname"),
             ("origin_source_file", "origin_source_file"),

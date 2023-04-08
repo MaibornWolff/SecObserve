@@ -1,3 +1,3 @@
 import gunicorn
 
-gunicorn.SERVER = 'undisclosed'
+gunicorn.SERVER = "undisclosed"

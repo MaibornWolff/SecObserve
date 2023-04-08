@@ -15,7 +15,9 @@ def get_api_configuration_by_id(id: int) -> Optional[Api_Configuration]:
         return None
 
 
-def get_api_configuration_by_name(product: Product, name: str) -> Optional[Api_Configuration]:
+def get_api_configuration_by_name(
+    product: Product, name: str
+) -> Optional[Api_Configuration]:
     try:
         return Api_Configuration.objects.get(product=product, name=name)
     except Api_Configuration.DoesNotExist:

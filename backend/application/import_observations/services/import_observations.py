@@ -41,7 +41,6 @@ def file_upload_observations(
     docker_image_name_tag: str,
     endpoint_url: str,
 ) -> Tuple[int, int, int]:
-
     parser_instance = instanciate_parser(parser)
 
     if not isinstance(parser_instance, BaseFileParser):
@@ -56,7 +55,7 @@ def file_upload_observations(
     return process_data(
         product,
         parser,
-        file.name, # type: ignore[arg-type]
+        file.name,  # type: ignore[arg-type]
         "",
         service,
         docker_image_name_tag,
@@ -140,7 +139,9 @@ def process_data(
     )
 
     for observation_before_for_dict in observations_before_list:
-        observations_before[observation_before_for_dict.identity_hash] = observation_before_for_dict
+        observations_before[
+            observation_before_for_dict.identity_hash
+        ] = observation_before_for_dict
 
     observations_this_run: set[str] = set()
 

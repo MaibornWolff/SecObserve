@@ -72,13 +72,14 @@ class SARIFParser(BaseParser, BaseFileParser):
             sarif_scanner = run.get("tool", {}).get("driver", {}).get("name")
             sarif_version = run.get("tool", {}).get("driver", {}).get("version")
             if not sarif_version:
-                sarif_version = run.get("tool", {}).get("driver", {}).get("semanticVersion")
+                sarif_version = (
+                    run.get("tool", {}).get("driver", {}).get("semanticVersion")
+                )
             if sarif_version:
                 sarif_scanner += " / " + sarif_version
 
             sarif_rules = self.get_rules(run)
             for result in run.get("results", []):
-
                 if result.get("kind", "fail") != "fail":
                     # see §3.27.9 kind property
                     continue

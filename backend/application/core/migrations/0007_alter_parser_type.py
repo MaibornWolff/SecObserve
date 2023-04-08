@@ -4,15 +4,26 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0006_manual_parser'),
+        ("core", "0006_manual_parser"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='parser',
-            name='type',
-            field=models.CharField(choices=[('SCA', 'SCA'), ('SAST', 'SAST'), ('DAST', 'DAST'), ('IAST', 'IAST'), ('Secrets', 'Secrets'), ('Infrastructure', 'Infrastructure'), ('Other', 'Other'), ('Manual', 'Manual')], max_length=16),
+            model_name="parser",
+            name="type",
+            field=models.CharField(
+                choices=[
+                    ("SCA", "SCA"),
+                    ("SAST", "SAST"),
+                    ("DAST", "DAST"),
+                    ("IAST", "IAST"),
+                    ("Secrets", "Secrets"),
+                    ("Infrastructure", "Infrastructure"),
+                    ("Other", "Other"),
+                    ("Manual", "Manual"),
+                ],
+                max_length=16,
+            ),
         ),
     ]

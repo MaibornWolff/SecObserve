@@ -17,7 +17,6 @@ from application.commons.services.notifications import (
 
 
 class TestNotifications(BaseTestCase):
-
     # --- send_product_security_gate_notification ---
 
     @patch("application.commons.services.notifications._send_notification")

@@ -4,15 +4,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('access_control', '0004_alter_api_token_api_token_hash'),
+        ("access_control", "0004_alter_api_token_api_token_hash"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='setting_theme',
-            field=models.CharField(choices=[('light', 'light'), ('dark', 'dark')], default='light', max_length=5),
+            model_name="user",
+            name="setting_theme",
+            field=models.CharField(
+                choices=[("light", "light"), ("dark", "dark")],
+                default="light",
+                max_length=5,
+            ),
         ),
     ]

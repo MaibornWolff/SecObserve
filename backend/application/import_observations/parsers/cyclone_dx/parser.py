@@ -47,7 +47,6 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         return True, [], data
 
     def get_observations(self, data: dict) -> list[Observation]:
-
         components = self.get_components(data)
         metadata = self.get_metadata(data)
         observations = self.create_observations(data, components, metadata)
@@ -185,7 +184,9 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         ratings = vulnerability.get("ratings", [])
         if ratings:
             for rating in ratings:
-                severity = rating.get("severity", Observation.SEVERITY_UNKOWN).capitalize()
+                severity = rating.get(
+                    "severity", Observation.SEVERITY_UNKOWN
+                ).capitalize()
                 numerical_severity = Observation.NUMERICAL_SEVERITIES.get(severity, 99)
                 if numerical_severity < current_numerical_severity:
                     current_severity = severity

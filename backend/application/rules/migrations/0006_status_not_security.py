@@ -4,15 +4,27 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rules', '0005_uniqueness'),
+        ("rules", "0005_uniqueness"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='rule',
-            name='new_status',
-            field=models.CharField(blank=True, choices=[('Open', 'Open'), ('Resolved', 'Resolved'), ('Duplicate', 'Duplicate'), ('False positive', 'False positive'), ('In review', 'In review'), ('Not affected', 'Not affected'), ('Not security', 'Not security'), ('Risk accepted', 'Risk accepted')], max_length=16),
+            model_name="rule",
+            name="new_status",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("Open", "Open"),
+                    ("Resolved", "Resolved"),
+                    ("Duplicate", "Duplicate"),
+                    ("False positive", "False positive"),
+                    ("In review", "In review"),
+                    ("Not affected", "Not affected"),
+                    ("Not security", "Not security"),
+                    ("Risk accepted", "Risk accepted"),
+                ],
+                max_length=16,
+            ),
         ),
     ]

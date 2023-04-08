@@ -6,7 +6,6 @@ import encrypted_model_fields.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("access_control", "0002_user_additional_fields"),
     ]

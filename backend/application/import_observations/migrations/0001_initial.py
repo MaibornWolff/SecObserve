@@ -6,7 +6,6 @@ import encrypted_model_fields.fields
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [

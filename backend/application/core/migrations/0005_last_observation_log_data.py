@@ -21,7 +21,6 @@ def update_last_observation_log(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("core", "0004_observation_last_observation_log"),
     ]
