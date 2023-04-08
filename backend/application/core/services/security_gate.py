@@ -6,7 +6,7 @@ from application.commons.services.notifications import (
 from application.core.models import Product
 
 
-def check_security_gate(product: Product) -> bool:
+def check_security_gate(product: Product) -> None:
     initial_security_gate_passed = product.security_gate_passed
     new_security_gate_passed = None
 

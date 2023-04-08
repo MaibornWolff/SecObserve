@@ -1,5 +1,6 @@
 from os import path
 from unittest import TestCase
+
 from application.import_observations.parsers.secobserve.parser import SecObserveParser
 
 
@@ -12,7 +13,7 @@ class TestSecObserveParser(TestCase):
             self.assertFalse(check)
             self.assertEqual(1, len(messages))
             self.assertEqual("File is not valid JSON", messages[0])
-            self.assertIsNone(data)
+            self.assertFalse(data)
 
     def test_wrong_format(self):
         with open(path.dirname(__file__) + "/files/wrong_format.json") as testfile:
@@ -22,7 +23,7 @@ class TestSecObserveParser(TestCase):
             self.assertFalse(check)
             self.assertEqual(1, len(messages))
             self.assertEqual("File is not a SecObserve format", messages[0])
-            self.assertIsNone(data)
+            self.assertFalse(data)
 
     def test_no_observation(self):
         with open(path.dirname(__file__) + "/files/no_observation.json") as testfile:

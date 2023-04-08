@@ -1,17 +1,3 @@
-from application.commons.api.views import HealthView, VersionView
-from application.commons.views import empty_view
-from application.access_control.api.views import (
-    CreateAPITokenView,
-    RevokeAPITokenView,
-    AuthenticateView,
-)
-from application.import_observations.api.views import (
-    ApiImportObservationsById,
-    ApiImportObservationsByName,
-    FileUploadObservationsByName,
-    FileUploadObservationsById,
-)
-from application.metrics.api.views import SeverityCountsView, StatusCountsView
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -20,6 +6,21 @@ from django.urls import include, path
 from django.views import defaults as default_views
 from django.views.generic.base import RedirectView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerSplitView
+
+from application.access_control.api.views import (
+    AuthenticateView,
+    CreateAPITokenView,
+    RevokeAPITokenView,
+)
+from application.commons.api.views import HealthView, VersionView
+from application.commons.views import empty_view
+from application.import_observations.api.views import (
+    ApiImportObservationsById,
+    ApiImportObservationsByName,
+    FileUploadObservationsById,
+    FileUploadObservationsByName,
+)
+from application.metrics.api.views import SeverityCountsView, StatusCountsView
 
 urlpatterns = [
     path("", empty_view),

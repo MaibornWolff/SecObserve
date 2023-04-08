@@ -1,6 +1,7 @@
 import logging
 
 from django.db import migrations
+
 from application.commons.services.log_message import format_log_message
 
 logger = logging.getLogger("secobserve.migration")
@@ -21,7 +22,6 @@ def update_last_observation_log(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("core", "0004_observation_last_observation_log"),
     ]

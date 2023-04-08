@@ -1,35 +1,30 @@
 from datetime import datetime
 from typing import Tuple
+
 from django.core.files.base import File
 from django.utils.timezone import make_aware
 from rest_framework.exceptions import ValidationError
 
-from application.core.models import (
-    Observation,
-    Product,
-    Reference,
-    Parser,
-    Evidence,
-)
+from application.core.models import Evidence, Observation, Parser, Product, Reference
 from application.core.queries.observation import (
     get_observations_for_vulnerability_check,
 )
 from application.core.services.observation import (
-    get_identity_hash,
+    clip_fields,
     get_current_severity,
     get_current_status,
+    get_identity_hash,
     normalize_observation_fields,
-    clip_fields,
 )
 from application.core.services.observation_log import create_observation_log
 from application.core.services.security_gate import check_security_gate
 from application.import_observations.models import Api_Configuration
-from application.import_observations.services.parser_registry import get_parser_class
 from application.import_observations.parsers.base_parser import (
-    BaseParser,
     BaseAPIParser,
     BaseFileParser,
+    BaseParser,
 )
+from application.import_observations.services.parser_registry import get_parser_class
 from application.rules.services.rule_engine import Rule_Engine
 
 
@@ -41,7 +36,6 @@ def file_upload_observations(
     docker_image_name_tag: str,
     endpoint_url: str,
 ) -> Tuple[int, int, int]:
-
     parser_instance = instanciate_parser(parser)
 
     if not isinstance(parser_instance, BaseFileParser):
@@ -56,7 +50,7 @@ def file_upload_observations(
     return process_data(
         product,
         parser,
-        file.name,
+        file.name,  # type: ignore[arg-type]
         "",
         service,
         docker_image_name_tag,
@@ -138,8 +132,11 @@ def process_data(
     observations_before_list = get_observations_for_vulnerability_check(
         product, parser, filename, api_configuration_name
     )
-    for observation_before in observations_before_list:
-        observations_before[observation_before.identity_hash] = observation_before
+
+    for observation_before_for_dict in observations_before_list:
+        observations_before[
+            observation_before_for_dict.identity_hash
+        ] = observation_before_for_dict
 
     observations_this_run: set[str] = set()
 

@@ -1,10 +1,10 @@
 from application.core.models import Observation
-from application.core.services.observation_log import create_observation_log
-from application.core.services.security_gate import check_security_gate
 from application.core.services.observation import (
     get_current_severity,
     get_current_status,
 )
+from application.core.services.observation_log import create_observation_log
+from application.core.services.security_gate import check_security_gate
 
 
 def save_assessment(

@@ -1,4 +1,4 @@
-import { RaRecord, Identifier } from "react-admin";
+import { Identifier, RaRecord } from "react-admin";
 
 export interface ApiConfiguration extends RaRecord {
     id: Identifier;

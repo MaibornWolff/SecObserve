@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.db.models import Exists, OuterRef
 from django.db.models.query import QuerySet
 
@@ -6,14 +8,16 @@ from application.core.models import Product, Product_Member
 from application.import_observations.models import Api_Configuration
 
 
-def get_api_configuration_by_id(id: int) -> Api_Configuration:
+def get_api_configuration_by_id(id: int) -> Optional[Api_Configuration]:
     try:
         return Api_Configuration.objects.get(id=id)
     except Api_Configuration.DoesNotExist:
         return None
 
 
-def get_api_configuration_by_name(product: Product, name: str) -> Api_Configuration:
+def get_api_configuration_by_name(
+    product: Product, name: str
+) -> Optional[Api_Configuration]:
     try:
         return Api_Configuration.objects.get(product=product, name=name)
     except Api_Configuration.DoesNotExist:

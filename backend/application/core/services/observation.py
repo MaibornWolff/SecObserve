@@ -1,5 +1,6 @@
 import hashlib
 from urllib.parse import urlparse
+
 from django.apps import apps
 from django.db.models.fields import CharField, TextField
 

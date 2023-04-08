@@ -1,13 +1,13 @@
+from django.core.validators import MinValueValidator
 from rest_framework.serializers import (
-    ModelSerializer,
-    Serializer,
+    BooleanField,
+    CharField,
     FileField,
     IntegerField,
-    CharField,
-    BooleanField,
+    ModelSerializer,
+    Serializer,
     ValidationError,
 )
-from django.core.validators import MinValueValidator
 
 from application.access_control.services.roles_permissions import Permissions
 from application.core.api.serializers import NestedProductSerializer
@@ -73,7 +73,8 @@ class ApiConfigurationSerializer(ModelSerializer):
 
         return data
 
-    def validate(self, data):
+    def validate(self, data: dict):
+        self.instance: Api_Configuration
         if data.pop("test_connection", False):
             if self.instance is not None:
                 product = data.get("product", self.instance.product)

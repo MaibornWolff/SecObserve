@@ -1,28 +1,23 @@
+import { Fragment } from "react";
 import {
-    List,
-    Datagrid,
-    TextField,
-    TextInput,
+    BooleanField,
     BulkDeleteButton,
     CreateButton,
-    TopToolbar,
+    Datagrid,
+    List,
     ReferenceField,
     ReferenceInput,
-    BooleanField,
+    TextField,
+    TextInput,
+    TopToolbar,
 } from "react-admin";
-import { Fragment } from "react";
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
 
 const listFilters = [
     <TextInput source="name" alwaysOn />,
-    <ReferenceInput
-        source="parser"
-        reference="parsers"
-        sort={{ field: "name", order: "ASC" }}
-        alwaysOn
-    >
+    <ReferenceInput source="parser" reference="parsers" sort={{ field: "name", order: "ASC" }} alwaysOn>
         <AutocompleteInputMedium optionText="name" />
     </ReferenceInput>,
 ];
@@ -30,21 +25,13 @@ const listFilters = [
 const BulkActionButtons = () => {
     const user = localStorage.getItem("user");
     return (
-        <Fragment>
-            {user && JSON.parse(user).is_superuser && (
-                <BulkDeleteButton mutationMode="pessimistic" />
-            )}
-        </Fragment>
+        <Fragment>{user && JSON.parse(user).is_superuser && <BulkDeleteButton mutationMode="pessimistic" />}</Fragment>
     );
 };
 
 const ListActions = () => {
     const user = localStorage.getItem("user");
-    return (
-        <TopToolbar>
-            {user && JSON.parse(user).is_superuser && <CreateButton />}
-        </TopToolbar>
-    );
+    return <TopToolbar>{user && JSON.parse(user).is_superuser && <CreateButton />}</TopToolbar>;
 };
 
 const GeneralRuleList = () => {
@@ -61,17 +48,10 @@ const GeneralRuleList = () => {
             <Datagrid
                 size="medium"
                 rowClick="show"
-                bulkActionButtons={
-                    user &&
-                    JSON.parse(user).is_superuser && <BulkActionButtons />
-                }
+                bulkActionButtons={user && JSON.parse(user).is_superuser && <BulkActionButtons />}
             >
                 <TextField source="name" />
-                <ReferenceField
-                    source="parser"
-                    reference="parsers"
-                    link={false}
-                />
+                <ReferenceField source="parser" reference="parsers" link={false} />
                 <TextField source="scanner_prefix" />
                 <TextField source="title" label="Observation title" />
                 <TextField source="new_severity" />

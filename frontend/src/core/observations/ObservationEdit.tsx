@@ -1,26 +1,19 @@
+import { Typography } from "@mui/material";
 import {
+    DeleteButton,
     Edit,
+    NumberInput,
+    ReferenceInput,
+    SaveButton,
     SimpleForm,
+    Toolbar,
     required,
     useRecordContext,
-    NumberInput,
-    Toolbar,
-    SaveButton,
-    DeleteButton,
-    ReferenceInput,
 } from "react-admin";
-import { Typography } from "@mui/material";
 
-import {
-    TextInputWide,
-    SelectInputWide,
-    AutocompleteInputMedium,
-} from "../../commons/layout/themes";
 import { PERMISSION_OBSERVATION_DELETE } from "../../access_control/types";
-import {
-    OBSERVATION_SEVERITY_CHOICES,
-    OBSERVATION_STATUS_CHOICES,
-} from "../../core/types";
+import { AutocompleteInputMedium, SelectInputWide, TextInputWide } from "../../commons/layout/themes";
+import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../../core/types";
 
 const CustomToolbar = () => {
     const observation = useRecordContext();
@@ -28,10 +21,9 @@ const CustomToolbar = () => {
     return (
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
             <SaveButton />
-            {observation &&
-                observation.product_data.permissions.includes(
-                    PERMISSION_OBSERVATION_DELETE
-                ) && <DeleteButton mutationMode="pessimistic" />}
+            {observation && observation.product_data.permissions.includes(PERMISSION_OBSERVATION_DELETE) && (
+                <DeleteButton mutationMode="pessimistic" />
+            )}
         </Toolbar>
     );
 };
@@ -65,19 +57,11 @@ const ObservationEdit = () => {
     return (
         <Edit redirect="show" mutationMode="pessimistic" transform={transform}>
             <SimpleForm warnWhenUnsavedChanges toolbar={<CustomToolbar />}>
-                <ReferenceInput
-                    source="product"
-                    reference="products"
-                    sort={{ field: "name", order: "ASC" }}
-                >
+                <ReferenceInput source="product" reference="products" sort={{ field: "name", order: "ASC" }}>
                     <SelectInputWide optionText="name" disabled={true} />
                 </ReferenceInput>
                 <Typography variant="h6">Observation</Typography>
-                <TextInputWide
-                    autoFocus
-                    source="title"
-                    validate={requiredValidate}
-                />
+                <TextInputWide autoFocus source="title" validate={requiredValidate} />
                 <AutocompleteInputMedium
                     source="current_severity"
                     label="Severity"
@@ -93,38 +77,13 @@ const ObservationEdit = () => {
                 <TextInputWide source="description" multiline />
                 <TextInputWide source="recommendation" multiline />
                 <Typography variant="h6">Origins</Typography>
-                <TextInputWide
-                    source="origin_service_name"
-                    label="Service name"
-                />
-                <TextInputWide
-                    source="origin_component_name_version"
-                    label="Component name:version"
-                />
-                <TextInputWide
-                    source="origin_docker_image_name_tag"
-                    label="Container name:tag"
-                />
-                <TextInputWide
-                    source="origin_endpoint_url"
-                    label="Endpoint URL"
-                />
-                <TextInputWide
-                    source="origin_source_file"
-                    label="Source file"
-                />
-                <NumberInput
-                    source="origin_source_line_start"
-                    label="Source line start"
-                    min={0}
-                    step={1}
-                />
-                <NumberInput
-                    source="origin_source_line_end"
-                    label="Source line end"
-                    min={0}
-                    step={1}
-                />
+                <TextInputWide source="origin_service_name" label="Service name" />
+                <TextInputWide source="origin_component_name_version" label="Component name:version" />
+                <TextInputWide source="origin_docker_image_name_tag" label="Container name:tag" />
+                <TextInputWide source="origin_endpoint_url" label="Endpoint URL" />
+                <TextInputWide source="origin_source_file" label="Source file" />
+                <NumberInput source="origin_source_line_start" label="Source line start" min={0} step={1} />
+                <NumberInput source="origin_source_line_end" label="Source line end" min={0} step={1} />
             </SimpleForm>
         </Edit>
     );

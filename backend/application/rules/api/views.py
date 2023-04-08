@@ -1,17 +1,17 @@
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import ModelViewSet
 
-from application.rules.api.serializers import (
-    GeneralRuleSerializer,
-    ProductRuleSerializer,
-)
 from application.rules.api.filters import GeneralRuleFilter, ProductRuleFilter
 from application.rules.api.permissions import (
     UserHasGeneralRulePermission,
     UserHasProductRulePermission,
 )
-from application.rules.queries.rule import get_general_rules, get_product_rules
+from application.rules.api.serializers import (
+    GeneralRuleSerializer,
+    ProductRuleSerializer,
+)
 from application.rules.models import Rule
+from application.rules.queries.rule import get_general_rules, get_product_rules
 
 
 class GeneralRuleViewSet(ModelViewSet):

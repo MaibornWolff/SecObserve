@@ -1,13 +1,13 @@
+import { Paper, Stack } from "@mui/material";
 import {
-    useListController,
     Datagrid,
-    TextField,
     ListContextProvider,
     Pagination,
     SelectField,
+    TextField,
     WithRecord,
+    useListController,
 } from "react-admin";
-import { Paper, Stack } from "@mui/material";
 
 import {
     PERMISSION_PRODUCT_MEMBER_DELETE,
@@ -21,9 +21,7 @@ type ProductMemberEmbeddedListProps = {
     product: any;
 };
 
-const ProductMemberEmbeddedList = ({
-    product,
-}: ProductMemberEmbeddedListProps) => {
+const ProductMemberEmbeddedList = ({ product }: ProductMemberEmbeddedListProps) => {
     const filter = { product: Number(product.id) };
     const perPage = 25;
     const resource = "product_members";
@@ -52,28 +50,18 @@ const ProductMemberEmbeddedList = ({
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
                 <Paper>
-                    <Datagrid
-                        size="medium"
-                        sx={{ width: "100%" }}
-                        bulkActionButtons={false}
-                    >
+                    <Datagrid size="medium" sx={{ width: "100%" }} bulkActionButtons={false}>
                         <TextField source="user_data.full_name" label="User" />
                         <SelectField source="role" choices={ROLE_CHOICES} />
                         <WithRecord
                             render={(product_member) => (
                                 <Stack direction="row" spacing={4}>
-                                    {product &&
-                                        product.permissions.includes(
-                                            PERMISSION_PRODUCT_MEMBER_EDIT
-                                        ) && <ProductMemberEdit />}
-                                    {product &&
-                                        product.permissions.includes(
-                                            PERMISSION_PRODUCT_MEMBER_DELETE
-                                        ) && (
-                                            <ProductMemberDelete
-                                                product_member={product_member}
-                                            />
-                                        )}
+                                    {product && product.permissions.includes(PERMISSION_PRODUCT_MEMBER_EDIT) && (
+                                        <ProductMemberEdit />
+                                    )}
+                                    {product && product.permissions.includes(PERMISSION_PRODUCT_MEMBER_DELETE) && (
+                                        <ProductMemberDelete product_member={product_member} />
+                                    )}
                                 </Stack>
                             )}
                         />

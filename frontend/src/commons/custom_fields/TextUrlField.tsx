@@ -1,4 +1,5 @@
 import LaunchIcon from "@mui/icons-material/Launch";
+
 import { useStyles } from "../../commons/layout/themes";
 
 interface TextUrlFieldProps {
@@ -8,8 +9,7 @@ interface TextUrlFieldProps {
 }
 
 function is_valid_url(urlString: string): boolean {
-    const SAFE_URL_PATTERN =
-        /^(?:(?:https?|mailto|ftp|tel|file|sms):|[^&:/?#]*(?:[/?#]|$))/gi;
+    const SAFE_URL_PATTERN = /^(?:(?:https?|mailto|ftp|tel|file|sms):|[^&:/?#]*(?:[/?#]|$))/gi;
 
     try {
         return Boolean(new URL(urlString) && urlString.match(SAFE_URL_PATTERN));

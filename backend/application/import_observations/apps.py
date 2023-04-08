@@ -1,9 +1,9 @@
-import os
 import logging
-from inspect import isclass
-from pathlib import Path
+import os
 from importlib import import_module
 from importlib.util import find_spec
+from inspect import isclass
+from pathlib import Path
 
 from django.apps import AppConfig
 from django.db import connection
@@ -17,11 +17,11 @@ class UploadObservationsConfig(AppConfig):
 
     def ready(self):
         from application.commons.services.log_message import format_log_message
+        from application.import_observations.parsers.base_parser import BaseParser
         from application.import_observations.services.parser_registry import (
             create_manual_parser,
             register_parser,
         )
-        from application.import_observations.parsers.base_parser import BaseParser
 
         all_tables = connection.introspection.table_names()
         if "core_parser" in all_tables:

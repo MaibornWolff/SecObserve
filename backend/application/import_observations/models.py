@@ -1,13 +1,7 @@
-from django.db.models import (
-    Model,
-    CharField,
-    ForeignKey,
-    CASCADE,
-    PROTECT,
-)
+from django.db.models import CASCADE, PROTECT, CharField, ForeignKey, Model
 from encrypted_model_fields.fields import EncryptedCharField
 
-from application.core.models import Product, Parser
+from application.core.models import Parser, Product
 
 
 class Api_Configuration(Model):

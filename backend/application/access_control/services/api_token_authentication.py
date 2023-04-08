@@ -1,16 +1,13 @@
-import string
 import secrets
+import string
+from typing import Optional
 
 from argon2 import PasswordHasher
 from argon2.profiles import RFC_9106_LOW_MEMORY
+from rest_framework.authentication import BaseAuthentication, get_authorization_header
+from rest_framework.exceptions import AuthenticationFailed, ValidationError
 
-from rest_framework.authentication import (
-    BaseAuthentication,
-    get_authorization_header,
-)
-from rest_framework.exceptions import ValidationError, AuthenticationFailed
-
-from application.access_control.models import User, API_Token
+from application.access_control.models import API_Token, User
 
 API_TOKEN_PREFIX = "APIToken"
 
@@ -71,7 +68,7 @@ class APITokenAuthentication(BaseAuthentication):
     def authenticate_header(self, request):
         return API_TOKEN_PREFIX
 
-    def _validate_api_token(self, api_token: str) -> User:
+    def _validate_api_token(self, api_token: str) -> Optional[User]:
         ph = PasswordHasher()
         api_tokens = API_Token.objects.all()
         for api_token_data in api_tokens:

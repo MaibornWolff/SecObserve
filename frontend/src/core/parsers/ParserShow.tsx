@@ -1,4 +1,5 @@
 import { Show, SimpleShowLayout, TextField } from "react-admin";
+
 import { useStyles } from "../../commons/layout/themes";
 
 const ParserShow = () => {

@@ -1,5 +1,6 @@
 import logging
 import traceback
+from typing import Optional
 
 from django.db.models.deletion import ProtectedError
 from rest_framework.response import Response
@@ -18,7 +19,7 @@ logger = logging.getLogger("secobserve.exception_handler")
 
 
 def custom_exception_handler(exc, context):
-
+    response: Optional[Response]
     if isinstance(exc, ProtectedError):
         # An object cannot be deleted because it has dependent objects.
         response = Response()

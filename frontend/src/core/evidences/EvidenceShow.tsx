@@ -1,12 +1,5 @@
-import {
-    Show,
-    SimpleShowLayout,
-    TextField,
-    ReferenceField,
-    WithRecord,
-    Labeled,
-} from "react-admin";
 import { JsonViewer, JsonViewerTheme } from "@textea/json-viewer";
+import { Labeled, ReferenceField, Show, SimpleShowLayout, TextField, WithRecord } from "react-admin";
 
 import { useStyles } from "../../commons/layout/themes";
 import { getSettingTheme } from "../../commons/settings/functions";
@@ -16,18 +9,10 @@ const EvidenceShow = () => {
     return (
         <Show>
             <SimpleShowLayout>
-                <ReferenceField
-                    source="product"
-                    reference="products"
-                    link="show"
-                >
+                <ReferenceField source="product" reference="products" link="show">
                     <TextField source="name" />
                 </ReferenceField>
-                <ReferenceField
-                    source="observation"
-                    reference="observations"
-                    link="show"
-                >
+                <ReferenceField source="observation" reference="observations" link="show">
                     <TextField source="title" />
                 </ReferenceField>
                 <TextField source="name" />

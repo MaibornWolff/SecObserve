@@ -1,6 +1,10 @@
 {
     "trailingComma": "es5",
+    "printWidth": 120,
     "tabWidth": 4,
     "semi": true,
-    "singleQuote": false
+    "singleQuote": false,
+    "importOrder": ["^@access_control/(.*)$", "^@commons/(.*)$", "^@core/(.*)$", "^@dashboard/(.*)$", "^@import_observations/(.*)$", "^@metrics/(.*)$", "^@rules/(.*)$", "^@types/(.*)$", "^[./]"],
+    "importOrderSeparation": true,
+    "importOrderSortSpecifiers": true
 }

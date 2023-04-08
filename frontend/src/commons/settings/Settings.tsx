@@ -1,18 +1,9 @@
 // import Card from "@mui/material/Card";
-import { useTheme, Title } from "react-admin";
-import {
-    Box,
-    Card,
-    CardContent,
-    CardHeader,
-    FormControl,
-    FormControlLabel,
-    RadioGroup,
-    Radio,
-} from "@mui/material";
+import { Box, Card, CardContent, CardHeader, FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
+import { Title, useTheme } from "react-admin";
 
-import { setSettingTheme, getSettingTheme } from "./functions";
 import { darkTheme, lightTheme } from "../layout/themes";
+import { getSettingTheme, setSettingTheme } from "./functions";
 
 const Settings = () => {
     const [, setTheme] = useTheme();
@@ -34,11 +25,7 @@ const Settings = () => {
             <CardContent>
                 <Box sx={{ width: "10em", display: "inline-block" }}>Theme</Box>
                 <FormControl>
-                    <RadioGroup
-                        defaultValue={getSettingTheme()}
-                        name="radio-buttons-group"
-                        row
-                    >
+                    <RadioGroup defaultValue={getSettingTheme()} name="radio-buttons-group" row>
                         <FormControlLabel
                             value="light"
                             control={<Radio />}

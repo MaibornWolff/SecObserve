@@ -1,19 +1,18 @@
 from itertools import chain
 from unittest.mock import patch
+
 from argon2 import PasswordHasher
 from argon2.profiles import RFC_9106_LOW_MEMORY
-
 from django.http import HttpRequest
-from rest_framework.exceptions import ValidationError, AuthenticationFailed
-
-from unittests.base_test_case import BaseTestCase
+from rest_framework.exceptions import AuthenticationFailed, ValidationError
 
 from application.access_control.models import API_Token
 from application.access_control.services.api_token_authentication import (
+    APITokenAuthentication,
     create_api_token,
     revoke_api_token,
-    APITokenAuthentication,
 )
+from unittests.base_test_case import BaseTestCase
 
 
 class TestFunctions(BaseTestCase):

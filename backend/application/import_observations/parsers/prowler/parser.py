@@ -1,10 +1,11 @@
-from json import load, dumps
+from json import dumps, load
+
 from django.core.files.base import File
 
 from application.core.models import Observation, Parser
 from application.import_observations.parsers.base_parser import (
-    BaseParser,
     BaseFileParser,
+    BaseParser,
 )
 
 
@@ -17,14 +18,14 @@ class ProwlerParser(BaseParser, BaseFileParser):
     def get_type(cls) -> str:
         return Parser.TYPE_INFRASTRUCTURE
 
-    def check_format(self, file: File) -> tuple[bool, list[str], dict]:
+    def check_format(self, file: File) -> tuple[bool, list[str], dict | list]:
         try:
             data = load(file)
         except Exception:
-            return False, ["File is not valid JSON"], None
+            return False, ["File is not valid JSON"], {}
 
         if not type(data) is list:
-            return False, ["File is not a Prowler format, data is not a list"], None
+            return False, ["File is not a Prowler format, data is not a list"], {}
 
         if len(data) >= 1:
             first_element = data[0]
@@ -32,7 +33,7 @@ class ProwlerParser(BaseParser, BaseFileParser):
                 return (
                     False,
                     ["File is not a Prowler format, element is not a dictionary"],
-                    None,
+                    {},
                 )
             if not first_element.get("StatusExtended") or not first_element.get(
                 "Status"
@@ -42,7 +43,7 @@ class ProwlerParser(BaseParser, BaseFileParser):
                     [
                         "Data is not a Prowler format, element doesn't have a StatusExtended or Status entry"
                     ],
-                    None,
+                    {},
                 )
 
         return True, [], data
@@ -94,7 +95,7 @@ class ProwlerParser(BaseParser, BaseFileParser):
                 if resource_type:
                     description += f"\n\n**Resource type:** {resource_type}"
 
-                recommendation = None
+                recommendation = ""
                 if recommendation_text:
                     recommendation = recommendation_text
                 if recommendation_url:

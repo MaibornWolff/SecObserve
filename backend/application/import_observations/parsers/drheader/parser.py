@@ -1,12 +1,12 @@
-from json import load, dumps
+from json import dumps, load
+
 from django.core.files.base import File
 
 from application.core.models import Observation, Parser
 from application.import_observations.parsers.base_parser import (
-    BaseParser,
     BaseFileParser,
+    BaseParser,
 )
-
 
 REFERENCES = {
     "Access-Control-Allow-Origin": [
@@ -95,14 +95,14 @@ class DrHEADerParser(BaseParser, BaseFileParser):
     def get_type(cls) -> str:
         return Parser.TYPE_DAST
 
-    def check_format(self, file: File) -> tuple[bool, list[str], dict]:
+    def check_format(self, file: File) -> tuple[bool, list[str], dict | list]:
         try:
             data = load(file)
         except Exception:
-            return False, ["File is not valid JSON"], None
+            return False, ["File is not valid JSON"], {}
 
         if not type(data) is list:
-            return False, ["File is not a DrHeader format, data is not a list"], None
+            return False, ["File is not a DrHeader format, data is not a list"], {}
 
         if len(data) >= 1:
             first_element = data[0]
@@ -110,7 +110,7 @@ class DrHEADerParser(BaseParser, BaseFileParser):
                 return (
                     False,
                     ["File is not a DrHeader format, element is not a dictionary"],
-                    None,
+                    {},
                 )
             if not first_element.get("rule"):
                 return (
@@ -118,7 +118,7 @@ class DrHEADerParser(BaseParser, BaseFileParser):
                     [
                         "Data is not a DrHeader format, element doesn't have a rule entry"
                     ],
-                    None,
+                    {},
                 )
 
         return True, [], data

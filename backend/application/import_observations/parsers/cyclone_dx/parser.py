@@ -1,10 +1,11 @@
-from json import load, dumps
+from json import dumps, load
+
 from django.core.files.base import File
 
 from application.core.models import Observation, Parser
 from application.import_observations.parsers.base_parser import (
-    BaseParser,
     BaseFileParser,
+    BaseParser,
 )
 
 
@@ -38,23 +39,22 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         try:
             data = load(file)
         except Exception:
-            return False, ["File is not valid JSON"], None
+            return False, ["File is not valid JSON"], {}
 
         bom_format = data.get("bomFormat")
         if bom_format != "CycloneDX":
-            return False, ["Data is not a CycloneDX SBOM"], None
+            return False, ["Data is not a CycloneDX SBOM"], {}
 
         return True, [], data
 
     def get_observations(self, data: dict) -> list[Observation]:
-
         components = self.get_components(data)
         metadata = self.get_metadata(data)
         observations = self.create_observations(data, components, metadata)
 
         return observations
 
-    def get_components(self, data: dict) -> dict[Component]:
+    def get_components(self, data: dict) -> dict[str, Component]:
         components = {}
         metadata_component = data.get("metadata", {}).get("component")
         if metadata_component:
@@ -85,7 +85,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         return components
 
     def create_observations(
-        self, data: dict, components: dict[Component], metadata: Metadata
+        self, data: dict, components: dict[str, Component], metadata: Metadata
     ) -> list[Observation]:
         observations = []
 
@@ -93,7 +93,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         for vulnerability in vulnerabilities:
             id = vulnerability.get("id")
             cvss3_score, cvss3_vector = self.get_cvss3(vulnerability)
-            severity = None
+            severity = Observation.SEVERITY_UNKOWN
             if not cvss3_score:
                 severity = self.get_highest_severity(vulnerability)
             cwe = self.get_cwe(vulnerability)
@@ -185,7 +185,9 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         ratings = vulnerability.get("ratings", [])
         if ratings:
             for rating in ratings:
-                severity = rating.get("severity", Observation.SEVERITY_UNKOWN).capitalize()
+                severity = rating.get(
+                    "severity", Observation.SEVERITY_UNKOWN
+                ).capitalize()
                 numerical_severity = Observation.NUMERICAL_SEVERITIES.get(severity, 99)
                 if numerical_severity < current_numerical_severity:
                     current_severity = severity

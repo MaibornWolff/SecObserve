@@ -1,29 +1,27 @@
-import * as React from "react";
-import {
-    SimpleForm,
-    ReferenceInput,
-    required,
-    useCreate,
-    useRefresh,
-    useNotify,
-    CreateBase,
-    Toolbar,
-    SaveButton,
-    BooleanInput,
-} from "react-admin";
-import { Dialog, DialogTitle, DialogContent, Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
+import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import * as React from "react";
 import {
-    TextInputWide,
-    SelectInputWide,
-    AutocompleteInputWide,
+    BooleanInput,
+    CreateBase,
+    ReferenceInput,
+    SaveButton,
+    SimpleForm,
+    Toolbar,
+    required,
+    useCreate,
+    useNotify,
+    useRefresh,
+} from "react-admin";
+
+import {
     AutocompleteInputMedium,
+    AutocompleteInputWide,
+    SelectInputWide,
+    TextInputWide,
 } from "../../commons/layout/themes";
-import {
-    OBSERVATION_SEVERITY_CHOICES,
-    OBSERVATION_STATUS_CHOICES,
-} from "../../core/types";
+import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../../core/types";
 
 export type ProductRuleCreateProps = {
     id: any;
@@ -130,35 +128,17 @@ const ProductRuleCreate = ({ id }: ProductRuleCreateProps) => {
                 <DialogTitle>Add product rule</DialogTitle>
                 <DialogContent>
                     <CreateBase resource="product_rules">
-                        <SimpleForm
-                            onSubmit={create_product_rule}
-                            toolbar={<CustomToolbar />}
-                        >
+                        <SimpleForm onSubmit={create_product_rule} toolbar={<CustomToolbar />}>
                             <ReferenceInput
                                 source="product"
                                 reference="products"
                                 sort={{ field: "name", order: "ASC" }}
                             >
-                                <SelectInputWide
-                                    optionText="name"
-                                    defaultValue={id}
-                                    disabled={true}
-                                />
+                                <SelectInputWide optionText="name" defaultValue={id} disabled={true} />
                             </ReferenceInput>
-                            <TextInputWide
-                                autoFocus
-                                source="name"
-                                validate={requiredValidate}
-                            />
-                            <ReferenceInput
-                                source="parser"
-                                reference="parsers"
-                                sort={{ field: "name", order: "ASC" }}
-                            >
-                                <AutocompleteInputWide
-                                    optionText="name"
-                                    validate={requiredValidate}
-                                />
+                            <TextInputWide autoFocus source="name" validate={requiredValidate} />
+                            <ReferenceInput source="parser" reference="parsers" sort={{ field: "name", order: "ASC" }}>
+                                <AutocompleteInputWide optionText="name" validate={requiredValidate} />
                             </ReferenceInput>
                             <TextInputWide source="scanner_prefix" />
                             <TextInputWide
@@ -191,18 +171,9 @@ const ProductRuleCreate = ({ id }: ProductRuleCreateProps) => {
                                 label="Origin source file"
                                 helperText="Regular expression to match the source file"
                             />
-                            <AutocompleteInputMedium
-                                source="new_severity"
-                                choices={OBSERVATION_SEVERITY_CHOICES}
-                            />
-                            <AutocompleteInputMedium
-                                source="new_status"
-                                choices={OBSERVATION_STATUS_CHOICES}
-                            />
-                            <BooleanInput
-                                source="enabled"
-                                defaultValue={true}
-                            />
+                            <AutocompleteInputMedium source="new_severity" choices={OBSERVATION_SEVERITY_CHOICES} />
+                            <AutocompleteInputMedium source="new_status" choices={OBSERVATION_STATUS_CHOICES} />
+                            <BooleanInput source="enabled" defaultValue={true} />
                         </SimpleForm>
                     </CreateBase>
                 </DialogContent>

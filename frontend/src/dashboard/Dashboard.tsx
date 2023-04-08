@@ -1,9 +1,9 @@
-import React from "react";
 import { Stack, Typography } from "@mui/material";
+import React from "react";
 
+import ObservationDashboardList from "../core/observations/ObservationDashboardList";
 import MetricSeverities from "../metrics/MetricSeverities";
 import MetricStatus from "../metrics/MetricStatus";
-import ObservationDashboardList from "../core/observations/ObservationDashboardList";
 
 const Dashboard = () => {
     return (

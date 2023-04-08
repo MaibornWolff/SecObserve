@@ -1,9 +1,10 @@
 from unittest.mock import patch
+
 from django.core.management import call_command
 from rest_framework.test import APIClient
 
-from unittests.base_test_case import BaseTestCase
 from application.access_control.models import User
+from unittests.base_test_case import BaseTestCase
 
 
 class APITest:

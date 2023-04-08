@@ -3,14 +3,13 @@
  * See https://github.com/bmihelac/ra-data-django-rest-framework
  * Copied to make it compatible with React-Admin 4 and DefectDojo
  */
-import queryString from "query-string";
-import { Identifier, fetchUtils, DataProvider } from "react-admin";
 import { InteractionRequiredAuthError } from "@azure/msal-browser";
+import queryString from "query-string";
+import { DataProvider, Identifier, fetchUtils } from "react-admin";
+
 import { getPublicClientApplication } from "../../access_control/aad";
-import {
-    aad_signed_in,
-    jwt_signed_in,
-} from "../../access_control/authProvider";
+import { aad_signed_in, jwt_signed_in } from "../../access_control/authProvider";
+
 const base_url = window.__RUNTIME_CONFIG__.API_BASE_URL;
 
 const getPaginationQuery = (params: any) => {
@@ -52,26 +51,22 @@ function getTokenRedirect() {
         account: account,
     };
 
-    return publicClientApplication
-        .acquireTokenSilent(accessTokenRequest)
-        .catch((error) => {
-            console.warn(
-                "silent token acquisition fails. acquiring token using redirect"
-            );
-            if (error instanceof InteractionRequiredAuthError) {
-                // fallback to interaction when silent call fails
-                return publicClientApplication
-                    .acquireTokenRedirect(accessTokenRequest)
-                    .then((tokenResponse) => {
-                        return tokenResponse;
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    });
-            } else {
-                console.warn(error);
-            }
-        });
+    return publicClientApplication.acquireTokenSilent(accessTokenRequest).catch((error) => {
+        console.warn("silent token acquisition fails. acquiring token using redirect");
+        if (error instanceof InteractionRequiredAuthError) {
+            // fallback to interaction when silent call fails
+            return publicClientApplication
+                .acquireTokenRedirect(accessTokenRequest)
+                .then((tokenResponse) => {
+                    return tokenResponse;
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        } else {
+            console.warn(error);
+        }
+    });
 }
 
 function createOptionsFromTokenAAD() {
@@ -97,22 +92,13 @@ function createOptionsFromTokenAAD() {
         });
 }
 
-export function httpClient(
-    url: string,
-    options?: fetchUtils.Options | undefined
-) {
+export function httpClient(url: string, options?: fetchUtils.Options | undefined) {
     if (aad_signed_in()) {
         return createOptionsFromTokenAAD().then((tokenOptions) => {
-            return fetchUtils.fetchJson(
-                url,
-                Object.assign(tokenOptions, options)
-            );
+            return fetchUtils.fetchJson(url, Object.assign(tokenOptions, options));
         });
     } else if (jwt_signed_in()) {
-        return fetchUtils.fetchJson(
-            url,
-            Object.assign(createOptionsFromTokenJWT(), options)
-        );
+        return fetchUtils.fetchJson(url, Object.assign(createOptionsFromTokenJWT(), options));
     } else {
         return Promise.reject();
     }
@@ -133,9 +119,7 @@ export default (): DataProvider => {
                 ...getOrderingQuery(params),
             };
 
-            const url = `${base_url}/${resource}/?${queryString.stringify(
-                query
-            )}`;
+            const url = `${base_url}/${resource}/?${queryString.stringify(query)}`;
 
             const { json } = await httpClient(url);
 
@@ -153,9 +137,7 @@ export default (): DataProvider => {
         },
 
         getMany: (resource, params) => {
-            return Promise.all(
-                params.ids.map((id) => getOneJson(resource, id))
-            ).then((data) => ({ data }));
+            return Promise.all(params.ids.map((id) => getOneJson(resource, id))).then((data) => ({ data }));
         },
 
         getManyReference: async (resource, params) => {
@@ -165,9 +147,7 @@ export default (): DataProvider => {
                 ...getOrderingQuery(params),
                 [params.target]: params.id,
             };
-            const url = `${base_url}/${resource}/?${queryString.stringify(
-                query
-            )}`;
+            const url = `${base_url}/${resource}/?${queryString.stringify(query)}`;
 
             const { json } = await httpClient(url);
             return {
@@ -177,13 +157,10 @@ export default (): DataProvider => {
         },
 
         update: async (resource, params) => {
-            const { json } = await httpClient(
-                `${base_url}/${resource}/${params.id}/`,
-                {
-                    method: "PATCH",
-                    body: JSON.stringify(params.data),
-                }
-            );
+            const { json } = await httpClient(`${base_url}/${resource}/${params.id}/`, {
+                method: "PATCH",
+                body: JSON.stringify(params.data),
+            });
             return { data: json };
         },
 
@@ -210,12 +187,9 @@ export default (): DataProvider => {
         },
 
         delete: async (resource, params) => {
-            const { json } = await httpClient(
-                `${base_url}/${resource}/${params.id}/`,
-                {
-                    method: "DELETE",
-                }
-            );
+            const { json } = await httpClient(`${base_url}/${resource}/${params.id}/`, {
+                method: "DELETE",
+            });
             return { data: json };
         },
 

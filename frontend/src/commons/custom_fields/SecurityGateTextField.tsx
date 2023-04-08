@@ -1,4 +1,4 @@
-import { useRecordContext, ChipField } from "react-admin";
+import { ChipField, useRecordContext } from "react-admin";
 
 interface SecurityGateTextProps {
     sortable: boolean;

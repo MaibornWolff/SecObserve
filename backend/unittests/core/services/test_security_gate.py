@@ -1,9 +1,10 @@
-from constance.test import override_config
 from unittest.mock import patch
 
-from unittests.base_test_case import BaseTestCase
+from constance.test import override_config
+
 from application.core.models import Product
 from application.core.services.security_gate import check_security_gate
+from unittests.base_test_case import BaseTestCase
 
 
 class TestSecurityGate(BaseTestCase):

@@ -18,6 +18,7 @@ class ProductRuleSerializer(ModelSerializer):
         fields = "__all__"
 
     def validate_product(self, value):
+        self.instance: Rule
         if self.instance and self.instance.product != value:
             raise ValidationError("Product cannot be changed")
 

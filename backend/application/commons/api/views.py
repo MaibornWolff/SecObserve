@@ -6,7 +6,6 @@ from application.commons.api.serializers import VersionSerializer
 
 
 class VersionView(APIView):
-
     serializer_class = VersionSerializer
 
     @action(detail=True, methods=["get"], url_name="version")
@@ -18,7 +17,6 @@ class VersionView(APIView):
 
 
 class HealthView(APIView):
-
     authentication_classes = []
     permission_classes = []
     serializer_class = None

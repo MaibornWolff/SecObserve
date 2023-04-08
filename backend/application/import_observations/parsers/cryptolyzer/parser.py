@@ -1,10 +1,12 @@
-from json import load, dumps
+from json import dumps, load
+from typing import Optional
+
 from django.core.files.base import File
 
 from application.core.models import Observation, Parser
 from application.import_observations.parsers.base_parser import (
-    BaseParser,
     BaseFileParser,
+    BaseParser,
 )
 
 # Recommended cipher suites according to German BSI as of 2020
@@ -123,7 +125,7 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
         try:
             data = load(file)
         except Exception:
-            return False, ["File is not valid JSON"], None
+            return False, ["File is not valid JSON"], {}
 
         if (
             not data.get("target")
@@ -131,7 +133,7 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
             or not data.get("ciphers")
             or not data.get("curves")
         ):
-            return False, ["File is not a valid CryptoLyzer format"], None
+            return False, ["File is not a valid CryptoLyzer format"], {}
 
         return True, [], data
 
@@ -163,7 +165,7 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
 
         return observations
 
-    def check_weak_protocols(self, data: dict) -> Observation | None:
+    def check_weak_protocols(self, data: dict) -> Optional[Observation]:
         endpoint_url = self.get_endpoint_url(data.get("versions", {}).get("target", {}))
         versions = data.get("versions", {}).get("versions", []).copy()
         if "tls1_2" in versions:
@@ -200,7 +202,7 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
         protocol_name: str,
         recommended_cipher_suites: list[str],
         data: dict,
-    ) -> Observation | None:
+    ) -> Optional[Observation]:
         ciphers = data.get("ciphers", [])
         for cipher in ciphers:
             cipher_protocol = cipher.get("target", {}).get("proto_version")
@@ -241,7 +243,7 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
     def check_curves(
         self,
         data: dict,
-    ) -> Observation | None:
+    ) -> Optional[Observation]:
         curves = data.get("curves", {})
         unrecommended_curves = []
         inner_curves = curves.get("curves", {})
@@ -279,7 +281,7 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
     def check_signature_algorithms(
         self,
         data: dict,
-    ) -> Observation | None:
+    ) -> Optional[Observation]:
         signature_algorithms = data.get("sigalgos", {})
         unrecommended_signature_algorithms = []
         inner_signature_algorithms = signature_algorithms.get("sig_algos", {})
@@ -314,10 +316,10 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
         else:
             return None
 
-    def get_endpoint_url(self, target: dict) -> str | None:
+    def get_endpoint_url(self, target: dict) -> str:
         hostname = target.get("address")
         port = target.get("port")
-        endpoint_url = None
+        endpoint_url = ""
         if hostname:
             endpoint_url = "https://" + hostname
             if port:
