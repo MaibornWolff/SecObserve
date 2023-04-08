@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Tuple, Optional
+from typing import Tuple
 from django.core.files.base import File
 from django.utils.timezone import make_aware
 from rest_framework.exceptions import ValidationError

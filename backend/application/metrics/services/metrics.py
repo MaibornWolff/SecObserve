@@ -1,5 +1,3 @@
-from typing import Optional
-
 from django.db.models import Count
 from application.core.models import Observation, Product
 from application.core.queries.observation import get_observations

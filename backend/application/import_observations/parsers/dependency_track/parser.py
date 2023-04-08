@@ -141,7 +141,7 @@ class DependencyTrack(BaseParser, BaseAPIParser):
         try:
             response = requests.get(dependency_track_base_url, timeout=60)
             response.raise_for_status()
-        except Exception as e:
+        except Exception:
             return "Dependency-Track", None
 
         application = response.json().get("application", "Dependency-Track")

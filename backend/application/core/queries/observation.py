@@ -1,6 +1,6 @@
 from typing import Optional
 
-from django.db.models import Exists, OuterRef, Count
+from django.db.models import Exists, OuterRef
 from django.db.models.query import QuerySet
 
 from application.commons.services.global_request import get_current_user

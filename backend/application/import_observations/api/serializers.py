@@ -1,5 +1,3 @@
-from typing import TypedDict
-
 from rest_framework.serializers import (
     ModelSerializer,
     Serializer,
