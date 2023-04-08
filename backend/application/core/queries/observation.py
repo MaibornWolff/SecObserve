@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.db.models import Exists, OuterRef
 from django.db.models.query import QuerySet
 
@@ -11,7 +13,7 @@ from application.core.models import (
 )
 
 
-def get_observation_by_id(id: int) -> Observation:
+def get_observation_by_id(id: int) -> Optional[Observation]:
     try:
         return Observation.objects.get(id=id)
     except Observation.DoesNotExist:
