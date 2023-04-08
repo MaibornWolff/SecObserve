@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from django.utils.timezone import make_aware
 from rest_framework.serializers import (
@@ -21,6 +22,7 @@ from application.core.models import (
     Parser,
 )
 from application.access_control.services.roles_permissions import (
+    Permissions,
     Roles,
     get_permissions_for_role,
 )
@@ -61,9 +63,9 @@ class ProductSerializer(ModelSerializer):
     def get_open_unkown_observation_count(self, obj: Product) -> int:
         return obj.open_unkown_observation_count
 
-    def get_permissions(self, obj: Product) -> list[int]:
+    def get_permissions(self, obj: Product) -> list[Permissions]:
         user = get_current_user()
-        if user.is_superuser:
+        if user and user.is_superuser:
             return get_permissions_for_role(Roles.Owner)
 
         product_member = get_product_member(obj)
@@ -103,9 +105,9 @@ class NestedProductSerializer(ModelSerializer):
         model = Product
         fields = "__all__"
 
-    def get_permissions(self, product: Product) -> list[int]:
+    def get_permissions(self, product: Product) -> list[Permissions]:
         user = get_current_user()
-        if user.is_superuser:
+        if user and user.is_superuser:
             return get_permissions_for_role(Roles.Owner)
 
         product_member = get_product_member(product)
@@ -129,7 +131,8 @@ class ProductMemberSerializer(ModelSerializer):
         fields = "__all__"
 
     def validate(self, data: dict):
-        data_product = data.get("product")
+        self.instance: Product_Member
+        data_product: Optional[Product] = data.get("product")
         data_user = data.get("user")
 
         if self.instance is not None and (
@@ -150,10 +153,13 @@ class ProductMemberSerializer(ModelSerializer):
         else:
             own_product_member = get_product_member(data_product, get_current_user())
 
-        if (
-            not get_current_user().is_superuser
-            and data.get("role") == Roles.Owner
-            and own_product_member.role != Roles.Owner
+        current_user = get_current_user()
+        if data.get("role") == Roles.Owner and (
+            not current_user
+            or not own_product_member
+            or (
+                not current_user.is_superuser and own_product_member.role != Roles.Owner
+            )
         ):
             raise PermissionDenied("You are not permitted to add a member as Owner")
 
@@ -207,7 +213,7 @@ class ObservationSerializer(ModelSerializer):
         model = Observation
         exclude = ["numerical_severity"]
 
-    def get_origin_source_file_url(self, observation: Observation) -> str:
+    def get_origin_source_file_url(self, observation: Observation) -> Optional[str]:
         origin_source_file_url = None
 
         if observation.product.repository_prefix and observation.origin_source_file:
@@ -243,14 +249,15 @@ class ObservationListSerializer(ModelSerializer):
 
 
 class ObservationUpdateSerializer(ModelSerializer):
-    def validate(self, data):
+    def validate(self, data: dict):
+        self.instance: Observation
         if self.instance and self.instance.parser.type != Parser.TYPE_MANUAL:
             raise ValidationError("Only manual observations can be updated")
 
         data["import_last_seen"] = make_aware(datetime.now())
         return super().validate(data)
 
-    def update(self, instance, validated_data):
+    def update(self, instance: Observation, validated_data: dict):
         actual_severity = instance.current_severity
         actual_status = instance.current_status
 

@@ -56,17 +56,17 @@ class SARIFParser(BaseParser, BaseFileParser):
         try:
             data = load(file)
         except Exception:
-            return False, ["File is not valid JSON"], None
+            return False, ["File is not valid JSON"], {}
 
         version = data.get("version")
         schema = data.get("$schema")
         if not version or not schema:
-            return False, ["'version' and/or '$schema' are missing"], None
+            return False, ["'version' and/or '$schema' are missing"], {}
 
         return True, [], data
 
     def get_observations(self, data: dict) -> list[Observation]:
-        observations = []
+        observations: list[Observation] = []
 
         for run in data.get("runs", []):
             sarif_scanner = run.get("tool", {}).get("driver", {}).get("name")
@@ -169,7 +169,7 @@ class SARIFParser(BaseParser, BaseFileParser):
             sarif_scanner, sarif_rule
         )
         if parser_cvss3_score:
-            parser_severity = None
+            parser_severity = ""
 
         if sarif_rule.name:
             title = sarif_rule.name
@@ -235,15 +235,18 @@ class SARIFParser(BaseParser, BaseFileParser):
             purl = PackageURL.from_string(origin_component_purl)
             namespace = purl.namespace
             name = purl.name
-            version = purl.version
+            if purl.version:
+                version = purl.version
+            else:
+                version = ""
             if namespace:
                 origin_component_name = f"{namespace}:{name}"
             else:
                 origin_component_name = name
             origin_component_version = version
         else:
-            origin_component_name = None
-            origin_component_version = None
+            origin_component_name = ""
+            origin_component_version = ""
 
         observation = Observation(
             parser_severity=parser_severity,
@@ -315,6 +318,8 @@ class SARIFParser(BaseParser, BaseFileParser):
         bandit_severity = result.get("properties", {}).get("issue_severity")
         if sarif_scanner.lower().startswith("bandit") and bandit_severity:
             return bandit_severity.title()
+        else:
+            return ""
 
     def get_dependency_check_cvss3_score(self, sarif_scanner: str, sarif_rule: Rule):
         # Dependency Check SARIF has no proper level, but stores the severity in a property
@@ -333,16 +338,15 @@ class SARIFParser(BaseParser, BaseFileParser):
             title.startswith("CVE-") or title.startswith("GHSA-")
         ):
             return title
+        else:
+            return ""
 
     def get_dependency_check_origin_component_purl(
         self, sarif_scanner: str, location: dict
     ):
-        if sarif_scanner.lower().startswith("dependency-check") and location.get(
-            "logicalLocations"
-        ):
-            fully_qualified_name = location.get("logicalLocations")[0].get(
-                "fullyQualifiedName"
-            )
+        logicalLocations = location.get("logicalLocations")
+        if sarif_scanner.lower().startswith("dependency-check") and logicalLocations:
+            fully_qualified_name = logicalLocations[0].get("fullyQualifiedName")
             if fully_qualified_name and fully_qualified_name.startswith("pkg:"):
                 return fully_qualified_name
 

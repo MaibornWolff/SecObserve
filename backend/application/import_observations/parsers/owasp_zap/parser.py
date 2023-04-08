@@ -29,10 +29,10 @@ class SecObserveParser(BaseParser, BaseFileParser):
         try:
             data = load(file)
         except Exception:
-            return False, ["File is not valid JSON"], None
+            return False, ["File is not valid JSON"], {}
 
         if not data.get("@programName") == "OWASP ZAP":
-            return False, ["File is not an OWASP ZAP format"], None
+            return False, ["File is not an OWASP ZAP format"], {}
 
         return True, [], data
 

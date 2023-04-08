@@ -33,7 +33,7 @@ class TestLogMessage(BaseTestCase):
             exception=Exception("exception_message"),
         )
 
-        log_message = "{'message': 'incoming_message', 'data_key_1': 'value_1', 'data_key_2': 'value_2', 'user': 'user_internal@example.com', 'response_status': 500, 'exception_message': 'exception_message', 'exception_class': 'builtins.Exception'}"
+        log_message = "{'message': 'incoming_message', 'data_key_1': 'value_1', 'data_key_2': 'value_2', 'user': 'user_internal@example.com', 'response_status': '500', 'exception_message': 'exception_message', 'exception_class': 'builtins.Exception'}"
         self.assertEqual(log_message, message)
 
     @patch("application.commons.services.log_message.get_current_user")

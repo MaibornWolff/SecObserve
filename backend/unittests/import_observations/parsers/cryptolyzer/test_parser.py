@@ -13,7 +13,7 @@ class TestCryptolyzeParser(TestCase):
             self.assertFalse(check)
             self.assertEqual(1, len(messages))
             self.assertEqual("File is not valid JSON", messages[0])
-            self.assertIsNone(data)
+            self.assertFalse(data)
 
     def test_wrong_format(self):
         with open(path.dirname(__file__) + "/files/wrong_format.json") as testfile:
@@ -23,7 +23,7 @@ class TestCryptolyzeParser(TestCase):
             self.assertFalse(check)
             self.assertEqual(1, len(messages))
             self.assertEqual("File is not a valid CryptoLyzer format", messages[0])
-            self.assertIsNone(data)
+            self.assertFalse(data)
 
     def test_no_observations(self):
         with open(path.dirname(__file__) + "/files/no_observations.json") as testfile:

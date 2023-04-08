@@ -1,3 +1,5 @@
+from typing import TypedDict
+
 from rest_framework.serializers import (
     ModelSerializer,
     Serializer,
@@ -73,7 +75,8 @@ class ApiConfigurationSerializer(ModelSerializer):
 
         return data
 
-    def validate(self, data):
+    def validate(self, data: dict):
+        self.instance: Api_Configuration
         if data.pop("test_connection", False):
             if self.instance is not None:
                 product = data.get("product", self.instance.product)

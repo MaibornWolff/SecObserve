@@ -80,7 +80,7 @@ class CreateAPITokenView(APIView):
         except ValidationError as e:
             response = Response(status=status.HTTP_400_BAD_REQUEST)
             logger.warning(
-                format_log_message(message=e.detail, user=user, response=response)
+                format_log_message(message=str(e), user=user, response=response)
             )
             raise
 
@@ -144,7 +144,8 @@ def get_authenticated_user(data) -> User:
     username = request_serializer.validated_data.get("username")
     password = request_serializer.validated_data.get("password")
 
-    user = django_authenticate(username=username, password=password)
+    user: User = django_authenticate(username=username, password=password) # type: ignore[assignment]
+    # We always get a User from our model
     if not user:
         raise PermissionDenied("Invalid credentials")
 

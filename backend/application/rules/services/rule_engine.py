@@ -131,8 +131,10 @@ class Rule_Engine:
 
             if previous_product_rule:
                 comment = f"Removed product rule {previous_product_rule.name}"
-            else:
+            elif previous_general_rule:
                 comment = f"Removed general rule {previous_general_rule.name}"
+            else:
+                comment = "Removed unkown rule"
 
             create_observation_log(observation, severity, status, comment)
 

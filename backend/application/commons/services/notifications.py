@@ -3,6 +3,7 @@ import requests
 
 from constance import config
 from datetime import datetime, timedelta
+from typing import Optional
 from django.template.loader import render_to_string
 
 from application.commons.services.log_message import format_log_message
@@ -10,7 +11,7 @@ from application.core.models import Product
 
 logger = logging.getLogger("secobserve.commons")
 
-LAST_EXCEPTIONS = dict()
+LAST_EXCEPTIONS: dict[str, datetime] = dict()
 
 
 def send_product_security_gate_notification(product: Product) -> None:
@@ -62,7 +63,7 @@ def _send_notification(webhook: str, template: str, **kwargs) -> None:
             )
 
 
-def _create_notification_message(template: str, **kwargs) -> str:
+def _create_notification_message(template: str, **kwargs) -> Optional[str]:
     try:
         return render_to_string(template, kwargs)
     except Exception as exception:

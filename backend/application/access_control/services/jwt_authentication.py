@@ -1,5 +1,6 @@
 import jwt
 from datetime import datetime, timezone, timedelta
+from typing import Optional
 
 from constance import config
 from rest_framework.exceptions import AuthenticationFailed
@@ -65,9 +66,12 @@ class JWTAuthentication(BaseAuthentication):
     def authenticate_header(self, request):
         return JWT_PREFIX
 
-    def _validate_jwt(self, token: str) -> User:
+    def _validate_jwt(self, token: str) -> Optional[User]:
         try:
-            payload = jwt.decode(token, get_secret(), algorithms=ALGORITHM)
-            return get_user_by_username(payload.get("username"))
+            payload = jwt.decode(token, get_secret(), algorithms=[ALGORITHM])
+            username = payload.get("username")
+            if not username:
+                raise AuthenticationFailed("No username in JWT")
+            return get_user_by_username(username)
         except jwt.PyJWTError as e:
             raise AuthenticationFailed(str(e))

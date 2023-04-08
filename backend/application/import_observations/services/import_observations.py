@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Tuple
+from typing import Tuple, Optional
 from django.core.files.base import File
 from django.utils.timezone import make_aware
 from rest_framework.exceptions import ValidationError
@@ -56,7 +56,7 @@ def file_upload_observations(
     return process_data(
         product,
         parser,
-        file.name,
+        file.name, # type: ignore[arg-type]
         "",
         service,
         docker_image_name_tag,
@@ -138,8 +138,9 @@ def process_data(
     observations_before_list = get_observations_for_vulnerability_check(
         product, parser, filename, api_configuration_name
     )
-    for observation_before in observations_before_list:
-        observations_before[observation_before.identity_hash] = observation_before
+
+    for observation_before_for_dict in observations_before_list:
+        observations_before[observation_before_for_dict.identity_hash] = observation_before_for_dict
 
     observations_this_run: set[str] = set()
 

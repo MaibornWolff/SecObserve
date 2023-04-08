@@ -165,7 +165,7 @@ class TestJWTAuthentication(BaseTestCase):
         self.assertEqual(self.user_internal.username, user.username)
         secret_mock.assert_called()
         get_user_mock.assert_called_with(self.user_internal.username)
-        jwt_mock.assert_called_with("token", "secret", algorithms="HS256")
+        jwt_mock.assert_called_with("token", "secret", algorithms=["HS256"])
 
     @patch("jwt.decode")
     @patch("application.access_control.services.jwt_authentication.get_secret")
@@ -179,4 +179,4 @@ class TestJWTAuthentication(BaseTestCase):
 
         self.assertEqual("Signature expired", str(e.exception))
         secret_mock.assert_called()
-        jwt_mock.assert_called_with("token", "secret", algorithms="HS256")
+        jwt_mock.assert_called_with("token", "secret", algorithms=["HS256"])

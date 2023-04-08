@@ -1,6 +1,7 @@
 import csv
 
 from datetime import datetime
+from typing import Any
 from openpyxl import Workbook
 from openpyxl.styles import Font
 
@@ -76,8 +77,8 @@ def export_observations_csv(
         observations = Observation.objects.filter(product=product)
 
     for observation in observations:
+        fields: list[Any] = []
         if first_row:
-            fields = []
             for key in dir(observation):
                 if (
                     key not in __get_excludes()
@@ -90,7 +91,6 @@ def export_observations_csv(
 
             first_row = False
         if not first_row:
-            fields = []
             for key in dir(observation):
                 if (
                     key not in __get_excludes()

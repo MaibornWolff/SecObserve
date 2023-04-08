@@ -13,7 +13,7 @@ class TestCryptolyzeParser(TestCase):
             self.assertFalse(check)
             self.assertEqual(1, len(messages))
             self.assertEqual("File is not valid JSON", messages[0])
-            self.assertIsNone(data)
+            self.assertFalse(data)
 
     def test_wrong_format_1(self):
         with open(path.dirname(__file__) + "/files/wrong_format_1.json") as testfile:
@@ -25,7 +25,7 @@ class TestCryptolyzeParser(TestCase):
             self.assertEqual(
                 "File is not a Prowler format, data is not a list", messages[0]
             )
-            self.assertIsNone(data)
+            self.assertFalse(data)
 
     def test_wrong_format_2(self):
         with open(path.dirname(__file__) + "/files/wrong_format_2.json") as testfile:
@@ -37,7 +37,7 @@ class TestCryptolyzeParser(TestCase):
             self.assertEqual(
                 "File is not a Prowler format, element is not a dictionary", messages[0]
             )
-            self.assertIsNone(data)
+            self.assertFalse(data)
 
     def test_wrong_format_3(self):
         with open(path.dirname(__file__) + "/files/wrong_format_3.json") as testfile:
@@ -50,7 +50,7 @@ class TestCryptolyzeParser(TestCase):
                 "Data is not a Prowler format, element doesn't have a StatusExtended or Status entry",
                 messages[0],
             )
-            self.assertIsNone(data)
+            self.assertFalse(data)
 
     def test_no_observations(self):
         with open(path.dirname(__file__) + "/files/no_observations.json") as testfile:

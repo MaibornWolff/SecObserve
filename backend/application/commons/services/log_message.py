@@ -31,15 +31,17 @@ def format_log_message(
         message_dict["user"] = user.username
     elif get_current_user():
         if not isinstance(get_current_user(), AnonymousUser):
-            message_dict["user"] = get_current_user().username
+            message_dict["user"] = get_current_user().username  # type: ignore [union-attr, assignment]
+            # The elif makes sure we have a current user
 
     if get_current_request():
-        message_dict["request_method"] = get_current_request().method
-        message_dict["request_path"] = get_current_request().get_full_path()
+        message_dict["request_method"] = get_current_request().method  # type: ignore [union-attr, assignment]
+        # The elif makes sure we have a current request
+        message_dict["request_path"] = get_current_request().get_full_path()  # type: ignore [union-attr]
         message_dict["request_client_ip"] = __get_client_ip(get_current_request())
 
     if response:
-        message_dict["response_status"] = response.status_code
+        message_dict["response_status"] = str(response.status_code)
 
     if exception:
         if message:

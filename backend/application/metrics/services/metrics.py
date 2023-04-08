@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.db.models import Count
 from application.core.models import Observation, Product
 from application.core.queries.observation import get_observations
@@ -24,7 +26,7 @@ def get_status_counts(product: Product = None):
 
 
 def get_codecharta_metrics(product: Product) -> list[dict]:
-    file_severities_dict = {}
+    file_severities_dict: dict[str, dict] = {}
     observations = Observation.objects.filter(
         product=product, current_status=Observation.STATUS_OPEN
     )

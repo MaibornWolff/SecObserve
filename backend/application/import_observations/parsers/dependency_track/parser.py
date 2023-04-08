@@ -1,6 +1,8 @@
 import json
 import requests
 
+from typing import Optional
+
 from application.core.models import Observation, Parser
 from application.import_observations.parsers.base_parser import (
     BaseParser,
@@ -9,7 +11,7 @@ from application.import_observations.parsers.base_parser import (
 from application.import_observations.models import Api_Configuration
 
 STATUS_MAPPING = {
-    "NOT_SET": None,
+    "NOT_SET": "",
     "EXPLOITABLE": Observation.STATUS_OPEN,
     "IN_TRIAGE": Observation.STATUS_IN_REVIEW,
     "RESOLVED": Observation.STATUS_RESOLVED,
@@ -111,9 +113,9 @@ class DependencyTrack(BaseParser, BaseAPIParser):
 
     def get_status(self, state: str) -> str:
         if not state:
-            return None
+            return ""
 
-        return STATUS_MAPPING.get(state)
+        return STATUS_MAPPING.get(state, "")
 
     def get_severity(self, severity: str) -> str:
         if (
@@ -130,7 +132,7 @@ class DependencyTrack(BaseParser, BaseAPIParser):
 
         return None
 
-    def get_about(self) -> tuple[str, str]:
+    def get_about(self) -> tuple[str, Optional[str]]:
         dependency_track_base_url = self.api_configuration.base_url
         if not dependency_track_base_url.endswith("/"):
             dependency_track_base_url += "/"
@@ -140,7 +142,7 @@ class DependencyTrack(BaseParser, BaseAPIParser):
             response = requests.get(dependency_track_base_url, timeout=60)
             response.raise_for_status()
         except Exception as e:
-            return False, [f"Cannot access Dependency Track API: {str(e)}"], {}
+            return "Dependency-Track", None
 
         application = response.json().get("application", "Dependency-Track")
         version = response.json().get("version")

@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.db.models import Exists, OuterRef, Count
 from django.db.models.query import QuerySet
 
@@ -11,7 +13,7 @@ from application.core.models import (
 )
 
 
-def get_observation_by_id(id: int) -> Observation:
+def get_observation_by_id(id: int) -> Optional[Observation]:
     try:
         return Observation.objects.get(id=id)
     except Observation.DoesNotExist:
@@ -45,26 +47,6 @@ def get_observations_for_vulnerability_check(
         upload_filename=filename,
         api_configuration_name=api_configuration_name,
     )
-
-
-def get_components(product: Product) -> dict:
-    if product:
-        components = (
-            get_observations()
-            .values("origin_component_name_version")
-            .annotate(count=Count("id"))
-            .filter(product=product, current_status=Observation.STATUS_OPEN)
-            .order_by()
-        )
-    else:
-        components = (
-            get_observations()
-            .values("origin_component_name_version")
-            .annotate(count=Count("id"))
-            .filter(current_status=Observation.STATUS_OPEN)
-            .order_by()
-        )
-    return components
 
 
 def get_evidences() -> QuerySet[Evidence]:

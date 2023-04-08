@@ -6,7 +6,7 @@ from unittests.base_test_case import BaseTestCase
 from application.access_control.services.authorization import (
     user_has_permission,
     user_has_permission_or_403,
-    get_user_permission,
+    get_user_permissions,
     role_has_permission,
     PermissionDoesNotExistError,
     RoleDoesNotExistError,
@@ -213,12 +213,12 @@ class TestAuthorization(BaseTestCase):
     # ---------------------------------------------------------------
 
     def test_get_user_permission_internal(self):
-        permissions = get_user_permission(self.user_internal)
+        permissions = get_user_permissions(self.user_internal)
         self.assertEqual([Permissions.Product_Create], permissions)
 
     @patch("application.access_control.services.authorization.get_current_user")
     def test_get_user_permission_external(self, mock):
         mock.return_value = self.user_external
 
-        permissions = get_user_permission()
+        permissions = get_user_permissions()
         self.assertEqual([], permissions)

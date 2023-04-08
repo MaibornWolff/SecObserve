@@ -5,7 +5,8 @@ from rest_framework.serializers import (
     SerializerMethodField,
 )
 from application.access_control.models import User
-from application.access_control.services.authorization import get_user_permission
+from application.access_control.services.authorization import get_user_permissions
+from application.access_control.services.roles_permissions import Permissions
 
 
 class UserSerializer(ModelSerializer):
@@ -27,8 +28,8 @@ class UserSerializer(ModelSerializer):
             "permissions",
         ]
 
-    def get_permissions(self, obj) -> list[int]:
-        return get_user_permission(obj)
+    def get_permissions(self, obj) -> list[Permissions]:
+        return get_user_permissions(obj)
 
 
 class UserSettingsSerializer(ModelSerializer):

@@ -38,11 +38,11 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         try:
             data = load(file)
         except Exception:
-            return False, ["File is not valid JSON"], None
+            return False, ["File is not valid JSON"], {}
 
         bom_format = data.get("bomFormat")
         if bom_format != "CycloneDX":
-            return False, ["Data is not a CycloneDX SBOM"], None
+            return False, ["Data is not a CycloneDX SBOM"], {}
 
         return True, [], data
 
@@ -54,7 +54,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
 
         return observations
 
-    def get_components(self, data: dict) -> dict[Component]:
+    def get_components(self, data: dict) -> dict[str, Component]:
         components = {}
         metadata_component = data.get("metadata", {}).get("component")
         if metadata_component:
@@ -85,7 +85,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         return components
 
     def create_observations(
-        self, data: dict, components: dict[Component], metadata: Metadata
+        self, data: dict, components: dict[str, Component], metadata: Metadata
     ) -> list[Observation]:
         observations = []
 
@@ -93,7 +93,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         for vulnerability in vulnerabilities:
             id = vulnerability.get("id")
             cvss3_score, cvss3_vector = self.get_cvss3(vulnerability)
-            severity = None
+            severity = Observation.SEVERITY_UNKOWN
             if not cvss3_score:
                 severity = self.get_highest_severity(vulnerability)
             cwe = self.get_cwe(vulnerability)
