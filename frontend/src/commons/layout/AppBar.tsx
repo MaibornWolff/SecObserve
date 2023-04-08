@@ -1,20 +1,11 @@
-import * as React from "react";
-import { Link } from "react-router-dom";
-import { AppBar, Logout, UserMenu, useUserMenu } from "react-admin";
-import {
-    Box,
-    Typography,
-    useMediaQuery,
-    Theme,
-    MenuItem,
-    ListItemIcon,
-    ListItemText,
-    Divider,
-} from "@mui/material";
 import ArticleIcon from "@mui/icons-material/Article";
 import SettingsIcon from "@mui/icons-material/Settings";
-import About from "../about/About";
+import { Box, Divider, ListItemIcon, ListItemText, MenuItem, Theme, Typography, useMediaQuery } from "@mui/material";
+import * as React from "react";
+import { AppBar, Logout, UserMenu, useUserMenu } from "react-admin";
+import { Link } from "react-router-dom";
 
+import About from "../about/About";
 import Logo from "./Logo";
 
 const DocumentationMenu = React.forwardRef(() => {
@@ -71,9 +62,7 @@ const CustomUserMenu = () => {
 };
 
 const CustomAppBar = () => {
-    const isLargeEnough = useMediaQuery<Theme>((theme) =>
-        theme.breakpoints.up("sm")
-    );
+    const isLargeEnough = useMediaQuery<Theme>((theme) => theme.breakpoints.up("sm"));
     return (
         <AppBar color="secondary" elevation={1} userMenu={<CustomUserMenu />}>
             <Typography

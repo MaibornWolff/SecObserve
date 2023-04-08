@@ -1,35 +1,22 @@
-import * as React from "react";
-import {
-    SimpleForm,
-    ReferenceInput,
-    required,
-    useCreate,
-    useRefresh,
-    useNotify,
-    CreateBase,
-    Toolbar,
-    SaveButton,
-    NumberInput,
-} from "react-admin";
-import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    Button,
-    Typography,
-} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
+import { Button, Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
+import * as React from "react";
 import {
-    TextInputWide,
-    SelectInputWide,
-    AutocompleteInputMedium,
-} from "../../commons/layout/themes";
-import {
-    OBSERVATION_SEVERITY_CHOICES,
-    OBSERVATION_STATUS_CHOICES,
-    OBSERVATION_STATUS_OPEN,
-} from "../../core/types";
+    CreateBase,
+    NumberInput,
+    ReferenceInput,
+    SaveButton,
+    SimpleForm,
+    Toolbar,
+    required,
+    useCreate,
+    useNotify,
+    useRefresh,
+} from "react-admin";
+
+import { AutocompleteInputMedium, SelectInputWide, TextInputWide } from "../../commons/layout/themes";
+import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES, OBSERVATION_STATUS_OPEN } from "../../core/types";
 
 export type ObservationCreateProps = {
     id: any;
@@ -108,27 +95,16 @@ const ObservationCreate = ({ id }: ObservationCreateProps) => {
                 <DialogTitle>Add observation</DialogTitle>
                 <DialogContent>
                     <CreateBase resource="observations">
-                        <SimpleForm
-                            onSubmit={create_observation}
-                            toolbar={<CustomToolbar />}
-                        >
+                        <SimpleForm onSubmit={create_observation} toolbar={<CustomToolbar />}>
                             <ReferenceInput
                                 source="product"
                                 reference="products"
                                 sort={{ field: "name", order: "ASC" }}
                             >
-                                <SelectInputWide
-                                    optionText="name"
-                                    defaultValue={id}
-                                    disabled={true}
-                                />
+                                <SelectInputWide optionText="name" defaultValue={id} disabled={true} />
                             </ReferenceInput>
                             <Typography variant="h6">Observation</Typography>
-                            <TextInputWide
-                                autoFocus
-                                source="title"
-                                validate={requiredValidate}
-                            />
+                            <TextInputWide autoFocus source="title" validate={requiredValidate} />
                             <AutocompleteInputMedium
                                 source="current_severity"
                                 label="Severity"
@@ -145,38 +121,13 @@ const ObservationCreate = ({ id }: ObservationCreateProps) => {
                             <TextInputWide source="description" multiline />
                             <TextInputWide source="recommendation" multiline />
                             <Typography variant="h6">Origins</Typography>
-                            <TextInputWide
-                                source="origin_service_name"
-                                label="Service name"
-                            />
-                            <TextInputWide
-                                source="origin_component_name_version"
-                                label="Component name:version"
-                            />
-                            <TextInputWide
-                                source="origin_docker_image_name_tag"
-                                label="Container name:tag"
-                            />
-                            <TextInputWide
-                                source="origin_endpoint_url"
-                                label="Endpoint URL"
-                            />
-                            <TextInputWide
-                                source="origin_source_file"
-                                label="Source file"
-                            />
-                            <NumberInput
-                                source="origin_source_line_start"
-                                label="Source line start"
-                                min={0}
-                                step={1}
-                            />
-                            <NumberInput
-                                source="origin_source_line_end"
-                                label="Source line end"
-                                min={0}
-                                step={1}
-                            />
+                            <TextInputWide source="origin_service_name" label="Service name" />
+                            <TextInputWide source="origin_component_name_version" label="Component name:version" />
+                            <TextInputWide source="origin_docker_image_name_tag" label="Container name:tag" />
+                            <TextInputWide source="origin_endpoint_url" label="Endpoint URL" />
+                            <TextInputWide source="origin_source_file" label="Source file" />
+                            <NumberInput source="origin_source_line_start" label="Source line start" min={0} step={1} />
+                            <NumberInput source="origin_source_line_end" label="Source line end" min={0} step={1} />
                         </SimpleForm>
                     </CreateBase>
                 </DialogContent>

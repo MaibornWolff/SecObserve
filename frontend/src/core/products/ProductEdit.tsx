@@ -1,21 +1,21 @@
+import { Typography } from "@mui/material";
+import { RichTextInput } from "ra-input-rich-text";
 import {
+    BooleanInput,
+    DeleteButton,
     Edit,
-    SimpleForm,
-    required,
-    useRecordContext,
+    FormDataConsumer,
     NullableBooleanInput,
     NumberInput,
-    FormDataConsumer,
-    Toolbar,
     SaveButton,
-    DeleteButton,
-    BooleanInput,
+    SimpleForm,
+    Toolbar,
+    required,
+    useRecordContext,
 } from "react-admin";
-import { RichTextInput } from "ra-input-rich-text";
-import { Typography } from "@mui/material";
 
-import { TextInputWide } from "../../commons/layout/themes";
 import { PERMISSION_PRODUCT_DELETE } from "../../access_control/types";
+import { TextInputWide } from "../../commons/layout/themes";
 
 const CustomToolbar = () => {
     const product = useRecordContext();
@@ -23,10 +23,9 @@ const CustomToolbar = () => {
     return (
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
             <SaveButton />
-            {product &&
-                product.permissions.includes(PERMISSION_PRODUCT_DELETE) && (
-                    <DeleteButton mutationMode="pessimistic" />
-                )}
+            {product && product.permissions.includes(PERMISSION_PRODUCT_DELETE) && (
+                <DeleteButton mutationMode="pessimistic" />
+            )}
         </Toolbar>
     );
 };
@@ -85,11 +84,7 @@ const ProductEdit = () => {
         <Edit redirect="show" mutationMode="pessimistic" transform={transform}>
             <SimpleForm warnWhenUnsavedChanges toolbar={<CustomToolbar />}>
                 <Typography variant="h6">Product</Typography>
-                <TextInputWide
-                    autoFocus
-                    source="name"
-                    validate={requiredValidate}
-                />
+                <TextInputWide autoFocus source="name" validate={requiredValidate} />
                 <RichTextInput source="description" />
 
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>
@@ -101,18 +96,12 @@ const ProductEdit = () => {
                     Integrations
                 </Typography>
                 <TextInputWide source="repository_prefix" />
-                <TextInputWide
-                    source="ms_teams_webhook"
-                    label="MS Teams Webhook"
-                />
+                <TextInputWide source="ms_teams_webhook" label="MS Teams Webhook" />
 
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>
                     Security Gate
                 </Typography>
-                <NullableBooleanInput
-                    source="security_gate_active"
-                    defaultValue={null}
-                />
+                <NullableBooleanInput source="security_gate_active" defaultValue={null} />
                 <FormDataConsumer>
                     {({ formData }) =>
                         formData.security_gate_active && (

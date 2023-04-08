@@ -1,16 +1,10 @@
-import React from "react";
 import Box from "@mui/material/Box";
-import {
-    useTranslate,
-    DashboardMenuItem,
-    MenuItemLink,
-    MenuProps,
-    useSidebarState,
-} from "react-admin";
+import React from "react";
+import { DashboardMenuItem, MenuItemLink, MenuProps, useSidebarState, useTranslate } from "react-admin";
 
-import products from "../../core/products";
 import observations from "../../core/observations";
 import parsers from "../../core/parsers";
+import products from "../../core/products";
 import general_rules from "../../rules/general_rules";
 
 const Menu = ({ dense = false }: MenuProps) => {
@@ -78,11 +72,7 @@ const Menu = ({ dense = false }: MenuProps) => {
                     paddingBottom: 14,
                 }}
             >
-                <a
-                    href="https://www.maibornwolff.de"
-                    target="_blank"
-                    rel="noreferrer"
-                >
+                <a href="https://www.maibornwolff.de" target="_blank" rel="noreferrer">
                     <img src="maibornwolff.svg" height={"24px"} />
                 </a>
             </Box>

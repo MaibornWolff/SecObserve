@@ -1,4 +1,5 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
+
 import { getPublicClientApplication } from "../access_control/aad";
 import { aad_signed_in, jwt_signed_in } from "./authProvider";
 
@@ -16,25 +17,20 @@ axios_instance.interceptors.request.use(
                 account: account,
             };
             if (account) {
-                const accessTokenResponse =
-                    await publicClientApplication.acquireTokenSilent(
-                        accessTokenRequest
-                    );
+                const accessTokenResponse = await publicClientApplication.acquireTokenSilent(accessTokenRequest);
 
                 if (accessTokenResponse) {
                     const accessToken = accessTokenResponse.accessToken;
 
                     if (config.headers && accessToken) {
-                        config.headers["Authorization"] =
-                            "Bearer " + accessToken;
+                        config.headers["Authorization"] = "Bearer " + accessToken;
                     }
                 }
             }
             return config;
         } else if (jwt_signed_in()) {
             if (config.headers) {
-                config.headers["Authorization"] =
-                    "JWT " + localStorage.getItem("jwt");
+                config.headers["Authorization"] = "JWT " + localStorage.getItem("jwt");
             }
             return config;
         } else {

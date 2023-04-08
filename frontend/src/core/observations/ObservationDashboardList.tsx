@@ -1,16 +1,17 @@
+import { Paper } from "@mui/material";
 import {
-    useListController,
+    ChipField,
     Datagrid,
-    TextField,
+    FunctionField,
     ListContextProvider,
     Pagination,
-    ChipField,
-    FunctionField,
+    TextField,
+    useListController,
 } from "react-admin";
-import { Paper } from "@mui/material";
+
+import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { humanReadableDate } from "../../commons/functions";
 import { OBSERVATION_STATUS_OPEN } from "../types";
-import { SeverityField } from "../../commons/custom_fields/SeverityField";
 
 const ShowObservations = (id: any) => {
     return "../../../../observations/" + id + "/show";
@@ -50,12 +51,7 @@ const ObservationDashboardList = () => {
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
                 <Paper>
-                    <Datagrid
-                        size="small"
-                        sx={{ width: "100%" }}
-                        rowClick={ShowObservations}
-                        bulkActionButtons={false}
-                    >
+                    <Datagrid size="small" sx={{ width: "100%" }} rowClick={ShowObservations} bulkActionButtons={false}>
                         <TextField source="product_data.name" label="Product" />
                         <TextField source="title" />
                         <SeverityField source="current_severity" />
@@ -64,9 +60,7 @@ const ObservationDashboardList = () => {
                         <FunctionField
                             label="Age"
                             sortBy="last_observation_log"
-                            render={(record: {
-                                last_observation_log: string;
-                            }) =>
+                            render={(record: { last_observation_log: string }) =>
                                 humanReadableDate(record.last_observation_log)
                             }
                         />

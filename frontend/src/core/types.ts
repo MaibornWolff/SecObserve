@@ -1,4 +1,4 @@
-import { RaRecord, Identifier } from "react-admin";
+import { Identifier, RaRecord } from "react-admin";
 
 export interface Product extends RaRecord {
     id: Identifier;

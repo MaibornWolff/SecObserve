@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { Confirm, useNotify, useRefresh } from "react-admin";
 import GeneralRuleIcon from "@mui/icons-material/Rule";
 import { Button } from "@mui/material";
+import { useState } from "react";
+import { Confirm, useNotify, useRefresh } from "react-admin";
 
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
@@ -17,11 +17,7 @@ const ProductRuleApply = (props: ProductRuleApplyProps) => {
     const handleDialogClose = () => setOpen(false);
 
     const handleConfirm = async () => {
-        const url =
-            window.__RUNTIME_CONFIG__.API_BASE_URL +
-            "/products/" +
-            props.product.id +
-            "/apply_rules/";
+        const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/products/" + props.product.id + "/apply_rules/";
 
         httpClient(url, {
             method: "PUT",
@@ -54,11 +50,7 @@ const ProductRuleApply = (props: ProductRuleApplyProps) => {
             <Confirm
                 isOpen={open}
                 title="Apply rules"
-                content={
-                    "Are you sure you want to apply all rules to the product " +
-                    props.product.name +
-                    "?"
-                }
+                content={"Are you sure you want to apply all rules to the product " + props.product.name + "?"}
                 onConfirm={handleConfirm}
                 onClose={handleDialogClose}
             />

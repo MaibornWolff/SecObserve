@@ -1,27 +1,21 @@
-import { useState, Fragment } from "react";
+import CancelIcon from "@mui/icons-material/Cancel";
+import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
+import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Fragment, useState } from "react";
 import {
-    SimpleForm,
-    required,
-    useRefresh,
-    useNotify,
     SaveButton,
+    SimpleForm,
     Toolbar,
+    required,
     useListContext,
+    useNotify,
+    useRefresh,
     useUnselectAll,
 } from "react-admin";
-import { Dialog, DialogTitle, DialogContent, Button } from "@mui/material";
-import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
-import CancelIcon from "@mui/icons-material/Cancel";
 
-import {
-    OBSERVATION_SEVERITY_CHOICES,
-    OBSERVATION_STATUS_CHOICES,
-} from "../types";
-import {
-    TextInputWide,
-    AutocompleteInputMedium,
-} from "../../commons/layout/themes";
+import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
+import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../types";
 
 const ObservationBulkAsessment = () => {
     const [open, setOpen] = useState(false);
@@ -122,10 +116,7 @@ const ObservationBulkAsessment = () => {
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Bulk Observation Assessment</DialogTitle>
                 <DialogContent>
-                    <SimpleForm
-                        onSubmit={observationUpdate}
-                        toolbar={<CustomToolbar />}
-                    >
+                    <SimpleForm onSubmit={observationUpdate} toolbar={<CustomToolbar />}>
                         <AutocompleteInputMedium
                             source="current_severity"
                             label="Severity"
@@ -136,11 +127,7 @@ const ObservationBulkAsessment = () => {
                             label="Status"
                             choices={OBSERVATION_STATUS_CHOICES}
                         />
-                        <TextInputWide
-                            multiline
-                            source="comment"
-                            validate={requiredValidate}
-                        />
+                        <TextInputWide multiline source="comment" validate={requiredValidate} />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>

@@ -1,8 +1,9 @@
 import ProductIcon from "@mui/icons-material/ViewInAr";
-import ProductList from "./ProductList";
-import ProductShow from "./ProductShow";
+
 import ProductCreate from "./ProductCreate";
 import ProductEdit from "./ProductEdit";
+import ProductList from "./ProductList";
+import ProductShow from "./ProductShow";
 
 export default {
     list: ProductList,

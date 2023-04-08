@@ -1,6 +1,7 @@
-import { List, Datagrid, TextField, TextInput, SelectInput } from "react-admin";
-import { PARSER_SOURCE_CHOICES, SCANNER_TYPE_CHOICES } from "../types";
+import { Datagrid, List, SelectInput, TextField, TextInput } from "react-admin";
+
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
+import { PARSER_SOURCE_CHOICES, SCANNER_TYPE_CHOICES } from "../types";
 
 const listFilters = [
     <TextInput source="name" alwaysOn />,

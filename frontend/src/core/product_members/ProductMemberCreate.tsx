@@ -1,18 +1,18 @@
-import * as React from "react";
-import {
-    SimpleForm,
-    ReferenceInput,
-    required,
-    useCreate,
-    useRefresh,
-    useNotify,
-    CreateBase,
-    Toolbar,
-    SaveButton,
-} from "react-admin";
-import { Dialog, DialogTitle, DialogContent, Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
+import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import * as React from "react";
+import {
+    CreateBase,
+    ReferenceInput,
+    SaveButton,
+    SimpleForm,
+    Toolbar,
+    required,
+    useCreate,
+    useNotify,
+    useRefresh,
+} from "react-admin";
 
 import { ROLE_CHOICES } from "../../access_control/types";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
@@ -93,26 +93,16 @@ const ProductMemberCreate = ({ id }: ProductMemberCreateProps) => {
                 <DialogTitle>Add product member</DialogTitle>
                 <DialogContent>
                     <CreateBase resource="product_members">
-                        <SimpleForm
-                            onSubmit={create_product_member}
-                            toolbar={<CustomToolbar />}
-                        >
+                        <SimpleForm onSubmit={create_product_member} toolbar={<CustomToolbar />}>
                             <ReferenceInput
                                 source="user"
                                 reference="users"
                                 label="User Category"
                                 sort={{ field: "full_name", order: "ASC" }}
                             >
-                                <AutocompleteInputWide
-                                    optionText="full_name"
-                                    validate={requiredValidate}
-                                />
+                                <AutocompleteInputWide optionText="full_name" validate={requiredValidate} />
                             </ReferenceInput>
-                            <AutocompleteInputWide
-                                source="role"
-                                choices={ROLE_CHOICES}
-                                validate={requiredValidate}
-                            />
+                            <AutocompleteInputWide source="role" choices={ROLE_CHOICES} validate={requiredValidate} />
                         </SimpleForm>
                     </CreateBase>
                 </DialogContent>

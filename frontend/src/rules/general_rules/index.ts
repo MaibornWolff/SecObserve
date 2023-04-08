@@ -1,8 +1,9 @@
 import GeneralRuleIcon from "@mui/icons-material/Rule";
-import GeneralRuleList from "./GeneralRuleList";
-import GeneralRuleShow from "./GeneralRuleShow";
+
 import GeneralRuleCreate from "./GeneralRuleCreate";
 import GeneralRuleEdit from "./GeneralRuleEdit";
+import GeneralRuleList from "./GeneralRuleList";
+import GeneralRuleShow from "./GeneralRuleShow";
 
 export default {
     list: GeneralRuleList,

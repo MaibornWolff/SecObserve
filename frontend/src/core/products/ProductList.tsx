@@ -1,19 +1,19 @@
+import { Fragment } from "react";
 import {
-    List,
+    BulkDeleteButton,
+    CreateButton,
     Datagrid,
+    List,
+    NullableBooleanInput,
     TextField,
     TextInput,
-    BulkDeleteButton,
-    NullableBooleanInput,
-    CreateButton,
     TopToolbar,
 } from "react-admin";
-import { Fragment } from "react";
 
+import { PERMISSION_PRODUCT_CREATE } from "../../access_control/types";
+import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
 import { SecurityGateTextField } from "../../commons/custom_fields/SecurityGateTextField";
-import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
-import { PERMISSION_PRODUCT_CREATE } from "../../access_control/types";
 
 const listFilters = [
     <TextInput source="name" alwaysOn />,
@@ -30,10 +30,7 @@ const ListActions = () => {
     const user = localStorage.getItem("user");
     return (
         <TopToolbar>
-            {user &&
-                JSON.parse(user).permissions.includes(
-                    PERMISSION_PRODUCT_CREATE
-                ) && <CreateButton />}
+            {user && JSON.parse(user).permissions.includes(PERMISSION_PRODUCT_CREATE) && <CreateButton />}
         </TopToolbar>
     );
 };
@@ -48,11 +45,7 @@ const ProductList = () => {
             actions={<ListActions />}
             disableSyncWithLocation={false}
         >
-            <Datagrid
-                size="medium"
-                rowClick="show"
-                bulkActionButtons={<BulkActionButtons />}
-            >
+            <Datagrid size="medium" rowClick="show" bulkActionButtons={<BulkActionButtons />}>
                 <TextField source="name" />
                 <SecurityGateTextField />
                 <ObservationsCountField withLabel={false} />

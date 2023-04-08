@@ -1,4 +1,5 @@
 import { Layout, LayoutProps } from "react-admin";
+
 import AppBar from "./AppBar";
 import Menu from "./Menu";
 

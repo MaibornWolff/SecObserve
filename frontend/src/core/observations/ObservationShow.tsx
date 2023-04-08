@@ -1,33 +1,30 @@
+import { Stack, Typography } from "@mui/material";
 import {
-    useRecordContext,
+    ArrayField,
+    ChipField,
+    Datagrid,
+    DateField,
+    EditButton,
+    Labeled,
+    NumberField,
+    ReferenceField,
     Show,
     SimpleShowLayout,
     TextField,
-    NumberField,
-    DateField,
-    ArrayField,
-    Datagrid,
-    WithRecord,
-    ChipField,
     TopToolbar,
-    ReferenceField,
-    Labeled,
-    EditButton,
+    WithRecord,
+    useRecordContext,
 } from "react-admin";
-import { Stack, Typography } from "@mui/material";
 
+import { PERMISSION_OBSERVATION_ASSESSMENT, PERMISSION_OBSERVATION_EDIT } from "../../access_control/types";
 import MarkdownField from "../../commons/custom_fields/MarkdownField";
+import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import { get_cwe_url, get_vulnerability_url } from "../../commons/functions";
-import { SeverityField } from "../../commons/custom_fields/SeverityField";
+import { useStyles } from "../../commons/layout/themes";
 import ObservationAssessment from "./ObservationAssessment";
 import ObservationRemoveAssessment from "./ObservationRemoveAssessment";
 import ObservationsShowAside from "./ObservationShowAside";
-import {
-    PERMISSION_OBSERVATION_ASSESSMENT,
-    PERMISSION_OBSERVATION_EDIT,
-} from "../../access_control/types";
-import { useStyles } from "../../commons/layout/themes";
 
 const ShowActions = () => {
     const observation = useRecordContext();
@@ -35,24 +32,17 @@ const ShowActions = () => {
         <TopToolbar>
             {observation &&
                 observation.product_data.permissions &&
-                observation.product_data.permissions.includes(
-                    PERMISSION_OBSERVATION_ASSESSMENT
-                ) && <ObservationAssessment />}
-            {observation &&
-                observation.product_data.permissions &&
-                observation.product_data.permissions.includes(
-                    PERMISSION_OBSERVATION_ASSESSMENT
-                ) &&
-                (observation.assessment_severity ||
-                    observation.assessment_status) && (
-                    <ObservationRemoveAssessment />
+                observation.product_data.permissions.includes(PERMISSION_OBSERVATION_ASSESSMENT) && (
+                    <ObservationAssessment />
                 )}
             {observation &&
                 observation.product_data.permissions &&
+                observation.product_data.permissions.includes(PERMISSION_OBSERVATION_ASSESSMENT) &&
+                (observation.assessment_severity || observation.assessment_status) && <ObservationRemoveAssessment />}
+            {observation &&
+                observation.product_data.permissions &&
                 observation.parser_data.type == "Manual" &&
-                observation.product_data.permissions.includes(
-                    PERMISSION_OBSERVATION_EDIT
-                ) && <EditButton />}
+                observation.product_data.permissions.includes(PERMISSION_OBSERVATION_EDIT) && <EditButton />}
         </TopToolbar>
     );
 };
@@ -88,10 +78,7 @@ const ObservationShow = () => {
                             </Stack>
                             <Stack spacing={2}>
                                 <Labeled>
-                                    <ChipField
-                                        source="current_status"
-                                        label="Status"
-                                    />
+                                    <ChipField source="current_status" label="Status" />
                                 </Labeled>
                                 {observation.parser_status != "" && (
                                     <Labeled>
@@ -115,24 +102,17 @@ const ObservationShow = () => {
                                 </Labeled>
                             )}
                             <Labeled>
-                                <TextField
-                                    source="title"
-                                    className={classes.fontBigBold}
-                                />
+                                <TextField source="title" className={classes.fontBigBold} />
                             </Labeled>
                         </Stack>
                         {observation.description != "" && (
                             <Labeled label="Description">
-                                <MarkdownField
-                                    content={observation.description}
-                                />
+                                <MarkdownField content={observation.description} />
                             </Labeled>
                         )}
                         {observation.recommendation != "" && (
                             <Labeled label="Recommendation">
-                                <MarkdownField
-                                    content={observation.recommendation}
-                                />
+                                <MarkdownField content={observation.recommendation} />
                             </Labeled>
                         )}
                         {(observation.vulnerability_id != "" ||
@@ -140,38 +120,24 @@ const ObservationShow = () => {
                             observation.cvss3_vector != "" ||
                             observation.cwe != null) && (
                             <div>
-                                <Typography
-                                    variant="h6"
-                                    sx={{ paddingTop: "16px" }}
-                                >
+                                <Typography variant="h6" sx={{ paddingTop: "16px" }}>
                                     Vulnerability
                                 </Typography>
                                 <Stack direction="row" spacing={4}>
                                     {observation.vulnerability_id != "" &&
-                                        get_vulnerability_url(
-                                            observation.vulnerability_id
-                                        ) == null && (
+                                        get_vulnerability_url(observation.vulnerability_id) == null && (
                                             <Labeled>
-                                                <TextField
-                                                    source="vulnerability_id"
-                                                    label="Vulnerability id"
-                                                />
+                                                <TextField source="vulnerability_id" label="Vulnerability id" />
                                             </Labeled>
                                         )}
                                     {observation.vulnerability_id != "" &&
-                                        get_vulnerability_url(
-                                            observation.vulnerability_id
-                                        ) != null && (
+                                        get_vulnerability_url(observation.vulnerability_id) != null && (
                                             <Labeled label="Vulnerability id">
                                                 <TextUrlField
-                                                    text={
-                                                        observation.vulnerability_id
-                                                    }
+                                                    text={observation.vulnerability_id}
                                                     url={
                                                         observation.vulnerability_id &&
-                                                        get_vulnerability_url(
-                                                            observation.vulnerability_id
-                                                        )
+                                                        get_vulnerability_url(observation.vulnerability_id)
                                                     }
                                                 />
                                             </Labeled>
@@ -188,12 +154,7 @@ const ObservationShow = () => {
                                     )}
                                     {observation.cwe != null && (
                                         <Labeled label="CWE">
-                                            <TextUrlField
-                                                text={observation.cwe}
-                                                url={get_cwe_url(
-                                                    observation.cwe
-                                                )}
-                                            />
+                                            <TextUrlField text={observation.cwe} url={get_cwe_url(observation.cwe)} />
                                         </Labeled>
                                     )}
                                 </Stack>
@@ -204,62 +165,38 @@ const ObservationShow = () => {
                         </Typography>
                         {observation.origin_service_name != "" && (
                             <div>
-                                <Typography
-                                    variant="subtitle1"
-                                    sx={{ paddingTop: "8px" }}
-                                >
+                                <Typography variant="subtitle1" sx={{ paddingTop: "8px" }}>
                                     Service
                                 </Typography>
                                 <Labeled>
-                                    <TextField
-                                        source="origin_service_name"
-                                        label="Name"
-                                    />
+                                    <TextField source="origin_service_name" label="Name" />
                                 </Labeled>
                             </div>
                         )}
                         {observation.origin_component_name != "" && (
                             <div>
-                                <Typography
-                                    variant="subtitle1"
-                                    sx={{ paddingTop: "8px" }}
-                                >
+                                <Typography variant="subtitle1" sx={{ paddingTop: "8px" }}>
                                     Component
                                 </Typography>
                                 <Stack direction="row" spacing={4}>
-                                    {observation.origin_component_name !=
-                                        "" && (
+                                    {observation.origin_component_name != "" && (
                                         <Labeled>
-                                            <TextField
-                                                source="origin_component_name"
-                                                label="Component name"
-                                            />
+                                            <TextField source="origin_component_name" label="Component name" />
                                         </Labeled>
                                     )}
-                                    {observation.origin_component_version !=
-                                        "" && (
+                                    {observation.origin_component_version != "" && (
                                         <Labeled>
-                                            <TextField
-                                                source="origin_component_version"
-                                                label="Component version"
-                                            />
+                                            <TextField source="origin_component_version" label="Component version" />
                                         </Labeled>
                                     )}
-                                    {observation.origin_component_purl !=
-                                        "" && (
+                                    {observation.origin_component_purl != "" && (
                                         <Labeled>
-                                            <TextField
-                                                source="origin_component_purl"
-                                                label="Component PURL"
-                                            />
+                                            <TextField source="origin_component_purl" label="Component PURL" />
                                         </Labeled>
                                     )}
                                     {observation.origin_component_cpe != "" && (
                                         <Labeled>
-                                            <TextField
-                                                source="origin_component_cpe"
-                                                label="Component CPE"
-                                            />
+                                            <TextField source="origin_component_cpe" label="Component CPE" />
                                         </Labeled>
                                     )}
                                 </Stack>
@@ -267,29 +204,18 @@ const ObservationShow = () => {
                         )}
                         {observation.origin_docker_image_name != "" && (
                             <div>
-                                <Typography
-                                    variant="subtitle1"
-                                    sx={{ paddingTop: "8px" }}
-                                >
+                                <Typography variant="subtitle1" sx={{ paddingTop: "8px" }}>
                                     Docker
                                 </Typography>
                                 <Stack direction="row" spacing={4}>
-                                    {observation.origin_docker_image_name !=
-                                        "" && (
+                                    {observation.origin_docker_image_name != "" && (
                                         <Labeled>
-                                            <TextField
-                                                source="origin_docker_image_name"
-                                                label="Docker image name"
-                                            />
+                                            <TextField source="origin_docker_image_name" label="Docker image name" />
                                         </Labeled>
                                     )}
-                                    {observation.origin_docker_image_tag !=
-                                        "" && (
+                                    {observation.origin_docker_image_tag != "" && (
                                         <Labeled>
-                                            <TextField
-                                                source="origin_docker_image_tag"
-                                                label="Docker image tag"
-                                            />
+                                            <TextField source="origin_docker_image_tag" label="Docker image tag" />
                                         </Labeled>
                                     )}
                                 </Stack>
@@ -297,50 +223,31 @@ const ObservationShow = () => {
                         )}
                         {observation.origin_endpoint_url != "" && (
                             <div>
-                                <Typography
-                                    variant="subtitle1"
-                                    sx={{ paddingTop: "8px" }}
-                                >
+                                <Typography variant="subtitle1" sx={{ paddingTop: "8px" }}>
                                     Endpoint
                                 </Typography>
                                 {observation.origin_endpoint_url != "" && (
                                     <Labeled label="Endpoint URL">
                                         <TextUrlField
-                                            text={
-                                                observation.origin_endpoint_url
-                                            }
-                                            url={
-                                                observation.origin_endpoint_url
-                                            }
+                                            text={observation.origin_endpoint_url}
+                                            url={observation.origin_endpoint_url}
                                         />
                                     </Labeled>
                                 )}
                                 <Stack direction="row" spacing={4}>
-                                    {observation.origin_endpoint_scheme !=
-                                        "" && (
+                                    {observation.origin_endpoint_scheme != "" && (
                                         <Labeled>
-                                            <TextField
-                                                source="origin_endpoint_scheme"
-                                                label="Endpoint scheme"
-                                            />
+                                            <TextField source="origin_endpoint_scheme" label="Endpoint scheme" />
                                         </Labeled>
                                     )}
-                                    {observation.origin_endpoint_hostname !=
-                                        "" && (
+                                    {observation.origin_endpoint_hostname != "" && (
                                         <Labeled>
-                                            <TextField
-                                                source="origin_endpoint_hostname"
-                                                label="Endpoint host"
-                                            />
+                                            <TextField source="origin_endpoint_hostname" label="Endpoint host" />
                                         </Labeled>
                                     )}
-                                    {observation.origin_endpoint_port !=
-                                        null && (
+                                    {observation.origin_endpoint_port != null && (
                                         <Labeled>
-                                            <TextField
-                                                source="origin_endpoint_port"
-                                                label="Endpoint port"
-                                            />
+                                            <TextField source="origin_endpoint_port" label="Endpoint port" />
                                         </Labeled>
                                     )}
                                 </Stack>
@@ -348,42 +255,27 @@ const ObservationShow = () => {
                         )}
                         {observation.origin_source_file != "" && (
                             <div>
-                                <Typography
-                                    variant="subtitle1"
-                                    sx={{ paddingTop: "8px" }}
-                                >
+                                <Typography variant="subtitle1" sx={{ paddingTop: "8px" }}>
                                     Source
                                 </Typography>
                                 <Stack direction="row" spacing={4}>
                                     {observation.origin_source_file != "" && (
                                         <Labeled>
                                             <TextUrlField
-                                                text={
-                                                    observation.origin_source_file
-                                                }
-                                                url={
-                                                    observation.origin_source_file_url
-                                                }
+                                                text={observation.origin_source_file}
+                                                url={observation.origin_source_file_url}
                                                 label="Source file"
                                             />
                                         </Labeled>
                                     )}
-                                    {observation.origin_source_line_start !=
-                                        null && (
+                                    {observation.origin_source_line_start != null && (
                                         <Labeled>
-                                            <TextField
-                                                source="origin_source_line_start"
-                                                label="Source line start"
-                                            />
+                                            <TextField source="origin_source_line_start" label="Source line start" />
                                         </Labeled>
                                     )}
-                                    {observation.origin_source_line_end !=
-                                        null && (
+                                    {observation.origin_source_line_end != null && (
                                         <Labeled>
-                                            <TextField
-                                                source="origin_source_line_end"
-                                                label="Source line end"
-                                            />
+                                            <TextField source="origin_source_line_end" label="Source line end" />
                                         </Labeled>
                                     )}
                                 </Stack>

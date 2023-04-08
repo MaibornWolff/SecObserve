@@ -1,29 +1,12 @@
-import { useState, ChangeEvent, Fragment } from "react";
-import {
-    SimpleForm,
-    required,
-    useRefresh,
-    useNotify,
-    SaveButton,
-    Toolbar,
-    ReferenceInput,
-} from "react-admin";
-import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    Button,
-    LinearProgress,
-} from "@mui/material";
-import UploadIcon from "@mui/icons-material/Upload";
 import CancelIcon from "@mui/icons-material/Cancel";
-
-import {
-    TextInputWide,
-    AutocompleteInputWide,
-} from "../../commons/layout/themes";
-import { httpClient } from "../../commons/ra-data-django-rest-framework";
+import UploadIcon from "@mui/icons-material/Upload";
+import { Button, Dialog, DialogContent, DialogTitle, LinearProgress } from "@mui/material";
+import { ChangeEvent, Fragment, useState } from "react";
+import { ReferenceInput, SaveButton, SimpleForm, Toolbar, required, useNotify, useRefresh } from "react-admin";
 import { makeStyles } from "tss-react/mui";
+
+import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
+import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
 const FileUploadObservations = () => {
     const useStyles = makeStyles()({
@@ -58,23 +41,16 @@ const FileUploadObservations = () => {
                 formData.append("service", data.service);
             }
             if (data.docker_image_name_tag) {
-                formData.append(
-                    "docker_image_name_tag",
-                    data.docker_image_name_tag
-                );
+                formData.append("docker_image_name_tag", data.docker_image_name_tag);
             }
             if (data.endpoint_url) {
                 formData.append("endpoint_url", data.endpoint_url);
             }
 
-            httpClient(
-                window.__RUNTIME_CONFIG__.API_BASE_URL +
-                    "/import/file_upload_observations_by_id/",
-                {
-                    method: "POST",
-                    body: formData,
-                }
-            )
+            httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/import/file_upload_observations_by_id/", {
+                method: "POST",
+                body: formData,
+            })
                 .then((result) => {
                     const message =
                         result.json.observations_new +
@@ -145,10 +121,7 @@ const FileUploadObservations = () => {
                 {loading ? <LinearProgress color="secondary" /> : null}
                 <DialogTitle>Upload Observations From File</DialogTitle>
                 <DialogContent>
-                    <SimpleForm
-                        onSubmit={observationUpdate}
-                        toolbar={<CustomToolbar />}
-                    >
+                    <SimpleForm onSubmit={observationUpdate} toolbar={<CustomToolbar />}>
                         <input
                             id="sbom-input"
                             className={classes.input}
@@ -162,16 +135,10 @@ const FileUploadObservations = () => {
                             sort={{ field: "name", order: "ASC" }}
                             filter={{ source: "File" }}
                         >
-                            <AutocompleteInputWide
-                                optionText="name"
-                                validate={requiredValidate}
-                            />
+                            <AutocompleteInputWide optionText="name" validate={requiredValidate} />
                         </ReferenceInput>
                         <TextInputWide source="service" />
-                        <TextInputWide
-                            source="docker_image_name_tag"
-                            label="Docker image name:tag"
-                        />
+                        <TextInputWide source="docker_image_name_tag" label="Docker image name:tag" />
                         <TextInputWide source="endpoint_url" />
                     </SimpleForm>
                 </DialogContent>

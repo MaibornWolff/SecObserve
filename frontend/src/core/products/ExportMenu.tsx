@@ -1,16 +1,16 @@
-import { useState } from "react";
-import { useNotify } from "react-admin";
-import Button from "@mui/material/Button";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
+import { faFileCsv, faFileExcel } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DownloadIcon from "@mui/icons-material/Download";
 import ViewQuiltIcon from "@mui/icons-material/ViewQuilt";
 import { ListItemIcon } from "@mui/material";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileExcel, faFileCsv } from "@fortawesome/free-solid-svg-icons";
+import Button from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import { useState } from "react";
+import { useNotify } from "react-admin";
 
-import { getSettingTheme } from "../../commons/settings/functions";
 import axios_instance from "../../access_control/axios_instance";
+import { getSettingTheme } from "../../commons/settings/functions";
 
 export default function ExportMenu(product: any) {
     const notify = useNotify();
@@ -30,11 +30,7 @@ export default function ExportMenu(product: any) {
             return "black";
         }
     }
-    const exportDataCsv = async (
-        url_suffix: string,
-        filename: string,
-        message: string
-    ) => {
+    const exportDataCsv = async (url_suffix: string, filename: string, message: string) => {
         axios_instance
             .get("/products/" + product.product.id + url_suffix)
             .then(function (response) {
@@ -57,11 +53,7 @@ export default function ExportMenu(product: any) {
         handleClose();
     };
 
-    const exportDataExcel = async (
-        url_suffix: string,
-        filename: string,
-        message: string
-    ) => {
+    const exportDataExcel = async (url_suffix: string, filename: string, message: string) => {
         axios_instance
             .get("/products/" + product.product.id + url_suffix, {
                 responseType: "arraybuffer",
@@ -90,43 +82,23 @@ export default function ExportMenu(product: any) {
     };
 
     const exportCodeChartaMetrics = async () => {
-        exportDataCsv(
-            "/export_codecharta_metrics/",
-            "secobserve_codecharta_metrics.csv",
-            "CodeCharta metrics"
-        );
+        exportDataCsv("/export_codecharta_metrics/", "secobserve_codecharta_metrics.csv", "CodeCharta metrics");
     };
 
     const exportAllObservationsExcel = async () => {
-        exportDataExcel(
-            "/export_observations_excel/",
-            "all_observations.xlsx",
-            "Observations"
-        );
+        exportDataExcel("/export_observations_excel/", "all_observations.xlsx", "Observations");
     };
 
     const exportOpenObservationsExcel = async () => {
-        exportDataExcel(
-            "/export_observations_excel/?status=Open",
-            "open_observations.xlsx",
-            "Observations"
-        );
+        exportDataExcel("/export_observations_excel/?status=Open", "open_observations.xlsx", "Observations");
     };
 
     const exportAllObservationsCsv = async () => {
-        exportDataCsv(
-            "/export_observations_csv/",
-            "all_observations.csv",
-            "Observations"
-        );
+        exportDataCsv("/export_observations_csv/", "all_observations.csv", "Observations");
     };
 
     const exportOpenObservationsCsv = async () => {
-        exportDataCsv(
-            "/export_observations_csv/?status=Open",
-            "open_observations.csv",
-            "Observations"
-        );
+        exportDataCsv("/export_observations_csv/?status=Open", "open_observations.csv", "Observations");
     };
 
     return (
@@ -154,37 +126,25 @@ export default function ExportMenu(product: any) {
             >
                 <MenuItem onClick={exportOpenObservationsExcel}>
                     <ListItemIcon>
-                        <FontAwesomeIcon
-                            icon={faFileExcel}
-                            color={getIconColor()}
-                        />
+                        <FontAwesomeIcon icon={faFileExcel} color={getIconColor()} />
                     </ListItemIcon>
                     Open observations / Excel
                 </MenuItem>
                 <MenuItem onClick={exportOpenObservationsCsv} divider>
                     <ListItemIcon>
-                        <FontAwesomeIcon
-                            icon={faFileCsv}
-                            color={getIconColor()}
-                        />
+                        <FontAwesomeIcon icon={faFileCsv} color={getIconColor()} />
                     </ListItemIcon>
                     Open observations / CSV
                 </MenuItem>
                 <MenuItem onClick={exportAllObservationsExcel}>
                     <ListItemIcon>
-                        <FontAwesomeIcon
-                            icon={faFileExcel}
-                            color={getIconColor()}
-                        />
+                        <FontAwesomeIcon icon={faFileExcel} color={getIconColor()} />
                     </ListItemIcon>
                     All observations / Excel
                 </MenuItem>
                 <MenuItem onClick={exportAllObservationsCsv} divider>
                     <ListItemIcon>
-                        <FontAwesomeIcon
-                            icon={faFileCsv}
-                            color={getIconColor()}
-                        />
+                        <FontAwesomeIcon icon={faFileCsv} color={getIconColor()} />
                     </ListItemIcon>
                     All observations / CSV
                 </MenuItem>

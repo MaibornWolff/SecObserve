@@ -1,29 +1,26 @@
+import CancelIcon from "@mui/icons-material/Cancel";
+import EditIcon from "@mui/icons-material/Edit";
+import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import * as React from "react";
 import {
-    SimpleForm,
-    required,
-    useRefresh,
-    useNotify,
-    SaveButton,
-    Toolbar,
-    useUpdate,
-    ReferenceInput,
     BooleanInput,
+    ReferenceInput,
+    SaveButton,
+    SimpleForm,
+    Toolbar,
+    required,
+    useNotify,
+    useRefresh,
+    useUpdate,
 } from "react-admin";
-import { Dialog, DialogTitle, DialogContent, Button } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import CancelIcon from "@mui/icons-material/Cancel";
 
 import {
-    TextInputWide,
-    SelectInputWide,
-    AutocompleteInputWide,
     AutocompleteInputMedium,
+    AutocompleteInputWide,
+    SelectInputWide,
+    TextInputWide,
 } from "../../commons/layout/themes";
-import {
-    OBSERVATION_SEVERITY_CHOICES,
-    OBSERVATION_STATUS_CHOICES,
-} from "../../core/types";
+import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../../core/types";
 
 const ProductRuleEdit = () => {
     const [open, setOpen] = React.useState(false);
@@ -143,34 +140,13 @@ const ProductRuleEdit = () => {
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Edit product rule</DialogTitle>
                 <DialogContent>
-                    <SimpleForm
-                        onSubmit={product_rule_update}
-                        toolbar={<CustomToolbar />}
-                    >
-                        <ReferenceInput
-                            source="product"
-                            reference="products"
-                            sort={{ field: "name", order: "ASC" }}
-                        >
-                            <SelectInputWide
-                                optionText="name"
-                                disabled={true}
-                            />
+                    <SimpleForm onSubmit={product_rule_update} toolbar={<CustomToolbar />}>
+                        <ReferenceInput source="product" reference="products" sort={{ field: "name", order: "ASC" }}>
+                            <SelectInputWide optionText="name" disabled={true} />
                         </ReferenceInput>
-                        <TextInputWide
-                            autoFocus
-                            source="name"
-                            validate={requiredValidate}
-                        />
-                        <ReferenceInput
-                            source="parser"
-                            reference="parsers"
-                            sort={{ field: "name", order: "ASC" }}
-                        >
-                            <AutocompleteInputWide
-                                optionText="name"
-                                validate={requiredValidate}
-                            />
+                        <TextInputWide autoFocus source="name" validate={requiredValidate} />
+                        <ReferenceInput source="parser" reference="parsers" sort={{ field: "name", order: "ASC" }}>
+                            <AutocompleteInputWide optionText="name" validate={requiredValidate} />
                         </ReferenceInput>
                         <TextInputWide source="scanner_prefix" />
                         <TextInputWide
@@ -203,14 +179,8 @@ const ProductRuleEdit = () => {
                             label="Origin source file"
                             helperText="Regular expression to match the source file"
                         />
-                        <AutocompleteInputMedium
-                            source="new_severity"
-                            choices={OBSERVATION_SEVERITY_CHOICES}
-                        />
-                        <AutocompleteInputMedium
-                            source="new_status"
-                            choices={OBSERVATION_STATUS_CHOICES}
-                        />
+                        <AutocompleteInputMedium source="new_severity" choices={OBSERVATION_SEVERITY_CHOICES} />
+                        <AutocompleteInputMedium source="new_status" choices={OBSERVATION_STATUS_CHOICES} />
                         <BooleanInput source="enabled" defaultValue={true} />
                     </SimpleForm>
                 </DialogContent>
