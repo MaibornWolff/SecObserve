@@ -9,7 +9,7 @@ from application.import_observations.parsers.base_parser import (
     BaseParser,
 )
 
-# Recommended cipher suites according to German BSI as of 2020
+# Recommended cipher suites, curves and signature algorithms according to German BSI as of 2023
 TLS12_RECOMMENDED_CIPHERS = [
     "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256",
     "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384",
@@ -81,6 +81,7 @@ RECOMMENDED_ELLIPTIC_CURVES = [
     "prime256v1",  # equivalent to secp256r1 according to RFC 4492
     "secp384r1",
     "secp521r1",
+    "ffdhe2048",
     "ffdhe3072",
     "ffdhe4096",
 ]
@@ -210,10 +211,8 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
                 unrecommended_cipher_suites = []
                 cipher_suites = cipher.get("cipher_suites", {})
                 for cipher_suite in cipher_suites:
-                    keys = cipher_suite.keys()
-                    for key in keys:
-                        if key not in recommended_cipher_suites:
-                            unrecommended_cipher_suites.append(key)
+                    if cipher_suite not in recommended_cipher_suites:
+                        unrecommended_cipher_suites.append(cipher_suite)
 
                 if unrecommended_cipher_suites:
                     endpoint_url = self.get_endpoint_url(cipher.get("target", {}))
@@ -248,10 +247,8 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
         unrecommended_curves = []
         inner_curves = curves.get("curves", {})
         for inner_curve in inner_curves:
-            keys = inner_curve.keys()
-            for key in keys:
-                if key.lower() not in RECOMMENDED_ELLIPTIC_CURVES:
-                    unrecommended_curves.append(key)
+            if inner_curve.lower() not in RECOMMENDED_ELLIPTIC_CURVES:
+                unrecommended_curves.append(inner_curve)
 
         if unrecommended_curves:
             endpoint_url = self.get_endpoint_url(curves.get("target", {}))
@@ -286,10 +283,8 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
         unrecommended_signature_algorithms = []
         inner_signature_algorithms = signature_algorithms.get("sig_algos", {})
         for inner_signature_algorithm in inner_signature_algorithms:
-            keys = inner_signature_algorithm.keys()
-            for key in keys:
-                if key.lower() not in RECOMMENDED_SIGNATURE_ALGORITHMS:
-                    unrecommended_signature_algorithms.append(key)
+            if inner_signature_algorithm.lower() not in RECOMMENDED_SIGNATURE_ALGORITHMS:
+                unrecommended_signature_algorithms.append(inner_signature_algorithm)
 
         if unrecommended_signature_algorithms:
             endpoint_url = self.get_endpoint_url(signature_algorithms.get("target", {}))
