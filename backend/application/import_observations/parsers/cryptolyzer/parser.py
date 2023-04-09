@@ -283,7 +283,10 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
         unrecommended_signature_algorithms = []
         inner_signature_algorithms = signature_algorithms.get("sig_algos", {})
         for inner_signature_algorithm in inner_signature_algorithms:
-            if inner_signature_algorithm.lower() not in RECOMMENDED_SIGNATURE_ALGORITHMS:
+            if (
+                inner_signature_algorithm.lower()
+                not in RECOMMENDED_SIGNATURE_ALGORITHMS
+            ):
                 unrecommended_signature_algorithms.append(inner_signature_algorithm)
 
         if unrecommended_signature_algorithms:
