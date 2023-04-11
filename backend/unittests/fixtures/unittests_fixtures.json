@@ -106,7 +106,7 @@
             "description": "",
             "repository_prefix": "",
             "security_gate_passed": null,
-            "security_gate_active": null,
+            "security_gate_active": false,
             "security_gate_threshold_critical": null,
             "security_gate_threshold_high": null,
             "security_gate_threshold_medium": null,

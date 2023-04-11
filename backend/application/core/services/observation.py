@@ -13,7 +13,7 @@ def get_identity_hash(observation) -> str:
     return hashlib.sha256(hash_string.casefold().encode("utf-8").strip()).hexdigest()
 
 
-def _get_string_to_hash(observation):
+def _get_string_to_hash(observation):  # pylint: disable=too-many-branches
     hash_string = observation.title
 
     if observation.origin_component_name_version:
@@ -48,8 +48,6 @@ def _get_string_to_hash(observation):
 
 
 def get_current_severity(observation) -> str:
-    Observation = apps.get_model("core", "Observation")
-
     if observation.assessment_severity:
         return observation.assessment_severity
 
@@ -59,18 +57,28 @@ def get_current_severity(observation) -> str:
     if observation.parser_severity:
         return observation.parser_severity
 
-    if observation.cvss3_score is None:
+    return _get_cvss3_severity(observation.cvss3_score)
+
+
+def _get_cvss3_severity(cvss3_score: int):
+    Observation = apps.get_model("core", "Observation")
+
+    if cvss3_score is None:
         return Observation.SEVERITY_UNKOWN
-    elif observation.cvss3_score >= 9:
+
+    if cvss3_score >= 9:
         return Observation.SEVERITY_CRITICAL
-    elif observation.cvss3_score >= 7:
+
+    if cvss3_score >= 7:
         return Observation.SEVERITY_HIGH
-    elif observation.cvss3_score >= 4:
+
+    if cvss3_score >= 4:
         return Observation.SEVERITY_MEDIUM
-    elif observation.cvss3_score >= 0.1:
+
+    if cvss3_score >= 0.1:
         return Observation.SEVERITY_LOW
-    else:
-        return Observation.SEVERITY_NONE
+
+    return Observation.SEVERITY_NONE
 
 
 def get_current_status(observation) -> str:
@@ -91,7 +99,9 @@ def get_current_status(observation) -> str:
     return Observation.STATUS_OPEN
 
 
-def normalize_observation_fields(observation) -> None:
+def normalize_observation_fields(
+    observation,
+) -> None:  # pylint: disable=too-many-branches, too-many-statements
     observation.numerical_severity = observation.NUMERICAL_SEVERITIES.get(
         observation.current_severity
     )
@@ -252,13 +262,13 @@ def normalize_observation_fields(observation) -> None:
         observation.vulnerability_id = ""
 
 
-def clip_fields(model: str, object) -> None:
+def clip_fields(model: str, my_object) -> None:
     Model = apps.get_model("core", model)
     for field in Model._meta.get_fields():
-        if type(field) == CharField or type(field) == TextField:
+        if isinstance(field, (CharField, TextField)):
             _, _, _, key_args = field.deconstruct()
             max_length = key_args.get("max_length")
             if max_length:
-                value = getattr(object, field.name)
+                value = getattr(my_object, field.name)
                 if value and len(value) > max_length:
-                    setattr(object, field.name, value[: max_length - 4] + " ...")
+                    setattr(my_object, field.name, value[: max_length - 4] + " ...")

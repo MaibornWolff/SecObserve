@@ -73,7 +73,7 @@ REFERENCES = {
     ],
     "X-Frame-Options": [
         "https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#x-frame-options",
-        "https://cheatsheetseries.owasp.org/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html#x-frame-options-header-types",  # noqa: E501
+        "https://cheatsheetseries.owasp.org/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html#x-frame-options-header-types",  # noqa: E501 pylint: disable=line-too-long
         "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options",
     ],
     "X-Powered-By": [
@@ -96,17 +96,17 @@ class DrHEADerParser(BaseParser, BaseFileParser):
         return Parser.TYPE_DAST
 
     def check_format(self, file: File) -> tuple[bool, list[str], dict | list]:
-        try:
+        try:  # pylint: disable=duplicate-code
             data = load(file)
         except Exception:
             return False, ["File is not valid JSON"], {}
 
-        if not type(data) is list:
+        if not isinstance(data, list):
             return False, ["File is not a DrHeader format, data is not a list"], {}
 
-        if len(data) >= 1:
+        if len(data) >= 1:  # pylint: disable=duplicate-code
             first_element = data[0]
-            if type(first_element) is not dict:
+            if not isinstance(first_element, dict):
                 return (
                     False,
                     ["File is not a DrHeader format, element is not a dictionary"],
@@ -145,7 +145,7 @@ class DrHEADerParser(BaseParser, BaseFileParser):
             if value:
                 description += "**Value:** " + value + "\n\n"
             if expected:
-                if type(expected) is list:
+                if isinstance(expected, list):
                     if len(expected) == 1:
                         description += "**Expected:** " + expected[0]
                     elif delimiter:

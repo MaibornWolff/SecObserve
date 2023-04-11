@@ -42,7 +42,7 @@ class ApiImportObservationsById(APIView):
         request=ApiImportObservationsByIdRequestSerializer,
         responses={status.HTTP_200_OK: ImportObservationsResponseSerializer},
     )
-    def post(self, request, format=None):
+    def post(self, request):
         request_serializer = ApiImportObservationsByIdRequestSerializer(
             data=request.data
         )
@@ -89,7 +89,7 @@ class ApiImportObservationsByName(APIView):
         request=ApiImportObservationsByNameRequestSerializer,
         responses={status.HTTP_200_OK: ImportObservationsResponseSerializer},
     )
-    def post(self, request, format=None):
+    def post(self, request):
         request_serializer = ApiImportObservationsByNameRequestSerializer(
             data=request.data
         )
@@ -143,7 +143,7 @@ class FileUploadObservationsById(APIView):
         request=FileUploadObservationsByIdRequestSerializer,
         responses={status.HTTP_200_OK: ImportObservationsResponseSerializer},
     )
-    def post(self, request, format=None):
+    def post(self, request):
         request_serializer = FileUploadObservationsByIdRequestSerializer(
             data=request.data
         )
@@ -192,7 +192,7 @@ class FileUploadObservationsByName(APIView):
         request=FileUploadObservationsByNameRequestSerializer,
         responses={status.HTTP_200_OK: ImportObservationsResponseSerializer},
     )
-    def post(self, request, format=None):
+    def post(self, request):
         request_serializer = FileUploadObservationsByNameRequestSerializer(
             data=request.data
         )

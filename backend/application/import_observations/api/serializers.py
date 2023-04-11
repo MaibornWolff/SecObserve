@@ -63,9 +63,9 @@ class ApiConfigurationSerializer(ModelSerializer):
         model = Api_Configuration
         fields = "__all__"
 
-    def to_representation(self, obj):
+    def to_representation(self, instance):
         # Only users who can edit an API Configuration are allowed to see the API key
-        data = super(ApiConfigurationSerializer, self).to_representation(obj)
+        data = super().to_representation(instance)
 
         permissions = data.get("product_data", {}).get("permissions", [])
         if Permissions.Api_Configuration_Edit not in permissions:
@@ -73,23 +73,23 @@ class ApiConfigurationSerializer(ModelSerializer):
 
         return data
 
-    def validate(self, data: dict):
+    def validate(self, attrs: dict):
         self.instance: Api_Configuration
-        if data.pop("test_connection", False):
+        if attrs.pop("test_connection", False):
             if self.instance is not None:
-                product = data.get("product", self.instance.product)
-                name = data.get("name", self.instance.name)
-                parser = data.get("parser", self.instance.parser)
-                base_url = data.get("base_url", self.instance.base_url)
-                project_key = data.get("project_key", self.instance.project_key)
-                api_key = data.get("api_key", self.instance.api_key)
+                product = attrs.get("product", self.instance.product)
+                name = attrs.get("name", self.instance.name)
+                parser = attrs.get("parser", self.instance.parser)
+                base_url = attrs.get("base_url", self.instance.base_url)
+                project_key = attrs.get("project_key", self.instance.project_key)
+                api_key = attrs.get("api_key", self.instance.api_key)
             else:
-                product = data.get("product")
-                name = data.get("name")
-                parser = data.get("parser")
-                base_url = data.get("base_url")
-                project_key = data.get("project_key")
-                api_key = data.get("api_key")
+                product = attrs.get("product")
+                name = attrs.get("name")
+                parser = attrs.get("parser")
+                base_url = attrs.get("base_url")
+                project_key = attrs.get("project_key")
+                api_key = attrs.get("api_key")
 
             api_configuration = Api_Configuration(
                 product=product,
@@ -103,7 +103,7 @@ class ApiConfigurationSerializer(ModelSerializer):
             if not valid:
                 raise ValidationError("\n".join(errors))
 
-        data_product = data.get("product")
+        data_product = attrs.get("product")
         if (
             self.instance is not None
             and data_product
@@ -111,4 +111,4 @@ class ApiConfigurationSerializer(ModelSerializer):
         ):
             raise ValidationError("Product cannot be changed")
 
-        return data
+        return attrs

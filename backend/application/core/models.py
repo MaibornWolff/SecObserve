@@ -281,7 +281,7 @@ class Observation(Model):
         return f"{self.product} / {self.title}"
 
     def __init__(self, *args, **kwargs):
-        super(Observation, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.unsaved_references = []
         self.unsaved_evidences = []

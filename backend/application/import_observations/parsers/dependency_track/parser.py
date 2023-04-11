@@ -21,6 +21,9 @@ STATUS_MAPPING = {
 
 
 class DependencyTrack(BaseParser, BaseAPIParser):
+    def __init__(self):
+        self.api_configuration: Optional[Api_Configuration] = None
+
     @classmethod
     def get_name(cls) -> str:
         return "Dependency Track"
@@ -133,6 +136,9 @@ class DependencyTrack(BaseParser, BaseAPIParser):
         return None
 
     def get_about(self) -> tuple[str, Optional[str]]:
+        if not self.api_configuration:
+            return "Dependency-Track", None
+
         dependency_track_base_url = self.api_configuration.base_url
         if not dependency_track_base_url.endswith("/"):
             dependency_track_base_url += "/"

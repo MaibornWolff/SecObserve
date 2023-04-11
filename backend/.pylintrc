@@ -1,13 +1,17 @@
 [MASTER]
 load-plugins=pylint_django, pylint_celery
 django-settings-module=config.settings.base
+ignore-paths=.*/migrations
+
 [FORMAT]
 max-line-length=120
 
 [MESSAGES CONTROL]
-disable=missing-docstring,invalid-name
+disable=abstract-method,broad-except,too-few-public-methods,missing-docstring,invalid-name
 
 [DESIGN]
+max-args=6
+max-returns=7
 max-parents=13
 
 [TYPECHECK]

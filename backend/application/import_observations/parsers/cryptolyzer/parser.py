@@ -110,7 +110,7 @@ RECOMMENDED_SIGNATURE_ALGORITHMS = [
     "ecdsa_brainpoolP512r1tls13_sha512",
 ]
 
-BSI_LINK = "https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TG02102/BSI-TR-02102-2.pdf?__blob=publicationFile&v=5"  # noqa: E501
+BSI_LINK = "https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TG02102/BSI-TR-02102-2.pdf?__blob=publicationFile&v=5"  # noqa: E501 pylint: disable=line-too-long
 
 
 class CryptoLyzerParser(BaseParser, BaseFileParser):
@@ -120,7 +120,7 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
 
     @classmethod
     def get_type(cls) -> str:
-        return Parser.TYPE_DAST
+        return Parser.TYPE_DAST  # pylint: disable=duplicate-code
 
     def check_format(self, file: File) -> tuple[bool, list[str], dict]:
         try:
@@ -177,25 +177,26 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
             "**Weak protocols according to BSI recommendations:**\n* "
             + "\n* ".join(versions)
         )
-        if versions:
-            observation = Observation(
-                title="Weak protocols detected",
-                description=description,
-                parser_severity=Observation.SEVERITY_HIGH,
-                origin_endpoint_url=endpoint_url,
-                scanner=self.get_name(),
-            )
 
-            observation.unsaved_references = [BSI_LINK]
-
-            evidence = []
-            evidence.append("Result")
-            evidence.append(dumps(data.get("versions")))
-            observation.unsaved_evidences.append(evidence)
-
-            return observation
-        else:
+        if not versions:
             return None
+
+        observation = Observation(
+            title="Weak protocols detected",
+            description=description,
+            parser_severity=Observation.SEVERITY_HIGH,
+            origin_endpoint_url=endpoint_url,
+            scanner=self.get_name(),
+        )
+
+        observation.unsaved_references = [BSI_LINK]
+
+        evidence = []
+        evidence.append("Result")
+        evidence.append(dumps(data.get("versions")))
+        observation.unsaved_evidences.append(evidence)
+
+        return observation
 
     def check_ciphers(
         self,
@@ -250,30 +251,30 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
             if inner_curve.lower() not in RECOMMENDED_ELLIPTIC_CURVES:
                 unrecommended_curves.append(inner_curve)
 
-        if unrecommended_curves:
-            endpoint_url = self.get_endpoint_url(curves.get("target", {}))
-            description = (
-                "**Unrecommended elliptic curves according to BSI recommendations:**\n* "
-                + "\n* ".join(unrecommended_curves)
-            )
-            observation = Observation(
-                title="Unrecommended elliptic curves",
-                description=description,
-                parser_severity=Observation.SEVERITY_MEDIUM,
-                origin_endpoint_url=endpoint_url,
-                scanner=self.get_name(),
-            )
-
-            evidence = []
-            evidence.append("Result")
-            evidence.append(dumps(curves))
-            observation.unsaved_evidences.append(evidence)
-
-            observation.unsaved_references = [BSI_LINK]
-
-            return observation
-        else:
+        if not unrecommended_curves:
             return None
+
+        endpoint_url = self.get_endpoint_url(curves.get("target", {}))
+        description = (
+            "**Unrecommended elliptic curves according to BSI recommendations:**\n* "
+            + "\n* ".join(unrecommended_curves)
+        )
+        observation = Observation(
+            title="Unrecommended elliptic curves",
+            description=description,
+            parser_severity=Observation.SEVERITY_MEDIUM,
+            origin_endpoint_url=endpoint_url,
+            scanner=self.get_name(),
+        )
+
+        evidence = []
+        evidence.append("Result")
+        evidence.append(dumps(curves))
+        observation.unsaved_evidences.append(evidence)
+
+        observation.unsaved_references = [BSI_LINK]
+
+        return observation
 
     def check_signature_algorithms(
         self,
@@ -289,30 +290,30 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
             ):
                 unrecommended_signature_algorithms.append(inner_signature_algorithm)
 
-        if unrecommended_signature_algorithms:
-            endpoint_url = self.get_endpoint_url(signature_algorithms.get("target", {}))
-            description = (
-                "**Unrecommended signature algorithms according to BSI recommendations:**\n* "
-                + "\n* ".join(unrecommended_signature_algorithms)
-            )
-            observation = Observation(
-                title="Unrecommended signature algorithms",
-                description=description,
-                parser_severity=Observation.SEVERITY_MEDIUM,
-                origin_endpoint_url=endpoint_url,
-                scanner=self.get_name(),
-            )
-
-            evidence = []
-            evidence.append("Result")
-            evidence.append(dumps(signature_algorithms))
-            observation.unsaved_evidences.append(evidence)
-
-            observation.unsaved_references = [BSI_LINK]
-
-            return observation
-        else:
+        if not unrecommended_signature_algorithms:
             return None
+
+        endpoint_url = self.get_endpoint_url(signature_algorithms.get("target", {}))
+        description = (
+            "**Unrecommended signature algorithms according to BSI recommendations:**\n* "
+            + "\n* ".join(unrecommended_signature_algorithms)
+        )
+        observation = Observation(
+            title="Unrecommended signature algorithms",
+            description=description,
+            parser_severity=Observation.SEVERITY_MEDIUM,
+            origin_endpoint_url=endpoint_url,
+            scanner=self.get_name(),
+        )
+
+        evidence = []
+        evidence.append("Result")
+        evidence.append(dumps(signature_algorithms))
+        observation.unsaved_evidences.append(evidence)
+
+        observation.unsaved_references = [BSI_LINK]
+
+        return observation
 
     def get_endpoint_url(self, target: dict) -> str:
         hostname = target.get("address")

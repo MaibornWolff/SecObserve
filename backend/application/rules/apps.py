@@ -8,6 +8,6 @@ class RulesConfig(AppConfig):
 
     def ready(self):
         try:
-            import application.rules.signals  # noqa F401
+            import application.rules.signals  # noqa F401 pylint: disable=import-outside-toplevel,unused-import
         except ImportError:
             pass

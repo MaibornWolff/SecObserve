@@ -26,7 +26,7 @@ class User(AbstractUser):
         else:
             self.full_name = self.username
 
-        super(User, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class JWT_Secret(Model):
