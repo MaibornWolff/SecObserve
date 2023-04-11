@@ -8,7 +8,10 @@ from application.core.services.security_gate import check_security_gate
 
 
 @receiver(post_save, sender=Product)
-def product_post_save(sender, instance: Product, created: bool, **kwargs) -> None:
+def product_post_save(
+    sender, instance: Product, created: bool, **kwargs
+) -> None:  # pylint: disable=unused-argument
+    # sender is needed according to Django documentation
     if not created:
         check_security_gate(instance)
     else:

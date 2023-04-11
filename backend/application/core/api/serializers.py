@@ -71,31 +71,31 @@ class ProductSerializer(ModelSerializer):
         product_member = get_product_member(obj)
         if product_member:
             return get_permissions_for_role(product_member.role)
-        else:
-            return []
 
-    def validate(self, data: dict):
-        if data.get("security_gate_active"):
-            if not data.get("security_gate_threshold_critical"):
-                data["security_gate_threshold_critical"] = 0
-            if not data.get("security_gate_threshold_high"):
-                data["security_gate_threshold_high"] = 0
-            if not data.get("security_gate_threshold_medium"):
-                data["security_gate_threshold_medium"] = 0
-            if not data.get("security_gate_threshold_low"):
-                data["security_gate_threshold_low"] = 0
-            if not data.get("security_gate_threshold_none"):
-                data["security_gate_threshold_none"] = 0
-            if not data.get("security_gate_threshold_unkown"):
-                data["security_gate_threshold_unkown"] = 0
+        return []
+
+    def validate(self, attrs: dict):
+        if attrs.get("security_gate_active"):
+            if not attrs.get("security_gate_threshold_critical"):
+                attrs["security_gate_threshold_critical"] = 0
+            if not attrs.get("security_gate_threshold_high"):
+                attrs["security_gate_threshold_high"] = 0
+            if not attrs.get("security_gate_threshold_medium"):
+                attrs["security_gate_threshold_medium"] = 0
+            if not attrs.get("security_gate_threshold_low"):
+                attrs["security_gate_threshold_low"] = 0
+            if not attrs.get("security_gate_threshold_none"):
+                attrs["security_gate_threshold_none"] = 0
+            if not attrs.get("security_gate_threshold_unkown"):
+                attrs["security_gate_threshold_unkown"] = 0
         else:
-            data["security_gate_threshold_critical"] = None
-            data["security_gate_threshold_high"] = None
-            data["security_gate_threshold_medium"] = None
-            data["security_gate_threshold_low"] = None
-            data["security_gate_threshold_none"] = None
-            data["security_gate_threshold_unkown"] = None
-        return super().validate(data)
+            attrs["security_gate_threshold_critical"] = None
+            attrs["security_gate_threshold_high"] = None
+            attrs["security_gate_threshold_medium"] = None
+            attrs["security_gate_threshold_low"] = None
+            attrs["security_gate_threshold_none"] = None
+            attrs["security_gate_threshold_unkown"] = None
+        return super().validate(attrs)
 
 
 class NestedProductSerializer(ModelSerializer):
@@ -113,8 +113,8 @@ class NestedProductSerializer(ModelSerializer):
         product_member = get_product_member(product)
         if product_member:
             return get_permissions_for_role(product_member.role)
-        else:
-            return []
+
+        return []
 
 
 class NestedProductListSerializer(ModelSerializer):
@@ -130,10 +130,10 @@ class ProductMemberSerializer(ModelSerializer):
         model = Product_Member
         fields = "__all__"
 
-    def validate(self, data: dict):
+    def validate(self, attrs: dict):
         self.instance: Product_Member
-        data_product: Optional[Product] = data.get("product")
-        data_user = data.get("user")
+        data_product: Optional[Product] = attrs.get("product")
+        data_user = attrs.get("user")
 
         if self.instance is not None and (
             (data_product and data_product != self.instance.product)
@@ -154,7 +154,7 @@ class ProductMemberSerializer(ModelSerializer):
             own_product_member = get_product_member(data_product, get_current_user())
 
         current_user = get_current_user()
-        if data.get("role") == Roles.Owner and (
+        if attrs.get("role") == Roles.Owner and (
             not current_user
             or not own_product_member
             or (
@@ -163,7 +163,7 @@ class ProductMemberSerializer(ModelSerializer):
         ):
             raise PermissionDenied("You are not permitted to add a member as Owner")
 
-        return data
+        return attrs
 
 
 class ParserSerializer(ModelSerializer):
@@ -241,21 +241,21 @@ class ObservationListSerializer(ModelSerializer):
         exclude = ["numerical_severity"]
 
     def get_scanner_name(self, observation: Observation) -> str:
-        if observation.scanner:
-            scanner_parts = observation.scanner.split("/")
-            return scanner_parts[0].strip()
-        else:
+        if not observation.scanner:
             return ""
+
+        scanner_parts = observation.scanner.split("/")
+        return scanner_parts[0].strip()
 
 
 class ObservationUpdateSerializer(ModelSerializer):
-    def validate(self, data: dict):
+    def validate(self, attrs: dict):
         self.instance: Observation
         if self.instance and self.instance.parser.type != Parser.TYPE_MANUAL:
             raise ValidationError("Only manual observations can be updated")
 
-        data["import_last_seen"] = make_aware(datetime.now())
-        return super().validate(data)
+        attrs["import_last_seen"] = make_aware(datetime.now())
+        return super().validate(attrs)
 
     def update(self, instance: Observation, validated_data: dict):
         actual_severity = instance.current_severity
@@ -311,12 +311,12 @@ class ObservationUpdateSerializer(ModelSerializer):
 
 
 class ObservationCreateSerializer(ModelSerializer):
-    def validate(self, data):
+    def validate(self, attrs):
         manual_parser = Parser.objects.get(type=Parser.TYPE_MANUAL)
-        data["parser"] = manual_parser
-        data["scanner"] = Parser.TYPE_MANUAL
-        data["import_last_seen"] = make_aware(datetime.now())
-        return super().validate(data)
+        attrs["parser"] = manual_parser
+        attrs["scanner"] = Parser.TYPE_MANUAL
+        attrs["import_last_seen"] = make_aware(datetime.now())
+        return super().validate(attrs)
 
     def create(self, validated_data):
         observation: Observation = super().create(validated_data)

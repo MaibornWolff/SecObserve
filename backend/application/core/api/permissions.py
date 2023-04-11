@@ -13,8 +13,8 @@ class UserHasProductPermission(BasePermission):
     def has_permission(self, request, view):
         if request.method == "POST":
             return not request.user.is_external
-        else:
-            return True
+
+        return True
 
     def has_object_permission(self, request, view, obj):
         return check_object_permission(

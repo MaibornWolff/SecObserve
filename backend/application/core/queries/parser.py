@@ -3,9 +3,9 @@ from typing import Optional
 from application.core.models import Parser
 
 
-def get_parser_by_id(id: int) -> Optional[Parser]:
+def get_parser_by_id(parser_id: int) -> Optional[Parser]:
     try:
-        return Parser.objects.get(id=id)
+        return Parser.objects.get(id=parser_id)
     except Parser.DoesNotExist:
         return None
 

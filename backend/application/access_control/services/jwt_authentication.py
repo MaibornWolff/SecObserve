@@ -37,9 +37,11 @@ class JWTAuthentication(BaseAuthentication):
 
         if not auth:
             return None
-        elif len(auth) == 1:
+
+        if len(auth) == 1:
             raise AuthenticationFailed("Invalid token header: No credentials provided.")
-        elif len(auth) > 2:
+
+        if len(auth) > 2:
             raise AuthenticationFailed(
                 "Invalid token header: Token string should not contain spaces."
             )
@@ -52,13 +54,13 @@ class JWTAuthentication(BaseAuthentication):
             return None
 
         user = self._validate_jwt(auth_token)
-        if user:
-            if user.is_active:
-                return (user, None)
-            else:
-                raise AuthenticationFailed("User is deactivated.")
-        else:
+        if not user:
             raise AuthenticationFailed("Invalid token.")
+
+        if not user.is_active:
+            raise AuthenticationFailed("User is deactivated.")
+
+        return (user, None)
 
     def authenticate_header(self, request):
         return JWT_PREFIX
@@ -71,4 +73,4 @@ class JWTAuthentication(BaseAuthentication):
                 raise AuthenticationFailed("No username in JWT")
             return get_user_by_username(username)
         except jwt.PyJWTError as e:
-            raise AuthenticationFailed(str(e))
+            raise AuthenticationFailed(str(e)) from e

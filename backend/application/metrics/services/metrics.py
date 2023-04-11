@@ -73,9 +73,10 @@ def get_codecharta_metrics(product: Product) -> list[dict]:
             file_severities_value[
                 f"Vulnerabilities_{observation.current_severity}".lower()
             ] += 1
-            if (
-                observation.current_severity == Observation.SEVERITY_CRITICAL
-                or observation.current_severity == Observation.SEVERITY_HIGH
+
+            if observation.current_severity in (
+                Observation.SEVERITY_CRITICAL,
+                Observation.SEVERITY_HIGH,
             ):
                 file_severities_value[
                     f"Vulnerabilities_{Observation.SEVERITY_HIGH}_and_above".lower()
@@ -86,6 +87,7 @@ def get_codecharta_metrics(product: Product) -> list[dict]:
                 file_severities_value[
                     f"Vulnerabilities_{Observation.SEVERITY_LOW}_and_above".lower()
                 ] += 1
+
             if observation.current_severity == Observation.SEVERITY_MEDIUM:
                 file_severities_value[
                     f"Vulnerabilities_{Observation.SEVERITY_MEDIUM}_and_above".lower()
@@ -93,6 +95,7 @@ def get_codecharta_metrics(product: Product) -> list[dict]:
                 file_severities_value[
                     f"Vulnerabilities_{Observation.SEVERITY_LOW}_and_above".lower()
                 ] += 1
+
             if observation.current_severity == Observation.SEVERITY_LOW:
                 file_severities_value[
                     f"Vulnerabilities_{Observation.SEVERITY_LOW}_and_above".lower()

@@ -42,9 +42,11 @@ class APITokenAuthentication(BaseAuthentication):
 
         if not authentication_header:
             return None
-        elif len(authentication_header) == 1:
+
+        if len(authentication_header) == 1:
             raise AuthenticationFailed("Invalid token header: No credentials provided.")
-        elif len(authentication_header) > 2:
+
+        if len(authentication_header) > 2:
             raise AuthenticationFailed(
                 "Invalid token header: Token string should not contain spaces."
             )
@@ -57,13 +59,13 @@ class APITokenAuthentication(BaseAuthentication):
             return None
 
         user = self._validate_api_token(auth_token)
-        if user:
-            if user.is_active:
-                return (user, None)
-            else:
-                raise AuthenticationFailed("User is deactivated.")
-        else:
+        if not user:
             raise AuthenticationFailed("Invalid API token.")
+
+        if not user.is_active:
+            raise AuthenticationFailed("User is deactivated.")
+
+        return (user, None)
 
     def authenticate_header(self, request):
         return API_TOKEN_PREFIX
@@ -75,7 +77,7 @@ class APITokenAuthentication(BaseAuthentication):
             try:
                 ph.verify(api_token_data.api_token_hash, api_token)
                 return api_token_data.user
-            except Exception:  # nosec try_except_pass
+            except Exception:
                 # all token need to be checked if a valid one can be found
                 pass
         return None

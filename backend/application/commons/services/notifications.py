@@ -6,12 +6,13 @@ import requests
 from constance import config
 from django.template.loader import render_to_string
 
+from application.commons.services.functions import get_classname
 from application.commons.services.log_message import format_log_message
 from application.core.models import Product
 
 logger = logging.getLogger("secobserve.commons")
 
-LAST_EXCEPTIONS: dict[str, datetime] = dict()
+LAST_EXCEPTIONS: dict[str, datetime] = {}
 
 
 def send_product_security_gate_notification(product: Product) -> None:
@@ -37,7 +38,7 @@ def send_exception_notification(exception: Exception) -> None:
         _send_notification(
             config.EXCEPTION_MS_TEAMS_WEBHOOK,
             "msteams_exception.tpl",
-            exception_class=_get_classname(exception),
+            exception_class=get_classname(exception),
             exception_message=str(exception),
             date_time=datetime.now(),
         )
@@ -66,11 +67,11 @@ def _send_notification(webhook: str, template: str, **kwargs) -> None:
 def _create_notification_message(template: str, **kwargs) -> Optional[str]:
     try:
         return render_to_string(template, kwargs)
-    except Exception as exception:
+    except Exception as e:
         logger.error(
             format_log_message(
                 message=f"Error while rendering template {template}",
-                exception=exception,
+                exception=e,
             )
         )
         return None
@@ -83,17 +84,8 @@ def _get_base_url_frontend() -> str:
     return base_url_frontend
 
 
-def _get_classname(obj):
-    cls = type(obj)
-    module = cls.__module__
-    name = cls.__qualname__
-    if module is not None and module != "__builtin__":
-        name = module + "." + name
-    return name
-
-
 def _ratelimit_exception(exception: Exception) -> bool:
-    key = _get_classname(exception) + "/" + str(exception)
+    key = get_classname(exception) + "/" + str(exception)
     now = datetime.now()
     if key in LAST_EXCEPTIONS:
         last_datetime = LAST_EXCEPTIONS[key]
@@ -101,8 +93,8 @@ def _ratelimit_exception(exception: Exception) -> bool:
         if difference.seconds >= config.EXCEPTION_RATELIMIT:
             LAST_EXCEPTIONS[key] = now
             return True
-        else:
-            return False
-    else:
-        LAST_EXCEPTIONS[key] = now
-        return True
+
+        return False
+
+    LAST_EXCEPTIONS[key] = now
+    return True

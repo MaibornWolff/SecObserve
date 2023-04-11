@@ -11,7 +11,7 @@ from application.metrics.services.metrics import get_severity_counts, get_status
 
 class SeverityCountsView(APIView):
     @action(detail=False, methods=["get"])
-    def get(self, request, format=None):
+    def get(self, request):
         product_id = request.query_params.get("product_id")
         if product_id:
             product = get_product_by_id(product_id)
@@ -51,7 +51,7 @@ class SeverityCountsView(APIView):
 
 class StatusCountsView(APIView):
     @action(detail=False, methods=["get"])
-    def get(self, request, format=None):
+    def get(self, request):
         product_id = request.query_params.get("product_id")
         if product_id:
             product = get_product_by_id(product_id)

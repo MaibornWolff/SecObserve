@@ -16,8 +16,8 @@ def get_current_user() -> Optional[User]:
     request = get_current_request()
     if request:
         return request.user  # type: ignore[return-value]
-    else:
-        return None
+
+    return None
 
 
 class GlobalRequestMiddleware:

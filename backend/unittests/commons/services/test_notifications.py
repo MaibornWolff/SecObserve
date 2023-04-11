@@ -4,11 +4,11 @@ from unittest.mock import ANY, patch
 from constance.test import override_config
 from requests import Response
 
+from application.commons.services.functions import get_classname
 from application.commons.services.notifications import (
     LAST_EXCEPTIONS,
     _create_notification_message,
     _get_base_url_frontend,
-    _get_classname,
     _ratelimit_exception,
     _send_notification,
     send_exception_notification,
@@ -229,7 +229,7 @@ class TestNotifications(BaseTestCase):
         exception = Exception("test_exception")
         message = _create_notification_message(
             "msteams_exception.tpl",
-            exception_class=_get_classname(exception),
+            exception_class=get_classname(exception),
             exception_message=str(exception),
             date_time=datetime(2022, 12, 31, 23, 59, 59),
         )

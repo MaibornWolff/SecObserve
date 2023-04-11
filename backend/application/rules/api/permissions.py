@@ -12,8 +12,8 @@ class UserHasGeneralRulePermission(BasePermission):
     def has_permission(self, request, view):
         if request.method == "GET":
             return True
-        else:
-            return request.user and request.user.is_superuser
+
+        return request.user and request.user.is_superuser
 
 
 class UserHasProductRulePermission(BasePermission):

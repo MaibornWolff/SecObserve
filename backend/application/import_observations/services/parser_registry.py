@@ -25,7 +25,7 @@ def register_parser(parser_class: Type[BaseParser]) -> None:
         return
 
     name = parser_class.get_name()
-    type = parser_class.get_type()
+    my_type = parser_class.get_type()
 
     SCANNERS[name] = parser_class
 
@@ -43,14 +43,14 @@ def register_parser(parser_class: Type[BaseParser]) -> None:
         if parser.name != name:
             parser.name = name
             parser.save()
-        if parser.type != type:
-            parser.type = type
+        if parser.type != my_type:
+            parser.type = my_type
             parser.save()
         if parser.source != source:
             parser.source = source
             parser.save()
     else:
-        Parser(name=name, type=type, source=source).save()
+        Parser(name=name, type=my_type, source=source).save()
 
 
 def create_manual_parser() -> None:

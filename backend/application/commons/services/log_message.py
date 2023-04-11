@@ -2,20 +2,22 @@ from django.contrib.auth.models import AnonymousUser
 from rest_framework.response import Response
 
 from application.access_control.models import User
+from application.commons.services.functions import get_classname
 from application.commons.services.global_request import (
     get_current_request,
     get_current_user,
 )
 
 
-def format_log_message(
+def format_log_message(  # pylint: disable=too-many-branches
+    # There are quite a lot of branches, but at least they are not nested too much
     message: str = None,
     data: dict = None,
     user: User = None,
     response: Response = None,
     exception: Exception = None,
 ) -> str:
-    message_dict = dict()
+    message_dict = {}
     if message:
         message_dict["message"] = message
     elif exception:
@@ -48,7 +50,7 @@ def format_log_message(
     if exception:
         if message:
             message_dict["exception_message"] = str(exception)
-        message_dict["exception_class"] = __get_classname(exception)
+        message_dict["exception_class"] = get_classname(exception)
 
     return str(message_dict)
 
@@ -60,12 +62,3 @@ def __get_client_ip(request):
     else:
         ip = request.META.get("REMOTE_ADDR")
     return ip
-
-
-def __get_classname(obj):
-    cls = type(obj)
-    module = cls.__module__
-    name = cls.__qualname__
-    if module is not None and module != "__builtin__":
-        name = module + "." + name
-    return name

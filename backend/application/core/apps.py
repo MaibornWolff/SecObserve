@@ -7,8 +7,8 @@ class CoreConfig(AppConfig):
 
     def ready(self):
         try:
-            import application.core.signals  # noqa F401
+            import application.core.signals  # noqa F401 pylint: disable=import-outside-toplevel, unused-import
         except ImportError:
             pass
 
-        import config.schema  # noqa: F401
+        import config.schema  # noqa: F401 pylint: disable=import-outside-toplevel, unused-import

@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from json import dumps, load
 from typing import Optional
 
@@ -18,28 +19,17 @@ SEVERITIES = {
 }
 
 
+@dataclass
 class Rule:
-    def __init__(
-        self,
-        default_level=None,
-        short_description=None,
-        full_description=None,
-        help_uri=None,
-        help=None,
-        id=None,
-        name=None,
-        properties=None,
-        rule_dict=None,
-    ):
-        self.default_level = default_level
-        self.short_description = short_description
-        self.full_description = full_description
-        self.help_uri = help_uri
-        self.help = help
-        self.id = id
-        self.name = name
-        self.properties = properties
-        self.rule_dict = rule_dict
+    default_level: Optional[str] = None
+    short_description: Optional[str] = None
+    full_description: Optional[str] = None
+    help_uri: Optional[str] = None
+    help: Optional[str] = None
+    id: Optional[str] = None
+    name: Optional[str] = None
+    properties: Optional[str] = None
+    rule_dict: Optional[str] = None
 
 
 class SARIFParser(BaseParser, BaseFileParser):
@@ -286,15 +276,15 @@ class SARIFParser(BaseParser, BaseFileParser):
         sarif_rules = run.get("tool", {}).get("driver", {}).get("rules", [])
         for sarif_rule in sarif_rules:
             if sarif_rule.get("help", {}).get("text"):
-                help = sarif_rule.get("help", {}).get("text")
+                rule_help = sarif_rule.get("help", {}).get("text")
             else:
-                help = sarif_rule.get("help", {}).get("markdown")
+                rule_help = sarif_rule.get("help", {}).get("markdown")
             rule = Rule(
                 default_level=sarif_rule.get("defaultConfiguration", {}).get("level"),
                 short_description=sarif_rule.get("shortDescription", {}).get("text"),
                 full_description=sarif_rule.get("fullDescription", {}).get("text"),
                 help_uri=sarif_rule.get("helpUri"),
-                help=help,
+                help=rule_help,
                 id=sarif_rule.get("id"),
                 name=sarif_rule.get("name"),
                 properties=sarif_rule.get("properties", {}),
@@ -318,8 +308,8 @@ class SARIFParser(BaseParser, BaseFileParser):
         bandit_severity = result.get("properties", {}).get("issue_severity")
         if sarif_scanner.lower().startswith("bandit") and bandit_severity:
             return bandit_severity.title()
-        else:
-            return ""
+
+        return ""
 
     def get_dependency_check_cvss3_score(self, sarif_scanner: str, sarif_rule: Rule):
         # Dependency Check SARIF has no proper level, but stores the severity in a property
@@ -330,6 +320,8 @@ class SARIFParser(BaseParser, BaseFileParser):
         ):
             return sarif_rule.properties.get("cvssv3_baseScore")
 
+        return None
+
     def get_dependency_check_vulnerability_id(
         self, sarif_scanner: str, title: str
     ) -> str:
@@ -338,8 +330,8 @@ class SARIFParser(BaseParser, BaseFileParser):
             title.startswith("CVE-") or title.startswith("GHSA-")
         ):
             return title
-        else:
-            return ""
+
+        return ""
 
     def get_dependency_check_origin_component_purl(
         self, sarif_scanner: str, location: dict
@@ -349,6 +341,8 @@ class SARIFParser(BaseParser, BaseFileParser):
             fully_qualified_name = logicalLocations[0].get("fullyQualifiedName")
             if fully_qualified_name and fully_qualified_name.startswith("pkg:"):
                 return fully_qualified_name
+
+        return ""
 
     def result_is_suppressed(self, result: dict) -> bool:
         suppressions = result.get("suppressions", {})

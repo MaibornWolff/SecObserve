@@ -13,9 +13,9 @@ from application.core.models import (
 )
 
 
-def get_observation_by_id(id: int) -> Optional[Observation]:
+def get_observation_by_id(observation_id: int) -> Optional[Observation]:
     try:
-        return Observation.objects.get(id=id)
+        return Observation.objects.get(id=observation_id)
     except Observation.DoesNotExist:
         return None
 

@@ -8,9 +8,9 @@ from application.commons.services.global_request import get_current_user
 from application.core.models import Product, Product_Member
 
 
-def get_product_by_id(id: int) -> Optional[Product]:
+def get_product_by_id(product_id: int) -> Optional[Product]:
     try:
-        return Product.objects.get(id=id)
+        return Product.objects.get(id=product_id)
     except Product.DoesNotExist:
         return None
 

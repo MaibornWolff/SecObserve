@@ -8,9 +8,11 @@ from application.core.models import Product, Product_Member
 from application.import_observations.models import Api_Configuration
 
 
-def get_api_configuration_by_id(id: int) -> Optional[Api_Configuration]:
+def get_api_configuration_by_id(
+    api_configuration_id: int,
+) -> Optional[Api_Configuration]:
     try:
-        return Api_Configuration.objects.get(id=id)
+        return Api_Configuration.objects.get(id=api_configuration_id)
     except Api_Configuration.DoesNotExist:
         return None
 

@@ -113,7 +113,7 @@ class ObservationFilter(FilterSet):
         ),
     )
 
-    class Meta:
+    class Meta:  # pylint: disable=duplicate-code
         model = Observation
         fields = [
             "product",
@@ -124,7 +124,9 @@ class ObservationFilter(FilterSet):
             "scanner",
         ]
 
-    def get_age(self, queryset, field_name, value):
+    def get_age(self, queryset, field_name, value):  # pylint: disable=unused-argument
+        # field_name is used as a positional argument
+
         if value == AGE_DAY:
             days = 0
         elif value == AGE_WEEK:
@@ -138,9 +140,9 @@ class ObservationFilter(FilterSet):
         else:
             days = None
 
-        if days is not None:
-            today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
-            time_threshold = today - timedelta(days=int(days))
-            return queryset.filter(last_observation_log__gte=time_threshold)
-        else:
+        if days is None:
             return queryset
+
+        today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        time_threshold = today - timedelta(days=int(days))
+        return queryset.filter(last_observation_log__gte=time_threshold)

@@ -47,7 +47,7 @@ class UserAdmin(auth_admin.UserAdmin):
 
 @admin.register(JWT_Secret)
 class JWTSecretAdmin(admin.ModelAdmin):
-    def has_add_permission(self, request, obj=None):
+    def has_add_permission(self, request):
         return False
 
 
@@ -55,5 +55,5 @@ class JWTSecretAdmin(admin.ModelAdmin):
 class API_TokenAdmin(admin.ModelAdmin):
     list_display = ["user"]
 
-    def has_add_permission(self, request, obj=None):
+    def has_add_permission(self, request):
         return False

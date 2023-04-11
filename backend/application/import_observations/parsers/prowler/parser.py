@@ -24,12 +24,12 @@ class ProwlerParser(BaseParser, BaseFileParser):
         except Exception:
             return False, ["File is not valid JSON"], {}
 
-        if not type(data) is list:
+        if not isinstance(data, list):
             return False, ["File is not a Prowler format, data is not a list"], {}
 
         if len(data) >= 1:
             first_element = data[0]
-            if type(first_element) is not dict:
+            if not isinstance(first_element, dict):
                 return (
                     False,
                     ["File is not a Prowler format, element is not a dictionary"],

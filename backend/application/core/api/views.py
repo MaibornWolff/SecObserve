@@ -225,12 +225,14 @@ class ObservationViewSet(ModelViewSet):
     def get_serializer_class(self):
         if self.action == "list":
             return ObservationListSerializer
-        elif self.action == "create":
+
+        if self.action == "create":
             return ObservationCreateSerializer
-        elif self.action in ["update", "partial_update"]:
+
+        if self.action in ["update", "partial_update"]:
             return ObservationUpdateSerializer
-        else:
-            return super().get_serializer_class()
+
+        return super().get_serializer_class()
 
     def get_queryset(self):
         return (
