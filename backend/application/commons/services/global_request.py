@@ -9,7 +9,8 @@ _requests: dict[str, HttpRequest] = {}
 
 
 def get_current_request() -> Optional[HttpRequest]:
-    return _requests.get(current_thread().name)
+    return _requests.get(current_thread().name)  # nosec B113
+    #  This is not a HTTP request
 
 
 def get_current_user() -> Optional[User]:

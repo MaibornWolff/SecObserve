@@ -50,8 +50,9 @@ django-auth-adfs==1.11.5  # https://github.com/snok/django-auth-adfs
 # ------------------------------------------------------------------------------
 mysqlclient==2.1.1
 
-# Excel export
+# Excel and CSV
 # ------------------------------------------------------------------------------
+defusedcsv==2.0.0
 openpyxl==3.1.2
 
 # Package URL
