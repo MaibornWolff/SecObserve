@@ -52,7 +52,7 @@ def file_upload_observations(
     parser_instance = instanciate_parser(parser)
 
     if not isinstance(parser_instance, BaseFileParser):
-        raise Exception(f"{parser.name} isn't a file parser")
+        raise ParserError(f"{parser.name} isn't a file parser")
 
     format_valid, errors, data = parser_instance.check_format(file)
     if not format_valid:
@@ -85,7 +85,7 @@ def api_import_observations(
     parser_instance = instanciate_parser(api_configuration.parser)
 
     if not isinstance(parser_instance, BaseAPIParser):
-        raise Exception(f"{api_configuration.parser.name} isn't an API parser")
+        raise ParserError(f"{api_configuration.parser.name} isn't an API parser")
 
     format_valid, errors, data = parser_instance.check_connection(api_configuration)
     if not format_valid:
@@ -125,7 +125,7 @@ def api_check_connection(
 def instanciate_parser(parser: Parser) -> BaseParser:
     parser_class = get_parser_class(parser.name)
     if not parser_class:
-        raise Exception(f"Parser {parser.name} not found in parser registry")
+        raise ParserError(f"Parser {parser.name} not found in parser registry")
     parser_instance: BaseParser = parser_class()
     return parser_instance
 
@@ -344,3 +344,8 @@ def resolve_unimported_observations(observations_before: dict[str, Observation])
             )
 
     return observations_resolved
+
+
+class ParserError(Exception):
+    def __init__(self, message):
+        self.message = message
