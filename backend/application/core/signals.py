@@ -8,9 +8,9 @@ from application.core.services.security_gate import check_security_gate
 
 
 @receiver(post_save, sender=Product)
-def product_post_save(
+def product_post_save(  # pylint: disable=unused-argument
     sender, instance: Product, created: bool, **kwargs
-) -> None:  # pylint: disable=unused-argument
+) -> None:
     # sender is needed according to Django documentation
     if not created:
         check_security_gate(instance)
