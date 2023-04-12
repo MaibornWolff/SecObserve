@@ -14,9 +14,7 @@ logger = logging.getLogger("secobserve.access_control")
 
 
 @receiver(user_logged_in)
-def signal_user_logged_in(
-    sender, user: User, **kwargs
-) -> None:
+def signal_user_logged_in(sender, user: User, **kwargs) -> None:
     # sender is needed according to Django documentation
     logger.info(format_log_message(message="User logged in", user=user))
 
