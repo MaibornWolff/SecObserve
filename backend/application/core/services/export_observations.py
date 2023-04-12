@@ -1,7 +1,7 @@
-import csv
 from datetime import datetime
 from typing import Any
 
+from defusedcsv import csv
 from django.http import HttpResponse
 from openpyxl import Workbook
 from openpyxl.styles import Font
@@ -63,10 +63,8 @@ def export_observations_excel(product: Product, status: str = None) -> Workbook:
 def export_observations_csv(
     response: HttpResponse, product: Product, status: str = None
 ) -> None:
-    writer = csv.writer(  # nosemgrep: python.lang.security.use-defusedcsv.use-defusedcsv
-        response
-    )
-    # Ony a closed user group can import observations, risk is accepted
+    writer = csv.writer(response)  # nosemgrep
+    # defusedcsv is actually used but not detected by Semgrep
 
     first_row = True
 
