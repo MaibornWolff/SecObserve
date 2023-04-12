@@ -9,7 +9,7 @@ from rest_framework.exceptions import AuthenticationFailed, ValidationError
 
 from application.access_control.models import API_Token, User
 
-API_TOKEN_PREFIX = "APIToken"
+API_TOKEN_PREFIX = "APIToken"  # nosec B105
 
 
 def create_api_token(user: User) -> str:
@@ -77,7 +77,7 @@ class APITokenAuthentication(BaseAuthentication):
             try:
                 ph.verify(api_token_data.api_token_hash, api_token)
                 return api_token_data.user
-            except Exception:
+            except Exception:  # nosec B110
                 # all token need to be checked if a valid one can be found
                 pass
         return None

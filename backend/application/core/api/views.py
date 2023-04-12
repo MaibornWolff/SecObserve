@@ -130,8 +130,8 @@ class ProductViewSet(ModelViewSet):
 
         with NamedTemporaryFile() as tmp:
             workbook.save(
-                tmp.name
-            )  # nosemgrep: python.lang.correctness.tempfile.flush.tempfile-without-flush
+                tmp.name  # nosemgrep: python.lang.correctness.tempfile.flush.tempfile-without-flush
+            )
             # export works fine without .flush()
             tmp.seek(0)
             stream = tmp.read()

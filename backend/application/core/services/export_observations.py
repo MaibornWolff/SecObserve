@@ -63,9 +63,9 @@ def export_observations_excel(product: Product, status: str = None) -> Workbook:
 def export_observations_csv(
     response: HttpResponse, product: Product, status: str = None
 ) -> None:
-    writer = csv.writer(
+    writer = csv.writer(  # nosemgrep: python.lang.security.use-defusedcsv.use-defusedcsv
         response
-    )  # nosemgrep: python.lang.security.use-defusedcsv.use-defusedcsv
+    )
     # Ony a closed user group can import observations, risk is accepted
 
     first_row = True
