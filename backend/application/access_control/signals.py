@@ -14,7 +14,7 @@ logger = logging.getLogger("secobserve.access_control")
 
 
 @receiver(user_logged_in)
-def signal_user_logged_in(  # pylint: disable=unused-argument
+def signal_user_logged_in(
     sender, user: User, **kwargs
 ) -> None:
     # sender is needed according to Django documentation
