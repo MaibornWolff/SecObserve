@@ -106,24 +106,41 @@ def normalize_observation_fields(
         observation.current_severity
     )
 
-    if observation.origin_endpoint_url:
-        parse_result = urlparse(observation.origin_endpoint_url)
-        observation.origin_endpoint_scheme = parse_result.scheme
-        observation.origin_endpoint_hostname = parse_result.hostname
-        observation.origin_endpoint_port = parse_result.port
-        observation.origin_endpoint_path = parse_result.path
-        observation.origin_endpoint_params = parse_result.params
-        observation.origin_endpoint_query = parse_result.query
-        observation.origin_endpoint_fragment = parse_result.fragment
-    else:
-        observation.origin_endpoint_scheme = ""
-        observation.origin_endpoint_hostname = ""
-        observation.origin_endpoint_port = None
-        observation.origin_endpoint_path = ""
-        observation.origin_endpoint_params = ""
-        observation.origin_endpoint_query = ""
-        observation.origin_endpoint_fragment = ""
+    normalize_origin_component(observation)
+    normalize_origin_docker(observation)
+    normalize_origin_endpoint(observation)
 
+    normalize_severity(observation)
+    normalize_status(observation)
+
+    if observation.description is None:
+        observation.description = ""
+    else:
+        # Newlines at the end of the description are removed
+        while observation.description.endswith("\n"):
+            observation.description = observation.description[:-1]
+
+    if observation.recommendation is None:
+        observation.recommendation = ""
+    if observation.scanner_observation_id is None:
+        observation.scanner_observation_id = ""
+    if observation.origin_service_name is None:
+        observation.origin_service_name = ""
+    if observation.origin_source_file is None:
+        observation.origin_source_file = ""
+    if observation.cvss3_vector is None:
+        observation.cvss3_vector = ""
+    if observation.scanner is None:
+        observation.scanner = ""
+    if observation.api_configuration_name is None:
+        observation.api_configuration_name = ""
+    if observation.upload_filename is None:
+        observation.upload_filename = ""
+    if observation.vulnerability_id is None:
+        observation.vulnerability_id = ""
+
+
+def normalize_origin_component(observation):
     if not observation.origin_component_name_version:
         if observation.origin_component_name and observation.origin_component_version:
             observation.origin_component_name_version = (
@@ -151,6 +168,19 @@ def normalize_observation_fields(
             )
             observation.origin_component_version = None
 
+    if observation.origin_component_name_version is None:
+        observation.origin_component_name_version = ""
+    if observation.origin_component_name is None:
+        observation.origin_component_name = ""
+    if observation.origin_component_version is None:
+        observation.origin_component_version = ""
+    if observation.origin_component_purl is None:
+        observation.origin_component_purl = ""
+    if observation.origin_component_cpe is None:
+        observation.origin_component_cpe = ""
+
+
+def normalize_origin_docker(observation):
     if not observation.origin_docker_image_name_tag:
         if observation.origin_docker_image_name and observation.origin_docker_image_tag:
             observation.origin_docker_image_name_tag = (
@@ -183,33 +213,33 @@ def normalize_observation_fields(
     else:
         observation.origin_docker_image_name_tag_short = ""
 
-    if observation.description is None:
-        observation.description = ""
-    else:
-        # Newlines at the end of the description are removed
-        while observation.description.endswith("\n"):
-            observation.description = observation.description[:-1]
-
-    if observation.recommendation is None:
-        observation.recommendation = ""
-    if observation.scanner_observation_id is None:
-        observation.scanner_observation_id = ""
-    if observation.origin_component_name_version is None:
-        observation.origin_component_name_version = ""
-    if observation.origin_component_name is None:
-        observation.origin_component_name = ""
-    if observation.origin_component_version is None:
-        observation.origin_component_version = ""
-    if observation.origin_component_purl is None:
-        observation.origin_component_purl = ""
-    if observation.origin_component_cpe is None:
-        observation.origin_component_cpe = ""
     if observation.origin_docker_image_name_tag is None:
         observation.origin_docker_image_name_tag = ""
     if observation.origin_docker_image_name is None:
         observation.origin_docker_image_name = ""
     if observation.origin_docker_image_tag is None:
         observation.origin_docker_image_tag = ""
+
+
+def normalize_origin_endpoint(observation):
+    if observation.origin_endpoint_url:
+        parse_result = urlparse(observation.origin_endpoint_url)
+        observation.origin_endpoint_scheme = parse_result.scheme
+        observation.origin_endpoint_hostname = parse_result.hostname
+        observation.origin_endpoint_port = parse_result.port
+        observation.origin_endpoint_path = parse_result.path
+        observation.origin_endpoint_params = parse_result.params
+        observation.origin_endpoint_query = parse_result.query
+        observation.origin_endpoint_fragment = parse_result.fragment
+    else:
+        observation.origin_endpoint_scheme = ""
+        observation.origin_endpoint_hostname = ""
+        observation.origin_endpoint_port = None
+        observation.origin_endpoint_path = ""
+        observation.origin_endpoint_params = ""
+        observation.origin_endpoint_query = ""
+        observation.origin_endpoint_fragment = ""
+
     if observation.origin_endpoint_url is None:
         observation.origin_endpoint_url = ""
     if observation.origin_endpoint_scheme is None:
@@ -224,16 +254,9 @@ def normalize_observation_fields(
         observation.origin_endpoint_query = ""
     if observation.origin_endpoint_fragment is None:
         observation.origin_endpoint_fragment = ""
-    if observation.origin_service_name is None:
-        observation.origin_service_name = ""
-    if observation.origin_source_file is None:
-        observation.origin_source_file = ""
-    if observation.cvss3_vector is None:
-        observation.cvss3_vector = ""
-    if observation.scanner is None:
-        observation.scanner = ""
-    if observation.api_configuration_name is None:
-        observation.api_configuration_name = ""
+
+
+def normalize_severity(observation):
     if observation.current_severity is None:
         observation.current_severity = ""
     if observation.assessment_severity is None:
@@ -248,6 +271,9 @@ def normalize_observation_fields(
             observation.parser_severity,
         ) not in observation.SEVERITY_CHOICES:
             observation.parser_severity = observation.SEVERITY_UNKOWN
+
+
+def normalize_status(observation):
     if observation.current_status is None:
         observation.current_status = ""
     if observation.assessment_status is None:
@@ -256,10 +282,6 @@ def normalize_observation_fields(
         observation.rule_status = ""
     if observation.parser_status is None:
         observation.parser_status = ""
-    if observation.upload_filename is None:
-        observation.upload_filename = ""
-    if observation.vulnerability_id is None:
-        observation.vulnerability_id = ""
 
 
 def clip_fields(model: str, my_object) -> None:

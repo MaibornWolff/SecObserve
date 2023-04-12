@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from json import dumps, load
-from typing import Optional
+from typing import Optional, Tuple
 
 from django.core.files.base import File
 from packageurl import PackageURL
@@ -30,6 +30,14 @@ class Rule:
     name: Optional[str] = None
     properties: Optional[str] = None
     rule_dict: Optional[str] = None
+
+
+@dataclass
+class Location:
+    uri: str = ""
+    start_line: Optional[str] = None
+    end_line: Optional[str] = None
+    snippet: Optional[str] = None
 
 
 class SARIFParser(BaseParser, BaseFileParser):
@@ -106,54 +114,12 @@ class SARIFParser(BaseParser, BaseFileParser):
         sarif_rules,
         sarif_location,
     ):
-        if sarif_location:
-            sarif_uri = (
-                sarif_location.get("physicalLocation", {})
-                .get("artifactLocation", {})
-                .get("uri")
-            )
-            sarif_start_line = (
-                sarif_location.get("physicalLocation", {})
-                .get("region", {})
-                .get("startLine")
-            )
-            sarif_end_line = (
-                sarif_location.get("physicalLocation", {})
-                .get("region", {})
-                .get("endLine")
-            )
-            sarif_snippet = (
-                sarif_location.get("physicalLocation", {})
-                .get("region", {})
-                .get("snippet", {})
-                .get("text")
-            )
-        else:
-            sarif_uri = None
-            sarif_start_line = None
-            sarif_end_line = None
-            sarif_snippet = None
+        location = self.get_location_data(sarif_location)
 
         sarif_rule_id = result.get("ruleId", "")
         sarif_rule = sarif_rules.get(sarif_rule_id, Rule())
 
-        sarif_level = result.get("level")
-        sarif_message_text = result.get("message", {}).get("text")
-        sarif_properties = result.get("properties", {})
-
-        if sarif_level:
-            parser_severity = SEVERITIES.get(
-                sarif_level.lower(), Observation.SEVERITY_UNKOWN
-            )
-        elif sarif_rule.default_level:
-            parser_severity = SEVERITIES.get(
-                sarif_rule.default_level.lower(),
-                Observation.SEVERITY_UNKOWN,
-            )
-        elif self.get_bandit_severity(sarif_scanner, result):
-            parser_severity = self.get_bandit_severity(sarif_scanner, result)
-        else:
-            parser_severity = Observation.SEVERITY_UNKOWN
+        parser_severity = self.get_parser_severity(result, sarif_scanner, sarif_rule)
 
         parser_cvss3_score = self.get_dependency_check_cvss3_score(
             sarif_scanner, sarif_rule
@@ -166,51 +132,10 @@ class SARIFParser(BaseParser, BaseFileParser):
         else:
             title = sarif_rule_id
 
-        description = ""
-        if sarif_message_text:
-            description += f"{sarif_message_text}\n\n"
-
-        if (
-            sarif_rule.short_description
-            and sarif_rule.short_description not in sarif_message_text
-        ):
-            description += (
-                f"**Rule short description:** {sarif_rule.short_description}\n\n"
-            )
-        if (
-            sarif_rule.full_description
-            and sarif_rule.full_description not in sarif_message_text
-            and sarif_rule.full_description not in sarif_rule.short_description
-        ):
-            description += (
-                f"**Rule full description:** {sarif_rule.full_description}\n\n"
-            )
-
-        if (
-            sarif_rule.help
-            and sarif_rule.help not in sarif_message_text
-            and sarif_rule.help not in sarif_rule.short_description
-        ):
-            description += f"**Rule help:** {sarif_rule.help}\n\n"
-
-        if sarif_snippet:
-            # Newlines at the end of the description are removed
-            while sarif_snippet.endswith("\n"):
-                sarif_snippet = sarif_snippet[:-1]
-            description += f"**Snippet:** ```{sarif_snippet}```\n\n"
-
-        if sarif_properties and isinstance(sarif_properties, dict):
-            for key in sarif_properties:
-                value = sarif_properties[key]
-                if value:
-                    description += f"**{key.title()}:** {str(value)}\n\n"
+        description = self.get_description(location.snippet, sarif_rule, result)
 
         sarif_cwe = None
         if sarif_rule.properties and isinstance(sarif_rule.properties, dict):
-            for key in sarif_rule.properties:
-                value = sarif_rule.properties[key]
-                if value:
-                    description += f"**{key.title()}:** {str(value)}\n\n"
             sarif_cwe = self.get_cwe(sarif_rule.properties.get("tags", []))
 
         parser_vulnerability_id = self.get_dependency_check_vulnerability_id(
@@ -221,19 +146,10 @@ class SARIFParser(BaseParser, BaseFileParser):
             sarif_scanner, sarif_location
         )
         if origin_component_purl:
-            sarif_uri = None
-            purl = PackageURL.from_string(origin_component_purl)
-            namespace = purl.namespace
-            name = purl.name
-            if purl.version:
-                version = purl.version
-            else:
-                version = ""
-            if namespace:
-                origin_component_name = f"{namespace}:{name}"
-            else:
-                origin_component_name = name
-            origin_component_version = version
+            origin_component_name, origin_component_version = self.extract_component(
+                origin_component_purl
+            )
+            location.uri = ""
         else:
             origin_component_name = ""
             origin_component_version = ""
@@ -242,9 +158,9 @@ class SARIFParser(BaseParser, BaseFileParser):
             parser_severity=parser_severity,
             title=title,
             description=description,
-            origin_source_file=sarif_uri,
-            origin_source_line_start=self.get_int_or_none(sarif_start_line),
-            origin_source_line_end=self.get_int_or_none(sarif_end_line),
+            origin_source_file=location.uri,
+            origin_source_line_start=self.get_int_or_none(location.start_line),
+            origin_source_line_end=self.get_int_or_none(location.end_line),
             scanner=sarif_scanner,
             cwe=sarif_cwe,
             cvss3_score=parser_cvss3_score,
@@ -269,6 +185,129 @@ class SARIFParser(BaseParser, BaseFileParser):
             observation.unsaved_references.append(sarif_rule.help_uri)
 
         observations.append(observation)
+
+    def get_location_data(self, sarif_location: dict) -> Location:
+        location = Location()
+        if sarif_location:
+            location.uri = (
+                sarif_location.get("physicalLocation", {})
+                .get("artifactLocation", {})
+                .get("uri", "")
+            )
+            location.start_line = (
+                sarif_location.get("physicalLocation", {})
+                .get("region", {})
+                .get("startLine")
+            )
+            location.end_line = (
+                sarif_location.get("physicalLocation", {})
+                .get("region", {})
+                .get("endLine")
+            )
+            location.snippet = (
+                sarif_location.get("physicalLocation", {})
+                .get("region", {})
+                .get("snippet", {})
+                .get("text")
+            )
+
+        return location
+
+    def get_parser_severity(
+        self, result: dict, sarif_scanner: str, sarif_rule: Rule
+    ) -> str:
+        sarif_level = result.get("level")
+        if sarif_level:
+            parser_severity = SEVERITIES.get(
+                sarif_level.lower(), Observation.SEVERITY_UNKOWN
+            )
+        elif sarif_rule.default_level:
+            parser_severity = SEVERITIES.get(
+                sarif_rule.default_level.lower(),
+                Observation.SEVERITY_UNKOWN,
+            )
+        elif self.get_bandit_severity(sarif_scanner, result):
+            parser_severity = self.get_bandit_severity(sarif_scanner, result)
+        else:
+            parser_severity = Observation.SEVERITY_UNKOWN
+
+        return parser_severity
+
+    def get_description(
+        self,
+        sarif_snippet: Optional[str],
+        sarif_rule: Rule,
+        result: dict,
+    ) -> str:
+        description = ""
+
+        sarif_message_text = result.get("message", {}).get("text")
+        if sarif_message_text:
+            description += f"{sarif_message_text}\n\n"
+
+        if (
+            sarif_rule.short_description
+            and sarif_rule.short_description not in sarif_message_text
+        ):
+            description += (
+                f"**Rule short description:** {sarif_rule.short_description}\n\n"
+            )
+
+        rule_short_description = (
+            sarif_rule.short_description if sarif_rule.short_description else ""
+        )
+        if (
+            sarif_rule.full_description
+            and sarif_rule.full_description not in sarif_message_text
+            and sarif_rule.full_description not in rule_short_description
+        ):
+            description += (
+                f"**Rule full description:** {sarif_rule.full_description}\n\n"
+            )
+
+        if (
+            sarif_rule.help
+            and sarif_rule.help not in sarif_message_text
+            and sarif_rule.help not in rule_short_description
+        ):
+            description += f"**Rule help:** {sarif_rule.help}\n\n"
+
+        if sarif_snippet:
+            # Newlines at the end of the description are removed
+            while sarif_snippet.endswith("\n"):
+                sarif_snippet = sarif_snippet[:-1]
+            description += f"**Snippet:** ```{sarif_snippet}```\n\n"
+
+        sarif_properties = result.get("properties", {})
+        if sarif_properties and isinstance(sarif_properties, dict):
+            for key in sarif_properties:
+                value = sarif_properties[key]
+                if value:
+                    description += f"**{key.title()}:** {str(value)}\n\n"
+
+        if sarif_rule.properties and isinstance(sarif_rule.properties, dict):
+            for key in sarif_rule.properties:
+                value = sarif_rule.properties[key]
+                if value:
+                    description += f"**{key.title()}:** {str(value)}\n\n"
+
+        return description
+
+    def extract_component(self, origin_component_purl: str) -> Tuple[str, str]:
+        purl = PackageURL.from_string(origin_component_purl)
+        namespace = purl.namespace
+        name = purl.name
+        if purl.version:
+            version = purl.version
+        else:
+            version = ""
+        if namespace:
+            origin_component_name = f"{namespace}:{name}"
+        else:
+            origin_component_name = name
+        origin_component_version = version
+
+        return origin_component_name, origin_component_version
 
     def get_rules(self, run: dict) -> dict:
         rules = {}

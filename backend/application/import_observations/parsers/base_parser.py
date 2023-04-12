@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Optional
 
 from django.core.files.base import File
 
@@ -18,7 +18,7 @@ class BaseParser:
     def get_observations(self, data: Any) -> list[Observation]:
         raise NotImplementedError("get_observations() must be overridden")
 
-    def get_int_or_none(self, value: str) -> int | None:
+    def get_int_or_none(self, value: Optional[str]) -> int | None:
         if value:
             try:
                 return int(value)

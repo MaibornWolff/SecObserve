@@ -90,8 +90,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
     ) -> list[Observation]:
         observations = []
 
-        vulnerabilities = data.get("vulnerabilities", [])
-        for vulnerability in vulnerabilities:
+        for vulnerability in data.get("vulnerabilities", []):
             vulnerability_id = vulnerability.get("id")
             cvss3_score, cvss3_vector = self.get_cvss3(vulnerability)
             severity = Observation.SEVERITY_UNKOWN
@@ -103,9 +102,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             if detail:
                 description += f"\n\n{detail}"
             recommendation = vulnerability.get("recommendation")
-            advisories = vulnerability.get("advisories", [])
-            affects = vulnerability.get("affects", [])
-            for affected in affects:
+            for affected in vulnerability.get("affects", []):
                 ref = affected.get("ref")
                 if ref:
                     component = components.get(ref)
@@ -129,11 +126,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                             origin_source_file=metadata.file,
                         )
 
-                        if advisories:
-                            for advisory in advisories:
-                                observation.unsaved_references.append(
-                                    advisory.get("url")
-                                )
+                        self.add_references(vulnerability, observation)
 
                         evidence = []
                         evidence.append("Vulnerability")
@@ -200,3 +193,9 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             return cwes[0]
 
         return None
+
+    def add_references(self, vulnerability: dict, observation: Observation) -> None:
+        advisories = vulnerability.get("advisories", [])
+        if advisories:
+            for advisory in advisories:
+                observation.unsaved_references.append(advisory.get("url"))

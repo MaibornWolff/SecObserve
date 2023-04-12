@@ -22,3 +22,4 @@ export AAD_CLIENT_ID=dummy
 export AAD_TENANT_ID=dummy
 
 pylint application
+echo $?

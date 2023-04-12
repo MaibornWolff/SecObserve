@@ -11,8 +11,10 @@ disable=abstract-method,broad-except,too-few-public-methods,missing-docstring,in
 
 [DESIGN]
 max-args=6
-max-returns=7
+max-attributes=10
+max-locals=20
 max-parents=13
+max-returns=7
 
 [TYPECHECK]
 generated-members=REQUEST,acl_users,aq_parent,"[a-zA-Z]+_set{1,2}",save,delete

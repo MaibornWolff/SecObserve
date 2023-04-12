@@ -42,6 +42,11 @@ jobs:
         run: |
           ./bin/run_mypy.sh
 
+      - name: PyLint
+        working-directory: ./backend
+        run: |
+          ./bin/run_pylint.sh
+
       - name: Unittests
         run: |
           docker build -f docker/backend/unittests/django/Dockerfile -t secobserve_backend_unittests:latest .
