@@ -1,5 +1,5 @@
 # build environment
-FROM node:18.15.0-alpine as build
+FROM node:18.16.0-alpine as build
 
 ARG VERSION=unkown
 
