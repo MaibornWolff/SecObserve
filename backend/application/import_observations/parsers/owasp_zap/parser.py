@@ -17,7 +17,7 @@ SEVERITIES = {
 }
 
 
-class SecObserveParser(BaseParser, BaseFileParser):
+class OWASPZAPParser(BaseParser, BaseFileParser):
     @classmethod
     def get_name(cls) -> str:
         return "OWASP ZAP"

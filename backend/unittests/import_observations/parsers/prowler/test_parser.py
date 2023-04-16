@@ -5,7 +5,7 @@ from application.core.models import Observation
 from application.import_observations.parsers.prowler.parser import ProwlerParser
 
 
-class TestCryptolyzeParser(TestCase):
+class TestProwlerParser(TestCase):
     def test_no_json(self):
         with open(path.dirname(__file__) + "/test_parser.py") as testfile:
             parser = ProwlerParser()

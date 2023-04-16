@@ -44,7 +44,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
 
         bom_format = data.get("bomFormat")
         if bom_format != "CycloneDX":
-            return False, ["Data is not a CycloneDX SBOM"], {}
+            return False, ["File is not a CycloneDX SBOM"], {}
 
         return True, [], data
 
@@ -93,7 +93,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         for vulnerability in data.get("vulnerabilities", []):
             vulnerability_id = vulnerability.get("id")
             cvss3_score, cvss3_vector = self.get_cvss3(vulnerability)
-            severity = Observation.SEVERITY_UNKOWN
+            severity = ""
             if not cvss3_score:
                 severity = self.get_highest_severity(vulnerability)
             cwe = self.get_cwe(vulnerability)
@@ -174,7 +174,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         return None, None
 
     def get_highest_severity(self, vulnerability):
-        current_severity = None
+        current_severity = Observation.SEVERITY_UNKOWN
         current_numerical_severity = 999
         ratings = vulnerability.get("ratings", [])
         if ratings:
