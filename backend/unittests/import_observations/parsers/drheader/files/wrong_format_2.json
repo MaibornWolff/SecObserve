@@ -1,0 +1,11 @@
+[
+    {
+        "message": "Header not included in response",
+        "severity": "high",
+        "expected": [
+            "no-store",
+            "max-age=0"
+        ],
+        "delimiter": ","
+    }
+]

@@ -1,0 +1,55 @@
+[
+    {
+        "rule": "Cache-Control",
+        "message": "Header not included in response",
+        "severity": "high",
+        "expected": [
+            "no-store",
+            "max-age=0"
+        ],
+        "delimiter": ","
+    },
+    {
+        "rule": "Pragma",
+        "message": "Header not included in response",
+        "severity": "high",
+        "expected": [
+            "no-cache"
+        ]
+    },
+    {
+        "rule": "Referrer-Policy",
+        "message": "Value does not match security policy. Exactly one of the expected items was expected",
+        "severity": "high",
+        "value": "same-origin",
+        "expected": [
+            "strict-origin",
+            "strict-origin-when-cross-origin",
+            "no-referrer"
+        ]
+    },
+    {
+        "rule": "Server",
+        "message": "Header should not be returned",
+        "severity": "high"
+    },
+    {
+        "rule": "Strict-Transport-Security",
+        "message": "Header not included in response",
+        "severity": "high",
+        "expected": [
+            "max-age=31536000",
+            "includeSubDomains"
+        ],
+        "delimiter": ";"
+    },
+    {
+        "rule": "X-XSS-Protection",
+        "message": "Value does not match security policy",
+        "severity": "high",
+        "value": "1; mode=block",
+        "expected": [
+            "0"
+        ]
+    }
+]

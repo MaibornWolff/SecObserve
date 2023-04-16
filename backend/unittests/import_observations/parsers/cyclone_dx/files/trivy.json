@@ -1,0 +1,3197 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.4",
+  "serialNumber": "urn:uuid:fa9f9148-2935-422a-b058-20afa8cafa82",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2023-04-12T19:57:36+00:00",
+    "tools": [
+      {
+        "vendor": "aquasecurity",
+        "name": "trivy",
+        "version": "0.38.3"
+      }
+    ],
+    "component": {
+      "bom-ref": "pkg:oci/example-frontend@sha256:73d3494bb53ebe41f806c08fc356c000c21fe4a5eddf23907646c4eab784ea19?repository_url=index.docker.io%2Fexample%2Fexample-frontend\u0026arch=amd64",
+      "type": "container",
+      "name": "example/example-frontend:dev",
+      "purl": "pkg:oci/example-frontend@sha256:73d3494bb53ebe41f806c08fc356c000c21fe4a5eddf23907646c4eab784ea19?repository_url=index.docker.io%2Fexample%2Fexample-frontend\u0026arch=amd64",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:SchemaVersion",
+          "value": "2"
+        },
+        {
+          "name": "aquasecurity:trivy:ImageID",
+          "value": "sha256:941b4d2fcf1a6731c27442740af8be97d8b68c5d24cfeb649cf68a6c28077fee"
+        },
+        {
+          "name": "aquasecurity:trivy:RepoDigest",
+          "value": "example/example-frontend@sha256:73d3494bb53ebe41f806c08fc356c000c21fe4a5eddf23907646c4eab784ea19"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:f1417ff83b319fbdae6dd9cd6d8c9c88002dcd75ecf6ec201c8c6894681cf2b5"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:5a1212ea1f049968fb8ff518497c1c2d171761b3622bf081029490827019d352"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:94b005be52e89b9b36a92709f074e86aae3cc4d3ac81e64bc1a13ccc473d9bd5"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:d485dd98643d9947ceddaa62aae323a2b5fe38102fe7e3282abe2b6d9b7edcc2"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:f97918a20b1b69e6e39250f7abdeb148f3fa1b138d3ee751b54feebe931298b1"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:b48e284b366739bc54cb1a63e7755502e6c710410b779e6ec837e513244d4131"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:52d7e74312eed300a540d1f49add1cc67801721fe88d6378715a825f8942ba52"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:b608314f9ddab65789173e631ac55b1dd430c25776a457ed6d2621c45e28ac6e"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:29a500f777591a10a2455bb9913fa716a07ba9760758ec8918d68d979d212b7c"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:b7ef820c20beabf45f603a13682459bbe13a0df9b6f8209c5f96a5f597bea68a"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:c9eb1c2a8c965361b85671a5969c2d46ea9dfa9a9663ab4aa8111ea0aa22df4b"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:621c480bca7f14afcb20ee873d10e2014a91c073041611fef9b50b5d0844d1a4"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef"
+        },
+        {
+          "name": "aquasecurity:trivy:RepoTag",
+          "value": "example/example-frontend:dev"
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "bom-ref": "pkg:apk/alpine/--update@20230412.103458?distro=3.17.3",
+      "type": "library",
+      "name": "--update",
+      "version": "20230412.103458",
+      "purl": "pkg:apk/alpine/--update@20230412.103458?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "--update@20230412.103458"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b608314f9ddab65789173e631ac55b1dd430c25776a457ed6d2621c45e28ac6e"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/alpine-baselayout@3.4.0-r0?distro=3.17.3",
+      "type": "library",
+      "name": "alpine-baselayout",
+      "version": "3.4.0-r0",
+      "licenses": [
+        {
+          "expression": "GPL-2.0"
+        }
+      ],
+      "purl": "pkg:apk/alpine/alpine-baselayout@3.4.0-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "alpine-baselayout@3.4.0-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "alpine-baselayout"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "3.4.0-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:f1417ff83b319fbdae6dd9cd6d8c9c88002dcd75ecf6ec201c8c6894681cf2b5"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/alpine-baselayout-data@3.4.0-r0?distro=3.17.3",
+      "type": "library",
+      "name": "alpine-baselayout-data",
+      "version": "3.4.0-r0",
+      "licenses": [
+        {
+          "expression": "GPL-2.0"
+        }
+      ],
+      "purl": "pkg:apk/alpine/alpine-baselayout-data@3.4.0-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "alpine-baselayout-data@3.4.0-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "alpine-baselayout"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "3.4.0-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:f1417ff83b319fbdae6dd9cd6d8c9c88002dcd75ecf6ec201c8c6894681cf2b5"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/alpine-keys@2.4-r1?distro=3.17.3",
+      "type": "library",
+      "name": "alpine-keys",
+      "version": "2.4-r1",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:apk/alpine/alpine-keys@2.4-r1?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "alpine-keys@2.4-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "alpine-keys"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "2.4-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:f1417ff83b319fbdae6dd9cd6d8c9c88002dcd75ecf6ec201c8c6894681cf2b5"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/aom-libs@3.5.0-r0?distro=3.17.3",
+      "type": "library",
+      "name": "aom-libs",
+      "version": "3.5.0-r0",
+      "licenses": [
+        {
+          "expression": "BSD-2-Clause"
+        },
+        {
+          "expression": "custom"
+        }
+      ],
+      "purl": "pkg:apk/alpine/aom-libs@3.5.0-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "aom-libs@3.5.0-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "aom"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "3.5.0-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/apk-tools@2.12.10-r1?distro=3.17.3",
+      "type": "library",
+      "name": "apk-tools",
+      "version": "2.12.10-r1",
+      "licenses": [
+        {
+          "expression": "GPL-2.0"
+        }
+      ],
+      "purl": "pkg:apk/alpine/apk-tools@2.12.10-r1?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "apk-tools@2.12.10-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "apk-tools"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "2.12.10-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:f1417ff83b319fbdae6dd9cd6d8c9c88002dcd75ecf6ec201c8c6894681cf2b5"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/brotli-libs@1.0.9-r9?distro=3.17.3",
+      "type": "library",
+      "name": "brotli-libs",
+      "version": "1.0.9-r9",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:apk/alpine/brotli-libs@1.0.9-r9?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "brotli-libs@1.0.9-r9"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "brotli"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.0.9-r9"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/busybox@1.35.0-r29?distro=3.17.3",
+      "type": "library",
+      "name": "busybox",
+      "version": "1.35.0-r29",
+      "licenses": [
+        {
+          "expression": "GPL-2.0"
+        }
+      ],
+      "purl": "pkg:apk/alpine/busybox@1.35.0-r29?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "busybox@1.35.0-r29"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "busybox"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.35.0-r29"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:f1417ff83b319fbdae6dd9cd6d8c9c88002dcd75ecf6ec201c8c6894681cf2b5"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/busybox-binsh@1.35.0-r29?distro=3.17.3",
+      "type": "library",
+      "name": "busybox-binsh",
+      "version": "1.35.0-r29",
+      "licenses": [
+        {
+          "expression": "GPL-2.0"
+        }
+      ],
+      "purl": "pkg:apk/alpine/busybox-binsh@1.35.0-r29?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "busybox-binsh@1.35.0-r29"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "busybox"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.35.0-r29"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:f1417ff83b319fbdae6dd9cd6d8c9c88002dcd75ecf6ec201c8c6894681cf2b5"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/c-ares@1.18.1-r1?distro=3.17.3",
+      "type": "library",
+      "name": "c-ares",
+      "version": "1.18.1-r1",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:apk/alpine/c-ares@1.18.1-r1?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "c-ares@1.18.1-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "c-ares"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.18.1-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b608314f9ddab65789173e631ac55b1dd430c25776a457ed6d2621c45e28ac6e"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/ca-certificates@20220614-r4?distro=3.17.3",
+      "type": "library",
+      "name": "ca-certificates",
+      "version": "20220614-r4",
+      "licenses": [
+        {
+          "expression": "MPL-2.0"
+        },
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:apk/alpine/ca-certificates@20220614-r4?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "ca-certificates@20220614-r4"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "ca-certificates"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "20220614-r4"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/ca-certificates-bundle@20220614-r4?distro=3.17.3",
+      "type": "library",
+      "name": "ca-certificates-bundle",
+      "version": "20220614-r4",
+      "licenses": [
+        {
+          "expression": "MPL-2.0"
+        },
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:apk/alpine/ca-certificates-bundle@20220614-r4?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "ca-certificates-bundle@20220614-r4"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "ca-certificates"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "20220614-r4"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:f1417ff83b319fbdae6dd9cd6d8c9c88002dcd75ecf6ec201c8c6894681cf2b5"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/fontconfig@2.14.1-r0?distro=3.17.3",
+      "type": "library",
+      "name": "fontconfig",
+      "version": "2.14.1-r0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:apk/alpine/fontconfig@2.14.1-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "fontconfig@2.14.1-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "fontconfig"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "2.14.1-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/freetype@2.12.1-r0?distro=3.17.3",
+      "type": "library",
+      "name": "freetype",
+      "version": "2.12.1-r0",
+      "licenses": [
+        {
+          "expression": "FTL"
+        },
+        {
+          "expression": "GPL-2.0"
+        }
+      ],
+      "purl": "pkg:apk/alpine/freetype@2.12.1-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "freetype@2.12.1-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "freetype"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "2.12.1-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/geoip@1.6.12-r3?distro=3.17.3",
+      "type": "library",
+      "name": "geoip",
+      "version": "1.6.12-r3",
+      "licenses": [
+        {
+          "expression": "GPL-3.0"
+        }
+      ],
+      "purl": "pkg:apk/alpine/geoip@1.6.12-r3?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "geoip@1.6.12-r3"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "geoip"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.6.12-r3"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/icu-data-en@72.1-r1?distro=3.17.3",
+      "type": "library",
+      "name": "icu-data-en",
+      "version": "72.1-r1",
+      "licenses": [
+        {
+          "expression": "MIT"
+        },
+        {
+          "expression": "ICU"
+        },
+        {
+          "expression": "Unicode-TOU"
+        }
+      ],
+      "purl": "pkg:apk/alpine/icu-data-en@72.1-r1?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "icu-data-en@72.1-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "icu"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "72.1-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b608314f9ddab65789173e631ac55b1dd430c25776a457ed6d2621c45e28ac6e"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/icu-libs@72.1-r1?distro=3.17.3",
+      "type": "library",
+      "name": "icu-libs",
+      "version": "72.1-r1",
+      "licenses": [
+        {
+          "expression": "MIT"
+        },
+        {
+          "expression": "ICU"
+        },
+        {
+          "expression": "Unicode-TOU"
+        }
+      ],
+      "purl": "pkg:apk/alpine/icu-libs@72.1-r1?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "icu-libs@72.1-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "icu"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "72.1-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b608314f9ddab65789173e631ac55b1dd430c25776a457ed6d2621c45e28ac6e"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libavif@0.11.1-r0?distro=3.17.3",
+      "type": "library",
+      "name": "libavif",
+      "version": "0.11.1-r0",
+      "licenses": [
+        {
+          "expression": "BSD-2-Clause"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libavif@0.11.1-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libavif@0.11.1-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "libavif"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "0.11.1-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libbsd@0.11.7-r0?distro=3.17.3",
+      "type": "library",
+      "name": "libbsd",
+      "version": "0.11.7-r0",
+      "licenses": [
+        {
+          "expression": "BSD-3-Clause"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libbsd@0.11.7-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libbsd@0.11.7-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "libbsd"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "0.11.7-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libbz2@1.0.8-r4?distro=3.17.3",
+      "type": "library",
+      "name": "libbz2",
+      "version": "1.0.8-r4",
+      "licenses": [
+        {
+          "expression": "bzip2-1.0.6"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libbz2@1.0.8-r4?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libbz2@1.0.8-r4"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "bzip2"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.0.8-r4"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libc-utils@0.7.2-r3?distro=3.17.3",
+      "type": "library",
+      "name": "libc-utils",
+      "version": "0.7.2-r3",
+      "licenses": [
+        {
+          "expression": "BSD-2-Clause"
+        },
+        {
+          "expression": "BSD-3-Clause"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libc-utils@0.7.2-r3?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libc-utils@0.7.2-r3"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "libc-dev"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "0.7.2-r3"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:f1417ff83b319fbdae6dd9cd6d8c9c88002dcd75ecf6ec201c8c6894681cf2b5"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libcrypto3@3.0.8-r3?distro=3.17.3",
+      "type": "library",
+      "name": "libcrypto3",
+      "version": "3.0.8-r3",
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libcrypto3@3.0.8-r3?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libcrypto3@3.0.8-r3"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "openssl"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "3.0.8-r3"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:f1417ff83b319fbdae6dd9cd6d8c9c88002dcd75ecf6ec201c8c6894681cf2b5"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libdav1d@1.0.0-r2?distro=3.17.3",
+      "type": "library",
+      "name": "libdav1d",
+      "version": "1.0.0-r2",
+      "licenses": [
+        {
+          "expression": "BSD-2-Clause"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libdav1d@1.0.0-r2?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libdav1d@1.0.0-r2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "dav1d"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.0.0-r2"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libedit@20221030.3.1-r0?distro=3.17.3",
+      "type": "library",
+      "name": "libedit",
+      "version": "20221030.3.1-r0",
+      "licenses": [
+        {
+          "expression": "BSD-3-Clause"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libedit@20221030.3.1-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libedit@20221030.3.1-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "libedit"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "20221030.3.1-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libexpat@2.5.0-r0?distro=3.17.3",
+      "type": "library",
+      "name": "libexpat",
+      "version": "2.5.0-r0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libexpat@2.5.0-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libexpat@2.5.0-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "expat"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "2.5.0-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libgcc@12.2.1_git20220924-r4?distro=3.17.3",
+      "type": "library",
+      "name": "libgcc",
+      "version": "12.2.1_git20220924-r4",
+      "licenses": [
+        {
+          "expression": "GPL-2.0"
+        },
+        {
+          "expression": "LGPL-2.1-or-later"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libgcc@12.2.1_git20220924-r4?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libgcc@12.2.1_git20220924-r4"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "gcc"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "12.2.1_git20220924-r4"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b608314f9ddab65789173e631ac55b1dd430c25776a457ed6d2621c45e28ac6e"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libgcrypt@1.10.1-r0?distro=3.17.3",
+      "type": "library",
+      "name": "libgcrypt",
+      "version": "1.10.1-r0",
+      "licenses": [
+        {
+          "expression": "LGPL-2.1-or-later"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libgcrypt@1.10.1-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libgcrypt@1.10.1-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "libgcrypt"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.10.1-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libgd@2.3.3-r3?distro=3.17.3",
+      "type": "library",
+      "name": "libgd",
+      "version": "2.3.3-r3",
+      "licenses": [
+        {
+          "expression": "custom"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libgd@2.3.3-r3?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libgd@2.3.3-r3"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "gd"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "2.3.3-r3"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libgpg-error@1.46-r1?distro=3.17.3",
+      "type": "library",
+      "name": "libgpg-error",
+      "version": "1.46-r1",
+      "licenses": [
+        {
+          "expression": "GPL-2.0"
+        },
+        {
+          "expression": "LGPL-2.1-or-later"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libgpg-error@1.46-r1?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libgpg-error@1.46-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "libgpg-error"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.46-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libice@1.0.10-r1?distro=3.17.3",
+      "type": "library",
+      "name": "libice",
+      "version": "1.0.10-r1",
+      "licenses": [
+        {
+          "expression": "X11"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libice@1.0.10-r1?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libice@1.0.10-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "libice"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.0.10-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libintl@0.21.1-r1?distro=3.17.3",
+      "type": "library",
+      "name": "libintl",
+      "version": "0.21.1-r1",
+      "licenses": [
+        {
+          "expression": "LGPL-2.1-or-later"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libintl@0.21.1-r1?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libintl@0.21.1-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "gettext"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "0.21.1-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:5a1212ea1f049968fb8ff518497c1c2d171761b3622bf081029490827019d352"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libjpeg-turbo@2.1.4-r0?distro=3.17.3",
+      "type": "library",
+      "name": "libjpeg-turbo",
+      "version": "2.1.4-r0",
+      "licenses": [
+        {
+          "expression": "BSD-3-Clause"
+        },
+        {
+          "expression": "IJG"
+        },
+        {
+          "expression": "Zlib"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libjpeg-turbo@2.1.4-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libjpeg-turbo@2.1.4-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "libjpeg-turbo"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "2.1.4-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libmd@1.0.4-r0?distro=3.17.3",
+      "type": "library",
+      "name": "libmd",
+      "version": "1.0.4-r0",
+      "licenses": [
+        {
+          "expression": "Public"
+        },
+        {
+          "expression": "Domain"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libmd@1.0.4-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libmd@1.0.4-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "libmd"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.0.4-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libpng@1.6.38-r0?distro=3.17.3",
+      "type": "library",
+      "name": "libpng",
+      "version": "1.6.38-r0",
+      "licenses": [
+        {
+          "expression": "Libpng"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libpng@1.6.38-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libpng@1.6.38-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "libpng"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.6.38-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libsm@1.2.3-r1?distro=3.17.3",
+      "type": "library",
+      "name": "libsm",
+      "version": "1.2.3-r1",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libsm@1.2.3-r1?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libsm@1.2.3-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "libsm"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.2.3-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libssl3@3.0.8-r3?distro=3.17.3",
+      "type": "library",
+      "name": "libssl3",
+      "version": "3.0.8-r3",
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libssl3@3.0.8-r3?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libssl3@3.0.8-r3"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "openssl"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "3.0.8-r3"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:f1417ff83b319fbdae6dd9cd6d8c9c88002dcd75ecf6ec201c8c6894681cf2b5"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libstdc%2B%2B@12.2.1_git20220924-r4?distro=3.17.3",
+      "type": "library",
+      "name": "libstdc++",
+      "version": "12.2.1_git20220924-r4",
+      "licenses": [
+        {
+          "expression": "GPL-2.0"
+        },
+        {
+          "expression": "LGPL-2.1-or-later"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libstdc%2B%2B@12.2.1_git20220924-r4?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libstdc++@12.2.1_git20220924-r4"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "gcc"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "12.2.1_git20220924-r4"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b608314f9ddab65789173e631ac55b1dd430c25776a457ed6d2621c45e28ac6e"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libuuid@2.38.1-r1?distro=3.17.3",
+      "type": "library",
+      "name": "libuuid",
+      "version": "2.38.1-r1",
+      "licenses": [
+        {
+          "expression": "BSD-3-Clause"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libuuid@2.38.1-r1?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libuuid@2.38.1-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "util-linux"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "2.38.1-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libwebp@1.2.4-r1?distro=3.17.3",
+      "type": "library",
+      "name": "libwebp",
+      "version": "1.2.4-r1",
+      "licenses": [
+        {
+          "expression": "BSD-3-Clause"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libwebp@1.2.4-r1?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libwebp@1.2.4-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "libwebp"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.2.4-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libx11@1.8.4-r0?distro=3.17.3",
+      "type": "library",
+      "name": "libx11",
+      "version": "1.8.4-r0",
+      "licenses": [
+        {
+          "expression": "custom:XFREE86"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libx11@1.8.4-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libx11@1.8.4-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "libx11"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.8.4-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libxau@1.0.10-r0?distro=3.17.3",
+      "type": "library",
+      "name": "libxau",
+      "version": "1.0.10-r0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libxau@1.0.10-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libxau@1.0.10-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "libxau"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.0.10-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libxcb@1.15-r0?distro=3.17.3",
+      "type": "library",
+      "name": "libxcb",
+      "version": "1.15-r0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libxcb@1.15-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libxcb@1.15-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "libxcb"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.15-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libxdmcp@1.1.4-r0?distro=3.17.3",
+      "type": "library",
+      "name": "libxdmcp",
+      "version": "1.1.4-r0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libxdmcp@1.1.4-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libxdmcp@1.1.4-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "libxdmcp"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.1.4-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libxext@1.3.5-r0?distro=3.17.3",
+      "type": "library",
+      "name": "libxext",
+      "version": "1.3.5-r0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libxext@1.3.5-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libxext@1.3.5-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "libxext"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.3.5-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libxml2@2.10.3-r1?distro=3.17.3",
+      "type": "library",
+      "name": "libxml2",
+      "version": "2.10.3-r1",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libxml2@2.10.3-r1?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libxml2@2.10.3-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "libxml2"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "2.10.3-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libxpm@3.5.15-r0?distro=3.17.3",
+      "type": "library",
+      "name": "libxpm",
+      "version": "3.5.15-r0",
+      "licenses": [
+        {
+          "expression": "custom:BELL"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libxpm@3.5.15-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libxpm@3.5.15-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "libxpm"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "3.5.15-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libxslt@1.1.37-r1?distro=3.17.3",
+      "type": "library",
+      "name": "libxslt",
+      "version": "1.1.37-r1",
+      "licenses": [
+        {
+          "expression": "custom"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libxslt@1.1.37-r1?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libxslt@1.1.37-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "libxslt"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.1.37-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/libxt@1.2.1-r0?distro=3.17.3",
+      "type": "library",
+      "name": "libxt",
+      "version": "1.2.1-r0",
+      "licenses": [
+        {
+          "expression": "custom"
+        }
+      ],
+      "purl": "pkg:apk/alpine/libxt@1.2.1-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libxt@1.2.1-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "libxt"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.2.1-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/musl@1.2.3-r4?distro=3.17.3",
+      "type": "library",
+      "name": "musl",
+      "version": "1.2.3-r4",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:apk/alpine/musl@1.2.3-r4?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "musl@1.2.3-r4"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "musl"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.2.3-r4"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:f1417ff83b319fbdae6dd9cd6d8c9c88002dcd75ecf6ec201c8c6894681cf2b5"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/musl-utils@1.2.3-r4?distro=3.17.3",
+      "type": "library",
+      "name": "musl-utils",
+      "version": "1.2.3-r4",
+      "licenses": [
+        {
+          "expression": "MIT"
+        },
+        {
+          "expression": "BSD-2-Clause"
+        },
+        {
+          "expression": "GPL-2.0"
+        }
+      ],
+      "purl": "pkg:apk/alpine/musl-utils@1.2.3-r4?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "musl-utils@1.2.3-r4"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "musl"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.2.3-r4"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:f1417ff83b319fbdae6dd9cd6d8c9c88002dcd75ecf6ec201c8c6894681cf2b5"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/ncurses-libs@6.3_p20221119-r0?distro=3.17.3",
+      "type": "library",
+      "name": "ncurses-libs",
+      "version": "6.3_p20221119-r0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:apk/alpine/ncurses-libs@6.3_p20221119-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "ncurses-libs@6.3_p20221119-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "ncurses"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "6.3_p20221119-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/ncurses-terminfo-base@6.3_p20221119-r0?distro=3.17.3",
+      "type": "library",
+      "name": "ncurses-terminfo-base",
+      "version": "6.3_p20221119-r0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:apk/alpine/ncurses-terminfo-base@6.3_p20221119-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "ncurses-terminfo-base@6.3_p20221119-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "ncurses"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "6.3_p20221119-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/nghttp2-libs@1.51.0-r0?distro=3.17.3",
+      "type": "library",
+      "name": "nghttp2-libs",
+      "version": "1.51.0-r0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:apk/alpine/nghttp2-libs@1.51.0-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "nghttp2-libs@1.51.0-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "nghttp2"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.51.0-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/nginx@1.22.1-r1?distro=3.17.3",
+      "type": "library",
+      "name": "nginx",
+      "version": "1.22.1-r1",
+      "licenses": [
+        {
+          "expression": "2-clause"
+        },
+        {
+          "expression": "BSD-like"
+        },
+        {
+          "expression": "license"
+        }
+      ],
+      "purl": "pkg:apk/alpine/nginx@1.22.1-r1?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "nginx@1.22.1-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "nginx"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.22.1-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:5a1212ea1f049968fb8ff518497c1c2d171761b3622bf081029490827019d352"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/nginx-module-geoip@1.22.1-r1?distro=3.17.3",
+      "type": "library",
+      "name": "nginx-module-geoip",
+      "version": "1.22.1-r1",
+      "licenses": [
+        {
+          "expression": "2-clause"
+        },
+        {
+          "expression": "BSD-like"
+        },
+        {
+          "expression": "license"
+        }
+      ],
+      "purl": "pkg:apk/alpine/nginx-module-geoip@1.22.1-r1?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "nginx-module-geoip@1.22.1-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "nginx-module-geoip"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.22.1-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/nginx-module-image-filter@1.22.1-r1?distro=3.17.3",
+      "type": "library",
+      "name": "nginx-module-image-filter",
+      "version": "1.22.1-r1",
+      "licenses": [
+        {
+          "expression": "2-clause"
+        },
+        {
+          "expression": "BSD-like"
+        },
+        {
+          "expression": "license"
+        }
+      ],
+      "purl": "pkg:apk/alpine/nginx-module-image-filter@1.22.1-r1?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "nginx-module-image-filter@1.22.1-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "nginx-module-image-filter"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.22.1-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/nginx-module-njs@1.22.1.0.7.11-r1?distro=3.17.3",
+      "type": "library",
+      "name": "nginx-module-njs",
+      "version": "1.22.1.0.7.11-r1",
+      "licenses": [
+        {
+          "expression": "2-clause"
+        },
+        {
+          "expression": "BSD-like"
+        },
+        {
+          "expression": "license"
+        }
+      ],
+      "purl": "pkg:apk/alpine/nginx-module-njs@1.22.1.0.7.11-r1?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "nginx-module-njs@1.22.1.0.7.11-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "nginx-module-njs"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.22.1.0.7.11-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/nginx-module-xslt@1.22.1-r1?distro=3.17.3",
+      "type": "library",
+      "name": "nginx-module-xslt",
+      "version": "1.22.1-r1",
+      "licenses": [
+        {
+          "expression": "2-clause"
+        },
+        {
+          "expression": "BSD-like"
+        },
+        {
+          "expression": "license"
+        }
+      ],
+      "purl": "pkg:apk/alpine/nginx-module-xslt@1.22.1-r1?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "nginx-module-xslt@1.22.1-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "nginx-module-xslt"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.22.1-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/nodejs@18.14.2-r0?distro=3.17.3",
+      "type": "library",
+      "name": "nodejs",
+      "version": "18.14.2-r0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:apk/alpine/nodejs@18.14.2-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "nodejs@18.14.2-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "nodejs"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "18.14.2-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b608314f9ddab65789173e631ac55b1dd430c25776a457ed6d2621c45e28ac6e"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/npm@9.1.2-r0?distro=3.17.3",
+      "type": "library",
+      "name": "npm",
+      "version": "9.1.2-r0",
+      "licenses": [
+        {
+          "expression": "Artistic-2.0"
+        }
+      ],
+      "purl": "pkg:apk/alpine/npm@9.1.2-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "npm@9.1.2-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "npm"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "9.1.2-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b608314f9ddab65789173e631ac55b1dd430c25776a457ed6d2621c45e28ac6e"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/pcre2@10.42-r0?distro=3.17.3",
+      "type": "library",
+      "name": "pcre2",
+      "version": "10.42-r0",
+      "licenses": [
+        {
+          "expression": "BSD-3-Clause"
+        }
+      ],
+      "purl": "pkg:apk/alpine/pcre2@10.42-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "pcre2@10.42-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "pcre2"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "10.42-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:5a1212ea1f049968fb8ff518497c1c2d171761b3622bf081029490827019d352"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/scanelf@1.3.5-r1?distro=3.17.3",
+      "type": "library",
+      "name": "scanelf",
+      "version": "1.3.5-r1",
+      "licenses": [
+        {
+          "expression": "GPL-2.0"
+        }
+      ],
+      "purl": "pkg:apk/alpine/scanelf@1.3.5-r1?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "scanelf@1.3.5-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "pax-utils"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.3.5-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:f1417ff83b319fbdae6dd9cd6d8c9c88002dcd75ecf6ec201c8c6894681cf2b5"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/ssl_client@1.35.0-r29?distro=3.17.3",
+      "type": "library",
+      "name": "ssl_client",
+      "version": "1.35.0-r29",
+      "licenses": [
+        {
+          "expression": "GPL-2.0"
+        }
+      ],
+      "purl": "pkg:apk/alpine/ssl_client@1.35.0-r29?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "ssl_client@1.35.0-r29"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "busybox"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.35.0-r29"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:f1417ff83b319fbdae6dd9cd6d8c9c88002dcd75ecf6ec201c8c6894681cf2b5"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/tiff@4.4.0-r3?distro=3.17.3",
+      "type": "library",
+      "name": "tiff",
+      "version": "4.4.0-r3",
+      "licenses": [
+        {
+          "expression": "libtiff"
+        }
+      ],
+      "purl": "pkg:apk/alpine/tiff@4.4.0-r3?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "tiff@4.4.0-r3"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "tiff"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "4.4.0-r3"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/tzdata@2023c-r0?distro=3.17.3",
+      "type": "library",
+      "name": "tzdata",
+      "version": "2023c-r0",
+      "licenses": [
+        {
+          "expression": "Public-Domain"
+        }
+      ],
+      "purl": "pkg:apk/alpine/tzdata@2023c-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "tzdata@2023c-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "tzdata"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "2023c-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:5a1212ea1f049968fb8ff518497c1c2d171761b3622bf081029490827019d352"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/xz-libs@5.2.9-r0?distro=3.17.3",
+      "type": "library",
+      "name": "xz-libs",
+      "version": "5.2.9-r0",
+      "licenses": [
+        {
+          "expression": "GPL-2.0"
+        },
+        {
+          "expression": "Public-Domain"
+        },
+        {
+          "expression": "LGPL-2.1-or-later"
+        }
+      ],
+      "purl": "pkg:apk/alpine/xz-libs@5.2.9-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "xz-libs@5.2.9-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "xz"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "5.2.9-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/zlib@1.2.13-r0?distro=3.17.3",
+      "type": "library",
+      "name": "zlib",
+      "version": "1.2.13-r0",
+      "licenses": [
+        {
+          "expression": "Zlib"
+        }
+      ],
+      "purl": "pkg:apk/alpine/zlib@1.2.13-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "zlib@1.2.13-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "zlib"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.2.13-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:f1417ff83b319fbdae6dd9cd6d8c9c88002dcd75ecf6ec201c8c6894681cf2b5"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:apk/alpine/zstd-libs@1.5.5-r0?distro=3.17.3",
+      "type": "library",
+      "name": "zstd-libs",
+      "version": "1.5.5-r0",
+      "licenses": [
+        {
+          "expression": "BSD-3-Clause"
+        },
+        {
+          "expression": "GPL-2.0"
+        }
+      ],
+      "purl": "pkg:apk/alpine/zstd-libs@1.5.5-r0?distro=3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "zstd-libs@1.5.5-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "zstd"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.5.5-r0"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b9c8823af0ef2c8284428a5f32ab97e180262d5d8a482e7e411503ecf5c89ea7"
+        }
+      ]
+    },
+    {
+      "bom-ref": "94bc98ed-6ec6-4e79-baff-47c2e8e2c816",
+      "type": "operating-system",
+      "name": "alpine",
+      "version": "3.17.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:Type",
+          "value": "alpine"
+        },
+        {
+          "name": "aquasecurity:trivy:Class",
+          "value": "os-pkgs"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/ansi-regex@5.0.1?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fansi-regex%2Fpackage.json",
+      "type": "library",
+      "name": "ansi-regex",
+      "version": "5.0.1",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:npm/ansi-regex@5.0.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "ansi-regex@5.0.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "node-pkg"
+        },
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/node_modules/runtime-env-cra/node_modules/ansi-regex/package.json"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b608314f9ddab65789173e631ac55b1dd430c25776a457ed6d2621c45e28ac6e"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/escalade@3.1.1?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fescalade%2Fpackage.json",
+      "type": "library",
+      "name": "escalade",
+      "version": "3.1.1",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:npm/escalade@3.1.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "escalade@3.1.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "node-pkg"
+        },
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/node_modules/runtime-env-cra/node_modules/escalade/package.json"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b608314f9ddab65789173e631ac55b1dd430c25776a457ed6d2621c45e28ac6e"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/string-width@4.2.3?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fstring-width%2Fpackage.json",
+      "type": "library",
+      "name": "string-width",
+      "version": "4.2.3",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:npm/string-width@4.2.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "string-width@4.2.3"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "node-pkg"
+        },
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/node_modules/runtime-env-cra/node_modules/string-width/package.json"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b608314f9ddab65789173e631ac55b1dd430c25776a457ed6d2621c45e28ac6e"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/color-convert@2.0.1?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fcolor-convert%2Fpackage.json",
+      "type": "library",
+      "name": "color-convert",
+      "version": "2.0.1",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:npm/color-convert@2.0.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "color-convert@2.0.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "node-pkg"
+        },
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/node_modules/runtime-env-cra/node_modules/color-convert/package.json"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b608314f9ddab65789173e631ac55b1dd430c25776a457ed6d2621c45e28ac6e"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/get-caller-file@2.0.5?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fget-caller-file%2Fpackage.json",
+      "type": "library",
+      "name": "get-caller-file",
+      "version": "2.0.5",
+      "licenses": [
+        {
+          "expression": "ISC"
+        }
+      ],
+      "purl": "pkg:npm/get-caller-file@2.0.5",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "get-caller-file@2.0.5"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "node-pkg"
+        },
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/node_modules/runtime-env-cra/node_modules/get-caller-file/package.json"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b608314f9ddab65789173e631ac55b1dd430c25776a457ed6d2621c45e28ac6e"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/is-fullwidth-code-point@3.0.0?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fis-fullwidth-code-point%2Fpackage.json",
+      "type": "library",
+      "name": "is-fullwidth-code-point",
+      "version": "3.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:npm/is-fullwidth-code-point@3.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "is-fullwidth-code-point@3.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "node-pkg"
+        },
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/node_modules/runtime-env-cra/node_modules/is-fullwidth-code-point/package.json"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b608314f9ddab65789173e631ac55b1dd430c25776a457ed6d2621c45e28ac6e"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/require-directory@2.1.1?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Frequire-directory%2Fpackage.json",
+      "type": "library",
+      "name": "require-directory",
+      "version": "2.1.1",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:npm/require-directory@2.1.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "require-directory@2.1.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "node-pkg"
+        },
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/node_modules/runtime-env-cra/node_modules/require-directory/package.json"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b608314f9ddab65789173e631ac55b1dd430c25776a457ed6d2621c45e28ac6e"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/yargs-parser@21.1.1?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fyargs-parser%2Fpackage.json",
+      "type": "library",
+      "name": "yargs-parser",
+      "version": "21.1.1",
+      "licenses": [
+        {
+          "expression": "ISC"
+        }
+      ],
+      "purl": "pkg:npm/yargs-parser@21.1.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "yargs-parser@21.1.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "node-pkg"
+        },
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/node_modules/runtime-env-cra/node_modules/yargs-parser/package.json"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b608314f9ddab65789173e631ac55b1dd430c25776a457ed6d2621c45e28ac6e"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/ansi-styles@4.3.0?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fansi-styles%2Fpackage.json",
+      "type": "library",
+      "name": "ansi-styles",
+      "version": "4.3.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:npm/ansi-styles@4.3.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "ansi-styles@4.3.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "node-pkg"
+        },
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/node_modules/runtime-env-cra/node_modules/ansi-styles/package.json"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b608314f9ddab65789173e631ac55b1dd430c25776a457ed6d2621c45e28ac6e"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/cliui@8.0.1?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fcliui%2Fpackage.json",
+      "type": "library",
+      "name": "cliui",
+      "version": "8.0.1",
+      "licenses": [
+        {
+          "expression": "ISC"
+        }
+      ],
+      "purl": "pkg:npm/cliui@8.0.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "cliui@8.0.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "node-pkg"
+        },
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/node_modules/runtime-env-cra/node_modules/cliui/package.json"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b608314f9ddab65789173e631ac55b1dd430c25776a457ed6d2621c45e28ac6e"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/emoji-regex@8.0.0?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Femoji-regex%2Fpackage.json",
+      "type": "library",
+      "name": "emoji-regex",
+      "version": "8.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:npm/emoji-regex@8.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "emoji-regex@8.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "node-pkg"
+        },
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/node_modules/runtime-env-cra/node_modules/emoji-regex/package.json"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b608314f9ddab65789173e631ac55b1dd430c25776a457ed6d2621c45e28ac6e"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/wrap-ansi@7.0.0?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fwrap-ansi%2Fpackage.json",
+      "type": "library",
+      "name": "wrap-ansi",
+      "version": "7.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:npm/wrap-ansi@7.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "wrap-ansi@7.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "node-pkg"
+        },
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/node_modules/runtime-env-cra/node_modules/wrap-ansi/package.json"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b608314f9ddab65789173e631ac55b1dd430c25776a457ed6d2621c45e28ac6e"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/y18n@5.0.8?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fy18n%2Fpackage.json",
+      "type": "library",
+      "name": "y18n",
+      "version": "5.0.8",
+      "licenses": [
+        {
+          "expression": "ISC"
+        }
+      ],
+      "purl": "pkg:npm/y18n@5.0.8",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "y18n@5.0.8"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "node-pkg"
+        },
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/node_modules/runtime-env-cra/node_modules/y18n/package.json"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b608314f9ddab65789173e631ac55b1dd430c25776a457ed6d2621c45e28ac6e"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/color-name@1.1.4?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fcolor-name%2Fpackage.json",
+      "type": "library",
+      "name": "color-name",
+      "version": "1.1.4",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:npm/color-name@1.1.4",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "color-name@1.1.4"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "node-pkg"
+        },
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/node_modules/runtime-env-cra/node_modules/color-name/package.json"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b608314f9ddab65789173e631ac55b1dd430c25776a457ed6d2621c45e28ac6e"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/strip-ansi@6.0.1?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fstrip-ansi%2Fpackage.json",
+      "type": "library",
+      "name": "strip-ansi",
+      "version": "6.0.1",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:npm/strip-ansi@6.0.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "strip-ansi@6.0.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "node-pkg"
+        },
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/node_modules/runtime-env-cra/node_modules/strip-ansi/package.json"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b608314f9ddab65789173e631ac55b1dd430c25776a457ed6d2621c45e28ac6e"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/yargs@17.7.1?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fyargs%2Fpackage.json",
+      "type": "library",
+      "name": "yargs",
+      "version": "17.7.1",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "purl": "pkg:npm/yargs@17.7.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "yargs@17.7.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "node-pkg"
+        },
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/node_modules/runtime-env-cra/node_modules/yargs/package.json"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b608314f9ddab65789173e631ac55b1dd430c25776a457ed6d2621c45e28ac6e"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:npm/runtime-env-cra@0.2.4?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fpackage.json",
+      "type": "library",
+      "name": "runtime-env-cra",
+      "version": "0.2.4",
+      "licenses": [
+        {
+          "expression": "ISC"
+        }
+      ],
+      "purl": "pkg:npm/runtime-env-cra@0.2.4",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "runtime-env-cra@0.2.4"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "node-pkg"
+        },
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/node_modules/runtime-env-cra/package.json"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:b608314f9ddab65789173e631ac55b1dd430c25776a457ed6d2621c45e28ac6e"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "94bc98ed-6ec6-4e79-baff-47c2e8e2c816",
+      "dependsOn": [
+        "pkg:apk/alpine/--update@20230412.103458?distro=3.17.3",
+        "pkg:apk/alpine/alpine-baselayout@3.4.0-r0?distro=3.17.3",
+        "pkg:apk/alpine/alpine-baselayout-data@3.4.0-r0?distro=3.17.3",
+        "pkg:apk/alpine/alpine-keys@2.4-r1?distro=3.17.3",
+        "pkg:apk/alpine/aom-libs@3.5.0-r0?distro=3.17.3",
+        "pkg:apk/alpine/apk-tools@2.12.10-r1?distro=3.17.3",
+        "pkg:apk/alpine/brotli-libs@1.0.9-r9?distro=3.17.3",
+        "pkg:apk/alpine/busybox@1.35.0-r29?distro=3.17.3",
+        "pkg:apk/alpine/busybox-binsh@1.35.0-r29?distro=3.17.3",
+        "pkg:apk/alpine/c-ares@1.18.1-r1?distro=3.17.3",
+        "pkg:apk/alpine/ca-certificates@20220614-r4?distro=3.17.3",
+        "pkg:apk/alpine/ca-certificates-bundle@20220614-r4?distro=3.17.3",
+        "pkg:apk/alpine/fontconfig@2.14.1-r0?distro=3.17.3",
+        "pkg:apk/alpine/freetype@2.12.1-r0?distro=3.17.3",
+        "pkg:apk/alpine/geoip@1.6.12-r3?distro=3.17.3",
+        "pkg:apk/alpine/icu-data-en@72.1-r1?distro=3.17.3",
+        "pkg:apk/alpine/icu-libs@72.1-r1?distro=3.17.3",
+        "pkg:apk/alpine/libavif@0.11.1-r0?distro=3.17.3",
+        "pkg:apk/alpine/libbsd@0.11.7-r0?distro=3.17.3",
+        "pkg:apk/alpine/libbz2@1.0.8-r4?distro=3.17.3",
+        "pkg:apk/alpine/libc-utils@0.7.2-r3?distro=3.17.3",
+        "pkg:apk/alpine/libcrypto3@3.0.8-r3?distro=3.17.3",
+        "pkg:apk/alpine/libdav1d@1.0.0-r2?distro=3.17.3",
+        "pkg:apk/alpine/libedit@20221030.3.1-r0?distro=3.17.3",
+        "pkg:apk/alpine/libexpat@2.5.0-r0?distro=3.17.3",
+        "pkg:apk/alpine/libgcc@12.2.1_git20220924-r4?distro=3.17.3",
+        "pkg:apk/alpine/libgcrypt@1.10.1-r0?distro=3.17.3",
+        "pkg:apk/alpine/libgd@2.3.3-r3?distro=3.17.3",
+        "pkg:apk/alpine/libgpg-error@1.46-r1?distro=3.17.3",
+        "pkg:apk/alpine/libice@1.0.10-r1?distro=3.17.3",
+        "pkg:apk/alpine/libintl@0.21.1-r1?distro=3.17.3",
+        "pkg:apk/alpine/libjpeg-turbo@2.1.4-r0?distro=3.17.3",
+        "pkg:apk/alpine/libmd@1.0.4-r0?distro=3.17.3",
+        "pkg:apk/alpine/libpng@1.6.38-r0?distro=3.17.3",
+        "pkg:apk/alpine/libsm@1.2.3-r1?distro=3.17.3",
+        "pkg:apk/alpine/libssl3@3.0.8-r3?distro=3.17.3",
+        "pkg:apk/alpine/libstdc%2B%2B@12.2.1_git20220924-r4?distro=3.17.3",
+        "pkg:apk/alpine/libuuid@2.38.1-r1?distro=3.17.3",
+        "pkg:apk/alpine/libwebp@1.2.4-r1?distro=3.17.3",
+        "pkg:apk/alpine/libx11@1.8.4-r0?distro=3.17.3",
+        "pkg:apk/alpine/libxau@1.0.10-r0?distro=3.17.3",
+        "pkg:apk/alpine/libxcb@1.15-r0?distro=3.17.3",
+        "pkg:apk/alpine/libxdmcp@1.1.4-r0?distro=3.17.3",
+        "pkg:apk/alpine/libxext@1.3.5-r0?distro=3.17.3",
+        "pkg:apk/alpine/libxml2@2.10.3-r1?distro=3.17.3",
+        "pkg:apk/alpine/libxpm@3.5.15-r0?distro=3.17.3",
+        "pkg:apk/alpine/libxslt@1.1.37-r1?distro=3.17.3",
+        "pkg:apk/alpine/libxt@1.2.1-r0?distro=3.17.3",
+        "pkg:apk/alpine/musl@1.2.3-r4?distro=3.17.3",
+        "pkg:apk/alpine/musl-utils@1.2.3-r4?distro=3.17.3",
+        "pkg:apk/alpine/ncurses-libs@6.3_p20221119-r0?distro=3.17.3",
+        "pkg:apk/alpine/ncurses-terminfo-base@6.3_p20221119-r0?distro=3.17.3",
+        "pkg:apk/alpine/nghttp2-libs@1.51.0-r0?distro=3.17.3",
+        "pkg:apk/alpine/nginx@1.22.1-r1?distro=3.17.3",
+        "pkg:apk/alpine/nginx-module-geoip@1.22.1-r1?distro=3.17.3",
+        "pkg:apk/alpine/nginx-module-image-filter@1.22.1-r1?distro=3.17.3",
+        "pkg:apk/alpine/nginx-module-njs@1.22.1.0.7.11-r1?distro=3.17.3",
+        "pkg:apk/alpine/nginx-module-xslt@1.22.1-r1?distro=3.17.3",
+        "pkg:apk/alpine/nodejs@18.14.2-r0?distro=3.17.3",
+        "pkg:apk/alpine/npm@9.1.2-r0?distro=3.17.3",
+        "pkg:apk/alpine/pcre2@10.42-r0?distro=3.17.3",
+        "pkg:apk/alpine/scanelf@1.3.5-r1?distro=3.17.3",
+        "pkg:apk/alpine/ssl_client@1.35.0-r29?distro=3.17.3",
+        "pkg:apk/alpine/tiff@4.4.0-r3?distro=3.17.3",
+        "pkg:apk/alpine/tzdata@2023c-r0?distro=3.17.3",
+        "pkg:apk/alpine/xz-libs@5.2.9-r0?distro=3.17.3",
+        "pkg:apk/alpine/zlib@1.2.13-r0?distro=3.17.3",
+        "pkg:apk/alpine/zstd-libs@1.5.5-r0?distro=3.17.3"
+      ]
+    },
+    {
+      "ref": "pkg:oci/example-frontend@sha256:73d3494bb53ebe41f806c08fc356c000c21fe4a5eddf23907646c4eab784ea19?repository_url=index.docker.io%2Fexample%2Fexample-frontend\u0026arch=amd64",
+      "dependsOn": [
+        "94bc98ed-6ec6-4e79-baff-47c2e8e2c816",
+        "pkg:npm/ansi-regex@5.0.1?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fansi-regex%2Fpackage.json",
+        "pkg:npm/escalade@3.1.1?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fescalade%2Fpackage.json",
+        "pkg:npm/string-width@4.2.3?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fstring-width%2Fpackage.json",
+        "pkg:npm/color-convert@2.0.1?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fcolor-convert%2Fpackage.json",
+        "pkg:npm/get-caller-file@2.0.5?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fget-caller-file%2Fpackage.json",
+        "pkg:npm/is-fullwidth-code-point@3.0.0?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fis-fullwidth-code-point%2Fpackage.json",
+        "pkg:npm/require-directory@2.1.1?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Frequire-directory%2Fpackage.json",
+        "pkg:npm/yargs-parser@21.1.1?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fyargs-parser%2Fpackage.json",
+        "pkg:npm/ansi-styles@4.3.0?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fansi-styles%2Fpackage.json",
+        "pkg:npm/cliui@8.0.1?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fcliui%2Fpackage.json",
+        "pkg:npm/emoji-regex@8.0.0?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Femoji-regex%2Fpackage.json",
+        "pkg:npm/wrap-ansi@7.0.0?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fwrap-ansi%2Fpackage.json",
+        "pkg:npm/y18n@5.0.8?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fy18n%2Fpackage.json",
+        "pkg:npm/color-name@1.1.4?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fcolor-name%2Fpackage.json",
+        "pkg:npm/strip-ansi@6.0.1?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fstrip-ansi%2Fpackage.json",
+        "pkg:npm/yargs@17.7.1?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fnode_modules%2Fyargs%2Fpackage.json",
+        "pkg:npm/runtime-env-cra@0.2.4?file_path=usr%2Flocal%2Flib%2Fnode_modules%2Fruntime-env-cra%2Fpackage.json"
+      ]
+    }
+  ],
+  "vulnerabilities": [
+    {
+      "id": "CVE-2023-29469",
+      "source": {
+        "name": "alpine",
+        "url": "https://secdb.alpinelinux.org/"
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "redhat"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      ],
+      "description": "No description is available for this CVE.",
+      "recommendation": "Upgrade libxml2 to version 2.10.4-r0",
+      "advisories": [
+        {
+          "url": "https://access.redhat.com/security/cve/CVE-2023-29469"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-29469"
+        },
+        {
+          "url": "https://www.cve.org/CVERecord?id=CVE-2023-29469"
+        }
+      ],
+      "affects": [
+        {
+          "ref": "pkg:apk/alpine/libxml2@2.10.3-r1?distro=3.17.3",
+          "versions": [
+            {
+              "version": "2.10.3-r1",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2023-28484",
+      "source": {
+        "name": "alpine",
+        "url": "https://secdb.alpinelinux.org/"
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "redhat"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      ],
+      "description": "No description is available for this CVE.",
+      "recommendation": "Upgrade libxml2 to version 2.10.4-r0",
+      "advisories": [
+        {
+          "url": "https://access.redhat.com/security/cve/CVE-2023-28484"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-28484"
+        },
+        {
+          "url": "https://www.cve.org/CVERecord?id=CVE-2023-28484"
+        }
+      ],
+      "affects": [
+        {
+          "ref": "pkg:apk/alpine/libxml2@2.10.3-r1?distro=3.17.3",
+          "versions": [
+            {
+              "version": "2.10.3-r1",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

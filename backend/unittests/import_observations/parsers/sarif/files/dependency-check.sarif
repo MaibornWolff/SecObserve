@@ -1,0 +1,187 @@
+{
+    "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+    "version": "2.1.0",
+    "runs": [
+        {
+            "tool": {
+                "driver": {
+                    "name": "dependency-check",
+                    "version": "8.0.1",
+                    "informationUri": "https://jeremylong.github.io/DependencyCheck/",
+                    "rules": [
+                        {
+                            "id": "CVE-2017-10355",
+                            "shortDescription": {
+                                "text": "Medium severity - CVE-2017-10355 Deadlock vulnerability in pkg:maven\/xerces\/xercesImpl@2.12.2"
+                            },
+                            "fullDescription": {
+                                "text": "sonatype-2017-0348 - xerces:xercesImpl - Denial of Service (DoS)\n\nThe software contains multiple threads or executable segments that are waiting for each other to release a necessary lock, resulting in deadlock."
+                            },
+                            "help": {
+                                "text": "",
+                                "markdown": "\n\nIf this is a false positive - consider using the HTML report to generate a suppression file. For more information see [How dependency-check works](https://jeremylong.github.io/DependencyCheck/general/internals.html), [How to read the HTML report](https://jeremylong.github.io/DependencyCheck/general/thereport.html), and [Suppressing false positives](https://jeremylong.github.io/DependencyCheck/general/suppression.html)."
+                            },
+                            "properties": {
+                                "cvssv3_baseScore": 5.9,
+                                "security-severity": 5.9,
+                                "cvssv3_attackVector": "N",
+                                "cvssv3_attackComplexity": "H",
+                                "cvssv3_privilegesRequired": "N",
+                                "cvssv3_userInteraction": "N",
+                                "cvssv3_scope": "U",
+                                "cvssv3_confidentialityImpact": "N",
+                                "cvssv3_integrityImpact": "N",
+                                "cvssv3_availabilityImpact": "H",
+                                "cvssv3_baseSeverity": "MEDIUM",
+                                "source": "OSSINDEX"
+                            }
+                        },
+                        {
+                            "id": "CVE-2022-42920",
+                            "shortDescription": {
+                                "text": "Critical severity - CVE-2022-42920 Out-of-bounds Write vulnerability in pkg:maven\/org.apache.bcel\/bcel@6.5.0"
+                            },
+                            "fullDescription": {
+                                "text": "Apache Commons BCEL has a number of APIs that would normally only allow changing specific class characteristics. However, due to an out-of-bounds writing issue, these APIs can be used to produce arbitrary bytecode. This could be abused in applications that pass attacker-controllable data to those APIs, giving the attacker more control over the resulting bytecode than otherwise expected. Update to Apache Commons BCEL 6.6.0."
+                            },
+                            "help": {
+                                "text": "",
+                                "markdown": "For more information see [CVE-2022-42920](http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2022-42920).\n\n\nIf this is a false positive - consider using the HTML report to generate a suppression file. For more information see [How dependency-check works](https://jeremylong.github.io/DependencyCheck/general/internals.html), [How to read the HTML report](https://jeremylong.github.io/DependencyCheck/general/thereport.html), and [Suppressing false positives](https://jeremylong.github.io/DependencyCheck/general/suppression.html)."
+                            },
+                            "properties": {
+                                "cvssv3_baseScore": 9.8,
+                                "security-severity": 9.8,
+                                "cvssv3_attackVector": "NETWORK",
+                                "cvssv3_attackComplexity": "LOW",
+                                "cvssv3_privilegesRequired": "NONE",
+                                "cvssv3_userInteraction": "NONE",
+                                "cvssv3_scope": "UNCHANGED",
+                                "cvssv3_confidentialityImpact": "HIGH",
+                                "cvssv3_integrityImpact": "HIGH",
+                                "cvssv3_availabilityImpact": "HIGH",
+                                "cvssv3_baseSeverity": "CRITICAL",
+                                "cvssv3_exploitabilityScore": "3.9",
+                                "cvssv3_impactScore": "5.9",
+                                "cvssv3_version": "3.1",
+                                "source": "NVD"
+                            }
+                        },
+                        {
+                            "id": "CVE-2023-0044",
+                            "shortDescription": {
+                                "text": "Unknown severity - CVE-2023-0044 Information Exposure vulnerability in pkg:maven\/io.quarkus\/quarkus-vertx-http@2.16.0.Final"
+                            },
+                            "fullDescription": {
+                                "text": "quarkus-vertx-http - Information Disclosure"
+                            },
+                            "help": {
+                                "text": "",
+                                "markdown": "\n\nIf this is a false positive - consider using the HTML report to generate a suppression file. For more information see [How dependency-check works](https://jeremylong.github.io/DependencyCheck/general/internals.html), [How to read the HTML report](https://jeremylong.github.io/DependencyCheck/general/thereport.html), and [Suppressing false positives](https://jeremylong.github.io/DependencyCheck/general/suppression.html)."
+                            },
+                            "properties": {
+                                "cvssv2_score": 5.3,
+                                "cvssv2_accessVector": "N",
+                                "cvssv2_accessComplexity": "L",
+                                "cvssv2_authenticationr": "$enc.json($rule.cvssv2Authentication)",
+                                "cvssv2_confidentialImpact": "$enc.json($rule.cvssv2ConfidentialityImpact)",
+                                "cvssv2_integrityImpact": "N",
+                                "cvssv2_availabilityImpact": "N",
+                                "cvssv2_severity": "MEDIUM",
+                                "source": "OSSINDEX"
+                            }
+                        }
+                    ],
+                    "properties": {
+                        "disclaimer": "Dependency-Check is an open source tool performing a best effort analysis of 3rd party dependencies; false positives and false negatives may exist in the analysis performed by the tool. Use of the tool and the reporting provided constitutes acceptance for use in an AS IS condition, and there are NO warranties, implied or otherwise, with regard to the analysis or its use. Any use of the tool and the reporting provided is at the user's risk. In no event shall the copyright holder or OWASP be held liable for any damages whatsoever arising out of or in connection with the use of this tool, the analysis performed, or the resulting report.",
+                        "nvd": "This report contains data retrieved from the National Vulnerability Database: http://nvd.nist.gov",
+                        "cisa": "This report may contain data retrieved from the CISA Known Exploited Vulnerability Catalog: https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+                        "npm": "This report may contain data retrieved from the NPM Public Advisories: https://www.npmjs.com/advisories",
+                        "retirejs": "This report may contain data retrieved from the RetireJS community: https://retirejs.github.io/retire.js/",
+                        "ossindex": "This report may contain data retrieved from the Sonatype OSS Index: https://ossindex.sonatype.org",
+                        "NVD CVE Checked": "2023-01-24T15:59:20",
+                        "NVD CVE Modified": "2023-01-24T14:00:02",
+                        "VersionCheckOn": "2023-01-24T15:59:27",
+                        "kev.checked": "1674572368"
+                    }
+                }
+            },
+            "results": [
+                {
+                    "ruleId": "CVE-2022-42920",
+                    "level": "warning",
+                    "message": {
+                        "text": "CVE-2022-42920 - Apache Commons BCEL has a number of APIs that would normally only allow changing specific class characteristics. However, due to an out-of-bounds writing issue, these APIs can be used to produce arbitrary bytecode. This could be abused in applications that pass attacker-controllable data to those APIs, giving the attacker more control over the resulting bytecode than otherwise expected. Update to Apache Commons BCEL 6.6.0."
+                    },
+                    "partialFingerprints": {
+                        "vulnerabilityHash": "252e91c4b99958a439d35727992a52f1"
+                    },
+                    "locations": [
+                        {
+                            "physicalLocation": {
+                                "artifactLocation": {
+                                    "uri": "\/home\/.gradle\/caches\/modules-2\/files-2.1\/org.apache.bcel\/bcel\/6.5.0\/79b1975ec0c7a6c1a15e19fb3a58cc4041b4aaea\/bcel-6.5.0.jar",
+                                    "index": 12
+                                }
+                            },
+                            "logicalLocations": [
+                                {
+                                    "fullyQualifiedName": "pkg:maven\/org.apache.bcel\/bcel@6.5.0"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "ruleId": "CVE-2023-0044",
+                    "level": "warning",
+                    "message": {
+                        "text": "CVE-2023-0044 - quarkus-vertx-http - Information Disclosure"
+                    },
+                    "partialFingerprints": {
+                        "vulnerabilityHash": "4f9a6d817752fee59a19618c2dffc9c9"
+                    },
+                    "locations": [
+                        {
+                            "physicalLocation": {
+                                "artifactLocation": {
+                                    "uri": "\/home\/.gradle\/caches\/modules-2\/files-2.1\/io.quarkus\/quarkus-vertx-http\/2.16.0.Final\/62d6c1c3b3dd769b8e7b95cdc14b55841e689014\/quarkus-vertx-http-2.16.0.Final.jar",
+                                    "index": 182
+                                }
+                            },
+                            "logicalLocations": [
+                                {
+                                    "fullyQualifiedName": "pkg:maven\/io.quarkus\/quarkus-vertx-http@2.16.0.Final"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "ruleId": "CVE-2017-10355",
+                    "level": "warning",
+                    "message": {
+                        "text": "CVE-2017-10355 - sonatype-2017-0348 - xerces:xercesImpl - Denial of Service (DoS)\n\nThe software contains multiple threads or executable segments that are waiting for each other to release a necessary lock, resulting in deadlock."
+                    },
+                    "partialFingerprints": {
+                        "vulnerabilityHash": "569f1c37808ec2ec6c25b0dfa0e3453b"
+                    },
+                    "locations": [
+                        {
+                            "physicalLocation": {
+                                "artifactLocation": {
+                                    "uri": "\/home\/.gradle\/caches\/modules-2\/files-2.1\/xerces\/xercesImpl\/2.12.2\/f051f988aa2c9b4d25d05f95742ab0cc3ed789e2\/xercesImpl-2.12.2.jar",
+                                    "index": 262
+                                }
+                            },
+                            "logicalLocations": [
+                                {
+                                    "fullyQualifiedName": "pkg:maven\/xerces\/xercesImpl@2.12.2"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

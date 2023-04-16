@@ -152,7 +152,7 @@ class DrHEADerParser(BaseParser, BaseFileParser):
                         description += "**Expected:** "
                         description += (delimiter + " ").join(expected)
                     else:
-                        description += "**Expected:** \n* "
+                        description += "**Expected:**\n* "
                         description += "\n* ".join(expected)
                 else:
                     description += "**Expected:** " + str(expected)

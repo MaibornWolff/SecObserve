@@ -58,8 +58,11 @@ class SARIFParser(BaseParser, BaseFileParser):
         version = data.get("version")
         schema = data.get("$schema")
         if not version or not schema:
-            return False, ["'version' and/or '$schema' are missing"], {}
+            return False, ["File is not SARIF format, 'version' and/or '$schema' are missing"], {}
 
+        if version != "2.1.0":
+            return False, ["File is not SARIF format, version is not 2.1.0"], {}
+        
         return True, [], data
 
     def get_observations(self, data: dict) -> list[Observation]:

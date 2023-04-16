@@ -1,0 +1,740 @@
+{
+	"$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+	"version": "2.1.0",
+	"runs": [
+		{
+			"tool": {
+				"driver": {
+					"name": "KICS",
+					"version": "development",
+					"fullName": "Keeping Infrastructure as Code Secure",
+					"informationUri": "https://www.kics.io/",
+					"rules": [
+						{
+							"id": "d6355c88-1e8d-49e9-b2f2-f8a1ca12c75b",
+							"name": "Docker Socket Mounted In Container",
+							"shortDescription": {
+								"text": "Docker Socket Mounted In Container"
+							},
+							"fullDescription": {
+								"text": "Docker socket docker.sock should not be mounted on host. If the docker socket is mounted, it can allow its processes to execute docker commands."
+							},
+							"defaultConfiguration": {
+								"level": "error"
+							},
+							"helpUri": "https://docs.docker.com/compose/compose-file/#volumes",
+							"relationships": [
+								{
+									"target": {
+										"id": "CAT005",
+										"index": 10,
+										"toolComponent": {
+											"name": "Categories",
+											"guid": "58cdcc6f-fe41-4724-bfb3-131a93df4c3f",
+											"index": 0
+										}
+									}
+								}
+							]
+						},
+						{
+							"id": "9fb1cd65-7a07-4531-9bcf-47589d0f82d6",
+							"name": "Passwords And Secrets - Encryption Key",
+							"shortDescription": {
+								"text": "Passwords And Secrets - Encryption Key"
+							},
+							"fullDescription": {
+								"text": "Query to find passwords and secrets in infrastructure code."
+							},
+							"defaultConfiguration": {
+								"level": "error"
+							},
+							"helpUri": "https://docs.kics.io/latest/secrets/",
+							"relationships": [
+								{
+									"target": {
+										"id": "CAT012",
+										"index": 12,
+										"toolComponent": {
+											"name": "Categories",
+											"guid": "58cdcc6f-fe41-4724-bfb3-131a93df4c3f",
+											"index": 0
+										}
+									}
+								}
+							]
+						},
+						{
+							"id": "487f4be7-3fd9-4506-a07a-eae252180c08",
+							"name": "Passwords And Secrets - Generic Password",
+							"shortDescription": {
+								"text": "Passwords And Secrets - Generic Password"
+							},
+							"fullDescription": {
+								"text": "Query to find passwords and secrets in infrastructure code."
+							},
+							"defaultConfiguration": {
+								"level": "error"
+							},
+							"helpUri": "https://docs.kics.io/latest/secrets/",
+							"relationships": [
+								{
+									"target": {
+										"id": "CAT012",
+										"index": 12,
+										"toolComponent": {
+											"name": "Categories",
+											"guid": "58cdcc6f-fe41-4724-bfb3-131a93df4c3f",
+											"index": 0
+										}
+									}
+								}
+							]
+						},
+						{
+							"id": "3e2d3b2f-c22a-4df1-9cc6-a7a0aebb0c99",
+							"name": "Passwords And Secrets - Generic Secret",
+							"shortDescription": {
+								"text": "Passwords And Secrets - Generic Secret"
+							},
+							"fullDescription": {
+								"text": "Query to find passwords and secrets in infrastructure code."
+							},
+							"defaultConfiguration": {
+								"level": "error"
+							},
+							"helpUri": "https://docs.kics.io/latest/secrets/",
+							"relationships": [
+								{
+									"target": {
+										"id": "CAT012",
+										"index": 12,
+										"toolComponent": {
+											"name": "Categories",
+											"guid": "58cdcc6f-fe41-4724-bfb3-131a93df4c3f",
+											"index": 0
+										}
+									}
+								}
+							]
+						},
+						{
+							"id": "1c1325ff-831d-43a1-973e-839ae57dfcc0",
+							"name": "Volume Has Sensitive Host Directory",
+							"shortDescription": {
+								"text": "Volume Has Sensitive Host Directory"
+							},
+							"fullDescription": {
+								"text": "Container has sensitive host directory mounted as a volume"
+							},
+							"defaultConfiguration": {
+								"level": "error"
+							},
+							"helpUri": "https://docs.docker.com/compose/compose-file/compose-file-v3/#volume-configuration-reference",
+							"relationships": [
+								{
+									"target": {
+										"id": "CAT005",
+										"index": 10,
+										"toolComponent": {
+											"name": "Categories",
+											"guid": "58cdcc6f-fe41-4724-bfb3-131a93df4c3f",
+											"index": 0
+										}
+									}
+								}
+							]
+						},
+						{
+							"id": "451d79dc-0588-476a-ad03-3c7f0320abb3",
+							"name": "Container Traffic Not Bound To Host Interface",
+							"shortDescription": {
+								"text": "Container Traffic Not Bound To Host Interface"
+							},
+							"fullDescription": {
+								"text": "Incoming container traffic should be bound to a specific host interface"
+							},
+							"defaultConfiguration": {
+								"level": "warning"
+							},
+							"helpUri": "https://docs.docker.com/compose/compose-file/compose-file-v3/#ports",
+							"relationships": [
+								{
+									"target": {
+										"id": "CAT009",
+										"index": 9,
+										"toolComponent": {
+											"name": "Categories",
+											"guid": "58cdcc6f-fe41-4724-bfb3-131a93df4c3f",
+											"index": 0
+										}
+									}
+								}
+							]
+						},
+						{
+							"id": "698ed579-b239-4f8f-a388-baa4bcb13ef8",
+							"name": "Healthcheck Not Set",
+							"shortDescription": {
+								"text": "Healthcheck Not Set"
+							},
+							"fullDescription": {
+								"text": "Check containers periodically to see if they are running properly."
+							},
+							"defaultConfiguration": {
+								"level": "warning"
+							},
+							"helpUri": "https://docs.docker.com/compose/compose-file/compose-file-v3/#healthcheck",
+							"relationships": [
+								{
+									"target": {
+										"id": "CAT002",
+										"index": 8,
+										"toolComponent": {
+											"name": "Categories",
+											"guid": "58cdcc6f-fe41-4724-bfb3-131a93df4c3f",
+											"index": 0
+										}
+									}
+								}
+							]
+						},
+						{
+							"id": "4f31dd9f-2cc3-4751-9b53-67e4af83dac0",
+							"name": "Host Namespace is Shared",
+							"shortDescription": {
+								"text": "Host Namespace is Shared"
+							},
+							"fullDescription": {
+								"text": "The hosts process namespace should not be shared by containers"
+							},
+							"defaultConfiguration": {
+								"level": "warning"
+							},
+							"helpUri": "https://docs.docker.com/compose/compose-file/compose-file-v3/#pid",
+							"relationships": [
+								{
+									"target": {
+										"id": "CAT011",
+										"index": 11,
+										"toolComponent": {
+											"name": "Categories",
+											"guid": "58cdcc6f-fe41-4724-bfb3-131a93df4c3f",
+											"index": 0
+										}
+									}
+								}
+							]
+						},
+						{
+							"id": "bb9ac4f7-e13b-423d-a010-c74a1bfbe492",
+							"name": "Memory Not Limited",
+							"shortDescription": {
+								"text": "Memory Not Limited"
+							},
+							"fullDescription": {
+								"text": "Memory limits should be defined for each container. This prevents potential resource exhaustion by ensuring that containers consume not more than the designated amount of memory"
+							},
+							"defaultConfiguration": {
+								"level": "warning"
+							},
+							"helpUri": "https://docs.docker.com/compose/compose-file/compose-file-v3/#resources",
+							"relationships": [
+								{
+									"target": {
+										"id": "CAT011",
+										"index": 11,
+										"toolComponent": {
+											"name": "Categories",
+											"guid": "58cdcc6f-fe41-4724-bfb3-131a93df4c3f",
+											"index": 0
+										}
+									}
+								}
+							]
+						},
+						{
+							"id": "e36d8880-3f78-4546-b9a1-12f0745ca0d5",
+							"name": "NPM Install Command Without Pinned Version",
+							"shortDescription": {
+								"text": "NPM Install Command Without Pinned Version"
+							},
+							"fullDescription": {
+								"text": "Check if packages installed by npm are pinning a specific version."
+							},
+							"defaultConfiguration": {
+								"level": "warning"
+							},
+							"helpUri": "https://docs.docker.com/engine/reference/builder/#run",
+							"relationships": [
+								{
+									"target": {
+										"id": "CAT013",
+										"index": 6,
+										"toolComponent": {
+											"name": "Categories",
+											"guid": "58cdcc6f-fe41-4724-bfb3-131a93df4c3f",
+											"index": 0
+										}
+									}
+								}
+							]
+						},
+						{
+							"id": "ce14a68b-1668-41a0-ab7d-facd9f784742",
+							"name": "Networks Not Set",
+							"shortDescription": {
+								"text": "Networks Not Set"
+							},
+							"fullDescription": {
+								"text": "Setting networks in services ensures you are not using dockers default bridge (docker0), which shares traffic bewteen all containers."
+							},
+							"defaultConfiguration": {
+								"level": "warning"
+							},
+							"helpUri": "https://docs.docker.com/compose/compose-file/compose-file-v3/#networks",
+							"relationships": [
+								{
+									"target": {
+										"id": "CAT009",
+										"index": 9,
+										"toolComponent": {
+											"name": "Categories",
+											"guid": "58cdcc6f-fe41-4724-bfb3-131a93df4c3f",
+											"index": 0
+										}
+									}
+								}
+							]
+						},
+						{
+							"id": "bc2908f3-f73c-40a9-8793-c1b7d5544f79",
+							"name": "Privileged Ports Mapped In Container",
+							"shortDescription": {
+								"text": "Privileged Ports Mapped In Container"
+							},
+							"fullDescription": {
+								"text": "Privileged ports (1 to 1023) should not be mapped. Also you should drop net_bind_service linux capability from the container unless you absolutely need to use priviledged ports."
+							},
+							"defaultConfiguration": {
+								"level": "warning"
+							},
+							"helpUri": "https://docs.docker.com/compose/compose-file/compose-file-v3/#cap_add-cap_drop",
+							"relationships": [
+								{
+									"target": {
+										"id": "CAT009",
+										"index": 9,
+										"toolComponent": {
+											"name": "Categories",
+											"guid": "58cdcc6f-fe41-4724-bfb3-131a93df4c3f",
+											"index": 0
+										}
+									}
+								}
+							]
+						},
+						{
+							"id": "610e266e-6c12-4bca-9925-1ed0cd29742b",
+							"name": "Security Opt Not Set",
+							"shortDescription": {
+								"text": "Security Opt Not Set"
+							},
+							"fullDescription": {
+								"text": "Attribute 'security_opt' should be defined."
+							},
+							"defaultConfiguration": {
+								"level": "warning"
+							},
+							"helpUri": "https://docs.docker.com/compose/compose-file/compose-file-v3/#security_opt",
+							"relationships": [
+								{
+									"target": {
+										"id": "CAT011",
+										"index": 11,
+										"toolComponent": {
+											"name": "Categories",
+											"guid": "58cdcc6f-fe41-4724-bfb3-131a93df4c3f",
+											"index": 0
+										}
+									}
+								}
+							]
+						},
+						{
+							"id": "d3499f6d-1651-41bb-a9a7-de925fea487b",
+							"name": "Unpinned Package Version in Apk Add",
+							"shortDescription": {
+								"text": "Unpinned Package Version in Apk Add"
+							},
+							"fullDescription": {
+								"text": "Package version pinning reduces the range of versions that can be installed, reducing the chances of failure due to unanticipated changes"
+							},
+							"defaultConfiguration": {
+								"level": "warning"
+							},
+							"helpUri": "https://docs.docker.com/develop/develop-images/dockerfile_best-practices/",
+							"relationships": [
+								{
+									"target": {
+										"id": "CAT013",
+										"index": 6,
+										"toolComponent": {
+											"name": "Categories",
+											"guid": "58cdcc6f-fe41-4724-bfb3-131a93df4c3f",
+											"index": 0
+										}
+									}
+								}
+							]
+						},
+						{
+							"id": "9bae49be-0aa3-4de5-bab2-4c3a069e40cd",
+							"name": "Update Instruction Alone",
+							"shortDescription": {
+								"text": "Update Instruction Alone"
+							},
+							"fullDescription": {
+								"text": "Instruction 'RUN \u003cpackage-manager\u003e update' should always be followed by '\u003cpackage-manager\u003e install' in the same RUN statement"
+							},
+							"defaultConfiguration": {
+								"level": "warning"
+							},
+							"helpUri": "https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#run",
+							"relationships": [
+								{
+									"target": {
+										"id": "CAT005",
+										"index": 10,
+										"toolComponent": {
+											"name": "Categories",
+											"guid": "58cdcc6f-fe41-4724-bfb3-131a93df4c3f",
+											"index": 0
+										}
+									}
+								}
+							]
+						},
+						{
+							"id": "ce76b7d0-9e77-464d-b86f-c5c48e03e22d",
+							"name": "Container Capabilities Unrestricted",
+							"shortDescription": {
+								"text": "Container Capabilities Unrestricted"
+							},
+							"fullDescription": {
+								"text": "Some capabilities are not needed in certain (or any) containers. Make sure that you only add capabilities that your container needs. Drop unnecessary capabilities as well."
+							},
+							"defaultConfiguration": {
+								"level": "note"
+							},
+							"helpUri": "https://docs.docker.com/compose/compose-file/compose-file-v3/#cap_add-cap_drop",
+							"relationships": [
+								{
+									"target": {
+										"id": "CAT011",
+										"index": 11,
+										"toolComponent": {
+											"name": "Categories",
+											"guid": "58cdcc6f-fe41-4724-bfb3-131a93df4c3f",
+											"index": 0
+										}
+									}
+								}
+							]
+						},
+						{
+							"id": "6b610c50-99fb-4ef0-a5f3-e312fd945bc3",
+							"name": "Cpus Not Limited",
+							"shortDescription": {
+								"text": "Cpus Not Limited"
+							},
+							"fullDescription": {
+								"text": "CPU limits should be set because if the system has CPU time free, a container is guaranteed to be allocated as much CPU as it requests"
+							},
+							"defaultConfiguration": {
+								"level": "note"
+							},
+							"helpUri": "https://docs.docker.com/compose/compose-file/compose-file-v3/#resources",
+							"relationships": [
+								{
+									"target": {
+										"id": "CAT011",
+										"index": 11,
+										"toolComponent": {
+											"name": "Categories",
+											"guid": "58cdcc6f-fe41-4724-bfb3-131a93df4c3f",
+											"index": 0
+										}
+									}
+								}
+							]
+						},
+						{
+							"id": "b03a748a-542d-44f4-bb86-9199ab4fd2d5",
+							"name": "Healthcheck Instruction Missing",
+							"shortDescription": {
+								"text": "Healthcheck Instruction Missing"
+							},
+							"fullDescription": {
+								"text": "Ensure that HEALTHCHECK is being used. The HEALTHCHECK instruction tells Docker how to test a container to check that it is still working"
+							},
+							"defaultConfiguration": {
+								"level": "note"
+							},
+							"helpUri": "https://docs.docker.com/engine/reference/builder/#healthcheck",
+							"relationships": [
+								{
+									"target": {
+										"id": "CAT007",
+										"index": 14,
+										"toolComponent": {
+											"name": "Categories",
+											"guid": "58cdcc6f-fe41-4724-bfb3-131a93df4c3f",
+											"index": 0
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			},
+			"results": [
+				{
+					"ruleId": "d6355c88-1e8d-49e9-b2f2-f8a1ca12c75b",
+					"ruleIndex": 0,
+					"kind": "fail",
+					"message": {
+						"text": "There is a docker socket named 'docker.sock' mounted in a volume"
+					},
+					"locations": [
+						{
+							"physicalLocation": {
+								"artifactLocation": {
+									"uri": "docker-compose-prod-postgres.yml"
+								},
+								"region": {
+									"startLine": 34
+								}
+							}
+						}
+					]
+				},
+				{
+					"ruleId": "d6355c88-1e8d-49e9-b2f2-f8a1ca12c75b",
+					"ruleIndex": 0,
+					"kind": "pass",
+					"message": {
+						"text": "There is a docker socket named 'docker.sock' mounted in a volume"
+					},
+					"locations": [
+						{
+							"physicalLocation": {
+								"artifactLocation": {
+									"uri": "docker-compose-prod-mysql.yml"
+								},
+								"region": {
+									"startLine": 34
+								}
+							}
+						}
+					]
+				},
+				{
+					"ruleId": "9fb1cd65-7a07-4531-9bcf-47589d0f82d6",
+					"ruleIndex": 1,
+					"kind": "fail",
+					"message": {
+						"text": "Hardcoded secret key appears in source"
+					},
+					"locations": [
+						{
+							"physicalLocation": {
+								"artifactLocation": {
+									"uri": "docker-compose-dev.yml"
+								},
+								"region": {
+									"startLine": 49
+								}
+							}
+						}
+					]
+				}
+			],
+			"taxonomies": [
+				{
+					"guid": "58cdcc6f-fe41-4724-bfb3-131a93df4c3f",
+					"name": "Categories",
+					"fullDescription": {
+						"text": "This taxonomy contains the types an issue can assume"
+					},
+					"shortDescription": {
+						"text": "Vulnerabilities categories"
+					},
+					"taxa": [
+						{
+							"id": "CAT000",
+							"name": "Undefined Category",
+							"shortDescription": {
+								"text": "Category is not defined"
+							},
+							"fullDescription": {
+								"text": "Category is not defined"
+							}
+						},
+						{
+							"id": "CAT015",
+							"name": "Bill Of Materials",
+							"shortDescription": {
+								"text": "List of resources provisioned"
+							},
+							"fullDescription": {
+								"text": "List of resources provisioned"
+							}
+						},
+						{
+							"id": "CAT004",
+							"name": "Best Practices",
+							"shortDescription": {
+								"text": "Metadata management"
+							},
+							"fullDescription": {
+								"text": "Metadata management"
+							}
+						},
+						{
+							"id": "CAT006",
+							"name": "Encryption",
+							"shortDescription": {
+								"text": "Data Security and Encryption configuration"
+							},
+							"fullDescription": {
+								"text": "Data Security and Encryption configuration"
+							}
+						},
+						{
+							"id": "CAT008",
+							"name": "Insecure Defaults",
+							"shortDescription": {
+								"text": "Configurations that are insecure by default"
+							},
+							"fullDescription": {
+								"text": "Configurations that are insecure by default"
+							}
+						},
+						{
+							"id": "CAT010",
+							"name": "Observability",
+							"shortDescription": {
+								"text": "Logging and Monitoring"
+							},
+							"fullDescription": {
+								"text": "Logging and Monitoring"
+							}
+						},
+						{
+							"id": "CAT013",
+							"name": "Supply-Chain",
+							"shortDescription": {
+								"text": "Dependency version management"
+							},
+							"fullDescription": {
+								"text": "Dependency version management"
+							}
+						},
+						{
+							"id": "CAT001",
+							"name": "Access Control",
+							"shortDescription": {
+								"text": "Service permission and identity management"
+							},
+							"fullDescription": {
+								"text": "Service permission and identity management"
+							}
+						},
+						{
+							"id": "CAT002",
+							"name": "Availability",
+							"shortDescription": {
+								"text": "Reliability and Scalability"
+							},
+							"fullDescription": {
+								"text": "Reliability and Scalability"
+							}
+						},
+						{
+							"id": "CAT009",
+							"name": "Networking and Firewall",
+							"shortDescription": {
+								"text": "Network port exposure and firewall configuration"
+							},
+							"fullDescription": {
+								"text": "Network port exposure and firewall configuration"
+							}
+						},
+						{
+							"id": "CAT005",
+							"name": "Build Process",
+							"shortDescription": {
+								"text": "Insecure configurations when building/deploying"
+							},
+							"fullDescription": {
+								"text": "Insecure configurations when building/deploying"
+							}
+						},
+						{
+							"id": "CAT011",
+							"name": "Resource Management",
+							"shortDescription": {
+								"text": "Resource and privilege limit configuration"
+							},
+							"fullDescription": {
+								"text": "Resource and privilege limit configuration"
+							}
+						},
+						{
+							"id": "CAT012",
+							"name": "Secret Management",
+							"shortDescription": {
+								"text": "Secret and Key management"
+							},
+							"fullDescription": {
+								"text": "Secret and Key management"
+							}
+						},
+						{
+							"id": "CAT003",
+							"name": "Backup",
+							"shortDescription": {
+								"text": "Survivability and Recovery"
+							},
+							"fullDescription": {
+								"text": "Survivability and Recovery"
+							}
+						},
+						{
+							"id": "CAT007",
+							"name": "Insecure Configurations",
+							"shortDescription": {
+								"text": "Configurations which expose the application unnecessarily"
+							},
+							"fullDescription": {
+								"text": "Configurations which expose the application unnecessarily"
+							}
+						},
+						{
+							"id": "CAT014",
+							"name": "Structure and Semantics",
+							"shortDescription": {
+								"text": "Malformed document structure or inadequate semantics"
+							},
+							"fullDescription": {
+								"text": "Malformed document structure or inadequate semantics"
+							}
+						}
+					]
+				}
+			]
+		}
+	]
+}

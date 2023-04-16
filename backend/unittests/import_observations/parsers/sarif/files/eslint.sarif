@@ -1,0 +1,562 @@
+{
+  "version": "2.1.0",
+  "$schema": "http://json.schemastore.org/sarif-2.1.0-rtm.5",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "ESLint",
+          "informationUri": "https://eslint.org",
+          "rules": [
+            {
+              "id": "@typescript-eslint/no-unused-vars",
+              "helpUri": "https://typescript-eslint.io/rules/no-unused-vars",
+              "properties": {},
+              "shortDescription": {
+                "text": "Disallow unused variables"
+              }
+            },
+            {
+              "id": "@typescript-eslint/no-non-null-assertion",
+              "helpUri": "https://typescript-eslint.io/rules/no-non-null-assertion",
+              "properties": {},
+              "shortDescription": {
+                "text": "Disallow non-null assertions using the `!` postfix operator"
+              }
+            },
+            {
+              "id": "security/detect-object-injection",
+              "helpUri": "https://github.com/nodesecurity/eslint-plugin-security/blob/main/docs/the-dangers-of-square-bracket-notation.md",
+              "properties": {
+                "category": "Possible Security Vulnerability"
+              },
+              "shortDescription": {
+                "text": "Detects \"variable[key]\" as a left- or right-hand assignment operand."
+              }
+            }
+          ],
+          "version": "8.25.0"
+        }
+      },
+      "artifacts": [
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/App.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/access_control/Login.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/access_control/authProvider.ts"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/access_control/index.ts"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/access_control/types.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/commons/configuration/Configuration.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/commons/custom_fields/MarkdownField.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/commons/custom_fields/ObservationsCountField.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/commons/custom_fields/SecurityGateTextField.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/commons/custom_fields/SeverityField.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/commons/custom_fields/TextUrlField.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/commons/functions.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/commons/i18n/en.ts"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/commons/layout/AppBar.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/commons/layout/Layout.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/commons/layout/Logo.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/commons/layout/Menu.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/commons/layout/SubMenu.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/commons/layout/index.ts"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/commons/layout/themes.ts"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/commons/ra-data-django-rest-framework/index.ts"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/commons/types.ts"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/core/observations/ObservationAssessment.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/core/observations/ObservationEmbeddedList.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/core/observations/ObservationList.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/core/observations/ObservationShow.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/core/observations/ObservationShowAside.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/core/observations/index.ts"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/core/product_members/ProductMemberBulkDeleteButton.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/core/product_members/ProductMemberCreate.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/core/product_members/ProductMemberDeleteButton.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/core/product_members/ProductMemberEdit.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/core/product_members/ProductMemberEmbeddedList.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/core/products/ImportObservations.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/core/products/ProductCreate.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/core/products/ProductEdit.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/core/products/ProductHeader.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/core/products/ProductList.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/core/products/ProductShow.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/core/products/index.ts"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/core/scanners/ScannerList.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/core/scanners/ScannerShow.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/core/scanners/index.ts"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/core/types.ts"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/dashboard/Dashboard.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/dashboard/MetricSeverities.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/dashboard/MetricStatus.tsx"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/dashboard/index.ts"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/index.tsx"
+          }
+        }
+      ],
+      "results": [
+        {
+          "level": "warning",
+          "message": {
+            "text": "'locale' is defined but never used."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/App.tsx",
+                  "index": 0
+                },
+                "region": {
+                  "startLine": 19,
+                  "startColumn": 44,
+                  "endLine": 19,
+                  "endColumn": 50
+                }
+              }
+            }
+          ],
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "ruleIndex": 0
+        },
+        {
+          "level": "warning",
+          "message": {
+            "text": "'ref' is defined but never used."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/commons/layout/AppBar.tsx",
+                  "index": 13
+                },
+                "region": {
+                  "startLine": 17,
+                  "startColumn": 52,
+                  "endLine": 17,
+                  "endColumn": 55
+                }
+              }
+            }
+          ],
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "ruleIndex": 0
+        },
+        {
+          "level": "warning",
+          "message": {
+            "text": "'isLoading' is assigned a value but never used."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/core/product_members/ProductMemberBulkDeleteButton.tsx",
+                  "index": 28
+                },
+                "region": {
+                  "startLine": 17,
+                  "startColumn": 26,
+                  "endLine": 17,
+                  "endColumn": 35
+                }
+              }
+            }
+          ],
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "ruleIndex": 0
+        },
+        {
+          "level": "warning",
+          "message": {
+            "text": "'isLoading' is assigned a value but never used."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/core/product_members/ProductMemberDeleteButton.tsx",
+                  "index": 30
+                },
+                "region": {
+                  "startLine": 13,
+                  "startColumn": 25,
+                  "endLine": 13,
+                  "endColumn": 34
+                }
+              }
+            }
+          ],
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "ruleIndex": 0
+        },
+        {
+          "level": "warning",
+          "message": {
+            "text": "Forbidden non-null assertion."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/core/products/ProductHeader.tsx",
+                  "index": 36
+                },
+                "region": {
+                  "startLine": 13,
+                  "startColumn": 68,
+                  "endLine": 13,
+                  "endColumn": 71
+                }
+              }
+            }
+          ],
+          "ruleId": "@typescript-eslint/no-non-null-assertion",
+          "ruleIndex": 1,
+          "suppressions": [
+            {
+              "kind": "inSource",
+              "justification": ""
+            }
+          ]
+        },
+        {
+          "level": "warning",
+          "message": {
+            "text": "'string' is defined but never used."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/core/types.ts",
+                  "index": 43
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 10,
+                  "endLine": 1,
+                  "endColumn": 16
+                }
+              }
+            }
+          ],
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "ruleIndex": 0
+        },
+        {
+          "level": "warning",
+          "message": {
+            "text": "Generic Object Injection Sink"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/dashboard/MetricStatus.tsx",
+                  "index": 46
+                },
+                "region": {
+                  "startLine": 64,
+                  "startColumn": 17,
+                  "endLine": 64,
+                  "endColumn": 63
+                }
+              }
+            }
+          ],
+          "ruleId": "security/detect-object-injection",
+          "ruleIndex": 2,
+          "suppressions": [
+            {
+              "kind": "inSource",
+              "justification": ""
+            }
+          ]
+        },
+        {
+          "level": "warning",
+          "message": {
+            "text": "Generic Object Injection Sink"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/dashboard/MetricStatus.tsx",
+                  "index": 46
+                },
+                "region": {
+                  "startLine": 65,
+                  "startColumn": 17,
+                  "endLine": 65,
+                  "endColumn": 58
+                }
+              }
+            }
+          ],
+          "ruleId": "security/detect-object-injection",
+          "ruleIndex": 2,
+          "suppressions": [
+            {
+              "kind": "inSource",
+              "justification": ""
+            }
+          ]
+        },
+        {
+          "level": "warning",
+          "message": {
+            "text": "Generic Object Injection Sink"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/dashboard/MetricStatus.tsx",
+                  "index": 46
+                },
+                "region": {
+                  "startLine": 66,
+                  "startColumn": 17,
+                  "endLine": 66,
+                  "endColumn": 61
+                }
+              }
+            }
+          ],
+          "ruleId": "security/detect-object-injection",
+          "ruleIndex": 2,
+          "suppressions": [
+            {
+              "kind": "inSource",
+              "justification": ""
+            }
+          ]
+        },
+        {
+          "level": "warning",
+          "message": {
+            "text": "Generic Object Injection Sink"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///home/stefanf/workspace/SecObserve/frontend/src/dashboard/MetricStatus.tsx",
+                  "index": 46
+                },
+                "region": {
+                  "startLine": 67,
+                  "startColumn": 17,
+                  "endLine": 67,
+                  "endColumn": 62
+                }
+              }
+            }
+          ],
+          "ruleId": "security/detect-object-injection",
+          "ruleIndex": 2,
+          "suppressions": [
+            {
+              "kind": "inSource",
+              "justification": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
