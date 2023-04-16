@@ -60,10 +60,15 @@ class TestCycloneDXParser(TestCase):
 * **Method:** GET
 * **Evidence:** admin"""
             self.assertEqual(description, observation.description)
-            self.assertEqual("<p>Remove all comments that return information that may help an attacker and fix any underlying problems they refer to.</p>", observation.recommendation)
+            self.assertEqual(
+                "<p>Remove all comments that return information that may help an attacker and fix any underlying problems they refer to.</p>",
+                observation.recommendation,
+            )
             self.assertEqual(Observation.SEVERITY_NONE, observation.parser_severity)
             self.assertEqual("200", observation.cwe)
-            self.assertEqual("https://example-backend.example.com", observation.origin_endpoint_url)
+            self.assertEqual(
+                "https://example-backend.example.com", observation.origin_endpoint_url
+            )
             self.assertEqual("Alert", observation.unsaved_evidences[0][0])
             self.assertIn(
                 '"alert": "Information Disclosure - Suspicious Comments"',
