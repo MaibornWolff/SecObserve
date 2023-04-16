@@ -1,28 +1,21 @@
-import { useState } from "react";
 import { Paper } from "@mui/material";
-import { PolarArea } from "react-chartjs-2";
-import {
-    Chart as ChartJS,
-    RadialLinearScale,
-    ArcElement,
-    Title,
-    Legend,
-    Tooltip,
-} from "chart.js";
+import { ArcElement, Chart as ChartJS, Legend, RadialLinearScale, Title, Tooltip } from "chart.js";
+import { useState } from "react";
 import { Identifier } from "react-admin";
+import { PolarArea } from "react-chartjs-2";
 
 import { httpClient } from "../commons/ra-data-django-rest-framework";
 import {
-    OBSERVATION_STATUS_OPEN,
-    OBSERVATION_STATUS_RESOLVED,
     OBSERVATION_STATUS_DUPLICATE,
     OBSERVATION_STATUS_FALSE_POSITIVE,
     OBSERVATION_STATUS_IN_REVIEW,
     OBSERVATION_STATUS_NOT_AFFECTED,
     OBSERVATION_STATUS_NOT_SECURITY,
+    OBSERVATION_STATUS_OPEN,
+    OBSERVATION_STATUS_RESOLVED,
     OBSERVATION_STATUS_RISK_ACCEPTED,
 } from "../core/types";
-import { getFontColor, getBackgroundColor, getGridColor } from "./functions";
+import { getBackgroundColor, getFontColor, getGridColor } from "./functions";
 
 interface MetricStatusProps {
     product_id: Identifier | undefined;
@@ -65,8 +58,7 @@ const MetricStatus = (props: MetricStatusProps) => {
     function get_data() {
         setLoading(true);
 
-        let url =
-            window.__RUNTIME_CONFIG__.API_BASE_URL + "/metrics/status_counts/";
+        let url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/metrics/status_counts/";
         if (props.product_id) {
             url += "?product_id=" + props.product_id;
         }

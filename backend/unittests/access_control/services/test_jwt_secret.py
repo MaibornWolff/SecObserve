@@ -1,8 +1,8 @@
 from unittest.mock import patch
 
-from unittests.base_test_case import BaseTestCase
 from application.access_control.models import JWT_Secret
-from application.access_control.services.jwt_secret import get_secret, _create_secret
+from application.access_control.services.jwt_secret import _create_secret, get_secret
+from unittests.base_test_case import BaseTestCase
 
 
 class TestJwtSecret(BaseTestCase):

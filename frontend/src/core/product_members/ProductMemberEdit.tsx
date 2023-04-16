@@ -1,17 +1,17 @@
+import CancelIcon from "@mui/icons-material/Cancel";
+import EditIcon from "@mui/icons-material/Edit";
+import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import * as React from "react";
 import {
-    SimpleForm,
-    required,
-    useRefresh,
-    useNotify,
-    SaveButton,
-    Toolbar,
-    useUpdate,
     ReferenceInput,
+    SaveButton,
+    SimpleForm,
+    Toolbar,
+    required,
+    useNotify,
+    useRefresh,
+    useUpdate,
 } from "react-admin";
-import { Dialog, DialogTitle, DialogContent, Button } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import CancelIcon from "@mui/icons-material/Cancel";
 
 import { ROLE_CHOICES } from "../../access_control/types";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
@@ -96,25 +96,11 @@ const ProductMemberEdit = () => {
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Edit product member</DialogTitle>
                 <DialogContent>
-                    <SimpleForm
-                        onSubmit={product_member_update}
-                        toolbar={<CustomToolbar />}
-                    >
-                        <ReferenceInput
-                            source="user"
-                            reference="users"
-                            sort={{ field: "full_name", order: "ASC" }}
-                        >
-                            <AutocompleteInputWide
-                                optionText="full_name"
-                                disabled
-                            />
+                    <SimpleForm onSubmit={product_member_update} toolbar={<CustomToolbar />}>
+                        <ReferenceInput source="user" reference="users" sort={{ field: "full_name", order: "ASC" }}>
+                            <AutocompleteInputWide optionText="full_name" disabled />
                         </ReferenceInput>
-                        <AutocompleteInputWide
-                            source="role"
-                            choices={ROLE_CHOICES}
-                            validate={requiredValidate}
-                        />
+                        <AutocompleteInputWide source="role" choices={ROLE_CHOICES} validate={requiredValidate} />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>

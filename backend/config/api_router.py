@@ -2,11 +2,11 @@ from rest_framework.routers import SimpleRouter
 
 from application.access_control.api.views import UserViewSet
 from application.core.api.views import (
-    ObservationViewSet,
-    ProductViewSet,
-    ProductMemberViewSet,
-    ParserViewSet,
     EvidenceViewSet,
+    ObservationViewSet,
+    ParserViewSet,
+    ProductMemberViewSet,
+    ProductViewSet,
 )
 from application.import_observations.api.views import ApiConfigurationViewSet
 from application.rules.api.views import GeneralRuleViewSet, ProductRuleViewSet

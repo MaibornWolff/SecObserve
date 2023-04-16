@@ -1,10 +1,10 @@
-import csv
-
 from datetime import datetime
+from typing import Any
+
+from defusedcsv import csv
+from django.http import HttpResponse
 from openpyxl import Workbook
 from openpyxl.styles import Font
-
-from django.http import HttpResponse
 
 from application.core.models import Observation, Product
 
@@ -63,8 +63,8 @@ def export_observations_excel(product: Product, status: str = None) -> Workbook:
 def export_observations_csv(
     response: HttpResponse, product: Product, status: str = None
 ) -> None:
-    writer = csv.writer(response)  # nosemgrep: python.lang.security.use-defusedcsv.use-defusedcsv
-    # Ony a closed user group can import observations, risk is accepted
+    writer = csv.writer(response)  # nosemgrep
+    # defusedcsv is actually used but not detected by Semgrep
 
     first_row = True
 
@@ -76,8 +76,8 @@ def export_observations_csv(
         observations = Observation.objects.filter(product=product)
 
     for observation in observations:
+        fields: list[Any] = []
         if first_row:
-            fields = []
             for key in dir(observation):
                 if (
                     key not in __get_excludes()
@@ -90,7 +90,6 @@ def export_observations_csv(
 
             first_row = False
         if not first_row:
-            fields = []
             for key in dir(observation):
                 if (
                     key not in __get_excludes()

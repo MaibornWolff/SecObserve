@@ -6,11 +6,10 @@ from application.commons.api.serializers import VersionSerializer
 
 
 class VersionView(APIView):
-
     serializer_class = VersionSerializer
 
     @action(detail=True, methods=["get"], url_name="version")
-    def get(self, request, format=None):
+    def get(self, request):
         content = {
             "version": "version_unkown",
         }
@@ -18,13 +17,12 @@ class VersionView(APIView):
 
 
 class HealthView(APIView):
-
     authentication_classes = []
     permission_classes = []
     serializer_class = None
 
     @action(detail=True, methods=["get"], url_name="health")
-    def get(self, request, format=None):
+    def get(self, request):
         response = Response()
         response["Cache-Control"] = "no-cache, no-store, must-revalidate"
 

@@ -1,10 +1,10 @@
 from drf_spectacular.extensions import OpenApiAuthenticationExtension
 from drf_spectacular.plumbing import build_bearer_security_scheme_object
 
-from application.access_control.services.jwt_authentication import JWT_PREFIX
 from application.access_control.services.api_token_authentication import (
     API_TOKEN_PREFIX,
 )
+from application.access_control.services.jwt_authentication import JWT_PREFIX
 
 
 class APITokenAuthenticationScheme(OpenApiAuthenticationExtension):

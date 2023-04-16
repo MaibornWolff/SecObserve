@@ -1,5 +1,5 @@
-import { TranslationMessages } from "react-admin";
 import englishMessages from "ra-language-english";
+import { TranslationMessages } from "react-admin";
 
 const customEnglishMessages: TranslationMessages = {
     ...englishMessages,

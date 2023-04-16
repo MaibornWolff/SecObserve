@@ -1,18 +1,18 @@
-import * as React from "react";
+import InfoIcon from "@mui/icons-material/Info";
 import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
     Button,
-    MenuItem,
-    Typography,
-    ListItemIcon,
-    ListItemText,
+    Dialog,
+    DialogContent,
+    DialogTitle,
     Grid,
     Link,
+    ListItemIcon,
+    ListItemText,
+    MenuItem,
     Stack,
+    Typography,
 } from "@mui/material";
-import InfoIcon from "@mui/icons-material/Info";
+import * as React from "react";
 
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
@@ -81,9 +81,8 @@ const About = () => {
                 <DialogTitle>About</DialogTitle>
                 <DialogContent>
                     <Typography sx={{ marginBottom: 4 }}>
-                        SecObserve gathers results about potential security
-                        flaws from various vulnerability scanning tools and
-                        makes them available for assessment and reporting.{" "}
+                        SecObserve gathers results about potential security flaws from various vulnerability scanning
+                        tools and makes them available for assessment and reporting.{" "}
                     </Typography>
                     <Grid container spacing={2}>
                         <Grid item xs={4}>
@@ -102,11 +101,7 @@ const About = () => {
                             <Typography>Copyright:</Typography>
                         </Grid>
                         <Grid item xs={8}>
-                            <Link
-                                href="https://www.maibornwolff.de"
-                                target="_blank"
-                                rel="noreferrer"
-                            >
+                            <Link href="https://www.maibornwolff.de" target="_blank" rel="noreferrer">
                                 MaibornWolff GmbH
                             </Link>
                         </Grid>
@@ -126,22 +121,12 @@ const About = () => {
                             <Typography>Source code: </Typography>
                         </Grid>
                         <Grid item xs={8}>
-                            <Link
-                                href="https://github.com/MaibornWolff/SecObserve"
-                                target="_blank"
-                                rel="noreferrer"
-                            >
+                            <Link href="https://github.com/MaibornWolff/SecObserve" target="_blank" rel="noreferrer">
                                 https://github.com/MaibornWolff/SecObserve
                             </Link>
                         </Grid>
                     </Grid>
-                    <Stack
-                        direction="row"
-                        justifyContent="center"
-                        alignItems="center"
-                        marginTop={4}
-                        spacing={2}
-                    >
+                    <Stack direction="row" justifyContent="center" alignItems="center" marginTop={4} spacing={2}>
                         <OKButton />
                     </Stack>
                 </DialogContent>

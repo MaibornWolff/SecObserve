@@ -1,0 +1,1026 @@
+{
+  "$schema": "https://docs.oasis-open.org/sarif/sarif/v2.1.0/os/schemas/sarif-schema-2.1.0.json",
+  "runs": [
+    {
+      "invocations": [
+        {
+          "executionSuccessful": true,
+          "toolExecutionNotifications": []
+        }
+      ],
+      "results": [
+        {
+          "fingerprints": {
+            "matchBasedId/v1": "8482205033004d9d9710add5391a12314df8ea1f118702c6a0cdde6a0d596b9585d6930d921106c09618083ee636b05090fa52942a47d50f4b2376235db0d9f2_0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "frontend/src/access_control/AADSignInButton.tsx",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "endColumn": 18,
+                  "endLine": 33,
+                  "snippet": {
+                    "text": "        <Button\n            variant=\"contained\"\n            onClick={() => handleLogin(\"redirect\")}\n            startIcon={<FontAwesomeIcon icon={faMicrosoft} color={\"white\"} />}\n        >\n            Sign in with Microsoft\n        </Button>"
+                  },
+                  "startColumn": 9,
+                  "startLine": 27
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "JSX element not internationalized: '\n            Sign in with Microsoft\n        '.  You should support different languages in your website or app with internationalization. Instead, use packages such as `i18next` in order to internationalize your elements."
+          },
+          "properties": {},
+          "ruleId": "typescript.react.portability.i18next.jsx-not-internationalized.jsx-not-internationalized"
+        },
+        {
+          "fingerprints": {
+            "matchBasedId/v1": "00f175bd78cf58aece7205f6e2d16569db1427e8e35c61f933c30dbd8bd3fd9865a4cd048bfac91cbf2c098b9b95c5605233264546aeeab0b5d9838be35dbabf_0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "frontend/src/commons/about/About.tsx",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "endColumn": 51,
+                  "endLine": 78,
+                  "snippet": {
+                    "text": "                <ListItemText>About</ListItemText>"
+                  },
+                  "startColumn": 17,
+                  "startLine": 78
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "JSX element not internationalized: 'About'.  You should support different languages in your website or app with internationalization. Instead, use packages such as `i18next` in order to internationalize your elements."
+          },
+          "properties": {},
+          "ruleId": "typescript.react.portability.i18next.jsx-not-internationalized.jsx-not-internationalized"
+        },
+        {
+          "fingerprints": {
+            "matchBasedId/v1": "199c36db4ca37ba9c13469479adc149ce3e38fa2bc267b5555a1763a342d659d4398229944ce7f02aa7537db5f9872cbdb0fd8db991724687a8e3c752c80adf5_0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "frontend/src/commons/about/About.tsx",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "endColumn": 49,
+                  "endLine": 81,
+                  "snippet": {
+                    "text": "                <DialogTitle>About</DialogTitle>"
+                  },
+                  "startColumn": 17,
+                  "startLine": 81
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "JSX element not internationalized: 'About'.  You should support different languages in your website or app with internationalization. Instead, use packages such as `i18next` in order to internationalize your elements."
+          },
+          "properties": {},
+          "ruleId": "typescript.react.portability.i18next.jsx-not-internationalized.jsx-not-internationalized"
+        },
+        {
+          "fingerprints": {
+            "matchBasedId/v1": "5f88afd16103c636f64380455e6ca8918abf86b8371bb1968bdd38a759e828a1bca8e7096f0480a5cec579b22950fcb8c407afefbf1aa20afc1636579d86ccec_0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "frontend/src/commons/about/About.tsx",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "endColumn": 34,
+                  "endLine": 86,
+                  "snippet": {
+                    "text": "                    <Typography sx={{ marginBottom: 4 }}>\n                        SecObserve gathers results about potential security flaws from various vulnerability scanning\n                        tools and makes them available for assessment and reporting.{\" \"}\n                    </Typography>"
+                  },
+                  "startColumn": 21,
+                  "startLine": 83
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "JSX element not internationalized: '\n                        SecObserve gathers results about potential security flaws from various vulnerability scanning\n                        tools and makes them available for assessment and reporting.'.  You should support different languages in your website or app with internationalization. Instead, use packages such as `i18next` in order to internationalize your elements."
+          },
+          "properties": {},
+          "ruleId": "typescript.react.portability.i18next.jsx-not-internationalized.jsx-not-internationalized"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "name": "semgrep",
+          "rules": [
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "Untrusted user input in {url: ...} can result in Open Redirect vulnerability."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.nestjs.security.audit.nestjs-open-redirect.nestjs-open-redirect",
+              "id": "typescript.nestjs.security.audit.nestjs-open-redirect.nestjs-open-redirect",
+              "name": "typescript.nestjs.security.audit.nestjs-open-redirect.nestjs-open-redirect",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')",
+                  "OWASP-A01:2021 - Broken Access Control",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Untrusted user input in {url: ...} can result in Open Redirect vulnerability."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "fullDescription": {
+                "text": "This rule has been deprecated."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.security.audit.react-missing-noreferrer.react-missing-noreferrer",
+              "id": "typescript.react.security.audit.react-missing-noreferrer.react-missing-noreferrer",
+              "name": "typescript.react.security.audit.react-missing-noreferrer.react-missing-noreferrer",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor",
+                  "OWASP-A01:2021 - Broken Access Control",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "This rule has been deprecated."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "Overwriting `transformLinkUri` or `transformImageUri` to something insecure, or turning `allowDangerousHtml` on, or turning `escapeHtml` off, will open the code up to XSS vectors."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.security.react-markdown-insecure-html.react-markdown-insecure-html",
+              "id": "typescript.react.security.react-markdown-insecure-html.react-markdown-insecure-html",
+              "name": "typescript.react.security.react-markdown-insecure-html.react-markdown-insecure-html",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+                  "OWASP-A03:2021 - Injection",
+                  "OWASP-A07:2017 - Cross-Site Scripting (XSS)",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Overwriting `transformLinkUri` or `transformImageUri` to something insecure, or turning `allowDangerousHtml` on, or turning `escapeHtml` off, will open the code up to XSS vectors."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "Detection of $HTML from non-constant definition. This can inadvertently expose users to cross-site scripting (XSS) attacks if this comes from user-provided input. If you have to use $HTML, consider using a sanitization library such as DOMPurify to sanitize your HTML."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.security.audit.react-unsanitized-method.react-unsanitized-method",
+              "id": "typescript.react.security.audit.react-unsanitized-method.react-unsanitized-method",
+              "name": "typescript.react.security.audit.react-unsanitized-method.react-unsanitized-method",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+                  "OWASP-A03:2021 - Injection",
+                  "OWASP-A07:2017 - Cross-Site Scripting (XSS)",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Detection of $HTML from non-constant definition. This can inadvertently expose users to cross-site scripting (XSS) attacks if this comes from user-provided input. If you have to use $HTML, consider using a sanitization library such as DOMPurify to sanitize your HTML."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "Copying a prop into state in React -- this is bad practice as all updates to it are ignored. Instead, read props directly in your component and avoid copying props into state."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.best-practice.react-props-in-state.react-props-in-state",
+              "id": "typescript.react.best-practice.react-props-in-state.react-props-in-state",
+              "name": "typescript.react.best-practice.react-props-in-state.react-props-in-state",
+              "properties": {
+                "precision": "very-high",
+                "tags": []
+              },
+              "shortDescription": {
+                "text": "Copying a prop into state in React -- this is bad practice as all updates to it are ignored. Instead, read props directly in your component and avoid copying props into state."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "Detection of dangerouslySetInnerHTML from non-constant definition. This can inadvertently expose users to cross-site scripting (XSS) attacks if this comes from user-provided input. If you have to use dangerouslySetInnerHTML, consider using a sanitization library such as DOMPurify to sanitize your HTML."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml",
+              "id": "typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml",
+              "name": "typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+                  "OWASP-A03:2021 - Injection",
+                  "OWASP-A07:2017 - Cross-Site Scripting (XSS)",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Detection of dangerouslySetInnerHTML from non-constant definition. This can inadvertently expose users to cross-site scripting (XSS) attacks if this comes from user-provided input. If you have to use dangerouslySetInnerHTML, consider using a sanitization library such as DOMPurify to sanitize your HTML."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "fullDescription": {
+                "text": "Unencrypted request over HTTP detected."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.security.react-insecure-request.react-insecure-request",
+              "id": "typescript.react.security.react-insecure-request.react-insecure-request",
+              "name": "typescript.react.security.react-insecure-request.react-insecure-request",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-319: Cleartext Transmission of Sensitive Information",
+                  "OWASP-A02:2021 - Cryptographic Failures",
+                  "OWASP-A03:2017 - Sensitive Data Exposure",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Unencrypted request over HTTP detected."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "fullDescription": {
+                "text": "this rule has been deprecated."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.security.react-controlled-component-password.react-controlled-component-password",
+              "id": "typescript.react.security.react-controlled-component-password.react-controlled-component-password",
+              "name": "typescript.react.security.react-controlled-component-password.react-controlled-component-password",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+                  "OWASP-A03:2021 - Injection",
+                  "OWASP-A07:2017 - Cross-Site Scripting (XSS)",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "this rule has been deprecated."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "Detection of $HTML from non-constant definition. This can inadvertently expose users to cross-site scripting (XSS) attacks if this comes from user-provided input. If you have to use $HTML, consider using a sanitization library such as DOMPurify to sanitize your HTML."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.security.audit.react-unsanitized-property.react-unsanitized-property",
+              "id": "typescript.react.security.audit.react-unsanitized-property.react-unsanitized-property",
+              "name": "typescript.react.security.audit.react-unsanitized-property.react-unsanitized-property",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+                  "OWASP-A03:2021 - Injection",
+                  "OWASP-A07:2017 - Cross-Site Scripting (XSS)",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Detection of $HTML from non-constant definition. This can inadvertently expose users to cross-site scripting (XSS) attacks if this comes from user-provided input. If you have to use $HTML, consider using a sanitization library such as DOMPurify to sanitize your HTML."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "JSX Component label not internationalized: '$MESSAGE'"
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.portability.i18next.jsx-label-not-i18n.jsx-label-not-i18n",
+              "id": "typescript.react.portability.i18next.jsx-label-not-i18n.jsx-label-not-i18n",
+              "name": "typescript.react.portability.i18next.jsx-label-not-i18n.jsx-label-not-i18n",
+              "properties": {
+                "precision": "very-high",
+                "tags": []
+              },
+              "shortDescription": {
+                "text": "JSX Component label not internationalized: '$MESSAGE'"
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "Detected a variable used in an anchor tag with the 'href' attribute. A malicious actor may be able to input the 'javascript:' URI, which could cause cross-site scripting (XSS). It is recommended to disallow 'javascript:' URIs within your application."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.security.audit.react-href-var.react-href-var",
+              "id": "typescript.react.security.audit.react-href-var.react-href-var",
+              "name": "typescript.react.security.audit.react-href-var.react-href-var",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+                  "OWASP-A03:2021 - Injection",
+                  "OWASP-A07:2017 - Cross-Site Scripting (XSS)",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Detected a variable used in an anchor tag with the 'href' attribute. A malicious actor may be able to input the 'javascript:' URI, which could cause cross-site scripting (XSS). It is recommended to disallow 'javascript:' URIs within your application."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "Detected the use of `$TRUST`. This can introduce a Cross-Site-Scripting (XSS) vulnerability if this comes from user-provided input. If you have to use `$TRUST`, ensure it does not come from user-input or use the appropriate prevention mechanism e.g. input validation or sanitization depending on the context."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.angular.security.audit.angular-domsanitizer.angular-bypasssecuritytrust",
+              "id": "typescript.angular.security.audit.angular-domsanitizer.angular-bypasssecuritytrust",
+              "name": "typescript.angular.security.audit.angular-domsanitizer.angular-bypasssecuritytrust",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+                  "OWASP-A03:2021 - Injection",
+                  "OWASP-A07:2017 - Cross-Site Scripting (XSS)",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Detected the use of `$TRUST`. This can introduce a Cross-Site-Scripting (XSS) vulnerability if this comes from user-provided input. If you have to use `$TRUST`, ensure it does not come from user-input or use the appropriate prevention mechanism e.g. input validation or sanitization depending on the context."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "fullDescription": {
+                "text": "this rule has been deprecated."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.security.audit.react-css-injection.react-css-injection",
+              "id": "typescript.react.security.audit.react-css-injection.react-css-injection",
+              "name": "typescript.react.security.audit.react-css-injection.react-css-injection",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+                  "OWASP-A03:2021 - Injection",
+                  "OWASP-A07:2017 - Cross-Site Scripting (XSS)",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "this rule has been deprecated."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "Access-Control-Allow-Origin response header is set to \"*\". This will disable CORS Same Origin Policy restrictions."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.nestjs.security.audit.nestjs-header-cors-any.nestjs-header-cors-any",
+              "id": "typescript.nestjs.security.audit.nestjs-header-cors-any.nestjs-header-cors-any",
+              "name": "typescript.nestjs.security.audit.nestjs-header-cors-any.nestjs-header-cors-any",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-183: Permissive List of Allowed Inputs",
+                  "OWASP-A04:2021 - Insecure Design",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Access-Control-Allow-Origin response header is set to \"*\". This will disable CORS Same Origin Policy restrictions."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "fullDescription": {
+                "text": "this rule has been deprecated."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.security.audit.react-html-element-spreading.react-html-element-spreading",
+              "id": "typescript.react.security.audit.react-html-element-spreading.react-html-element-spreading",
+              "name": "typescript.react.security.audit.react-html-element-spreading.react-html-element-spreading",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+                  "OWASP-A03:2021 - Injection",
+                  "OWASP-A07:2017 - Cross-Site Scripting (XSS)",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "this rule has been deprecated."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "fullDescription": {
+                "text": "This rule has been deprecated"
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.security.audit.react-missing-noopener.react-missing-noopener",
+              "id": "typescript.react.security.audit.react-missing-noopener.react-missing-noopener",
+              "name": "typescript.react.security.audit.react-missing-noopener.react-missing-noopener",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor",
+                  "OWASP-A01:2021 - Broken Access Control",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "This rule has been deprecated"
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "Translation key '$KEY' should match format 'MODULE.FEATURE.*'"
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.portability.i18next.i18next-key-format.i18next-key-format",
+              "id": "typescript.react.portability.i18next.i18next-key-format.i18next-key-format",
+              "name": "typescript.react.portability.i18next.i18next-key-format.i18next-key-format",
+              "properties": {
+                "precision": "very-high",
+                "tags": []
+              },
+              "shortDescription": {
+                "text": "Translation key '$KEY' should match format 'MODULE.FEATURE.*'"
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "Queue $X is missing encryption at rest. Add \"encryption: $Y.QueueEncryption.KMS\" or \"encryption: $Y.QueueEncryption.KMS_MANAGED\" to the queue props to enable encryption at rest for the queue."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.aws-cdk.security.audit.awscdk-sqs-unencryptedqueue.awscdk-sqs-unencryptedqueue",
+              "id": "typescript.aws-cdk.security.audit.awscdk-sqs-unencryptedqueue.awscdk-sqs-unencryptedqueue",
+              "name": "typescript.aws-cdk.security.audit.awscdk-sqs-unencryptedqueue.awscdk-sqs-unencryptedqueue",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-311: Missing Encryption of Sensitive Data",
+                  "OWASP-A03:2017 - Sensitive Data Exposure",
+                  "OWASP-A04:2021 - Insecure Design",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Queue $X is missing encryption at rest. Add \"encryption: $Y.QueueEncryption.KMS\" or \"encryption: $Y.QueueEncryption.KMS_MANAGED\" to the queue props to enable encryption at rest for the queue."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "fullDescription": {
+                "text": "this rule has been deprecated."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.security.audit.react-router-redirect.react-router-redirect",
+              "id": "typescript.react.security.audit.react-router-redirect.react-router-redirect",
+              "name": "typescript.react.security.audit.react-router-redirect.react-router-redirect",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+                  "OWASP-A03:2021 - Injection",
+                  "OWASP-A07:2017 - Cross-Site Scripting (XSS)",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "this rule has been deprecated."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "JSX element not internationalized: '$MESSAGE'.  You should support different languages in your website or app with internationalization. Instead, use packages such as `i18next` in order to internationalize your elements."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.portability.i18next.jsx-not-internationalized.jsx-not-internationalized",
+              "id": "typescript.react.portability.i18next.jsx-not-internationalized.jsx-not-internationalized",
+              "name": "typescript.react.portability.i18next.jsx-not-internationalized.jsx-not-internationalized",
+              "properties": {
+                "precision": "very-high",
+                "tags": []
+              },
+              "shortDescription": {
+                "text": "JSX element not internationalized: '$MESSAGE'.  You should support different languages in your website or app with internationalization. Instead, use packages such as `i18next` in order to internationalize your elements."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "Using the GrantPublicAccess method on bucket contruct $X will make the objects in the bucket world accessible. Verify if this is intentional."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.aws-cdk.security.awscdk-bucket-grantpublicaccessmethod.awscdk-bucket-grantpublicaccessmethod",
+              "id": "typescript.aws-cdk.security.awscdk-bucket-grantpublicaccessmethod.awscdk-bucket-grantpublicaccessmethod",
+              "name": "typescript.aws-cdk.security.awscdk-bucket-grantpublicaccessmethod.awscdk-bucket-grantpublicaccessmethod",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-306: Missing Authentication for Critical Function",
+                  "OWASP-A07:2021 - Identification and Authentication Failures",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Using the GrantPublicAccess method on bucket contruct $X will make the objects in the bucket world accessible. Verify if this is intentional."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "fullDescription": {
+                "text": "Property decoded from JWT token without verifying and cannot be trustworthy."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.security.audit.react-jwt-decoded-property.react-jwt-decoded-property",
+              "id": "typescript.react.security.audit.react-jwt-decoded-property.react-jwt-decoded-property",
+              "name": "typescript.react.security.audit.react-jwt-decoded-property.react-jwt-decoded-property",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-922: Insecure Storage of Sensitive Information",
+                  "OWASP-A01:2021 - Broken Access Control",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Property decoded from JWT token without verifying and cannot be trustworthy."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "fullDescription": {
+                "text": "this rule has been deprecated."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.security.audit.react-props-injection.react-props-injection",
+              "id": "typescript.react.security.audit.react-props-injection.react-props-injection",
+              "name": "typescript.react.security.audit.react-props-injection.react-props-injection",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+                  "OWASP-A03:2021 - Injection",
+                  "OWASP-A07:2017 - Cross-Site Scripting (XSS)",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "this rule has been deprecated."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "fullDescription": {
+                "text": "this rule has been deprecated."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.security.audit.react-styled-components-injection.react-styled-components-injection",
+              "id": "typescript.react.security.audit.react-styled-components-injection.react-styled-components-injection",
+              "name": "typescript.react.security.audit.react-styled-components-injection.react-styled-components-injection",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+                  "OWASP-A03:2021 - Injection",
+                  "OWASP-A07:2017 - Cross-Site Scripting (XSS)",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "this rule has been deprecated."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "By declaring a styled component inside the render method of a react component, you are dynamically creating a new component on every render. This means that React will have to discard and re-calculate that part of the DOM subtree on each subsequent render, instead of just calculating the difference of what changed between them. This leads to performance bottlenecks and unpredictable behavior."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.best-practice.define-styled-components-on-module-level.define-styled-components-on-module-level",
+              "id": "typescript.react.best-practice.define-styled-components-on-module-level.define-styled-components-on-module-level",
+              "name": "typescript.react.best-practice.define-styled-components-on-module-level.define-styled-components-on-module-level",
+              "properties": {
+                "precision": "very-high",
+                "tags": []
+              },
+              "shortDescription": {
+                "text": "By declaring a styled component inside the render method of a react component, you are dynamically creating a new component on every render. This means that React will have to discard and re-calculate that part of the DOM subtree on each subsequent render, instead of just calculating the difference of what changed between them. This leads to performance bottlenecks and unpredictable behavior."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "fullDescription": {
+                "text": "Bucket $X is not set to enforce encryption-in-transit, if not explictly setting this on the bucket policy - the property \"enforceSSL\" should be set to true"
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.aws-cdk.security.audit.awscdk-bucket-enforcessl.aws-cdk-bucket-enforcessl",
+              "id": "typescript.aws-cdk.security.audit.awscdk-bucket-enforcessl.aws-cdk-bucket-enforcessl",
+              "name": "typescript.aws-cdk.security.audit.awscdk-bucket-enforcessl.aws-cdk-bucket-enforcessl",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-319: Cleartext Transmission of Sensitive Information",
+                  "OWASP-A02:2021 - Cryptographic Failures",
+                  "OWASP-A03:2017 - Sensitive Data Exposure",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Bucket $X is not set to enforce encryption-in-transit, if not explictly setting this on the bucket policy - the property \"enforceSSL\" should be set to true"
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "fullDescription": {
+                "text": "this rule has been deprecated."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.security.audit.react-http-leak.react-http-leak",
+              "id": "typescript.react.security.audit.react-http-leak.react-http-leak",
+              "name": "typescript.react.security.audit.react-http-leak.react-http-leak",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor",
+                  "OWASP-A01:2021 - Broken Access Control",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "this rule has been deprecated."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "It's best practice to explicitly pass props to an HTML component rather than use the spread operator. The spread operator risks passing invalid HTML props to an HTML element, which can cause console warnings or worse, give malicious actors a way to inject unexpected attributes."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.best-practice.react-props-spreading.react-props-spreading",
+              "id": "typescript.react.best-practice.react-props-spreading.react-props-spreading",
+              "name": "typescript.react.best-practice.react-props-spreading.react-props-spreading",
+              "properties": {
+                "precision": "very-high",
+                "tags": []
+              },
+              "shortDescription": {
+                "text": "It's best practice to explicitly pass props to an HTML component rather than use the spread operator. The spread operator risks passing invalid HTML props to an HTML element, which can cause console warnings or worse, give malicious actors a way to inject unexpected attributes."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "Legacy component lifecycle was detected - $METHOD."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.best-practice.react-legacy-component.react-legacy-component",
+              "id": "typescript.react.best-practice.react-legacy-component.react-legacy-component",
+              "name": "typescript.react.best-practice.react-legacy-component.react-legacy-component",
+              "properties": {
+                "precision": "very-high",
+                "tags": []
+              },
+              "shortDescription": {
+                "text": "Legacy component lifecycle was detected - $METHOD."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "fullDescription": {
+                "text": "Storing JWT tokens in localStorage known to be a bad practice, consider moving your tokens from localStorage to a HTTP cookie."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.security.audit.react-jwt-in-localstorage.react-jwt-in-localstorage",
+              "id": "typescript.react.security.audit.react-jwt-in-localstorage.react-jwt-in-localstorage",
+              "name": "typescript.react.security.audit.react-jwt-in-localstorage.react-jwt-in-localstorage",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-922: Insecure Storage of Sensitive Information",
+                  "OWASP-A01:2021 - Broken Access Control",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Storing JWT tokens in localStorage known to be a bad practice, consider moving your tokens from localStorage to a HTTP cookie."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "fullDescription": {
+                "text": "It looks like no matter how $CONDITION is evaluated, this expression returns $ANS. This is probably a copy-paste error."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.lang.correctness.useless-ternary.useless-ternary",
+              "id": "typescript.lang.correctness.useless-ternary.useless-ternary",
+              "name": "typescript.lang.correctness.useless-ternary.useless-ternary",
+              "properties": {
+                "precision": "very-high",
+                "tags": []
+              },
+              "shortDescription": {
+                "text": "It looks like no matter how $CONDITION is evaluated, this expression returns $ANS. This is probably a copy-paste error."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "fullDescription": {
+                "text": "this rule has been deprecated."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.security.audit.react-no-refs.react-no-refs",
+              "id": "typescript.react.security.audit.react-no-refs.react-no-refs",
+              "name": "typescript.react.security.audit.react-no-refs.react-no-refs",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+                  "OWASP-A03:2021 - Injection",
+                  "OWASP-A07:2017 - Cross-Site Scripting (XSS)",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "this rule has been deprecated."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "fullDescription": {
+                "text": "Moment is a legacy project in maintenance mode. Consider using libraries that are actively supported, e.g. `dayjs`."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.lang.best-practice.moment-deprecated.moment-deprecated",
+              "id": "typescript.lang.best-practice.moment-deprecated.moment-deprecated",
+              "name": "typescript.lang.best-practice.moment-deprecated.moment-deprecated",
+              "properties": {
+                "precision": "very-high",
+                "tags": []
+              },
+              "shortDescription": {
+                "text": "Moment is a legacy project in maintenance mode. Consider using libraries that are actively supported, e.g. `dayjs`."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "CodeBuild Project $X is set to have a public URL. This will make the build results, logs, artifacts publically accessible, including builds prior to the project being public. Ensure this is acceptable for the project."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.aws-cdk.security.awscdk-codebuild-project-public.awscdk-codebuild-project-public",
+              "id": "typescript.aws-cdk.security.awscdk-codebuild-project-public.awscdk-codebuild-project-public",
+              "name": "typescript.aws-cdk.security.awscdk-codebuild-project-public.awscdk-codebuild-project-public",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-306: Missing Authentication for Critical Function",
+                  "OWASP-A07:2021 - Identification and Authentication Failures",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "CodeBuild Project $X is set to have a public URL. This will make the build results, logs, artifacts publically accessible, including builds prior to the project being public. Ensure this is acceptable for the project."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "fullDescription": {
+                "text": "Add \"encryption: $Y.BucketEncryption.KMS_MANAGED\" or \"encryption: $Y.BucketEncryption.S3_MANAGED\" to the bucket props for Bucket construct $X"
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.aws-cdk.security.audit.awscdk-bucket-encryption.awscdk-bucket-encryption",
+              "id": "typescript.aws-cdk.security.audit.awscdk-bucket-encryption.awscdk-bucket-encryption",
+              "name": "typescript.aws-cdk.security.audit.awscdk-bucket-encryption.awscdk-bucket-encryption",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-311: Missing Encryption of Sensitive Data",
+                  "OWASP-A03:2017 - Sensitive Data Exposure",
+                  "OWASP-A04:2021 - Insecure Design",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Add \"encryption: $Y.BucketEncryption.KMS_MANAGED\" or \"encryption: $Y.BucketEncryption.S3_MANAGED\" to the bucket props for Bucket construct $X"
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "The output is not sanitized when calling with SecurityContext.NONE."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.angular.security.audit.angular-domsanitizer.angular-sanitize-none-context",
+              "id": "typescript.angular.security.audit.angular-domsanitizer.angular-sanitize-none-context",
+              "name": "typescript.angular.security.audit.angular-domsanitizer.angular-sanitize-none-context",
+              "properties": {
+                "precision": "very-high",
+                "tags": []
+              },
+              "shortDescription": {
+                "text": "The output is not sanitized when calling with SecurityContext.NONE."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "React useSelect() label is not internationalized - '$LABEL'. You should support different langauges in your website or app with internationalization. Instead, use packages such as `i18next` to internationalize your elements."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.portability.i18next.useselect-label-not-i18n.useselect-label-not-i18n",
+              "id": "typescript.react.portability.i18next.useselect-label-not-i18n.useselect-label-not-i18n",
+              "name": "typescript.react.portability.i18next.useselect-label-not-i18n.useselect-label-not-i18n",
+              "properties": {
+                "precision": "very-high",
+                "tags": []
+              },
+              "shortDescription": {
+                "text": "React useSelect() label is not internationalized - '$LABEL'. You should support different langauges in your website or app with internationalization. Instead, use packages such as `i18next` to internationalize your elements."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "findDOMNode is an escape hatch used to access the underlying DOM node. In most cases, use of this escape hatch is discouraged because it pierces the component abstraction."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.best-practice.react-find-dom.react-find-dom",
+              "id": "typescript.react.best-practice.react-find-dom.react-find-dom",
+              "name": "typescript.react.best-practice.react-find-dom.react-find-dom",
+              "properties": {
+                "precision": "very-high",
+                "tags": []
+              },
+              "shortDescription": {
+                "text": "findDOMNode is an escape hatch used to access the underlying DOM node. In most cases, use of this escape hatch is discouraged because it pierces the component abstraction."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "React useSelect() label is not internationalized - '$LABEL'"
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.portability.i18next.useselect.react-useselect-label-not-internationalized",
+              "id": "typescript.react.portability.i18next.useselect.react-useselect-label-not-internationalized",
+              "name": "typescript.react.portability.i18next.useselect.react-useselect-label-not-internationalized",
+              "properties": {
+                "precision": "very-high",
+                "tags": []
+              },
+              "shortDescription": {
+                "text": "React useSelect() label is not internationalized - '$LABEL'"
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "Unescaped '.' character in CORS domain regex $CORS: $PATTERN"
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.lang.security.audit.cors-regex-wildcard.cors-regex-wildcard",
+              "id": "typescript.lang.security.audit.cors-regex-wildcard.cors-regex-wildcard",
+              "name": "typescript.lang.security.audit.cors-regex-wildcard.cors-regex-wildcard",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-183: Permissive List of Allowed Inputs",
+                  "OWASP-A04:2021 - Insecure Design",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Unescaped '.' character in CORS domain regex $CORS: $PATTERN"
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "X-XSS-Protection header is set to 0. This will disable the browser's XSS Filter."
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.nestjs.security.audit.nestjs-header-xss-disabled.nestjs-header-xss-disabled",
+              "id": "typescript.nestjs.security.audit.nestjs-header-xss-disabled.nestjs-header-xss-disabled",
+              "name": "typescript.nestjs.security.audit.nestjs-header-xss-disabled.nestjs-header-xss-disabled",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+                  "OWASP-A03:2021 - Injection",
+                  "OWASP-A07:2017 - Cross-Site Scripting (XSS)",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "X-XSS-Protection header is set to 0. This will disable the browser's XSS Filter."
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "React MUI enqueueSnackbar() title is not internationalized: '$MESSAGE'"
+              },
+              "helpUri": "https://semgrep.dev/r/typescript.react.portability.i18next.mui-snackbar-message.mui-snackbar-message",
+              "id": "typescript.react.portability.i18next.mui-snackbar-message.mui-snackbar-message",
+              "name": "typescript.react.portability.i18next.mui-snackbar-message.mui-snackbar-message",
+              "properties": {
+                "precision": "very-high",
+                "tags": []
+              },
+              "shortDescription": {
+                "text": "React MUI enqueueSnackbar() title is not internationalized: '$MESSAGE'"
+              }
+            }
+          ],
+          "semanticVersion": "1.16.0"
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}

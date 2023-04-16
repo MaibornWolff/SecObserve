@@ -1,4 +1,4 @@
-from unittest.mock import patch, call
+from unittest.mock import call, patch
 
 from application.core.models import Parser, Product
 from application.rules.services.rule_engine import Rule_Engine

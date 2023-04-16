@@ -1,4 +1,5 @@
-import { useRecordContext, ChipField } from "react-admin";
+import { ChipField, useRecordContext } from "react-admin";
+
 import { get_severity_color } from "../functions";
 
 interface SeverityProps {

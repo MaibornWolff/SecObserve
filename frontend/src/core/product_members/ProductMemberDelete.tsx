@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { Button, Confirm, useNotify, useRefresh, useDelete } from "react-admin";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useState } from "react";
+import { Button, Confirm, useDelete, useNotify, useRefresh } from "react-admin";
 
 type ProductMemberDeleteProps = {
     product_member: any;
@@ -37,12 +37,7 @@ const ProductMemberDelete = (props: ProductMemberDeleteProps) => {
 
     return (
         <>
-            <Button
-                label="Delete"
-                onClick={handleClick}
-                startIcon={<DeleteIcon />}
-                sx={{ color: "#d32f2f" }}
-            />
+            <Button label="Delete" onClick={handleClick} startIcon={<DeleteIcon />} sx={{ color: "#d32f2f" }} />
             <Confirm
                 isOpen={open}
                 title="Delete product member"

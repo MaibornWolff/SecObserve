@@ -1,23 +1,17 @@
 import {
-    Edit,
-    SimpleForm,
-    required,
-    ReferenceInput,
-    SelectInput,
-    Toolbar,
-    SaveButton,
-    DeleteButton,
     BooleanInput,
+    DeleteButton,
+    Edit,
+    ReferenceInput,
+    SaveButton,
+    SelectInput,
+    SimpleForm,
+    Toolbar,
+    required,
 } from "react-admin";
 
-import {
-    TextInputWide,
-    AutocompleteInputMedium,
-} from "../../commons/layout/themes";
-import {
-    OBSERVATION_SEVERITY_CHOICES,
-    OBSERVATION_STATUS_CHOICES,
-} from "../../core/types";
+import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
+import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../../core/types";
 
 const CustomToolbar = () => {
     return (
@@ -63,21 +57,10 @@ const GeneralRuleEdit = () => {
     return (
         <Edit redirect="show" mutationMode="pessimistic" transform={transform}>
             <SimpleForm warnWhenUnsavedChanges toolbar={<CustomToolbar />}>
-                <TextInputWide
-                    autoFocus
-                    source="name"
-                    validate={requiredValidate}
-                />
+                <TextInputWide autoFocus source="name" validate={requiredValidate} />
                 <TextInputWide multiline source="description" />
-                <ReferenceInput
-                    source="parser"
-                    reference="parsers"
-                    sort={{ field: "name", order: "ASC" }}
-                >
-                    <SelectInput
-                        optionText="name"
-                        validate={requiredValidate}
-                    />
+                <ReferenceInput source="parser" reference="parsers" sort={{ field: "name", order: "ASC" }}>
+                    <SelectInput optionText="name" validate={requiredValidate} />
                 </ReferenceInput>
                 <TextInputWide source="scanner_prefix" />
                 <TextInputWide
@@ -110,14 +93,8 @@ const GeneralRuleEdit = () => {
                     label="Origin source file"
                     helperText="Regular expression to match the source file"
                 />
-                <AutocompleteInputMedium
-                    source="new_severity"
-                    choices={OBSERVATION_SEVERITY_CHOICES}
-                />
-                <AutocompleteInputMedium
-                    source="new_status"
-                    choices={OBSERVATION_STATUS_CHOICES}
-                />
+                <AutocompleteInputMedium source="new_severity" choices={OBSERVATION_SEVERITY_CHOICES} />
+                <AutocompleteInputMedium source="new_status" choices={OBSERVATION_STATUS_CHOICES} />
                 <BooleanInput source="enabled" defaultValue={true} />
             </SimpleForm>
         </Edit>

@@ -8,6 +8,6 @@ class AccessControlConfig(AppConfig):
 
     def ready(self):
         try:
-            import application.access_control.signals  # noqa F401
+            import application.access_control.signals  # noqa F401 pylint: disable=import-outside-toplevel, unused-import
         except ImportError:
             pass

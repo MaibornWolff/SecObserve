@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0009_status_not_security'),
+        ("core", "0009_status_not_security"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='observation',
-            name='origin_docker_image_name_tag_short',
+            model_name="observation",
+            name="origin_docker_image_name_tag_short",
             field=models.CharField(blank=True, max_length=513),
         ),
     ]

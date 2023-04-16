@@ -23,6 +23,7 @@
             "backend/requirements/base.txt",
             "backend/requirements/dev.txt",
             "backend/requirements/prod.txt",
+            "backend/requirements/unittests.txt",
             "\\.requirements$"
         ]
     },

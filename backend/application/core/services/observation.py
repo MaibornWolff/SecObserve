@@ -1,5 +1,6 @@
 import hashlib
 from urllib.parse import urlparse
+
 from django.apps import apps
 from django.db.models.fields import CharField, TextField
 
@@ -12,7 +13,7 @@ def get_identity_hash(observation) -> str:
     return hashlib.sha256(hash_string.casefold().encode("utf-8").strip()).hexdigest()
 
 
-def _get_string_to_hash(observation):
+def _get_string_to_hash(observation):  # pylint: disable=too-many-branches
     hash_string = observation.title
 
     if observation.origin_component_name_version:
@@ -47,8 +48,6 @@ def _get_string_to_hash(observation):
 
 
 def get_current_severity(observation) -> str:
-    Observation = apps.get_model("core", "Observation")
-
     if observation.assessment_severity:
         return observation.assessment_severity
 
@@ -58,18 +57,28 @@ def get_current_severity(observation) -> str:
     if observation.parser_severity:
         return observation.parser_severity
 
-    if observation.cvss3_score is None:
+    return _get_cvss3_severity(observation.cvss3_score)
+
+
+def _get_cvss3_severity(cvss3_score: int):
+    Observation = apps.get_model("core", "Observation")
+
+    if cvss3_score is None:
         return Observation.SEVERITY_UNKOWN
-    elif observation.cvss3_score >= 9:
+
+    if cvss3_score >= 9:
         return Observation.SEVERITY_CRITICAL
-    elif observation.cvss3_score >= 7:
+
+    if cvss3_score >= 7:
         return Observation.SEVERITY_HIGH
-    elif observation.cvss3_score >= 4:
+
+    if cvss3_score >= 4:
         return Observation.SEVERITY_MEDIUM
-    elif observation.cvss3_score >= 0.1:
+
+    if cvss3_score >= 0.1:
         return Observation.SEVERITY_LOW
-    else:
-        return Observation.SEVERITY_NONE
+
+    return Observation.SEVERITY_NONE
 
 
 def get_current_status(observation) -> str:
@@ -90,29 +99,48 @@ def get_current_status(observation) -> str:
     return Observation.STATUS_OPEN
 
 
-def normalize_observation_fields(observation) -> None:
+def normalize_observation_fields(
+    observation,
+) -> None:  # pylint: disable=too-many-branches, too-many-statements
     observation.numerical_severity = observation.NUMERICAL_SEVERITIES.get(
         observation.current_severity
     )
 
-    if observation.origin_endpoint_url:
-        parse_result = urlparse(observation.origin_endpoint_url)
-        observation.origin_endpoint_scheme = parse_result.scheme
-        observation.origin_endpoint_hostname = parse_result.hostname
-        observation.origin_endpoint_port = parse_result.port
-        observation.origin_endpoint_path = parse_result.path
-        observation.origin_endpoint_params = parse_result.params
-        observation.origin_endpoint_query = parse_result.query
-        observation.origin_endpoint_fragment = parse_result.fragment
-    else:
-        observation.origin_endpoint_scheme = ""
-        observation.origin_endpoint_hostname = ""
-        observation.origin_endpoint_port = None
-        observation.origin_endpoint_path = ""
-        observation.origin_endpoint_params = ""
-        observation.origin_endpoint_query = ""
-        observation.origin_endpoint_fragment = ""
+    normalize_origin_component(observation)
+    normalize_origin_docker(observation)
+    normalize_origin_endpoint(observation)
 
+    normalize_severity(observation)
+    normalize_status(observation)
+
+    if observation.description is None:
+        observation.description = ""
+    else:
+        # Newlines at the end of the description are removed
+        while observation.description.endswith("\n"):
+            observation.description = observation.description[:-1]
+
+    if observation.recommendation is None:
+        observation.recommendation = ""
+    if observation.scanner_observation_id is None:
+        observation.scanner_observation_id = ""
+    if observation.origin_service_name is None:
+        observation.origin_service_name = ""
+    if observation.origin_source_file is None:
+        observation.origin_source_file = ""
+    if observation.cvss3_vector is None:
+        observation.cvss3_vector = ""
+    if observation.scanner is None:
+        observation.scanner = ""
+    if observation.api_configuration_name is None:
+        observation.api_configuration_name = ""
+    if observation.upload_filename is None:
+        observation.upload_filename = ""
+    if observation.vulnerability_id is None:
+        observation.vulnerability_id = ""
+
+
+def normalize_origin_component(observation):
     if not observation.origin_component_name_version:
         if observation.origin_component_name and observation.origin_component_version:
             observation.origin_component_name_version = (
@@ -140,6 +168,19 @@ def normalize_observation_fields(observation) -> None:
             )
             observation.origin_component_version = None
 
+    if observation.origin_component_name_version is None:
+        observation.origin_component_name_version = ""
+    if observation.origin_component_name is None:
+        observation.origin_component_name = ""
+    if observation.origin_component_version is None:
+        observation.origin_component_version = ""
+    if observation.origin_component_purl is None:
+        observation.origin_component_purl = ""
+    if observation.origin_component_cpe is None:
+        observation.origin_component_cpe = ""
+
+
+def normalize_origin_docker(observation):
     if not observation.origin_docker_image_name_tag:
         if observation.origin_docker_image_name and observation.origin_docker_image_tag:
             observation.origin_docker_image_name_tag = (
@@ -172,33 +213,33 @@ def normalize_observation_fields(observation) -> None:
     else:
         observation.origin_docker_image_name_tag_short = ""
 
-    if observation.description is None:
-        observation.description = ""
-    else:
-        # Newlines at the end of the description are removed
-        while observation.description.endswith("\n"):
-            observation.description = observation.description[:-1]
-
-    if observation.recommendation is None:
-        observation.recommendation = ""
-    if observation.scanner_observation_id is None:
-        observation.scanner_observation_id = ""
-    if observation.origin_component_name_version is None:
-        observation.origin_component_name_version = ""
-    if observation.origin_component_name is None:
-        observation.origin_component_name = ""
-    if observation.origin_component_version is None:
-        observation.origin_component_version = ""
-    if observation.origin_component_purl is None:
-        observation.origin_component_purl = ""
-    if observation.origin_component_cpe is None:
-        observation.origin_component_cpe = ""
     if observation.origin_docker_image_name_tag is None:
         observation.origin_docker_image_name_tag = ""
     if observation.origin_docker_image_name is None:
         observation.origin_docker_image_name = ""
     if observation.origin_docker_image_tag is None:
         observation.origin_docker_image_tag = ""
+
+
+def normalize_origin_endpoint(observation):
+    if observation.origin_endpoint_url:
+        parse_result = urlparse(observation.origin_endpoint_url)
+        observation.origin_endpoint_scheme = parse_result.scheme
+        observation.origin_endpoint_hostname = parse_result.hostname
+        observation.origin_endpoint_port = parse_result.port
+        observation.origin_endpoint_path = parse_result.path
+        observation.origin_endpoint_params = parse_result.params
+        observation.origin_endpoint_query = parse_result.query
+        observation.origin_endpoint_fragment = parse_result.fragment
+    else:
+        observation.origin_endpoint_scheme = ""
+        observation.origin_endpoint_hostname = ""
+        observation.origin_endpoint_port = None
+        observation.origin_endpoint_path = ""
+        observation.origin_endpoint_params = ""
+        observation.origin_endpoint_query = ""
+        observation.origin_endpoint_fragment = ""
+
     if observation.origin_endpoint_url is None:
         observation.origin_endpoint_url = ""
     if observation.origin_endpoint_scheme is None:
@@ -213,16 +254,9 @@ def normalize_observation_fields(observation) -> None:
         observation.origin_endpoint_query = ""
     if observation.origin_endpoint_fragment is None:
         observation.origin_endpoint_fragment = ""
-    if observation.origin_service_name is None:
-        observation.origin_service_name = ""
-    if observation.origin_source_file is None:
-        observation.origin_source_file = ""
-    if observation.cvss3_vector is None:
-        observation.cvss3_vector = ""
-    if observation.scanner is None:
-        observation.scanner = ""
-    if observation.api_configuration_name is None:
-        observation.api_configuration_name = ""
+
+
+def normalize_severity(observation):
     if observation.current_severity is None:
         observation.current_severity = ""
     if observation.assessment_severity is None:
@@ -237,6 +271,9 @@ def normalize_observation_fields(observation) -> None:
             observation.parser_severity,
         ) not in observation.SEVERITY_CHOICES:
             observation.parser_severity = observation.SEVERITY_UNKOWN
+
+
+def normalize_status(observation):
     if observation.current_status is None:
         observation.current_status = ""
     if observation.assessment_status is None:
@@ -245,19 +282,15 @@ def normalize_observation_fields(observation) -> None:
         observation.rule_status = ""
     if observation.parser_status is None:
         observation.parser_status = ""
-    if observation.upload_filename is None:
-        observation.upload_filename = ""
-    if observation.vulnerability_id is None:
-        observation.vulnerability_id = ""
 
 
-def clip_fields(model: str, object) -> None:
+def clip_fields(model: str, my_object) -> None:
     Model = apps.get_model("core", model)
     for field in Model._meta.get_fields():
-        if type(field) == CharField or type(field) == TextField:
+        if isinstance(field, (CharField, TextField)):
             _, _, _, key_args = field.deconstruct()
             max_length = key_args.get("max_length")
             if max_length:
-                value = getattr(object, field.name)
+                value = getattr(my_object, field.name)
                 if value and len(value) > max_length:
-                    setattr(object, field.name, value[: max_length - 4] + " ...")
+                    setattr(my_object, field.name, value[: max_length - 4] + " ...")

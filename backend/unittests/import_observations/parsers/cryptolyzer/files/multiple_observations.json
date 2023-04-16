@@ -1,0 +1,169 @@
+{
+    "target": {
+        "scheme": "tls",
+        "address": "www.example.org",
+        "ip": "192.168.0.1",
+        "port": 443,
+        "proto_version": null
+    },
+    "versions": {
+        "target": {
+            "scheme": "tls",
+            "address": "www.example.org",
+            "ip": "192.168.0.1",
+            "port": 443,
+            "proto_version": null
+        },
+        "versions": [
+            "tls1_2",
+            "tls1_3"
+        ],
+        "alerts_unsupported_tls_version": true
+    },
+    "ciphers": [
+        {
+            "target": {
+                "scheme": "tls",
+                "address": "www.example.org",
+                "ip": "192.168.0.1",
+                "port": 443,
+                "proto_version": "tls1_2"
+            },
+            "cipher_suites": [
+                "TLS_DHE_RSA_WITH_AES_128_GCM_SHA256",
+                "TLS_DHE_RSA_WITH_AES_256_GCM_SHA384",
+                "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+                "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+                "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256"
+            ],
+            "cipher_suite_preference": false,
+            "long_cipher_suite_list_intolerance": false
+        },
+        {
+            "target": {
+                "scheme": "tls",
+                "address": "www.example.org",
+                "ip": "192.168.0.1",
+                "port": 443,
+                "proto_version": "tls1_3"
+            },
+            "cipher_suites": [
+                "TLS_AES_128_GCM_SHA256",
+                "TLS_AES_256_GCM_SHA384",
+                "TLS_CHACHA20_POLY1305_SHA256",
+                "TLS_AES_128_CCM_SHA256"
+            ],
+            "cipher_suite_preference": false,
+            "long_cipher_suite_list_intolerance": false
+        }
+    ],
+    "curves": {
+        "target": {
+            "scheme": "tls",
+            "address": "www.example.org",
+            "ip": "192.168.0.1",
+            "port": 443,
+            "proto_version": "tls1_2"
+        },
+        "curves": [
+            "SECP256R1",
+            "SECP384R1",
+            "SECP521R1",
+            "X25519",
+            "X448"
+        ],
+        "extension_supported": true
+    },
+    "sigalgos": {
+        "target": {
+            "scheme": "tls",
+            "address": "www.example.org",
+            "ip": "192.168.0.1",
+            "port": 443,
+            "proto_version": "tls1_2"
+        },
+        "sig_algos": [
+            "RSA_SHA1",
+            "RSA_SHA224",
+            "RSA_SHA256",
+            "RSA_SHA384",
+            "RSA_SHA512",
+            "RSA_PSS_RSAE_SHA256",
+            "RSA_PSS_RSAE_SHA384",
+            "RSA_PSS_RSAE_SHA512"
+        ]
+    },
+    "extensions": {
+        "target": {
+            "scheme": "tls",
+            "address": "www.example.org",
+            "ip": "192.168.0.1",
+            "port": 443,
+            "proto_version": "tls1_2"
+        },
+        "next_protocols": [],
+        "application_layer_protocols": [
+            {
+                "H2": {
+                    "code": "h2"
+                }
+            },
+            {
+                "HTTP_1_1": {
+                    "code": "http/1.1"
+                }
+            }
+        ],
+        "compression_methods": "{TlsCompressionMethod.NULL}",
+        "clock_is_accurate": false,
+        "renegotiation_supported": true,
+        "session_cache_supported": true,
+        "session_ticket_supported": true,
+        "extended_master_secret_supported": true,
+        "encrypt_then_mac_supported": null,
+        "ec_point_formats": [
+            {
+                "UNCOMPRESSED": {
+                    "code": 0
+                }
+            },
+            {
+                "ANSIX962_COMPRESSED_PRIME": {
+                    "code": 1
+                }
+            },
+            {
+                "ANSIX962_COMPRESSED_CHAR2": {
+                    "code": 2
+                }
+            }
+        ]
+    },
+    "vulns": {
+        "target": {
+            "address": "www.example.org",
+            "port": 443,
+            "timeout": null,
+            "ip": "192.168.0.1",
+            "l4_transfer": null
+        },
+        "ciphers": {
+            "lucky13": false,
+            "sweet32": false,
+            "freak": false,
+            "anonymous_dh": false,
+            "null_encryption": false,
+            "rc4": false,
+            "non_forward_secret": true,
+            "export_grade": false
+        },
+        "dhparams": {
+            "logjam": false,
+            "dheat": false
+        },
+        "versions": {
+            "drown": false,
+            "early_tls_version": false
+        }
+    }
+}

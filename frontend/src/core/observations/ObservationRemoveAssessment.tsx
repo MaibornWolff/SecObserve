@@ -1,15 +1,8 @@
-import * as React from "react";
-import {
-    SimpleForm,
-    required,
-    useRefresh,
-    useNotify,
-    SaveButton,
-    Toolbar,
-} from "react-admin";
-import { Dialog, DialogTitle, DialogContent, Button } from "@mui/material";
-import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import CancelIcon from "@mui/icons-material/Cancel";
+import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
+import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import * as React from "react";
+import { SaveButton, SimpleForm, Toolbar, required, useNotify, useRefresh } from "react-admin";
 
 import { TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
@@ -24,16 +17,10 @@ const ObservationRemoveAssessment = () => {
             comment: data.comment,
         };
 
-        httpClient(
-            window.__RUNTIME_CONFIG__.API_BASE_URL +
-                "/observations/" +
-                data.id +
-                "/remove_assessment/",
-            {
-                method: "PATCH",
-                body: JSON.stringify(patch),
-            }
-        )
+        httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/observations/" + data.id + "/remove_assessment/", {
+            method: "PATCH",
+            body: JSON.stringify(patch),
+        })
             .then(() => {
                 refresh();
                 notify("Observation updated", {
@@ -98,15 +85,8 @@ const ObservationRemoveAssessment = () => {
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Observation Remove Assessment</DialogTitle>
                 <DialogContent>
-                    <SimpleForm
-                        onSubmit={observationUpdate}
-                        toolbar={<CustomToolbar />}
-                    >
-                        <TextInputWide
-                            multiline
-                            source="comment"
-                            validate={requiredValidate}
-                        />
+                    <SimpleForm onSubmit={observationUpdate} toolbar={<CustomToolbar />}>
+                        <TextInputWide multiline source="comment" validate={requiredValidate} />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>

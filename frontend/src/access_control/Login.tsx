@@ -1,31 +1,15 @@
-import { useState } from "react";
-import PropTypes from "prop-types";
-import { useLocation, Navigate } from "react-router-dom";
-
-import {
-    Avatar,
-    Button,
-    Card,
-    CardActions,
-    CircularProgress,
-    Stack,
-} from "@mui/material";
 import LockIcon from "@mui/icons-material/Lock";
-import {
-    Form,
-    required,
-    TextInput,
-    useTranslate,
-    useLogin,
-    useNotify,
-    useTheme,
-} from "react-admin";
 import PersonIcon from "@mui/icons-material/Person";
+import { Avatar, Button, Card, CardActions, CircularProgress, Stack } from "@mui/material";
 import Box from "@mui/material/Box";
+import PropTypes from "prop-types";
+import { useState } from "react";
+import { Form, TextInput, required, useLogin, useNotify, useTheme, useTranslate } from "react-admin";
+import { Navigate, useLocation } from "react-router-dom";
 
+import { getTheme } from "../commons/settings/functions";
 import { AADSignInButton } from "./AADSignInButton";
 import { aad_signed_in } from "./authProvider";
-import { getTheme } from "../commons/settings/functions";
 
 const Login = () => {
     const [loading, setLoading] = useState(false);
@@ -54,12 +38,7 @@ const Login = () => {
                     {
                         type: "warning",
                         messageArgs: {
-                            _:
-                                typeof error === "string"
-                                    ? error
-                                    : error && error.message
-                                    ? error.message
-                                    : undefined,
+                            _: typeof error === "string" ? error : error && error.message ? error.message : undefined,
                         },
                     }
                 );
@@ -127,16 +106,10 @@ const Login = () => {
                                         fullWidth
                                         startIcon={<PersonIcon />}
                                     >
-                                        {loading && (
-                                            <CircularProgress
-                                                size={25}
-                                                thickness={2}
-                                            />
-                                        )}
+                                        {loading && <CircularProgress size={25} thickness={2} />}
                                         Sign in with user
                                     </Button>
-                                    {window.__RUNTIME_CONFIG__.AAD_ENABLE ==
-                                        "true" && <AADSignInButton />}
+                                    {window.__RUNTIME_CONFIG__.AAD_ENABLE == "true" && <AADSignInButton />}
                                 </Stack>
                             </CardActions>
                         </Card>

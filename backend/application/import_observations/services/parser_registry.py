@@ -1,19 +1,21 @@
 import logging
+from typing import Optional, Type
+
+from application.commons.services.log_message import format_log_message
 from application.core.models import Parser
 from application.core.queries.parser import get_parser_by_name
 from application.import_observations.parsers.base_parser import (
-    BaseParser,
     BaseAPIParser,
     BaseFileParser,
+    BaseParser,
 )
-from application.commons.services.log_message import format_log_message
 
 logger = logging.getLogger("secobserve.import_observations")
 
 SCANNERS = {}
 
 
-def register_parser(parser_class: BaseParser) -> None:
+def register_parser(parser_class: Type[BaseParser]) -> None:
     if not issubclass(parser_class, BaseParser):
         logger.warning(
             format_log_message(
@@ -23,7 +25,7 @@ def register_parser(parser_class: BaseParser) -> None:
         return
 
     name = parser_class.get_name()
-    type = parser_class.get_type()
+    my_type = parser_class.get_type()
 
     SCANNERS[name] = parser_class
 
@@ -41,14 +43,14 @@ def register_parser(parser_class: BaseParser) -> None:
         if parser.name != name:
             parser.name = name
             parser.save()
-        if parser.type != type:
-            parser.type = type
+        if parser.type != my_type:
+            parser.type = my_type
             parser.save()
         if parser.source != source:
             parser.source = source
             parser.save()
     else:
-        Parser(name=name, type=type, source=source).save()
+        Parser(name=name, type=my_type, source=source).save()
 
 
 def create_manual_parser() -> None:
@@ -68,5 +70,5 @@ def create_manual_parser() -> None:
                 parser.delete()
 
 
-def get_parser_class(name: str) -> BaseParser:
+def get_parser_class(name: str) -> Optional[Type[BaseParser]]:
     return SCANNERS.get(name)

@@ -1,18 +1,15 @@
-import string
 import secrets
+import string
+from typing import Optional
 
 from argon2 import PasswordHasher
 from argon2.profiles import RFC_9106_LOW_MEMORY
+from rest_framework.authentication import BaseAuthentication, get_authorization_header
+from rest_framework.exceptions import AuthenticationFailed, ValidationError
 
-from rest_framework.authentication import (
-    BaseAuthentication,
-    get_authorization_header,
-)
-from rest_framework.exceptions import ValidationError, AuthenticationFailed
+from application.access_control.models import API_Token, User
 
-from application.access_control.models import User, API_Token
-
-API_TOKEN_PREFIX = "APIToken"
+API_TOKEN_PREFIX = "APIToken"  # nosec B105
 
 
 def create_api_token(user: User) -> str:
@@ -45,9 +42,11 @@ class APITokenAuthentication(BaseAuthentication):
 
         if not authentication_header:
             return None
-        elif len(authentication_header) == 1:
+
+        if len(authentication_header) == 1:
             raise AuthenticationFailed("Invalid token header: No credentials provided.")
-        elif len(authentication_header) > 2:
+
+        if len(authentication_header) > 2:
             raise AuthenticationFailed(
                 "Invalid token header: Token string should not contain spaces."
             )
@@ -60,25 +59,25 @@ class APITokenAuthentication(BaseAuthentication):
             return None
 
         user = self._validate_api_token(auth_token)
-        if user:
-            if user.is_active:
-                return (user, None)
-            else:
-                raise AuthenticationFailed("User is deactivated.")
-        else:
+        if not user:
             raise AuthenticationFailed("Invalid API token.")
+
+        if not user.is_active:
+            raise AuthenticationFailed("User is deactivated.")
+
+        return (user, None)
 
     def authenticate_header(self, request):
         return API_TOKEN_PREFIX
 
-    def _validate_api_token(self, api_token: str) -> User:
+    def _validate_api_token(self, api_token: str) -> Optional[User]:
         ph = PasswordHasher()
         api_tokens = API_Token.objects.all()
         for api_token_data in api_tokens:
             try:
                 ph.verify(api_token_data.api_token_hash, api_token)
                 return api_token_data.user
-            except Exception:  # nosec try_except_pass
+            except Exception:  # nosec B110
                 # all token need to be checked if a valid one can be found
                 pass
         return None

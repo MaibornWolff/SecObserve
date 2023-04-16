@@ -1,14 +1,14 @@
 from copy import deepcopy
 
-from unittests.base_test_case import BaseTestCase
 from application.core.models import Observation
 from application.core.services.observation import (
-    get_identity_hash,
     _get_string_to_hash,
     get_current_severity,
     get_current_status,
+    get_identity_hash,
     normalize_observation_fields,
 )
+from unittests.base_test_case import BaseTestCase
 
 
 class TestObservation(BaseTestCase):
@@ -296,7 +296,9 @@ class TestObservation(BaseTestCase):
 
         before_observation.origin_docker_image_name = "docker_image_name"
         before_observation.origin_docker_image_tag = "docker_image_tag"
-        before_observation.origin_docker_image_name_tag_short = "docker_image_name:docker_image_tag"
+        before_observation.origin_docker_image_name_tag_short = (
+            "docker_image_name:docker_image_tag"
+        )
 
         normalize_observation_fields(after_observation)
         self.assertEqual(before_observation, after_observation)

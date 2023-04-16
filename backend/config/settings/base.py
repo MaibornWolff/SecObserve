@@ -60,7 +60,9 @@ DATABASES = {
 }
 
 if env("MYSQL_AZURE", default="false") == "true":
-    DATABASES["default"]["OPTIONS"] = {"ssl": {"ca": "/app/BaltimoreCyberTrustRoot.crt.pem"}}
+    DATABASES["default"]["OPTIONS"] = {
+        "ssl": {"ca": "/app/BaltimoreCyberTrustRoot.crt.pem"}
+    }
 
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -364,18 +366,18 @@ LOGGING = {
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
 # -------------------------------------------------------------------------------
 if AAD_CLIENT_ID:
-    DEFAULT_AUTHENTICATION_CLASSES = (
+    DEFAULT_AUTHENTICATION_CLASSES = [
         "django_auth_adfs.rest_framework.AdfsAccessTokenAuthentication",
         "application.access_control.services.api_token_authentication.APITokenAuthentication",
         "application.access_control.services.jwt_authentication.JWTAuthentication",
         "rest_framework.authentication.SessionAuthentication",
-    )
+    ]
 else:
-    DEFAULT_AUTHENTICATION_CLASSES = (
+    DEFAULT_AUTHENTICATION_CLASSES = [
         "application.access_control.services.api_token_authentication.APITokenAuthentication",
         "application.access_control.services.jwt_authentication.JWTAuthentication",
         "rest_framework.authentication.SessionAuthentication",
-    )
+    ]
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": DEFAULT_AUTHENTICATION_CLASSES,

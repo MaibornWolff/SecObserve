@@ -1,14 +1,6 @@
-import { useState } from "react";
-import {
-    Button,
-    Confirm,
-    useListContext,
-    useNotify,
-    useRefresh,
-    useUnselectAll,
-    useDeleteMany,
-} from "react-admin";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useState } from "react";
+import { Button, Confirm, useDeleteMany, useListContext, useNotify, useRefresh, useUnselectAll } from "react-admin";
 
 const ObservationBulkDeleteButton = () => {
     const [open, setOpen] = useState(false);
@@ -44,12 +36,7 @@ const ObservationBulkDeleteButton = () => {
 
     return (
         <>
-            <Button
-                label="Delete"
-                onClick={handleClick}
-                startIcon={<DeleteIcon />}
-                sx={{ color: "#d32f2f" }}
-            />
+            <Button label="Delete" onClick={handleClick} startIcon={<DeleteIcon />} sx={{ color: "#d32f2f" }} />
             <Confirm
                 isOpen={open}
                 title="Delete Observations"

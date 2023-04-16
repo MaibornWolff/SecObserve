@@ -17,43 +17,49 @@ def user_has_permission(obj, permission: int, user: User = None) -> bool:
     if user is None:
         user = get_current_user()
 
+    if user is None:
+        return False
+
     if user.is_superuser:
         return True
 
     if isinstance(obj, Product):
         # Check if the user has a role for the product with the requested permissions
         member = get_product_member(obj, user)
-        if member is not None and role_has_permission(member.role, permission):
-            return True
-    elif (
+        return bool(member is not None and role_has_permission(member.role, permission))
+
+    if (
         isinstance(obj, Product_Member)
         and permission in Permissions.get_product_member_permissions()
     ):
         return user_has_permission(obj.product, permission, user)
-    elif (
+
+    if (
         isinstance(obj, Rule)
         and permission in Permissions.get_product_rule_permissions()
     ):
-        if obj.product:
-            return user_has_permission(obj.product, permission, user)
-        else:
+        if not obj.product:
             raise NoAuthorizationImplementedError(
                 "No authorization implemented for General Rules"
             )
-    elif (
+
+        return user_has_permission(obj.product, permission, user)
+
+    if (
         isinstance(obj, Observation)
         and permission in Permissions.get_observation_permissions()
     ):
         return user_has_permission(obj.product, permission, user)
-    elif (
+
+    if (
         isinstance(obj, Api_Configuration)
         and permission in Permissions.get_api_configuration_permissions()
     ):
         return user_has_permission(obj.product, permission, user)
-    else:
-        raise NoAuthorizationImplementedError(
-            f"No authorization implemented for class {type(obj).__name__} and permission {permission}"
-        )
+
+    raise NoAuthorizationImplementedError(
+        f"No authorization implemented for class {type(obj).__name__} and permission {permission}"
+    )
 
 
 def user_has_permission_or_403(obj, permission: int, user: User = None) -> None:
@@ -75,13 +81,13 @@ def role_has_permission(role: int, permission: int) -> bool:
     return permission in permissions
 
 
-def get_user_permission(user: User = None) -> list[int]:
+def get_user_permissions(user: User = None) -> list[Permissions]:
     if not user:
         user = get_current_user()
 
     permissions = []
 
-    if not user.is_external:
+    if user and not user.is_external:
         permissions.append(Permissions.Product_Create)
 
     return permissions

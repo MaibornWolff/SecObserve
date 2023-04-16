@@ -1,8 +1,8 @@
 import { useMsal } from "@azure/msal-react";
+import { faMicrosoft } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@mui/material";
 import { useNotify } from "react-admin";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMicrosoft } from "@fortawesome/free-brands-svg-icons";
 
 import { loginRequest } from "./aad";
 

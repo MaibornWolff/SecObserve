@@ -1,16 +1,11 @@
-import {
-    RecordContextProvider,
-    useGetOne,
-    Labeled,
-    TextField,
-} from "react-admin";
 import { Paper } from "@mui/material";
+import { Labeled, RecordContextProvider, TextField, useGetOne } from "react-admin";
 import { useParams } from "react-router-dom";
 
-import { Product } from "../types";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
 import { SecurityGateTextField } from "../../commons/custom_fields/SecurityGateTextField";
 import { useStyles } from "../../commons/layout/themes";
+import { Product } from "../types";
 
 const ProductHeader = () => {
     const { id: id } = useParams<any>();

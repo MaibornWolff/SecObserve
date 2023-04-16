@@ -1,27 +1,20 @@
-import { Identifier, useNotify } from "react-admin";
-import { useState } from "react";
 import { Paper } from "@mui/material";
+import { ArcElement, Chart as ChartJS, Legend, RadialLinearScale, Title, Tooltip } from "chart.js";
+import { useState } from "react";
+import { Identifier, useNotify } from "react-admin";
 import { PolarArea } from "react-chartjs-2";
-import {
-    Chart as ChartJS,
-    RadialLinearScale,
-    ArcElement,
-    Title,
-    Legend,
-    Tooltip,
-} from "chart.js";
 
-import { httpClient } from "../commons/ra-data-django-rest-framework";
 import { get_severity_color } from "../commons/functions";
+import { httpClient } from "../commons/ra-data-django-rest-framework";
 import {
     OBSERVATION_SEVERITY_CRITICAL,
     OBSERVATION_SEVERITY_HIGH,
-    OBSERVATION_SEVERITY_MEDIUM,
     OBSERVATION_SEVERITY_LOW,
+    OBSERVATION_SEVERITY_MEDIUM,
     OBSERVATION_SEVERITY_NONE,
     OBSERVATION_SEVERITY_UNKOWN,
 } from "../core/types";
-import { getFontColor, getBackgroundColor, getGridColor } from "./functions";
+import { getBackgroundColor, getFontColor, getGridColor } from "./functions";
 
 interface MetricSeveritiesProps {
     product_id: Identifier | undefined;
@@ -61,9 +54,7 @@ const MetricSeverities = (props: MetricSeveritiesProps) => {
     function get_data() {
         setLoading(true);
 
-        let url =
-            window.__RUNTIME_CONFIG__.API_BASE_URL +
-            "/metrics/severity_counts/";
+        let url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/metrics/severity_counts/";
         if (props.product_id) {
             url += "?product_id=" + props.product_id;
         }

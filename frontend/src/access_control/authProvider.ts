@@ -9,17 +9,13 @@ const authProvider: AuthProvider = {
         if (aad_signed_in()) {
             return Promise.resolve();
         } else {
-            const request = new Request(
-                window.__RUNTIME_CONFIG__.API_BASE_URL +
-                    "/authentication/authenticate/",
-                {
-                    method: "POST",
-                    body: JSON.stringify({ username, password }),
-                    headers: new Headers({
-                        "Content-Type": "application/json",
-                    }),
-                }
-            );
+            const request = new Request(window.__RUNTIME_CONFIG__.API_BASE_URL + "/authentication/authenticate/", {
+                method: "POST",
+                body: JSON.stringify({ username, password }),
+                headers: new Headers({
+                    "Content-Type": "application/json",
+                }),
+            });
             return fetch(request)
                 .then((response) => {
                     if (response.status < 200 || response.status >= 300) {
@@ -96,9 +92,7 @@ const authProvider: AuthProvider = {
 };
 
 const getUserInfo = async () => {
-    return httpClient(
-        window.__RUNTIME_CONFIG__.API_BASE_URL + "/users/me/"
-    ).then((response) => {
+    return httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/users/me/").then((response) => {
         const before_theme = getSettingTheme();
         localStorage.setItem("user", JSON.stringify(response.json));
         const after_theme = getSettingTheme();

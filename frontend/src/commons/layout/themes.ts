@@ -1,11 +1,5 @@
-import {
-    defaultTheme,
-    AutocompleteInput,
-    TextInput,
-    PasswordInput,
-    SelectInput,
-} from "react-admin";
 import { styled } from "@mui/system";
+import { AutocompleteInput, PasswordInput, SelectInput, TextInput, defaultTheme } from "react-admin";
 import { makeStyles } from "tss-react/mui";
 
 import { getSettingTheme } from "../../commons/settings/functions";

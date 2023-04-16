@@ -1,3 +1,4 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
@@ -7,23 +8,22 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
-from django_filters.rest_framework import DjangoFilterBackend
 
 from application.access_control.services.authorization import user_has_permission_or_403
 from application.access_control.services.roles_permissions import Permissions
-from application.core.queries.product import get_product_by_name, get_product_by_id
-from application.core.queries.parser import get_parser_by_name, get_parser_by_id
+from application.core.queries.parser import get_parser_by_id, get_parser_by_name
+from application.core.queries.product import get_product_by_id, get_product_by_name
 from application.import_observations.api.filters import ApiConfigurationFilter
 from application.import_observations.api.permissions import (
     UserHasApiConfigurationPermission,
 )
 from application.import_observations.api.serializers import (
+    ApiConfigurationSerializer,
     ApiImportObservationsByIdRequestSerializer,
     ApiImportObservationsByNameRequestSerializer,
-    FileUploadObservationsByNameRequestSerializer,
     FileUploadObservationsByIdRequestSerializer,
+    FileUploadObservationsByNameRequestSerializer,
     ImportObservationsResponseSerializer,
-    ApiConfigurationSerializer,
 )
 from application.import_observations.models import Api_Configuration
 from application.import_observations.queries.api_configuration import (
@@ -32,8 +32,8 @@ from application.import_observations.queries.api_configuration import (
     get_api_configurations,
 )
 from application.import_observations.services.import_observations import (
-    file_upload_observations,
     api_import_observations,
+    file_upload_observations,
 )
 
 
@@ -42,7 +42,7 @@ class ApiImportObservationsById(APIView):
         request=ApiImportObservationsByIdRequestSerializer,
         responses={status.HTTP_200_OK: ImportObservationsResponseSerializer},
     )
-    def post(self, request, format=None):
+    def post(self, request):
         request_serializer = ApiImportObservationsByIdRequestSerializer(
             data=request.data
         )
@@ -89,7 +89,7 @@ class ApiImportObservationsByName(APIView):
         request=ApiImportObservationsByNameRequestSerializer,
         responses={status.HTTP_200_OK: ImportObservationsResponseSerializer},
     )
-    def post(self, request, format=None):
+    def post(self, request):
         request_serializer = ApiImportObservationsByNameRequestSerializer(
             data=request.data
         )
@@ -137,14 +137,13 @@ class ApiImportObservationsByName(APIView):
 
 
 class FileUploadObservationsById(APIView):
-
     parser_classes = [MultiPartParser]
 
     @extend_schema(
         request=FileUploadObservationsByIdRequestSerializer,
         responses={status.HTTP_200_OK: ImportObservationsResponseSerializer},
     )
-    def post(self, request, format=None):
+    def post(self, request):
         request_serializer = FileUploadObservationsByIdRequestSerializer(
             data=request.data
         )
@@ -187,14 +186,13 @@ class FileUploadObservationsById(APIView):
 
 
 class FileUploadObservationsByName(APIView):
-
     parser_classes = [MultiPartParser]
 
     @extend_schema(
         request=FileUploadObservationsByNameRequestSerializer,
         responses={status.HTTP_200_OK: ImportObservationsResponseSerializer},
     )
-    def post(self, request, format=None):
+    def post(self, request):
         request_serializer = FileUploadObservationsByNameRequestSerializer(
             data=request.data
         )

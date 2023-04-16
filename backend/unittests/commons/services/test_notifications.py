@@ -1,23 +1,23 @@
 from datetime import datetime, timedelta
-from requests import Response
-from unittest.mock import patch, ANY
-from constance.test import override_config
+from unittest.mock import ANY, patch
 
-from unittests.base_test_case import BaseTestCase
+from constance.test import override_config
+from requests import Response
+
+from application.commons.services.functions import get_classname
 from application.commons.services.notifications import (
-    send_product_security_gate_notification,
-    send_exception_notification,
-    _send_notification,
+    LAST_EXCEPTIONS,
     _create_notification_message,
     _get_base_url_frontend,
-    _get_classname,
     _ratelimit_exception,
-    LAST_EXCEPTIONS,
+    _send_notification,
+    send_exception_notification,
+    send_product_security_gate_notification,
 )
+from unittests.base_test_case import BaseTestCase
 
 
 class TestNotifications(BaseTestCase):
-
     # --- send_product_security_gate_notification ---
 
     @patch("application.commons.services.notifications._send_notification")
@@ -229,7 +229,7 @@ class TestNotifications(BaseTestCase):
         exception = Exception("test_exception")
         message = _create_notification_message(
             "msteams_exception.tpl",
-            exception_class=_get_classname(exception),
+            exception_class=get_classname(exception),
             exception_message=str(exception),
             date_time=datetime(2022, 12, 31, 23, 59, 59),
         )

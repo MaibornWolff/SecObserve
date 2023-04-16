@@ -1,5 +1,6 @@
 import logging
 import traceback
+from typing import Optional
 
 from django.db.models.deletion import ProtectedError
 from rest_framework.response import Response
@@ -18,7 +19,7 @@ logger = logging.getLogger("secobserve.exception_handler")
 
 
 def custom_exception_handler(exc, context):
-
+    response: Optional[Response]
     if isinstance(exc, ProtectedError):
         # An object cannot be deleted because it has dependent objects.
         response = Response()
@@ -43,10 +44,7 @@ def custom_exception_handler(exc, context):
             send_exception_notification(exc)
         else:
             if response.status_code < 500:
-                if (
-                    response.status_code == HTTP_401_UNAUTHORIZED
-                    or response.status_code == HTTP_403_FORBIDDEN
-                ):
+                if response.status_code in (HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN):
                     logger.warning(format_log_message(response=response, exception=exc))
 
                 # HTTP status codes lower than 500 are no technical errors.
@@ -75,21 +73,23 @@ def format_exception_message(exc):
         and exc.detail
         and type(exc.detail).__name__ == "ReturnDict"
     ):
-        message_list = list()
+        message_list = []
         for key in exc.detail:
             for message in exc.detail.get(key):
                 message_list.append(
                     f'{key.replace("_", " ").capitalize()}: {str(message)}'
                 )
         return "\n".join(message_list)
-    elif (
+
+    if (
         hasattr(exc, "detail")
         and exc.detail
-        and type(exc.detail) == list
+        and isinstance(exc.detail, list)
         and len(exc.detail) > 0
     ):
         return " / ".join(exc.detail)
-    elif hasattr(exc, "args") and exc.args and "protected foreign keys" in exc.args[0]:
+
+    if hasattr(exc, "args") and exc.args and "protected foreign keys" in exc.args[0]:
         return exc.args[0].split("protected foreign keys")[0] + "protected foreign keys"
-    else:
-        return str(exc)
+
+    return str(exc)

@@ -1,26 +1,21 @@
-import * as React from "react";
-import {
-    SimpleForm,
-    ReferenceInput,
-    required,
-    useCreate,
-    useRefresh,
-    useNotify,
-    CreateBase,
-    Toolbar,
-    SaveButton,
-    BooleanInput,
-} from "react-admin";
-import { Dialog, DialogTitle, DialogContent, Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
-
+import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import * as React from "react";
 import {
-    AutocompleteInputWide,
-    SelectInputWide,
-    TextInputWide,
-    PasswordInputWide,
-} from "../../commons/layout/themes";
+    BooleanInput,
+    CreateBase,
+    ReferenceInput,
+    SaveButton,
+    SimpleForm,
+    Toolbar,
+    required,
+    useCreate,
+    useNotify,
+    useRefresh,
+} from "react-admin";
+
+import { AutocompleteInputWide, PasswordInputWide, SelectInputWide, TextInputWide } from "../../commons/layout/themes";
 
 export type ApiConfigurationCreateProps = {
     id: any;
@@ -98,55 +93,27 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
                 <DialogTitle>Add API configuration</DialogTitle>
                 <DialogContent>
                     <CreateBase resource="api_configurations">
-                        <SimpleForm
-                            onSubmit={create_api_configuration}
-                            toolbar={<CustomToolbar />}
-                        >
+                        <SimpleForm onSubmit={create_api_configuration} toolbar={<CustomToolbar />}>
                             <ReferenceInput
                                 source="product"
                                 reference="products"
                                 sort={{ field: "name", order: "ASC" }}
                             >
-                                <SelectInputWide
-                                    optionText="name"
-                                    defaultValue={id}
-                                    disabled={true}
-                                />
+                                <SelectInputWide optionText="name" defaultValue={id} disabled={true} />
                             </ReferenceInput>
-                            <TextInputWide
-                                autoFocus
-                                source="name"
-                                validate={requiredValidate}
-                            />
+                            <TextInputWide autoFocus source="name" validate={requiredValidate} />
                             <ReferenceInput
                                 source="parser"
                                 reference="parsers"
                                 sort={{ field: "name", order: "ASC" }}
                                 filter={{ source: "API" }}
                             >
-                                <AutocompleteInputWide
-                                    optionText="name"
-                                    validate={requiredValidate}
-                                />
+                                <AutocompleteInputWide optionText="name" validate={requiredValidate} />
                             </ReferenceInput>
-                            <TextInputWide
-                                source="base_url"
-                                validate={requiredValidate}
-                                label="Base URL"
-                            />
-                            <TextInputWide
-                                source="project_key"
-                                validate={requiredValidate}
-                            />
-                            <PasswordInputWide
-                                source="api_key"
-                                label="API key"
-                                validate={requiredValidate}
-                            />
-                            <BooleanInput
-                                source="test_connection"
-                                defaultValue={true}
-                            />
+                            <TextInputWide source="base_url" validate={requiredValidate} label="Base URL" />
+                            <TextInputWide source="project_key" validate={requiredValidate} />
+                            <PasswordInputWide source="api_key" label="API key" validate={requiredValidate} />
+                            <BooleanInput source="test_connection" defaultValue={true} />
                         </SimpleForm>
                     </CreateBase>
                 </DialogContent>

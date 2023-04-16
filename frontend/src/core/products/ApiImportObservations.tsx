@@ -1,27 +1,10 @@
-import { useState, Fragment } from "react";
-import {
-    SimpleForm,
-    required,
-    useRefresh,
-    useNotify,
-    SaveButton,
-    Toolbar,
-    ReferenceInput,
-} from "react-admin";
-import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    Button,
-    LinearProgress,
-} from "@mui/material";
-import UploadIcon from "@mui/icons-material/CloudUpload";
 import CancelIcon from "@mui/icons-material/Cancel";
+import UploadIcon from "@mui/icons-material/CloudUpload";
+import { Button, Dialog, DialogContent, DialogTitle, LinearProgress } from "@mui/material";
+import { Fragment, useState } from "react";
+import { ReferenceInput, SaveButton, SimpleForm, Toolbar, required, useNotify, useRefresh } from "react-admin";
 
-import {
-    TextInputWide,
-    AutocompleteInputWide,
-} from "../../commons/layout/themes";
+import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
 const ApiImportObservations = (product: any) => {
@@ -40,14 +23,10 @@ const ApiImportObservations = (product: any) => {
             endpoint_url: data.endpoint_url,
         };
 
-        httpClient(
-            window.__RUNTIME_CONFIG__.API_BASE_URL +
-                "/import/api_import_observations_by_id/",
-            {
-                method: "POST",
-                body: JSON.stringify(formData),
-            }
-        )
+        httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/import/api_import_observations_by_id/", {
+            method: "POST",
+            body: JSON.stringify(formData),
+        })
             .then((result) => {
                 const message =
                     result.json.observations_new +
@@ -118,10 +97,7 @@ const ApiImportObservations = (product: any) => {
                 {loading ? <LinearProgress color="secondary" /> : null}
                 <DialogTitle>Import Observations From API</DialogTitle>
                 <DialogContent>
-                    <SimpleForm
-                        onSubmit={observationUpdate}
-                        toolbar={<CustomToolbar />}
-                    >
+                    <SimpleForm onSubmit={observationUpdate} toolbar={<CustomToolbar />}>
                         <ReferenceInput
                             source="api_configuration"
                             reference="api_configurations"
@@ -135,10 +111,7 @@ const ApiImportObservations = (product: any) => {
                             />
                         </ReferenceInput>
                         <TextInputWide source="service" />
-                        <TextInputWide
-                            source="docker_image_name_tag"
-                            label="Docker image name:tag"
-                        />
+                        <TextInputWide source="docker_image_name_tag" label="Docker image name:tag" />
                         <TextInputWide source="endpoint_url" />
                     </SimpleForm>
                 </DialogContent>

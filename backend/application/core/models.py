@@ -1,24 +1,24 @@
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import (
-    Model,
-    CharField,
-    DateTimeField,
-    DateField,
-    DecimalField,
-    IntegerField,
-    ForeignKey,
-    BooleanField,
-    ManyToManyField,
-    TextField,
     CASCADE,
     PROTECT,
+    BooleanField,
+    CharField,
+    DateField,
+    DateTimeField,
+    DecimalField,
+    ForeignKey,
+    IntegerField,
+    ManyToManyField,
+    Model,
+    TextField,
 )
-from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
 
 from application.access_control.models import User
 from application.core.services.observation import (
-    normalize_observation_fields,
     get_identity_hash,
+    normalize_observation_fields,
 )
 
 
@@ -281,7 +281,7 @@ class Observation(Model):
         return f"{self.product} / {self.title}"
 
     def __init__(self, *args, **kwargs):
-        super(Observation, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.unsaved_references = []
         self.unsaved_evidences = []

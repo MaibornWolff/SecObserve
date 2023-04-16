@@ -1,8 +1,12 @@
 from .prod import *  # noqa
 
-# Disable SSL for database access
-DATABASES["default"]["OPTIONS"] = {}
-
+DATABASES = {
+    "default": {
+        "ATOMIC_REQUESTS": True,
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "./sqlite_unittests.db",
+    }
+}
 # Basically disable throttling for unit tests
 REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"] = {
     "anon": "1000/second",
@@ -29,7 +33,7 @@ TEMPLATES = [
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
             ],
-            'debug': True,
+            "debug": True,
         },
     },
 ]

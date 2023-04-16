@@ -1,10 +1,11 @@
 from json import load
+
 from django.core.files.base import File
 
 from application.core.models import Observation, Parser
 from application.import_observations.parsers.base_parser import (
-    BaseParser,
     BaseFileParser,
+    BaseParser,
 )
 
 
@@ -21,14 +22,14 @@ class SecObserveParser(BaseParser, BaseFileParser):
         try:
             data = load(file)
         except Exception:
-            return False, ["File is not valid JSON"], None
+            return False, ["File is not valid JSON"], {}
 
         if not data.get("format") == "SecObserve":
-            return False, ["File is not a SecObserve format"], None
+            return False, ["File is not a SecObserve format"], {}
 
         return True, [], data
 
-    def get_observations(self, data: list) -> list[Observation]:
+    def get_observations(self, data: dict) -> list[Observation]:
         observations = []
 
         for uploaded_observation in data.get("observations", []):

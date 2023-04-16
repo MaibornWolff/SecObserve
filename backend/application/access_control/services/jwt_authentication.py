@@ -1,12 +1,10 @@
-import jwt
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta, timezone
+from typing import Optional
 
+import jwt
 from constance import config
+from rest_framework.authentication import BaseAuthentication, get_authorization_header
 from rest_framework.exceptions import AuthenticationFailed
-from rest_framework.authentication import (
-    BaseAuthentication,
-    get_authorization_header,
-)
 
 from application.access_control.models import User
 from application.access_control.queries.user import get_user_by_username
@@ -39,9 +37,11 @@ class JWTAuthentication(BaseAuthentication):
 
         if not auth:
             return None
-        elif len(auth) == 1:
+
+        if len(auth) == 1:
             raise AuthenticationFailed("Invalid token header: No credentials provided.")
-        elif len(auth) > 2:
+
+        if len(auth) > 2:
             raise AuthenticationFailed(
                 "Invalid token header: Token string should not contain spaces."
             )
@@ -54,20 +54,23 @@ class JWTAuthentication(BaseAuthentication):
             return None
 
         user = self._validate_jwt(auth_token)
-        if user:
-            if user.is_active:
-                return (user, None)
-            else:
-                raise AuthenticationFailed("User is deactivated.")
-        else:
+        if not user:
             raise AuthenticationFailed("Invalid token.")
+
+        if not user.is_active:
+            raise AuthenticationFailed("User is deactivated.")
+
+        return (user, None)
 
     def authenticate_header(self, request):
         return JWT_PREFIX
 
-    def _validate_jwt(self, token: str) -> User:
+    def _validate_jwt(self, token: str) -> Optional[User]:
         try:
-            payload = jwt.decode(token, get_secret(), algorithms=ALGORITHM)
-            return get_user_by_username(payload.get("username"))
+            payload = jwt.decode(token, get_secret(), algorithms=[ALGORITHM])
+            username = payload.get("username")
+            if not username:
+                raise AuthenticationFailed("No username in JWT")
+            return get_user_by_username(username)
         except jwt.PyJWTError as e:
-            raise AuthenticationFailed(str(e))
+            raise AuthenticationFailed(str(e)) from e

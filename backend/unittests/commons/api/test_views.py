@@ -1,6 +1,7 @@
 from unittest.mock import patch
-from rest_framework.test import APIClient
+
 from rest_framework.status import HTTP_200_OK, HTTP_204_NO_CONTENT
+from rest_framework.test import APIClient
 
 from unittests.base_test_case import BaseTestCase
 

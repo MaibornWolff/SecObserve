@@ -1,8 +1,8 @@
 from rest_framework.permissions import BasePermission
 
 from application.access_control.api.permissions import (
-    check_post_permission,
     check_object_permission,
+    check_post_permission,
 )
 from application.access_control.services.roles_permissions import Permissions, Roles
 from application.core.models import Product
@@ -13,8 +13,8 @@ class UserHasProductPermission(BasePermission):
     def has_permission(self, request, view):
         if request.method == "POST":
             return not request.user.is_external
-        else:
-            return True
+
+        return True
 
     def has_object_permission(self, request, view, obj):
         return check_object_permission(

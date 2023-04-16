@@ -1,14 +1,14 @@
 import { useRecordContext } from "react-admin";
 
-import { get_severity_color } from "../functions";
 import {
     OBSERVATION_SEVERITY_CRITICAL,
     OBSERVATION_SEVERITY_HIGH,
-    OBSERVATION_SEVERITY_MEDIUM,
     OBSERVATION_SEVERITY_LOW,
+    OBSERVATION_SEVERITY_MEDIUM,
     OBSERVATION_SEVERITY_NONE,
     OBSERVATION_SEVERITY_UNKOWN,
 } from "../../core/types";
+import { get_severity_color } from "../functions";
 
 interface ObservationsProps {
     label: string;
@@ -30,9 +30,7 @@ const ObservationsCountField = (props: ObservationsProps) => {
         <div style={{ marginTop: get_margin() }}>
             <span
                 style={{
-                    background: get_severity_color(
-                        OBSERVATION_SEVERITY_CRITICAL
-                    ),
+                    background: get_severity_color(OBSERVATION_SEVERITY_CRITICAL),
                     color: "white",
                     padding: 8,
                 }}

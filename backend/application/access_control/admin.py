@@ -3,15 +3,14 @@ from django.contrib.auth import admin as auth_admin
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
-from application.access_control.models import JWT_Secret, API_Token
 from application.access_control.forms import UserAdminChangeForm, UserAdminCreationForm
+from application.access_control.models import API_Token, JWT_Secret
 
 User = get_user_model()
 
 
 @admin.register(User)
 class UserAdmin(auth_admin.UserAdmin):
-
     form = UserAdminChangeForm
     add_form = UserAdminCreationForm
     fieldsets = (
@@ -48,7 +47,7 @@ class UserAdmin(auth_admin.UserAdmin):
 
 @admin.register(JWT_Secret)
 class JWTSecretAdmin(admin.ModelAdmin):
-    def has_add_permission(self, request, obj=None):
+    def has_add_permission(self, request):
         return False
 
 
@@ -56,5 +55,5 @@ class JWTSecretAdmin(admin.ModelAdmin):
 class API_TokenAdmin(admin.ModelAdmin):
     list_display = ["user"]
 
-    def has_add_permission(self, request, obj=None):
+    def has_add_permission(self, request):
         return False

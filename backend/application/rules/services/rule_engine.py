@@ -1,6 +1,7 @@
 import re
+from typing import Optional
 
-from application.core.models import Product, Parser, Observation
+from application.core.models import Observation, Parser, Product
 from application.core.services.observation import (
     get_current_severity,
     get_current_status,
@@ -37,7 +38,7 @@ class Rule_Engine:
 
         rule_found = False
         for rule in self.rules:
-            if (
+            if (  # pylint: disable=too-many-boolean-expressions
                 observation.parser == rule.parser
                 and (
                     not rule.scanner_prefix
@@ -82,7 +83,7 @@ class Rule_Engine:
                     observation.general_rule = rule
 
                 # Write observation and observation log if status or severity has been changed
-                if (
+                if (  # pylint: disable=too-many-boolean-expressions
                     previous_rule_status != observation.rule_status
                     or previous_rule_severity != observation.rule_severity
                     or previous_status != observation.current_status
@@ -90,51 +91,21 @@ class Rule_Engine:
                     or previous_general_rule != observation.general_rule
                     or previous_product_rule != observation.product_rule
                 ):
-                    if previous_status != observation.current_status:
-                        status = observation.current_status
-                    else:
-                        status = ""
-                    if previous_severity != observation.current_severity:
-                        severity = observation.current_severity
-                    else:
-                        severity = ""
-
-                    if rule.product:
-                        comment = f"Updated by product rule {rule.name}"
-                    else:
-                        comment = f"Updated by general rule {rule.name}"
-
-                    create_observation_log(observation, severity, status, comment)
+                    self._write_observation_log(
+                        observation, rule, previous_severity, previous_status
+                    )
 
                 rule_found = True
                 break
 
+        # Write observation and observation log if no rule was found but there was one before
         if not rule_found and (
             previous_general_rule != observation.general_rule
             or previous_product_rule != observation.product_rule
         ):
-            observation.rule_severity = ""
-            previous_severity = observation.current_severity
-            observation.current_severity = get_current_severity(observation)
-            observation.rule_status = ""
-            previous_status = observation.current_status
-            observation.current_status = get_current_status(observation)
-
-            if previous_status != observation.current_status:
-                status = observation.current_status
-            else:
-                status = ""
-            if previous_severity != observation.current_severity:
-                severity = observation.current_severity
-            else:
-                severity = ""
-
-            if previous_product_rule:
-                comment = f"Removed product rule {previous_product_rule.name}"
-            else:
-                comment = f"Removed general rule {previous_general_rule.name}"
-
-            create_observation_log(observation, severity, status, comment)
+            self._write_observation_log_no_rule(
+                observation, previous_product_rule, previous_general_rule
+            )
 
     def apply_all_rules_for_product_and_parser(self) -> None:
         for observation in Observation.objects.filter(
@@ -151,3 +122,58 @@ class Rule_Engine:
 
         compiled_pattern = re.compile(pattern, re.IGNORECASE)
         return compiled_pattern.match(value) is not None
+
+    def _write_observation_log(
+        self,
+        observation: Observation,
+        rule: Rule,
+        previous_severity: str,
+        previous_status: str,
+    ) -> None:
+        if previous_status != observation.current_status:
+            status = observation.current_status
+        else:
+            status = ""
+        if previous_severity != observation.current_severity:
+            severity = observation.current_severity
+        else:
+            severity = ""
+
+        if rule.product:
+            comment = f"Updated by product rule {rule.name}"
+        else:
+            comment = f"Updated by general rule {rule.name}"
+
+        create_observation_log(observation, severity, status, comment)
+
+    # Write observation and observation log if status or severity has been changed
+    def _write_observation_log_no_rule(
+        self,
+        observation: Observation,
+        previous_product_rule: Optional[Rule],
+        previous_general_rule: Optional[Rule],
+    ) -> None:
+        observation.rule_severity = ""
+        previous_severity = observation.current_severity
+        observation.current_severity = get_current_severity(observation)
+        observation.rule_status = ""
+        previous_status = observation.current_status
+        observation.current_status = get_current_status(observation)
+
+        if previous_status != observation.current_status:
+            status = observation.current_status
+        else:
+            status = ""
+        if previous_severity != observation.current_severity:
+            severity = observation.current_severity
+        else:
+            severity = ""
+
+        if previous_product_rule:
+            comment = f"Removed product rule {previous_product_rule.name}"
+        elif previous_general_rule:
+            comment = f"Removed general rule {previous_general_rule.name}"
+        else:
+            comment = "Removed unkown rule"
+
+        create_observation_log(observation, severity, status, comment)

@@ -8,3 +8,4 @@ frontend/cypress/screenshots
 frontend/cypress/videos
 frontend/public/runtime-env.js
 frontend/.env
+backend/dummy

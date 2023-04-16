@@ -1,28 +1,30 @@
-from json import load, dumps
+from dataclasses import dataclass
+from json import dumps, load
+
 from django.core.files.base import File
 
 from application.core.models import Observation, Parser
 from application.import_observations.parsers.base_parser import (
-    BaseParser,
     BaseFileParser,
+    BaseParser,
 )
 
 
+@dataclass
 class Component:
-    def __init__(self, name, version, type, purl, cpe, json):
-        self.name = name
-        self.version = version
-        self.type = type
-        self.purl = purl
-        self.cpe = cpe
-        self.json = json
+    name: str
+    version: str
+    type: str
+    purl: str
+    cpe: str
+    json: str
 
 
+@dataclass
 class Metadata:
-    def __init__(self, scanner, container, file):
-        self.scanner = scanner
-        self.container = container
-        self.file = file
+    scanner: str
+    container: str
+    file: str
 
 
 class CycloneDXParser(BaseParser, BaseFileParser):
@@ -38,23 +40,22 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         try:
             data = load(file)
         except Exception:
-            return False, ["File is not valid JSON"], None
+            return False, ["File is not valid JSON"], {}
 
         bom_format = data.get("bomFormat")
         if bom_format != "CycloneDX":
-            return False, ["Data is not a CycloneDX SBOM"], None
+            return False, ["File is not a CycloneDX SBOM"], {}
 
         return True, [], data
 
     def get_observations(self, data: dict) -> list[Observation]:
-
         components = self.get_components(data)
         metadata = self.get_metadata(data)
         observations = self.create_observations(data, components, metadata)
 
         return observations
 
-    def get_components(self, data: dict) -> dict[Component]:
+    def get_components(self, data: dict) -> dict[str, Component]:
         components = {}
         metadata_component = data.get("metadata", {}).get("component")
         if metadata_component:
@@ -85,15 +86,14 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         return components
 
     def create_observations(
-        self, data: dict, components: dict[Component], metadata: Metadata
+        self, data: dict, components: dict[str, Component], metadata: Metadata
     ) -> list[Observation]:
         observations = []
 
-        vulnerabilities = data.get("vulnerabilities", [])
-        for vulnerability in vulnerabilities:
-            id = vulnerability.get("id")
+        for vulnerability in data.get("vulnerabilities", []):
+            vulnerability_id = vulnerability.get("id")
             cvss3_score, cvss3_vector = self.get_cvss3(vulnerability)
-            severity = None
+            severity = ""
             if not cvss3_score:
                 severity = self.get_highest_severity(vulnerability)
             cwe = self.get_cwe(vulnerability)
@@ -102,20 +102,18 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             if detail:
                 description += f"\n\n{detail}"
             recommendation = vulnerability.get("recommendation")
-            advisories = vulnerability.get("advisories", [])
-            affects = vulnerability.get("affects", [])
-            for affected in affects:
+            for affected in vulnerability.get("affects", []):
                 ref = affected.get("ref")
                 if ref:
                     component = components.get(ref)
                     if component:
-                        title = id
+                        title = vulnerability_id
                         observation = Observation(
                             title=title,
                             description=description,
                             recommendation=recommendation,
                             parser_severity=severity,
-                            vulnerability_id=id,
+                            vulnerability_id=vulnerability_id,
                             origin_component_name=component.name,
                             origin_component_version=component.version,
                             origin_component_purl=component.purl,
@@ -128,11 +126,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                             origin_source_file=metadata.file,
                         )
 
-                        if advisories:
-                            for advisory in advisories:
-                                observation.unsaved_references.append(
-                                    advisory.get("url")
-                                )
+                        self.add_references(vulnerability, observation)
 
                         evidence = []
                         evidence.append("Vulnerability")
@@ -148,25 +142,25 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         return observations
 
     def get_metadata(self, data: dict) -> Metadata:
-        scanner = None
-        container = None
-        file = None
+        scanner = ""
+        container = ""
+        file = ""
 
         tools = data.get("metadata", {}).get("tools", [])
         if len(tools) >= 1:
-            scanner = tools[0].get("name")
+            scanner = tools[0].get("name", "")
             version = tools[0].get("version")
             if version:
                 scanner += " / " + version
 
-        type = data.get("metadata", {}).get("component", {}).get("type")
-        name = data.get("metadata", {}).get("component", {}).get("name")
-        if type == "container":
-            container = name
-        if type == "file":
-            file = name
+        component_type = data.get("metadata", {}).get("component", {}).get("type")
+        component_name = data.get("metadata", {}).get("component", {}).get("name", "")
+        if component_type == "container":
+            container = component_name
+        if component_type == "file":
+            file = component_name
 
-        return Metadata(scanner, container, file)
+        return Metadata(scanner=scanner, container=container, file=file)
 
     def get_cvss3(self, vulnerability):
         ratings = vulnerability.get("ratings", [])
@@ -180,12 +174,14 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         return None, None
 
     def get_highest_severity(self, vulnerability):
-        current_severity = None
+        current_severity = Observation.SEVERITY_UNKOWN
         current_numerical_severity = 999
         ratings = vulnerability.get("ratings", [])
         if ratings:
             for rating in ratings:
-                severity = rating.get("severity", Observation.SEVERITY_UNKOWN).capitalize()
+                severity = rating.get(
+                    "severity", Observation.SEVERITY_UNKOWN
+                ).capitalize()
                 numerical_severity = Observation.NUMERICAL_SEVERITIES.get(severity, 99)
                 if numerical_severity < current_numerical_severity:
                     current_severity = severity
@@ -195,3 +191,11 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         cwes = vulnerability.get("cwes", [])
         if len(cwes) >= 1:
             return cwes[0]
+
+        return None
+
+    def add_references(self, vulnerability: dict, observation: Observation) -> None:
+        advisories = vulnerability.get("advisories", [])
+        if advisories:
+            for advisory in advisories:
+                observation.unsaved_references.append(advisory.get("url"))
