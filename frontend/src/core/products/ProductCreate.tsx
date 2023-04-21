@@ -10,7 +10,8 @@ import {
     required,
 } from "react-admin";
 
-import { TextInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputMedium, PasswordInputWide, TextInputWide } from "../../commons/layout/themes";
+import { ISSUE_TRACKER_TYPE_CHOICES } from "../types";
 
 const ProductCreate = () => {
     return (
@@ -85,6 +86,24 @@ const ProductCreate = () => {
                         )
                     }
                 </FormDataConsumer>
+                <Typography variant="h6" sx={{ marginTop: "1em" }}>
+                    Issue Tracker
+                </Typography>
+                <BooleanInput source="issue_tracker_active" label="Active" defaultValue={false} />
+                <AutocompleteInputMedium
+                    source="issue_tracker_type"
+                    label="Type"
+                    choices={ISSUE_TRACKER_TYPE_CHOICES}
+                />
+                <TextInputWide source="issue_tracker_base_url" label="Base URL" />
+                <PasswordInputWide
+                    source="issue_tracker_api_key"
+                    label="API key"
+                    inputProps={{ autocomplete: "current-password" }}
+                />
+                <TextInputWide source="issue_tracker_project_id" label="Project id" />
+                <TextInputWide source="issue_tracker_labels" label="Labels" />
+                <TextInputWide source="issue_tracker_epic_id" label="Epic id" />
             </SimpleForm>
         </Create>
     );

@@ -30,6 +30,9 @@ from application.core.models import (
 )
 from application.core.queries.product import get_product_member
 from application.core.services.observation_log import create_observation_log
+from application.issue_tracker.services.issue_tracker import (
+    push_observation_to_issue_tracker,
+)
 
 
 class ProductSerializer(ModelSerializer):
@@ -95,6 +98,27 @@ class ProductSerializer(ModelSerializer):
             attrs["security_gate_threshold_low"] = None
             attrs["security_gate_threshold_none"] = None
             attrs["security_gate_threshold_unkown"] = None
+
+        if not (
+            attrs.get("issue_tracker_type")
+            and attrs.get("issue_tracker_base_url")
+            and attrs.get("issue_tracker_api_key")
+            and attrs.get("issue_tracker_project_id")
+        ) and not (
+            not attrs.get("issue_tracker_type")
+            and not attrs.get("issue_tracker_base_url")
+            and not attrs.get("issue_tracker_api_key")
+            and not attrs.get("issue_tracker_project_id")
+        ):
+            raise ValidationError(
+                "Either all or none of the issue tracker fields must be set"
+            )
+
+        if attrs.get("issue_tracker_active") and not attrs.get("issue_tracker_type"):
+            raise ValidationError(
+                "Issue tracker data must be set when issue tracking is active"
+            )
+
         return super().validate(attrs)
 
 
@@ -286,6 +310,9 @@ class ObservationUpdateSerializer(ModelSerializer):
                 actual_status,
                 "Observation changed manually",
             )
+
+        push_observation_to_issue_tracker(observation)
+
         return observation
 
     def to_representation(self, instance):
@@ -320,12 +347,16 @@ class ObservationCreateSerializer(ModelSerializer):
 
     def create(self, validated_data):
         observation: Observation = super().create(validated_data)
+
         create_observation_log(
             observation,
             observation.current_severity,
             observation.current_status,
             "Observation created manually",
         )
+
+        push_observation_to_issue_tracker(observation)
+
         return observation
 
     def to_representation(self, instance):

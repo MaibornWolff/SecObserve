@@ -23,6 +23,14 @@ from application.core.services.observation import (
 
 
 class Product(Model):
+    ISSUE_TRACKER_GITHUB = "GitHub"
+    ISSUE_TRACKER_GITLAB = "GitLab"
+
+    ISSUE_TRACKER_TYPE_CHOICES = [
+        (ISSUE_TRACKER_GITHUB, ISSUE_TRACKER_GITHUB),
+        (ISSUE_TRACKER_GITLAB, ISSUE_TRACKER_GITLAB),
+    ]
+
     name = CharField(max_length=255, unique=True)
     description = TextField(max_length=2048, blank=True)
     repository_prefix = CharField(max_length=255, blank=True)
@@ -51,6 +59,15 @@ class Product(Model):
     )
     apply_general_rules = BooleanField(default=True)
     ms_teams_webhook = CharField(max_length=255, blank=True)
+    issue_tracker_active = BooleanField(default=False)
+    issue_tracker_type = CharField(
+        max_length=12, choices=ISSUE_TRACKER_TYPE_CHOICES, blank=True
+    )
+    issue_tracker_base_url = CharField(max_length=255, blank=True)
+    issue_tracker_api_key = CharField(max_length=255, blank=True)
+    issue_tracker_project_id = CharField(max_length=255, blank=True)
+    issue_tracker_labels = CharField(max_length=255, blank=True)
+    issue_tracker_epic_id = CharField(max_length=255, blank=True)
 
     def __str__(self):
         return self.name
@@ -276,6 +293,7 @@ class Observation(Model):
         null=True,
         on_delete=PROTECT,
     )
+    issue_tracker_issue_id = CharField(max_length=255, blank=True)
 
     def __str__(self):
         return f"{self.product} / {self.title}"

@@ -15,7 +15,19 @@ export interface Product extends RaRecord {
     security_gate_threshold_unkown: number;
     apply_general_rules: boolean;
     ms_teams_webhook: string;
+    issue_tracker_active: boolean;
+    issue_tracker_type: string;
+    issue_tracker_base_url: string;
+    issue_tracker_api_key: string;
+    issue_tracker_project_id: string;
+    issue_tracker_labels: string;
+    issue_tracker_epic_id: string;
 }
+
+export const ISSUE_TRACKER_TYPE_CHOICES = [
+    { id: "GitHub", name: "GitHub" },
+    { id: "GitLab", name: "GitLab" },
+];
 
 export interface Parser extends RaRecord {
     id: Identifier;
@@ -92,6 +104,7 @@ export interface Observation extends RaRecord {
     modified: Date;
     general_rule: Identifier;
     product_rule: Identifier;
+    issue_tracker_issue_id: string;
 }
 
 export const OBSERVATION_SEVERITY_CRITICAL = "Critical";

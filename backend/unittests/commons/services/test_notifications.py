@@ -8,7 +8,7 @@ from application.commons.services.functions import get_classname
 from application.commons.services.notifications import (
     LAST_EXCEPTIONS,
     _create_notification_message,
-    _get_base_url_frontend,
+    get_base_url_frontend,
     _ratelimit_exception,
     _send_notification,
     send_exception_notification,
@@ -260,11 +260,11 @@ class TestNotifications(BaseTestCase):
 
     @override_config(BASE_URL_FRONTEND="https://www.example.com")
     def test_get_base_url_frontend_without_slash(self):
-        self.assertEqual("https://www.example.com/", _get_base_url_frontend())
+        self.assertEqual("https://www.example.com/", get_base_url_frontend())
 
     @override_config(BASE_URL_FRONTEND="https://www.example.com/")
     def test_get_base_url_frontend_with_slash(self):
-        self.assertEqual("https://www.example.com/", _get_base_url_frontend())
+        self.assertEqual("https://www.example.com/", get_base_url_frontend())
 
     # --- _ratelimit_exception ---
 

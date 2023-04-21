@@ -62,6 +62,9 @@ const MetaData = () => {
                                 link="show"
                             />
                         )}
+                        {observation.issue_tracker_issue_id != "" && (
+                            <TextField source="issue_tracker_issue_id" label="Issue id" />
+                        )}
                         <DateField source="import_last_seen" showTime />
                         <DateField source="created" showTime />
                     </SimpleShowLayout>
