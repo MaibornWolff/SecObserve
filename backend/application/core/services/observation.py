@@ -113,12 +113,7 @@ def normalize_observation_fields(
     normalize_severity(observation)
     normalize_status(observation)
 
-    if observation.description is None:
-        observation.description = ""
-    else:
-        # Newlines at the end of the description are removed
-        while observation.description.endswith("\n"):
-            observation.description = observation.description[:-1]
+    normalize_description(observation)
 
     if observation.recommendation is None:
         observation.recommendation = ""
@@ -140,6 +135,15 @@ def normalize_observation_fields(
         observation.vulnerability_id = ""
     if observation.issue_tracker_issue_id is None:
         observation.issue_tracker_issue_id = ""
+
+
+def normalize_description(observation):
+    if observation.description is None:
+        observation.description = ""
+    else:
+        # Newlines at the end of the description are removed
+        while observation.description.endswith("\n"):
+            observation.description = observation.description[:-1]
 
 
 def normalize_origin_component(observation):
