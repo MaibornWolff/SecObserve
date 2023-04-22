@@ -27,7 +27,7 @@ class TestNotifications(BaseTestCase):
         mock_send.assert_not_called()
 
     @patch("application.commons.services.notifications._send_notification")
-    @patch("application.commons.services.notifications._get_base_url_frontend")
+    @patch("application.commons.services.notifications.get_base_url_frontend")
     def test_send_product_security_gate_notification_security_gate_none(
         self, mock_base_url, mock_send
     ):
@@ -44,7 +44,7 @@ class TestNotifications(BaseTestCase):
         )
 
     @patch("application.commons.services.notifications._send_notification")
-    @patch("application.commons.services.notifications._get_base_url_frontend")
+    @patch("application.commons.services.notifications.get_base_url_frontend")
     def test_send_product_security_gate_notification_security_gate_passed(
         self, mock_base_url, mock_send
     ):
@@ -61,7 +61,7 @@ class TestNotifications(BaseTestCase):
         )
 
     @patch("application.commons.services.notifications._send_notification")
-    @patch("application.commons.services.notifications._get_base_url_frontend")
+    @patch("application.commons.services.notifications.get_base_url_frontend")
     def test_send_product_security_gate_notification_security_gate_failed(
         self, mock_base_url, mock_send
     ):
@@ -256,14 +256,14 @@ class TestNotifications(BaseTestCase):
 """
         self.assertEqual(expected_message, message)
 
-    # --- _get_base_url_frontend ---
+    # --- get_base_url_frontend ---
 
     @override_config(BASE_URL_FRONTEND="https://www.example.com")
-    def test_get_base_url_frontend_without_slash(self):
+    def testget_base_url_frontend_without_slash(self):
         self.assertEqual("https://www.example.com/", get_base_url_frontend())
 
     @override_config(BASE_URL_FRONTEND="https://www.example.com/")
-    def test_get_base_url_frontend_with_slash(self):
+    def testget_base_url_frontend_with_slash(self):
         self.assertEqual("https://www.example.com/", get_base_url_frontend())
 
     # --- _ratelimit_exception ---

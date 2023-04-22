@@ -138,6 +138,8 @@ def normalize_observation_fields(
         observation.upload_filename = ""
     if observation.vulnerability_id is None:
         observation.vulnerability_id = ""
+    if observation.issue_tracker_issue_id is None:
+        observation.issue_tracker_issue_id = ""
 
 
 def normalize_origin_component(observation):
