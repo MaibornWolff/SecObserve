@@ -133,7 +133,7 @@ const ProductShow = () => {
                                     )}
 
                                     <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                                        Issue Tracker
+                                        Issue Tracker (Experimental)
                                     </Typography>
                                     <BooleanField source="issue_tracker_active" label="Active" />
                                     {product.issue_tracker_type && (

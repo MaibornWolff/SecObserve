@@ -166,7 +166,7 @@ const ProductEdit = () => {
                     }
                 </FormDataConsumer>
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                    Issue Tracker
+                    Issue Tracker (Experimental)
                 </Typography>
                 <BooleanInput source="issue_tracker_active" label="Active" />
                 <AutocompleteInputMedium
