@@ -1,5 +1,5 @@
 import json
-from typing import Optional
+from typing import Any, Optional
 
 import requests
 
@@ -12,7 +12,7 @@ from application.issue_tracker.issue_trackers.base_issue_tracker import (
 
 class GitHubIssueTracker(BaseIssueTracker):
     def create_issue(self, observation: Observation) -> None:
-        data = {
+        data:dict[str, Any] = {
             "title": self._get_title(observation),
             "body": self._get_description(observation),
         }
@@ -49,20 +49,25 @@ class GitHubIssueTracker(BaseIssueTracker):
             description=response.json().get("body"),
         )
 
+        if response.json().get("labels"):
+            issue.labels = ""
+            for label in response.json().get("labels"):
+                issue.labels += f"{label.get('name')},"
+            issue.labels = issue.labels[:-1]
+
         return issue
 
-    def update_issue(self, observation: Observation) -> None:
+    def update_issue(self, observation: Observation, issue: Issue) -> None:
         if not observation.issue_tracker_issue_id:
             return
 
-        data = {
+        data:dict[str, Any] = {
             "title": self._get_title(observation),
             "body": self._get_description(observation),
             "state": "open",
         }
         if observation.product.issue_tracker_labels:
-            labels = observation.product.issue_tracker_labels.split(",")
-            data["labels"] = [item.strip() for item in labels]
+            data["labels"] = self._get_labels(observation.product, issue)
 
         response = requests.patch(
             url=f"{self._get_issue_tracker_base_url(observation.product)}/{observation.issue_tracker_issue_id}",
@@ -72,21 +77,20 @@ class GitHubIssueTracker(BaseIssueTracker):
         )
         response.raise_for_status()
 
-    def close_issue(self, observation: Observation) -> None:
+    def close_issue(self, observation: Observation, issue: Issue) -> None:
         if not observation.issue_tracker_issue_id:
             return
 
         description = self._get_description(observation)
         description += f"\n\n**Observation status:** {observation.current_status}"
 
-        data = {
+        data:dict[str, Any] = {
             "title": self._get_title(observation),
             "body": description,
             "state": "closed",
         }
         if observation.product.issue_tracker_labels:
-            labels = observation.product.issue_tracker_labels.split(",")
-            data["labels"] = [item.strip() for item in labels]
+            data["labels"] = self._get_labels(observation.product, issue)
 
         response = requests.patch(
             url=f"{self._get_issue_tracker_base_url(observation.product)}/{observation.issue_tracker_issue_id}",
@@ -99,13 +103,12 @@ class GitHubIssueTracker(BaseIssueTracker):
     def close_issue_for_deleted_observation(
         self, product: Product, issue: Issue
     ) -> None:
-        data = {
+        data:dict[str, Any] = {
             "body": self._get_description_for_deleted_observation(issue.description),
             "state": "closed",
         }
         if product.issue_tracker_labels:
-            labels = product.issue_tracker_labels.split(",")
-            data["labels"] = [item.strip() for item in labels]
+            data["labels"] = self._get_labels(product, issue)
 
         response = requests.patch(
             url=f"{self._get_issue_tracker_base_url(product)}/{issue.id}",
@@ -126,3 +129,14 @@ class GitHubIssueTracker(BaseIssueTracker):
             "Accept": "application/vnd.github+json",
             "Authorization": f"Bearer {product.issue_tracker_api_key}",
         }
+
+    def _get_labels(self, product: Product, issue: Issue) -> list[str]:
+        product_labels = product.issue_tracker_labels.split(",")
+        product_labels = [item.strip() for item in product_labels]
+
+        if issue.labels:        
+            for label in issue.labels.split(","):
+                if label not in product_labels:
+                    product_labels.append(label)
+        
+        return product_labels

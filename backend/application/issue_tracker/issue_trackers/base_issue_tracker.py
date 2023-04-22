@@ -9,7 +9,8 @@ from application.core.models import Observation, Product
 class Issue:
     id: str
     title: str
-    description: str
+    description: Optional[str] = None
+    labels: Optional[str] = None
 
 
 class BaseIssueTracker:
@@ -19,10 +20,10 @@ class BaseIssueTracker:
     def get_issue(self, product: Product, issue_id: Optional[str]) -> Optional[Issue]:
         raise NotImplementedError("get_issue() must be overridden")
 
-    def update_issue(self, observation: Observation) -> None:
+    def update_issue(self, observation: Observation, issue: Issue) -> None:
         raise NotImplementedError("update_issue() must be overridden")
 
-    def close_issue(self, observation: Observation) -> None:
+    def close_issue(self, observation: Observation, issue: Issue) -> None:
         raise NotImplementedError("close_issue() must be overridden")
 
     def close_issue_for_deleted_observation(

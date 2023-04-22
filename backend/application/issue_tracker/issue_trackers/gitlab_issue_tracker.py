@@ -14,6 +14,7 @@ class GitLabIssueTracker(BaseIssueTracker):
         data = {
             "title": self._get_title(observation),
             "description": self._get_description(observation),
+            "confidential": True,
         }
         if observation.product.issue_tracker_labels:
             data["labels"] = observation.product.issue_tracker_labels
@@ -44,17 +45,19 @@ class GitLabIssueTracker(BaseIssueTracker):
             id=response.json().get("iid"),
             title=response.json().get("title"),
             description=response.json().get("description"),
+            labels=",".join(response.json().get("labels")),
         )
 
         return issue
 
-    def update_issue(self, observation: Observation) -> None:
+    def update_issue(self, observation: Observation, issue: Issue) -> None:
         if not observation.issue_tracker_issue_id:
             return
 
         data = {
             "title": self._get_title(observation),
             "description": self._get_description(observation),
+            "confidential": True,
             "state_event": "reopen",
         }
         if observation.product.issue_tracker_labels:
@@ -67,7 +70,7 @@ class GitLabIssueTracker(BaseIssueTracker):
         )
         response.raise_for_status()
 
-    def close_issue(self, observation: Observation) -> None:
+    def close_issue(self, observation: Observation, issue: Issue) -> None:
         if not observation.issue_tracker_issue_id:
             return
 
@@ -77,6 +80,7 @@ class GitLabIssueTracker(BaseIssueTracker):
         data = {
             "title": self._get_title(observation),
             "description": description,
+            "confidential": True,
             "state_event": "close",
         }
         if observation.product.issue_tracker_labels:
@@ -96,6 +100,7 @@ class GitLabIssueTracker(BaseIssueTracker):
             "description": self._get_description_for_deleted_observation(
                 issue.description
             ),
+            "confidential": True,
             "state_event": "close",
         }
         if product.issue_tracker_labels:
