@@ -3,6 +3,7 @@ import {
     ArrayField,
     Datagrid,
     DateField,
+    Labeled,
     ReferenceField,
     SimpleShowLayout,
     TextField,
@@ -11,6 +12,7 @@ import {
 } from "react-admin";
 import { Link } from "react-router-dom";
 
+import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import { useStyles } from "../../commons/layout/themes";
 
 const ObservationsShowAside = () => {
@@ -61,6 +63,18 @@ const MetaData = () => {
                                 label="Product rule name"
                                 link="show"
                             />
+                        )}
+                        {observation.issue_tracker_issue_id != "" && (
+                            <Labeled label="Issue">
+                                <TextUrlField
+                                    text={
+                                        observation.product_data.issue_tracker_type +
+                                        " #" +
+                                        observation.issue_tracker_issue_id
+                                    }
+                                    url={observation.issue_tracker_issue_url}
+                                />
+                            </Labeled>
                         )}
                         <DateField source="import_last_seen" showTime />
                         <DateField source="created" showTime />

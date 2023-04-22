@@ -26,6 +26,9 @@ from application.import_observations.parsers.base_parser import (
     BaseParser,
 )
 from application.import_observations.services.parser_registry import get_parser_class
+from application.issue_tracker.services.issue_tracker import (
+    push_observations_to_issue_tracker,
+)
 from application.rules.services.rule_engine import Rule_Engine
 
 
@@ -187,6 +190,7 @@ def process_data(import_parameters: ImportParameters) -> Tuple[int, int, int]:
 
     observations_resolved = resolve_unimported_observations(observations_before)
     check_security_gate(import_parameters.product)
+    push_observations_to_issue_tracker(import_parameters.product)
 
     return observations_new, observations_updated, observations_resolved
 

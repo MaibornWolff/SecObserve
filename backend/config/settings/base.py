@@ -105,6 +105,7 @@ LOCAL_APPS = [
     "application.commons",
     "application.core",
     "application.import_observations",
+    "application.issue_tracker",
     "application.rules",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

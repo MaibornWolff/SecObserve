@@ -131,6 +131,30 @@ const ProductShow = () => {
                                             )}
                                         </div>
                                     )}
+
+                                    <Typography variant="h6" sx={{ marginTop: "1em" }}>
+                                        Issue Tracker (Experimental)
+                                    </Typography>
+                                    <BooleanField source="issue_tracker_active" label="Active" />
+                                    {product.issue_tracker_type && (
+                                        <div>
+                                            <Labeled>
+                                                <TextField source="issue_tracker_type" label="Type" />
+                                            </Labeled>
+                                            <br />
+                                            <Labeled>
+                                                <TextField source="issue_tracker_base_url" label="Base URL" />
+                                            </Labeled>
+                                            <br />
+                                            <Labeled>
+                                                <TextField source="issue_tracker_project_id" label="Project id" />
+                                            </Labeled>
+                                            <br />
+                                            <Labeled>
+                                                <TextField source="issue_tracker_labels" label="Labels" />
+                                            </Labeled>
+                                        </div>
+                                    )}
                                 </SimpleShowLayout>
                             </Tab>
                             <Tab label="Metrics" path="metrics" icon={<BarChartIcon />}>
