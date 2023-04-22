@@ -103,7 +103,6 @@ const ProductCreate = () => {
                 />
                 <TextInputWide source="issue_tracker_project_id" label="Project id" />
                 <TextInputWide source="issue_tracker_labels" label="Labels" />
-                <TextInputWide source="issue_tracker_epic_id" label="Epic id" />
             </SimpleForm>
         </Create>
     );

@@ -153,10 +153,6 @@ const ProductShow = () => {
                                             <Labeled>
                                                 <TextField source="issue_tracker_labels" label="Labels" />
                                             </Labeled>
-                                            <br />
-                                            <Labeled>
-                                                <TextField source="issue_tracker_epic_id" label="Epic id" />
-                                            </Labeled>
                                         </div>
                                     )}
                                 </SimpleShowLayout>

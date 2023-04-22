@@ -67,7 +67,6 @@ class Product(Model):
     issue_tracker_api_key = CharField(max_length=255, blank=True)
     issue_tracker_project_id = CharField(max_length=255, blank=True)
     issue_tracker_labels = CharField(max_length=255, blank=True)
-    issue_tracker_epic_id = CharField(max_length=255, blank=True)
 
     def __str__(self):
         return self.name
