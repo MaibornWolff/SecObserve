@@ -12,7 +12,7 @@ from application.issue_tracker.issue_trackers.base_issue_tracker import (
 
 class GitHubIssueTracker(BaseIssueTracker):
     def create_issue(self, observation: Observation) -> None:
-        data:dict[str, Any] = {
+        data: dict[str, Any] = {
             "title": self._get_title(observation),
             "body": self._get_description(observation),
         }
@@ -61,7 +61,7 @@ class GitHubIssueTracker(BaseIssueTracker):
         if not observation.issue_tracker_issue_id:
             return
 
-        data:dict[str, Any] = {
+        data: dict[str, Any] = {
             "title": self._get_title(observation),
             "body": self._get_description(observation),
             "state": "open",
@@ -84,7 +84,7 @@ class GitHubIssueTracker(BaseIssueTracker):
         description = self._get_description(observation)
         description += f"\n\n**Observation status:** {observation.current_status}"
 
-        data:dict[str, Any] = {
+        data: dict[str, Any] = {
             "title": self._get_title(observation),
             "body": description,
             "state": "closed",
@@ -103,7 +103,7 @@ class GitHubIssueTracker(BaseIssueTracker):
     def close_issue_for_deleted_observation(
         self, product: Product, issue: Issue
     ) -> None:
-        data:dict[str, Any] = {
+        data: dict[str, Any] = {
             "body": self._get_description_for_deleted_observation(issue.description),
             "state": "closed",
         }
@@ -134,9 +134,9 @@ class GitHubIssueTracker(BaseIssueTracker):
         product_labels = product.issue_tracker_labels.split(",")
         product_labels = [item.strip() for item in product_labels]
 
-        if issue.labels:        
+        if issue.labels:
             for label in issue.labels.split(","):
                 if label not in product_labels:
                     product_labels.append(label)
-        
+
         return product_labels

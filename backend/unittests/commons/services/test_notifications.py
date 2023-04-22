@@ -8,9 +8,9 @@ from application.commons.services.functions import get_classname
 from application.commons.services.notifications import (
     LAST_EXCEPTIONS,
     _create_notification_message,
-    get_base_url_frontend,
     _ratelimit_exception,
     _send_notification,
+    get_base_url_frontend,
     send_exception_notification,
     send_product_security_gate_notification,
 )

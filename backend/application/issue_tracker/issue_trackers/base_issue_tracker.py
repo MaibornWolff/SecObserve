@@ -68,5 +68,7 @@ class BaseIssueTracker:
             origin += f"{observation.origin_source_file}"
         return origin
 
-    def _get_description_for_deleted_observation(self, description: str) -> str:
+    def _get_description_for_deleted_observation(
+        self, description: Optional[str]
+    ) -> str:
         return f"**--- Observation has been deleted ---**\n\n{description}"
