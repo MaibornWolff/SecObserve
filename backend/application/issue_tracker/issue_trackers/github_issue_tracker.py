@@ -118,11 +118,13 @@ class GitHubIssueTracker(BaseIssueTracker):
         )
         response.raise_for_status()
 
+    def get_frontend_issue_url(self, product: Product, issue_id: str) -> str:
+        return (
+            f"https://github.com/{product.issue_tracker_project_id}/issues/{issue_id}"
+        )
+
     def _get_issue_tracker_base_url(self, product: Product) -> str:
-        url = product.issue_tracker_base_url
-        if not url.endswith("/"):
-            url += "/"
-        return f"{url}repos/{product.issue_tracker_project_id}/issues"
+        return f"https://api.github.com/repos/{product.issue_tracker_project_id}/issues"
 
     def _get_headers(self, product: Product) -> dict:
         return {

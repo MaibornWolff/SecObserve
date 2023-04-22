@@ -1,3 +1,4 @@
+import urllib.parse
 from typing import Optional
 
 import requests
@@ -113,11 +114,13 @@ class GitLabIssueTracker(BaseIssueTracker):
         )
         response.raise_for_status()
 
+    def get_frontend_issue_url(self, product: Product, issue_id: str) -> str:
+        base_url = self._normalize_base_url(product.issue_tracker_base_url)
+        return f"{base_url}/{product.issue_tracker_project_id}/-/issues/{issue_id}"
+
     def _get_issue_tracker_base_url(self, product: Product) -> str:
-        url = product.issue_tracker_base_url
-        if not url.endswith("/"):
-            url += "/"
-        return f"{url}api/v4/projects/{product.issue_tracker_project_id}/issues"
+        base_url = self._normalize_base_url(product.issue_tracker_base_url)
+        return f"{base_url}/api/v4/projects/{urllib.parse.quote_plus(product.issue_tracker_project_id)}/issues"
 
     def _get_headers(self, product: Product) -> dict:
         return {

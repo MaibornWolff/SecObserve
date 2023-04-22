@@ -21,7 +21,7 @@ def push_observations_to_issue_tracker(product: Product) -> None:
 
 def push_observation_to_issue_tracker(observation: Observation) -> None:
     if observation.product.issue_tracker_active:
-        issue_tracker = _issue_tracker_factory(observation.product)
+        issue_tracker = issue_tracker_factory(observation.product)
 
         # If the issue tracker issue id is set but the issue does not exist, remove the id
         issue = issue_tracker.get_issue(
@@ -45,13 +45,13 @@ def push_deleted_observation_to_issue_tracker(
     product: Product, issue_id: Optional[str]
 ) -> None:
     if product.issue_tracker_active and issue_id:
-        issue_tracker = _issue_tracker_factory(product)
+        issue_tracker = issue_tracker_factory(product)
         issue = issue_tracker.get_issue(product, issue_id)
         if issue:
             issue_tracker.close_issue_for_deleted_observation(product, issue)
 
 
-def _issue_tracker_factory(product: Product) -> BaseIssueTracker:
+def issue_tracker_factory(product: Product) -> BaseIssueTracker:
     if product.issue_tracker_type == Product.ISSUE_TRACKER_GITHUB:
         return GitHubIssueTracker()
 

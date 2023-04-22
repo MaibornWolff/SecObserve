@@ -31,6 +31,9 @@ class BaseIssueTracker:
     ) -> None:
         raise NotImplementedError("close_issue() must be overridden")
 
+    def get_frontend_issue_url(self, product: Product, issue_id: str) -> str:
+        raise NotImplementedError("get_frontend_issue_url() must be overridden")
+
     def _get_title(self, observation: Observation) -> str:
         title = f'{observation.current_severity} vulnerability: "{observation.title}"'
         origin = self._get_origin(observation)
@@ -72,3 +75,8 @@ class BaseIssueTracker:
         self, description: Optional[str]
     ) -> str:
         return f"**--- Observation has been deleted ---**\n\n{description}"
+
+    def _normalize_base_url(self, base_url: str) -> str:
+        if base_url.endswith("/"):
+            base_url = base_url[:-1]
+        return base_url

@@ -31,6 +31,7 @@ from application.core.models import (
 from application.core.queries.product import get_product_member
 from application.core.services.observation_log import create_observation_log
 from application.issue_tracker.services.issue_tracker import (
+    issue_tracker_factory,
     push_observation_to_issue_tracker,
 )
 
@@ -98,6 +99,9 @@ class ProductSerializer(ModelSerializer):
             attrs["security_gate_threshold_low"] = None
             attrs["security_gate_threshold_none"] = None
             attrs["security_gate_threshold_unkown"] = None
+
+        if attrs.get("issue_tracker_type") == Product.ISSUE_TRACKER_GITHUB:
+            attrs["issue_tracker_base_url"] = "https://api.github.com"
 
         if not (
             attrs.get("issue_tracker_type")
@@ -232,6 +236,7 @@ class ObservationSerializer(ModelSerializer):
     references = NestedReferenceSerializer(many=True)
     evidences = NestedEvidenceSerializer(many=True)
     origin_source_file_url = SerializerMethodField()
+    issue_tracker_issue_url = SerializerMethodField()
 
     class Meta:
         model = Observation
@@ -253,6 +258,17 @@ class ObservationSerializer(ModelSerializer):
                 origin_source_file_url += "-" + str(observation.origin_source_line_end)
 
         return origin_source_file_url
+
+    def get_issue_tracker_issue_url(self, observation: Observation) -> Optional[str]:
+        issue_url = None
+
+        if observation.issue_tracker_issue_id:
+            issue_tracker = issue_tracker_factory(observation.product)
+            issue_url = issue_tracker.get_frontend_issue_url(
+                observation.product, observation.issue_tracker_issue_id
+            )
+
+        return issue_url
 
 
 class ObservationListSerializer(ModelSerializer):
