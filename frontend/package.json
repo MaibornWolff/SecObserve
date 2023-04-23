@@ -64,7 +64,7 @@
         "@microsoft/eslint-formatter-sarif": "3.0.0",
         "react-scripts": "5.0.1",
         "cypress": "12.10.0",
-        "prettier": "2.8.7",
+        "prettier": "2.8.8",
         "@trivago/prettier-plugin-sort-imports": "4.1.1"
     }
 }
