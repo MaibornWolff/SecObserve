@@ -99,13 +99,7 @@ def get_current_status(observation) -> str:
     return Observation.STATUS_OPEN
 
 
-def normalize_observation_fields(
-    observation,
-) -> None:  # pylint: disable=too-many-branches, too-many-statements
-    observation.numerical_severity = observation.NUMERICAL_SEVERITIES.get(
-        observation.current_severity
-    )
-
+def normalize_observation_fields(observation) -> None:
     normalize_origin_component(observation)
     normalize_origin_docker(observation)
     normalize_origin_endpoint(observation)
@@ -278,6 +272,12 @@ def normalize_severity(observation):
         ) not in observation.SEVERITY_CHOICES:
             observation.parser_severity = observation.SEVERITY_UNKOWN
 
+    observation.current_severity = get_current_severity(observation)
+
+    observation.numerical_severity = observation.NUMERICAL_SEVERITIES.get(
+        observation.current_severity
+    )
+
 
 def normalize_status(observation):
     if observation.current_status is None:
@@ -288,6 +288,8 @@ def normalize_status(observation):
         observation.rule_status = ""
     if observation.parser_status is None:
         observation.parser_status = ""
+
+    observation.current_status = get_current_status(observation)
 
 
 def clip_fields(model: str, my_object) -> None:

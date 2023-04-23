@@ -30,6 +30,7 @@ from application.core.models import (
 )
 from application.core.queries.product import get_product_member
 from application.core.services.observation_log import create_observation_log
+from application.core.services.security_gate import check_security_gate
 from application.issue_tracker.services.issue_tracker import (
     issue_tracker_factory,
     push_observation_to_issue_tracker,
@@ -327,6 +328,7 @@ class ObservationUpdateSerializer(ModelSerializer):
                 "Observation changed manually",
             )
 
+        check_security_gate(observation.product)
         push_observation_to_issue_tracker(observation)
 
         return observation
@@ -341,8 +343,8 @@ class ObservationUpdateSerializer(ModelSerializer):
             "title",
             "description",
             "recommendation",
-            "current_severity",
-            "current_status",
+            "parser_severity",
+            "parser_status",
             "origin_component_name_version",
             "origin_docker_image_name_tag",
             "origin_endpoint_url",
@@ -355,8 +357,7 @@ class ObservationUpdateSerializer(ModelSerializer):
 
 class ObservationCreateSerializer(ModelSerializer):
     def validate(self, attrs):
-        manual_parser = Parser.objects.get(type=Parser.TYPE_MANUAL)
-        attrs["parser"] = manual_parser
+        attrs["parser"] = Parser.objects.get(type=Parser.TYPE_MANUAL)
         attrs["scanner"] = Parser.TYPE_MANUAL
         attrs["import_last_seen"] = make_aware(datetime.now())
         return super().validate(attrs)
@@ -371,6 +372,7 @@ class ObservationCreateSerializer(ModelSerializer):
             "Observation created manually",
         )
 
+        check_security_gate(observation.product)
         push_observation_to_issue_tracker(observation)
 
         return observation
@@ -386,8 +388,8 @@ class ObservationCreateSerializer(ModelSerializer):
             "title",
             "description",
             "recommendation",
-            "current_severity",
-            "current_status",
+            "parser_severity",
+            "parser_status",
             "origin_component_name_version",
             "origin_docker_image_name_tag",
             "origin_endpoint_url",

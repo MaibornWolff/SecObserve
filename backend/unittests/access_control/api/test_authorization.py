@@ -464,11 +464,7 @@ class TestAuthentication(BaseTestCase):
             )
         )
 
-        post_data = {
-            "product": 1,
-            "title": "observation_title",
-            "current_severity": "Critical",
-        }
+        post_data = {"product": 1}
         expected_data = (
             "{'message': 'You do not have permission to perform this action.'}"
         )
@@ -482,7 +478,7 @@ class TestAuthentication(BaseTestCase):
                 expected_data,
             )
         )
-        expected_data = "{'message': 'Current status: This field is required.'}"
+        expected_data = "{'message': 'Title: This field is required.'}"
         self._test_api(
             APITest(
                 "db_internal_write",

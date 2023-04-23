@@ -186,6 +186,11 @@ class TestObservation(BaseTestCase):
     def test_normalize_observation_fields_empty(self):
         before_observation = Observation(title="empty")
         after_observation = deepcopy(before_observation)
+
+        before_observation.current_severity = Observation.SEVERITY_UNKOWN
+        before_observation.numerical_severity = 6
+        before_observation.current_status = Observation.STATUS_OPEN
+
         normalize_observation_fields(after_observation)
         self.assertEqual(before_observation, after_observation)
 
@@ -203,6 +208,10 @@ class TestObservation(BaseTestCase):
                     after_observation.__dict__[key] = None
                     value = None
 
+        before_observation.current_severity = Observation.SEVERITY_UNKOWN
+        before_observation.numerical_severity = 6
+        before_observation.current_status = Observation.STATUS_OPEN
+
         normalize_observation_fields(after_observation)
         self.assertEqual(before_observation, after_observation)
 
@@ -214,8 +223,10 @@ class TestObservation(BaseTestCase):
         )
         after_observation = deepcopy(before_observation)
 
+        before_observation.current_severity = Observation.SEVERITY_UNKOWN
+        before_observation.numerical_severity = 6
+        before_observation.current_status = Observation.STATUS_OPEN
         before_observation.description = "desc"
-
         before_observation.origin_endpoint_scheme = "https"
         before_observation.origin_endpoint_hostname = "www.example.com"
         before_observation.origin_endpoint_path = "/subpath"
@@ -230,6 +241,9 @@ class TestObservation(BaseTestCase):
         )
         after_observation = deepcopy(before_observation)
 
+        before_observation.current_severity = Observation.SEVERITY_UNKOWN
+        before_observation.numerical_severity = 6
+        before_observation.current_status = Observation.STATUS_OPEN
         before_observation.origin_component_name = "component_name"
         before_observation.origin_component_version = ""
 
@@ -243,6 +257,9 @@ class TestObservation(BaseTestCase):
         )
         after_observation = deepcopy(before_observation)
 
+        before_observation.current_severity = Observation.SEVERITY_UNKOWN
+        before_observation.numerical_severity = 6
+        before_observation.current_status = Observation.STATUS_OPEN
         before_observation.origin_component_name = "component_name"
         before_observation.origin_component_version = "component_version"
 
@@ -257,6 +274,9 @@ class TestObservation(BaseTestCase):
         )
         after_observation = deepcopy(before_observation)
 
+        before_observation.current_severity = Observation.SEVERITY_UNKOWN
+        before_observation.numerical_severity = 6
+        before_observation.current_status = Observation.STATUS_OPEN
         before_observation.origin_component_name_version = (
             "component_name:component_version"
         )
@@ -270,6 +290,9 @@ class TestObservation(BaseTestCase):
         )
         after_observation = deepcopy(before_observation)
 
+        before_observation.current_severity = Observation.SEVERITY_UNKOWN
+        before_observation.numerical_severity = 6
+        before_observation.current_status = Observation.STATUS_OPEN
         before_observation.origin_component_name_version = "component_name"
 
         normalize_observation_fields(after_observation)
@@ -281,6 +304,9 @@ class TestObservation(BaseTestCase):
         )
         after_observation = deepcopy(before_observation)
 
+        before_observation.current_severity = Observation.SEVERITY_UNKOWN
+        before_observation.numerical_severity = 6
+        before_observation.current_status = Observation.STATUS_OPEN
         before_observation.origin_docker_image_name = "docker_image_name"
         before_observation.origin_docker_image_tag = ""
         before_observation.origin_docker_image_name_tag_short = "docker_image_name"
@@ -294,6 +320,9 @@ class TestObservation(BaseTestCase):
         )
         after_observation = deepcopy(before_observation)
 
+        before_observation.current_severity = Observation.SEVERITY_UNKOWN
+        before_observation.numerical_severity = 6
+        before_observation.current_status = Observation.STATUS_OPEN
         before_observation.origin_docker_image_name = "docker_image_name"
         before_observation.origin_docker_image_tag = "docker_image_tag"
         before_observation.origin_docker_image_name_tag_short = (
@@ -313,6 +342,9 @@ class TestObservation(BaseTestCase):
         )
         after_observation = deepcopy(before_observation)
 
+        before_observation.current_severity = Observation.SEVERITY_UNKOWN
+        before_observation.numerical_severity = 6
+        before_observation.current_status = Observation.STATUS_OPEN
         before_observation.origin_docker_image_name_tag = (
             "docker_image_name:docker_image_tag"
         )
@@ -329,6 +361,9 @@ class TestObservation(BaseTestCase):
         )
         after_observation = deepcopy(before_observation)
 
+        before_observation.current_severity = Observation.SEVERITY_UNKOWN
+        before_observation.numerical_severity = 6
+        before_observation.current_status = Observation.STATUS_OPEN
         before_observation.origin_docker_image_name_tag = "docker_image_name"
         before_observation.origin_docker_image_name_tag_short = "docker_image_name"
 
