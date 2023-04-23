@@ -61,9 +61,9 @@ from application.core.services.export_observations import (
     export_observations_csv,
     export_observations_excel,
 )
+from application.core.services.security_gate import check_security_gate
 from application.issue_tracker.services.issue_tracker import (
     push_deleted_observation_to_issue_tracker,
-    push_observation_to_issue_tracker,
 )
 from application.metrics.services.metrics import get_codecharta_metrics
 from application.rules.services.rule_engine import Rule_Engine
@@ -255,6 +255,7 @@ class ObservationViewSet(ModelViewSet):
         product = instance.product
         issue_id = instance.issue_tracker_issue_id
         super().perform_destroy(instance)
+        check_security_gate(product)
         push_deleted_observation_to_issue_tracker(product, issue_id)
 
     @extend_schema(
@@ -279,7 +280,6 @@ class ObservationViewSet(ModelViewSet):
         comment = request_serializer.validated_data.get("comment")
 
         save_assessment(observation, new_severity, new_status, comment)
-        push_observation_to_issue_tracker(observation)
 
         return Response()
 
@@ -303,7 +303,6 @@ class ObservationViewSet(ModelViewSet):
         comment = request_serializer.validated_data.get("comment")
 
         remove_assessment(observation, comment)
-        push_observation_to_issue_tracker(observation)
 
         return Response()
 

@@ -63,13 +63,13 @@ const ObservationEdit = () => {
                 <Typography variant="h6">Observation</Typography>
                 <TextInputWide autoFocus source="title" validate={requiredValidate} />
                 <AutocompleteInputMedium
-                    source="current_severity"
+                    source="parser_severity"
                     label="Severity"
                     choices={OBSERVATION_SEVERITY_CHOICES}
                     validate={requiredValidate}
                 />
                 <AutocompleteInputMedium
-                    source="current_status"
+                    source="parser_status"
                     label="Status"
                     choices={OBSERVATION_STATUS_CHOICES}
                     validate={requiredValidate}
