@@ -464,9 +464,7 @@ class TestAuthentication(BaseTestCase):
             )
         )
 
-        post_data = {
-            "product": 1
-        }
+        post_data = {"product": 1}
         expected_data = (
             "{'message': 'You do not have permission to perform this action.'}"
         )
