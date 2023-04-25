@@ -1,5 +1,8 @@
+from django.core.validators import MinValueValidator
 from rest_framework.serializers import (
     CharField,
+    ChoiceField,
+    IntegerField,
     ModelSerializer,
     Serializer,
     SerializerMethodField,
@@ -7,7 +10,7 @@ from rest_framework.serializers import (
 
 from application.access_control.models import User
 from application.access_control.services.authorization import get_user_permissions
-from application.access_control.services.roles_permissions import Permissions
+from application.access_control.services.roles_permissions import Permissions, Roles
 
 
 class UserSerializer(ModelSerializer):
@@ -51,5 +54,10 @@ class AuthenticationResponseSerializer(Serializer):
     user = UserSerializer()
 
 
-class CreateAPITokenResponseSerializer(Serializer):
+class ProductApiTokenSerializer(Serializer):
+    id = IntegerField(validators=[MinValueValidator(0)])
+    role = ChoiceField(choices=Roles)
+
+
+class CreateApiTokenResponseSerializer(Serializer):
     token = CharField()

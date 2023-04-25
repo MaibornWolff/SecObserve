@@ -1,39 +1,12 @@
-import secrets
-import string
 from typing import Optional
 
 from argon2 import PasswordHasher
-from argon2.profiles import RFC_9106_LOW_MEMORY
 from rest_framework.authentication import BaseAuthentication, get_authorization_header
-from rest_framework.exceptions import AuthenticationFailed, ValidationError
+from rest_framework.exceptions import AuthenticationFailed
 
 from application.access_control.models import API_Token, User
 
 API_TOKEN_PREFIX = "APIToken"  # nosec B105
-
-
-def create_api_token(user: User) -> str:
-    try:
-        API_Token.objects.get(user=user)
-        raise ValidationError("Only one API token per user is allowed.")
-    except API_Token.DoesNotExist:
-        pass
-
-    alphabet = string.ascii_letters + string.digits
-    api_token = "".join(secrets.choice(alphabet) for i in range(32))
-
-    ph = PasswordHasher.from_parameters(RFC_9106_LOW_MEMORY)
-    api_token_hash = ph.hash(api_token)
-
-    API_Token(user=user, api_token_hash=api_token_hash).save()
-
-    return api_token
-
-
-def revoke_api_token(user: User) -> None:
-    api_tokens = API_Token.objects.filter(user=user)
-    for api_token in api_tokens:
-        api_token.delete()
 
 
 class APITokenAuthentication(BaseAuthentication):
