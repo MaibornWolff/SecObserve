@@ -1,6 +1,6 @@
 from rest_framework.routers import SimpleRouter
 
-from application.access_control.api.views import UserViewSet
+from application.access_control.api.views import ProductApiTokenViewset, UserViewSet
 from application.core.api.views import (
     EvidenceViewSet,
     ObservationViewSet,
@@ -14,6 +14,9 @@ from application.rules.api.views import GeneralRuleViewSet, ProductRuleViewSet
 router = SimpleRouter()
 
 router.register("users", UserViewSet)
+router.register(
+    "product_api_tokens", ProductApiTokenViewset, basename="product_api_tokens"
+)
 router.register("products", ProductViewSet)
 router.register("product_members", ProductMemberViewSet)
 router.register("parsers", ParserViewSet)

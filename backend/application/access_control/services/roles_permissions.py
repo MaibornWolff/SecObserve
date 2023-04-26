@@ -46,6 +46,9 @@ class Permissions(IntEnum):
     Api_Configuration_Delete = 3003
     Api_Configuration_Create = 3004
 
+    Product_Api_Token_Revoke = 4003
+    Product_Api_Token_Create = 4004
+
     @classmethod
     def has_value(cls, value):
         try:
@@ -160,6 +163,8 @@ def get_roles_with_permissions():
             Permissions.Api_Configuration_Edit,
             Permissions.Api_Configuration_Delete,
             Permissions.Api_Configuration_Create,
+            Permissions.Product_Api_Token_Revoke,
+            Permissions.Product_Api_Token_Create,
         },
     }
 

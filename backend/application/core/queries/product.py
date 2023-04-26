@@ -51,8 +51,12 @@ def get_product_members() -> QuerySet[Product_Member]:
     if user is None:
         return Product_Member.objects.none()
 
+    product_members = Product_Member.objects.exclude(
+        user__username__startswith="-product-"
+    )
+
     if user.is_superuser:
-        return Product_Member.objects.all()
+        return product_members
 
     products = get_products()
-    return Product_Member.objects.filter(product__in=products)
+    return product_members.filter(product__in=products)

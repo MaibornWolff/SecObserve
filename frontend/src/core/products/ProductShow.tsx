@@ -1,6 +1,7 @@
 import BarChartIcon from "@mui/icons-material/BarChart";
 import UploadIcon from "@mui/icons-material/CloudUpload";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import TokenIcon from "@mui/icons-material/Token";
 import { Stack, Typography } from "@mui/material";
 import {
     BooleanField,
@@ -18,9 +19,12 @@ import {
     useRecordContext,
 } from "react-admin";
 
+import CreateProductApiToken from "../../access_control/product_api_token/ProductApiTokenCreate";
+import ProductApiTokenEmbeddedList from "../../access_control/product_api_token/ProductApiTokenEmbeddedList";
 import {
     PERMISSION_API_CONFIGURATION_CREATE,
     PERMISSION_OBSERVATION_CREATE,
+    PERMISSION_PRODUCT_API_TOKEN_CREATE,
     PERMISSION_PRODUCT_EDIT,
     PERMISSION_PRODUCT_IMPORT_OBSERVATIONS,
     PERMISSION_PRODUCT_MEMBER_CREATE,
@@ -204,6 +208,12 @@ const ProductShow = () => {
                                     <ProductMemberCreate id={product.id} />
                                 )}
                                 <ProductMemberEmbeddedList product={product} />
+                            </Tab>
+                            <Tab label="API Token" path="api_token" icon={<TokenIcon />}>
+                                {product && product.permissions.includes(PERMISSION_PRODUCT_API_TOKEN_CREATE) && (
+                                    <CreateProductApiToken product={product} />
+                                )}
+                                <ProductApiTokenEmbeddedList product={product} />
                             </Tab>
                         </TabbedShowLayout>
                     )}
