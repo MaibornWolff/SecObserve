@@ -63,13 +63,6 @@ class TestGitHubIssueTracker(BaseTestCase):
         )
 
     @patch("requests.get")
-    def test_get_issue_no_id(self, get_mock):
-        issue_tracker = GitHubIssueTracker()
-        issue = issue_tracker.get_issue(self.observation_1.product, None)
-        self.assertIsNone(issue)
-        get_mock.assert_not_called()
-
-    @patch("requests.get")
     def test_get_issue_exception(self, get_mock):
         response = Response()
         response.status_code = 500

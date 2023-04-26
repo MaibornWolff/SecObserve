@@ -30,10 +30,7 @@ class GitHubIssueTracker(BaseIssueTracker):
         observation.issue_tracker_issue_id = response.json().get("number")
         observation.save()
 
-    def get_issue(self, product: Product, issue_id: Optional[str]) -> Optional[Issue]:
-        if not issue_id:
-            return None
-
+    def get_issue(self, product: Product, issue_id: str) -> Optional[Issue]:
         response = requests.get(
             url=f"{self._get_issue_tracker_base_url(product)}/{issue_id}",
             headers=self._get_headers(product),

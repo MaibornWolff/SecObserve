@@ -17,7 +17,7 @@ class BaseIssueTracker:
     def create_issue(self, observation: Observation) -> None:
         raise NotImplementedError("create_issue() must be overridden")
 
-    def get_issue(self, product: Product, issue_id: Optional[str]) -> Optional[Issue]:
+    def get_issue(self, product: Product, issue_id: str) -> Optional[Issue]:
         raise NotImplementedError("get_issue() must be overridden")
 
     def update_issue(self, observation: Observation, issue: Issue) -> None:
