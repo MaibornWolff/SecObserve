@@ -210,10 +210,9 @@ const ProductShow = () => {
                                 <ProductMemberEmbeddedList product={product} />
                             </Tab>
                             <Tab label="API Token" path="api_token" icon={<TokenIcon />}>
-                                {product &&
-                                    product.permissions.includes(PERMISSION_PRODUCT_API_TOKEN_CREATE) && (
-                                        <CreateProductApiToken product={product} />
-                                    )}
+                                {product && product.permissions.includes(PERMISSION_PRODUCT_API_TOKEN_CREATE) && (
+                                    <CreateProductApiToken product={product} />
+                                )}
                                 <ProductApiTokenEmbeddedList product={product} />
                             </Tab>
                         </TabbedShowLayout>
