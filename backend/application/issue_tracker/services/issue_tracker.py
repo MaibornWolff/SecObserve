@@ -23,10 +23,14 @@ def push_observation_to_issue_tracker(observation: Observation) -> None:
     if observation.product.issue_tracker_active:
         issue_tracker = issue_tracker_factory(observation.product)
 
-        # If the issue tracker issue id is set but the issue does not exist, remove the id
-        issue = issue_tracker.get_issue(
-            observation.product, observation.issue_tracker_issue_id
-        )
+        if observation.issue_tracker_issue_id:
+            issue = issue_tracker.get_issue(
+                observation.product, observation.issue_tracker_issue_id
+            )
+        else:
+            issue = None
+
+        # If the issue_tracker_issue_id is set but the issue does not exist, remove the id
         if observation.issue_tracker_issue_id and not issue:
             observation.issue_tracker_issue_id = ""
             observation.save()
