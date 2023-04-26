@@ -23,7 +23,7 @@ const EvidenceShow = () => {
                                 value={JSON.parse(evidence.evidence)}
                                 groupArraysAfterLength={10000}
                                 displayDataTypes={false}
-                                displayObjectSize={false}
+                                displaySize={false}
                                 indentWidth={4}
                                 collapseStringsAfterLength={false}
                                 enableClipboard={false}
