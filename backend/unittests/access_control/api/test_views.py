@@ -17,7 +17,9 @@ class TestAPIToken(BaseTestCase):
 
         api_client = APIClient()
         request_data = {"username": "user@example.com", "password": "not-so-secret"}
-        response = api_client.post(reverse("create_user_api_token"), request_data, "json")
+        response = api_client.post(
+            reverse("create_user_api_token"), request_data, "json"
+        )
 
         self.assertEqual(403, response.status_code)
         self.assertEqual("Invalid credentials", response.data["message"])
@@ -33,7 +35,9 @@ class TestAPIToken(BaseTestCase):
 
         api_client = APIClient()
         request_data = {"username": "user@example.com", "password": "not-so-secret"}
-        response = api_client.post(reverse("create_user_api_token"), request_data, "json")
+        response = api_client.post(
+            reverse("create_user_api_token"), request_data, "json"
+        )
 
         self.assertEqual(400, response.status_code)
         self.assertEqual(
@@ -50,7 +54,9 @@ class TestAPIToken(BaseTestCase):
 
         api_client = APIClient()
         request_data = {"username": "user@example.com", "password": "not-so-secret"}
-        response = api_client.post(reverse("create_user_api_token"), request_data, "json")
+        response = api_client.post(
+            reverse("create_user_api_token"), request_data, "json"
+        )
         self.assertEqual(201, response.status_code)
         self.assertEqual("api_token", response.data["token"])
         user_mock.assert_called_with(request_data)
@@ -64,7 +70,9 @@ class TestAPIToken(BaseTestCase):
 
         api_client = APIClient()
         request_data = {"username": "user@example.com", "password": "not-so-secret"}
-        response = api_client.post(reverse("revoke_user_api_token"), request_data, "json")
+        response = api_client.post(
+            reverse("revoke_user_api_token"), request_data, "json"
+        )
 
         self.assertEqual(403, response.status_code)
         self.assertEqual("Invalid credentials", response.data["message"])
@@ -77,7 +85,9 @@ class TestAPIToken(BaseTestCase):
 
         api_client = APIClient()
         request_data = {"username": "user@example.com", "password": "not-so-secret"}
-        response = api_client.post(reverse("revoke_user_api_token"), request_data, "json")
+        response = api_client.post(
+            reverse("revoke_user_api_token"), request_data, "json"
+        )
 
         self.assertEqual(204, response.status_code)
         user_mock.assert_called_with(request_data)

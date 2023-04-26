@@ -1,7 +1,7 @@
 from itertools import chain
 from unittest.mock import patch
 
-from rest_framework.exceptions import  ValidationError
+from rest_framework.exceptions import ValidationError
 
 from application.access_control.models import API_Token
 from application.access_control.services.user_api_token import (
@@ -44,5 +44,3 @@ class TestUserApiToken(BaseTestCase):
 
         filter_mock.assert_called_with(user=self.user_internal)
         self.assertEqual(2, delete_mock.call_count)
-
-

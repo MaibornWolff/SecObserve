@@ -262,9 +262,7 @@ class TestAuthentication(BaseTestCase):
         self._check_authentication(["get"], "/api/status/version/")
 
         self._check_authentication(["get", "post"], "/api/product_api_tokens/")
-        self._check_authentication(
-            ["delete"], "/api/product_api_tokens/1/"
-        )
+        self._check_authentication(["delete"], "/api/product_api_tokens/1/")
 
     def test_authentication_users(self):
         self._check_authentication(["get"], "/api/users/me/")

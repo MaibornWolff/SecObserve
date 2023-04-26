@@ -887,14 +887,28 @@ class TestAuthentication(BaseTestCase):
 
         # --- product_api_tokens ---
 
-        expected_data = "{'results': [OrderedDict([('id', 2), ('role', <Roles.Upload: 2>)])]}"
+        expected_data = (
+            "{'results': [OrderedDict([('id', 2), ('role', <Roles.Upload: 2>)])]}"
+        )
         self._test_api(
-            APITest("db_admin", "get", "/api/product_api_tokens/?product=2", None, 200, expected_data)
+            APITest(
+                "db_admin",
+                "get",
+                "/api/product_api_tokens/?product=2",
+                None,
+                200,
+                expected_data,
+            )
         )
 
         self._test_api(
             APITest(
-                "db_internal_write", "get", "/api/product_api_tokens/?product=2", None, 403, None
+                "db_internal_write",
+                "get",
+                "/api/product_api_tokens/?product=2",
+                None,
+                403,
+                None,
             )
         )
 
@@ -906,7 +920,7 @@ class TestAuthentication(BaseTestCase):
                 "db_external",
                 "post",
                 "/api/product_api_tokens/",
-                {"id": 1,"role": 2},
+                {"id": 1, "role": 2},
                 403,
                 expected_data,
             )
@@ -917,15 +931,24 @@ class TestAuthentication(BaseTestCase):
                 "db_internal_write",
                 "post",
                 "/api/product_api_tokens/",
-                {"id": 1,"role": 2},
+                {"id": 1, "role": 2},
                 201,
                 None,
             )
         )
 
-        expected_data = "{'results': [OrderedDict([('id', 1), ('role', <Roles.Upload: 2>)])]}"
+        expected_data = (
+            "{'results': [OrderedDict([('id', 1), ('role', <Roles.Upload: 2>)])]}"
+        )
         self._test_api(
-            APITest("db_internal_write", "get", "/api/product_api_tokens/?product=1", None, 200, expected_data)
+            APITest(
+                "db_internal_write",
+                "get",
+                "/api/product_api_tokens/?product=1",
+                None,
+                200,
+                expected_data,
+            )
         )
 
         expected_data = (
@@ -1174,4 +1197,3 @@ class TestAuthentication(BaseTestCase):
                 expected_data,
             )
         )
-
