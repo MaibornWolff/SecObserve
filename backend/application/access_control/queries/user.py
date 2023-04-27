@@ -20,6 +20,22 @@ def get_users() -> QuerySet[User]:
     if user is None:
         return User.objects.none()
 
+    users = User.objects.all()
+
+    if user.is_superuser or not user.is_external:
+        return users
+
+    product_members = get_product_members()
+
+    return users.filter(id__in=[member.user_id for member in product_members])
+
+
+def get_users_without_api_tokens() -> QuerySet[User]:
+    user = get_current_user()
+
+    if user is None:
+        return User.objects.none()
+
     users = User.objects.exclude(username__startswith="-product-")
 
     if user.is_superuser or not user.is_external:
