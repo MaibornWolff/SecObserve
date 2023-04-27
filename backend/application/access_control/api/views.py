@@ -20,7 +20,10 @@ from application.access_control.api.serializers import (
     UserSettingsSerializer,
 )
 from application.access_control.models import User
-from application.access_control.queries.user import get_users
+from application.access_control.queries.user import (
+    get_users,
+    get_users_without_api_tokens,
+)
 from application.access_control.services.authorization import user_has_permission_or_403
 from application.access_control.services.jwt_authentication import create_jwt
 from application.access_control.services.product_api_token import (
@@ -46,6 +49,9 @@ class UserViewSet(RetrieveModelMixin, ListModelMixin, GenericViewSet):
     queryset = User.objects.none()
 
     def get_queryset(self):
+        if self.action == "list":
+            return get_users_without_api_tokens()
+
         return get_users()
 
     @extend_schema(methods=["GET"], responses={status.HTTP_200_OK: UserSerializer})
