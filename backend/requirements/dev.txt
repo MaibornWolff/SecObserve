@@ -15,7 +15,7 @@ pylint-celery==0.3  # https://github.com/PyCQA/pylint-celery
 pre-commit==3.2.2  # https://github.com/pre-commit/pre-commit
 mypy==1.2.0  # https://github.com/python/mypy
 django-stubs==4.2.0  # https://github.com/typeddjango/django-stubs
-djangorestframework-stubs==1.10.0  # https://github.com/typeddjango/djangorestframework-stubs
+djangorestframework-stubs==3.14.0  # https://github.com/typeddjango/djangorestframework-stubs
 
 # Django
 # ------------------------------------------------------------------------------
