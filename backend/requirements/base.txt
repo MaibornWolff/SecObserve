@@ -40,7 +40,7 @@ argon2-cffi==21.3.0
 
 # HTTP requests
 # ------------------------------------------------------------------------------
-requests==2.28.2  # https://github.com/psf/requests
+requests==2.29.0  # https://github.com/psf/requests
 
 # Azure Active Directory
 # ------------------------------------------------------------------------------
