@@ -41,6 +41,6 @@ Some information about how the observation was created or updated.
 
 `References` are links to further information about the observation. They are imported with the observation.
 
-## Evidence
+## Evidences
 
 `Evidences` are extracts from the scan reports showing the basis on which the observation was created.

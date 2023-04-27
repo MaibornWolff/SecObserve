@@ -69,6 +69,7 @@ nav:
   - Integrations:
     - GitHub actions and GitLab CI templates: integrations/github_actions_and_templates.md
     - Source code repositories: integrations/source_code_repositories.md
+    - Issue trackers (experimental): integrations/issue_trackers.md
     - Notifications to Microsoft Teams: integrations/notifications.md
     - Export of observations: integrations/observations_export.md
     - CodeCharta: integrations/codecharta.md

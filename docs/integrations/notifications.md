@@ -9,6 +9,8 @@ SecObserve can send notifications to Microsoft Teams for two kinds of events:
 
 For both types of notifications an incoming webhook has to be set for a channel, where the notifications shall appear. How to do this is explained in [Create Incoming Webhooks](https://learn.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook). Copy the URL of the webhook to the clipboard, to have it available to set it in SecObserve.
 
+![MS Teams notification](../assets/images/screenshot_ms_teams.png)
+
 The messages do not include mentions, but a user can set the "Channel notifications" to "All activities" in Teams, to get an active notification when an entry is generated. 
 
 ## Notifications for security gates

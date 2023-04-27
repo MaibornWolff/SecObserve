@@ -102,7 +102,7 @@ const CreateProductApiToken = (props: CreateProductApiTokenProps) => {
                 </DialogContent>
             </Dialog>
             <Dialog open={showApiTokenOpen} onClose={handleApiTokenClose}>
-                <DialogTitle>{"Product API token"}</DialogTitle>
+                <DialogTitle>Create product API token</DialogTitle>
                 <DialogContent>
                     <Stack direction="row" spacing={2} justifyContent="center" alignItems="center">
                         <TextField disabled defaultValue={apiToken} sx={{ width: "50ch" }} />
