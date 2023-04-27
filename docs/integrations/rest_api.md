@@ -19,14 +19,43 @@ SecObserve is build with an API first approach, every functionality needed to us
 
 #### API token
 
-API tokens are used for other integration scenarios, e.g. to call the REST API from a CI/CD pipeline to import observations. An API token for a user can only been seen once, when it is created. Afterwards there is no way to see that API token again. If it is lost it needs to be revoked and a new one has to be created, as only one API token is allowed per user.
+API tokens are used for other integration scenarios, e.g. to call the REST API from a CI/CD pipeline to import observations.
+
+|                                  |                                         |
+|----------------------------------|-----------------------------------------|
+| **Validity**                     | Until revokation                        |
+| **HTTP header**                  | `Authorization: APIToken `*`token`*     |
+
+API tokens can be created for a product or a user.
+
+##### Product API token
+
+![Create product API token 1](../assets/images/screenshot_product_api_token_1.png)
+
+A role (see [Roles and permissions](../../usage/users_permissions/#roles-and-permissions)) must be selected during creation of a product API token, to determine the permissions of the API token for the product.
+
+![Create product API token 2](../assets/images/screenshot_product_api_token_2.png){ width="60%" style="display: block; margin: 0 auto" }
+
+The API token can be seen only once after it has been created. It must be copied to ensure that it is not lost.
+
+![Create product API token 3](../assets/images/screenshot_product_api_token_3.png){ width="60%" style="display: block; margin: 0 auto" }
+
+Only one API token can be created per product. If it needs to be replaced, it must be revoked first.
+
+![Revoke product API token](../assets/images/screenshot_product_api_token_4.png)
+
+
+##### User API token
+
+An API token for a user can only be created and revoked with API calls. The token can be seen only once, when it is created. Afterwards there is no way to see that API token again. If it is lost it needs to be revoked and a new one has to be created, as only one API token is allowed per user.
+
+The API token has the same permissions for the same products as the user.
 
 |                                  |                                         |
 |----------------------------------|-----------------------------------------|
 | **Endpoint to create API token** | `/api/authentication/create_api_token/` |
 | **Endpoint to revoke API token** | `/api/authentication/revoke_api_token/` |
-| **Validity**                     | Until revokation                        |
-| **HTTP header**                  | `Authorization: APIToken `*`token`*     |
+
 
 ## Interactive API documentation
 
