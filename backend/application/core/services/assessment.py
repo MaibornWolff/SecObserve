@@ -5,6 +5,9 @@ from application.core.services.observation import (
 )
 from application.core.services.observation_log import create_observation_log
 from application.core.services.security_gate import check_security_gate
+from application.issue_tracker.services.issue_tracker import (
+    push_observation_to_issue_tracker,
+)
 
 
 def save_assessment(
@@ -41,6 +44,7 @@ def save_assessment(
         create_observation_log(observation, log_severity, log_status, comment)
 
     check_security_gate(observation.product)
+    push_observation_to_issue_tracker(observation)
 
 
 def remove_assessment(observation: Observation, comment: str) -> None:
@@ -53,3 +57,4 @@ def remove_assessment(observation: Observation, comment: str) -> None:
         create_observation_log(observation, "", "", comment)
 
         check_security_gate(observation.product)
+        push_observation_to_issue_tracker(observation)

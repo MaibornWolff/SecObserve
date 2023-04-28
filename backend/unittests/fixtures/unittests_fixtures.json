@@ -1,5 +1,13 @@
 [
     {
+        "model": "access_control.api_token",
+        "pk": 1,
+        "fields": {
+            "api_token_hash": "argon2$argon2id$v=19$m=102400,t=2,p=8$bUc4bk13R2RLSElVMlVoRENLeGoyaA$NMzcg5d9N6jufieKF+nADLa4AdLGdMb5lFVPN8zKPm0",
+            "user": 5
+        }
+    },
+    {
         "model": "access_control.user",
         "pk": 1,
         "fields": {
@@ -80,6 +88,26 @@
         }
     },
     {
+        "model": "access_control.user",
+        "pk": 5,
+        "fields": {
+            "password": "",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "-product-2-api_token-",
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-12-12T18:48:08.514Z",
+            "full_name": "-product-2-api_token-",
+            "is_external": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
         "model": "core.product",
         "pk": 1,
         "fields": {
@@ -151,6 +179,15 @@
             "product": 2,
             "user": 3,
             "role": 1
+        }
+    },
+    {
+        "model": "core.product_member",
+        "pk": 5,
+        "fields": {
+            "product": 2,
+            "user": 5,
+            "role": 2
         }
     },
     {

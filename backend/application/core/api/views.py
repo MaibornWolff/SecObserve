@@ -61,6 +61,11 @@ from application.core.services.export_observations import (
     export_observations_csv,
     export_observations_excel,
 )
+from application.core.services.security_gate import check_security_gate
+from application.issue_tracker.services.issue_tracker import (
+    push_deleted_observation_to_issue_tracker,
+    push_observations_to_issue_tracker,
+)
 from application.metrics.services.metrics import get_codecharta_metrics
 from application.rules.services.rule_engine import Rule_Engine
 
@@ -180,6 +185,8 @@ class ProductViewSet(ModelViewSet):
             rule_engine = Rule_Engine(product, parser)
             rule_engine.apply_all_rules_for_product_and_parser()
 
+        push_observations_to_issue_tracker(product)
+
         return Response(status=HTTP_204_NO_CONTENT)
 
     def __get_product(self, pk) -> Product:
@@ -246,6 +253,13 @@ class ObservationViewSet(ModelViewSet):
                 )
             )
         )
+
+    def perform_destroy(self, instance: Observation) -> None:
+        product = instance.product
+        issue_id = instance.issue_tracker_issue_id
+        super().perform_destroy(instance)
+        check_security_gate(product)
+        push_deleted_observation_to_issue_tracker(product, issue_id)
 
     @extend_schema(
         methods=["PATCH"],

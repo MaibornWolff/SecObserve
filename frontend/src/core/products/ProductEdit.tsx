@@ -15,7 +15,8 @@ import {
 } from "react-admin";
 
 import { PERMISSION_PRODUCT_DELETE } from "../../access_control/types";
-import { TextInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputMedium, PasswordInputWide, TextInputWide } from "../../commons/layout/themes";
+import { ISSUE_TRACKER_TYPE_CHOICES } from "../types";
 
 const CustomToolbar = () => {
     const product = useRecordContext();
@@ -76,6 +77,18 @@ const ProductEdit = () => {
             if (data.security_gate_threshold_unkown == "") {
                 data.security_gate_threshold_unkown = null;
             }
+        }
+        if (!data.issue_tracker_type) {
+            data.issue_tracker_type = "";
+        }
+        if (!data.issue_tracker_base_url) {
+            data.issue_tracker_base_url = "";
+        }
+        if (!data.issue_tracker_api_key) {
+            data.issue_tracker_api_key = "";
+        }
+        if (!data.issue_tracker_project_id) {
+            data.issue_tracker_project_id = "";
         }
         return data;
     };
@@ -152,6 +165,23 @@ const ProductEdit = () => {
                         )
                     }
                 </FormDataConsumer>
+                <Typography variant="h6" sx={{ marginTop: "1em" }}>
+                    Issue Tracker (Experimental)
+                </Typography>
+                <BooleanInput source="issue_tracker_active" label="Active" />
+                <AutocompleteInputMedium
+                    source="issue_tracker_type"
+                    label="Type"
+                    choices={ISSUE_TRACKER_TYPE_CHOICES}
+                />
+                <TextInputWide source="issue_tracker_base_url" label="Base URL" />
+                <PasswordInputWide
+                    source="issue_tracker_api_key"
+                    label="API key"
+                    inputProps={{ autocomplete: "current-password" }}
+                />
+                <TextInputWide source="issue_tracker_project_id" label="Project id" />
+                <TextInputWide source="issue_tracker_labels" label="Labels" />
             </SimpleForm>
         </Edit>
     );

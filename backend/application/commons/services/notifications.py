@@ -6,7 +6,7 @@ import requests
 from constance import config
 from django.template.loader import render_to_string
 
-from application.commons.services.functions import get_classname
+from application.commons.services.functions import get_base_url_frontend, get_classname
 from application.commons.services.log_message import format_log_message
 from application.core.models import Product
 
@@ -29,7 +29,7 @@ def send_product_security_gate_notification(product: Product) -> None:
             "msteams_product_security_gate.tpl",
             product=product,
             security_gate_status=security_gate_status,
-            product_url=f"{_get_base_url_frontend()}#/products/{product.id}/show",
+            product_url=f"{get_base_url_frontend()}#/products/{product.id}/show",
         )
 
 
@@ -75,13 +75,6 @@ def _create_notification_message(template: str, **kwargs) -> Optional[str]:
             )
         )
         return None
-
-
-def _get_base_url_frontend() -> str:
-    base_url_frontend = config.BASE_URL_FRONTEND
-    if not base_url_frontend.endswith("/"):
-        base_url_frontend += "/"
-    return base_url_frontend
 
 
 def _ratelimit_exception(exception: Exception) -> bool:

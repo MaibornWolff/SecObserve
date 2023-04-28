@@ -1,31 +1,44 @@
 import logging
 
 from django.contrib.auth import authenticate as django_authenticate
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import GenericViewSet, ViewSet
 
 from application.access_control.api.filters import UserFilter
 from application.access_control.api.serializers import (
     AuthenticationRequestSerializer,
     AuthenticationResponseSerializer,
-    CreateAPITokenResponseSerializer,
+    CreateApiTokenResponseSerializer,
+    ProductApiTokenSerializer,
     UserSerializer,
     UserSettingsSerializer,
 )
 from application.access_control.models import User
-from application.access_control.queries.user import get_users
-from application.access_control.services.api_token_authentication import (
-    create_api_token,
-    revoke_api_token,
+from application.access_control.queries.user import (
+    get_users,
+    get_users_without_api_tokens,
 )
+from application.access_control.services.authorization import user_has_permission_or_403
 from application.access_control.services.jwt_authentication import create_jwt
+from application.access_control.services.product_api_token import (
+    create_product_api_token,
+    get_product_api_tokens,
+    revoke_product_api_token,
+)
+from application.access_control.services.roles_permissions import Permissions
+from application.access_control.services.user_api_token import (
+    create_user_api_token,
+    revoke_user_api_token,
+)
 from application.commons.services.log_message import format_log_message
+from application.core.models import Product
+from application.core.queries.product import get_product_by_id
 
 logger = logging.getLogger("secobserve.access_control")
 
@@ -36,6 +49,9 @@ class UserViewSet(RetrieveModelMixin, ListModelMixin, GenericViewSet):
     queryset = User.objects.none()
 
     def get_queryset(self):
+        if self.action == "list":
+            return get_users_without_api_tokens()
+
         return get_users()
 
     @extend_schema(methods=["GET"], responses={status.HTTP_200_OK: UserSerializer})
@@ -65,18 +81,18 @@ class UserViewSet(RetrieveModelMixin, ListModelMixin, GenericViewSet):
         return Response(response_serializer.data, status=status.HTTP_200_OK)
 
 
-class CreateAPITokenView(APIView):
+class CreateUserAPITokenView(APIView):
     authentication_classes = []
     permission_classes = []
 
     @extend_schema(
         request=AuthenticationRequestSerializer,
-        responses={status.HTTP_200_OK: CreateAPITokenResponseSerializer},
+        responses={status.HTTP_201_CREATED: CreateApiTokenResponseSerializer},
     )
     def post(self, request):
-        user = get_authenticated_user(request.data)
+        user = _get_authenticated_user(request.data)
         try:
-            token = create_api_token(user)
+            token = create_user_api_token(user)
         except ValidationError as e:
             response = Response(status=status.HTTP_400_BAD_REQUEST)
             logger.warning(
@@ -84,7 +100,7 @@ class CreateAPITokenView(APIView):
             )
             raise
 
-        response = Response({"token": token})
+        response = Response({"token": token}, status=status.HTTP_201_CREATED)
         logger.info(
             format_log_message(
                 message="API token created", user=user, response=response
@@ -93,7 +109,7 @@ class CreateAPITokenView(APIView):
         return response
 
 
-class RevokeAPITokenView(APIView):
+class RevokeUserAPITokenView(APIView):
     authentication_classes = []
     permission_classes = []
 
@@ -102,13 +118,70 @@ class RevokeAPITokenView(APIView):
         responses={status.HTTP_204_NO_CONTENT: None},
     )
     def post(self, request):
-        user = get_authenticated_user(request.data)
-        revoke_api_token(user)
+        user = _get_authenticated_user(request.data)
+        revoke_user_api_token(user)
         response = Response(status=status.HTTP_204_NO_CONTENT)
         logger.info(
             format_log_message(
                 message="API token revoked", user=user, response=response
             )
+        )
+        return response
+
+
+class ProductApiTokenViewset(ViewSet):
+    serializer_class = ProductApiTokenSerializer
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                name="product", location=OpenApiParameter.QUERY, required=True, type=int
+            ),
+        ],
+    )
+    def list(self, request):
+        product = _get_product(request.query_params.get("product"))
+        user_has_permission_or_403(product, Permissions.Product_View)
+        tokens = get_product_api_tokens(product)
+        serializer = ProductApiTokenSerializer(tokens, many=True)
+        response_data = {"results": serializer.data}
+        return Response(response_data)
+
+    @extend_schema(
+        request=ProductApiTokenSerializer,
+        responses={status.HTTP_200_OK: CreateApiTokenResponseSerializer},
+    )
+    def create(self, request):
+        request_serializer = ProductApiTokenSerializer(data=request.data)
+        if not request_serializer.is_valid():
+            raise ValidationError(request_serializer.errors)
+
+        product = _get_product(request_serializer.validated_data.get("id"))
+
+        user_has_permission_or_403(product, Permissions.Product_Api_Token_Create)
+
+        token = create_product_api_token(
+            product, request_serializer.validated_data.get("role")
+        )
+
+        response = Response({"token": token}, status=status.HTTP_201_CREATED)
+        logger.info(
+            format_log_message(message="Product API token created", response=response)
+        )
+        return response
+
+    @extend_schema(
+        responses={status.HTTP_204_NO_CONTENT: None},
+    )
+    def destroy(self, request, pk=None):
+        product = _get_product(pk)
+        user_has_permission_or_403(product, Permissions.Product_Api_Token_Revoke)
+
+        revoke_product_api_token(product)
+
+        response = Response(status=status.HTTP_204_NO_CONTENT)
+        logger.info(
+            format_log_message(message="Product API token revoked", response=response)
         )
         return response
 
@@ -122,7 +195,7 @@ class AuthenticateView(APIView):
         responses={status.HTTP_200_OK: AuthenticationResponseSerializer},
     )
     def post(self, request):
-        user = get_authenticated_user(request.data)
+        user = _get_authenticated_user(request.data)
 
         jwt = create_jwt(user)
 
@@ -136,7 +209,7 @@ class AuthenticateView(APIView):
         return response
 
 
-def get_authenticated_user(data) -> User:
+def _get_authenticated_user(data: dict) -> User:
     request_serializer = AuthenticationRequestSerializer(data=data)
     if not request_serializer.is_valid():
         raise ValidationError(request_serializer.errors)
@@ -150,3 +223,11 @@ def get_authenticated_user(data) -> User:
         raise PermissionDenied("Invalid credentials")
 
     return user
+
+
+def _get_product(product_id: int) -> Product:
+    product = get_product_by_id(product_id)
+    if not product:
+        raise ValidationError(f"Product {product_id} does not exist")
+
+    return product

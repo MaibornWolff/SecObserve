@@ -72,6 +72,10 @@ const App = () => {
 };
 
 function trim_string(in_string: string) {
+    if (in_string === undefined) {
+        return "";
+    }
+
     const out_string = in_string.length > 50 ? in_string.substring(0, 50) + "..." : in_string;
 
     return out_string;
