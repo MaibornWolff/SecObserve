@@ -1,6 +1,6 @@
 {
     "name": "secobserve",
-    "version": "0.0.1",
+    "version": "0.9.4",
     "private": true,
     "dependencies": {
         "@mui/icons-material": "5.11.16",
