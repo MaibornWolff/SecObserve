@@ -19,13 +19,22 @@ const CreateProductApiToken = (props: CreateProductApiTokenProps) => {
 
     const [roleOpen, setRoleOpen] = useState(false);
     const handleRoleOpen = () => setRoleOpen(true);
-    const handleRoleClose = () => setRoleOpen(false);
+    const handleRoleClose = (event: object, reason: string) => {
+        if (reason && reason == "backdropClick") return;
+        setRoleOpen(false);
+    };
+
+    const handleRoleCancel = () => setRoleOpen(false);
 
     const [apiToken, setApiToken] = useState("undefined");
 
     const [showApiTokenOpen, setShowApiTokenOpen] = useState(false);
     const handleApiTokenOpen = () => setShowApiTokenOpen(true);
-    const handleApiTokenClose = () => {
+    const handleApiTokenClose = (event: object, reason: string) => {
+        if (reason && reason == "backdropClick") return;
+        handleApiTokenOk();
+    };
+    const handleApiTokenOk = () => {
         setApiToken("undefined");
         setShowApiTokenOpen(false);
         refresh();
@@ -41,7 +50,7 @@ const CreateProductApiToken = (props: CreateProductApiTokenProps) => {
                 color: "#000000dd",
             }}
             variant="contained"
-            onClick={handleRoleClose}
+            onClick={handleRoleCancel}
             color="inherit"
             startIcon={<CancelIcon />}
         >
@@ -113,7 +122,7 @@ const CreateProductApiToken = (props: CreateProductApiTokenProps) => {
                     Make sure to copy the token now. You won&apos;t be able to see it again!
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleApiTokenClose}>OK</Button>
+                    <Button onClick={handleApiTokenOk}>OK</Button>
                 </DialogActions>
             </Dialog>
         </>

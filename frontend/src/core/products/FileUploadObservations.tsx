@@ -22,6 +22,16 @@ const FileUploadObservations = () => {
     const notify = useNotify();
     const [fileSelected, setFileSelected] = useState<File>();
     const { classes } = useStyles();
+    const handleOpen = () => setOpen(true);
+    const handleCancel = () => {
+        setOpen(false);
+        setLoading(false);
+    };
+    const handleClose = (event: object, reason: string) => {
+        if (reason && reason == "backdropClick") return;
+        setOpen(false);
+        setLoading(false);
+    };
 
     const handleFileChange = function (e: ChangeEvent<HTMLInputElement>) {
         const fileList = e.target.files;
@@ -74,15 +84,6 @@ const FileUploadObservations = () => {
         }
     };
 
-    const handleClose = () => {
-        setOpen(false);
-        setLoading(false);
-    };
-
-    const handleOpen = () => {
-        setOpen(true);
-    };
-
     const CancelButton = () => (
         <Button
             sx={{
@@ -93,7 +94,7 @@ const FileUploadObservations = () => {
                 color: "#000000dd",
             }}
             variant="contained"
-            onClick={handleClose}
+            onClick={handleCancel}
             color="inherit"
             startIcon={<CancelIcon />}
         >

@@ -11,6 +11,12 @@ const ObservationRemoveAssessment = () => {
     const [open, setOpen] = React.useState(false);
     const refresh = useRefresh();
     const notify = useNotify();
+    const handleOpen = () => setOpen(true);
+    const handleCancel = () => setOpen(false);
+    const handleClose = (event: object, reason: string) => {
+        if (reason && reason == "backdropClick") return;
+        setOpen(false);
+    };
 
     const observationUpdate = async (data: any) => {
         const patch = {
@@ -36,14 +42,6 @@ const ObservationRemoveAssessment = () => {
         setOpen(false);
     };
 
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    const handleOpen = () => {
-        setOpen(true);
-    };
-
     const CancelButton = () => (
         <Button
             sx={{
@@ -54,7 +52,7 @@ const ObservationRemoveAssessment = () => {
                 color: "#000000dd",
             }}
             variant="contained"
-            onClick={handleClose}
+            onClick={handleCancel}
             color="inherit"
             startIcon={<CancelIcon />}
         >

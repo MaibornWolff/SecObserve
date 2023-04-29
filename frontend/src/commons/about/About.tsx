@@ -34,9 +34,12 @@ const About = () => {
             });
     };
 
-    const handleClose = () => {
+    const handleClose = (event: object, reason: string) => {
+        if (reason && reason == "backdropClick") return;
         setOpen(false);
     };
+
+    const handleOk = () => setOpen(false);
 
     const handleOpen = () => {
         setOpen(true);
@@ -52,7 +55,7 @@ const About = () => {
                 color: "#000000dd",
             }}
             variant="contained"
-            onClick={handleClose}
+            onClick={handleOk}
             color="inherit"
         >
             {" "}

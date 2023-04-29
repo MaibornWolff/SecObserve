@@ -21,7 +21,12 @@ const ProductMemberEdit = () => {
     const [update] = useUpdate();
     const refresh = useRefresh();
     const notify = useNotify();
-
+    const handleOpen = () => setOpen(true);
+    const handleCancel = () => setOpen(false);
+    const handleClose = (event: object, reason: string) => {
+        if (reason && reason == "backdropClick") return;
+        setOpen(false);
+    };
     const product_member_update = async (data: any) => {
         const patch = {
             role: data.role,
@@ -51,14 +56,6 @@ const ProductMemberEdit = () => {
         setOpen(false);
     };
 
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    const handleOpen = () => {
-        setOpen(true);
-    };
-
     const CancelButton = () => (
         <Button
             sx={{
@@ -69,7 +66,7 @@ const ProductMemberEdit = () => {
                 color: "#000000dd",
             }}
             variant="contained"
-            onClick={handleClose}
+            onClick={handleCancel}
             color="inherit"
             startIcon={<CancelIcon />}
         >

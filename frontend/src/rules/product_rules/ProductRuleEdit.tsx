@@ -27,6 +27,12 @@ const ProductRuleEdit = () => {
     const [update] = useUpdate();
     const refresh = useRefresh();
     const notify = useNotify();
+    const handleOpen = () => setOpen(true);
+    const handleCancel = () => setOpen(false);
+    const handleClose = (event: object, reason: string) => {
+        if (reason && reason == "backdropClick") return;
+        setOpen(false);
+    };
 
     const product_rule_update = async (data: any) => {
         if (data.scanner_prefix == null) {
@@ -95,14 +101,6 @@ const ProductRuleEdit = () => {
         setOpen(false);
     };
 
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    const handleOpen = () => {
-        setOpen(true);
-    };
-
     const CancelButton = () => (
         <Button
             sx={{
@@ -113,7 +111,7 @@ const ProductRuleEdit = () => {
                 color: "#000000dd",
             }}
             variant="contained"
-            onClick={handleClose}
+            onClick={handleCancel}
             color="inherit"
             startIcon={<CancelIcon />}
         >
