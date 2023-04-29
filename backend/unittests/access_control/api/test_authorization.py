@@ -1068,7 +1068,7 @@ class TestAuthentication(BaseTestCase):
         self._test_api(
             APITest(
                 "db_internal_read",
-                "put",
+                "post",
                 "/api/products/1/apply_rules/",
                 post_data,
                 403,
@@ -1079,8 +1079,67 @@ class TestAuthentication(BaseTestCase):
         self._test_api(
             APITest(
                 "db_internal_write",
-                "put",
+                "post",
                 "/api/products/1/apply_rules/",
+                post_data,
+                204,
+                expected_data,
+            )
+        )
+
+        post_data = {
+            "severity": "Critical",
+            "status": "Open",
+            "comment": "string",
+            "observations": []
+        }
+        expected_data = (
+            "{'message': 'You do not have permission to perform this action.'}"
+        )
+        self._test_api(
+            APITest(
+                "db_internal_read",
+                "post",
+                "/api/products/1/observations_bulk_assessment/",
+                post_data,
+                403,
+                expected_data,
+            )
+        )
+        expected_data = "None"
+        self._test_api(
+            APITest(
+                "db_internal_write",
+                "post",
+                "/api/products/1/observations_bulk_assessment/",
+                post_data,
+                204,
+                expected_data,
+            )
+        )
+
+        post_data = {
+            "observations": []
+        }
+        expected_data = (
+            "{'message': 'You do not have permission to perform this action.'}"
+        )
+        self._test_api(
+            APITest(
+                "db_internal_read",
+                "post",
+                "/api/products/1/observations_bulk_delete/",
+                post_data,
+                403,
+                expected_data,
+            )
+        )
+        expected_data = "None"
+        self._test_api(
+            APITest(
+                "db_internal_write",
+                "post",
+                "/api/products/1/observations_bulk_delete/",
                 post_data,
                 204,
                 expected_data,

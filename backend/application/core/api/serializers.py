@@ -6,6 +6,8 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.serializers import (
     CharField,
     ChoiceField,
+    IntegerField,
+    ListField,
     ModelSerializer,
     Serializer,
     SerializerMethodField,
@@ -408,3 +410,18 @@ class ObservationAssessmentSerializer(Serializer):
 
 class ObservationRemoveAssessmentSerializer(Serializer):
     comment = CharField(max_length=255, required=True)
+
+
+class ObservationBulkDeleteSerializer(Serializer):
+    observations = ListField(
+        child=IntegerField(min_value=1), min_length=0, max_length=100, required=True
+    )
+
+
+class ObservationBulkAssessmentSerializer(Serializer):
+    severity = ChoiceField(choices=Observation.SEVERITY_CHOICES, required=False)
+    status = ChoiceField(choices=Observation.STATUS_CHOICES, required=False)
+    comment = CharField(max_length=255, required=True)
+    observations = ListField(
+        child=IntegerField(min_value=1), min_length=0, max_length=100, required=True
+    )

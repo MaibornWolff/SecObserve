@@ -22,7 +22,7 @@ const ProductRuleApply = (props: ProductRuleApplyProps) => {
         const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/products/" + props.product.id + "/apply_rules/";
 
         httpClient(url, {
-            method: "PUT",
+            method: "POST",
         })
             .then(() => {
                 refresh();
