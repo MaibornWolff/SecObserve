@@ -1,5 +1,5 @@
 import GeneralRuleIcon from "@mui/icons-material/Rule";
-import { Button } from "@mui/material";
+import { Backdrop, Button, CircularProgress } from "@mui/material";
 import { useState } from "react";
 import { Confirm, useNotify, useRefresh } from "react-admin";
 
@@ -12,29 +12,34 @@ type ProductRuleApplyProps = {
 const ProductRuleApply = (props: ProductRuleApplyProps) => {
     const [open, setOpen] = useState(false);
     const refresh = useRefresh();
+    const [loading, setLoading] = useState(false);
     const notify = useNotify();
     const handleClick = () => setOpen(true);
     const handleDialogClose = () => setOpen(false);
 
     const handleConfirm = async () => {
+        setLoading(true);
         const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/products/" + props.product.id + "/apply_rules/";
 
         httpClient(url, {
             method: "PUT",
         })
             .then(() => {
+                refresh();
+                setOpen(false);
+                setLoading(false);
                 notify("Rules applied", {
                     type: "success",
                 });
             })
             .catch((error) => {
+                refresh();
+                setOpen(false);
+                setLoading(false);
                 notify(error.message, {
                     type: "warning",
                 });
             });
-
-        refresh();
-        setOpen(false);
     };
 
     return (
@@ -48,12 +53,17 @@ const ProductRuleApply = (props: ProductRuleApplyProps) => {
                 Apply rules
             </Button>
             <Confirm
-                isOpen={open}
+                isOpen={open && !loading}
                 title="Apply rules"
                 content={"Are you sure you want to apply all rules to the product " + props.product.name + "?"}
                 onConfirm={handleConfirm}
                 onClose={handleDialogClose}
             />
+            {loading ? (
+                <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={open}>
+                    <CircularProgress color="primary" />
+                </Backdrop>
+            ) : null}
         </>
     );
 };

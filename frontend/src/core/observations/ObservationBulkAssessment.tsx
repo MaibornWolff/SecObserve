@@ -1,6 +1,6 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
-import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Button, Dialog, DialogContent, DialogTitle, LinearProgress } from "@mui/material";
 import { Fragment, useState } from "react";
 import {
     SaveButton,
@@ -20,11 +20,13 @@ import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../typ
 const ObservationBulkAsessment = () => {
     const [open, setOpen] = useState(false);
     const refresh = useRefresh();
+    const [loading, setLoading] = useState(false);
     const notify = useNotify();
     const { selectedIds } = useListContext();
     const unselectAll = useUnselectAll("observations");
 
     const observationUpdate = async (data: any) => {
+        setLoading(true);
         const patch = {
             severity: data.current_severity,
             status: data.current_status,
@@ -69,6 +71,7 @@ const ObservationBulkAsessment = () => {
         }
         unselectAll();
         setOpen(false);
+        setLoading(false);
     };
 
     const handleClose = (event: object, reason: string) => {
@@ -115,6 +118,7 @@ const ObservationBulkAsessment = () => {
                 Assessment
             </Button>
             <Dialog open={open} onClose={handleClose}>
+                {loading ? <LinearProgress color="primary" /> : null}
                 <DialogTitle>Bulk Observation Assessment</DialogTitle>
                 <DialogContent>
                     <SimpleForm onSubmit={observationUpdate} toolbar={<CustomToolbar />}>
