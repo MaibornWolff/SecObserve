@@ -1,9 +1,14 @@
-from unittest.mock import call, patch, Mock
+from unittest.mock import Mock, call, patch
+
 from django.core.management import call_command
 from rest_framework.exceptions import ValidationError
 
 from application.core.models import Observation, Product
-from application.core.services.observations_bulk_actions import observations_bulk_assessment, observations_bulk_delete,     _check_observations
+from application.core.services.observations_bulk_actions import (
+    _check_observations,
+    observations_bulk_assessment,
+    observations_bulk_delete,
+)
 from unittests.base_test_case import BaseTestCase
 
 
@@ -18,13 +23,29 @@ class TestObservationsBulkActions(BaseTestCase):
         observation_2 = Observation()
         check_mock.return_value = [self.observation_1, observation_2]
 
-        observations_bulk_assessment(self.product_1, Observation.SEVERITY_CRITICAL, Observation.STATUS_OPEN, "comment", [1, 2])
+        observations_bulk_assessment(
+            self.product_1,
+            Observation.SEVERITY_CRITICAL,
+            Observation.STATUS_OPEN,
+            "comment",
+            [1, 2],
+        )
 
         check_mock.assert_called_with(self.product_1, [1, 2])
         expected_calls = [
-            call(self.observation_1, Observation.SEVERITY_CRITICAL, Observation.STATUS_OPEN, "comment"),
-            call(observation_2, Observation.SEVERITY_CRITICAL, Observation.STATUS_OPEN, "comment"),
-    ]
+            call(
+                self.observation_1,
+                Observation.SEVERITY_CRITICAL,
+                Observation.STATUS_OPEN,
+                "comment",
+            ),
+            call(
+                observation_2,
+                Observation.SEVERITY_CRITICAL,
+                Observation.STATUS_OPEN,
+                "comment",
+            ),
+        ]
         save_mock.assert_has_calls(expected_calls, any_order=False)
 
     @patch("application.core.services.observations_bulk_actions._check_observations")
@@ -44,7 +65,10 @@ class TestObservationsBulkActions(BaseTestCase):
         with self.assertRaises(ValidationError) as e:
             _check_observations(self.product_1, [1, 2])
 
-        self.assertEqual(str(e.exception), "[ErrorDetail(string='Some observations do not exist', code='invalid')]")
+        self.assertEqual(
+            str(e.exception),
+            "[ErrorDetail(string='Some observations do not exist', code='invalid')]",
+        )
 
     def test_check_observation_not_in_product(self):
         product_2 = Product.objects.get(pk=2)
@@ -52,7 +76,10 @@ class TestObservationsBulkActions(BaseTestCase):
         with self.assertRaises(ValidationError) as e:
             _check_observations(product_2, [1])
 
-        self.assertEqual(str(e.exception), "[ErrorDetail(string='Observation 1 does not belong to product 2', code='invalid')]")
+        self.assertEqual(
+            str(e.exception),
+            "[ErrorDetail(string='Observation 1 does not belong to product 2', code='invalid')]",
+        )
 
     def test_check_observation_success(self):
         product_1 = Product.objects.get(pk=1)

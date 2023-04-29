@@ -263,13 +263,21 @@ class TestAuthentication(BaseTestCase):
         self._check_authentication(["delete"], "/api/product_api_tokens/1/")
 
         self._check_authentication(["post"], "/api/products/1/apply_rules/")
-        
-        self._check_authentication(["post"], "/api/products/1/observations_bulk_assessment/")
-        self._check_authentication(["post"], "/api/products/1/observations_bulk_delete/")
-        
-        self._check_authentication(["get"], "/api/products/1/export_codecharta_metrics/")
+
+        self._check_authentication(
+            ["post"], "/api/products/1/observations_bulk_assessment/"
+        )
+        self._check_authentication(
+            ["post"], "/api/products/1/observations_bulk_delete/"
+        )
+
+        self._check_authentication(
+            ["get"], "/api/products/1/export_codecharta_metrics/"
+        )
         self._check_authentication(["get"], "/api/products/1/export_observations_csv/")
-        self._check_authentication(["get"], "/api/products/1/export_observations_excel/")
+        self._check_authentication(
+            ["get"], "/api/products/1/export_observations_excel/"
+        )
 
     def test_authentication_users(self):
         self._check_authentication(["get"], "/api/users/me/")

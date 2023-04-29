@@ -1091,7 +1091,7 @@ class TestAuthentication(BaseTestCase):
             "severity": "Critical",
             "status": "Open",
             "comment": "string",
-            "observations": []
+            "observations": [],
         }
         expected_data = (
             "{'message': 'You do not have permission to perform this action.'}"
@@ -1118,9 +1118,7 @@ class TestAuthentication(BaseTestCase):
             )
         )
 
-        post_data = {
-            "observations": []
-        }
+        post_data = {"observations": []}
         expected_data = (
             "{'message': 'You do not have permission to perform this action.'}"
         )
