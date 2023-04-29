@@ -23,7 +23,7 @@ import {
     OBSERVATION_STATUS_CHOICES,
     OBSERVATION_STATUS_OPEN,
 } from "../types";
-import ObservationBulkAsessment from "./ObservationBulkAssessment";
+import ObservationBulkAssessment from "./ObservationBulkAssessment";
 import ObservationBulkDeleteButton from "./ObservationBulkDeleteButton";
 
 const listFilters = [
@@ -49,8 +49,12 @@ type ObservationsEmbeddedListProps = {
 
 const BulkActionButtons = (product: any) => (
     <Fragment>
-        {product.product.permissions.includes(PERMISSION_OBSERVATION_ASSESSMENT) && <ObservationBulkAsessment />}
-        {product.product.permissions.includes(PERMISSION_OBSERVATION_DELETE) && <ObservationBulkDeleteButton />}
+        {product.product.permissions.includes(PERMISSION_OBSERVATION_ASSESSMENT) && (
+            <ObservationBulkAssessment product={product.product} />
+        )}
+        {product.product.permissions.includes(PERMISSION_OBSERVATION_DELETE) && (
+            <ObservationBulkDeleteButton product={product.product} />
+        )}
     </Fragment>
 );
 

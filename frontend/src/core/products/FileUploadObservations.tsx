@@ -1,6 +1,6 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import UploadIcon from "@mui/icons-material/Upload";
-import { Button, Dialog, DialogContent, DialogTitle, LinearProgress } from "@mui/material";
+import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { ChangeEvent, Fragment, useState } from "react";
 import { ReferenceInput, SaveButton, SimpleForm, Toolbar, required, useNotify, useRefresh } from "react-admin";
 import { makeStyles } from "tss-react/mui";
@@ -120,8 +120,7 @@ const FileUploadObservations = () => {
             >
                 Upload Observations From File
             </Button>
-            <Dialog open={open} onClose={handleClose}>
-                {loading ? <LinearProgress color="primary" /> : null}
+            <Dialog open={open && !loading} onClose={handleClose}>
                 <DialogTitle>Upload Observations From File</DialogTitle>
                 <DialogContent>
                     <SimpleForm onSubmit={observationUpdate} toolbar={<CustomToolbar />}>
@@ -146,6 +145,11 @@ const FileUploadObservations = () => {
                     </SimpleForm>
                 </DialogContent>
             </Dialog>
+            {loading ? (
+                <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={open}>
+                    <CircularProgress color="primary" />
+                </Backdrop>
+            ) : null}
         </Fragment>
     );
 };

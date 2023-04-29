@@ -1,6 +1,6 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import UploadIcon from "@mui/icons-material/CloudUpload";
-import { Button, Dialog, DialogContent, DialogTitle, LinearProgress } from "@mui/material";
+import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import { ReferenceInput, SaveButton, SimpleForm, Toolbar, required, useNotify, useRefresh } from "react-admin";
 
@@ -96,8 +96,7 @@ const ApiImportObservations = (product: any) => {
             >
                 Import Observations From API
             </Button>
-            <Dialog open={open} onClose={handleClose}>
-                {loading ? <LinearProgress color="primary" /> : null}
+            <Dialog open={open && !loading} onClose={handleClose}>
                 <DialogTitle>Import Observations From API</DialogTitle>
                 <DialogContent>
                     <SimpleForm onSubmit={observationUpdate} toolbar={<CustomToolbar />}>
@@ -119,6 +118,11 @@ const ApiImportObservations = (product: any) => {
                     </SimpleForm>
                 </DialogContent>
             </Dialog>
+            {loading ? (
+                <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={open}>
+                    <CircularProgress color="primary" />
+                </Backdrop>
+            ) : null}
         </Fragment>
     );
 };

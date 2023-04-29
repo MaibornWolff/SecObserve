@@ -1,50 +1,67 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Backdrop, CircularProgress } from "@mui/material";
 import { useState } from "react";
-import { Button, Confirm, useDeleteMany, useListContext, useNotify, useRefresh, useUnselectAll } from "react-admin";
+import { Button, Confirm, useListContext, useNotify, useRefresh, useUnselectAll } from "react-admin";
 
-const ObservationBulkDeleteButton = () => {
+import { httpClient } from "../../commons/ra-data-django-rest-framework";
+
+type ObservationBulkDeleteButtonProps = {
+    product: any;
+};
+
+const ObservationBulkDeleteButton = (props: ObservationBulkDeleteButtonProps) => {
     const [open, setOpen] = useState(false);
-    const [deleted, setDeleted] = useState(false);
-    const [error_shown, setErrorShown] = useState(false);
-    const [deleteMany, { isLoading, error }] = useDeleteMany();
     const { selectedIds } = useListContext();
     const refresh = useRefresh();
+    const [loading, setLoading] = useState(false);
     const notify = useNotify();
     const unselectAll = useUnselectAll("observations");
     const handleClick = () => setOpen(true);
     const handleDialogClose = () => setOpen(false);
 
     const handleConfirm = async () => {
-        deleteMany("observations", { ids: selectedIds });
-        setDeleted(true);
-        refresh();
-        unselectAll();
-        setOpen(false);
-    };
+        setLoading(true);
+        const url =
+            window.__RUNTIME_CONFIG__.API_BASE_URL + "/products/" + props.product.id + "/observations_bulk_delete/";
+        const delete_data = {
+            observations: selectedIds,
+        };
 
-    if (error && !error_shown) {
-        setErrorShown(true);
-        setDeleted(false);
-        notify("Some observations could not be deleted: " + error, {
-            type: "warning",
-        });
-    } else if (deleted) {
-        setDeleted(false);
-        notify("Observations deleted");
-    }
+        httpClient(url, {
+            method: "POST",
+            body: JSON.stringify(delete_data),
+        })
+            .then(() => {
+                refresh();
+                setOpen(false);
+                setLoading(false);
+                unselectAll();
+                notify("Observations deleted", {
+                    type: "success",
+                });
+            })
+            .catch((error) => {
+                refresh();
+                setOpen(false);
+                setLoading(false);
+                unselectAll();
+                notify(error.message, {
+                    type: "warning",
+                });
+            });
+    };
 
     return (
         <>
             <Button label="Delete" onClick={handleClick} startIcon={<DeleteIcon />} sx={{ color: "#d32f2f" }} />
             <Confirm
-                isOpen={open && !isLoading}
+                isOpen={open && !loading}
                 title="Delete Observations"
                 content="Are you sure you want to delete the selected observations?"
                 onConfirm={handleConfirm}
                 onClose={handleDialogClose}
             />
-            {isLoading ? (
+            {loading ? (
                 <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={open}>
                     <CircularProgress color="primary" />
                 </Backdrop>
