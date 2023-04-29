@@ -70,17 +70,19 @@ const FileUploadObservations = () => {
                         result.json.observations_resolved +
                         " resolved observations";
                     refresh();
+                    setLoading(false);
+                    setOpen(false);
                     notify(message, {
                         type: "success",
                     });
                 })
                 .catch((error) => {
+                    setLoading(false);
+                    setOpen(false);
                     notify(error.message, {
                         type: "warning",
                     });
                 });
-            setLoading(false);
-            setOpen(false);
         }
     };
 
@@ -119,7 +121,7 @@ const FileUploadObservations = () => {
                 Upload Observations From File
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                {loading ? <LinearProgress color="secondary" /> : null}
+                {loading ? <LinearProgress color="primary" /> : null}
                 <DialogTitle>Upload Observations From File</DialogTitle>
                 <DialogContent>
                     <SimpleForm onSubmit={observationUpdate} toolbar={<CustomToolbar />}>

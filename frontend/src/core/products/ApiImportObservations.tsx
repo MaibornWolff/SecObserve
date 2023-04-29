@@ -46,17 +46,19 @@ const ApiImportObservations = (product: any) => {
                     result.json.observations_resolved +
                     " resolved observations";
                 refresh();
+                setLoading(false);
+                setOpen(false);
                 notify(message, {
                     type: "success",
                 });
             })
             .catch((error) => {
+                setLoading(false);
+                setOpen(false);
                 notify(error.message, {
                     type: "warning",
                 });
             });
-        setLoading(false);
-        setOpen(false);
     };
 
     const CancelButton = () => (
@@ -95,7 +97,7 @@ const ApiImportObservations = (product: any) => {
                 Import Observations From API
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                {loading ? <LinearProgress color="secondary" /> : null}
+                {loading ? <LinearProgress color="primary" /> : null}
                 <DialogTitle>Import Observations From API</DialogTitle>
                 <DialogContent>
                     <SimpleForm onSubmit={observationUpdate} toolbar={<CustomToolbar />}>
