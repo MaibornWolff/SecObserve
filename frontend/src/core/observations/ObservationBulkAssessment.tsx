@@ -71,13 +71,14 @@ const ObservationBulkAsessment = () => {
         setOpen(false);
     };
 
-    const handleClose = () => {
+    const handleClose = (event: object, reason: string) => {
+        if (reason && reason == "backdropClick") return;
         setOpen(false);
     };
 
-    const handleOpen = () => {
-        setOpen(true);
-    };
+    const handleCancel = () => setOpen(false);
+
+    const handleOpen = () => setOpen(true);
 
     const CancelButton = () => (
         <Button
@@ -89,7 +90,7 @@ const ObservationBulkAsessment = () => {
                 color: "#000000dd",
             }}
             variant="contained"
-            onClick={handleClose}
+            onClick={handleCancel}
             color="inherit"
             startIcon={<CancelIcon />}
         >

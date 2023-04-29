@@ -12,6 +12,16 @@ const ApiImportObservations = (product: any) => {
     const [loading, setLoading] = useState(false);
     const refresh = useRefresh();
     const notify = useNotify();
+    const handleOpen = () => setOpen(true);
+    const handleCancel = () => {
+        setOpen(false);
+        setLoading(false);
+    };
+    const handleClose = (event: object, reason: string) => {
+        if (reason && reason == "backdropClick") return;
+        setOpen(false);
+        setLoading(false);
+    };
 
     const observationUpdate = async (data: any) => {
         setLoading(true);
@@ -49,15 +59,6 @@ const ApiImportObservations = (product: any) => {
         setOpen(false);
     };
 
-    const handleClose = () => {
-        setOpen(false);
-        setLoading(false);
-    };
-
-    const handleOpen = () => {
-        setOpen(true);
-    };
-
     const CancelButton = () => (
         <Button
             sx={{
@@ -68,7 +69,7 @@ const ApiImportObservations = (product: any) => {
                 color: "#000000dd",
             }}
             variant="contained"
-            onClick={handleClose}
+            onClick={handleCancel}
             color="inherit"
             startIcon={<CancelIcon />}
         >
