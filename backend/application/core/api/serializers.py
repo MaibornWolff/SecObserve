@@ -303,7 +303,6 @@ class ObservationListSerializer(ModelSerializer):
             purl = PackageURL.from_string(observation.origin_component_purl)
             if purl.type:
                 origin_component_name_version_with_type += f" ({purl.type})"
-                # origin_component_name_version_with_type += f" / {purl.type}"
 
         return origin_component_name_version_with_type
 
