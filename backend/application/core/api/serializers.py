@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 from django.utils.timezone import make_aware
+from packageurl import PackageURL
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.serializers import (
     CharField,
@@ -278,6 +279,7 @@ class ObservationListSerializer(ModelSerializer):
     product_data = NestedProductListSerializer(source="product")
     parser_data = ParserSerializer(source="parser")
     scanner_name = SerializerMethodField()
+    origin_component_name_version = SerializerMethodField()
 
     class Meta:
         model = Observation
@@ -289,6 +291,21 @@ class ObservationListSerializer(ModelSerializer):
 
         scanner_parts = observation.scanner.split("/")
         return scanner_parts[0].strip()
+
+    def get_origin_component_name_version(self, observation: Observation) -> str:
+        if not observation.origin_component_name:
+            return ""
+
+        origin_component_name_version_with_type = (
+            observation.origin_component_name_version
+        )
+        if observation.origin_component_purl:
+            purl = PackageURL.from_string(observation.origin_component_purl)
+            if purl.type:
+                origin_component_name_version_with_type += f" ({purl.type})"
+                # origin_component_name_version_with_type += f" / {purl.type}"
+
+        return origin_component_name_version_with_type
 
 
 class ObservationUpdateSerializer(ModelSerializer):
