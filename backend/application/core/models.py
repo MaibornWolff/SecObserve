@@ -59,6 +59,7 @@ class Product(Model):
     )
     apply_general_rules = BooleanField(default=True)
     ms_teams_webhook = CharField(max_length=255, blank=True)
+    email_to = CharField(max_length=255, blank=True)
     issue_tracker_active = BooleanField(default=False)
     issue_tracker_type = CharField(
         max_length=12, choices=ISSUE_TRACKER_TYPE_CHOICES, blank=True

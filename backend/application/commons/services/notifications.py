@@ -4,6 +4,7 @@ from typing import Optional
 
 import requests
 from constance import config
+from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 from application.commons.services.functions import get_base_url_frontend, get_classname
@@ -16,15 +17,27 @@ LAST_EXCEPTIONS: dict[str, datetime] = {}
 
 
 def send_product_security_gate_notification(product: Product) -> None:
-    if product.ms_teams_webhook:
-        if product.security_gate_passed is None:
-            security_gate_status = "None"
-        elif product.security_gate_passed:
-            security_gate_status = "Passed"
-        else:
-            security_gate_status = "Failed"
+    if product.security_gate_passed is None:
+        security_gate_status = "None"
+    elif product.security_gate_passed:
+        security_gate_status = "Passed"
+    else:
+        security_gate_status = "Failed"
 
-        _send_notification(
+    email_to_adresses = _get_email_to_adresses(product.email_to)
+    if email_to_adresses and config.EMAIL_FROM:
+        for email_to in email_to_adresses:
+            _send_email_notification(
+                email_to,
+                f"Security gate for {product.name} has changed to {security_gate_status}",
+                "email_product_security_gate.tpl",
+                product=product,
+                security_gate_status=security_gate_status,
+                product_url=f"{get_base_url_frontend()}#/products/{product.id}/show",
+            )
+
+    if product.ms_teams_webhook:
+        _send_msteams_notification(
             product.ms_teams_webhook,
             "msteams_product_security_gate.tpl",
             product=product,
@@ -35,7 +48,7 @@ def send_product_security_gate_notification(product: Product) -> None:
 
 def send_exception_notification(exception: Exception) -> None:
     if config.EXCEPTION_MS_TEAMS_WEBHOOK and _ratelimit_exception(exception):
-        _send_notification(
+        _send_msteams_notification(
             config.EXCEPTION_MS_TEAMS_WEBHOOK,
             "msteams_exception.tpl",
             exception_class=get_classname(exception),
@@ -44,7 +57,29 @@ def send_exception_notification(exception: Exception) -> None:
         )
 
 
-def _send_notification(webhook: str, template: str, **kwargs) -> None:
+def _send_email_notification(
+    email_to: str, subject: str, template: str, **kwargs
+) -> None:
+    notification_message = _create_notification_message(template, **kwargs)
+    if notification_message:
+        try:
+            send_mail(
+                subject=subject,
+                message=notification_message,
+                from_email=config.EMAIL_FROM,
+                recipient_list=[email_to],
+                fail_silently=False,
+            )
+        except Exception as e:
+            logger.error(
+                format_log_message(
+                    message=f"Error while sending email to {email_to}",
+                    exception=e,
+                )
+            )
+
+
+def _send_msteams_notification(webhook: str, template: str, **kwargs) -> None:
     notification_message = _create_notification_message(template, **kwargs)
     if notification_message:
         try:
@@ -91,3 +126,7 @@ def _ratelimit_exception(exception: Exception) -> bool:
 
     LAST_EXCEPTIONS[key] = now
     return True
+
+def _get_email_to_adresses(email_to: str) -> list[str]:
+        email_to_adresses = email_to.split(",")
+        return [item.strip() for item in email_to_adresses]

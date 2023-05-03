@@ -9,7 +9,7 @@ from application.commons.services.notifications import (
     LAST_EXCEPTIONS,
     _create_notification_message,
     _ratelimit_exception,
-    _send_notification,
+    _send_msteams_notification,
     get_base_url_frontend,
     send_exception_notification,
     send_product_security_gate_notification,
@@ -120,7 +120,7 @@ class TestNotifications(BaseTestCase):
     def test_send_notification_empty_message(self, mock_request, mock_create_message):
         mock_create_message.return_value = None
 
-        _send_notification("test_webhook", "test_template")
+        _send_msteams_notification("test_webhook", "test_template")
 
         mock_create_message.assert_called_with("test_template")
         mock_request.assert_not_called()
@@ -135,7 +135,7 @@ class TestNotifications(BaseTestCase):
         mock_create_message.return_value = "test_message"
         mock_request.side_effect = Exception("test_exception")
 
-        _send_notification("test_webhook", "test_template")
+        _send_msteams_notification("test_webhook", "test_template")
 
         mock_create_message.assert_called_with("test_template")
         mock_request.assert_called_with(
@@ -156,7 +156,7 @@ class TestNotifications(BaseTestCase):
         response.status_code = 400
         mock_request.return_value = response
 
-        _send_notification("test_webhook", "test_template")
+        _send_msteams_notification("test_webhook", "test_template")
 
         mock_create_message.assert_called_with("test_template")
         mock_request.assert_called_with(
@@ -177,7 +177,7 @@ class TestNotifications(BaseTestCase):
         response.status_code = 200
         mock_request.return_value = response
 
-        _send_notification("test_webhook", "test_template")
+        _send_msteams_notification("test_webhook", "test_template")
 
         mock_create_message.assert_called_with("test_template")
         mock_request.assert_called_with(
