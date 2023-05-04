@@ -1,3 +1,4 @@
+pytz==2023.3 # https://github.com/stub42/pytz
 argon2-cffi==21.3.0  # https://github.com/hynek/argon2_cffi
 whitenoise==6.4.0  # https://github.com/evansd/whitenoise
 # --- Celery/Redis is currently unused ---
