@@ -1,4 +1,3 @@
-pytz==2023.3 # https://github.com/stub42/pytz
 argon2-cffi==21.3.0  # https://github.com/hynek/argon2_cffi
 whitenoise==6.4.0  # https://github.com/evansd/whitenoise
 # --- Celery/Redis is currently unused ---
@@ -10,7 +9,7 @@ whitenoise==6.4.0  # https://github.com/evansd/whitenoise
 
 # Django
 # ------------------------------------------------------------------------------
-django==3.2.19  # https://www.djangoproject.com/
+django==4.2.1  # https://www.djangoproject.com/
 django-environ==0.10.0  # https://github.com/joke2k/django-environ
 django-model-utils==4.3.1  # https://github.com/jazzband/django-model-utils
 django-crispy-forms==2.0  # https://github.com/django-crispy-forms/django-crispy-forms
