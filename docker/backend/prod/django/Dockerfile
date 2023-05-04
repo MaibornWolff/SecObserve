@@ -51,7 +51,7 @@ COPY ./backend ${APP_HOME}
 COPY ./backend/config/settings/prod.py ${APP_HOME}/config/settings/dist.py
 
 # certificate for MS Azure managed MySQL database
-COPY ./docker/backend/prod/database/BaltimoreCyberTrustRoot.crt.pem ${APP_HOME}/BaltimoreCyberTrustRoot.crt.pem
+COPY ./docker/backend/prod/database/BaltimoreCyberTrustRoot_combined.crt.pem ${APP_HOME}/BaltimoreCyberTrustRoot_combined.crt.pem
 
 RUN addgroup -g 1001 -S ${group} \
     && adduser -u 1001 -S ${user} -G ${group} \

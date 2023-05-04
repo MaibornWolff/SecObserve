@@ -61,7 +61,7 @@ DATABASES = {
 
 if env("MYSQL_AZURE", default="false") == "true":
     DATABASES["default"]["OPTIONS"] = {
-        "ssl": {"ca": "/app/BaltimoreCyberTrustRoot.crt.pem"}
+        "ssl": {"ca": "/app/BaltimoreCyberTrustRoot_combined.crt.pem"}
     }
 
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
