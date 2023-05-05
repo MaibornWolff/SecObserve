@@ -14,6 +14,13 @@ def get_user_by_username(username: str) -> Optional[User]:
         return None
 
 
+def get_user_by_email(email: str) -> Optional[User]:
+    try:
+        return User.objects.get(email=email)
+    except User.DoesNotExist:
+        return None
+
+
 def get_users() -> QuerySet[User]:
     user = get_current_user()
 

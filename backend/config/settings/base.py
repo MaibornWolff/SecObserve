@@ -493,7 +493,7 @@ CONSTANCE_CONFIG = {
     ),
     "EXCEPTION_EMAIL_TO": (
         "",
-        "Email address to send exception notifications",
+        "Comma separated email addresses to send exception notifications",
         str,
     ),
 }

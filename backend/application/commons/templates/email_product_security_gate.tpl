@@ -1,8 +1,8 @@
-Hello,
+Hello{{ first_name }},
 
 security gate for product {{ product.name }} has changed to {{ security_gate_status }}
 
-View Product {{ product.name }}: {{ product_url }}
+View product {{ product.name }}: {{ product_url }}
 
 Regards,
 
