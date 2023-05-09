@@ -34,7 +34,7 @@ drf-spectacular-sidecar==2023.5.1  # https://github.com/tfranzel/drf-spectacular
 
 # Token authentication
 # ------------------------------------------------------------------------------
-PyJWT==2.6.0  # https://github.com/jpadilla/pyjwt
+PyJWT==2.7.0  # https://github.com/jpadilla/pyjwt
 argon2-cffi==21.3.0
 
 # HTTP requests
