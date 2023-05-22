@@ -98,7 +98,9 @@ const ProductShow = () => {
                                             Notifications
                                         </Typography>
                                     )}
-                                    {product.email_to && <TextField source="email_to" label="Comma separated email to addresses" />}
+                                    {product.email_to && (
+                                        <TextField source="email_to" label="Comma separated email to addresses" />
+                                    )}
                                     {product.ms_teams_webhook && (
                                         <TextField source="ms_teams_webhook" label="MS Teams Webhook" />
                                     )}
