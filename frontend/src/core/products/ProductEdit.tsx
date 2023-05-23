@@ -106,10 +106,18 @@ const ProductEdit = () => {
                 <BooleanInput source="apply_general_rules" />
 
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                    Integrations
+                    Source code repository
                 </Typography>
                 <TextInputWide source="repository_prefix" />
-                <TextInputWide source="ms_teams_webhook" label="MS Teams Webhook" />
+                <Typography variant="h6" sx={{ marginTop: "1em" }}>
+                    Notifications
+                </Typography>
+                <TextInputWide
+                    source="notification_email_to"
+                    label="Email"
+                    helperText="Comma separated email to addresses"
+                />
+                <TextInputWide source="notification_ms_teams_webhook" label="MS Teams" helperText="Webhook URL" />
 
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>
                     Security Gate

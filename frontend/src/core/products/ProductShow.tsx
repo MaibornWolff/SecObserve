@@ -86,14 +86,23 @@ const ProductShow = () => {
                                     </Typography>
                                     <BooleanField source="apply_general_rules" />
 
-                                    {(product.repository_prefix || product.ms_teams_webhook) && (
+                                    {product.repository_prefix && (
                                         <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                                            Integrations
+                                            Source code repository
                                         </Typography>
                                     )}
                                     {product.repository_prefix && <TextField source="repository_prefix" />}
-                                    {product.ms_teams_webhook && (
-                                        <TextField source="ms_teams_webhook" label="MS Teams Webhook" />
+
+                                    {(product.notification_email_to || product.notification_ms_teams_webhook) && (
+                                        <Typography variant="h6" sx={{ marginTop: "1em" }}>
+                                            Notifications
+                                        </Typography>
+                                    )}
+                                    {product.notification_email_to && (
+                                        <TextField source="notification_email_to" label="Email" />
+                                    )}
+                                    {product.notification_ms_teams_webhook && (
+                                        <TextField source="notification_ms_teams_webhook" label="MS Teams" />
                                     )}
 
                                     {product.security_gate_active != null && (
