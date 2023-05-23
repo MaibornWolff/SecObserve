@@ -112,8 +112,8 @@ const ProductEdit = () => {
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>
                     Notifications
                 </Typography>
-                <TextInputWide source="email_to" label="Email" helperText="Comma separated email to addresses" />
-                <TextInputWide source="ms_teams_webhook" label="MS Teams" helperText="Webhook URL" />
+                <TextInputWide source="notification_email_to" label="Email" helperText="Comma separated email to addresses" />
+                <TextInputWide source="notification_ms_teams_webhook" label="MS Teams" helperText="Webhook URL" />
 
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>
                     Security Gate

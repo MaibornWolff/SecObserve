@@ -14,8 +14,8 @@ export interface Product extends RaRecord {
     security_gate_threshold_none: number;
     security_gate_threshold_unkown: number;
     apply_general_rules: boolean;
-    ms_teams_webhook: string;
-    email_to: string;
+    notification_ms_teams_webhook: string;
+    notification_email_to: string;
     issue_tracker_active: boolean;
     issue_tracker_type: string;
     issue_tracker_base_url: string;

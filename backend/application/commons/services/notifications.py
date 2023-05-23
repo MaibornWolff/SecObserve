@@ -26,12 +26,12 @@ def send_product_security_gate_notification(product: Product) -> None:
     else:
         security_gate_status = "Failed"
 
-    email_to_adresses = _get_email_to_adresses(product.email_to)
+    email_to_adresses = _get_email_to_adresses(product.notification_email_to)
     if email_to_adresses and config.EMAIL_FROM:
-        for email_to in email_to_adresses:
-            first_name = _get_first_name(email_to)
+        for notification_email_to in email_to_adresses:
+            first_name = _get_first_name(notification_email_to)
             _send_email_notification(
-                email_to,
+                notification_email_to,
                 f"Security gate for {product.name} has changed to {security_gate_status}",
                 "email_product_security_gate.tpl",
                 product=product,
@@ -40,9 +40,9 @@ def send_product_security_gate_notification(product: Product) -> None:
                 first_name=first_name,
             )
 
-    if product.ms_teams_webhook:
+    if product.notification_ms_teams_webhook:
         _send_msteams_notification(
-            product.ms_teams_webhook,
+            product.notification_ms_teams_webhook,
             "msteams_product_security_gate.tpl",
             product=product,
             security_gate_status=security_gate_status,
@@ -54,10 +54,10 @@ def send_exception_notification(exception: Exception) -> None:
     if _ratelimit_exception(exception):
         email_to_adresses = _get_email_to_adresses(config.EXCEPTION_EMAIL_TO)
         if email_to_adresses and config.EMAIL_FROM:
-            for email_to in email_to_adresses:
-                first_name = _get_first_name(email_to)
+            for notification_email_to in email_to_adresses:
+                first_name = _get_first_name(notification_email_to)
                 _send_email_notification(
-                    email_to,
+                    notification_email_to,
                     f"Exception {get_classname(exception)} has occured",
                     "email_exception.tpl",
                     exception_class=get_classname(exception),
@@ -79,7 +79,7 @@ def send_exception_notification(exception: Exception) -> None:
 
 
 def _send_email_notification(
-    email_to: str, subject: str, template: str, **kwargs
+    notification_email_to: str, subject: str, template: str, **kwargs
 ) -> None:
     notification_message = _create_notification_message(template, **kwargs)
     if notification_message:
@@ -88,13 +88,13 @@ def _send_email_notification(
                 subject=subject,
                 message=notification_message,
                 from_email=config.EMAIL_FROM,
-                recipient_list=[email_to],
+                recipient_list=[notification_email_to],
                 fail_silently=False,
             )
         except Exception as e:
             logger.error(
                 format_log_message(
-                    message=f"Error while sending email to {email_to}",
+                    message=f"Error while sending email to {notification_email_to}",
                     exception=e,
                 )
             )
@@ -149,8 +149,8 @@ def _ratelimit_exception(exception: Exception) -> bool:
     return True
 
 
-def _get_email_to_adresses(email_to: str) -> list[str]:
-    email_to_adresses = email_to.split(",")
+def _get_email_to_adresses(notification_email_to: str) -> list[str]:
+    email_to_adresses = notification_email_to.split(",")
     return [item.strip() for item in email_to_adresses]
 
 

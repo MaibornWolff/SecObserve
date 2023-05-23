@@ -93,16 +93,16 @@ const ProductShow = () => {
                                     )}
                                     {product.repository_prefix && <TextField source="repository_prefix" />}
 
-                                    {(product.email_to || product.ms_teams_webhook) && (
+                                    {(product.notification_email_to || product.notification_ms_teams_webhook) && (
                                         <Typography variant="h6" sx={{ marginTop: "1em" }}>
                                             Notifications
                                         </Typography>
                                     )}
-                                    {product.email_to && (
-                                        <TextField source="email_to" label="Comma separated email to addresses" />
+                                    {product.notification_email_to && (
+                                        <TextField source="notification_email_to" label="Email" />
                                     )}
-                                    {product.ms_teams_webhook && (
-                                        <TextField source="ms_teams_webhook" label="MS Teams Webhook" />
+                                    {product.notification_ms_teams_webhook && (
+                                        <TextField source="notification_ms_teams_webhook" label="MS Teams" />
                                     )}
 
                                     {product.security_gate_active != null && (
