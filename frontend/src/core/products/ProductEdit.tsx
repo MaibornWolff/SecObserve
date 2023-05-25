@@ -39,6 +39,12 @@ const ProductEdit = () => {
         if (!data.repository_prefix) {
             data.repository_prefix = "";
         }
+        if (!data.notification_email_to) {
+            data.notification_email_to = "";
+        }
+        if (!data.notification_ms_teams_webhook) {
+            data.notification_ms_teams_webhook = "";
+        }
         if (data.security_gate_active) {
             if (data.security_gate_threshold_critical == "") {
                 data.security_gate_threshold_critical = 0;
@@ -89,6 +95,9 @@ const ProductEdit = () => {
         }
         if (!data.issue_tracker_project_id) {
             data.issue_tracker_project_id = "";
+        }
+        if (!data.issue_tracker_labels) {
+            data.issue_tracker_labels = "";
         }
         return data;
     };
