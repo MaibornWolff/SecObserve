@@ -174,10 +174,7 @@ const ProductCreate = () => {
                     choices={ISSUE_TRACKER_TYPE_CHOICES}
                 />
                 <TextInputWide source="issue_tracker_base_url" label="Base URL" />
-                <TextInputWide
-                    source="issue_tracker_api_key"
-                    label="API key"
-                />
+                <TextInputWide source="issue_tracker_api_key" label="API key" />
                 <TextInputWide source="issue_tracker_project_id" label="Project id" />
                 <TextInputWide source="issue_tracker_labels" label="Labels" />
             </SimpleForm>
