@@ -14,7 +14,7 @@ import {
     useUpdate,
 } from "react-admin";
 
-import { AutocompleteInputWide, PasswordInputWide, SelectInputWide, TextInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputWide, SelectInputWide, TextInputWide } from "../../commons/layout/themes";
 
 const ApiConfigurationEdit = () => {
     const [open, setOpen] = React.useState(false);
@@ -113,7 +113,7 @@ const ApiConfigurationEdit = () => {
                         </ReferenceInput>
                         <TextInputWide source="base_url" validate={requiredValidate} label="Base URL" />
                         <TextInputWide source="project_key" validate={requiredValidate} />
-                        <PasswordInputWide source="api_key" label="API key" validate={requiredValidate} />
+                        <TextInputWide source="api_key" label="API key" validate={requiredValidate} />
                         <BooleanInput source="test_connection" defaultValue={true} />
                     </SimpleForm>
                 </DialogContent>
