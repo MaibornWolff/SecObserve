@@ -12,7 +12,7 @@ import {
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { humanReadableDate } from "../../commons/functions";
 import { OBSERVATION_STATUS_OPEN } from "../types";
-import { Observation } from "../types"
+import { Observation } from "../types";
 
 const ShowObservations = (id: any) => {
     return "../../../../observations/" + id + "/show";
@@ -61,9 +61,7 @@ const ObservationDashboardList = () => {
                         <FunctionField<Observation>
                             label="Age"
                             sortBy="last_observation_log"
-                            render={record =>
-                                record ? humanReadableDate(record.last_observation_log) : ""
-                            }
+                            render={(record) => (record ? humanReadableDate(record.last_observation_log) : "")}
                         />
                     </Datagrid>
                 </Paper>

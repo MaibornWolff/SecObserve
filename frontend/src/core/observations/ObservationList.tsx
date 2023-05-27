@@ -63,10 +63,8 @@ const ObservationList = () => {
                 <FunctionField<Observation>
                     label="Age"
                     sortBy="last_observation_log"
-                    render={record =>
-                        record ? humanReadableDate(record.last_observation_log) : ""
-                    }
-        />
+                    render={(record) => (record ? humanReadableDate(record.last_observation_log) : "")}
+                />
             </Datagrid>
         </List>
     );
