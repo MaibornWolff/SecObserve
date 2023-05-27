@@ -15,7 +15,7 @@ import {
 } from "react-admin";
 
 import { PERMISSION_PRODUCT_DELETE } from "../../access_control/types";
-import { AutocompleteInputMedium, PasswordInputWide, TextInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
 import { ISSUE_TRACKER_TYPE_CHOICES } from "../types";
 
 const CustomToolbar = () => {
@@ -192,11 +192,7 @@ const ProductEdit = () => {
                     choices={ISSUE_TRACKER_TYPE_CHOICES}
                 />
                 <TextInputWide source="issue_tracker_base_url" label="Base URL" />
-                <PasswordInputWide
-                    source="issue_tracker_api_key"
-                    label="API key"
-                    inputProps={{ autocomplete: "current-password" }}
-                />
+                <TextInputWide source="issue_tracker_api_key" label="API key" inputProps={{ autocomplete: "off" }} />
                 <TextInputWide source="issue_tracker_project_id" label="Project id" />
                 <TextInputWide source="issue_tracker_labels" label="Labels" />
             </SimpleForm>

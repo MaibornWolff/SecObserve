@@ -19,6 +19,8 @@ def get_user_by_email(email: str) -> Optional[User]:
         return User.objects.get(email=email)
     except User.DoesNotExist:
         return None
+    except User.MultipleObjectsReturned:
+        return None
 
 
 def get_users() -> QuerySet[User]:

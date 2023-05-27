@@ -1,6 +1,6 @@
 Hello{{ first_name }},
 
-Exception {{ exception_class }} has occured
+Exception {{ exception_class }} has occured.
     
 Message: {{ exception_message }}
 

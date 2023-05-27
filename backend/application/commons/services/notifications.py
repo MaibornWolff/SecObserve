@@ -149,7 +149,10 @@ def _ratelimit_exception(exception: Exception) -> bool:
     return True
 
 
-def _get_email_to_adresses(notification_email_to: str) -> list[str]:
+def _get_email_to_adresses(notification_email_to: str) -> Optional[list[str]]:
+    if not notification_email_to:
+        return None
+
     email_to_adresses = notification_email_to.split(",")
     return [item.strip() for item in email_to_adresses]
 

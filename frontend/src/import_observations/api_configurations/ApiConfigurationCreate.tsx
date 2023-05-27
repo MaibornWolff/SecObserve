@@ -15,7 +15,7 @@ import {
     useRefresh,
 } from "react-admin";
 
-import { AutocompleteInputWide, PasswordInputWide, SelectInputWide, TextInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputWide, SelectInputWide, TextInputWide } from "../../commons/layout/themes";
 
 export type ApiConfigurationCreateProps = {
     id: any;
@@ -109,7 +109,7 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
                             </ReferenceInput>
                             <TextInputWide source="base_url" validate={requiredValidate} label="Base URL" />
                             <TextInputWide source="project_key" validate={requiredValidate} />
-                            <PasswordInputWide source="api_key" label="API key" validate={requiredValidate} />
+                            <TextInputWide source="api_key" label="API key" validate={requiredValidate} />
                             <BooleanInput source="test_connection" defaultValue={true} />
                         </SimpleForm>
                     </CreateBase>
