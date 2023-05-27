@@ -12,6 +12,7 @@ import {
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { humanReadableDate } from "../../commons/functions";
 import { OBSERVATION_STATUS_OPEN } from "../types";
+import { Observation } from "../types";
 
 const ShowObservations = (id: any) => {
     return "../../../../observations/" + id + "/show";
@@ -57,12 +58,10 @@ const ObservationDashboardList = () => {
                         <SeverityField source="current_severity" />
                         <ChipField source="current_status" label="Status" />
                         <TextField source="scanner_name" label="Scanner" />
-                        <FunctionField
+                        <FunctionField<Observation>
                             label="Age"
                             sortBy="last_observation_log"
-                            render={(record: { last_observation_log: string }) =>
-                                humanReadableDate(record.last_observation_log)
-                            }
+                            render={(record) => (record ? humanReadableDate(record.last_observation_log) : "")}
                         />
                     </Datagrid>
                 </Paper>
