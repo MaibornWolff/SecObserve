@@ -18,6 +18,7 @@ import {
     OBSERVATION_SEVERITY_CHOICES,
     OBSERVATION_STATUS_CHOICES,
     OBSERVATION_STATUS_OPEN,
+    Observation,
 } from "../types";
 
 const listFilters = [
@@ -59,13 +60,13 @@ const ObservationList = () => {
                 <TextField source="origin_endpoint_hostname" label="Host" />
                 <TextField source="origin_source_file" label="Source" />,
                 <TextField source="scanner_name" label="Scanner" />
-                <FunctionField
+                <FunctionField<Observation>
                     label="Age"
                     sortBy="last_observation_log"
-                    render={(record: { last_observation_log: string }) =>
-                        humanReadableDate(record.last_observation_log)
+                    render={record =>
+                        record ? humanReadableDate(record.last_observation_log) : ""
                     }
-                />
+        />
             </Datagrid>
         </List>
     );
