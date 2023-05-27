@@ -67,7 +67,11 @@ const rtf = new Intl.RelativeTimeFormat("en", {
     style: "long",
 });
 
-export const humanReadableDate = (date: string) => {
+export const humanReadableDate = (date: string | undefined) => {
+    if (date === undefined) {
+        return "";
+    }
+
     const today = new Date().setHours(23, 59, 59, 999);
     const diffInMs = Date.parse(date).valueOf() - today.valueOf();
     const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
