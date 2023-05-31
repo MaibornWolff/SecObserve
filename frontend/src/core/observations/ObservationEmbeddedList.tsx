@@ -22,8 +22,9 @@ import {
     OBSERVATION_SEVERITY_CHOICES,
     OBSERVATION_STATUS_CHOICES,
     OBSERVATION_STATUS_OPEN,
+    Observation,
 } from "../types";
-import ObservationBulkAsessment from "./ObservationBulkAssessment";
+import ObservationBulkAssessment from "./ObservationBulkAssessment";
 import ObservationBulkDeleteButton from "./ObservationBulkDeleteButton";
 
 const listFilters = [
@@ -49,8 +50,12 @@ type ObservationsEmbeddedListProps = {
 
 const BulkActionButtons = (product: any) => (
     <Fragment>
-        {product.product.permissions.includes(PERMISSION_OBSERVATION_ASSESSMENT) && <ObservationBulkAsessment />}
-        {product.product.permissions.includes(PERMISSION_OBSERVATION_DELETE) && <ObservationBulkDeleteButton />}
+        {product.product.permissions.includes(PERMISSION_OBSERVATION_ASSESSMENT) && (
+            <ObservationBulkAssessment product={product.product} />
+        )}
+        {product.product.permissions.includes(PERMISSION_OBSERVATION_DELETE) && (
+            <ObservationBulkDeleteButton product={product.product} />
+        )}
     </Fragment>
 );
 
@@ -107,12 +112,10 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
                         <TextField source="origin_endpoint_hostname" label="Host" />
                         <TextField source="origin_source_file" label="Source" />
                         <TextField source="scanner_name" label="Scanner" />
-                        <FunctionField
+                        <FunctionField<Observation>
                             label="Age"
                             sortBy="last_observation_log"
-                            render={(record: { last_observation_log: string }) =>
-                                humanReadableDate(record.last_observation_log)
-                            }
+                            render={(record) => (record ? humanReadableDate(record.last_observation_log) : "")}
                         />
                     </Datagrid>
                 </Paper>

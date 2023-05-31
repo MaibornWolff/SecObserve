@@ -10,12 +10,82 @@ import {
     required,
 } from "react-admin";
 
-import { AutocompleteInputMedium, PasswordInputWide, TextInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
 import { ISSUE_TRACKER_TYPE_CHOICES } from "../types";
 
 const ProductCreate = () => {
+    const transform = (data: any) => {
+        if (!data.description) {
+            data.description = "";
+        }
+        if (!data.repository_prefix) {
+            data.repository_prefix = "";
+        }
+        if (!data.notification_email_to) {
+            data.notification_email_to = "";
+        }
+        if (!data.notification_ms_teams_webhook) {
+            data.notification_ms_teams_webhook = "";
+        }
+        if (data.security_gate_active) {
+            if (data.security_gate_threshold_critical == "") {
+                data.security_gate_threshold_critical = 0;
+            }
+            if (data.security_gate_threshold_high == "") {
+                data.security_gate_threshold_high = 0;
+            }
+            if (data.security_gate_threshold_medium == "") {
+                data.security_gate_threshold_medium = 0;
+            }
+            if (data.security_gate_threshold_low == "") {
+                data.security_gate_threshold_low = 0;
+            }
+            if (data.security_gate_threshold_none == "") {
+                data.security_gate_threshold_none = 0;
+            }
+            if (data.security_gate_threshold_unkown == "") {
+                data.security_gate_threshold_unkown = 0;
+            }
+        } else {
+            if (data.security_gate_threshold_critical == "") {
+                data.security_gate_threshold_critical = null;
+            }
+            if (data.security_gate_threshold_high == "") {
+                data.security_gate_threshold_high = null;
+            }
+            if (data.security_gate_threshold_medium == "") {
+                data.security_gate_threshold_medium = null;
+            }
+            if (data.security_gate_threshold_low == "") {
+                data.security_gate_threshold_low = null;
+            }
+            if (data.security_gate_threshold_none == "") {
+                data.security_gate_threshold_none = null;
+            }
+            if (data.security_gate_threshold_unkown == "") {
+                data.security_gate_threshold_unkown = null;
+            }
+        }
+        if (!data.issue_tracker_type) {
+            data.issue_tracker_type = "";
+        }
+        if (!data.issue_tracker_base_url) {
+            data.issue_tracker_base_url = "";
+        }
+        if (!data.issue_tracker_api_key) {
+            data.issue_tracker_api_key = "";
+        }
+        if (!data.issue_tracker_project_id) {
+            data.issue_tracker_project_id = "";
+        }
+        if (!data.issue_tracker_labels) {
+            data.issue_tracker_labels = "";
+        }
+        return data;
+    };
+
     return (
-        <Create redirect="show">
+        <Create redirect="show" transform={transform}>
             <SimpleForm warnWhenUnsavedChanges>
                 <Typography variant="h6">Product</Typography>
                 <TextInputWide autoFocus source="name" validate={requiredValidate} />
@@ -27,10 +97,18 @@ const ProductCreate = () => {
                 <BooleanInput source="apply_general_rules" defaultValue={true} />
 
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                    Integrations
+                    Source code repository
                 </Typography>
                 <TextInputWide source="repository_prefix" />
-                <TextInputWide source="ms_teams_webhook" label="MS Teams Webhook" />
+                <Typography variant="h6" sx={{ marginTop: "1em" }}>
+                    Notifications
+                </Typography>
+                <TextInputWide
+                    source="notification_email_to"
+                    label="Email"
+                    helperText="Comma separated email to addresses"
+                />
+                <TextInputWide source="notification_ms_teams_webhook" label="MS Teams" helperText="Webhook URL" />
 
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>
                     Security Gate
@@ -96,11 +174,7 @@ const ProductCreate = () => {
                     choices={ISSUE_TRACKER_TYPE_CHOICES}
                 />
                 <TextInputWide source="issue_tracker_base_url" label="Base URL" />
-                <PasswordInputWide
-                    source="issue_tracker_api_key"
-                    label="API key"
-                    inputProps={{ autocomplete: "current-password" }}
-                />
+                <TextInputWide source="issue_tracker_api_key" label="API key" />
                 <TextInputWide source="issue_tracker_project_id" label="Project id" />
                 <TextInputWide source="issue_tracker_labels" label="Labels" />
             </SimpleForm>

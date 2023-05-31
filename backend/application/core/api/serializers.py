@@ -2,10 +2,13 @@ from datetime import datetime
 from typing import Optional
 
 from django.utils.timezone import make_aware
+from packageurl import PackageURL
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.serializers import (
     CharField,
     ChoiceField,
+    IntegerField,
+    ListField,
     ModelSerializer,
     Serializer,
     SerializerMethodField,
@@ -276,6 +279,7 @@ class ObservationListSerializer(ModelSerializer):
     product_data = NestedProductListSerializer(source="product")
     parser_data = ParserSerializer(source="parser")
     scanner_name = SerializerMethodField()
+    origin_component_name_version = SerializerMethodField()
 
     class Meta:
         model = Observation
@@ -287,6 +291,20 @@ class ObservationListSerializer(ModelSerializer):
 
         scanner_parts = observation.scanner.split("/")
         return scanner_parts[0].strip()
+
+    def get_origin_component_name_version(self, observation: Observation) -> str:
+        if not observation.origin_component_name:
+            return ""
+
+        origin_component_name_version_with_type = (
+            observation.origin_component_name_version
+        )
+        if observation.origin_component_purl:
+            purl = PackageURL.from_string(observation.origin_component_purl)
+            if purl.type:
+                origin_component_name_version_with_type += f" ({purl.type})"
+
+        return origin_component_name_version_with_type
 
 
 class ObservationUpdateSerializer(ModelSerializer):
@@ -408,3 +426,18 @@ class ObservationAssessmentSerializer(Serializer):
 
 class ObservationRemoveAssessmentSerializer(Serializer):
     comment = CharField(max_length=255, required=True)
+
+
+class ObservationBulkDeleteSerializer(Serializer):
+    observations = ListField(
+        child=IntegerField(min_value=1), min_length=0, max_length=100, required=True
+    )
+
+
+class ObservationBulkAssessmentSerializer(Serializer):
+    severity = ChoiceField(choices=Observation.SEVERITY_CHOICES, required=False)
+    status = ChoiceField(choices=Observation.STATUS_CHOICES, required=False)
+    comment = CharField(max_length=255, required=True)
+    observations = ListField(
+        child=IntegerField(min_value=1), min_length=0, max_length=100, required=True
+    )

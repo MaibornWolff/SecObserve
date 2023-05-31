@@ -1,6 +1,6 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import UploadIcon from "@mui/icons-material/Upload";
-import { Button, Dialog, DialogContent, DialogTitle, LinearProgress } from "@mui/material";
+import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { ChangeEvent, Fragment, useState } from "react";
 import { ReferenceInput, SaveButton, SimpleForm, Toolbar, required, useNotify, useRefresh } from "react-admin";
 import { makeStyles } from "tss-react/mui";
@@ -22,6 +22,16 @@ const FileUploadObservations = () => {
     const notify = useNotify();
     const [fileSelected, setFileSelected] = useState<File>();
     const { classes } = useStyles();
+    const handleOpen = () => setOpen(true);
+    const handleCancel = () => {
+        setOpen(false);
+        setLoading(false);
+    };
+    const handleClose = (event: object, reason: string) => {
+        if (reason && reason == "backdropClick") return;
+        setOpen(false);
+        setLoading(false);
+    };
 
     const handleFileChange = function (e: ChangeEvent<HTMLInputElement>) {
         const fileList = e.target.files;
@@ -60,27 +70,20 @@ const FileUploadObservations = () => {
                         result.json.observations_resolved +
                         " resolved observations";
                     refresh();
+                    setLoading(false);
+                    setOpen(false);
                     notify(message, {
                         type: "success",
                     });
                 })
                 .catch((error) => {
+                    setLoading(false);
+                    setOpen(false);
                     notify(error.message, {
                         type: "warning",
                     });
                 });
-            setLoading(false);
-            setOpen(false);
         }
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-        setLoading(false);
-    };
-
-    const handleOpen = () => {
-        setOpen(true);
     };
 
     const CancelButton = () => (
@@ -93,7 +96,7 @@ const FileUploadObservations = () => {
                 color: "#000000dd",
             }}
             variant="contained"
-            onClick={handleClose}
+            onClick={handleCancel}
             color="inherit"
             startIcon={<CancelIcon />}
         >
@@ -117,8 +120,7 @@ const FileUploadObservations = () => {
             >
                 Upload Observations From File
             </Button>
-            <Dialog open={open} onClose={handleClose}>
-                {loading ? <LinearProgress color="secondary" /> : null}
+            <Dialog open={open && !loading} onClose={handleClose}>
                 <DialogTitle>Upload Observations From File</DialogTitle>
                 <DialogContent>
                     <SimpleForm onSubmit={observationUpdate} toolbar={<CustomToolbar />}>
@@ -143,6 +145,11 @@ const FileUploadObservations = () => {
                     </SimpleForm>
                 </DialogContent>
             </Dialog>
+            {loading ? (
+                <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={open}>
+                    <CircularProgress color="primary" />
+                </Backdrop>
+            ) : null}
         </Fragment>
     );
 };

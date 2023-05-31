@@ -14,14 +14,19 @@ import {
     useUpdate,
 } from "react-admin";
 
-import { AutocompleteInputWide, PasswordInputWide, SelectInputWide, TextInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputWide, SelectInputWide, TextInputWide } from "../../commons/layout/themes";
 
 const ApiConfigurationEdit = () => {
     const [open, setOpen] = React.useState(false);
     const [update] = useUpdate();
     const refresh = useRefresh();
     const notify = useNotify();
-
+    const handleOpen = () => setOpen(true);
+    const handleCancel = () => setOpen(false);
+    const handleClose = (event: object, reason: string) => {
+        if (reason && reason == "backdropClick") return;
+        setOpen(false);
+    };
     const api_configuration_update = async (data: any) => {
         const patch = {
             name: data.name,
@@ -56,14 +61,6 @@ const ApiConfigurationEdit = () => {
         setOpen(false);
     };
 
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    const handleOpen = () => {
-        setOpen(true);
-    };
-
     const CancelButton = () => (
         <Button
             sx={{
@@ -74,7 +71,7 @@ const ApiConfigurationEdit = () => {
                 color: "#000000dd",
             }}
             variant="contained"
-            onClick={handleClose}
+            onClick={handleCancel}
             color="inherit"
             startIcon={<CancelIcon />}
         >
@@ -116,7 +113,7 @@ const ApiConfigurationEdit = () => {
                         </ReferenceInput>
                         <TextInputWide source="base_url" validate={requiredValidate} label="Base URL" />
                         <TextInputWide source="project_key" validate={requiredValidate} />
-                        <PasswordInputWide source="api_key" label="API key" validate={requiredValidate} />
+                        <TextInputWide source="api_key" label="API key" validate={requiredValidate} />
                         <BooleanInput source="test_connection" defaultValue={true} />
                     </SimpleForm>
                 </DialogContent>

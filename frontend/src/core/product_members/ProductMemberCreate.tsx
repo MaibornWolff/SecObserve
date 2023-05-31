@@ -25,17 +25,13 @@ const ProductMemberCreate = ({ id }: ProductMemberCreateProps) => {
     const [open, setOpen] = React.useState(false);
     const refresh = useRefresh();
     const notify = useNotify();
-
     const [create] = useCreate();
-
-    const handleOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
+    const handleOpen = () => setOpen(true);
+    const handleCancel = () => setOpen(false);
+    const handleClose = (event: object, reason: string) => {
+        if (reason && reason == "backdropClick") return;
         setOpen(false);
     };
-
     const CancelButton = () => (
         <Button
             sx={{
@@ -46,7 +42,7 @@ const ProductMemberCreate = ({ id }: ProductMemberCreateProps) => {
                 color: "#000000dd",
             }}
             variant="contained"
-            onClick={handleClose}
+            onClick={handleCancel}
             color="inherit"
             startIcon={<CancelIcon />}
         >

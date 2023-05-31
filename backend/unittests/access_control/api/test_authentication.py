@@ -83,7 +83,7 @@ class TestAuthentication(BaseTestCase):
             else:
                 raise Exception(f"Unkown method: {method}")
 
-            self.assertTrue(response.status_code in [200, 400, 404])
+            self.assertTrue(response.status_code in [200, 204, 400, 404])
             mock_authentication.assert_called_once()
             mock_authentication.reset_mock()
 
@@ -255,14 +255,29 @@ class TestAuthentication(BaseTestCase):
         self._check_authentication(
             ["delete", "get", "put", "patch"], "/api/products/1/"
         )
-        self._check_authentication(["put"], "/api/products/1/apply_rules/")
-
         self._check_authentication(["get"], "/api/evidences/1/")
 
         self._check_authentication(["get"], "/api/status/version/")
 
         self._check_authentication(["get", "post"], "/api/product_api_tokens/")
         self._check_authentication(["delete"], "/api/product_api_tokens/1/")
+
+        self._check_authentication(["post"], "/api/products/1/apply_rules/")
+
+        self._check_authentication(
+            ["post"], "/api/products/1/observations_bulk_assessment/"
+        )
+        self._check_authentication(
+            ["post"], "/api/products/1/observations_bulk_delete/"
+        )
+
+        self._check_authentication(
+            ["get"], "/api/products/1/export_codecharta_metrics/"
+        )
+        self._check_authentication(["get"], "/api/products/1/export_observations_csv/")
+        self._check_authentication(
+            ["get"], "/api/products/1/export_observations_excel/"
+        )
 
     def test_authentication_users(self):
         self._check_authentication(["get"], "/api/users/me/")

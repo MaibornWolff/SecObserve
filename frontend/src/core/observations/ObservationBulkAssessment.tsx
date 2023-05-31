@@ -1,6 +1,6 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
-import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import {
     SaveButton,
@@ -17,67 +17,61 @@ import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/the
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../types";
 
-const ObservationBulkAsessment = () => {
+type ObservationBulkAssessmentButtonProps = {
+    product: any;
+};
+
+const ObservationBulkAssessment = (props: ObservationBulkAssessmentButtonProps) => {
     const [open, setOpen] = useState(false);
     const refresh = useRefresh();
+    const [loading, setLoading] = useState(false);
     const notify = useNotify();
     const { selectedIds } = useListContext();
     const unselectAll = useUnselectAll("observations");
 
     const observationUpdate = async (data: any) => {
-        const patch = {
+        setLoading(true);
+        const url =
+            window.__RUNTIME_CONFIG__.API_BASE_URL + "/products/" + props.product.id + "/observations_bulk_assessment/";
+        const assessment_data = {
             severity: data.current_severity,
             status: data.current_status,
             comment: data.comment,
+            observations: selectedIds,
         };
 
-        let error_message = "";
-        let has_error = false;
-        for (const index in selectedIds) {
-            if (has_error) {
-                break;
-            }
-            httpClient(
-                window.__RUNTIME_CONFIG__.API_BASE_URL +
-                    "/observations/" +
-                    // We trust the selectIds coming from the ListContext
-                    // eslint-disable-next-line security/detect-object-injection
-                    selectedIds[index] +
-                    "/assessment/",
-                {
-                    method: "PATCH",
-                    body: JSON.stringify(patch),
-                }
-            )
-                .then(() => {
-                    refresh();
-                })
-                .catch((error) => {
-                    refresh();
-                    has_error = true;
-                    error_message = error.message;
+        httpClient(url, {
+            method: "POST",
+            body: JSON.stringify(assessment_data),
+        })
+            .then(() => {
+                refresh();
+                setOpen(false);
+                setLoading(false);
+                unselectAll();
+                notify("Observations updated", {
+                    type: "success",
                 });
-        }
-        if (has_error) {
-            notify(error_message, {
-                type: "warning",
+            })
+            .catch((error) => {
+                refresh();
+                setOpen(false);
+                setLoading(false);
+                unselectAll();
+                notify(error.message, {
+                    type: "warning",
+                });
             });
-        } else {
-            notify("Observations updated", {
-                type: "success",
-            });
-        }
-        unselectAll();
+    };
+
+    const handleClose = (event: object, reason: string) => {
+        if (reason && reason == "backdropClick") return;
         setOpen(false);
     };
 
-    const handleClose = () => {
-        setOpen(false);
-    };
+    const handleCancel = () => setOpen(false);
 
-    const handleOpen = () => {
-        setOpen(true);
-    };
+    const handleOpen = () => setOpen(true);
 
     const CancelButton = () => (
         <Button
@@ -89,7 +83,7 @@ const ObservationBulkAsessment = () => {
                 color: "#000000dd",
             }}
             variant="contained"
-            onClick={handleClose}
+            onClick={handleCancel}
             color="inherit"
             startIcon={<CancelIcon />}
         >
@@ -113,7 +107,7 @@ const ObservationBulkAsessment = () => {
             >
                 Assessment
             </Button>
-            <Dialog open={open} onClose={handleClose}>
+            <Dialog open={open && !loading} onClose={handleClose}>
                 <DialogTitle>Bulk Observation Assessment</DialogTitle>
                 <DialogContent>
                     <SimpleForm onSubmit={observationUpdate} toolbar={<CustomToolbar />}>
@@ -131,10 +125,15 @@ const ObservationBulkAsessment = () => {
                     </SimpleForm>
                 </DialogContent>
             </Dialog>
+            {loading ? (
+                <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={open}>
+                    <CircularProgress color="primary" />
+                </Backdrop>
+            ) : null}
         </Fragment>
     );
 };
 
 const requiredValidate = [required()];
 
-export default ObservationBulkAsessment;
+export default ObservationBulkAssessment;

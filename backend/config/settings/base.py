@@ -61,7 +61,7 @@ DATABASES = {
 
 if env("MYSQL_AZURE", default="false") == "true":
     DATABASES["default"]["OPTIONS"] = {
-        "ssl": {"ca": "/app/BaltimoreCyberTrustRoot.crt.pem"}
+        "ssl": {"ca": "/app/BaltimoreCyberTrustRoot_combined.crt.pem"}
     }
 
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
@@ -282,9 +282,18 @@ SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
 EMAIL_BACKEND = env(
-    "DJANGO_EMAIL_BACKEND",
-    default="django.core.mail.backends.smtp.EmailBackend",
+    "EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend"
 )
+# https://docs.djangoproject.com/en/dev/ref/settings/#email-host
+EMAIL_HOST = env("EMAIL_HOST", default="localhost")
+# https://docs.djangoproject.com/en/dev/ref/settings/#email-port
+EMAIL_PORT = env("EMAIL_PORT", default=1025)
+# https://docs.djangoproject.com/en/dev/ref/settings/#email-host-user
+EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
+# https://docs.djangoproject.com/en/dev/ref/settings/#email-host-password
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
+# https://docs.djangoproject.com/en/dev/ref/settings/#email-use-tls
+EMAIL_USE_TLS = env("EMAIL_USE_TLS", default=False)
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
 
@@ -479,6 +488,16 @@ CONSTANCE_CONFIG = {
         "Timedelta in seconds when to send the same exception the next time",
         int,
     ),
+    "EMAIL_FROM": (
+        "",
+        "From address for sending email notifications",
+        str,
+    ),
+    "EXCEPTION_EMAIL_TO": (
+        "",
+        "Comma separated email addresses to send exception notifications",
+        str,
+    ),
 }
 
 CONSTANCE_CONFIG_FIELDSETS = {
@@ -497,6 +516,8 @@ CONSTANCE_CONFIG_FIELDSETS = {
     ),
     "Integrations": (
         "BASE_URL_FRONTEND",
+        "EMAIL_FROM",
+        "EXCEPTION_EMAIL_TO",
         "EXCEPTION_MS_TEAMS_WEBHOOK",
         "EXCEPTION_RATELIMIT",
     ),

@@ -15,7 +15,7 @@ import {
     useRefresh,
 } from "react-admin";
 
-import { AutocompleteInputWide, PasswordInputWide, SelectInputWide, TextInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputWide, SelectInputWide, TextInputWide } from "../../commons/layout/themes";
 
 export type ApiConfigurationCreateProps = {
     id: any;
@@ -25,14 +25,11 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
     const [open, setOpen] = React.useState(false);
     const refresh = useRefresh();
     const notify = useNotify();
-
     const [create] = useCreate();
-
-    const handleOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
+    const handleOpen = () => setOpen(true);
+    const handleCancel = () => setOpen(false);
+    const handleClose = (event: object, reason: string) => {
+        if (reason && reason == "backdropClick") return;
         setOpen(false);
     };
 
@@ -46,7 +43,7 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
                 color: "#000000dd",
             }}
             variant="contained"
-            onClick={handleClose}
+            onClick={handleCancel}
             color="inherit"
             startIcon={<CancelIcon />}
         >
@@ -112,7 +109,7 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
                             </ReferenceInput>
                             <TextInputWide source="base_url" validate={requiredValidate} label="Base URL" />
                             <TextInputWide source="project_key" validate={requiredValidate} />
-                            <PasswordInputWide source="api_key" label="API key" validate={requiredValidate} />
+                            <TextInputWide source="api_key" label="API key" validate={requiredValidate} />
                             <BooleanInput source="test_connection" defaultValue={true} />
                         </SimpleForm>
                     </CreateBase>

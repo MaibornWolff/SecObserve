@@ -17,11 +17,6 @@ EMAIL_PORT = 1025
 # ------------------------
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
-# django-extensions
-# ------------------------------------------------------------------------------
-# https://django-extensions.readthedocs.io/en/latest/installation_instructions.html#configuration
-INSTALLED_APPS += ["django_extensions"]  # noqa F405
-
 # Your stuff...
 # ------------------------------------------------------------------------------
 

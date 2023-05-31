@@ -30,6 +30,8 @@ from application.core.api.permissions import (
 from application.core.api.serializers import (
     EvidenceSerializer,
     ObservationAssessmentSerializer,
+    ObservationBulkAssessmentSerializer,
+    ObservationBulkDeleteSerializer,
     ObservationCreateSerializer,
     ObservationListSerializer,
     ObservationRemoveAssessmentSerializer,
@@ -60,6 +62,10 @@ from application.core.services.assessment import remove_assessment, save_assessm
 from application.core.services.export_observations import (
     export_observations_csv,
     export_observations_excel,
+)
+from application.core.services.observations_bulk_actions import (
+    observations_bulk_assessment,
+    observations_bulk_delete,
 )
 from application.core.services.security_gate import check_security_gate
 from application.issue_tracker.services.issue_tracker import (
@@ -172,11 +178,11 @@ class ProductViewSet(ModelViewSet):
         return response
 
     @extend_schema(
-        methods=["PUT"],
+        methods=["POST"],
         request=None,
         responses={HTTP_204_NO_CONTENT: None},
     )
-    @action(detail=True, methods=["put"])
+    @action(detail=True, methods=["post"])
     def apply_rules(self, request, pk=None):
         product = self.__get_product(pk)
         user_has_permission_or_403(product, Permissions.Product_Rule_Apply)
@@ -187,6 +193,48 @@ class ProductViewSet(ModelViewSet):
 
         push_observations_to_issue_tracker(product)
 
+        return Response(status=HTTP_204_NO_CONTENT)
+
+    @extend_schema(
+        methods=["POST"],
+        request=ObservationBulkAssessmentSerializer,
+        responses={HTTP_204_NO_CONTENT: None},
+    )
+    @action(detail=True, methods=["post"])
+    def observations_bulk_assessment(self, request, pk=None):
+        product = self.__get_product(pk)
+        user_has_permission_or_403(product, Permissions.Observation_Assessment)
+
+        request_serializer = ObservationBulkAssessmentSerializer(data=request.data)
+        if not request_serializer.is_valid():
+            raise ValidationError(request_serializer.errors)
+
+        observations_bulk_assessment(
+            product,
+            request_serializer.validated_data.get("severity"),
+            request_serializer.validated_data.get("status"),
+            request_serializer.validated_data.get("comment"),
+            request_serializer.validated_data.get("observations"),
+        )
+        return Response(status=HTTP_204_NO_CONTENT)
+
+    @extend_schema(
+        methods=["POST"],
+        request=ObservationBulkDeleteSerializer,
+        responses={HTTP_204_NO_CONTENT: None},
+    )
+    @action(detail=True, methods=["post"])
+    def observations_bulk_delete(self, request, pk):
+        product = self.__get_product(pk)
+        user_has_permission_or_403(product, Permissions.Observation_Delete)
+
+        request_serializer = ObservationBulkDeleteSerializer(data=request.data)
+        if not request_serializer.is_valid():
+            raise ValidationError(request_serializer.errors)
+
+        observations_bulk_delete(
+            product, request_serializer.validated_data.get("observations")
+        )
         return Response(status=HTTP_204_NO_CONTENT)
 
     def __get_product(self, pk) -> Product:

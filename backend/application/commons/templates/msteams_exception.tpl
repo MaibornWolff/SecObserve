@@ -11,8 +11,11 @@
             "name": "Exception message:",
             "value": "{{ exception_message }}"
         }, {
-            "name": "Date:",
+            "name": "Timestamp:",
             "value": "{{ date_time|date:"Y-m-d H:i:s.u" }}"
+        }, {
+            "name": "Trace:",
+            "value": "{{ exception_trace }}"
         }],
         "markdown": true
     }],

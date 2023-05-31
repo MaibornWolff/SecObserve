@@ -1,6 +1,6 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import UploadIcon from "@mui/icons-material/CloudUpload";
-import { Button, Dialog, DialogContent, DialogTitle, LinearProgress } from "@mui/material";
+import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import { ReferenceInput, SaveButton, SimpleForm, Toolbar, required, useNotify, useRefresh } from "react-admin";
 
@@ -12,6 +12,16 @@ const ApiImportObservations = (product: any) => {
     const [loading, setLoading] = useState(false);
     const refresh = useRefresh();
     const notify = useNotify();
+    const handleOpen = () => setOpen(true);
+    const handleCancel = () => {
+        setOpen(false);
+        setLoading(false);
+    };
+    const handleClose = (event: object, reason: string) => {
+        if (reason && reason == "backdropClick") return;
+        setOpen(false);
+        setLoading(false);
+    };
 
     const observationUpdate = async (data: any) => {
         setLoading(true);
@@ -36,26 +46,19 @@ const ApiImportObservations = (product: any) => {
                     result.json.observations_resolved +
                     " resolved observations";
                 refresh();
+                setLoading(false);
+                setOpen(false);
                 notify(message, {
                     type: "success",
                 });
             })
             .catch((error) => {
+                setLoading(false);
+                setOpen(false);
                 notify(error.message, {
                     type: "warning",
                 });
             });
-        setLoading(false);
-        setOpen(false);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-        setLoading(false);
-    };
-
-    const handleOpen = () => {
-        setOpen(true);
     };
 
     const CancelButton = () => (
@@ -68,7 +71,7 @@ const ApiImportObservations = (product: any) => {
                 color: "#000000dd",
             }}
             variant="contained"
-            onClick={handleClose}
+            onClick={handleCancel}
             color="inherit"
             startIcon={<CancelIcon />}
         >
@@ -93,8 +96,7 @@ const ApiImportObservations = (product: any) => {
             >
                 Import Observations From API
             </Button>
-            <Dialog open={open} onClose={handleClose}>
-                {loading ? <LinearProgress color="secondary" /> : null}
+            <Dialog open={open && !loading} onClose={handleClose}>
                 <DialogTitle>Import Observations From API</DialogTitle>
                 <DialogContent>
                     <SimpleForm onSubmit={observationUpdate} toolbar={<CustomToolbar />}>
@@ -116,6 +118,11 @@ const ApiImportObservations = (product: any) => {
                     </SimpleForm>
                 </DialogContent>
             </Dialog>
+            {loading ? (
+                <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={open}>
+                    <CircularProgress color="primary" />
+                </Backdrop>
+            ) : null}
         </Fragment>
     );
 };

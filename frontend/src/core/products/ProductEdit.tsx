@@ -15,7 +15,7 @@ import {
 } from "react-admin";
 
 import { PERMISSION_PRODUCT_DELETE } from "../../access_control/types";
-import { AutocompleteInputMedium, PasswordInputWide, TextInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
 import { ISSUE_TRACKER_TYPE_CHOICES } from "../types";
 
 const CustomToolbar = () => {
@@ -38,6 +38,12 @@ const ProductEdit = () => {
         }
         if (!data.repository_prefix) {
             data.repository_prefix = "";
+        }
+        if (!data.notification_email_to) {
+            data.notification_email_to = "";
+        }
+        if (!data.notification_ms_teams_webhook) {
+            data.notification_ms_teams_webhook = "";
         }
         if (data.security_gate_active) {
             if (data.security_gate_threshold_critical == "") {
@@ -90,6 +96,9 @@ const ProductEdit = () => {
         if (!data.issue_tracker_project_id) {
             data.issue_tracker_project_id = "";
         }
+        if (!data.issue_tracker_labels) {
+            data.issue_tracker_labels = "";
+        }
         return data;
     };
 
@@ -106,10 +115,18 @@ const ProductEdit = () => {
                 <BooleanInput source="apply_general_rules" />
 
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                    Integrations
+                    Source code repository
                 </Typography>
                 <TextInputWide source="repository_prefix" />
-                <TextInputWide source="ms_teams_webhook" label="MS Teams Webhook" />
+                <Typography variant="h6" sx={{ marginTop: "1em" }}>
+                    Notifications
+                </Typography>
+                <TextInputWide
+                    source="notification_email_to"
+                    label="Email"
+                    helperText="Comma separated email to addresses"
+                />
+                <TextInputWide source="notification_ms_teams_webhook" label="MS Teams" helperText="Webhook URL" />
 
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>
                     Security Gate
@@ -175,11 +192,7 @@ const ProductEdit = () => {
                     choices={ISSUE_TRACKER_TYPE_CHOICES}
                 />
                 <TextInputWide source="issue_tracker_base_url" label="Base URL" />
-                <PasswordInputWide
-                    source="issue_tracker_api_key"
-                    label="API key"
-                    inputProps={{ autocomplete: "current-password" }}
-                />
+                <TextInputWide source="issue_tracker_api_key" label="API key" inputProps={{ autocomplete: "off" }} />
                 <TextInputWide source="issue_tracker_project_id" label="Project id" />
                 <TextInputWide source="issue_tracker_labels" label="Labels" />
             </SimpleForm>
