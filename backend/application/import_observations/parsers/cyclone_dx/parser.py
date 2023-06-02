@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from json import dumps, load
+from typing import Optional
 
 from django.core.files.base import File
 
@@ -12,12 +13,13 @@ from application.import_observations.parsers.base_parser import (
 
 @dataclass
 class Component:
+    bom_ref: str
     name: str
     version: str
     type: str
     purl: str
     cpe: str
-    json: str
+    json: dict[str, str]
 
 
 @dataclass
@@ -49,54 +51,60 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         return True, [], data
 
     def get_observations(self, data: dict) -> list[Observation]:
-        components = self.get_components(data)
-        metadata = self.get_metadata(data)
-        observations = self.create_observations(data, components, metadata)
+        components = self._get_components(data)
+        metadata = self._get_metadata(data)
+        observations = self._create_observations(data, components, metadata)
 
         return observations
 
-    def get_components(self, data: dict) -> dict[str, Component]:
+    def _get_components(self, data: dict) -> dict[str, Component]:
         components = {}
-        metadata_component = data.get("metadata", {}).get("component")
-        if metadata_component:
-            bom_ref = metadata_component.get("bom-ref")
-            if bom_ref:
-                component = Component(
-                    name=metadata_component.get("name"),
-                    version=metadata_component.get("version"),
-                    type=metadata_component.get("type"),
-                    purl=metadata_component.get("purl"),
-                    cpe=metadata_component.get("cpe"),
-                    json=metadata_component,
-                )
-                components[bom_ref] = component
+
+        root_component = self._get_root_component(data)
+        if root_component:
+            components[root_component.bom_ref] = root_component
+
         sbom_components = data.get("components", [])
         for sbom_component in sbom_components:
-            bom_ref = sbom_component.get("bom-ref")
-            if bom_ref:
-                component = Component(
-                    name=sbom_component.get("name"),
-                    version=sbom_component.get("version"),
-                    type=sbom_component.get("type"),
-                    purl=sbom_component.get("purl"),
-                    cpe=sbom_component.get("cpe"),
-                    json=sbom_component,
-                )
-                components[bom_ref] = component
+            component = self._get_component(sbom_component)
+            if component:
+                components[component.bom_ref] = component
+
         return components
 
-    def create_observations(
+    def _get_root_component(self, data: dict) -> Optional[Component]:
+        metadata_component = data.get("metadata", {}).get("component")
+        if not metadata_component:
+            return None
+
+        return self._get_component(metadata_component)
+
+    def _get_component(self, component_data: dict[str, str]) -> Optional[Component]:
+        if not component_data.get("bom-ref"):
+            return None
+
+        return Component(
+            bom_ref=component_data.get("bom-ref", ""),
+            name=component_data.get("name", ""),
+            version=component_data.get("version", ""),
+            type=component_data.get("type", ""),
+            purl=component_data.get("purl", ""),
+            cpe=component_data.get("cpe", ""),
+            json=component_data,
+        )
+
+    def _create_observations(
         self, data: dict, components: dict[str, Component], metadata: Metadata
     ) -> list[Observation]:
         observations = []
 
         for vulnerability in data.get("vulnerabilities", []):
             vulnerability_id = vulnerability.get("id")
-            cvss3_score, cvss3_vector = self.get_cvss3(vulnerability)
+            cvss3_score, cvss3_vector = self._get_cvss3(vulnerability)
             severity = ""
             if not cvss3_score:
-                severity = self.get_highest_severity(vulnerability)
-            cwe = self.get_cwe(vulnerability)
+                severity = self._get_highest_severity(vulnerability)
+            cwe = self._get_cwe(vulnerability)
             description = vulnerability.get("description")
             detail = vulnerability.get("detail")
             if detail:
@@ -126,22 +134,17 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                             origin_source_file=metadata.file,
                         )
 
-                        self.add_references(vulnerability, observation)
+                        self._add_references(vulnerability, observation)
 
-                        evidence = []
-                        evidence.append("Vulnerability")
-                        evidence.append(dumps(vulnerability))
-                        observation.unsaved_evidences.append(evidence)
-                        evidence = []
-                        evidence.append("Component")
-                        evidence.append(dumps(component.json))
-                        observation.unsaved_evidences.append(evidence)
+                        self._add_evidences(
+                            data, components, vulnerability, component, observation
+                        )
 
                         observations.append(observation)
 
         return observations
 
-    def get_metadata(self, data: dict) -> Metadata:
+    def _get_metadata(self, data: dict) -> Metadata:
         scanner = ""
         container = ""
         file = ""
@@ -162,7 +165,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
 
         return Metadata(scanner=scanner, container=container, file=file)
 
-    def get_cvss3(self, vulnerability):
+    def _get_cvss3(self, vulnerability):
         ratings = vulnerability.get("ratings", [])
         if ratings:
             for rating in ratings:
@@ -173,7 +176,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                     return cvss3_score, cvss3_vector
         return None, None
 
-    def get_highest_severity(self, vulnerability):
+    def _get_highest_severity(self, vulnerability):
         current_severity = Observation.SEVERITY_UNKOWN
         current_numerical_severity = 999
         ratings = vulnerability.get("ratings", [])
@@ -187,15 +190,105 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                     current_severity = severity
         return current_severity
 
-    def get_cwe(self, vulnerability):
+    def _get_cwe(self, vulnerability):
         cwes = vulnerability.get("cwes", [])
         if len(cwes) >= 1:
             return cwes[0]
 
         return None
 
-    def add_references(self, vulnerability: dict, observation: Observation) -> None:
+    def _add_references(self, vulnerability: dict, observation: Observation) -> None:
         advisories = vulnerability.get("advisories", [])
         if advisories:
             for advisory in advisories:
                 observation.unsaved_references.append(advisory.get("url"))
+
+    def _add_evidences(
+        self,
+        data: dict,
+        components: dict[str, Component],
+        vulnerability: dict,
+        component: Component,
+        observation: Observation,
+    ):
+        evidence = []
+        evidence.append("Vulnerability")
+        evidence.append(dumps(vulnerability))
+        observation.unsaved_evidences.append(evidence)
+        evidence = []
+        evidence.append("Component")
+        evidence.append(dumps(component.json))
+        observation.unsaved_evidences.append(evidence)
+
+        component_dependencies: list[dict[str, str | list[str]]] = []
+        self._filter_component_dependencies(
+            component.bom_ref,
+            data.get("dependencies", []),
+            component_dependencies,
+        )
+        if component_dependencies:
+            translated_component_dependencies = self._translate_component_dependencies(
+                component_dependencies, components
+            )
+            evidence = []
+            evidence.append("Dependencies")
+            evidence.append(dumps(translated_component_dependencies))
+            observation.unsaved_evidences.append(evidence)
+
+    def _filter_component_dependencies(
+        self,
+        bom_ref: str,
+        dependencies: list[dict[str, str | list[str]]],
+        component_dependencies: list[dict[str, str | list[str]]],
+    ) -> None:
+        for dependency in dependencies:
+            if dependency in component_dependencies:
+                continue
+            depends_on = dependency.get("dependsOn", [])
+            if bom_ref in depends_on:
+                component_dependencies.append(dependency)
+                self._filter_component_dependencies(
+                    str(dependency.get("ref")), dependencies, component_dependencies
+                )
+
+    def _translate_component_dependencies(
+        self,
+        component_dependencies: list[dict[str, str | list[str]]],
+        components: dict[str, Component],
+    ) -> list[dict]:
+        translated_component_dependencies = []
+
+        for component_dependency in component_dependencies:
+            translated_component_dependency: dict[str, str | list[str]] = {}
+
+            translated_component_dependency["ref"] = self._get_bom_ref_name_version(
+                str(component_dependency.get("ref")), components
+            )
+
+            translated_component_dependencies_inner: list[str] = []
+            for dependency in component_dependency.get("dependsOn", []):
+                translated_component_dependencies_inner.append(
+                    self._get_bom_ref_name_version(dependency, components)
+                )
+            translated_component_dependencies_inner.sort()
+            translated_component_dependency[
+                "dependsOn"
+            ] = translated_component_dependencies_inner
+
+            translated_component_dependencies.append(translated_component_dependency)
+
+        return translated_component_dependencies
+
+    def _get_bom_ref_name_version(
+        self, bom_ref: str, components: dict[str, Component]
+    ) -> str:
+        component = components.get(bom_ref, None)
+        if not component:
+            return ""
+
+        if component.version:
+            component_name_version = f"{component.name}:{component.version}"
+        else:
+            component_name_version = component.name
+
+        return component_name_version
