@@ -18,4 +18,4 @@ djangorestframework-stubs==3.14.1  # https://github.com/typeddjango/djangorestfr
 
 # Django
 # ------------------------------------------------------------------------------
-django-extensions==3.2.1  # https://github.com/django-extensions/django-extensions
+django-extensions==3.2.3  # https://github.com/django-extensions/django-extensions
