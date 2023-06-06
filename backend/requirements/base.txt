@@ -43,7 +43,7 @@ requests==2.31.0  # https://github.com/psf/requests
 
 # Azure Active Directory
 # ------------------------------------------------------------------------------
-django-auth-adfs==1.11.5  # https://github.com/snok/django-auth-adfs
+django-auth-adfs==1.11.6  # https://github.com/snok/django-auth-adfs
 
 # Database
 # ------------------------------------------------------------------------------
