@@ -17,17 +17,20 @@ from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from application.access_control.services.authorization import user_has_permission_or_403
 from application.access_control.services.roles_permissions import Permissions
 from application.core.api.filters import (
+    BranchFilter,
     ObservationFilter,
     ParserFilter,
     ProductFilter,
     ProductMemberFilter,
 )
 from application.core.api.permissions import (
+    UserHasBranchPermission,
     UserHasObservationPermission,
     UserHasProductMemberPermission,
     UserHasProductPermission,
 )
 from application.core.api.serializers import (
+    BranchSerializer,
     EvidenceSerializer,
     ObservationAssessmentSerializer,
     ObservationBulkAssessmentSerializer,
@@ -42,6 +45,7 @@ from application.core.api.serializers import (
     ProductSerializer,
 )
 from application.core.models import (
+    Branch,
     Observation,
     Observation_Log,
     Parser,
@@ -54,6 +58,7 @@ from application.core.queries.observation import (
     get_observations,
 )
 from application.core.queries.product import (
+    get_branches,
     get_product_by_id,
     get_product_members,
     get_products,
@@ -191,7 +196,7 @@ class ProductViewSet(ModelViewSet):
             rule_engine = Rule_Engine(product, parser)
             rule_engine.apply_all_rules_for_product_and_parser()
 
-        push_observations_to_issue_tracker(product)
+        push_observations_to_issue_tracker(product, False)
 
         return Response(status=HTTP_204_NO_CONTENT)
 
@@ -259,6 +264,17 @@ class ProductMemberViewSet(ModelViewSet):
 
     def get_queryset(self):
         return get_product_members().select_related("user")
+
+
+class BranchViewSet(ModelViewSet):
+    serializer_class = BranchSerializer
+    filterset_class = BranchFilter
+    permission_classes = (IsAuthenticated, UserHasBranchPermission)
+    queryset = Branch.objects.none()
+    filter_backends = [DjangoFilterBackend]
+
+    def get_queryset(self):
+        return get_branches()
 
 
 class ParserViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):

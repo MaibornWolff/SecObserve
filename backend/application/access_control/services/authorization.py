@@ -7,13 +7,18 @@ from application.access_control.services.roles_permissions import (
     get_roles_with_permissions,
 )
 from application.commons.services.global_request import get_current_user
-from application.core.models import Observation, Product, Product_Member
+from application.core.models import Branch, Observation, Product, Product_Member
 from application.core.queries.product import get_product_member
 from application.import_observations.models import Api_Configuration
 from application.rules.models import Rule
 
 
-def user_has_permission(obj, permission: int, user: User = None) -> bool:
+def user_has_permission(  # pylint: disable=too-many-return-statements
+    obj, permission: int, user: User = None
+) -> bool:
+    # There are a lot of different objects that need to be checked for permissions.
+    # Refactoring it wouldn't make it more readable.
+
     if user is None:
         user = get_current_user()
 
@@ -43,6 +48,9 @@ def user_has_permission(obj, permission: int, user: User = None) -> bool:
                 "No authorization implemented for General Rules"
             )
 
+        return user_has_permission(obj.product, permission, user)
+
+    if isinstance(obj, Branch) and permission in Permissions.get_branch_permissions():
         return user_has_permission(obj.product, permission, user)
 
     if (

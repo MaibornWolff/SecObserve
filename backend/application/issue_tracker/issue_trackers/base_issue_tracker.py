@@ -44,6 +44,9 @@ class BaseIssueTracker:
     def _get_description(self, observation: Observation) -> str:
         description = observation.description
 
+        if observation.branch:
+            description += f"\n\n**Branch:** {observation.branch.name}"
+
         url = f"{get_base_url_frontend()}#/observations/{observation.pk}/show"
         description += f"\n\n**SecObserve observation:** [{url}]({url})"
 

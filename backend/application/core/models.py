@@ -2,6 +2,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import (
     CASCADE,
     PROTECT,
+    SET_NULL,
     BooleanField,
     CharField,
     DateField,
@@ -34,6 +35,12 @@ class Product(Model):
     name = CharField(max_length=255, unique=True)
     description = TextField(max_length=2048, blank=True)
     repository_prefix = CharField(max_length=255, blank=True)
+    repository_default_branch = ForeignKey(
+        "Branch",
+        on_delete=SET_NULL,
+        related_name="repository_default_branch",
+        null=True,
+    )
     security_gate_passed = BooleanField(null=True)
     security_gate_active = BooleanField(null=True)
     security_gate_threshold_critical = IntegerField(
@@ -76,6 +83,7 @@ class Product(Model):
     def open_critical_observation_count(self):
         return Observation.objects.filter(
             product=self,
+            branch=self.repository_default_branch,
             current_severity=Observation.SEVERITY_CRITICAL,
             current_status=Observation.STATUS_OPEN,
         ).count()
@@ -84,6 +92,7 @@ class Product(Model):
     def open_high_observation_count(self):
         return Observation.objects.filter(
             product=self,
+            branch=self.repository_default_branch,
             current_severity=Observation.SEVERITY_HIGH,
             current_status=Observation.STATUS_OPEN,
         ).count()
@@ -92,6 +101,7 @@ class Product(Model):
     def open_medium_observation_count(self):
         return Observation.objects.filter(
             product=self,
+            branch=self.repository_default_branch,
             current_severity=Observation.SEVERITY_MEDIUM,
             current_status=Observation.STATUS_OPEN,
         ).count()
@@ -100,6 +110,7 @@ class Product(Model):
     def open_low_observation_count(self):
         return Observation.objects.filter(
             product=self,
+            branch=self.repository_default_branch,
             current_severity=Observation.SEVERITY_LOW,
             current_status=Observation.STATUS_OPEN,
         ).count()
@@ -108,6 +119,7 @@ class Product(Model):
     def open_none_observation_count(self):
         return Observation.objects.filter(
             product=self,
+            branch=self.repository_default_branch,
             current_severity=Observation.SEVERITY_NONE,
             current_status=Observation.STATUS_OPEN,
         ).count()
@@ -116,6 +128,69 @@ class Product(Model):
     def open_unkown_observation_count(self):
         return Observation.objects.filter(
             product=self,
+            branch=self.repository_default_branch,
+            current_severity=Observation.SEVERITY_UNKOWN,
+            current_status=Observation.STATUS_OPEN,
+        ).count()
+
+
+class Branch(Model):
+    product = ForeignKey(Product, on_delete=CASCADE)
+    name = CharField(max_length=255, unique=True)
+
+    class Meta:
+        unique_together = (
+            "product",
+            "name",
+        )
+
+    def __str__(self):
+        return f"{self.product} / {self.name}"
+
+    @property
+    def open_critical_observation_count(self):
+        return Observation.objects.filter(
+            branch=self,
+            current_severity=Observation.SEVERITY_CRITICAL,
+            current_status=Observation.STATUS_OPEN,
+        ).count()
+
+    @property
+    def open_high_observation_count(self):
+        return Observation.objects.filter(
+            branch=self,
+            current_severity=Observation.SEVERITY_HIGH,
+            current_status=Observation.STATUS_OPEN,
+        ).count()
+
+    @property
+    def open_medium_observation_count(self):
+        return Observation.objects.filter(
+            branch=self,
+            current_severity=Observation.SEVERITY_MEDIUM,
+            current_status=Observation.STATUS_OPEN,
+        ).count()
+
+    @property
+    def open_low_observation_count(self):
+        return Observation.objects.filter(
+            branch=self,
+            current_severity=Observation.SEVERITY_LOW,
+            current_status=Observation.STATUS_OPEN,
+        ).count()
+
+    @property
+    def open_none_observation_count(self):
+        return Observation.objects.filter(
+            branch=self,
+            current_severity=Observation.SEVERITY_NONE,
+            current_status=Observation.STATUS_OPEN,
+        ).count()
+
+    @property
+    def open_unkown_observation_count(self):
+        return Observation.objects.filter(
+            branch=self,
             current_severity=Observation.SEVERITY_UNKOWN,
             current_status=Observation.STATUS_OPEN,
         ).count()
@@ -221,6 +296,7 @@ class Observation(Model):
     ]
 
     product = ForeignKey(Product, on_delete=PROTECT)
+    branch = ForeignKey(Branch, on_delete=PROTECT, null=True)
     parser = ForeignKey(Parser, on_delete=PROTECT)
     title = CharField(max_length=255)
     description = TextField(max_length=2048, blank=True)

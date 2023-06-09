@@ -7,15 +7,17 @@ import {
     FormDataConsumer,
     NullableBooleanInput,
     NumberInput,
+    ReferenceInput,
     SaveButton,
     SimpleForm,
     Toolbar,
+    WithRecord,
     required,
     useRecordContext,
 } from "react-admin";
 
 import { PERMISSION_PRODUCT_DELETE } from "../../access_control/types";
-import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { ISSUE_TRACKER_TYPE_CHOICES } from "../types";
 
 const CustomToolbar = () => {
@@ -118,6 +120,19 @@ const ProductEdit = () => {
                     Source code repository
                 </Typography>
                 <TextInputWide source="repository_prefix" />
+                <WithRecord
+                    render={(product) => (
+                        <ReferenceInput
+                            source="repository_default_branch"
+                            reference="branches"
+                            label="Default branch"
+                            sort={{ field: "name", order: "ASC" }}
+                            filter={{ product: product.id }}
+                        >
+                            <AutocompleteInputWide optionText="name" />
+                        </ReferenceInput>
+                    )}
+                />
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>
                     Notifications
                 </Typography>

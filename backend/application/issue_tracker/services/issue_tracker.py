@@ -2,7 +2,7 @@ from typing import Optional
 
 from django.db.models import QuerySet
 
-from application.core.models import Observation, Product
+from application.core.models import Branch, Observation, Product
 from application.issue_tracker.issue_trackers.base_issue_tracker import BaseIssueTracker
 from application.issue_tracker.issue_trackers.github_issue_tracker import (
     GitHubIssueTracker,
@@ -12,11 +12,18 @@ from application.issue_tracker.issue_trackers.gitlab_issue_tracker import (
 )
 
 
-def push_observations_to_issue_tracker(product: Product) -> None:
+def push_observations_to_issue_tracker(
+    product: Product, use_branch: bool, branch: Branch = None
+) -> None:
     if product.issue_tracker_active:
-        observations: QuerySet[Observation] = product.observation_set.all()
-        for observation in observations:
-            push_observation_to_issue_tracker(observation)
+        if (not use_branch) or (
+            use_branch and product.repository_default_branch == branch
+        ):
+            observations: QuerySet[Observation] = Observation.objects.filter(
+                product=product, branch=product.repository_default_branch
+            )
+            for observation in observations:
+                push_observation_to_issue_tracker(observation)
 
 
 def push_observation_to_issue_tracker(observation: Observation) -> None:

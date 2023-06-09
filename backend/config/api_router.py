@@ -2,6 +2,7 @@ from rest_framework.routers import SimpleRouter
 
 from application.access_control.api.views import ProductApiTokenViewset, UserViewSet
 from application.core.api.views import (
+    BranchViewSet,
     EvidenceViewSet,
     ObservationViewSet,
     ParserViewSet,
@@ -19,6 +20,7 @@ router.register(
 )
 router.register("products", ProductViewSet)
 router.register("product_members", ProductMemberViewSet)
+router.register("branches", BranchViewSet)
 router.register("parsers", ParserViewSet)
 router.register("observations", ObservationViewSet)
 router.register("general_rules", GeneralRuleViewSet)

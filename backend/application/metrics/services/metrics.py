@@ -7,7 +7,9 @@ from application.core.queries.observation import get_observations
 def get_severity_counts(product: Product = None):
     observations = get_observations()
     if product:
-        observations = observations.filter(product=product)
+        observations = observations.filter(
+            product=product, branch=product.repository_default_branch
+        )
 
     return (
         observations.filter(current_status=Observation.STATUS_OPEN)
@@ -19,7 +21,9 @@ def get_severity_counts(product: Product = None):
 def get_status_counts(product: Product = None):
     observations = get_observations()
     if product:
-        observations = observations.filter(product=product)
+        observations = observations.filter(
+            product=product, branch=product.repository_default_branch
+        )
 
     return observations.values("current_status").annotate(Count("id"))
 

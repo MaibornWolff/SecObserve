@@ -2,7 +2,16 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import UploadIcon from "@mui/icons-material/Upload";
 import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { ChangeEvent, Fragment, useState } from "react";
-import { ReferenceInput, SaveButton, SimpleForm, Toolbar, required, useNotify, useRefresh } from "react-admin";
+import {
+    ReferenceInput,
+    SaveButton,
+    SimpleForm,
+    Toolbar,
+    WithRecord,
+    required,
+    useNotify,
+    useRefresh,
+} from "react-admin";
 import { makeStyles } from "tss-react/mui";
 
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
@@ -46,6 +55,9 @@ const FileUploadObservations = () => {
             const formData = new FormData();
             formData.append("file", fileSelected, fileSelected.name);
             formData.append("product", data.id);
+            if (data.branch) {
+                formData.append("branch", data.branch);
+            }
             formData.append("parser", data.parser);
             if (data.service) {
                 formData.append("service", data.service);
@@ -130,6 +142,19 @@ const FileUploadObservations = () => {
                             type="file"
                             onChange={handleFileChange}
                             accept=".json, .sarif"
+                        />
+                        <WithRecord
+                            render={(product) => (
+                                <ReferenceInput
+                                    source="branch"
+                                    reference="branches"
+                                    sort={{ field: "name", order: "ASC" }}
+                                    filter={{ product: product.id }}
+                                    alwaysOn
+                                >
+                                    <AutocompleteInputWide optionText="name" />
+                                </ReferenceInput>
+                            )}
                         />
                         <ReferenceInput
                             source="parser"

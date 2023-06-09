@@ -20,6 +20,7 @@ from application.import_observations.services.import_observations import (
 class FileUploadObservationsByIdRequestSerializer(Serializer):
     file = FileField(max_length=255)
     product = IntegerField(validators=[MinValueValidator(0)])
+    branch = IntegerField(validators=[MinValueValidator(0)], required=False)
     parser = IntegerField(validators=[MinValueValidator(0)])
     service = CharField(max_length=255, required=False)
     docker_image_name_tag = CharField(max_length=513, required=False)
@@ -29,6 +30,7 @@ class FileUploadObservationsByIdRequestSerializer(Serializer):
 class FileUploadObservationsByNameRequestSerializer(Serializer):
     file = FileField(max_length=255)
     product_name = CharField(max_length=255)
+    branch_name = CharField(max_length=255, required=False)
     parser_name = CharField(max_length=255)
     service = CharField(max_length=255, required=False)
     docker_image_name_tag = CharField(max_length=513, required=False)
@@ -37,6 +39,7 @@ class FileUploadObservationsByNameRequestSerializer(Serializer):
 
 class ApiImportObservationsByIdRequestSerializer(Serializer):
     api_configuration = IntegerField(validators=[MinValueValidator(0)])
+    branch = IntegerField(validators=[MinValueValidator(0)], required=False)
     service = CharField(max_length=255, required=False, allow_blank=True)
     docker_image_name_tag = CharField(max_length=513, required=False, allow_blank=True)
     endpoint_url = CharField(max_length=2048, required=False, allow_blank=True)
@@ -44,6 +47,7 @@ class ApiImportObservationsByIdRequestSerializer(Serializer):
 
 class ApiImportObservationsByNameRequestSerializer(Serializer):
     api_configuration_name = CharField(max_length=255)
+    branch_name = CharField(max_length=255, required=False)
     service = CharField(max_length=255, required=False)
     docker_image_name_tag = CharField(max_length=513, required=False)
     endpoint_url = CharField(max_length=2048, required=False)
