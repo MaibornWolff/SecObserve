@@ -17,6 +17,7 @@ class TestProductSerializer(BaseTestCase):
         )
         mock_filter.assert_called_with(
             product=self.product_1,
+            branch=None,
             current_severity=Observation.SEVERITY_CRITICAL,
             current_status=Observation.STATUS_OPEN,
         )
@@ -30,6 +31,7 @@ class TestProductSerializer(BaseTestCase):
         )
         mock_filter.assert_called_with(
             product=self.product_1,
+            branch=None,
             current_severity=Observation.SEVERITY_HIGH,
             current_status=Observation.STATUS_OPEN,
         )
@@ -43,6 +45,7 @@ class TestProductSerializer(BaseTestCase):
         )
         mock_filter.assert_called_with(
             product=self.product_1,
+            branch=None,
             current_severity=Observation.SEVERITY_MEDIUM,
             current_status=Observation.STATUS_OPEN,
         )
@@ -56,6 +59,7 @@ class TestProductSerializer(BaseTestCase):
         )
         mock_filter.assert_called_with(
             product=self.product_1,
+            branch=None,
             current_severity=Observation.SEVERITY_LOW,
             current_status=Observation.STATUS_OPEN,
         )
@@ -69,6 +73,7 @@ class TestProductSerializer(BaseTestCase):
         )
         mock_filter.assert_called_with(
             product=self.product_1,
+            branch=None,
             current_severity=Observation.SEVERITY_NONE,
             current_status=Observation.STATUS_OPEN,
         )
@@ -82,6 +87,7 @@ class TestProductSerializer(BaseTestCase):
         )
         mock_filter.assert_called_with(
             product=self.product_1,
+            branch=None,
             current_severity=Observation.SEVERITY_UNKOWN,
             current_status=Observation.STATUS_OPEN,
         )
