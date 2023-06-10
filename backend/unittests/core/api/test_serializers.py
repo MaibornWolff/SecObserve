@@ -1,9 +1,98 @@
 from unittest.mock import patch
 
 from application.access_control.services.roles_permissions import Permissions, Roles
-from application.core.api.serializers import ProductSerializer
+from application.core.api.serializers import BranchSerializer, ProductSerializer
 from application.core.models import Observation, Product_Member
 from unittests.base_test_case import BaseTestCase
+
+
+class TestBranchSerializer(BaseTestCase):
+    def test_is_default_branch_true(self):
+        branch_serializer = BranchSerializer()
+        self.assertTrue(branch_serializer.get_is_default_branch(obj=self.branch_1))
+
+    def test_is_default_branch_false(self):
+        branch_serializer = BranchSerializer()
+        self.assertFalse(branch_serializer.get_is_default_branch(obj=self.branch_2))
+
+    @patch("application.core.models.Observation.objects.filter")
+    def test_get_open_critical_observation_count(self, mock_filter):
+        mock_filter.return_value.count.return_value = 99
+        branch_serializer = BranchSerializer()
+        self.assertEqual(
+            99,
+            branch_serializer.get_open_critical_observation_count(obj=self.branch_1),
+        )
+        mock_filter.assert_called_with(
+            branch=self.branch_1,
+            current_severity=Observation.SEVERITY_CRITICAL,
+            current_status=Observation.STATUS_OPEN,
+        )
+
+    @patch("application.core.models.Observation.objects.filter")
+    def test_get_open_high_observation_count(self, mock_filter):
+        mock_filter.return_value.count.return_value = 99
+        branch_serializer = BranchSerializer()
+        self.assertEqual(
+            99, branch_serializer.get_open_high_observation_count(obj=self.branch_1)
+        )
+        mock_filter.assert_called_with(
+            branch=self.branch_1,
+            current_severity=Observation.SEVERITY_HIGH,
+            current_status=Observation.STATUS_OPEN,
+        )
+
+    @patch("application.core.models.Observation.objects.filter")
+    def test_get_open_medium_observation_count(self, mock_filter):
+        mock_filter.return_value.count.return_value = 99
+        branch_serializer = BranchSerializer()
+        self.assertEqual(
+            99, branch_serializer.get_open_medium_observation_count(obj=self.branch_1)
+        )
+        mock_filter.assert_called_with(
+            branch=self.branch_1,
+            current_severity=Observation.SEVERITY_MEDIUM,
+            current_status=Observation.STATUS_OPEN,
+        )
+
+    @patch("application.core.models.Observation.objects.filter")
+    def test_get_open_low_observation_count(self, mock_filter):
+        mock_filter.return_value.count.return_value = 99
+        branch_serializer = BranchSerializer()
+        self.assertEqual(
+            99, branch_serializer.get_open_low_observation_count(obj=self.branch_1)
+        )
+        mock_filter.assert_called_with(
+            branch=self.branch_1,
+            current_severity=Observation.SEVERITY_LOW,
+            current_status=Observation.STATUS_OPEN,
+        )
+
+    @patch("application.core.models.Observation.objects.filter")
+    def test_get_open_none_observation_count(self, mock_filter):
+        mock_filter.return_value.count.return_value = 99
+        branch_serializer = BranchSerializer()
+        self.assertEqual(
+            99, branch_serializer.get_open_none_observation_count(obj=self.branch_1)
+        )
+        mock_filter.assert_called_with(
+            branch=self.branch_1,
+            current_severity=Observation.SEVERITY_NONE,
+            current_status=Observation.STATUS_OPEN,
+        )
+
+    @patch("application.core.models.Observation.objects.filter")
+    def test_get_open_unkown_observation_count(self, mock_filter):
+        mock_filter.return_value.count.return_value = 99
+        branch_serializer = BranchSerializer()
+        self.assertEqual(
+            99, branch_serializer.get_open_unkown_observation_count(obj=self.branch_1)
+        )
+        mock_filter.assert_called_with(
+            branch=self.branch_1,
+            current_severity=Observation.SEVERITY_UNKOWN,
+            current_status=Observation.STATUS_OPEN,
+        )
 
 
 class TestProductSerializer(BaseTestCase):
@@ -17,7 +106,7 @@ class TestProductSerializer(BaseTestCase):
         )
         mock_filter.assert_called_with(
             product=self.product_1,
-            branch=None,
+            branch=self.branch_1,
             current_severity=Observation.SEVERITY_CRITICAL,
             current_status=Observation.STATUS_OPEN,
         )
@@ -31,7 +120,7 @@ class TestProductSerializer(BaseTestCase):
         )
         mock_filter.assert_called_with(
             product=self.product_1,
-            branch=None,
+            branch=self.branch_1,
             current_severity=Observation.SEVERITY_HIGH,
             current_status=Observation.STATUS_OPEN,
         )
@@ -45,7 +134,7 @@ class TestProductSerializer(BaseTestCase):
         )
         mock_filter.assert_called_with(
             product=self.product_1,
-            branch=None,
+            branch=self.branch_1,
             current_severity=Observation.SEVERITY_MEDIUM,
             current_status=Observation.STATUS_OPEN,
         )
@@ -59,7 +148,7 @@ class TestProductSerializer(BaseTestCase):
         )
         mock_filter.assert_called_with(
             product=self.product_1,
-            branch=None,
+            branch=self.branch_1,
             current_severity=Observation.SEVERITY_LOW,
             current_status=Observation.STATUS_OPEN,
         )
@@ -73,7 +162,7 @@ class TestProductSerializer(BaseTestCase):
         )
         mock_filter.assert_called_with(
             product=self.product_1,
-            branch=None,
+            branch=self.branch_1,
             current_severity=Observation.SEVERITY_NONE,
             current_status=Observation.STATUS_OPEN,
         )
@@ -87,7 +176,7 @@ class TestProductSerializer(BaseTestCase):
         )
         mock_filter.assert_called_with(
             product=self.product_1,
-            branch=None,
+            branch=self.branch_1,
             current_severity=Observation.SEVERITY_UNKOWN,
             current_status=Observation.STATUS_OPEN,
         )

@@ -241,6 +241,11 @@ class TestAuthentication(BaseTestCase):
         self._check_authentication(["get"], "/api/parsers/")
         self._check_authentication(["get"], "/api/parsers/1/")
 
+        self._check_authentication(["get", "post"], "/api/branches/")
+        self._check_authentication(
+            ["delete", "get", "put", "patch"], "/api/branches/1/"
+        )
+
         self._check_authentication(["get", "post"], "/api/product_members/")
         self._check_authentication(
             ["delete", "get", "put", "patch"], "/api/product_members/1/"

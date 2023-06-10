@@ -114,6 +114,7 @@
             "name": "db_product_internal",
             "description": "",
             "repository_prefix": "",
+            "repository_default_branch": 1,
             "security_gate_passed": true,
             "security_gate_active": null,
             "security_gate_threshold_critical": null,
@@ -143,6 +144,30 @@
             "security_gate_threshold_unkown": null,
             "apply_general_rules": true,
             "notification_ms_teams_webhook": ""
+        }
+    },
+    {
+        "model": "core.branch",
+        "pk": 1,
+        "fields": {
+            "product": 1,
+            "name": "db_branch_internal_dev"
+        }
+    },
+    {
+        "model": "core.branch",
+        "pk": 2,
+        "fields": {
+            "product": 1,
+            "name": "db_branch_internal_main"
+        }
+    },
+    {
+        "model": "core.branch",
+        "pk": 3,
+        "fields": {
+            "product": 2,
+            "name": "db_branch_external"
         }
     },
     {
@@ -222,6 +247,7 @@
         "pk": 1,
         "fields": {
             "product": 1,
+            "branch": 1,
             "parser": 1,
             "title": "db_observation_internal",
             "description": "",
