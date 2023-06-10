@@ -8,6 +8,7 @@ import {
     FunctionField,
     ListContextProvider,
     Pagination,
+    ReferenceInput,
     TextField,
     TextInput,
     useListController,
@@ -23,22 +24,39 @@ import {
     OBSERVATION_STATUS_CHOICES,
     OBSERVATION_STATUS_OPEN,
     Observation,
+    Product,
 } from "../types";
 import ObservationBulkAssessment from "./ObservationBulkAssessment";
 import ObservationBulkDeleteButton from "./ObservationBulkDeleteButton";
 
-const listFilters = [
-    <TextInput source="title" alwaysOn />,
-    <AutocompleteInput source="current_severity" label="Severity" choices={OBSERVATION_SEVERITY_CHOICES} alwaysOn />,
-    <AutocompleteInput source="current_status" label="Status" choices={OBSERVATION_STATUS_CHOICES} alwaysOn />,
-    <TextInput source="origin_service_name" label="Service" alwaysOn />,
-    <TextInput source="origin_component_name_version" label="Component" alwaysOn />,
-    <TextInput source="origin_docker_image_name_tag_short" label="Container" alwaysOn />,
-    <TextInput source="origin_endpoint_hostname" label="Host" alwaysOn />,
-    <TextInput source="origin_source_file" label="Source" alwaysOn />,
-    <TextInput source="scanner" alwaysOn />,
-    <AutocompleteInputMedium source="age" choices={OBSERVATION_AGE_CHOICES} alwaysOn />,
-];
+function listFilters(product: Product) {
+    return [
+        <ReferenceInput
+            source="branch"
+            reference="branches"
+            sort={{ field: "name", order: "ASC" }}
+            filter={{ product: product.id }}
+            alwaysOn
+        >
+            <AutocompleteInputMedium optionText="name" />
+        </ReferenceInput>,
+        <TextInput source="title" alwaysOn />,
+        <AutocompleteInput
+            source="current_severity"
+            label="Severity"
+            choices={OBSERVATION_SEVERITY_CHOICES}
+            alwaysOn
+        />,
+        <AutocompleteInput source="current_status" label="Status" choices={OBSERVATION_STATUS_CHOICES} alwaysOn />,
+        <TextInput source="origin_service_name" label="Service" alwaysOn />,
+        <TextInput source="origin_component_name_version" label="Component" alwaysOn />,
+        <TextInput source="origin_docker_image_name_tag_short" label="Container" alwaysOn />,
+        <TextInput source="origin_endpoint_hostname" label="Host" alwaysOn />,
+        <TextInput source="origin_source_file" label="Source" alwaysOn />,
+        <TextInput source="scanner" alwaysOn />,
+        <AutocompleteInputMedium source="age" choices={OBSERVATION_AGE_CHOICES} alwaysOn />,
+    ];
+}
 
 const ShowObservations = (id: any) => {
     return "../../../../observations/" + id + "/show";
@@ -64,7 +82,7 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
     const perPage = 25;
     const resource = "observations";
     const sort = { field: "current_severity", order: "ASC" };
-    const filterDefaultValues = { current_status: OBSERVATION_STATUS_OPEN };
+    const filterDefaultValues = { current_status: OBSERVATION_STATUS_OPEN, branch: product.repository_default_branch };
     const disableSyncWithLocation = false;
     const storeKey = "observations.embedded";
 
@@ -89,7 +107,7 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
-                <FilterForm filters={listFilters} />
+                <FilterForm filters={listFilters(product)} />
                 <Paper>
                     <Datagrid
                         size="medium"
@@ -103,6 +121,7 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
                             )
                         }
                     >
+                        <TextField source="branch_name" label="Branch" />
                         <TextField source="title" />
                         <SeverityField source="current_severity" />
                         <ChipField source="current_status" label="Status" />

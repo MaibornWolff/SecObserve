@@ -23,6 +23,7 @@ from application.access_control.services.roles_permissions import (
 )
 from application.commons.services.global_request import get_current_user
 from application.core.models import (
+    Branch,
     Evidence,
     Observation,
     Observation_Log,
@@ -41,6 +42,7 @@ from application.issue_tracker.services.issue_tracker import (
 
 
 class ProductSerializer(ModelSerializer):
+    repository_default_branch_name = SerializerMethodField()
     open_critical_observation_count = SerializerMethodField()
     open_high_observation_count = SerializerMethodField()
     open_medium_observation_count = SerializerMethodField()
@@ -52,6 +54,12 @@ class ProductSerializer(ModelSerializer):
     class Meta:
         model = Product
         fields = "__all__"
+
+    def get_repository_default_branch_name(self, obj: Product) -> str:
+        if not obj.repository_default_branch:
+            return ""
+
+        return obj.repository_default_branch.name
 
     def get_open_critical_observation_count(self, obj: Product) -> int:
         return obj.open_critical_observation_count
@@ -198,6 +206,41 @@ class ProductMemberSerializer(ModelSerializer):
         return attrs
 
 
+class BranchSerializer(ModelSerializer):
+    is_default_branch = SerializerMethodField()
+    open_critical_observation_count = SerializerMethodField()
+    open_high_observation_count = SerializerMethodField()
+    open_medium_observation_count = SerializerMethodField()
+    open_low_observation_count = SerializerMethodField()
+    open_none_observation_count = SerializerMethodField()
+    open_unkown_observation_count = SerializerMethodField()
+
+    class Meta:
+        model = Branch
+        fields = "__all__"
+
+    def get_is_default_branch(self, obj: Branch) -> bool:
+        return obj.product.repository_default_branch == obj
+
+    def get_open_critical_observation_count(self, obj: Branch) -> int:
+        return obj.open_critical_observation_count
+
+    def get_open_high_observation_count(self, obj: Branch) -> int:
+        return obj.open_high_observation_count
+
+    def get_open_medium_observation_count(self, obj: Branch) -> int:
+        return obj.open_medium_observation_count
+
+    def get_open_low_observation_count(self, obj: Branch) -> int:
+        return obj.open_low_observation_count
+
+    def get_open_none_observation_count(self, obj: Branch) -> int:
+        return obj.open_none_observation_count
+
+    def get_open_unkown_observation_count(self, obj: Branch) -> int:
+        return obj.open_unkown_observation_count
+
+
 class ParserSerializer(ModelSerializer):
     class Meta:
         model = Parser
@@ -235,6 +278,7 @@ class EvidenceSerializer(ModelSerializer):
 
 class ObservationSerializer(ModelSerializer):
     product_data = NestedProductSerializer(source="product")
+    branch_name = SerializerMethodField()
     parser_data = ParserSerializer(source="parser")
     observation_logs = NestedObservationLogSerializer(many=True)
     references = NestedReferenceSerializer(many=True)
@@ -245,6 +289,12 @@ class ObservationSerializer(ModelSerializer):
     class Meta:
         model = Observation
         exclude = ["numerical_severity"]
+
+    def get_branch_name(self, observation: Observation) -> str:
+        if not observation.branch:
+            return ""
+
+        return observation.branch.name
 
     def get_origin_source_file_url(self, observation: Observation) -> Optional[str]:
         origin_source_file_url = None
@@ -277,6 +327,7 @@ class ObservationSerializer(ModelSerializer):
 
 class ObservationListSerializer(ModelSerializer):
     product_data = NestedProductListSerializer(source="product")
+    branch_name = SerializerMethodField()
     parser_data = ParserSerializer(source="parser")
     scanner_name = SerializerMethodField()
     origin_component_name_version = SerializerMethodField()
@@ -284,6 +335,12 @@ class ObservationListSerializer(ModelSerializer):
     class Meta:
         model = Observation
         exclude = ["numerical_severity"]
+
+    def get_branch_name(self, observation: Observation) -> str:
+        if not observation.branch:
+            return ""
+
+        return observation.branch.name
 
     def get_scanner_name(self, observation: Observation) -> str:
         if not observation.scanner:

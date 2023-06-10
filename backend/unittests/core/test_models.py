@@ -16,6 +16,7 @@ class TestProduct(BaseTestCase):
         self.assertEqual(99, product.open_critical_observation_count)
         mock.assert_called_with(
             product=product,
+            branch=None,
             current_severity=Observation.SEVERITY_CRITICAL,
             current_status=Observation.STATUS_OPEN,
         )
@@ -27,6 +28,7 @@ class TestProduct(BaseTestCase):
         self.assertEqual(99, product.open_high_observation_count)
         mock.assert_called_with(
             product=product,
+            branch=None,
             current_severity=Observation.SEVERITY_HIGH,
             current_status=Observation.STATUS_OPEN,
         )
@@ -38,6 +40,7 @@ class TestProduct(BaseTestCase):
         self.assertEqual(99, product.open_medium_observation_count)
         mock.assert_called_with(
             product=product,
+            branch=None,
             current_severity=Observation.SEVERITY_MEDIUM,
             current_status=Observation.STATUS_OPEN,
         )
@@ -49,6 +52,7 @@ class TestProduct(BaseTestCase):
         self.assertEqual(99, product.open_low_observation_count)
         mock.assert_called_with(
             product=product,
+            branch=None,
             current_severity=Observation.SEVERITY_LOW,
             current_status=Observation.STATUS_OPEN,
         )
@@ -60,6 +64,7 @@ class TestProduct(BaseTestCase):
         self.assertEqual(99, product.open_none_observation_count)
         mock.assert_called_with(
             product=product,
+            branch=None,
             current_severity=Observation.SEVERITY_NONE,
             current_status=Observation.STATUS_OPEN,
         )
@@ -71,6 +76,7 @@ class TestProduct(BaseTestCase):
         self.assertEqual(99, product.open_unkown_observation_count)
         mock.assert_called_with(
             product=product,
+            branch=None,
             current_severity=Observation.SEVERITY_UNKOWN,
             current_status=Observation.STATUS_OPEN,
         )

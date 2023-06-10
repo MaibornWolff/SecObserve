@@ -48,6 +48,7 @@ const ProductList = () => {
             <Datagrid size="medium" rowClick="show" bulkActionButtons={<BulkActionButtons />}>
                 <TextField source="name" />
                 <SecurityGateTextField />
+                <TextField source="repository_default_branch_name" label="Default branch" />
                 <ObservationsCountField withLabel={false} />
             </Datagrid>
         </List>

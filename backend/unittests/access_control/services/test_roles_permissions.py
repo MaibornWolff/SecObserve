@@ -14,6 +14,7 @@ class TestRolesPermissions(BaseTestCase):
         permissions = {
             Permissions.Product_View,
             Permissions.Product_Member_View,
+            Permissions.Branch_View,
             Permissions.Product_Rule_View,
             Permissions.Observation_View,
             Permissions.Api_Configuration_View,

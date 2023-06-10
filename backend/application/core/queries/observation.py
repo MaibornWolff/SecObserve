@@ -5,6 +5,7 @@ from django.db.models.query import QuerySet
 
 from application.commons.services.global_request import get_current_user
 from application.core.models import (
+    Branch,
     Evidence,
     Observation,
     Parser,
@@ -39,10 +40,15 @@ def get_observations() -> QuerySet[Observation]:
 
 
 def get_observations_for_vulnerability_check(
-    product: Product, parser: Parser, filename: str, api_configuration_name: str
+    product: Product,
+    branch: Optional[Branch],
+    parser: Parser,
+    filename: str,
+    api_configuration_name: str,
 ) -> QuerySet[Observation]:
     return get_observations().filter(
         product=product,
+        branch=branch,
         parser=parser,
         upload_filename=filename,
         api_configuration_name=api_configuration_name,

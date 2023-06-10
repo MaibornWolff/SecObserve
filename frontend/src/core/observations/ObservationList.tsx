@@ -25,6 +25,9 @@ const listFilters = [
     <ReferenceInput source="product" reference="products" sort={{ field: "name", order: "ASC" }} alwaysOn>
         <AutocompleteInputMedium optionText="name" />
     </ReferenceInput>,
+    <ReferenceInput source="branch" reference="branches" sort={{ field: "name", order: "ASC" }} alwaysOn>
+        <AutocompleteInputMedium optionText="name" />
+    </ReferenceInput>,
     <TextInput source="title" alwaysOn />,
     <AutocompleteInput source="current_severity" label="Severity" choices={OBSERVATION_SEVERITY_CHOICES} alwaysOn />,
     <AutocompleteInput source="current_status" label="Status" choices={OBSERVATION_STATUS_CHOICES} alwaysOn />,
@@ -51,6 +54,7 @@ const ObservationList = () => {
         >
             <Datagrid size="medium" rowClick="show" bulkActionButtons={false}>
                 <TextField source="product_data.name" label="Product" />
+                <TextField source="branch_name" label="Branch" />
                 <TextField source="title" />
                 <SeverityField source="current_severity" />
                 <ChipField source="current_status" label="Status" />

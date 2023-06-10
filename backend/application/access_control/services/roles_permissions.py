@@ -35,6 +35,11 @@ class Permissions(IntEnum):
     Product_Rule_Create = 1304
     Product_Rule_Apply = 1305
 
+    Branch_View = 1401
+    Branch_Edit = 1402
+    Branch_Delete = 1403
+    Branch_Create = 1404
+
     Observation_View = 2001
     Observation_Edit = 2002
     Observation_Delete = 2003
@@ -86,6 +91,15 @@ class Permissions(IntEnum):
         }
 
     @classmethod
+    def get_branch_permissions(cls):
+        return {
+            Permissions.Branch_View,
+            Permissions.Branch_Edit,
+            Permissions.Branch_Delete,
+            Permissions.Branch_Create,
+        }
+
+    @classmethod
     def get_api_configuration_permissions(cls):
         return {
             Permissions.Api_Configuration_View,
@@ -101,6 +115,7 @@ def get_roles_with_permissions():
             Permissions.Product_View,
             Permissions.Product_Member_View,
             Permissions.Product_Rule_View,
+            Permissions.Branch_View,
             Permissions.Observation_View,
             Permissions.Api_Configuration_View,
         },
@@ -112,6 +127,7 @@ def get_roles_with_permissions():
             Permissions.Product_Import_Observations,
             Permissions.Product_Member_View,
             Permissions.Product_Rule_View,
+            Permissions.Branch_View,
             Permissions.Observation_View,
             Permissions.Observation_Edit,
             Permissions.Observation_Create,
@@ -131,6 +147,10 @@ def get_roles_with_permissions():
             Permissions.Product_Rule_Delete,
             Permissions.Product_Rule_Create,
             Permissions.Product_Rule_Apply,
+            Permissions.Branch_View,
+            Permissions.Branch_Edit,
+            Permissions.Branch_Delete,
+            Permissions.Branch_Create,
             Permissions.Observation_View,
             Permissions.Observation_Edit,
             Permissions.Observation_Create,
@@ -154,6 +174,10 @@ def get_roles_with_permissions():
             Permissions.Product_Rule_Delete,
             Permissions.Product_Rule_Create,
             Permissions.Product_Rule_Apply,
+            Permissions.Branch_View,
+            Permissions.Branch_Edit,
+            Permissions.Branch_Delete,
+            Permissions.Branch_Create,
             Permissions.Observation_View,
             Permissions.Observation_Edit,
             Permissions.Observation_Create,

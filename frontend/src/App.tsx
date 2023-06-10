@@ -67,6 +67,12 @@ const App = () => {
                 // nosemgrep because the props are well defined in the import
                 recordRepresentation={(record) => `${trim_string(record.name)}`}
             />
+            <Resource
+                name="branches"
+                // {...evidences} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                // nosemgrep because the props are well defined in the import
+                recordRepresentation={(record) => `${trim_string(record.name)}`}
+            />
         </Admin>
     );
 };
