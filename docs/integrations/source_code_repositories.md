@@ -4,7 +4,7 @@ Observations can have a source file plus start and end lines as an origin. Durin
 
 ## Setting the repository in a product
 
-When creating or editing a product, the field `Repository prefix` can be set. This needs to be the prefix of the URL to show a file in the repository, including the branch. For GitLab it is something like `https://gitlab.maibornwolff.de/secobserve/secobserve/-/blob/dev`, for GitHub it looks like `https://github.com/MaibornWolff/codecharta/blob/main`.
+When creating or editing a product, the field `Repository prefix` can be set. This needs to be the prefix of the URL to show a file in the repository. If the observations of the product have the branch set, then for GitLab it is something like `https://gitlab.maibornwolff.de/secobserve/secobserve/-/blob`, for GitHub it looks like `https://github.com/MaibornWolff/codecharta/blob`. If the observations don't have the branch set, then a branch need to be part of the repository prefix.
 
 ![Repository integration](../assets/images/screenshot_repository_1.png)
 

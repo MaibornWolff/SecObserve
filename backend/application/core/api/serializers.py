@@ -301,9 +301,11 @@ class ObservationSerializer(ModelSerializer):
 
         if observation.product.repository_prefix and observation.origin_source_file:
             origin_source_file_url = observation.product.repository_prefix
-            if not origin_source_file_url.endswith("/"):
-                origin_source_file_url += "/"
-            origin_source_file_url += observation.origin_source_file
+            if origin_source_file_url.endswith("/"):
+                origin_source_file_url = origin_source_file_url[:-1]
+            if observation.branch:
+                origin_source_file_url += f"/{observation.branch.name}"
+            origin_source_file_url += f"/{observation.origin_source_file}"
             if observation.origin_source_line_start:
                 origin_source_file_url += "#L" + str(
                     observation.origin_source_line_start
