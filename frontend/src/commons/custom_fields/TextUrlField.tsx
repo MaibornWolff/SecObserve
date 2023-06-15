@@ -83,6 +83,6 @@ const TextUrlField = (props: TextUrlFieldProps) => {
     );
 };
 
-TextUrlField.defaultProps = { label: "Name" };
+TextUrlField.defaultProps = { label: "" };
 
 export default TextUrlField;

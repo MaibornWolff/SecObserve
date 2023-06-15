@@ -17,8 +17,7 @@ const ShowDefaultBranchObservationsButton = ({ product }: ShowDefaultBranchObser
         return `?displayedFilters=%7B%7D&filter=%7B%22current_status%22%3A%22Open%22%2C%22branch%22%3A${branch_id}%7D&order=ASC&sort=current_severity`;
     }
 
-    const navigateToContacts = () => {
-        // 👇️ navigate to /contacts
+    const navigateToObservations = () => {
         navigate(get_observations_url(product.id, product.repository_default_branch));
     };
 
@@ -27,7 +26,7 @@ const ShowDefaultBranchObservationsButton = ({ product }: ShowDefaultBranchObser
             {product.repository_default_branch && (
                 <Button
                     variant="contained"
-                    onClick={navigateToContacts}
+                    onClick={navigateToObservations}
                     sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem" }}
                     startIcon={<observations.icon />}
                 >
