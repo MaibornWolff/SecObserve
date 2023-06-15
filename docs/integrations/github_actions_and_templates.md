@@ -25,6 +25,7 @@ Most of the actions and templates use the same set of variables:
 | `SO_API_BASE_URL` | *mandatory* | Base URL of the SecObserve backend, e.g. `https://secobserve-backend.example.com`. |
 | `SO_API_TOKEN` | *mandatory* | API token of the user to be used for the import. The users needs at least the `Upload` role. |
 | `SO_PRODUCT_NAME` | *mandatory* | Name of the product which observations are imported. The product has to exist before starting the import. |
+| `SO_BRANCH_NAME` | *optional* | Name of the branch in the source code repository. |
 | `SO_ORIGIN_SERVICE` | *optional* | Service name to be set for all imported observations. |
 | `SO_ORIGIN_DOCKER_IMAGE_NAME_TAG` | *optional* | Name:Tag of Docker image to be set for all imported observations. |
 | `SO_ORIGIN_ENDPOINT_URL` | *optional* | URL of endpoint to be set for all imported observations. |
@@ -51,7 +52,7 @@ All GitHub actions and GitLab CI templates use a pre-built Docker image that con
 ##  Examplary workflow for GitHub actions
 
 !!! tip
-    The mandatory variables for importing (`SO_API_BASE_URL`, `SO_API_TOKEN` and `SO_PRODUCT_NAME`) can be set as secrets and variables in the settings of the project in GitHub.
+    The mandatory variables for importing (`SO_API_BASE_URL`, `SO_API_TOKEN`, `SO_PRODUCT_NAME`) can be set as secrets and variables in the settings of the project in GitHub.
 
 ```yaml
 name: Vulnerability checks

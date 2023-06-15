@@ -136,7 +136,7 @@ class Product(Model):
 
 class Branch(Model):
     product = ForeignKey(Product, on_delete=CASCADE)
-    name = CharField(max_length=255, unique=True)
+    name = CharField(max_length=255)
 
     class Meta:
         unique_together = (

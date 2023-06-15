@@ -3,10 +3,12 @@
 ``` mermaid
 erDiagram
     Product ||--o{ Observation : has
+    Product ||--o{ Branch : has
     Product ||--o{ Product_Rule : has
     Product ||--o{ API_Configuration : has
     Product ||--o{ Product_Member : has
-    Observation }o--|| Parser : discovered_by
+    Parser ||--o{ Observation: discovered_by
+    Observation }o--o| Branch: found_in
     Observation ||--|{ Observation_Log : has
     Observation ||--|{ Reference : has
     Observation ||--|{ Evidence : has
@@ -19,9 +21,13 @@ A `Product` is the representation of the system that is checked for vulnerabilit
 
 ## Observation
 
-An `Observation`  is something that has been discovered by a vulnerability scanner. Not every observation is actually a vulnerability. An assessment can show it is e.g. a false positive or not applicable in the current context.
+An `Observation` is something that has been discovered by a vulnerability scanner. Not every observation is actually a vulnerability. An assessment can show it is e.g. a false positive or not applicable in the current context.
 
 Every `Observation` belongs to exactly one product.
+
+## Branch
+
+Software development often uses branches in the source code repository. Vulnerability scanners can run for multiple branches of a product and observations can be viewed and managed by branch. See more in [Working with branches](../usage/branches.md).
 
 ## Parser
 
