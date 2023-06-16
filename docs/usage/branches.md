@@ -18,6 +18,6 @@ The repository default branch can be set manually while editing a product. If it
 
 ![Branches in the product](../assets/images/screenshot_product_default_branch.png)
 
-When the repository default branch is set, the Observations tab shows a button to show all open observations for the default branch.
+The Observations tab shows a button to show all open observations for the default branch.
 
 ![Observations default branch button](../assets/images/screenshot_observations_default_branch.png)
