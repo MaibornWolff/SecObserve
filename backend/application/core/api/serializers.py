@@ -375,6 +375,14 @@ class ObservationUpdateSerializer(ModelSerializer):
         attrs["import_last_seen"] = make_aware(datetime.now())
         return super().validate(attrs)
 
+    def validate_branch(self, branch: Branch) -> Branch:
+        if branch and branch.product != self.instance.product:
+            raise ValidationError(
+                "Branch does not belong to the same product as the observation"
+            )
+
+        return branch
+
     def update(self, instance: Observation, validated_data: dict):
         actual_severity = instance.current_severity
         actual_status = instance.current_status
@@ -417,6 +425,7 @@ class ObservationUpdateSerializer(ModelSerializer):
     class Meta:
         model = Observation
         fields = [
+            "branch",
             "title",
             "description",
             "recommendation",
@@ -437,6 +446,13 @@ class ObservationCreateSerializer(ModelSerializer):
         attrs["parser"] = Parser.objects.get(type=Parser.TYPE_MANUAL)
         attrs["scanner"] = Parser.TYPE_MANUAL
         attrs["import_last_seen"] = make_aware(datetime.now())
+
+        if attrs.get("branch"):
+            if attrs["branch"].product != attrs["product"]:
+                raise ValidationError(
+                    "Branch does not belong to the same product as the observation"
+                )
+
         return super().validate(attrs)
 
     def create(self, validated_data):
@@ -462,6 +478,7 @@ class ObservationCreateSerializer(ModelSerializer):
         model = Observation
         fields = [
             "product",
+            "branch",
             "title",
             "description",
             "recommendation",

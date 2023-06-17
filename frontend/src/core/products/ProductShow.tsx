@@ -20,7 +20,6 @@ import {
     WithRecord,
     useRecordContext,
 } from "react-admin";
-import { useWatch } from "react-hook-form";
 
 import CreateProductApiToken from "../../access_control/product_api_token/ProductApiTokenCreate";
 import ProductApiTokenEmbeddedList from "../../access_control/product_api_token/ProductApiTokenEmbeddedList";
@@ -49,6 +48,7 @@ import ProductRuleCreate from "../../rules/product_rules/ProductRuleCreate";
 import ProductRuleEmbeddedList from "../../rules/product_rules/ProductRuleEmbeddedList";
 import BranchCreate from "../branches/BranchCreate";
 import BranchEmbeddedList from "../branches/BranchEmbeddedList";
+import ShowDefaultBranchObservationsButton from "../branches/ShowDefaultBranchObservationsButton";
 import ObservationCreate from "../observations/ObservationCreate";
 import ObservationsEmbeddedList from "../observations/ObservationEmbeddedList";
 import ProductMemberCreate from "../product_members/ProductMemberCreate";
@@ -208,17 +208,26 @@ const ProductShow = () => {
                                     </Stack>{" "}
                                 </SimpleShowLayout>
                             </Tab>
-                            <Tab label="Observations" path="observations" icon={<observations.icon />}>
-                                {product && product.permissions.includes(PERMISSION_OBSERVATION_CREATE) && (
-                                    <ObservationCreate id={product.id} />
-                                )}
-                                <ObservationsEmbeddedList product={product} />
-                            </Tab>
                             <Tab label="Branches" path="branches" icon={<AccountTreeIcon />}>
                                 {product && product.permissions.includes(PERMISSION_BRANCH_CREATE) && (
                                     <BranchCreate id={product.id} />
                                 )}
                                 <BranchEmbeddedList product={product} />
+                            </Tab>
+                            <Tab label="Observations" path="observations" icon={<observations.icon />}>
+                                <Stack
+                                    direction="row"
+                                    spacing={2}
+                                    sx={{
+                                        alignItems: "center",
+                                    }}
+                                >
+                                    {product && product.permissions.includes(PERMISSION_OBSERVATION_CREATE) && (
+                                        <ObservationCreate id={product.id} />
+                                    )}
+                                    <ShowDefaultBranchObservationsButton product={product} />
+                                </Stack>
+                                <ObservationsEmbeddedList product={product} />
                             </Tab>
                             <Tab label="Rules" path="rules" icon={<general_rules.icon />}>
                                 <Stack
