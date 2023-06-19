@@ -3,6 +3,7 @@ from unittest import TestCase
 from application.access_control.models import User
 from application.access_control.services.roles_permissions import Roles
 from application.core.models import (
+    Branch,
     Observation,
     Observation_Log,
     Parser,
@@ -37,6 +38,11 @@ class BaseTestCase(TestCase):
         self.api_configuration_1 = Api_Configuration(
             name="api_configuration_1", product=self.product_1, parser=self.parser_1
         )
+
+        self.branch_1 = Branch(name="branch_1", product=self.product_1)
+        self.product_1.repository_default_branch = self.branch_1
+        self.observation_1.branch = self.branch_1
+        self.branch_2 = Branch(name="branch_2", product=self.product_1)
 
         self.product_member_1 = Product_Member(
             product=self.product_1, user=self.user_internal, role=Roles.Writer

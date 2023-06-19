@@ -5,6 +5,7 @@ export interface Product extends RaRecord {
     name: string;
     description: string;
     repository_prefix: string;
+    repository_default_branch: Identifier;
     security_gate_passed: boolean;
     security_gate_active: boolean | null;
     security_gate_threshold_critical: number;
@@ -57,6 +58,7 @@ export const PARSER_SOURCE_CHOICES = [
 export interface Observation extends RaRecord {
     id: Identifier;
     product: Product;
+    branch: Identifier;
     parser: Parser;
     title: string;
     description: string;

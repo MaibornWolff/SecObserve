@@ -32,7 +32,7 @@ class TestGitLabIssueTracker(BaseTestCase):
             headers={"PRIVATE-TOKEN": "api_key_1"},
             data={
                 "title": 'Critical vulnerability: "observation_1"',
-                "description": "description_1\n\n**SecObserve observation:** [/#/observations/1/show](/#/observations/1/show)",
+                "description": "description_1\n\n**Branch:** branch_1\n\n**SecObserve observation:** [/#/observations/1/show](/#/observations/1/show)",
                 "confidential": True,
                 "labels": "label_1, label_2",
             },
@@ -60,7 +60,7 @@ class TestGitLabIssueTracker(BaseTestCase):
             headers={"PRIVATE-TOKEN": "api_key_1"},
             data={
                 "title": 'Critical vulnerability: "observation_1"',
-                "description": "description_1\n\n**SecObserve observation:** [/#/observations/1/show](/#/observations/1/show)",
+                "description": "description_1\n\n**Branch:** branch_1\n\n**SecObserve observation:** [/#/observations/1/show](/#/observations/1/show)",
                 "confidential": True,
                 "labels": "label_1, label_2",
             },
@@ -161,7 +161,7 @@ class TestGitLabIssueTracker(BaseTestCase):
             headers={"PRIVATE-TOKEN": "api_key_1"},
             data={
                 "title": 'Critical vulnerability: "observation_1"',
-                "description": "description_1\n\n**SecObserve observation:** [/#/observations/1/show](/#/observations/1/show)",
+                "description": "description_1\n\n**Branch:** branch_1\n\n**SecObserve observation:** [/#/observations/1/show](/#/observations/1/show)",
                 "confidential": True,
                 "state_event": "reopen",
                 "add_labels": "label_2,label_3",
@@ -189,7 +189,7 @@ class TestGitLabIssueTracker(BaseTestCase):
             headers={"PRIVATE-TOKEN": "api_key_1"},
             data={
                 "title": 'Critical vulnerability: "observation_1"',
-                "description": "description_1\n\n**SecObserve observation:** [/#/observations/1/show](/#/observations/1/show)",
+                "description": "description_1\n\n**Branch:** branch_1\n\n**SecObserve observation:** [/#/observations/1/show](/#/observations/1/show)",
                 "confidential": True,
                 "state_event": "reopen",
                 "add_labels": "label_2,label_3",
@@ -233,7 +233,7 @@ class TestGitLabIssueTracker(BaseTestCase):
             headers={"PRIVATE-TOKEN": "api_key_1"},
             data={
                 "title": 'Critical vulnerability: "observation_1"',
-                "description": "description_1\n\n**SecObserve observation:** [/#/observations/1/show](/#/observations/1/show)\n\n**Observation status:** Resolved",
+                "description": "description_1\n\n**Branch:** branch_1\n\n**SecObserve observation:** [/#/observations/1/show](/#/observations/1/show)\n\n**Observation status:** Resolved",
                 "confidential": True,
                 "state_event": "close",
                 "add_labels": "label_2,label_3",
@@ -262,7 +262,7 @@ class TestGitLabIssueTracker(BaseTestCase):
             headers={"PRIVATE-TOKEN": "api_key_1"},
             data={
                 "title": 'Critical vulnerability: "observation_1"',
-                "description": "description_1\n\n**SecObserve observation:** [/#/observations/1/show](/#/observations/1/show)\n\n**Observation status:** Resolved",
+                "description": "description_1\n\n**Branch:** branch_1\n\n**SecObserve observation:** [/#/observations/1/show](/#/observations/1/show)\n\n**Observation status:** Resolved",
                 "confidential": True,
                 "state_event": "close",
                 "add_labels": "label_2,label_3",

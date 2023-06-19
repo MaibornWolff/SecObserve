@@ -5,7 +5,7 @@ from django.db.models.query import QuerySet
 
 from application.access_control.models import User
 from application.commons.services.global_request import get_current_user
-from application.core.models import Product, Product_Member
+from application.core.models import Branch, Product, Product_Member
 
 
 def get_product_by_id(product_id: int) -> Optional[Product]:
@@ -60,3 +60,34 @@ def get_product_members() -> QuerySet[Product_Member]:
 
     products = get_products()
     return product_members.filter(product__in=products)
+
+
+def get_branch_by_id(product: Product, branch_id: int) -> Optional[Branch]:
+    try:
+        return Branch.objects.get(id=branch_id, product=product)
+    except Branch.DoesNotExist:
+        return None
+
+
+def get_branch_by_name(product: Product, name: str) -> Optional[Branch]:
+    try:
+        return Branch.objects.get(name=name, product=product)
+    except Branch.DoesNotExist:
+        return None
+
+
+def get_branches() -> QuerySet[Branch]:
+    user = get_current_user()
+
+    if user is None:
+        return Branch.objects.none()
+
+    if user.is_superuser:
+        return Branch.objects.all()
+
+    products = get_products()
+    return Branch.objects.filter(product__in=products)
+
+
+def get_branches_by_product(product: Product) -> QuerySet[Branch]:
+    return Branch.objects.filter(product=product)

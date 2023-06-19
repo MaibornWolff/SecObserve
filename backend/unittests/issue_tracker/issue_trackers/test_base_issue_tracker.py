@@ -65,7 +65,7 @@ class TestBaseIssueTracker(BaseTestCase):
     @patch(
         "application.issue_tracker.issue_trackers.base_issue_tracker.get_base_url_frontend"
     )
-    def test_get_description(self, base_url_mock):
+    def test_get_description_with_branch(self, base_url_mock):
         base_url_mock.return_value = "http://localhost:3000"
         self.observation_1.pk = 1
         self.observation_1.description = "description_1"
@@ -75,7 +75,27 @@ class TestBaseIssueTracker(BaseTestCase):
 
         expected_description = """description_1
 
+**Branch:** branch_1
+
 **SecObserve observation:** [http://localhost:3000#/observations/1/show](http://localhost:3000#/observations/1/show)"""
+        self.assertEqual(expected_description, description)
+        base_url_mock.assert_called_once()
+
+    @patch(
+        "application.issue_tracker.issue_trackers.base_issue_tracker.get_base_url_frontend"
+    )
+    def test_get_description_without_branch(self, base_url_mock):
+        base_url_mock.return_value = "http://localhost:3000"
+        observation_2 = Observation(
+            pk=2, product=self.product_1, description="description_2"
+        )
+
+        issue_tracker = BaseIssueTracker()
+        description = issue_tracker._get_description(observation_2)
+
+        expected_description = """description_2
+
+**SecObserve observation:** [http://localhost:3000#/observations/2/show](http://localhost:3000#/observations/2/show)"""
         self.assertEqual(expected_description, description)
         base_url_mock.assert_called_once()
 

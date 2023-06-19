@@ -7,12 +7,18 @@ import {
     SaveButton,
     SimpleForm,
     Toolbar,
+    WithRecord,
     required,
     useRecordContext,
 } from "react-admin";
 
 import { PERMISSION_OBSERVATION_DELETE } from "../../access_control/types";
-import { AutocompleteInputMedium, SelectInputWide, TextInputWide } from "../../commons/layout/themes";
+import {
+    AutocompleteInputMedium,
+    AutocompleteInputWide,
+    SelectInputWide,
+    TextInputWide,
+} from "../../commons/layout/themes";
 import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../../core/types";
 
 const CustomToolbar = () => {
@@ -61,6 +67,18 @@ const ObservationEdit = () => {
                     <SelectInputWide optionText="name" disabled={true} />
                 </ReferenceInput>
                 <Typography variant="h6">Observation</Typography>
+                <WithRecord
+                    render={(branch) => (
+                        <ReferenceInput
+                            source="branch"
+                            reference="branches"
+                            sort={{ field: "name", order: "ASC" }}
+                            filter={{ product: branch.product_data.id }}
+                        >
+                            <AutocompleteInputWide optionText="name" />
+                        </ReferenceInput>
+                    )}
+                />
                 <TextInputWide autoFocus source="title" validate={requiredValidate} />
                 <AutocompleteInputMedium
                     source="parser_severity"

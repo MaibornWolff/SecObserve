@@ -15,7 +15,12 @@ import {
     useRefresh,
 } from "react-admin";
 
-import { AutocompleteInputMedium, SelectInputWide, TextInputWide } from "../../commons/layout/themes";
+import {
+    AutocompleteInputMedium,
+    AutocompleteInputWide,
+    SelectInputWide,
+    TextInputWide,
+} from "../../commons/layout/themes";
 import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES, OBSERVATION_STATUS_OPEN } from "../../core/types";
 
 export type ObservationCreateProps = {
@@ -101,6 +106,14 @@ const ObservationCreate = ({ id }: ObservationCreateProps) => {
                                 <SelectInputWide optionText="name" defaultValue={id} disabled={true} />
                             </ReferenceInput>
                             <Typography variant="h6">Observation</Typography>
+                            <ReferenceInput
+                                source="branch"
+                                reference="branches"
+                                sort={{ field: "name", order: "ASC" }}
+                                filter={{ product: id }}
+                            >
+                                <AutocompleteInputWide optionText="name" />
+                            </ReferenceInput>
                             <TextInputWide autoFocus source="title" validate={requiredValidate} />
                             <AutocompleteInputMedium
                                 source="parser_severity"

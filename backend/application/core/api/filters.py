@@ -9,7 +9,7 @@ from django_filters import (
     OrderingFilter,
 )
 
-from application.core.models import Observation, Parser, Product, Product_Member
+from application.core.models import Branch, Observation, Parser, Product, Product_Member
 
 AGE_DAY = "Today"
 AGE_WEEK = "Past 7 days"
@@ -55,6 +55,19 @@ class ProductMemberFilter(FilterSet):
         fields = ["product", "user", "role"]
 
 
+class BranchFilter(FilterSet):
+    product = NumberFilter(field_name="product")
+
+    ordering = OrderingFilter(
+        # tuple-mapping retains order
+        fields=(("name", "name"),),
+    )
+
+    class Meta:
+        model = Branch
+        fields = ["product", "name"]
+
+
 class ParserFilter(FilterSet):
     name = CharFilter(field_name="name", lookup_expr="icontains")
     type = ChoiceFilter(field_name="type", choices=Parser.TYPE_CHOICES)
@@ -95,6 +108,7 @@ class ObservationFilter(FilterSet):
         # tuple-mapping retains order
         fields=(
             ("product__name", "product_data.name"),
+            ("branch__name", "branch_name"),
             ("title", "title"),
             ("numerical_severity", "current_severity"),
             ("current_status", "current_status"),
@@ -117,6 +131,7 @@ class ObservationFilter(FilterSet):
         model = Observation
         fields = [
             "product",
+            "branch",
             "title",
             "current_severity",
             "current_status",

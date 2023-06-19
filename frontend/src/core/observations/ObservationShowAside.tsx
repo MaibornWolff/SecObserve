@@ -33,6 +33,9 @@ const MetaData = () => {
                     <SimpleShowLayout>
                         <Typography variant="h6">Metadata</Typography>
                         <ReferenceField source="product" reference="products" link="show" />
+                        {observation.branch && (
+                            <ReferenceField source="branch" reference="branches" label="Branch" link={false} />
+                        )}
                         <ReferenceField source="parser" reference="parsers" label="Parser name" link="show" />
                         <ReferenceField source="parser" reference="parsers" label="Parser type" link={false}>
                             <TextField source="type" />

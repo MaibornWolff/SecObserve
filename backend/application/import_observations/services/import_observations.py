@@ -1,12 +1,19 @@
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Tuple
+from typing import Optional, Tuple
 
 from django.core.files.base import File
 from django.utils.timezone import make_aware
 from rest_framework.exceptions import ValidationError
 
-from application.core.models import Evidence, Observation, Parser, Product, Reference
+from application.core.models import (
+    Branch,
+    Evidence,
+    Observation,
+    Parser,
+    Product,
+    Reference,
+)
 from application.core.queries.observation import (
     get_observations_for_vulnerability_check,
 )
@@ -18,6 +25,7 @@ from application.core.services.observation import (
     normalize_observation_fields,
 )
 from application.core.services.observation_log import create_observation_log
+from application.core.services.product import set_repository_default_branch
 from application.core.services.security_gate import check_security_gate
 from application.import_observations.models import Api_Configuration
 from application.import_observations.parsers.base_parser import (
@@ -35,6 +43,7 @@ from application.rules.services.rule_engine import Rule_Engine
 @dataclass
 class ImportParameters:
     product: Product
+    branch: Optional[Branch]
     parser: Parser
     filename: str
     api_configuration_name: str
@@ -44,35 +53,46 @@ class ImportParameters:
     imported_observations: list[Observation]
 
 
+@dataclass
+class FileUploadParameters:
+    product: Product
+    branch: Optional[Branch]
+    parser: Parser
+    file: File
+    service: str
+    docker_image_name_tag: str
+    endpoint_url: str
+
+
 def file_upload_observations(
-    product: Product,
-    parser: Parser,
-    file: File,
-    service: str,
-    docker_image_name_tag: str,
-    endpoint_url: str,
+    file_upload_parameters: FileUploadParameters,
 ) -> Tuple[int, int, int]:
-    parser_instance = instanciate_parser(parser)
+    parser_instance = instanciate_parser(file_upload_parameters.parser)
 
     if not isinstance(parser_instance, BaseFileParser):
-        raise ParserError(f"{parser.name} isn't a file parser")
+        raise ParserError(f"{file_upload_parameters.parser.name} isn't a file parser")
 
-    format_valid, errors, data = parser_instance.check_format(file)
+    format_valid, errors, data = parser_instance.check_format(
+        file_upload_parameters.file
+    )
     if not format_valid:
         raise ValidationError("File format is not valid: " + " / ".join(errors))
 
     imported_observations = parser_instance.get_observations(data)
 
-    filename = file.name if file.name else ""
+    filename = (
+        file_upload_parameters.file.name if file_upload_parameters.file.name else ""
+    )
 
     import_parameters = ImportParameters(
-        product=product,
-        parser=parser,
+        product=file_upload_parameters.product,
+        branch=file_upload_parameters.branch,
+        parser=file_upload_parameters.parser,
         filename=filename,
         api_configuration_name="",
-        service=service,
-        docker_image_name_tag=docker_image_name_tag,
-        endpoint_url=endpoint_url,
+        service=file_upload_parameters.service,
+        docker_image_name_tag=file_upload_parameters.docker_image_name_tag,
+        endpoint_url=file_upload_parameters.endpoint_url,
         imported_observations=imported_observations,
     )
 
@@ -81,6 +101,7 @@ def file_upload_observations(
 
 def api_import_observations(
     api_configuration: Api_Configuration,
+    branch: Optional[Branch],
     service: str,
     docker_image_name_tag: str,
     endpoint_url: str,
@@ -100,6 +121,7 @@ def api_import_observations(
 
     import_parameters = ImportParameters(
         product=api_configuration.product,
+        branch=branch,
         parser=api_configuration.parser,
         filename="",
         api_configuration_name=api_configuration.name,
@@ -145,6 +167,7 @@ def process_data(import_parameters: ImportParameters) -> Tuple[int, int, int]:
     observations_before: dict[str, Observation] = {}
     for observation_before_for_dict in get_observations_for_vulnerability_check(
         import_parameters.product,
+        import_parameters.branch,
         import_parameters.parser,
         import_parameters.filename,
         import_parameters.api_configuration_name,
@@ -190,7 +213,10 @@ def process_data(import_parameters: ImportParameters) -> Tuple[int, int, int]:
 
     observations_resolved = resolve_unimported_observations(observations_before)
     check_security_gate(import_parameters.product)
-    push_observations_to_issue_tracker(import_parameters.product)
+    set_repository_default_branch(import_parameters.product)
+    push_observations_to_issue_tracker(
+        import_parameters.product, True, import_parameters.branch
+    )
 
     return observations_new, observations_updated, observations_resolved
 
@@ -199,6 +225,7 @@ def prepare_imported_observation(
     import_parameters: ImportParameters, imported_observation: Observation
 ) -> None:
     imported_observation.product = import_parameters.product
+    imported_observation.branch = import_parameters.branch
     imported_observation.parser = import_parameters.parser
     if not imported_observation.scanner:
         imported_observation.scanner = import_parameters.parser.name

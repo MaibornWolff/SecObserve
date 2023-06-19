@@ -52,6 +52,22 @@ class UserHasProductMemberPermission(BasePermission):
         )
 
 
+class UserHasBranchPermission(BasePermission):
+    def has_permission(self, request, view):
+        return check_post_permission(
+            request, Product, "product", Permissions.Branch_Create
+        )
+
+    def has_object_permission(self, request, view, obj):
+        return check_object_permission(
+            request,
+            obj,
+            Permissions.Branch_View,
+            Permissions.Branch_Edit,
+            Permissions.Branch_Delete,
+        )
+
+
 class UserHasObservationPermission(BasePermission):
     def has_permission(self, request, view):
         return check_post_permission(

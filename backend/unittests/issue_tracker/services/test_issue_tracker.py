@@ -28,7 +28,7 @@ class TestIssueTracker(BaseTestCase):
     )
     def test_push_observations_to_issue_tracker_not_active(self, mock):
         product = Product.objects.get(pk=1)
-        push_observations_to_issue_tracker(product)
+        push_observations_to_issue_tracker(product, False)
         mock.assert_not_called()
 
     @patch(
@@ -39,7 +39,9 @@ class TestIssueTracker(BaseTestCase):
         product.issue_tracker_active = True
         observation = Observation.objects.get(pk=1)
 
-        push_observations_to_issue_tracker(product)
+        push_observations_to_issue_tracker(
+            product, True, observation.product.repository_default_branch
+        )
 
         mock.assert_called_once_with(observation)
 

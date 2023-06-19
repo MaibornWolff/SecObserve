@@ -13,6 +13,14 @@ const ProductHeader = () => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const { data: product } = useGetOne<Product>("products", { id: id! });
     const { classes } = useStyles();
+
+    function get_open_observation_label(product: Product | undefined) {
+        if (!product || product.repository_default_branch == null) {
+            return "Open observations";
+        }
+        return "Open observations (" + product.repository_default_branch_name + ")";
+    }
+
     return (
         <RecordContextProvider value={product}>
             {" "}
@@ -28,10 +36,12 @@ const ProductHeader = () => {
                 <Labeled label="Product name">
                     <TextField source="name" className={classes.fontBigBold} />
                 </Labeled>
-                <Labeled>
-                    <SecurityGateTextField />
-                </Labeled>
-                <Labeled>
+                {product && product.security_gate_active != false && (
+                    <Labeled>
+                        <SecurityGateTextField />
+                    </Labeled>
+                )}
+                <Labeled label={get_open_observation_label(product)}>
                     <ObservationsCountField withLabel={true} />
                 </Labeled>
             </Paper>

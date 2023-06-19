@@ -1,3 +1,4 @@
+import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import UploadIcon from "@mui/icons-material/CloudUpload";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
@@ -8,6 +9,7 @@ import {
     EditButton,
     Labeled,
     NumberField,
+    ReferenceField,
     RichTextField,
     Show,
     SimpleShowLayout,
@@ -23,6 +25,7 @@ import CreateProductApiToken from "../../access_control/product_api_token/Produc
 import ProductApiTokenEmbeddedList from "../../access_control/product_api_token/ProductApiTokenEmbeddedList";
 import {
     PERMISSION_API_CONFIGURATION_CREATE,
+    PERMISSION_BRANCH_CREATE,
     PERMISSION_OBSERVATION_CREATE,
     PERMISSION_PRODUCT_API_TOKEN_CREATE,
     PERMISSION_PRODUCT_EDIT,
@@ -35,19 +38,22 @@ import observations from "../../core/observations";
 import products from "../../core/products";
 import ApiConfigurationCreate from "../../import_observations/api_configurations/ApiConfigurationCreate";
 import ApiConfigurationEmbeddedList from "../../import_observations/api_configurations/ApiConfigurationEmbeddedList";
+import ApiImportObservations from "../../import_observations/import/ApiImportObservations";
+import FileUploadObservations from "../../import_observations/import/FileUploadObservations";
 import MetricSeverities from "../../metrics/MetricSeverities";
 import MetricStatus from "../../metrics/MetricStatus";
 import general_rules from "../../rules/general_rules";
 import ProductRuleApply from "../../rules/product_rules/ProductRuleApply";
 import ProductRuleCreate from "../../rules/product_rules/ProductRuleCreate";
 import ProductRuleEmbeddedList from "../../rules/product_rules/ProductRuleEmbeddedList";
+import BranchCreate from "../branches/BranchCreate";
+import BranchEmbeddedList from "../branches/BranchEmbeddedList";
+import ShowDefaultBranchObservationsButton from "../branches/ShowDefaultBranchObservationsButton";
 import ObservationCreate from "../observations/ObservationCreate";
 import ObservationsEmbeddedList from "../observations/ObservationEmbeddedList";
 import ProductMemberCreate from "../product_members/ProductMemberCreate";
 import ProductMemberEmbeddedList from "../product_members/ProductMemberEmbeddedList";
-import ApiImportObservations from "./ApiImportObservations";
 import ExportMenu from "./ExportMenu";
-import FileUploadObservations from "./FileUploadObservations";
 import ProductHeader from "./ProductHeader";
 
 const ShowActions = () => {
@@ -86,12 +92,21 @@ const ProductShow = () => {
                                     </Typography>
                                     <BooleanField source="apply_general_rules" />
 
-                                    {product.repository_prefix && (
+                                    {(product.repository_prefix || product.repository_default_branch) && (
                                         <Typography variant="h6" sx={{ marginTop: "1em" }}>
                                             Source code repository
                                         </Typography>
                                     )}
                                     {product.repository_prefix && <TextField source="repository_prefix" />}
+                                    {product.repository_default_branch && (
+                                        <ReferenceField
+                                            source="repository_default_branch"
+                                            reference="branches"
+                                            link={false}
+                                        >
+                                            <TextField source="name" />
+                                        </ReferenceField>
+                                    )}
 
                                     {(product.notification_email_to || product.notification_ms_teams_webhook) && (
                                         <Typography variant="h6" sx={{ marginTop: "1em" }}>
@@ -171,22 +186,47 @@ const ProductShow = () => {
                                 </SimpleShowLayout>
                             </Tab>
                             <Tab label="Metrics" path="metrics" icon={<BarChartIcon />}>
+                                <SimpleShowLayout>
+                                    {product && product.repository_default_branch && (
+                                        <ReferenceField
+                                            source="repository_default_branch"
+                                            reference="branches"
+                                            label="Default branch"
+                                            link={false}
+                                        />
+                                    )}
+                                    <Stack
+                                        direction="row"
+                                        spacing={2}
+                                        sx={{
+                                            alignItems: "center",
+                                            marginTop: 2,
+                                        }}
+                                    >
+                                        <MetricSeverities product_id={product.id} />
+                                        <MetricStatus product_id={product.id} />
+                                    </Stack>{" "}
+                                </SimpleShowLayout>
+                            </Tab>
+                            <Tab label="Branches" path="branches" icon={<AccountTreeIcon />}>
+                                {product && product.permissions.includes(PERMISSION_BRANCH_CREATE) && (
+                                    <BranchCreate id={product.id} />
+                                )}
+                                <BranchEmbeddedList product={product} />
+                            </Tab>
+                            <Tab label="Observations" path="observations" icon={<observations.icon />}>
                                 <Stack
                                     direction="row"
                                     spacing={2}
                                     sx={{
                                         alignItems: "center",
-                                        marginTop: 2,
                                     }}
                                 >
-                                    <MetricSeverities product_id={product.id} />
-                                    <MetricStatus product_id={product.id} />
-                                </Stack>{" "}
-                            </Tab>
-                            <Tab label="Observations" path="observations" icon={<observations.icon />}>
-                                {product && product.permissions.includes(PERMISSION_OBSERVATION_CREATE) && (
-                                    <ObservationCreate id={product.id} />
-                                )}
+                                    {product && product.permissions.includes(PERMISSION_OBSERVATION_CREATE) && (
+                                        <ObservationCreate id={product.id} />
+                                    )}
+                                    <ShowDefaultBranchObservationsButton product={product} />
+                                </Stack>
                                 <ObservationsEmbeddedList product={product} />
                             </Tab>
                             <Tab label="Rules" path="rules" icon={<general_rules.icon />}>

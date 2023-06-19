@@ -26,12 +26,21 @@ const ApiImportObservations = (product: any) => {
     const observationUpdate = async (data: any) => {
         setLoading(true);
 
-        const formData = {
-            api_configuration: data.api_configuration,
-            service: data.service,
-            docker_image_name_tag: data.docker_image_name_tag,
-            endpoint_url: data.endpoint_url,
-        };
+        const formData = new FormData();
+        formData.append("api_configuration", data.api_configuration);
+        if (data.branch) {
+            formData.append("exsting_branch", data.branch);
+        }
+        formData.append("parser", data.parser);
+        if (data.service) {
+            formData.append("service", data.service);
+        }
+        if (data.docker_image_name_tag) {
+            formData.append("docker_image_name_tag", data.docker_image_name_tag);
+        }
+        if (data.endpoint_url) {
+            formData.append("endpoint_url", data.endpoint_url);
+        }
 
         httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/import/api_import_observations_by_id/", {
             method: "POST",
@@ -111,6 +120,15 @@ const ApiImportObservations = (product: any) => {
                                 label="API configuration"
                                 validate={requiredValidate}
                             />
+                        </ReferenceInput>
+                        <ReferenceInput
+                            source="branch"
+                            reference="branches"
+                            sort={{ field: "name", order: "ASC" }}
+                            filter={{ product: product.product.id }}
+                            alwaysOn
+                        >
+                            <AutocompleteInputWide optionText="name" />
                         </ReferenceInput>
                         <TextInputWide source="service" />
                         <TextInputWide source="docker_image_name_tag" label="Docker image name:tag" />
