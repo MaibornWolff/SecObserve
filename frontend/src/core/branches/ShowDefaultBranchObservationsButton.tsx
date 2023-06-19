@@ -23,16 +23,14 @@ const ShowDefaultBranchObservationsButton = ({ product }: ShowDefaultBranchObser
 
     return (
         <React.Fragment>
-            {product.repository_default_branch && (
-                <Button
-                    variant="contained"
-                    onClick={navigateToObservations}
-                    sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem" }}
-                    startIcon={<observations.icon />}
-                >
-                    Show default branch observations
-                </Button>
-            )}
+            <Button
+                variant="contained"
+                onClick={navigateToObservations}
+                sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem" }}
+                startIcon={<observations.icon />}
+            >
+                Show default branch observations
+            </Button>
         </React.Fragment>
     );
 };
