@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { Datagrid, DateField, List, ReferenceField, ReferenceInput, TextField, TextInput } from "react-admin";
+import { Datagrid, DateField, List, ReferenceInput, TextField, TextInput } from "react-admin";
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { AutocompleteInputMedium } from "../layout/themes";

@@ -16,6 +16,8 @@ def _check_notifications(notification_ids: list[int]) -> QuerySet[Notification]:
         raise ValidationError("Some notifications do not exist")
 
     user = get_current_user()
+    if not user:
+        raise ValidationError("User not found in request")
     if not user.is_superuser:
         for notification in notifications:
             if notification.user != user:

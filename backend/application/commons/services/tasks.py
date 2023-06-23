@@ -43,8 +43,8 @@ def handle_task_exception(e: Exception, user: User) -> None:
     Notification.objects.create(
         name="Error in background task",
         message=str(e),
-        function=data.get("function"),
-        arguments=data.get("arguments"),
+        function=str(data.get("function")),
+        arguments=str(data.get("arguments")),
         product=product,
         observation=observation,
         user=user,

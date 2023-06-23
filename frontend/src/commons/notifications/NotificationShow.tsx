@@ -6,11 +6,9 @@ import {
     SimpleShowLayout,
     TextField,
     TopToolbar,
-    useRecordContext,
 } from "react-admin";
 
 const ShowActions = () => {
-    const notification = useRecordContext();
     return (
         <TopToolbar>
             <DeleteWithConfirmButton />
