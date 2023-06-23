@@ -1,7 +1,6 @@
 from rest_framework.routers import SimpleRouter
 
 from application.access_control.api.views import ProductApiTokenViewset, UserViewSet
-from application.commons.api.views import NotificationViewSet
 from application.core.api.views import (
     BranchViewSet,
     EvidenceViewSet,
@@ -28,7 +27,6 @@ router.register("general_rules", GeneralRuleViewSet)
 router.register("api_configurations", ApiConfigurationViewSet)
 router.register("product_rules", ProductRuleViewSet)
 router.register("evidences", EvidenceViewSet)
-router.register("notifications", NotificationViewSet)
 
 app_name = "api"
 urlpatterns = router.urls

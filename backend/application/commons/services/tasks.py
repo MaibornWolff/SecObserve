@@ -4,7 +4,6 @@ import traceback
 from typing import Any
 
 from application.access_control.models import User
-from application.commons.models import Notification
 from application.commons.services.log_message import format_log_message
 
 logger = logging.getLogger("secobserve.tasks")
@@ -34,18 +33,3 @@ def handle_task_exception(e: Exception, user: User) -> None:
         )
     )
     logger.error(traceback.format_exc())
-
-    observation = data.get("arguments", {}).get("observation")
-    product = None
-    if observation:
-        product = observation.product
-
-    Notification.objects.create(
-        name="Error in background task",
-        message=str(e),
-        function=str(data.get("function")),
-        arguments=str(data.get("arguments")),
-        product=product,
-        observation=observation,
-        user=user,
-    )

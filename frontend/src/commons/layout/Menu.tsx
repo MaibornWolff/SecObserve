@@ -6,7 +6,6 @@ import observations from "../../core/observations";
 import parsers from "../../core/parsers";
 import products from "../../core/products";
 import general_rules from "../../rules/general_rules";
-import notifications from "../notifications";
 
 const Menu = ({ dense = false }: MenuProps) => {
     const translate = useTranslate();
@@ -59,13 +58,6 @@ const Menu = ({ dense = false }: MenuProps) => {
                     state={{ _scrollToTop: true }}
                     primaryText="General Rules"
                     leftIcon={<general_rules.icon />}
-                    dense={dense}
-                />
-                <MenuItemLink
-                    to="/notifications"
-                    state={{ _scrollToTop: true }}
-                    primaryText="Notifications"
-                    leftIcon={<notifications.icon />}
                     dense={dense}
                 />
             </Box>
