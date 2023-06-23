@@ -284,6 +284,10 @@ class TestAuthentication(BaseTestCase):
             ["get"], "/api/products/1/export_observations_excel/"
         )
 
+        self._check_authentication(["get"], "/api/notifications/")
+        self._check_authentication(["delete", "get"], "/api/notifications/1/")
+        self._check_authentication(["delete"], "/api/notifications/bulk_delete/")
+
     def test_authentication_users(self):
         self._check_authentication(["get"], "/api/users/me/")
         self._check_authentication(["get"], "/api/users/")

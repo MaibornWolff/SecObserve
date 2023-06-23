@@ -1,7 +1,9 @@
+from django.db.models import Q
 from django.db.models.query import QuerySet
 
 from application.commons.models import Notification
 from application.commons.services.global_request import get_current_user
+from application.core.queries.product import get_products
 
 
 def get_notifications() -> QuerySet[Notification]:
@@ -13,4 +15,8 @@ def get_notifications() -> QuerySet[Notification]:
     if user.is_superuser:
         return Notification.objects.all()
 
-    return Notification.objects.filter(user=user)
+    products = get_products()
+
+    return Notification.objects.filter(
+        (Q(product=None) | Q(product__in=products)) & Q(user=user)
+    )

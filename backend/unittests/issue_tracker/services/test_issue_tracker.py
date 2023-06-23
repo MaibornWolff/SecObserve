@@ -37,7 +37,9 @@ class TestIssueTracker(BaseTestCase):
         "application.issue_tracker.services.issue_tracker.push_observation_to_issue_tracker"
     )
     @patch("application.issue_tracker.services.issue_tracker.get_current_user")
-    def test_push_observations_to_issue_tracker(self, mock_current_user, mock_issue_tracker):
+    def test_push_observations_to_issue_tracker(
+        self, mock_current_user, mock_issue_tracker
+    ):
         product = Product.objects.get(pk=1)
         product.issue_tracker_active = True
         observation = Observation.objects.get(pk=1)
@@ -48,7 +50,7 @@ class TestIssueTracker(BaseTestCase):
             product, True, observation.product.repository_default_branch
         )
 
-        mock_current_user.assert_called_once() 
+        mock_current_user.assert_called_once()
         mock_issue_tracker.assert_called_once_with(observation, user)
 
     @patch("application.issue_tracker.services.issue_tracker.issue_tracker_factory")
