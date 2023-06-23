@@ -2,6 +2,7 @@ from unittest.mock import call, patch
 
 from django.core.management import call_command
 
+from application.access_control.models import User
 from application.core.models import Observation, Product
 from application.issue_tracker.issue_trackers.base_issue_tracker import Issue
 from application.issue_tracker.issue_trackers.github_issue_tracker import (
@@ -22,6 +23,7 @@ from unittests.base_test_case import BaseTestCase
 class TestIssueTracker(BaseTestCase):
     def setUp(self):
         call_command("loaddata", "unittests/fixtures/unittests_fixtures.json")
+        super().setUp()
 
     @patch(
         "application.issue_tracker.services.issue_tracker.push_observation_to_issue_tracker"
@@ -34,21 +36,25 @@ class TestIssueTracker(BaseTestCase):
     @patch(
         "application.issue_tracker.services.issue_tracker.push_observation_to_issue_tracker"
     )
-    def test_push_observations_to_issue_tracker(self, mock):
+    @patch("application.issue_tracker.services.issue_tracker.get_current_user")
+    def test_push_observations_to_issue_tracker(self, mock_current_user, mock_issue_tracker):
         product = Product.objects.get(pk=1)
         product.issue_tracker_active = True
         observation = Observation.objects.get(pk=1)
+        user = User.objects.get(pk=1)
+        mock_current_user.return_value = user
 
         push_observations_to_issue_tracker(
             product, True, observation.product.repository_default_branch
         )
 
-        mock.assert_called_once_with(observation)
+        mock_current_user.assert_called_once() 
+        mock_issue_tracker.assert_called_once_with(observation, user)
 
     @patch("application.issue_tracker.services.issue_tracker.issue_tracker_factory")
     def test_push_observation_to_issue_tracker_not_active(self, mock):
         observation = Observation.objects.get(pk=1)
-        push_observation_to_issue_tracker(observation)
+        push_observation_to_issue_tracker(observation, None)
         mock.assert_not_called()
 
     @patch("application.issue_tracker.services.issue_tracker.issue_tracker_factory")
@@ -59,7 +65,7 @@ class TestIssueTracker(BaseTestCase):
         observation.product.issue_tracker_active = True
         observation.current_status = Observation.STATUS_OPEN
 
-        push_observation_to_issue_tracker(observation)
+        push_observation_to_issue_tracker(observation, None)
 
         expected_calls = [call(observation.product), call().create_issue(observation)]
         mock.assert_has_calls(expected_calls, any_order=False)
@@ -76,7 +82,7 @@ class TestIssueTracker(BaseTestCase):
         observation.current_status = Observation.STATUS_OPEN
         observation.issue_tracker_issue_id = "123"
 
-        push_observation_to_issue_tracker(observation)
+        push_observation_to_issue_tracker(observation, None)
 
         expected_calls = [
             call(observation.product),
@@ -99,7 +105,7 @@ class TestIssueTracker(BaseTestCase):
         observation.current_status = Observation.STATUS_OPEN
         observation.issue_tracker_issue_id = "123"
 
-        push_observation_to_issue_tracker(observation)
+        push_observation_to_issue_tracker(observation, None)
 
         expected_calls = [
             call(observation.product),
@@ -120,7 +126,7 @@ class TestIssueTracker(BaseTestCase):
         observation.product.issue_tracker_active = True
         observation.current_status = Observation.STATUS_NOT_AFFECTED
 
-        push_observation_to_issue_tracker(observation)
+        push_observation_to_issue_tracker(observation, None)
 
         expected_calls = [call(observation.product)]
         observation_mock.assert_not_called()
@@ -139,7 +145,7 @@ class TestIssueTracker(BaseTestCase):
         observation.current_status = Observation.STATUS_FALSE_POSITIVE
         observation.issue_tracker_issue_id = "123"
 
-        push_observation_to_issue_tracker(observation)
+        push_observation_to_issue_tracker(observation, None)
 
         expected_calls = [
             call(observation.product),
@@ -152,20 +158,20 @@ class TestIssueTracker(BaseTestCase):
     @patch("application.issue_tracker.services.issue_tracker.issue_tracker_factory")
     def test_push_deleted_observation_not_active_no_id(self, mock):
         product = Product.objects.get(pk=1)
-        push_deleted_observation_to_issue_tracker(product, "")
+        push_deleted_observation_to_issue_tracker(product, "", None)
         mock.assert_not_called()
 
     @patch("application.issue_tracker.services.issue_tracker.issue_tracker_factory")
     def test_push_deleted_observation_active_no_id(self, mock):
         product = Product.objects.get(pk=1)
         product.issue_tracker_active = True
-        push_deleted_observation_to_issue_tracker(product, "")
+        push_deleted_observation_to_issue_tracker(product, "", None)
         mock.assert_not_called()
 
     @patch("application.issue_tracker.services.issue_tracker.issue_tracker_factory")
     def test_push_deleted_observation_not_active_with_id(self, mock):
         product = Product.objects.get(pk=1)
-        push_deleted_observation_to_issue_tracker(product, "123")
+        push_deleted_observation_to_issue_tracker(product, "123", None)
         mock.assert_not_called()
 
     @patch("application.issue_tracker.services.issue_tracker.issue_tracker_factory")
@@ -173,7 +179,7 @@ class TestIssueTracker(BaseTestCase):
         mock.return_value.get_issue.return_value = None
         product = Product.objects.get(pk=1)
         product.issue_tracker_active = True
-        push_deleted_observation_to_issue_tracker(product, "123")
+        push_deleted_observation_to_issue_tracker(product, "123", None)
         expected_calls = [call(product), call().get_issue(product, "123")]
         mock.assert_has_calls(expected_calls, any_order=False)
 
@@ -183,7 +189,7 @@ class TestIssueTracker(BaseTestCase):
         mock.return_value.get_issue.return_value = issue
         product = Product.objects.get(pk=1)
         product.issue_tracker_active = True
-        push_deleted_observation_to_issue_tracker(product, "123")
+        push_deleted_observation_to_issue_tracker(product, "123", None)
         expected_calls = [
             call(product),
             call().get_issue(product, "123"),

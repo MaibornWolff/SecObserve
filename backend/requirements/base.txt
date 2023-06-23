@@ -1,11 +1,5 @@
 argon2-cffi==21.3.0  # https://github.com/hynek/argon2_cffi
 whitenoise==6.5.0  # https://github.com/evansd/whitenoise
-# --- Celery/Redis is currently unused ---
-# redis==4.3.4  # https://github.com/redis/redis-py
-# hiredis==2.0.0  # https://github.com/redis/hiredis-py
-# celery==5.2.7  # pyup: < 6.0  # https://github.com/celery/celery
-# django-celery-beat==2.3.0  # https://github.com/celery/django-celery-beat
-# flower==1.2.0  # https://github.com/mher/flower
 
 # Django
 # ------------------------------------------------------------------------------
@@ -14,8 +8,6 @@ django-environ==0.10.0  # https://github.com/joke2k/django-environ
 django-model-utils==4.3.1  # https://github.com/jazzband/django-model-utils
 django-crispy-forms==2.0  # https://github.com/django-crispy-forms/django-crispy-forms
 crispy-bootstrap5==0.7  # https://github.com/django-crispy-forms/crispy-bootstrap5
-# --- Celery/Redis is currently unused ---
-# django-redis==5.2.0  # https://github.com/jazzband/django-redis
 django-filter==23.2  # https://github.com/carltongibson/django-filter 
 django-csp==3.7  # https://github.com/mozilla/django-csp
 django-constance==2.9.1  # https://github.com/jazzband/django-constance
@@ -35,7 +27,6 @@ drf-spectacular-sidecar==2023.6.1  # https://github.com/tfranzel/drf-spectacular
 # Token authentication
 # ------------------------------------------------------------------------------
 PyJWT==2.7.0  # https://github.com/jpadilla/pyjwt
-argon2-cffi==21.3.0
 
 # HTTP requests
 # ------------------------------------------------------------------------------
@@ -58,3 +49,7 @@ openpyxl==3.1.2
 # Package URL
 # ------------------------------------------------------------------------------
 packageurl-python==0.11.1  # https://github.com/package-url/packageurl-python
+
+# Task queue
+# ------------------------------------------------------------------------------
+huey==2.4.5  # https://github.com/coleifer/huey

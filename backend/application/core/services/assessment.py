@@ -1,3 +1,4 @@
+from application.commons.services.global_request import get_current_user
 from application.core.models import Observation
 from application.core.services.observation import (
     get_current_severity,
@@ -44,7 +45,7 @@ def save_assessment(
         create_observation_log(observation, log_severity, log_status, comment)
 
     check_security_gate(observation.product)
-    push_observation_to_issue_tracker(observation)
+    push_observation_to_issue_tracker(observation, get_current_user())
 
 
 def remove_assessment(observation: Observation, comment: str) -> None:
@@ -57,4 +58,4 @@ def remove_assessment(observation: Observation, comment: str) -> None:
         create_observation_log(observation, "", "", comment)
 
         check_security_gate(observation.product)
-        push_observation_to_issue_tracker(observation)
+        push_observation_to_issue_tracker(observation, get_current_user())

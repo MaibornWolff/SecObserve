@@ -20,5 +20,7 @@ export FIELD_ENCRYPTION_KEY=DtlkqVb3wlaVdJK_BU-3mB4wwuuf8xx8YNInajiJ7GU=
 # --- Azure AD ---
 export AAD_CLIENT_ID=dummy
 export AAD_TENANT_ID=dummy
+# --- Huey ---
+export HUEY_FILENAME=./huey.db
 
 mypy application

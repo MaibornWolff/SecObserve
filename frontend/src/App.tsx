@@ -6,6 +6,7 @@ import { Login } from "./access_control";
 import authProvider from "./access_control/authProvider";
 import englishMessages from "./commons/i18n/en";
 import { Layout } from "./commons/layout";
+import notifications from "./commons/notifications";
 import drfProvider from "./commons/ra-data-django-rest-framework";
 import Settings from "./commons/settings/Settings";
 import { getTheme } from "./commons/settings/functions";
@@ -67,9 +68,11 @@ const App = () => {
                 // nosemgrep because the props are well defined in the import
                 recordRepresentation={(record) => `${trim_string(record.name)}`}
             />
+            <Resource name="branches" recordRepresentation={(record) => `${trim_string(record.name)}`} />
+            <Resource name="users" recordRepresentation={(record) => `${trim_string(record.full_name)}`} />
             <Resource
-                name="branches"
-                // {...evidences} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                name="notifications"
+                {...notifications} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
                 // nosemgrep because the props are well defined in the import
                 recordRepresentation={(record) => `${trim_string(record.name)}`}
             />

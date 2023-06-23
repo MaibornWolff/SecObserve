@@ -1,8 +1,23 @@
+from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import action
+from rest_framework.exceptions import NotFound, ValidationError
+from rest_framework.filters import SearchFilter
+from rest_framework.mixins import DestroyModelMixin, ListModelMixin, RetrieveModelMixin
 from rest_framework.response import Response
+from rest_framework.status import HTTP_204_NO_CONTENT
 from rest_framework.views import APIView
+from rest_framework.viewsets import GenericViewSet
 
-from application.commons.api.serializers import VersionSerializer
+from application.commons.api.filters import NotificationFilter
+from application.commons.api.serializers import (
+    NotificationBulkSerializer,
+    NotificationSerializer,
+    VersionSerializer,
+)
+from application.commons.models import Notification
+from application.commons.queries.notification import get_notifications
+from application.commons.services.notifications import bulk_delete
 
 
 class VersionView(APIView):
@@ -27,3 +42,31 @@ class HealthView(APIView):
         response["Cache-Control"] = "no-cache, no-store, must-revalidate"
 
         return response
+
+
+class NotificationViewSet(
+    GenericViewSet, DestroyModelMixin, ListModelMixin, RetrieveModelMixin
+):
+    serializer_class = NotificationSerializer
+    filterset_class = NotificationFilter
+    queryset = Notification.objects.all()
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ["name"]
+
+    def get_queryset(self):
+        return get_notifications()
+
+    @extend_schema(
+        methods=["DELETE"],
+        request=NotificationBulkSerializer,
+        responses={HTTP_204_NO_CONTENT: None},
+    )
+    @action(detail=False, methods=["delete"])
+    def bulk_delete(self, request):
+        request_serializer = NotificationBulkSerializer(data=request.data)
+        if not request_serializer.is_valid():
+            raise ValidationError(request_serializer.errors)
+
+        bulk_delete(request_serializer.validated_data.get("notifications"))
+
+        return Response(status=HTTP_204_NO_CONTENT)
