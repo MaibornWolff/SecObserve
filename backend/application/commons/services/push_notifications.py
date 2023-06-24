@@ -8,6 +8,7 @@ from constance import config
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
+from application.access_control.models import User
 from application.access_control.queries.user import get_user_by_email
 from application.commons.services.functions import get_base_url_frontend, get_classname
 from application.commons.services.log_message import format_log_message
@@ -78,6 +79,45 @@ def send_exception_notification(exception: Exception) -> None:
             )
 
 
+def send_task_notification(
+    function: Optional[str],
+    arguments: Optional[str],
+    user: Optional[User],
+    exception: Exception,
+) -> None:
+    if _ratelimit_exception(exception, function, arguments):
+        email_to_adresses = _get_email_to_adresses(config.EXCEPTION_EMAIL_TO)
+        if email_to_adresses and config.EMAIL_FROM:
+            for notification_email_to in email_to_adresses:
+                first_name = _get_first_name(notification_email_to)
+                _send_email_notification(
+                    notification_email_to,
+                    f"Exception {get_classname(exception)} has occured in background task",
+                    "email_task_exception.tpl",
+                    function=function,
+                    arguments=arguments,
+                    user=user,
+                    exception_class=get_classname(exception),
+                    exception_message=str(exception),
+                    exception_trace=_get_stack_trace(exception, False),
+                    date_time=datetime.now(),
+                    first_name=first_name,
+                )
+
+        if config.EXCEPTION_MS_TEAMS_WEBHOOK:
+            _send_msteams_notification(
+                config.EXCEPTION_MS_TEAMS_WEBHOOK,
+                "msteams_task_exception.tpl",
+                function=function,
+                arguments=arguments,
+                user=user,
+                exception_class=get_classname(exception),
+                exception_message=str(exception),
+                exception_trace=_get_stack_trace(exception, True),
+                date_time=datetime.now(),
+            )
+
+
 def _send_email_notification(
     notification_email_to: str, subject: str, template: str, **kwargs
 ) -> None:
@@ -133,9 +173,20 @@ def _create_notification_message(template: str, **kwargs) -> Optional[str]:
         return None
 
 
-def _ratelimit_exception(exception: Exception) -> bool:
-    key = get_classname(exception) + "/" + str(exception)
+def _ratelimit_exception(
+    exception: Exception, function: str = None, arguments: str = None
+) -> bool:
+    key = (
+        get_classname(exception)
+        + "/"
+        + str(exception)
+        + "/"
+        + str(function)
+        + "/"
+        + str(arguments)
+    )
     now = datetime.now()
+
     if key in LAST_EXCEPTIONS:
         last_datetime = LAST_EXCEPTIONS[key]
         difference: timedelta = now - last_datetime
