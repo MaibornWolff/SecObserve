@@ -71,7 +71,8 @@ RUN addgroup -g 1001 -S ${group} \
     && chmod ugo+w ${APP_HOME}/application/staticfiles \
     # create directory for huey task queue
     && mkdir /var/lib/huey \
-    && chown -R ${user}:${group} /var/lib/huey
+    && chown -R ${user}:${group} /var/lib/huey \
+    && chmod ugo+rw /var/lib/huey
 
 HEALTHCHECK --interval=30s --timeout=30s --start-period=30s --retries=3 \
     CMD wget -nv -t1 --spider 'http://localhost:5000/api/status/health/' || exit 1
