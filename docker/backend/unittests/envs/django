@@ -18,3 +18,6 @@ FIELD_ENCRYPTION_KEY="DtlkqVb3wlaVdJK_BU-3mB4wwuuf8xx8YNInajiJ7GU="
 # ------------------------------------------------------------------------------
 AAD_CLIENT_ID=dummy
 AAD_TENANT_ID=dummy
+
+# --- Django ---
+DJANGO_DEBUG=True
