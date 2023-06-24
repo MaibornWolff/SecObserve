@@ -345,7 +345,7 @@ LOGGING = {
         },
         "huey": {
             "handlers": ["console"],
-            "level": "WARNING",
+            "level": "INFO",
         },
     },
 }
