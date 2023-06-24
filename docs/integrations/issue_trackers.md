@@ -1,4 +1,4 @@
-# Issue trackers (experimental)
+# Issue trackers
 
 Developers and product owners will typically document the development tasks in an issue tracker and move these issues in a Scrum or Kanban board. Therefore, even though the assessment of observations is done in SecObserve, it may be useful to transfer them to an issue tracker as well. SecObserve currently supports automatic creation of issues in **GitHub** and **GitLab**. 
 
@@ -26,9 +26,9 @@ The parameters for the issue tracker integration are set in the product:
 | **Project id** | The path of the repository in its URL in **GitHub** or **GitLab**, e.g. `MaibornWolff/SecObserve`. |
 | **Labels** | A comma separated list of labels, that will be set for the issue. Additional labels can be set in the issue tracker, they will be preserved when the issue is updated. |
 
-!!! warning "This feature is experimental"
+Issues are created or updated by an asynchronous background process after the import or the assessment of an observation has finished. If problems should occur during the transfer, a notification is send, see [Notifications](./notifications.md).
 
-    The pushing of issues is done synchronously after importing results from a vulnerability scanner or after an assessment. This might take a considerable amount of time or can trigger rate limits when there are a lot of observations. If the push produces an error from the issue tracker, the user will see a server error message in SecObserve, even though the observation has been created or updated.
+!!! tip
 
     Issues shouldn't be created when observations are imported the first time for a vulnerability scannner. First the number of observations should be minimized with settings of the vulnerability scanner of rules within SecObserve, before pushing issues to an issue tracker.
 

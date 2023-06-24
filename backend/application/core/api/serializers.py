@@ -414,7 +414,7 @@ class ObservationUpdateSerializer(ModelSerializer):
             )
 
         check_security_gate(observation.product)
-        push_observation_to_issue_tracker(observation)
+        push_observation_to_issue_tracker(observation, get_current_user())
 
         return observation
 
@@ -466,7 +466,7 @@ class ObservationCreateSerializer(ModelSerializer):
         )
 
         check_security_gate(observation.product)
-        push_observation_to_issue_tracker(observation)
+        push_observation_to_issue_tracker(observation, get_current_user())
 
         return observation
 

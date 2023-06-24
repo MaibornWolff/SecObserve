@@ -35,9 +35,10 @@ WORKDIR ${APP_HOME}
 ARG user=django
 ARG group=django
 
-# All absolute dir copies ignore workdir instruction. All relative dir copies are wrt to the workdir instruction
-# copy python dependency wheels from python-build-stage
+# use wheels to install python dependencies
 COPY --from=python-build-stage /usr/src/app/wheels  /wheels/
+RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
+    && rm -rf /wheels/
 
 # copy startup scripts
 COPY ./docker/backend/unittests/django/entrypoint /entrypoint
@@ -48,10 +49,6 @@ COPY ./backend ${APP_HOME}
 # use prod settings
 COPY ./backend/config/settings/unittests.py ${APP_HOME}/config/settings/dist.py
 
-# use wheels to install python dependencies
-RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
-    && rm -rf /wheels/
-
 RUN addgroup -g 1001 -S ${group} \
     && adduser -u 1001 -S ${user} -G ${group} \
     # make startup scripts executable
@@ -61,7 +58,10 @@ RUN addgroup -g 1001 -S ${group} \
     && sed -i 's/version_unkown/'"${VERSION}"'/g' ${APP_HOME}/application/commons/api/views.py \
     # make staticfiles writeable 
     && mkdir ${APP_HOME}/application/staticfiles \
-    && chown ${user}.${group} ${APP_HOME}
+    && chown ${user}.${group} ${APP_HOME} \
+    # create directory for huey task queue
+    && mkdir /var/lib/huey \
+    && chown -R ${user}:${group} /var/lib/huey
 
 USER ${user}
 

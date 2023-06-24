@@ -5,12 +5,6 @@ set -o errexit
 set -o nounset
 
 
-
-# N.B. If only .env files supported variable expansion...
-# --- Celery/Redis is currently unused ---
-# export CELERY_BROKER_URL="${REDIS_URL}"
-
-
 if [ -z "${DATABASE_USER}" ]; then
     base_postgres_image_default_user='postgres'
     export DATABASE_USER="${base_postgres_image_default_user}"

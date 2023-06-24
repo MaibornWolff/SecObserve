@@ -9,3 +9,4 @@ frontend/cypress/videos
 frontend/public/runtime-env.js
 frontend/.env
 backend/dummy
+backend/huey.db

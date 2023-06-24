@@ -16,6 +16,7 @@ from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from application.access_control.services.authorization import user_has_permission_or_403
 from application.access_control.services.roles_permissions import Permissions
+from application.commons.services.global_request import get_current_user
 from application.core.api.filters import (
     BranchFilter,
     ObservationFilter,
@@ -323,7 +324,7 @@ class ObservationViewSet(ModelViewSet):
         issue_id = instance.issue_tracker_issue_id
         super().perform_destroy(instance)
         check_security_gate(product)
-        push_deleted_observation_to_issue_tracker(product, issue_id)
+        push_deleted_observation_to_issue_tracker(product, issue_id, get_current_user())
 
     @extend_schema(
         methods=["PATCH"],
