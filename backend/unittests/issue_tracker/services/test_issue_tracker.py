@@ -25,6 +25,8 @@ class TestIssueTracker(BaseTestCase):
         call_command("loaddata", "unittests/fixtures/unittests_fixtures.json")
         super().setUp()
 
+    # --- push_observations_to_issue_tracker ---
+
     @patch(
         "application.issue_tracker.services.issue_tracker.push_observation_to_issue_tracker"
     )
@@ -52,6 +54,8 @@ class TestIssueTracker(BaseTestCase):
 
         mock_current_user.assert_called_once()
         mock_issue_tracker.assert_called_once_with(observation, user)
+
+    # --- push_observation_to_issue_tracker ---
 
     @patch("application.issue_tracker.services.issue_tracker.issue_tracker_factory")
     def test_push_observation_to_issue_tracker_not_active(self, mock):
@@ -158,6 +162,22 @@ class TestIssueTracker(BaseTestCase):
         factory_mock.assert_has_calls(expected_calls, any_order=False)
 
     @patch("application.issue_tracker.services.issue_tracker.issue_tracker_factory")
+    @patch("application.issue_tracker.services.issue_tracker.handle_task_exception")
+    def test_push_observation_to_issue_tracker_exception(
+        self, exception_mock, factory_mock
+    ):
+        exception = Exception("error")
+        factory_mock.side_effect = exception
+
+        observation = Observation.objects.get(pk=1)
+        observation.product.issue_tracker_active = True
+        push_observation_to_issue_tracker(observation, self.user_internal)
+
+        exception_mock.assert_called_with(exception, self.user_internal)
+
+    # --- push_deleted_observation_to_issue_tracker ---
+
+    @patch("application.issue_tracker.services.issue_tracker.issue_tracker_factory")
     def test_push_deleted_observation_not_active_no_id(self, mock):
         product = Product.objects.get(pk=1)
         push_deleted_observation_to_issue_tracker(product, "", None)
@@ -198,6 +218,20 @@ class TestIssueTracker(BaseTestCase):
             call().close_issue_for_deleted_observation(product, issue),
         ]
         mock.assert_has_calls(expected_calls, any_order=False)
+
+    @patch("application.issue_tracker.services.issue_tracker.issue_tracker_factory")
+    @patch("application.issue_tracker.services.issue_tracker.handle_task_exception")
+    def test_push_deleted_observation_exception(self, exception_mock, factory_mock):
+        exception = Exception("error")
+        factory_mock.side_effect = exception
+
+        product = Product.objects.get(pk=1)
+        product.issue_tracker_active = True
+        push_deleted_observation_to_issue_tracker(product, "123", self.user_internal)
+
+        exception_mock.assert_called_with(exception, self.user_internal)
+
+    # --- issue_tracker_factory ---
 
     def test_issue_tracker_factory_GitHub(self):
         product = Product.objects.get(pk=1)

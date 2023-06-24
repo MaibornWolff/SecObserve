@@ -16,6 +16,7 @@ from application.commons.services.push_notifications import (
     get_base_url_frontend,
     send_exception_notification,
     send_product_security_gate_notification,
+    send_task_exception_notification,
 )
 from unittests.base_test_case import BaseTestCase
 
@@ -272,6 +273,115 @@ class TestPushNotifications(BaseTestCase):
         ]
         mock_get_first_name.assert_has_calls(expected_calls_get_first_name)
 
+    # --- send_task_exception_notification ---
+
+    @override_config(EXCEPTION_MS_TEAMS_WEBHOOK="")
+    @override_config(EXCEPTION_EMAIL_TO="")
+    @patch("application.commons.services.push_notifications._ratelimit_exception")
+    @patch("application.commons.services.push_notifications._send_msteams_notification")
+    @patch("application.commons.services.push_notifications._send_email_notification")
+    def test_send_task_exception_notification_no_webhook_no_email(
+        self, mock_send_email, mock_send_teams, mock_ratelimit
+    ):
+        mock_ratelimit.return_value = True
+        send_task_exception_notification(
+            function="test_function",
+            arguments="test_arguments",
+            user=self.user_internal,
+            exception=Exception("test_exception"),
+        )
+        mock_send_teams.assert_not_called()
+        mock_send_email.assert_not_called()
+
+    @override_config(EXCEPTION_MS_TEAMS_WEBHOOK="https://msteams.microsoft.com")
+    @override_config(EXCEPTION_EMAIL_TO="test1@example.com, test2@example.com")
+    @override_config(EMAIL_FROM="secobserve@example.com")
+    @patch("application.commons.services.push_notifications._ratelimit_exception")
+    @patch("application.commons.services.push_notifications._send_msteams_notification")
+    @patch("application.commons.services.push_notifications._send_email_notification")
+    def test_send_exception_notification_no_ratelimit(
+        self, mock_send_email, mock_send_teams, mock_ratelimit
+    ):
+        mock_ratelimit.return_value = False
+        exception = Exception("test_exception")
+        send_task_exception_notification(
+            function="test_function",
+            arguments="test_arguments",
+            user=self.user_internal,
+            exception=exception,
+        )
+        mock_ratelimit.assert_called_with(exception, "test_function", "test_arguments")
+        mock_send_teams.assert_not_called()
+        mock_send_email.assert_not_called()
+
+    @override_config(EXCEPTION_MS_TEAMS_WEBHOOK="https://msteams.microsoft.com")
+    @override_config(EXCEPTION_EMAIL_TO="test1@example.com, test2@example.com")
+    @override_config(EMAIL_FROM="secobserve@example.com")
+    @patch("application.commons.services.push_notifications._ratelimit_exception")
+    @patch("application.commons.services.push_notifications._send_msteams_notification")
+    @patch("application.commons.services.push_notifications._send_email_notification")
+    @patch("application.commons.services.push_notifications._get_first_name")
+    def test_send_exception_notification_success(
+        self, mock_get_first_name, mock_send_email, mock_send_teams, mock_ratelimit
+    ):
+        mock_ratelimit.return_value = True
+        mock_get_first_name.return_value = "first_name"
+
+        exception = Exception("test_exception")
+        send_task_exception_notification(
+            function="test_function",
+            arguments="test_arguments",
+            user=self.user_internal,
+            exception=exception,
+        )
+
+        mock_ratelimit.assert_called_with(exception, "test_function", "test_arguments")
+        expected_calls_email = [
+            call(
+                "test1@example.com",
+                "Exception builtins.Exception has occured in background task",
+                "email_task_exception.tpl",
+                function="test_function",
+                arguments="test_arguments",
+                user=self.user_internal,
+                exception_class="builtins.Exception",
+                exception_message="test_exception",
+                exception_trace="",
+                date_time=ANY,
+                first_name="first_name",
+            ),
+            call(
+                "test2@example.com",
+                "Exception builtins.Exception has occured in background task",
+                "email_task_exception.tpl",
+                function="test_function",
+                arguments="test_arguments",
+                user=self.user_internal,
+                exception_class="builtins.Exception",
+                exception_message="test_exception",
+                exception_trace="",
+                date_time=ANY,
+                first_name="first_name",
+            ),
+        ]
+        mock_send_email.assert_has_calls(expected_calls_email)
+        mock_send_teams.assert_called_with(
+            "https://msteams.microsoft.com",
+            "msteams_task_exception.tpl",
+            function="test_function",
+            arguments="test_arguments",
+            user=self.user_internal,
+            exception_class="builtins.Exception",
+            exception_message="test_exception",
+            exception_trace="",
+            date_time=ANY,
+        )
+        expected_calls_get_first_name = [
+            call("test1@example.com"),
+            call("test2@example.com"),
+        ]
+        mock_get_first_name.assert_has_calls(expected_calls_get_first_name)
+
     # --- _send_email_notification ---
 
     @patch(
@@ -513,8 +623,10 @@ class TestPushNotifications(BaseTestCase):
 
         self.assertTrue(_ratelimit_exception(exception))
         self.assertEqual(1, len(LAST_EXCEPTIONS.keys()))
+
         difference: timedelta = (
-            datetime.now() - LAST_EXCEPTIONS["builtins.Exception/test_exception"]
+            datetime.now()
+            - LAST_EXCEPTIONS["builtins.Exception/test_exception/None/None"]
         )
         self.assertGreater(difference.microseconds, 0)
         self.assertLess(difference.microseconds, 999)
@@ -523,22 +635,26 @@ class TestPushNotifications(BaseTestCase):
     def test_ratelimit_exception_true(self):
         LAST_EXCEPTIONS.clear()
         LAST_EXCEPTIONS[
-            "builtins.Exception/test_exception"
+            "builtins.Exception/test_exception/test_function/test_arguments"
         ] = datetime.now() - timedelta(seconds=11)
         exception = Exception("test_exception")
 
-        self.assertTrue(_ratelimit_exception(exception))
+        self.assertTrue(
+            _ratelimit_exception(exception, "test_function", "test_arguments")
+        )
         self.assertEqual(1, len(LAST_EXCEPTIONS.keys()))
 
     @override_config(EXCEPTION_RATELIMIT=10)
     def test_ratelimit_exception_false(self):
         LAST_EXCEPTIONS.clear()
         LAST_EXCEPTIONS[
-            "builtins.Exception/test_exception"
+            "builtins.Exception/test_exception/test_function/test_arguments"
         ] = datetime.now() - timedelta(seconds=9)
         exception = Exception("test_exception")
 
-        self.assertFalse(_ratelimit_exception(exception))
+        self.assertFalse(
+            _ratelimit_exception(exception, "test_function", "test_arguments")
+        )
         self.assertEqual(1, len(LAST_EXCEPTIONS.keys()))
 
     ## --- _get_user_first_name ---

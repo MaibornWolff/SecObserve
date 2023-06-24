@@ -79,7 +79,7 @@ def send_exception_notification(exception: Exception) -> None:
             )
 
 
-def send_task_notification(
+def send_task_exception_notification(
     function: Optional[str],
     arguments: Optional[str],
     user: Optional[User],

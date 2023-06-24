@@ -5,7 +5,9 @@ from typing import Any
 
 from application.access_control.models import User
 from application.commons.services.log_message import format_log_message
-from application.commons.services.push_notifications import send_task_notification
+from application.commons.services.push_notifications import (
+    send_task_exception_notification,
+)
 
 logger = logging.getLogger("secobserve.tasks")
 
@@ -37,6 +39,10 @@ def handle_task_exception(e: Exception, user: User) -> None:
     )
     logger.error(traceback.format_exc())
 
-    send_task_notification(
-        function=function, arguments=str(arguments), user=user, exception=e
+    arguments_string = None
+    if arguments:
+        arguments_string = str(arguments)
+
+    send_task_exception_notification(
+        function=function, arguments=arguments_string, user=user, exception=e
     )
