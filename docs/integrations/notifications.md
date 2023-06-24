@@ -1,6 +1,6 @@
 # Notifications
 
-SecObserve can send notifications to email addresses abd Microsoft Teams channels for two kinds of events:
+SecObserve can send notifications to email addresses or Microsoft Teams channels for two kinds of events:
 
 * When the [security gate](../usage/security_gates.md) of a product changes.
 * When an exception occurs while processing a request.
