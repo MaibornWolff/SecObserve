@@ -63,7 +63,8 @@ RUN addgroup -g 1001 -S ${group} \
     && sed -i 's/placeholder/'"${COMMIT_ID}"'/g' ${APP_HOME}/application/commons/api/views.py \
     # create directory for huey task queue
     && mkdir /var/lib/huey \
-    && chown -R ${user}:${group} /var/lib/huey
+    && chown -R ${user}:${group} /var/lib/huey \
+    && chmod ugo+rw /var/lib/huey
 
 
 HEALTHCHECK --interval=30s --timeout=30s --start-period=10s --retries=3 \
