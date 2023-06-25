@@ -33,6 +33,7 @@ def push_observations_to_issue_tracker(
 @db_task()
 def push_observation_to_issue_tracker(observation: Observation, user: User) -> None:
     try:
+        print(f"--- start observation: {observation.pk} ---")
         if observation.product.issue_tracker_active:
             issue_tracker = issue_tracker_factory(observation.product)
 
@@ -56,6 +57,7 @@ def push_observation_to_issue_tracker(observation: Observation, user: User) -> N
             else:
                 if issue:
                     issue_tracker.close_issue(observation, issue)
+        print(f"--- end observation: {observation.pk} ---")
     except Exception as e:
         handle_task_exception(e, user)
 
