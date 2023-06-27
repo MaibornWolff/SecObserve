@@ -1,12 +1,16 @@
 import re
 from typing import Optional
 
+from application.commons.services.global_request import get_current_user
 from application.core.models import Observation, Parser, Product
 from application.core.services.observation import (
     get_current_severity,
     get_current_status,
 )
 from application.core.services.observation_log import create_observation_log
+from application.issue_tracker.services.issue_tracker import (
+    push_observation_to_issue_tracker,
+)
 from application.rules.models import Rule
 
 
@@ -82,7 +86,7 @@ class Rule_Engine:
                 else:
                     observation.general_rule = rule
 
-                # Write observation and observation log if status or severity has been changed
+                # Write observation and observation and push to issue tracker log if status or severity has been changed
                 if (  # pylint: disable=too-many-boolean-expressions
                     previous_rule_status != observation.rule_status
                     or previous_rule_severity != observation.rule_severity
@@ -94,7 +98,7 @@ class Rule_Engine:
                     self._write_observation_log(
                         observation, rule, previous_severity, previous_status
                     )
-
+                    push_observation_to_issue_tracker(observation, get_current_user())
                 rule_found = True
                 break
 

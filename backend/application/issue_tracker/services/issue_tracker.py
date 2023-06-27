@@ -1,12 +1,11 @@
 from typing import Optional
 
-from django.db.models import QuerySet
 from huey.contrib.djhuey import db_task, task
 
 from application.access_control.models import User
 from application.commons.services.global_request import get_current_user
 from application.commons.services.tasks import handle_task_exception
-from application.core.models import Branch, Observation, Product
+from application.core.models import Observation, Product
 from application.issue_tracker.issue_trackers.base_issue_tracker import BaseIssueTracker
 from application.issue_tracker.issue_trackers.github_issue_tracker import (
     GitHubIssueTracker,
@@ -17,24 +16,20 @@ from application.issue_tracker.issue_trackers.gitlab_issue_tracker import (
 
 
 def push_observations_to_issue_tracker(
-    product: Product, use_branch: bool, branch: Branch = None
+    product: Product, observations: set[Observation]
 ) -> None:
     if product.issue_tracker_active:
-        if (not use_branch) or (
-            use_branch and product.repository_default_branch == branch
-        ):
-            observations: QuerySet[Observation] = Observation.objects.filter(
-                product=product, branch=product.repository_default_branch
-            )
-            for observation in observations:
-                push_observation_to_issue_tracker(observation, get_current_user())
+        for observation in observations:
+            push_observation_to_issue_tracker(observation, get_current_user())
 
 
 @db_task()
 def push_observation_to_issue_tracker(observation: Observation, user: User) -> None:
     try:
-        print(f"--- start observation: {observation.pk} ---")
-        if observation.product.issue_tracker_active:
+        if (
+            observation.product.issue_tracker_active
+            and observation.branch == observation.product.repository_default_branch
+        ):
             issue_tracker = issue_tracker_factory(observation.product)
 
             if observation.issue_tracker_issue_id:
@@ -57,7 +52,6 @@ def push_observation_to_issue_tracker(observation: Observation, user: User) -> N
             else:
                 if issue:
                     issue_tracker.close_issue(observation, issue)
-        print(f"--- end observation: {observation.pk} ---")
     except Exception as e:
         handle_task_exception(e, user)
 
