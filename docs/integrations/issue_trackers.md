@@ -4,7 +4,7 @@ Developers and product owners will typically document the development tasks in a
 
 The synchronization of issues is an unidirectional process:
 
-* A new observation will be pushed as an open issue.
+* A new observation will be pushed as an open issue, if its branch is set to the default branch of the product.
 * If the observation changes its priority or description, the issue will be updated accordingly.
 * If the observation changes the status from **Open** to another status by an assessment in SecObserve, the issue will be closed.
 * If the observation gets the status **Resolved** in SecObserve because it is not found in the results anymore, the issue will be closed as well.

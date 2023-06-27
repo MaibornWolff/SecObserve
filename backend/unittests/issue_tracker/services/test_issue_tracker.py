@@ -3,7 +3,7 @@ from unittest.mock import call, patch
 from django.core.management import call_command
 
 from application.access_control.models import User
-from application.core.models import Observation, Product
+from application.core.models import Branch, Observation, Product
 from application.issue_tracker.issue_trackers.base_issue_tracker import Issue
 from application.issue_tracker.issue_trackers.github_issue_tracker import (
     GitHubIssueTracker,
@@ -48,9 +48,7 @@ class TestIssueTracker(BaseTestCase):
         user = User.objects.get(pk=1)
         mock_current_user.return_value = user
 
-        push_observations_to_issue_tracker(
-            product, True, observation.product.repository_default_branch
-        )
+        push_observations_to_issue_tracker(product, {observation})
 
         mock_current_user.assert_called_once()
         mock_issue_tracker.assert_called_once_with(observation, user)
@@ -60,6 +58,15 @@ class TestIssueTracker(BaseTestCase):
     @patch("application.issue_tracker.services.issue_tracker.issue_tracker_factory")
     def test_push_observation_to_issue_tracker_not_active(self, mock):
         observation = Observation.objects.get(pk=1)
+        push_observation_to_issue_tracker(observation, None)
+        mock.assert_not_called()
+
+    @patch("application.issue_tracker.services.issue_tracker.issue_tracker_factory")
+    def test_push_observation_to_issue_tracker_not_default_branch(self, mock):
+        observation = Observation.objects.get(pk=1)
+        observation.product.issue_tracker_active = True
+        not_default_branch = Branch.objects.get(pk=2)
+        observation.branch = not_default_branch
         push_observation_to_issue_tracker(observation, None)
         mock.assert_not_called()
 
