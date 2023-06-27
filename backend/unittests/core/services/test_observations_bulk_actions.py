@@ -50,16 +50,18 @@ class TestObservationsBulkActions(BaseTestCase):
 
     @patch("application.core.services.observations_bulk_actions._check_observations")
     @patch("django.db.models.query.QuerySet.delete")
-    @patch("application.core.services.observations_bulk_actions.push_deleted_observation_to_issue_tracker")
+    @patch(
+        "application.core.services.observations_bulk_actions.push_deleted_observation_to_issue_tracker"
+    )
     @patch("application.core.services.observations_bulk_actions.get_current_user")
-    def test_observations_bulk_delete(self, current_user_mock, push_issue_tracker_mock, delete_mock, check_mock):
+    def test_observations_bulk_delete(
+        self, current_user_mock, push_issue_tracker_mock, delete_mock, check_mock
+    ):
         observations = Observation.objects.all()
         for observation in observations:
             observation.issue_tracker_issue_id = f"issue_{observation.pk}"
         check_mock.return_value = observations
         current_user_mock.return_value = self.user_internal
-
-
 
         observations_bulk_delete(self.product_1, [1, 2])
 
