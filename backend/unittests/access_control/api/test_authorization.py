@@ -1105,6 +1105,74 @@ class TestAuthentication(BaseTestCase):
             )
         )
 
+        # --- notifications ---
+
+        expected_data = "OrderedDict([('count', 6), ('next', None), ('previous', None), ('results', [OrderedDict([('id', 1), ('product_name', 'db_product_internal'), ('observation_title', 'db_observation_internal'), ('user_full_name', 'db_internal_write'), ('name', 'exception_internal'), ('created', '2022-12-15T17:10:35.518000+01:00'), ('message', 'message_exception_internal'), ('type', 'Exception'), ('function', ''), ('arguments', ''), ('user', 2), ('product', 1), ('observation', 1)]), OrderedDict([('id', 2), ('product_name', 'db_product_external'), ('observation_title', 'db_observation_internal'), ('user_full_name', 'db_external'), ('name', 'exception_external'), ('created', '2022-12-15T17:10:35.518000+01:00'), ('message', 'message_exception_external'), ('type', 'Exception'), ('function', ''), ('arguments', ''), ('user', 4), ('product', 2), ('observation', 2)]), OrderedDict([('id', 3), ('product_name', 'db_product_internal'), ('observation_title', 'db_observation_internal'), ('user_full_name', 'db_internal_write'), ('name', 'security_gate_internal'), ('created', '2022-12-15T17:10:35.518000+01:00'), ('message', ''), ('type', 'Security gate'), ('function', ''), ('arguments', ''), ('user', 2), ('product', 1), ('observation', 1)]), OrderedDict([('id', 4), ('product_name', 'db_product_external'), ('observation_title', 'db_observation_internal'), ('user_full_name', 'db_external'), ('name', 'security_gate_internal'), ('created', '2022-12-15T17:10:35.518000+01:00'), ('message', ''), ('type', 'Security gate'), ('function', ''), ('arguments', ''), ('user', 4), ('product', 2), ('observation', 2)]), OrderedDict([('id', 5), ('product_name', 'db_product_internal'), ('observation_title', 'db_observation_internal'), ('user_full_name', 'db_internal_write'), ('name', 'task_internal'), ('created', '2022-12-15T17:10:35.518000+01:00'), ('message', 'message_task_internal'), ('type', 'Task'), ('function', 'function_task_internal'), ('arguments', 'arguments_task_internal'), ('user', 2), ('product', 1), ('observation', 1)]), OrderedDict([('id', 6), ('product_name', 'db_product_external'), ('observation_title', 'db_observation_internal'), ('user_full_name', 'db_external'), ('name', 'task_external'), ('created', '2022-12-15T17:10:35.518000+01:00'), ('message', 'message_task_external'), ('type', 'Task'), ('function', 'function_task_external'), ('arguments', 'arguments_task_external'), ('user', 4), ('product', 2), ('observation', 2)])])])"
+        self._test_api(
+            APITest("db_admin", "get", "/api/notifications/", None, 200, expected_data)
+        )
+
+        expected_data = "OrderedDict([('count', 2), ('next', None), ('previous', None), ('results', [OrderedDict([('id', 3), ('product_name', 'db_product_internal'), ('observation_title', 'db_observation_internal'), ('user_full_name', 'db_internal_write'), ('name', 'security_gate_internal'), ('created', '2022-12-15T17:10:35.518000+01:00'), ('message', ''), ('type', 'Security gate'), ('function', ''), ('arguments', ''), ('user', 2), ('product', 1), ('observation', 1)]), OrderedDict([('id', 5), ('product_name', 'db_product_internal'), ('observation_title', 'db_observation_internal'), ('user_full_name', 'db_internal_write'), ('name', 'task_internal'), ('created', '2022-12-15T17:10:35.518000+01:00'), ('message', 'message_task_internal'), ('type', 'Task'), ('function', 'function_task_internal'), ('arguments', 'arguments_task_internal'), ('user', 2), ('product', 1), ('observation', 1)])])])"
+        self._test_api(
+            APITest(
+                "db_internal_write",
+                "get",
+                "/api/notifications/",
+                None,
+                200,
+                expected_data,
+            )
+        )
+
+        self._test_api(
+            APITest(
+                "db_internal_write", "get", "/api/notifications/1/", None, 404, None
+            )
+        )
+
+        self._test_api(
+            APITest(
+                "db_internal_write", "get", "/api/notifications/3/", None, 200, None
+            )
+        )
+
+        post_data = {"notifications": [1, 3, 5]}
+        expected_data = "{'message': 'Some notifications do not exist'}"
+        self._test_api(
+            APITest(
+                "db_internal_write",
+                "post",
+                "/api/notifications/bulk_delete/",
+                post_data,
+                400,
+                expected_data,
+            )
+        )
+
+        post_data = {"notifications": [3, 5]}
+        self._test_api(
+            APITest(
+                "db_internal_write",
+                "post",
+                "/api/notifications/bulk_delete/",
+                post_data,
+                204,
+                None,
+            )
+        )
+
+        expected_data = "OrderedDict([('count', 0), ('next', None), ('previous', None), ('results', [])])"
+        self._test_api(
+            APITest(
+                "db_internal_write",
+                "get",
+                "/api/notifications/",
+                None,
+                200,
+                expected_data,
+            )
+        )
+
         # --- product ---
 
         expected_data = "OrderedDict([('count', 2), ('next', None), ('previous', None), ('results', [OrderedDict([('id', 1), ('repository_default_branch_name', 'changed'), ('open_critical_observation_count', 0), ('open_high_observation_count', 0), ('open_medium_observation_count', 0), ('open_low_observation_count', 0), ('open_none_observation_count', 0), ('open_unkown_observation_count', 0), ('permissions', {<Permissions.Product_Rule_View: 1301>, <Permissions.Product_Rule_Edit: 1302>, <Permissions.Product_Rule_Delete: 1303>, <Permissions.Product_Rule_Create: 1304>, <Permissions.Product_Rule_Apply: 1305>, <Permissions.Product_Api_Token_Revoke: 4003>, <Permissions.Product_Api_Token_Create: 4004>, <Permissions.Product_Member_View: 1201>, <Permissions.Product_Member_Edit: 1202>, <Permissions.Product_Member_Delete: 1203>, <Permissions.Product_Member_Create: 1204>, <Permissions.Api_Configuration_View: 3001>, <Permissions.Api_Configuration_Edit: 3002>, <Permissions.Api_Configuration_Delete: 3003>, <Permissions.Api_Configuration_Create: 3004>, <Permissions.Product_View: 1101>, <Permissions.Product_Edit: 1102>, <Permissions.Product_Delete: 1103>, <Permissions.Product_Import_Observations: 1105>, <Permissions.Observation_View: 2001>, <Permissions.Observation_Edit: 2002>, <Permissions.Observation_Create: 2004>, <Permissions.Observation_Delete: 2003>, <Permissions.Observation_Assessment: 2005>, <Permissions.Branch_View: 1401>, <Permissions.Branch_Edit: 1402>, <Permissions.Branch_Delete: 1403>, <Permissions.Branch_Create: 1404>}), ('name', 'db_product_internal'), ('description', ''), ('repository_prefix', ''), ('security_gate_passed', True), ('security_gate_active', None), ('security_gate_threshold_critical', None), ('security_gate_threshold_high', None), ('security_gate_threshold_medium', None), ('security_gate_threshold_low', None), ('security_gate_threshold_none', None), ('security_gate_threshold_unkown', None), ('apply_general_rules', True), ('notification_ms_teams_webhook', ''), ('notification_email_to', ''), ('issue_tracker_active', False), ('issue_tracker_type', ''), ('issue_tracker_base_url', ''), ('issue_tracker_api_key', ''), ('issue_tracker_project_id', ''), ('issue_tracker_labels', ''), ('repository_default_branch', 1), ('members', [2, 3])]), OrderedDict([('id', 2), ('repository_default_branch_name', 'db_branch_external'), ('open_critical_observation_count', 0), ('open_high_observation_count', 0), ('open_medium_observation_count', 0), ('open_low_observation_count', 0), ('open_none_observation_count', 0), ('open_unkown_observation_count', 0), ('permissions', {<Permissions.Product_Rule_View: 1301>, <Permissions.Product_Rule_Edit: 1302>, <Permissions.Product_Rule_Delete: 1303>, <Permissions.Product_Rule_Create: 1304>, <Permissions.Product_Rule_Apply: 1305>, <Permissions.Product_Api_Token_Revoke: 4003>, <Permissions.Product_Api_Token_Create: 4004>, <Permissions.Product_Member_View: 1201>, <Permissions.Product_Member_Edit: 1202>, <Permissions.Product_Member_Delete: 1203>, <Permissions.Product_Member_Create: 1204>, <Permissions.Api_Configuration_View: 3001>, <Permissions.Api_Configuration_Edit: 3002>, <Permissions.Api_Configuration_Delete: 3003>, <Permissions.Api_Configuration_Create: 3004>, <Permissions.Product_View: 1101>, <Permissions.Product_Edit: 1102>, <Permissions.Product_Delete: 1103>, <Permissions.Product_Import_Observations: 1105>, <Permissions.Observation_View: 2001>, <Permissions.Observation_Edit: 2002>, <Permissions.Observation_Create: 2004>, <Permissions.Observation_Delete: 2003>, <Permissions.Observation_Assessment: 2005>, <Permissions.Branch_View: 1401>, <Permissions.Branch_Edit: 1402>, <Permissions.Branch_Delete: 1403>, <Permissions.Branch_Create: 1404>}), ('name', 'db_product_external'), ('description', ''), ('repository_prefix', ''), ('security_gate_passed', None), ('security_gate_active', False), ('security_gate_threshold_critical', None), ('security_gate_threshold_high', None), ('security_gate_threshold_medium', None), ('security_gate_threshold_low', None), ('security_gate_threshold_none', None), ('security_gate_threshold_unkown', None), ('apply_general_rules', True), ('notification_ms_teams_webhook', ''), ('notification_email_to', ''), ('issue_tracker_active', False), ('issue_tracker_type', ''), ('issue_tracker_base_url', ''), ('issue_tracker_api_key', ''), ('issue_tracker_project_id', ''), ('issue_tracker_labels', ''), ('repository_default_branch', 3), ('members', [3, 4, 5])])])])"

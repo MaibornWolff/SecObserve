@@ -504,5 +504,85 @@
             "name": "db_evidence_external",
             "evidence": "xyz"
         }
+    },
+    {
+        "model": "commons.notification",
+        "pk": 1,
+        "fields": {
+            "type": "Exception",
+            "name": "exception_internal",
+            "created": "2022-12-15T16:10:35.518Z",
+            "message": "message_exception_internal",
+            "user": 2,
+            "product": 1,
+            "observation": 1
+        }
+    },
+    {
+        "model": "commons.notification",
+        "pk": 2,
+        "fields": {
+            "type": "Exception",
+            "name": "exception_external",
+            "created": "2022-12-15T16:10:35.518Z",
+            "message": "message_exception_external",
+            "user": 4,
+            "product": 2,
+            "observation": 2
+        }
+    },
+    {
+        "model": "commons.notification",
+        "pk": 3,
+        "fields": {
+            "type": "Security gate",
+            "name": "security_gate_internal",
+            "created": "2022-12-15T16:10:35.518Z",
+            "user": 2,
+            "product": 1,
+            "observation": 1
+        }
+    },
+    {
+        "model": "commons.notification",
+        "pk": 4,
+        "fields": {
+            "type": "Security gate",
+            "name": "security_gate_internal",
+            "created": "2022-12-15T16:10:35.518Z",
+            "user": 4,
+            "product": 2,
+            "observation": 2
+        }
+    },
+    {
+        "model": "commons.notification",
+        "pk": 5,
+        "fields": {
+            "type": "Task",
+            "name": "task_internal",
+            "created": "2022-12-15T16:10:35.518Z",
+            "message": "message_task_internal",
+            "function": "function_task_internal",
+            "arguments": "arguments_task_internal",
+            "user": 2,
+            "product": 1,
+            "observation": 1
+        }
+    },
+    {
+        "model": "commons.notification",
+        "pk": 6,
+        "fields": {
+            "type": "Task",
+            "name": "task_external",
+            "created": "2022-12-15T16:10:35.518Z",
+            "message": "message_task_external",
+            "function": "function_task_external",
+            "arguments": "arguments_task_external",
+            "user": 4,
+            "product": 2,
+            "observation": 2
+        }
     }
 ]

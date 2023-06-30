@@ -2,6 +2,7 @@ from django.db.models.query import QuerySet
 from rest_framework.exceptions import ValidationError
 
 from application.commons.models import Notification
+from application.commons.queries.notification import get_notifications
 
 
 def bulk_delete(notification_ids: list[int]) -> None:
@@ -10,7 +11,7 @@ def bulk_delete(notification_ids: list[int]) -> None:
 
 
 def _check_notifications(notification_ids: list[int]) -> QuerySet[Notification]:
-    notifications = Notification.objects.filter(id__in=notification_ids)
+    notifications = get_notifications().filter(id__in=notification_ids)
     if len(notifications) != len(notification_ids):
         raise ValidationError("Some notifications do not exist")
 

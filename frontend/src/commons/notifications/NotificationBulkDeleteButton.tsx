@@ -23,7 +23,7 @@ const NotificationBulkDeleteButton = () => {
         };
 
         httpClient(url, {
-            method: "DELETE",
+            method: "POST",
             body: JSON.stringify(delete_data),
         })
             .then(() => {

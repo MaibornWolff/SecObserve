@@ -57,11 +57,11 @@ class NotificationViewSet(
         return get_notifications()
 
     @extend_schema(
-        methods=["DELETE"],
+        methods=["POST"],
         request=NotificationBulkSerializer,
         responses={HTTP_204_NO_CONTENT: None},
     )
-    @action(detail=False, methods=["delete"])
+    @action(detail=False, methods=["post"])
     def bulk_delete(self, request):
         request_serializer = NotificationBulkSerializer(data=request.data)
         if not request_serializer.is_valid():
