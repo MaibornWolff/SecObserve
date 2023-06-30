@@ -30,7 +30,11 @@ class TestPushNotifications(BaseTestCase):
     @patch("application.commons.services.push_notifications.get_current_user")
     @patch("application.commons.models.Notification.objects.create")
     def test_send_product_security_gate_notification_no_webhook_no_email(
-        self, mock_notification_create, mock_current_user, mock_send_email, mock_send_teams
+        self,
+        mock_notification_create,
+        mock_current_user,
+        mock_send_email,
+        mock_send_teams,
     ):
         mock_current_user.return_value = self.user_internal
         self.product_1.notification_ms_teams_webhook = ""
@@ -55,7 +59,13 @@ class TestPushNotifications(BaseTestCase):
     @patch("application.commons.services.push_notifications.get_current_user")
     @patch("application.commons.models.Notification.objects.create")
     def test_send_product_security_gate_notification_security_gate_none(
-        self, mock_notification_create, mock_current_user, mock_get_first_name, mock_base_url, mock_send_email, mock_send_teams
+        self,
+        mock_notification_create,
+        mock_current_user,
+        mock_get_first_name,
+        mock_base_url,
+        mock_send_email,
+        mock_send_teams,
     ):
         mock_base_url.return_value = "https://secobserve.com/"
         mock_get_first_name.return_value = "first_name"
@@ -115,7 +125,13 @@ class TestPushNotifications(BaseTestCase):
     @patch("application.commons.services.push_notifications.get_current_user")
     @patch("application.commons.models.Notification.objects.create")
     def test_send_product_security_gate_notification_security_gate_passed(
-        self, mock_notification_create, mock_current_user, mock_get_first_name, mock_base_url, mock_send_email, mock_send_teams
+        self,
+        mock_notification_create,
+        mock_current_user,
+        mock_get_first_name,
+        mock_base_url,
+        mock_send_email,
+        mock_send_teams,
     ):
         mock_base_url.return_value = "https://secobserve.com/"
         mock_get_first_name.return_value = "first_name"
@@ -175,7 +191,13 @@ class TestPushNotifications(BaseTestCase):
     @patch("application.commons.services.push_notifications.get_current_user")
     @patch("application.commons.models.Notification.objects.create")
     def test_send_product_security_gate_notification_security_gate_failed(
-        self, mock_notification_create, mock_current_user, mock_get_first_name, mock_base_url, mock_send_email, mock_send_teams
+        self,
+        mock_notification_create,
+        mock_current_user,
+        mock_get_first_name,
+        mock_base_url,
+        mock_send_email,
+        mock_send_teams,
     ):
         mock_base_url.return_value = "https://secobserve.com/"
         mock_get_first_name.return_value = "first_name"
@@ -237,7 +259,12 @@ class TestPushNotifications(BaseTestCase):
     @patch("application.commons.services.push_notifications.get_current_user")
     @patch("application.commons.models.Notification.objects.create")
     def test_send_exception_notification_no_webhook_no_email(
-        self, mock_notification_create, mock_current_user, mock_send_email, mock_send_teams, mock_ratelimit
+        self,
+        mock_notification_create,
+        mock_current_user,
+        mock_send_email,
+        mock_send_teams,
+        mock_ratelimit,
     ):
         mock_ratelimit.return_value = True
         mock_current_user.return_value = self.user_internal
@@ -248,7 +275,7 @@ class TestPushNotifications(BaseTestCase):
         mock_send_email.assert_not_called()
         mock_notification_create.assert_called_with(
             name="Exception builtins.Exception has occured",
-            message='test_exception',
+            message="test_exception",
             user=self.user_internal,
             type=Notification.TYPE_EXCEPTION,
         )
@@ -279,7 +306,13 @@ class TestPushNotifications(BaseTestCase):
     @patch("application.commons.services.push_notifications.get_current_user")
     @patch("application.commons.models.Notification.objects.create")
     def test_send_exception_notification_success(
-        self, mock_notification_create, mock_current_user, mock_get_first_name, mock_send_email, mock_send_teams, mock_ratelimit
+        self,
+        mock_notification_create,
+        mock_current_user,
+        mock_get_first_name,
+        mock_send_email,
+        mock_send_teams,
+        mock_ratelimit,
     ):
         mock_ratelimit.return_value = True
         mock_get_first_name.return_value = "first_name"
@@ -327,7 +360,7 @@ class TestPushNotifications(BaseTestCase):
         mock_get_first_name.assert_has_calls(expected_calls_get_first_name)
         mock_notification_create.assert_called_with(
             name="Exception builtins.Exception has occured",
-            message='test_exception',
+            message="test_exception",
             user=self.user_internal,
             type=Notification.TYPE_EXCEPTION,
         )
@@ -394,7 +427,12 @@ class TestPushNotifications(BaseTestCase):
     @patch("application.commons.services.push_notifications._get_first_name")
     @patch("application.commons.models.Notification.objects.create")
     def test_send_task_exception_notification_success(
-        self, mock_notification_create, mock_get_first_name, mock_send_email, mock_send_teams, mock_ratelimit
+        self,
+        mock_notification_create,
+        mock_get_first_name,
+        mock_send_email,
+        mock_send_teams,
+        mock_ratelimit,
     ):
         mock_ratelimit.return_value = True
         mock_get_first_name.return_value = "first_name"
@@ -708,8 +746,7 @@ class TestPushNotifications(BaseTestCase):
         self.assertEqual(1, len(LAST_EXCEPTIONS.keys()))
 
         difference: timedelta = (
-            datetime.now()
-            - LAST_EXCEPTIONS["builtins.Exception/test_exception/None/"]
+            datetime.now() - LAST_EXCEPTIONS["builtins.Exception/test_exception/None/"]
         )
         self.assertGreater(difference.microseconds, 0)
         self.assertLess(difference.microseconds, 999)
