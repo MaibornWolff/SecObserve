@@ -39,10 +39,6 @@ def handle_task_exception(e: Exception, user: User) -> None:
     )
     logger.error(traceback.format_exc())
 
-    arguments_string = None
-    if arguments:
-        arguments_string = str(arguments)
-
     send_task_exception_notification(
-        function=function, arguments=arguments_string, user=user, exception=e
+        function=function, arguments=arguments, user=user, exception=e
     )
