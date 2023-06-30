@@ -4,6 +4,7 @@ from unittest.mock import ANY, call, patch
 from constance.test import override_config
 from requests import Response
 
+from application.commons.models import Notification
 from application.commons.services.functions import get_classname
 from application.commons.services.push_notifications import (
     LAST_EXCEPTIONS,
@@ -26,25 +27,39 @@ class TestPushNotifications(BaseTestCase):
 
     @patch("application.commons.services.push_notifications._send_msteams_notification")
     @patch("application.commons.services.push_notifications._send_email_notification")
+    @patch("application.commons.services.push_notifications.get_current_user")
+    @patch("application.commons.models.Notification.objects.create")
     def test_send_product_security_gate_notification_no_webhook_no_email(
-        self, mock_send_email, mock_send_teams
+        self, mock_notification_create, mock_current_user, mock_send_email, mock_send_teams
     ):
+        mock_current_user.return_value = self.user_internal
         self.product_1.notification_ms_teams_webhook = ""
         self.product_1.notification_email_to = ""
+
         send_product_security_gate_notification(self.product_1)
+
         mock_send_teams.assert_not_called()
         mock_send_email.assert_not_called()
+        mock_notification_create.assert_called_with(
+            name="Security gate has changed to None",
+            product=self.product_1,
+            user=self.user_internal,
+            type=Notification.TYPE_SECURITY_GATE,
+        )
 
     @override_config(EMAIL_FROM="secobserve@example.com")
     @patch("application.commons.services.push_notifications._send_msteams_notification")
     @patch("application.commons.services.push_notifications._send_email_notification")
     @patch("application.commons.services.push_notifications.get_base_url_frontend")
     @patch("application.commons.services.push_notifications._get_first_name")
+    @patch("application.commons.services.push_notifications.get_current_user")
+    @patch("application.commons.models.Notification.objects.create")
     def test_send_product_security_gate_notification_security_gate_none(
-        self, mock_get_first_name, mock_base_url, mock_send_email, mock_send_teams
+        self, mock_notification_create, mock_current_user, mock_get_first_name, mock_base_url, mock_send_email, mock_send_teams
     ):
         mock_base_url.return_value = "https://secobserve.com/"
         mock_get_first_name.return_value = "first_name"
+        mock_current_user.return_value = self.user_internal
         self.product_1.notification_ms_teams_webhook = "https://msteams.microsoft.com"
         self.product_1.notification_email_to = "test1@example.com, test2@example.com"
         self.product_1.security_gate_passed = None
@@ -85,17 +100,26 @@ class TestPushNotifications(BaseTestCase):
             call("test2@example.com"),
         ]
         mock_get_first_name.assert_has_calls(expected_calls_get_first_name)
+        mock_notification_create.assert_called_with(
+            name="Security gate has changed to None",
+            product=self.product_1,
+            user=self.user_internal,
+            type=Notification.TYPE_SECURITY_GATE,
+        )
 
     @override_config(EMAIL_FROM="secobserve@example.com")
     @patch("application.commons.services.push_notifications._send_msteams_notification")
     @patch("application.commons.services.push_notifications._send_email_notification")
     @patch("application.commons.services.push_notifications.get_base_url_frontend")
     @patch("application.commons.services.push_notifications._get_first_name")
+    @patch("application.commons.services.push_notifications.get_current_user")
+    @patch("application.commons.models.Notification.objects.create")
     def test_send_product_security_gate_notification_security_gate_passed(
-        self, mock_get_first_name, mock_base_url, mock_send_email, mock_send_teams
+        self, mock_notification_create, mock_current_user, mock_get_first_name, mock_base_url, mock_send_email, mock_send_teams
     ):
         mock_base_url.return_value = "https://secobserve.com/"
         mock_get_first_name.return_value = "first_name"
+        mock_current_user.return_value = self.user_internal
         self.product_1.notification_ms_teams_webhook = "https://msteams.microsoft.com"
         self.product_1.notification_email_to = "test1@example.com, test2@example.com"
         self.product_1.security_gate_passed = True
@@ -136,17 +160,26 @@ class TestPushNotifications(BaseTestCase):
             call("test2@example.com"),
         ]
         mock_get_first_name.assert_has_calls(expected_calls_get_first_name)
+        mock_notification_create.assert_called_with(
+            name="Security gate has changed to Passed",
+            product=self.product_1,
+            user=self.user_internal,
+            type=Notification.TYPE_SECURITY_GATE,
+        )
 
     @override_config(EMAIL_FROM="secobserve@example.com")
     @patch("application.commons.services.push_notifications._send_msteams_notification")
     @patch("application.commons.services.push_notifications._send_email_notification")
     @patch("application.commons.services.push_notifications.get_base_url_frontend")
     @patch("application.commons.services.push_notifications._get_first_name")
+    @patch("application.commons.services.push_notifications.get_current_user")
+    @patch("application.commons.models.Notification.objects.create")
     def test_send_product_security_gate_notification_security_gate_failed(
-        self, mock_get_first_name, mock_base_url, mock_send_email, mock_send_teams
+        self, mock_notification_create, mock_current_user, mock_get_first_name, mock_base_url, mock_send_email, mock_send_teams
     ):
         mock_base_url.return_value = "https://secobserve.com/"
         mock_get_first_name.return_value = "first_name"
+        mock_current_user.return_value = self.user_internal
         self.product_1.notification_ms_teams_webhook = "https://msteams.microsoft.com"
         self.product_1.notification_email_to = "test1@example.com, test2@example.com"
         self.product_1.security_gate_passed = False
@@ -187,6 +220,12 @@ class TestPushNotifications(BaseTestCase):
             call("test2@example.com"),
         ]
         mock_get_first_name.assert_has_calls(expected_calls_get_first_name)
+        mock_notification_create.assert_called_with(
+            name="Security gate has changed to Failed",
+            product=self.product_1,
+            user=self.user_internal,
+            type=Notification.TYPE_SECURITY_GATE,
+        )
 
     # --- send_exception_notification ---
 
@@ -195,13 +234,24 @@ class TestPushNotifications(BaseTestCase):
     @patch("application.commons.services.push_notifications._ratelimit_exception")
     @patch("application.commons.services.push_notifications._send_msteams_notification")
     @patch("application.commons.services.push_notifications._send_email_notification")
+    @patch("application.commons.services.push_notifications.get_current_user")
+    @patch("application.commons.models.Notification.objects.create")
     def test_send_exception_notification_no_webhook_no_email(
-        self, mock_send_email, mock_send_teams, mock_ratelimit
+        self, mock_notification_create, mock_current_user, mock_send_email, mock_send_teams, mock_ratelimit
     ):
         mock_ratelimit.return_value = True
+        mock_current_user.return_value = self.user_internal
+
         send_exception_notification(Exception("test_exception"))
+
         mock_send_teams.assert_not_called()
         mock_send_email.assert_not_called()
+        mock_notification_create.assert_called_with(
+            name="Exception builtins.Exception has occured",
+            message='test_exception',
+            user=self.user_internal,
+            type=Notification.TYPE_EXCEPTION,
+        )
 
     @override_config(EXCEPTION_MS_TEAMS_WEBHOOK="https://msteams.microsoft.com")
     @override_config(EXCEPTION_EMAIL_TO="test1@example.com, test2@example.com")
@@ -226,11 +276,14 @@ class TestPushNotifications(BaseTestCase):
     @patch("application.commons.services.push_notifications._send_msteams_notification")
     @patch("application.commons.services.push_notifications._send_email_notification")
     @patch("application.commons.services.push_notifications._get_first_name")
+    @patch("application.commons.services.push_notifications.get_current_user")
+    @patch("application.commons.models.Notification.objects.create")
     def test_send_exception_notification_success(
-        self, mock_get_first_name, mock_send_email, mock_send_teams, mock_ratelimit
+        self, mock_notification_create, mock_current_user, mock_get_first_name, mock_send_email, mock_send_teams, mock_ratelimit
     ):
         mock_ratelimit.return_value = True
         mock_get_first_name.return_value = "first_name"
+        mock_current_user.return_value = self.user_internal
 
         exception = Exception("test_exception")
         send_exception_notification(exception)
@@ -272,6 +325,12 @@ class TestPushNotifications(BaseTestCase):
             call("test2@example.com"),
         ]
         mock_get_first_name.assert_has_calls(expected_calls_get_first_name)
+        mock_notification_create.assert_called_with(
+            name="Exception builtins.Exception has occured",
+            message='test_exception',
+            user=self.user_internal,
+            type=Notification.TYPE_EXCEPTION,
+        )
 
     # --- send_task_exception_notification ---
 
@@ -280,18 +339,30 @@ class TestPushNotifications(BaseTestCase):
     @patch("application.commons.services.push_notifications._ratelimit_exception")
     @patch("application.commons.services.push_notifications._send_msteams_notification")
     @patch("application.commons.services.push_notifications._send_email_notification")
+    @patch("application.commons.models.Notification.objects.create")
     def test_send_task_exception_notification_no_webhook_no_email(
-        self, mock_send_email, mock_send_teams, mock_ratelimit
+        self, mock_notification_create, mock_send_email, mock_send_teams, mock_ratelimit
     ):
+        arguments = {"argument": "test_argument"}
         mock_ratelimit.return_value = True
         send_task_exception_notification(
             function="test_function",
-            arguments="test_arguments",
+            arguments=arguments,
             user=self.user_internal,
             exception=Exception("test_exception"),
         )
         mock_send_teams.assert_not_called()
         mock_send_email.assert_not_called()
+        mock_notification_create.assert_called_with(
+            name="Error in background task",
+            message="test_exception",
+            function="test_function",
+            arguments="{'argument': 'test_argument'}",
+            product=None,
+            observation=None,
+            user=self.user_internal,
+            type=Notification.TYPE_TASK,
+        )
 
     @override_config(EXCEPTION_MS_TEAMS_WEBHOOK="https://msteams.microsoft.com")
     @override_config(EXCEPTION_EMAIL_TO="test1@example.com, test2@example.com")
@@ -299,7 +370,7 @@ class TestPushNotifications(BaseTestCase):
     @patch("application.commons.services.push_notifications._ratelimit_exception")
     @patch("application.commons.services.push_notifications._send_msteams_notification")
     @patch("application.commons.services.push_notifications._send_email_notification")
-    def test_send_exception_notification_no_ratelimit(
+    def test_send_task_exception_notification_no_ratelimit(
         self, mock_send_email, mock_send_teams, mock_ratelimit
     ):
         mock_ratelimit.return_value = False
@@ -321,28 +392,30 @@ class TestPushNotifications(BaseTestCase):
     @patch("application.commons.services.push_notifications._send_msteams_notification")
     @patch("application.commons.services.push_notifications._send_email_notification")
     @patch("application.commons.services.push_notifications._get_first_name")
-    def test_send_exception_notification_success(
-        self, mock_get_first_name, mock_send_email, mock_send_teams, mock_ratelimit
+    @patch("application.commons.models.Notification.objects.create")
+    def test_send_task_exception_notification_success(
+        self, mock_notification_create, mock_get_first_name, mock_send_email, mock_send_teams, mock_ratelimit
     ):
         mock_ratelimit.return_value = True
         mock_get_first_name.return_value = "first_name"
 
         exception = Exception("test_exception")
+        arguments = {"observation": self.observation_1}
         send_task_exception_notification(
             function="test_function",
-            arguments="test_arguments",
+            arguments=arguments,
             user=self.user_internal,
             exception=exception,
         )
 
-        mock_ratelimit.assert_called_with(exception, "test_function", "test_arguments")
+        mock_ratelimit.assert_called_with(exception, "test_function", arguments)
         expected_calls_email = [
             call(
                 "test1@example.com",
                 "Exception builtins.Exception has occured in background task",
                 "email_task_exception.tpl",
                 function="test_function",
-                arguments="test_arguments",
+                arguments=str(arguments),
                 user=self.user_internal,
                 exception_class="builtins.Exception",
                 exception_message="test_exception",
@@ -355,7 +428,7 @@ class TestPushNotifications(BaseTestCase):
                 "Exception builtins.Exception has occured in background task",
                 "email_task_exception.tpl",
                 function="test_function",
-                arguments="test_arguments",
+                arguments=str(arguments),
                 user=self.user_internal,
                 exception_class="builtins.Exception",
                 exception_message="test_exception",
@@ -369,7 +442,7 @@ class TestPushNotifications(BaseTestCase):
             "https://msteams.microsoft.com",
             "msteams_task_exception.tpl",
             function="test_function",
-            arguments="test_arguments",
+            arguments=str(arguments),
             user=self.user_internal,
             exception_class="builtins.Exception",
             exception_message="test_exception",
@@ -381,6 +454,16 @@ class TestPushNotifications(BaseTestCase):
             call("test2@example.com"),
         ]
         mock_get_first_name.assert_has_calls(expected_calls_get_first_name)
+        mock_notification_create.assert_called_with(
+            name="Error in background task",
+            message="test_exception",
+            function="test_function",
+            arguments=str(arguments),
+            product=self.product_1,
+            observation=self.observation_1,
+            user=self.user_internal,
+            type=Notification.TYPE_TASK,
+        )
 
     # --- _send_email_notification ---
 
@@ -626,7 +709,7 @@ class TestPushNotifications(BaseTestCase):
 
         difference: timedelta = (
             datetime.now()
-            - LAST_EXCEPTIONS["builtins.Exception/test_exception/None/None"]
+            - LAST_EXCEPTIONS["builtins.Exception/test_exception/None/"]
         )
         self.assertGreater(difference.microseconds, 0)
         self.assertLess(difference.microseconds, 999)

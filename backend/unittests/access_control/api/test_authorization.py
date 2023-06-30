@@ -37,6 +37,7 @@ class TestAuthentication(BaseTestCase):
         mock_user.return_value = None
         call_command("loaddata", "unittests/fixtures/unittests_fixtures.json")
         self.maxDiff = None
+        super().setUpClass()
 
     @patch(
         "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
