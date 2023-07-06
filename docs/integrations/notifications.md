@@ -42,3 +42,6 @@ When creating or editing a product, the field `MS Teams` can be set in the *Noti
 An admistrator can configure the field `EXCEPTION_MS_TEAMS_WEBHOOK` in the Django Admin user interface. If an exception occurs while processing a request and this field is filled with the copied webhook URL, a notifications is sent to Teams before returning the HTTP code 500 via the REST API.
 
 There is a ratelimiting active to prevent flooding of Teams, if a series of exceptions occurs. The same exception is sent only once during a specified timedelta, which can be configured in the Django Admin user interface as well.
+
+## Notifications in the user interface
+
