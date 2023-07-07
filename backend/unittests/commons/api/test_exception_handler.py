@@ -85,7 +85,8 @@ class TestExceptionHandler(BaseTestCase):
 
     @patch("application.commons.api.exception_handler.logger.error")
     @patch("application.commons.api.exception_handler.format_log_message")
-    def test_server_error(self, mock_format, mock_logging):
+    @patch("application.commons.api.exception_handler.send_exception_notification")
+    def test_server_error(self, mock_notification, mock_format, mock_logging):
         exception = APIException(Exception("Not authentication"))
         response = custom_exception_handler(exception, None)
 
@@ -94,3 +95,4 @@ class TestExceptionHandler(BaseTestCase):
         self.assertEqual(data, response.data)
         mock_format.assert_called_with(response=response, exception=exception)
         self.assertEqual(mock_logging.call_count, 2)
+        mock_notification.assert_called_with(exception)
