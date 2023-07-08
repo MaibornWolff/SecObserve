@@ -131,7 +131,7 @@ const MetricSeverities = (props: MetricSeveritiesProps) => {
                         plugins: {
                             title: {
                                 display: true,
-                                text: "Severities of open observations",
+                                text: "Severities of open observations (current)",
                                 color: getFontColor(),
                             },
                             legend: {

@@ -12,7 +12,7 @@ from application.commons.services.push_notifications import (
 logger = logging.getLogger("secobserve.tasks")
 
 
-def handle_task_exception(e: Exception, user: User) -> None:
+def handle_task_exception(e: Exception, user: User = None) -> None:
     data: dict[str, Any] = {}
     function = None
     arguments = None

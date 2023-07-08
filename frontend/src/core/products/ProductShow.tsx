@@ -42,6 +42,7 @@ import ApiImportObservations from "../../import_observations/import/ApiImportObs
 import FileUploadObservations from "../../import_observations/import/FileUploadObservations";
 import MetricSeverities from "../../metrics/MetricSeverities";
 import MetricStatus from "../../metrics/MetricStatus";
+import ProductMetricsSeverities from "../../metrics/ProductMetricsSeverities";
 import general_rules from "../../rules/general_rules";
 import ProductRuleApply from "../../rules/product_rules/ProductRuleApply";
 import ProductRuleCreate from "../../rules/product_rules/ProductRuleCreate";
@@ -204,6 +205,7 @@ const ProductShow = () => {
                                         }}
                                     >
                                         <MetricSeverities product_id={product.id} />
+                                        <ProductMetricsSeverities product_id={product.id} />
                                         <MetricStatus product_id={product.id} />
                                     </Stack>{" "}
                                 </SimpleShowLayout>

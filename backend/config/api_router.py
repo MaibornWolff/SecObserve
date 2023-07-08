@@ -11,6 +11,7 @@ from application.core.api.views import (
     ProductViewSet,
 )
 from application.import_observations.api.views import ApiConfigurationViewSet
+from application.metrics.api.views import ProductMetricsViewSet
 from application.rules.api.views import GeneralRuleViewSet, ProductRuleViewSet
 
 router = SimpleRouter()
@@ -29,6 +30,7 @@ router.register("api_configurations", ApiConfigurationViewSet)
 router.register("product_rules", ProductRuleViewSet)
 router.register("evidences", EvidenceViewSet)
 router.register("notifications", NotificationViewSet)
+router.register("metrics/product_metrics", ProductMetricsViewSet)
 
 app_name = "api"
 urlpatterns = router.urls

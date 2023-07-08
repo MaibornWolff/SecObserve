@@ -123,7 +123,7 @@ const MetricStatus = (props: MetricStatusProps) => {
                         plugins: {
                             title: {
                                 display: true,
-                                text: "Status of observations",
+                                text: "Status of observations (current)",
                                 color: getFontColor(),
                             },
                             legend: {
