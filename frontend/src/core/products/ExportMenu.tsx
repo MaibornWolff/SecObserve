@@ -30,9 +30,9 @@ export default function ExportMenu(product: any) {
             return "black";
         }
     }
-    const exportDataCsv = async (url_suffix: string, filename: string, message: string) => {
+    const exportDataCsv = async (url: string, filename: string, message: string) => {
         axios_instance
-            .get("/products/" + product.product.id + url_suffix)
+            .get(url)
             .then(function (response) {
                 const blob = new Blob([response.data], { type: "text/csv" });
                 const url = window.URL.createObjectURL(blob);
@@ -53,9 +53,9 @@ export default function ExportMenu(product: any) {
         handleClose();
     };
 
-    const exportDataExcel = async (url_suffix: string, filename: string, message: string) => {
+    const exportDataExcel = async (url: string, filename: string, message: string) => {
         axios_instance
-            .get("/products/" + product.product.id + url_suffix, {
+            .get(url, {
                 responseType: "arraybuffer",
                 headers: { Accept: "*/*" },
             })
@@ -82,23 +82,31 @@ export default function ExportMenu(product: any) {
     };
 
     const exportCodeChartaMetrics = async () => {
-        exportDataCsv("/export_codecharta_metrics/", "secobserve_codecharta_metrics.csv", "CodeCharta metrics");
+        exportDataCsv("/products/" + product.product.id + "/export_codecharta_metrics/", "secobserve_codecharta_metrics.csv", "CodeCharta metrics");
     };
 
     const exportAllObservationsExcel = async () => {
-        exportDataExcel("/export_observations_excel/", "all_observations.xlsx", "Observations");
+        exportDataExcel("/products/" + product.product.id + "/export_observations_excel/", "all_observations.xlsx", "Observations");
     };
 
     const exportOpenObservationsExcel = async () => {
-        exportDataExcel("/export_observations_excel/?status=Open", "open_observations.xlsx", "Observations");
+        exportDataExcel("/products/" + product.product.id +  "/export_observations_excel/?status=Open", "open_observations.xlsx", "Observations");
     };
 
     const exportAllObservationsCsv = async () => {
-        exportDataCsv("/export_observations_csv/", "all_observations.csv", "Observations");
+        exportDataCsv("/products/" + product.product.id + "/export_observations_csv/", "all_observations.csv", "Observations");
     };
 
     const exportOpenObservationsCsv = async () => {
-        exportDataCsv("/export_observations_csv/?status=Open", "open_observations.csv", "Observations");
+        exportDataCsv("/products/" + product.product.id + "/export_observations_csv/?status=Open", "open_observations.csv", "Observations");
+    };
+
+    const exportMetricsExcel = async () => {
+        exportDataExcel("/metrics/export_excel?product_id=" + product.product.id, "product_metrics.xlsx", "Product Metrics");
+    };
+
+    const exportMetricsCsv = async () => {
+        exportDataCsv("/metrics/export_csv?product_id=" + product.product.id, "product_metrics.csv", "Product Metrics");
     };
 
     return (
@@ -147,6 +155,18 @@ export default function ExportMenu(product: any) {
                         <FontAwesomeIcon icon={faFileCsv} color={getIconColor()} />
                     </ListItemIcon>
                     All observations / CSV
+                </MenuItem>
+                <MenuItem onClick={exportMetricsExcel}>
+                    <ListItemIcon>
+                        <FontAwesomeIcon icon={faFileExcel} color={getIconColor()} />
+                    </ListItemIcon>
+                    Metrics / Excel
+                </MenuItem>
+                <MenuItem onClick={exportMetricsCsv} divider>
+                    <ListItemIcon>
+                        <FontAwesomeIcon icon={faFileCsv} color={getIconColor()} />
+                    </ListItemIcon>
+                    Metrics / CSV
                 </MenuItem>
                 <MenuItem onClick={exportCodeChartaMetrics}>
                     <ListItemIcon>

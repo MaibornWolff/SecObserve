@@ -101,7 +101,7 @@ def calculate_metrics_for_product(  # pylint: disable=too-many-branches
     todays_product_metrics.save()
 
 
-def get_severity_timeline(product: Optional[Product], age: str):
+def get_severity_timeline(product: Optional[Product], age: str) -> dict:
     product_metrics = get_product_metrics()
     if product:
         product_metrics = product_metrics.filter(product=product)
@@ -179,7 +179,7 @@ def get_severity_timeline(product: Optional[Product], age: str):
     return response_data
 
 
-def get_severity_counts(product: Optional[Product]):
+def get_severity_counts(product: Optional[Product]) -> dict:
     product_metrics = get_todays_product_metrics()
     if product:
         product_metrics = product_metrics.filter(product=product)
@@ -203,7 +203,7 @@ def get_severity_counts(product: Optional[Product]):
     return response_data
 
 
-def get_status_counts(product: Optional[Product]):
+def get_status_counts(product: Optional[Product]) -> dict:
     product_metrics = get_todays_product_metrics()
     if product:
         product_metrics = product_metrics.filter(product=product)

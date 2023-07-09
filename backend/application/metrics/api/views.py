@@ -1,3 +1,6 @@
+from tempfile import NamedTemporaryFile
+
+from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
 from rest_framework.mixins import ListModelMixin
@@ -12,6 +15,10 @@ from application.metrics.api.filters import ProductMetricsFilter
 from application.metrics.api.serializers import ProductMetricsSerializer
 from application.metrics.models import Product_Metrics
 from application.metrics.queries.product_metrics import get_product_metrics
+from application.metrics.services.export_metrics import (
+    export_product_metrics_csv,
+    export_product_metrics_excel,
+)
 from application.metrics.services.metrics import (
     get_severity_counts,
     get_severity_timeline,
@@ -32,42 +39,68 @@ class ProductMetricsViewSet(GenericViewSet, ListModelMixin):
 class ProductMetricsCountsView(APIView):
     @action(detail=False, methods=["get"])
     def get(self, request):
-        product_id = request.query_params.get("product_id")
-        if product_id:
-            product = get_product_by_id(product_id)
-        else:
-            product = None
-        if product:
-            user_has_permission_or_403(product, Permissions.Product_View)
-
+        product = _get_and_check_product(request)
         age = request.query_params.get("age", "")
-
         return Response(get_severity_timeline(product, age))
 
 
 class SeverityCountsView(APIView):
     @action(detail=False, methods=["get"])
     def get(self, request):
-        product_id = request.query_params.get("product_id")
-        if product_id:
-            product = get_product_by_id(product_id)
-        else:
-            product = None
-        if product:
-            user_has_permission_or_403(product, Permissions.Product_View)
-
+        product = _get_and_check_product(request)
         return Response(get_severity_counts(product))
 
 
 class StatusCountsView(APIView):
     @action(detail=False, methods=["get"])
     def get(self, request):
-        product_id = request.query_params.get("product_id")
-        if product_id:
-            product = get_product_by_id(product_id)
-        else:
-            product = None
-        if product:
-            user_has_permission_or_403(product, Permissions.Product_View)
-
+        product = _get_and_check_product(request)
         return Response(get_status_counts(product))
+
+
+class ProductMetricsExportExcelView(APIView):
+    @action(detail=False, methods=["get"])
+    def get(self, request):
+        product = _get_and_check_product(request)
+
+        workbook = export_product_metrics_excel(product)
+
+        with NamedTemporaryFile() as tmp:
+            workbook.save(
+                tmp.name  # nosemgrep: python.lang.correctness.tempfile.flush.tempfile-without-flush
+            )
+            # export works fine without .flush()
+            tmp.seek(0)
+            stream = tmp.read()
+
+        response = HttpResponse(
+            content=stream,
+            content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        )
+        response["Content-Disposition"] = "attachment; filename=product_metrics.xlsx"
+
+        return response
+
+
+class ProductMetricsExportCsvView(APIView):
+    @action(detail=False, methods=["get"])
+    def get(self, request):
+        product = _get_and_check_product(request)
+
+        response = HttpResponse(content_type="text/csv")
+        response["Content-Disposition"] = "attachment; filename=product_metrics.csv"
+
+        export_product_metrics_csv(response, product)
+
+        return response
+
+
+def _get_and_check_product(request):
+    product_id = request.query_params.get("product_id")
+    if product_id:
+        product = get_product_by_id(product_id)
+    else:
+        product = None
+    if product:
+        user_has_permission_or_403(product, Permissions.Product_View)
+    return product

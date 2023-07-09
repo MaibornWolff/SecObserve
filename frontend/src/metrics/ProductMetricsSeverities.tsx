@@ -10,9 +10,8 @@ import {
     Title,
     Tooltip,
 } from "chart.js";
-import { get } from "http";
 import { useState } from "react";
-import { Identifier, useNotify } from "react-admin";
+import { Identifier } from "react-admin";
 import { Line } from "react-chartjs-2";
 
 import { get_severity_color } from "../commons/functions";
@@ -35,7 +34,6 @@ const ProductMetricsSeverities = (props: ProductMetricsSeveritiesProps) => {
     const [datasets, setDatasets] = useState<any[]>([]);
     const [loaded, setLoaded] = useState(false);
     const [loading, setLoading] = useState(false);
-    const notify = useNotify();
 
     const days = [
         new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toLocaleDateString(),
@@ -148,7 +146,7 @@ const ProductMetricsSeverities = (props: ProductMetricsSeveritiesProps) => {
                     fill: true,
                     label: OBSERVATION_SEVERITY_UNKOWN,
                     data: unkown_observations,
-                    borderColor: "#ffffff",
+                    borderColor: getBackgroundColor(),
                     backgroundColor: get_severity_color(OBSERVATION_SEVERITY_UNKOWN),
                     cubicInterpolationMode: "monotone",
                 },
@@ -156,7 +154,7 @@ const ProductMetricsSeverities = (props: ProductMetricsSeveritiesProps) => {
                     fill: true,
                     label: OBSERVATION_SEVERITY_NONE,
                     data: none_observations,
-                    borderColor: "#ffffff",
+                    borderColor: getBackgroundColor(),
                     backgroundColor: get_severity_color(OBSERVATION_SEVERITY_NONE),
                     cubicInterpolationMode: "monotone",
                 },
@@ -164,7 +162,7 @@ const ProductMetricsSeverities = (props: ProductMetricsSeveritiesProps) => {
                     fill: true,
                     label: OBSERVATION_SEVERITY_LOW,
                     data: low_observations,
-                    borderColor: "#ffffff",
+                    borderColor: getBackgroundColor(),
                     backgroundColor: get_severity_color(OBSERVATION_SEVERITY_LOW),
                     cubicInterpolationMode: "monotone",
                 },
@@ -172,7 +170,7 @@ const ProductMetricsSeverities = (props: ProductMetricsSeveritiesProps) => {
                     fill: true,
                     label: OBSERVATION_SEVERITY_MEDIUM,
                     data: medium_observations,
-                    borderColor: "#ffffff",
+                    borderColor: getBackgroundColor(),
                     backgroundColor: get_severity_color(OBSERVATION_SEVERITY_MEDIUM),
                     cubicInterpolationMode: "monotone",
                 },
@@ -180,7 +178,7 @@ const ProductMetricsSeverities = (props: ProductMetricsSeveritiesProps) => {
                     fill: true,
                     label: OBSERVATION_SEVERITY_HIGH,
                     data: high_observations,
-                    borderColor: "#ffffff",
+                    borderColor: getBackgroundColor(),
                     backgroundColor: get_severity_color(OBSERVATION_SEVERITY_HIGH),
                     cubicInterpolationMode: "monotone",
                 },
@@ -188,7 +186,7 @@ const ProductMetricsSeverities = (props: ProductMetricsSeveritiesProps) => {
                     fill: true,
                     label: OBSERVATION_SEVERITY_CRITICAL,
                     data: critical_observations,
-                    borderColor: "#ffffff",
+                    borderColor: getBackgroundColor(),
                     backgroundColor: get_severity_color(OBSERVATION_SEVERITY_CRITICAL),
                     cubicInterpolationMode: "monotone",
                 },
@@ -223,6 +221,14 @@ const ProductMetricsSeverities = (props: ProductMetricsSeveritiesProps) => {
                         scales: {
                             y: {
                                 stacked: true,
+                                grid : {
+                                    color: getGridColor(),
+                                },
+                            },
+                            x: {
+                                grid : {
+                                    color: getGridColor(),
+                                },
                             },
                         },
                         borderColor: getBackgroundColor(),
