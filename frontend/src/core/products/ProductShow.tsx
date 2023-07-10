@@ -40,9 +40,9 @@ import ApiConfigurationCreate from "../../import_observations/api_configurations
 import ApiConfigurationEmbeddedList from "../../import_observations/api_configurations/ApiConfigurationEmbeddedList";
 import ApiImportObservations from "../../import_observations/import/ApiImportObservations";
 import FileUploadObservations from "../../import_observations/import/FileUploadObservations";
-import MetricSeverities from "../../metrics/MetricSeverities";
-import MetricStatus from "../../metrics/MetricStatus";
-import ProductMetricsSeverities from "../../metrics/ProductMetricsSeverities";
+import MetricsSeveritiesCurrent from "../../metrics/MetricsSeveritiesCurrent";
+import MetricsSeveritiesTimeline from "../../metrics/MetricsSeveritiesTimeLine";
+import MetricsStatusCurrent from "../../metrics/MetricsStatusCurrent";
 import general_rules from "../../rules/general_rules";
 import ProductRuleApply from "../../rules/product_rules/ProductRuleApply";
 import ProductRuleCreate from "../../rules/product_rules/ProductRuleCreate";
@@ -204,9 +204,9 @@ const ProductShow = () => {
                                             marginTop: 2,
                                         }}
                                     >
-                                        <MetricSeverities product_id={product.id} />
-                                        <ProductMetricsSeverities product_id={product.id} />
-                                        <MetricStatus product_id={product.id} />
+                                        <MetricsSeveritiesCurrent product_id={product.id} />
+                                        <MetricsSeveritiesTimeline product_id={product.id} />
+                                        <MetricsStatusCurrent product_id={product.id} />
                                     </Stack>{" "}
                                 </SimpleShowLayout>
                             </Tab>

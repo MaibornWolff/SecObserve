@@ -26,11 +26,11 @@ import {
 } from "../core/types";
 import { getBackgroundColor, getFontColor, getGridColor } from "./functions";
 
-interface ProductMetricsSeveritiesProps {
+interface MetricsSeveritiesTimelineProps {
     product_id: Identifier | undefined;
 }
 
-const ProductMetricsSeverities = (props: ProductMetricsSeveritiesProps) => {
+const MetricsSeveritiesTimeline = (props: MetricsSeveritiesTimelineProps) => {
     const [datasets, setDatasets] = useState<any[]>([]);
     const [loaded, setLoaded] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -254,4 +254,4 @@ const ProductMetricsSeverities = (props: ProductMetricsSeveritiesProps) => {
     );
 };
 
-export default ProductMetricsSeverities;
+export default MetricsSeveritiesTimeline;

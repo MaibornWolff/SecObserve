@@ -1,55 +1,51 @@
 import { Paper } from "@mui/material";
 import { ArcElement, Chart as ChartJS, Legend, RadialLinearScale, Title, Tooltip } from "chart.js";
 import { useState } from "react";
-import { Identifier } from "react-admin";
+import { Identifier, useNotify } from "react-admin";
 import { PolarArea } from "react-chartjs-2";
 
+import { get_severity_color } from "../commons/functions";
 import { httpClient } from "../commons/ra-data-django-rest-framework";
 import {
-    OBSERVATION_STATUS_DUPLICATE,
-    OBSERVATION_STATUS_FALSE_POSITIVE,
-    OBSERVATION_STATUS_IN_REVIEW,
-    OBSERVATION_STATUS_NOT_AFFECTED,
-    OBSERVATION_STATUS_NOT_SECURITY,
-    OBSERVATION_STATUS_OPEN,
-    OBSERVATION_STATUS_RESOLVED,
-    OBSERVATION_STATUS_RISK_ACCEPTED,
+    OBSERVATION_SEVERITY_CRITICAL,
+    OBSERVATION_SEVERITY_HIGH,
+    OBSERVATION_SEVERITY_LOW,
+    OBSERVATION_SEVERITY_MEDIUM,
+    OBSERVATION_SEVERITY_NONE,
+    OBSERVATION_SEVERITY_UNKOWN,
 } from "../core/types";
 import { getBackgroundColor, getFontColor, getGridColor } from "./functions";
 
-interface MetricStatusProps {
+interface MetricsSeveritiesCurrentProps {
     product_id: Identifier | undefined;
 }
 
-const MetricStatus = (props: MetricStatusProps) => {
+const MetricsSeveritiesCurrent = (props: MetricsSeveritiesCurrentProps) => {
     const [data, setData] = useState<number[]>([]);
     const [loaded, setLoaded] = useState(false);
     const [loading, setLoading] = useState(false);
+    const notify = useNotify();
 
     const chart_data = {
         labels: [
-            OBSERVATION_STATUS_OPEN,
-            OBSERVATION_STATUS_RESOLVED,
-            OBSERVATION_STATUS_DUPLICATE,
-            OBSERVATION_STATUS_FALSE_POSITIVE,
-            OBSERVATION_STATUS_IN_REVIEW,
-            OBSERVATION_STATUS_NOT_AFFECTED,
-            OBSERVATION_STATUS_NOT_SECURITY,
-            OBSERVATION_STATUS_RISK_ACCEPTED,
+            OBSERVATION_SEVERITY_CRITICAL,
+            OBSERVATION_SEVERITY_HIGH,
+            OBSERVATION_SEVERITY_MEDIUM,
+            OBSERVATION_SEVERITY_LOW,
+            OBSERVATION_SEVERITY_NONE,
+            OBSERVATION_SEVERITY_UNKOWN,
         ],
         datasets: [
             {
-                label: "Status of observations",
+                label: "Severities of open observations",
                 data: data,
                 backgroundColor: [
-                    "#1f2c33",
-                    "#3d5766",
-                    "#79adcc",
-                    "#bcb7b6",
-                    "#ffc09f",
-                    "#ffd799",
-                    "#ffee93",
-                    "#fcf5c7",
+                    get_severity_color(OBSERVATION_SEVERITY_CRITICAL),
+                    get_severity_color(OBSERVATION_SEVERITY_HIGH),
+                    get_severity_color(OBSERVATION_SEVERITY_MEDIUM),
+                    get_severity_color(OBSERVATION_SEVERITY_LOW),
+                    get_severity_color(OBSERVATION_SEVERITY_NONE),
+                    get_severity_color(OBSERVATION_SEVERITY_UNKOWN),
                 ],
             },
         ],
@@ -65,19 +61,32 @@ const MetricStatus = (props: MetricStatusProps) => {
 
         httpClient(url, {
             method: "GET",
-        }).then((result) => {
-            const new_data = [
-                result.json.open,
-                result.json.resolved,
-                result.json.duplicate,
-                result.json.false_positive,
-                result.json.in_review,
-                result.json.not_affected,
-                result.json.not_security,
-                result.json.risk_accepted,
-            ];
-            setData((data) => data.concat(new_data));
-        });
+        })
+            .then((result) => {
+                localStorage.setItem("aad_login_finalized", "true");
+                const new_data = [
+                    result.json.open_critical,
+                    result.json.open_high,
+                    result.json.open_medium,
+                    result.json.open_low,
+                    result.json.open_none,
+                    result.json.open_unkown,
+                ];
+                setData((data) => data.concat(new_data));
+            })
+            .catch((error) => {
+                if (localStorage.getItem("aad_login_finalized") != "false") {
+                    if (error !== undefined) {
+                        notify(error.message, {
+                            type: "warning",
+                        });
+                    } else {
+                        notify("Error while loading metrics", {
+                            type: "warning",
+                        });
+                    }
+                }
+            });
         setLoaded(true);
         setLoading(false);
     }
@@ -122,7 +131,7 @@ const MetricStatus = (props: MetricStatusProps) => {
                         plugins: {
                             title: {
                                 display: true,
-                                text: "Status of observations (current)",
+                                text: "Severities of open observations (current)",
                                 color: getFontColor(),
                             },
                             legend: {
@@ -140,4 +149,4 @@ const MetricStatus = (props: MetricStatusProps) => {
     );
 };
 
-export default MetricStatus;
+export default MetricsSeveritiesCurrent;
