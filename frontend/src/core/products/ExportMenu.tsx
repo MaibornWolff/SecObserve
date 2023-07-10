@@ -82,27 +82,51 @@ export default function ExportMenu(product: any) {
     };
 
     const exportCodeChartaMetrics = async () => {
-        exportDataCsv("/products/" + product.product.id + "/export_codecharta_metrics/", "secobserve_codecharta_metrics.csv", "CodeCharta metrics");
+        exportDataCsv(
+            "/products/" + product.product.id + "/export_codecharta_metrics/",
+            "secobserve_codecharta_metrics.csv",
+            "CodeCharta metrics"
+        );
     };
 
     const exportAllObservationsExcel = async () => {
-        exportDataExcel("/products/" + product.product.id + "/export_observations_excel/", "all_observations.xlsx", "Observations");
+        exportDataExcel(
+            "/products/" + product.product.id + "/export_observations_excel/",
+            "all_observations.xlsx",
+            "Observations"
+        );
     };
 
     const exportOpenObservationsExcel = async () => {
-        exportDataExcel("/products/" + product.product.id +  "/export_observations_excel/?status=Open", "open_observations.xlsx", "Observations");
+        exportDataExcel(
+            "/products/" + product.product.id + "/export_observations_excel/?status=Open",
+            "open_observations.xlsx",
+            "Observations"
+        );
     };
 
     const exportAllObservationsCsv = async () => {
-        exportDataCsv("/products/" + product.product.id + "/export_observations_csv/", "all_observations.csv", "Observations");
+        exportDataCsv(
+            "/products/" + product.product.id + "/export_observations_csv/",
+            "all_observations.csv",
+            "Observations"
+        );
     };
 
     const exportOpenObservationsCsv = async () => {
-        exportDataCsv("/products/" + product.product.id + "/export_observations_csv/?status=Open", "open_observations.csv", "Observations");
+        exportDataCsv(
+            "/products/" + product.product.id + "/export_observations_csv/?status=Open",
+            "open_observations.csv",
+            "Observations"
+        );
     };
 
     const exportMetricsExcel = async () => {
-        exportDataExcel("/metrics/export_excel?product_id=" + product.product.id, "product_metrics.xlsx", "Product Metrics");
+        exportDataExcel(
+            "/metrics/export_excel?product_id=" + product.product.id,
+            "product_metrics.xlsx",
+            "Product Metrics"
+        );
     };
 
     const exportMetricsCsv = async () => {

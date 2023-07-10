@@ -221,12 +221,12 @@ const MetricsSeveritiesTimeline = (props: MetricsSeveritiesTimelineProps) => {
                         scales: {
                             y: {
                                 stacked: true,
-                                grid : {
+                                grid: {
                                     color: getGridColor(),
                                 },
                             },
                             x: {
-                                grid : {
+                                grid: {
                                     color: getGridColor(),
                                 },
                             },

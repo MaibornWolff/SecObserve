@@ -21,10 +21,10 @@ from application.import_observations.api.views import (
     FileUploadObservationsByName,
 )
 from application.metrics.api.views import (
-    ProductMetricsTimelineView,
     ProductMetricsCurrentView,
     ProductMetricsExportCsvView,
     ProductMetricsExportExcelView,
+    ProductMetricsTimelineView,
 )
 
 urlpatterns = [
