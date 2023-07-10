@@ -1,14 +1,13 @@
+from datetime import timedelta
 from unittest.mock import patch
 
 from django.core.management import call_command
+from django.utils import timezone
 from rest_framework.test import APIClient
 
 from application.access_control.models import User
 from application.metrics.models import Product_Metrics
 from unittests.base_test_case import BaseTestCase
-from datetime import timedelta
-
-from django.utils import timezone
 
 
 class APITest:
@@ -42,16 +41,24 @@ class TestAuthentication(BaseTestCase):
         call_command("loaddata", "unittests/fixtures/unittests_fixtures.json")
 
         product_metrics = Product_Metrics.objects.get(pk=1)
-        product_metrics.date = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=1)
+        product_metrics.date = timezone.now().replace(
+            hour=0, minute=0, second=0, microsecond=0
+        ) - timedelta(days=1)
         product_metrics.save()
         product_metrics = Product_Metrics.objects.get(pk=2)
-        product_metrics.date = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        product_metrics.date = timezone.now().replace(
+            hour=0, minute=0, second=0, microsecond=0
+        )
         product_metrics.save()
         product_metrics = Product_Metrics.objects.get(pk=3)
-        product_metrics.date = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=1)
+        product_metrics.date = timezone.now().replace(
+            hour=0, minute=0, second=0, microsecond=0
+        ) - timedelta(days=1)
         product_metrics.save()
         product_metrics = Product_Metrics.objects.get(pk=4)
-        product_metrics.date = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        product_metrics.date = timezone.now().replace(
+            hour=0, minute=0, second=0, microsecond=0
+        )
         product_metrics.save()
 
         self.maxDiff = None
@@ -330,9 +337,7 @@ class TestAuthentication(BaseTestCase):
 
         # --- metrics ---
 
-        expected_data = (
-            "{'open_critical': 7, 'open_high': 9, 'open_medium': 11, 'open_low': 13, 'open_none': 15, 'open_unknown': 17, 'open': 19, 'resolved': 21, 'duplicate': 23, 'false_positive': 25, 'in_review': 27, 'not_affected': 29, 'not_security': 31, 'risk_accepted': 33}"
-        )
+        expected_data = "{'open_critical': 7, 'open_high': 9, 'open_medium': 11, 'open_low': 13, 'open_none': 15, 'open_unknown': 17, 'open': 19, 'resolved': 21, 'duplicate': 23, 'false_positive': 25, 'in_review': 27, 'not_affected': 29, 'not_security': 31, 'risk_accepted': 33}"
         self._test_api(
             APITest(
                 "db_admin",
@@ -355,7 +360,7 @@ class TestAuthentication(BaseTestCase):
             )
         )
 
-        expected_data = ("{'open_critical': 2, 'open_high': 3, 'open_medium': 4, 'open_low': 5, 'open_none': 6, 'open_unknown': 7, 'open': 8, 'resolved': 9, 'duplicate': 10, 'false_positive': 11, 'in_review': 12, 'not_affected': 13, 'not_security': 14, 'risk_accepted': 15}")
+        expected_data = "{'open_critical': 2, 'open_high': 3, 'open_medium': 4, 'open_low': 5, 'open_none': 6, 'open_unknown': 7, 'open': 8, 'resolved': 9, 'duplicate': 10, 'false_positive': 11, 'in_review': 12, 'not_affected': 13, 'not_security': 14, 'risk_accepted': 15}"
         self._test_api(
             APITest(
                 "db_internal_write",
@@ -379,7 +384,7 @@ class TestAuthentication(BaseTestCase):
             )
         )
 
-        expected_data = ("{'open_critical': 2, 'open_high': 3, 'open_medium': 4, 'open_low': 5, 'open_none': 6, 'open_unknown': 7, 'open': 8, 'resolved': 9, 'duplicate': 10, 'false_positive': 11, 'in_review': 12, 'not_affected': 13, 'not_security': 14, 'risk_accepted': 15}")
+        expected_data = "{'open_critical': 2, 'open_high': 3, 'open_medium': 4, 'open_low': 5, 'open_none': 6, 'open_unknown': 7, 'open': 8, 'resolved': 9, 'duplicate': 10, 'false_positive': 11, 'in_review': 12, 'not_affected': 13, 'not_security': 14, 'risk_accepted': 15}"
         self._test_api(
             APITest(
                 "db_internal_write",

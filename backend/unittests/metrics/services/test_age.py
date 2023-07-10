@@ -1,6 +1,12 @@
+from application.metrics.services.age import (
+    AGE_MONTH,
+    AGE_QUARTER,
+    AGE_WEEK,
+    AGE_YEAR,
+    get_days,
+)
 from unittests.base_test_case import BaseTestCase
 
-from application.metrics.services.age import get_days, AGE_WEEK, AGE_MONTH, AGE_QUARTER, AGE_YEAR
 
 class TestAge(BaseTestCase):
     def test_get_age(self):
