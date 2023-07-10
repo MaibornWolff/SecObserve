@@ -17,11 +17,11 @@ import {
 } from "../core/types";
 import { getBackgroundColor, getFontColor, getGridColor } from "./functions";
 
-interface MetricStatusProps {
+interface MetricsStatusCurrentProps {
     product_id: Identifier | undefined;
 }
 
-const MetricStatus = (props: MetricStatusProps) => {
+const MetricsStatusCurrent = (props: MetricsStatusCurrentProps) => {
     const [data, setData] = useState<number[]>([]);
     const [loaded, setLoaded] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -58,7 +58,7 @@ const MetricStatus = (props: MetricStatusProps) => {
     function get_data() {
         setLoading(true);
 
-        let url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/metrics/status_counts/";
+        let url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/metrics/product_metrics_current/";
         if (props.product_id) {
             url += "?product_id=" + props.product_id;
         }
@@ -67,15 +67,14 @@ const MetricStatus = (props: MetricStatusProps) => {
             method: "GET",
         }).then((result) => {
             const new_data = [
-                result.json.Open,
-                result.json.Resolved,
-                result.json.Duplicate,
-                result.json[OBSERVATION_STATUS_FALSE_POSITIVE], // eslint-disable-line security/detect-object-injection
-                result.json[OBSERVATION_STATUS_IN_REVIEW], // eslint-disable-line security/detect-object-injection
-                result.json[OBSERVATION_STATUS_NOT_AFFECTED], // eslint-disable-line security/detect-object-injection
-                result.json[OBSERVATION_STATUS_NOT_SECURITY], // eslint-disable-line security/detect-object-injection
-                result.json[OBSERVATION_STATUS_RISK_ACCEPTED], // eslint-disable-line security/detect-object-injection
-                // eslint is disabled because the values for the keys are constants
+                result.json.open,
+                result.json.resolved,
+                result.json.duplicate,
+                result.json.false_positive,
+                result.json.in_review,
+                result.json.not_affected,
+                result.json.not_security,
+                result.json.risk_accepted,
             ];
             setData((data) => data.concat(new_data));
         });
@@ -123,7 +122,7 @@ const MetricStatus = (props: MetricStatusProps) => {
                         plugins: {
                             title: {
                                 display: true,
-                                text: "Status of observations",
+                                text: "Status of observations (current)",
                                 color: getFontColor(),
                             },
                             legend: {
@@ -141,4 +140,4 @@ const MetricStatus = (props: MetricStatusProps) => {
     );
 };
 
-export default MetricStatus;
+export default MetricsStatusCurrent;

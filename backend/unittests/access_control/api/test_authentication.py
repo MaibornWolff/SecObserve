@@ -228,8 +228,10 @@ class TestAuthentication(BaseTestCase):
             ["delete", "get", "put", "patch"], "/api/general_rules/1/"
         )
 
-        self._check_authentication(["get"], "/api/metrics/severity_counts/")
-        self._check_authentication(["get"], "/api/metrics/status_counts/")
+        self._check_authentication(["get"], "/api/metrics/export_csv/")
+        self._check_authentication(["get"], "/api/metrics/export_excel/")
+        self._check_authentication(["get"], "/api/metrics/product_metrics_current/")
+        self._check_authentication(["get"], "/api/metrics/product_metrics_timeline/")
 
         self._check_authentication(["get"], "/api/observations/")
         self._check_authentication(

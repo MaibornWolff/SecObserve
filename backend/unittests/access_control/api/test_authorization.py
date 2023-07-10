@@ -1,9 +1,12 @@
+from datetime import timedelta
 from unittest.mock import patch
 
 from django.core.management import call_command
+from django.utils import timezone
 from rest_framework.test import APIClient
 
 from application.access_control.models import User
+from application.metrics.models import Product_Metrics
 from unittests.base_test_case import BaseTestCase
 
 
@@ -36,6 +39,28 @@ class TestAuthentication(BaseTestCase):
     def setUpClass(self, mock_user):
         mock_user.return_value = None
         call_command("loaddata", "unittests/fixtures/unittests_fixtures.json")
+
+        product_metrics = Product_Metrics.objects.get(pk=1)
+        product_metrics.date = timezone.now().replace(
+            hour=0, minute=0, second=0, microsecond=0
+        ) - timedelta(days=1)
+        product_metrics.save()
+        product_metrics = Product_Metrics.objects.get(pk=2)
+        product_metrics.date = timezone.now().replace(
+            hour=0, minute=0, second=0, microsecond=0
+        )
+        product_metrics.save()
+        product_metrics = Product_Metrics.objects.get(pk=3)
+        product_metrics.date = timezone.now().replace(
+            hour=0, minute=0, second=0, microsecond=0
+        ) - timedelta(days=1)
+        product_metrics.save()
+        product_metrics = Product_Metrics.objects.get(pk=4)
+        product_metrics.date = timezone.now().replace(
+            hour=0, minute=0, second=0, microsecond=0
+        )
+        product_metrics.save()
+
         self.maxDiff = None
         super().setUpClass()
 
@@ -312,75 +337,70 @@ class TestAuthentication(BaseTestCase):
 
         # --- metrics ---
 
-        expected_data = (
-            "{'Critical': 0, 'High': 0, 'Medium': 0, 'Low': 0, 'None': 0, 'Unkown': 0}"
-        )
+        expected_data = "{'open_critical': 7, 'open_high': 9, 'open_medium': 11, 'open_low': 13, 'open_none': 15, 'open_unknown': 17, 'open': 19, 'resolved': 21, 'duplicate': 23, 'false_positive': 25, 'in_review': 27, 'not_affected': 29, 'not_security': 31, 'risk_accepted': 33}"
         self._test_api(
             APITest(
                 "db_admin",
                 "get",
-                "/api/metrics/severity_counts/",
+                "/api/metrics/product_metrics_current/",
                 None,
                 200,
                 expected_data,
             )
         )
-        expected_data = "{'Open': 0, 'Resolved': 0, 'Duplicate': 1, 'False positive': 1, 'In review': 0, 'Not affected': 0, 'Not security': 0, 'Risk accepted': 0}"
+        expected_data = "{'2023-07-09': {'open_critical': 5, 'open_high': 7, 'open_medium': 9, 'open_low': 11, 'open_none': 13, 'open_unknown': 15, 'open': 17, 'resolved': 19, 'duplicate': 21, 'false_positive': 23, 'in_review': 25, 'not_affected': 27, 'not_security': 29, 'risk_accepted': 31}, '2023-07-10': {'open_critical': 7, 'open_high': 9, 'open_medium': 11, 'open_low': 13, 'open_none': 15, 'open_unknown': 17, 'open': 19, 'resolved': 21, 'duplicate': 23, 'false_positive': 25, 'in_review': 27, 'not_affected': 29, 'not_security': 31, 'risk_accepted': 33}}"
         self._test_api(
             APITest(
                 "db_admin",
                 "get",
-                "/api/metrics/status_counts/",
+                "/api/metrics/product_metrics_timeline/",
                 None,
                 200,
                 expected_data,
             )
         )
 
-        expected_data = (
-            "{'Critical': 0, 'High': 0, 'Medium': 0, 'Low': 0, 'None': 0, 'Unkown': 0}"
-        )
+        expected_data = "{'open_critical': 2, 'open_high': 3, 'open_medium': 4, 'open_low': 5, 'open_none': 6, 'open_unknown': 7, 'open': 8, 'resolved': 9, 'duplicate': 10, 'false_positive': 11, 'in_review': 12, 'not_affected': 13, 'not_security': 14, 'risk_accepted': 15}"
         self._test_api(
             APITest(
                 "db_internal_write",
                 "get",
-                "/api/metrics/severity_counts/",
-                None,
-                200,
-                expected_data,
-            )
-        )
-        expected_data = "{'Open': 0, 'Resolved': 0, 'Duplicate': 1, 'False positive': 0, 'In review': 0, 'Not affected': 0, 'Not security': 0, 'Risk accepted': 0}"
-        self._test_api(
-            APITest(
-                "db_internal_write",
-                "get",
-                "/api/metrics/status_counts/",
+                "/api/metrics/product_metrics_current/",
                 None,
                 200,
                 expected_data,
             )
         )
 
-        expected_data = (
-            "{'Critical': 0, 'High': 0, 'Medium': 0, 'Low': 0, 'None': 0, 'Unkown': 0}"
-        )
+        expected_data = "{'2023-07-09': {'open_critical': 1, 'open_high': 2, 'open_medium': 3, 'open_low': 4, 'open_none': 5, 'open_unknown': 6, 'open': 7, 'resolved': 8, 'duplicate': 9, 'false_positive': 10, 'in_review': 11, 'not_affected': 12, 'not_security': 13, 'risk_accepted': 14}, '2023-07-10': {'open_critical': 2, 'open_high': 3, 'open_medium': 4, 'open_low': 5, 'open_none': 6, 'open_unknown': 7, 'open': 8, 'resolved': 9, 'duplicate': 10, 'false_positive': 11, 'in_review': 12, 'not_affected': 13, 'not_security': 14, 'risk_accepted': 15}}"
         self._test_api(
             APITest(
                 "db_internal_write",
                 "get",
-                "/api/metrics/severity_counts/?product_id=1",
+                "/api/metrics/product_metrics_timeline/",
                 None,
                 200,
                 expected_data,
             )
         )
-        expected_data = "{'Open': 0, 'Resolved': 0, 'Duplicate': 1, 'False positive': 0, 'In review': 0, 'Not affected': 0, 'Not security': 0, 'Risk accepted': 0}"
+
+        expected_data = "{'open_critical': 2, 'open_high': 3, 'open_medium': 4, 'open_low': 5, 'open_none': 6, 'open_unknown': 7, 'open': 8, 'resolved': 9, 'duplicate': 10, 'false_positive': 11, 'in_review': 12, 'not_affected': 13, 'not_security': 14, 'risk_accepted': 15}"
         self._test_api(
             APITest(
                 "db_internal_write",
                 "get",
-                "/api/metrics/status_counts/?product_id=1",
+                "/api/metrics/product_metrics_current/?product_id=1",
+                None,
+                200,
+                expected_data,
+            )
+        )
+        expected_data = "{'2023-07-09': {'open_critical': 1, 'open_high': 2, 'open_medium': 3, 'open_low': 4, 'open_none': 5, 'open_unknown': 6, 'open': 7, 'resolved': 8, 'duplicate': 9, 'false_positive': 10, 'in_review': 11, 'not_affected': 12, 'not_security': 13, 'risk_accepted': 14}, '2023-07-10': {'open_critical': 2, 'open_high': 3, 'open_medium': 4, 'open_low': 5, 'open_none': 6, 'open_unknown': 7, 'open': 8, 'resolved': 9, 'duplicate': 10, 'false_positive': 11, 'in_review': 12, 'not_affected': 13, 'not_security': 14, 'risk_accepted': 15}}"
+        self._test_api(
+            APITest(
+                "db_internal_write",
+                "get",
+                "/api/metrics/product_metrics_timeline/?product_id=1",
                 None,
                 200,
                 expected_data,
@@ -394,7 +414,7 @@ class TestAuthentication(BaseTestCase):
             APITest(
                 "db_internal_write",
                 "get",
-                "/api/metrics/severity_counts/?product_id=2",
+                "/api/metrics/product_metrics_current/?product_id=2",
                 None,
                 403,
                 expected_data,
@@ -407,7 +427,7 @@ class TestAuthentication(BaseTestCase):
             APITest(
                 "db_internal_write",
                 "get",
-                "/api/metrics/status_counts/?product_id=2",
+                "/api/metrics/product_metrics_timeline/?product_id=2",
                 None,
                 403,
                 expected_data,

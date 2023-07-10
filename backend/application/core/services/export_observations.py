@@ -1,112 +1,44 @@
-from datetime import datetime
-from typing import Any
+from typing import Optional
 
-from defusedcsv import csv
+from django.db.models.query import QuerySet
 from django.http import HttpResponse
 from openpyxl import Workbook
-from openpyxl.styles import Font
 
+from application.commons.services.export import export_csv, export_excel
 from application.core.models import Observation, Product
 
 
-def export_observations_excel(product: Product, status: str = None) -> Workbook:
-    workbook = Workbook()
-    workbook.iso_dates = True
-    worksheet = workbook.active
-    worksheet.title = "Observations"
+def export_observations_excel(product: Product, status: Optional[str]) -> Workbook:
+    observations = _get_observations(product, status)
+    return export_excel(
+        observations, "Observations", _get_excludes(), _get_foreign_keys()
+    )
 
-    font_bold = Font(bold=True)
 
-    row_num = 1
-
+def _get_observations(product: Product, status: Optional[str]) -> QuerySet:
     if status:
         observations = Observation.objects.filter(
             product=product, current_status=status
         )
     else:
         observations = Observation.objects.filter(product=product)
-
-    for observation in observations:
-        if row_num == 1:
-            col_num = 1
-            for key in dir(observation):
-                if (
-                    key not in __get_excludes()
-                    and not callable(getattr(observation, key))
-                    and not key.startswith("_")
-                ):
-                    cell = worksheet.cell(row=row_num, column=col_num, value=key)
-                    cell.font = font_bold
-                    col_num += 1
-            cell.font = font_bold
-            row_num = 2
-        if row_num > 1:
-            col_num = 1
-            for key in dir(observation):
-                if (
-                    key not in __get_excludes()
-                    and not callable(getattr(observation, key))
-                    and not key.startswith("_")
-                ):
-                    value = observation.__dict__.get(key)
-                    if key in __get_foreign_keys() and getattr(observation, key):
-                        value = str(getattr(observation, key))
-                    if value and isinstance(value, datetime):
-                        value = value.replace(tzinfo=None)
-                    worksheet.cell(row=row_num, column=col_num, value=value)
-                    col_num += 1
-        row_num += 1
-
-    return workbook
+    observations = observations.order_by("current_status", "current_severity", "title")
+    return observations
 
 
 def export_observations_csv(
-    response: HttpResponse, product: Product, status: str = None
+    response: HttpResponse, product: Product, status: Optional[str]
 ) -> None:
-    writer = csv.writer(response)  # nosemgrep
-    # defusedcsv is actually used but not detected by Semgrep
-
-    first_row = True
-
-    if status:
-        observations = Observation.objects.filter(
-            product=product, current_status=status
-        )
-    else:
-        observations = Observation.objects.filter(product=product)
-
-    for observation in observations:
-        fields: list[Any] = []
-        if first_row:
-            for key in dir(observation):
-                if (
-                    key not in __get_excludes()
-                    and not callable(getattr(observation, key))
-                    and not key.startswith("_")
-                ):
-                    fields.append(key)
-
-            writer.writerow(fields)
-
-            first_row = False
-        if not first_row:
-            for key in dir(observation):
-                if (
-                    key not in __get_excludes()
-                    and not callable(getattr(observation, key))
-                    and not key.startswith("_")
-                ):
-                    value = observation.__dict__.get(key)
-                    if key in __get_foreign_keys() and getattr(observation, key):
-                        value = str(getattr(observation, key))
-                    if value and isinstance(value, str):
-                        value = value.replace("\n", " NEWLINE ").replace("\r", "")
-                    fields.append(value)
-
-            writer.writerow(fields)
+    observations = _get_observations(product, status)
+    export_csv(
+        response,
+        observations,
+        _get_excludes(),
+        _get_foreign_keys(),
+    )
 
 
-def __get_excludes():
+def _get_excludes():
     return [
         "identity_hash",
         "pk",
@@ -129,8 +61,9 @@ def __get_excludes():
         "STATUS_OPEN",
         "STATUS_RESOLVED",
         "STATUS_RISK_ACCEPTED",
+        "STATUS_NOT_SECURITY",
     ]
 
 
-def __get_foreign_keys():
+def _get_foreign_keys():
     return ["parser", "product"]

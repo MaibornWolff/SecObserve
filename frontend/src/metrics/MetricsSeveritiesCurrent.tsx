@@ -16,11 +16,11 @@ import {
 } from "../core/types";
 import { getBackgroundColor, getFontColor, getGridColor } from "./functions";
 
-interface MetricSeveritiesProps {
+interface MetricsSeveritiesCurrentProps {
     product_id: Identifier | undefined;
 }
 
-const MetricSeverities = (props: MetricSeveritiesProps) => {
+const MetricsSeveritiesCurrent = (props: MetricsSeveritiesCurrentProps) => {
     const [data, setData] = useState<number[]>([]);
     const [loaded, setLoaded] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -54,7 +54,7 @@ const MetricSeverities = (props: MetricSeveritiesProps) => {
     function get_data() {
         setLoading(true);
 
-        let url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/metrics/severity_counts/";
+        let url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/metrics/product_metrics_current/";
         if (props.product_id) {
             url += "?product_id=" + props.product_id;
         }
@@ -65,12 +65,12 @@ const MetricSeverities = (props: MetricSeveritiesProps) => {
             .then((result) => {
                 localStorage.setItem("aad_login_finalized", "true");
                 const new_data = [
-                    result.json.Critical,
-                    result.json.High,
-                    result.json.Medium,
-                    result.json.Low,
-                    result.json.None,
-                    result.json.Unkown,
+                    result.json.open_critical,
+                    result.json.open_high,
+                    result.json.open_medium,
+                    result.json.open_low,
+                    result.json.open_none,
+                    result.json.open_unkown,
                 ];
                 setData((data) => data.concat(new_data));
             })
@@ -131,7 +131,7 @@ const MetricSeverities = (props: MetricSeveritiesProps) => {
                         plugins: {
                             title: {
                                 display: true,
-                                text: "Severities of open observations",
+                                text: "Severities of open observations (current)",
                                 color: getFontColor(),
                             },
                             legend: {
@@ -149,4 +149,4 @@ const MetricSeverities = (props: MetricSeveritiesProps) => {
     );
 };
 
-export default MetricSeverities;
+export default MetricsSeveritiesCurrent;

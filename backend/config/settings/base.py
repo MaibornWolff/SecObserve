@@ -104,6 +104,7 @@ LOCAL_APPS = [
     "application.core",
     "application.import_observations",
     "application.issue_tracker",
+    "application.metrics",
     "application.rules",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -475,6 +476,11 @@ CONSTANCE_CONFIG = {
         "Comma separated email addresses to send exception notifications",
         str,
     ),
+    "BACKGROUND_PRODUCT_METRICS_INTERVAL_MINUTES": (
+        5,
+        "Calculate product metrics every x minutes",
+        int,
+    ),
 }
 
 CONSTANCE_CONFIG_FIELDSETS = {
@@ -498,6 +504,7 @@ CONSTANCE_CONFIG_FIELDSETS = {
         "EXCEPTION_MS_TEAMS_WEBHOOK",
         "EXCEPTION_RATELIMIT",
     ),
+    "Background tasks": ("BACKGROUND_PRODUCT_METRICS_INTERVAL_MINUTES",),
 }
 
 FIELD_ENCRYPTION_KEY = env("FIELD_ENCRYPTION_KEY")
@@ -533,13 +540,13 @@ HUEY = {
         "filename": HUEY_FILENAME,  # Filename for sqlite.
     },
     "consumer": {
-        "workers": 1,
+        "workers": 2,
         "worker_type": "thread",
         "initial_delay": 0.1,  # Smallest polling interval, same as -d.
         "backoff": 1.15,  # Exponential backoff using this rate, -b.
         "max_delay": 10.0,  # Max possible polling interval, -m.
         "scheduler_interval": 1,  # Check schedule every second, -s.
-        "periodic": False,  # Enable crontab feature.
+        "periodic": True,  # Enable crontab feature.
         "check_worker_health": True,  # Enable worker health checks.
         "health_check_interval": 60,  # Check worker health every second.
     },
