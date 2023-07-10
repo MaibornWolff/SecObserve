@@ -21,11 +21,10 @@ from application.import_observations.api.views import (
     FileUploadObservationsByName,
 )
 from application.metrics.api.views import (
-    ProductMetricsCountsView,
+    ProductMetricsTimelineView,
+    ProductMetricsCurrentView,
     ProductMetricsExportCsvView,
     ProductMetricsExportExcelView,
-    SeverityCountsView,
-    StatusCountsView,
 )
 
 urlpatterns = [
@@ -78,9 +77,8 @@ urlpatterns += [
         "api/import/file_upload_observations_by_id/",
         FileUploadObservationsById.as_view(),
     ),
-    path("api/metrics/product_metrics_counts/", ProductMetricsCountsView.as_view()),
-    path("api/metrics/severity_counts/", SeverityCountsView.as_view()),
-    path("api/metrics/status_counts/", StatusCountsView.as_view()),
+    path("api/metrics/product_metrics_timeline/", ProductMetricsTimelineView.as_view()),
+    path("api/metrics/product_metrics_current/", ProductMetricsCurrentView.as_view()),
     path("api/metrics/export_excel/", ProductMetricsExportExcelView.as_view()),
     path("api/metrics/export_csv/", ProductMetricsExportCsvView.as_view()),
     # OpenAPI 3

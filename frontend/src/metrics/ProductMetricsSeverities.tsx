@@ -70,7 +70,7 @@ const ProductMetricsSeverities = (props: ProductMetricsSeveritiesProps) => {
     function get_data() {
         setLoading(true);
 
-        let url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/metrics/product_metrics_counts/?age=Past%207%20days";
+        let url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/metrics/product_metrics_timeline/?age=Past%207%20days";
         if (props.product_id) {
             url += "&product_id=" + props.product_id;
         }

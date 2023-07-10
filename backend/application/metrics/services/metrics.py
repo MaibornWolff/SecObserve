@@ -101,7 +101,7 @@ def calculate_metrics_for_product(  # pylint: disable=too-many-branches
     todays_product_metrics.save()
 
 
-def get_severity_timeline(product: Optional[Product], age: str) -> dict:
+def get_product_metrics_timeline(product: Optional[Product], age: str) -> dict:
     product_metrics = get_product_metrics()
     if product:
         product_metrics = product_metrics.filter(product=product)
@@ -113,6 +113,7 @@ def get_severity_timeline(product: Optional[Product], age: str) -> dict:
         product_metrics = product_metrics.filter(date__gte=time_threshold)
 
     response_data: dict = {}
+
     for product_metric in product_metrics:
         if not product:
             response_metric = response_data.get(product_metric.date.isoformat(), {})
@@ -179,57 +180,48 @@ def get_severity_timeline(product: Optional[Product], age: str) -> dict:
     return response_data
 
 
-def get_severity_counts(product: Optional[Product]) -> dict:
+def get_product_metrics_current(product: Optional[Product]) -> dict:
     product_metrics = get_todays_product_metrics()
     if product:
         product_metrics = product_metrics.filter(product=product)
 
-    response_data = {}
-    response_data[Observation.SEVERITY_CRITICAL] = 0
-    response_data[Observation.SEVERITY_HIGH] = 0
-    response_data[Observation.SEVERITY_MEDIUM] = 0
-    response_data[Observation.SEVERITY_LOW] = 0
-    response_data[Observation.SEVERITY_NONE] = 0
-    response_data[Observation.SEVERITY_UNKOWN] = 0
-
-    for product_metric in product_metrics:
-        response_data[Observation.SEVERITY_CRITICAL] += product_metric.open_critical
-        response_data[Observation.SEVERITY_HIGH] += product_metric.open_high
-        response_data[Observation.SEVERITY_MEDIUM] += product_metric.open_medium
-        response_data[Observation.SEVERITY_LOW] += product_metric.open_low
-        response_data[Observation.SEVERITY_NONE] += product_metric.open_none
-        response_data[Observation.SEVERITY_UNKOWN] += product_metric.open_unknown
+    response_data: dict = _initialize_response_data()
+    if len(product_metrics) > 0:
+        for product_metric in product_metrics:
+            response_data["open_critical"] += product_metric.open_critical
+            response_data["open_high"] += product_metric.open_high
+            response_data["open_medium"] += product_metric.open_medium
+            response_data["open_low"] += product_metric.open_low
+            response_data["open_none"] += product_metric.open_none
+            response_data["open_unknown"] += product_metric.open_unknown
+            response_data["open"] += product_metric.open
+            response_data["resolved"] += product_metric.resolved
+            response_data["duplicate"] += product_metric.duplicate
+            response_data["false_positive"] += product_metric.false_positive
+            response_data["in_review"] += product_metric.in_review
+            response_data["not_affected"] += product_metric.not_affected
+            response_data["not_security"] += product_metric.not_security
+            response_data["risk_accepted"] += product_metric.risk_accepted
 
     return response_data
 
 
-def get_status_counts(product: Optional[Product]) -> dict:
-    product_metrics = get_todays_product_metrics()
-    if product:
-        product_metrics = product_metrics.filter(product=product)
-
-    response_data = {}
-    response_data[Observation.STATUS_OPEN] = 0
-    response_data[Observation.STATUS_RESOLVED] = 0
-    response_data[Observation.STATUS_DUPLICATE] = 0
-    response_data[Observation.STATUS_FALSE_POSITIVE] = 0
-    response_data[Observation.STATUS_IN_REVIEW] = 0
-    response_data[Observation.STATUS_NOT_AFFECTED] = 0
-    response_data[Observation.STATUS_NOT_SECURITY] = 0
-    response_data[Observation.STATUS_RISK_ACCEPTED] = 0
-
-    for product_metric in product_metrics:
-        response_data[Observation.STATUS_OPEN] += product_metric.open
-        response_data[Observation.STATUS_RESOLVED] += product_metric.resolved
-        response_data[Observation.STATUS_DUPLICATE] += product_metric.duplicate
-        response_data[
-            Observation.STATUS_FALSE_POSITIVE
-        ] += product_metric.false_positive
-        response_data[Observation.STATUS_IN_REVIEW] += product_metric.in_review
-        response_data[Observation.STATUS_NOT_AFFECTED] += product_metric.not_affected
-        response_data[Observation.STATUS_NOT_SECURITY] += product_metric.not_security
-        response_data[Observation.STATUS_RISK_ACCEPTED] += product_metric.risk_accepted
-
+def _initialize_response_data() -> dict:
+    response_data: dict = {}
+    response_data["open_critical"] = 0
+    response_data["open_high"] = 0
+    response_data["open_medium"] = 0
+    response_data["open_low"] = 0
+    response_data["open_none"] = 0
+    response_data["open_unknown"] = 0
+    response_data["open"] = 0
+    response_data["resolved"] = 0
+    response_data["duplicate"] = 0
+    response_data["false_positive"] = 0
+    response_data["in_review"] = 0
+    response_data["not_affected"] = 0
+    response_data["not_security"] = 0
+    response_data["risk_accepted"] = 0
     return response_data
 
 

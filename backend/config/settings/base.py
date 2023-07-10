@@ -477,7 +477,7 @@ CONSTANCE_CONFIG = {
         str,
     ),
     "BACKGROUND_PRODUCT_METRICS_INTERVAL_MINUTES": (
-        60,
+        5,
         "Calculate product metrics every x minutes",
         int,
     ),
