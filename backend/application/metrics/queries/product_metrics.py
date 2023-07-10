@@ -1,6 +1,5 @@
-from datetime import date
-
 from django.db.models.query import QuerySet
+from django.utils import timezone
 
 from application.commons.services.global_request import get_current_user
 from application.core.queries.product import get_products
@@ -22,4 +21,4 @@ def get_product_metrics() -> QuerySet[Product_Metrics]:
 
 
 def get_todays_product_metrics() -> QuerySet[Product_Metrics]:
-    return get_product_metrics().filter(date=date.today())
+    return get_product_metrics().filter(date=timezone.localdate())
