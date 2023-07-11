@@ -47,7 +47,7 @@ const MetricsSeveritiesTimeline = (props: MetricsSeveritiesTimelineProps) => {
 
     function get_metrics(date: Date, metrics_data: any) {
         const date_string = date.toISOString().split("T")[0];
-        const metrics = metrics_data[date_string];
+        const metrics = metrics_data[date_string]; // eslint-disable-line security/detect-object-injection
         if (metrics) {
             return metrics;
         } else {
