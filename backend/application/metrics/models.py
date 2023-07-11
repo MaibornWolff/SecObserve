@@ -1,4 +1,12 @@
-from django.db.models import CASCADE, DateField, ForeignKey, IntegerField, Model
+from django.db.models import (
+    CASCADE,
+    DateField,
+    DateTimeField,
+    ForeignKey,
+    IntegerField,
+    Model,
+)
+from django.utils import timezone
 
 from application.core.models import Product
 
@@ -28,3 +36,19 @@ class Product_Metrics(Model):
             "product",
             "date",
         )
+
+
+class Product_Metrics_Status(Model):
+    last_calculated = DateTimeField(default=timezone.now)
+
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        pass
+
+    @classmethod
+    def load(cls) -> "Product_Metrics_Status":
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj

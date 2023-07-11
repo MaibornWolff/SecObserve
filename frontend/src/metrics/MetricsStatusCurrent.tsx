@@ -15,7 +15,7 @@ import {
     OBSERVATION_STATUS_RESOLVED,
     OBSERVATION_STATUS_RISK_ACCEPTED,
 } from "../core/types";
-import { getBackgroundColor, getFontColor, getGridColor } from "./functions";
+import { getBackgroundColor, getElevation, getFontColor, getGridColor } from "./functions";
 
 interface MetricsStatusCurrentProps {
     product_id: Identifier | undefined;
@@ -90,6 +90,7 @@ const MetricsStatusCurrent = (props: MetricsStatusCurrentProps) => {
 
     return (
         <Paper
+            elevation={getElevation()}
             sx={{
                 alignItems: "center",
                 display: "flex",

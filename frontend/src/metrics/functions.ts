@@ -10,7 +10,7 @@ export function getGridColor() {
 
 export function getBackgroundColor() {
     if (getSettingTheme() == "dark") {
-        return "#1e1e1e";
+        return "#282828";
     } else {
         return "white";
     }
@@ -21,5 +21,13 @@ export function getFontColor() {
         return "#bcbcbc";
     } else {
         return "#666666";
+    }
+}
+
+export function getElevation() {
+    if (getSettingTheme() == "dark") {
+        return 4;
+    } else {
+        return 0;
     }
 }

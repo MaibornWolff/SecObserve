@@ -9,7 +9,7 @@ from huey.contrib.djhuey import db_periodic_task, lock_task
 
 from application.commons.services.tasks import handle_task_exception
 from application.core.models import Observation, Product
-from application.metrics.models import Product_Metrics
+from application.metrics.models import Product_Metrics, Product_Metrics_Status
 from application.metrics.queries.product_metrics import (
     get_product_metrics,
     get_todays_product_metrics,
@@ -31,6 +31,10 @@ def calculate_product_metrics() -> None:
             calculate_metrics_for_product(product)
     except Exception as e:
         handle_task_exception(e)
+
+    product_metrics_status = Product_Metrics_Status.load()
+    product_metrics_status.last_calculated = timezone.now()
+    product_metrics_status.save()
 
     logger.info("--- Calculate_product_metrics - finished ---")
 
