@@ -24,8 +24,8 @@ from application.metrics.api.views import (
     ProductMetricsCurrentView,
     ProductMetricsExportCsvView,
     ProductMetricsExportExcelView,
-    ProductMetricsTimelineView,
     ProductMetricsStatusView,
+    ProductMetricsTimelineView,
 )
 
 urlpatterns = [
