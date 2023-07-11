@@ -24,7 +24,7 @@ import {
     OBSERVATION_SEVERITY_NONE,
     OBSERVATION_SEVERITY_UNKOWN,
 } from "../core/types";
-import { getBackgroundColor, getFontColor, getGridColor } from "./functions";
+import { getBackgroundColor, getElevation, getFontColor, getGridColor } from "./functions";
 
 interface MetricsSeveritiesTimelineProps {
     product_id: Identifier | undefined;
@@ -205,6 +205,7 @@ const MetricsSeveritiesTimeline = (props: MetricsSeveritiesTimelineProps) => {
 
     return (
         <Paper
+            elevation={getElevation()}
             sx={{
                 alignItems: "top",
                 display: "flex",

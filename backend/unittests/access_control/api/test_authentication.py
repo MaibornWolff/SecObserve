@@ -232,6 +232,7 @@ class TestAuthentication(BaseTestCase):
         self._check_authentication(["get"], "/api/metrics/export_excel/")
         self._check_authentication(["get"], "/api/metrics/product_metrics_current/")
         self._check_authentication(["get"], "/api/metrics/product_metrics_timeline/")
+        self._check_authentication(["get"], "/api/metrics/product_metrics_status/")
 
         self._check_authentication(["get"], "/api/observations/")
         self._check_authentication(

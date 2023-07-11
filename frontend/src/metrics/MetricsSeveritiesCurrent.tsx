@@ -14,7 +14,7 @@ import {
     OBSERVATION_SEVERITY_NONE,
     OBSERVATION_SEVERITY_UNKOWN,
 } from "../core/types";
-import { getBackgroundColor, getFontColor, getGridColor } from "./functions";
+import { getBackgroundColor, getElevation, getFontColor, getGridColor } from "./functions";
 
 interface MetricsSeveritiesCurrentProps {
     product_id: Identifier | undefined;
@@ -99,6 +99,7 @@ const MetricsSeveritiesCurrent = (props: MetricsSeveritiesCurrentProps) => {
 
     return (
         <Paper
+            elevation={getElevation()}
             sx={{
                 alignItems: "center",
                 display: "flex",

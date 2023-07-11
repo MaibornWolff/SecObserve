@@ -40,6 +40,7 @@ import ApiConfigurationCreate from "../../import_observations/api_configurations
 import ApiConfigurationEmbeddedList from "../../import_observations/api_configurations/ApiConfigurationEmbeddedList";
 import ApiImportObservations from "../../import_observations/import/ApiImportObservations";
 import FileUploadObservations from "../../import_observations/import/FileUploadObservations";
+import MetricsHeader from "../../metrics/MetricsHeader";
 import MetricsSeveritiesCurrent from "../../metrics/MetricsSeveritiesCurrent";
 import MetricsSeveritiesTimeline from "../../metrics/MetricsSeveritiesTimeLine";
 import MetricsStatusCurrent from "../../metrics/MetricsStatusCurrent";
@@ -188,14 +189,7 @@ const ProductShow = () => {
                             </Tab>
                             <Tab label="Metrics" path="metrics" icon={<BarChartIcon />}>
                                 <SimpleShowLayout>
-                                    {product && product.repository_default_branch && (
-                                        <ReferenceField
-                                            source="repository_default_branch"
-                                            reference="branches"
-                                            label="Default branch"
-                                            link={false}
-                                        />
-                                    )}
+                                    <MetricsHeader repository_default_branch={product.repository_default_branch_name} />
                                     <Stack
                                         direction="row"
                                         spacing={2}

@@ -1,5 +1,6 @@
 from tempfile import NamedTemporaryFile
 
+from constance import config
 from django.http import HttpResponse
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -8,6 +9,7 @@ from rest_framework.views import APIView
 from application.access_control.services.authorization import user_has_permission_or_403
 from application.access_control.services.roles_permissions import Permissions
 from application.core.queries.product import get_product_by_id
+from application.metrics.models import Product_Metrics_Status
 from application.metrics.services.export_metrics import (
     export_product_metrics_csv,
     export_product_metrics_excel,
@@ -68,6 +70,18 @@ class ProductMetricsExportCsvView(APIView):
         export_product_metrics_csv(response, product)
 
         return response
+
+
+class ProductMetricsStatusView(APIView):
+    @action(detail=False, methods=["get"])
+    def get(self, request):
+        status = Product_Metrics_Status.load()
+        return Response(
+            {
+                "last_calculated": status.last_calculated,
+                "calculation_interval": config.BACKGROUND_PRODUCT_METRICS_INTERVAL_MINUTES,
+            }
+        )
 
 
 def _get_and_check_product(request):

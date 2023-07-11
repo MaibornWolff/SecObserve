@@ -2,6 +2,7 @@ import { Stack, Typography } from "@mui/material";
 import React from "react";
 
 import ObservationDashboardList from "../core/observations/ObservationDashboardList";
+import MetricsHeader from "../metrics/MetricsHeader";
 import MetricsSeveritiesCurrent from "../metrics/MetricsSeveritiesCurrent";
 import MetricsSeveritiesTimeline from "../metrics/MetricsSeveritiesTimeLine";
 import MetricsStatusCurrent from "../metrics/MetricsStatusCurrent";
@@ -9,6 +10,7 @@ import MetricsStatusCurrent from "../metrics/MetricsStatusCurrent";
 const Dashboard = () => {
     return (
         <React.Fragment>
+            <MetricsHeader repository_default_branch={undefined} />
             <Stack
                 direction="row"
                 spacing={2}
