@@ -8,8 +8,13 @@ class TestObservationLog(BaseTestCase):
     @patch("application.core.models.Observation.save")
     @patch("application.core.models.Observation_Log.save")
     @patch("application.core.services.observation_log.get_current_user")
+    @patch("application.core.models.Product.save")
     def test_create_observation_log(
-        self, mock_user, mock_observation_log_save, mock_observation_save
+        self,
+        mock_product_save,
+        mock_user,
+        mock_observation_log_save,
+        mock_observation_save,
     ):
         mock_user.return_value = self.user_internal
 
@@ -29,3 +34,4 @@ class TestObservationLog(BaseTestCase):
         observation_log.save.assert_called_once()
         self.observation_1.save.assert_called_once()
         mock_user.assert_called_once()
+        self.observation_1.product.save.assert_called_once()

@@ -15,5 +15,7 @@ def create_observation_log(
     observation_log.save()
     observation.last_observation_log = observation_log.created
     observation.save()
+    observation.product.last_observation_change = observation_log.created
+    observation.product.save()
 
     return observation_log
