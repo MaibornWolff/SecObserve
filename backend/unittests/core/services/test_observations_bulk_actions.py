@@ -54,8 +54,16 @@ class TestObservationsBulkActions(BaseTestCase):
         "application.core.services.observations_bulk_actions.push_deleted_observation_to_issue_tracker"
     )
     @patch("application.core.services.observations_bulk_actions.get_current_user")
+    @patch("application.core.services.observations_bulk_actions.check_security_gate")
+    @patch("application.core.models.Product.save")
     def test_observations_bulk_delete(
-        self, current_user_mock, push_issue_tracker_mock, delete_mock, check_mock
+        self,
+        product_save_mock,
+        check_security_gate_mock,
+        current_user_mock,
+        push_issue_tracker_mock,
+        delete_mock,
+        check_mock,
     ):
         observations = Observation.objects.all()
         for observation in observations:
@@ -72,6 +80,8 @@ class TestObservationsBulkActions(BaseTestCase):
             call(self.product_1, "issue_2", self.user_internal),
         ]
         push_issue_tracker_mock.assert_has_calls(calls)
+        check_security_gate_mock.assert_called_once()
+        self.product_1.save.assert_called_once()
 
     @patch("application.core.models.Observation.objects.filter")
     def test_check_observations_count(self, mock):

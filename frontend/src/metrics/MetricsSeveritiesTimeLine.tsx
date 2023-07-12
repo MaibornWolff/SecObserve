@@ -57,7 +57,7 @@ const MetricsSeveritiesTimeline = (props: MetricsSeveritiesTimelineProps) => {
                 open_medium: 0,
                 open_low: 0,
                 open_none: 0,
-                open_unkown: 0,
+                open_unknown: 0,
             };
         }
     }
@@ -91,7 +91,7 @@ const MetricsSeveritiesTimeline = (props: MetricsSeveritiesTimelineProps) => {
             medium_observations.push(metrics.open_medium);
             low_observations.push(metrics.open_low);
             none_observations.push(metrics.open_none);
-            unkown_observations.push(metrics.open_unkown);
+            unkown_observations.push(metrics.open_unknown);
 
             metrics = get_metrics(new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), result.json);
             critical_observations.push(metrics.open_critical);
@@ -99,7 +99,7 @@ const MetricsSeveritiesTimeline = (props: MetricsSeveritiesTimelineProps) => {
             medium_observations.push(metrics.open_medium);
             low_observations.push(metrics.open_low);
             none_observations.push(metrics.open_none);
-            unkown_observations.push(metrics.open_unkown);
+            unkown_observations.push(metrics.open_unknown);
 
             metrics = get_metrics(new Date(Date.now() - 4 * 24 * 60 * 60 * 1000), result.json);
             critical_observations.push(metrics.open_critical);
@@ -107,7 +107,7 @@ const MetricsSeveritiesTimeline = (props: MetricsSeveritiesTimelineProps) => {
             medium_observations.push(metrics.open_medium);
             low_observations.push(metrics.open_low);
             none_observations.push(metrics.open_none);
-            unkown_observations.push(metrics.open_unkown);
+            unkown_observations.push(metrics.open_unknown);
 
             metrics = get_metrics(new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), result.json);
             critical_observations.push(metrics.open_critical);
@@ -115,7 +115,7 @@ const MetricsSeveritiesTimeline = (props: MetricsSeveritiesTimelineProps) => {
             medium_observations.push(metrics.open_medium);
             low_observations.push(metrics.open_low);
             none_observations.push(metrics.open_none);
-            unkown_observations.push(metrics.open_unkown);
+            unkown_observations.push(metrics.open_unknown);
 
             metrics = get_metrics(new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), result.json);
             critical_observations.push(metrics.open_critical);
@@ -123,7 +123,7 @@ const MetricsSeveritiesTimeline = (props: MetricsSeveritiesTimelineProps) => {
             medium_observations.push(metrics.open_medium);
             low_observations.push(metrics.open_low);
             none_observations.push(metrics.open_none);
-            unkown_observations.push(metrics.open_unkown);
+            unkown_observations.push(metrics.open_unknown);
 
             metrics = get_metrics(new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), result.json);
             critical_observations.push(metrics.open_critical);
@@ -131,7 +131,7 @@ const MetricsSeveritiesTimeline = (props: MetricsSeveritiesTimelineProps) => {
             medium_observations.push(metrics.open_medium);
             low_observations.push(metrics.open_low);
             none_observations.push(metrics.open_none);
-            unkown_observations.push(metrics.open_unkown);
+            unkown_observations.push(metrics.open_unknown);
 
             metrics = get_metrics(new Date(Date.now()), result.json);
             critical_observations.push(metrics.open_critical);
@@ -139,7 +139,7 @@ const MetricsSeveritiesTimeline = (props: MetricsSeveritiesTimelineProps) => {
             medium_observations.push(metrics.open_medium);
             low_observations.push(metrics.open_low);
             none_observations.push(metrics.open_none);
-            unkown_observations.push(metrics.open_unkown);
+            unkown_observations.push(metrics.open_unknown);
 
             const data_sets = [
                 {

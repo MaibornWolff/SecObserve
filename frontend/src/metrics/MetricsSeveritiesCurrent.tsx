@@ -70,7 +70,7 @@ const MetricsSeveritiesCurrent = (props: MetricsSeveritiesCurrentProps) => {
                     result.json.open_medium,
                     result.json.open_low,
                     result.json.open_none,
-                    result.json.open_unkown,
+                    result.json.open_unknown,
                 ];
                 setData((data) => data.concat(new_data));
             })

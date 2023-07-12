@@ -46,16 +46,9 @@ def calculate_metrics_for_product(  # pylint: disable=too-many-branches
 
     today = timezone.localdate()
 
-    latest_observation = _get_latest_observation(product)
-    if not latest_observation:
-        return  # No observations, no metrics
-
     latest_product_metrics = _get_latest_product_metrics(product)
 
-    if (
-        latest_observation.last_observation_log.date() < today
-        and latest_product_metrics
-    ):
+    if product.last_observation_change.date() < today and latest_product_metrics:
         # No relevant changes of observations today, but we might need to update the metrics
         # if there are no metrics for today or previous days.
         iteration_date = latest_product_metrics.date + timedelta(days=1)
@@ -139,15 +132,6 @@ def calculate_metrics_for_product(  # pylint: disable=too-many-branches
                 todays_product_metrics.risk_accepted += 1
 
         todays_product_metrics.save()
-
-
-def _get_latest_observation(product: Product) -> Optional[Observation]:
-    try:
-        return Observation.objects.filter(product=product).latest(
-            "last_observation_log"
-        )
-    except Observation.DoesNotExist:
-        return None
 
 
 def _get_latest_product_metrics(product: Product) -> Optional[Product_Metrics]:
