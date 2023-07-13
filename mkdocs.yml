@@ -66,6 +66,7 @@ nav:
     - Working with branches: usage/branches.md
     - Rule engine: usage/rule_engine.md
     - Security gates: usage/security_gates.md
+    - Metrics: usage/metrics.md
     - Users and permissions: usage/users_permissions.md
   - Integrations:
     - GitHub actions and GitLab CI templates: integrations/github_actions_and_templates.md
