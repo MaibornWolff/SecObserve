@@ -26,20 +26,21 @@ const ApiImportObservations = (product: any) => {
     const observationUpdate = async (data: any) => {
         setLoading(true);
 
-        const formData = new FormData();
-        formData.append("api_configuration", data.api_configuration);
+        const formData: any = {
+            api_configuration: data.api_configuration,
+            parser: data.parser,
+        };
         if (data.branch) {
-            formData.append("exsting_branch", data.branch);
+            formData.branch = data.branch;
         }
-        formData.append("parser", data.parser);
         if (data.service) {
-            formData.append("service", data.service);
+            formData.service = data.service;
         }
         if (data.docker_image_name_tag) {
-            formData.append("docker_image_name_tag", data.docker_image_name_tag);
+            formData.docker_image_name_tag = data.docker_image_name_tag;
         }
         if (data.endpoint_url) {
-            formData.append("endpoint_url", data.endpoint_url);
+            formData.endpoint_url = data.endpoint_url;
         }
 
         httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/import/api_import_observations_by_id/", {
