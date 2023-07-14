@@ -84,7 +84,7 @@ class DependencyTrack(BaseParser, BaseAPIParser):
 
             state = finding.get("analysis", {}).get("state")
             reference_url = finding.get("attribution", {}).get("referenceUrl")
-            cwes = finding.get("cwes", [])
+            cwes = finding.get("vulnerability", {}).get("cwes", [])
 
             observation = Observation(
                 title=vulnerability_id,
