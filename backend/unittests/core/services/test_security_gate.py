@@ -217,10 +217,16 @@ class TestSecurityGate(BaseTestCase):
         check_security_gate(product)
         self.assertTrue(product.security_gate_passed)
 
+    @patch("application.core.models.Product.save")
+    @patch(
+        "application.core.services.security_gate.send_product_security_gate_notification"
+    )
     @override_config(SECURITY_GATE_ACTIVE=False)
-    def test_check_security_gate_general_false(self):
+    def test_check_security_gate_general_false(self, mock_notification, mock_save):
         product = Product(
             security_gate_passed=None,
         )
         check_security_gate(product)
         self.assertIsNone(product.security_gate_passed)
+        mock_save.assert_called_once()
+        mock_notification.assert_called_once()

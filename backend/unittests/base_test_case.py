@@ -1,4 +1,4 @@
-from unittest import TestCase
+from django.test import TestCase
 
 from application.access_control.models import User
 from application.access_control.services.roles_permissions import Roles

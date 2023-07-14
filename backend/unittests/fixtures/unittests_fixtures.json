@@ -124,7 +124,8 @@
             "security_gate_threshold_none": null,
             "security_gate_threshold_unkown": null,
             "apply_general_rules": true,
-            "notification_ms_teams_webhook": ""
+            "notification_ms_teams_webhook": "",
+            "last_observation_change": "2022-12-16T16:13:18.283Z"
         }
     },
     {
@@ -143,7 +144,8 @@
             "security_gate_threshold_none": null,
             "security_gate_threshold_unkown": null,
             "apply_general_rules": true,
-            "notification_ms_teams_webhook": ""
+            "notification_ms_teams_webhook": "",
+            "last_observation_change": "2022-12-16T16:13:18.283Z"
         }
     },
     {
@@ -503,6 +505,174 @@
             "observation": 2,
             "name": "db_evidence_external",
             "evidence": "xyz"
+        }
+    },
+    {
+        "model": "commons.notification",
+        "pk": 1,
+        "fields": {
+            "type": "Exception",
+            "name": "exception_internal",
+            "created": "2022-12-15T16:10:35.518Z",
+            "message": "message_exception_internal",
+            "user": 2,
+            "product": 1,
+            "observation": 1
+        }
+    },
+    {
+        "model": "commons.notification",
+        "pk": 2,
+        "fields": {
+            "type": "Exception",
+            "name": "exception_external",
+            "created": "2022-12-15T16:10:35.518Z",
+            "message": "message_exception_external",
+            "user": 4,
+            "product": 2,
+            "observation": 2
+        }
+    },
+    {
+        "model": "commons.notification",
+        "pk": 3,
+        "fields": {
+            "type": "Security gate",
+            "name": "security_gate_internal",
+            "created": "2022-12-15T16:10:35.518Z",
+            "user": 2,
+            "product": 1,
+            "observation": 1
+        }
+    },
+    {
+        "model": "commons.notification",
+        "pk": 4,
+        "fields": {
+            "type": "Security gate",
+            "name": "security_gate_internal",
+            "created": "2022-12-15T16:10:35.518Z",
+            "user": 4,
+            "product": 2,
+            "observation": 2
+        }
+    },
+    {
+        "model": "commons.notification",
+        "pk": 5,
+        "fields": {
+            "type": "Task",
+            "name": "task_internal",
+            "created": "2022-12-15T16:10:35.518Z",
+            "message": "message_task_internal",
+            "function": "function_task_internal",
+            "arguments": "arguments_task_internal",
+            "user": 2,
+            "product": 1,
+            "observation": 1
+        }
+    },
+    {
+        "model": "commons.notification",
+        "pk": 6,
+        "fields": {
+            "type": "Task",
+            "name": "task_external",
+            "created": "2022-12-15T16:10:35.518Z",
+            "message": "message_task_external",
+            "function": "function_task_external",
+            "arguments": "arguments_task_external",
+            "user": 4,
+            "product": 2,
+            "observation": 2
+        }
+    },
+    {
+        "model": "metrics.product_metrics",
+        "pk": 1,
+        "fields": {
+            "product": 1,
+            "date": "2022-07-09",
+            "open_critical": 1,
+            "open_high": 2,
+            "open_medium": 3,
+            "open_low": 4,
+            "open_none": 5,
+            "open_unknown": 6,
+            "open": 7,
+            "resolved": 8,
+            "duplicate": 9,
+            "false_positive": 10,
+            "in_review": 11,
+            "not_affected": 12,
+            "not_security": 13,
+            "risk_accepted": 14
+        }
+    },
+    {
+        "model": "metrics.product_metrics",
+        "pk": 2,
+        "fields": {
+            "product": 1,
+            "date": "2022-07-10",
+            "open_critical": 2,
+            "open_high": 3,
+            "open_medium": 4,
+            "open_low": 5,
+            "open_none": 6,
+            "open_unknown": 7,
+            "open": 8,
+            "resolved": 9,
+            "duplicate": 10,
+            "false_positive": 11,
+            "in_review": 12,
+            "not_affected": 13,
+            "not_security": 14,
+            "risk_accepted": 15
+        }
+    },
+    {
+        "model": "metrics.product_metrics",
+        "pk": 3,
+        "fields": {
+            "product": 2,
+            "date": "2022-07-09",
+            "open_critical": 4,
+            "open_high": 5,
+            "open_medium": 6,
+            "open_low": 7,
+            "open_none": 8,
+            "open_unknown": 9,
+            "open": 10,
+            "resolved": 11,
+            "duplicate": 12,
+            "false_positive": 13,
+            "in_review": 14,
+            "not_affected": 15,
+            "not_security": 16,
+            "risk_accepted": 17
+        }
+    },
+    {
+        "model": "metrics.product_metrics",
+        "pk": 4,
+        "fields": {
+            "product": 2,
+            "date": "2022-07-10",
+            "open_critical": 5,
+            "open_high": 6,
+            "open_medium": 7,
+            "open_low": 8,
+            "open_none": 9,
+            "open_unknown": 10,
+            "open": 11,
+            "resolved": 12,
+            "duplicate": 13,
+            "false_positive": 14,
+            "in_review": 15,
+            "not_affected": 16,
+            "not_security": 17,
+            "risk_accepted": 18
         }
     }
 ]

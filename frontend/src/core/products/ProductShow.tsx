@@ -40,8 +40,10 @@ import ApiConfigurationCreate from "../../import_observations/api_configurations
 import ApiConfigurationEmbeddedList from "../../import_observations/api_configurations/ApiConfigurationEmbeddedList";
 import ApiImportObservations from "../../import_observations/import/ApiImportObservations";
 import FileUploadObservations from "../../import_observations/import/FileUploadObservations";
-import MetricSeverities from "../../metrics/MetricSeverities";
-import MetricStatus from "../../metrics/MetricStatus";
+import MetricsHeader from "../../metrics/MetricsHeader";
+import MetricsSeveritiesCurrent from "../../metrics/MetricsSeveritiesCurrent";
+import MetricsSeveritiesTimeline from "../../metrics/MetricsSeveritiesTimeLine";
+import MetricsStatusCurrent from "../../metrics/MetricsStatusCurrent";
 import general_rules from "../../rules/general_rules";
 import ProductRuleApply from "../../rules/product_rules/ProductRuleApply";
 import ProductRuleCreate from "../../rules/product_rules/ProductRuleCreate";
@@ -187,14 +189,7 @@ const ProductShow = () => {
                             </Tab>
                             <Tab label="Metrics" path="metrics" icon={<BarChartIcon />}>
                                 <SimpleShowLayout>
-                                    {product && product.repository_default_branch && (
-                                        <ReferenceField
-                                            source="repository_default_branch"
-                                            reference="branches"
-                                            label="Default branch"
-                                            link={false}
-                                        />
-                                    )}
+                                    <MetricsHeader repository_default_branch={product.repository_default_branch_name} />
                                     <Stack
                                         direction="row"
                                         spacing={2}
@@ -203,8 +198,9 @@ const ProductShow = () => {
                                             marginTop: 2,
                                         }}
                                     >
-                                        <MetricSeverities product_id={product.id} />
-                                        <MetricStatus product_id={product.id} />
+                                        <MetricsSeveritiesCurrent product_id={product.id} />
+                                        <MetricsSeveritiesTimeline product_id={product.id} />
+                                        <MetricsStatusCurrent product_id={product.id} />
                                     </Stack>{" "}
                                 </SimpleShowLayout>
                             </Tab>

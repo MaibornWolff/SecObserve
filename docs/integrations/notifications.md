@@ -1,9 +1,12 @@
 # Notifications
 
-SecObserve can send notifications to email addresses abd Microsoft Teams channels for two kinds of events:
+SecObserve can send notifications to email addresses or Microsoft Teams channels for 3 kinds of events:
 
 * When the [security gate](../usage/security_gates.md) of a product changes.
 * When an exception occurs while processing a request.
+* When an exception occurs in a background task.
+
+There is a ratelimiting active to prevent flooding of notifications, if a series of exceptions occurs. The same exception is sent only once during a specified timedelta, which can be configured in the Django Admin user interface. The default for this timedelta is 1 hour.
 
 ##  Notifications to email addresses
 
@@ -20,8 +23,6 @@ When creating or editing a product, the field `Email` can be set in the *Notific
 #### Notifications for exceptions
 
 An admistrator can configure the field `EXCEPTION_EMAIL_TO` in the Django Admin user interface. If an exception occurs while processing a request and this field is filled with a comma separated list of email addresses, a notifications is sent each of the email addresses before returning the HTTP code 500 via the REST API.
-
-There is a ratelimiting active to prevent flooding of email inboxes, if a series of exceptions occurs. The same exception is sent only once during a specified timedelta, which can be configured in the Django Admin user interface as well.
 
 ##  Notifications to Microsoft Teams channels
 
@@ -41,4 +42,13 @@ When creating or editing a product, the field `MS Teams` can be set in the *Noti
 
 An admistrator can configure the field `EXCEPTION_MS_TEAMS_WEBHOOK` in the Django Admin user interface. If an exception occurs while processing a request and this field is filled with the copied webhook URL, a notifications is sent to Teams before returning the HTTP code 500 via the REST API.
 
-There is a ratelimiting active to prevent flooding of Teams, if a series of exceptions occurs. The same exception is sent only once during a specified timedelta, which can be configured in the Django Admin user interface as well.
+## Notifications in the user interface
+
+Notifications are also stored in the database and can be viewed in the user interface.
+
+* **Regular users** can view notifications for changed security gates and exceptions in background tasks for all products where they are a product member.
+* **Administrators** can view all notifications.
+
+![UI notifications](../assets/images/screenshot_notifications.png)
+
+When a notification is deleted, it is removed from the database and won't be visible anymore for all users.

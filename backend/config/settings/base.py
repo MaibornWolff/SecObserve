@@ -82,15 +82,12 @@ DJANGO_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # "django.contrib.humanize", # Handy template tags
     "django.contrib.admin",
     "django.forms",
 ]
 THIRD_PARTY_APPS = [
     "crispy_forms",
     "crispy_bootstrap5",
-    # --- Celery/Redis is currently unused ---
-    # "django_celery_beat",
     "rest_framework",
     "corsheaders",
     "drf_spectacular",
@@ -98,6 +95,7 @@ THIRD_PARTY_APPS = [
     "django_filters",
     "constance",
     "constance.backends.database",
+    "huey.contrib.djhuey",
 ]
 
 LOCAL_APPS = [
@@ -106,6 +104,7 @@ LOCAL_APPS = [
     "application.core",
     "application.import_observations",
     "application.issue_tracker",
+    "application.metrics",
     "application.rules",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -345,33 +344,12 @@ LOGGING = {
             "handlers": ["console"],
             "level": "CRITICAL",
         },
+        "huey": {
+            "handlers": ["console"],
+            "level": "WARNING",
+        },
     },
 }
-
-# Celery
-# ------------------------------------------------------------------------------
-# --- Celery/Redis is currently unused ---
-# if USE_TZ:
-#     # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-timezone
-#     CELERY_TIMEZONE = TIME_ZONE
-# # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-broker_url
-# CELERY_BROKER_URL = env("CELERY_BROKER_URL")
-# # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_backend
-# CELERY_RESULT_BACKEND = CELERY_BROKER_URL
-# # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-accept_content
-# CELERY_ACCEPT_CONTENT = ["json"]
-# # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-task_serializer
-# CELERY_TASK_SERIALIZER = "json"
-# # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_serializer
-# CELERY_RESULT_SERIALIZER = "json"
-# # http://docs.celeryproject.org/en/latest/userguide/configuration.html#task-time-limit
-# # TODO: set to whatever value is adequate in your circumstances
-# CELERY_TASK_TIME_LIMIT = 5 * 60
-# # http://docs.celeryproject.org/en/latest/userguide/configuration.html#task-soft-time-limit
-# # TODO: set to whatever value is adequate in your circumstances
-# CELERY_TASK_SOFT_TIME_LIMIT = 60
-# # http://docs.celeryproject.org/en/latest/userguide/configuration.html#beat-scheduler
-# CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
 # -------------------------------------------------------------------------------
@@ -498,6 +476,11 @@ CONSTANCE_CONFIG = {
         "Comma separated email addresses to send exception notifications",
         str,
     ),
+    "BACKGROUND_PRODUCT_METRICS_INTERVAL_MINUTES": (
+        5,
+        "Calculate product metrics every x minutes",
+        int,
+    ),
 }
 
 CONSTANCE_CONFIG_FIELDSETS = {
@@ -521,6 +504,7 @@ CONSTANCE_CONFIG_FIELDSETS = {
         "EXCEPTION_MS_TEAMS_WEBHOOK",
         "EXCEPTION_RATELIMIT",
     ),
+    "Background tasks": ("BACKGROUND_PRODUCT_METRICS_INTERVAL_MINUTES",),
 }
 
 FIELD_ENCRYPTION_KEY = env("FIELD_ENCRYPTION_KEY")
@@ -541,4 +525,29 @@ AUTH_ADFS = {
     "LOGIN_EXEMPT_URLS": [
         "^api",  # Assuming you API is available at /api
     ],
+}
+
+HUEY_FILENAME = env("HUEY_FILENAME", default="/var/lib/huey/huey.db")
+
+HUEY = {
+    "huey_class": "huey.SqliteHuey",  # Huey implementation to use.
+    "name": DATABASES["default"]["NAME"],  # Use db name for huey.
+    "results": False,  # Store return values of tasks.
+    "store_none": False,  # If a task returns None, do not save to results.
+    "immediate": DEBUG,  # If DEBUG=True, run synchronously.
+    "utc": True,  # Use UTC for all times internally.
+    "connection": {
+        "filename": HUEY_FILENAME,  # Filename for sqlite.
+    },
+    "consumer": {
+        "workers": 2,
+        "worker_type": "thread",
+        "initial_delay": 0.1,  # Smallest polling interval, same as -d.
+        "backoff": 1.15,  # Exponential backoff using this rate, -b.
+        "max_delay": 10.0,  # Max possible polling interval, -m.
+        "scheduler_interval": 1,  # Check schedule every second, -s.
+        "periodic": True,  # Enable crontab feature.
+        "check_worker_health": True,  # Enable worker health checks.
+        "health_check_interval": 60,  # Check worker health every second.
+    },
 }

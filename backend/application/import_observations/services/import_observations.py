@@ -177,6 +177,7 @@ def process_data(import_parameters: ImportParameters) -> Tuple[int, int, int]:
         ] = observation_before_for_dict
 
     observations_this_run: set[str] = set()
+    vulnerability_check_observations: set[Observation] = set()
 
     for imported_observation in import_parameters.imported_observations:
         # Set additional data in newly uploaded observation
@@ -203,6 +204,7 @@ def process_data(import_parameters: ImportParameters) -> Tuple[int, int, int]:
                 observations_before.pop(observation_before.identity_hash)
                 # Add identity_hash to set of observations in this run to detect duplicates in this run
                 observations_this_run.add(observation_before.identity_hash)
+                vulnerability_check_observations.add(observation_before)
             else:
                 process_new_observation(imported_observation)
 
@@ -210,15 +212,17 @@ def process_data(import_parameters: ImportParameters) -> Tuple[int, int, int]:
                 rule_engine.apply_rules_for_observation(imported_observation)
                 # Add identity_hash to set of observations in this run to detect duplicates in this run
                 observations_this_run.add(imported_observation.identity_hash)
+                vulnerability_check_observations.add(imported_observation)
 
     observations_resolved = resolve_unimported_observations(observations_before)
+    vulnerability_check_observations.update(observations_resolved)
     check_security_gate(import_parameters.product)
     set_repository_default_branch(import_parameters.product)
     push_observations_to_issue_tracker(
-        import_parameters.product, True, import_parameters.branch
+        import_parameters.product, vulnerability_check_observations
     )
 
-    return observations_new, observations_updated, observations_resolved
+    return observations_new, observations_updated, len(observations_resolved)
 
 
 def prepare_imported_observation(
@@ -355,16 +359,21 @@ def process_new_observation(imported_observation: Observation) -> None:
     )
 
 
-def resolve_unimported_observations(observations_before: dict[str, Observation]) -> int:
+def resolve_unimported_observations(
+    observations_before: dict[str, Observation]
+) -> set[Observation]:
     # All observations that are still in observations_before are not in the imported scan
     # and seem to have been resolved.
-    observations_resolved = 0
+    observations_resolved: set[Observation] = set()
     for observation in observations_before.values():
+        old_status = get_current_status(observation)
+
         observation.parser_status = Observation.STATUS_RESOLVED
         observation.save()
+
         new_status = get_current_status(observation)
-        if observation.current_status != new_status:
-            observations_resolved += 1
+        if old_status != new_status:
+            observations_resolved.add(observation)
 
             observation.current_status = new_status
             create_observation_log(

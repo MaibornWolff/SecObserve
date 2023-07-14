@@ -35,9 +35,13 @@ WORKDIR ${APP_HOME}
 ARG user=django
 ARG group=django
 
-# All absolute dir copies ignore workdir instruction. All relative dir copies are wrt to the workdir instruction
-# copy python dependency wheels from python-build-stage
+# Install binaries and libs for PostgreSQL
+RUN apk add --no-cache --virtual postgresql-libs postgresql-client mariadb-dev mysql-client bash
+
+# use wheels to install python dependencies
 COPY --from=python-build-stage /usr/src/app/wheels  /wheels/
+RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
+    && rm -rf /wheels/ && rm -rf /tmp
 
 # copy startup scripts
 COPY ./docker/backend/dev/django/entrypoint /entrypoint
@@ -51,17 +55,17 @@ COPY ./backend/config/settings/dev.py ${APP_HOME}/config/settings/dist.py
 
 RUN addgroup -g 1001 -S ${group} \
     && adduser -u 1001 -S ${user} -G ${group} \
-    # Install binaries and libs for PostgreSQL
-    && apk add --no-cache --virtual postgresql-libs postgresql-client mariadb-dev mysql-client bash \
-    # use wheels to install python dependencies
-    && pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
-	&& rm -rf /wheels/ && rm -rf /tmp \
     # make startup scripts executable
     && chmod +x /entrypoint \
     && chmod +x /start \
     && chmod +x /wait-for-it.sh \
     # insert commit id for status endpoint
-    && sed -i 's/placeholder/'"${COMMIT_ID}"'/g' ${APP_HOME}/application/commons/api/views.py
+    && sed -i 's/placeholder/'"${COMMIT_ID}"'/g' ${APP_HOME}/application/commons/api/views.py \
+    # create directory for huey task queue
+    && mkdir /var/lib/huey \
+    && chown -R ${user}:${group} /var/lib/huey \
+    && chmod ugo+rw /var/lib/huey
+
 
 HEALTHCHECK --interval=30s --timeout=30s --start-period=10s --retries=3 \
     CMD wget -nv -t1 --spider 'http://localhost:8000/api/status/health/' || exit 1

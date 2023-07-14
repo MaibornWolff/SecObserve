@@ -3,6 +3,7 @@ from tempfile import NamedTemporaryFile
 
 from django.db.models import Prefetch
 from django.http import HttpResponse
+from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework.decorators import action
@@ -16,6 +17,7 @@ from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from application.access_control.services.authorization import user_has_permission_or_403
 from application.access_control.services.roles_permissions import Permissions
+from application.commons.services.global_request import get_current_user
 from application.core.api.filters import (
     BranchFilter,
     ObservationFilter,
@@ -75,7 +77,6 @@ from application.core.services.observations_bulk_actions import (
 from application.core.services.security_gate import check_security_gate
 from application.issue_tracker.services.issue_tracker import (
     push_deleted_observation_to_issue_tracker,
-    push_observations_to_issue_tracker,
 )
 from application.metrics.services.metrics import get_codecharta_metrics
 from application.rules.services.rule_engine import Rule_Engine
@@ -195,8 +196,6 @@ class ProductViewSet(ModelViewSet):
         for parser in Parser.objects.all():
             rule_engine = Rule_Engine(product, parser)
             rule_engine.apply_all_rules_for_product_and_parser()
-
-        push_observations_to_issue_tracker(product, False)
 
         return Response(status=HTTP_204_NO_CONTENT)
 
@@ -323,7 +322,9 @@ class ObservationViewSet(ModelViewSet):
         issue_id = instance.issue_tracker_issue_id
         super().perform_destroy(instance)
         check_security_gate(product)
-        push_deleted_observation_to_issue_tracker(product, issue_id)
+        push_deleted_observation_to_issue_tracker(product, issue_id, get_current_user())
+        product.last_observation_change = timezone.now()
+        product.save()
 
     @extend_schema(
         methods=["PATCH"],

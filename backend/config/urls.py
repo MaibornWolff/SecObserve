@@ -20,7 +20,13 @@ from application.import_observations.api.views import (
     FileUploadObservationsById,
     FileUploadObservationsByName,
 )
-from application.metrics.api.views import SeverityCountsView, StatusCountsView
+from application.metrics.api.views import (
+    ProductMetricsCurrentView,
+    ProductMetricsExportCsvView,
+    ProductMetricsExportExcelView,
+    ProductMetricsStatusView,
+    ProductMetricsTimelineView,
+)
 
 urlpatterns = [
     path("", empty_view),
@@ -72,8 +78,11 @@ urlpatterns += [
         "api/import/file_upload_observations_by_id/",
         FileUploadObservationsById.as_view(),
     ),
-    path("api/metrics/severity_counts/", SeverityCountsView.as_view()),
-    path("api/metrics/status_counts/", StatusCountsView.as_view()),
+    path("api/metrics/product_metrics_timeline/", ProductMetricsTimelineView.as_view()),
+    path("api/metrics/product_metrics_current/", ProductMetricsCurrentView.as_view()),
+    path("api/metrics/product_metrics_status/", ProductMetricsStatusView.as_view()),
+    path("api/metrics/export_excel/", ProductMetricsExportExcelView.as_view()),
+    path("api/metrics/export_csv/", ProductMetricsExportCsvView.as_view()),
     # OpenAPI 3
     path("api/oa3/schema/", SpectacularAPIView.as_view(), name="schema_oa3"),
     path(
