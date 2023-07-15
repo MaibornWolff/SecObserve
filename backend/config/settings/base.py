@@ -102,6 +102,7 @@ LOCAL_APPS = [
     "application.access_control",
     "application.commons",
     "application.core",
+    "application.epss",
     "application.import_observations",
     "application.issue_tracker",
     "application.metrics",
@@ -481,6 +482,16 @@ CONSTANCE_CONFIG = {
         "Calculate product metrics every x minutes",
         int,
     ),
+    "BACKGROUND_EPSS_IMPORT_CRONTAB_MINUTES": (
+        "*",
+        "Minutes crontab expression for EPSS import",
+        str,
+    ),
+    "BACKGROUND_EPSS_IMPORT_CRONTAB_HOURS": (
+        "3",
+        "Hours crontab expression for EPSS import (UTC)",
+        str,
+    ),
 }
 
 CONSTANCE_CONFIG_FIELDSETS = {
@@ -504,7 +515,11 @@ CONSTANCE_CONFIG_FIELDSETS = {
         "EXCEPTION_MS_TEAMS_WEBHOOK",
         "EXCEPTION_RATELIMIT",
     ),
-    "Background tasks": ("BACKGROUND_PRODUCT_METRICS_INTERVAL_MINUTES",),
+    "Background tasks (restart needed)": (
+        "BACKGROUND_PRODUCT_METRICS_INTERVAL_MINUTES",
+        "BACKGROUND_EPSS_IMPORT_CRONTAB_MINUTES",
+        "BACKGROUND_EPSS_IMPORT_CRONTAB_HOURS",
+    ),
 }
 
 FIELD_ENCRYPTION_KEY = env("FIELD_ENCRYPTION_KEY")

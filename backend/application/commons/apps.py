@@ -2,6 +2,7 @@ import os
 import resource
 
 from django.apps import AppConfig
+from huey.contrib.djhuey import HUEY as huey
 
 
 class UtilsConfig(AppConfig):
@@ -20,6 +21,8 @@ class UtilsConfig(AppConfig):
             ) as limit:
                 mem = int(limit.read())
                 resource.setrlimit(resource.RLIMIT_AS, (mem, mem))
+
+        huey.flush_locks("import_epss", "calculate_product_metrics")
 
         # This forces the schema extension for DRF to be loaded
         import config.schema  # noqa: F401 pylint: disable=import-outside-toplevel, unused-import

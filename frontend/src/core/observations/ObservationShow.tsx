@@ -118,7 +118,9 @@ const ObservationShow = () => {
                         {(observation.vulnerability_id != "" ||
                             observation.cvss3_score != null ||
                             observation.cvss3_vector != "" ||
-                            observation.cwe != null) && (
+                            observation.cwe != null ||
+                            observation.epss_score != null ||
+                            observation.epss_percentile != null) && (
                             <div>
                                 <Typography variant="h6" sx={{ paddingTop: "16px" }}>
                                     Vulnerability
@@ -143,18 +145,28 @@ const ObservationShow = () => {
                                             </Labeled>
                                         )}
                                     {observation.cvss3_score != null && (
-                                        <Labeled>
+                                        <Labeled label="CVSS3 score">
                                             <NumberField source="cvss3_score" />
                                         </Labeled>
                                     )}
                                     {observation.cvss3_vector != "" && (
-                                        <Labeled>
+                                        <Labeled label="CVSS2 Vector">
                                             <TextField source="cvss3_vector" />
                                         </Labeled>
                                     )}
                                     {observation.cwe != null && (
                                         <Labeled label="CWE">
                                             <TextUrlField text={observation.cwe} url={get_cwe_url(observation.cwe)} />
+                                        </Labeled>
+                                    )}
+                                    {observation.epss_score != null && (
+                                        <Labeled label="EPSS score (%)">
+                                            <NumberField source="epss_score" />
+                                        </Labeled>
+                                    )}
+                                    {observation.epss_percentile != null && (
+                                        <Labeled label="EPSS percentile (%)">
+                                            <NumberField source="epss_percentile" />
                                         </Labeled>
                                     )}
                                 </Stack>

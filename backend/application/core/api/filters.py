@@ -124,6 +124,7 @@ class ObservationFilter(FilterSet):
             ("parser__type", "parser_data.type"),
             ("scanner", "scanner_name"),
             ("last_observation_log", "last_observation_log"),
+            ("epss_score", "epss_score"),
         ),
     )
 
