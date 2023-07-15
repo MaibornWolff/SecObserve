@@ -347,6 +347,18 @@ class Observation(Model):
     cwe = IntegerField(
         null=True, validators=[MinValueValidator(1), MaxValueValidator(999999)]
     )
+    epss_score = DecimalField(
+        max_digits=6,
+        decimal_places=3,
+        null=True,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+    )
+    epss_percentile = DecimalField(
+        max_digits=6,
+        decimal_places=3,
+        null=True,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+    )
     found = DateField(null=True)
     scanner = CharField(max_length=255, blank=True)
     upload_filename = CharField(max_length=255, blank=True)

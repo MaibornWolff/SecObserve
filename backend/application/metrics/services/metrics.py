@@ -1,13 +1,8 @@
-import logging
 from datetime import timedelta
 from typing import Optional
 
-from constance import config
 from django.utils import timezone
-from huey import crontab
-from huey.contrib.djhuey import db_periodic_task, lock_task
 
-from application.commons.services.tasks import handle_task_exception
 from application.core.models import Observation, Product
 from application.metrics.models import Product_Metrics, Product_Metrics_Status
 from application.metrics.queries.product_metrics import (
@@ -16,27 +11,14 @@ from application.metrics.queries.product_metrics import (
 )
 from application.metrics.services.age import get_days
 
-logger = logging.getLogger("secobserve.metrics")
 
-
-@db_periodic_task(
-    crontab(minute=f"*/{config.BACKGROUND_PRODUCT_METRICS_INTERVAL_MINUTES}")
-)
-@lock_task("calculate_product_metrics")
 def calculate_product_metrics() -> None:
-    logger.info("--- Calculate_product_metrics - start ---")
-
-    try:
-        for product in Product.objects.all():
-            calculate_metrics_for_product(product)
-    except Exception as e:
-        handle_task_exception(e)
+    for product in Product.objects.all():
+        calculate_metrics_for_product(product)
 
     product_metrics_status = Product_Metrics_Status.load()
     product_metrics_status.last_calculated = timezone.now()
     product_metrics_status.save()
-
-    logger.info("--- Calculate_product_metrics - finished ---")
 
 
 def calculate_metrics_for_product(  # pylint: disable=too-many-branches
