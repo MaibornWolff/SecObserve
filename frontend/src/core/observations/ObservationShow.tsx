@@ -150,7 +150,7 @@ const ObservationShow = () => {
                                         </Labeled>
                                     )}
                                     {observation.cvss3_vector != "" && (
-                                        <Labeled label="CVSS2 Vector">
+                                        <Labeled label="CVSS3 Vector">
                                             <TextField source="cvss3_vector" />
                                         </Labeled>
                                     )}
