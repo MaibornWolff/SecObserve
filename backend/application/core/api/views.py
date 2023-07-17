@@ -310,12 +310,6 @@ class ObservationViewSet(ModelViewSet):
             .select_related("product")
             .select_related("branch")
             .select_related("parser")
-            # .prefetch_related(
-            #     Prefetch(
-            #         "observation_logs",
-            #         queryset=Observation_Log.objects.order_by("-created"),
-            #     )
-            # )
         )
 
     def perform_destroy(self, instance: Observation) -> None:
