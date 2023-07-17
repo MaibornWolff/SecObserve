@@ -9,6 +9,7 @@ from django.db.models import (
     DateTimeField,
     DecimalField,
     ForeignKey,
+    Index,
     IntegerField,
     ManyToManyField,
     Model,
@@ -77,6 +78,11 @@ class Product(Model):
     issue_tracker_labels = CharField(max_length=255, blank=True)
     last_observation_change = DateTimeField(default=timezone.now)
 
+    class Meta:
+        indexes = [
+            Index(fields=["name"]),
+        ]
+
     def __str__(self):
         return self.name
 
@@ -144,6 +150,9 @@ class Branch(Model):
             "product",
             "name",
         )
+        indexes = [
+            Index(fields=["name"]),
+        ]
 
     def __str__(self):
         return f"{self.product} / {self.name}"
@@ -245,6 +254,11 @@ class Parser(Model):
     name = CharField(max_length=255, unique=True)
     type = CharField(max_length=16, choices=TYPE_CHOICES)
     source = CharField(max_length=16, choices=SOURCE_CHOICES)
+
+    class Meta:
+        indexes = [
+            Index(fields=["name"]),
+        ]
 
     def __str__(self):
         return self.name
@@ -384,6 +398,24 @@ class Observation(Model):
     )
     issue_tracker_issue_id = CharField(max_length=255, blank=True)
 
+    class Meta:
+        indexes = [
+            Index(fields=["product", "branch"]),
+            Index(fields=["title"]),
+            Index(fields=["current_severity"]),
+            Index(fields=["numerical_severity"]),
+            Index(fields=["current_status"]),
+            Index(fields=["vulnerability_id"]),
+            Index(fields=["origin_component_name_version"]),
+            Index(fields=["origin_docker_image_name_tag_short"]),
+            Index(fields=["origin_service_name"]),
+            Index(fields=["origin_endpoint_hostname"]),
+            Index(fields=["origin_source_file"]),
+            Index(fields=["last_observation_log"]),
+            Index(fields=["epss_score"]),
+            Index(fields=["scanner"]),
+        ]
+
     def __str__(self):
         return f"{self.product} / {self.title}"
 
@@ -414,11 +446,21 @@ class Observation_Log(Model):
     comment = CharField(max_length=255)
     created = DateTimeField(auto_now_add=True)
 
+    class Meta:
+        indexes = [
+            Index(fields=["-created"]),
+        ]
+
 
 class Evidence(Model):
     observation = ForeignKey(Observation, related_name="evidences", on_delete=CASCADE)
     name = CharField(max_length=255)
     evidence = TextField()
+
+    class Meta:
+        indexes = [
+            Index(fields=["name"]),
+        ]
 
 
 class Reference(Model):

@@ -3,6 +3,7 @@ from django.db.models import (
     BooleanField,
     CharField,
     ForeignKey,
+    Index,
     Model,
     TextField,
 )
@@ -35,6 +36,9 @@ class Rule(Model):
             "product",
             "name",
         )
+        indexes = [
+            Index(fields=["name"]),
+        ]
 
     def __str__(self):
         return self.name
