@@ -453,6 +453,7 @@ class Observation_Log(Model):
         ]
         ordering = ["observation", "-created"]
 
+
 class Evidence(Model):
     observation = ForeignKey(Observation, related_name="evidences", on_delete=CASCADE)
     name = CharField(max_length=255)
