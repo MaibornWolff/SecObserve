@@ -448,9 +448,10 @@ class Observation_Log(Model):
 
     class Meta:
         indexes = [
+            Index(fields=["observation", "-created"]),
             Index(fields=["-created"]),
         ]
-
+        ordering = ["observation", "-created"]
 
 class Evidence(Model):
     observation = ForeignKey(Observation, related_name="evidences", on_delete=CASCADE)
