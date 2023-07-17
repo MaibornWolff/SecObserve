@@ -71,6 +71,7 @@ nav:
   - Integrations:
     - Overview: integrations/overview.md
     - GitHub actions and GitLab CI templates: integrations/github_actions_and_templates.md
+    - Exploit Prediction Scoring System (EPSS): integrations/epss.md
     - Source code repositories: integrations/source_code_repositories.md
     - Issue trackers: integrations/issue_trackers.md
     - Notifications: integrations/notifications.md

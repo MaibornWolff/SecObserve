@@ -5,7 +5,7 @@ from datetime import datetime
 import requests
 
 from application.core.models import Observation
-from application.epss.models import EPSS_Scores, EPSS_Status
+from application.epss.models import EPSS_Score, EPSS_Status
 
 
 def import_epss() -> None:
@@ -17,7 +17,7 @@ def import_epss() -> None:
     response.raise_for_status()
     extracted_data = gzip.decompress(response.content)
 
-    EPSS_Scores.objects.all().delete()
+    EPSS_Score.objects.all().delete()
 
     counter = 0
     scores = []
@@ -37,7 +37,7 @@ def import_epss() -> None:
             elements = decoded_line.split(",")
             if len(elements) == 3:
                 scores.append(
-                    EPSS_Scores(
+                    EPSS_Score(
                         cve=elements[0],
                         epss_score=elements[1],
                         epss_percentile=elements[2],
@@ -45,24 +45,24 @@ def import_epss() -> None:
                 )
                 counter += 1
             if counter == 1000:
-                EPSS_Scores.objects.bulk_create(scores)
+                EPSS_Score.objects.bulk_create(scores)
                 counter = 0
                 scores = []
     if scores:
-        EPSS_Scores.objects.bulk_create(scores)
+        EPSS_Score.objects.bulk_create(scores)
 
 
 def epss_apply_observations() -> None:
-    observations = Observation.objects.filter(title__startswith="CVE-")
+    observations = Observation.objects.filter(vulnerability_id__startswith="CVE-")
     for observation in observations:
         epss_apply_observation(observation)
 
 
 def epss_apply_observation(observation: Observation) -> None:
-    if observation.title.startswith("CVE-"):
+    if observation.vulnerability_id.startswith("CVE-"):
         try:
-            epss_score = EPSS_Scores.objects.get(cve=observation.title)
-        except EPSS_Scores.DoesNotExist:
+            epss_score = EPSS_Score.objects.get(cve=observation.vulnerability_id)
+        except EPSS_Score.DoesNotExist:
             return
 
         if epss_score.epss_score:

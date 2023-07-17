@@ -4,7 +4,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import CharField, DateField, DecimalField, Model
 
 
-class EPSS_Scores(Model):
+class EPSS_Score(Model):
     cve = CharField(max_length=20, unique=True)
     epss_score = DecimalField(
         max_digits=6,
