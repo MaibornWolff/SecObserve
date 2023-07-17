@@ -1,7 +1,6 @@
 import csv
 from tempfile import NamedTemporaryFile
 
-from django.db.models import Prefetch
 from django.http import HttpResponse
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
@@ -46,14 +45,7 @@ from application.core.api.serializers import (
     ProductMemberSerializer,
     ProductSerializer,
 )
-from application.core.models import (
-    Branch,
-    Observation,
-    Observation_Log,
-    Parser,
-    Product,
-    Product_Member,
-)
+from application.core.models import Branch, Observation, Parser, Product, Product_Member
 from application.core.queries.observation import (
     get_evidences,
     get_observation_by_id,
@@ -308,13 +300,8 @@ class ObservationViewSet(ModelViewSet):
         return (
             get_observations()
             .select_related("product")
+            .select_related("branch")
             .select_related("parser")
-            .prefetch_related(
-                Prefetch(
-                    "observation_logs",
-                    queryset=Observation_Log.objects.order_by("-created"),
-                )
-            )
         )
 
     def perform_destroy(self, instance: Observation) -> None:

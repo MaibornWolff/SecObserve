@@ -250,7 +250,9 @@ def _initialize_response_data() -> dict:
 def get_codecharta_metrics(product: Product) -> list[dict]:
     file_severities_dict: dict[str, dict] = {}
     observations = Observation.objects.filter(
-        product=product, current_status=Observation.STATUS_OPEN
+        product=product,
+        branch=product.repository_default_branch,
+        current_status=Observation.STATUS_OPEN,
     )
     for observation in observations:
         if observation.origin_source_file:
