@@ -32,7 +32,7 @@ from application.core.models import (
     Product_Member,
     Reference,
 )
-from application.core.queries.product import get_product_member
+from application.core.queries.product_member import get_product_member
 from application.core.services.observation_log import create_observation_log
 from application.core.services.security_gate import check_security_gate
 from application.issue_tracker.services.issue_tracker import (
@@ -41,8 +41,7 @@ from application.issue_tracker.services.issue_tracker import (
 )
 
 
-class ProductSerializer(ModelSerializer):
-    repository_default_branch_name = SerializerMethodField()
+class ProductCoreSerializer(ModelSerializer):
     open_critical_observation_count = SerializerMethodField()
     open_high_observation_count = SerializerMethodField()
     open_medium_observation_count = SerializerMethodField()
@@ -54,12 +53,6 @@ class ProductSerializer(ModelSerializer):
     class Meta:
         model = Product
         fields = "__all__"
-
-    def get_repository_default_branch_name(self, obj: Product) -> str:
-        if not obj.repository_default_branch:
-            return ""
-
-        return obj.repository_default_branch.name
 
     def get_open_critical_observation_count(self, obj: Product) -> int:
         return obj.open_critical_observation_count
@@ -89,6 +82,61 @@ class ProductSerializer(ModelSerializer):
             return get_permissions_for_role(product_member.role)
 
         return []
+
+
+class ProductGroupSerializer(ProductCoreSerializer):
+    products_count = SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = [
+            "id",
+            "name",
+            "description",
+            "products_count",
+            "permissions",
+            "open_critical_observation_count",
+            "open_high_observation_count",
+            "open_medium_observation_count",
+            "open_low_observation_count",
+            "open_none_observation_count",
+            "open_unkown_observation_count",
+        ]
+
+    def get_products_count(self, obj: Product) -> int:
+        return obj.products.count()
+
+    def create(self, validated_data: dict) -> Product:
+        product_group = super().create(validated_data)
+        product_group.is_product_group = True
+        product_group.save()
+        return product_group
+
+    def update(self, instance: Product, validated_data: dict) -> Product:
+        product_group = super().update(instance, validated_data)
+        if product_group.is_product_group is False:
+            product_group.is_product_group = True
+            product_group.save()
+        return product_group
+
+
+class ProductSerializer(ProductCoreSerializer):
+    product_group_name = SerializerMethodField()
+    repository_default_branch_name = SerializerMethodField()
+
+    class Meta:
+        model = Product
+        exclude = ["is_product_group"]
+
+    def get_product_group_name(self, obj: Product) -> str:
+        if not obj.product_group:
+            return ""
+        return obj.product_group.name
+
+    def get_repository_default_branch_name(self, obj: Product) -> str:
+        if not obj.repository_default_branch:
+            return ""
+        return obj.repository_default_branch.name
 
     def validate(self, attrs: dict):
         if attrs.get("security_gate_active"):
@@ -137,13 +185,19 @@ class ProductSerializer(ModelSerializer):
 
         return super().validate(attrs)
 
+    def validate_product_group(self, product: Product) -> Product:
+        if product and product.is_product_group is False:
+            raise ValidationError("Product group must be a product group")
+
+        return product
+
 
 class NestedProductSerializer(ModelSerializer):
     permissions = SerializerMethodField()
 
     class Meta:
         model = Product
-        fields = "__all__"
+        exclude = ["is_product_group"]
 
     def get_permissions(self, product: Product) -> list[Permissions]:
         user = get_current_user()
@@ -158,9 +212,16 @@ class NestedProductSerializer(ModelSerializer):
 
 
 class NestedProductListSerializer(ModelSerializer):
+    product_group_name = SerializerMethodField()
+
     class Meta:
         model = Product
-        exclude = ["members"]
+        exclude = ["members", "is_product_group"]
+
+    def get_product_group_name(self, obj: Product) -> str:
+        if not obj.product_group:
+            return ""
+        return obj.product_group.name
 
 
 class ProductMemberSerializer(ModelSerializer):

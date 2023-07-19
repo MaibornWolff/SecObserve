@@ -12,6 +12,7 @@ class TestRolesPermissions(BaseTestCase):
 
     def test_get_permissions_for_role_successful(self):
         permissions = {
+            Permissions.Product_Group_View,
             Permissions.Product_View,
             Permissions.Product_Member_View,
             Permissions.Branch_View,

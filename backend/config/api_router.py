@@ -9,6 +9,7 @@ from application.core.api.views import (
     ParserViewSet,
     ProductMemberViewSet,
     ProductViewSet,
+    ProductGroupViewSet,
 )
 from application.import_observations.api.views import ApiConfigurationViewSet
 from application.rules.api.views import GeneralRuleViewSet, ProductRuleViewSet
@@ -20,6 +21,7 @@ router.register(
     "product_api_tokens", ProductApiTokenViewset, basename="product_api_tokens"
 )
 router.register("products", ProductViewSet)
+router.register("product_groups", ProductGroupViewSet)
 router.register("product_members", ProductMemberViewSet)
 router.register("branches", BranchViewSet)
 router.register("parsers", ParserViewSet)

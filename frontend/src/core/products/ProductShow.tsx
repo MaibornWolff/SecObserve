@@ -88,6 +88,11 @@ const ProductShow = () => {
                                     <Typography variant="h6">Product</Typography>
                                     <TextField source="name" />
                                     {product.description && <RichTextField source="description" />}
+                                    {product.product_group && (
+                                        <ReferenceField source="product_group" reference="product_groups" link="show">
+                                            <TextField source="name" />
+                                        </ReferenceField>
+                                    )}
 
                                     <Typography variant="h6" sx={{ marginTop: "1em" }}>
                                         Rules

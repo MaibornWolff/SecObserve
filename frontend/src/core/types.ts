@@ -30,6 +30,11 @@ export const ISSUE_TRACKER_TYPE_CHOICES = [
     { id: "GitLab", name: "GitLab" },
 ];
 
+export interface ProductGroup extends RaRecord {
+    id: Identifier;
+    name: string;
+}
+
 export interface Parser extends RaRecord {
     id: Identifier;
     name: string;

@@ -214,7 +214,9 @@ class TestAuthorization(BaseTestCase):
 
     def test_get_user_permission_internal(self):
         permissions = get_user_permissions(self.user_internal)
-        self.assertEqual([Permissions.Product_Create], permissions)
+        self.assertEqual(
+            [Permissions.Product_Create, Permissions.Product_Group_Create], permissions
+        )
 
     @patch("application.access_control.services.authorization.get_current_user")
     def test_get_user_permission_external(self, mock):

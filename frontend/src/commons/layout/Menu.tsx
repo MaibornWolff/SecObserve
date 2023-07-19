@@ -4,6 +4,7 @@ import { DashboardMenuItem, MenuItemLink, MenuProps, useSidebarState, useTransla
 
 import observations from "../../core/observations";
 import parsers from "../../core/parsers";
+import product_groups from "../../core/product_groups";
 import products from "../../core/products";
 import general_rules from "../../rules/general_rules";
 import notifications from "../notifications";
@@ -27,6 +28,13 @@ const Menu = ({ dense = false }: MenuProps) => {
                 }}
             >
                 <DashboardMenuItem />
+                <MenuItemLink
+                    to="/product_groups"
+                    state={{ _scrollToTop: true }}
+                    primaryText="Product Groups"
+                    leftIcon={<product_groups.icon />}
+                    dense={dense}
+                />
                 <MenuItemLink
                     to="/products"
                     state={{ _scrollToTop: true }}

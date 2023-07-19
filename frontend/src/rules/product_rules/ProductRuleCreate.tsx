@@ -15,12 +15,7 @@ import {
     useRefresh,
 } from "react-admin";
 
-import {
-    AutocompleteInputMedium,
-    AutocompleteInputWide,
-    SelectInputWide,
-    TextInputWide,
-} from "../../commons/layout/themes";
+import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../../core/types";
 
 export type ProductRuleCreateProps = {
@@ -126,13 +121,6 @@ const ProductRuleCreate = ({ id }: ProductRuleCreateProps) => {
                 <DialogContent>
                     <CreateBase resource="product_rules">
                         <SimpleForm onSubmit={create_product_rule} toolbar={<CustomToolbar />}>
-                            <ReferenceInput
-                                source="product"
-                                reference="products"
-                                sort={{ field: "name", order: "ASC" }}
-                            >
-                                <SelectInputWide optionText="name" defaultValue={id} disabled={true} />
-                            </ReferenceInput>
                             <TextInputWide autoFocus source="name" validate={requiredValidate} />
                             <ReferenceInput source="parser" reference="parsers" sort={{ field: "name", order: "ASC" }}>
                                 <AutocompleteInputWide optionText="name" validate={requiredValidate} />

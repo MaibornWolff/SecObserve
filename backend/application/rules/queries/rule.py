@@ -1,4 +1,4 @@
-from django.db.models import Exists, OuterRef
+from django.db.models import Exists, OuterRef, Q
 from django.db.models.query import QuerySet
 
 from application.commons.services.global_request import get_current_user
@@ -16,15 +16,23 @@ def get_product_rules() -> QuerySet[Rule]:
     if user is None:
         return Rule.objects.none()
 
-    if user.is_superuser:
-        return Rule.objects.filter(product__isnull=False)
+    product_rules = Rule.objects.filter(product__isnull=False)
 
-    product_members = Product_Member.objects.filter(
-        product=OuterRef("product_id"), user=user
-    )
+    if not user.is_superuser:
+        product_members = Product_Member.objects.filter(
+            product=OuterRef("product_id"), user=user
+        )
+        product_group_members = Product_Member.objects.filter(
+            product=OuterRef("product__product_group"), user=user
+        )
 
-    product_rules = Rule.objects.annotate(
-        product__member=Exists(product_members)
-    ).filter(product__member=True)
+        product_rules = product_rules.annotate(
+            product__member=Exists(product_members),
+            product__product_group__member=Exists(product_group_members),
+        )
+
+        product_rules = product_rules.filter(
+            Q(product__member=True) | Q(product__product_group__member=True)
+        )
 
     return product_rules

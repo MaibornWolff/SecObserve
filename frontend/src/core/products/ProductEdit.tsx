@@ -110,6 +110,13 @@ const ProductEdit = () => {
                 <Typography variant="h6">Product</Typography>
                 <TextInputWide autoFocus source="name" validate={requiredValidate} />
                 <RichTextInput source="description" />
+                <ReferenceInput
+                    source="product_group"
+                    reference="product_groups"
+                    sort={{ field: "name", order: "ASC" }}
+                >
+                    <AutocompleteInputWide optionText="name" />
+                </ReferenceInput>
 
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>
                     Rules

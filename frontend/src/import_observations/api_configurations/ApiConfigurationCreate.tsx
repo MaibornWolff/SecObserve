@@ -15,7 +15,7 @@ import {
     useRefresh,
 } from "react-admin";
 
-import { AutocompleteInputWide, SelectInputWide, TextInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 
 export type ApiConfigurationCreateProps = {
     id: any;
@@ -91,13 +91,6 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
                 <DialogContent>
                     <CreateBase resource="api_configurations">
                         <SimpleForm onSubmit={create_api_configuration} toolbar={<CustomToolbar />}>
-                            <ReferenceInput
-                                source="product"
-                                reference="products"
-                                sort={{ field: "name", order: "ASC" }}
-                            >
-                                <SelectInputWide optionText="name" defaultValue={id} disabled={true} />
-                            </ReferenceInput>
                             <TextInputWide autoFocus source="name" validate={requiredValidate} />
                             <ReferenceInput
                                 source="parser"

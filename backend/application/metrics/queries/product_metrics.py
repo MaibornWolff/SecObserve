@@ -15,7 +15,7 @@ def get_product_metrics() -> QuerySet[Product_Metrics]:
     if user.is_superuser:
         return Product_Metrics.objects.all()
 
-    products = get_products()
+    products = get_products(is_product_group=False)
 
     return Product_Metrics.objects.filter(product__in=products)
 

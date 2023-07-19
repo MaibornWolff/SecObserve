@@ -18,6 +18,11 @@ class Roles(IntEnum):
 
 
 class Permissions(IntEnum):
+    Product_Group_View = 1001
+    Product_Group_Edit = 1002
+    Product_Group_Delete = 1003
+    Product_Group_Create = 1004
+
     Product_View = 1101
     Product_Edit = 1102
     Product_Delete = 1103
@@ -61,6 +66,15 @@ class Permissions(IntEnum):
             return True
         except ValueError:
             return False
+
+    @classmethod
+    def get_product_group_permissions(cls):
+        return {
+            Permissions.Product_Group_View,
+            Permissions.Product_Group_Edit,
+            Permissions.Product_Group_Delete,
+            Permissions.Product_Group_Create,
+        }
 
     @classmethod
     def get_observation_permissions(cls):
@@ -112,6 +126,7 @@ class Permissions(IntEnum):
 def get_roles_with_permissions():
     return {
         Roles.Reader: {
+            Permissions.Product_Group_View,
             Permissions.Product_View,
             Permissions.Product_Member_View,
             Permissions.Product_Rule_View,
@@ -123,6 +138,7 @@ def get_roles_with_permissions():
             Permissions.Product_Import_Observations,
         },
         Roles.Writer: {
+            Permissions.Product_Group_View,
             Permissions.Product_View,
             Permissions.Product_Import_Observations,
             Permissions.Product_Member_View,
@@ -135,6 +151,8 @@ def get_roles_with_permissions():
             Permissions.Api_Configuration_View,
         },
         Roles.Maintainer: {
+            Permissions.Product_Group_View,
+            Permissions.Product_Group_Edit,
             Permissions.Product_View,
             Permissions.Product_Edit,
             Permissions.Product_Import_Observations,
@@ -161,6 +179,9 @@ def get_roles_with_permissions():
             Permissions.Api_Configuration_Create,
         },
         Roles.Owner: {
+            Permissions.Product_Group_View,
+            Permissions.Product_Group_Edit,
+            Permissions.Product_Group_Delete,
             Permissions.Product_View,
             Permissions.Product_Edit,
             Permissions.Product_Delete,

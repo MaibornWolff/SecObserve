@@ -6,11 +6,12 @@ import {
     FormDataConsumer,
     NullableBooleanInput,
     NumberInput,
+    ReferenceInput,
     SimpleForm,
     required,
 } from "react-admin";
 
-import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { ISSUE_TRACKER_TYPE_CHOICES } from "../types";
 
 const ProductCreate = () => {
@@ -90,6 +91,13 @@ const ProductCreate = () => {
                 <Typography variant="h6">Product</Typography>
                 <TextInputWide autoFocus source="name" validate={requiredValidate} />
                 <RichTextInput source="description" />
+                <ReferenceInput
+                    source="product_group"
+                    reference="product_groups"
+                    sort={{ field: "name", order: "ASC" }}
+                >
+                    <AutocompleteInputWide optionText="name" />
+                </ReferenceInput>
 
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>
                     Rules
