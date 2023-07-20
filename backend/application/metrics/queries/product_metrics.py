@@ -29,7 +29,7 @@ def get_product_metrics() -> QuerySet[Product_Metrics]:
         )
 
         product_metrics = product_metrics.filter(
-            Q(is_product_group=False)
+            Q(product__is_product_group=False)
             & (Q(product__member=True) | Q(product__product_group__member=True))
         )
 
