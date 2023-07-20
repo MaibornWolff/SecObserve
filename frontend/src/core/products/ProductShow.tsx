@@ -69,7 +69,7 @@ const ShowActions = () => {
                     <ApiImportObservations product={product} />
                 </div>
             )}
-            <ExportMenu product={product} />
+            <ExportMenu product={product} is_product_group={false} />
             {product && product.permissions.includes(PERMISSION_PRODUCT_EDIT) && <EditButton />}
         </TopToolbar>
     );

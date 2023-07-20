@@ -7,9 +7,9 @@ from application.core.api.views import (
     EvidenceViewSet,
     ObservationViewSet,
     ParserViewSet,
+    ProductGroupViewSet,
     ProductMemberViewSet,
     ProductViewSet,
-    ProductGroupViewSet,
 )
 from application.import_observations.api.views import ApiConfigurationViewSet
 from application.rules.api.views import GeneralRuleViewSet, ProductRuleViewSet

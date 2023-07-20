@@ -94,3 +94,5 @@ def export_csv(
                     if value and isinstance(value, str):
                         value = value.replace("\n", " NEWLINE ").replace("\r", "")
                     fields.append(value)
+
+            writer.writerow(fields)

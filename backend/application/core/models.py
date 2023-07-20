@@ -197,7 +197,7 @@ class Branch(Model):
         ]
 
     def __str__(self):
-        return f"{self.product} / {self.name}"
+        return self.name
 
     @property
     def open_critical_observation_count(self):

@@ -15,17 +15,6 @@ def export_observations_excel(product: Product, status: Optional[str]) -> Workbo
     )
 
 
-def _get_observations(product: Product, status: Optional[str]) -> QuerySet:
-    if status:
-        observations = Observation.objects.filter(
-            product=product, current_status=status
-        )
-    else:
-        observations = Observation.objects.filter(product=product)
-    observations = observations.order_by("current_status", "current_severity", "title")
-    return observations
-
-
 def export_observations_csv(
     response: HttpResponse, product: Product, status: Optional[str]
 ) -> None:
@@ -36,6 +25,20 @@ def export_observations_csv(
         _get_excludes(),
         _get_foreign_keys(),
     )
+
+
+def _get_observations(product: Product, status: Optional[str]) -> QuerySet:
+    if product.is_product_group:
+        observations = Observation.objects.filter(product__product_group=product)
+    else:
+        observations = Observation.objects.filter(product=product)
+
+    if status:
+        observations = observations.filter(current_status=status)
+
+    observations = observations.order_by("current_status", "current_severity", "title")
+
+    return observations
 
 
 def _get_excludes():
@@ -66,4 +69,4 @@ def _get_excludes():
 
 
 def _get_foreign_keys():
-    return ["parser", "product"]
+    return ["branch", "parser", "product"]
