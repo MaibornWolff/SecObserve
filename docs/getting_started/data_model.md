@@ -2,6 +2,7 @@
 
 ``` mermaid
 erDiagram
+    Product_Group |o--o{ Product : has
     Product ||--o{ Observation : has
     Product ||--o{ Branch : has
     Product ||--o{ Product_Rule : has
@@ -14,6 +15,10 @@ erDiagram
     Observation ||--|{ Evidence : has
     General_Rule
 ```
+
+## Product Group
+
+A `Product Group` is a collection of products. It is used to group products that belong together, e.g. because they are part of the same project.
 
 ## Product
 

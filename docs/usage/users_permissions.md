@@ -21,25 +21,30 @@ The user type can be set by flags in the user administration:
 
 There are some general permissions based on the user's type:
 
-|                      | Internal | External | Superuser |
-|----------------------|:--------:|:--------:|:---------:|
-| Create Product       | X        | -        | X         |
-|                      |          |          |           |
-| View General Rules   | X        | X        | X         |
-| Create General Rules | -        | -        | X         |
-| Edit General Rules   | -        | -        | X         |
-| Delete General Rules | -        | -        | X         |
-|                      |          |          |           |
-| Access Admin UI      | -        | -        | X         |
+|                       | Internal | External | Superuser |
+|-----------------------|:--------:|:--------:|:---------:|
+| Create Product Groups | X        | -        | X         |
+| Create Product        | X        | -        | X         |
+|                       |          |          |           |
+| View General Rules    | X        | X        | X         |
+| Create General Rules  | -        | -        | X         |
+| Edit General Rules    | -        | -        | X         |
+| Delete General Rules  | -        | -        | X         |
+|                       |          |          |           |
+| Access Admin UI       | -        | -        | X         |
 
 ## Roles and permissions
 
 ![Product Members](../assets/images/screenshot_product_members.png)
 
-While superusers have permission to view and edit all data, internal and external users must be a product member with a specific role to access the product and its data:
+While superusers have permission to view and edit all data, internal and external users must be a product member with a specific role to access the product and its data. Product members of a product group have access to all products of that group with their respective role.
 
 |                          | Reader | Writer | Maintainer | Owner | Upload |
 |--------------------------|:------:|:------:|:----------:|:-----:|:------:|
+| View Product Group       | X      | X      | X          | X     | -      |
+| Edit Product Group       | -      | -      | X          | X     | -      |
+| Delete Product Group     | -      | -      | -          | X     | -      |
+|                          |        |        |            |       |        |
 | View Product             | X      | X      | X          | X     | -      |
 | Import Observations      | -      | X      | X          | X     | X      |
 | Edit Product             | -      | -      | X          | X     | -      |
