@@ -4,7 +4,6 @@ from django.utils import timezone
 
 from application.commons.services.global_request import get_current_user
 from application.core.models import Product_Member
-from application.core.queries.product import get_products
 from application.metrics.models import Product_Metrics
 
 
@@ -30,7 +29,7 @@ def get_product_metrics() -> QuerySet[Product_Metrics]:
         )
 
         product_metrics = product_metrics.filter(
-            is_product_group=False
+            Q(is_product_group=False)
             & (Q(product__member=True) | Q(product__product_group__member=True))
         )
 

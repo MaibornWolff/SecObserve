@@ -36,15 +36,15 @@ import ProductRuleEmbeddedList from "../../rules/product_rules/ProductRuleEmbedd
 import ProductMemberCreate from "../product_members/ProductMemberCreate";
 import ProductMemberEmbeddedList from "../product_members/ProductMemberEmbeddedList";
 import product from "../products";
+import ExportMenu from "../products/ExportMenu";
 import ProductEmbeddedList from "../products/ProductEmbeddedList";
 import ProductGroupHeader from "./ProductGroupHeader";
-import ExportMenu from "../products/ExportMenu";
 
 const ShowActions = () => {
     const product_group = useRecordContext();
     return (
         <TopToolbar>
-            <ExportMenu product={product_group}  is_product_group={true} />
+            <ExportMenu product={product_group} is_product_group={true} />
             {product_group && product_group.permissions.includes(PERMISSION_PRODUCT_GROUP_EDIT) && <EditButton />}
         </TopToolbar>
     );

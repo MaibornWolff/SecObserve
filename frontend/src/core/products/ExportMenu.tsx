@@ -14,7 +14,7 @@ import { getSettingTheme } from "../../commons/settings/functions";
 
 interface ExportMenuProps {
     product: any;
-    is_product_group: boolean
+    is_product_group: boolean;
 }
 
 const ExportMenu = (props: ExportMenuProps) => {
@@ -208,6 +208,6 @@ const ExportMenu = (props: ExportMenuProps) => {
             </Menu>
         </div>
     );
-}
+};
 
 export default ExportMenu;
