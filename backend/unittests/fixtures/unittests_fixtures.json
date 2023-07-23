@@ -108,6 +108,26 @@
         }
     },
     {
+        "model": "access_control.user",
+        "pk": 6,
+        "fields": {
+            "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$bUc4bk13R2RLSElVMlVoRENLeGoyaA$NMzcg5d9N6jufieKF+nADLa4AdLGdMb5lFVPN8zKPm0",
+            "last_login": "2022-12-07T19:24:26.108Z",
+            "is_superuser": false,
+            "username": "db_product_group_user",
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2022-12-04T10:09:18.495Z",
+            "full_name": "db_product_group_user",
+            "is_external": false,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
         "model": "core.product",
         "pk": 1,
         "fields": {
@@ -125,7 +145,8 @@
             "security_gate_threshold_unkown": null,
             "apply_general_rules": true,
             "notification_ms_teams_webhook": "",
-            "last_observation_change": "2022-12-16T16:13:18.283Z"
+            "last_observation_change": "2022-12-16T16:13:18.283Z",
+            "product_group": 3
         }
     },
     {
@@ -146,6 +167,50 @@
             "apply_general_rules": true,
             "notification_ms_teams_webhook": "",
             "last_observation_change": "2022-12-16T16:13:18.283Z"
+        }
+    },
+    {
+        "model": "core.product",
+        "pk": 3,
+        "fields": {
+            "name": "db_product_group",
+            "description": "",
+            "repository_prefix": "",
+            "repository_default_branch": 1,
+            "security_gate_passed": true,
+            "security_gate_active": null,
+            "security_gate_threshold_critical": null,
+            "security_gate_threshold_high": null,
+            "security_gate_threshold_medium": null,
+            "security_gate_threshold_low": null,
+            "security_gate_threshold_none": null,
+            "security_gate_threshold_unkown": null,
+            "apply_general_rules": true,
+            "notification_ms_teams_webhook": "",
+            "last_observation_change": "2022-12-16T16:13:18.283Z",
+            "is_product_group": true
+        }
+    },
+    {
+        "model": "core.product",
+        "pk": 4,
+        "fields": {
+            "name": "db_product_group_admin_only",
+            "description": "",
+            "repository_prefix": "",
+            "repository_default_branch": 1,
+            "security_gate_passed": true,
+            "security_gate_active": null,
+            "security_gate_threshold_critical": null,
+            "security_gate_threshold_high": null,
+            "security_gate_threshold_medium": null,
+            "security_gate_threshold_low": null,
+            "security_gate_threshold_none": null,
+            "security_gate_threshold_unkown": null,
+            "apply_general_rules": true,
+            "notification_ms_teams_webhook": "",
+            "last_observation_change": "2022-12-16T16:13:18.283Z",
+            "is_product_group": true
         }
     },
     {
@@ -215,6 +280,15 @@
             "product": 2,
             "user": 5,
             "role": 2
+        }
+    },
+    {
+        "model": "core.product_member",
+        "pk": 6,
+        "fields": {
+            "product": 3,
+            "user": 6,
+            "role": 5
         }
     },
     {

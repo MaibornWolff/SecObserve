@@ -301,6 +301,12 @@ class BranchSerializer(ModelSerializer):
     def get_open_unkown_observation_count(self, obj: Branch) -> int:
         return obj.open_unkown_observation_count
 
+    def validate_product(self, product: Product) -> Product:
+        if product and product.is_product_group:
+            raise ValidationError("Product must not be a product group")
+
+        return product
+
 
 class ParserSerializer(ModelSerializer):
     class Meta:
@@ -386,6 +392,12 @@ class ObservationSerializer(ModelSerializer):
             )
 
         return issue_url
+
+    def validate_product(self, product: Product) -> Product:
+        if product and product.is_product_group:
+            raise ValidationError("Product must not be a product group")
+
+        return product
 
 
 class ObservationListSerializer(ModelSerializer):
