@@ -12,7 +12,12 @@ import { useNotify } from "react-admin";
 import axios_instance from "../../access_control/axios_instance";
 import { getSettingTheme } from "../../commons/settings/functions";
 
-export default function ExportMenu(product: any) {
+interface ExportMenuProps {
+    product: any;
+    is_product_group: boolean;
+}
+
+const ExportMenu = (props: ExportMenuProps) => {
     const notify = useNotify();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -83,7 +88,7 @@ export default function ExportMenu(product: any) {
 
     const exportCodeChartaMetrics = async () => {
         exportDataCsv(
-            "/products/" + product.product.id + "/export_codecharta_metrics/",
+            "/products/" + props.product.id + "/export_codecharta_metrics/",
             "secobserve_codecharta_metrics.csv",
             "CodeCharta metrics"
         );
@@ -91,7 +96,7 @@ export default function ExportMenu(product: any) {
 
     const exportAllObservationsExcel = async () => {
         exportDataExcel(
-            "/products/" + product.product.id + "/export_observations_excel/",
+            "/products/" + props.product.id + "/export_observations_excel/",
             "all_observations.xlsx",
             "Observations"
         );
@@ -99,7 +104,7 @@ export default function ExportMenu(product: any) {
 
     const exportOpenObservationsExcel = async () => {
         exportDataExcel(
-            "/products/" + product.product.id + "/export_observations_excel/?status=Open",
+            "/products/" + props.product.id + "/export_observations_excel/?status=Open",
             "open_observations.xlsx",
             "Observations"
         );
@@ -107,7 +112,7 @@ export default function ExportMenu(product: any) {
 
     const exportAllObservationsCsv = async () => {
         exportDataCsv(
-            "/products/" + product.product.id + "/export_observations_csv/",
+            "/products/" + props.product.id + "/export_observations_csv/",
             "all_observations.csv",
             "Observations"
         );
@@ -115,7 +120,7 @@ export default function ExportMenu(product: any) {
 
     const exportOpenObservationsCsv = async () => {
         exportDataCsv(
-            "/products/" + product.product.id + "/export_observations_csv/?status=Open",
+            "/products/" + props.product.id + "/export_observations_csv/?status=Open",
             "open_observations.csv",
             "Observations"
         );
@@ -123,14 +128,14 @@ export default function ExportMenu(product: any) {
 
     const exportMetricsExcel = async () => {
         exportDataExcel(
-            "/metrics/export_excel?product_id=" + product.product.id,
+            "/metrics/export_excel?product_id=" + props.product.id,
             "product_metrics.xlsx",
             "Product Metrics"
         );
     };
 
     const exportMetricsCsv = async () => {
-        exportDataCsv("/metrics/export_csv?product_id=" + product.product.id, "product_metrics.csv", "Product Metrics");
+        exportDataCsv("/metrics/export_csv?product_id=" + props.product.id, "product_metrics.csv", "Product Metrics");
     };
 
     return (
@@ -186,19 +191,23 @@ export default function ExportMenu(product: any) {
                     </ListItemIcon>
                     Metrics / Excel
                 </MenuItem>
-                <MenuItem onClick={exportMetricsCsv} divider>
+                <MenuItem onClick={exportMetricsCsv} divider={!props.is_product_group}>
                     <ListItemIcon>
                         <FontAwesomeIcon icon={faFileCsv} color={getIconColor()} />
                     </ListItemIcon>
                     Metrics / CSV
                 </MenuItem>
-                <MenuItem onClick={exportCodeChartaMetrics}>
-                    <ListItemIcon>
-                        <ViewQuiltIcon sx={{ color: getIconColor() }} />
-                    </ListItemIcon>
-                    CodeCharta metrics
-                </MenuItem>
+                {!props.is_product_group && (
+                    <MenuItem onClick={exportCodeChartaMetrics}>
+                        <ListItemIcon>
+                            <ViewQuiltIcon sx={{ color: getIconColor() }} />
+                        </ListItemIcon>
+                        CodeCharta metrics
+                    </MenuItem>
+                )}
             </Menu>
         </div>
     );
-}
+};
+
+export default ExportMenu;

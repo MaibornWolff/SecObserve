@@ -8,7 +8,7 @@ from application.access_control.services.roles_permissions import (
 )
 from application.commons.services.global_request import get_current_user
 from application.core.models import Branch, Observation, Product, Product_Member
-from application.core.queries.product import get_product_member
+from application.core.queries.product_member import get_product_member
 from application.import_observations.models import Api_Configuration
 from application.rules.models import Rule
 
@@ -28,7 +28,23 @@ def user_has_permission(  # pylint: disable=too-many-return-statements
     if user.is_superuser:
         return True
 
-    if isinstance(obj, Product):
+    if (
+        isinstance(obj, Product)
+        and not obj.is_product_group
+        and permission not in Permissions.get_product_group_permissions()
+    ):
+        # Check if the user has a role for the product with the requested permissions
+        member = get_product_member(obj, user)
+        authorized = bool(
+            member is not None and role_has_permission(member.role, permission)
+        )
+
+        if not authorized and obj.product_group:
+            authorized = user_has_permission(obj.product_group, permission, user)
+
+        return authorized
+
+    if isinstance(obj, Product) and obj.is_product_group:
         # Check if the user has a role for the product with the requested permissions
         member = get_product_member(obj, user)
         return bool(member is not None and role_has_permission(member.role, permission))
@@ -97,6 +113,7 @@ def get_user_permissions(user: User = None) -> list[Permissions]:
 
     if user and not user.is_external:
         permissions.append(Permissions.Product_Create)
+        permissions.append(Permissions.Product_Group_Create)
 
     return permissions
 

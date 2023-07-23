@@ -69,7 +69,7 @@ const ShowActions = () => {
                     <ApiImportObservations product={product} />
                 </div>
             )}
-            <ExportMenu product={product} />
+            <ExportMenu product={product} is_product_group={false} />
             {product && product.permissions.includes(PERMISSION_PRODUCT_EDIT) && <EditButton />}
         </TopToolbar>
     );
@@ -88,6 +88,11 @@ const ProductShow = () => {
                                     <Typography variant="h6">Product</Typography>
                                     <TextField source="name" />
                                     {product.description && <RichTextField source="description" />}
+                                    {product.product_group && (
+                                        <ReferenceField source="product_group" reference="product_groups" link="show">
+                                            <TextField source="name" />
+                                        </ReferenceField>
+                                    )}
 
                                     <Typography variant="h6" sx={{ marginTop: "1em" }}>
                                         Rules

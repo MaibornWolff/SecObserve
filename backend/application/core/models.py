@@ -35,6 +35,12 @@ class Product(Model):
 
     name = CharField(max_length=255, unique=True)
     description = TextField(max_length=2048, blank=True)
+
+    is_product_group = BooleanField(default=False)
+    product_group = ForeignKey(
+        "self", on_delete=PROTECT, related_name="products", null=True, blank=True
+    )
+
     repository_prefix = CharField(max_length=255, blank=True)
     repository_default_branch = ForeignKey(
         "Branch",
@@ -88,56 +94,92 @@ class Product(Model):
 
     @property
     def open_critical_observation_count(self):
+        if self.is_product_group:
+            count = 0
+            for product in Product.objects.filter(product_group=self):
+                count += product.open_critical_observation_count
+            return count
+
         return Observation.objects.filter(
             product=self,
             branch=self.repository_default_branch,
-            current_severity=Observation.SEVERITY_CRITICAL,
             current_status=Observation.STATUS_OPEN,
+            current_severity=Observation.SEVERITY_CRITICAL,
         ).count()
 
     @property
     def open_high_observation_count(self):
+        if self.is_product_group:
+            count = 0
+            for product in Product.objects.filter(product_group=self):
+                count += product.open_high_observation_count
+            return count
+
         return Observation.objects.filter(
             product=self,
             branch=self.repository_default_branch,
-            current_severity=Observation.SEVERITY_HIGH,
             current_status=Observation.STATUS_OPEN,
+            current_severity=Observation.SEVERITY_HIGH,
         ).count()
 
     @property
     def open_medium_observation_count(self):
+        if self.is_product_group:
+            count = 0
+            for product in Product.objects.filter(product_group=self):
+                count += product.open_medium_observation_count
+            return count
+
         return Observation.objects.filter(
             product=self,
             branch=self.repository_default_branch,
-            current_severity=Observation.SEVERITY_MEDIUM,
             current_status=Observation.STATUS_OPEN,
+            current_severity=Observation.SEVERITY_MEDIUM,
         ).count()
 
     @property
     def open_low_observation_count(self):
+        if self.is_product_group:
+            count = 0
+            for product in Product.objects.filter(product_group=self):
+                count += product.open_low_observation_count
+            return count
+
         return Observation.objects.filter(
             product=self,
             branch=self.repository_default_branch,
-            current_severity=Observation.SEVERITY_LOW,
             current_status=Observation.STATUS_OPEN,
+            current_severity=Observation.SEVERITY_LOW,
         ).count()
 
     @property
     def open_none_observation_count(self):
+        if self.is_product_group:
+            count = 0
+            for product in Product.objects.filter(product_group=self):
+                count += product.open_none_observation_count
+            return count
+
         return Observation.objects.filter(
             product=self,
             branch=self.repository_default_branch,
-            current_severity=Observation.SEVERITY_NONE,
             current_status=Observation.STATUS_OPEN,
+            current_severity=Observation.SEVERITY_NONE,
         ).count()
 
     @property
     def open_unkown_observation_count(self):
+        if self.is_product_group:
+            count = 0
+            for product in Product.objects.filter(product_group=self):
+                count += product.open_unkown_observation_count
+            return count
+
         return Observation.objects.filter(
             product=self,
             branch=self.repository_default_branch,
-            current_severity=Observation.SEVERITY_UNKOWN,
             current_status=Observation.STATUS_OPEN,
+            current_severity=Observation.SEVERITY_UNKOWN,
         ).count()
 
 
@@ -155,7 +197,7 @@ class Branch(Model):
         ]
 
     def __str__(self):
-        return f"{self.product} / {self.name}"
+        return self.name
 
     @property
     def open_critical_observation_count(self):

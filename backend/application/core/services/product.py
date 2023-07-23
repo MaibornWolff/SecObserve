@@ -1,5 +1,5 @@
 from application.core.models import Product
-from application.core.queries.product import get_branches_by_product
+from application.core.queries.branch import get_branches_by_product
 
 
 def set_repository_default_branch(product: Product) -> None:

@@ -4,7 +4,7 @@ from django.db.models.query import QuerySet
 
 from application.access_control.models import User
 from application.commons.services.global_request import get_current_user
-from application.core.queries.product import get_product_members
+from application.core.queries.product_member import get_product_members
 
 
 def get_user_by_username(username: str) -> Optional[User]:

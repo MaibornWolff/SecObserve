@@ -10,7 +10,7 @@ import {
     Title,
     Tooltip,
 } from "chart.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Identifier } from "react-admin";
 import { Line } from "react-chartjs-2";
 
@@ -32,7 +32,6 @@ interface MetricsSeveritiesTimelineProps {
 
 const MetricsSeveritiesTimeline = (props: MetricsSeveritiesTimelineProps) => {
     const [datasets, setDatasets] = useState<any[]>([]);
-    const [loaded, setLoaded] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const days = [
@@ -67,7 +66,7 @@ const MetricsSeveritiesTimeline = (props: MetricsSeveritiesTimelineProps) => {
         datasets: datasets,
     };
 
-    function get_data() {
+    useEffect(() => {
         setLoading(true);
 
         let url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/metrics/product_metrics_timeline/?age=Past%207%20days";
@@ -193,13 +192,8 @@ const MetricsSeveritiesTimeline = (props: MetricsSeveritiesTimelineProps) => {
             ];
             setDatasets(data_sets);
         });
-        setLoaded(true);
         setLoading(false);
-    }
-
-    if (!loaded) {
-        get_data();
-    }
+    }, []);
 
     ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler, Legend);
 

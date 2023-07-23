@@ -13,7 +13,7 @@ from application.metrics.services.age import get_days
 
 
 def calculate_product_metrics() -> None:
-    for product in Product.objects.all():
+    for product in Product.objects.filter(is_product_group=False):
         calculate_metrics_for_product(product)
 
     product_metrics_status = Product_Metrics_Status.load()
@@ -126,7 +126,10 @@ def _get_latest_product_metrics(product: Product) -> Optional[Product_Metrics]:
 def get_product_metrics_timeline(product: Optional[Product], age: str) -> dict:
     product_metrics = get_product_metrics()
     if product:
-        product_metrics = product_metrics.filter(product=product)
+        if product.is_product_group:
+            product_metrics = product_metrics.filter(product__product_group=product)
+        else:
+            product_metrics = product_metrics.filter(product=product)
 
     days = get_days(age)
     if days:
@@ -137,7 +140,7 @@ def get_product_metrics_timeline(product: Optional[Product], age: str) -> dict:
     response_data: dict = {}
 
     for product_metric in product_metrics:
-        if not product:
+        if not product or product.is_product_group:
             response_metric = response_data.get(product_metric.date.isoformat(), {})
             response_metric["open_critical"] = (
                 response_metric.get("open_critical", 0) + product_metric.open_critical
@@ -205,7 +208,10 @@ def get_product_metrics_timeline(product: Optional[Product], age: str) -> dict:
 def get_product_metrics_current(product: Optional[Product]) -> dict:
     product_metrics = get_todays_product_metrics()
     if product:
-        product_metrics = product_metrics.filter(product=product)
+        if product.is_product_group:
+            product_metrics = product_metrics.filter(product__product_group=product)
+        else:
+            product_metrics = product_metrics.filter(product=product)
 
     response_data: dict = _initialize_response_data()
     if len(product_metrics) > 0:

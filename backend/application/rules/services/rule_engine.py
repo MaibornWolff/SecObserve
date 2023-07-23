@@ -21,6 +21,14 @@ class Rule_Engine:
         )
         self.rules: list[Rule] = list(product_parser_rules)
 
+        if product.product_group:
+            product_group_parser_rules = Rule.objects.filter(
+                product=product.product_group,
+                parser=parser,
+                enabled=True,
+            )
+            self.rules += list(product_group_parser_rules)
+
         if product.apply_general_rules:
             parser_rules = Rule.objects.filter(
                 product__isnull=True, parser=parser, enabled=True

@@ -6,7 +6,7 @@ from application.access_control.api.permissions import (
 )
 from application.access_control.services.roles_permissions import Permissions, Roles
 from application.core.models import Product
-from application.core.queries.product import get_product_member
+from application.core.queries.product_member import get_product_member
 
 
 class UserHasProductPermission(BasePermission):

@@ -10,3 +10,5 @@ frontend/public/runtime-env.js
 frontend/.env
 backend/dummy
 backend/huey.db
+backend/huey.db-shm
+backend/huey.db-wal

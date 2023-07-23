@@ -13,6 +13,7 @@ import { getTheme } from "./commons/settings/functions";
 import evidences from "./core/evidences";
 import observations from "./core/observations";
 import parsers from "./core/parsers";
+import product_groups from "./core/product_groups";
 import products from "./core/products";
 import { Dashboard } from "./dashboard";
 import general_rules from "./rules/general_rules";
@@ -37,6 +38,12 @@ const App = () => {
             <CustomRoutes>
                 <Route path="/settings" element={<Settings />} />
             </CustomRoutes>
+            <Resource
+                name="product_groups"
+                {...product_groups} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                // nosemgrep because the props are well defined in the import
+                recordRepresentation={(record) => `${trim_string(record.name)}`}
+            />
             <Resource
                 name="products"
                 {...products} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
