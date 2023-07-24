@@ -73,9 +73,6 @@ const ProductCreate = () => {
         if (!data.issue_tracker_base_url) {
             data.issue_tracker_base_url = "";
         }
-        if (!data.issue_tracker_username) {
-            data.issue_tracker_username = "";
-        }
         if (!data.issue_tracker_api_key) {
             data.issue_tracker_api_key = "";
         }
@@ -84,6 +81,12 @@ const ProductCreate = () => {
         }
         if (!data.issue_tracker_labels) {
             data.issue_tracker_labels = "";
+        }
+        if (!data.issue_tracker_username) {
+            data.issue_tracker_username = "";
+        }
+        if (!data.issue_tracker_status_closed) {
+            data.issue_tracker_status_closed = "";
         }
         return data;
     };
@@ -176,7 +179,7 @@ const ProductCreate = () => {
                     }
                 </FormDataConsumer>
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                    Issue Tracker (Experimental)
+                    Issue Tracker
                 </Typography>
                 <BooleanInput source="issue_tracker_active" label="Active" defaultValue={false} />
                 <AutocompleteInputMedium
@@ -185,10 +188,11 @@ const ProductCreate = () => {
                     choices={ISSUE_TRACKER_TYPE_CHOICES}
                 />
                 <TextInputWide source="issue_tracker_base_url" label="Base URL" />
-                <TextInputWide source="issue_tracker_username" label="Username (only for Jira)" />
                 <TextInputWide source="issue_tracker_api_key" label="API key" />
                 <TextInputWide source="issue_tracker_project_id" label="Project id" />
                 <TextInputWide source="issue_tracker_labels" label="Labels" />
+                <TextInputWide source="issue_tracker_username" label="Username (only for Jira)" />
+                <TextInputWide source="issue_tracker_status_closed" label="Closed status (only for Jira)" />
             </SimpleForm>
         </Create>
     );

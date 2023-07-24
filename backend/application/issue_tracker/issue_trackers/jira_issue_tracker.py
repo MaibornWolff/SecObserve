@@ -59,7 +59,8 @@ class JiraIssueTracker(BaseIssueTracker):
 
             if (
                 jira_issue.fields.status
-                and str(jira_issue.fields.status) == "Done"
+                and str(jira_issue.fields.status)
+                == observation.product.issue_tracker_status_closed
                 and observation.issue_tracker_jira_initial_status
             ):
                 self.jira.transition_issue(
@@ -81,7 +82,9 @@ class JiraIssueTracker(BaseIssueTracker):
                 description=description,
             )
 
-            self.jira.transition_issue(jira_issue, "Done")
+            self.jira.transition_issue(
+                jira_issue, observation.product.issue_tracker_status_closed
+            )
 
     def close_issue_for_deleted_observation(
         self, product: Product, issue: Issue
@@ -99,7 +102,7 @@ class JiraIssueTracker(BaseIssueTracker):
                 description=description,
             )
 
-            self.jira.transition_issue(jira_issue, "Done")
+            self.jira.transition_issue(jira_issue, product.issue_tracker_status_closed)
 
     def get_frontend_issue_url(self, product: Product, issue_id: str) -> str:
         return f"{product.issue_tracker_base_url}/browse/{issue_id}"

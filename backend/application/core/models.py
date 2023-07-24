@@ -74,8 +74,10 @@ class Product(Model):
         User, through="Product_Member", related_name="product_members", blank=True
     )
     apply_general_rules = BooleanField(default=True)
+
     notification_ms_teams_webhook = CharField(max_length=255, blank=True)
     notification_email_to = CharField(max_length=255, blank=True)
+
     issue_tracker_active = BooleanField(default=False)
     issue_tracker_type = CharField(
         max_length=12, choices=ISSUE_TRACKER_TYPE_CHOICES, blank=True
@@ -85,6 +87,8 @@ class Product(Model):
     issue_tracker_api_key = CharField(max_length=255, blank=True)
     issue_tracker_project_id = CharField(max_length=255, blank=True)
     issue_tracker_labels = CharField(max_length=255, blank=True)
+    issue_tracker_status_closed = CharField(max_length=255, blank=True)
+
     last_observation_change = DateTimeField(default=timezone.now)
 
     class Meta:

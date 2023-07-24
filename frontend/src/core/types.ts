@@ -24,6 +24,7 @@ export interface Product extends RaRecord {
     issue_tracker_api_key: string;
     issue_tracker_project_id: string;
     issue_tracker_labels: string;
+    issue_tracker_status_closed: string;
 }
 
 export const ISSUE_TRACKER_TYPE_CHOICES = [

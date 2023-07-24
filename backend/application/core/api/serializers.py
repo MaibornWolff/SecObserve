@@ -138,7 +138,9 @@ class ProductSerializer(ProductCoreSerializer):
             return ""
         return obj.repository_default_branch.name
 
-    def validate(self, attrs: dict):
+    def validate(self, attrs: dict):  # pylint: disable=too-many-branches
+        # There are quite a lot of branches, but at least they are not nested too much
+
         if attrs.get("security_gate_active"):
             if not attrs.get("security_gate_threshold_critical"):
                 attrs["security_gate_threshold_critical"] = 0
@@ -183,20 +185,29 @@ class ProductSerializer(ProductCoreSerializer):
                 "Issue tracker data must be set when issue tracking is active"
             )
 
-        if attrs.get(
-            "issue_tracker_type"
-        ) == Product.ISSUE_TRACKER_JIRA and not attrs.get("issue_tracker_username"):
-            raise ValidationError(
-                "Username must be set when issue tracker type is Jira"
-            )
+        if attrs.get("issue_tracker_type") == Product.ISSUE_TRACKER_JIRA:
+            if not attrs.get("issue_tracker_username"):
+                raise ValidationError(
+                    "Username must be set when issue tracker type is Jira"
+                )
+            if not attrs.get("issue_tracker_status_closed"):
+                raise ValidationError(
+                    "Closed status must be set when issue tracker type is Jira"
+                )
+
         if (
             attrs.get("issue_tracker_type")
             and attrs.get("issue_tracker_type") != Product.ISSUE_TRACKER_JIRA
-            and attrs.get("issue_tracker_username")
         ):
-            raise ValidationError(
-                "Username must not be set when issue tracker type is not Jira"
-            )
+            if attrs.get("issue_tracker_username"):
+                raise ValidationError(
+                    "Username must not be set when issue tracker type is not Jira"
+                )
+            if attrs.get("issue_tracker_status_closed"):
+                raise ValidationError(
+                    "Closed status must not be set when issue tracker type is not Jira"
+                )
+
         return super().validate(attrs)
 
     def validate_product_group(self, product: Product) -> Product:
