@@ -20,6 +20,7 @@ export interface Product extends RaRecord {
     issue_tracker_active: boolean;
     issue_tracker_type: string;
     issue_tracker_base_url: string;
+    issue_tracker_username: string;
     issue_tracker_api_key: string;
     issue_tracker_project_id: string;
     issue_tracker_labels: string;
@@ -28,6 +29,7 @@ export interface Product extends RaRecord {
 export const ISSUE_TRACKER_TYPE_CHOICES = [
     { id: "GitHub", name: "GitHub" },
     { id: "GitLab", name: "GitLab" },
+    { id: "Jira", name: "Jira" },
 ];
 
 export interface ProductGroup extends RaRecord {

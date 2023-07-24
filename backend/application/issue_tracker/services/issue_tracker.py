@@ -13,6 +13,7 @@ from application.issue_tracker.issue_trackers.github_issue_tracker import (
 from application.issue_tracker.issue_trackers.gitlab_issue_tracker import (
     GitLabIssueTracker,
 )
+from application.issue_tracker.issue_trackers.jira_issue_tracker import JiraIssueTracker
 
 
 def push_observations_to_issue_tracker(
@@ -76,5 +77,8 @@ def issue_tracker_factory(product: Product) -> BaseIssueTracker:
 
     if product.issue_tracker_type == Product.ISSUE_TRACKER_GITLAB:
         return GitLabIssueTracker()
+
+    if product.issue_tracker_type == Product.ISSUE_TRACKER_JIRA:
+        return JiraIssueTracker(product=product)
 
     raise ValueError(f"Unknown issue tracker type: {product.issue_tracker_type}")

@@ -183,6 +183,20 @@ class ProductSerializer(ProductCoreSerializer):
                 "Issue tracker data must be set when issue tracking is active"
             )
 
+        if attrs.get(
+            "issue_tracker_type"
+        ) == Product.ISSUE_TRACKER_JIRA and not attrs.get("issue_tracker_username"):
+            raise ValidationError(
+                "Username must be set when issue tracker type is Jira"
+            )
+        if (
+            attrs.get("issue_tracker_type")
+            and attrs.get("issue_tracker_type") != Product.ISSUE_TRACKER_JIRA
+            and attrs.get("issue_tracker_username")
+        ):
+            raise ValidationError(
+                "Username must not be set when issue tracker type is not Jira"
+            )
         return super().validate(attrs)
 
     def validate_product_group(self, product: Product) -> Product:
@@ -355,7 +369,7 @@ class ObservationSerializer(ModelSerializer):
 
     class Meta:
         model = Observation
-        exclude = ["numerical_severity"]
+        exclude = ["numerical_severity", "issue_tracker_jira_initial_status"]
 
     def get_branch_name(self, observation: Observation) -> str:
         if not observation.branch:
@@ -409,7 +423,7 @@ class ObservationListSerializer(ModelSerializer):
 
     class Meta:
         model = Observation
-        exclude = ["numerical_severity"]
+        exclude = ["numerical_severity", "issue_tracker_jira_initial_status"]
 
     def get_branch_name(self, observation: Observation) -> str:
         if not observation.branch:

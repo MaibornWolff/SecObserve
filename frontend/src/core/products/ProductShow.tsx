@@ -181,6 +181,12 @@ const ProductShow = () => {
                                                 <TextField source="issue_tracker_base_url" label="Base URL" />
                                             </Labeled>
                                             <br />
+                                            {product.issue_tracker_username && (<div><Labeled>
+                                                <TextField source="issue_tracker_username" label="Username (only for Jira)" />
+                                            </Labeled>
+                                            <br />
+                                            </div>
+                                            )}
                                             <Labeled>
                                                 <TextField source="issue_tracker_project_id" label="Project id" />
                                             </Labeled>
