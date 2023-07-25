@@ -89,7 +89,7 @@ services:
       - database
 
   mysql:
-    image: mysql:8.0.33
+    image: mysql:8.0.34
     container_name: "prod_mysql"
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: ${SO_MYSQL_RANDOM_ROOT_PASSWORD:-yes}
