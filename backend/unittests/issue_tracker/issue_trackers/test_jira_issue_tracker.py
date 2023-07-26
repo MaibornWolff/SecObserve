@@ -391,7 +391,9 @@ class TestJiraIssueTracker(BaseTestCase):
         issue_mock.return_value = None
 
         issue_tracker = JiraIssueTracker(self.observation_1.product)
-        issue_tracker.close_issue_for_deleted_observation(self.observation_1.product, issue)
+        issue_tracker.close_issue_for_deleted_observation(
+            self.observation_1.product, issue
+        )
 
         issue_mock.assert_called_once_with(
             "jira_1", fields="summary,description,labels,status"
@@ -430,7 +432,9 @@ class TestJiraIssueTracker(BaseTestCase):
         issue_mock.return_value = jira_issue
 
         issue_tracker = JiraIssueTracker(self.observation_1.product)
-        issue_tracker.close_issue_for_deleted_observation(self.observation_1.product, issue)
+        issue_tracker.close_issue_for_deleted_observation(
+            self.observation_1.product, issue
+        )
 
         self.assertEqual("title_old", jira_issue.fields.summary)
         description = "*--- Observation has been deleted ---*\n\ndescription_old"
