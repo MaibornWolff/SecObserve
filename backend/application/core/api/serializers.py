@@ -190,6 +190,10 @@ class ProductSerializer(ProductCoreSerializer):
                 raise ValidationError(
                     "Username must be set when issue tracker type is Jira"
                 )
+            if not attrs.get("issue_tracker_issue_type"):
+                raise ValidationError(
+                    "Issue type must be set when issue tracker type is Jira"
+                )
             if not attrs.get("issue_tracker_status_closed"):
                 raise ValidationError(
                     "Closed status must be set when issue tracker type is Jira"
@@ -202,6 +206,10 @@ class ProductSerializer(ProductCoreSerializer):
             if attrs.get("issue_tracker_username"):
                 raise ValidationError(
                     "Username must not be set when issue tracker type is not Jira"
+                )
+            if attrs.get("issue_tracker_issue_type"):
+                raise ValidationError(
+                    "Isse type must not be set when issue tracker type is not Jira"
                 )
             if attrs.get("issue_tracker_status_closed"):
                 raise ValidationError(

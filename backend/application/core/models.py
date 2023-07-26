@@ -87,6 +87,7 @@ class Product(Model):
     issue_tracker_api_key = CharField(max_length=255, blank=True)
     issue_tracker_project_id = CharField(max_length=255, blank=True)
     issue_tracker_labels = CharField(max_length=255, blank=True)
+    issue_tracker_issue_type = CharField(max_length=255, blank=True)
     issue_tracker_status_closed = CharField(max_length=255, blank=True)
 
     last_observation_change = DateTimeField(default=timezone.now)

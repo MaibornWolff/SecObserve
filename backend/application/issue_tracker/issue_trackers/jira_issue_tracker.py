@@ -26,7 +26,7 @@ class JiraIssueTracker(BaseIssueTracker):
             summary=self._get_title(observation),
             description=self._get_description(observation),
             labels=[item.strip() for item in labels],
-            issuetype="Task",
+            issuetype=observation.product.issue_tracker_issue_type,
         )
 
         observation.issue_tracker_issue_id = jira_issue.key

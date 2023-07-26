@@ -85,6 +85,9 @@ const ProductCreate = () => {
         if (!data.issue_tracker_username) {
             data.issue_tracker_username = "";
         }
+        if (!data.issue_tracker_issue_type) {
+            data.issue_tracker_issue_type = "";
+        }
         if (!data.issue_tracker_status_closed) {
             data.issue_tracker_status_closed = "";
         }
@@ -192,6 +195,7 @@ const ProductCreate = () => {
                 <TextInputWide source="issue_tracker_project_id" label="Project id" />
                 <TextInputWide source="issue_tracker_labels" label="Labels" />
                 <TextInputWide source="issue_tracker_username" label="Username (only for Jira)" />
+                <TextInputWide source="issue_tracker_issue_type" label="Issue type (only for Jira)" />
                 <TextInputWide source="issue_tracker_status_closed" label="Closed status (only for Jira)" />
             </SimpleForm>
         </Create>

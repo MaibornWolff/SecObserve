@@ -200,6 +200,17 @@ const ProductShow = () => {
                                                     <br />
                                                 </div>
                                             )}
+                                            {product.issue_tracker_issue_type && (
+                                                <div>
+                                                    <Labeled>
+                                                        <TextField
+                                                            source="issue_tracker_issue_type"
+                                                            label="Issue type (only for Jira)"
+                                                        />
+                                                    </Labeled>
+                                                    <br />
+                                                </div>
+                                            )}
                                             {product.issue_tracker_status_closed && (
                                                 <div>
                                                     <Labeled>
