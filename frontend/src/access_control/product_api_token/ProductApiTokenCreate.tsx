@@ -72,8 +72,6 @@ const CreateProductApiToken = (props: CreateProductApiTokenProps) => {
             role: data.role,
         };
 
-        console.log(props);
-
         httpClient(url, {
             method: "POST",
             body: JSON.stringify(create_data),

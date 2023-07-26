@@ -168,7 +168,7 @@ const ProductShow = () => {
                                     )}
 
                                     <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                                        Issue Tracker (Experimental)
+                                        Issue Tracker
                                     </Typography>
                                     <BooleanField source="issue_tracker_active" label="Active" />
                                     {product.issue_tracker_type && (
@@ -188,6 +188,40 @@ const ProductShow = () => {
                                             <Labeled>
                                                 <TextField source="issue_tracker_labels" label="Labels" />
                                             </Labeled>
+                                            <br />
+                                            {product.issue_tracker_username && (
+                                                <div>
+                                                    <Labeled>
+                                                        <TextField
+                                                            source="issue_tracker_username"
+                                                            label="Username (only for Jira)"
+                                                        />
+                                                    </Labeled>
+                                                    <br />
+                                                </div>
+                                            )}
+                                            {product.issue_tracker_issue_type && (
+                                                <div>
+                                                    <Labeled>
+                                                        <TextField
+                                                            source="issue_tracker_issue_type"
+                                                            label="Issue type (only for Jira)"
+                                                        />
+                                                    </Labeled>
+                                                    <br />
+                                                </div>
+                                            )}
+                                            {product.issue_tracker_status_closed && (
+                                                <div>
+                                                    <Labeled>
+                                                        <TextField
+                                                            source="issue_tracker_status_closed"
+                                                            label="Closed status (only for Jira)"
+                                                        />
+                                                    </Labeled>
+                                                    <br />
+                                                </div>
+                                            )}
                                         </div>
                                     )}
                                 </SimpleShowLayout>

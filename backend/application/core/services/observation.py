@@ -129,6 +129,8 @@ def normalize_observation_fields(observation) -> None:
         observation.vulnerability_id = ""
     if observation.issue_tracker_issue_id is None:
         observation.issue_tracker_issue_id = ""
+    if observation.issue_tracker_jira_initial_status is None:
+        observation.issue_tracker_jira_initial_status = ""
 
 
 def normalize_description(observation):

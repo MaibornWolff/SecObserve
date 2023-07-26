@@ -138,7 +138,9 @@ class ProductSerializer(ProductCoreSerializer):
             return ""
         return obj.repository_default_branch.name
 
-    def validate(self, attrs: dict):
+    def validate(self, attrs: dict):  # pylint: disable=too-many-branches
+        # There are quite a lot of branches, but at least they are not nested too much
+
         if attrs.get("security_gate_active"):
             if not attrs.get("security_gate_threshold_critical"):
                 attrs["security_gate_threshold_critical"] = 0
@@ -182,6 +184,37 @@ class ProductSerializer(ProductCoreSerializer):
             raise ValidationError(
                 "Issue tracker data must be set when issue tracking is active"
             )
+
+        if attrs.get("issue_tracker_type") == Product.ISSUE_TRACKER_JIRA:
+            if not attrs.get("issue_tracker_username"):
+                raise ValidationError(
+                    "Username must be set when issue tracker type is Jira"
+                )
+            if not attrs.get("issue_tracker_issue_type"):
+                raise ValidationError(
+                    "Issue type must be set when issue tracker type is Jira"
+                )
+            if not attrs.get("issue_tracker_status_closed"):
+                raise ValidationError(
+                    "Closed status must be set when issue tracker type is Jira"
+                )
+
+        if (
+            attrs.get("issue_tracker_type")
+            and attrs.get("issue_tracker_type") != Product.ISSUE_TRACKER_JIRA
+        ):
+            if attrs.get("issue_tracker_username"):
+                raise ValidationError(
+                    "Username must not be set when issue tracker type is not Jira"
+                )
+            if attrs.get("issue_tracker_issue_type"):
+                raise ValidationError(
+                    "Isse type must not be set when issue tracker type is not Jira"
+                )
+            if attrs.get("issue_tracker_status_closed"):
+                raise ValidationError(
+                    "Closed status must not be set when issue tracker type is not Jira"
+                )
 
         return super().validate(attrs)
 
@@ -355,7 +388,7 @@ class ObservationSerializer(ModelSerializer):
 
     class Meta:
         model = Observation
-        exclude = ["numerical_severity"]
+        exclude = ["numerical_severity", "issue_tracker_jira_initial_status"]
 
     def get_branch_name(self, observation: Observation) -> str:
         if not observation.branch:
@@ -409,7 +442,7 @@ class ObservationListSerializer(ModelSerializer):
 
     class Meta:
         model = Observation
-        exclude = ["numerical_severity"]
+        exclude = ["numerical_severity", "issue_tracker_jira_initial_status"]
 
     def get_branch_name(self, observation: Observation) -> str:
         if not observation.branch:

@@ -27,10 +27,12 @@ from application.core.services.observation import (
 class Product(Model):
     ISSUE_TRACKER_GITHUB = "GitHub"
     ISSUE_TRACKER_GITLAB = "GitLab"
+    ISSUE_TRACKER_JIRA = "Jira"
 
     ISSUE_TRACKER_TYPE_CHOICES = [
         (ISSUE_TRACKER_GITHUB, ISSUE_TRACKER_GITHUB),
         (ISSUE_TRACKER_GITLAB, ISSUE_TRACKER_GITLAB),
+        (ISSUE_TRACKER_JIRA, ISSUE_TRACKER_JIRA),
     ]
 
     name = CharField(max_length=255, unique=True)
@@ -72,16 +74,22 @@ class Product(Model):
         User, through="Product_Member", related_name="product_members", blank=True
     )
     apply_general_rules = BooleanField(default=True)
+
     notification_ms_teams_webhook = CharField(max_length=255, blank=True)
     notification_email_to = CharField(max_length=255, blank=True)
+
     issue_tracker_active = BooleanField(default=False)
     issue_tracker_type = CharField(
         max_length=12, choices=ISSUE_TRACKER_TYPE_CHOICES, blank=True
     )
     issue_tracker_base_url = CharField(max_length=255, blank=True)
+    issue_tracker_username = CharField(max_length=255, blank=True)
     issue_tracker_api_key = CharField(max_length=255, blank=True)
     issue_tracker_project_id = CharField(max_length=255, blank=True)
     issue_tracker_labels = CharField(max_length=255, blank=True)
+    issue_tracker_issue_type = CharField(max_length=255, blank=True)
+    issue_tracker_status_closed = CharField(max_length=255, blank=True)
+
     last_observation_change = DateTimeField(default=timezone.now)
 
     class Meta:
@@ -439,6 +447,7 @@ class Observation(Model):
         on_delete=PROTECT,
     )
     issue_tracker_issue_id = CharField(max_length=255, blank=True)
+    issue_tracker_jira_initial_status = CharField(max_length=255, blank=True)
 
     class Meta:
         indexes = [

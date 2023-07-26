@@ -53,3 +53,7 @@ packageurl-python==0.11.2  # https://github.com/package-url/packageurl-python
 # Task queue
 # ------------------------------------------------------------------------------
 huey==2.4.5  # https://github.com/coleifer/huey
+
+# Issue tracker
+# ------------------------------------------------------------------------------
+jira==3.5.2  # https://github.com/pycontribs/jira
