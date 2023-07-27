@@ -162,7 +162,14 @@ const ProductEdit = () => {
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>
                     Security Gate
                 </Typography>
-                <NullableBooleanInput source="security_gate_active" defaultValue={null} />
+                <NullableBooleanInput
+                    source="security_gate_active"
+                    defaultValue={null}
+                    nullLabel="Standard"
+                    falseLabel="Disabled"
+                    trueLabel="Product specific"
+                    label="Security gate"
+                />
                 <FormDataConsumer>
                     {({ formData }) =>
                         formData.security_gate_active && (

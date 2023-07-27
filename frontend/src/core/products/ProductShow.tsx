@@ -133,8 +133,12 @@ const ProductShow = () => {
                                                 Security Gate
                                             </Typography>
                                             <br />
-                                            <Labeled>
-                                                <BooleanField source="security_gate_active" />
+                                            <Labeled label="Security gate">
+                                                <BooleanField
+                                                    source="security_gate_active"
+                                                    valueLabelFalse="Disabled"
+                                                    valueLabelTrue="Product specific"
+                                                />
                                             </Labeled>
                                             {product.security_gate_active == true && (
                                                 <div>
