@@ -16,7 +16,7 @@ The **Repository default branch** should always be set, when branches are used i
 
 * The metrics on the dashboard and on the **Metrics** tab are calculated using the observations where the default branch is set.
 * The number of severities in the header when showing a product are for the observations where the default branch is set as well.
-* [Issues in GitHub or GitLab](../integrations/issue_trackers.md) are created for the default branch.
+* [Issues in GitHub, GitLab or Jira](../integrations/issue_trackers.md) are created only for the default branch.
 
 The repository default branch can be set manually while editing a product. If it is not set manually, it will be set automatically with the first branch that is created, either after importing observations with a branch name or by manually creating a branch.
 
