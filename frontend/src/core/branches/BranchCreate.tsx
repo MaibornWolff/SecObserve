@@ -2,7 +2,17 @@ import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import * as React from "react";
-import { CreateBase, SaveButton, SimpleForm, Toolbar, required, useCreate, useNotify, useRefresh } from "react-admin";
+import {
+    BooleanInput,
+    CreateBase,
+    SaveButton,
+    SimpleForm,
+    Toolbar,
+    required,
+    useCreate,
+    useNotify,
+    useRefresh,
+} from "react-admin";
 
 import { TextInputWide } from "../../commons/layout/themes";
 
@@ -80,6 +90,11 @@ const BranchCreate = ({ id }: BranchCreateProps) => {
                     <CreateBase resource="branches">
                         <SimpleForm onSubmit={create_branch} toolbar={<CustomToolbar />}>
                             <TextInputWide source="name" validate={requiredValidate} />
+                            <BooleanInput
+                                source="housekeeping_protect"
+                                label="Protect from housekeeping"
+                                defaultValue={false}
+                            />
                         </SimpleForm>
                     </CreateBase>
                 </DialogContent>

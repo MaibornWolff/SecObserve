@@ -2,7 +2,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import EditIcon from "@mui/icons-material/Edit";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import * as React from "react";
-import { SaveButton, SimpleForm, Toolbar, required, useNotify, useRefresh, useUpdate } from "react-admin";
+import { BooleanInput, SaveButton, SimpleForm, Toolbar, required, useNotify, useRefresh, useUpdate } from "react-admin";
 
 import { TextInputWide } from "../../commons/layout/themes";
 
@@ -20,6 +20,7 @@ const BranchEdit = () => {
     const branch_update = async (data: any) => {
         const patch = {
             name: data.name,
+            housekeeping_protect: data.housekeeping_protect,
         };
 
         update(
@@ -84,6 +85,7 @@ const BranchEdit = () => {
                 <DialogContent>
                     <SimpleForm onSubmit={branch_update} toolbar={<CustomToolbar />}>
                         <TextInputWide source="name" validate={requiredValidate} />
+                        <BooleanInput source="housekeeping_protect" label="Protect from housekeeping" />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>

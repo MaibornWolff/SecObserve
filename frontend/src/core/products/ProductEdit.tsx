@@ -17,7 +17,11 @@ import {
 } from "react-admin";
 
 import { PERMISSION_PRODUCT_DELETE } from "../../access_control/types";
-import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
+import {
+    AutocompleteInputMedium,
+    AutocompleteInputWide,
+    TextInputWide,
+} from "../../commons/layout/themes";
 import { ISSUE_TRACKER_TYPE_CHOICES } from "../types";
 
 const CustomToolbar = () => {
@@ -40,6 +44,18 @@ const ProductEdit = () => {
         }
         if (!data.repository_prefix) {
             data.repository_prefix = "";
+        }
+        if (data.repository_branch_housekeeping_active) {
+            if (data.repository_branch_housekeeping_keep_inactive_days == "") {
+                data.repository_branch_housekeeping_keep_inactive_days = 1;
+            }
+        } else {
+            if (data.repository_branch_housekeeping_keep_inactive_days == "") {
+                data.repository_branch_housekeeping_keep_inactive_days = null;
+            }
+        }
+        if (!data.repository_branch_housekeeping_exempt_branches) {
+            data.repository_branch_housekeeping_exempt_branches = "";
         }
         if (!data.notification_email_to) {
             data.notification_email_to = "";
@@ -149,6 +165,38 @@ const ProductEdit = () => {
                         </ReferenceInput>
                     )}
                 />
+                <NullableBooleanInput
+                    source="repository_branch_housekeeping_active"
+                    label="Housekeeping"
+                    defaultValue={null}
+                    nullLabel="Standard"
+                    falseLabel="Disabled"
+                    trueLabel="Product specific"
+                    helperText="Delete inactive branches"
+                />
+                <FormDataConsumer>
+                    {({ formData }) =>
+                        formData.repository_branch_housekeeping_active && (
+                            <div>
+                                <NumberInput
+                                    source="repository_branch_housekeeping_keep_inactive_days"
+                                    label="Keep inactive"
+                                    helperText="Days before incative branches and their observations are deleted"
+                                    defaultValue={30}
+                                    min={1}
+                                    max={999999}
+                                />
+                                <br />
+                                <TextInputWide
+                                    source="repository_branch_housekeeping_exempt_branches"
+                                    label="Exempt branches"
+                                    helperText="Regular expression which branches to exempt from deletion"
+                                />
+                                <br />
+                            </div>
+                        )
+                    }
+                </FormDataConsumer>
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>
                     Notifications
                 </Typography>

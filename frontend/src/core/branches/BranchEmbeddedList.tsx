@@ -1,5 +1,13 @@
 import { Paper, Stack } from "@mui/material";
-import { BooleanField, Datagrid, ListContextProvider, Pagination, WithRecord, useListController } from "react-admin";
+import {
+    BooleanField,
+    Datagrid,
+    DateField,
+    ListContextProvider,
+    Pagination,
+    WithRecord,
+    useListController,
+} from "react-admin";
 
 import { PERMISSION_BRANCH_DELETE, PERMISSION_BRANCH_EDIT } from "../../access_control/types";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
@@ -53,13 +61,20 @@ const BranchEmbeddedList = ({ product }: BranchEmbeddedListProps) => {
                         />
                         <BooleanField source="is_default_branch" label="Default branch" sortable={false} />
                         <ObservationsCountField withLabel={false} />
+                        <DateField source="last_import" showTime />
+                        <WithRecord
+                            label="Protect"
+                            render={(branch) =>
+                                !branch.is_default_branch && <BooleanField source="housekeeping_protect" />
+                            }
+                        />
                         <WithRecord
                             render={(branch) => (
                                 <Stack direction="row" spacing={4}>
                                     {product && product.permissions.includes(PERMISSION_BRANCH_EDIT) && <BranchEdit />}
-                                    {product && product.permissions.includes(PERMISSION_BRANCH_DELETE) && (
-                                        <BranchDelete branch={branch} />
-                                    )}
+                                    {product &&
+                                        product.permissions.includes(PERMISSION_BRANCH_DELETE) &&
+                                        !branch.is_default_branch && <BranchDelete branch={branch} />}
                                 </Stack>
                             )}
                         />

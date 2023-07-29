@@ -99,7 +99,9 @@ const ProductShow = () => {
                                     </Typography>
                                     <BooleanField source="apply_general_rules" />
 
-                                    {(product.repository_prefix || product.repository_default_branch) && (
+                                    {(product.repository_prefix ||
+                                        product.repository_default_branch ||
+                                        product.repository_branch_housekeeping_active != null) && (
                                         <Typography variant="h6" sx={{ marginTop: "1em" }}>
                                             Source code repository
                                         </Typography>
@@ -113,6 +115,29 @@ const ProductShow = () => {
                                         >
                                             <TextField source="name" />
                                         </ReferenceField>
+                                    )}
+                                    {product.repository_branch_housekeeping_active != null && (
+                                        <div>
+                                            <Labeled label="Housekeeping">
+                                                <BooleanField
+                                                    source="repository_branch_housekeeping_active"
+                                                    valueLabelFalse="Disabled"
+                                                    valueLabelTrue="Product specific"
+                                                />
+                                            </Labeled>
+                                            {product.repository_branch_housekeeping_active == true && (
+                                                <div>
+                                                    <Labeled label="Keep inactive">
+                                                        <NumberField source="repository_branch_housekeeping_keep_inactive_days" />
+                                                    </Labeled>
+                                                    <br />
+                                                    <Labeled label="Exempt branches">
+                                                        <TextField source="repository_branch_housekeeping_exempt_branches" />
+                                                    </Labeled>
+                                                    <br />
+                                                </div>
+                                            )}
+                                        </div>
                                     )}
 
                                     {(product.notification_email_to || product.notification_ms_teams_webhook) && (

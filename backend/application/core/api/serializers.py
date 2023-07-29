@@ -1,7 +1,6 @@
-from datetime import datetime
 from typing import Optional
 
-from django.utils.timezone import make_aware
+from django.utils import timezone
 from packageurl import PackageURL
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.serializers import (
@@ -140,6 +139,13 @@ class ProductSerializer(ProductCoreSerializer):
 
     def validate(self, attrs: dict):  # pylint: disable=too-many-branches
         # There are quite a lot of branches, but at least they are not nested too much
+
+        if attrs.get("repository_branch_housekeeping_active"):
+            if not attrs.get("repository_branch_housekeeping_keep_inactive_days"):
+                attrs["repository_branch_housekeeping_keep_inactive_days"] = 1
+        else:
+            attrs["repository_branch_housekeeping_keep_inactive_days"] = None
+            attrs["repository_branch_housekeeping_exempt_branches"] = ""
 
         if attrs.get("security_gate_active"):
             if not attrs.get("security_gate_threshold_critical"):
@@ -478,7 +484,7 @@ class ObservationUpdateSerializer(ModelSerializer):
         if self.instance and self.instance.parser.type != Parser.TYPE_MANUAL:
             raise ValidationError("Only manual observations can be updated")
 
-        attrs["import_last_seen"] = make_aware(datetime.now())
+        attrs["import_last_seen"] = timezone.now()
         return super().validate(attrs)
 
     def validate_branch(self, branch: Branch) -> Branch:
@@ -521,6 +527,9 @@ class ObservationUpdateSerializer(ModelSerializer):
 
         check_security_gate(observation.product)
         push_observation_to_issue_tracker(observation, get_current_user())
+        if observation.branch:
+            observation.branch.last_import = timezone.now()
+            observation.branch.save()
 
         return observation
 
@@ -551,7 +560,7 @@ class ObservationCreateSerializer(ModelSerializer):
     def validate(self, attrs):
         attrs["parser"] = Parser.objects.get(type=Parser.TYPE_MANUAL)
         attrs["scanner"] = Parser.TYPE_MANUAL
-        attrs["import_last_seen"] = make_aware(datetime.now())
+        attrs["import_last_seen"] = timezone.now()
 
         if attrs.get("branch"):
             if attrs["branch"].product != attrs["product"]:
@@ -573,6 +582,9 @@ class ObservationCreateSerializer(ModelSerializer):
 
         check_security_gate(observation.product)
         push_observation_to_issue_tracker(observation, get_current_user())
+        if observation.branch:
+            observation.branch.last_import = timezone.now()
+            observation.branch.save()
 
         return observation
 

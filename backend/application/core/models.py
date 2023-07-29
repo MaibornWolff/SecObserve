@@ -50,6 +50,14 @@ class Product(Model):
         related_name="repository_default_branch",
         null=True,
     )
+    repository_branch_housekeeping_active = BooleanField(null=True)
+    repository_branch_housekeeping_keep_inactive_days = IntegerField(
+        null=True, validators=[MinValueValidator(1), MaxValueValidator(999999)]
+    )
+    repository_branch_housekeeping_exempt_branches = CharField(
+        max_length=255, blank=True
+    )
+
     security_gate_passed = BooleanField(null=True)
     security_gate_active = BooleanField(null=True)
     security_gate_threshold_critical = IntegerField(
@@ -70,6 +78,7 @@ class Product(Model):
     security_gate_threshold_unkown = IntegerField(
         null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]
     )
+
     members = ManyToManyField(
         User, through="Product_Member", related_name="product_members", blank=True
     )
@@ -194,6 +203,8 @@ class Product(Model):
 class Branch(Model):
     product = ForeignKey(Product, on_delete=CASCADE)
     name = CharField(max_length=255)
+    last_import = DateTimeField(null=True)
+    housekeeping_protect = BooleanField(default=False)
 
     class Meta:
         unique_together = (
@@ -361,7 +372,7 @@ class Observation(Model):
     ]
 
     product = ForeignKey(Product, on_delete=PROTECT)
-    branch = ForeignKey(Branch, on_delete=PROTECT, null=True)
+    branch = ForeignKey(Branch, on_delete=CASCADE, null=True)
     parser = ForeignKey(Parser, on_delete=PROTECT)
     title = CharField(max_length=255)
     description = TextField(max_length=2048, blank=True)

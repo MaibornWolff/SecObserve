@@ -41,7 +41,9 @@ const BranchDelete = (props: BranchDeleteProps) => {
             <Confirm
                 isOpen={open}
                 title="Delete branch"
-                content={"Are you sure you want to delete the branch " + props.branch.name + "?"}
+                content={
+                    "Are you sure you want to delete the branch " + props.branch.name + " and all of its observations?"
+                }
                 onConfirm={handleConfirm}
                 onClose={handleDialogClose}
             />
