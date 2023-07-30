@@ -244,7 +244,12 @@ const ProductCreate = () => {
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>
                     Issue Tracker
                 </Typography>
-                <BooleanInput source="issue_tracker_active" label="Active" defaultValue={false} helperText="Send observations to an issue tracker"/>
+                <BooleanInput
+                    source="issue_tracker_active"
+                    label="Active"
+                    defaultValue={false}
+                    helperText="Send observations to an issue tracker"
+                />
                 <AutocompleteInputMedium
                     source="issue_tracker_type"
                     label="Type"
