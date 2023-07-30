@@ -17,11 +17,7 @@ import {
 } from "react-admin";
 
 import { PERMISSION_PRODUCT_DELETE } from "../../access_control/types";
-import {
-    AutocompleteInputMedium,
-    AutocompleteInputWide,
-    TextInputWide,
-} from "../../commons/layout/themes";
+import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { ISSUE_TRACKER_TYPE_CHOICES } from "../types";
 
 const CustomToolbar = () => {

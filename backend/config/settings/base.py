@@ -499,7 +499,7 @@ CONSTANCE_CONFIG = {
     ),
     "BRANCH_HOUSEKEEPING_CRONTAB_HOURS": (
         "2",
-        "Hours crontab expression for branch housekeeping",
+        "Hours crontab expression for branch housekeeping (UTC)",
         str,
     ),
     "BRANCH_HOUSEKEEPING_ACTIVE": (
