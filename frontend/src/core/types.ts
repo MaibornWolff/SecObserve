@@ -6,6 +6,9 @@ export interface Product extends RaRecord {
     description: string;
     repository_prefix: string;
     repository_default_branch: Identifier;
+    repository_branch_housekeeping_active: boolean;
+    repository_branch_housekeeping_keep_inactive_days: number;
+    repository_branch_housekeeping_exempt_branches: string;
     security_gate_passed: boolean;
     security_gate_active: boolean | null;
     security_gate_threshold_critical: number;

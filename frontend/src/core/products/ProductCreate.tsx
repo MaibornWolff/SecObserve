@@ -22,6 +22,18 @@ const ProductCreate = () => {
         if (!data.repository_prefix) {
             data.repository_prefix = "";
         }
+        if (data.repository_branch_housekeeping_active) {
+            if (data.repository_branch_housekeeping_keep_inactive_days == "") {
+                data.repository_branch_housekeeping_keep_inactive_days = 1;
+            }
+        } else {
+            if (data.repository_branch_housekeeping_keep_inactive_days == "") {
+                data.repository_branch_housekeeping_keep_inactive_days = null;
+            }
+        }
+        if (!data.repository_branch_housekeeping_exempt_branches) {
+            data.repository_branch_housekeeping_exempt_branches = "";
+        }
         if (!data.notification_email_to) {
             data.notification_email_to = "";
         }
@@ -116,16 +128,56 @@ const ProductCreate = () => {
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>
                     Source code repository
                 </Typography>
-                <TextInputWide source="repository_prefix" />
+                <TextInputWide
+                    source="repository_prefix"
+                    helperText="URL prefix to link to a file in the source code repository"
+                />
+                <NullableBooleanInput
+                    source="repository_branch_housekeeping_active"
+                    label="Housekeeping"
+                    defaultValue={null}
+                    nullLabel="Standard"
+                    falseLabel="Disabled"
+                    trueLabel="Product specific"
+                    helperText="Delete inactive branches"
+                    sx={{ width: "15em" }}
+                />
+                <FormDataConsumer>
+                    {({ formData }) =>
+                        formData.repository_branch_housekeeping_active && (
+                            <div>
+                                <NumberInput
+                                    source="repository_branch_housekeeping_keep_inactive_days"
+                                    label="Keep inactive"
+                                    helperText="Days before incative branches and their observations are deleted"
+                                    defaultValue={30}
+                                    min={1}
+                                    max={999999}
+                                />
+                                <br />
+                                <TextInputWide
+                                    source="repository_branch_housekeeping_exempt_branches"
+                                    label="Exempt branches"
+                                    helperText="Regular expression which branches to exempt from deletion"
+                                />
+                                <br />
+                            </div>
+                        )
+                    }
+                </FormDataConsumer>
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>
                     Notifications
                 </Typography>
                 <TextInputWide
                     source="notification_email_to"
                     label="Email"
-                    helperText="Comma separated email to addresses"
+                    helperText="Comma separated email to addresses to send notifications via email"
                 />
-                <TextInputWide source="notification_ms_teams_webhook" label="MS Teams" helperText="Webhook URL" />
+                <TextInputWide
+                    source="notification_ms_teams_webhook"
+                    label="MS Teams"
+                    helperText="Webhook URL to send notifications to MS Teams"
+                />
 
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>
                     Security Gate
@@ -137,6 +189,7 @@ const ProductCreate = () => {
                     falseLabel="Disabled"
                     trueLabel="Product specific"
                     label="Security gate"
+                    helperText="Shows that the product does not exceed a defined amount of vulnerabilities per severity"
                 />
                 <FormDataConsumer>
                     {({ formData }) =>
@@ -191,7 +244,12 @@ const ProductCreate = () => {
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>
                     Issue Tracker
                 </Typography>
-                <BooleanInput source="issue_tracker_active" label="Active" defaultValue={false} />
+                <BooleanInput
+                    source="issue_tracker_active"
+                    label="Active"
+                    defaultValue={false}
+                    helperText="Send observations to an issue tracker"
+                />
                 <AutocompleteInputMedium
                     source="issue_tracker_type"
                     label="Type"

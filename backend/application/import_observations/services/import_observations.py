@@ -1,9 +1,8 @@
 from dataclasses import dataclass
-from datetime import datetime
 from typing import Optional, Tuple
 
 from django.core.files.base import File
-from django.utils.timezone import make_aware
+from django.utils import timezone
 from rest_framework.exceptions import ValidationError
 
 from application.core.models import (
@@ -219,6 +218,9 @@ def process_data(import_parameters: ImportParameters) -> Tuple[int, int, int]:
     vulnerability_check_observations.update(observations_resolved)
     check_security_gate(import_parameters.product)
     set_repository_default_branch(import_parameters.product)
+    if import_parameters.branch:
+        import_parameters.branch.last_import = timezone.now()
+        import_parameters.branch.save()
     push_observations_to_issue_tracker(
         import_parameters.product, vulnerability_check_observations
     )
@@ -238,7 +240,7 @@ def prepare_imported_observation(
     imported_observation.api_configuration_name = (
         import_parameters.api_configuration_name
     )
-    imported_observation.import_last_seen = make_aware(datetime.now())
+    imported_observation.import_last_seen = timezone.now()
     if import_parameters.service:
         imported_observation.origin_service_name = import_parameters.service
     if import_parameters.docker_image_name_tag:
@@ -281,7 +283,7 @@ def process_current_observation(
     observation_before.current_status = get_current_status(observation_before)
 
     epss_apply_observation(observation_before)
-    observation_before.import_last_seen = make_aware(datetime.now())
+    observation_before.import_last_seen = timezone.now()
     observation_before.save()
 
     observation_before.references.all().delete()

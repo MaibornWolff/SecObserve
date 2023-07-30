@@ -1,5 +1,6 @@
 import csv
 from tempfile import NamedTemporaryFile
+from typing import Any
 
 from django.http import HttpResponse
 from django.utils import timezone
@@ -10,6 +11,7 @@ from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.filters import SearchFilter
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.status import HTTP_204_NO_CONTENT
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
@@ -281,6 +283,13 @@ class BranchViewSet(ModelViewSet):
 
     def get_queryset(self):
         return get_branches()
+
+    def destroy(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        instance: Branch = self.get_object()
+        if instance == instance.product.repository_default_branch:
+            raise ValidationError("You cannot delete the default branch of a product.")
+
+        return super().destroy(request, *args, **kwargs)
 
 
 class ParserViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):

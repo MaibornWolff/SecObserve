@@ -1,6 +1,8 @@
 # Rule engine
 
-Sometimes the result of a scanner doesn't fit to the product's needs. Either the severity or the status need to be adjusted. To avoid having to do many manual assessments regularly, a built-in rule engine can adjust severity and/or status directly with the import of observations. This can remove a lot of noise, for example by setting observations to `False positive`, in case the ruleset of the scanner can not be adjusted appropriately. 
+Sometimes the result of a scanner doesn't fit to the product's needs. Either the severity or the status need to be adjusted. To avoid having to do many manual assessments regularly, a built-in rule engine can adjust severity and/or status directly with the import of observations.
+
+This can remove a lot of noise, for example by setting observations to `False positive`, in case the ruleset of the scanner can not be adjusted appropriately. 
 
 ![Rules](../assets/images/screenshot_rules.png)
 
