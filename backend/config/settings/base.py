@@ -483,7 +483,7 @@ CONSTANCE_CONFIG = {
         int,
     ),
     "BACKGROUND_EPSS_IMPORT_CRONTAB_MINUTES": (
-        "*",
+        "0",
         "Minutes crontab expression for EPSS import",
         str,
     ),
@@ -493,7 +493,7 @@ CONSTANCE_CONFIG = {
         str,
     ),
     "BRANCH_HOUSEKEEPING_CRONTAB_MINUTES": (
-        "*",
+        "0",
         "Minutes crontab expression for branch housekeeping",
         str,
     ),
