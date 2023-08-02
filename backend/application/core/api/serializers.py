@@ -410,13 +410,19 @@ class ObservationSerializer(ModelSerializer):
             if origin_source_file_url.endswith("/"):
                 origin_source_file_url = origin_source_file_url[:-1]
             if "dev.azure.com" in observation.product.repository_prefix:
-                origin_source_file_url = self._create_azure_devops_url(observation, origin_source_file_url)
+                origin_source_file_url = self._create_azure_devops_url(
+                    observation, origin_source_file_url
+                )
             else:
-                origin_source_file_url = self._create_common_url(observation, origin_source_file_url)
+                origin_source_file_url = self._create_common_url(
+                    observation, origin_source_file_url
+                )
 
         return origin_source_file_url
 
-    def _create_azure_devops_url(self, observation: Observation, origin_source_file_url: str) -> str:
+    def _create_azure_devops_url(
+        self, observation: Observation, origin_source_file_url: str
+    ) -> str:
         origin_source_file_url += f"?path={observation.origin_source_file}"
         if observation.branch:
             origin_source_file_url += f"&version=GB{observation.branch.name}"
@@ -424,20 +430,24 @@ class ObservationSerializer(ModelSerializer):
             origin_source_file_url += f"&line={observation.origin_source_line_start}"
             origin_source_file_url += "&lineStartColumn=1&lineEndColumn=1"
             if observation.origin_source_line_end:
-                origin_source_file_url += f"&lineEnd={observation.origin_source_line_end+1}"
+                origin_source_file_url += (
+                    f"&lineEnd={observation.origin_source_line_end+1}"
+                )
             else:
-                origin_source_file_url += f"&lineEnd={observation.origin_source_line_start+1}"
-        
+                origin_source_file_url += (
+                    f"&lineEnd={observation.origin_source_line_start+1}"
+                )
+
         return origin_source_file_url
 
-    def _create_common_url(self, observation: Observation, origin_source_file_url: str) -> str:
+    def _create_common_url(
+        self, observation: Observation, origin_source_file_url: str
+    ) -> str:
         if observation.branch:
             origin_source_file_url += f"/{observation.branch.name}"
         origin_source_file_url += f"/{observation.origin_source_file}"
         if observation.origin_source_line_start:
-            origin_source_file_url += "#L" + str(
-                observation.origin_source_line_start
-            )
+            origin_source_file_url += "#L" + str(observation.origin_source_line_start)
         if observation.origin_source_line_end:
             origin_source_file_url += "-" + str(observation.origin_source_line_end)
 
