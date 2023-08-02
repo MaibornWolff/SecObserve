@@ -413,16 +413,8 @@ class ObservationSerializer(ModelSerializer):
                 origin_source_file_url = self._create_azure_devops_url(
                     observation, origin_source_file_url
                 )
-            elif "github" in observation.product.repository_prefix:
-                origin_source_file_url = self._create_github_url(
-                    observation, origin_source_file_url
-                )
-            elif "gitlab" in observation.product.repository_prefix:
-                origin_source_file_url = self._create_gitlab_url(
-                    observation, origin_source_file_url
-                )
             else:
-                origin_source_file_url = self._get_common_url_part(
+                origin_source_file_url = self._create_common_url(
                     observation, origin_source_file_url
                 )
 
@@ -448,19 +440,7 @@ class ObservationSerializer(ModelSerializer):
 
         return origin_source_file_url
 
-    def _create_github_url(
-        self, observation: Observation, origin_source_file_url: str
-    ) -> str:
-        origin_source_file_url += "/blob"
-        return self._get_common_url_part(observation, origin_source_file_url)
-
-    def _create_gitlab_url(
-        self, observation: Observation, origin_source_file_url: str
-    ) -> str:
-        origin_source_file_url += "/-/blob"
-        return self._get_common_url_part(observation, origin_source_file_url)
-
-    def _get_common_url_part(
+    def _create_common_url(
         self, observation: Observation, origin_source_file_url: str
     ) -> str:
         if observation.branch:
