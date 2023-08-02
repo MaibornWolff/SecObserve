@@ -255,13 +255,45 @@ const ProductCreate = () => {
                     label="Type"
                     choices={ISSUE_TRACKER_TYPE_CHOICES}
                 />
-                <TextInputWide source="issue_tracker_base_url" label="Base URL" />
-                <TextInputWide source="issue_tracker_api_key" label="API key" />
-                <TextInputWide source="issue_tracker_project_id" label="Project id" />
-                <TextInputWide source="issue_tracker_labels" label="Labels" />
-                <TextInputWide source="issue_tracker_username" label="Username (only for Jira)" />
-                <TextInputWide source="issue_tracker_issue_type" label="Issue type (only for Jira)" />
-                <TextInputWide source="issue_tracker_status_closed" label="Closed status (only for Jira)" />
+                <FormDataConsumer>
+                    {({ formData }) =>
+                        formData.issue_tracker_type && (
+                            <div>
+                                <TextInputWide source="issue_tracker_base_url" label="Base URL" />
+                                <br />
+                                <TextInputWide source="issue_tracker_api_key" label="API key" />
+                                <br />
+                                <TextInputWide source="issue_tracker_project_id" label="Project id" />
+                                <br />
+                                <TextInputWide source="issue_tracker_labels" label="Labels" />
+                                <br />
+                                <FormDataConsumer>
+                                    {({ formData }) =>
+                                        formData.issue_tracker_type == "Jira" && (
+                                            <div>
+                                                <TextInputWide
+                                                    source="issue_tracker_username"
+                                                    label="Username (only for Jira)"
+                                                />
+                                                <br />
+                                                <TextInputWide
+                                                    source="issue_tracker_issue_type"
+                                                    label="Issue type (only for Jira)"
+                                                />
+                                                <br />
+                                                <TextInputWide
+                                                    source="issue_tracker_status_closed"
+                                                    label="Closed status (only for Jira)"
+                                                />
+                                                <br />
+                                            </div>
+                                        )
+                                    }
+                                </FormDataConsumer>
+                            </div>
+                        )
+                    }
+                </FormDataConsumer>
             </SimpleForm>
         </Create>
     );
