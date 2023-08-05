@@ -14,7 +14,7 @@ import {
     useUpdate,
 } from "react-admin";
 
-import { AutocompleteInputWide, SelectInputWide, TextInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 
 const ApiConfigurationEdit = () => {
     const [open, setOpen] = React.useState(false);
@@ -99,9 +99,6 @@ const ApiConfigurationEdit = () => {
                 <DialogTitle>Edit API configuration</DialogTitle>
                 <DialogContent>
                     <SimpleForm onSubmit={api_configuration_update} toolbar={<CustomToolbar />}>
-                        <ReferenceInput source="product" reference="products" sort={{ field: "name", order: "ASC" }}>
-                            <SelectInputWide optionText="name" disabled={true} />
-                        </ReferenceInput>
                         <TextInputWide autoFocus source="name" validate={requiredValidate} />
                         <ReferenceInput
                             source="parser"

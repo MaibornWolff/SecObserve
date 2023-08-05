@@ -15,10 +15,10 @@ There is an instance-wide definition of the thresholds, that can be changed by a
 | None     | 99999     |
 | Unkown   | 99999     |
 
-A product can decide how to deal with security gates by setting the attribute `Security gate active`:
+A product can decide how to deal with security gates by setting the `Security gate` attribute:
 
-* ***empty***: Use the instance-wide definition, this is the default.
-* **No**: Do not calculate and show a security gate.
-* **Yes**: Use product specific thresholds to calculate the security gate.
+* **Standard**: Use the instance-wide definition, this is the default.
+* **Disabled**: Do not calculate and show a security gate.
+* **Product specific**: Use product specific thresholds to calculate the security gate.
 
 ![Security Gate Edit](../assets/images/screenshot_security_gate_2.png)

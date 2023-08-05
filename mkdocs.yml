@@ -63,13 +63,15 @@ nav:
     - Import observations: usage/import_observations.md
     - Supported scanners: usage/supported_scanners.md
     - Assess observations: usage/assess_observations.md
-    - Working with branches: usage/branches.md
+    - Branches: usage/branches.md
     - Rule engine: usage/rule_engine.md
     - Security gates: usage/security_gates.md
     - Metrics: usage/metrics.md
     - Users and permissions: usage/users_permissions.md
   - Integrations:
+    - Overview: integrations/overview.md
     - GitHub actions and GitLab CI templates: integrations/github_actions_and_templates.md
+    - Exploit Prediction Scoring System (EPSS): integrations/epss.md
     - Source code repositories: integrations/source_code_repositories.md
     - Issue trackers: integrations/issue_trackers.md
     - Notifications: integrations/notifications.md

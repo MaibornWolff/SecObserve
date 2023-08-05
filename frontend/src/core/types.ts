@@ -6,6 +6,9 @@ export interface Product extends RaRecord {
     description: string;
     repository_prefix: string;
     repository_default_branch: Identifier;
+    repository_branch_housekeeping_active: boolean;
+    repository_branch_housekeeping_keep_inactive_days: number;
+    repository_branch_housekeeping_exempt_branches: string;
     security_gate_passed: boolean;
     security_gate_active: boolean | null;
     security_gate_threshold_critical: number;
@@ -20,15 +23,24 @@ export interface Product extends RaRecord {
     issue_tracker_active: boolean;
     issue_tracker_type: string;
     issue_tracker_base_url: string;
+    issue_tracker_username: string;
     issue_tracker_api_key: string;
     issue_tracker_project_id: string;
     issue_tracker_labels: string;
+    issue_tracker_issue_type: string;
+    issue_tracker_status_closed: string;
 }
 
 export const ISSUE_TRACKER_TYPE_CHOICES = [
     { id: "GitHub", name: "GitHub" },
     { id: "GitLab", name: "GitLab" },
+    { id: "Jira", name: "Jira" },
 ];
+
+export interface ProductGroup extends RaRecord {
+    id: Identifier;
+    name: string;
+}
 
 export interface Parser extends RaRecord {
     id: Identifier;
@@ -96,6 +108,8 @@ export interface Observation extends RaRecord {
     origin_source_line_end: number;
     cvss3_score: number;
     cvss3_vector: string;
+    epss_score: number;
+    epss_percentile: number;
     cwe: number;
     found: Date;
     scanner: string;

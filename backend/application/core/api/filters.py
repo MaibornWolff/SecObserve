@@ -5,6 +5,7 @@ from django_filters import (
     CharFilter,
     ChoiceFilter,
     FilterSet,
+    ModelChoiceFilter,
     NumberFilter,
     OrderingFilter,
 )
@@ -26,17 +27,34 @@ AGE_CHOICES = [
 ]
 
 
+class ProductGroupFilter(FilterSet):
+    name = CharFilter(field_name="name", lookup_expr="icontains")
+
+    ordering = OrderingFilter(
+        # tuple-mapping retains order
+        fields=(("name", "name")),
+    )
+
+    class Meta:
+        model = Product
+        fields = ["name"]
+
+
 class ProductFilter(FilterSet):
     name = CharFilter(field_name="name", lookup_expr="icontains")
 
     ordering = OrderingFilter(
         # tuple-mapping retains order
-        fields=(("name", "name"), ("security_gate_passed", "security_gate_passed")),
+        fields=(
+            ("name", "name"),
+            ("security_gate_passed", "security_gate_passed"),
+            ("product_group__name", "product_group_name"),
+        ),
     )
 
     class Meta:
         model = Product
-        fields = ["name", "security_gate_passed"]
+        fields = ["name", "security_gate_passed", "product_group"]
 
 
 class ProductMemberFilter(FilterSet):
@@ -101,13 +119,17 @@ class ObservationFilter(FilterSet):
         field_name="origin_source_file", lookup_expr="icontains"
     )
     scanner = CharFilter(field_name="scanner", lookup_expr="icontains")
-
     age = ChoiceFilter(field_name="age", method="get_age", choices=AGE_CHOICES)
+    product_group = ModelChoiceFilter(
+        field_name="product__product_group",
+        queryset=Product.objects.filter(is_product_group=True),
+    )
 
     ordering = OrderingFilter(
         # tuple-mapping retains order
         fields=(
             ("product__name", "product_data.name"),
+            ("product__product_group__name", "product_data.product_group_name"),
             ("branch__name", "branch_name"),
             ("title", "title"),
             ("numerical_severity", "current_severity"),
@@ -124,6 +146,7 @@ class ObservationFilter(FilterSet):
             ("parser__type", "parser_data.type"),
             ("scanner", "scanner_name"),
             ("last_observation_log", "last_observation_log"),
+            ("epss_score", "epss_score"),
         ),
     )
 

@@ -1,13 +1,8 @@
-import logging
 from datetime import timedelta
 from typing import Optional
 
-from constance import config
 from django.utils import timezone
-from huey import crontab
-from huey.contrib.djhuey import db_periodic_task, lock_task
 
-from application.commons.services.tasks import handle_task_exception
 from application.core.models import Observation, Product
 from application.metrics.models import Product_Metrics, Product_Metrics_Status
 from application.metrics.queries.product_metrics import (
@@ -16,27 +11,14 @@ from application.metrics.queries.product_metrics import (
 )
 from application.metrics.services.age import get_days
 
-logger = logging.getLogger("secobserve.metrics")
 
-
-@db_periodic_task(
-    crontab(minute=f"*/{config.BACKGROUND_PRODUCT_METRICS_INTERVAL_MINUTES}")
-)
-@lock_task("calculate_product_metrics")
 def calculate_product_metrics() -> None:
-    logger.info("--- Calculate_product_metrics - start ---")
-
-    try:
-        for product in Product.objects.all():
-            calculate_metrics_for_product(product)
-    except Exception as e:
-        handle_task_exception(e)
+    for product in Product.objects.filter(is_product_group=False):
+        calculate_metrics_for_product(product)
 
     product_metrics_status = Product_Metrics_Status.load()
     product_metrics_status.last_calculated = timezone.now()
     product_metrics_status.save()
-
-    logger.info("--- Calculate_product_metrics - finished ---")
 
 
 def calculate_metrics_for_product(  # pylint: disable=too-many-branches
@@ -144,7 +126,10 @@ def _get_latest_product_metrics(product: Product) -> Optional[Product_Metrics]:
 def get_product_metrics_timeline(product: Optional[Product], age: str) -> dict:
     product_metrics = get_product_metrics()
     if product:
-        product_metrics = product_metrics.filter(product=product)
+        if product.is_product_group:
+            product_metrics = product_metrics.filter(product__product_group=product)
+        else:
+            product_metrics = product_metrics.filter(product=product)
 
     days = get_days(age)
     if days:
@@ -155,7 +140,7 @@ def get_product_metrics_timeline(product: Optional[Product], age: str) -> dict:
     response_data: dict = {}
 
     for product_metric in product_metrics:
-        if not product:
+        if not product or product.is_product_group:
             response_metric = response_data.get(product_metric.date.isoformat(), {})
             response_metric["open_critical"] = (
                 response_metric.get("open_critical", 0) + product_metric.open_critical
@@ -223,7 +208,10 @@ def get_product_metrics_timeline(product: Optional[Product], age: str) -> dict:
 def get_product_metrics_current(product: Optional[Product]) -> dict:
     product_metrics = get_todays_product_metrics()
     if product:
-        product_metrics = product_metrics.filter(product=product)
+        if product.is_product_group:
+            product_metrics = product_metrics.filter(product__product_group=product)
+        else:
+            product_metrics = product_metrics.filter(product=product)
 
     response_data: dict = _initialize_response_data()
     if len(product_metrics) > 0:
@@ -268,7 +256,9 @@ def _initialize_response_data() -> dict:
 def get_codecharta_metrics(product: Product) -> list[dict]:
     file_severities_dict: dict[str, dict] = {}
     observations = Observation.objects.filter(
-        product=product, current_status=Observation.STATUS_OPEN
+        product=product,
+        branch=product.repository_default_branch,
+        current_status=Observation.STATUS_OPEN,
     )
     for observation in observations:
         if observation.origin_source_file:

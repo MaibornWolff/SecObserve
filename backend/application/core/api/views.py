@@ -1,7 +1,7 @@
 import csv
 from tempfile import NamedTemporaryFile
+from typing import Any
 
-from django.db.models import Prefetch
 from django.http import HttpResponse
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
@@ -11,6 +11,7 @@ from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.filters import SearchFilter
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.status import HTTP_204_NO_CONTENT
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
@@ -23,6 +24,7 @@ from application.core.api.filters import (
     ObservationFilter,
     ParserFilter,
     ProductFilter,
+    ProductGroupFilter,
     ProductMemberFilter,
 )
 from application.core.api.permissions import (
@@ -43,28 +45,19 @@ from application.core.api.serializers import (
     ObservationSerializer,
     ObservationUpdateSerializer,
     ParserSerializer,
+    ProductGroupSerializer,
     ProductMemberSerializer,
     ProductSerializer,
 )
-from application.core.models import (
-    Branch,
-    Observation,
-    Observation_Log,
-    Parser,
-    Product,
-    Product_Member,
-)
+from application.core.models import Branch, Observation, Parser, Product, Product_Member
+from application.core.queries.branch import get_branches
 from application.core.queries.observation import (
     get_evidences,
     get_observation_by_id,
     get_observations,
 )
-from application.core.queries.product import (
-    get_branches,
-    get_product_by_id,
-    get_product_members,
-    get_products,
-)
+from application.core.queries.product import get_product_by_id, get_products
+from application.core.queries.product_member import get_product_members
 from application.core.services.assessment import remove_assessment, save_assessment
 from application.core.services.export_observations import (
     export_observations_csv,
@@ -82,6 +75,18 @@ from application.metrics.services.metrics import get_codecharta_metrics
 from application.rules.services.rule_engine import Rule_Engine
 
 
+class ProductGroupViewSet(ModelViewSet):
+    serializer_class = ProductGroupSerializer
+    filterset_class = ProductGroupFilter
+    permission_classes = (IsAuthenticated, UserHasProductPermission)
+    queryset = Product.objects.none()
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ["name"]
+
+    def get_queryset(self):
+        return get_products(is_product_group=True)
+
+
 class ProductViewSet(ModelViewSet):
     serializer_class = ProductSerializer
     filterset_class = ProductFilter
@@ -91,7 +96,11 @@ class ProductViewSet(ModelViewSet):
     search_fields = ["name"]
 
     def get_queryset(self):
-        return get_products()
+        return (
+            get_products(is_product_group=False)
+            .select_related("product_group")
+            .select_related("repository_default_branch")
+        )
 
     @extend_schema(
         methods=["GET"],
@@ -275,6 +284,13 @@ class BranchViewSet(ModelViewSet):
     def get_queryset(self):
         return get_branches()
 
+    def destroy(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        instance: Branch = self.get_object()
+        if instance == instance.product.repository_default_branch:
+            raise ValidationError("You cannot delete the default branch of a product.")
+
+        return super().destroy(request, *args, **kwargs)
+
 
 class ParserViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     serializer_class = ParserSerializer
@@ -308,13 +324,9 @@ class ObservationViewSet(ModelViewSet):
         return (
             get_observations()
             .select_related("product")
+            .select_related("product__product_group")
+            .select_related("branch")
             .select_related("parser")
-            .prefetch_related(
-                Prefetch(
-                    "observation_logs",
-                    queryset=Observation_Log.objects.order_by("-created"),
-                )
-            )
         )
 
     def perform_destroy(self, instance: Observation) -> None:

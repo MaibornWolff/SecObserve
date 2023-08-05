@@ -7,6 +7,7 @@ import {
     FilterForm,
     FunctionField,
     ListContextProvider,
+    NumberField,
     Pagination,
     ReferenceInput,
     TextField,
@@ -124,6 +125,7 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
                         <TextField source="branch_name" label="Branch" />
                         <TextField source="title" />
                         <SeverityField source="current_severity" />
+                        <NumberField source="epss_score" label="EPSS" />
                         <ChipField source="current_status" label="Status" />
                         <TextField source="origin_service_name" label="Service" />
                         <TextField source="origin_component_name_version" label="Component" />

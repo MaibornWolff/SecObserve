@@ -9,6 +9,7 @@ from django.db.models import (
     DateTimeField,
     DecimalField,
     ForeignKey,
+    Index,
     IntegerField,
     ManyToManyField,
     Model,
@@ -26,14 +27,22 @@ from application.core.services.observation import (
 class Product(Model):
     ISSUE_TRACKER_GITHUB = "GitHub"
     ISSUE_TRACKER_GITLAB = "GitLab"
+    ISSUE_TRACKER_JIRA = "Jira"
 
     ISSUE_TRACKER_TYPE_CHOICES = [
         (ISSUE_TRACKER_GITHUB, ISSUE_TRACKER_GITHUB),
         (ISSUE_TRACKER_GITLAB, ISSUE_TRACKER_GITLAB),
+        (ISSUE_TRACKER_JIRA, ISSUE_TRACKER_JIRA),
     ]
 
     name = CharField(max_length=255, unique=True)
     description = TextField(max_length=2048, blank=True)
+
+    is_product_group = BooleanField(default=False)
+    product_group = ForeignKey(
+        "self", on_delete=PROTECT, related_name="products", null=True, blank=True
+    )
+
     repository_prefix = CharField(max_length=255, blank=True)
     repository_default_branch = ForeignKey(
         "Branch",
@@ -41,6 +50,14 @@ class Product(Model):
         related_name="repository_default_branch",
         null=True,
     )
+    repository_branch_housekeeping_active = BooleanField(null=True)
+    repository_branch_housekeeping_keep_inactive_days = IntegerField(
+        null=True, validators=[MinValueValidator(1), MaxValueValidator(999999)]
+    )
+    repository_branch_housekeeping_exempt_branches = CharField(
+        max_length=255, blank=True
+    )
+
     security_gate_passed = BooleanField(null=True)
     security_gate_active = BooleanField(null=True)
     security_gate_threshold_critical = IntegerField(
@@ -61,92 +78,145 @@ class Product(Model):
     security_gate_threshold_unkown = IntegerField(
         null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]
     )
+
     members = ManyToManyField(
         User, through="Product_Member", related_name="product_members", blank=True
     )
     apply_general_rules = BooleanField(default=True)
+
     notification_ms_teams_webhook = CharField(max_length=255, blank=True)
     notification_email_to = CharField(max_length=255, blank=True)
+
     issue_tracker_active = BooleanField(default=False)
     issue_tracker_type = CharField(
         max_length=12, choices=ISSUE_TRACKER_TYPE_CHOICES, blank=True
     )
     issue_tracker_base_url = CharField(max_length=255, blank=True)
+    issue_tracker_username = CharField(max_length=255, blank=True)
     issue_tracker_api_key = CharField(max_length=255, blank=True)
     issue_tracker_project_id = CharField(max_length=255, blank=True)
     issue_tracker_labels = CharField(max_length=255, blank=True)
+    issue_tracker_issue_type = CharField(max_length=255, blank=True)
+    issue_tracker_status_closed = CharField(max_length=255, blank=True)
+
     last_observation_change = DateTimeField(default=timezone.now)
+
+    class Meta:
+        indexes = [
+            Index(fields=["name"]),
+        ]
 
     def __str__(self):
         return self.name
 
     @property
     def open_critical_observation_count(self):
+        if self.is_product_group:
+            count = 0
+            for product in Product.objects.filter(product_group=self):
+                count += product.open_critical_observation_count
+            return count
+
         return Observation.objects.filter(
             product=self,
             branch=self.repository_default_branch,
-            current_severity=Observation.SEVERITY_CRITICAL,
             current_status=Observation.STATUS_OPEN,
+            current_severity=Observation.SEVERITY_CRITICAL,
         ).count()
 
     @property
     def open_high_observation_count(self):
+        if self.is_product_group:
+            count = 0
+            for product in Product.objects.filter(product_group=self):
+                count += product.open_high_observation_count
+            return count
+
         return Observation.objects.filter(
             product=self,
             branch=self.repository_default_branch,
-            current_severity=Observation.SEVERITY_HIGH,
             current_status=Observation.STATUS_OPEN,
+            current_severity=Observation.SEVERITY_HIGH,
         ).count()
 
     @property
     def open_medium_observation_count(self):
+        if self.is_product_group:
+            count = 0
+            for product in Product.objects.filter(product_group=self):
+                count += product.open_medium_observation_count
+            return count
+
         return Observation.objects.filter(
             product=self,
             branch=self.repository_default_branch,
-            current_severity=Observation.SEVERITY_MEDIUM,
             current_status=Observation.STATUS_OPEN,
+            current_severity=Observation.SEVERITY_MEDIUM,
         ).count()
 
     @property
     def open_low_observation_count(self):
+        if self.is_product_group:
+            count = 0
+            for product in Product.objects.filter(product_group=self):
+                count += product.open_low_observation_count
+            return count
+
         return Observation.objects.filter(
             product=self,
             branch=self.repository_default_branch,
-            current_severity=Observation.SEVERITY_LOW,
             current_status=Observation.STATUS_OPEN,
+            current_severity=Observation.SEVERITY_LOW,
         ).count()
 
     @property
     def open_none_observation_count(self):
+        if self.is_product_group:
+            count = 0
+            for product in Product.objects.filter(product_group=self):
+                count += product.open_none_observation_count
+            return count
+
         return Observation.objects.filter(
             product=self,
             branch=self.repository_default_branch,
-            current_severity=Observation.SEVERITY_NONE,
             current_status=Observation.STATUS_OPEN,
+            current_severity=Observation.SEVERITY_NONE,
         ).count()
 
     @property
     def open_unkown_observation_count(self):
+        if self.is_product_group:
+            count = 0
+            for product in Product.objects.filter(product_group=self):
+                count += product.open_unkown_observation_count
+            return count
+
         return Observation.objects.filter(
             product=self,
             branch=self.repository_default_branch,
-            current_severity=Observation.SEVERITY_UNKOWN,
             current_status=Observation.STATUS_OPEN,
+            current_severity=Observation.SEVERITY_UNKOWN,
         ).count()
 
 
 class Branch(Model):
     product = ForeignKey(Product, on_delete=CASCADE)
     name = CharField(max_length=255)
+    last_import = DateTimeField(null=True)
+    housekeeping_protect = BooleanField(default=False)
 
     class Meta:
         unique_together = (
             "product",
             "name",
         )
+        indexes = [
+            Index(fields=["name"]),
+        ]
 
     def __str__(self):
-        return f"{self.product} / {self.name}"
+        return self.name
 
     @property
     def open_critical_observation_count(self):
@@ -246,6 +316,11 @@ class Parser(Model):
     type = CharField(max_length=16, choices=TYPE_CHOICES)
     source = CharField(max_length=16, choices=SOURCE_CHOICES)
 
+    class Meta:
+        indexes = [
+            Index(fields=["name"]),
+        ]
+
     def __str__(self):
         return self.name
 
@@ -297,7 +372,7 @@ class Observation(Model):
     ]
 
     product = ForeignKey(Product, on_delete=PROTECT)
-    branch = ForeignKey(Branch, on_delete=PROTECT, null=True)
+    branch = ForeignKey(Branch, on_delete=CASCADE, null=True)
     parser = ForeignKey(Parser, on_delete=PROTECT)
     title = CharField(max_length=255)
     description = TextField(max_length=2048, blank=True)
@@ -347,6 +422,18 @@ class Observation(Model):
     cwe = IntegerField(
         null=True, validators=[MinValueValidator(1), MaxValueValidator(999999)]
     )
+    epss_score = DecimalField(
+        max_digits=6,
+        decimal_places=3,
+        null=True,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+    )
+    epss_percentile = DecimalField(
+        max_digits=6,
+        decimal_places=3,
+        null=True,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+    )
     found = DateField(null=True)
     scanner = CharField(max_length=255, blank=True)
     upload_filename = CharField(max_length=255, blank=True)
@@ -371,6 +458,25 @@ class Observation(Model):
         on_delete=PROTECT,
     )
     issue_tracker_issue_id = CharField(max_length=255, blank=True)
+    issue_tracker_jira_initial_status = CharField(max_length=255, blank=True)
+
+    class Meta:
+        indexes = [
+            Index(fields=["product", "branch"]),
+            Index(fields=["title"]),
+            Index(fields=["current_severity"]),
+            Index(fields=["numerical_severity"]),
+            Index(fields=["current_status"]),
+            Index(fields=["vulnerability_id"]),
+            Index(fields=["origin_component_name_version"]),
+            Index(fields=["origin_docker_image_name_tag_short"]),
+            Index(fields=["origin_service_name"]),
+            Index(fields=["origin_endpoint_hostname"]),
+            Index(fields=["origin_source_file"]),
+            Index(fields=["last_observation_log"]),
+            Index(fields=["epss_score"]),
+            Index(fields=["scanner"]),
+        ]
 
     def __str__(self):
         return f"{self.product} / {self.title}"
@@ -402,11 +508,23 @@ class Observation_Log(Model):
     comment = CharField(max_length=255)
     created = DateTimeField(auto_now_add=True)
 
+    class Meta:
+        indexes = [
+            Index(fields=["observation", "-created"]),
+            Index(fields=["-created"]),
+        ]
+        ordering = ["observation", "-created"]
+
 
 class Evidence(Model):
     observation = ForeignKey(Observation, related_name="evidences", on_delete=CASCADE)
     name = CharField(max_length=255)
     evidence = TextField()
+
+    class Meta:
+        indexes = [
+            Index(fields=["name"]),
+        ]
 
 
 class Reference(Model):

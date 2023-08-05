@@ -1,6 +1,6 @@
 from typing import Optional
 
-from django.db.models import Exists, OuterRef
+from django.db.models import Exists, OuterRef, Q
 from django.db.models.query import QuerySet
 
 from application.commons.services.global_request import get_current_user
@@ -32,13 +32,23 @@ def get_api_configurations() -> QuerySet[Api_Configuration]:
     if user is None:
         return Api_Configuration.objects.none()
 
-    if user.is_superuser:
-        return Api_Configuration.objects.all()
+    api_configurations = Api_Configuration.objects.all()
 
-    product_members = Product_Member.objects.filter(
-        product=OuterRef("product_id"), user=user
-    )
+    if not user.is_superuser:
+        product_members = Product_Member.objects.filter(
+            product=OuterRef("product_id"), user=user
+        )
+        product_group_members = Product_Member.objects.filter(
+            product=OuterRef("product__product_group"), user=user
+        )
 
-    return Api_Configuration.objects.annotate(
-        product__member=Exists(product_members)
-    ).filter(product__member=True)
+        api_configurations = api_configurations.annotate(
+            product__member=Exists(product_members),
+            product__product_group__member=Exists(product_group_members),
+        )
+
+        api_configurations = api_configurations.filter(
+            Q(product__member=True) | Q(product__product_group__member=True)
+        )
+
+    return api_configurations

@@ -1,6 +1,6 @@
 # Issue trackers
 
-Developers and product owners will typically document the development tasks in an issue tracker and move these issues in a Scrum or Kanban board. Therefore, even though the assessment of observations is done in SecObserve, it may be useful to transfer them to an issue tracker as well. SecObserve currently supports automatic creation of issues in **GitHub** and **GitLab**. 
+Developers and product owners will typically document the development tasks in an issue tracker and move these issues in a Scrum or Kanban board. Therefore, even though the assessment of observations is done in SecObserve, it may be useful to transfer them to an issue tracker as well. SecObserve currently supports automatic creation of issues in **GitHub**, **GitLab** and **Jira (Cloud)**. 
 
 The synchronization of issues is an unidirectional process:
 
@@ -17,14 +17,17 @@ The parameters for the issue tracker integration are set in the product:
 
 ![Issue tracker integration](../assets/images/screenshot_issue_tracker.png)
 
-| | |
-|-|-|
-| **Active** | Issues will only be pushed, if this parameter is set. |
-| **Type** | Either **GitHub** or **GitLab** |
-| **Base URL** | The base URL of the issue tracker. For **GitHub** it is `https://api.github.com`, for a self hosted **GitLab** it will be something like `https://gitlab.example.com`. |
-| **API key** | An API key must be created in **GitHub** or **GitLab**, having the permissions to create and update issues. |
-| **Project id** | The path of the repository in its URL in **GitHub** or **GitLab**, e.g. `MaibornWolff/SecObserve`. |
-| **Labels** | A comma separated list of labels, that will be set for the issue. Additional labels can be set in the issue tracker, they will be preserved when the issue is updated. |
+|                   |   |
+|-------------------|---|
+| **Active**        | Issues will only be pushed, if this parameter is set. |
+| **Type**          | Either **GitHub** or **GitLab** or **Jira** |
+| **Base URL**      | The base URL of the issue tracker. For **GitHub** it is `https://api.github.com`, for a self hosted **GitLab** it will be something like `https://gitlab.example.com`, for **Jira** it is `https:\\{organization_name}.atlassian.net`. |
+| **API key**       | An API key must be created in the issue tracker, having the permissions to create and update issues. |
+| **Project id**    | The path of the repository in its URL in **GitHub** or **GitLab**, e.g. `MaibornWolff/SecObserve`. For **Jira** it is the key of the project. |
+| **Labels**        | A comma separated list of labels, that will be set for the issue. Additional labels can be set in the issue tracker, they will be preserved when the issue is updated. |
+| **Username**      | *(only for Jira)* The REST API of Jira needs an authentication with username and API key. |
+| **Issue type**    | *(only for Jira)* The issue type to be created. |
+| **Closed status** | *(only for Jira)* The status to be set when an issue is closed. |
 
 Issues are created or updated by an asynchronous background process after the import or the assessment of an observation has finished. If problems should occur during the transfer, a notification is send, see [Notifications](./notifications.md).
 
@@ -39,3 +42,7 @@ Issues are created or updated by an asynchronous background process after the im
 ## Issue in GitLab
 
 ![GitLab issue](../assets/images/screenshot_issue_tracker_gitlab.png)
+
+## Issue in Jira (Cloud)
+
+![Jira issue](../assets/images/screenshot_issue_tracker_jira.png)

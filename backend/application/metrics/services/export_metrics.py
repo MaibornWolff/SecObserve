@@ -30,7 +30,10 @@ def export_product_metrics_csv(
 def _get_product_metrics(product: Optional[Product]):
     product_metrics = get_product_metrics()
     if product:
-        product_metrics = product_metrics.filter(product=product)
+        if product.is_product_group:
+            product_metrics = product_metrics.filter(product__product_group=product)
+        else:
+            product_metrics = product_metrics.filter(product=product)
     product_metrics = product_metrics.order_by("product__name", "date")
     return product_metrics
 

@@ -5,6 +5,7 @@ import {
     Datagrid,
     List,
     NullableBooleanInput,
+    ReferenceInput,
     TextField,
     TextInput,
     TopToolbar,
@@ -14,9 +15,13 @@ import { PERMISSION_PRODUCT_CREATE } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
 import { SecurityGateTextField } from "../../commons/custom_fields/SecurityGateTextField";
+import { AutocompleteInputMedium } from "../../commons/layout/themes";
 
 const listFilters = [
     <TextInput source="name" alwaysOn />,
+    <ReferenceInput source="product_group" reference="product_groups" sort={{ field: "name", order: "ASC" }} alwaysOn>
+        <AutocompleteInputMedium optionText="name" />
+    </ReferenceInput>,
     <NullableBooleanInput source="security_gate_passed" alwaysOn />,
 ];
 
@@ -47,8 +52,9 @@ const ProductList = () => {
         >
             <Datagrid size="medium" rowClick="show" bulkActionButtons={<BulkActionButtons />}>
                 <TextField source="name" />
+                <TextField source="product_group_name" label="Product Group" />
                 <SecurityGateTextField />
-                <TextField source="repository_default_branch_name" label="Default branch" />
+                <TextField source="repository_default_branch_name" label="Default branch" sortable={false} />
                 <ObservationsCountField withLabel={false} />
             </Datagrid>
         </List>

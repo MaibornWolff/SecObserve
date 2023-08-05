@@ -1,6 +1,6 @@
 from typing import Optional
 
-from django.db.models import Exists, OuterRef
+from django.db.models import Exists, OuterRef, Q
 from django.db.models.query import QuerySet
 
 from application.commons.services.global_request import get_current_user
@@ -27,16 +27,26 @@ def get_observations() -> QuerySet[Observation]:
     if user is None:
         return Observation.objects.none()
 
-    if user.is_superuser:
-        return Observation.objects.all()
+    observations = Observation.objects.all()
 
-    product_members = Product_Member.objects.filter(
-        product=OuterRef("product_id"), user=user
-    )
+    if not user.is_superuser:
+        product_members = Product_Member.objects.filter(
+            product=OuterRef("product_id"), user=user
+        )
+        product_group_members = Product_Member.objects.filter(
+            product=OuterRef("product__product_group"), user=user
+        )
 
-    return Observation.objects.annotate(product__member=Exists(product_members)).filter(
-        product__member=True
-    )
+        observations = observations.annotate(
+            product__member=Exists(product_members),
+            product__product_group__member=Exists(product_group_members),
+        )
+
+        observations = observations.filter(
+            Q(product__member=True) | Q(product__product_group__member=True)
+        )
+
+    return observations
 
 
 def get_observations_for_vulnerability_check(
@@ -61,13 +71,24 @@ def get_evidences() -> QuerySet[Evidence]:
     if user is None:
         return Evidence.objects.none()
 
-    if user.is_superuser:
-        return Evidence.objects.all()
+    evidences = Evidence.objects.all()
 
-    product_members = Product_Member.objects.filter(
-        product=OuterRef("observation__product_id"), user=user
-    )
+    if not user.is_superuser:
+        product_members = Product_Member.objects.filter(
+            product=OuterRef("observation__product_id"), user=user
+        )
+        product_group_members = Product_Member.objects.filter(
+            product=OuterRef("observation__product__product_group"), user=user
+        )
 
-    return Evidence.objects.annotate(
-        observation__product__member=Exists(product_members)
-    ).filter(observation__product__member=True)
+        evidences = evidences.annotate(
+            observation__product__member=Exists(product_members),
+            observation__product__product_group__member=Exists(product_group_members),
+        )
+
+        evidences = evidences.filter(
+            Q(observation__product__member=True)
+            | Q(observation__product__product_group__member=True)
+        )
+
+    return evidences

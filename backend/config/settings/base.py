@@ -102,6 +102,7 @@ LOCAL_APPS = [
     "application.access_control",
     "application.commons",
     "application.core",
+    "application.epss",
     "application.import_observations",
     "application.issue_tracker",
     "application.metrics",
@@ -481,6 +482,41 @@ CONSTANCE_CONFIG = {
         "Calculate product metrics every x minutes",
         int,
     ),
+    "BACKGROUND_EPSS_IMPORT_CRONTAB_MINUTES": (
+        "0",
+        "Minutes crontab expression for EPSS import",
+        str,
+    ),
+    "BACKGROUND_EPSS_IMPORT_CRONTAB_HOURS": (
+        "3",
+        "Hours crontab expression for EPSS import (UTC)",
+        str,
+    ),
+    "BRANCH_HOUSEKEEPING_CRONTAB_MINUTES": (
+        "0",
+        "Minutes crontab expression for branch housekeeping",
+        str,
+    ),
+    "BRANCH_HOUSEKEEPING_CRONTAB_HOURS": (
+        "2",
+        "Hours crontab expression for branch housekeeping (UTC)",
+        str,
+    ),
+    "BRANCH_HOUSEKEEPING_ACTIVE": (
+        True,
+        "Delete inactive branches",
+        bool,
+    ),
+    "BRANCH_HOUSEKEEPING_KEEP_INACTIVE_DAYS": (
+        30,
+        "Days before incative branches and their observations are deleted",
+        int,
+    ),
+    "BRANCH_HOUSEKEEPING_EXEMPT_BRANCHES": (
+        "",
+        "Regular expression which branches to exempt from deletion",
+        str,
+    ),
 }
 
 CONSTANCE_CONFIG_FIELDSETS = {
@@ -504,7 +540,18 @@ CONSTANCE_CONFIG_FIELDSETS = {
         "EXCEPTION_MS_TEAMS_WEBHOOK",
         "EXCEPTION_RATELIMIT",
     ),
-    "Background tasks": ("BACKGROUND_PRODUCT_METRICS_INTERVAL_MINUTES",),
+    "Background tasks (restart needed)": (
+        "BACKGROUND_PRODUCT_METRICS_INTERVAL_MINUTES",
+        "BACKGROUND_EPSS_IMPORT_CRONTAB_MINUTES",
+        "BACKGROUND_EPSS_IMPORT_CRONTAB_HOURS",
+    ),
+    "Housekeeping for branches": (
+        "BRANCH_HOUSEKEEPING_CRONTAB_MINUTES",
+        "BRANCH_HOUSEKEEPING_CRONTAB_HOURS",
+        "BRANCH_HOUSEKEEPING_ACTIVE",
+        "BRANCH_HOUSEKEEPING_KEEP_INACTIVE_DAYS",
+        "BRANCH_HOUSEKEEPING_EXEMPT_BRANCHES",
+    ),
 }
 
 FIELD_ENCRYPTION_KEY = env("FIELD_ENCRYPTION_KEY")

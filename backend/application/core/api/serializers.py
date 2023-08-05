@@ -1,7 +1,6 @@
-from datetime import datetime
 from typing import Optional
 
-from django.utils.timezone import make_aware
+from django.utils import timezone
 from packageurl import PackageURL
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.serializers import (
@@ -32,7 +31,7 @@ from application.core.models import (
     Product_Member,
     Reference,
 )
-from application.core.queries.product import get_product_member
+from application.core.queries.product_member import get_product_member
 from application.core.services.observation_log import create_observation_log
 from application.core.services.security_gate import check_security_gate
 from application.issue_tracker.services.issue_tracker import (
@@ -41,8 +40,7 @@ from application.issue_tracker.services.issue_tracker import (
 )
 
 
-class ProductSerializer(ModelSerializer):
-    repository_default_branch_name = SerializerMethodField()
+class ProductCoreSerializer(ModelSerializer):
     open_critical_observation_count = SerializerMethodField()
     open_high_observation_count = SerializerMethodField()
     open_medium_observation_count = SerializerMethodField()
@@ -54,12 +52,6 @@ class ProductSerializer(ModelSerializer):
     class Meta:
         model = Product
         fields = "__all__"
-
-    def get_repository_default_branch_name(self, obj: Product) -> str:
-        if not obj.repository_default_branch:
-            return ""
-
-        return obj.repository_default_branch.name
 
     def get_open_critical_observation_count(self, obj: Product) -> int:
         return obj.open_critical_observation_count
@@ -90,7 +82,71 @@ class ProductSerializer(ModelSerializer):
 
         return []
 
-    def validate(self, attrs: dict):
+
+class ProductGroupSerializer(ProductCoreSerializer):
+    products_count = SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = [
+            "id",
+            "name",
+            "description",
+            "products_count",
+            "permissions",
+            "open_critical_observation_count",
+            "open_high_observation_count",
+            "open_medium_observation_count",
+            "open_low_observation_count",
+            "open_none_observation_count",
+            "open_unkown_observation_count",
+        ]
+
+    def get_products_count(self, obj: Product) -> int:
+        return obj.products.count()
+
+    def create(self, validated_data: dict) -> Product:
+        product_group = super().create(validated_data)
+        product_group.is_product_group = True
+        product_group.save()
+        return product_group
+
+    def update(self, instance: Product, validated_data: dict) -> Product:
+        product_group = super().update(instance, validated_data)
+        if product_group.is_product_group is False:
+            product_group.is_product_group = True
+            product_group.save()
+        return product_group
+
+
+class ProductSerializer(ProductCoreSerializer):
+    product_group_name = SerializerMethodField()
+    repository_default_branch_name = SerializerMethodField()
+
+    class Meta:
+        model = Product
+        exclude = ["is_product_group"]
+
+    def get_product_group_name(self, obj: Product) -> str:
+        if not obj.product_group:
+            return ""
+        return obj.product_group.name
+
+    def get_repository_default_branch_name(self, obj: Product) -> str:
+        if not obj.repository_default_branch:
+            return ""
+        return obj.repository_default_branch.name
+
+    def validate(self, attrs: dict):  # pylint: disable=too-many-branches
+        # There are quite a lot of branches, but at least they are not nested too much
+
+        if attrs.get("repository_branch_housekeeping_active"):
+            if not attrs.get("repository_branch_housekeeping_keep_inactive_days"):
+                attrs["repository_branch_housekeeping_keep_inactive_days"] = 1
+        else:
+            attrs["repository_branch_housekeeping_keep_inactive_days"] = None
+            attrs["repository_branch_housekeeping_exempt_branches"] = ""
+
         if attrs.get("security_gate_active"):
             if not attrs.get("security_gate_threshold_critical"):
                 attrs["security_gate_threshold_critical"] = 0
@@ -135,7 +191,44 @@ class ProductSerializer(ModelSerializer):
                 "Issue tracker data must be set when issue tracking is active"
             )
 
+        if attrs.get("issue_tracker_type") == Product.ISSUE_TRACKER_JIRA:
+            if not attrs.get("issue_tracker_username"):
+                raise ValidationError(
+                    "Username must be set when issue tracker type is Jira"
+                )
+            if not attrs.get("issue_tracker_issue_type"):
+                raise ValidationError(
+                    "Issue type must be set when issue tracker type is Jira"
+                )
+            if not attrs.get("issue_tracker_status_closed"):
+                raise ValidationError(
+                    "Closed status must be set when issue tracker type is Jira"
+                )
+
+        if (
+            attrs.get("issue_tracker_type")
+            and attrs.get("issue_tracker_type") != Product.ISSUE_TRACKER_JIRA
+        ):
+            if attrs.get("issue_tracker_username"):
+                raise ValidationError(
+                    "Username must not be set when issue tracker type is not Jira"
+                )
+            if attrs.get("issue_tracker_issue_type"):
+                raise ValidationError(
+                    "Isse type must not be set when issue tracker type is not Jira"
+                )
+            if attrs.get("issue_tracker_status_closed"):
+                raise ValidationError(
+                    "Closed status must not be set when issue tracker type is not Jira"
+                )
+
         return super().validate(attrs)
+
+    def validate_product_group(self, product: Product) -> Product:
+        if product and product.is_product_group is False:
+            raise ValidationError("Product group must be a product group")
+
+        return product
 
 
 class NestedProductSerializer(ModelSerializer):
@@ -143,7 +236,7 @@ class NestedProductSerializer(ModelSerializer):
 
     class Meta:
         model = Product
-        fields = "__all__"
+        exclude = ["is_product_group"]
 
     def get_permissions(self, product: Product) -> list[Permissions]:
         user = get_current_user()
@@ -158,9 +251,16 @@ class NestedProductSerializer(ModelSerializer):
 
 
 class NestedProductListSerializer(ModelSerializer):
+    product_group_name = SerializerMethodField()
+
     class Meta:
         model = Product
-        exclude = ["members"]
+        exclude = ["members", "is_product_group"]
+
+    def get_product_group_name(self, obj: Product) -> str:
+        if not obj.product_group:
+            return ""
+        return obj.product_group.name
 
 
 class ProductMemberSerializer(ModelSerializer):
@@ -240,6 +340,12 @@ class BranchSerializer(ModelSerializer):
     def get_open_unkown_observation_count(self, obj: Branch) -> int:
         return obj.open_unkown_observation_count
 
+    def validate_product(self, product: Product) -> Product:
+        if product and product.is_product_group:
+            raise ValidationError("Product must not be a product group")
+
+        return product
+
 
 class ParserSerializer(ModelSerializer):
     class Meta:
@@ -288,7 +394,7 @@ class ObservationSerializer(ModelSerializer):
 
     class Meta:
         model = Observation
-        exclude = ["numerical_severity"]
+        exclude = ["numerical_severity", "issue_tracker_jira_initial_status"]
 
     def get_branch_name(self, observation: Observation) -> str:
         if not observation.branch:
@@ -303,15 +409,47 @@ class ObservationSerializer(ModelSerializer):
             origin_source_file_url = observation.product.repository_prefix
             if origin_source_file_url.endswith("/"):
                 origin_source_file_url = origin_source_file_url[:-1]
-            if observation.branch:
-                origin_source_file_url += f"/{observation.branch.name}"
-            origin_source_file_url += f"/{observation.origin_source_file}"
-            if observation.origin_source_line_start:
-                origin_source_file_url += "#L" + str(
-                    observation.origin_source_line_start
+            if "dev.azure.com" in observation.product.repository_prefix:
+                origin_source_file_url = self._create_azure_devops_url(
+                    observation, origin_source_file_url
                 )
+            else:
+                origin_source_file_url = self._create_common_url(
+                    observation, origin_source_file_url
+                )
+
+        return origin_source_file_url
+
+    def _create_azure_devops_url(
+        self, observation: Observation, origin_source_file_url: str
+    ) -> str:
+        origin_source_file_url += f"?path={observation.origin_source_file}"
+        if observation.branch:
+            origin_source_file_url += f"&version=GB{observation.branch.name}"
+        if observation.origin_source_line_start:
+            origin_source_file_url += f"&line={observation.origin_source_line_start}"
+            origin_source_file_url += "&lineStartColumn=1&lineEndColumn=1"
             if observation.origin_source_line_end:
-                origin_source_file_url += "-" + str(observation.origin_source_line_end)
+                origin_source_file_url += (
+                    f"&lineEnd={observation.origin_source_line_end+1}"
+                )
+            else:
+                origin_source_file_url += (
+                    f"&lineEnd={observation.origin_source_line_start+1}"
+                )
+
+        return origin_source_file_url
+
+    def _create_common_url(
+        self, observation: Observation, origin_source_file_url: str
+    ) -> str:
+        if observation.branch:
+            origin_source_file_url += f"/{observation.branch.name}"
+        origin_source_file_url += f"/{observation.origin_source_file}"
+        if observation.origin_source_line_start:
+            origin_source_file_url += "#L" + str(observation.origin_source_line_start)
+        if observation.origin_source_line_end:
+            origin_source_file_url += "-" + str(observation.origin_source_line_end)
 
         return origin_source_file_url
 
@@ -326,6 +464,12 @@ class ObservationSerializer(ModelSerializer):
 
         return issue_url
 
+    def validate_product(self, product: Product) -> Product:
+        if product and product.is_product_group:
+            raise ValidationError("Product must not be a product group")
+
+        return product
+
 
 class ObservationListSerializer(ModelSerializer):
     product_data = NestedProductListSerializer(source="product")
@@ -336,7 +480,7 @@ class ObservationListSerializer(ModelSerializer):
 
     class Meta:
         model = Observation
-        exclude = ["numerical_severity"]
+        exclude = ["numerical_severity", "issue_tracker_jira_initial_status"]
 
     def get_branch_name(self, observation: Observation) -> str:
         if not observation.branch:
@@ -372,7 +516,7 @@ class ObservationUpdateSerializer(ModelSerializer):
         if self.instance and self.instance.parser.type != Parser.TYPE_MANUAL:
             raise ValidationError("Only manual observations can be updated")
 
-        attrs["import_last_seen"] = make_aware(datetime.now())
+        attrs["import_last_seen"] = timezone.now()
         return super().validate(attrs)
 
     def validate_branch(self, branch: Branch) -> Branch:
@@ -415,6 +559,9 @@ class ObservationUpdateSerializer(ModelSerializer):
 
         check_security_gate(observation.product)
         push_observation_to_issue_tracker(observation, get_current_user())
+        if observation.branch:
+            observation.branch.last_import = timezone.now()
+            observation.branch.save()
 
         return observation
 
@@ -445,7 +592,7 @@ class ObservationCreateSerializer(ModelSerializer):
     def validate(self, attrs):
         attrs["parser"] = Parser.objects.get(type=Parser.TYPE_MANUAL)
         attrs["scanner"] = Parser.TYPE_MANUAL
-        attrs["import_last_seen"] = make_aware(datetime.now())
+        attrs["import_last_seen"] = timezone.now()
 
         if attrs.get("branch"):
             if attrs["branch"].product != attrs["product"]:
@@ -467,6 +614,9 @@ class ObservationCreateSerializer(ModelSerializer):
 
         check_security_gate(observation.product)
         push_observation_to_issue_tracker(observation, get_current_user())
+        if observation.branch:
+            observation.branch.last_import = timezone.now()
+            observation.branch.save()
 
         return observation
 
