@@ -39,7 +39,7 @@ django-auth-adfs==1.11.6  # https://github.com/snok/django-auth-adfs
 # Database
 # ------------------------------------------------------------------------------
 mysqlclient==2.2.0
-psycopg[binary]==3.1.9
+psycopg[binary]==3.1.10
 
 # Excel and CSV
 # ------------------------------------------------------------------------------
