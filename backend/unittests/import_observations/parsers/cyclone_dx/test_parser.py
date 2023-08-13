@@ -119,6 +119,23 @@ class TestCycloneDXParser(TestCase):
                 observation.unsaved_evidences[1][1],
             )
 
+    def test_grype_component_version(self):
+        with open(path.dirname(__file__) + "/files/grype_2.json") as testfile:
+            parser = CycloneDXParser()
+            check, messages, data = parser.check_format(testfile)
+            observations = parser.get_observations(data)
+
+            self.assertTrue(check)
+            self.assertEqual(0, len(messages))
+            self.assertEqual(1, len(observations))
+
+            observation = observations[0]
+            self.assertEqual("CVE-2018-20225", observation.vulnerability_id)
+            self.assertEqual("grype / 0.65.1", observation.scanner)
+            self.assertEqual(
+                "example/example-backend:dev", observation.origin_docker_image_name_tag
+            )
+
     def test_trivy(self):
         with open(path.dirname(__file__) + "/files/trivy.json") as testfile:
             parser = CycloneDXParser()
