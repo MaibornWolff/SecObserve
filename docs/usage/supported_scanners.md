@@ -37,6 +37,7 @@ These scanners have been tested with SecObserve:
 | [Semgrep](https://semgrep.dev/docs) | SARIF | Application SAST | File |
 | [Checkov](https://www.checkov.io/1.Welcome/Quick%20Start.html) | SARIF | Infrastructure SAST | File |
 | [KICS](https://docs.kics.io/latest) | SARIF | Infrastructure SAST | File |
+| [tfsec](https://aquasecurity.github.io/tfsec) | SARIF | Infrastructure SAST | File |
 | [Gitleaks](https://gitleaks.io) | SARIF | Secrets | File |
 | [Trivy](https://aquasecurity.github.io/trivy) | SARIF | Secrets | File |
 | [CryptoLyzer](https://gitlab.com/coroner/cryptolyzer) ^2)^ | CryptoLyzer | DAST | File |
