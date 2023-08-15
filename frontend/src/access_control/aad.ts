@@ -23,5 +23,5 @@ export const loginRequest = {
 export function getPublicClientApplication() {
     const pca = new PublicClientApplication(config);
     pca.initialize();
-    return pca; 
+    return pca;
 }
