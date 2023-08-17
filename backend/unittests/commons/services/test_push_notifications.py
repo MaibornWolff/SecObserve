@@ -274,7 +274,7 @@ class TestPushNotifications(BaseTestCase):
         mock_send_teams.assert_not_called()
         mock_send_email.assert_not_called()
         mock_notification_create.assert_called_with(
-            name="Exception builtins.Exception has occured",
+            name='Exception "builtins.Exception" has occured',
             message="test_exception",
             user=self.user_internal,
             type=Notification.TYPE_EXCEPTION,
@@ -325,7 +325,7 @@ class TestPushNotifications(BaseTestCase):
         expected_calls_email = [
             call(
                 "test1@example.com",
-                "Exception builtins.Exception has occured",
+                'Exception "builtins.Exception" has occured',
                 "email_exception.tpl",
                 exception_class="builtins.Exception",
                 exception_message="test_exception",
@@ -335,7 +335,7 @@ class TestPushNotifications(BaseTestCase):
             ),
             call(
                 "test2@example.com",
-                "Exception builtins.Exception has occured",
+                'Exception "builtins.Exception" has occured',
                 "email_exception.tpl",
                 exception_class="builtins.Exception",
                 exception_message="test_exception",
@@ -359,7 +359,7 @@ class TestPushNotifications(BaseTestCase):
         ]
         mock_get_first_name.assert_has_calls(expected_calls_get_first_name)
         mock_notification_create.assert_called_with(
-            name="Exception builtins.Exception has occured",
+            name='Exception "builtins.Exception" has occured',
             message="test_exception",
             user=self.user_internal,
             type=Notification.TYPE_EXCEPTION,
@@ -387,7 +387,7 @@ class TestPushNotifications(BaseTestCase):
         mock_send_teams.assert_not_called()
         mock_send_email.assert_not_called()
         mock_notification_create.assert_called_with(
-            name="Error in background task",
+            name='Exception "builtins.Exception" has occured',
             message="test_exception",
             function="test_function",
             arguments="{'argument': 'test_argument'}",
@@ -450,7 +450,7 @@ class TestPushNotifications(BaseTestCase):
         expected_calls_email = [
             call(
                 "test1@example.com",
-                "Exception builtins.Exception has occured in background task",
+                'Exception "builtins.Exception" has occured in background task',
                 "email_task_exception.tpl",
                 function="test_function",
                 arguments=str(arguments),
@@ -463,7 +463,7 @@ class TestPushNotifications(BaseTestCase):
             ),
             call(
                 "test2@example.com",
-                "Exception builtins.Exception has occured in background task",
+                'Exception "builtins.Exception" has occured in background task',
                 "email_task_exception.tpl",
                 function="test_function",
                 arguments=str(arguments),
@@ -493,7 +493,7 @@ class TestPushNotifications(BaseTestCase):
         ]
         mock_get_first_name.assert_has_calls(expected_calls_get_first_name)
         mock_notification_create.assert_called_with(
-            name="Error in background task",
+            name='Exception "builtins.Exception" has occured',
             message="test_exception",
             function="test_function",
             arguments=str(arguments),
