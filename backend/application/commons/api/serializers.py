@@ -24,6 +24,9 @@ class NotificationSerializer(ModelSerializer):
         fields = "__all__"
 
     def get_product_name(self, obj: Notification):
+        if obj.product:
+            return obj.product.name
+
         if obj.observation:
             return obj.observation.product.name
 
