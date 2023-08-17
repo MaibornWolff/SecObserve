@@ -68,7 +68,7 @@ def send_exception_notification(exception: Exception) -> None:
                 first_name = _get_first_name(notification_email_to)
                 _send_email_notification(
                     notification_email_to,
-                    f"Exception {get_classname(exception)} has occured",
+                    f'Exception "{get_classname(exception)}" has occured',
                     "email_exception.tpl",
                     exception_class=get_classname(exception),
                     exception_message=str(exception),
@@ -88,7 +88,7 @@ def send_exception_notification(exception: Exception) -> None:
             )
 
         Notification.objects.create(
-            name=f"Exception {get_classname(exception)} has occured",
+            name=f'Exception "{get_classname(exception)}" has occured',
             message=str(exception),
             user=get_current_user(),
             type=Notification.TYPE_EXCEPTION,
@@ -108,7 +108,7 @@ def send_task_exception_notification(
                 first_name = _get_first_name(notification_email_to)
                 _send_email_notification(
                     notification_email_to,
-                    f"Exception {get_classname(exception)} has occured in background task",
+                    f'Exception "{get_classname(exception)}" has occured in background task',
                     "email_task_exception.tpl",
                     function=function,
                     arguments=str(arguments),
@@ -141,7 +141,7 @@ def send_task_exception_notification(
                 product = observation.product
 
         Notification.objects.create(
-            name="Error in background task",
+            name=f'Exception "{get_classname(exception)}" has occured',
             message=str(exception),
             function=str(function),
             arguments=_get_arguments_string(arguments),
