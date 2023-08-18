@@ -82,6 +82,16 @@ class ProductCoreSerializer(ModelSerializer):
 
         return []
 
+    def validate(self, attrs: dict):
+        if attrs.get("repository_branch_housekeeping_active"):
+            if not attrs.get("repository_branch_housekeeping_keep_inactive_days"):
+                attrs["repository_branch_housekeeping_keep_inactive_days"] = 1
+        else:
+            attrs["repository_branch_housekeeping_keep_inactive_days"] = None
+            attrs["repository_branch_housekeeping_exempt_branches"] = ""
+
+        return super().validate(attrs)
+
 
 class ProductGroupSerializer(ProductCoreSerializer):
     products_count = SerializerMethodField()
@@ -100,6 +110,9 @@ class ProductGroupSerializer(ProductCoreSerializer):
             "open_low_observation_count",
             "open_none_observation_count",
             "open_unkown_observation_count",
+            "repository_branch_housekeeping_active",
+            "repository_branch_housekeeping_keep_inactive_days",
+            "repository_branch_housekeeping_exempt_branches",
         ]
 
     def get_products_count(self, obj: Product) -> int:
@@ -139,13 +152,6 @@ class ProductSerializer(ProductCoreSerializer):
 
     def validate(self, attrs: dict):  # pylint: disable=too-many-branches
         # There are quite a lot of branches, but at least they are not nested too much
-
-        if attrs.get("repository_branch_housekeeping_active"):
-            if not attrs.get("repository_branch_housekeeping_keep_inactive_days"):
-                attrs["repository_branch_housekeeping_keep_inactive_days"] = 1
-        else:
-            attrs["repository_branch_housekeeping_keep_inactive_days"] = None
-            attrs["repository_branch_housekeeping_exempt_branches"] = ""
 
         if attrs.get("security_gate_active"):
             if not attrs.get("security_gate_threshold_critical"):
