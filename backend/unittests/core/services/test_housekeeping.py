@@ -182,7 +182,6 @@ class TestHousekeeping(BaseTestCase):
         except Branch.DoesNotExist:
             self.fail("Branch should not have been deleted")
 
-
     @override_config(BRANCH_HOUSEKEEPING_ACTIVE=False)
     def test_delete_inactive_branches_for_product_product_group_not_active(self):
         product_group = Product.objects.get(name="db_product_group")
@@ -244,7 +243,6 @@ class TestHousekeeping(BaseTestCase):
             pass
         except Branch.DoesNotExist:
             self.fail("Branch should not have been deleted")
-
 
     @override_config(BRANCH_HOUSEKEEPING_ACTIVE=False)
     def test_delete_inactive_branches_for_product_product_group_delete(self):
