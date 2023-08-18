@@ -3,7 +3,10 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import TokenIcon from "@mui/icons-material/Token";
 import { Stack, Typography } from "@mui/material";
 import {
+    BooleanField,
     EditButton,
+    Labeled,
+    NumberField,
     RichTextField,
     Show,
     SimpleShowLayout,
@@ -63,6 +66,35 @@ const ProductGroupShow = () => {
                                     <Typography variant="h6">Product Group</Typography>
                                     <TextField source="name" />
                                     {product_group.description && <RichTextField source="description" />}
+
+                                    {product_group.repository_branch_housekeeping_active != null && (
+                                        <Typography variant="h6" sx={{ marginTop: "1em" }}>
+                                            Source code repository
+                                        </Typography>
+                                    )}
+                                    {product_group.repository_branch_housekeeping_active != null && (
+                                        <div>
+                                            <Labeled label="Housekeeping">
+                                                <BooleanField
+                                                    source="repository_branch_housekeeping_active"
+                                                    valueLabelFalse="Disabled"
+                                                    valueLabelTrue="Product specific"
+                                                />
+                                            </Labeled>
+                                            {product_group.repository_branch_housekeeping_active == true && (
+                                                <div>
+                                                    <Labeled label="Keep inactive">
+                                                        <NumberField source="repository_branch_housekeeping_keep_inactive_days" />
+                                                    </Labeled>
+                                                    <br />
+                                                    <Labeled label="Exempt branches">
+                                                        <TextField source="repository_branch_housekeeping_exempt_branches" />
+                                                    </Labeled>
+                                                    <br />
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
                                 </SimpleShowLayout>
                             </Tab>
                             <Tab label="Products" path="products" icon={<product.icon />}>

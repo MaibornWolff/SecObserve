@@ -22,6 +22,11 @@ class TestHousekeeping(BaseTestCase):
         branch = Branch.objects.get(name="db_branch_internal_main")
         branch.last_import = timezone.now() - timedelta(days=10)
         branch.save()
+
+        product = Product.objects.get(name="db_product_internal")
+        product.product_group = None
+        product.save()
+
         return super().setUp()
 
     @patch(
@@ -108,7 +113,12 @@ class TestHousekeeping(BaseTestCase):
 
     @override_config(BRANCH_HOUSEKEEPING_ACTIVE=False)
     def test_delete_inactive_branches_for_product_product_specific_delete(self):
+        product_group = Product.objects.get(name="db_product_group")
+        product_group.repository_branch_housekeeping_active = None
+        product_group.repository_branch_housekeeping_keep_inactive_days = 11
+        product_group.save()
         product = Product.objects.get(name="db_product_internal")
+        product.product_group = product_group
         product.repository_branch_housekeeping_active = True
         product.repository_branch_housekeeping_keep_inactive_days = 9
         product.save()
@@ -171,3 +181,87 @@ class TestHousekeeping(BaseTestCase):
             pass
         except Branch.DoesNotExist:
             self.fail("Branch should not have been deleted")
+
+
+    @override_config(BRANCH_HOUSEKEEPING_ACTIVE=False)
+    def test_delete_inactive_branches_for_product_product_group_not_active(self):
+        product_group = Product.objects.get(name="db_product_group")
+        product_group.repository_branch_housekeeping_active = False
+        product_group.save()
+        product = Product.objects.get(name="db_product_internal")
+        product.product_group = product_group
+        product.repository_branch_housekeeping_active = True
+        product.repository_branch_housekeeping_keep_inactive_days = 9
+        product.save()
+
+        delete_inactive_branches_for_product(product)
+
+        try:
+            Branch.objects.get(name="db_branch_internal_main")
+            pass
+        except Branch.DoesNotExist:
+            self.fail("Branch should not have been deleted")
+
+    @override_config(BRANCH_HOUSEKEEPING_ACTIVE=False)
+    def test_delete_inactive_branches_for_product_product_group_too_early(self):
+        product_group = Product.objects.get(name="db_product_group")
+        product_group.repository_branch_housekeeping_active = True
+        product_group.repository_branch_housekeeping_keep_inactive_days = 11
+        product_group.save()
+        product = Product.objects.get(name="db_product_internal")
+        product.product_group = product_group
+        product.repository_branch_housekeeping_active = True
+        product.repository_branch_housekeeping_keep_inactive_days = 11
+        product.save()
+
+        delete_inactive_branches_for_product(product)
+
+        try:
+            Branch.objects.get(name="db_branch_internal_main")
+            pass
+        except Branch.DoesNotExist:
+            self.fail("Branch should not have been deleted")
+
+    @override_config(BRANCH_HOUSEKEEPING_ACTIVE=False)
+    def test_delete_inactive_branches_for_product_product_group_exempt(self):
+        product_group = Product.objects.get(name="db_product_group")
+        product_group.repository_branch_housekeeping_active = True
+        product_group.repository_branch_housekeeping_keep_inactive_days = 9
+        product_group.repository_branch_housekeeping_exempt_branches = (
+            "db_branch_internal_m.*"
+        )
+        product_group.save()
+        product = Product.objects.get(name="db_product_internal")
+        product.product_group = product_group
+        product.repository_branch_housekeeping_active = True
+        product.repository_branch_housekeeping_keep_inactive_days = 9
+        product.save()
+
+        delete_inactive_branches_for_product(product)
+
+        try:
+            Branch.objects.get(name="db_branch_internal_main")
+            pass
+        except Branch.DoesNotExist:
+            self.fail("Branch should not have been deleted")
+
+
+    @override_config(BRANCH_HOUSEKEEPING_ACTIVE=False)
+    def test_delete_inactive_branches_for_product_product_group_delete(self):
+        product_group = Product.objects.get(name="db_product_group")
+        product_group.repository_branch_housekeeping_active = True
+        product_group.repository_branch_housekeeping_keep_inactive_days = 9
+        product_group.save()
+        product = Product.objects.get(name="db_product_internal")
+        product.product_group = product_group
+        product.repository_branch_housekeeping_active = True
+        product.repository_branch_housekeeping_keep_inactive_days = 11
+        product.save()
+
+        delete_inactive_branches_for_product(product)
+
+        try:
+            Branch.objects.get(name="db_branch_internal_main")
+            self.fail("Branch should have been deleted")
+        except Branch.DoesNotExist:
+            pass
