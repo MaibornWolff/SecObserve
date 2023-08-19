@@ -5,7 +5,7 @@ from typing import Any
 
 from application.access_control.models import User
 from application.commons.services.log_message import format_log_message
-from application.commons.services.push_notifications import (
+from application.commons.services.send_notifications import (
     send_task_exception_notification,
 )
 
