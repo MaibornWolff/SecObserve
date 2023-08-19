@@ -256,7 +256,9 @@ def _get_notification_ms_teams_webhook(product: Product) -> Optional[str]:
     return None
 
 
-def _get_email_to_addresses(notification_email_to: Optional[str]) -> Optional[list[str]]:
+def _get_email_to_addresses(
+    notification_email_to: Optional[str],
+) -> Optional[list[str]]:
     if not notification_email_to:
         return None
 
