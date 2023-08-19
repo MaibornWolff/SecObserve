@@ -113,6 +113,8 @@ class ProductGroupSerializer(ProductCoreSerializer):
             "repository_branch_housekeeping_active",
             "repository_branch_housekeeping_keep_inactive_days",
             "repository_branch_housekeeping_exempt_branches",
+            "notification_ms_teams_webhook",
+            "notification_email_to",
         ]
 
     def get_products_count(self, obj: Product) -> int:

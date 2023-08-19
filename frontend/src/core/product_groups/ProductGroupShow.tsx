@@ -95,6 +95,19 @@ const ProductGroupShow = () => {
                                             )}
                                         </div>
                                     )}
+
+                                    {(product_group.notification_email_to ||
+                                        product_group.notification_ms_teams_webhook) && (
+                                        <Typography variant="h6" sx={{ marginTop: "1em" }}>
+                                            Notifications
+                                        </Typography>
+                                    )}
+                                    {product_group.notification_email_to && (
+                                        <TextField source="notification_email_to" label="Email" />
+                                    )}
+                                    {product_group.notification_ms_teams_webhook && (
+                                        <TextField source="notification_ms_teams_webhook" label="MS Teams" />
+                                    )}
                                 </SimpleShowLayout>
                             </Tab>
                             <Tab label="Products" path="products" icon={<product.icon />}>

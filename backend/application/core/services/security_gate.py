@@ -1,6 +1,6 @@
 from constance import config
 
-from application.commons.services.push_notifications import (
+from application.commons.services.send_notifications import (
     send_product_security_gate_notification,
 )
 from application.core.models import Product

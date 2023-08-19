@@ -46,6 +46,12 @@ const ProductGroupEdit = () => {
         if (!data.repository_branch_housekeeping_exempt_branches) {
             data.repository_branch_housekeeping_exempt_branches = "";
         }
+        if (!data.notification_email_to) {
+            data.notification_email_to = "";
+        }
+        if (!data.notification_ms_teams_webhook) {
+            data.notification_ms_teams_webhook = "";
+        }
         return data;
     };
 
@@ -92,6 +98,20 @@ const ProductGroupEdit = () => {
                         )
                     }
                 </FormDataConsumer>
+
+                <Typography variant="h6" sx={{ marginTop: "1em" }}>
+                    Notifications
+                </Typography>
+                <TextInputWide
+                    source="notification_email_to"
+                    label="Email"
+                    helperText="Comma separated email to addresses to send notifications via email"
+                />
+                <TextInputWide
+                    source="notification_ms_teams_webhook"
+                    label="MS Teams"
+                    helperText="Webhook URL to send notifications to MS Teams"
+                />
             </SimpleForm>
         </Edit>
     );

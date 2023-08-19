@@ -44,6 +44,8 @@ export interface ProductGroup extends RaRecord {
     repository_branch_housekeeping_active: boolean;
     repository_branch_housekeeping_keep_inactive_days: number;
     repository_branch_housekeeping_exempt_branches: string;
+    notification_ms_teams_webhook: string;
+    notification_email_to: string;
 }
 
 export interface Parser extends RaRecord {
