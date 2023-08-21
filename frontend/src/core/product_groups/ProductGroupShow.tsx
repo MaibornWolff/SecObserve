@@ -69,7 +69,7 @@ const ProductGroupShow = () => {
 
                                     {product_group.repository_branch_housekeeping_active != null && (
                                         <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                                            Source code repository
+                                            Source code repository (for products)
                                         </Typography>
                                     )}
                                     {product_group.repository_branch_housekeeping_active != null && (
@@ -78,7 +78,7 @@ const ProductGroupShow = () => {
                                                 <BooleanField
                                                     source="repository_branch_housekeeping_active"
                                                     valueLabelFalse="Disabled"
-                                                    valueLabelTrue="Product specific"
+                                                    valueLabelTrue="Product group specific"
                                                 />
                                             </Labeled>
                                             {product_group.repository_branch_housekeeping_active == true && (
@@ -99,7 +99,7 @@ const ProductGroupShow = () => {
                                     {(product_group.notification_email_to ||
                                         product_group.notification_ms_teams_webhook) && (
                                         <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                                            Notifications
+                                            Notifications (for products)
                                         </Typography>
                                     )}
                                     {product_group.notification_email_to && (
@@ -107,6 +107,49 @@ const ProductGroupShow = () => {
                                     )}
                                     {product_group.notification_ms_teams_webhook && (
                                         <TextField source="notification_ms_teams_webhook" label="MS Teams" />
+                                    )}
+
+                                    {product_group.security_gate_active != null && (
+                                        <div>
+                                            <Typography variant="h6" sx={{ marginTop: "1em" }}>
+                                                Security Gate (for products)
+                                            </Typography>
+                                            <Labeled label="Security gate">
+                                                <BooleanField
+                                                    source="security_gate_active"
+                                                    valueLabelFalse="Disabled"
+                                                    valueLabelTrue="Product group specific"
+                                                />
+                                            </Labeled>
+                                            {product_group.security_gate_active == true && (
+                                                <div>
+                                                    <Labeled>
+                                                        <NumberField source="security_gate_threshold_critical" />
+                                                    </Labeled>
+                                                    <br />
+                                                    <Labeled>
+                                                        <NumberField source="security_gate_threshold_high" />
+                                                    </Labeled>
+                                                    <br />
+                                                    <Labeled>
+                                                        <NumberField source="security_gate_threshold_medium" />
+                                                    </Labeled>
+                                                    <br />
+                                                    <Labeled>
+                                                        <NumberField source="security_gate_threshold_low" />
+                                                    </Labeled>
+                                                    <br />
+                                                    <Labeled>
+                                                        <NumberField source="security_gate_threshold_none" />
+                                                    </Labeled>
+                                                    <br />
+                                                    <Labeled>
+                                                        <NumberField source="security_gate_unkown" />
+                                                    </Labeled>
+                                                    <br />
+                                                </div>
+                                            )}
+                                        </div>
                                     )}
                                 </SimpleShowLayout>
                             </Tab>

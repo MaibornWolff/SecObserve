@@ -90,6 +90,27 @@ class ProductCoreSerializer(ModelSerializer):
             attrs["repository_branch_housekeeping_keep_inactive_days"] = None
             attrs["repository_branch_housekeeping_exempt_branches"] = ""
 
+        if attrs.get("security_gate_active"):
+            if not attrs.get("security_gate_threshold_critical"):
+                attrs["security_gate_threshold_critical"] = 0
+            if not attrs.get("security_gate_threshold_high"):
+                attrs["security_gate_threshold_high"] = 0
+            if not attrs.get("security_gate_threshold_medium"):
+                attrs["security_gate_threshold_medium"] = 0
+            if not attrs.get("security_gate_threshold_low"):
+                attrs["security_gate_threshold_low"] = 0
+            if not attrs.get("security_gate_threshold_none"):
+                attrs["security_gate_threshold_none"] = 0
+            if not attrs.get("security_gate_threshold_unkown"):
+                attrs["security_gate_threshold_unkown"] = 0
+        else:
+            attrs["security_gate_threshold_critical"] = None
+            attrs["security_gate_threshold_high"] = None
+            attrs["security_gate_threshold_medium"] = None
+            attrs["security_gate_threshold_low"] = None
+            attrs["security_gate_threshold_none"] = None
+            attrs["security_gate_threshold_unkown"] = None
+
         return super().validate(attrs)
 
 
@@ -115,6 +136,13 @@ class ProductGroupSerializer(ProductCoreSerializer):
             "repository_branch_housekeeping_exempt_branches",
             "notification_ms_teams_webhook",
             "notification_email_to",
+            "security_gate_active",
+            "security_gate_threshold_critical",
+            "security_gate_threshold_high",
+            "security_gate_threshold_medium",
+            "security_gate_threshold_low",
+            "security_gate_threshold_none",
+            "security_gate_threshold_unkown",
         ]
 
     def get_products_count(self, obj: Product) -> int:
@@ -136,6 +164,8 @@ class ProductGroupSerializer(ProductCoreSerializer):
 
 class ProductSerializer(ProductCoreSerializer):
     product_group_name = SerializerMethodField()
+    product_group_repository_branch_housekeeping_active = SerializerMethodField()
+    product_group_security_gate_active = SerializerMethodField()
     repository_default_branch_name = SerializerMethodField()
 
     class Meta:
@@ -147,6 +177,18 @@ class ProductSerializer(ProductCoreSerializer):
             return ""
         return obj.product_group.name
 
+    def get_product_group_repository_branch_housekeeping_active(
+        self, obj: Product
+    ) -> Optional[bool]:
+        if not obj.product_group:
+            return None
+        return obj.product_group.repository_branch_housekeeping_active
+
+    def get_product_group_security_gate_active(self, obj: Product) -> Optional[bool]:
+        if not obj.product_group:
+            return None
+        return obj.product_group.security_gate_active
+
     def get_repository_default_branch_name(self, obj: Product) -> str:
         if not obj.repository_default_branch:
             return ""
@@ -154,28 +196,6 @@ class ProductSerializer(ProductCoreSerializer):
 
     def validate(self, attrs: dict):  # pylint: disable=too-many-branches
         # There are quite a lot of branches, but at least they are not nested too much
-
-        if attrs.get("security_gate_active"):
-            if not attrs.get("security_gate_threshold_critical"):
-                attrs["security_gate_threshold_critical"] = 0
-            if not attrs.get("security_gate_threshold_high"):
-                attrs["security_gate_threshold_high"] = 0
-            if not attrs.get("security_gate_threshold_medium"):
-                attrs["security_gate_threshold_medium"] = 0
-            if not attrs.get("security_gate_threshold_low"):
-                attrs["security_gate_threshold_low"] = 0
-            if not attrs.get("security_gate_threshold_none"):
-                attrs["security_gate_threshold_none"] = 0
-            if not attrs.get("security_gate_threshold_unkown"):
-                attrs["security_gate_threshold_unkown"] = 0
-        else:
-            attrs["security_gate_threshold_critical"] = None
-            attrs["security_gate_threshold_high"] = None
-            attrs["security_gate_threshold_medium"] = None
-            attrs["security_gate_threshold_low"] = None
-            attrs["security_gate_threshold_none"] = None
-            attrs["security_gate_threshold_unkown"] = None
-
         if attrs.get("issue_tracker_type") == Product.ISSUE_TRACKER_GITHUB:
             attrs["issue_tracker_base_url"] = "https://api.github.com"
 

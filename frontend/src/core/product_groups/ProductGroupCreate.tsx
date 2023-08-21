@@ -27,6 +27,45 @@ const ProductGroupCreate = () => {
         if (!data.notification_ms_teams_webhook) {
             data.notification_ms_teams_webhook = "";
         }
+        if (data.security_gate_active) {
+            if (data.security_gate_threshold_critical == "") {
+                data.security_gate_threshold_critical = 0;
+            }
+            if (data.security_gate_threshold_high == "") {
+                data.security_gate_threshold_high = 0;
+            }
+            if (data.security_gate_threshold_medium == "") {
+                data.security_gate_threshold_medium = 0;
+            }
+            if (data.security_gate_threshold_low == "") {
+                data.security_gate_threshold_low = 0;
+            }
+            if (data.security_gate_threshold_none == "") {
+                data.security_gate_threshold_none = 0;
+            }
+            if (data.security_gate_threshold_unkown == "") {
+                data.security_gate_threshold_unkown = 0;
+            }
+        } else {
+            if (data.security_gate_threshold_critical == "") {
+                data.security_gate_threshold_critical = null;
+            }
+            if (data.security_gate_threshold_high == "") {
+                data.security_gate_threshold_high = null;
+            }
+            if (data.security_gate_threshold_medium == "") {
+                data.security_gate_threshold_medium = null;
+            }
+            if (data.security_gate_threshold_low == "") {
+                data.security_gate_threshold_low = null;
+            }
+            if (data.security_gate_threshold_none == "") {
+                data.security_gate_threshold_none = null;
+            }
+            if (data.security_gate_threshold_unkown == "") {
+                data.security_gate_threshold_unkown = null;
+            }
+        }
         return data;
     };
 
@@ -38,7 +77,7 @@ const ProductGroupCreate = () => {
                 <RichTextInput source="description" />
 
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                    Source code repository
+                    Source code repository (for products)
                 </Typography>
                 <NullableBooleanInput
                     source="repository_branch_housekeeping_active"
@@ -75,7 +114,7 @@ const ProductGroupCreate = () => {
                 </FormDataConsumer>
 
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                    Notifications
+                    Notifications (for products)
                 </Typography>
                 <TextInputWide
                     source="notification_email_to"
@@ -87,6 +126,69 @@ const ProductGroupCreate = () => {
                     label="MS Teams"
                     helperText="Webhook URL to send notifications to MS Teams"
                 />
+
+                <Typography variant="h6" sx={{ marginTop: "1em" }}>
+                    Security Gate (for products)
+                </Typography>
+                <NullableBooleanInput
+                    source="security_gate_active"
+                    defaultValue={null}
+                    nullLabel="Standard"
+                    falseLabel="Disabled"
+                    trueLabel="Product group specific"
+                    label="Security gate"
+                    helperText="Shows that a product does not exceed a defined amount of vulnerabilities per severity"
+                />
+                <FormDataConsumer>
+                    {({ formData }) =>
+                        formData.security_gate_active && (
+                            <div>
+                                <NumberInput
+                                    label="Threshold critical"
+                                    source="security_gate_threshold_critical"
+                                    min={0}
+                                    max={999999}
+                                />
+                                <br />
+                                <NumberInput
+                                    label="Threshold high"
+                                    source="security_gate_threshold_high"
+                                    min={0}
+                                    max={999999}
+                                />
+                                <br />
+                                <NumberInput
+                                    label="Threshold medium"
+                                    source="security_gate_threshold_medium"
+                                    min={0}
+                                    max={999999}
+                                />
+                                <br />
+                                <NumberInput
+                                    label="Threshold low"
+                                    source="security_gate_threshold_low"
+                                    min={0}
+                                    max={999999}
+                                />
+                                <br />
+                                <NumberInput
+                                    label="Threshold none"
+                                    source="security_gate_threshold_none"
+                                    min={0}
+                                    max={999999}
+                                />
+                                <br />
+                                <NumberInput
+                                    label="Threshold unkown"
+                                    source="security_gate_threshold_unkown"
+                                    min={0}
+                                    max={999999}
+                                />
+                                <br />
+                            </div>
+                        )
+                    }
+                </FormDataConsumer>
             </SimpleForm>
         </Create>
     );
