@@ -50,7 +50,7 @@
         "not op_mini all"
     ],
     "devDependencies": {
-        "@types/jest": "29.5.3",
+        "@types/jest": "29.5.4",
         "@types/node": "18.17.8",
         "@types/prop-types": "15.7.5",
         "@types/react": "18.2.20",
