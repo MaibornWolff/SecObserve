@@ -30,6 +30,24 @@ class TestSecurityGate(BaseTestCase):
         save_mock.assert_called()
         notification_mock.assert_called_with(product)
 
+    @patch("application.core.models.Product.save")
+    @patch(
+        "application.core.services.security_gate.send_product_security_gate_notification"
+    )
+    def test_check_security_gate_false_and_changed_product_group(
+        self, notification_mock, save_mock
+    ):
+        product_group = Product(is_product_group=True, security_gate_active=False)
+        product = Product(
+            product_group=product_group,
+            security_gate_passed=True,
+            security_gate_active=True,
+        )
+        check_security_gate(product)
+        self.assertIsNone(product.security_gate_passed)
+        save_mock.assert_called()
+        notification_mock.assert_called_with(product)
+
     @patch("application.core.models.Observation.objects.filter")
     def test_check_security_gate_true_critical(self, mock):
         mock.return_value.count.return_value = 2
@@ -42,6 +60,28 @@ class TestSecurityGate(BaseTestCase):
         self.assertFalse(product.security_gate_passed)
 
     @patch("application.core.models.Observation.objects.filter")
+    @patch("application.core.models.Product.save")
+    @patch("application.commons.models.Notification.save")
+    def test_check_security_gate_true_critical_product_group(
+        self, notification_save_mock, product_save_mock, filter_mock
+    ):
+        filter_mock.return_value.count.return_value = 2
+        product_group = Product(
+            is_product_group=True,
+            security_gate_active=True,
+            security_gate_threshold_critical=1,
+        )
+        product = Product(
+            product_group=product_group,
+            security_gate_passed=True,
+            security_gate_active=False,
+        )
+        check_security_gate(product)
+        self.assertFalse(product.security_gate_passed)
+        product_save_mock.assert_called()
+        notification_save_mock.assert_called()
+
+    @patch("application.core.models.Observation.objects.filter")
     def test_check_security_gate_true_high(self, mock):
         mock.return_value.count.return_value = 2
         product = Product(
@@ -52,6 +92,29 @@ class TestSecurityGate(BaseTestCase):
         )
         check_security_gate(product)
         self.assertFalse(product.security_gate_passed)
+
+    @patch("application.core.models.Observation.objects.filter")
+    @patch("application.core.models.Product.save")
+    @patch("application.commons.models.Notification.save")
+    def test_check_security_gate_true_high_product_group(
+        self, notification_save_mock, product_save_mock, filter_mock
+    ):
+        filter_mock.return_value.count.return_value = 2
+        product_group = Product(
+            is_product_group=True,
+            security_gate_active=True,
+            security_gate_threshold_critical=3,
+            security_gate_threshold_high=1,
+        )
+        product = Product(
+            product_group=product_group,
+            security_gate_passed=True,
+            security_gate_active=False,
+        )
+        check_security_gate(product)
+        self.assertFalse(product.security_gate_passed)
+        product_save_mock.assert_called()
+        notification_save_mock.assert_called()
 
     @patch("application.core.models.Observation.objects.filter")
     def test_check_security_gate_true_medium(self, mock):
@@ -67,6 +130,30 @@ class TestSecurityGate(BaseTestCase):
         self.assertFalse(product.security_gate_passed)
 
     @patch("application.core.models.Observation.objects.filter")
+    @patch("application.core.models.Product.save")
+    @patch("application.commons.models.Notification.save")
+    def test_check_security_gate_true_medium_product_group(
+        self, notification_save_mock, product_save_mock, filter_mock
+    ):
+        filter_mock.return_value.count.return_value = 2
+        product_group = Product(
+            is_product_group=True,
+            security_gate_active=True,
+            security_gate_threshold_critical=3,
+            security_gate_threshold_high=3,
+            security_gate_threshold_medium=1,
+        )
+        product = Product(
+            product_group=product_group,
+            security_gate_passed=True,
+            security_gate_active=False,
+        )
+        check_security_gate(product)
+        self.assertFalse(product.security_gate_passed)
+        product_save_mock.assert_called()
+        notification_save_mock.assert_called()
+
+    @patch("application.core.models.Observation.objects.filter")
     def test_check_security_gate_true_low(self, mock):
         mock.return_value.count.return_value = 2
         product = Product(
@@ -79,6 +166,31 @@ class TestSecurityGate(BaseTestCase):
         )
         check_security_gate(product)
         self.assertFalse(product.security_gate_passed)
+
+    @patch("application.core.models.Observation.objects.filter")
+    @patch("application.core.models.Product.save")
+    @patch("application.commons.models.Notification.save")
+    def test_check_security_gate_true_low_product_group(
+        self, notification_save_mock, product_save_mock, filter_mock
+    ):
+        filter_mock.return_value.count.return_value = 2
+        product_group = Product(
+            is_product_group=True,
+            security_gate_active=True,
+            security_gate_threshold_critical=3,
+            security_gate_threshold_high=3,
+            security_gate_threshold_medium=3,
+            security_gate_threshold_low=1,
+        )
+        product = Product(
+            product_group=product_group,
+            security_gate_passed=True,
+            security_gate_active=False,
+        )
+        check_security_gate(product)
+        self.assertFalse(product.security_gate_passed)
+        product_save_mock.assert_called()
+        notification_save_mock.assert_called()
 
     @patch("application.core.models.Observation.objects.filter")
     def test_check_security_gate_true_none(self, mock):
@@ -96,6 +208,32 @@ class TestSecurityGate(BaseTestCase):
         self.assertFalse(product.security_gate_passed)
 
     @patch("application.core.models.Observation.objects.filter")
+    @patch("application.core.models.Product.save")
+    @patch("application.commons.models.Notification.save")
+    def test_check_security_gate_true_none_product_group(
+        self, notification_save_mock, product_save_mock, filter_mock
+    ):
+        filter_mock.return_value.count.return_value = 2
+        product_group = Product(
+            is_product_group=True,
+            security_gate_active=True,
+            security_gate_threshold_critical=3,
+            security_gate_threshold_high=3,
+            security_gate_threshold_medium=3,
+            security_gate_threshold_low=3,
+            security_gate_threshold_none=1,
+        )
+        product = Product(
+            product_group=product_group,
+            security_gate_passed=True,
+            security_gate_active=False,
+        )
+        check_security_gate(product)
+        self.assertFalse(product.security_gate_passed)
+        product_save_mock.assert_called()
+        notification_save_mock.assert_called()
+
+    @patch("application.core.models.Observation.objects.filter")
     def test_check_security_gate_true_unkown(self, mock):
         mock.return_value.count.return_value = 2
         product = Product(
@@ -110,6 +248,33 @@ class TestSecurityGate(BaseTestCase):
         )
         check_security_gate(product)
         self.assertFalse(product.security_gate_passed)
+
+    @patch("application.core.models.Observation.objects.filter")
+    @patch("application.core.models.Product.save")
+    @patch("application.commons.models.Notification.save")
+    def test_check_security_gate_true_unkown_product_group(
+        self, notification_save_mock, product_save_mock, filter_mock
+    ):
+        filter_mock.return_value.count.return_value = 2
+        product_group = Product(
+            is_product_group=True,
+            security_gate_active=True,
+            security_gate_threshold_critical=3,
+            security_gate_threshold_high=3,
+            security_gate_threshold_medium=3,
+            security_gate_threshold_low=3,
+            security_gate_threshold_none=3,
+            security_gate_threshold_unkown=1,
+        )
+        product = Product(
+            product_group=product_group,
+            security_gate_passed=True,
+            security_gate_active=False,
+        )
+        check_security_gate(product)
+        self.assertFalse(product.security_gate_passed)
+        product_save_mock.assert_called()
+        notification_save_mock.assert_called()
 
     @patch("application.core.models.Observation.objects.filter")
     def test_check_security_gate_true_no_match(self, mock):
