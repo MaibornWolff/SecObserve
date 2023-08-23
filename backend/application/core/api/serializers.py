@@ -485,7 +485,9 @@ class ObservationSerializer(ModelSerializer):
         issue_url = None
 
         if observation.issue_tracker_issue_id:
-            issue_tracker = issue_tracker_factory(observation.product)
+            issue_tracker = issue_tracker_factory(
+                observation.product, with_communication=False
+            )
             issue_url = issue_tracker.get_frontend_issue_url(
                 observation.product, observation.issue_tracker_issue_id
             )
