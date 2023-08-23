@@ -110,7 +110,7 @@ class JiraIssueTracker(BaseIssueTracker):
     def _get_description(self, observation: Observation) -> str:
         description = observation.description
         description = description.replace("**", "*")
-        description = description.replace("```", "")
+        description = description.replace("```", "{code}")
 
         if observation.branch:
             description += f"\n\n*Branch:* {observation.branch.name}"
