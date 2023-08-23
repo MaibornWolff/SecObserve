@@ -12,11 +12,15 @@ from application.issue_tracker.issue_trackers.base_issue_tracker import (
 
 
 class JiraIssueTracker(BaseIssueTracker):
-    def __init__(self, product: Product) -> None:
-        self.jira = JIRA(
-            server=product.issue_tracker_base_url,
-            basic_auth=(product.issue_tracker_username, product.issue_tracker_api_key),
-        )
+    def __init__(self, product: Product, with_communication: bool = True) -> None:
+        if with_communication:
+            self.jira = JIRA(
+                server=product.issue_tracker_base_url,
+                basic_auth=(
+                    product.issue_tracker_username,
+                    product.issue_tracker_api_key,
+                ),
+            )
 
     def create_issue(self, observation: Observation) -> None:
         labels = observation.product.issue_tracker_labels.split(",")

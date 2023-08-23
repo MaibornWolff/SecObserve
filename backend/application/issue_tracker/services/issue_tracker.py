@@ -71,7 +71,9 @@ def push_deleted_observation_to_issue_tracker(
         handle_task_exception(e, user)
 
 
-def issue_tracker_factory(product: Product) -> BaseIssueTracker:
+def issue_tracker_factory(
+    product: Product, with_communication: bool = True
+) -> BaseIssueTracker:
     if product.issue_tracker_type == Product.ISSUE_TRACKER_GITHUB:
         return GitHubIssueTracker()
 
@@ -79,6 +81,6 @@ def issue_tracker_factory(product: Product) -> BaseIssueTracker:
         return GitLabIssueTracker()
 
     if product.issue_tracker_type == Product.ISSUE_TRACKER_JIRA:
-        return JiraIssueTracker(product=product)
+        return JiraIssueTracker(product=product, with_communication=with_communication)
 
     raise ValueError(f"Unknown issue tracker type: {product.issue_tracker_type}")
