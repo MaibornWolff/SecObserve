@@ -50,8 +50,11 @@ COPY ./backend ${APP_HOME}
 # use prod settings
 COPY ./backend/config/settings/prod.py ${APP_HOME}/config/settings/dist.py
 
-# certificate for MS Azure managed MySQL database
+# certificates for MS Azure managed MySQL database
+# single server
 COPY ./docker/backend/prod/database/BaltimoreCyberTrustRoot_combined.crt.pem ${APP_HOME}/BaltimoreCyberTrustRoot_combined.crt.pem
+# flexible server
+COPY ./docker/backend/prod/database/DigiCertGlobalRootCA.crt.pem ${APP_HOME}/DigiCertGlobalRootCA.crt.pem
 
 RUN addgroup -g 1001 -S ${group} \
     && adduser -u 1001 -S ${user} -G ${group} \
