@@ -82,64 +82,7 @@ class ProductCoreSerializer(ModelSerializer):
 
         return []
 
-
-class ProductGroupSerializer(ProductCoreSerializer):
-    products_count = SerializerMethodField()
-
-    class Meta:
-        model = Product
-        fields = [
-            "id",
-            "name",
-            "description",
-            "products_count",
-            "permissions",
-            "open_critical_observation_count",
-            "open_high_observation_count",
-            "open_medium_observation_count",
-            "open_low_observation_count",
-            "open_none_observation_count",
-            "open_unkown_observation_count",
-        ]
-
-    def get_products_count(self, obj: Product) -> int:
-        return obj.products.count()
-
-    def create(self, validated_data: dict) -> Product:
-        product_group = super().create(validated_data)
-        product_group.is_product_group = True
-        product_group.save()
-        return product_group
-
-    def update(self, instance: Product, validated_data: dict) -> Product:
-        product_group = super().update(instance, validated_data)
-        if product_group.is_product_group is False:
-            product_group.is_product_group = True
-            product_group.save()
-        return product_group
-
-
-class ProductSerializer(ProductCoreSerializer):
-    product_group_name = SerializerMethodField()
-    repository_default_branch_name = SerializerMethodField()
-
-    class Meta:
-        model = Product
-        exclude = ["is_product_group"]
-
-    def get_product_group_name(self, obj: Product) -> str:
-        if not obj.product_group:
-            return ""
-        return obj.product_group.name
-
-    def get_repository_default_branch_name(self, obj: Product) -> str:
-        if not obj.repository_default_branch:
-            return ""
-        return obj.repository_default_branch.name
-
-    def validate(self, attrs: dict):  # pylint: disable=too-many-branches
-        # There are quite a lot of branches, but at least they are not nested too much
-
+    def validate(self, attrs: dict):
         if attrs.get("repository_branch_housekeeping_active"):
             if not attrs.get("repository_branch_housekeeping_keep_inactive_days"):
                 attrs["repository_branch_housekeeping_keep_inactive_days"] = 1
@@ -168,6 +111,91 @@ class ProductSerializer(ProductCoreSerializer):
             attrs["security_gate_threshold_none"] = None
             attrs["security_gate_threshold_unkown"] = None
 
+        return super().validate(attrs)
+
+
+class ProductGroupSerializer(ProductCoreSerializer):
+    products_count = SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = [
+            "id",
+            "name",
+            "description",
+            "products_count",
+            "permissions",
+            "open_critical_observation_count",
+            "open_high_observation_count",
+            "open_medium_observation_count",
+            "open_low_observation_count",
+            "open_none_observation_count",
+            "open_unkown_observation_count",
+            "repository_branch_housekeeping_active",
+            "repository_branch_housekeeping_keep_inactive_days",
+            "repository_branch_housekeeping_exempt_branches",
+            "notification_ms_teams_webhook",
+            "notification_email_to",
+            "security_gate_active",
+            "security_gate_threshold_critical",
+            "security_gate_threshold_high",
+            "security_gate_threshold_medium",
+            "security_gate_threshold_low",
+            "security_gate_threshold_none",
+            "security_gate_threshold_unkown",
+        ]
+
+    def get_products_count(self, obj: Product) -> int:
+        return obj.products.count()
+
+    def create(self, validated_data: dict) -> Product:
+        product_group = super().create(validated_data)
+        product_group.is_product_group = True
+        product_group.save()
+        return product_group
+
+    def update(self, instance: Product, validated_data: dict) -> Product:
+        product_group = super().update(instance, validated_data)
+        if product_group.is_product_group is False:
+            product_group.is_product_group = True
+            product_group.save()
+        return product_group
+
+
+class ProductSerializer(ProductCoreSerializer):
+    product_group_name = SerializerMethodField()
+    product_group_repository_branch_housekeeping_active = SerializerMethodField()
+    product_group_security_gate_active = SerializerMethodField()
+    repository_default_branch_name = SerializerMethodField()
+
+    class Meta:
+        model = Product
+        exclude = ["is_product_group"]
+
+    def get_product_group_name(self, obj: Product) -> str:
+        if not obj.product_group:
+            return ""
+        return obj.product_group.name
+
+    def get_product_group_repository_branch_housekeeping_active(
+        self, obj: Product
+    ) -> Optional[bool]:
+        if not obj.product_group:
+            return None
+        return obj.product_group.repository_branch_housekeeping_active
+
+    def get_product_group_security_gate_active(self, obj: Product) -> Optional[bool]:
+        if not obj.product_group:
+            return None
+        return obj.product_group.security_gate_active
+
+    def get_repository_default_branch_name(self, obj: Product) -> str:
+        if not obj.repository_default_branch:
+            return ""
+        return obj.repository_default_branch.name
+
+    def validate(self, attrs: dict):  # pylint: disable=too-many-branches
+        # There are quite a lot of branches, but at least they are not nested too much
         if attrs.get("issue_tracker_type") == Product.ISSUE_TRACKER_GITHUB:
             attrs["issue_tracker_base_url"] = "https://api.github.com"
 
@@ -457,7 +485,9 @@ class ObservationSerializer(ModelSerializer):
         issue_url = None
 
         if observation.issue_tracker_issue_id:
-            issue_tracker = issue_tracker_factory(observation.product)
+            issue_tracker = issue_tracker_factory(
+                observation.product, with_communication=False
+            )
             issue_url = issue_tracker.get_frontend_issue_url(
                 observation.product, observation.issue_tracker_issue_id
             )

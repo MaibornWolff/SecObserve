@@ -165,6 +165,7 @@ const ProductCreate = () => {
                         )
                     }
                 </FormDataConsumer>
+
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>
                     Notifications
                 </Typography>

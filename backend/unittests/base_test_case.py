@@ -25,6 +25,7 @@ class BaseTestCase(TestCase):
         self.user_admin = User(username="user_admin@example.com", is_superuser=True)
 
         self.parser_1 = Parser(name="parser_1")
+        self.product_group_1 = Product(name="product_group_1")
         self.product_1 = Product(name="product_1")
         self.observation_1 = Observation(title="observation_1", product=self.product_1)
         self.observation_log_1 = Observation_Log(

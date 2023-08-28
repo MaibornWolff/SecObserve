@@ -8,6 +8,7 @@ from rest_framework.serializers import (
 )
 
 from application.commons.models import Notification
+from application.commons.services.global_request import get_current_user
 
 
 class VersionSerializer(Serializer):
@@ -15,6 +16,7 @@ class VersionSerializer(Serializer):
 
 
 class NotificationSerializer(ModelSerializer):
+    message = SerializerMethodField()
     product_name = SerializerMethodField()
     observation_title = SerializerMethodField()
     user_full_name = SerializerMethodField()
@@ -23,7 +25,20 @@ class NotificationSerializer(ModelSerializer):
         model = Notification
         fields = "__all__"
 
+    def get_message(self, obj: Notification):
+        if not obj.message:
+            return obj.message
+
+        user = get_current_user()
+        if user and user.is_superuser:
+            return obj.message
+
+        return "..."
+
     def get_product_name(self, obj: Notification):
+        if obj.product:
+            return obj.product.name
+
         if obj.observation:
             return obj.observation.product.name
 

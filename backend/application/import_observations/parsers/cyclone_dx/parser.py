@@ -158,8 +158,13 @@ class CycloneDXParser(BaseParser, BaseFileParser):
 
         component_type = data.get("metadata", {}).get("component", {}).get("type")
         component_name = data.get("metadata", {}).get("component", {}).get("name", "")
+        component_version = (
+            data.get("metadata", {}).get("component", {}).get("version", "")
+        )
         if component_type == "container":
             container = component_name
+            if component_version and ":" not in container:
+                container += f":{component_version}"
         if component_type == "file":
             file = component_name
 

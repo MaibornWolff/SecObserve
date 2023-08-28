@@ -50,12 +50,13 @@ class TestJiraIssueTracker(BaseTestCase):
     @patch("application.core.models.Observation.save")
     def test_create_issue(self, save_mock, base_url_mock, create_issue_mock, jira_mock):
         self.observation_1.product.issue_tracker_issue_type = "Vulnerability"
+        self.observation_1.description = "description_1\n\n**Snippet**: ```codeblock```"
         base_url_mock.return_value = "https://secobserve.com/"
         create_issue_mock.return_value = JiraIssue(
             key="jira_issue_1",
             fields=JiraIssueFields(
                 summary="title_1",
-                description="description_1",
+                description="description_1\n\n*Snippet*: {code}codeblock{code}\n\n*Branch:* branch_1\n\n*SecObserve observation:* https://secobserve.com/#/observations/1/show",
                 labels=["label_1", "label_2"],
                 status="Open",
             ),
@@ -67,7 +68,7 @@ class TestJiraIssueTracker(BaseTestCase):
         create_issue_mock.assert_called_once_with(
             project="jira_project_1",
             summary='Critical vulnerability: "observation_1"',
-            description="description_1\n\n*Branch:* branch_1\n\n*SecObserve observation:* https://secobserve.com/#/observations/1/show",
+            description="description_1\n\n*Snippet*: {code}codeblock{code}\n\n*Branch:* branch_1\n\n*SecObserve observation:* https://secobserve.com/#/observations/1/show",
             labels=["label_1", "label_2"],
             issuetype="Vulnerability",
         )

@@ -40,6 +40,12 @@ export const ISSUE_TRACKER_TYPE_CHOICES = [
 export interface ProductGroup extends RaRecord {
     id: Identifier;
     name: string;
+    description: string;
+    repository_branch_housekeeping_active: boolean;
+    repository_branch_housekeeping_keep_inactive_days: number;
+    repository_branch_housekeeping_exempt_branches: string;
+    notification_ms_teams_webhook: string;
+    notification_email_to: string;
 }
 
 export interface Parser extends RaRecord {

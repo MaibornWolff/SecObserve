@@ -116,7 +116,11 @@ const ProductShow = () => {
                                             <TextField source="name" />
                                         </ReferenceField>
                                     )}
-                                    {product.repository_branch_housekeeping_active != null && (
+                                    {((!product.product_group &&
+                                        product.repository_branch_housekeeping_active != null) ||
+                                        (product.product_group &&
+                                            product.product_group_repository_branch_housekeeping_active == null &&
+                                            product.repository_branch_housekeeping_active != null)) && (
                                         <div>
                                             <Labeled label="Housekeeping">
                                                 <BooleanField
@@ -139,6 +143,16 @@ const ProductShow = () => {
                                             )}
                                         </div>
                                     )}
+                                    {product.product_group &&
+                                        product.product_group_repository_branch_housekeeping_active != null && (
+                                            <Labeled label="Housekeeping (from product group)">
+                                                <BooleanField
+                                                    source="product_group_repository_branch_housekeeping_active"
+                                                    valueLabelFalse="Disabled"
+                                                    valueLabelTrue="Product group specific"
+                                                />
+                                            </Labeled>
+                                        )}
 
                                     {(product.notification_email_to || product.notification_ms_teams_webhook) && (
                                         <Typography variant="h6" sx={{ marginTop: "1em" }}>
@@ -152,12 +166,14 @@ const ProductShow = () => {
                                         <TextField source="notification_ms_teams_webhook" label="MS Teams" />
                                     )}
 
-                                    {product.security_gate_active != null && (
+                                    {((!product.product_group && product.security_gate_active != null) ||
+                                        (product.product_group &&
+                                            product.product_group_security_gate_active == null &&
+                                            product.security_gate_active != null)) && (
                                         <div>
                                             <Typography variant="h6" sx={{ marginTop: "1em" }}>
                                                 Security Gate
                                             </Typography>
-                                            <br />
                                             <Labeled label="Security gate">
                                                 <BooleanField
                                                     source="security_gate_active"
@@ -188,11 +204,25 @@ const ProductShow = () => {
                                                     </Labeled>
                                                     <br />
                                                     <Labeled>
-                                                        <NumberField source="security_gate_unkown" />
+                                                        <NumberField source="security_gate_threshold_unkown" />
                                                     </Labeled>
                                                     <br />
                                                 </div>
                                             )}
+                                        </div>
+                                    )}
+                                    {product.product_group && product.product_group_security_gate_active != null && (
+                                        <div>
+                                            <Typography variant="h6" sx={{ marginTop: "1em" }}>
+                                                Security Gate
+                                            </Typography>
+                                            <Labeled label="Security gate (from product group)">
+                                                <BooleanField
+                                                    source="product_group_security_gate_active"
+                                                    valueLabelFalse="Disabled"
+                                                    valueLabelTrue="Product group specific"
+                                                />
+                                            </Labeled>
                                         </div>
                                     )}
 

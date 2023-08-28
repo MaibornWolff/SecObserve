@@ -29,12 +29,13 @@ def send_product_security_gate_notification(product: Product) -> None:
     else:
         security_gate_status = "Failed"
 
-    email_to_adresses = _get_email_to_adresses(product.notification_email_to)
-    if email_to_adresses and config.EMAIL_FROM:
-        for notification_email_to in email_to_adresses:
-            first_name = _get_first_name(notification_email_to)
+    notification_email_to = _get_notification_email_to(product)
+    email_to_addresses = _get_email_to_addresses(notification_email_to)
+    if email_to_addresses and config.EMAIL_FROM:
+        for email_to_address in email_to_addresses:
+            first_name = _get_first_name(email_to_address)
             _send_email_notification(
-                notification_email_to,
+                email_to_address,
                 f"Security gate for {product.name} has changed to {security_gate_status}",
                 "email_product_security_gate.tpl",
                 product=product,
@@ -43,9 +44,10 @@ def send_product_security_gate_notification(product: Product) -> None:
                 first_name=first_name,
             )
 
-    if product.notification_ms_teams_webhook:
+    notification_ms_teams_webhook = _get_notification_ms_teams_webhook(product)
+    if notification_ms_teams_webhook:
         _send_msteams_notification(
-            product.notification_ms_teams_webhook,
+            notification_ms_teams_webhook,
             "msteams_product_security_gate.tpl",
             product=product,
             security_gate_status=security_gate_status,
@@ -62,13 +64,13 @@ def send_product_security_gate_notification(product: Product) -> None:
 
 def send_exception_notification(exception: Exception) -> None:
     if _ratelimit_exception(exception):
-        email_to_adresses = _get_email_to_adresses(config.EXCEPTION_EMAIL_TO)
+        email_to_adresses = _get_email_to_addresses(config.EXCEPTION_EMAIL_TO)
         if email_to_adresses and config.EMAIL_FROM:
             for notification_email_to in email_to_adresses:
                 first_name = _get_first_name(notification_email_to)
                 _send_email_notification(
                     notification_email_to,
-                    f"Exception {get_classname(exception)} has occured",
+                    f'Exception "{get_classname(exception)}" has occured',
                     "email_exception.tpl",
                     exception_class=get_classname(exception),
                     exception_message=str(exception),
@@ -88,7 +90,7 @@ def send_exception_notification(exception: Exception) -> None:
             )
 
         Notification.objects.create(
-            name=f"Exception {get_classname(exception)} has occured",
+            name=f'Exception "{get_classname(exception)}" has occured',
             message=str(exception),
             user=get_current_user(),
             type=Notification.TYPE_EXCEPTION,
@@ -102,13 +104,13 @@ def send_task_exception_notification(
     exception: Exception,
 ) -> None:
     if _ratelimit_exception(exception, function, arguments):
-        email_to_adresses = _get_email_to_adresses(config.EXCEPTION_EMAIL_TO)
+        email_to_adresses = _get_email_to_addresses(config.EXCEPTION_EMAIL_TO)
         if email_to_adresses and config.EMAIL_FROM:
             for notification_email_to in email_to_adresses:
                 first_name = _get_first_name(notification_email_to)
                 _send_email_notification(
                     notification_email_to,
-                    f"Exception {get_classname(exception)} has occured in background task",
+                    f'Exception "{get_classname(exception)}" has occured in background task',
                     "email_task_exception.tpl",
                     function=function,
                     arguments=str(arguments),
@@ -141,7 +143,7 @@ def send_task_exception_notification(
                 product = observation.product
 
         Notification.objects.create(
-            name="Error in background task",
+            name=f'Exception "{get_classname(exception)}" has occured',
             message=str(exception),
             function=str(function),
             arguments=_get_arguments_string(arguments),
@@ -234,7 +236,29 @@ def _ratelimit_exception(
     return True
 
 
-def _get_email_to_adresses(notification_email_to: str) -> Optional[list[str]]:
+def _get_notification_email_to(product: Product) -> Optional[str]:
+    if product.notification_email_to:
+        return product.notification_email_to
+
+    if product.product_group and product.product_group.notification_email_to:
+        return product.product_group.notification_email_to
+
+    return None
+
+
+def _get_notification_ms_teams_webhook(product: Product) -> Optional[str]:
+    if product.notification_ms_teams_webhook:
+        return product.notification_ms_teams_webhook
+
+    if product.product_group and product.product_group.notification_ms_teams_webhook:
+        return product.product_group.notification_ms_teams_webhook
+
+    return None
+
+
+def _get_email_to_addresses(
+    notification_email_to: Optional[str],
+) -> Optional[list[str]]:
     if not notification_email_to:
         return None
 

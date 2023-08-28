@@ -14,7 +14,11 @@ def product_post_save(  # pylint: disable=unused-argument
 ) -> None:
     # sender is needed according to Django documentation
     if not created:
-        check_security_gate(instance)
+        if instance.is_product_group:
+            for product in instance.products.all():
+                check_security_gate(product)
+        else:
+            check_security_gate(instance)
     else:
         user = get_current_user()
         if user:

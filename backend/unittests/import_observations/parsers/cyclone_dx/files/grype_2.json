@@ -1,0 +1,94 @@
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.4.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.4",
+  "serialNumber": "urn:uuid:c49146f5-ba0e-424c-8dad-3b1eb7ee5450",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2023-08-12T15:31:56Z",
+    "tools": [
+      {
+        "vendor": "anchore",
+        "name": "grype",
+        "version": "0.65.1"
+      }
+    ],
+    "component": {
+      "bom-ref": "b794be65a08c5158",
+      "type": "container",
+      "name": "example/example-backend",
+      "version": "dev"
+    }
+  },
+  "components": [
+    {
+      "bom-ref": "pkg:pypi/pip@23.1.2?package-id=3ae39f089d483c6d",
+      "type": "library",
+      "author": "The pip developers <distutils-sig@python.org>",
+      "name": "pip",
+      "version": "23.1.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "cpe": "cpe:2.3:a:pip_developers_project:python-pip:23.1.2:*:*:*:*:*:*:*",
+      "purl": "pkg:pypi/pip@23.1.2"
+    }
+  ],
+  "vulnerabilities": [
+    {
+      "bom-ref": "urn:uuid:7f6adff9-44a5-4f7a-9c98-1f24f6293677",
+      "id": "CVE-2018-20225",
+      "source": {
+        "name": "nvd-cpe",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2018-20225"
+      },
+      "references": [
+        {
+          "id": "CVE-2018-20225",
+          "source": {
+            "name": "nvd-cpe",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2018-20225"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "score": 6.8,
+          "severity": "high",
+          "method": "CVSSv2",
+          "vector": "AV:N/AC:M/Au:N/C:P/I:P/A:P"
+        },
+        {
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        }
+      ],
+      "description": "** DISPUTED ** An issue was discovered in pip (all versions) because it installs the version with the highest version number, even if the user had intended to obtain a private package from a private index. This only affects use of the --extra-index-url option, and exploitation requires that the package does not already exist in the public index (and thus the attacker can put the package there with an arbitrary version number). NOTE: it has been reported that this is intended functionality and the user is responsible for using --extra-index-url securely.",
+      "advisories": [
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=1835736"
+        },
+        {
+          "url": "https://cowlicks.website/posts/arbitrary-code-execution-from-pips-extra-index-url.html"
+        },
+        {
+          "url": "https://lists.apache.org/thread.html/rb1adce798445facd032870d644eb39c4baaf9c4a7dd5477d12bb6ab2@%3Cgithub.arrow.apache.org%3E"
+        },
+        {
+          "url": "https://pip.pypa.io/en/stable/news/"
+        }
+      ],
+      "affects": [
+        {
+          "ref": "pkg:pypi/pip@23.1.2?package-id=3ae39f089d483c6d"
+        }
+      ]
+    }
+  ]
+}

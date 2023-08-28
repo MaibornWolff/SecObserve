@@ -17,22 +17,41 @@ def delete_inactive_branches() -> None:
 
 
 def delete_inactive_branches_for_product(product: Product) -> None:
-    if product.repository_branch_housekeeping_active is False:
-        # Branch housekeeping is disabled for this product
-        return
+    product_group_specific = False
+    if product.product_group:
+        product_group: Product = product.product_group
+        if product_group.repository_branch_housekeeping_active is False:
+            # Branch housekeeping is disabled for this product group
+            return
+        if product_group.repository_branch_housekeeping_active is True:
+            # Branch housekeeping is product group specific
+            product_group_specific = True
+            keep_inactive_days = (
+                product_group.repository_branch_housekeeping_keep_inactive_days
+            )
+            exempt_branches = (
+                product_group.repository_branch_housekeeping_exempt_branches
+            )
 
-    if product.repository_branch_housekeeping_active is True:
-        # Branch housekeeping is product specific
-        keep_inactive_days = product.repository_branch_housekeeping_keep_inactive_days
-        exempt_branches = product.repository_branch_housekeeping_exempt_branches
-    else:
-        # Branch housekeeping is standard
-        if not config.BRANCH_HOUSEKEEPING_ACTIVE:
-            # Branch housekeeping is disabled
+    if not product_group_specific:
+        if product.repository_branch_housekeeping_active is False:
+            # Branch housekeeping is disabled for this product
             return
 
-        keep_inactive_days = config.BRANCH_HOUSEKEEPING_KEEP_INACTIVE_DAYS
-        exempt_branches = config.BRANCH_HOUSEKEEPING_EXEMPT_BRANCHES
+        if product.repository_branch_housekeeping_active is True:
+            # Branch housekeeping is product specific
+            keep_inactive_days = (
+                product.repository_branch_housekeeping_keep_inactive_days
+            )
+            exempt_branches = product.repository_branch_housekeeping_exempt_branches
+        else:
+            # Branch housekeeping is standard
+            if not config.BRANCH_HOUSEKEEPING_ACTIVE:
+                # Branch housekeeping is disabled
+                return
+
+            keep_inactive_days = config.BRANCH_HOUSEKEEPING_KEEP_INACTIVE_DAYS
+            exempt_branches = config.BRANCH_HOUSEKEEPING_EXEMPT_BRANCHES
 
     if not keep_inactive_days:
         # Branch housekeeping has no inactive days configured

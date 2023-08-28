@@ -3,7 +3,10 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import TokenIcon from "@mui/icons-material/Token";
 import { Stack, Typography } from "@mui/material";
 import {
+    BooleanField,
     EditButton,
+    Labeled,
+    NumberField,
     RichTextField,
     Show,
     SimpleShowLayout,
@@ -63,6 +66,91 @@ const ProductGroupShow = () => {
                                     <Typography variant="h6">Product Group</Typography>
                                     <TextField source="name" />
                                     {product_group.description && <RichTextField source="description" />}
+
+                                    {product_group.repository_branch_housekeeping_active != null && (
+                                        <Typography variant="h6" sx={{ marginTop: "1em" }}>
+                                            Source code repository (for products)
+                                        </Typography>
+                                    )}
+                                    {product_group.repository_branch_housekeeping_active != null && (
+                                        <div>
+                                            <Labeled label="Housekeeping">
+                                                <BooleanField
+                                                    source="repository_branch_housekeeping_active"
+                                                    valueLabelFalse="Disabled"
+                                                    valueLabelTrue="Product group specific"
+                                                />
+                                            </Labeled>
+                                            {product_group.repository_branch_housekeeping_active == true && (
+                                                <div>
+                                                    <Labeled label="Keep inactive">
+                                                        <NumberField source="repository_branch_housekeeping_keep_inactive_days" />
+                                                    </Labeled>
+                                                    <br />
+                                                    <Labeled label="Exempt branches">
+                                                        <TextField source="repository_branch_housekeeping_exempt_branches" />
+                                                    </Labeled>
+                                                    <br />
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {(product_group.notification_email_to ||
+                                        product_group.notification_ms_teams_webhook) && (
+                                        <Typography variant="h6" sx={{ marginTop: "1em" }}>
+                                            Notifications (for products)
+                                        </Typography>
+                                    )}
+                                    {product_group.notification_email_to && (
+                                        <TextField source="notification_email_to" label="Email" />
+                                    )}
+                                    {product_group.notification_ms_teams_webhook && (
+                                        <TextField source="notification_ms_teams_webhook" label="MS Teams" />
+                                    )}
+
+                                    {product_group.security_gate_active != null && (
+                                        <div>
+                                            <Typography variant="h6" sx={{ marginTop: "1em" }}>
+                                                Security Gate (for products)
+                                            </Typography>
+                                            <Labeled label="Security gate">
+                                                <BooleanField
+                                                    source="security_gate_active"
+                                                    valueLabelFalse="Disabled"
+                                                    valueLabelTrue="Product group specific"
+                                                />
+                                            </Labeled>
+                                            {product_group.security_gate_active == true && (
+                                                <div>
+                                                    <Labeled>
+                                                        <NumberField source="security_gate_threshold_critical" />
+                                                    </Labeled>
+                                                    <br />
+                                                    <Labeled>
+                                                        <NumberField source="security_gate_threshold_high" />
+                                                    </Labeled>
+                                                    <br />
+                                                    <Labeled>
+                                                        <NumberField source="security_gate_threshold_medium" />
+                                                    </Labeled>
+                                                    <br />
+                                                    <Labeled>
+                                                        <NumberField source="security_gate_threshold_low" />
+                                                    </Labeled>
+                                                    <br />
+                                                    <Labeled>
+                                                        <NumberField source="security_gate_threshold_none" />
+                                                    </Labeled>
+                                                    <br />
+                                                    <Labeled>
+                                                        <NumberField source="security_gate_unkown" />
+                                                    </Labeled>
+                                                    <br />
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
                                 </SimpleShowLayout>
                             </Tab>
                             <Tab label="Products" path="products" icon={<product.icon />}>
