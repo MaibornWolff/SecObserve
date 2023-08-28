@@ -10,6 +10,12 @@
 
 * There will be specific upgrade instructions if necessary, e.g. when there are new configuration parameters.
 
+## Release 0.9.9
+
+**Breaking changes**
+
+* The value of the configuration parameter `MYSQL_AZURE` has been changed from `true` to `flexible` or `single`, depending on the type of Azure Database for MySQL. See [Configuration](configuration.md) for details.
+
 ## Release 0.9.1
 
 **Breaking changes**
