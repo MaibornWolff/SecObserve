@@ -19,7 +19,7 @@ services:
 
   cypress:
     # the Docker image to use from https://github.com/cypress-io/cypress-docker-images
-    image: "cypress/included:12.17.4"
+    image: "cypress/included:13.0.0"
     depends_on:
       - frontend
     environment:
