@@ -65,7 +65,7 @@
         "eslint-plugin-react-hooks": "4.6.0",
         "@microsoft/eslint-formatter-sarif": "3.0.0",
         "react-scripts": "5.0.1",
-        "cypress": "12.17.4",
+        "cypress": "13.0.0",
         "prettier": "3.0.3",
         "@trivago/prettier-plugin-sort-imports": "4.2.0",
         "@babel/plugin-proposal-private-property-in-object": "7.21.11"
