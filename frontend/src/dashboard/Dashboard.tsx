@@ -6,8 +6,14 @@ import MetricsHeader from "../metrics/MetricsHeader";
 import MetricsSeveritiesCurrent from "../metrics/MetricsSeveritiesCurrent";
 import MetricsSeveritiesTimeline from "../metrics/MetricsSeveritiesTimeLine";
 import MetricsStatusCurrent from "../metrics/MetricsStatusCurrent";
+import { useAuth } from "react-oidc-context";
 
 const Dashboard = () => {
+    const auth = useAuth();
+    console.log("------------------------------------------")
+    console.log(auth);
+    console.log("------------------------------------------")
+
     return (
         <React.Fragment>
             <MetricsHeader repository_default_branch={undefined} />

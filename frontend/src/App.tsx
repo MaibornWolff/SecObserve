@@ -17,13 +17,25 @@ import product_groups from "./core/product_groups";
 import products from "./core/products";
 import { Dashboard } from "./dashboard";
 import general_rules from "./rules/general_rules";
+import { AuthProvider } from "react-oidc-context";
+import { WebStorageStateStore } from "oidc-client-ts";
 
 const i18nProvider = polyglotI18nProvider(() => {
     return englishMessages;
 }, "en");
 
+const oidcConfig = {
+    userStore: new WebStorageStateStore({ store: window.localStorage }),
+    authority: "https://login.microsoftonline.com/b8d7ad48-53f4-4c29-a71c-0717f0d3a5d0",
+    client_id: "46e202b4-dd0f-4bf3-897c-cfdf6b1547a9",
+    redirect_uri: "http://localhost:3000",
+    scope: "46e202b4-dd0f-4bf3-897c-cfdf6b1547a9/.default",
+  };
+  
+
 const App = () => {
     return (
+        <AuthProvider {...oidcConfig}>
         <Admin
             title=""
             dataProvider={drfProvider()}
@@ -84,6 +96,7 @@ const App = () => {
                 recordRepresentation={(record) => `${trim_string(record.name)}`}
             />{" "}
         </Admin>
+        </AuthProvider>
     );
 };
 

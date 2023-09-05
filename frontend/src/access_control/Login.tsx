@@ -10,6 +10,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import { getTheme } from "../commons/settings/functions";
 import { AADSignInButton } from "./AADSignInButton";
 import { aad_signed_in } from "./authProvider";
+import { OAuth2SignInButton } from "./OAuth2SignInButton";
 
 const Login = () => {
     const [loading, setLoading] = useState(false);
@@ -110,6 +111,7 @@ const Login = () => {
                                         Sign in with user
                                     </Button>
                                     {window.__RUNTIME_CONFIG__.AAD_ENABLE == "true" && <AADSignInButton />}
+                                    <OAuth2SignInButton />
                                 </Stack>
                             </CardActions>
                         </Card>
