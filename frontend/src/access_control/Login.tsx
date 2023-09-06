@@ -9,8 +9,8 @@ import { Navigate, useLocation } from "react-router-dom";
 
 import { getTheme } from "../commons/settings/functions";
 import { AADSignInButton } from "./AADSignInButton";
-import { aad_signed_in } from "./authProvider";
 import { OAuth2SignInButton } from "./OAuth2SignInButton";
+import { jwt_signed_in, oauth2_signed_in } from "./authProvider";
 
 const Login = () => {
     const [loading, setLoading] = useState(false);
@@ -20,7 +20,10 @@ const Login = () => {
     const notify = useNotify();
     const login = useLogin();
     const location = useLocation();
-    const isAuthenticated = localStorage.getItem("jwt") || aad_signed_in();
+    const isAuthenticated = jwt_signed_in() || oauth2_signed_in();
+
+    console.log("oauth2_signed_in(): " + oauth2_signed_in());
+    console.log("isAuthenticated: " + isAuthenticated);
 
     const handleSubmit = (auth: FormValues) => {
         setLoading(true);

@@ -1,18 +1,18 @@
 import { Stack, Typography } from "@mui/material";
 import React from "react";
+import { useAuth } from "react-oidc-context";
 
 import ObservationDashboardList from "../core/observations/ObservationDashboardList";
 import MetricsHeader from "../metrics/MetricsHeader";
 import MetricsSeveritiesCurrent from "../metrics/MetricsSeveritiesCurrent";
 import MetricsSeveritiesTimeline from "../metrics/MetricsSeveritiesTimeLine";
 import MetricsStatusCurrent from "../metrics/MetricsStatusCurrent";
-import { useAuth } from "react-oidc-context";
 
 const Dashboard = () => {
     const auth = useAuth();
-    console.log("------------------------------------------")
+    console.log("------------------------------------------");
     console.log(auth);
-    console.log("------------------------------------------")
+    console.log("------------------------------------------");
 
     return (
         <React.Fragment>

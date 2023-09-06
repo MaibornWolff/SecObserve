@@ -7,7 +7,6 @@ export const OAuth2SignInButton = () => {
     const auth = useAuth();
 
     const handleLogin = () => {
-        localStorage.setItem("aad_login_finalized", "false");
         auth.signinRedirect();
     };
     return (

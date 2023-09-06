@@ -1,12 +1,11 @@
 import { AuthProvider } from "react-admin";
 
-import { getPublicClientApplication } from "../access_control/aad";
 import { httpClient } from "../commons/ra-data-django-rest-framework";
 import { getSettingTheme, saveSettingListProperties, setListProperties } from "../commons/settings/functions";
 
 const authProvider: AuthProvider = {
     login: ({ username, password }) => {
-        if (aad_signed_in()) {
+        if (oauth2_signed_in()) {
             return Promise.resolve();
         } else {
             const request = new Request(window.__RUNTIME_CONFIG__.API_BASE_URL + "/authentication/authenticate/", {
@@ -39,18 +38,14 @@ const authProvider: AuthProvider = {
         }
     },
     logout: async () => {
-        if (aad_signed_in() || jwt_signed_in()) {
+        if (oauth2_signed_in() || jwt_signed_in()) {
             await saveSettingListProperties();
         }
 
         localStorage.removeItem("jwt");
         localStorage.removeItem("user");
-        localStorage.removeItem("aad_login_finalized");
-
-        if (aad_signed_in()) {
-            const pca = getPublicClientApplication();
-            await pca.initialize();
-            pca.logoutRedirect();
+        if (oauth2_signed_in()) {
+            // ToDo
         }
 
         return Promise.resolve();
@@ -74,14 +69,10 @@ const authProvider: AuthProvider = {
         return Promise.resolve();
     },
     checkAuth: () => {
-        if (localStorage.getItem("jwt") || aad_signed_in()) {
+        if (localStorage.getItem("jwt") || oauth2_signed_in()) {
             return Promise.resolve();
         } else {
-            if (localStorage.getItem("aad_login_finalized") == "false") {
-                return Promise.resolve();
-            } else {
-                return Promise.reject();
-            }
+            return Promise.reject();
         }
     },
     getPermissions: () => Promise.reject(),
@@ -118,13 +109,16 @@ const getUserInfo = async () => {
     });
 };
 
-export function aad_signed_in(): boolean {
-    const pca = getPublicClientApplication();
-    return pca.getAllAccounts().length > 0;
-}
-
 export function jwt_signed_in(): boolean {
     return localStorage.getItem("jwt") != null;
+}
+
+export function oauth2_signed_in(): boolean {
+    const oidcStorage = localStorage.getItem(
+        "oidc.user:https://login.microsoftonline.com/b8d7ad48-53f4-4c29-a71c-0717f0d3a5d0:46e202b4-dd0f-4bf3-897c-cfdf6b1547a9"
+    );
+    console.log("--- oidcStorage --- " + oidcStorage + "---");
+    return oidcStorage != null;
 }
 
 export default authProvider;

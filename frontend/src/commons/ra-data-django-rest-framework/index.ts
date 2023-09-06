@@ -3,12 +3,11 @@
  * See https://github.com/bmihelac/ra-data-django-rest-framework
  * Copied to make it compatible with React-Admin 4 and DefectDojo
  */
-import { InteractionRequiredAuthError } from "@azure/msal-browser";
 import queryString from "query-string";
 import { DataProvider, Identifier, fetchUtils } from "react-admin";
 
-import { getPublicClientApplication } from "../../access_control/aad";
-import { aad_signed_in, jwt_signed_in } from "../../access_control/authProvider";
+import { oauth2_signed_in, jwt_signed_in } from "../../access_control/authProvider";
+import { User } from "oidc-client-ts";
 
 const base_url = window.__RUNTIME_CONFIG__.API_BASE_URL;
 
@@ -43,40 +42,35 @@ function createOptionsFromTokenJWT() {
     };
 }
 
-export async function httpClient(url: string, options?: fetchUtils.Options | undefined) {
-    if (aad_signed_in()) {
-        const publicClientApplication = getPublicClientApplication();
-        await publicClientApplication.initialize();
-        const account = publicClientApplication.getAllAccounts()[0];
-        const accessTokenRequest = {
-            scopes: [window.__RUNTIME_CONFIG__.AAD_SCOPE as string],
-            account: account,
-        };
-        const authResult = await publicClientApplication.acquireTokenSilent(accessTokenRequest).catch((error) => {
-            console.warn("silent token acquisition fails. acquiring token using redirect");
-            if (error instanceof InteractionRequiredAuthError) {
-                // fallback to interaction when silent call fails
-                return publicClientApplication
-                    .acquireTokenRedirect(accessTokenRequest)
-                    .then((tokenResponse) => {
-                        return tokenResponse;
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    });
-            } else {
-                console.warn(error);
-            }
-        });
-        if (!authResult) {
-            return Promise.reject();
-        }
-        const token = authResult.accessToken;
-        const user = {
-            authenticated: !!token,
-            token: `Bearer ${token}`,
-        };
-        return fetchUtils.fetchJson(url, { ...options, user });
+function createOptionsFromTokenOAuth2() {
+    const user = getUser();
+    console.log("--- user --- "+ JSON.stringify(user) + "---");
+    const token = user?.access_token;
+    console.log("--- token --- "+ token + "---");
+
+    return {
+        user: {
+            authenticated: true,
+            token: "Bearer " + token,
+        },
+    };
+}
+
+function getUser() {
+    const oidcStorage = localStorage.getItem("oidc.user:https://login.microsoftonline.com/b8d7ad48-53f4-4c29-a71c-0717f0d3a5d0:46e202b4-dd0f-4bf3-897c-cfdf6b1547a9")
+    if (!oidcStorage) {
+        return null;
+    }
+
+    return User.fromStorageString(oidcStorage);
+}
+
+
+export function httpClient(url: string, options?: fetchUtils.Options | undefined) {
+    if (oauth2_signed_in()) {
+            const oauth2_options = createOptionsFromTokenOAuth2();
+            console.log("--- oauth2_options --- "+ JSON.stringify(oauth2_options) + "---")
+            return fetchUtils.fetchJson(url, Object.assign(oauth2_options, options));
     } else if (jwt_signed_in()) {
         return fetchUtils.fetchJson(url, Object.assign(createOptionsFromTokenJWT(), options));
     } else {
