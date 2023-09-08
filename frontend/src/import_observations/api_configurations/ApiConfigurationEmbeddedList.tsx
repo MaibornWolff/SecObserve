@@ -29,20 +29,13 @@ type ApiConfigurationEmbeddedListProps = {
 };
 
 const ApiConfigurationEmbeddedList = ({ product }: ApiConfigurationEmbeddedListProps) => {
-    const filter = { product: Number(product.id) };
-    const perPage = 25;
-    const resource = "api_configurations";
-    const sort = { field: "name", order: "ASC" };
-    const disableSyncWithLocation = true;
-    const storeKey = "api_configurations.embedded";
-
     const listContext = useListController({
-        filter,
-        perPage,
-        resource,
-        sort,
-        disableSyncWithLocation,
-        storeKey,
+        filter: { product: Number(product.id) },
+        perPage: 25,
+        resource: "api_configurations",
+        sort: { field: "name", order: "ASC" },
+        disableSyncWithLocation: true,
+        storeKey: "api_configurations.embedded",
     });
 
     if (listContext.isLoading) {

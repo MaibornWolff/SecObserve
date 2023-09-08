@@ -21,6 +21,7 @@ from application.access_control.services.roles_permissions import Permissions
 from application.commons.services.global_request import get_current_user
 from application.core.api.filters import (
     BranchFilter,
+    EvidenceFilter,
     ObservationFilter,
     ParserFilter,
     ProductFilter,
@@ -49,7 +50,14 @@ from application.core.api.serializers import (
     ProductMemberSerializer,
     ProductSerializer,
 )
-from application.core.models import Branch, Observation, Parser, Product, Product_Member
+from application.core.models import (
+    Branch,
+    Evidence,
+    Observation,
+    Parser,
+    Product,
+    Product_Member,
+)
 from application.core.queries.branch import get_branches
 from application.core.queries.observation import (
     get_evidences,
@@ -307,6 +315,7 @@ class ObservationViewSet(ModelViewSet):
     queryset = Observation.objects.none()
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["title"]
+    ordering = ["-created_at"]
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -387,9 +396,10 @@ class ObservationViewSet(ModelViewSet):
         return Response()
 
 
-class EvidenceViewSet(GenericViewSet, RetrieveModelMixin):
+class EvidenceViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     serializer_class = EvidenceSerializer
-    queryset = Observation.objects.none()
+    filterset_class = EvidenceFilter
+    queryset = Evidence.objects.none()
 
     def get_queryset(self):
         return get_evidences()

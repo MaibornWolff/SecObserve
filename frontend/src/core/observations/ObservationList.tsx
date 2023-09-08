@@ -45,6 +45,9 @@ const listFilters = [
 ];
 
 const ObservationList = () => {
+    localStorage.removeItem("observationembeddedlist.product");
+    localStorage.removeItem("observationdashboardlist");
+
     return (
         <List
             perPage={25}
@@ -53,7 +56,7 @@ const ObservationList = () => {
             sort={{ field: "current_severity", order: "ASC" }}
             filterDefaultValues={{ current_status: OBSERVATION_STATUS_OPEN }}
             disableSyncWithLocation={false}
-            storeKey="observations.root"
+            storeKey="observations.list"
             actions={false}
         >
             <Datagrid size="medium" rowClick="show" bulkActionButtons={false}>

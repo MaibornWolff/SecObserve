@@ -22,20 +22,13 @@ type ProductMemberEmbeddedListProps = {
 };
 
 const ProductMemberEmbeddedList = ({ product }: ProductMemberEmbeddedListProps) => {
-    const filter = { product: Number(product.id) };
-    const perPage = 25;
-    const resource = "product_members";
-    const sort = { field: "user_data.full_name", order: "ASC" };
-    const disableSyncWithLocation = true;
-    const storeKey = "product_member.embedded";
-
     const listContext = useListController({
-        filter,
-        perPage,
-        resource,
-        sort,
-        disableSyncWithLocation,
-        storeKey,
+        filter: { product: Number(product.id) },
+        perPage: 25,
+        resource: "product_members",
+        sort: { field: "user_data.full_name", order: "ASC" },
+        disableSyncWithLocation: true,
+        storeKey: "product_member.embedded",
     });
 
     if (listContext.isLoading) {

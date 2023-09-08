@@ -19,7 +19,7 @@ const ParserList = () => {
             actions={false}
             disableSyncWithLocation={false}
         >
-            <Datagrid size="medium" rowClick="show" bulkActionButtons={false}>
+            <Datagrid size="medium" rowClick={false} bulkActionButtons={false}>
                 <TextField source="name" />
                 <TextField source="type" />
                 <TextField source="source" />

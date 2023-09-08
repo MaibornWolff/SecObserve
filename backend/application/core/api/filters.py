@@ -10,7 +10,14 @@ from django_filters import (
     OrderingFilter,
 )
 
-from application.core.models import Branch, Observation, Parser, Product, Product_Member
+from application.core.models import (
+    Branch,
+    Evidence,
+    Observation,
+    Parser,
+    Product,
+    Product_Member,
+)
 
 AGE_DAY = "Today"
 AGE_WEEK = "Past 7 days"
@@ -184,3 +191,16 @@ class ObservationFilter(FilterSet):
         today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
         time_threshold = today - timedelta(days=int(days))
         return queryset.filter(last_observation_log__gte=time_threshold)
+
+
+class EvidenceFilter(FilterSet):
+    name = CharFilter(field_name="name", lookup_expr="icontains")
+
+    ordering = OrderingFilter(
+        # tuple-mapping retains order
+        fields=(("name", "name"), ("observation", "observation")),
+    )
+
+    class Meta:
+        model = Evidence
+        fields = ["name", "observation"]
