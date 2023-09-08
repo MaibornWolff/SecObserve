@@ -315,7 +315,6 @@ class ObservationViewSet(ModelViewSet):
     queryset = Observation.objects.none()
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["title"]
-    ordering = ["-created_at"]
 
     def get_serializer_class(self):
         if self.action == "list":
