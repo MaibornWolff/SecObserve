@@ -424,6 +424,11 @@ class ObservationSerializer(ModelSerializer):
         model = Observation
         exclude = ["numerical_severity", "issue_tracker_jira_initial_status"]
 
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response["evidences"] = sorted(response["evidences"], key=lambda x: x["name"])
+        return response
+
     def get_branch_name(self, observation: Observation) -> str:
         if not observation.branch:
             return ""

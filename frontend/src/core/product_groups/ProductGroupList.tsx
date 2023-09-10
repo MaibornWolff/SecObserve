@@ -24,6 +24,7 @@ const ProductGroupList = () => {
             sort={{ field: "name", order: "ASC" }}
             actions={<ListActions />}
             disableSyncWithLocation={false}
+            storeKey="product_groups.list"
         >
             <Datagrid size="medium" rowClick="show" bulkActionButtons={false}>
                 <TextField source="name" />

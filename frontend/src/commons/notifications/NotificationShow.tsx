@@ -1,6 +1,8 @@
+import { Stack } from "@mui/material";
 import {
     DateField,
     DeleteWithConfirmButton,
+    PrevNextButtons,
     ReferenceField,
     Show,
     SimpleShowLayout,
@@ -12,7 +14,15 @@ import {
 const ShowActions = () => {
     return (
         <TopToolbar>
-            <DeleteWithConfirmButton />
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <PrevNextButtons
+                    linkType="show"
+                    sort={{ field: "created", order: "DESC" }}
+                    storeKey="notifications.list"
+                    sx={{ fontSize: "0.875rem" }}
+                />
+                <DeleteWithConfirmButton />
+            </Stack>
         </TopToolbar>
     );
 };

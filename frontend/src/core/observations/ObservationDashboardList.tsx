@@ -19,25 +19,17 @@ const ShowObservations = (id: any) => {
 };
 
 const ObservationDashboardList = () => {
-    const filter = {
-        age: "Past 7 days",
-        current_status: OBSERVATION_STATUS_OPEN,
-    };
-    const perPage = 10;
-    const resource = "observations";
-    const sort = { field: "current_severity", order: "ASC" };
-    const filterDefaultValues = {};
-    const disableSyncWithLocation = true;
-    const storeKey = "observations.dashboard";
-
     const listContext = useListController({
-        filter,
-        perPage,
-        resource,
-        sort,
-        filterDefaultValues,
-        disableSyncWithLocation,
-        storeKey,
+        filter: {
+            age: "Past 7 days",
+            current_status: OBSERVATION_STATUS_OPEN,
+        },
+        perPage: 10,
+        resource: "observations",
+        sort: { field: "current_severity", order: "ASC" },
+        filterDefaultValues: {},
+        disableSyncWithLocation: true,
+        storeKey: "observations.dashboard",
     });
 
     if (listContext.isLoading) {
@@ -47,6 +39,8 @@ const ObservationDashboardList = () => {
     if (listContext.data === undefined) {
         listContext.data = [];
     }
+
+    localStorage.setItem("observationdashboardlist", "true");
 
     return (
         <ListContextProvider value={listContext}>

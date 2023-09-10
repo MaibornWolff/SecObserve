@@ -34,6 +34,7 @@ const NotificationList = () => {
             sort={{ field: "created", order: "DESC" }}
             actions={false}
             disableSyncWithLocation={false}
+            storeKey="notifications.list"
         >
             <Datagrid size="medium" rowClick="show" bulkActionButtons={<BulkActionButtons />}>
                 <TextField source="type" />

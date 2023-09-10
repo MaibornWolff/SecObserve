@@ -79,22 +79,14 @@ const BulkActionButtons = (product: any) => (
 );
 
 const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) => {
-    const filter = { product: Number(product.id) };
-    const perPage = 25;
-    const resource = "observations";
-    const sort = { field: "current_severity", order: "ASC" };
-    const filterDefaultValues = { current_status: OBSERVATION_STATUS_OPEN, branch: product.repository_default_branch };
-    const disableSyncWithLocation = false;
-    const storeKey = "observations.embedded";
-
     const listContext = useListController({
-        filter,
-        perPage,
-        resource,
-        sort,
-        filterDefaultValues,
-        disableSyncWithLocation,
-        storeKey,
+        filter: { product: Number(product.id) },
+        perPage: 25,
+        resource: "observations",
+        sort: { field: "current_severity", order: "ASC" },
+        filterDefaultValues: { current_status: OBSERVATION_STATUS_OPEN, branch: product.repository_default_branch },
+        disableSyncWithLocation: false,
+        storeKey: "observations.embedded",
     });
 
     if (listContext.isLoading) {
@@ -104,6 +96,8 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
     if (listContext.data === undefined) {
         listContext.data = [];
     }
+
+    localStorage.setItem("observationembeddedlist.product", product.id);
 
     return (
         <ListContextProvider value={listContext}>

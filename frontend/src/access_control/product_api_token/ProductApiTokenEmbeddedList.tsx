@@ -9,20 +9,13 @@ type ProductApiTokenEmbeddedListProps = {
 };
 
 const ProductApiTokenEmbeddedList = ({ product }: ProductApiTokenEmbeddedListProps) => {
-    const filter = { product: Number(product.id) };
-    const perPage = 25;
-    const resource = "product_api_tokens";
-    const sort = { field: "role", order: "ASC" };
-    const disableSyncWithLocation = true;
-    const storeKey = "product_api_tokens.embedded";
-
     const listContext = useListController({
-        filter,
-        perPage,
-        resource,
-        sort,
-        disableSyncWithLocation,
-        storeKey,
+        filter: { product: Number(product.id) },
+        perPage: 25,
+        resource: "product_api_tokens",
+        sort: { field: "role", order: "ASC" },
+        disableSyncWithLocation: true,
+        storeKey: "product_api_tokens.embedded",
     });
 
     if (listContext.isLoading) {

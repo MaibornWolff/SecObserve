@@ -9,6 +9,7 @@ import {
     EditButton,
     Labeled,
     NumberField,
+    PrevNextButtons,
     ReferenceField,
     RichTextField,
     Show,
@@ -58,28 +59,50 @@ import ProductMemberEmbeddedList from "../product_members/ProductMemberEmbeddedL
 import ExportMenu from "./ExportMenu";
 import ProductHeader from "./ProductHeader";
 
-const ShowActions = () => {
+type ShowActionsProps = {
+    filter: any;
+    storeKey: string;
+};
+
+const ShowActions = (props: ShowActionsProps) => {
     const product = useRecordContext();
     return (
         <TopToolbar>
-            {product && product.permissions.includes(PERMISSION_PRODUCT_IMPORT_OBSERVATIONS) && (
-                <div>
-                    <FileUploadObservations />
-                    &nbsp; &nbsp;
-                    <ApiImportObservations product={product} />
-                </div>
-            )}
-            <ExportMenu product={product} is_product_group={false} />
-            {product && product.permissions.includes(PERMISSION_PRODUCT_EDIT) && <EditButton />}
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <PrevNextButtons
+                    filter={props.filter}
+                    linkType="show"
+                    sort={{ field: "name", order: "ASC" }}
+                    storeKey={props.storeKey}
+                    sx={{ fontSize: "0.875rem" }}
+                />
+                {product && product.permissions.includes(PERMISSION_PRODUCT_IMPORT_OBSERVATIONS) && (
+                    <div>
+                        <FileUploadObservations />
+                        &nbsp; &nbsp;
+                        <ApiImportObservations product={product} />
+                    </div>
+                )}
+                <ExportMenu product={product} is_product_group={false} />
+                {product && product.permissions.includes(PERMISSION_PRODUCT_EDIT) && <EditButton />}
+            </Stack>
         </TopToolbar>
     );
 };
 
 const ProductShow = () => {
+    let filter = {};
+    let storeKey = "products.list";
+    const product_group_id = localStorage.getItem("productembeddedlist.product_group");
+    if (product_group_id !== null) {
+        filter = { product_group: Number(product_group_id) };
+        storeKey = "products.embedded";
+    }
+
     return (
         <div>
             <ProductHeader />
-            <Show actions={<ShowActions />}>
+            <Show actions={<ShowActions filter={filter} storeKey={storeKey} />}>
                 <WithRecord
                     render={(product) => (
                         <TabbedShowLayout>

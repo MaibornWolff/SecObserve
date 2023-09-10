@@ -20,20 +20,13 @@ type BranchEmbeddedListProps = {
 };
 
 const BranchEmbeddedList = ({ product }: BranchEmbeddedListProps) => {
-    const filter = { product: Number(product.id) };
-    const perPage = 25;
-    const resource = "branches";
-    const sort = { field: "name", order: "ASC" };
-    const disableSyncWithLocation = true;
-    const storeKey = "branch.embedded";
-
     const listContext = useListController({
-        filter,
-        perPage,
-        resource,
-        sort,
-        disableSyncWithLocation,
-        storeKey,
+        filter: { product: Number(product.id) },
+        perPage: 25,
+        resource: "branches",
+        sort: { field: "name", order: "ASC" },
+        disableSyncWithLocation: true,
+        storeKey: "branch.embedded",
     });
 
     if (listContext.isLoading) {
