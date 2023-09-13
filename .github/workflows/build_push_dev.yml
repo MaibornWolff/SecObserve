@@ -25,7 +25,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
         name: Build and push backend
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           context: .
           file: ./docker/backend/prod/django/Dockerfile
@@ -35,7 +35,7 @@ jobs:
             VERSION=dev
       -
         name: Build and push frontend
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           context: .
           file: ./docker/frontend/Dockerfile
