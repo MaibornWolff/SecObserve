@@ -75,7 +75,7 @@ services:
       - "3306:3306"
 
   postgres:
-    image: postgres:15.4-alpine
+    image: postgres:16.0-alpine
     volumes:
       - dev_postgres_data:/var/lib/postgresql/data
     environment:
