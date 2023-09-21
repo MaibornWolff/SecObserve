@@ -3,12 +3,12 @@
 set -o errexit
 set -o nounset
 
-if [ -z "${DATABASE_USER}" ]; then
-    base_postgres_image_default_user='postgres'
-    export DATABASE_USER="${base_postgres_image_default_user}"
-fi
-
 if [ "${DATABASE_ENGINE}" != "django.db.backends.sqlite3" ]; then
+    if [ -z "${DATABASE_USER}" ]; then
+        base_postgres_image_default_user='postgres'
+        export DATABASE_USER="${base_postgres_image_default_user}"
+    fi
+
     /wait-for-it.sh "${DATABASE_HOST}":"${DATABASE_PORT}"
     >&2 echo 'Database is available'
 fi

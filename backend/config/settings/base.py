@@ -53,9 +53,9 @@ if env("DATABASE_ENGINE") == "django.db.backends.sqlite3":
         "default": {
             "ATOMIC_REQUESTS": True,
             "ENGINE": "django.db.backends.sqlite3",
-            "NAME": "/var/lib/sqlite/secobserve.db",
+            "NAME": env.str("DATABASE_DB", "/var/lib/sqlite/secobserve.db"),
         }
-    }
+    }   
 else:
     DATABASES = {
         "default": {
