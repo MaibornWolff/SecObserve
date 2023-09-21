@@ -4,6 +4,9 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
+# python manage.py flush --no-input
+rm -rf /var/lib/sqlite/*
+
 python manage.py migrate
 
 echo "Admin user: ${ADMIN_USER}"
