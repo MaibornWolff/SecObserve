@@ -19,7 +19,7 @@
         "react-dom": "18.2.0",
         "react-router": "6.16.0",
         "react-router-dom": "6.16.0",
-        "tss-react": "4.9.1",
+        "tss-react": "4.9.2",
         "chart.js": "4.4.0",
         "react-chartjs-2": "5.2.0",
         "markdown-to-jsx": "7.3.2",
