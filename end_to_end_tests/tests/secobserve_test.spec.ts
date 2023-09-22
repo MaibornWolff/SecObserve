@@ -25,7 +25,7 @@ test.describe("SecObserve", async () => {
         await page.getByLabel("Password *").fill(process.env.SO_PW_PASSWORD);
         await page.getByRole("button", { name: "Sign in with user" }).click();
 
-        await page.getByRole("menuitem", { name: "Xroduct Groups" }).click();
+        await page.getByRole("menuitem", { name: "Product Groups" }).click();
         await expect(page).toHaveURL(process.env.SO_PW_FRONTEND_BASE_URL + "/#/product_groups");
 
         await page.getByRole("menuitem", { name: "Products" }).click();
