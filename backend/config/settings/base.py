@@ -47,26 +47,36 @@ LOCALE_PATHS = [str(ROOT_DIR / "locale")]
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
-DATABASES = {
-    "default": {
-        "ATOMIC_REQUESTS": True,
-        "ENGINE": env("DATABASE_ENGINE"),
-        "HOST": env("DATABASE_HOST"),
-        "PORT": env("DATABASE_PORT"),
-        "NAME": env("DATABASE_DB"),
-        "USER": env("DATABASE_USER"),
-        "PASSWORD": env("DATABASE_PASSWORD"),
-    }
-}
 
-if env("MYSQL_AZURE", default="false") == "single":
-    DATABASES["default"]["OPTIONS"] = {
-        "ssl": {"ca": "/app/BaltimoreCyberTrustRoot_combined.crt.pem"}
+if env("DATABASE_ENGINE") == "django.db.backends.sqlite3":
+    DATABASES = {
+        "default": {
+            "ATOMIC_REQUESTS": True,
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": env.str("DATABASE_DB", "/var/lib/sqlite/secobserve.db"),
+        }
     }
-if env("MYSQL_AZURE", default="false") == "flexible":
-    DATABASES["default"]["OPTIONS"] = {
-        "ssl": {"ca": "/app/DigiCertGlobalRootCA.crt.pem"}
+else:
+    DATABASES = {
+        "default": {
+            "ATOMIC_REQUESTS": True,
+            "ENGINE": env("DATABASE_ENGINE"),
+            "HOST": env("DATABASE_HOST"),
+            "PORT": env("DATABASE_PORT"),
+            "NAME": env("DATABASE_DB"),
+            "USER": env("DATABASE_USER"),
+            "PASSWORD": env("DATABASE_PASSWORD"),
+        }
     }
+
+    if env("MYSQL_AZURE", default="false") == "single":
+        DATABASES["default"]["OPTIONS"] = {
+            "ssl": {"ca": "/app/BaltimoreCyberTrustRoot_combined.crt.pem"}
+        }
+    if env("MYSQL_AZURE", default="false") == "flexible":
+        DATABASES["default"]["OPTIONS"] = {
+            "ssl": {"ca": "/app/DigiCertGlobalRootCA.crt.pem"}
+        }
 
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

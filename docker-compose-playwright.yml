@@ -1,0 +1,68 @@
+version: "3"
+
+networks:
+  secobserve:
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: ./docker/frontend/Dockerfile
+    image: secobserve_frontend_playwright
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    environment:
+      API_BASE_URL: http://backend:5000/api
+      AAD_ENABLE: false
+      AAD_AUTHORITY: dummy
+      AAD_CLIENT_ID: dummy
+      AAD_REDIRECT_URI: dummy
+      AAD_POST_LOGOUT_REDIRECT_URI: dummy
+      AAD_SCOPE: dummy
+    networks:
+      - secobserve
+
+  backend:
+    build:
+      context: .
+      dockerfile: ./docker/backend/prod/django/Dockerfile
+    image: secobserve_backend_playwright
+    environment:
+      # --- Admin user ---
+      ADMIN_USER: admin-user
+      ADMIN_PASSWORD: admin-password
+      ADMIN_EMAIL: admin@example.com
+      # --- Database ---
+      DATABASE_ENGINE: django.db.backends.sqlite3
+      # --- Security ---
+      ALLOWED_HOSTS: backend
+      CORS_ALLOWED_ORIGINS: http://frontend:3000
+      DJANGO_SECRET_KEY: NxYPEF5lNGgk3yonndjSbwP77uNJxOvfKTjF5aVBqsHktNlf1wfJHHvJ8iifk32r
+      FIELD_ENCRYPTION_KEY: DtlkqVb3wlaVdJK_BU-3mB4wwuuf8xx8YNInajiJ7GU=
+      # --- Azure AD ---
+      # AAD_CLIENT_ID: dummy
+      # AAD_TENANT_ID: dummy
+    ports:
+      - "5000:5000"
+    command: /start_end_to_end_tests
+    networks:
+      - secobserve
+
+
+  playwright:
+    image: mcr.microsoft.com/playwright:v1.38.0
+    depends_on:
+      - frontend
+    environment:
+      - SO_PW_DOCKER=true
+      - SO_PW_FRONTEND_BASE_URL=http://frontend:3000
+      - SO_PW_USERNAME=admin-user
+      - SO_PW_PASSWORD=admin-password
+    working_dir: /end_to_end_tests
+    volumes:
+      - ./end_to_end_tests:/end_to_end_tests
+    entrypoint: ["npx", "playwright", "test"]
+    networks:
+      - secobserve

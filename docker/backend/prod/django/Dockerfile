@@ -42,6 +42,7 @@ COPY --from=python-build-stage /usr/src/app/wheels  /wheels/
 # copy startup scripts
 COPY ./docker/backend/prod/django/entrypoint /entrypoint
 COPY ./docker/backend/prod/django/start /start
+COPY ./docker/backend/prod/django/start_end_to_end_tests /start_end_to_end_tests
 COPY ./docker/backend/prod/django/wait-for-it.sh /wait-for-it.sh
 
 # copy application code to WORKDIR
@@ -65,7 +66,7 @@ RUN addgroup -g 1001 -S ${group} \
     && rm -rf /wheels/ \
     # make startup scripts executable
     && chmod +x /entrypoint \
-    && chmod +x /start \
+    && chmod +x /start* \
     && chmod +x /wait-for-it.sh \
     # insert version for status endpoint
     && sed -i 's/version_unkown/'"${VERSION}"'/g' ${APP_HOME}/application/commons/api/views.py \
@@ -75,7 +76,11 @@ RUN addgroup -g 1001 -S ${group} \
     # create directory for huey task queue
     && mkdir /var/lib/huey \
     && chown -R ${user}:${group} /var/lib/huey \
-    && chmod ugo+rw /var/lib/huey
+    && chmod ugo+rw /var/lib/huey \
+    # create directory for possible sqlite db
+    && mkdir /var/lib/sqlite \
+    && chown -R ${user}:${group} /var/lib/sqlite \
+    && chmod ugo+rw /var/lib/sqlite
 
 HEALTHCHECK --interval=30s --timeout=30s --start-period=30s --retries=3 \
     CMD wget -nv -t1 --spider 'http://localhost:5000/api/status/health/' || exit 1

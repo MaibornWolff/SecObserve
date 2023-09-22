@@ -1,0 +1,14 @@
+{
+  "name": "end_to_end_tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "devDependencies": {
+    "@playwright/test": "1.38.0",
+    "@types/node": "20.6.3"
+  }
+}

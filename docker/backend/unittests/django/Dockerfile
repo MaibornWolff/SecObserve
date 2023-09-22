@@ -61,7 +61,11 @@ RUN addgroup -g 1001 -S ${group} \
     && chown ${user}.${group} ${APP_HOME} \
     # create directory for huey task queue
     && mkdir /var/lib/huey \
-    && chown -R ${user}:${group} /var/lib/huey
+    && chown -R ${user}:${group} /var/lib/huey \
+    # create directory for sqlite db
+    && mkdir /var/lib/sqlite \
+    && chown -R ${user}:${group} /var/lib/sqlite \
+    && chmod ugo+rw /var/lib/sqlite
 
 USER ${user}
 
