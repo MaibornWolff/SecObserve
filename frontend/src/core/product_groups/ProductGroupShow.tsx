@@ -53,7 +53,6 @@ const ShowActions = () => {
                     linkType="show"
                     sort={{ field: "name", order: "ASC" }}
                     storeKey="product_groups.list"
-                    sx={{ fontSize: "0.875rem" }}
                 />
                 <ExportMenu product={product_group} is_product_group={true} />
                 {product_group && product_group.permissions.includes(PERMISSION_PRODUCT_GROUP_EDIT) && <EditButton />}

@@ -47,7 +47,6 @@ const ShowActions = (props: ShowActionsProps) => {
                     linkType="show"
                     sort={{ field: "current_severity", order: "ASC" }}
                     storeKey={props.storeKey}
-                    sx={{ fontSize: "0.875rem" }}
                 />
                 {observation &&
                     observation.product_data.permissions &&

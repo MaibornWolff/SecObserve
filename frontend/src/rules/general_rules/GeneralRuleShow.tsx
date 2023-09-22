@@ -22,7 +22,6 @@ const ShowActions = () => {
                     linkType="show"
                     sort={{ field: "name", order: "ASC" }}
                     storeKey="general_rules.list"
-                    sx={{ fontSize: "0.875rem" }}
                 />
                 {user && JSON.parse(user).is_superuser && <EditButton />}
             </Stack>
