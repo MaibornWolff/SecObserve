@@ -18,11 +18,7 @@ const ShowActions = () => {
     return (
         <TopToolbar>
             <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <PrevNextButtons
-                    linkType="show"
-                    sort={{ field: "name", order: "ASC" }}
-                    storeKey="general_rules.list"
-                />
+                <PrevNextButtons linkType="show" sort={{ field: "name", order: "ASC" }} storeKey="general_rules.list" />
                 {user && JSON.parse(user).is_superuser && <EditButton />}
             </Stack>
         </TopToolbar>
