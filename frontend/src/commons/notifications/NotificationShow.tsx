@@ -19,7 +19,6 @@ const ShowActions = () => {
                     linkType="show"
                     sort={{ field: "created", order: "DESC" }}
                     storeKey="notifications.list"
-                    sx={{ fontSize: "0.875rem" }}
                 />
                 <DeleteWithConfirmButton />
             </Stack>

@@ -22,7 +22,6 @@ const ShowActions = () => {
                     filter={{ observation: observation_id }}
                     linkType="show"
                     sort={{ field: "name", order: "ASC" }}
-                    sx={{ fontSize: "0.875rem" }}
                 />
             </TopToolbar>
         );

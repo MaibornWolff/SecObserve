@@ -74,7 +74,6 @@ const ShowActions = (props: ShowActionsProps) => {
                     linkType="show"
                     sort={{ field: "name", order: "ASC" }}
                     storeKey={props.storeKey}
-                    sx={{ fontSize: "0.875rem" }}
                 />
                 {product && product.permissions.includes(PERMISSION_PRODUCT_IMPORT_OBSERVATIONS) && (
                     <div>
