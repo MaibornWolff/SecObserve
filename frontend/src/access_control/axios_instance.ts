@@ -11,6 +11,7 @@ axios_instance.interceptors.request.use(
     async (config: InternalAxiosRequestConfig) => {
         if (aad_signed_in()) {
             const publicClientApplication = getPublicClientApplication();
+            await publicClientApplication.initialize();
             const account = publicClientApplication.getAllAccounts()[0];
             const accessTokenRequest = {
                 scopes: [window.__RUNTIME_CONFIG__.AAD_SCOPE as string],

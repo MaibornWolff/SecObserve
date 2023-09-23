@@ -50,7 +50,7 @@ export async function httpClient(url: string, options?: fetchUtils.Options | und
         const account = publicClientApplication.getAllAccounts()[0];
         const accessTokenRequest = {
             scopes: [window.__RUNTIME_CONFIG__.AAD_SCOPE as string],
-            account: account,   
+            account: account,
         };
         const authResult = await publicClientApplication.acquireTokenSilent(accessTokenRequest).catch((error) => {
             console.warn("silent token acquisition fails. acquiring token using redirect");
@@ -68,7 +68,10 @@ export async function httpClient(url: string, options?: fetchUtils.Options | und
                 console.warn(error);
             }
         });
-        const token = authResult?.accessToken;
+        if (!authResult) {
+            return Promise.reject();
+        }
+        const token = authResult.accessToken;
         const user = {
             authenticated: !!token,
             token: `Bearer ${token}`,
