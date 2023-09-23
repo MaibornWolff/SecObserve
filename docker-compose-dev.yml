@@ -4,6 +4,7 @@ volumes:
   dev_huey_data:
   dev_mysql_data:
   dev_postgres_data:
+  dev_keycloak_data:
 
 services:
   frontend:
@@ -91,3 +92,16 @@ services:
     ports:
       - "1025:1025"
       - "8025:8025"
+
+  keycloak:
+    image: keycloak/keycloak:22.0.3
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_HTTPS_ENABLED=false
+      - KC_HOSTNAME_STRICT_HTTPS=false
+    volumes:
+      - dev_keycloak_data:/opt/keycloak/data/
+    ports:
+      - 8080:8080
+    command: start-dev

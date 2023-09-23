@@ -31,10 +31,15 @@ const onSigninCallback = (_user: User | void): void => {
 
 const oidcConfig = {
     userStore: new WebStorageStateStore({ store: window.localStorage }),
-    authority: "https://login.microsoftonline.com/b8d7ad48-53f4-4c29-a71c-0717f0d3a5d0",
-    client_id: "46e202b4-dd0f-4bf3-897c-cfdf6b1547a9",
+    // authority: "http://localhost:8080/realms/secobserve/broker/oidc/endpoint",
+    authority: "http:/localhost:8080",
+    client_id: "secobserve",
     redirect_uri: "http://localhost:3000",
-    scope: "46e202b4-dd0f-4bf3-897c-cfdf6b1547a9/.default",
+    scope: "secobserve-dedicated",
+    // authority: "https://login.microsoftonline.com/b8d7ad48-53f4-4c29-a71c-0717f0d3a5d0",
+    // client_id: "46e202b4-dd0f-4bf3-897c-cfdf6b1547a9",
+    // redirect_uri: "http://localhost:3000",
+    // scope: "46e202b4-dd0f-4bf3-897c-cfdf6b1547a9/.default",
     prompt: "select_account",
     onSigninCallback: onSigninCallback,
 };
