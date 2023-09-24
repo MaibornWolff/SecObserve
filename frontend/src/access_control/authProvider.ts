@@ -36,12 +36,13 @@ const authProvider: AuthProvider = {
                 });
         }
     },
-    logout: () => {
+    logout: async () => {
         localStorage.removeItem("jwt");
         localStorage.removeItem("user");
         localStorage.removeItem("aad_login_finalized");
         if (aad_signed_in()) {
             const pca = getPublicClientApplication();
+            await pca.initialize();
             pca.logoutRedirect();
         }
         return Promise.resolve();
