@@ -44,9 +44,10 @@ services:
       # --- Azure AD ---
       # AAD_CLIENT_ID: dummy
       # AAD_TENANT_ID: dummy
+      ## --- End-to-end-tests ---
+      SO_END_TO_END_TESTS: true
     ports:
       - "5000:5000"
-    command: /start_end_to_end_tests
     networks:
       - secobserve
 

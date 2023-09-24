@@ -54,7 +54,6 @@ services:
       AAD_TENANT_ID: ${SO_AAD_TENANT_ID:-}
     ports:
       - "5000:5000"
-    command: /start
 
   mysql:
     image: mysql:8.1.0
