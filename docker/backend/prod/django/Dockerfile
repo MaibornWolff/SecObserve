@@ -41,8 +41,6 @@ COPY --from=python-build-stage /usr/src/app/wheels  /wheels/
 
 # copy startup scripts
 COPY ./docker/backend/prod/django/entrypoint /entrypoint
-COPY ./docker/backend/prod/django/start /start
-COPY ./docker/backend/prod/django/start_end_to_end_tests /start_end_to_end_tests
 COPY ./docker/backend/prod/django/wait-for-it.sh /wait-for-it.sh
 
 # copy application code to WORKDIR
@@ -66,7 +64,6 @@ RUN addgroup -g 1001 -S ${group} \
     && rm -rf /wheels/ \
     # make startup scripts executable
     && chmod +x /entrypoint \
-    && chmod +x /start* \
     && chmod +x /wait-for-it.sh \
     # insert version for status endpoint
     && sed -i 's/version_unkown/'"${VERSION}"'/g' ${APP_HOME}/application/commons/api/views.py \

@@ -11,6 +11,42 @@ if [ "${DATABASE_ENGINE}" != "django.db.backends.sqlite3" ]; then
 
     /wait-for-it.sh "${DATABASE_HOST}":"${DATABASE_PORT}"
     >&2 echo 'Database is available'
+else
+    if [ "${SO_END_TO_END_TESTS}" == "true" ]; then
+        >&2 echo 'Running end-to-end tests and deleting SQLite database'
+        rm -rf /var/lib/sqlite/*
+    fi
 fi
 
-exec "$@"
+python manage.py migrate
+
+echo "Admin user: ${ADMIN_USER}"
+ADMIN_EXISTS=$(echo "SELECT * from access_control_user;" | python manage.py dbshell | grep "${ADMIN_USER}" || :)
+if [ ! -z "$ADMIN_EXISTS" ]
+then
+    echo "Initialization detected that the admin user ${ADMIN_USER} already exists in your database."
+else
+    if [ -z "${ADMIN_PASSWORD}" ]
+    then
+        export ADMIN_PASSWORD="$(cat /dev/urandom | LC_ALL=C tr -dc a-zA-Z0-9 | head -c 22)"
+        echo "Admin password: ${ADMIN_PASSWORD}"
+    fi
+
+    echo "Initialization detected no admin user ${ADMIN_USER}, creating it now in your database."
+
+cat <<EOD | python manage.py shell
+import os
+from application.access_control.models import User
+User.objects.create_superuser(
+  os.getenv('ADMIN_USER'),
+  os.getenv('ADMIN_EMAIL'),
+  os.getenv('ADMIN_PASSWORD'),
+)
+EOD
+fi
+
+python /app/manage.py collectstatic --noinput
+
+python manage.py run_huey &
+
+/usr/local/bin/gunicorn config.wsgi --bind 0.0.0.0:5000 --timeout 1200 --chdir=/app -w 2 -k gthread --threads 10
