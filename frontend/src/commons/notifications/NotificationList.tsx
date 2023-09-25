@@ -1,5 +1,15 @@
 import { Fragment } from "react";
-import { AutocompleteInput, Datagrid, DateField, List, ReferenceInput, TextField, TextInput } from "react-admin";
+import {
+    AutocompleteInput,
+    DatagridConfigurable,
+    DateField,
+    List,
+    ReferenceInput,
+    SelectColumnsButton,
+    TextField,
+    TextInput,
+    TopToolbar,
+} from "react-admin";
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { AutocompleteInputMedium } from "../layout/themes";
@@ -25,6 +35,12 @@ const BulkActionButtons = () => (
     </Fragment>
 );
 
+const ListActions = () => (
+    <TopToolbar>
+        <SelectColumnsButton />
+    </TopToolbar>
+);
+
 const NotificationList = () => {
     return (
         <List
@@ -32,11 +48,11 @@ const NotificationList = () => {
             pagination={<CustomPagination />}
             filters={listFilters}
             sort={{ field: "created", order: "DESC" }}
-            actions={false}
             disableSyncWithLocation={false}
             storeKey="notifications.list"
+            actions={<ListActions />}
         >
-            <Datagrid size="medium" rowClick="show" bulkActionButtons={<BulkActionButtons />}>
+            <DatagridConfigurable size="medium" rowClick="show" bulkActionButtons={<BulkActionButtons />}>
                 <TextField source="type" />
                 <TextField source="name" />
                 <DateField source="created" showTime={true} />
@@ -45,7 +61,7 @@ const NotificationList = () => {
                 <TextField source="product_name" label="Product" />
                 <TextField source="observation_title" label="Observation" />
                 <TextField source="user_full_name" label="User" />
-            </Datagrid>
+            </DatagridConfigurable>
         </List>
     );
 };
