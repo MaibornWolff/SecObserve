@@ -1,17 +1,19 @@
-import { Paper } from "@mui/material";
+import { Paper, Stack } from "@mui/material";
 import { Fragment } from "react";
 import {
     AutocompleteInput,
     ChipField,
-    Datagrid,
+    DatagridConfigurable,
     FilterForm,
     FunctionField,
     ListContextProvider,
     NumberField,
     Pagination,
     ReferenceInput,
+    SelectColumnsButton,
     TextField,
     TextInput,
+    TopToolbar,
     useListController,
 } from "react-admin";
 
@@ -78,6 +80,12 @@ const BulkActionButtons = (product: any) => (
     </Fragment>
 );
 
+const ListActions = () => (
+    <TopToolbar>
+        <SelectColumnsButton preferenceKey="observations.embedded" />
+    </TopToolbar>
+);
+
 const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) => {
     const listContext = useListController({
         filter: { product: Number(product.id) },
@@ -102,9 +110,12 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
-                <FilterForm filters={listFilters(product)} />
+                <Stack direction="row" spacing={2} justifyContent="center" alignItems="flex-end">
+                    <FilterForm filters={listFilters(product)} />
+                    <ListActions />
+                </Stack>
                 <Paper>
-                    <Datagrid
+                    <DatagridConfigurable
                         size="medium"
                         sx={{ width: "100%" }}
                         rowClick={ShowObservations}
@@ -115,6 +126,7 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
                                 <BulkActionButtons product={product} />
                             )
                         }
+                        preferenceKey="observations.embedded"
                     >
                         <TextField source="branch_name" label="Branch" />
                         <TextField source="title" />
@@ -132,7 +144,7 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
                             sortBy="last_observation_log"
                             render={(record) => (record ? humanReadableDate(record.last_observation_log) : "")}
                         />
-                    </Datagrid>
+                    </DatagridConfigurable>
                 </Paper>
                 <Pagination />
             </div>

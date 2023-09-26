@@ -51,7 +51,11 @@ const authProvider: AuthProvider = {
         if (error) {
             const status = error.status;
             if (status === 401 || status === 403) {
-                localStorage.clear();
+                Object.keys(localStorage).forEach(function (key) {
+                    if (!key.startsWith("RaStore")) {
+                        localStorage.removeItem(key);
+                    }
+                });
                 return Promise.reject({
                     redirectTo: "/login",
                     logoutUser: false,
