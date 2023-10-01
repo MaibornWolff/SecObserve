@@ -78,6 +78,7 @@ from application.core.services.observations_bulk_actions import (
 from application.core.services.security_gate import check_security_gate
 from application.issue_tracker.services.issue_tracker import (
     push_deleted_observation_to_issue_tracker,
+    push_observations_to_issue_tracker,
 )
 from application.metrics.services.metrics import get_codecharta_metrics
 from application.rules.services.rule_engine import Rule_Engine
@@ -256,6 +257,21 @@ class ProductViewSet(ModelViewSet):
         observations_bulk_delete(
             product, request_serializer.validated_data.get("observations")
         )
+        return Response(status=HTTP_204_NO_CONTENT)
+
+    @extend_schema(
+        methods=["POST"],
+        request=None,
+        responses={HTTP_204_NO_CONTENT: None},
+    )
+    @action(detail=True, methods=["post"])
+    def synchronize_issues(self, request, pk):
+        product = self.__get_product(pk)
+        user_has_permission_or_403(product, Permissions.Product_Edit)
+
+        observations = Observation.objects.filter(product=product)
+        push_observations_to_issue_tracker(product, set(observations))
+
         return Response(status=HTTP_204_NO_CONTENT)
 
     def __get_product(self, pk) -> Product:
