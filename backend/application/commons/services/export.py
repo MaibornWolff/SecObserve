@@ -29,7 +29,8 @@ def export_excel(
                     and not callable(getattr(current_object, key))
                     and not key.startswith("_")
                 ):
-                    cell = worksheet.cell(row=row_num, column=col_num, value=key)
+                    value = key.replace("_", " ").capitalize()
+                    cell = worksheet.cell(row=row_num, column=col_num, value=value)
                     cell.font = font_bold
                     col_num += 1
             cell.font = font_bold
@@ -75,7 +76,8 @@ def export_csv(
                     and not callable(getattr(current_object, key))
                     and not key.startswith("_")
                 ):
-                    fields.append(key)
+                    value = key.replace("_", " ").capitalize()
+                    fields.append(value)
 
             writer.writerow(fields)
 
