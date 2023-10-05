@@ -21,7 +21,7 @@
         "chart.js": "4.4.0",
         "react-chartjs-2": "5.2.0",
         "markdown-to-jsx": "7.3.2",
-        "@azure/msal-react": "2.0.3",
+        "@azure/msal-react": "2.0.4",
         "@azure/msal-browser": "3.1.0",
         "@fortawesome/fontawesome-svg-core": "6.4.2",
         "@fortawesome/free-solid-svg-icons": "6.4.2",
