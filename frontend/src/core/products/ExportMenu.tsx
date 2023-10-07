@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useNotify } from "react-admin";
 
 import axios_instance from "../../access_control/axios_instance";
-import { getSettingTheme } from "../../commons/settings/functions";
+import { getIconAndFontColor } from "../../commons/functions";
 
 interface ExportMenuProps {
     product: any;
@@ -28,13 +28,6 @@ const ExportMenu = (props: ExportMenuProps) => {
         setAnchorEl(null);
     };
 
-    function getIconColor() {
-        if (getSettingTheme() == "dark") {
-            return "white";
-        } else {
-            return "black";
-        }
-    }
     const exportDataCsv = async (url: string, filename: string, message: string) => {
         axios_instance
             .get(url)
@@ -161,46 +154,46 @@ const ExportMenu = (props: ExportMenuProps) => {
                     "aria-labelledby": "basic-button",
                 }}
             >
-                <MenuItem onClick={exportOpenObservationsExcel}>
+                <MenuItem onClick={exportOpenObservationsExcel} sx={{ fontSize: "0.875rem" }}>
                     <ListItemIcon>
-                        <FontAwesomeIcon icon={faFileExcel} color={getIconColor()} />
+                        <FontAwesomeIcon icon={faFileExcel} color={getIconAndFontColor()} />
                     </ListItemIcon>
                     Open observations / Excel
                 </MenuItem>
-                <MenuItem onClick={exportOpenObservationsCsv} divider>
+                <MenuItem onClick={exportOpenObservationsCsv} sx={{ fontSize: "0.875rem" }} divider>
                     <ListItemIcon>
-                        <FontAwesomeIcon icon={faFileCsv} color={getIconColor()} />
+                        <FontAwesomeIcon icon={faFileCsv} color={getIconAndFontColor()} />
                     </ListItemIcon>
                     Open observations / CSV
                 </MenuItem>
-                <MenuItem onClick={exportAllObservationsExcel}>
+                <MenuItem onClick={exportAllObservationsExcel} sx={{ fontSize: "0.875rem" }}>
                     <ListItemIcon>
-                        <FontAwesomeIcon icon={faFileExcel} color={getIconColor()} />
+                        <FontAwesomeIcon icon={faFileExcel} color={getIconAndFontColor()} />
                     </ListItemIcon>
                     All observations / Excel
                 </MenuItem>
-                <MenuItem onClick={exportAllObservationsCsv} divider>
+                <MenuItem onClick={exportAllObservationsCsv} sx={{ fontSize: "0.875rem" }} divider>
                     <ListItemIcon>
-                        <FontAwesomeIcon icon={faFileCsv} color={getIconColor()} />
+                        <FontAwesomeIcon icon={faFileCsv} color={getIconAndFontColor()} />
                     </ListItemIcon>
                     All observations / CSV
                 </MenuItem>
-                <MenuItem onClick={exportMetricsExcel}>
+                <MenuItem onClick={exportMetricsExcel} sx={{ fontSize: "0.875rem" }}>
                     <ListItemIcon>
-                        <FontAwesomeIcon icon={faFileExcel} color={getIconColor()} />
+                        <FontAwesomeIcon icon={faFileExcel} color={getIconAndFontColor()} />
                     </ListItemIcon>
                     Metrics / Excel
                 </MenuItem>
-                <MenuItem onClick={exportMetricsCsv} divider={!props.is_product_group}>
+                <MenuItem onClick={exportMetricsCsv} sx={{ fontSize: "0.875rem" }} divider={!props.is_product_group}>
                     <ListItemIcon>
-                        <FontAwesomeIcon icon={faFileCsv} color={getIconColor()} />
+                        <FontAwesomeIcon icon={faFileCsv} color={getIconAndFontColor()} />
                     </ListItemIcon>
                     Metrics / CSV
                 </MenuItem>
                 {!props.is_product_group && (
-                    <MenuItem onClick={exportCodeChartaMetrics}>
+                    <MenuItem onClick={exportCodeChartaMetrics} sx={{ fontSize: "0.875rem" }}>
                         <ListItemIcon>
-                            <ViewQuiltIcon sx={{ color: getIconColor() }} />
+                            <ViewQuiltIcon sx={{ color: getIconAndFontColor() }} />
                         </ListItemIcon>
                         CodeCharta metrics
                     </MenuItem>
