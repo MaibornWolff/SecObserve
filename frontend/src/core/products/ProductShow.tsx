@@ -39,8 +39,7 @@ import observations from "../../core/observations";
 import products from "../../core/products";
 import ApiConfigurationCreate from "../../import_observations/api_configurations/ApiConfigurationCreate";
 import ApiConfigurationEmbeddedList from "../../import_observations/api_configurations/ApiConfigurationEmbeddedList";
-import ApiImportObservations from "../../import_observations/import/ApiImportObservations";
-import FileUploadObservations from "../../import_observations/import/FileUploadObservations";
+import ImportMenu from "../../import_observations/import/ImportMenu";
 import MetricsHeader from "../../metrics/MetricsHeader";
 import MetricsSeveritiesCurrent from "../../metrics/MetricsSeveritiesCurrent";
 import MetricsSeveritiesTimeline from "../../metrics/MetricsSeveritiesTimeLine";
@@ -76,11 +75,7 @@ const ShowActions = (props: ShowActionsProps) => {
                     storeKey={props.storeKey}
                 />
                 {product && product.permissions.includes(PERMISSION_PRODUCT_IMPORT_OBSERVATIONS) && (
-                    <div>
-                        <FileUploadObservations />
-                        &nbsp; &nbsp;
-                        <ApiImportObservations product={product} />
-                    </div>
+                    <ImportMenu product={product} />
                 )}
                 <ExportMenu product={product} is_product_group={false} />
                 {product && product.permissions.includes(PERMISSION_PRODUCT_EDIT) && <EditButton />}

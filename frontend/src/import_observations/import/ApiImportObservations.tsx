@@ -4,6 +4,7 @@ import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle 
 import { Fragment, useState } from "react";
 import { ReferenceInput, SaveButton, SimpleForm, Toolbar, required, useNotify, useRefresh } from "react-admin";
 
+import { getIconAndFontColor } from "../../commons/functions";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
@@ -101,13 +102,13 @@ const ApiImportObservations = (product: any) => {
             <Button
                 onClick={handleOpen}
                 size="small"
-                sx={{ paddingTop: "0px", paddingBottom: "2px" }}
-                startIcon={<UploadIcon />}
+                sx={{ paddingTop: "0px", paddingBottom: "2px", color: getIconAndFontColor(), textTransform: "none" }}
+                startIcon={<UploadIcon sx={{ color: getIconAndFontColor() }} />}
             >
-                Import Observations From API
+                Import observations from API
             </Button>
             <Dialog open={open && !loading} onClose={handleClose}>
-                <DialogTitle>Import Observations From API</DialogTitle>
+                <DialogTitle>Import observations from API</DialogTitle>
                 <DialogContent>
                     <SimpleForm onSubmit={observationUpdate} toolbar={<CustomToolbar />}>
                         <ReferenceInput
