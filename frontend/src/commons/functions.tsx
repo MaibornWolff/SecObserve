@@ -6,6 +6,15 @@ import {
     OBSERVATION_SEVERITY_NONE,
     OBSERVATION_SEVERITY_UNKOWN,
 } from "../core/types";
+import { getSettingTheme } from "./settings/functions";
+
+export function getIconAndFontColor() {
+    if (getSettingTheme() == "dark") {
+        return "white";
+    } else {
+        return "black";
+    }
+}
 
 export function get_severity_color(severity: string): string {
     let backgroundColor = "transparent";

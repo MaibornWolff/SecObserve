@@ -37,7 +37,7 @@ services:
       - traefik
 
   frontend:
-    image: maibornwolff/secobserve-frontend:0.9.9
+    image: maibornwolff/secobserve-frontend:0.9.10
     container_name: "prod_secobserve_frontend"
     labels:
       - "traefik.enable=true"
@@ -55,7 +55,7 @@ services:
       - traefik
 
   backend:
-    image: maibornwolff/secobserve-backend:0.9.9
+    image: maibornwolff/secobserve-backend:0.9.10
     container_name: "prod_secobserve_backend"
     labels:
       - "traefik.enable=true"
@@ -83,7 +83,6 @@ services:
       # --- Azure AD ---
       AAD_CLIENT_ID: ${SO_AAD_CLIENT_ID:-}
       AAD_TENANT_ID: ${SO_AAD_TENANT_ID:-}
-    command: /start
     networks:
       - traefik
       - database

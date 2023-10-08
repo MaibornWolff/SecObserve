@@ -9,6 +9,7 @@ import {
     EditButton,
     Labeled,
     NumberField,
+    PrevNextButtons,
     ReferenceField,
     RichTextField,
     Show,
@@ -38,8 +39,7 @@ import observations from "../../core/observations";
 import products from "../../core/products";
 import ApiConfigurationCreate from "../../import_observations/api_configurations/ApiConfigurationCreate";
 import ApiConfigurationEmbeddedList from "../../import_observations/api_configurations/ApiConfigurationEmbeddedList";
-import ApiImportObservations from "../../import_observations/import/ApiImportObservations";
-import FileUploadObservations from "../../import_observations/import/FileUploadObservations";
+import ImportMenu from "../../import_observations/import/ImportMenu";
 import MetricsHeader from "../../metrics/MetricsHeader";
 import MetricsSeveritiesCurrent from "../../metrics/MetricsSeveritiesCurrent";
 import MetricsSeveritiesTimeline from "../../metrics/MetricsSeveritiesTimeLine";
@@ -58,28 +58,45 @@ import ProductMemberEmbeddedList from "../product_members/ProductMemberEmbeddedL
 import ExportMenu from "./ExportMenu";
 import ProductHeader from "./ProductHeader";
 
-const ShowActions = () => {
+type ShowActionsProps = {
+    filter: any;
+    storeKey: string;
+};
+
+const ShowActions = (props: ShowActionsProps) => {
     const product = useRecordContext();
     return (
         <TopToolbar>
-            {product && product.permissions.includes(PERMISSION_PRODUCT_IMPORT_OBSERVATIONS) && (
-                <div>
-                    <FileUploadObservations />
-                    &nbsp; &nbsp;
-                    <ApiImportObservations product={product} />
-                </div>
-            )}
-            <ExportMenu product={product} is_product_group={false} />
-            {product && product.permissions.includes(PERMISSION_PRODUCT_EDIT) && <EditButton />}
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <PrevNextButtons
+                    filter={props.filter}
+                    linkType="show"
+                    sort={{ field: "name", order: "ASC" }}
+                    storeKey={props.storeKey}
+                />
+                {product && product.permissions.includes(PERMISSION_PRODUCT_IMPORT_OBSERVATIONS) && (
+                    <ImportMenu product={product} />
+                )}
+                <ExportMenu product={product} is_product_group={false} />
+                {product && product.permissions.includes(PERMISSION_PRODUCT_EDIT) && <EditButton />}
+            </Stack>
         </TopToolbar>
     );
 };
 
 const ProductShow = () => {
+    let filter = {};
+    let storeKey = "products.list";
+    const product_group_id = localStorage.getItem("productembeddedlist.product_group");
+    if (product_group_id !== null) {
+        filter = { product_group: Number(product_group_id) };
+        storeKey = "products.embedded";
+    }
+
     return (
         <div>
             <ProductHeader />
-            <Show actions={<ShowActions />}>
+            <Show actions={<ShowActions filter={filter} storeKey={storeKey} />}>
                 <WithRecord
                     render={(product) => (
                         <TabbedShowLayout>

@@ -14,6 +14,7 @@ import {
 } from "react-admin";
 import { makeStyles } from "tss-react/mui";
 
+import { getIconAndFontColor } from "../../commons/functions";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
@@ -127,13 +128,13 @@ const FileUploadObservations = () => {
             <Button
                 onClick={handleOpen}
                 size="small"
-                sx={{ paddingTop: "0px", paddingBottom: "2px" }}
-                startIcon={<UploadIcon />}
+                sx={{ paddingTop: "0px", paddingBottom: "2px", color: getIconAndFontColor(), textTransform: "none" }}
+                startIcon={<UploadIcon sx={{ color: getIconAndFontColor() }} />}
             >
-                Upload Observations From File
+                Upload observations from file
             </Button>
             <Dialog open={open && !loading} onClose={handleClose}>
-                <DialogTitle>Upload Observations From File</DialogTitle>
+                <DialogTitle>Upload observations from file</DialogTitle>
                 <DialogContent>
                     <SimpleForm onSubmit={observationUpdate} toolbar={<CustomToolbar />}>
                         <input

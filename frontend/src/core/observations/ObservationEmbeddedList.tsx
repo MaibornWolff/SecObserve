@@ -1,17 +1,19 @@
-import { Paper } from "@mui/material";
+import { Paper, Stack } from "@mui/material";
 import { Fragment } from "react";
 import {
     AutocompleteInput,
     ChipField,
-    Datagrid,
+    DatagridConfigurable,
     FilterForm,
     FunctionField,
     ListContextProvider,
     NumberField,
     Pagination,
     ReferenceInput,
+    SelectColumnsButton,
     TextField,
     TextInput,
+    TopToolbar,
     useListController,
 } from "react-admin";
 
@@ -78,23 +80,21 @@ const BulkActionButtons = (product: any) => (
     </Fragment>
 );
 
-const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) => {
-    const filter = { product: Number(product.id) };
-    const perPage = 25;
-    const resource = "observations";
-    const sort = { field: "current_severity", order: "ASC" };
-    const filterDefaultValues = { current_status: OBSERVATION_STATUS_OPEN, branch: product.repository_default_branch };
-    const disableSyncWithLocation = false;
-    const storeKey = "observations.embedded";
+const ListActions = () => (
+    <TopToolbar>
+        <SelectColumnsButton preferenceKey="observations.embedded" />
+    </TopToolbar>
+);
 
+const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) => {
     const listContext = useListController({
-        filter,
-        perPage,
-        resource,
-        sort,
-        filterDefaultValues,
-        disableSyncWithLocation,
-        storeKey,
+        filter: { product: Number(product.id) },
+        perPage: 25,
+        resource: "observations",
+        sort: { field: "current_severity", order: "ASC" },
+        filterDefaultValues: { current_status: OBSERVATION_STATUS_OPEN, branch: product.repository_default_branch },
+        disableSyncWithLocation: false,
+        storeKey: "observations.embedded",
     });
 
     if (listContext.isLoading) {
@@ -105,12 +105,17 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
         listContext.data = [];
     }
 
+    localStorage.setItem("observationembeddedlist.product", product.id);
+
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
-                <FilterForm filters={listFilters(product)} />
+                <Stack direction="row" spacing={2} justifyContent="center" alignItems="flex-end">
+                    <FilterForm filters={listFilters(product)} />
+                    <ListActions />
+                </Stack>
                 <Paper>
-                    <Datagrid
+                    <DatagridConfigurable
                         size="medium"
                         sx={{ width: "100%" }}
                         rowClick={ShowObservations}
@@ -121,6 +126,7 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
                                 <BulkActionButtons product={product} />
                             )
                         }
+                        preferenceKey="observations.embedded"
                     >
                         <TextField source="branch_name" label="Branch" />
                         <TextField source="title" />
@@ -138,7 +144,7 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
                             sortBy="last_observation_log"
                             render={(record) => (record ? humanReadableDate(record.last_observation_log) : "")}
                         />
-                    </Datagrid>
+                    </DatagridConfigurable>
                 </Paper>
                 <Pagination />
             </div>

@@ -1,7 +1,7 @@
 import { Paper } from "@mui/material";
 import { ArcElement, Chart as ChartJS, Legend, RadialLinearScale, Title, Tooltip } from "chart.js";
 import { useState } from "react";
-import { Identifier } from "react-admin";
+import { Identifier, useNotify } from "react-admin";
 import { PolarArea } from "react-chartjs-2";
 
 import { httpClient } from "../commons/ra-data-django-rest-framework";
@@ -25,6 +25,7 @@ const MetricsStatusCurrent = (props: MetricsStatusCurrentProps) => {
     const [data, setData] = useState<number[]>([]);
     const [loaded, setLoaded] = useState(false);
     const [loading, setLoading] = useState(false);
+    const notify = useNotify();
 
     const chart_data = {
         labels: [
@@ -65,19 +66,33 @@ const MetricsStatusCurrent = (props: MetricsStatusCurrentProps) => {
 
         httpClient(url, {
             method: "GET",
-        }).then((result) => {
-            const new_data = [
-                result.json.open,
-                result.json.resolved,
-                result.json.duplicate,
-                result.json.false_positive,
-                result.json.in_review,
-                result.json.not_affected,
-                result.json.not_security,
-                result.json.risk_accepted,
-            ];
-            setData((data) => data.concat(new_data));
-        });
+        })
+            .then((result) => {
+                const new_data = [
+                    result.json.open,
+                    result.json.resolved,
+                    result.json.duplicate,
+                    result.json.false_positive,
+                    result.json.in_review,
+                    result.json.not_affected,
+                    result.json.not_security,
+                    result.json.risk_accepted,
+                ];
+                setData((data) => data.concat(new_data));
+            })
+            .catch((error) => {
+                if (localStorage.getItem("aad_login_finalized") != "false") {
+                    if (error !== undefined) {
+                        notify(error.message, {
+                            type: "warning",
+                        });
+                    } else {
+                        notify("Error while loading metrics", {
+                            type: "warning",
+                        });
+                    }
+                }
+            });
         setLoaded(true);
         setLoading(false);
     }

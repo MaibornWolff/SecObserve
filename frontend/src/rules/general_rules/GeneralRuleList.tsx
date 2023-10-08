@@ -44,6 +44,7 @@ const GeneralRuleList = () => {
             sort={{ field: "name", order: "ASC" }}
             actions={<ListActions />}
             disableSyncWithLocation={false}
+            storeKey="general_rules.list"
         >
             <Datagrid
                 size="medium"

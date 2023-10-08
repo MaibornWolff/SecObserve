@@ -30,20 +30,13 @@ type ProductRuleEmbeddedListProps = {
 };
 
 const ProductRuleEmbeddedList = ({ product }: ProductRuleEmbeddedListProps) => {
-    const filter = { product: Number(product.id) };
-    const perPage = 25;
-    const resource = "product_rules";
-    const sort = { field: "name", order: "ASC" };
-    const disableSyncWithLocation = true;
-    const storeKey = "product_rules.embedded";
-
     const listContext = useListController({
-        filter,
-        perPage,
-        resource,
-        sort,
-        disableSyncWithLocation,
-        storeKey,
+        filter: { product: Number(product.id) },
+        perPage: 25,
+        resource: "product_rules",
+        sort: { field: "name", order: "ASC" },
+        disableSyncWithLocation: true,
+        storeKey: "product_rules.embedded",
     });
 
     if (listContext.isLoading) {

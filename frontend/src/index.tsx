@@ -1,11 +1,4 @@
-/** @jsxRuntime classic */
 import { MsalProvider } from "@azure/msal-react";
-import "proxy-polyfill";
-// IE11 needs "jsxRuntime classic" for this initial file which means that "React" needs to be in scope
-// https://github.com/facebook/create-react-app/issues/9906
-import * as React from "react";
-import "react-app-polyfill/ie11";
-import "react-app-polyfill/stable";
 import { createRoot } from "react-dom/client";
 
 import App from "./App";
@@ -17,10 +10,8 @@ if (container) {
     const publicClientApplication = getPublicClientApplication();
 
     root.render(
-        <React.StrictMode>
-            <MsalProvider instance={publicClientApplication}>
-                <App />
-            </MsalProvider>
-        </React.StrictMode>
+        <MsalProvider instance={publicClientApplication}>
+            <App />
+        </MsalProvider>
     );
 }

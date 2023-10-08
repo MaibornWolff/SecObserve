@@ -11,7 +11,7 @@ import {
     Tooltip,
 } from "chart.js";
 import { useState } from "react";
-import { Identifier } from "react-admin";
+import { Identifier, useNotify } from "react-admin";
 import { Line } from "react-chartjs-2";
 
 import { get_severity_color } from "../commons/functions";
@@ -34,6 +34,7 @@ const MetricsSeveritiesTimeline = (props: MetricsSeveritiesTimelineProps) => {
     const [datasets, setDatasets] = useState<any[]>([]);
     const [loaded, setLoaded] = useState(false);
     const [loading, setLoading] = useState(false);
+    const notify = useNotify();
 
     const days = [
         new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toLocaleDateString(),
@@ -77,122 +78,136 @@ const MetricsSeveritiesTimeline = (props: MetricsSeveritiesTimelineProps) => {
 
         httpClient(url, {
             method: "GET",
-        }).then((result) => {
-            const critical_observations = [];
-            const high_observations = [];
-            const medium_observations = [];
-            const low_observations = [];
-            const none_observations = [];
-            const unkown_observations = [];
+        })
+            .then((result) => {
+                const critical_observations = [];
+                const high_observations = [];
+                const medium_observations = [];
+                const low_observations = [];
+                const none_observations = [];
+                const unkown_observations = [];
 
-            let metrics = get_metrics(new Date(Date.now() - 6 * 24 * 60 * 60 * 1000), result.json);
-            critical_observations.push(metrics.open_critical);
-            high_observations.push(metrics.open_high);
-            medium_observations.push(metrics.open_medium);
-            low_observations.push(metrics.open_low);
-            none_observations.push(metrics.open_none);
-            unkown_observations.push(metrics.open_unknown);
+                let metrics = get_metrics(new Date(Date.now() - 6 * 24 * 60 * 60 * 1000), result.json);
+                critical_observations.push(metrics.open_critical);
+                high_observations.push(metrics.open_high);
+                medium_observations.push(metrics.open_medium);
+                low_observations.push(metrics.open_low);
+                none_observations.push(metrics.open_none);
+                unkown_observations.push(metrics.open_unknown);
 
-            metrics = get_metrics(new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), result.json);
-            critical_observations.push(metrics.open_critical);
-            high_observations.push(metrics.open_high);
-            medium_observations.push(metrics.open_medium);
-            low_observations.push(metrics.open_low);
-            none_observations.push(metrics.open_none);
-            unkown_observations.push(metrics.open_unknown);
+                metrics = get_metrics(new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), result.json);
+                critical_observations.push(metrics.open_critical);
+                high_observations.push(metrics.open_high);
+                medium_observations.push(metrics.open_medium);
+                low_observations.push(metrics.open_low);
+                none_observations.push(metrics.open_none);
+                unkown_observations.push(metrics.open_unknown);
 
-            metrics = get_metrics(new Date(Date.now() - 4 * 24 * 60 * 60 * 1000), result.json);
-            critical_observations.push(metrics.open_critical);
-            high_observations.push(metrics.open_high);
-            medium_observations.push(metrics.open_medium);
-            low_observations.push(metrics.open_low);
-            none_observations.push(metrics.open_none);
-            unkown_observations.push(metrics.open_unknown);
+                metrics = get_metrics(new Date(Date.now() - 4 * 24 * 60 * 60 * 1000), result.json);
+                critical_observations.push(metrics.open_critical);
+                high_observations.push(metrics.open_high);
+                medium_observations.push(metrics.open_medium);
+                low_observations.push(metrics.open_low);
+                none_observations.push(metrics.open_none);
+                unkown_observations.push(metrics.open_unknown);
 
-            metrics = get_metrics(new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), result.json);
-            critical_observations.push(metrics.open_critical);
-            high_observations.push(metrics.open_high);
-            medium_observations.push(metrics.open_medium);
-            low_observations.push(metrics.open_low);
-            none_observations.push(metrics.open_none);
-            unkown_observations.push(metrics.open_unknown);
+                metrics = get_metrics(new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), result.json);
+                critical_observations.push(metrics.open_critical);
+                high_observations.push(metrics.open_high);
+                medium_observations.push(metrics.open_medium);
+                low_observations.push(metrics.open_low);
+                none_observations.push(metrics.open_none);
+                unkown_observations.push(metrics.open_unknown);
 
-            metrics = get_metrics(new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), result.json);
-            critical_observations.push(metrics.open_critical);
-            high_observations.push(metrics.open_high);
-            medium_observations.push(metrics.open_medium);
-            low_observations.push(metrics.open_low);
-            none_observations.push(metrics.open_none);
-            unkown_observations.push(metrics.open_unknown);
+                metrics = get_metrics(new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), result.json);
+                critical_observations.push(metrics.open_critical);
+                high_observations.push(metrics.open_high);
+                medium_observations.push(metrics.open_medium);
+                low_observations.push(metrics.open_low);
+                none_observations.push(metrics.open_none);
+                unkown_observations.push(metrics.open_unknown);
 
-            metrics = get_metrics(new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), result.json);
-            critical_observations.push(metrics.open_critical);
-            high_observations.push(metrics.open_high);
-            medium_observations.push(metrics.open_medium);
-            low_observations.push(metrics.open_low);
-            none_observations.push(metrics.open_none);
-            unkown_observations.push(metrics.open_unknown);
+                metrics = get_metrics(new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), result.json);
+                critical_observations.push(metrics.open_critical);
+                high_observations.push(metrics.open_high);
+                medium_observations.push(metrics.open_medium);
+                low_observations.push(metrics.open_low);
+                none_observations.push(metrics.open_none);
+                unkown_observations.push(metrics.open_unknown);
 
-            metrics = get_metrics(new Date(Date.now()), result.json);
-            critical_observations.push(metrics.open_critical);
-            high_observations.push(metrics.open_high);
-            medium_observations.push(metrics.open_medium);
-            low_observations.push(metrics.open_low);
-            none_observations.push(metrics.open_none);
-            unkown_observations.push(metrics.open_unknown);
+                metrics = get_metrics(new Date(Date.now()), result.json);
+                critical_observations.push(metrics.open_critical);
+                high_observations.push(metrics.open_high);
+                medium_observations.push(metrics.open_medium);
+                low_observations.push(metrics.open_low);
+                none_observations.push(metrics.open_none);
+                unkown_observations.push(metrics.open_unknown);
 
-            const data_sets = [
-                {
-                    fill: true,
-                    label: OBSERVATION_SEVERITY_UNKOWN,
-                    data: unkown_observations,
-                    borderColor: getBackgroundColor(),
-                    backgroundColor: get_severity_color(OBSERVATION_SEVERITY_UNKOWN),
-                    cubicInterpolationMode: "monotone",
-                },
-                {
-                    fill: true,
-                    label: OBSERVATION_SEVERITY_NONE,
-                    data: none_observations,
-                    borderColor: getBackgroundColor(),
-                    backgroundColor: get_severity_color(OBSERVATION_SEVERITY_NONE),
-                    cubicInterpolationMode: "monotone",
-                },
-                {
-                    fill: true,
-                    label: OBSERVATION_SEVERITY_LOW,
-                    data: low_observations,
-                    borderColor: getBackgroundColor(),
-                    backgroundColor: get_severity_color(OBSERVATION_SEVERITY_LOW),
-                    cubicInterpolationMode: "monotone",
-                },
-                {
-                    fill: true,
-                    label: OBSERVATION_SEVERITY_MEDIUM,
-                    data: medium_observations,
-                    borderColor: getBackgroundColor(),
-                    backgroundColor: get_severity_color(OBSERVATION_SEVERITY_MEDIUM),
-                    cubicInterpolationMode: "monotone",
-                },
-                {
-                    fill: true,
-                    label: OBSERVATION_SEVERITY_HIGH,
-                    data: high_observations,
-                    borderColor: getBackgroundColor(),
-                    backgroundColor: get_severity_color(OBSERVATION_SEVERITY_HIGH),
-                    cubicInterpolationMode: "monotone",
-                },
-                {
-                    fill: true,
-                    label: OBSERVATION_SEVERITY_CRITICAL,
-                    data: critical_observations,
-                    borderColor: getBackgroundColor(),
-                    backgroundColor: get_severity_color(OBSERVATION_SEVERITY_CRITICAL),
-                    cubicInterpolationMode: "monotone",
-                },
-            ];
-            setDatasets(data_sets);
-        });
+                const data_sets = [
+                    {
+                        fill: true,
+                        label: OBSERVATION_SEVERITY_UNKOWN,
+                        data: unkown_observations,
+                        borderColor: getBackgroundColor(),
+                        backgroundColor: get_severity_color(OBSERVATION_SEVERITY_UNKOWN),
+                        cubicInterpolationMode: "monotone",
+                    },
+                    {
+                        fill: true,
+                        label: OBSERVATION_SEVERITY_NONE,
+                        data: none_observations,
+                        borderColor: getBackgroundColor(),
+                        backgroundColor: get_severity_color(OBSERVATION_SEVERITY_NONE),
+                        cubicInterpolationMode: "monotone",
+                    },
+                    {
+                        fill: true,
+                        label: OBSERVATION_SEVERITY_LOW,
+                        data: low_observations,
+                        borderColor: getBackgroundColor(),
+                        backgroundColor: get_severity_color(OBSERVATION_SEVERITY_LOW),
+                        cubicInterpolationMode: "monotone",
+                    },
+                    {
+                        fill: true,
+                        label: OBSERVATION_SEVERITY_MEDIUM,
+                        data: medium_observations,
+                        borderColor: getBackgroundColor(),
+                        backgroundColor: get_severity_color(OBSERVATION_SEVERITY_MEDIUM),
+                        cubicInterpolationMode: "monotone",
+                    },
+                    {
+                        fill: true,
+                        label: OBSERVATION_SEVERITY_HIGH,
+                        data: high_observations,
+                        borderColor: getBackgroundColor(),
+                        backgroundColor: get_severity_color(OBSERVATION_SEVERITY_HIGH),
+                        cubicInterpolationMode: "monotone",
+                    },
+                    {
+                        fill: true,
+                        label: OBSERVATION_SEVERITY_CRITICAL,
+                        data: critical_observations,
+                        borderColor: getBackgroundColor(),
+                        backgroundColor: get_severity_color(OBSERVATION_SEVERITY_CRITICAL),
+                        cubicInterpolationMode: "monotone",
+                    },
+                ];
+                setDatasets(data_sets);
+            })
+            .catch((error) => {
+                if (localStorage.getItem("aad_login_finalized") != "false") {
+                    if (error !== undefined) {
+                        notify(error.message, {
+                            type: "warning",
+                        });
+                    } else {
+                        notify("Error while loading metrics", {
+                            type: "warning",
+                        });
+                    }
+                }
+            });
         setLoaded(true);
         setLoading(false);
     }

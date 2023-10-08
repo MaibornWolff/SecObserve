@@ -15,11 +15,6 @@ services:
       ADMIN_EMAIL: admin@example.com
       # --- Database ---
       DATABASE_ENGINE: django.db.backends.sqlite3
-      DATABASE_HOST: dummy
-      DATABASE_PORT: 9999
-      DATABASE_DB: dummy
-      DATABASE_USER: dummy
-      DATABASE_PASSWORD: dummy
       # --- Security ---
       ALLOWED_HOSTS: localhost
       CORS_ALLOWED_ORIGINS: http://localhost:3000

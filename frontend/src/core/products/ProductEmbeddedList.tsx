@@ -25,22 +25,14 @@ function listFilters() {
 }
 
 const ProductEmbeddedList = ({ product_group }: ProductEmbeddedListProps) => {
-    const filter = { product_group: Number(product_group.id) };
-    const perPage = 25;
-    const resource = "products";
-    const sort = { field: "name", order: "ASC" };
-    const filterDefaultValues = {};
-    const disableSyncWithLocation = false;
-    const storeKey = "products.embedded";
-
     const listContext = useListController({
-        filter,
-        perPage,
-        resource,
-        sort,
-        filterDefaultValues,
-        disableSyncWithLocation,
-        storeKey,
+        filter: { product_group: Number(product_group.id) },
+        perPage: 25,
+        resource: "products",
+        sort: { field: "name", order: "ASC" },
+        filterDefaultValues: {},
+        disableSyncWithLocation: false,
+        storeKey: "products.embedded",
     });
 
     if (listContext.isLoading) {
@@ -50,6 +42,9 @@ const ProductEmbeddedList = ({ product_group }: ProductEmbeddedListProps) => {
     if (listContext.data === undefined) {
         listContext.data = [];
     }
+
+    localStorage.setItem("productembeddedlist.product_group", product_group.id);
+
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>

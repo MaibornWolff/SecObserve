@@ -41,6 +41,8 @@ const ListActions = () => {
 };
 
 const ProductList = () => {
+    localStorage.removeItem("productembeddedlist.product_group");
+
     return (
         <List
             perPage={25}
@@ -49,6 +51,7 @@ const ProductList = () => {
             sort={{ field: "name", order: "ASC" }}
             actions={<ListActions />}
             disableSyncWithLocation={false}
+            storeKey="products.list"
         >
             <Datagrid size="medium" rowClick="show" bulkActionButtons={<BulkActionButtons />}>
                 <TextField source="name" />

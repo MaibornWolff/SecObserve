@@ -36,12 +36,13 @@ const authProvider: AuthProvider = {
                 });
         }
     },
-    logout: () => {
+    logout: async () => {
         localStorage.removeItem("jwt");
         localStorage.removeItem("user");
         localStorage.removeItem("aad_login_finalized");
         if (aad_signed_in()) {
             const pca = getPublicClientApplication();
+            await pca.initialize();
             pca.logoutRedirect();
         }
         return Promise.resolve();
@@ -50,7 +51,11 @@ const authProvider: AuthProvider = {
         if (error) {
             const status = error.status;
             if (status === 401 || status === 403) {
-                localStorage.clear();
+                Object.keys(localStorage).forEach(function (key) {
+                    if (!key.startsWith("RaStore")) {
+                        localStorage.removeItem(key);
+                    }
+                });
                 return Promise.reject({
                     redirectTo: "/login",
                     logoutUser: false,

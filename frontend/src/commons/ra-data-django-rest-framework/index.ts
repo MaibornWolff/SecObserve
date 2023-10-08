@@ -43,60 +43,40 @@ function createOptionsFromTokenJWT() {
     };
 }
 
-function getTokenRedirect() {
-    const publicClientApplication = getPublicClientApplication();
-    const account = publicClientApplication.getAllAccounts()[0];
-    const accessTokenRequest = {
-        scopes: [window.__RUNTIME_CONFIG__.AAD_SCOPE as string],
-        account: account,
-    };
-
-    return publicClientApplication.acquireTokenSilent(accessTokenRequest).catch((error) => {
-        console.warn("silent token acquisition fails. acquiring token using redirect");
-        if (error instanceof InteractionRequiredAuthError) {
-            // fallback to interaction when silent call fails
-            return publicClientApplication
-                .acquireTokenRedirect(accessTokenRequest)
-                .then((tokenResponse) => {
-                    return tokenResponse;
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        } else {
-            console.warn(error);
-        }
-    });
-}
-
-function createOptionsFromTokenAAD() {
-    return getTokenRedirect()
-        .then((token) => {
-            // A timing attack isn't possible when checking for undefined, because it's not a sequential comparison
-            // see https://www.npmjs.com/package/tslint-config-security?activeTab=readme#tsr-detect-possible-timing-attacks
-            // see https://snyk.io/blog/node-js-timing-attack-ccc-ctf/
-            // eslint-disable-next-line security/detect-possible-timing-attacks
-            if (token === undefined) {
-                return {};
-            }
-            return {
-                user: {
-                    authenticated: true,
-                    token: "Bearer " + token.accessToken,
-                },
-            };
-        })
-        .catch((error) => {
-            console.warn(error);
-            return {};
-        });
-}
-
-export function httpClient(url: string, options?: fetchUtils.Options | undefined) {
+export async function httpClient(url: string, options?: fetchUtils.Options | undefined) {
     if (aad_signed_in()) {
-        return createOptionsFromTokenAAD().then((tokenOptions) => {
-            return fetchUtils.fetchJson(url, Object.assign(tokenOptions, options));
+        const publicClientApplication = getPublicClientApplication();
+        await publicClientApplication.initialize();
+        const account = publicClientApplication.getAllAccounts()[0];
+        const accessTokenRequest = {
+            scopes: [window.__RUNTIME_CONFIG__.AAD_SCOPE as string],
+            account: account,
+        };
+        const authResult = await publicClientApplication.acquireTokenSilent(accessTokenRequest).catch((error) => {
+            console.warn("silent token acquisition fails. acquiring token using redirect");
+            if (error instanceof InteractionRequiredAuthError) {
+                // fallback to interaction when silent call fails
+                return publicClientApplication
+                    .acquireTokenRedirect(accessTokenRequest)
+                    .then((tokenResponse) => {
+                        return tokenResponse;
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            } else {
+                console.warn(error);
+            }
         });
+        if (!authResult) {
+            return Promise.reject();
+        }
+        const token = authResult.accessToken;
+        const user = {
+            authenticated: !!token,
+            token: `Bearer ${token}`,
+        };
+        return fetchUtils.fetchJson(url, { ...options, user });
     } else if (jwt_signed_in()) {
         return fetchUtils.fetchJson(url, Object.assign(createOptionsFromTokenJWT(), options));
     } else {

@@ -1,12 +1,5 @@
 from .prod import *  # noqa
 
-DATABASES = {
-    "default": {
-        "ATOMIC_REQUESTS": True,
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "./sqlite_unittests.db",
-    }
-}
 # Basically disable throttling for unit tests
 REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"] = {
     "anon": "1000/second",

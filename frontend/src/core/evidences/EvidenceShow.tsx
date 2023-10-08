@@ -1,13 +1,39 @@
 import { JsonViewer, JsonViewerTheme } from "@textea/json-viewer";
-import { Labeled, ReferenceField, Show, SimpleShowLayout, TextField, WithRecord } from "react-admin";
+import {
+    Labeled,
+    PrevNextButtons,
+    ReferenceField,
+    Show,
+    SimpleShowLayout,
+    TextField,
+    TopToolbar,
+    WithRecord,
+} from "react-admin";
 
 import { useStyles } from "../../commons/layout/themes";
 import { getSettingTheme } from "../../commons/settings/functions";
 
+const ShowActions = () => {
+    const observation_id = localStorage.getItem("observationshow.id");
+    if (observation_id) {
+        return (
+            <TopToolbar>
+                <PrevNextButtons
+                    filter={{ observation: observation_id }}
+                    linkType="show"
+                    sort={{ field: "name", order: "ASC" }}
+                />
+            </TopToolbar>
+        );
+    } else {
+        return null;
+    }
+};
+
 const EvidenceShow = () => {
     const { classes } = useStyles();
     return (
-        <Show>
+        <Show actions={<ShowActions />}>
             <SimpleShowLayout>
                 <ReferenceField source="product" reference="products" link="show">
                     <TextField source="name" />

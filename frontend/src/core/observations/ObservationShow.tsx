@@ -7,6 +7,7 @@ import {
     EditButton,
     Labeled,
     NumberField,
+    PrevNextButtons,
     ReferenceField,
     Show,
     SimpleShowLayout,
@@ -22,35 +23,67 @@ import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import { get_cwe_url, get_vulnerability_url } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
+import { OBSERVATION_STATUS_OPEN } from "../types";
 import ObservationAssessment from "./ObservationAssessment";
 import ObservationRemoveAssessment from "./ObservationRemoveAssessment";
 import ObservationsShowAside from "./ObservationShowAside";
 
-const ShowActions = () => {
+type ShowActionsProps = {
+    filter: any;
+    storeKey: string;
+};
+
+const ShowActions = (props: ShowActionsProps) => {
     const observation = useRecordContext();
+    if (observation) {
+        localStorage.setItem("observationshow.id", observation.id.toString());
+    }
     return (
         <TopToolbar>
-            {observation &&
-                observation.product_data.permissions &&
-                observation.product_data.permissions.includes(PERMISSION_OBSERVATION_ASSESSMENT) && (
-                    <ObservationAssessment />
-                )}
-            {observation &&
-                observation.product_data.permissions &&
-                observation.product_data.permissions.includes(PERMISSION_OBSERVATION_ASSESSMENT) &&
-                (observation.assessment_severity || observation.assessment_status) && <ObservationRemoveAssessment />}
-            {observation &&
-                observation.product_data.permissions &&
-                observation.parser_data.type == "Manual" &&
-                observation.product_data.permissions.includes(PERMISSION_OBSERVATION_EDIT) && <EditButton />}
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <PrevNextButtons
+                    filter={props.filter}
+                    filterDefaultValues={{ current_status: OBSERVATION_STATUS_OPEN }}
+                    linkType="show"
+                    sort={{ field: "current_severity", order: "ASC" }}
+                    storeKey={props.storeKey}
+                />
+                {observation &&
+                    observation.product_data.permissions &&
+                    observation.product_data.permissions.includes(PERMISSION_OBSERVATION_ASSESSMENT) && (
+                        <ObservationAssessment />
+                    )}
+                {observation &&
+                    observation.product_data.permissions &&
+                    observation.product_data.permissions.includes(PERMISSION_OBSERVATION_ASSESSMENT) &&
+                    (observation.assessment_severity || observation.assessment_status) && (
+                        <ObservationRemoveAssessment />
+                    )}
+                {observation &&
+                    observation.product_data.permissions &&
+                    observation.parser_data.type == "Manual" &&
+                    observation.product_data.permissions.includes(PERMISSION_OBSERVATION_EDIT) && <EditButton />}
+            </Stack>
         </TopToolbar>
     );
 };
 
 const ObservationShow = () => {
     const { classes } = useStyles();
+
+    let filter = {};
+    let storeKey = "observations.list";
+    const product_id = localStorage.getItem("observationembeddedlist.product");
+    if (product_id !== null) {
+        filter = { product: Number(product_id) };
+        storeKey = "observations.embedded";
+    } else if (localStorage.getItem("observationdashboardlist") === "true") {
+        filter = { age: "Past 7 days", current_status: "Open" };
+        storeKey = "observations.dashboard";
+    }
+
     return (
-        <Show actions={<ShowActions />} aside={<ObservationsShowAside />}>
+        <Show actions={<ShowActions filter={filter} storeKey={storeKey} />} aside={<ObservationsShowAside />}>
             <WithRecord
                 render={(observation) => (
                     <SimpleShowLayout>

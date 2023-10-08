@@ -7,6 +7,7 @@ import {
     EditButton,
     Labeled,
     NumberField,
+    PrevNextButtons,
     RichTextField,
     Show,
     SimpleShowLayout,
@@ -47,8 +48,15 @@ const ShowActions = () => {
     const product_group = useRecordContext();
     return (
         <TopToolbar>
-            <ExportMenu product={product_group} is_product_group={true} />
-            {product_group && product_group.permissions.includes(PERMISSION_PRODUCT_GROUP_EDIT) && <EditButton />}
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <PrevNextButtons
+                    linkType="show"
+                    sort={{ field: "name", order: "ASC" }}
+                    storeKey="product_groups.list"
+                />
+                <ExportMenu product={product_group} is_product_group={true} />
+                {product_group && product_group.permissions.includes(PERMISSION_PRODUCT_GROUP_EDIT) && <EditButton />}
+            </Stack>
         </TopToolbar>
     );
 };

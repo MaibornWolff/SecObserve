@@ -21,6 +21,7 @@ from application.access_control.services.roles_permissions import Permissions
 from application.commons.services.global_request import get_current_user
 from application.core.api.filters import (
     BranchFilter,
+    EvidenceFilter,
     ObservationFilter,
     ParserFilter,
     ProductFilter,
@@ -49,7 +50,14 @@ from application.core.api.serializers import (
     ProductMemberSerializer,
     ProductSerializer,
 )
-from application.core.models import Branch, Observation, Parser, Product, Product_Member
+from application.core.models import (
+    Branch,
+    Evidence,
+    Observation,
+    Parser,
+    Product,
+    Product_Member,
+)
 from application.core.queries.branch import get_branches
 from application.core.queries.observation import (
     get_evidences,
@@ -70,6 +78,7 @@ from application.core.services.observations_bulk_actions import (
 from application.core.services.security_gate import check_security_gate
 from application.issue_tracker.services.issue_tracker import (
     push_deleted_observation_to_issue_tracker,
+    push_observations_to_issue_tracker,
 )
 from application.metrics.services.metrics import get_codecharta_metrics
 from application.rules.services.rule_engine import Rule_Engine
@@ -250,6 +259,21 @@ class ProductViewSet(ModelViewSet):
         )
         return Response(status=HTTP_204_NO_CONTENT)
 
+    @extend_schema(
+        methods=["POST"],
+        request=None,
+        responses={HTTP_204_NO_CONTENT: None},
+    )
+    @action(detail=True, methods=["post"])
+    def synchronize_issues(self, request, pk):
+        product = self.__get_product(pk)
+        user_has_permission_or_403(product, Permissions.Product_Edit)
+
+        observations = Observation.objects.filter(product=product)
+        push_observations_to_issue_tracker(product, set(observations))
+
+        return Response(status=HTTP_204_NO_CONTENT)
+
     def __get_product(self, pk) -> Product:
         if not pk:
             raise ValidationError("No id provided")
@@ -387,9 +411,10 @@ class ObservationViewSet(ModelViewSet):
         return Response()
 
 
-class EvidenceViewSet(GenericViewSet, RetrieveModelMixin):
+class EvidenceViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     serializer_class = EvidenceSerializer
-    queryset = Observation.objects.none()
+    filterset_class = EvidenceFilter
+    queryset = Evidence.objects.none()
 
     def get_queryset(self):
         return get_evidences()

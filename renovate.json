@@ -39,6 +39,12 @@
                 "node"
             ],
             "allowedVersions": "<19"
+        },
+        {
+            "matchPackageNames": [
+                "postgres"
+            ],
+            "allowedVersions": "<16"
         }
     ],
     "prHourlyLimit": 10
