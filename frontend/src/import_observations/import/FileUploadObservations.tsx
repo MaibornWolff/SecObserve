@@ -128,7 +128,14 @@ const FileUploadObservations = () => {
             <Button
                 onClick={handleOpen}
                 size="small"
-                sx={{ paddingTop: "0px", paddingBottom: "2px", color: getIconAndFontColor(), textTransform: "none" }}
+                sx={{
+                    paddingTop: "0px",
+                    paddingBottom: "2px",
+                    color: getIconAndFontColor(),
+                    textTransform: "none",
+                    fontWeight: "normal",
+                    fontSize: "1rem",
+                }}
                 startIcon={<UploadIcon sx={{ color: getIconAndFontColor() }} />}
             >
                 Upload observations from file

@@ -154,44 +154,44 @@ const ExportMenu = (props: ExportMenuProps) => {
                     "aria-labelledby": "basic-button",
                 }}
             >
-                <MenuItem onClick={exportOpenObservationsExcel} sx={{ fontSize: "0.875rem" }}>
+                <MenuItem onClick={exportOpenObservationsExcel}>
                     <ListItemIcon>
                         <FontAwesomeIcon icon={faFileExcel} color={getIconAndFontColor()} />
                     </ListItemIcon>
                     Open observations / Excel
                 </MenuItem>
-                <MenuItem onClick={exportOpenObservationsCsv} sx={{ fontSize: "0.875rem" }} divider>
+                <MenuItem onClick={exportOpenObservationsCsv} divider>
                     <ListItemIcon>
                         <FontAwesomeIcon icon={faFileCsv} color={getIconAndFontColor()} />
                     </ListItemIcon>
                     Open observations / CSV
                 </MenuItem>
-                <MenuItem onClick={exportAllObservationsExcel} sx={{ fontSize: "0.875rem" }}>
+                <MenuItem onClick={exportAllObservationsExcel}>
                     <ListItemIcon>
                         <FontAwesomeIcon icon={faFileExcel} color={getIconAndFontColor()} />
                     </ListItemIcon>
                     All observations / Excel
                 </MenuItem>
-                <MenuItem onClick={exportAllObservationsCsv} sx={{ fontSize: "0.875rem" }} divider>
+                <MenuItem onClick={exportAllObservationsCsv} divider>
                     <ListItemIcon>
                         <FontAwesomeIcon icon={faFileCsv} color={getIconAndFontColor()} />
                     </ListItemIcon>
                     All observations / CSV
                 </MenuItem>
-                <MenuItem onClick={exportMetricsExcel} sx={{ fontSize: "0.875rem" }}>
+                <MenuItem onClick={exportMetricsExcel}>
                     <ListItemIcon>
                         <FontAwesomeIcon icon={faFileExcel} color={getIconAndFontColor()} />
                     </ListItemIcon>
                     Metrics / Excel
                 </MenuItem>
-                <MenuItem onClick={exportMetricsCsv} sx={{ fontSize: "0.875rem" }} divider={!props.is_product_group}>
+                <MenuItem onClick={exportMetricsCsv} divider={!props.is_product_group}>
                     <ListItemIcon>
                         <FontAwesomeIcon icon={faFileCsv} color={getIconAndFontColor()} />
                     </ListItemIcon>
                     Metrics / CSV
                 </MenuItem>
                 {!props.is_product_group && (
-                    <MenuItem onClick={exportCodeChartaMetrics} sx={{ fontSize: "0.875rem" }}>
+                    <MenuItem onClick={exportCodeChartaMetrics}>
                         <ListItemIcon>
                             <ViewQuiltIcon sx={{ color: getIconAndFontColor() }} />
                         </ListItemIcon>
