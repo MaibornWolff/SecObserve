@@ -11,7 +11,7 @@ flake8-isort==6.1.0  # https://github.com/gforcada/flake8-isort
 black==23.10.0  # https://github.com/psf/black
 pylint-django==2.5.3  # https://github.com/PyCQA/pylint-django
 pre-commit==3.5.0  # https://github.com/pre-commit/pre-commit
-mypy==1.6.0  # https://github.com/python/mypy
+mypy==1.6.1  # https://github.com/python/mypy
 django-stubs==4.2.4  # https://github.com/typeddjango/django-stubs
 djangorestframework-stubs==3.14.3  # https://github.com/typeddjango/djangorestframework-stubs
 
