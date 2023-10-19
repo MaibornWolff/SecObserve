@@ -79,7 +79,7 @@ class Product(Model):
         null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]
     )
 
-    members = ManyToManyField(
+    members: ManyToManyField = ManyToManyField(
         User, through="Product_Member", related_name="product_members", blank=True
     )
     apply_general_rules = BooleanField(default=True)
