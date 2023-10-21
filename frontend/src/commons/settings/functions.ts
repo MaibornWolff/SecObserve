@@ -1,5 +1,3 @@
-import path from "path";
-
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 import { darkTheme, lightTheme } from "../layout/themes";
 
