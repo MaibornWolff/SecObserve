@@ -3,19 +3,19 @@ import { Box, Card, CardContent, CardHeader, FormControl, FormControlLabel, Radi
 import { Title, useTheme } from "react-admin";
 
 import { darkTheme, lightTheme } from "../layout/themes";
-import { getSettingTheme, setSettingTheme } from "./functions";
+import { getSettingTheme, saveSettingTheme } from "./functions";
 
 const Settings = () => {
     const [, setTheme] = useTheme();
 
     function setLightTheme() {
         setTheme(lightTheme);
-        setSettingTheme("light");
+        saveSettingTheme("light");
     }
 
     function setDarkTheme() {
         setTheme(darkTheme);
-        setSettingTheme("dark");
+        saveSettingTheme("dark");
     }
 
     return (

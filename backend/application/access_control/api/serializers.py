@@ -30,6 +30,7 @@ class UserSerializer(ModelSerializer):
             "is_external",
             "setting_theme",
             "permissions",
+            "setting_list_properties",
         ]
 
     def get_permissions(self, obj) -> list[Permissions]:
@@ -41,6 +42,7 @@ class UserSettingsSerializer(ModelSerializer):
         model = User
         fields = [
             "setting_theme",
+            "setting_list_properties",
         ]
 
 
