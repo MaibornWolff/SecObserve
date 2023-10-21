@@ -29,7 +29,10 @@ class UserAdmin(auth_admin.UserAdmin):
         (
             _("Settings"),
             {
-                "fields": ("setting_theme",),
+                "fields": (
+                    "setting_theme",
+                    "setting_list_properties",
+                ),
             },
         ),
         (_("Important dates"), {"fields": ("last_login", "date_joined")}),

@@ -2,7 +2,7 @@ import { AuthProvider } from "react-admin";
 
 import { getPublicClientApplication } from "../access_control/aad";
 import { httpClient } from "../commons/ra-data-django-rest-framework";
-import { getSettingTheme } from "../commons/settings/functions";
+import { getSettingTheme, saveSettingListProperties, setListProperties } from "../commons/settings/functions";
 
 const authProvider: AuthProvider = {
     login: ({ username, password }) => {
@@ -25,6 +25,8 @@ const authProvider: AuthProvider = {
                 })
                 .then((auth) => {
                     localStorage.setItem("jwt", auth.jwt);
+                    setListProperties(auth.user.setting_list_properties);
+                    delete auth.user.setting_list_properties;
                     localStorage.setItem("user", JSON.stringify(auth.user));
                 })
                 .catch((error) => {
@@ -37,14 +39,20 @@ const authProvider: AuthProvider = {
         }
     },
     logout: async () => {
+        if (aad_signed_in() || jwt_signed_in()) {
+            await saveSettingListProperties();
+        }
+
         localStorage.removeItem("jwt");
         localStorage.removeItem("user");
         localStorage.removeItem("aad_login_finalized");
+
         if (aad_signed_in()) {
             const pca = getPublicClientApplication();
             await pca.initialize();
             pca.logoutRedirect();
         }
+
         return Promise.resolve();
     },
     checkError: (error) => {
@@ -99,6 +107,8 @@ const authProvider: AuthProvider = {
 const getUserInfo = async () => {
     return httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/users/me/").then((response) => {
         const before_theme = getSettingTheme();
+        setListProperties(response.json.setting_list_properties);
+        delete response.json.setting_list_properties;
         localStorage.setItem("user", JSON.stringify(response.json));
         const after_theme = getSettingTheme();
         if (before_theme != after_theme) {
