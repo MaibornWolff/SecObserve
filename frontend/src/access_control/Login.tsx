@@ -4,7 +4,7 @@ import { Avatar, Button, Card, CardActions, CircularProgress, Stack } from "@mui
 import Box from "@mui/material/Box";
 import PropTypes from "prop-types";
 import { useState } from "react";
-import { Form, TextInput, required, useLogin, useNotify, useTheme, useTranslate } from "react-admin";
+import { Form, TextInput, required, useLogin, useNotify, useTheme } from "react-admin";
 import { useAuth } from "react-oidc-context";
 import { Navigate, useLocation } from "react-router-dom";
 
