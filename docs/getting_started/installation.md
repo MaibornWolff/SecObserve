@@ -54,12 +54,12 @@ services:
       - "traefik.http.routers.frontend.entrypoints=web"
     environment:
       API_BASE_URL: ${SO_API_BASE_URL:-http://secobserve-backend.localhost/api}
-      AAD_ENABLE: ${SO_AAD_ENABLE:-false}
-      AAD_AUTHORITY: ${SO_AAD_AUTHORITY:-dummy}
-      AAD_CLIENT_ID: ${SO_AAD_CLIENT_ID:-dummy}
-      AAD_REDIRECT_URI: ${SO_AAD_REDIRECT_URI:-http://secobserve.localhost}
-      AAD_POST_LOGOUT_REDIRECT_URI: ${SO_AAD_POST_LOGOUT_REDIRECT_URI:-http://secobserve.localhost}
-      AAD_SCOPE: ${SO_AAD_SCOPE:-dummy}
+      OAUTH2_ENABLE: ${SO_OAUTH2_ENABLE:-false}
+      OAUTH2_AUTHORITY: ${SO_OAUTH2_AUTHORITY:-dummy}
+      OAUTH2_CLIENT_ID: ${SO_OAUTH2_CLIENT_ID:-dummy}
+      OAUTH2_REDIRECT_URI: ${SO_OAUTH2_REDIRECT_URI:-http://secobserve.localhost}
+      OAUTH2_POST_LOGOUT_REDIRECT_URI: ${SO_OAUTH2_POST_LOGOUT_REDIRECT_URI:-http://secobserve.localhost}
+      OAUTH2_SCOPE: ${SO_OAUTH2_SCOPE:-dummy}
     networks:
       - traefik
 
@@ -89,8 +89,8 @@ services:
       DJANGO_SECRET_KEY: ${SO_DJANGO_SECRET_KEY:-NxYPEF5lNGgk3yonndjSbwP77uNJxOvfKTjF5aVBqsHktNlf1wfJHHvJ8iifk32r}
       FIELD_ENCRYPTION_KEY: ${SO_FIELD_ENCRYPTION_KEY:-DtlkqVb3wlaVdJK_BU-3mB4wwuuf8xx8YNInajiJ7GU=}
       # --- Azure AD ---
-      AAD_CLIENT_ID: ${SO_AAD_CLIENT_ID:-}
-      AAD_TENANT_ID: ${SO_AAD_TENANT_ID:-}
+      OAUTH2_CLIENT_ID: ${SO_OAUTH2_CLIENT_ID:-}
+      OAUTH2_TENANT_ID: ${SO_OAUTH2_TENANT_ID:-}
     command: /start
     networks:
       - traefik

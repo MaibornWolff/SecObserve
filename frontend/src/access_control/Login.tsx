@@ -5,25 +5,22 @@ import Box from "@mui/material/Box";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { Form, TextInput, required, useLogin, useNotify, useTheme, useTranslate } from "react-admin";
+import { useAuth } from "react-oidc-context";
 import { Navigate, useLocation } from "react-router-dom";
 
 import { getTheme } from "../commons/settings/functions";
-import { AADSignInButton } from "./AADSignInButton";
 import { OAuth2SignInButton } from "./OAuth2SignInButton";
-import { jwt_signed_in, oauth2_signed_in } from "./authProvider";
+import { jwt_signed_in } from "./authProvider";
 
 const Login = () => {
     const [loading, setLoading] = useState(false);
-    const translate = useTranslate();
     const [, setTheme] = useTheme();
+    const auth = useAuth();
 
     const notify = useNotify();
     const login = useLogin();
     const location = useLocation();
-    const isAuthenticated = jwt_signed_in() || oauth2_signed_in();
-
-    console.log("oauth2_signed_in(): " + oauth2_signed_in());
-    console.log("isAuthenticated: " + isAuthenticated);
+    const isAuthenticated = jwt_signed_in() || auth.isAuthenticated;
 
     const handleSubmit = (auth: FormValues) => {
         setLoading(true);
@@ -83,7 +80,7 @@ const Login = () => {
                                     <TextInput
                                         autoFocus
                                         source="username"
-                                        label={translate("ra.auth.username")}
+                                        label="Username"
                                         disabled={loading}
                                         validate={required()}
                                         fullWidth
@@ -92,7 +89,7 @@ const Login = () => {
                                 <Box sx={{ marginTop: "1em" }}>
                                     <TextInput
                                         source="password"
-                                        label={translate("ra.auth.password")}
+                                        label="Password"
                                         type="password"
                                         disabled={loading}
                                         validate={required()}
@@ -113,8 +110,7 @@ const Login = () => {
                                         {loading && <CircularProgress size={25} thickness={2} />}
                                         Sign in with user
                                     </Button>
-                                    {window.__RUNTIME_CONFIG__.AAD_ENABLE == "true" && <AADSignInButton />}
-                                    <OAuth2SignInButton />
+                                    {window.__RUNTIME_CONFIG__.OAUTH2_ENABLE == "true" && <OAuth2SignInButton />}
                                 </Stack>
                             </CardActions>
                         </Card>

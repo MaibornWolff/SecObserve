@@ -10,3 +10,5 @@ backend/dummy
 backend/huey.db
 backend/huey.db-shm
 backend/huey.db-wal
+frontend/.env.keycloak
+frontend/.env.microsoft

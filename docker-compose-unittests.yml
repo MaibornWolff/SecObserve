@@ -20,7 +20,10 @@ services:
       CORS_ALLOWED_ORIGINS: http://localhost:3000
       DJANGO_SECRET_KEY: NxYPEF5lNGgk3yonndjSbwP77uNJxOvfKTjF5aVBqsHktNlf1wfJHHvJ8iifk32r
       FIELD_ENCRYPTION_KEY: DtlkqVb3wlaVdJK_BU-3mB4wwuuf8xx8YNInajiJ7GU=
-      # --- Azure AD ---
-      AAD_CLIENT_ID: dummy
-      AAD_TENANT_ID: dummy
+      # --- OAuth2 ---
+      OAUTH2_AUTHORITY: https://authority
+      OAUTH2_USERNAME: preferred_username
+      OAUTH2_FIRST_NAME: given_name
+      OAUTH2_LAST_NAME: family_name
+      OAUTH2_EMAIL: email
     command: /start

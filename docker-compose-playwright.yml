@@ -15,12 +15,12 @@ services:
       - "3000:3000"
     environment:
       API_BASE_URL: http://backend:5000/api
-      AAD_ENABLE: false
-      AAD_AUTHORITY: dummy
-      AAD_CLIENT_ID: dummy
-      AAD_REDIRECT_URI: dummy
-      AAD_POST_LOGOUT_REDIRECT_URI: dummy
-      AAD_SCOPE: dummy
+      OAUTH2_ENABLE: false
+      OAUTH2_AUTHORITY: dummy
+      OAUTH2_CLIENT_ID: dummy
+      OAUTH2_REDIRECT_URI: dummy
+      OAUTH2_POST_LOGOUT_REDIRECT_URI: dummy
+      OAUTH2_SCOPE: dummy
     networks:
       - secobserve
 
@@ -30,6 +30,7 @@ services:
       dockerfile: ./docker/backend/prod/django/Dockerfile
     image: secobserve_backend_playwright
     environment:
+      SO_END_TO_END_TESTS: true
       # --- Admin user ---
       ADMIN_USER: admin-user
       ADMIN_PASSWORD: admin-password
@@ -41,11 +42,12 @@ services:
       CORS_ALLOWED_ORIGINS: http://frontend:3000
       DJANGO_SECRET_KEY: NxYPEF5lNGgk3yonndjSbwP77uNJxOvfKTjF5aVBqsHktNlf1wfJHHvJ8iifk32r
       FIELD_ENCRYPTION_KEY: DtlkqVb3wlaVdJK_BU-3mB4wwuuf8xx8YNInajiJ7GU=
-      # --- Azure AD ---
-      # AAD_CLIENT_ID: dummy
-      # AAD_TENANT_ID: dummy
-      ## --- End-to-end-tests ---
-      SO_END_TO_END_TESTS: true
+      # --- OAuth2 ---
+      OAUTH2_AUTHORITY: ${SO_OAUTH2_AUTHORITY:-}
+      OAUTH2_USERNAME: ${SO_OAUTH2_USERNAME:-}
+      OAUTH2_FIRST_NAME: ${SO_OAUTH2_FIRST_NAME:-}
+      OAUTH2_LAST_NAME: ${SO_OAUTH2_LAST_NAME:-}
+      OAUTH2_EMAIL: ${SO_OAUTH2_EMAIL:-}
     ports:
       - "5000:5000"
     networks:

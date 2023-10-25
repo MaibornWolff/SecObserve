@@ -8,8 +8,8 @@ A part of the configuation is done with environment variables, which need to be 
 
 | Environment variable   | Optionality | Description |
 |------------------------|:-----------:|-------------|
-| `AAD_CLIENT_ID`        | optional    | Only for authentication with Azure AD: Client ID from the Azure app registration. |
-| `AAD_TENANT_ID`        | optional    | Only for authentication with Azure AD: Tenant ID of the Azure subscription. |
+| `OAUTH2_CLIENT_ID`        | optional    | Only for authentication with Azure AD: Client ID from the Azure app registration. |
+| `OAUTH2_TENANT_ID`        | optional    | Only for authentication with Azure AD: Tenant ID of the Azure subscription. |
 | `ADMIN_USER`           | mandatory   | Username of the administration user. The user will be created at the fist start of the backend. |
 | `ADMIN_EMAIL`          | optional    | E-Mail of the administration user. |
 | `ADMIN_PASSWORD`       | optional    | Initial password of the admin user. If it is not set, a random password will be created during startup and shown in the log. |
@@ -30,15 +30,15 @@ A part of the configuation is done with environment variables, which need to be 
 
 | Environment variable           | Optionality | Description |
 |--------------------------------|:-----------:|-------------|
-| `AAD_ENABLE`                   | mandatory   | `true`: Azure AD authentication is active, `false`: otherwise. |
-| `AAD_AUTHORITY`                | mandatory   | The authority is a URL that indicates a directory that MSAL can request tokens from, typically `https://login.microsoftonline.com/<TENANT>/` |
-| `AAD_CLIENT_ID`                | mandatory   | The client ID is the unique *Application (client) ID* assigned to your app by Azure AD when the app was registered. |
-| `AAD_REDIRECT_URI`             | mandatory   | The redirect URI is the URI the identity provider will send the security tokens back to. To be set with the URL of the frontend. |
-| `AAD_POST_LOGOUT_REDIRECT_URI` | mandatory   | The post logout redirect URI is the URI that will be called after logout. To be set with the URL of the frontend. |
-| `AAD_SCOPE`                    | mandatory   | The scope is a permission that have been granted to the client applications, see [Scopes and permissions in the Microsoft identity platform](https://learn.microsoft.com/en-us/azure/active-directory/develop/scopes-oidc). Might be something like `<AAD_CLIENT_ID>/.default` |
+| `OAUTH2_ENABLE`                   | mandatory   | `true`: Azure AD authentication is active, `false`: otherwise. |
+| `OAUTH2_AUTHORITY`                | mandatory   | The authority is a URL that indicates a directory that MSAL can request tokens from, typically `https://login.microsoftonline.com/<TENANT>/` |
+| `OAUTH2_CLIENT_ID`                | mandatory   | The client ID is the unique *Application (client) ID* assigned to your app by Azure AD when the app was registered. |
+| `OAUTH2_REDIRECT_URI`             | mandatory   | The redirect URI is the URI the identity provider will send the security tokens back to. To be set with the URL of the frontend. |
+| `OAUTH2_POST_LOGOUT_REDIRECT_URI` | mandatory   | The post logout redirect URI is the URI that will be called after logout. To be set with the URL of the frontend. |
+| `OAUTH2_SCOPE`                    | mandatory   | The scope is a permission that have been granted to the client applications, see [Scopes and permissions in the Microsoft identity platform](https://learn.microsoft.com/en-us/azure/active-directory/develop/scopes-oidc). Might be something like `<OAUTH2_CLIENT_ID>/.default` |
 | `API_BASE_URL`                 | mandatory   | URL where to find the backend API, e.g. `https:\\secobserve-backend.example.com/api`. |
 
-All the `AAD_*` environment variables are needed for technical reasons. If `AAD_ENABLE` is set to `false`, the other `AAD_*` environment variables can be set to `dummy` or something similar.
+All the `OAUTH2_*` environment variables are needed for technical reasons. If `OAUTH2_ENABLE` is set to `false`, the other `OAUTH2_*` environment variables can be set to `dummy` or something similar.
 
 ## Admin user interface
 

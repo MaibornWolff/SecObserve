@@ -1,3 +1,5 @@
+import { User, WebStorageStateStore } from "oidc-client-ts";
+import { UserManager } from "oidc-client-ts";
 import { AuthProvider } from "react-admin";
 
 import { httpClient } from "../commons/ra-data-django-rest-framework";
@@ -44,8 +46,10 @@ const authProvider: AuthProvider = {
 
         localStorage.removeItem("jwt");
         localStorage.removeItem("user");
+
         if (oauth2_signed_in()) {
-            // ToDo
+            const user_manager = new UserManager(oidcConfig);
+            return user_manager.signoutRedirect();
         }
 
         return Promise.resolve();
@@ -54,11 +58,12 @@ const authProvider: AuthProvider = {
         if (error) {
             const status = error.status;
             if (status === 401 || status === 403) {
-                Object.keys(localStorage).forEach(function (key) {
-                    if (!key.startsWith("RaStore")) {
-                        localStorage.removeItem(key);
-                    }
-                });
+                localStorage.removeItem("jwt");
+                localStorage.removeItem("user");
+                if (oauth2_signed_in()) {
+                    const user_manager = new UserManager(oidcConfig);
+                    user_manager.removeUser();
+                }
                 return Promise.reject({
                     redirectTo: "/login",
                     logoutUser: false,
@@ -113,12 +118,45 @@ export function jwt_signed_in(): boolean {
     return localStorage.getItem("jwt") != null;
 }
 
+export const oidcStorageKey =
+    "oidc.user:" + window.__RUNTIME_CONFIG__.OAUTH2_AUTHORITY + ":" + window.__RUNTIME_CONFIG__.OAUTH2_CLIENT_ID;
+
+export function oidcStorageUser(): string | null {
+    return localStorage.getItem(oidcStorageKey);
+}
+
 export function oauth2_signed_in(): boolean {
-    const oidcStorage = localStorage.getItem(
-        "oidc.user:https://login.microsoftonline.com/b8d7ad48-53f4-4c29-a71c-0717f0d3a5d0:46e202b4-dd0f-4bf3-897c-cfdf6b1547a9"
-    );
-    console.log("--- oidcStorage --- " + oidcStorage + "---");
-    return oidcStorage != null;
+    return oidcStorageUser() != null;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const onSigninCallback = (_user: User | void): void => {
+    window.history.replaceState({}, document.title, window.location.pathname);
+};
+
+export const oidcConfig = {
+    userStore: new WebStorageStateStore({ store: window.localStorage }),
+    authority: window.__RUNTIME_CONFIG__.OAUTH2_AUTHORITY,
+    client_id: window.__RUNTIME_CONFIG__.OAUTH2_CLIENT_ID,
+    redirect_uri: window.__RUNTIME_CONFIG__.OAUTH2_REDIRECT_URI,
+    post_logout_redirect_uri: window.__RUNTIME_CONFIG__.OAUTH2_POST_LOGOUT_REDIRECT_URI,
+    scope: window.__RUNTIME_CONFIG__.OAUTH2_SCOPE,
+    automaticSilentRenew: true,
+    prompt: "select_account",
+    onSigninCallback: onSigninCallback,
+};
+
+export function get_oidc_access_token(): string | null {
+    if (oidcStorageUser()) {
+        const user = User.fromStorageString(oidcStorageUser()!);
+        if (user) {
+            return user.access_token;
+        } else {
+            return null;
+        }
+    } else {
+        return null;
+    }
 }
 
 export default authProvider;

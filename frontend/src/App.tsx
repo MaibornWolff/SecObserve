@@ -1,4 +1,3 @@
-import { User, WebStorageStateStore } from "oidc-client-ts";
 import polyglotI18nProvider from "ra-i18n-polyglot";
 import { Admin, CustomRoutes, Resource } from "react-admin";
 import { AuthProvider } from "react-oidc-context";
@@ -6,6 +5,7 @@ import { Route } from "react-router";
 
 import { Login } from "./access_control";
 import authProvider from "./access_control/authProvider";
+import { oidcConfig } from "./access_control/authProvider";
 import englishMessages from "./commons/i18n/en";
 import { Layout } from "./commons/layout";
 import notifications from "./commons/notifications";
@@ -23,26 +23,6 @@ import general_rules from "./rules/general_rules";
 const i18nProvider = polyglotI18nProvider(() => {
     return englishMessages;
 }, "en");
-
-const onSigninCallback = (_user: User | void): void => {
-    console.log("--- onSigninCallback ---" + _user);
-    window.history.replaceState({}, document.title, window.location.pathname);
-};
-
-const oidcConfig = {
-    userStore: new WebStorageStateStore({ store: window.localStorage }),
-    // authority: "http://localhost:8080/realms/secobserve/broker/oidc/endpoint",
-    authority: "http:/localhost:8080",
-    client_id: "secobserve",
-    redirect_uri: "http://localhost:3000",
-    scope: "secobserve-dedicated",
-    // authority: "https://login.microsoftonline.com/b8d7ad48-53f4-4c29-a71c-0717f0d3a5d0",
-    // client_id: "46e202b4-dd0f-4bf3-897c-cfdf6b1547a9",
-    // redirect_uri: "http://localhost:3000",
-    // scope: "46e202b4-dd0f-4bf3-897c-cfdf6b1547a9/.default",
-    prompt: "select_account",
-    onSigninCallback: onSigninCallback,
-};
 
 const App = () => {
     return (

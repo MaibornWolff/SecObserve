@@ -6,8 +6,8 @@
 import queryString from "query-string";
 import { DataProvider, Identifier, fetchUtils } from "react-admin";
 
-import { oauth2_signed_in, jwt_signed_in } from "../../access_control/authProvider";
-import { User } from "oidc-client-ts";
+import { jwt_signed_in, oauth2_signed_in } from "../../access_control/authProvider";
+import { get_oidc_access_token } from "../../access_control/authProvider";
 
 const base_url = window.__RUNTIME_CONFIG__.API_BASE_URL;
 
@@ -43,34 +43,26 @@ function createOptionsFromTokenJWT() {
 }
 
 function createOptionsFromTokenOAuth2() {
-    const user = getUser();
-    console.log("--- user --- "+ JSON.stringify(user) + "---");
-    const token = user?.access_token;
-    console.log("--- token --- "+ token + "---");
-
-    return {
-        user: {
-            authenticated: true,
-            token: "Bearer " + token,
-        },
-    };
-}
-
-function getUser() {
-    const oidcStorage = localStorage.getItem("oidc.user:https://login.microsoftonline.com/b8d7ad48-53f4-4c29-a71c-0717f0d3a5d0:46e202b4-dd0f-4bf3-897c-cfdf6b1547a9")
-    if (!oidcStorage) {
-        return null;
+    const access_token = get_oidc_access_token();
+    if (access_token) {
+        return {
+            user: {
+                authenticated: true,
+                token: "Bearer " + access_token,
+            },
+        };
+    } else {
+        return {
+            user: {
+                authenticated: false,
+            },
+        };
     }
-
-    return User.fromStorageString(oidcStorage);
 }
-
 
 export function httpClient(url: string, options?: fetchUtils.Options | undefined) {
     if (oauth2_signed_in()) {
-            const oauth2_options = createOptionsFromTokenOAuth2();
-            console.log("--- oauth2_options --- "+ JSON.stringify(oauth2_options) + "---")
-            return fetchUtils.fetchJson(url, Object.assign(oauth2_options, options));
+        return fetchUtils.fetchJson(url, Object.assign(createOptionsFromTokenOAuth2(), options));
     } else if (jwt_signed_in()) {
         return fetchUtils.fetchJson(url, Object.assign(createOptionsFromTokenJWT(), options));
     } else {

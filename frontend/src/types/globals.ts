@@ -4,12 +4,12 @@ declare global {
     interface Window {
         __RUNTIME_CONFIG__: {
             API_BASE_URL: string;
-            AAD_ENABLE: string;
-            AAD_AUTHORITY: string;
-            AAD_CLIENT_ID: string;
-            AAD_REDIRECT_URI: string;
-            AAD_POST_LOGOUT_REDIRECT_URI: string;
-            AAD_SCOPE: string;
+            OAUTH2_ENABLE: string;
+            OAUTH2_AUTHORITY: string;
+            OAUTH2_CLIENT_ID: string;
+            OAUTH2_REDIRECT_URI: string;
+            OAUTH2_POST_LOGOUT_REDIRECT_URI: string;
+            OAUTH2_SCOPE: string;
         };
     }
 }

@@ -123,22 +123,10 @@ LOCAL_APPS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
-# AUTHENTICATION
-# ------------------------------------------------------------------------------
-
-AAD_CLIENT_ID = env("AAD_CLIENT_ID", default="")
-AAD_TENANT_ID = env("AAD_TENANT_ID", default="")
-
 # https://docs.djangoproject.com/en/dev/ref/settings/#authentication-backends
-if AAD_CLIENT_ID:
-    AUTHENTICATION_BACKENDS = [
-        "django_auth_adfs.backend.AdfsAccessTokenBackend",
-        "django.contrib.auth.backends.ModelBackend",
-    ]
-else:
-    AUTHENTICATION_BACKENDS = [
-        "django.contrib.auth.backends.ModelBackend",
-    ]
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "access_control.User"
@@ -362,9 +350,11 @@ LOGGING = {
 
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
 # -------------------------------------------------------------------------------
-if AAD_CLIENT_ID:
+# AUTHENTICATION
+# ------------------------------------------------------------------------------
+if env("OAUTH2_AUTHORITY"):
     DEFAULT_AUTHENTICATION_CLASSES = [
-        "django_auth_adfs.rest_framework.AdfsAccessTokenAuthentication",
+        "application.access_control.services.oauth2_authentication.OAuth2Authentication",
         "application.access_control.services.api_token_authentication.APITokenAuthentication",
         "application.access_control.services.jwt_authentication.JWTAuthentication",
         "rest_framework.authentication.SessionAuthentication",
@@ -563,24 +553,6 @@ CONSTANCE_CONFIG_FIELDSETS = {
 }
 
 FIELD_ENCRYPTION_KEY = env("FIELD_ENCRYPTION_KEY")
-
-AUTH_ADFS = {
-    "AUDIENCE": AAD_CLIENT_ID,
-    "CLIENT_ID": AAD_CLIENT_ID,
-    "CLAIM_MAPPING": {
-        "first_name": "given_name",
-        "last_name": "family_name",
-        "email": "upn",
-    },
-    "GROUPS_CLAIM": "roles",
-    "MIRROR_GROUPS": True,
-    "USERNAME_CLAIM": "upn",
-    "TENANT_ID": AAD_TENANT_ID,
-    "RELYING_PARTY_ID": AAD_CLIENT_ID,
-    "LOGIN_EXEMPT_URLS": [
-        "^api",  # Assuming you API is available at /api
-    ],
-}
 
 HUEY_FILENAME = env("HUEY_FILENAME", default="/var/lib/huey/huey.db")
 
