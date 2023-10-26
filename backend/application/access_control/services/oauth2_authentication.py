@@ -3,6 +3,7 @@ from typing import Optional
 
 import jwt
 import requests
+from django.db import IntegrityError, transaction
 from rest_framework.authentication import BaseAuthentication, get_authorization_header
 from rest_framework.exceptions import AuthenticationFailed
 
@@ -74,14 +75,21 @@ class OAuth2Authentication(BaseAuthentication):
         return response.json()["jwks_uri"]
 
     def _create_user(self, username: str, payload: dict) -> User:
-        user = User(username=username)
+        user = User(username=username, first_name="", last_name="", email="")
         if os.environ.get("OAUTH2_EMAIL"):
             user.email = payload[os.environ["OAUTH2_EMAIL"]]
         if os.environ.get("OAUTH2_FIRST_NAME"):
             user.first_name = payload[os.environ["OAUTH2_FIRST_NAME"]]
         if os.environ.get("OAUTH2_LAST_NAME"):
             user.last_name = payload[os.environ["OAUTH2_LAST_NAME"]]
-        user.save()
+        try:
+            with transaction.atomic():
+                user.save()
+        except IntegrityError as e:
+            # User was most likely created by another request
+            user = get_user_by_username(username)
+            if not user:
+                raise e
         return user
 
     def _check_user_change(self, user: User, payload: dict) -> User:
