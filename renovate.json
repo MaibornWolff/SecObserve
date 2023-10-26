@@ -44,7 +44,7 @@
             "matchPackageNames": [
                 "node"
             ],
-            "allowedVersions": "<19"
+            "allowedVersions": "<21"
         },
         {
             "matchPackageNames": [
