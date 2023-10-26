@@ -105,7 +105,7 @@ services:
       - KC_HTTPS_ENABLED=false
       - KC_HOSTNAME_STRICT_HTTPS=false
     volumes:
-      - dev_keycloak_data:/opt/keycloak/data/
+      - ./keycloak:/opt/keycloak/data/
     ports:
       - 8080:8080
     command: start-dev
