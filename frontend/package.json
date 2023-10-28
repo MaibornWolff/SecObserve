@@ -30,7 +30,7 @@
         "@emotion/react": "11.11.1",
         "@emotion/styled": "11.11.0",
         "runtime-env-cra": "0.2.4",
-        "oidc-client-ts": "2.3.0",
+        "oidc-client-ts": "2.4.0",
         "react-oidc-context": "2.3.1"
     },
     "scripts": {
