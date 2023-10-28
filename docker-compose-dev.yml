@@ -61,7 +61,7 @@ services:
     command: /start
 
   mysql:
-    image: mysql:8.1.0
+    image: mysql:8.2.0
     profiles:
       - mysql
     environment:
