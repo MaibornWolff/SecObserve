@@ -10,6 +10,12 @@
 
 * There will be specific upgrade instructions if necessary, e.g. when there are new configuration parameters.
 
+## Release 1.0.0
+
+**Breaking changes**
+
+* SecObserve now supports different OpenID Connect providers for authentication and the Microsoft specific dependencies have been removed. Thus the `AAD_` configuration parameters are not valid anymore and have been replaced with `OIDC_` parameters, see [Configuration](configuration.md) and [OpenID Connect authentication](../integrations/oidc_authentication.md) for details.
+
 ## Release 0.9.9
 
 **Breaking changes**

@@ -30,10 +30,6 @@ PyJWT==2.8.0  # https://github.com/jpadilla/pyjwt
 # ------------------------------------------------------------------------------
 requests==2.31.0  # https://github.com/psf/requests
 
-# Azure Active Directory
-# ------------------------------------------------------------------------------
-django-auth-adfs==1.11.6  # https://github.com/snok/django-auth-adfs
-
 # Database
 # ------------------------------------------------------------------------------
 mysqlclient==2.2.0

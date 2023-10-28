@@ -1,12 +1,13 @@
+import { User, WebStorageStateStore } from "oidc-client-ts";
+import { UserManager } from "oidc-client-ts";
 import { AuthProvider } from "react-admin";
 
-import { getPublicClientApplication } from "../access_control/aad";
 import { httpClient } from "../commons/ra-data-django-rest-framework";
 import { getSettingTheme, saveSettingListProperties, setListProperties } from "../commons/settings/functions";
 
 const authProvider: AuthProvider = {
     login: ({ username, password }) => {
-        if (aad_signed_in()) {
+        if (oidc_signed_in()) {
             return Promise.resolve();
         } else {
             const request = new Request(window.__RUNTIME_CONFIG__.API_BASE_URL + "/authentication/authenticate/", {
@@ -39,18 +40,16 @@ const authProvider: AuthProvider = {
         }
     },
     logout: async () => {
-        if (aad_signed_in() || jwt_signed_in()) {
+        if (oidc_signed_in() || jwt_signed_in()) {
             await saveSettingListProperties();
         }
 
         localStorage.removeItem("jwt");
         localStorage.removeItem("user");
-        localStorage.removeItem("aad_login_finalized");
 
-        if (aad_signed_in()) {
-            const pca = getPublicClientApplication();
-            await pca.initialize();
-            pca.logoutRedirect();
+        if (oidc_signed_in()) {
+            const user_manager = new UserManager(oidcConfig);
+            return user_manager.signoutRedirect();
         }
 
         return Promise.resolve();
@@ -59,11 +58,12 @@ const authProvider: AuthProvider = {
         if (error) {
             const status = error.status;
             if (status === 401 || status === 403) {
-                Object.keys(localStorage).forEach(function (key) {
-                    if (!key.startsWith("RaStore")) {
-                        localStorage.removeItem(key);
-                    }
-                });
+                localStorage.removeItem("jwt");
+                localStorage.removeItem("user");
+                if (oidc_signed_in()) {
+                    const user_manager = new UserManager(oidcConfig);
+                    user_manager.removeUser();
+                }
                 return Promise.reject({
                     redirectTo: "/login",
                     logoutUser: false,
@@ -74,14 +74,10 @@ const authProvider: AuthProvider = {
         return Promise.resolve();
     },
     checkAuth: () => {
-        if (localStorage.getItem("jwt") || aad_signed_in()) {
+        if (localStorage.getItem("jwt") || oidc_signed_in()) {
             return Promise.resolve();
         } else {
-            if (localStorage.getItem("aad_login_finalized") == "false") {
-                return Promise.resolve();
-            } else {
-                return Promise.reject();
-            }
+            return Promise.reject({ message: false });
         }
     },
     getPermissions: () => Promise.reject(),
@@ -118,13 +114,49 @@ const getUserInfo = async () => {
     });
 };
 
-export function aad_signed_in(): boolean {
-    const pca = getPublicClientApplication();
-    return pca.getAllAccounts().length > 0;
-}
-
 export function jwt_signed_in(): boolean {
     return localStorage.getItem("jwt") != null;
+}
+
+export const oidcStorageKey =
+    "oidc.user:" + window.__RUNTIME_CONFIG__.OIDC_AUTHORITY + ":" + window.__RUNTIME_CONFIG__.OIDC_CLIENT_ID;
+
+export function oidcStorageUser(): string | null {
+    return localStorage.getItem(oidcStorageKey);
+}
+
+export function oidc_signed_in(): boolean {
+    return oidcStorageUser() != null;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const onSigninCallback = (_user: User | void): void => {
+    window.history.replaceState({}, document.title, window.location.pathname);
+};
+
+export const oidcConfig = {
+    userStore: new WebStorageStateStore({ store: window.localStorage }),
+    authority: window.__RUNTIME_CONFIG__.OIDC_AUTHORITY,
+    client_id: window.__RUNTIME_CONFIG__.OIDC_CLIENT_ID,
+    redirect_uri: window.__RUNTIME_CONFIG__.OIDC_REDIRECT_URI,
+    post_logout_redirect_uri: window.__RUNTIME_CONFIG__.OIDC_POST_LOGOUT_REDIRECT_URI,
+    scope: "openid profile email",
+    automaticSilentRenew: true,
+    prompt: "select_account",
+    onSigninCallback: onSigninCallback,
+};
+
+export function get_oidc_id_token(): string | null {
+    if (oidcStorageUser()) {
+        const user = User.fromStorageString(oidcStorageUser()!);
+        if (user && user.id_token) {
+            return user.id_token;
+        } else {
+            return null;
+        }
+    } else {
+        return null;
+    }
 }
 
 export default authProvider;

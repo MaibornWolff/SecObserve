@@ -4,6 +4,7 @@ volumes:
   dev_huey_data:
   dev_mysql_data:
   dev_postgres_data:
+  dev_keycloak_data:
 
 services:
   frontend:
@@ -17,12 +18,11 @@ services:
       - "3000:3000"
     environment:
       API_BASE_URL: ${SO_API_BASE_URL:-http://localhost:8000/api}
-      AAD_ENABLE: ${SO_AAD_ENABLE:-false}
-      AAD_AUTHORITY: ${SO_AAD_AUTHORITY:-dummy}
-      AAD_CLIENT_ID: ${SO_AAD_CLIENT_ID:-dummy}
-      AAD_REDIRECT_URI: ${SO_AAD_REDIRECT_URI:-http://localhost:3000}
-      AAD_POST_LOGOUT_REDIRECT_URI: ${SO_AAD_POST_LOGOUT_REDIRECT_URI:-http://localhost:3000}
-      AAD_SCOPE: ${SO_AAD_SCOPE:-dummy}
+      OIDC_ENABLE: ${SO_OIDC_ENABLE:-true}
+      OIDC_AUTHORITY: ${SO_OIDC_AUTHORITY:-http://localhost:8080/realms/secobserve}
+      OIDC_CLIENT_ID: ${SO_OIDC_CLIENT_ID:-secobserve}
+      OIDC_REDIRECT_URI: ${SO_OIDC_REDIRECT_URI:-http://localhost:3000}
+      OIDC_POST_LOGOUT_REDIRECT_URI: ${SO_OIDC_POST_LOGOUT_REDIRECT_URI:-http://localhost:3000}
 
   backend:
     build:
@@ -31,6 +31,7 @@ services:
     image: secobserve_backend_dev
     depends_on:
       - postgres
+      - keycloak
     environment:
       # --- Admin user ---
       ADMIN_USER: ${SO_ADMIN_USER:-admin}
@@ -48,9 +49,12 @@ services:
       CORS_ALLOWED_ORIGINS: ${SO_CORS_ALLOWED_ORIGINS:-http://localhost:3000}
       DJANGO_SECRET_KEY: ${SO_DJANGO_SECRET_KEY:-NxYPEF5lNGgk3yonndjSbwP77uNJxOvfKTjF5aVBqsHktNlf1wfJHHvJ8iifk32r}
       FIELD_ENCRYPTION_KEY: ${SO_FIELD_ENCRYPTION_KEY:-DtlkqVb3wlaVdJK_BU-3mB4wwuuf8xx8YNInajiJ7GU=}
-      # --- Azure AD ---
-      AAD_CLIENT_ID: ${SO_AAD_CLIENT_ID:-}
-      AAD_TENANT_ID: ${SO_AAD_TENANT_ID:-}
+      # --- OpenID Connect ---
+      OIDC_AUTHORITY: ${SO_OIDC_AUTHORITY:-http://keycloak:8080/realms/secobserve}
+      OIDC_USERNAME: ${SO_OIDC_USERNAME:-preferred_username}
+      OIDC_FIRST_NAME: ${SO_OIDC_FIRST_NAME:-given_name}
+      OIDC_LAST_NAME: ${SO_OIDC_LAST_NAME:-family_name}
+      OIDC_EMAIL: ${SO_OIDC_EMAIL:-email}
       # --- Development ---
       USE_DOCKER: yes
     volumes:
@@ -91,3 +95,16 @@ services:
     ports:
       - "1025:1025"
       - "8025:8025"
+
+  keycloak:
+    image: keycloak/keycloak:22.0.3
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_HTTPS_ENABLED=false
+      - KC_HOSTNAME_STRICT_HTTPS=false
+    volumes:
+      - ./keycloak:/opt/keycloak/data/
+    ports:
+      - 8080:8080
+    command: start-dev

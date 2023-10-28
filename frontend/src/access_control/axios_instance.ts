@@ -1,7 +1,6 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
 
-import { getPublicClientApplication } from "../access_control/aad";
-import { aad_signed_in, jwt_signed_in } from "./authProvider";
+import { get_oidc_id_token, jwt_signed_in, oidc_signed_in } from "./authProvider";
 
 const axios_instance = axios.create({
     baseURL: window.__RUNTIME_CONFIG__.API_BASE_URL,
@@ -9,24 +8,9 @@ const axios_instance = axios.create({
 
 axios_instance.interceptors.request.use(
     async (config: InternalAxiosRequestConfig) => {
-        if (aad_signed_in()) {
-            const publicClientApplication = getPublicClientApplication();
-            await publicClientApplication.initialize();
-            const account = publicClientApplication.getAllAccounts()[0];
-            const accessTokenRequest = {
-                scopes: [window.__RUNTIME_CONFIG__.AAD_SCOPE as string],
-                account: account,
-            };
-            if (account) {
-                const accessTokenResponse = await publicClientApplication.acquireTokenSilent(accessTokenRequest);
-
-                if (accessTokenResponse) {
-                    const accessToken = accessTokenResponse.accessToken;
-
-                    if (config.headers && accessToken) {
-                        config.headers["Authorization"] = "Bearer " + accessToken;
-                    }
-                }
+        if (oidc_signed_in()) {
+            if (config.headers) {
+                config.headers["Authorization"] = "Bearer " + get_oidc_id_token();
             }
             return config;
         } else if (jwt_signed_in()) {

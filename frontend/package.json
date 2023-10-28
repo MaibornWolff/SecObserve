@@ -21,8 +21,6 @@
         "chart.js": "4.4.0",
         "react-chartjs-2": "5.2.0",
         "markdown-to-jsx": "7.3.2",
-        "@azure/msal-react": "2.0.5",
-        "@azure/msal-browser": "3.3.0",
         "@fortawesome/fontawesome-svg-core": "6.4.2",
         "@fortawesome/free-solid-svg-icons": "6.4.2",
         "@fortawesome/free-brands-svg-icons": "6.4.2",
@@ -31,7 +29,9 @@
         "@textea/json-viewer": "3.2.2",
         "@emotion/react": "11.11.1",
         "@emotion/styled": "11.11.0",
-        "runtime-env-cra": "0.2.4" 
+        "runtime-env-cra": "0.2.4",
+        "oidc-client-ts": "2.3.0",
+        "react-oidc-context": "2.3.1"
     },
     "scripts": {
         "start": "NODE_ENV=development runtime-env-cra --config-name=./public/runtime-env.js && vite",

@@ -26,20 +26,17 @@ const MetricsHeader = (props: MetricsHeaderProps) => {
             method: "GET",
         })
             .then((result) => {
-                localStorage.setItem("aad_login_finalized", "true");
                 setData(result.json);
             })
             .catch((error) => {
-                if (localStorage.getItem("aad_login_finalized") != "false") {
-                    if (error !== undefined) {
-                        notify(error.message, {
-                            type: "warning",
-                        });
-                    } else {
-                        notify("Error while loading metrics status", {
-                            type: "warning",
-                        });
-                    }
+                if (error !== undefined) {
+                    notify(error.message, {
+                        type: "warning",
+                    });
+                } else {
+                    notify("Error while loading metrics status", {
+                        type: "warning",
+                    });
                 }
             });
         setLoaded(true);
