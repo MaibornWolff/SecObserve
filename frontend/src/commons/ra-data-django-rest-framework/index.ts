@@ -6,8 +6,8 @@
 import queryString from "query-string";
 import { DataProvider, Identifier, fetchUtils } from "react-admin";
 
-import { jwt_signed_in, oauth2_signed_in } from "../../access_control/authProvider";
-import { get_oidc_access_token } from "../../access_control/authProvider";
+import { jwt_signed_in, oidc_signed_in } from "../../access_control/authProvider";
+import { get_oidc_id_token } from "../../access_control/authProvider";
 
 const base_url = window.__RUNTIME_CONFIG__.API_BASE_URL;
 
@@ -42,8 +42,8 @@ function createOptionsFromTokenJWT() {
     };
 }
 
-function createOptionsFromTokenOAuth2() {
-    const access_token = get_oidc_access_token();
+function createOptionsFromTokenOIDC() {
+    const access_token = get_oidc_id_token();
     if (access_token) {
         return {
             user: {
@@ -61,8 +61,8 @@ function createOptionsFromTokenOAuth2() {
 }
 
 export function httpClient(url: string, options?: fetchUtils.Options | undefined) {
-    if (oauth2_signed_in()) {
-        return fetchUtils.fetchJson(url, Object.assign(createOptionsFromTokenOAuth2(), options));
+    if (oidc_signed_in()) {
+        return fetchUtils.fetchJson(url, Object.assign(createOptionsFromTokenOIDC(), options));
     } else if (jwt_signed_in()) {
         return fetchUtils.fetchJson(url, Object.assign(createOptionsFromTokenJWT(), options));
     } else {

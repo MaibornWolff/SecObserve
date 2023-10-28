@@ -149,9 +149,9 @@ class TestAuthentication(BaseTestCase):
             mock_authentication.reset_mock()
 
     @patch(
-        "application.access_control.services.oauth2_authentication.OAuth2Authentication.authenticate"
+        "application.access_control.services.oidc_authentication.OIDCAuthentication.authenticate"
     )
-    def _check_oauth2_not_authenticated(
+    def _check_oidc_not_authenticated(
         self, methods: list[str], url: str, mock_authentication
     ):
         mock_authentication.side_effect = AuthenticationFailed(
@@ -182,9 +182,9 @@ class TestAuthentication(BaseTestCase):
             mock_authentication.reset_mock()
 
     @patch(
-        "application.access_control.services.oauth2_authentication.OAuth2Authentication.authenticate"
+        "application.access_control.services.oidc_authentication.OIDCAuthentication.authenticate"
     )
-    def _check_oauth2_authenticated(
+    def _check_oidc_authenticated(
         self, methods: list[str], url: str, mock_authentication
     ):
         mock_authentication.return_value = self.user_admin, None
@@ -215,8 +215,8 @@ class TestAuthentication(BaseTestCase):
         self._check_api_token_authenticated(methods, url)
         self._check_jwt_not_authenticated(methods, url)
         self._check_jwt_authenticated(methods, url)
-        self._check_oauth2_not_authenticated(methods, url)
-        self._check_oauth2_authenticated(methods, url)
+        self._check_oidc_not_authenticated(methods, url)
+        self._check_oidc_authenticated(methods, url)
 
     @patch("application.commons.services.global_request.get_current_user")
     def test_authentication(self, mock_user):

@@ -7,7 +7,7 @@ import { getSettingTheme, saveSettingListProperties, setListProperties } from ".
 
 const authProvider: AuthProvider = {
     login: ({ username, password }) => {
-        if (oauth2_signed_in()) {
+        if (oidc_signed_in()) {
             return Promise.resolve();
         } else {
             const request = new Request(window.__RUNTIME_CONFIG__.API_BASE_URL + "/authentication/authenticate/", {
@@ -40,14 +40,14 @@ const authProvider: AuthProvider = {
         }
     },
     logout: async () => {
-        if (oauth2_signed_in() || jwt_signed_in()) {
+        if (oidc_signed_in() || jwt_signed_in()) {
             await saveSettingListProperties();
         }
 
         localStorage.removeItem("jwt");
         localStorage.removeItem("user");
 
-        if (oauth2_signed_in()) {
+        if (oidc_signed_in()) {
             const user_manager = new UserManager(oidcConfig);
             return user_manager.signoutRedirect();
         }
@@ -60,7 +60,7 @@ const authProvider: AuthProvider = {
             if (status === 401 || status === 403) {
                 localStorage.removeItem("jwt");
                 localStorage.removeItem("user");
-                if (oauth2_signed_in()) {
+                if (oidc_signed_in()) {
                     const user_manager = new UserManager(oidcConfig);
                     user_manager.removeUser();
                 }
@@ -74,10 +74,10 @@ const authProvider: AuthProvider = {
         return Promise.resolve();
     },
     checkAuth: () => {
-        if (localStorage.getItem("jwt") || oauth2_signed_in()) {
+        if (localStorage.getItem("jwt") || oidc_signed_in()) {
             return Promise.resolve();
         } else {
-            return Promise.reject();
+            return Promise.reject({ message: false });
         }
     },
     getPermissions: () => Promise.reject(),
@@ -119,13 +119,13 @@ export function jwt_signed_in(): boolean {
 }
 
 export const oidcStorageKey =
-    "oidc.user:" + window.__RUNTIME_CONFIG__.OAUTH2_AUTHORITY + ":" + window.__RUNTIME_CONFIG__.OAUTH2_CLIENT_ID;
+    "oidc.user:" + window.__RUNTIME_CONFIG__.OIDC_AUTHORITY + ":" + window.__RUNTIME_CONFIG__.OIDC_CLIENT_ID;
 
 export function oidcStorageUser(): string | null {
     return localStorage.getItem(oidcStorageKey);
 }
 
-export function oauth2_signed_in(): boolean {
+export function oidc_signed_in(): boolean {
     return oidcStorageUser() != null;
 }
 
@@ -136,21 +136,21 @@ const onSigninCallback = (_user: User | void): void => {
 
 export const oidcConfig = {
     userStore: new WebStorageStateStore({ store: window.localStorage }),
-    authority: window.__RUNTIME_CONFIG__.OAUTH2_AUTHORITY,
-    client_id: window.__RUNTIME_CONFIG__.OAUTH2_CLIENT_ID,
-    redirect_uri: window.__RUNTIME_CONFIG__.OAUTH2_REDIRECT_URI,
-    post_logout_redirect_uri: window.__RUNTIME_CONFIG__.OAUTH2_POST_LOGOUT_REDIRECT_URI,
-    scope: window.__RUNTIME_CONFIG__.OAUTH2_SCOPE,
+    authority: window.__RUNTIME_CONFIG__.OIDC_AUTHORITY,
+    client_id: window.__RUNTIME_CONFIG__.OIDC_CLIENT_ID,
+    redirect_uri: window.__RUNTIME_CONFIG__.OIDC_REDIRECT_URI,
+    post_logout_redirect_uri: window.__RUNTIME_CONFIG__.OIDC_POST_LOGOUT_REDIRECT_URI,
+    scope: "openid profile email",
     automaticSilentRenew: true,
     prompt: "select_account",
     onSigninCallback: onSigninCallback,
 };
 
-export function get_oidc_access_token(): string | null {
+export function get_oidc_id_token(): string | null {
     if (oidcStorageUser()) {
         const user = User.fromStorageString(oidcStorageUser()!);
-        if (user) {
-            return user.access_token;
+        if (user && user.id_token) {
+            return user.id_token;
         } else {
             return null;
         }

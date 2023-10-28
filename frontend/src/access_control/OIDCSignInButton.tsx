@@ -2,7 +2,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import { Button } from "@mui/material";
 import { useAuth } from "react-oidc-context";
 
-export const OAuth2SignInButton = () => {
+export const OIDCSignInButton = () => {
     const auth = useAuth();
 
     const handleLogin = () => {

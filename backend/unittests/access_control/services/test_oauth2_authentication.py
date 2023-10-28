@@ -7,13 +7,11 @@ from django.utils import timezone
 from rest_framework.exceptions import AuthenticationFailed
 
 from application.access_control.models import User
-from application.access_control.services.oauth2_authentication import (
-    OAuth2Authentication,
-)
+from application.access_control.services.oidc_authentication import OIDCAuthentication
 from unittests.base_test_case import BaseTestCase
 
 
-class TestOAuth2Authentication(BaseTestCase):
+class TestOIDCAuthentication(BaseTestCase):
     def setUp(self) -> None:
         super().setUp()
 
@@ -21,8 +19,8 @@ class TestOAuth2Authentication(BaseTestCase):
 
     def test_authenticate_no_header(self):
         request = HttpRequest()
-        oauth2_authentication = OAuth2Authentication()
-        user = oauth2_authentication.authenticate(request)
+        oidc_authentication = OIDCAuthentication()
+        user = oidc_authentication.authenticate(request)
 
         self.assertIsNone(user)
 
@@ -30,8 +28,8 @@ class TestOAuth2Authentication(BaseTestCase):
         request = HttpRequest()
         request.META["HTTP_AUTHORIZATION"] = b"header"
         with self.assertRaises(AuthenticationFailed) as e:
-            oauth2_authentication = OAuth2Authentication()
-            oauth2_authentication.authenticate(request)
+            oidc_authentication = OIDCAuthentication()
+            oidc_authentication.authenticate(request)
 
         self.assertEqual(
             "Invalid token header: No credentials provided.", str(e.exception)
@@ -41,8 +39,8 @@ class TestOAuth2Authentication(BaseTestCase):
         request = HttpRequest()
         request.META["HTTP_AUTHORIZATION"] = b"header token_1 token_2"
         with self.assertRaises(AuthenticationFailed) as e:
-            oauth2_authentication = OAuth2Authentication()
-            oauth2_authentication.authenticate(request)
+            oidc_authentication = OIDCAuthentication()
+            oidc_authentication.authenticate(request)
 
         self.assertEqual(
             "Invalid token header: Token string should not contain spaces.",
@@ -52,13 +50,13 @@ class TestOAuth2Authentication(BaseTestCase):
     def test_authenticate_wrong_header(self):
         request = HttpRequest()
         request.META["HTTP_AUTHORIZATION"] = b"header token"
-        oauth2_authentication = OAuth2Authentication()
-        user = oauth2_authentication.authenticate(request)
+        oidc_authentication = OIDCAuthentication()
+        user = oidc_authentication.authenticate(request)
 
         self.assertIsNone(user)
 
     @patch(
-        "application.access_control.services.oauth2_authentication.OAuth2Authentication._validate_jwt"
+        "application.access_control.services.oidc_authentication.OIDCAuthentication._validate_jwt"
     )
     def test_authenticate_wrong_token(self, mock):
         mock.return_value = None
@@ -66,13 +64,13 @@ class TestOAuth2Authentication(BaseTestCase):
         with self.assertRaises(AuthenticationFailed) as e:
             request = HttpRequest()
             request.META["HTTP_AUTHORIZATION"] = b"Bearer token"
-            oauth2_authentication = OAuth2Authentication()
-            oauth2_authentication.authenticate(request)
+            oidc_authentication = OIDCAuthentication()
+            oidc_authentication.authenticate(request)
 
         self.assertEqual("Invalid token.", str(e.exception))
 
     @patch(
-        "application.access_control.services.oauth2_authentication.OAuth2Authentication._validate_jwt"
+        "application.access_control.services.oidc_authentication.OIDCAuthentication._validate_jwt"
     )
     def test_authenticate_user_deactivated(self, mock):
         mock.return_value = self.user_internal
@@ -81,37 +79,37 @@ class TestOAuth2Authentication(BaseTestCase):
         with self.assertRaises(AuthenticationFailed) as e:
             request = HttpRequest()
             request.META["HTTP_AUTHORIZATION"] = b"Bearer token"
-            oauth2_authentication = OAuth2Authentication()
-            oauth2_authentication.authenticate(request)
+            oidc_authentication = OIDCAuthentication()
+            oidc_authentication.authenticate(request)
 
         self.assertEqual("User is deactivated.", str(e.exception))
 
         self.user_internal.is_active = True
 
     @patch(
-        "application.access_control.services.oauth2_authentication.OAuth2Authentication._validate_jwt"
+        "application.access_control.services.oidc_authentication.OIDCAuthentication._validate_jwt"
     )
     def test_authenticate_successful(self, mock):
         mock.return_value = self.user_internal
 
         request = HttpRequest()
         request.META["HTTP_AUTHORIZATION"] = b"Bearer token"
-        oauth2_authentication = OAuth2Authentication()
-        user, _ = oauth2_authentication.authenticate(request)
+        oidc_authentication = OIDCAuthentication()
+        user, _ = oidc_authentication.authenticate(request)
 
         self.assertEqual(self.user_internal, user)
 
     # --- authenticate_header ---
 
     def test_authenticate_header(self):
-        oauth2_authentication = OAuth2Authentication()
-        self.assertEqual("Bearer", oauth2_authentication.authenticate_header(None))
+        oidc_authentication = OIDCAuthentication()
+        self.assertEqual("Bearer", oidc_authentication.authenticate_header(None))
 
     # --- _validate_jwt ---
 
     @patch("jwt.decode")
     @patch(
-        "application.access_control.services.oauth2_authentication.OAuth2Authentication._get_jwks_uri"
+        "application.access_control.services.oidc_authentication.OIDCAuthentication._get_jwks_uri"
     )
     @patch("jwt.PyJWKClient.__init__")
     @patch("jwt.PyJWKClient.get_signing_key_from_jwt")
@@ -125,8 +123,8 @@ class TestOAuth2Authentication(BaseTestCase):
         jwt_mock.side_effect = jwt.ExpiredSignatureError("Signature expired")
 
         with self.assertRaises(AuthenticationFailed) as e:
-            oauth2_authentication = OAuth2Authentication()
-            oauth2_authentication._validate_jwt("token")
+            oidc_authentication = OIDCAuthentication()
+            oidc_authentication._validate_jwt("token")
 
         self.assertEqual("Signature expired", str(e.exception))
         jwks_uri_mock.assert_called_once()
@@ -141,15 +139,15 @@ class TestOAuth2Authentication(BaseTestCase):
 
     @patch("jwt.decode")
     @patch(
-        "application.access_control.services.oauth2_authentication.OAuth2Authentication._get_jwks_uri"
+        "application.access_control.services.oidc_authentication.OIDCAuthentication._get_jwks_uri"
     )
     @patch("jwt.PyJWKClient.__init__")
     @patch("jwt.PyJWKClient.get_signing_key_from_jwt")
     @patch(
-        "application.access_control.services.oauth2_authentication.get_user_by_username"
+        "application.access_control.services.oidc_authentication.get_user_by_username"
     )
     @patch(
-        "application.access_control.services.oauth2_authentication.OAuth2Authentication._create_user"
+        "application.access_control.services.oidc_authentication.OIDCAuthentication._create_user"
     )
     def test_validate_jwt_user_not_found(
         self,
@@ -169,8 +167,8 @@ class TestOAuth2Authentication(BaseTestCase):
         expected_user = User(username="test_username")
         create_user_mock.return_value = expected_user
 
-        oauth2_authentication = OAuth2Authentication()
-        user = oauth2_authentication._validate_jwt("token")
+        oidc_authentication = OIDCAuthentication()
+        user = oidc_authentication._validate_jwt("token")
 
         self.assertEqual(user, expected_user)
         get_user_mock.assert_called_with("test_username")
@@ -189,15 +187,15 @@ class TestOAuth2Authentication(BaseTestCase):
 
     @patch("jwt.decode")
     @patch(
-        "application.access_control.services.oauth2_authentication.OAuth2Authentication._get_jwks_uri"
+        "application.access_control.services.oidc_authentication.OIDCAuthentication._get_jwks_uri"
     )
     @patch("jwt.PyJWKClient.__init__")
     @patch("jwt.PyJWKClient.get_signing_key_from_jwt")
     @patch(
-        "application.access_control.services.oauth2_authentication.get_user_by_username"
+        "application.access_control.services.oidc_authentication.get_user_by_username"
     )
     @patch(
-        "application.access_control.services.oauth2_authentication.OAuth2Authentication._check_user_change"
+        "application.access_control.services.oidc_authentication.OIDCAuthentication._check_user_change"
     )
     def test_validate_jwt_user_found(
         self,
@@ -216,8 +214,8 @@ class TestOAuth2Authentication(BaseTestCase):
         get_user_mock.return_value = self.user_internal
         check_user_change_mock.return_value = self.user_internal
 
-        oauth2_authentication = OAuth2Authentication()
-        user = oauth2_authentication._validate_jwt("token")
+        oidc_authentication = OIDCAuthentication()
+        user = oidc_authentication._validate_jwt("token")
 
         self.assertEqual(self.user_internal, user)
         get_user_mock.assert_called_with(self.user_internal.username)
@@ -237,8 +235,8 @@ class TestOAuth2Authentication(BaseTestCase):
     @patch("requests.request")
     def test_get_jwks_uri(self, requests_mock):
         requests_mock.return_value = MockResponse()
-        oauth2_authentication = OAuth2Authentication()
-        jwks_uri = oauth2_authentication._get_jwks_uri()
+        oidc_authentication = OIDCAuthentication()
+        jwks_uri = oidc_authentication._get_jwks_uri()
 
         self.assertEqual("https://authority/.well-known/jwks.json", jwks_uri)
         requests_mock.assert_called_once_with(
@@ -247,10 +245,10 @@ class TestOAuth2Authentication(BaseTestCase):
             timeout=60,
         )
 
-    @patch("application.access_control.services.oauth2_authentication.User.save")
+    @patch("application.access_control.services.oidc_authentication.User.save")
     def test_create_user(self, user_save_mock):
-        oauth2_authentication = OAuth2Authentication()
-        user = oauth2_authentication._create_user(
+        oidc_authentication = OIDCAuthentication()
+        user = oidc_authentication._create_user(
             "test_username",
             {
                 "preferred_username": "test_username",
@@ -266,7 +264,7 @@ class TestOAuth2Authentication(BaseTestCase):
         self.assertEqual("test_email", user.email)
         user_save_mock.assert_called_once()
 
-    @patch("application.access_control.services.oauth2_authentication.User.save")
+    @patch("application.access_control.services.oidc_authentication.User.save")
     def test_check_user_change_no_change(self, user_save_mock):
         old_user = User(
             username="test_username",
@@ -274,8 +272,8 @@ class TestOAuth2Authentication(BaseTestCase):
             last_name="test_last_name",
             email="test_email",
         )
-        oauth2_authentication = OAuth2Authentication()
-        new_user = oauth2_authentication._check_user_change(
+        oidc_authentication = OIDCAuthentication()
+        new_user = oidc_authentication._check_user_change(
             old_user,
             {
                 "preferred_username": "test_username",
@@ -291,7 +289,7 @@ class TestOAuth2Authentication(BaseTestCase):
         self.assertEqual("test_email", new_user.email)
         user_save_mock.assert_not_called()
 
-    @patch("application.access_control.services.oauth2_authentication.User.save")
+    @patch("application.access_control.services.oidc_authentication.User.save")
     def test_check_user_change_with_changes(self, user_save_mock):
         old_user = User(
             username="test_username",
@@ -299,8 +297,8 @@ class TestOAuth2Authentication(BaseTestCase):
             last_name="test_last_name",
             email="test_email",
         )
-        oauth2_authentication = OAuth2Authentication()
-        new_user = oauth2_authentication._check_user_change(
+        oidc_authentication = OIDCAuthentication()
+        new_user = oidc_authentication._check_user_change(
             old_user,
             {
                 "preferred_username": "test_username",

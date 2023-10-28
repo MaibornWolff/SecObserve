@@ -10,11 +10,11 @@ from rest_framework.exceptions import AuthenticationFailed
 from application.access_control.models import User
 from application.access_control.queries.user import get_user_by_username
 
-OAUTH2_PREFIX = "Bearer"
+OIDC_PREFIX = "Bearer"
 ALGORITHMS = ["RS256", "RS384", "RS512", "ES256 ", "ES384", "ES512", "EdDSA"]
 
 
-class OAuth2Authentication(BaseAuthentication):
+class OIDCAuthentication(BaseAuthentication):
     def authenticate(self, request):
         auth = get_authorization_header(request).split()
         if not auth:
@@ -31,7 +31,7 @@ class OAuth2Authentication(BaseAuthentication):
         auth_prefix = auth[0].decode("UTF-8")
         auth_token = auth[1].decode("UTF-8")
 
-        if auth_prefix.lower() != OAUTH2_PREFIX.lower():
+        if auth_prefix.lower() != OIDC_PREFIX.lower():
             # Authorization header is possibly for another backend
             return None
 
@@ -45,7 +45,7 @@ class OAuth2Authentication(BaseAuthentication):
         return (user, None)
 
     def authenticate_header(self, request):
-        return OAUTH2_PREFIX
+        return OIDC_PREFIX
 
     def _validate_jwt(self, token: str) -> Optional[User]:
         try:
@@ -56,7 +56,7 @@ class OAuth2Authentication(BaseAuthentication):
             payload = jwt.decode(
                 jwt=token, key=signing_key.key, options=config, algorithms=ALGORITHMS
             )
-            username = payload.get(os.environ["OAUTH2_USERNAME"])
+            username = payload.get(os.environ["OIDC_USERNAME"])
             user = get_user_by_username(username)
             if user:
                 user = self._check_user_change(user, payload)
@@ -68,7 +68,7 @@ class OAuth2Authentication(BaseAuthentication):
     def _get_jwks_uri(self):
         response = requests.request(
             method="GET",
-            url=f"{os.environ['OAUTH2_AUTHORITY']}/.well-known/openid-configuration",
+            url=f"{os.environ['OIDC_AUTHORITY']}/.well-known/openid-configuration",
             timeout=60,
         )
         response.raise_for_status()
@@ -76,41 +76,42 @@ class OAuth2Authentication(BaseAuthentication):
 
     def _create_user(self, username: str, payload: dict) -> User:
         user = User(username=username, first_name="", last_name="", email="")
-        if os.environ.get("OAUTH2_EMAIL"):
-            user.email = payload[os.environ["OAUTH2_EMAIL"]]
-        if os.environ.get("OAUTH2_FIRST_NAME"):
-            user.first_name = payload[os.environ["OAUTH2_FIRST_NAME"]]
-        if os.environ.get("OAUTH2_LAST_NAME"):
-            user.last_name = payload[os.environ["OAUTH2_LAST_NAME"]]
+        if os.environ.get("OIDC_EMAIL"):
+            user.email = payload[os.environ["OIDC_EMAIL"]]
+        if os.environ.get("OIDC_FIRST_NAME"):
+            user.first_name = payload[os.environ["OIDC_FIRST_NAME"]]
+        if os.environ.get("OIDC_LAST_NAME"):
+            user.last_name = payload[os.environ["OIDC_LAST_NAME"]]
         try:
             with transaction.atomic():
                 user.save()
+            return user
         except IntegrityError as e:
             # User was most likely created by another request
-            user = get_user_by_username(username)
-            if not user:
+            existing_user = get_user_by_username(username)
+            if not existing_user:
                 raise e
-        return user
+            return existing_user
 
     def _check_user_change(self, user: User, payload: dict) -> User:
         user_changed = False
         if (
-            os.environ.get("OAUTH2_EMAIL")
-            and user.email != payload[os.environ["OAUTH2_EMAIL"]]
+            os.environ.get("OIDC_EMAIL")
+            and user.email != payload[os.environ["OIDC_EMAIL"]]
         ):
-            user.email = payload[os.environ["OAUTH2_EMAIL"]]
+            user.email = payload[os.environ["OIDC_EMAIL"]]
             user_changed = True
         if (
-            os.environ.get("OAUTH2_FIRST_NAME")
-            and user.first_name != payload[os.environ["OAUTH2_FIRST_NAME"]]
+            os.environ.get("OIDC_FIRST_NAME")
+            and user.first_name != payload[os.environ["OIDC_FIRST_NAME"]]
         ):
-            user.first_name = payload[os.environ["OAUTH2_FIRST_NAME"]]
+            user.first_name = payload[os.environ["OIDC_FIRST_NAME"]]
             user_changed = True
         if (
-            os.environ.get("OAUTH2_LAST_NAME")
-            and user.last_name != payload[os.environ["OAUTH2_LAST_NAME"]]
+            os.environ.get("OIDC_LAST_NAME")
+            and user.last_name != payload[os.environ["OIDC_LAST_NAME"]]
         ):
-            user.last_name = payload[os.environ["OAUTH2_LAST_NAME"]]
+            user.last_name = payload[os.environ["OIDC_LAST_NAME"]]
             user_changed = True
         if user_changed:
             user.save()

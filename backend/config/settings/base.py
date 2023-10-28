@@ -352,9 +352,9 @@ LOGGING = {
 # -------------------------------------------------------------------------------
 # AUTHENTICATION
 # ------------------------------------------------------------------------------
-if env("OAUTH2_AUTHORITY"):
+if env("OIDC_AUTHORITY"):
     DEFAULT_AUTHENTICATION_CLASSES = [
-        "application.access_control.services.oauth2_authentication.OAuth2Authentication",
+        "application.access_control.services.oidc_authentication.OIDCAuthentication",
         "application.access_control.services.api_token_authentication.APITokenAuthentication",
         "application.access_control.services.jwt_authentication.JWTAuthentication",
         "rest_framework.authentication.SessionAuthentication",

@@ -196,16 +196,14 @@ const MetricsSeveritiesTimeline = (props: MetricsSeveritiesTimelineProps) => {
                 setDatasets(data_sets);
             })
             .catch((error) => {
-                if (localStorage.getItem("aad_login_finalized") != "false") {
-                    if (error !== undefined) {
-                        notify(error.message, {
-                            type: "warning",
-                        });
-                    } else {
-                        notify("Error while loading metrics", {
-                            type: "warning",
-                        });
-                    }
+                if (error !== undefined) {
+                    notify(error.message, {
+                        type: "warning",
+                    });
+                } else {
+                    notify("Error while loading metrics", {
+                        type: "warning",
+                    });
                 }
             });
         setLoaded(true);

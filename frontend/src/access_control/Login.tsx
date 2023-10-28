@@ -9,7 +9,7 @@ import { useAuth } from "react-oidc-context";
 import { Navigate, useLocation } from "react-router-dom";
 
 import { getTheme } from "../commons/settings/functions";
-import { OAuth2SignInButton } from "./OAuth2SignInButton";
+import { OIDCSignInButton } from "./OIDCSignInButton";
 import { jwt_signed_in } from "./authProvider";
 
 const Login = () => {
@@ -49,7 +49,7 @@ const Login = () => {
     return (
         <div>
             {isAuthenticated && <Navigate to="/" replace={true} />}
-            {!isAuthenticated && (
+            {!isAuthenticated && !auth.isLoading && (
                 <Form onSubmit={handleSubmit} noValidate>
                     <Box
                         sx={{
@@ -110,7 +110,7 @@ const Login = () => {
                                         {loading && <CircularProgress size={25} thickness={2} />}
                                         Sign in with user
                                     </Button>
-                                    {window.__RUNTIME_CONFIG__.OAUTH2_ENABLE == "true" && <OAuth2SignInButton />}
+                                    {window.__RUNTIME_CONFIG__.OIDC_ENABLE == "true" && <OIDCSignInButton />}
                                 </Stack>
                             </CardActions>
                         </Card>
