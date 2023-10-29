@@ -8,7 +8,6 @@ from application.core.models import (
     Branch,
     Evidence,
     Observation,
-    Parser,
     Product,
     Product_Member,
 )
@@ -52,14 +51,12 @@ def get_observations() -> QuerySet[Observation]:
 def get_observations_for_vulnerability_check(
     product: Product,
     branch: Optional[Branch],
-    parser: Parser,
     filename: str,
     api_configuration_name: str,
 ) -> QuerySet[Observation]:
     return get_observations().filter(
         product=product,
         branch=branch,
-        parser=parser,
         upload_filename=filename,
         api_configuration_name=api_configuration_name,
     )

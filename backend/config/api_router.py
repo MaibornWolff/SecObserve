@@ -11,7 +11,10 @@ from application.core.api.views import (
     ProductMemberViewSet,
     ProductViewSet,
 )
-from application.import_observations.api.views import ApiConfigurationViewSet
+from application.import_observations.api.views import (
+    ApiConfigurationViewSet,
+    VulnerabilityCheckViewSet,
+)
 from application.rules.api.views import GeneralRuleViewSet, ProductRuleViewSet
 
 router = SimpleRouter()
@@ -31,6 +34,7 @@ router.register("api_configurations", ApiConfigurationViewSet)
 router.register("product_rules", ProductRuleViewSet)
 router.register("evidences", EvidenceViewSet)
 router.register("notifications", NotificationViewSet)
+router.register("vulnerability_checks", VulnerabilityCheckViewSet)
 
 app_name = "api"
 urlpatterns = router.urls

@@ -27,7 +27,10 @@ from application.core.services.observation_log import create_observation_log
 from application.core.services.product import set_repository_default_branch
 from application.core.services.security_gate import check_security_gate
 from application.epss.services.epss import epss_apply_observation
-from application.import_observations.models import Api_Configuration
+from application.import_observations.models import (
+    Api_Configuration,
+    Vulnerability_Check,
+)
 from application.import_observations.parsers.base_parser import (
     BaseAPIParser,
     BaseFileParser,
@@ -96,7 +99,21 @@ def file_upload_observations(
         imported_observations=imported_observations,
     )
 
-    return process_data(import_parameters)
+    numbers: Tuple[int, int, int, str] = process_data(import_parameters)
+
+    Vulnerability_Check.objects.update_or_create(
+        product=import_parameters.product,
+        branch=import_parameters.branch,
+        filename=import_parameters.filename,
+        defaults={
+            "last_import_observations_new": numbers[0],
+            "last_import_observations_updated": numbers[1],
+            "last_import_observations_resolved": numbers[2],
+            "scanner": numbers[3],
+        },
+    )
+
+    return numbers[0], numbers[1], numbers[2]
 
 
 def api_import_observations(
@@ -131,7 +148,21 @@ def api_import_observations(
         imported_observations=imported_observations,
     )
 
-    return process_data(import_parameters)
+    numbers: Tuple[int, int, int, str] = process_data(import_parameters)
+
+    Vulnerability_Check.objects.update_or_create(
+        product=import_parameters.product,
+        branch=import_parameters.branch,
+        api_configuration_name=import_parameters.api_configuration_name,
+        defaults={
+            "last_import_observations_new": numbers[0],
+            "last_import_observations_updated": numbers[1],
+            "last_import_observations_resolved": numbers[2],
+            "scanner": numbers[3],
+        },
+    )
+
+    return numbers[0], numbers[1], numbers[2]
 
 
 def api_check_connection(
@@ -155,9 +186,11 @@ def instanciate_parser(parser: Parser) -> BaseParser:
     return parser_instance
 
 
-def process_data(import_parameters: ImportParameters) -> Tuple[int, int, int]:
+def process_data(import_parameters: ImportParameters) -> Tuple[int, int, int, str]:
     observations_new = 0
     observations_updated = 0
+
+    scanner = ""
 
     rule_engine = Rule_Engine(
         product=import_parameters.product, parser=import_parameters.parser
@@ -168,13 +201,13 @@ def process_data(import_parameters: ImportParameters) -> Tuple[int, int, int]:
     for observation_before_for_dict in get_observations_for_vulnerability_check(
         import_parameters.product,
         import_parameters.branch,
-        import_parameters.parser,
         import_parameters.filename,
         import_parameters.api_configuration_name,
     ):
         observations_before[
             observation_before_for_dict.identity_hash
         ] = observation_before_for_dict
+        scanner = observation_before_for_dict.scanner
 
     observations_this_run: set[str] = set()
     vulnerability_check_observations: set[Observation] = set()
@@ -214,6 +247,8 @@ def process_data(import_parameters: ImportParameters) -> Tuple[int, int, int]:
                 observations_this_run.add(imported_observation.identity_hash)
                 vulnerability_check_observations.add(imported_observation)
 
+        scanner = imported_observation.scanner
+
     observations_resolved = resolve_unimported_observations(observations_before)
     vulnerability_check_observations.update(observations_resolved)
     check_security_gate(import_parameters.product)
@@ -225,7 +260,7 @@ def process_data(import_parameters: ImportParameters) -> Tuple[int, int, int]:
         import_parameters.product, vulnerability_check_observations
     )
 
-    return observations_new, observations_updated, len(observations_resolved)
+    return observations_new, observations_updated, len(observations_resolved), scanner
 
 
 def prepare_imported_observation(

@@ -1,7 +1,16 @@
-from django.db.models import CASCADE, PROTECT, CharField, ForeignKey, Model
+from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db.models import (
+    CASCADE,
+    PROTECT,
+    CharField,
+    DateTimeField,
+    ForeignKey,
+    IntegerField,
+    Model,
+)
 from encrypted_model_fields.fields import EncryptedCharField
 
-from application.core.models import Parser, Product
+from application.core.models import Branch, Parser, Product
 
 
 class Api_Configuration(Model):
@@ -16,4 +25,31 @@ class Api_Configuration(Model):
         unique_together = (
             "product",
             "name",
+        )
+
+
+class Vulnerability_Check(Model):
+    product = ForeignKey(Product, on_delete=CASCADE)
+    branch = ForeignKey(Branch, on_delete=CASCADE)
+    filename = CharField(max_length=255, blank=True)
+    api_configuration_name = CharField(max_length=255, blank=True)
+    scanner = CharField(max_length=255, blank=True)
+    first_import = DateTimeField(auto_now_add=True)
+    last_import = DateTimeField(auto_now=True)
+    last_import_observations_new = IntegerField(
+        null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]
+    )
+    last_import_observations_updated = IntegerField(
+        null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]
+    )
+    last_import_observations_resolved = IntegerField(
+        null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]
+    )
+
+    class Meta:
+        unique_together = (
+            "product",
+            "branch",
+            "filename",
+            "api_configuration_name",
         )

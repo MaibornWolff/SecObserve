@@ -1,6 +1,7 @@
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import UploadIcon from "@mui/icons-material/CloudUpload";
+import GradingIcon from "@mui/icons-material/Grading";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import TokenIcon from "@mui/icons-material/Token";
 import { Stack, Typography } from "@mui/material";
@@ -40,6 +41,7 @@ import products from "../../core/products";
 import ApiConfigurationCreate from "../../import_observations/api_configurations/ApiConfigurationCreate";
 import ApiConfigurationEmbeddedList from "../../import_observations/api_configurations/ApiConfigurationEmbeddedList";
 import ImportMenu from "../../import_observations/import/ImportMenu";
+import VulnerabilityCheckEmbeddedList from "../../import_observations/vulnerability_checks/VulnerabilityCheckEmbeddedList";
 import MetricsHeader from "../../metrics/MetricsHeader";
 import MetricsSeveritiesCurrent from "../../metrics/MetricsSeveritiesCurrent";
 import MetricsSeveritiesTimeline from "../../metrics/MetricsSeveritiesTimeLine";
@@ -324,6 +326,9 @@ const ProductShow = () => {
                                     <BranchCreate id={product.id} />
                                 )}
                                 <BranchEmbeddedList product={product} />
+                            </Tab>
+                            <Tab label="Vulnerability Checks" path="vulnerability_checks" icon={<GradingIcon />}>
+                                <VulnerabilityCheckEmbeddedList product={product} />
                             </Tab>
                             <Tab label="Observations" path="observations" icon={<observations.icon />}>
                                 <Stack

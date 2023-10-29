@@ -3,11 +3,12 @@ from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.filters import SearchFilter
+from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from application.access_control.services.authorization import user_has_permission_or_403
 from application.access_control.services.roles_permissions import Permissions
@@ -15,9 +16,13 @@ from application.core.models import Branch
 from application.core.queries.branch import get_branch_by_id, get_branch_by_name
 from application.core.queries.parser import get_parser_by_id, get_parser_by_name
 from application.core.queries.product import get_product_by_id, get_product_by_name
-from application.import_observations.api.filters import ApiConfigurationFilter
+from application.import_observations.api.filters import (
+    ApiConfigurationFilter,
+    VulnerabilityCheckFilter,
+)
 from application.import_observations.api.permissions import (
     UserHasApiConfigurationPermission,
+    UserHasVulnerabilityCheckPermission,
 )
 from application.import_observations.api.serializers import (
     ApiConfigurationSerializer,
@@ -26,12 +31,19 @@ from application.import_observations.api.serializers import (
     FileUploadObservationsByIdRequestSerializer,
     FileUploadObservationsByNameRequestSerializer,
     ImportObservationsResponseSerializer,
+    VulnerabilityCheckSerializer,
 )
-from application.import_observations.models import Api_Configuration
+from application.import_observations.models import (
+    Api_Configuration,
+    Vulnerability_Check,
+)
 from application.import_observations.queries.api_configuration import (
     get_api_configuration_by_id,
     get_api_configuration_by_name,
     get_api_configurations,
+)
+from application.import_observations.queries.vulnerability_check import (
+    get_vulnerability_checks,
 )
 from application.import_observations.services.import_observations import (
     FileUploadParameters,
@@ -295,3 +307,14 @@ class ApiConfigurationViewSet(ModelViewSet):
 
     def get_queryset(self):
         return get_api_configurations()
+
+
+class VulnerabilityCheckViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
+    serializer_class = VulnerabilityCheckSerializer
+    filterset_class = VulnerabilityCheckFilter
+    permission_classes = (IsAuthenticated, UserHasVulnerabilityCheckPermission)
+    queryset = Vulnerability_Check.objects.none()
+    filter_backends = [DjangoFilterBackend]
+
+    def get_queryset(self):
+        return get_vulnerability_checks()

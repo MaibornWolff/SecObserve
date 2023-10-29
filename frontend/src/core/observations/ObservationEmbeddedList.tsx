@@ -58,6 +58,8 @@ function listFilters(product: Product) {
         <TextInput source="origin_source_file" label="Source" alwaysOn />,
         <TextInput source="scanner" alwaysOn />,
         <AutocompleteInputMedium source="age" choices={OBSERVATION_AGE_CHOICES} alwaysOn />,
+        <TextInput source="upload_filename" label="Filename" />,
+        <TextInput source="api_configuration_name" label="API configuration" />,
     ];
 }
 
