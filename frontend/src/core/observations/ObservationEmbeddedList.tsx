@@ -22,7 +22,7 @@ import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { humanReadableDate } from "../../commons/functions";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import {
-    OBSERVATION_AGE_CHOICES,
+    AGE_CHOICES,
     OBSERVATION_SEVERITY_CHOICES,
     OBSERVATION_STATUS_CHOICES,
     OBSERVATION_STATUS_OPEN,
@@ -57,7 +57,7 @@ function listFilters(product: Product) {
         <TextInput source="origin_endpoint_hostname" label="Host" alwaysOn />,
         <TextInput source="origin_source_file" label="Source" alwaysOn />,
         <TextInput source="scanner" alwaysOn />,
-        <AutocompleteInputMedium source="age" choices={OBSERVATION_AGE_CHOICES} alwaysOn />,
+        <AutocompleteInputMedium source="age" choices={AGE_CHOICES} alwaysOn />,
         <TextInput source="upload_filename" label="Filename" />,
         <TextInput source="api_configuration_name" label="API configuration" />,
     ];
