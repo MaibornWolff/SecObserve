@@ -20,7 +20,7 @@ export interface VulnerabilityCheck extends RaRecord {
     filename: string;
     api_configuration_name: string;
     first_import: Date;
-    last_import: Date;
+    last_import: string;
     last_import_observations_new: number;
     last_import_observations_updated: number;
     last_import_observations_resolved: number;

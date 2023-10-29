@@ -28,6 +28,6 @@ export function getElevation() {
     if (getSettingTheme() == "dark") {
         return 4;
     } else {
-        return 0;
+        return 2;
     }
 }
