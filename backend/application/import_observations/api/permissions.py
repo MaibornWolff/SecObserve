@@ -22,3 +22,14 @@ class UserHasApiConfigurationPermission(BasePermission):
             Permissions.Api_Configuration_Edit,
             Permissions.Api_Configuration_Delete,
         )
+
+
+class UserHasVulnerabilityCheckPermission(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return check_object_permission(
+            request,
+            obj,
+            Permissions.Product_View,
+            None,
+            None,
+        )

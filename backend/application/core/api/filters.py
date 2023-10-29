@@ -85,7 +85,7 @@ class BranchFilter(FilterSet):
 
     ordering = OrderingFilter(
         # tuple-mapping retains order
-        fields=(("name", "name"),),
+        fields=(("name", "name"), ("last_import", "last_import")),
     )
 
     class Meta:
@@ -167,6 +167,8 @@ class ObservationFilter(FilterSet):
             "current_status",
             "parser",
             "scanner",
+            "upload_filename",
+            "api_configuration_name",
         ]
 
     def get_age(self, queryset, field_name, value):  # pylint: disable=unused-argument
