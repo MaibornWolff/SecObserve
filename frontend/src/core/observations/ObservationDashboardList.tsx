@@ -11,6 +11,7 @@ import {
 
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { humanReadableDate } from "../../commons/functions";
+import { getElevation } from "../../metrics/functions";
 import { OBSERVATION_STATUS_OPEN } from "../types";
 import { Observation } from "../types";
 
@@ -45,7 +46,7 @@ const ObservationDashboardList = () => {
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
-                <Paper>
+                <Paper elevation={getElevation()}>
                     <Datagrid size="small" sx={{ width: "100%" }} rowClick={ShowObservations} bulkActionButtons={false}>
                         <TextField source="product_data.name" label="Product" />
                         <TextField source="title" />
