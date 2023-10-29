@@ -3,6 +3,7 @@ import {
     BulkDeleteButton,
     CreateButton,
     Datagrid,
+    FunctionField,
     List,
     NullableBooleanInput,
     ReferenceInput,
@@ -15,7 +16,10 @@ import { PERMISSION_PRODUCT_CREATE } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
 import { SecurityGateTextField } from "../../commons/custom_fields/SecurityGateTextField";
+import { humanReadableDate } from "../../commons/functions";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
+import { Product } from "../types";
+import { AGE_CHOICES } from "../types";
 
 const listFilters = [
     <TextInput source="name" alwaysOn />,
@@ -23,6 +27,7 @@ const listFilters = [
         <AutocompleteInputMedium optionText="name" />
     </ReferenceInput>,
     <NullableBooleanInput source="security_gate_passed" alwaysOn />,
+    <AutocompleteInputMedium source="age" choices={AGE_CHOICES} label="Last observation change" alwaysOn />,
 ];
 
 const BulkActionButtons = () => (
@@ -59,6 +64,11 @@ const ProductList = () => {
                 <SecurityGateTextField />
                 <TextField source="repository_default_branch_name" label="Default branch" sortable={false} />
                 <ObservationsCountField withLabel={false} />
+                <FunctionField<Product>
+                    label="Last observation change"
+                    sortBy="last_observation_change"
+                    render={(record) => (record ? humanReadableDate(record.last_observation_change) : "")}
+                />
             </Datagrid>
         </List>
     );

@@ -34,6 +34,22 @@ AGE_CHOICES = [
 ]
 
 
+def _get_days_from_age(value):
+    if value == AGE_DAY:
+        days = 0
+    elif value == AGE_WEEK:
+        days = 7
+    elif value == AGE_MONTH:
+        days = 30
+    elif value == AGE_QUARTER:
+        days = 90
+    elif value == AGE_YEAR:
+        days = 365
+    else:
+        days = None
+    return days
+
+
 class ProductGroupFilter(FilterSet):
     name = CharFilter(field_name="name", lookup_expr="icontains")
 
@@ -49,6 +65,7 @@ class ProductGroupFilter(FilterSet):
 
 class ProductFilter(FilterSet):
     name = CharFilter(field_name="name", lookup_expr="icontains")
+    age = ChoiceFilter(field_name="age", method="get_age", choices=AGE_CHOICES)
 
     ordering = OrderingFilter(
         # tuple-mapping retains order
@@ -56,8 +73,21 @@ class ProductFilter(FilterSet):
             ("name", "name"),
             ("security_gate_passed", "security_gate_passed"),
             ("product_group__name", "product_group_name"),
+            ("last_observation_change", "last_observation_change"),
         ),
     )
+
+    def get_age(self, queryset, field_name, value):  # pylint: disable=unused-argument
+        # field_name is used as a positional argument
+
+        days = _get_days_from_age(value)
+
+        if days is None:
+            return queryset
+
+        today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        time_threshold = today - timedelta(days=int(days))
+        return queryset.filter(last_observation_change__gte=time_threshold)
 
     class Meta:
         model = Product
@@ -174,18 +204,7 @@ class ObservationFilter(FilterSet):
     def get_age(self, queryset, field_name, value):  # pylint: disable=unused-argument
         # field_name is used as a positional argument
 
-        if value == AGE_DAY:
-            days = 0
-        elif value == AGE_WEEK:
-            days = 7
-        elif value == AGE_MONTH:
-            days = 30
-        elif value == AGE_QUARTER:
-            days = 90
-        elif value == AGE_YEAR:
-            days = 365
-        else:
-            days = None
+        days = _get_days_from_age(value)
 
         if days is None:
             return queryset
