@@ -47,7 +47,7 @@ services:
       - default
 
   frontend:
-    image: maibornwolff/secobserve-frontend:0.9.10
+    image: maibornwolff/secobserve-frontend:1.0.0
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=Host(`secobserve.localhost`)"
@@ -63,7 +63,7 @@ services:
       - traefik
 
   backend:
-    image: maibornwolff/secobserve-backend:0.9.10
+    image: maibornwolff/secobserve-backend:1.0.0
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend.rule=Host(`secobserve-backend.localhost`)"
