@@ -58,23 +58,13 @@ const authProvider: AuthProvider = {
         if (error) {
             const status = error.status;
             if (status === 401 || status === 403) {
-                localStorage.removeItem("jwt");
-                localStorage.removeItem("user");
-                if (oidc_signed_in()) {
-                    const user_manager = new UserManager(oidcConfig);
-                    user_manager.removeUser();
-                }
-                return Promise.reject({
-                    redirectTo: "/login",
-                    logoutUser: false,
-                });
+                return Promise.reject({ message: error.message });
             }
         }
-
         return Promise.resolve();
     },
     checkAuth: () => {
-        if (localStorage.getItem("jwt") || oidc_signed_in()) {
+        if (oidc_signed_in() || jwt_signed_in()) {
             return Promise.resolve();
         } else {
             return Promise.reject({ message: false });
