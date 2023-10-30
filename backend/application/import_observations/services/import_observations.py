@@ -231,8 +231,11 @@ def process_data(import_parameters: ImportParameters) -> Tuple[int, int, int, st
             if observation_before:
                 process_current_observation(imported_observation, observation_before)
 
-                observations_updated += 1
                 rule_engine.apply_rules_for_observation(observation_before)
+
+                if observation_before.current_status == Observation.STATUS_OPEN:
+                    observations_updated += 1
+
                 # Remove observation from list of current observations because it is still part of the check
                 observations_before.pop(observation_before.identity_hash)
                 # Add identity_hash to set of observations in this run to detect duplicates in this run
@@ -241,8 +244,11 @@ def process_data(import_parameters: ImportParameters) -> Tuple[int, int, int, st
             else:
                 process_new_observation(imported_observation)
 
-                observations_new += 1
                 rule_engine.apply_rules_for_observation(imported_observation)
+
+                if imported_observation.current_status == Observation.STATUS_OPEN:
+                    observations_new += 1
+
                 # Add identity_hash to set of observations in this run to detect duplicates in this run
                 observations_this_run.add(imported_observation.identity_hash)
                 vulnerability_check_observations.add(imported_observation)
@@ -413,7 +419,8 @@ def resolve_unimported_observations(
 
         new_status = get_current_status(observation)
         if old_status != new_status:
-            observations_resolved.add(observation)
+            if old_status == Observation.STATUS_OPEN:
+                observations_resolved.add(observation)
 
             observation.current_status = new_status
             create_observation_log(
