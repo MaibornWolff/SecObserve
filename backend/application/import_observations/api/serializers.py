@@ -6,12 +6,16 @@ from rest_framework.serializers import (
     IntegerField,
     ModelSerializer,
     Serializer,
+    SerializerMethodField,
     ValidationError,
 )
 
 from application.access_control.services.roles_permissions import Permissions
 from application.core.api.serializers import NestedProductSerializer
-from application.import_observations.models import Api_Configuration
+from application.import_observations.models import (
+    Api_Configuration,
+    Vulnerability_Check,
+)
 from application.import_observations.services.import_observations import (
     api_check_connection,
 )
@@ -116,3 +120,25 @@ class ApiConfigurationSerializer(ModelSerializer):
             raise ValidationError("Product cannot be changed")
 
         return attrs
+
+
+class VulnerabilityCheckSerializer(ModelSerializer):
+    branch_name = SerializerMethodField()
+    scanner_name = SerializerMethodField()
+
+    def get_branch_name(self, vulnerability_check: Vulnerability_Check) -> str:
+        if not vulnerability_check.branch:
+            return ""
+
+        return vulnerability_check.branch.name
+
+    def get_scanner_name(self, vulnerability_check: Vulnerability_Check) -> str:
+        if not vulnerability_check.scanner:
+            return ""
+
+        scanner_parts = vulnerability_check.scanner.split("/")
+        return scanner_parts[0].strip()
+
+    class Meta:
+        model = Vulnerability_Check
+        fields = "__all__"

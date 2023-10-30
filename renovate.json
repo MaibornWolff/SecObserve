@@ -30,6 +30,12 @@
     "packageRules": [
         {
             "matchPackageNames": [
+                "python"
+            ],
+            "allowedVersions": "<3.12"
+        },
+        {
+            "matchPackageNames": [
                 "django"
             ],
             "allowedVersions": "<4.3"
@@ -38,7 +44,7 @@
             "matchPackageNames": [
                 "node"
             ],
-            "allowedVersions": "<19"
+            "allowedVersions": "<21"
         },
         {
             "matchPackageNames": [

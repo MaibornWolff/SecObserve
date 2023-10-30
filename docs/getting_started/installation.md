@@ -47,24 +47,23 @@ services:
       - default
 
   frontend:
-    image: maibornwolff/secobserve-frontend:0.9.10
+    image: maibornwolff/secobserve-frontend:1.0.0
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=Host(`secobserve.localhost`)"
       - "traefik.http.routers.frontend.entrypoints=web"
     environment:
       API_BASE_URL: ${SO_API_BASE_URL:-http://secobserve-backend.localhost/api}
-      AAD_ENABLE: ${SO_AAD_ENABLE:-false}
-      AAD_AUTHORITY: ${SO_AAD_AUTHORITY:-dummy}
-      AAD_CLIENT_ID: ${SO_AAD_CLIENT_ID:-dummy}
-      AAD_REDIRECT_URI: ${SO_AAD_REDIRECT_URI:-http://secobserve.localhost}
-      AAD_POST_LOGOUT_REDIRECT_URI: ${SO_AAD_POST_LOGOUT_REDIRECT_URI:-http://secobserve.localhost}
-      AAD_SCOPE: ${SO_AAD_SCOPE:-dummy}
+      OIDC_ENABLE: ${SO_OIDC_ENABLE:-false}
+      OIDC_AUTHORITY: ${SO_OIDC_AUTHORITY:-dummy}
+      OIDC_CLIENT_ID: ${SO_OIDC_CLIENT_ID:-dummy}
+      OIDC_REDIRECT_URI: ${SO_OIDC_REDIRECT_URI:-http://secobserve.localhost}
+      OIDC_POST_LOGOUT_REDIRECT_URI: ${SO_OIDC_POST_LOGOUT_REDIRECT_URI:-http://secobserve.localhost}
     networks:
       - traefik
 
   backend:
-    image: maibornwolff/secobserve-backend:0.9.10
+    image: maibornwolff/secobserve-backend:1.0.0
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend.rule=Host(`secobserve-backend.localhost`)"
@@ -88,9 +87,12 @@ services:
       CORS_ALLOWED_ORIGINS: ${SO_CORS_ALLOWED_ORIGINS:-http://secobserve.localhost}
       DJANGO_SECRET_KEY: ${SO_DJANGO_SECRET_KEY:-NxYPEF5lNGgk3yonndjSbwP77uNJxOvfKTjF5aVBqsHktNlf1wfJHHvJ8iifk32r}
       FIELD_ENCRYPTION_KEY: ${SO_FIELD_ENCRYPTION_KEY:-DtlkqVb3wlaVdJK_BU-3mB4wwuuf8xx8YNInajiJ7GU=}
-      # --- Azure AD ---
-      AAD_CLIENT_ID: ${SO_AAD_CLIENT_ID:-}
-      AAD_TENANT_ID: ${SO_AAD_TENANT_ID:-}
+      # --- OpenID Connect ---
+      OIDC_AUTHORITY: ${SO_OIDC_AUTHORITY:-}
+      OIDC_USERNAME: ${SO_OIDC_USERNAME:-}
+      OIDC_FIRST_NAME: ${SO_OIDC_FIRST_NAME:-}
+      OIDC_LAST_NAME: ${SO_OIDC_LAST_NAME:-}
+      OIDC_EMAIL: ${SO_OIDC_EMAIL:-}
     command: /start
     networks:
       - traefik

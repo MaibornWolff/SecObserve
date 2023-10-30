@@ -1,22 +1,17 @@
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import UploadIcon from "@mui/icons-material/CloudUpload";
+import GradingIcon from "@mui/icons-material/Grading";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import TokenIcon from "@mui/icons-material/Token";
-import { Stack, Typography } from "@mui/material";
+import { Box, Paper, Stack, Typography } from "@mui/material";
 import {
-    BooleanField,
     EditButton,
-    Labeled,
-    NumberField,
     PrevNextButtons,
-    ReferenceField,
-    RichTextField,
     Show,
     SimpleShowLayout,
     Tab,
     TabbedShowLayout,
-    TextField,
     TopToolbar,
     WithRecord,
     useRecordContext,
@@ -40,10 +35,12 @@ import products from "../../core/products";
 import ApiConfigurationCreate from "../../import_observations/api_configurations/ApiConfigurationCreate";
 import ApiConfigurationEmbeddedList from "../../import_observations/api_configurations/ApiConfigurationEmbeddedList";
 import ImportMenu from "../../import_observations/import/ImportMenu";
+import VulnerabilityCheckEmbeddedList from "../../import_observations/vulnerability_checks/VulnerabilityCheckEmbeddedList";
 import MetricsHeader from "../../metrics/MetricsHeader";
 import MetricsSeveritiesCurrent from "../../metrics/MetricsSeveritiesCurrent";
 import MetricsSeveritiesTimeline from "../../metrics/MetricsSeveritiesTimeLine";
 import MetricsStatusCurrent from "../../metrics/MetricsStatusCurrent";
+import { getElevation } from "../../metrics/functions";
 import general_rules from "../../rules/general_rules";
 import ProductRuleApply from "../../rules/product_rules/ProductRuleApply";
 import ProductRuleCreate from "../../rules/product_rules/ProductRuleCreate";
@@ -57,6 +54,7 @@ import ProductMemberCreate from "../product_members/ProductMemberCreate";
 import ProductMemberEmbeddedList from "../product_members/ProductMemberEmbeddedList";
 import ExportMenu from "./ExportMenu";
 import ProductHeader from "./ProductHeader";
+import ProductShowProduct from "./ProductShowProduct";
 
 type ShowActionsProps = {
     filter: any;
@@ -101,206 +99,28 @@ const ProductShow = () => {
                     render={(product) => (
                         <TabbedShowLayout>
                             <Tab label="Overview" icon={<products.icon />}>
-                                <SimpleShowLayout>
-                                    <Typography variant="h6">Product</Typography>
-                                    <TextField source="name" />
-                                    {product.description && <RichTextField source="description" />}
-                                    {product.product_group && (
-                                        <ReferenceField source="product_group" reference="product_groups" link="show">
-                                            <TextField source="name" />
-                                        </ReferenceField>
-                                    )}
-
-                                    <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                                        Rules
-                                    </Typography>
-                                    <BooleanField source="apply_general_rules" />
-
-                                    {(product.repository_prefix ||
-                                        product.repository_default_branch ||
-                                        product.repository_branch_housekeeping_active != null) && (
-                                        <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                                            Source code repository
-                                        </Typography>
-                                    )}
-                                    {product.repository_prefix && <TextField source="repository_prefix" />}
-                                    {product.repository_default_branch && (
-                                        <ReferenceField
-                                            source="repository_default_branch"
-                                            reference="branches"
-                                            link={false}
-                                        >
-                                            <TextField source="name" />
-                                        </ReferenceField>
-                                    )}
-                                    {((!product.product_group &&
-                                        product.repository_branch_housekeeping_active != null) ||
-                                        (product.product_group &&
-                                            product.product_group_repository_branch_housekeeping_active == null &&
-                                            product.repository_branch_housekeeping_active != null)) && (
-                                        <div>
-                                            <Labeled label="Housekeeping">
-                                                <BooleanField
-                                                    source="repository_branch_housekeeping_active"
-                                                    valueLabelFalse="Disabled"
-                                                    valueLabelTrue="Product specific"
-                                                />
-                                            </Labeled>
-                                            {product.repository_branch_housekeeping_active == true && (
-                                                <div>
-                                                    <Labeled label="Keep inactive">
-                                                        <NumberField source="repository_branch_housekeeping_keep_inactive_days" />
-                                                    </Labeled>
-                                                    <br />
-                                                    <Labeled label="Exempt branches">
-                                                        <TextField source="repository_branch_housekeeping_exempt_branches" />
-                                                    </Labeled>
-                                                    <br />
-                                                </div>
-                                            )}
-                                        </div>
-                                    )}
-                                    {product.product_group &&
-                                        product.product_group_repository_branch_housekeeping_active != null && (
-                                            <Labeled label="Housekeeping (from product group)">
-                                                <BooleanField
-                                                    source="product_group_repository_branch_housekeeping_active"
-                                                    valueLabelFalse="Disabled"
-                                                    valueLabelTrue="Product group specific"
-                                                />
-                                            </Labeled>
-                                        )}
-
-                                    {(product.notification_email_to || product.notification_ms_teams_webhook) && (
-                                        <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                                            Notifications
-                                        </Typography>
-                                    )}
-                                    {product.notification_email_to && (
-                                        <TextField source="notification_email_to" label="Email" />
-                                    )}
-                                    {product.notification_ms_teams_webhook && (
-                                        <TextField source="notification_ms_teams_webhook" label="MS Teams" />
-                                    )}
-
-                                    {((!product.product_group && product.security_gate_active != null) ||
-                                        (product.product_group &&
-                                            product.product_group_security_gate_active == null &&
-                                            product.security_gate_active != null)) && (
-                                        <div>
-                                            <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                                                Security Gate
+                                <Stack
+                                    direction="row"
+                                    spacing={2}
+                                    sx={{
+                                        alignItems: "top",
+                                        marginTop: 2,
+                                    }}
+                                >
+                                    <Box width={"50%"}>
+                                        <Paper elevation={getElevation()}>
+                                            <ProductShowProduct product={product} />
+                                        </Paper>
+                                    </Box>
+                                    <Box width={"50%"}>
+                                        <Paper elevation={getElevation()} sx={{ padding: 2 }}>
+                                            <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                                                Vulnerability checks
                                             </Typography>
-                                            <Labeled label="Security gate">
-                                                <BooleanField
-                                                    source="security_gate_active"
-                                                    valueLabelFalse="Disabled"
-                                                    valueLabelTrue="Product specific"
-                                                />
-                                            </Labeled>
-                                            {product.security_gate_active == true && (
-                                                <div>
-                                                    <Labeled>
-                                                        <NumberField source="security_gate_threshold_critical" />
-                                                    </Labeled>
-                                                    <br />
-                                                    <Labeled>
-                                                        <NumberField source="security_gate_threshold_high" />
-                                                    </Labeled>
-                                                    <br />
-                                                    <Labeled>
-                                                        <NumberField source="security_gate_threshold_medium" />
-                                                    </Labeled>
-                                                    <br />
-                                                    <Labeled>
-                                                        <NumberField source="security_gate_threshold_low" />
-                                                    </Labeled>
-                                                    <br />
-                                                    <Labeled>
-                                                        <NumberField source="security_gate_threshold_none" />
-                                                    </Labeled>
-                                                    <br />
-                                                    <Labeled>
-                                                        <NumberField source="security_gate_threshold_unkown" />
-                                                    </Labeled>
-                                                    <br />
-                                                </div>
-                                            )}
-                                        </div>
-                                    )}
-                                    {product.product_group && product.product_group_security_gate_active != null && (
-                                        <div>
-                                            <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                                                Security Gate
-                                            </Typography>
-                                            <Labeled label="Security gate (from product group)">
-                                                <BooleanField
-                                                    source="product_group_security_gate_active"
-                                                    valueLabelFalse="Disabled"
-                                                    valueLabelTrue="Product group specific"
-                                                />
-                                            </Labeled>
-                                        </div>
-                                    )}
-
-                                    <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                                        Issue Tracker
-                                    </Typography>
-                                    <BooleanField source="issue_tracker_active" label="Active" />
-                                    {product.issue_tracker_type && (
-                                        <div>
-                                            <Labeled>
-                                                <TextField source="issue_tracker_type" label="Type" />
-                                            </Labeled>
-                                            <br />
-                                            <Labeled>
-                                                <TextField source="issue_tracker_base_url" label="Base URL" />
-                                            </Labeled>
-                                            <br />
-                                            <Labeled>
-                                                <TextField source="issue_tracker_project_id" label="Project id" />
-                                            </Labeled>
-                                            <br />
-                                            <Labeled>
-                                                <TextField source="issue_tracker_labels" label="Labels" />
-                                            </Labeled>
-                                            <br />
-                                            {product.issue_tracker_username && (
-                                                <div>
-                                                    <Labeled>
-                                                        <TextField
-                                                            source="issue_tracker_username"
-                                                            label="Username (only for Jira)"
-                                                        />
-                                                    </Labeled>
-                                                    <br />
-                                                </div>
-                                            )}
-                                            {product.issue_tracker_issue_type && (
-                                                <div>
-                                                    <Labeled>
-                                                        <TextField
-                                                            source="issue_tracker_issue_type"
-                                                            label="Issue type (only for Jira)"
-                                                        />
-                                                    </Labeled>
-                                                    <br />
-                                                </div>
-                                            )}
-                                            {product.issue_tracker_status_closed && (
-                                                <div>
-                                                    <Labeled>
-                                                        <TextField
-                                                            source="issue_tracker_status_closed"
-                                                            label="Closed status (only for Jira)"
-                                                        />
-                                                    </Labeled>
-                                                    <br />
-                                                </div>
-                                            )}
-                                        </div>
-                                    )}
-                                </SimpleShowLayout>
+                                            <VulnerabilityCheckEmbeddedList product={product} long_list={false} />
+                                        </Paper>
+                                    </Box>
+                                </Stack>
                             </Tab>
                             <Tab label="Metrics" path="metrics" icon={<BarChartIcon />}>
                                 <SimpleShowLayout>
@@ -324,6 +144,9 @@ const ProductShow = () => {
                                     <BranchCreate id={product.id} />
                                 )}
                                 <BranchEmbeddedList product={product} />
+                            </Tab>
+                            <Tab label="Vulnerability Checks" path="vulnerability_checks" icon={<GradingIcon />}>
+                                <VulnerabilityCheckEmbeddedList product={product} long_list={true} />
                             </Tab>
                             <Tab label="Observations" path="observations" icon={<observations.icon />}>
                                 <Stack

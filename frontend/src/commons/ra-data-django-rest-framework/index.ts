@@ -3,12 +3,11 @@
  * See https://github.com/bmihelac/ra-data-django-rest-framework
  * Copied to make it compatible with React-Admin 4 and DefectDojo
  */
-import { InteractionRequiredAuthError } from "@azure/msal-browser";
 import queryString from "query-string";
 import { DataProvider, Identifier, fetchUtils } from "react-admin";
 
-import { getPublicClientApplication } from "../../access_control/aad";
-import { aad_signed_in, jwt_signed_in } from "../../access_control/authProvider";
+import { jwt_signed_in, oidc_signed_in } from "../../access_control/authProvider";
+import { get_oidc_id_token } from "../../access_control/authProvider";
 
 const base_url = window.__RUNTIME_CONFIG__.API_BASE_URL;
 
@@ -43,40 +42,27 @@ function createOptionsFromTokenJWT() {
     };
 }
 
-export async function httpClient(url: string, options?: fetchUtils.Options | undefined) {
-    if (aad_signed_in()) {
-        const publicClientApplication = getPublicClientApplication();
-        await publicClientApplication.initialize();
-        const account = publicClientApplication.getAllAccounts()[0];
-        const accessTokenRequest = {
-            scopes: [window.__RUNTIME_CONFIG__.AAD_SCOPE as string],
-            account: account,
+function createOptionsFromTokenOIDC() {
+    const access_token = get_oidc_id_token();
+    if (access_token) {
+        return {
+            user: {
+                authenticated: true,
+                token: "Bearer " + access_token,
+            },
         };
-        const authResult = await publicClientApplication.acquireTokenSilent(accessTokenRequest).catch((error) => {
-            console.warn("silent token acquisition fails. acquiring token using redirect");
-            if (error instanceof InteractionRequiredAuthError) {
-                // fallback to interaction when silent call fails
-                return publicClientApplication
-                    .acquireTokenRedirect(accessTokenRequest)
-                    .then((tokenResponse) => {
-                        return tokenResponse;
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    });
-            } else {
-                console.warn(error);
-            }
-        });
-        if (!authResult) {
-            return Promise.reject();
-        }
-        const token = authResult.accessToken;
-        const user = {
-            authenticated: !!token,
-            token: `Bearer ${token}`,
+    } else {
+        return {
+            user: {
+                authenticated: false,
+            },
         };
-        return fetchUtils.fetchJson(url, { ...options, user });
+    }
+}
+
+export function httpClient(url: string, options?: fetchUtils.Options | undefined) {
+    if (oidc_signed_in()) {
+        return fetchUtils.fetchJson(url, Object.assign(createOptionsFromTokenOIDC(), options));
     } else if (jwt_signed_in()) {
         return fetchUtils.fetchJson(url, Object.assign(createOptionsFromTokenJWT(), options));
     } else {

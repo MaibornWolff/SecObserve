@@ -63,7 +63,6 @@ const MetricsSeveritiesCurrent = (props: MetricsSeveritiesCurrentProps) => {
             method: "GET",
         })
             .then((result) => {
-                localStorage.setItem("aad_login_finalized", "true");
                 const new_data = [
                     result.json.open_critical,
                     result.json.open_high,
@@ -75,16 +74,14 @@ const MetricsSeveritiesCurrent = (props: MetricsSeveritiesCurrentProps) => {
                 setData((data) => data.concat(new_data));
             })
             .catch((error) => {
-                if (localStorage.getItem("aad_login_finalized") != "false") {
-                    if (error !== undefined) {
-                        notify(error.message, {
-                            type: "warning",
-                        });
-                    } else {
-                        notify("Error while loading metrics", {
-                            type: "warning",
-                        });
-                    }
+                if (error !== undefined) {
+                    notify(error.message, {
+                        type: "warning",
+                    });
+                } else {
+                    notify("Error while loading metrics", {
+                        type: "warning",
+                    });
                 }
             });
         setLoaded(true);

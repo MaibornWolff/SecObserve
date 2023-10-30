@@ -72,9 +72,14 @@ class UserViewSet(RetrieveModelMixin, ListModelMixin, GenericViewSet):
             raise ValidationError(request_serializer.errors)
 
         setting_theme = request_serializer.validated_data.get("setting_theme")
-        user = request.user
+        setting_list_properties = request_serializer.validated_data.get(
+            "setting_list_properties"
+        )
+        user: User = request.user
         if setting_theme:
             user.setting_theme = setting_theme
+        if setting_list_properties:
+            user.setting_list_properties = setting_list_properties
         user.save()
 
         response_serializer = UserSerializer(request.user)

@@ -17,9 +17,12 @@ export ALLOWED_HOSTS=localhost
 export CORS_ALLOWED_ORIGINS=http://localhost:3000
 export DJANGO_SECRET_KEY=NxYPEF5lNGgk3yonndjSbwP77uNJxOvfKTjF5aVBqsHktNlf1wfJHHvJ8iifk32r
 export FIELD_ENCRYPTION_KEY=DtlkqVb3wlaVdJK_BU-3mB4wwuuf8xx8YNInajiJ7GU=
-# --- Azure AD ---
-export AAD_CLIENT_ID=dummy
-export AAD_TENANT_ID=dummy
+# --- OpenID Connect ---
+export OIDC_AUTHORITY=dummy
+export OIDC_USERNAME=dummy
+export OIDC_FIRST_NAME=dummy
+export OIDC_LAST_NAME=dummy
+export OIDC_EMAIL=dummy
 # --- Huey ---
 export HUEY_FILENAME=./huey.db
 

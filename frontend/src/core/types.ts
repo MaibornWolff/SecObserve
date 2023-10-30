@@ -29,6 +29,7 @@ export interface Product extends RaRecord {
     issue_tracker_labels: string;
     issue_tracker_issue_type: string;
     issue_tracker_status_closed: string;
+    last_observation_change: string;
 }
 
 export const ISSUE_TRACKER_TYPE_CHOICES = [
@@ -178,7 +179,7 @@ export const OBSERVATION_STATUS_CHOICES = [
     },
 ];
 
-export const OBSERVATION_AGE_CHOICES = [
+export const AGE_CHOICES = [
     { id: "Today", name: "Today" },
     { id: "Past 7 days", name: "Past 7 days" },
     { id: "Past 30 days", name: "Past 30 days" },

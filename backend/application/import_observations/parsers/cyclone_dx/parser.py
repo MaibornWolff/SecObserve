@@ -173,12 +173,16 @@ class CycloneDXParser(BaseParser, BaseFileParser):
     def _get_cvss3(self, vulnerability):
         ratings = vulnerability.get("ratings", [])
         if ratings:
+            cvss3_score = 0
             for rating in ratings:
                 method = rating.get("method")
                 if method and method.lower().startswith("cvssv3"):
-                    cvss3_score = rating.get("score")
-                    cvss3_vector = rating.get("vector")
-                    return cvss3_score, cvss3_vector
+                    current_cvss3_score = rating.get("score", 0)
+                    if current_cvss3_score > cvss3_score:
+                        cvss3_score = current_cvss3_score
+                        cvss3_vector = rating.get("vector")
+            if cvss3_score > 0:
+                return cvss3_score, cvss3_vector
         return None, None
 
     def _get_highest_severity(self, vulnerability):

@@ -81,16 +81,14 @@ const MetricsStatusCurrent = (props: MetricsStatusCurrentProps) => {
                 setData((data) => data.concat(new_data));
             })
             .catch((error) => {
-                if (localStorage.getItem("aad_login_finalized") != "false") {
-                    if (error !== undefined) {
-                        notify(error.message, {
-                            type: "warning",
-                        });
-                    } else {
-                        notify("Error while loading metrics", {
-                            type: "warning",
-                        });
-                    }
+                if (error !== undefined) {
+                    notify(error.message, {
+                        type: "warning",
+                    });
+                } else {
+                    notify("Error while loading metrics", {
+                        type: "warning",
+                    });
                 }
             });
         setLoaded(true);
