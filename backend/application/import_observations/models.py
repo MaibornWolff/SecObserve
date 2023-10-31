@@ -30,7 +30,7 @@ class Api_Configuration(Model):
 
 class Vulnerability_Check(Model):
     product = ForeignKey(Product, on_delete=CASCADE)
-    branch = ForeignKey(Branch, on_delete=CASCADE)
+    branch = ForeignKey(Branch, on_delete=CASCADE, null=True)
     filename = CharField(max_length=255, blank=True)
     api_configuration_name = CharField(max_length=255, blank=True)
     scanner = CharField(max_length=255, blank=True)
