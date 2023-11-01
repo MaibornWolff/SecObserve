@@ -3,7 +3,7 @@ whitenoise==6.6.0  # https://github.com/evansd/whitenoise
 
 # Django
 # ------------------------------------------------------------------------------
-django==4.2.6  # https://www.djangoproject.com/
+django==4.2.7  # https://www.djangoproject.com/
 django-environ==0.11.2  # https://github.com/joke2k/django-environ
 django-model-utils==4.3.1  # https://github.com/jazzband/django-model-utils
 django-filter==23.3  # https://github.com/carltongibson/django-filter 
