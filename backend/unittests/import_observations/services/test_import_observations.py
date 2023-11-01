@@ -7,10 +7,12 @@ from django.core.management import call_command
 from application.access_control.models import User
 from application.core.models import (
     Branch,
+    Evidence,
     Observation,
     Observation_Log,
     Parser,
     Product,
+    Reference,
 )
 from application.import_observations.apps import _register_parser
 from application.import_observations.models import Vulnerability_Check
@@ -167,6 +169,15 @@ class TestImportObservations(BaseTestCase):
             "Updated by product rule db_product_rule_import",
         )
 
+        references = Reference.objects.filter(observation__product=product).order_by("id")
+        self.assertEqual(len(references), 3)
+
+        self.assertEqual(references[0].observation, observations[0])
+        self.assertEqual(references[0].url, "https://bandit.readthedocs.io/en/1.7.4/plugins/b104_hardcoded_bind_all_interfaces.html")
+
+        evidences = Evidence.objects.filter(observation__product=product).order_by("id")
+        self.assertEqual(len(evidences), 6)
+
         vulnerability_checks = Vulnerability_Check.objects.filter(product=1)
         self.assertEqual(len(vulnerability_checks), 1)
 
@@ -234,6 +245,12 @@ class TestImportObservations(BaseTestCase):
         self.assertEqual(
             observation_logs[6].comment, "Observation not found in latest scan"
         )
+
+        references = Reference.objects.filter(observation__product=product).order_by("id")
+        self.assertEqual(len(references), 3)
+
+        evidences = Evidence.objects.filter(observation__product=product).order_by("id")
+        self.assertEqual(len(evidences), 6)
 
         vulnerability_checks = Vulnerability_Check.objects.filter(product=1)
         self.assertEqual(len(vulnerability_checks), 1)
