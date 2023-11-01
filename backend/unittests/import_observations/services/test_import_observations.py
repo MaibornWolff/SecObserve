@@ -1,4 +1,3 @@
-import shutil
 from unittest.mock import call, patch
 
 from django.core.files.base import File
@@ -99,16 +98,11 @@ class TestImportObservations(BaseTestCase):
     ):
         # --- First import ---
 
-        shutil.copyfile(
-            "unittests/fixtures/data_input/bandit_two_observations.sarif",
-            "unittests/fixtures/data/bandit.sarif",
-        )
-
         file_upload_parameters = FileUploadParameters(
             product=Product.objects.get(id=1),
             branch=branch,
             parser=Parser.objects.get(id=1),
-            file=File(open("unittests/fixtures/data/bandit.sarif", "r")),
+            file=File(open("unittests/fixtures/data_1/bandit.sarif", "r")),
             service=service,
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
@@ -188,9 +182,7 @@ class TestImportObservations(BaseTestCase):
 
         self.assertEqual(vulnerability_checks[0].product, product)
         self.assertEqual(vulnerability_checks[0].branch, branch)
-        self.assertEqual(
-            vulnerability_checks[0].filename, "unittests/fixtures/data/bandit.sarif"
-        )
+        self.assertEqual(vulnerability_checks[0].filename, "bandit.sarif")
         self.assertEqual(vulnerability_checks[0].api_configuration_name, "")
         self.assertEqual(vulnerability_checks[0].scanner, "Bandit")
         self.assertEqual(vulnerability_checks[0].last_import_observations_new, 2)
@@ -199,16 +191,11 @@ class TestImportObservations(BaseTestCase):
 
         # --- Second import with some changes ---
 
-        shutil.copyfile(
-            "unittests/fixtures/data_input/bandit_one_observation.sarif",
-            "unittests/fixtures/data/bandit.sarif",
-        )
-
         file_upload_parameters = FileUploadParameters(
             product=Product.objects.get(id=1),
             branch=branch,
             parser=Parser.objects.get(id=1),
-            file=File(open("unittests/fixtures/data/bandit.sarif", "r")),
+            file=File(open("unittests/fixtures/data_2/bandit.sarif", "r")),
             service=service,
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
@@ -264,9 +251,7 @@ class TestImportObservations(BaseTestCase):
 
         self.assertEqual(vulnerability_checks[0].product, product)
         self.assertEqual(vulnerability_checks[0].branch, branch)
-        self.assertEqual(
-            vulnerability_checks[0].filename, "unittests/fixtures/data/bandit.sarif"
-        )
+        self.assertEqual(vulnerability_checks[0].filename, "bandit.sarif")
         self.assertEqual(vulnerability_checks[0].api_configuration_name, "")
         self.assertEqual(vulnerability_checks[0].scanner, "Bandit")
         self.assertEqual(vulnerability_checks[0].last_import_observations_new, 0)

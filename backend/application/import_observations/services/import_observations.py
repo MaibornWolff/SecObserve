@@ -1,3 +1,4 @@
+import os
 from dataclasses import dataclass
 from typing import Optional, Tuple
 
@@ -84,7 +85,9 @@ def file_upload_observations(
     imported_observations = parser_instance.get_observations(data)
 
     filename = (
-        file_upload_parameters.file.name if file_upload_parameters.file.name else ""
+        os.path.basename(file_upload_parameters.file.name)
+        if file_upload_parameters.file.name
+        else ""
     )
 
     import_parameters = ImportParameters(
