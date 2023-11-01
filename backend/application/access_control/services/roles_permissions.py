@@ -122,6 +122,12 @@ class Permissions(IntEnum):
             Permissions.Api_Configuration_Create,
         }
 
+    @classmethod
+    def get_vulnerability_check_permissions(cls):
+        return {
+            Permissions.Product_View,
+        }
+
 
 def get_roles_with_permissions():
     return {
