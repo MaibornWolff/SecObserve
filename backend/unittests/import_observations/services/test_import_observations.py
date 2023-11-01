@@ -169,11 +169,16 @@ class TestImportObservations(BaseTestCase):
             "Updated by product rule db_product_rule_import",
         )
 
-        references = Reference.objects.filter(observation__product=product).order_by("id")
+        references = Reference.objects.filter(observation__product=product).order_by(
+            "id"
+        )
         self.assertEqual(len(references), 3)
 
         self.assertEqual(references[0].observation, observations[0])
-        self.assertEqual(references[0].url, "https://bandit.readthedocs.io/en/1.7.4/plugins/b104_hardcoded_bind_all_interfaces.html")
+        self.assertEqual(
+            references[0].url,
+            "https://bandit.readthedocs.io/en/1.7.4/plugins/b104_hardcoded_bind_all_interfaces.html",
+        )
 
         evidences = Evidence.objects.filter(observation__product=product).order_by("id")
         self.assertEqual(len(evidences), 6)
@@ -246,7 +251,9 @@ class TestImportObservations(BaseTestCase):
             observation_logs[6].comment, "Observation not found in latest scan"
         )
 
-        references = Reference.objects.filter(observation__product=product).order_by("id")
+        references = Reference.objects.filter(observation__product=product).order_by(
+            "id"
+        )
         self.assertEqual(len(references), 3)
 
         evidences = Evidence.objects.filter(observation__product=product).order_by("id")
