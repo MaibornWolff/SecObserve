@@ -54,7 +54,7 @@ def get_observations_for_vulnerability_check(
     filename: str,
     api_configuration_name: str,
 ) -> QuerySet[Observation]:
-    return get_observations().filter(
+    return Observation.objects.filter(
         product=product,
         branch=branch,
         upload_filename=filename,
