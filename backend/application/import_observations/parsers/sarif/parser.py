@@ -283,7 +283,10 @@ class SARIFParser(BaseParser, BaseFileParser):
             # Newlines at the end of the description are removed
             while sarif_snippet.endswith("\n"):
                 sarif_snippet = sarif_snippet[:-1]
-            description += f"**Snippet:** ```{sarif_snippet}```\n\n"
+            if "\n" in sarif_snippet:
+                description += f"**Snippet:**\n\n```\n\n{sarif_snippet}\n```\n\n"
+            else:
+                description += f"**Snippet:** `{sarif_snippet}`\n\n"
 
         sarif_properties = result.get("properties", {})
         if sarif_properties and isinstance(sarif_properties, dict):
