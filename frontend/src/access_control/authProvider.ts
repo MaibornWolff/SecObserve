@@ -56,7 +56,6 @@ const authProvider: AuthProvider = {
     },
     checkError: (error) => {
         if (error) {
-            const status = error.status;
             if (oidc_signed_in()) {
                 if (window.__RUNTIME_CONFIG__.OIDC_ENABLE == "true") {
                     const user_manager = new UserManager(oidcConfig);
