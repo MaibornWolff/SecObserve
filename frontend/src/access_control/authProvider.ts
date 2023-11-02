@@ -56,19 +56,32 @@ const authProvider: AuthProvider = {
     },
     checkError: (error) => {
         if (error) {
-            const status = error.status;
-            if (status === 401 || status === 403) {
+            if (oidc_signed_in()) {
+                if (window.__RUNTIME_CONFIG__.OIDC_ENABLE == "true") {
+                    const user_manager = new UserManager(oidcConfig);
+                    return user_manager.signinRedirect();
+                }
                 return Promise.reject({ message: error.message });
             }
         }
         return Promise.resolve();
     },
     checkAuth: () => {
+        // if (window.__RUNTIME_CONFIG__.OIDC_ENABLE == "true") {
+        //     const user_manager = new UserManager(oidcConfig);
+        //     const user = await user_manager.getUser();
+        //     if (user && !user.expired) {
+        //         console.log("user_manager.getUser() OK")
+        //         return Promise.resolve();
+        //     } else {
+        //         console.log("user_manager.getUser() not OK")
+        //         return user_manager.signinRedirect();
+        //     }
+        // }
         if (oidc_signed_in() || jwt_signed_in()) {
             return Promise.resolve();
-        } else {
-            return Promise.reject({ message: false });
         }
+        return Promise.reject({ message: false });
     },
     getPermissions: () => Promise.reject(),
     getIdentity: async () => {
