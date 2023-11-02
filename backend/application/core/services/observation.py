@@ -307,4 +307,8 @@ def clip_fields(model: str, my_object) -> None:
                     value = getattr(my_object, field.name)
                     if value.count("```") == 1:
                         # There is an open code block, that we have to close
-                        setattr(my_object, field.name, value[: max_length - 9] + "\n```\n\n...")
+                        setattr(
+                            my_object,
+                            field.name,
+                            value[: max_length - 9] + "\n```\n\n...",
+                        )

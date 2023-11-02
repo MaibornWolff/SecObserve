@@ -279,6 +279,13 @@ class SARIFParser(BaseParser, BaseFileParser):
         ):
             description += f"**Rule help:** {sarif_rule.help}\n\n"
 
+        self.description_add_sarif_snippet(sarif_snippet, description)
+        self.description_add_sarif_properties(result, description)
+        self.description_add_sarif_rule(sarif_rule, description)
+
+        return description
+
+    def description_add_sarif_snippet(self, sarif_snippet, description):
         if sarif_snippet:
             # Newlines at the end of the description are removed
             while sarif_snippet.endswith("\n"):
@@ -288,6 +295,7 @@ class SARIFParser(BaseParser, BaseFileParser):
             else:
                 description += f"**Snippet:** `{sarif_snippet}`\n\n"
 
+    def description_add_sarif_properties(self, result, description):
         sarif_properties = result.get("properties", {})
         if sarif_properties and isinstance(sarif_properties, dict):
             for key in sarif_properties:
@@ -295,13 +303,12 @@ class SARIFParser(BaseParser, BaseFileParser):
                 if value:
                     description += f"**{key.title()}:** {str(value)}\n\n"
 
+    def description_add_sarif_rule(self, sarif_rule, description):
         if sarif_rule.properties and isinstance(sarif_rule.properties, dict):
             for key in sarif_rule.properties:
                 value = sarif_rule.properties[key]
                 if value:
                     description += f"**{key.title()}:** {str(value)}\n\n"
-
-        return description
 
     def extract_component(self, origin_component_purl: str) -> Tuple[str, str]:
         purl = PackageURL.from_string(origin_component_purl)
