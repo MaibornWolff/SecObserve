@@ -136,7 +136,7 @@ class TestSarifParser(TestCase):
             self.assertEqual("hardcoded_bind_all_interfaces", observation.title)
             description = """Possible binding to all interfaces.
 
-**Snippet:** ```ALLOWED_HOSTS = env("ALLOWED_HOSTS", default=["localhost", "0.0.0.0", "127.0.0.1"])```
+**Snippet:** `ALLOWED_HOSTS = env("ALLOWED_HOSTS", default=["localhost", "0.0.0.0", "127.0.0.1"])`
 
 **Issue_Confidence:** MEDIUM
 
