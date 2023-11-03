@@ -5,13 +5,13 @@ import {
     DateField,
     ListContextProvider,
     Pagination,
-    TextField,
     WithRecord,
     useListController,
 } from "react-admin";
 
 import { PERMISSION_BRANCH_DELETE, PERMISSION_BRANCH_EDIT } from "../../access_control/types";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
+import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import BranchDelete from "./BranchDelete";
 import BranchEdit from "./BranchEdit";
 
@@ -37,21 +37,21 @@ const BranchEmbeddedList = ({ product }: BranchEmbeddedListProps) => {
         listContext.data = [];
     }
 
-    function get_observations_url(record: any): string {
-        return `../observations?displayedFilters=%7B%7D&filter=%7B%22current_status%22%3A%22Open%22%2C%22branch%22%3A${record.id}%7D&order=ASC&sort=current_severity`;
+    function get_observations_url(product_id: number, branch_id: number): string {
+        return `#/products/${product_id}/show/observations?displayedFilters=%7B%7D&filter=%7B%22current_status%22%3A%22Open%22%2C%22branch%22%3A${branch_id}%7D&order=ASC&sort=current_severity`;
     }
 
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
                 <Paper>
-                    <Datagrid
-                        size="medium"
-                        sx={{ width: "100%" }}
-                        bulkActionButtons={false}
-                        rowClick={(id, resource, record) => get_observations_url(record)}
-                    >
-                        <TextField source="name" />
+                    <Datagrid size="medium" sx={{ width: "100%" }} bulkActionButtons={false}>
+                        <WithRecord
+                            label="Name"
+                            render={(branch) => (
+                                <TextUrlField text={branch.name} url={get_observations_url(product.id, branch.id)} />
+                            )}
+                        />
                         <BooleanField source="is_default_branch" label="Default branch" sortable={false} />
                         <ObservationsCountField withLabel={false} />
                         <DateField source="last_import" showTime />
