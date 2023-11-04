@@ -26,7 +26,7 @@
         "@fortawesome/free-brands-svg-icons": "6.4.2",
         "@fortawesome/react-fontawesome": "0.2.0",
         "axios": "1.6.0",
-        "@textea/json-viewer": "3.2.2",
+        "@textea/json-viewer": "3.2.3",
         "@emotion/react": "11.11.1",
         "@emotion/styled": "11.11.0",
         "runtime-env-cra": "0.2.4",
