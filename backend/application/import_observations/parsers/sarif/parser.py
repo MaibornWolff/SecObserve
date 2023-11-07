@@ -115,11 +115,11 @@ class SARIFParser(BaseParser, BaseFileParser):
 
     def create_observation(
         self,
-        result,
-        observations,
-        sarif_scanner,
-        sarif_rules,
-        sarif_location,
+        result: dict,
+        observations: list[Observation],
+        sarif_scanner: str,
+        sarif_rules: dict[str, Rule],
+        sarif_location: Optional[dict],
     ):
         location = self.get_location_data(sarif_location)
 
@@ -134,12 +134,11 @@ class SARIFParser(BaseParser, BaseFileParser):
         if parser_cvss3_score:
             parser_severity = ""
 
-        if sarif_rule.name:
-            title = sarif_rule.name
-        else:
-            title = sarif_rule_id
+        title = self.get_title(sarif_scanner, sarif_rule_id, sarif_rule)
 
-        description = self.get_description(location.snippet, sarif_rule, result)
+        description = self.get_description(
+            sarif_scanner, location.snippet, sarif_rule, title, result
+        )
 
         sarif_cwe = None
         if sarif_rule.properties and isinstance(sarif_rule.properties, dict):
@@ -193,7 +192,25 @@ class SARIFParser(BaseParser, BaseFileParser):
 
         observations.append(observation)
 
-    def get_location_data(self, sarif_location: dict) -> Location:
+    def get_title(
+        self, sarif_scanner: str, sarif_rule_id: str, sarif_rule: Rule
+    ) -> str:
+        if sarif_rule.name:
+            title = sarif_rule.name
+        else:
+            title = sarif_rule_id
+
+        title = self.get_trivy_title(title, sarif_scanner, sarif_rule)
+
+        return title
+
+    def get_trivy_title(self, title: str, sarif_scanner: str, sarif_rule: Rule) -> str:
+        # Rule name and rule id of Trivy are not very descriptive
+        if sarif_scanner.lower().startswith("trivy") and sarif_rule.short_description:
+            title = sarif_rule.short_description
+        return title
+
+    def get_location_data(self, sarif_location: Optional[dict]) -> Location:
         location = Location()
         if sarif_location:
             location.uri = (
@@ -242,19 +259,23 @@ class SARIFParser(BaseParser, BaseFileParser):
 
     def get_description(  # pylint: disable=too-many-branches
         self,
+        sarif_scanner: str,
         sarif_snippet: Optional[str],
         sarif_rule: Rule,
+        title: str,
         result: dict,
     ) -> str:
         description = ""
 
         sarif_message_text = result.get("message", {}).get("text")
-        if sarif_message_text:
+        if sarif_message_text and not sarif_scanner.lower().startswith("trivy"):
+            # Message text of Trivy has only redundant information
             description += f"{sarif_message_text}\n\n"
 
         if (
             sarif_rule.short_description
             and sarif_rule.short_description not in sarif_message_text
+            and sarif_rule.short_description not in title
         ):
             description += (
                 f"**Rule short description:** {sarif_rule.short_description}\n\n"
@@ -276,7 +297,9 @@ class SARIFParser(BaseParser, BaseFileParser):
             sarif_rule.help
             and sarif_rule.help not in sarif_message_text
             and sarif_rule.help not in rule_short_description
+            and not sarif_scanner.lower().startswith("trivy")
         ):
+            # Help text of Trivy has only redundant information
             description += f"**Rule help:** {sarif_rule.help}\n\n"
 
         if sarif_snippet:
@@ -319,7 +342,7 @@ class SARIFParser(BaseParser, BaseFileParser):
 
         return origin_component_name, origin_component_version
 
-    def get_rules(self, run: dict) -> dict:
+    def get_rules(self, run: dict) -> dict[str, Rule]:
         rules = {}
 
         sarif_rules = run.get("tool", {}).get("driver", {}).get("rules", [])
@@ -383,13 +406,17 @@ class SARIFParser(BaseParser, BaseFileParser):
         return ""
 
     def get_dependency_check_origin_component_purl(
-        self, sarif_scanner: str, location: dict
-    ):
-        logicalLocations = location.get("logicalLocations")
-        if sarif_scanner.lower().startswith("dependency-check") and logicalLocations:
-            fully_qualified_name = logicalLocations[0].get("fullyQualifiedName")
-            if fully_qualified_name and fully_qualified_name.startswith("pkg:"):
-                return fully_qualified_name
+        self, sarif_scanner: str, location: Optional[dict]
+    ) -> str:
+        if location:
+            logicalLocations = location.get("logicalLocations")
+            if (
+                sarif_scanner.lower().startswith("dependency-check")
+                and logicalLocations
+            ):
+                fully_qualified_name = logicalLocations[0].get("fullyQualifiedName")
+                if fully_qualified_name and fully_qualified_name.startswith("pkg:"):
+                    return fully_qualified_name
 
         return ""
 
