@@ -8,7 +8,7 @@ watchgod==0.8.2  # https://github.com/samuelcolvin/watchgod
 # ------------------------------------------------------------------------------
 flake8==6.1.0  # https://github.com/PyCQA/flake8
 flake8-isort==6.1.1  # https://github.com/gforcada/flake8-isort
-black==23.10.1  # https://github.com/psf/black
+black==23.11.0  # https://github.com/psf/black
 pylint-django==2.5.5  # https://github.com/PyCQA/pylint-django
 pre-commit==3.5.0  # https://github.com/pre-commit/pre-commit
 mypy==1.6.1  # https://github.com/python/mypy
