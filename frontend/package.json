@@ -5,7 +5,7 @@
     "dependencies": {
         "@mui/icons-material": "5.14.16",
         "@mui/material": "5.14.17",
-        "@types/inflection": "1.13.1",
+        "@types/inflection": "1.13.2",
         "@types/recharts": "1.8.27",
         "prop-types": "15.8.1",
         "query-string": "8.1.0",
