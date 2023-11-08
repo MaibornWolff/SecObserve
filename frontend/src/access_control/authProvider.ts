@@ -56,8 +56,8 @@ const authProvider: AuthProvider = {
     },
     checkError: (error) => {
         if (error) {
-            if (oidc_signed_in()) {
-                if (window.__RUNTIME_CONFIG__.OIDC_ENABLE == "true") {
+            if (error.status === 401 || error.status === 403) {
+                if (oidc_signed_in()) {
                     const user_manager = new UserManager(oidcConfig);
                     return user_manager.signinRedirect();
                 }
@@ -67,17 +67,6 @@ const authProvider: AuthProvider = {
         return Promise.resolve();
     },
     checkAuth: () => {
-        // if (window.__RUNTIME_CONFIG__.OIDC_ENABLE == "true") {
-        //     const user_manager = new UserManager(oidcConfig);
-        //     const user = await user_manager.getUser();
-        //     if (user && !user.expired) {
-        //         console.log("user_manager.getUser() OK")
-        //         return Promise.resolve();
-        //     } else {
-        //         console.log("user_manager.getUser() not OK")
-        //         return user_manager.signinRedirect();
-        //     }
-        // }
         if (oidc_signed_in() || jwt_signed_in()) {
             return Promise.resolve();
         }
