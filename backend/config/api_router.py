@@ -10,6 +10,7 @@ from application.core.api.views import (
     ProductGroupViewSet,
     ProductMemberViewSet,
     ProductViewSet,
+    ServiceViewSet,
 )
 from application.import_observations.api.views import (
     ApiConfigurationViewSet,
@@ -27,6 +28,7 @@ router.register("products", ProductViewSet)
 router.register("product_groups", ProductGroupViewSet)
 router.register("product_members", ProductMemberViewSet)
 router.register("branches", BranchViewSet)
+router.register("services", ServiceViewSet)
 router.register("parsers", ParserViewSet)
 router.register("observations", ObservationViewSet)
 router.register("general_rules", GeneralRuleViewSet)

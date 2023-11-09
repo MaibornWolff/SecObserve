@@ -30,6 +30,7 @@ from application.core.models import (
     Product,
     Product_Member,
     Reference,
+    Service,
 )
 from application.core.queries.product_member import get_product_member
 from application.core.services.observation_log import create_observation_log
@@ -335,6 +336,7 @@ class ProductMemberSerializer(ModelSerializer):
 
 
 class BranchSerializer(ModelSerializer):
+    name_with_product = SerializerMethodField()
     is_default_branch = SerializerMethodField()
     open_critical_observation_count = SerializerMethodField()
     open_high_observation_count = SerializerMethodField()
@@ -346,6 +348,9 @@ class BranchSerializer(ModelSerializer):
     class Meta:
         model = Branch
         fields = "__all__"
+
+    def get_name_with_product(self, obj: Service) -> str:
+        return f"{obj.name} ({obj.product.name})"
 
     def get_is_default_branch(self, obj: Branch) -> bool:
         return obj.product.repository_default_branch == obj
@@ -368,11 +373,40 @@ class BranchSerializer(ModelSerializer):
     def get_open_unkown_observation_count(self, obj: Branch) -> int:
         return obj.open_unkown_observation_count
 
-    def validate_product(self, product: Product) -> Product:
-        if product and product.is_product_group:
-            raise ValidationError("Product must not be a product group")
 
-        return product
+class ServiceSerializer(ModelSerializer):
+    name_with_product = SerializerMethodField()
+    open_critical_observation_count = SerializerMethodField()
+    open_high_observation_count = SerializerMethodField()
+    open_medium_observation_count = SerializerMethodField()
+    open_low_observation_count = SerializerMethodField()
+    open_none_observation_count = SerializerMethodField()
+    open_unkown_observation_count = SerializerMethodField()
+
+    class Meta:
+        model = Service
+        fields = "__all__"
+
+    def get_name_with_product(self, obj: Service) -> str:
+        return f"{obj.name} ({obj.product.name})"
+
+    def get_open_critical_observation_count(self, obj: Service) -> int:
+        return obj.open_critical_observation_count
+
+    def get_open_high_observation_count(self, obj: Service) -> int:
+        return obj.open_high_observation_count
+
+    def get_open_medium_observation_count(self, obj: Service) -> int:
+        return obj.open_medium_observation_count
+
+    def get_open_low_observation_count(self, obj: Service) -> int:
+        return obj.open_low_observation_count
+
+    def get_open_none_observation_count(self, obj: Service) -> int:
+        return obj.open_none_observation_count
+
+    def get_open_unkown_observation_count(self, obj: Service) -> int:
+        return obj.open_unkown_observation_count
 
 
 class ParserSerializer(ModelSerializer):

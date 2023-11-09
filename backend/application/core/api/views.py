@@ -9,7 +9,7 @@ from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.filters import SearchFilter
-from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
+from rest_framework.mixins import DestroyModelMixin, ListModelMixin, RetrieveModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -27,12 +27,14 @@ from application.core.api.filters import (
     ProductFilter,
     ProductGroupFilter,
     ProductMemberFilter,
+    ServiceFilter,
 )
 from application.core.api.permissions import (
     UserHasBranchPermission,
     UserHasObservationPermission,
     UserHasProductMemberPermission,
     UserHasProductPermission,
+    UserHasServicePermission,
 )
 from application.core.api.serializers import (
     BranchSerializer,
@@ -49,6 +51,7 @@ from application.core.api.serializers import (
     ProductGroupSerializer,
     ProductMemberSerializer,
     ProductSerializer,
+    ServiceSerializer,
 )
 from application.core.models import (
     Branch,
@@ -57,6 +60,7 @@ from application.core.models import (
     Parser,
     Product,
     Product_Member,
+    Service,
 )
 from application.core.queries.branch import get_branches
 from application.core.queries.observation import (
@@ -66,6 +70,7 @@ from application.core.queries.observation import (
 )
 from application.core.queries.product import get_product_by_id, get_products
 from application.core.queries.product_member import get_product_members
+from application.core.queries.service import get_services
 from application.core.services.assessment import remove_assessment, save_assessment
 from application.core.services.export_observations import (
     export_observations_csv,
@@ -303,7 +308,8 @@ class BranchViewSet(ModelViewSet):
     filterset_class = BranchFilter
     permission_classes = (IsAuthenticated, UserHasBranchPermission)
     queryset = Branch.objects.none()
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ["name"]
 
     def get_queryset(self):
         return get_branches()
@@ -314,6 +320,20 @@ class BranchViewSet(ModelViewSet):
             raise ValidationError("You cannot delete the default branch of a product.")
 
         return super().destroy(request, *args, **kwargs)
+
+
+class ServiceViewSet(
+    GenericViewSet, ListModelMixin, RetrieveModelMixin, DestroyModelMixin
+):
+    serializer_class = ServiceSerializer
+    filterset_class = ServiceFilter
+    permission_classes = (IsAuthenticated, UserHasServicePermission)
+    queryset = Service.objects.none()
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ["name"]
+
+    def get_queryset(self):
+        return get_services()
 
 
 class ParserViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):

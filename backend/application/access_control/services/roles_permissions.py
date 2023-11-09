@@ -45,6 +45,9 @@ class Permissions(IntEnum):
     Branch_Delete = 1403
     Branch_Create = 1404
 
+    Service_View = 1501
+    Service_Delete = 1503
+
     Observation_View = 2001
     Observation_Edit = 2002
     Observation_Delete = 2003
@@ -114,6 +117,13 @@ class Permissions(IntEnum):
         }
 
     @classmethod
+    def get_service_permissions(cls):
+        return {
+            Permissions.Service_View,
+            Permissions.Service_Delete,
+        }
+
+    @classmethod
     def get_api_configuration_permissions(cls):
         return {
             Permissions.Api_Configuration_View,
@@ -137,6 +147,7 @@ def get_roles_with_permissions():
             Permissions.Product_Member_View,
             Permissions.Product_Rule_View,
             Permissions.Branch_View,
+            Permissions.Service_View,
             Permissions.Observation_View,
             Permissions.Api_Configuration_View,
         },
@@ -150,6 +161,7 @@ def get_roles_with_permissions():
             Permissions.Product_Member_View,
             Permissions.Product_Rule_View,
             Permissions.Branch_View,
+            Permissions.Service_View,
             Permissions.Observation_View,
             Permissions.Observation_Edit,
             Permissions.Observation_Create,
@@ -175,6 +187,8 @@ def get_roles_with_permissions():
             Permissions.Branch_Edit,
             Permissions.Branch_Delete,
             Permissions.Branch_Create,
+            Permissions.Service_View,
+            Permissions.Service_Delete,
             Permissions.Observation_View,
             Permissions.Observation_Edit,
             Permissions.Observation_Create,
@@ -205,6 +219,8 @@ def get_roles_with_permissions():
             Permissions.Branch_Edit,
             Permissions.Branch_Delete,
             Permissions.Branch_Create,
+            Permissions.Service_View,
+            Permissions.Service_Delete,
             Permissions.Observation_View,
             Permissions.Observation_Edit,
             Permissions.Observation_Create,

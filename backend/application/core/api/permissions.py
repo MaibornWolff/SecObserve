@@ -68,6 +68,17 @@ class UserHasBranchPermission(BasePermission):
         )
 
 
+class UserHasServicePermission(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return check_object_permission(
+            request,
+            obj,
+            Permissions.Service_View,
+            None,
+            Permissions.Service_Delete,
+        )
+
+
 class UserHasObservationPermission(BasePermission):
     def has_permission(self, request, view):
         return check_post_permission(

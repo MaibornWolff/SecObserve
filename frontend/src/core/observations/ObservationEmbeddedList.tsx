@@ -51,7 +51,15 @@ function listFilters(product: Product) {
             alwaysOn
         />,
         <AutocompleteInput source="current_status" label="Status" choices={OBSERVATION_STATUS_CHOICES} alwaysOn />,
-        <TextInput source="origin_service_name" label="Service" alwaysOn />,
+        <ReferenceInput
+            source="origin_service"
+            reference="services"
+            sort={{ field: "name", order: "ASC" }}
+            filter={{ product: product.id }}
+            alwaysOn
+        >
+            <AutocompleteInputMedium label="Service" optionText="name" />
+        </ReferenceInput>,
         <TextInput source="origin_component_name_version" label="Component" alwaysOn />,
         <TextInput source="origin_docker_image_name_tag_short" label="Container" alwaysOn />,
         <TextInput source="origin_endpoint_hostname" label="Host" alwaysOn />,
