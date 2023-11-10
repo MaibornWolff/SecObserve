@@ -19,5 +19,6 @@ class TestRolesPermissions(BaseTestCase):
             Permissions.Product_Rule_View,
             Permissions.Observation_View,
             Permissions.Api_Configuration_View,
+            Permissions.Service_View,
         }
         self.assertEqual(permissions, get_permissions_for_role(Roles.Reader))

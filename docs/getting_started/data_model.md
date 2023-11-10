@@ -5,6 +5,7 @@ erDiagram
     Product_Group |o--o{ Product : has
     Product ||--o{ Observation : has
     Product ||--o{ Branch : has
+    Product ||--o{ Service : has
     Product ||--o{ Vulnerability_Check : has
     Product ||--o{ Product_Rule : has
     Product ||--o{ API_Configuration : has
@@ -34,6 +35,10 @@ Every `Observation` belongs to exactly one product.
 ## Branch
 
 Software development often uses branches in the source code repository. Vulnerability scanners can run for multiple branches of a product and observations can be viewed and managed by branch. See more in [Working with branches](../usage/branches.md).
+
+## Service
+
+A `Service` is a self-contained piece of functionality of a product. Can be something like a microservice or `backend` or `frontend`.	
 
 ## Vulnerability Check
 

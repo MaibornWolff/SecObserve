@@ -1,6 +1,7 @@
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import UploadIcon from "@mui/icons-material/CloudUpload";
+import ConstructionIcon from "@mui/icons-material/Construction";
 import GradingIcon from "@mui/icons-material/Grading";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import TokenIcon from "@mui/icons-material/Token";
@@ -52,6 +53,7 @@ import ObservationCreate from "../observations/ObservationCreate";
 import ObservationsEmbeddedList from "../observations/ObservationEmbeddedList";
 import ProductMemberCreate from "../product_members/ProductMemberCreate";
 import ProductMemberEmbeddedList from "../product_members/ProductMemberEmbeddedList";
+import ServiceEmbeddedList from "../services/ServiceEmbeddedList";
 import ExportMenu from "./ExportMenu";
 import ProductHeader from "./ProductHeader";
 import ProductShowProduct from "./ProductShowProduct";
@@ -144,6 +146,9 @@ const ProductShow = () => {
                                     <BranchCreate id={product.id} />
                                 )}
                                 <BranchEmbeddedList product={product} />
+                            </Tab>
+                            <Tab label="Services" path="services" icon={<ConstructionIcon />}>
+                                <ServiceEmbeddedList product={product} />
                             </Tab>
                             <Tab label="Vulnerability Checks" path="vulnerability_checks" icon={<GradingIcon />}>
                                 <VulnerabilityCheckEmbeddedList product={product} long_list={true} />

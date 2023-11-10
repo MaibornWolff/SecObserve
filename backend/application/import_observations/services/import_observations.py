@@ -13,6 +13,7 @@ from application.core.models import (
     Parser,
     Product,
     Reference,
+    Service,
 )
 from application.core.queries.observation import (
     get_observations_for_vulnerability_check,
@@ -287,6 +288,10 @@ def prepare_imported_observation(
     imported_observation.import_last_seen = timezone.now()
     if import_parameters.service:
         imported_observation.origin_service_name = import_parameters.service
+        service = Service.objects.get_or_create(
+            product=import_parameters.product, name=import_parameters.service
+        )[0]
+        imported_observation.origin_service = service
     if import_parameters.docker_image_name_tag:
         imported_observation.origin_docker_image_name_tag = (
             import_parameters.docker_image_name_tag
