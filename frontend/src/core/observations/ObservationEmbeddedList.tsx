@@ -1,12 +1,14 @@
 import { Paper, Stack } from "@mui/material";
 import { Fragment } from "react";
 import { useEffect } from "react";
+import { useNavigate } from "react-router";
 import {
     AutocompleteInput,
     ChipField,
     DatagridConfigurable,
     FilterForm,
     FunctionField,
+    Identifier,
     ListContextProvider,
     NumberField,
     Pagination,
@@ -98,6 +100,20 @@ const ListActions = () => (
 );
 
 const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) => {
+    const navigate = useNavigate();
+    function get_observations_url(branch_id: Identifier): string {
+        return `?displayedFilters=%7B%7D&filter=%7B%22current_status%22%3A%22Open%22%2C%22branch%22%3A${branch_id}%7D&order=ASC&sort=current_severity`;
+    }
+
+    useEffect(() => {
+        const current_product_id = localStorage.getItem("observationembeddedlist.product");
+        if (current_product_id && Number(current_product_id) !== product.id) {
+            localStorage.removeItem("RaStore.observations.embedded");
+            localStorage.setItem("observationembeddedlist.product", product.id);
+            navigate(get_observations_url(product.repository_default_branch));
+        }
+    }, [product]);
+
     const listContext = useListController({
         filter: { product: Number(product.id) },
         perPage: 25,
@@ -108,10 +124,6 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
         storeKey: "observations.embedded",
     });
 
-    useEffect(() => {
-        localStorage.removeItem("RaStore.observations.embedded");
-    }, [product]);
-
     if (listContext.isLoading) {
         return <div>Loading...</div>;
     }
@@ -119,8 +131,6 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
     if (listContext.data === undefined) {
         listContext.data = [];
     }
-
-    localStorage.setItem("observationembeddedlist.product", product.id);
 
     return (
         <ListContextProvider value={listContext}>
