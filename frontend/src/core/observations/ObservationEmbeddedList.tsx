@@ -1,7 +1,6 @@
 import { Paper, Stack } from "@mui/material";
 import { Fragment } from "react";
 import { useEffect } from "react";
-import { useNavigate } from "react-router";
 import {
     AutocompleteInput,
     ChipField,
@@ -19,6 +18,7 @@ import {
     TopToolbar,
     useListController,
 } from "react-admin";
+import { useNavigate } from "react-router";
 
 import { PERMISSION_OBSERVATION_ASSESSMENT, PERMISSION_OBSERVATION_DELETE } from "../../access_control/types";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
@@ -112,7 +112,7 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
             localStorage.setItem("observationembeddedlist.product", product.id);
             navigate(get_observations_url(product.repository_default_branch));
         }
-    }, [product]);
+    }, [product, navigate]);
 
     const listContext = useListController({
         filter: { product: Number(product.id) },
