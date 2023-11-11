@@ -44,10 +44,10 @@ const ImportMenu = (props: ImportMenuProps) => {
                     "aria-labelledby": "basic-button",
                 }}
             >
-                <MenuItem>
+                <MenuItem onKeyDown={(e) => e.stopPropagation()}>
                     <FileUploadObservations />
                 </MenuItem>
-                <MenuItem>
+                <MenuItem onKeyDown={(e) => e.stopPropagation()}>
                     <ApiImportObservations product={props.product} />
                 </MenuItem>
             </Menu>
