@@ -34,7 +34,6 @@ import {
     PERMISSION_PRODUCT_RULE_CREATE,
 } from "../../access_control/types";
 import observations from "../../core/observations";
-import products from "../../core/products";
 import ApiConfigurationCreate from "../../import_observations/api_configurations/ApiConfigurationCreate";
 import ApiConfigurationEmbeddedList from "../../import_observations/api_configurations/ApiConfigurationEmbeddedList";
 import ImportMenu from "../../import_observations/import/ImportMenu";
