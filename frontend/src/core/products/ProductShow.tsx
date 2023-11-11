@@ -120,10 +120,10 @@ const ProductShow = () => {
                                         alignItems: "center",
                                     }}
                                 >
+                                    <ShowDefaultBranchObservationsButton product={product} />
                                     {product && product.permissions.includes(PERMISSION_OBSERVATION_CREATE) && (
                                         <ObservationCreate id={product.id} />
                                     )}
-                                    <ShowDefaultBranchObservationsButton product={product} />
                                 </Stack>
                                 <ObservationsEmbeddedList product={product} />
                             </Tab>

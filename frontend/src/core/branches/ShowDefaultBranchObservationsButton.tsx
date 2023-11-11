@@ -13,12 +13,12 @@ export type ShowDefaultBranchObservationsButtonProps = {
 const ShowDefaultBranchObservationsButton = ({ product }: ShowDefaultBranchObservationsButtonProps) => {
     const navigate = useNavigate();
 
-    function get_observations_url(product_id: Identifier, branch_id: Identifier): string {
+    function get_observations_url(branch_id: Identifier): string {
         return `?displayedFilters=%7B%7D&filter=%7B%22current_status%22%3A%22Open%22%2C%22branch%22%3A${branch_id}%7D&order=ASC&sort=current_severity`;
     }
 
     const navigateToObservations = () => {
-        navigate(get_observations_url(product.id, product.repository_default_branch));
+        navigate(get_observations_url(product.repository_default_branch));
     };
 
     return (
