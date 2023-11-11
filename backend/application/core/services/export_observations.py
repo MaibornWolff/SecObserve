@@ -65,6 +65,7 @@ def _get_excludes():
         "STATUS_RESOLVED",
         "STATUS_RISK_ACCEPTED",
         "STATUS_NOT_SECURITY",
+        "origin_service",
     ]
 
 

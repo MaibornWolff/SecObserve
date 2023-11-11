@@ -2,6 +2,7 @@ import { Paper } from "@mui/material";
 import {
     Datagrid,
     FilterForm,
+    FunctionField,
     ListContextProvider,
     Pagination,
     TextField,
@@ -11,6 +12,8 @@ import {
 
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
 import { SecurityGateTextField } from "../../commons/custom_fields/SecurityGateTextField";
+import { humanReadableDate } from "../../commons/functions";
+import { Product } from "../types";
 
 type ProductEmbeddedListProps = {
     product_group: any;
@@ -52,9 +55,14 @@ const ProductEmbeddedList = ({ product_group }: ProductEmbeddedListProps) => {
                 <Paper>
                     <Datagrid size="medium" rowClick={ShowProducts} bulkActionButtons={false}>
                         <TextField source="name" />
-                        <SecurityGateTextField />
                         <TextField source="repository_default_branch_name" label="Default branch" sortable={false} />
+                        <SecurityGateTextField />
                         <ObservationsCountField withLabel={false} />
+                        <FunctionField<Product>
+                            label="Last observation change"
+                            sortBy="last_observation_change"
+                            render={(record) => (record ? humanReadableDate(record.last_observation_change) : "")}
+                        />
                     </Datagrid>
                 </Paper>
                 <Pagination />

@@ -80,8 +80,8 @@ const ObservationList = () => {
                 <TextField source="branch_name" label="Branch" />
                 <TextField source="title" />
                 <SeverityField source="current_severity" />
-                <NumberField source="epss_score" label="EPSS" />
                 <ChipField source="current_status" label="Status" />
+                <NumberField source="epss_score" label="EPSS" />
                 <TextField source="origin_service_name" label="Service" />
                 <TextField source="origin_component_name_version" label="Component" />
                 <TextField source="origin_docker_image_name_tag_short" label="Container" />
