@@ -142,7 +142,7 @@ def normalize_description(observation):
             observation.description = observation.description[:-1]
 
 
-def normalize_origin_component(observation):
+def normalize_origin_component(observation):  # pylint: disable=too-many-branches
     if not observation.origin_component_name_version:
         if observation.origin_component_name and observation.origin_component_version:
             observation.origin_component_name_version = (
@@ -180,6 +180,8 @@ def normalize_origin_component(observation):
         observation.origin_component_purl = ""
     if observation.origin_component_cpe is None:
         observation.origin_component_cpe = ""
+    if observation.origin_component_dependencies is None:
+        observation.origin_component_dependencies = ""
 
 
 def normalize_origin_docker(observation):
