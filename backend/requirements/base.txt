@@ -6,7 +6,7 @@ whitenoise==6.6.0  # https://github.com/evansd/whitenoise
 django==4.2.7  # https://www.djangoproject.com/
 django-environ==0.11.2  # https://github.com/joke2k/django-environ
 django-model-utils==4.3.1  # https://github.com/jazzband/django-model-utils
-django-filter==23.3  # https://github.com/carltongibson/django-filter 
+django-filter==23.4  # https://github.com/carltongibson/django-filter 
 django-csp==3.7  # https://github.com/mozilla/django-csp
 django-constance==3.1.0  # https://github.com/jazzband/django-constance
 django-constance[database]==3.1.0  # https://github.com/jazzband/django-constance
