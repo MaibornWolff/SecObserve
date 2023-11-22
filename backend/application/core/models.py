@@ -466,6 +466,7 @@ class Observation(Model):
     origin_component_name_version = CharField(max_length=513, blank=True)
     origin_component_purl = CharField(max_length=255, blank=True)
     origin_component_cpe = CharField(max_length=255, blank=True)
+    origin_component_dependencies = TextField(max_length=2048, blank=True)
     origin_docker_image_name = CharField(max_length=255, blank=True)
     origin_docker_image_tag = CharField(max_length=255, blank=True)
     origin_docker_image_name_tag = CharField(max_length=513, blank=True)

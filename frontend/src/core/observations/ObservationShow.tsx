@@ -18,6 +18,7 @@ import {
 } from "react-admin";
 
 import { PERMISSION_OBSERVATION_ASSESSMENT, PERMISSION_OBSERVATION_EDIT } from "../../access_control/types";
+import LabeledTextField from "../../commons/custom_fields/LabeledTextField";
 import MarkdownField from "../../commons/custom_fields/MarkdownField";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
@@ -245,6 +246,11 @@ const ObservationShow = () => {
                                         </Labeled>
                                     )}
                                 </Stack>
+                                {observation.origin_component_dependencies != "" && (
+                                    <Labeled label="First component dependency" sx={{ marginTop: 2 }}>
+                                        <LabeledTextField text={observation.origin_component_dependencies} />
+                                    </Labeled>
+                                )}
                             </div>
                         )}
                         {observation.origin_docker_image_name != "" && (

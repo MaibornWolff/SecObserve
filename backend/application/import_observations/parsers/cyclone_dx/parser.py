@@ -93,7 +93,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             json=component_data,
         )
 
-    def _create_observations(
+    def _create_observations(   # pylint: disable=too-many-locals
         self, data: dict, components: dict[str, Component], metadata: Metadata
     ) -> list[Observation]:
         observations = []
@@ -116,6 +116,14 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                     component = components.get(ref)
                     if component:
                         title = vulnerability_id
+
+                        (
+                            observation_component_dependencies,
+                            translated_component_dependencies,
+                        ) = self._get_component_dependencies(
+                            data, components, component
+                        )
+
                         observation = Observation(
                             title=title,
                             description=description,
@@ -126,6 +134,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                             origin_component_version=component.version,
                             origin_component_purl=component.purl,
                             origin_component_cpe=component.cpe,
+                            origin_component_dependencies=observation_component_dependencies,
                             cvss3_score=cvss3_score,
                             cvss3_vector=cvss3_vector,
                             cwe=cwe,
@@ -137,12 +146,37 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                         self._add_references(vulnerability, observation)
 
                         self._add_evidences(
-                            data, components, vulnerability, component, observation
+                            vulnerability,
+                            component,
+                            observation,
+                            translated_component_dependencies,
                         )
 
                         observations.append(observation)
 
         return observations
+
+    def _get_component_dependencies(self, data, components, component):
+        component_dependencies: list[dict[str, str | list[str]]] = []
+        self._filter_component_dependencies(
+            component.bom_ref,
+            data.get("dependencies", []),
+            component_dependencies,
+        )
+        observation_component_dependencies = ""
+        translated_component_dependencies = []
+        if component_dependencies:
+            translated_component_dependencies = self._translate_component_dependencies(
+                component_dependencies, components
+            )
+
+            observation_component_dependencies = self._get_dependencies(
+                "",
+                f"{component.name}:{component.version}",
+                translated_component_dependencies,
+            )
+
+        return observation_component_dependencies, translated_component_dependencies
 
     def _get_metadata(self, data: dict) -> Metadata:
         scanner = ""
@@ -214,11 +248,10 @@ class CycloneDXParser(BaseParser, BaseFileParser):
 
     def _add_evidences(
         self,
-        data: dict,
-        components: dict[str, Component],
         vulnerability: dict,
         component: Component,
         observation: Observation,
+        translated_component_dependencies: list[dict],
     ):
         evidence = []
         evidence.append("Vulnerability")
@@ -229,16 +262,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         evidence.append(dumps(component.json))
         observation.unsaved_evidences.append(evidence)
 
-        component_dependencies: list[dict[str, str | list[str]]] = []
-        self._filter_component_dependencies(
-            component.bom_ref,
-            data.get("dependencies", []),
-            component_dependencies,
-        )
-        if component_dependencies:
-            translated_component_dependencies = self._translate_component_dependencies(
-                component_dependencies, components
-            )
+        if translated_component_dependencies:
             evidence = []
             evidence.append("Dependencies")
             evidence.append(dumps(translated_component_dependencies))
@@ -301,3 +325,77 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             component_name_version = component.name
 
         return component_name_version
+
+    def _get_dependencies(
+        self,
+        dependencies: str,
+        component_version: str,
+        translated_component_dependencies: list[dict],
+    ) -> str:
+        for dependency in translated_component_dependencies:
+            ref = dependency.get("ref")
+            depends_on = dependency.get("dependsOn", [])
+            if (
+                ref
+                and ref != component_version
+                and component_version in depends_on
+                and (not dependencies or ref not in dependencies)
+            ):
+                if not dependencies:
+                    dependencies = f"{ref} --> {component_version}"
+                else:
+                    dependencies = f"{ref} --> {dependencies}"
+
+                dependencies = self._get_dependencies(
+                    dependencies, ref, translated_component_dependencies
+                )
+                break
+
+        return dependencies
+
+    # def _get_dependencies(
+    #     self,
+    #     dependencies: list[str],
+    #     list_pointer: int,
+    #     component_version: str,
+    #     translated_component_dependencies: dict,
+    # ) -> None:
+    #     i = -1
+    #     current_dependency = None
+    #     if dependencies:
+    #         current_dependency = dependencies[list_pointer]
+    #     for dependency in translated_component_dependencies:
+    #         ref = dependency.get("ref")
+    #         depends_on = dependency.get("dependsOn", [])
+    #         if (
+    #             ref
+    #             and ref != component_version
+    #             and component_version in depends_on
+    #             and (not dependencies or not ref in dependencies[list_pointer])
+    #         ):
+    #             i += 1
+
+    #             if list_pointer == 0:
+    #                 print("---------------------------------")
+    #                 print(f"i: {i}")
+    #                 print(f"list_pointer: {list_pointer}")
+    #                 print(f"ref: {ref}")
+    #                 print(f"component_version: {component_version}")
+    #                 print(f"depends_on: {depends_on}")
+    #                 print(f"dependencies: {dependencies}")
+    #                 print(f"current_dependency: {current_dependency}")
+
+    #             if len(dependencies) <= i:
+    #                 if not dependencies or not current_dependency:
+    #                     dependencies.append(f"{ref} --> {component_version}")
+    #                 else:
+    #                     dependencies.append(f"{ref} --> {current_dependency}")
+    #                 list_pointer = i
+    #             else:
+    #                 dependencies[
+    #                     list_pointer
+    #                 ] = f"{ref} --> {dependencies[list_pointer]}"
+
+    #             self._get_dependencies(
+    #                 dependencies, list_pointer, ref, translated_component_dependencies
+    #             )

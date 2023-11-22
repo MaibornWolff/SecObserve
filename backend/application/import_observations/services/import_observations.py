@@ -317,6 +317,10 @@ def process_current_observation(
     observation_before.found = imported_observation.found
     observation_before.scanner = imported_observation.scanner
 
+    observation_before.origin_component_dependencies = (
+        imported_observation.origin_component_dependencies
+    )
+
     previous_severity = observation_before.current_severity
     observation_before.parser_severity = imported_observation.parser_severity
     observation_before.current_severity = get_current_severity(observation_before)
