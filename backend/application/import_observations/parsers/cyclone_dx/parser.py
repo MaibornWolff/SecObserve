@@ -93,7 +93,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             json=component_data,
         )
 
-    def _create_observations(   # pylint: disable=too-many-locals
+    def _create_observations(  # pylint: disable=too-many-locals
         self, data: dict, components: dict[str, Component], metadata: Metadata
     ) -> list[Observation]:
         observations = []
