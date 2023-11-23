@@ -52,7 +52,7 @@ class OIDCAuthentication(BaseAuthentication):
             jwks_uri = self._get_jwks_uri()
             jwks_client = jwt.PyJWKClient(jwks_uri)
             signing_key = jwks_client.get_signing_key_from_jwt(token)
-            config = {
+            options = {
                 "verify_signature": True,
                 "verify_aud": True,
                 "strict_aud": True,
@@ -63,7 +63,7 @@ class OIDCAuthentication(BaseAuthentication):
             }
             payload = jwt.decode(
                 jwt=token,
-                config=config,
+                options=options,
                 key=signing_key.key,
                 algorithms=ALGORITHMS,
                 audience=os.environ["OIDC_CLIENT_ID"],
