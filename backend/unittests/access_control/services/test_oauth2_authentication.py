@@ -132,9 +132,18 @@ class TestOIDCAuthentication(BaseTestCase):
         get_signing_key_mock.assert_called_once_with("token")
         jwt_mock.assert_called_with(
             jwt="token",
+            options={
+                "verify_signature": True,
+                "verify_aud": True,
+                "strict_aud": True,
+                "require": ["exp", "iat", "nbf"],
+                "verify_iat": True,
+                "verify_exp": True,
+                "verify_nbf": True,
+            },
             key="test_key",
-            options={"verify_aud": False},
             algorithms=["RS256", "RS384", "RS512", "ES256 ", "ES384", "ES512", "EdDSA"],
+            audience="client_id",
         )
 
     @patch("jwt.decode")
@@ -177,9 +186,18 @@ class TestOIDCAuthentication(BaseTestCase):
         get_signing_key_mock.assert_called_once_with("token")
         jwt_mock.assert_called_with(
             jwt="token",
+            options={
+                "verify_signature": True,
+                "verify_aud": True,
+                "strict_aud": True,
+                "require": ["exp", "iat", "nbf"],
+                "verify_iat": True,
+                "verify_exp": True,
+                "verify_nbf": True,
+            },
             key="test_key",
-            options={"verify_aud": False},
             algorithms=["RS256", "RS384", "RS512", "ES256 ", "ES384", "ES512", "EdDSA"],
+            audience="client_id",
         )
         create_user_mock.assert_called_once_with(
             "test_username", {"preferred_username": "test_username"}
@@ -224,9 +242,18 @@ class TestOIDCAuthentication(BaseTestCase):
         get_signing_key_mock.assert_called_once_with("token")
         jwt_mock.assert_called_with(
             jwt="token",
+            options={
+                "verify_signature": True,
+                "verify_aud": True,
+                "strict_aud": True,
+                "require": ["exp", "iat", "nbf"],
+                "verify_iat": True,
+                "verify_exp": True,
+                "verify_nbf": True,
+            },
             key="test_key",
-            options={"verify_aud": False},
             algorithms=["RS256", "RS384", "RS512", "ES256 ", "ES384", "ES512", "EdDSA"],
+            audience="client_id",
         )
         check_user_change_mock.assert_called_once_with(
             self.user_internal, {"preferred_username": self.user_internal.username}

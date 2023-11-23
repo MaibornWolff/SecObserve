@@ -10,6 +10,12 @@
 
 * There will be specific upgrade instructions if necessary, e.g. when there are new configuration parameters.
 
+## Release 1.1.0
+
+**Breaking changes**
+
+* When OIDC authentication is used, the environment variable `OIDC_CLIENT_ID` needs to be set for the backend as well. See [Configuration](configuration.md) and [OpenID Connect authentication](../integrations/oidc_authentication.md) for details.
+
 ## Release 1.0.0
 
 **Breaking changes**
