@@ -56,7 +56,7 @@ class OIDCAuthentication(BaseAuthentication):
                 "verify_signature": True,
                 "verify_aud": True,
                 "strict_aud": True,
-                "require": ["exp", "iat", "nbf"],
+                "require": ["exp"],
                 "verify_iat": True,
                 "verify_exp": True,
                 "verify_nbf": True,
