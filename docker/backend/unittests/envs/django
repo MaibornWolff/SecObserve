@@ -17,7 +17,7 @@ FIELD_ENCRYPTION_KEY="DtlkqVb3wlaVdJK_BU-3mB4wwuuf8xx8YNInajiJ7GU="
 # OpenID Connect
 # ------------------------------------------------------------------------------
 OIDC_AUTHORITY=https://authority
-OIDC_CLIENT_ID=dummy
+OIDC_CLIENT_ID=client_id
 OIDC_USERNAME=preferred_username
 OIDC_FIRST_NAME=given_name
 OIDC_LAST_NAME=family_name
