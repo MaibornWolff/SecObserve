@@ -17,6 +17,7 @@ jobs:
         uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@dev
         with:
           so_configuration: 'so_configuration.yml'
+          SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
 
       # - name: Upload results
       #   uses: actions/upload-artifact@v3
