@@ -24,7 +24,7 @@ const BranchEmbeddedList = ({ product }: BranchEmbeddedListProps) => {
         filter: { product: Number(product.id) },
         perPage: 25,
         resource: "branches",
-        sort: { field: "name", order: "ASC" },
+        sort: { field: "last_import", order: "DESC" },
         disableSyncWithLocation: true,
         storeKey: "branch.embedded",
     });
