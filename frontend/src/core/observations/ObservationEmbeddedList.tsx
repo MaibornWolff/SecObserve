@@ -107,7 +107,7 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
 
     useEffect(() => {
         const current_product_id = localStorage.getItem("observationembeddedlist.product");
-        if (current_product_id && Number(current_product_id) !== product.id) {
+        if (current_product_id == null || Number(current_product_id) !== product.id) {
             localStorage.removeItem("RaStore.observations.embedded");
             localStorage.setItem("observationembeddedlist.product", product.id);
             navigate(get_observations_url(product.repository_default_branch));
