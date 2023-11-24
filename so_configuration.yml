@@ -27,20 +27,6 @@ gitleaks:
   REPORT_NAME: "gitleaks.sarif"
   SO_BRANCH_NAME: $GITHUB_REF_NAME
 
-grype_image_backend:
-  SCANNER: grype_image
-  TARGET: "maibornwolff/secobserve-backend:dev"
-  REPORT_NAME: "grype_backend_image.json"
-  SO_ORIGIN_SERVICE: "backend"
-  SO_BRANCH_NAME: "dev"
-
-grype_image_frontend:
-  SCANNER: grype_image
-  TARGET: "maibornwolff/secobserve-frontend:dev"
-  REPORT_NAME: "grype_frontend_image.json"
-  SO_ORIGIN_SERVICE: "frontend"
-  SO_BRANCH_NAME: "dev"
-
 kics:
   SCANNER: kics
   RUN_DIRECTORY: "."
