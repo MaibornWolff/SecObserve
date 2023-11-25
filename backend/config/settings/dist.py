@@ -12,8 +12,8 @@ SECRET_KEY = env(
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = env(
-    "ALLOWED_HOSTS", default=["localhost", "0.0.0.0", "127.0.0.1"]
-)  # nosec B104
+    "ALLOWED_HOSTS", default=["localhost", "0.0.0.0", "127.0.0.1"]  # nosec B104
+)
 # This file is not used for production
 
 # CACHES
