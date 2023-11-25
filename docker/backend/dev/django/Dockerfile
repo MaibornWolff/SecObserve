@@ -36,6 +36,8 @@ ARG user=django
 ARG group=django
 
 # Install binaries and libs for PostgreSQL
+# kics-scan ignore-block
+# versions of dependencies from distribution are ok
 RUN apk add --no-cache --virtual postgresql-libs postgresql-client mariadb-dev mysql-client bash
 
 # use wheels to install python dependencies

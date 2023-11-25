@@ -58,6 +58,7 @@ COPY ./docker/backend/prod/database/DigiCertGlobalRootCA.crt.pem ${APP_HOME}/Dig
 RUN addgroup -g 1001 -S ${group} \
     && adduser -u 1001 -S ${user} -G ${group} \
     # Install binaries and libs for PostgreSQL
+    # kics-scan ignore-line
     && apk add --no-cache --virtual postgresql-libs postgresql-client mariadb-dev mysql-client bash \
     # use wheels to install python dependencies
     && pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
