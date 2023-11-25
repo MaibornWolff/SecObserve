@@ -116,6 +116,66 @@ trivy_image_frontend_main:
   SO_ORIGIN_SERVICE: "frontend"
   SO_BRANCH_NAME: "main"
 
+cryptolyzer_backend_dev:
+  SCANNER: cryptolyzer
+  TARGET: "secobserve-backend.dev.maibornwolff.de"
+  REPORT_NAME: "cryptolyzer_backend_dev.json"
+  SO_ORIGIN_SERVICE: "backend"
+  SO_BRANCH_NAME: "dev"
+
+drheader_backend_dev:
+  SCANNER: drheader
+  TARGET: "https://secobserve-backend.dev.maibornwolff.de"
+  REPORT_NAME: "drheader_backend_dev.json"
+  SO_ORIGIN_SERVICE: "backend"
+  SO_ORIGIN_ENDPOINT_URL: "https://secobserve-backend.dev.maibornwolff.de"
+  SO_BRANCH_NAME: "dev"
+
+cryptolyzer_frontend_dev:
+  SCANNER: cryptolyzer
+  TARGET: "secobserve.dev.maibornwolff.de"
+  REPORT_NAME: "cryptolyzer_frontend_dev.json"
+  SO_ORIGIN_SERVICE: "frontend"
+  SO_BRANCH_NAME: "dev"
+
+drheader_frontend_dev:
+  SCANNER: drheader
+  TARGET: "https://secobserve.dev.maibornwolff.de"
+  REPORT_NAME: "drheader_frontend_dev.json"
+  SO_ORIGIN_SERVICE: "frontend"
+  SO_ORIGIN_ENDPOINT_URL: "https://secobserve-backend.dev.maibornwolff.de"
+  SO_BRANCH_NAME: "dev"
+
+cryptolyzer_backend_main:
+  SCANNER: cryptolyzer
+  TARGET: "secobserve-backend.maibornwolff.de"
+  REPORT_NAME: "cryptolyzer_backend_main.json"
+  SO_ORIGIN_SERVICE: "backend"
+  SO_BRANCH_NAME: "main"
+
+drheader_backend_main:
+  SCANNER: drheader
+  TARGET: "https://secobserve-backend.maibornwolff.de"
+  REPORT_NAME: "drheader_backend_main.json"
+  SO_ORIGIN_SERVICE: "backend"
+  SO_ORIGIN_ENDPOINT_URL: "https://secobserve-backend.maibornwolff.de"
+  SO_BRANCH_NAME: "main"
+
+cryptolyzer_frontend_main:
+  SCANNER: cryptolyzer
+  TARGET: "secobserve.maibornwolff.de"
+  REPORT_NAME: "cryptolyzer_frontend_main.json"
+  SO_ORIGIN_SERVICE: "frontend"
+  SO_BRANCH_NAME: "main"
+
+drheader_frontend_main:
+  SCANNER: drheader
+  TARGET: "https://secobserve.maibornwolff.de"
+  REPORT_NAME: "drheader_frontend_main.json"
+  SO_ORIGIN_SERVICE: "frontend"
+  SO_ORIGIN_ENDPOINT_URL: "https://secobserve-backend.maibornwolff.de"
+  SO_BRANCH_NAME: "main"
+
 importer:
   SO_UPLOAD: "true"
   SO_API_BASE_URL: "https://secobserve-backend.maibornwolff.de"
