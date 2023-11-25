@@ -55,10 +55,11 @@ COPY ./docker/backend/prod/database/BaltimoreCyberTrustRoot_combined.crt.pem ${A
 # flexible server
 COPY ./docker/backend/prod/database/DigiCertGlobalRootCA.crt.pem ${APP_HOME}/DigiCertGlobalRootCA.crt.pem
 
+# kics-scan ignore-block
+# versions of dependencies from distribution are ok
 RUN addgroup -g 1001 -S ${group} \
     && adduser -u 1001 -S ${user} -G ${group} \
     # Install binaries and libs for PostgreSQL
-    # kics-scan ignore-line
     && apk add --no-cache --virtual postgresql-libs postgresql-client mariadb-dev mysql-client bash \
     # use wheels to install python dependencies
     && pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
