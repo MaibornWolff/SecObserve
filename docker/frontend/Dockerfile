@@ -22,6 +22,8 @@ FROM nginxinc/nginx-unprivileged:stable-alpine
 
 USER root
 
+# kics-scan ignore-block
+# versions of dependencies from distribution are ok
 RUN apk del curl && \
         apk add --no-cache --virtual --update nodejs npm && \
         npm i -g runtime-env-cra@0.2.4

@@ -6,10 +6,10 @@ FROM python as python-build-stage
 ARG BUILD_ENVIRONMENT=prod
 
 # Install packages
+# kics-scan ignore-block
+# versions of dependencies from distribution are ok
 RUN apk add --no-cache --virtual .build-deps \
     ca-certificates gcc postgresql-dev linux-headers musl-dev libffi-dev mariadb-dev
-    # These 2 libraries would only be needed for the Pillow package
-    # jpeg-dev zlib-dev
 
 # Requirements are installed here to ensure they will be cached.
 COPY ./backend/requirements .
@@ -55,6 +55,8 @@ COPY ./docker/backend/prod/database/BaltimoreCyberTrustRoot_combined.crt.pem ${A
 # flexible server
 COPY ./docker/backend/prod/database/DigiCertGlobalRootCA.crt.pem ${APP_HOME}/DigiCertGlobalRootCA.crt.pem
 
+# kics-scan ignore-block
+# versions of dependencies from distribution are ok
 RUN addgroup -g 1001 -S ${group} \
     && adduser -u 1001 -S ${user} -G ${group} \
     # Install binaries and libs for PostgreSQL

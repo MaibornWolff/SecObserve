@@ -6,10 +6,10 @@ FROM python as python-build-stage
 ARG BUILD_ENVIRONMENT=dev
 
 # Install packages
+# kics-scan ignore-block
+# versions of dependencies from distribution are ok
 RUN apk add --no-cache --virtual .build-deps \
     ca-certificates gcc postgresql-dev linux-headers musl-dev libffi-dev mariadb-dev
-    # These 2 libraries would only be needed for the Pillow package
-    # jpeg-dev zlib-dev
 
 # Requirements are installed here to ensure they will be cached.
 COPY ./backend/requirements .
@@ -36,6 +36,8 @@ ARG user=django
 ARG group=django
 
 # Install binaries and libs for PostgreSQL
+# kics-scan ignore-block
+# versions of dependencies from distribution are ok
 RUN apk add --no-cache --virtual postgresql-libs postgresql-client mariadb-dev mysql-client bash
 
 # use wheels to install python dependencies
