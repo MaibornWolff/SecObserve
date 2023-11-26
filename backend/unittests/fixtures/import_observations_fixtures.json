@@ -1,0 +1,98 @@
+[
+    {
+        "model": "access_control.user",
+        "pk": 1,
+        "fields": {
+            "password": "",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "-product-1-api_token-",
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-12-12T18:48:08.514Z",
+            "full_name": "-product-1-api_token-",
+            "is_external": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "access_control.api_token",
+        "pk": 1,
+        "fields": {
+            "api_token_hash": "argon2$argon2id$v=19$m=102400,t=2,p=8$bUc4bk13R2RLSElVMlVoRENLeGoyaA$NMzcg5d9N6jufieKF+nADLa4AdLGdMb5lFVPN8zKPm0",
+            "user": 1
+        }
+    },
+    {
+        "model": "core.product",
+        "pk": 1,
+        "fields": {
+            "name": "db_product_import",
+            "description": "",
+            "repository_prefix": "",
+            "repository_default_branch": 1,
+            "security_gate_passed": true,
+            "security_gate_active": null,
+            "security_gate_threshold_critical": null,
+            "security_gate_threshold_high": null,
+            "security_gate_threshold_medium": null,
+            "security_gate_threshold_low": null,
+            "security_gate_threshold_none": null,
+            "security_gate_threshold_unkown": null,
+            "apply_general_rules": true,
+            "notification_ms_teams_webhook": "",
+            "last_observation_change": "2022-12-16T16:13:18.283Z",
+            "product_group": null
+        }
+    },
+    {
+        "model": "core.branch",
+        "pk": 1,
+        "fields": {
+            "product": 1,
+            "name": "db_branch_import"
+        }
+    },
+    {
+        "model": "core.product_member",
+        "pk": 1,
+        "fields": {
+            "product": 1,
+            "user": 5,
+            "role": 5
+        }
+    },
+    {
+        "model": "core.parser",
+        "pk": 1,
+        "fields": {
+            "name": "SARIF",
+            "type": "SAST",
+            "source": "File"
+        }
+    },
+    {
+        "model": "rules.rule",
+        "pk": 1,
+        "fields": {
+            "name": "db_product_rule_import",
+            "description": "",
+            "product": 1,
+            "parser": 1,
+            "scanner_prefix": "",
+            "title": "",
+            "origin_component_name_version": "",
+            "origin_docker_image_name_tag": "",
+            "origin_endpoint_url": "",
+            "origin_service_name": "",
+            "origin_source_file": ".*dev.*",
+            "new_severity": "",
+            "new_status": "Not affected",
+            "enabled": true
+        }
+    }
+]

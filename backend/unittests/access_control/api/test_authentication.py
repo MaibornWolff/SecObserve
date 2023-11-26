@@ -227,6 +227,9 @@ class TestAuthentication(BaseTestCase):
             ["delete", "get", "put", "patch"], "/api/api_configurations/1/"
         )
 
+        self._check_authentication(["get"], "/api/vulnerability_checks/")
+        self._check_authentication(["get"], "/api/vulnerability_checks/1/")
+
         self._check_authentication(["get", "post"], "/api/general_rules/")
         self._check_authentication(
             ["delete", "get", "put", "patch"], "/api/general_rules/1/"
@@ -252,6 +255,9 @@ class TestAuthentication(BaseTestCase):
         self._check_authentication(
             ["delete", "get", "put", "patch"], "/api/branches/1/"
         )
+
+        self._check_authentication(["get"], "/api/services/")
+        self._check_authentication(["delete", "get"], "/api/services/1/")
 
         self._check_authentication(["get", "post"], "/api/product_members/")
         self._check_authentication(

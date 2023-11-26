@@ -238,6 +238,30 @@
         }
     },
     {
+        "model": "core.service",
+        "pk": 1,
+        "fields": {
+            "product": 1,
+            "name": "db_service_internal_backend"
+        }
+    },
+    {
+        "model": "core.service",
+        "pk": 2,
+        "fields": {
+            "product": 1,
+            "name": "db_service_internal_frontend"
+        }
+    },
+    {
+        "model": "core.service",
+        "pk": 3,
+        "fields": {
+            "product": 2,
+            "name": "db_service_external"
+        }
+    },
+    {
         "model": "core.product_member",
         "pk": 1,
         "fields": {
@@ -355,7 +379,8 @@
             "origin_endpoint_params": "",
             "origin_endpoint_query": "",
             "origin_endpoint_fragment": "",
-            "origin_service_name": "",
+            "origin_service_name": "db_service_internal_backend",
+            "origin_service": 1,
             "origin_source_file": "",
             "origin_source_line_start": null,
             "origin_source_line_end": null,
@@ -501,6 +526,54 @@
             "base_url": "http://localhost:8080",
             "project_key": "secobserve",
             "api_key": "__secret__"
+        }
+    },
+    {
+        "model": "import_observations.vulnerability_check",
+        "pk": 1,
+        "fields": {
+            "product": 1,
+            "branch": null,
+            "filename": "filename_internal_no_branch",
+            "api_configuration_name": "",
+            "scanner": "scanner_internal_no_branch / 1.0.0",
+            "first_import": "2022-12-15T16:10:35.521Z",
+            "last_import": "2022-12-15T16:10:35.854Z",
+            "last_import_observations_new": 1,
+            "last_import_observations_updated": 2,
+            "last_import_observations_resolved": 3
+        }
+    },
+    {
+        "model": "import_observations.vulnerability_check",
+        "pk": 2,
+        "fields": {
+            "product": 1,
+            "branch": 1,
+            "filename": "",
+            "api_configuration_name": "api_configuration_internal_dev",
+            "scanner": "scanner_internal_dev",
+            "first_import": "2022-12-16T16:10:35.521Z",
+            "last_import": "2022-12-16T16:10:35.854Z",
+            "last_import_observations_new": 4,
+            "last_import_observations_updated": 5,
+            "last_import_observations_resolved": 6
+        }
+    },
+    {
+        "model": "import_observations.vulnerability_check",
+        "pk": 3,
+        "fields": {
+            "product": 2,
+            "branch": 3,
+            "filename": "filename_external",
+            "api_configuration_name": "",
+            "scanner": "scanner_external",
+            "first_import": "2022-12-17T16:10:35.521Z",
+            "last_import": "2022-12-17T16:10:35.854Z",
+            "last_import_observations_new": 7,
+            "last_import_observations_updated": 8,
+            "last_import_observations_resolved": 9
         }
     },
     {

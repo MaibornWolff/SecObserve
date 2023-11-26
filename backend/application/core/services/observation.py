@@ -142,7 +142,7 @@ def normalize_description(observation):
             observation.description = observation.description[:-1]
 
 
-def normalize_origin_component(observation):
+def normalize_origin_component(observation):  # pylint: disable=too-many-branches
     if not observation.origin_component_name_version:
         if observation.origin_component_name and observation.origin_component_version:
             observation.origin_component_name_version = (
@@ -180,6 +180,8 @@ def normalize_origin_component(observation):
         observation.origin_component_purl = ""
     if observation.origin_component_cpe is None:
         observation.origin_component_cpe = ""
+    if observation.origin_component_dependencies is None:
+        observation.origin_component_dependencies = ""
 
 
 def normalize_origin_docker(observation):
@@ -304,3 +306,11 @@ def clip_fields(model: str, my_object) -> None:
                 value = getattr(my_object, field.name)
                 if value and len(value) > max_length:
                     setattr(my_object, field.name, value[: max_length - 4] + " ...")
+                    value = getattr(my_object, field.name)
+                    if value.count("```") == 1:
+                        # There is an open code block, that we have to close
+                        setattr(
+                            my_object,
+                            field.name,
+                            value[: max_length - 9] + "\n```\n\n...",
+                        )

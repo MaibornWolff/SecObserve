@@ -1,0 +1,80 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "fullName": "Trivy Vulnerability Scanner",
+          "informationUri": "https://github.com/aquasecurity/trivy",
+          "name": "Trivy",
+          "rules": [
+            {
+              "id": "AVD-AZU-0014",
+              "name": "Misconfiguration",
+              "shortDescription": {
+                "text": "Ensure that the expiration date is set on all keys"
+              },
+              "fullDescription": {
+                "text": "Expiration Date is an optional Key Vault Key behavior and is not set by default.\n\nSet when the resource will be become inactive."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://avd.aquasec.com/misconfig/avd-azu-0014",
+              "help": {
+                "text": "Misconfiguration AVD-AZU-0014\nType: Terraform Security Check\nSeverity: MEDIUM\nCheck: Ensure that the expiration date is set on all keys\nMessage: Key should have an expiry date specified.\nLink: [AVD-AZU-0014](https://avd.aquasec.com/misconfig/avd-azu-0014)\nExpiration Date is an optional Key Vault Key behavior and is not set by default.\n\nSet when the resource will be become inactive.",
+                "markdown": "**Misconfiguration AVD-AZU-0014**\n| Type | Severity | Check | Message | Link |\n| --- | --- | --- | --- | --- |\n|Terraform Security Check|MEDIUM|Ensure that the expiration date is set on all keys|Key should have an expiry date specified.|[AVD-AZU-0014](https://avd.aquasec.com/misconfig/avd-azu-0014)|\n\nExpiration Date is an optional Key Vault Key behavior and is not set by default.\n\nSet when the resource will be become inactive."
+              },
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "5.5",
+                "tags": [
+                  "misconfiguration",
+                  "security",
+                  "MEDIUM"
+                ]
+              }
+            }
+          ],
+          "version": "0.47.0"
+        }
+      },
+      "results": [
+        {
+          "ruleId": "AVD-AZU-0014",
+          "ruleIndex": 0,
+          "level": "warning",
+          "message": {
+            "text": "Artifact: modules/azure-cosmosdb/main.tf\nType: terraform\nVulnerability AVD-AZU-0014\nSeverity: MEDIUM\nMessage: Key should have an expiry date specified.\nLink: [AVD-AZU-0014](https://avd.aquasec.com/misconfig/avd-azu-0014)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "modules/azure-cosmosdb/main.tf",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 164,
+                  "startColumn": 1,
+                  "endLine": 176,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "modules/azure-cosmosdb/main.tf"
+              }
+            }
+          ]
+        }
+      ],
+      "columnKind": "utf16CodeUnits",
+      "originalUriBaseIds": {
+        "ROOTPATH": {
+          "uri": "file:///home/example/"
+        }
+      }
+    }
+  ]
+}

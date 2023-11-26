@@ -1,11 +1,13 @@
 import { Paper, Stack } from "@mui/material";
 import { Fragment } from "react";
+import { useEffect } from "react";
 import {
     AutocompleteInput,
     ChipField,
     DatagridConfigurable,
     FilterForm,
     FunctionField,
+    Identifier,
     ListContextProvider,
     NumberField,
     Pagination,
@@ -16,6 +18,7 @@ import {
     TopToolbar,
     useListController,
 } from "react-admin";
+import { useNavigate } from "react-router";
 
 import { PERMISSION_OBSERVATION_ASSESSMENT, PERMISSION_OBSERVATION_DELETE } from "../../access_control/types";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
@@ -51,7 +54,15 @@ function listFilters(product: Product) {
             alwaysOn
         />,
         <AutocompleteInput source="current_status" label="Status" choices={OBSERVATION_STATUS_CHOICES} alwaysOn />,
-        <TextInput source="origin_service_name" label="Service" alwaysOn />,
+        <ReferenceInput
+            source="origin_service"
+            reference="services"
+            sort={{ field: "name", order: "ASC" }}
+            filter={{ product: product.id }}
+            alwaysOn
+        >
+            <AutocompleteInputMedium label="Service" optionText="name" />
+        </ReferenceInput>,
         <TextInput source="origin_component_name_version" label="Component" alwaysOn />,
         <TextInput source="origin_docker_image_name_tag_short" label="Container" alwaysOn />,
         <TextInput source="origin_endpoint_hostname" label="Host" alwaysOn />,
@@ -89,6 +100,20 @@ const ListActions = () => (
 );
 
 const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) => {
+    const navigate = useNavigate();
+    function get_observations_url(branch_id: Identifier): string {
+        return `?displayedFilters=%7B%7D&filter=%7B%22current_status%22%3A%22Open%22%2C%22branch%22%3A${branch_id}%7D&order=ASC&sort=current_severity`;
+    }
+
+    useEffect(() => {
+        const current_product_id = localStorage.getItem("observationembeddedlist.product");
+        if (current_product_id == null || Number(current_product_id) !== product.id) {
+            localStorage.removeItem("RaStore.observations.embedded");
+            localStorage.setItem("observationembeddedlist.product", product.id);
+            navigate(get_observations_url(product.repository_default_branch));
+        }
+    }, [product, navigate]);
+
     const listContext = useListController({
         filter: { product: Number(product.id) },
         perPage: 25,
@@ -106,8 +131,6 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
     if (listContext.data === undefined) {
         listContext.data = [];
     }
-
-    localStorage.setItem("observationembeddedlist.product", product.id);
 
     return (
         <ListContextProvider value={listContext}>
@@ -133,8 +156,8 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
                         <TextField source="branch_name" label="Branch" />
                         <TextField source="title" />
                         <SeverityField source="current_severity" />
-                        <NumberField source="epss_score" label="EPSS" />
                         <ChipField source="current_status" label="Status" />
+                        <NumberField source="epss_score" label="EPSS" />
                         <TextField source="origin_service_name" label="Service" />
                         <TextField source="origin_component_name_version" label="Component" />
                         <TextField source="origin_docker_image_name_tag_short" label="Container" />

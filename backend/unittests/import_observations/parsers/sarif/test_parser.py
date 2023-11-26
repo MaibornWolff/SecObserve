@@ -136,7 +136,7 @@ class TestSarifParser(TestCase):
             self.assertEqual("hardcoded_bind_all_interfaces", observation.title)
             description = """Possible binding to all interfaces.
 
-**Snippet:** ```ALLOWED_HOSTS = env("ALLOWED_HOSTS", default=["localhost", "0.0.0.0", "127.0.0.1"])```
+**Snippet:** `ALLOWED_HOSTS = env("ALLOWED_HOSTS", default=["localhost", "0.0.0.0", "127.0.0.1"])`
 
 **Issue_Confidence:** MEDIUM
 
@@ -174,8 +174,6 @@ class TestSarifParser(TestCase):
             self.assertEqual("Docker Socket Mounted In Container", observation.title)
             description = """There is a docker socket named 'docker.sock' mounted in a volume
 
-**Rule short description:** Docker Socket Mounted In Container
-
 **Rule full description:** Docker socket docker.sock should not be mounted on host. If the docker socket is mounted, it can allow its processes to execute docker commands.
 
 """
@@ -198,6 +196,54 @@ class TestSarifParser(TestCase):
             self.assertEqual("Result", observation.unsaved_evidences[1][0])
             self.assertIn(
                 '"ruleId": "d6355c88-1e8d-49e9-b2f2-f8a1ca12c75b"',
+                observation.unsaved_evidences[1][1],
+            )
+
+    def test_trivy_config(self):
+        with open(path.dirname(__file__) + "/files/trivy_config.sarif") as testfile:
+            parser = SARIFParser()
+            check, messages, data = parser.check_format(testfile)
+            observations = parser.get_observations(data)
+
+            self.assertTrue(check)
+            self.assertEqual(0, len(messages))
+            self.assertEqual(1, len(observations))
+
+            observation = observations[0]
+            self.assertEqual("Trivy / 0.47.0", observation.scanner)
+            self.assertEqual(
+                "Ensure that the expiration date is set on all keys", observation.title
+            )
+            description = """**Rule full description:** Expiration Date is an optional Key Vault Key behavior and is not set by default.
+
+Set when the resource will be become inactive.
+
+**Precision:** very-high
+
+**Security-Severity:** 5.5
+
+**Tags:** ['misconfiguration', 'security', 'MEDIUM']
+
+"""
+            self.assertEqual(description, observation.description)
+            self.assertEqual(
+                "modules/azure-cosmosdb/main.tf", observation.origin_source_file
+            )
+            self.assertEqual(164, observation.origin_source_line_start)
+            self.assertEqual(176, observation.origin_source_line_end)
+            self.assertEqual(Observation.SEVERITY_MEDIUM, observation.parser_severity)
+            self.assertEqual(
+                "https://avd.aquasec.com/misconfig/avd-azu-0014",
+                observation.unsaved_references[0],
+            )
+            self.assertEqual("Rule", observation.unsaved_evidences[0][0])
+            self.assertIn(
+                '"id": "AVD-AZU-0014"',
+                observation.unsaved_evidences[0][1],
+            )
+            self.assertEqual("Result", observation.unsaved_evidences[1][0])
+            self.assertIn(
+                '"ruleId": "AVD-AZU-0014"',
                 observation.unsaved_evidences[1][1],
             )
 

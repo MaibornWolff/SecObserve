@@ -17,6 +17,7 @@ from application.core.models import (
     Parser,
     Product,
     Product_Member,
+    Service,
 )
 
 AGE_DAY = "Today"
@@ -123,6 +124,17 @@ class BranchFilter(FilterSet):
         fields = ["product", "name"]
 
 
+class ServiceFilter(FilterSet):
+    ordering = OrderingFilter(
+        # tuple-mapping retains order
+        fields=(("name", "name")),
+    )
+
+    class Meta:
+        model = Service
+        fields = ["product", "name"]
+
+
 class ParserFilter(FilterSet):
     name = CharFilter(field_name="name", lookup_expr="icontains")
     type = ChoiceFilter(field_name="type", choices=Parser.TYPE_CHOICES)
@@ -199,6 +211,7 @@ class ObservationFilter(FilterSet):
             "scanner",
             "upload_filename",
             "api_configuration_name",
+            "origin_service",
         ]
 
     def get_age(self, queryset, field_name, value):  # pylint: disable=unused-argument

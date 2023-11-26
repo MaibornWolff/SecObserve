@@ -17,7 +17,7 @@ import {
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { humanReadableDate } from "../../commons/functions";
-import { AutocompleteInputMedium } from "../../commons/layout/themes";
+import { AutocompleteInputMedium, AutocompleteInputWide } from "../../commons/layout/themes";
 import {
     AGE_CHOICES,
     OBSERVATION_SEVERITY_CHOICES,
@@ -34,12 +34,14 @@ const listFilters = [
         <AutocompleteInputMedium optionText="name" />
     </ReferenceInput>,
     <ReferenceInput source="branch" reference="branches" sort={{ field: "name", order: "ASC" }} alwaysOn>
-        <AutocompleteInputMedium optionText="name" />
+        <AutocompleteInputWide optionText="name_with_product" />
     </ReferenceInput>,
     <TextInput source="title" alwaysOn />,
     <AutocompleteInput source="current_severity" label="Severity" choices={OBSERVATION_SEVERITY_CHOICES} alwaysOn />,
     <AutocompleteInput source="current_status" label="Status" choices={OBSERVATION_STATUS_CHOICES} alwaysOn />,
-    <TextInput source="origin_service_name" label="Service" />,
+    <ReferenceInput label="Service" source="origin_service" reference="services" sort={{ field: "name", order: "ASC" }}>
+        <AutocompleteInputWide label="Service" optionText="name_with_product" />
+    </ReferenceInput>,
     <TextInput source="origin_component_name_version" label="Component" />,
     <TextInput source="origin_docker_image_name_tag_short" label="Container" />,
     <TextInput source="origin_endpoint_hostname" label="Host" />,
@@ -78,8 +80,8 @@ const ObservationList = () => {
                 <TextField source="branch_name" label="Branch" />
                 <TextField source="title" />
                 <SeverityField source="current_severity" />
-                <NumberField source="epss_score" label="EPSS" />
                 <ChipField source="current_status" label="Status" />
+                <NumberField source="epss_score" label="EPSS" />
                 <TextField source="origin_service_name" label="Service" />
                 <TextField source="origin_component_name_version" label="Component" />
                 <TextField source="origin_docker_image_name_tag_short" label="Container" />

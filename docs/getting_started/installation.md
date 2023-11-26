@@ -47,7 +47,7 @@ services:
       - default
 
   frontend:
-    image: maibornwolff/secobserve-frontend:1.0.1
+    image: maibornwolff/secobserve-frontend:1.1.0
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=Host(`secobserve.localhost`)"
@@ -63,7 +63,7 @@ services:
       - traefik
 
   backend:
-    image: maibornwolff/secobserve-backend:1.0.1
+    image: maibornwolff/secobserve-backend:1.1.0
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend.rule=Host(`secobserve-backend.localhost`)"
@@ -89,6 +89,7 @@ services:
       FIELD_ENCRYPTION_KEY: ${SO_FIELD_ENCRYPTION_KEY:-DtlkqVb3wlaVdJK_BU-3mB4wwuuf8xx8YNInajiJ7GU=}
       # --- OpenID Connect ---
       OIDC_AUTHORITY: ${SO_OIDC_AUTHORITY:-}
+      OIDC_CLIENT_ID: ${SO_OIDC_CLIENT_ID:-}
       OIDC_USERNAME: ${SO_OIDC_USERNAME:-}
       OIDC_FIRST_NAME: ${SO_OIDC_FIRST_NAME:-}
       OIDC_LAST_NAME: ${SO_OIDC_LAST_NAME:-}

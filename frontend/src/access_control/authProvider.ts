@@ -56,8 +56,11 @@ const authProvider: AuthProvider = {
     },
     checkError: (error) => {
         if (error) {
-            const status = error.status;
-            if (status === 401 || status === 403) {
+            if (error.status === 401 || error.status === 403) {
+                if (oidc_signed_in()) {
+                    const user_manager = new UserManager(oidcConfig);
+                    return user_manager.signinRedirect();
+                }
                 return Promise.reject({ message: error.message });
             }
         }
@@ -66,9 +69,8 @@ const authProvider: AuthProvider = {
     checkAuth: () => {
         if (oidc_signed_in() || jwt_signed_in()) {
             return Promise.resolve();
-        } else {
-            return Promise.reject({ message: false });
         }
+        return Promise.reject({ message: false });
     },
     getPermissions: () => Promise.reject(),
     getIdentity: async () => {

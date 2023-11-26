@@ -50,6 +50,7 @@ services:
       FIELD_ENCRYPTION_KEY: ${SO_FIELD_ENCRYPTION_KEY:-DtlkqVb3wlaVdJK_BU-3mB4wwuuf8xx8YNInajiJ7GU=}
       # --- OpenID Connect ---
       OIDC_AUTHORITY: ${SO_OIDC_AUTHORITY:-}
+      OIDC_CLIENT_ID: ${SO_OIDC_CLIENT_ID:-}
       OIDC_USERNAME: ${SO_OIDC_USERNAME:-}
       OIDC_FIRST_NAME: ${SO_OIDC_FIRST_NAME:-}
       OIDC_LAST_NAME: ${SO_OIDC_LAST_NAME:-}
@@ -72,7 +73,7 @@ services:
       - "3306:3306"
 
   postgres:
-    image: postgres:15.4-alpine
+    image: postgres:15.5-alpine
     environment:
       POSTGRES_DB: ${SO_POSTGRES_DB:-secobserve}
       POSTGRES_USER: ${SO_POSTGRES_USER:-secobserve}

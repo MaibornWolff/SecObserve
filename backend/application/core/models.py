@@ -267,6 +267,77 @@ class Branch(Model):
         ).count()
 
 
+class Service(Model):
+    product = ForeignKey(Product, on_delete=CASCADE)
+    name = CharField(max_length=255)
+
+    class Meta:
+        unique_together = (
+            "product",
+            "name",
+        )
+        indexes = [
+            Index(fields=["name"]),
+        ]
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def open_critical_observation_count(self):
+        return Observation.objects.filter(
+            origin_service=self,
+            branch=self.product.repository_default_branch,
+            current_severity=Observation.SEVERITY_CRITICAL,
+            current_status=Observation.STATUS_OPEN,
+        ).count()
+
+    @property
+    def open_high_observation_count(self):
+        return Observation.objects.filter(
+            origin_service=self,
+            branch=self.product.repository_default_branch,
+            current_severity=Observation.SEVERITY_HIGH,
+            current_status=Observation.STATUS_OPEN,
+        ).count()
+
+    @property
+    def open_medium_observation_count(self):
+        return Observation.objects.filter(
+            origin_service=self,
+            branch=self.product.repository_default_branch,
+            current_severity=Observation.SEVERITY_MEDIUM,
+            current_status=Observation.STATUS_OPEN,
+        ).count()
+
+    @property
+    def open_low_observation_count(self):
+        return Observation.objects.filter(
+            origin_service=self,
+            branch=self.product.repository_default_branch,
+            current_severity=Observation.SEVERITY_LOW,
+            current_status=Observation.STATUS_OPEN,
+        ).count()
+
+    @property
+    def open_none_observation_count(self):
+        return Observation.objects.filter(
+            origin_service=self,
+            branch=self.product.repository_default_branch,
+            current_severity=Observation.SEVERITY_NONE,
+            current_status=Observation.STATUS_OPEN,
+        ).count()
+
+    @property
+    def open_unkown_observation_count(self):
+        return Observation.objects.filter(
+            origin_service=self,
+            branch=self.product.repository_default_branch,
+            current_severity=Observation.SEVERITY_UNKOWN,
+            current_status=Observation.STATUS_OPEN,
+        ).count()
+
+
 class Product_Member(Model):
     product = ForeignKey(Product, on_delete=CASCADE)
     user = ForeignKey(User, on_delete=CASCADE)
@@ -395,6 +466,7 @@ class Observation(Model):
     origin_component_name_version = CharField(max_length=513, blank=True)
     origin_component_purl = CharField(max_length=255, blank=True)
     origin_component_cpe = CharField(max_length=255, blank=True)
+    origin_component_dependencies = TextField(max_length=2048, blank=True)
     origin_docker_image_name = CharField(max_length=255, blank=True)
     origin_docker_image_tag = CharField(max_length=255, blank=True)
     origin_docker_image_name_tag = CharField(max_length=513, blank=True)
@@ -410,6 +482,7 @@ class Observation(Model):
     origin_endpoint_query = TextField(max_length=2048, blank=True)
     origin_endpoint_fragment = TextField(max_length=2048, blank=True)
     origin_service_name = CharField(max_length=255, blank=True)
+    origin_service = ForeignKey(Service, on_delete=PROTECT, null=True)
     origin_source_file = CharField(max_length=255, blank=True)
     origin_source_line_start = IntegerField(
         null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]

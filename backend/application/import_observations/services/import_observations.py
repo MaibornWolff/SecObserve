@@ -1,3 +1,4 @@
+import os
 from dataclasses import dataclass
 from typing import Optional, Tuple
 
@@ -12,6 +13,7 @@ from application.core.models import (
     Parser,
     Product,
     Reference,
+    Service,
 )
 from application.core.queries.observation import (
     get_observations_for_vulnerability_check,
@@ -84,7 +86,9 @@ def file_upload_observations(
     imported_observations = parser_instance.get_observations(data)
 
     filename = (
-        file_upload_parameters.file.name if file_upload_parameters.file.name else ""
+        os.path.basename(file_upload_parameters.file.name)
+        if file_upload_parameters.file.name
+        else ""
     )
 
     import_parameters = ImportParameters(
@@ -284,6 +288,10 @@ def prepare_imported_observation(
     imported_observation.import_last_seen = timezone.now()
     if import_parameters.service:
         imported_observation.origin_service_name = import_parameters.service
+        service = Service.objects.get_or_create(
+            product=import_parameters.product, name=import_parameters.service
+        )[0]
+        imported_observation.origin_service = service
     if import_parameters.docker_image_name_tag:
         imported_observation.origin_docker_image_name_tag = (
             import_parameters.docker_image_name_tag
@@ -308,6 +316,10 @@ def process_current_observation(
     observation_before.cwe = imported_observation.cwe
     observation_before.found = imported_observation.found
     observation_before.scanner = imported_observation.scanner
+
+    observation_before.origin_component_dependencies = (
+        imported_observation.origin_component_dependencies
+    )
 
     previous_severity = observation_before.current_severity
     observation_before.parser_severity = imported_observation.parser_severity

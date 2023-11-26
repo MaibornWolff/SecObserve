@@ -61,8 +61,8 @@ const ProductList = () => {
             <Datagrid size="medium" rowClick="show" bulkActionButtons={<BulkActionButtons />}>
                 <TextField source="name" />
                 <TextField source="product_group_name" label="Product Group" />
-                <SecurityGateTextField />
                 <TextField source="repository_default_branch_name" label="Default branch" sortable={false} />
+                <SecurityGateTextField />
                 <ObservationsCountField withLabel={false} />
                 <FunctionField<Product>
                     label="Last observation change"

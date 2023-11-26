@@ -7,13 +7,22 @@ from application.access_control.services.roles_permissions import (
     get_roles_with_permissions,
 )
 from application.commons.services.global_request import get_current_user
-from application.core.models import Branch, Observation, Product, Product_Member
+from application.core.models import (
+    Branch,
+    Observation,
+    Product,
+    Product_Member,
+    Service,
+)
 from application.core.queries.product_member import get_product_member
-from application.import_observations.models import Api_Configuration
+from application.import_observations.models import (
+    Api_Configuration,
+    Vulnerability_Check,
+)
 from application.rules.models import Rule
 
 
-def user_has_permission(  # pylint: disable=too-many-return-statements
+def user_has_permission(  # pylint: disable=too-many-return-statements,too-many-branches
     obj, permission: int, user: User = None
 ) -> bool:
     # There are a lot of different objects that need to be checked for permissions.
@@ -69,6 +78,9 @@ def user_has_permission(  # pylint: disable=too-many-return-statements
     if isinstance(obj, Branch) and permission in Permissions.get_branch_permissions():
         return user_has_permission(obj.product, permission, user)
 
+    if isinstance(obj, Service) and permission in Permissions.get_service_permissions():
+        return user_has_permission(obj.product, permission, user)
+
     if (
         isinstance(obj, Observation)
         and permission in Permissions.get_observation_permissions()
@@ -78,6 +90,12 @@ def user_has_permission(  # pylint: disable=too-many-return-statements
     if (
         isinstance(obj, Api_Configuration)
         and permission in Permissions.get_api_configuration_permissions()
+    ):
+        return user_has_permission(obj.product, permission, user)
+
+    if (
+        isinstance(obj, Vulnerability_Check)
+        and permission in Permissions.get_vulnerability_check_permissions()
     ):
         return user_has_permission(obj.product, permission, user)
 

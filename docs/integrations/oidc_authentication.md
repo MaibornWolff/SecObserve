@@ -14,17 +14,18 @@ Backend
 
 | Environment variable | Value                                               |
 |----------------------|-----------------------------------------------------|
-| `OIDC_AUTHORITY`   | `https://keycloak.example.com/realms/NAME_OF_REALM` |
-| `OIDC_USERNAME`    | `preferred_username`                                |
-| `OIDC_FIRST_NAME`  | `given_name`                                        |
-| `OIDC_LAST_NAME`   | `family_name`                                       |
-| `OIDC_EMAIL`       | `email`                                             |
+| `OIDC_AUTHORITY`     | `https://keycloak.example.com/realms/NAME_OF_REALM` |
+| `OIDC_CLIENT_ID`     | `CLIENT_ID`                                         |
+| `OIDC_USERNAME`      | `preferred_username`                                |
+| `OIDC_FIRST_NAME`    | `given_name`                                        |
+| `OIDC_LAST_NAME`     | `family_name`                                       |
+| `OIDC_EMAIL`         | `email`                                             |
 
 
 Frontend
 
-| Environment variable              | Value                                               |
-|-----------------------------------|-----------------------------------------------------|
+| Environment variable            | Value                                               |
+|---------------------------------|-----------------------------------------------------|
 | `OIDC_ENABLE`                   | `true`                                              |
 | `OIDC_AUTHORITY`                | `https://keycloak.example.com/realms/NAME_OF_REALM` |
 | `OIDC_CLIENT_ID`                | `CLIENT_ID`                                         |
@@ -42,17 +43,18 @@ Backend
 
 | Environment variable | Value                                              |
 |----------------------|----------------------------------------------------|
-| `OIDC_AUTHORITY`   | `https://login.microsoftonline.com/TENANT_ID`      |
-| `OIDC_USERNAME`    | `upn`                                              |
-| `OIDC_FIRST_NAME`  | `given_name`                                       |
-| `OIDC_LAST_NAME`   | `family_name`                                      |
-| `OIDC_EMAIL`       | `upn`                                              |
+| `OIDC_AUTHORITY`     | `https://login.microsoftonline.com/TENANT_ID`      |
+| `OIDC_CLIENT_ID`     | `CLIENT_ID`                                        |
+| `OIDC_USERNAME`      | `upn`                                              |
+| `OIDC_FIRST_NAME`    | `given_name`                                       |
+| `OIDC_LAST_NAME`     | `family_name`                                      |
+| `OIDC_EMAIL`         | `upn`                                              |
 
 
 Frontend
 
-| Environment variable              | Value                                              |
-|-----------------------------------|----------------------------------------------------|
+| Environment variable            | Value                                              |
+|---------------------------------|----------------------------------------------------|
 | `OIDC_ENABLE`                   | `true`                                             |
 | `OIDC_AUTHORITY`                | `https://login.microsoftonline.com/TENANT_ID`      |
 | `OIDC_CLIENT_ID`                | `CLIENT_ID`                                        |

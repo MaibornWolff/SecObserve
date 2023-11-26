@@ -51,6 +51,7 @@ services:
       FIELD_ENCRYPTION_KEY: ${SO_FIELD_ENCRYPTION_KEY:-DtlkqVb3wlaVdJK_BU-3mB4wwuuf8xx8YNInajiJ7GU=}
       # --- OpenID Connect ---
       OIDC_AUTHORITY: ${SO_OIDC_AUTHORITY:-http://keycloak:8080/realms/secobserve}
+      OIDC_CLIENT_ID: ${SO_OIDC_CLIENT_ID:-secobserve}
       OIDC_USERNAME: ${SO_OIDC_USERNAME:-preferred_username}
       OIDC_FIRST_NAME: ${SO_OIDC_FIRST_NAME:-given_name}
       OIDC_LAST_NAME: ${SO_OIDC_LAST_NAME:-family_name}
@@ -79,7 +80,7 @@ services:
       - "3306:3306"
 
   postgres:
-    image: postgres:15.4-alpine
+    image: postgres:15.5-alpine
     volumes:
       - dev_postgres_data:/var/lib/postgresql/data
     environment:
@@ -97,7 +98,7 @@ services:
       - "8025:8025"
 
   keycloak:
-    image: keycloak/keycloak:22.0.5
+    image: keycloak/keycloak:23.0.0
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
