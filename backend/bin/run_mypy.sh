@@ -27,4 +27,4 @@ export OIDC_EMAIL=dummy
 # --- Huey ---
 export HUEY_FILENAME=./huey.db
 
-mypy application
+poetry run mypy application
