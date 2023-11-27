@@ -32,17 +32,17 @@ jobs:
       - name: Flake8
         working-directory: ./backend
         run: |
-          $GITHUB_WORKSPACE/backend/.venv/bin/flake8 . --count --show-source --statistics
+          $GITHUB_WORKSPACE/backend/.venv/bin/flake8 . --exclude *.env* --count --show-source --statistics
 
       - name: Black
         working-directory: ./backend
         run: |
-          black . --check
+          black . --check --exclude .*\.venv.*
 
       - name: isort
         working-directory: ./backend
         run: |
-          isort . -c
+          isort . -c --skip .venv
 
       - name: MyPy
         working-directory: ./backend
