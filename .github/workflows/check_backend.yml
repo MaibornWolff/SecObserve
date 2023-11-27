@@ -32,7 +32,7 @@ jobs:
       - name: Flake8
         working-directory: ./backend
         run: |
-          $GITHUB_WORKSPACE/backend/.venv/bin/flake8 . --exclude *.env* --count --show-source --statistics
+          $GITHUB_WORKSPACE/backend/.venv/bin/flake8 . --exclude **/.venv/** --count --show-source --statistics
 
       - name: Black
         working-directory: ./backend
