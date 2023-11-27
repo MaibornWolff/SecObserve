@@ -7,9 +7,6 @@ permissions: read-all
 
 env:
   POETRY_NO_INTERACTION: 1
-  POETRY_VIRTUALENVS_IN_PROJECT: 1 
-  POETRY_VIRTUALENVS_CREATE: 1
-  VIRTUAL_ENV: $GITHUB_WORKSPACE/.venv
 
 jobs:
   build:
@@ -26,22 +23,23 @@ jobs:
       - name: Install dependencies
         working-directory: ./backend
         run: |
-          python -m pip  install --upgrade pip
-          python -m pip install --upgrade -r code_quality_requirements.txt
+          python -m pip install --upgrade poetry
+          python -m poetry install  --without prod,unittests --no-root
+
       - name: Flake8
         working-directory: ./backend
         run: |
-          flake8 . --count --show-source --statistics
+          poetry run flake8 . --count --show-source --statistics
 
       - name: Black
         working-directory: ./backend
         run: |
-          black . --check --exclude .*\.venv.*
+          poetry run black . --check
 
       - name: isort
         working-directory: ./backend
         run: |
-          isort . -c --skip .venv
+          poetry run isort . -c
 
       - name: MyPy
         working-directory: ./backend
