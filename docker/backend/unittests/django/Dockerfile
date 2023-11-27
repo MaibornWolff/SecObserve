@@ -9,8 +9,6 @@ ARG BUILD_ENVIRONMENT=unittests
 # kics-scan ignore-block
 RUN apk add --no-cache --virtual .build-deps \
     ca-certificates gcc postgresql-dev linux-headers musl-dev libffi-dev mariadb-dev
-    # These 2 libraries would only be needed for the Pillow package
-    # jpeg-dev zlib-dev
 
 # install dependencies with poetry
 RUN pip install poetry==1.7.1

@@ -27,4 +27,8 @@ export OIDC_EMAIL=dummy
 # --- Huey ---
 export HUEY_FILENAME=./huey.db
 
-poetry run pylint application
+if [ -z "$GITHUB_WORKSPACE" ]; then 
+    pylint application
+else 
+    poetry run pylint application
+fi

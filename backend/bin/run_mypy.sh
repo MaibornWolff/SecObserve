@@ -27,4 +27,8 @@ export OIDC_EMAIL=dummy
 # --- Huey ---
 export HUEY_FILENAME=./huey.db
 
-poetry run mypy application
+if [ -z "$GITHUB_WORKSPACE" ]; then 
+    mypy application
+else 
+    poetry run mypy application
+fi
