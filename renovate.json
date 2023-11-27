@@ -19,7 +19,8 @@
     "rebaseWhen": "conflicted",
     "pip_requirements": {
         "fileMatch": [
-            "mkdocs_requirements.txt",
+            "backend/code_quality_requirements.txt",
+            "mkdocs_requirements.txt"
         ]
     },
     "packageRules": [
