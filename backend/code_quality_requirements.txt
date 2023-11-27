@@ -1,9 +1,0 @@
-# Code quality
-# ------------------------------------------------------------------------------
-flake8==6.1.0  # https://github.com/PyCQA/flake8
-flake8-isort==6.1.1  # https://github.com/gforcada/flake8-isort
-black==23.11.0  # https://github.com/psf/black
-pylint-django==2.5.5  # https://github.com/PyCQA/pylint-django
-mypy==1.7.1  # https://github.com/python/mypy
-django-stubs==4.2.6  # https://github.com/typeddjango/django-stubs
-djangorestframework-stubs==3.14.4  # https://github.com/typeddjango/djangorestframework-stubs
