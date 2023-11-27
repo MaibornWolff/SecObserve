@@ -19,12 +19,7 @@
     "rebaseWhen": "conflicted",
     "pip_requirements": {
         "fileMatch": [
-            "mkdocs_requirements.txt",
-            "backend/requirements/base.txt",
-            "backend/requirements/dev.txt",
-            "backend/requirements/prod.txt",
-            "backend/requirements/unittests.txt",
-            "\\.requirements$"
+            "mkdocs_requirements.txt"
         ]
     },
     "packageRules": [

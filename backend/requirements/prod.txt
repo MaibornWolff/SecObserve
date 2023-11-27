@@ -1,5 +1,0 @@
-# PRECAUTION: avoid prod dependencies that aren't in dev
-
--r base.txt
-
-gunicorn==21.2.0  # https://github.com/benoitc/gunicorn

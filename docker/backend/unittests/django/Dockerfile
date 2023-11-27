@@ -9,14 +9,19 @@ ARG BUILD_ENVIRONMENT=unittests
 # kics-scan ignore-block
 RUN apk add --no-cache --virtual .build-deps \
     ca-certificates gcc postgresql-dev linux-headers musl-dev libffi-dev mariadb-dev
-    # These 2 libraries would only be needed for the Pillow package
-    # jpeg-dev zlib-dev
 
-# Requirements are installed here to ensure they will be cached.
-COPY ./backend/requirements .
+# install dependencies with poetry
+RUN pip install poetry==1.7.1
 
-# Create Python Dependency and Sub-Dependency Wheels.
-RUN pip wheel --wheel-dir /usr/src/app/wheels -r ${BUILD_ENVIRONMENT}.txt
+ENV POETRY_NO_INTERACTION=1 \
+    POETRY_VIRTUALENVS_IN_PROJECT=1 \
+    POETRY_VIRTUALENVS_CREATE=1 \
+    POETRY_CACHE_DIR=/tmp/poetry_cache
+
+WORKDIR /
+
+COPY backend/pyproject.toml backend/poetry.lock ./
+RUN poetry install --without dev,prod --no-root && rm -rf $POETRY_CACHE_DIR
 
 
 # Python 'run' stage
@@ -36,10 +41,10 @@ WORKDIR ${APP_HOME}
 ARG user=django
 ARG group=django
 
-# use wheels to install python dependencies
-COPY --from=python-build-stage /usr/src/app/wheels  /wheels/
-RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
-    && rm -rf /wheels/
+# copy dependencies from build stage
+ENV VIRTUAL_ENV=/.venv \
+    PATH="/.venv/bin:$PATH"
+COPY --from=python-build-stage ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
 # copy startup scripts
 COPY ./docker/backend/unittests/django/entrypoint /entrypoint
