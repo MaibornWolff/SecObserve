@@ -18,14 +18,14 @@ RUN sed -i 's/version_unkown/'"${VERSION}"'/g' ./src/commons/about/About.tsx
 RUN npm run build
 
 # production environment
-FROM nginxinc/nginx-unprivileged:stable-alpine
+FROM nginxinc/nginx-unprivileged:stable-alpine3.18
 
 USER root
 
 # kics-scan ignore-block
 # versions of dependencies from distribution are ok
 RUN apk del curl && \
-        apk add --no-cache --virtual --update nodejs npm && \
+        apk add --no-cache --virtual --update npm && \
         npm i -g runtime-env-cra@0.2.4
 
 COPY --from=build /app/build /usr/share/nginx/html
