@@ -11,7 +11,7 @@ authors = [
 python = ">= 3.10, < 3.12"
 # Django
 # ------------------------------------------------------------------------------
-django = "4.2.7"  # https://www.djangoproject.com/
+django = "4.2.8"  # https://www.djangoproject.com/
 django-environ = "0.11.2"  # https://github.com/joke2k/django-environ
 django-model-utils = "4.3.1"  # https://github.com/jazzband/django-model-utils
 django-filter = "23.4"  # https://github.com/carltongibson/django-filter 
