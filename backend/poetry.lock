@@ -1376,17 +1376,17 @@ et-xmlfile = "*"
 
 [[package]]
 name = "packageurl-python"
-version = "0.13.0"
+version = "0.13.1"
 description = "A purl aka. Package URL parser and builder"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "packageurl-python-0.13.0.tar.gz", hash = "sha256:4c64c533ba6c434aea5147151ff0a9335585bccfa7ff6e12775122f8b3fff8a6"},
-    {file = "packageurl_python-0.13.0-py3-none-any.whl", hash = "sha256:ad1a96f7b2397268ada89df10fb684b5a831e1a085082b9d7d2f62ae25932cfe"},
+    {file = "packageurl-python-0.13.1.tar.gz", hash = "sha256:84f8053f4b85294b98b3b78715475847fb48f4525ec302d06dc35b26a9b3078a"},
+    {file = "packageurl_python-0.13.1-py3-none-any.whl", hash = "sha256:d35090c7ec1d7afc611679912151b2157f28f68e729b6fa56f8ea5422819eaed"},
 ]
 
 [package.extras]
-build = ["wheel"]
+build = ["setuptools", "wheel"]
 lint = ["black", "isort", "mypy"]
 sqlalchemy = ["sqlalchemy (>=2.0.0)"]
 test = ["pytest"]
@@ -2297,4 +2297,4 @@ brotli = ["Brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">= 3.10, < 3.12"
-content-hash = "2773e2a8b2a7c6df6126bbd5b6e3a02460af077470f25c552d14e67929d3fc17"
+content-hash = "88960682e76e8863a57a8af9a06d3cfbb7ccb6a44ee62bd570526b829153f51b"
