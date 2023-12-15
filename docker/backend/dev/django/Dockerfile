@@ -12,7 +12,8 @@ RUN apk add --no-cache --virtual .build-deps \
     ca-certificates gcc postgresql-dev linux-headers musl-dev libffi-dev mariadb-dev
 
 # install dependencies with poetry
-RUN pip install poetry==1.7.1
+COPY ./backend/poetry_requirements.txt ./
+RUN pip install --no-cache -r ./poetry_requirements.txt
 
 ENV POETRY_NO_INTERACTION=1 \
     POETRY_VIRTUALENVS_IN_PROJECT=1 \
