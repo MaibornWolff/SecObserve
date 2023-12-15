@@ -36,6 +36,9 @@ services:
       ADMIN_USER: ${SO_ADMIN_USER:-admin}
       ADMIN_PASSWORD: ${SO_ADMIN_PASSWORD:-admin}
       ADMIN_EMAIL: ${SO_ADMIN_EMAIL:-admin@example.com}
+      # --- Gunicorn ---
+      GUNICORN_WORKERS: ${SO_GUNICORN_WORKERS:-3}
+      GUNICORN_THREADS: ${SO_GUNICORN_THREADS:-10}
       # --- Database ---
       DATABASE_ENGINE: ${SO_DATABASE_ENGINE:-django.db.backends.postgresql}
       DATABASE_HOST: ${SO_DATABASE_HOST:-postgres}
