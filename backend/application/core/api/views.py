@@ -216,9 +216,8 @@ class ProductViewSet(ModelViewSet):
         product = self.__get_product(pk)
         user_has_permission_or_403(product, Permissions.Product_Rule_Apply)
 
-        for parser in Parser.objects.all():
-            rule_engine = Rule_Engine(product, parser)
-            rule_engine.apply_all_rules_for_product_and_parser()
+        rule_engine = Rule_Engine(product)
+        rule_engine.apply_all_rules_for_product()
 
         return Response(status=HTTP_204_NO_CONTENT)
 

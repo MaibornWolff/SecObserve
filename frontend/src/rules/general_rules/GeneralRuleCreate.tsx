@@ -10,6 +10,9 @@ const transform = (data: any) => {
     if (data.title == null) {
         data.title = "";
     }
+    if (data.description_observation == null) {
+        data.description_observation = "";
+    }
     if (data.origin_component_name_version == null) {
         data.origin_component_name_version = "";
     }
@@ -41,13 +44,18 @@ const GeneralRuleCreate = () => {
                 <TextInputWide autoFocus source="name" validate={requiredValidate} />
                 <TextInputWide multiline source="description" />
                 <ReferenceInput source="parser" reference="parsers" sort={{ field: "name", order: "ASC" }}>
-                    <SelectInput optionText="name" validate={requiredValidate} />
+                    <SelectInput optionText="name" />
                 </ReferenceInput>
                 <TextInputWide source="scanner_prefix" />
                 <TextInputWide
                     source="title"
                     label="Observation title"
                     helperText="Regular expression to match the observation's title"
+                />
+                <TextInputWide
+                    source="description_observation"
+                    label="Observation description"
+                    helperText="Regular expression to match the observation's description"
                 />
                 <TextInputWide
                     source="origin_component_name_version"
