@@ -1,5 +1,3 @@
-// to-do: currently does not work unless error is ignored, Es6 upgrade did not work either
-// eslint-disable-next-line no-undef
 module.exports = {
   env: {
     browser: true,
@@ -9,7 +7,7 @@ module.exports = {
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:security/recommended",
+    "plugin:security/recommended-legacy",
     "plugin:react-hooks/recommended",
   ],
   parser: "@typescript-eslint/parser",
@@ -26,8 +24,6 @@ module.exports = {
     react: {
       pragma: "React", // Pragma to use, default to "React"
       version: "detect", // React version. "detect" automatically picks the version you have installed.
-      // You can also use `16.0`, `16.3`, etc, if you want to override the detected value.
-      // It will default to "latest" and warn if missing, and to "detect" in the future
     },
   },
   overrides: [
