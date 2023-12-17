@@ -2,7 +2,7 @@ import re
 from typing import Optional
 
 from application.commons.services.global_request import get_current_user
-from application.core.models import Observation, Parser, Product
+from application.core.models import Observation, Product
 from application.core.services.observation import (
     get_current_severity,
     get_current_status,
@@ -44,9 +44,6 @@ class Rule_Engine:
 
         rule_found = False
         for rule in self.rules:
-            print("-----------------------------------------------")
-            print(vars(rule))
-            print("-----------------------------------------------")
             if (  # pylint: disable=too-many-boolean-expressions
                 (not rule.parser or observation.parser == rule.parser)
                 and (
