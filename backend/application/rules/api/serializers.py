@@ -9,6 +9,12 @@ class GeneralRuleSerializer(ModelSerializer):
         model = Rule
         exclude = ["product"]
 
+    def validate(self, attrs):
+        if not attrs.get("parser") and not attrs.get("scanner_prefix"):
+            raise ValidationError("Either Parser or Scanner Prefix must be set")
+
+        return super().validate(attrs)
+
 
 class ProductRuleSerializer(ModelSerializer):
     product_data = NestedProductSerializer(source="product", read_only=True)
@@ -23,3 +29,9 @@ class ProductRuleSerializer(ModelSerializer):
             raise ValidationError("Product cannot be changed")
 
         return value
+
+    def validate(self, attrs):
+        if not attrs.get("parser") and not attrs.get("scanner_prefix"):
+            raise ValidationError("Either Parser or Scanner Prefix must be set")
+
+        return super().validate(attrs)
