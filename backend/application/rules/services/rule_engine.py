@@ -117,7 +117,13 @@ class Rule_Engine:
             )
 
     def apply_all_rules_for_product(self) -> None:
-        for observation in Observation.objects.filter(product=self.product):
+        if self.product.is_product_group:
+            products = Product.objects.filter(product_group=self.product)
+            observations = Observation.objects.filter(product__in=products)
+        else:
+            observations = Observation.objects.filter(product=self.product)
+
+        for observation in observations:
             self.apply_rules_for_observation(observation)
 
     def _check_regex(self, pattern: str, value: str) -> bool:
