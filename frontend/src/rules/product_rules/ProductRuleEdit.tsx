@@ -36,6 +36,9 @@ const ProductRuleEdit = () => {
         if (data.title == null) {
             data.title = "";
         }
+        if (data.description_observation == null) {
+            data.description_observation = "";
+        }
         if (data.origin_component_name_version == null) {
             data.origin_component_name_version = "";
         }
@@ -63,6 +66,7 @@ const ProductRuleEdit = () => {
             parser: data.parser,
             scanner_prefix: data.scanner_prefix,
             title: data.title,
+            description_observation: data.description_observation,
             origin_component_name_version: data.origin_component_name_version,
             origin_docker_image_name_tag: data.origin_docker_image_name_tag,
             origin_endpoint_url: data.origin_endpoint_url,
@@ -136,13 +140,18 @@ const ProductRuleEdit = () => {
                     <SimpleForm onSubmit={product_rule_update} toolbar={<CustomToolbar />}>
                         <TextInputWide autoFocus source="name" validate={requiredValidate} />
                         <ReferenceInput source="parser" reference="parsers" sort={{ field: "name", order: "ASC" }}>
-                            <AutocompleteInputWide optionText="name" validate={requiredValidate} />
+                            <AutocompleteInputWide optionText="name" />
                         </ReferenceInput>
                         <TextInputWide source="scanner_prefix" />
                         <TextInputWide
                             source="title"
                             label="Observation title"
                             helperText="Regular expression to match the observation's title"
+                        />
+                        <TextInputWide
+                            source="description_observation"
+                            label="Observation description"
+                            helperText="Regular expression to match the observation's description"
                         />
                         <TextInputWide
                             source="origin_component_name_version"

@@ -38,6 +38,9 @@ const GeneralRuleShow = () => {
                         <ReferenceField source="parser" reference="parsers" link="show" />
                         {rule.scanner_prefix && <TextField source="scanner_prefix" />}
                         {rule.title && <TextField source="title" label="Observation title" />}
+                        {rule.description_observation && (
+                            <TextField source="description_observation" label="Observation description" />
+                        )}
                         {rule.origin_component_name_version && (
                             <TextField source="origin_component_name_version" label="Origin component name:version" />
                         )}

@@ -2,7 +2,7 @@ import re
 from typing import Optional
 
 from application.commons.services.global_request import get_current_user
-from application.core.models import Observation, Parser, Product
+from application.core.models import Observation, Product
 from application.core.services.observation import (
     get_current_severity,
     get_current_status,
@@ -15,28 +15,22 @@ from application.rules.models import Rule
 
 
 class Rule_Engine:
-    def __init__(self, product: Product, parser: Parser):
-        product_parser_rules = Rule.objects.filter(
-            product=product, parser=parser, enabled=True
-        )
+    def __init__(self, product: Product):
+        product_parser_rules = Rule.objects.filter(product=product, enabled=True)
         self.rules: list[Rule] = list(product_parser_rules)
 
         if product.product_group:
             product_group_parser_rules = Rule.objects.filter(
                 product=product.product_group,
-                parser=parser,
                 enabled=True,
             )
             self.rules += list(product_group_parser_rules)
 
         if product.apply_general_rules:
-            parser_rules = Rule.objects.filter(
-                product__isnull=True, parser=parser, enabled=True
-            )
-            self.rules += list(parser_rules)
+            general_rules = Rule.objects.filter(product__isnull=True, enabled=True)
+            self.rules += list(general_rules)
 
         self.product = product
-        self.parser = parser
 
     def apply_rules_for_observation(self, observation: Observation) -> None:
         previous_product_rule = None
@@ -51,7 +45,7 @@ class Rule_Engine:
         rule_found = False
         for rule in self.rules:
             if (  # pylint: disable=too-many-boolean-expressions
-                observation.parser == rule.parser
+                (not rule.parser or observation.parser == rule.parser)
                 and (
                     not rule.scanner_prefix
                     or observation.scanner.lower().startswith(
@@ -59,6 +53,9 @@ class Rule_Engine:
                     )
                 )
                 and self._check_regex(rule.title, observation.title)
+                and self._check_regex(
+                    rule.description_observation, observation.description
+                )
                 and self._check_regex(
                     rule.origin_component_name_version,
                     observation.origin_component_name_version,
@@ -119,10 +116,14 @@ class Rule_Engine:
                 observation, previous_product_rule, previous_general_rule
             )
 
-    def apply_all_rules_for_product_and_parser(self) -> None:
-        for observation in Observation.objects.filter(
-            product=self.product, parser=self.parser
-        ):
+    def apply_all_rules_for_product(self) -> None:
+        if self.product.is_product_group:
+            products = Product.objects.filter(product_group=self.product)
+            observations = Observation.objects.filter(product__in=products)
+        else:
+            observations = Observation.objects.filter(product=self.product)
+
+        for observation in observations:
             self.apply_rules_for_observation(observation)
 
     def _check_regex(self, pattern: str, value: str) -> bool:

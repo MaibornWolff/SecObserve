@@ -22,13 +22,15 @@ A part of the configuation is done with environment variables, which need to be 
 | `MYSQL_AZURE`          | optional    | Must be set if Azure Database for MySQL is used, to use the necessary SSL certificate. For **MySQL Flexible Server** it needs to have the value `flexible`, for **MySQL Single Server** the the value needs to be `single`. See [Connect using mysql command-line client with TLS/SSL](https://learn.microsoft.com/en-us/azure/mysql/flexible-server/how-to-connect-tls-ssl#connect-using-mysql-command-line-client-with-tlsssl) and [Configure SSL connectivity in your application to securely connect to Azure Database for MySQL](https://learn.microsoft.com/en-us/azure/mysql/single-server/how-to-configure-ssl#step-1-obtain-ssl-certificate).
 | `DJANGO_SECRET_KEY`    | mandatory   | A secret key for a particular Django installation. This is used to provide cryptographic signing, and should be set to a unique, unpredictable value with at least 50 characters, see [Django settings SECRET_KEY](https://docs.djangoproject.com/en/3.2/ref/settings/#secret-key).
 | `FIELD_ENCRYPTION_KEY` | mandatory   | Key to encrypt fields like the JWT secret. See [Generating an Encryption Key](https://gitlab.com/lansharkconsulting/django/django-encrypted-model-fields#generating-an-encryption-key) how to generate the key. |
-| `OIDC_AUTHORITY`     | mandatory   | The authority is a URL that hosts the OpenID configuration well-known endpoint.  |
-| `OIDC_CLIENT_ID`     | mandatory   | The client ID is the unique *Application (client) ID* assigned to your app by the OpenID Connect provider when the app
+| `GUNICORN_WORKERS`     | optional   | Number of worker processes for the Gunicorn web server, see [Gunicorn documentation](https://docs.gunicorn.org/en/stable/design.html#how-many-workers). Default is 3. |
+| `GUNICORN_THREADS`     | optional   | Number of worker threads for the Gunicorn web server, default is 10. |
+| `OIDC_AUTHORITY`       | mandatory   | The authority is a URL that hosts the OpenID configuration well-known endpoint.  |
+| `OIDC_CLIENT_ID`       | mandatory   | The client ID is the unique *Application (client) ID* assigned to your app by the OpenID Connect provider when the app
 was registered. |
-| `OIDC_USERNAME`      | mandatory   | The claim that contains the username to find or create the user. |
-| `OIDC_FIRST_NAME`    | mandatory   | The claim that contains the first name of the user. |
-| `OIDC_LAST_NAME`     | mandatory   | The claim that contains the last name of the user. |
-| `OIDC_EMAIL`         | mandatory   | The claim that contains the email address of the user. |
+| `OIDC_USERNAME`        | mandatory   | The claim that contains the username to find or create the user. |
+| `OIDC_FIRST_NAME`      | mandatory   | The claim that contains the first name of the user. |
+| `OIDC_LAST_NAME`       | mandatory   | The claim that contains the last name of the user. |
+| `OIDC_EMAIL`           | mandatory   | The claim that contains the email address of the user. |
 
 
 #### Frontend

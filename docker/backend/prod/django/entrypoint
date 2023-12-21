@@ -1,7 +1,6 @@
 #!/bin/sh
 
 set -o errexit
-set -o nounset
 
 if [ "${DATABASE_ENGINE}" != "django.db.backends.sqlite3" ]; then
     if [ -z "${DATABASE_USER}" ]; then
@@ -49,4 +48,14 @@ python /app/manage.py collectstatic --noinput
 
 python manage.py run_huey --flush-locks &
 
-/usr/local/bin/gunicorn config.wsgi --bind 0.0.0.0:5000 --timeout 1200 --chdir=/app -w 2 -k gthread --threads 10
+if [ -z "$GUNICORN_WORKERS" ]; then
+    echo "GUNICORN_WORKERS is not set, defaulting to 3"
+    export GUNICORN_WORKERS=3
+fi
+
+if [ -z "${GUNICORN_THREADS}" ]; then
+    echo "GUNICORN_THREADS is not set, defaulting to 10"
+    GUNICORN_THREADS=10
+fi
+
+gunicorn config.wsgi --bind 0.0.0.0:5000 --timeout 1200 --chdir=/app -w $GUNICORN_WORKERS -k gthread --threads $GUNICORN_THREADS

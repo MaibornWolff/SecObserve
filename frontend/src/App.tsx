@@ -26,7 +26,10 @@ const i18nProvider = polyglotI18nProvider(() => {
 
 const App = () => {
     return (
-        <AuthProvider {...oidcConfig}>
+        <AuthProvider
+            {...oidcConfig} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+            // nosemgrep because the props are well defined in the import
+        >
             <Admin
                 title=""
                 dataProvider={drfProvider()}

@@ -196,9 +196,7 @@ def process_data(import_parameters: ImportParameters) -> Tuple[int, int, int, st
 
     scanner = ""
 
-    rule_engine = Rule_Engine(
-        product=import_parameters.product, parser=import_parameters.parser
-    )
+    rule_engine = Rule_Engine(product=import_parameters.product)
 
     # Read current observations for the same vulnerability check, to find updated and resolved observations
     observations_before: dict[str, Observation] = {}

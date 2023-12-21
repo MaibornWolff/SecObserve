@@ -34,6 +34,9 @@ services:
       ADMIN_USER: admin-user
       ADMIN_PASSWORD: admin-password
       ADMIN_EMAIL: admin@example.com
+      # --- Gunicorn ---
+      GUNICORN_WORKERS: 3
+      GUNICORN_THREADS: 10
       # --- Database ---
       DATABASE_ENGINE: django.db.backends.sqlite3
       # --- Security ---
@@ -55,7 +58,7 @@ services:
 
 
   playwright:
-    image: mcr.microsoft.com/playwright:v1.40.0
+    image: mcr.microsoft.com/playwright:v1.40.1
     depends_on:
       - frontend
     environment:

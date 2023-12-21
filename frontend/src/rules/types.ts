@@ -7,6 +7,7 @@ export interface GeneralRule extends RaRecord {
     parser: Identifier;
     scanner_prefix: string;
     title: string;
+    description_observation: string;
     origin_component_name_version: string;
     origin_docker_image_name_tag: string;
     origin_endpoint_url: string;

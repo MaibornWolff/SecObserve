@@ -68,6 +68,9 @@ const ProductRuleCreate = ({ id }: ProductRuleCreateProps) => {
         if (data.title == null) {
             data.title = "";
         }
+        if (data.description_observation == null) {
+            data.description_observation = "";
+        }
         if (data.origin_component_name_version == null) {
             data.origin_component_name_version = "";
         }
@@ -123,13 +126,18 @@ const ProductRuleCreate = ({ id }: ProductRuleCreateProps) => {
                         <SimpleForm onSubmit={create_product_rule} toolbar={<CustomToolbar />}>
                             <TextInputWide autoFocus source="name" validate={requiredValidate} />
                             <ReferenceInput source="parser" reference="parsers" sort={{ field: "name", order: "ASC" }}>
-                                <AutocompleteInputWide optionText="name" validate={requiredValidate} />
+                                <AutocompleteInputWide optionText="name" />
                             </ReferenceInput>
                             <TextInputWide source="scanner_prefix" />
                             <TextInputWide
                                 source="title"
                                 label="Observation title"
                                 helperText="Regular expression to match the observation's title"
+                            />
+                            <TextInputWide
+                                source="description_observation"
+                                label="Observation description"
+                                helperText="Regular expression to match the observation's description"
                             />
                             <TextInputWide
                                 source="origin_component_name_version"

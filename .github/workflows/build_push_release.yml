@@ -3,6 +3,7 @@ name: Build and push release images
 on:
   workflow_dispatch:
     inputs:
+      #checkov:skip=CKV_GHA_7:This is a false positive
       release:
         description: 'SecObserve release (without the v)'
         required: true

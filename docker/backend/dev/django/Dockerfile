@@ -6,16 +6,24 @@ FROM python as python-build-stage
 ARG BUILD_ENVIRONMENT=dev
 
 # Install packages
+# kics-scan ignore-block
+# versions of dependencies from distribution are ok
 RUN apk add --no-cache --virtual .build-deps \
     ca-certificates gcc postgresql-dev linux-headers musl-dev libffi-dev mariadb-dev
-    # These 2 libraries would only be needed for the Pillow package
-    # jpeg-dev zlib-dev
 
-# Requirements are installed here to ensure they will be cached.
-COPY ./backend/requirements .
+# install dependencies with poetry
+COPY ./backend/poetry_requirements.txt ./
+RUN pip install --no-cache -r ./poetry_requirements.txt
 
-# Create Python Dependency and Sub-Dependency Wheels.
-RUN pip wheel --wheel-dir /usr/src/app/wheels -r ${BUILD_ENVIRONMENT}.txt
+ENV POETRY_NO_INTERACTION=1 \
+    POETRY_VIRTUALENVS_IN_PROJECT=1 \
+    POETRY_VIRTUALENVS_CREATE=1 \
+    POETRY_CACHE_DIR=/tmp/poetry_cache
+
+WORKDIR /
+
+COPY backend/pyproject.toml backend/poetry.lock ./
+RUN poetry install --without prod,unittests --no-root && rm -rf $POETRY_CACHE_DIR
 
 
 # Python 'run' stage
@@ -36,12 +44,14 @@ ARG user=django
 ARG group=django
 
 # Install binaries and libs for PostgreSQL
+# kics-scan ignore-block
+# versions of dependencies from distribution are ok
 RUN apk add --no-cache --virtual postgresql-libs postgresql-client mariadb-dev mysql-client bash
 
-# use wheels to install python dependencies
-COPY --from=python-build-stage /usr/src/app/wheels  /wheels/
-RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
-    && rm -rf /wheels/ && rm -rf /tmp
+# copy dependencies from build stage
+ENV VIRTUAL_ENV=/.venv \
+    PATH="/.venv/bin:$PATH"
+COPY --from=python-build-stage ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
 # copy startup scripts
 COPY ./docker/backend/dev/django/entrypoint /entrypoint
@@ -65,7 +75,6 @@ RUN addgroup -g 1001 -S ${group} \
     && mkdir /var/lib/huey \
     && chown -R ${user}:${group} /var/lib/huey \
     && chmod ugo+rw /var/lib/huey
-
 
 HEALTHCHECK --interval=30s --timeout=30s --start-period=10s --retries=3 \
     CMD wget -nv -t1 --spider 'http://localhost:8000/api/status/health/' || exit 1

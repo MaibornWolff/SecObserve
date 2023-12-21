@@ -375,16 +375,6 @@ class CycloneDXParser(BaseParser, BaseFileParser):
     #         ):
     #             i += 1
 
-    #             if list_pointer == 0:
-    #                 print("---------------------------------")
-    #                 print(f"i: {i}")
-    #                 print(f"list_pointer: {list_pointer}")
-    #                 print(f"ref: {ref}")
-    #                 print(f"component_version: {component_version}")
-    #                 print(f"depends_on: {depends_on}")
-    #                 print(f"dependencies: {dependencies}")
-    #                 print(f"current_dependency: {current_dependency}")
-
     #             if len(dependencies) <= i:
     #                 if not dependencies or not current_dependency:
     #                     dependencies.append(f"{ref} --> {component_version}")
