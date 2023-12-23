@@ -43,7 +43,7 @@ These scanners have been tested with SecObserve:
 | [Trivy](https://aquasecurity.github.io/trivy) | SARIF | Secrets | File |
 | [CryptoLyzer](https://gitlab.com/coroner/cryptolyzer) ^2)^ | CryptoLyzer | DAST | File |
 | [DrHeader](https://github.com/Santandersecurityresearch/DrHeader) | DrHeader | DAST | File |
-| [OWASP ZAP](https://www.zaproxy.org) | OWASP ZAP | DAST | File |
+| [ZAP](https://www.zaproxy.org) | ZAP | DAST | File |
 | [Prowler](https://github.com/prowler-cloud/prowler) | Prowler | Cloud infrastructure | File |
 
 ^1)^ This is the exception to the rule. Even though SARIF is more suited for static code analysis, it works for Dependency Check.

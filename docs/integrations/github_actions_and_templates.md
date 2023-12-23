@@ -19,7 +19,7 @@ Most of the actions and templates use the same set of variables:
 | `FURTHER_PARAMETERS` | *optional* | Further parameters to be given to the scanner. |
 | `CONFIGURATION` | *mandatory, only for Semgrep* | Configuration to be used with Semgrep. |
 | `RULES` | *optional, only for DrHeader* | Custom rules to be used with DrHeader. |
-| `SCRIPT` | *optional, only for OWASP ZAP* | Script to be executed, default is `zap-baseline.py`. |
+| `SCRIPT` | *optional, only for ZAP* | Script to be executed, default is `zap-baseline.py`. |
 | **Importing** |
 | `SO_UPLOAD` | *optional* | No upload of observations into SecObserve if value is not `true`, default is `true`. |
 | `SO_API_BASE_URL` | *mandatory* | Base URL of the SecObserve backend, e.g. `https://secobserve-backend.example.com`. |
@@ -47,7 +47,7 @@ Most of the actions and templates use the same set of variables:
 | [Gitleaks](https://gitleaks.io)                                   | `actions/secrets/gitleaks` | `templates/secrets/gitleaks.yml` | [MIT](https://github.com/gitleaks/gitleaks/blob/master/LICENSE) |
 | [CryptoLyzer](https://gitlab.com/coroner/cryptolyzer)             | `actions/DAST/cryptolyzer` | `templates/DAST/cryptolyzer.yml` | [MPL 2.0](https://gitlab.com/coroner/cryptolyzer/-/blob/master/LICENSE.txt) |
 | [DrHeader](https://github.com/Santandersecurityresearch/DrHeader) | `actions/DAST/drheader` | `templates/DAST/drheader.yml` | [MIT](https://github.com/Santandersecurityresearch/DrHeader/blob/master/LICENSE) |
-| [OWASP ZAP](https://github.com/zaproxy/zaproxy)                   | `actions/DAST/owasp_zap` | `templates/DAST/owasp_zap.yml` | [Apache 2.0](https://github.com/zaproxy/zaproxy/blob/main/LICENSE) |
+| [ZAP](https://github.com/zaproxy/zaproxy)                         | `actions/DAST/zap` | `templates/DAST/zap.yml` | [Apache 2.0](https://github.com/zaproxy/zaproxy/blob/main/LICENSE) |
 
 All GitHub actions and GitLab CI templates use a pre-built Docker image that contains all scanners and the SecObserve importer.
 

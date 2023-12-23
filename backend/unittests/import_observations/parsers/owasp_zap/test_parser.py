@@ -2,13 +2,13 @@ from os import path
 from unittest import TestCase
 
 from application.core.models import Observation
-from application.import_observations.parsers.owasp_zap.parser import OWASPZAPParser
+from application.import_observations.parsers.zap.parser import ZAPParser
 
 
-class TestCycloneDXParser(TestCase):
+class TestZAPParserParser(TestCase):
     def test_no_json(self):
         with open(path.dirname(__file__) + "/test_parser.py") as testfile:
-            parser = OWASPZAPParser()
+            parser = ZAPParser()
             check, messages, data = parser.check_format(testfile)
 
             self.assertFalse(check)
@@ -18,17 +18,17 @@ class TestCycloneDXParser(TestCase):
 
     def test_wrong_format(self):
         with open(path.dirname(__file__) + "/files/wrong_format.json") as testfile:
-            parser = OWASPZAPParser()
+            parser = ZAPParser()
             check, messages, data = parser.check_format(testfile)
 
             self.assertFalse(check)
             self.assertEqual(1, len(messages))
-            self.assertEqual("File is not an OWASP ZAP format", messages[0])
+            self.assertEqual("File is not a ZAP format", messages[0])
             self.assertFalse(data)
 
     def test_owasp_zap(self):
         with open(path.dirname(__file__) + "/files/owasp_zap.json") as testfile:
-            parser = OWASPZAPParser()
+            parser = ZAPParser()
             check, messages, data = parser.check_format(testfile)
             observations = parser.get_observations(data)
 

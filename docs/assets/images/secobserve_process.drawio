@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2023-11-07T13:55:52.082Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.0.3 Chrome/114.0.5735.289 Electron/25.8.4 Safari/537.36" etag="smw_jezn1Zpqvje8_uw5" version="22.0.3" type="device">
+<mxfile host="Electron" modified="2023-12-23T07:27:35.220Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.2 Chrome/114.0.5735.289 Electron/25.9.4 Safari/537.36" etag="ULhDoXdWsaf8jAXg-oID" version="22.1.2" type="device">
   <diagram id="STATmjy3AcgogcaYLQfj" name="Seite-1">
-    <mxGraphModel dx="1421" dy="898" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="1421" dy="944" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -37,7 +37,7 @@
         <mxCell id="j-LpTXnSDLAkQ5Fwcx-e-9" value="&lt;b&gt;SAST&lt;br&gt;Infrastructure&lt;br&gt;&lt;/b&gt;&lt;br&gt;Checkov&lt;br&gt;KICS&lt;br&gt;tfsec&lt;br&gt;Trivy" style="text;html=1;align=center;verticalAlign=top;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=12;fontColor=#FFFFFF;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" parent="1" vertex="1">
           <mxGeometry x="509.9999999999999" y="516" width="110" height="110" as="geometry" />
         </mxCell>
-        <mxCell id="j-LpTXnSDLAkQ5Fwcx-e-10" value="&lt;b&gt;DAST&lt;br&gt;&lt;/b&gt;&lt;br&gt;&lt;br&gt;Cryptolyzer&lt;br&gt;DrHeader&lt;br&gt;OWASP ZAP" style="text;html=1;align=center;verticalAlign=top;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=12;fontColor=#FFFFFF;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" parent="1" vertex="1">
+        <mxCell id="j-LpTXnSDLAkQ5Fwcx-e-10" value="&lt;b&gt;DAST&lt;br&gt;&lt;/b&gt;&lt;br&gt;&lt;br&gt;Cryptolyzer&lt;br&gt;DrHeader&lt;br&gt;ZAP" style="text;html=1;align=center;verticalAlign=top;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=12;fontColor=#FFFFFF;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" parent="1" vertex="1">
           <mxGeometry x="725.7692307692306" y="516" width="90" height="100" as="geometry" />
         </mxCell>
         <mxCell id="j-LpTXnSDLAkQ5Fwcx-e-11" value="&lt;b&gt;Cloud&lt;br&gt;Infastructure&lt;/b&gt;&lt;br&gt;&lt;br&gt;Prowler" style="text;html=1;align=center;verticalAlign=top;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=12;fontColor=#FFFFFF;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" parent="1" vertex="1">
