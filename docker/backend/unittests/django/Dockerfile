@@ -1,4 +1,4 @@
-FROM python:3.11.6-alpine as python
+FROM python:3.12.1-alpine as python
 
 # Python build stage
 FROM python as python-build-stage
