@@ -8,6 +8,7 @@ from application.core.models import (
     Branch,
     Evidence,
     Observation,
+    Potential_Duplicate,
     Product,
     Product_Member,
 )
@@ -89,3 +90,34 @@ def get_evidences() -> QuerySet[Evidence]:
         )
 
     return evidences
+
+
+def get_potential_duplicates() -> QuerySet[Potential_Duplicate]:
+    user = get_current_user()
+
+    if user is None:
+        return Potential_Duplicate.objects.none()
+
+    potential_duplicates = Potential_Duplicate.objects.filter(
+        potential_duplicate_observation__current_status=Observation.STATUS_OPEN
+    )
+
+    if not user.is_superuser:
+        product_members = Product_Member.objects.filter(
+            product=OuterRef("observation__product_id"), user=user
+        )
+        product_group_members = Product_Member.objects.filter(
+            product=OuterRef("observation__product__product_group"), user=user
+        )
+
+        potential_duplicates = potential_duplicates.annotate(
+            observation__product__member=Exists(product_members),
+            observation__product__product_group__member=Exists(product_group_members),
+        )
+
+        potential_duplicates = potential_duplicates.filter(
+            Q(observation__product__member=True)
+            | Q(observation__product__product_group__member=True)
+        )
+
+    return potential_duplicates
