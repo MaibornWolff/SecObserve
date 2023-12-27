@@ -532,6 +532,7 @@ class Observation(Model):
     )
     issue_tracker_issue_id = CharField(max_length=255, blank=True)
     issue_tracker_jira_initial_status = CharField(max_length=255, blank=True)
+    has_potential_duplicates = BooleanField(default=False)
 
     class Meta:
         indexes = [
@@ -603,3 +604,25 @@ class Evidence(Model):
 class Reference(Model):
     observation = ForeignKey(Observation, related_name="references", on_delete=CASCADE)
     url = TextField(max_length=2048)
+
+
+class Potential_Duplicate(Model):
+    POTENTIAL_DUPLICATE_TYPE_COMPONENT = "Component"
+    POTENTIAL_DUPLICATE_TYPE_SOURCE = "Source"
+
+    POTENTIAL_DUPLICATE_TYPES = [
+        (POTENTIAL_DUPLICATE_TYPE_COMPONENT, POTENTIAL_DUPLICATE_TYPE_COMPONENT),
+        (POTENTIAL_DUPLICATE_TYPE_SOURCE, POTENTIAL_DUPLICATE_TYPE_SOURCE),
+    ]
+
+    observation = ForeignKey(
+        Observation, related_name="potential_duplicates", on_delete=CASCADE
+    )
+    potential_duplicate_observation = ForeignKey(Observation, on_delete=CASCADE)
+    type = CharField(max_length=12, choices=POTENTIAL_DUPLICATE_TYPES)
+
+    class Meta:
+        unique_together = (
+            "observation",
+            "potential_duplicate_observation",
+        )

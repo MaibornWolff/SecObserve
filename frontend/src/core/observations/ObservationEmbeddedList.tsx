@@ -3,12 +3,14 @@ import { Fragment } from "react";
 import { useEffect } from "react";
 import {
     AutocompleteInput,
+    BooleanField,
     ChipField,
     DatagridConfigurable,
     FilterForm,
     FunctionField,
     Identifier,
     ListContextProvider,
+    NullableBooleanInput,
     NumberField,
     Pagination,
     ReferenceInput,
@@ -71,6 +73,7 @@ function listFilters(product: Product) {
         <AutocompleteInputMedium source="age" choices={AGE_CHOICES} alwaysOn />,
         <TextInput source="upload_filename" label="Filename" />,
         <TextInput source="api_configuration_name" label="API configuration" />,
+        <NullableBooleanInput source="has_potential_duplicates" label="Duplicates" alwaysOn />,
     ];
 }
 
@@ -169,6 +172,7 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
                             sortBy="last_observation_log"
                             render={(record) => (record ? humanReadableDate(record.last_observation_log) : "")}
                         />
+                        <BooleanField source="has_potential_duplicates" label="Dupl." />
                     </DatagridConfigurable>
                 </Paper>
                 <Pagination />

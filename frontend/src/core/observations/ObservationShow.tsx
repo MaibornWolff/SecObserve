@@ -1,4 +1,5 @@
 import { Stack, Typography } from "@mui/material";
+import { Fragment } from "react";
 import {
     ArrayField,
     ChipField,
@@ -28,6 +29,7 @@ import { OBSERVATION_STATUS_OPEN } from "../types";
 import ObservationAssessment from "./ObservationAssessment";
 import ObservationRemoveAssessment from "./ObservationRemoveAssessment";
 import ObservationsShowAside from "./ObservationShowAside";
+import PotentialDuplicatesList from "./PotentialDuplicatesList";
 
 type ShowActionsProps = {
     filter: any;
@@ -346,6 +348,14 @@ const ObservationShow = () => {
                                 <DateField source="created" showTime />
                             </Datagrid>
                         </ArrayField>
+                        {observation && observation.has_potential_duplicates && (
+                            <Fragment>
+                                <Typography variant="h6" sx={{ paddingTop: "16px", paddingBottom: "8px" }}>
+                                    Potential Duplicates
+                                </Typography>{" "}
+                                <PotentialDuplicatesList observation={observation} />
+                            </Fragment>
+                        )}
                     </SimpleShowLayout>
                 )}
             />

@@ -15,6 +15,7 @@ from application.core.models import (
     Evidence,
     Observation,
     Parser,
+    Potential_Duplicate,
     Product,
     Product_Member,
     Service,
@@ -196,6 +197,7 @@ class ObservationFilter(FilterSet):
             ("scanner", "scanner_name"),
             ("last_observation_log", "last_observation_log"),
             ("epss_score", "epss_score"),
+            ("has_potential_duplicates", "has_potential_duplicates"),
         ),
     )
 
@@ -212,6 +214,7 @@ class ObservationFilter(FilterSet):
             "upload_filename",
             "api_configuration_name",
             "origin_service",
+            "has_potential_duplicates",
         ]
 
     def get_age(self, queryset, field_name, value):  # pylint: disable=unused-argument
@@ -238,3 +241,9 @@ class EvidenceFilter(FilterSet):
     class Meta:
         model = Evidence
         fields = ["name", "observation"]
+
+
+class PotentialDuplicateFilter(FilterSet):
+    class Meta:
+        model = Potential_Duplicate
+        fields = ["observation"]

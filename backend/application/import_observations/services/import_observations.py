@@ -26,6 +26,7 @@ from application.core.services.observation import (
     normalize_observation_fields,
 )
 from application.core.services.observation_log import create_observation_log
+from application.core.services.potential_duplicates import find_potential_duplicates
 from application.core.services.product import set_repository_default_branch
 from application.core.services.security_gate import check_security_gate
 from application.epss.services.epss import epss_apply_observation
@@ -72,7 +73,7 @@ class FileUploadParameters:
 def file_upload_observations(
     file_upload_parameters: FileUploadParameters,
 ) -> Tuple[int, int, int]:
-    parser_instance = instanciate_parser(file_upload_parameters.parser)
+    parser_instance = _instanciate_parser(file_upload_parameters.parser)
 
     if not isinstance(parser_instance, BaseFileParser):
         raise ParserError(f"{file_upload_parameters.parser.name} isn't a file parser")
@@ -103,7 +104,7 @@ def file_upload_observations(
         imported_observations=imported_observations,
     )
 
-    numbers: Tuple[int, int, int, str] = process_data(import_parameters)
+    numbers: Tuple[int, int, int, str] = _process_data(import_parameters)
 
     Vulnerability_Check.objects.update_or_create(
         product=import_parameters.product,
@@ -127,7 +128,7 @@ def api_import_observations(
     docker_image_name_tag: str,
     endpoint_url: str,
 ) -> Tuple[int, int, int]:
-    parser_instance = instanciate_parser(api_configuration.parser)
+    parser_instance = _instanciate_parser(api_configuration.parser)
 
     if not isinstance(parser_instance, BaseAPIParser):
         raise ParserError(f"{api_configuration.parser.name} isn't an API parser")
@@ -152,7 +153,7 @@ def api_import_observations(
         imported_observations=imported_observations,
     )
 
-    numbers: Tuple[int, int, int, str] = process_data(import_parameters)
+    numbers: Tuple[int, int, int, str] = _process_data(import_parameters)
 
     Vulnerability_Check.objects.update_or_create(
         product=import_parameters.product,
@@ -172,7 +173,7 @@ def api_import_observations(
 def api_check_connection(
     api_configuration: Api_Configuration,
 ) -> Tuple[bool, list[str]]:
-    parser_instance = instanciate_parser(api_configuration.parser)
+    parser_instance = _instanciate_parser(api_configuration.parser)
 
     if not isinstance(parser_instance, BaseAPIParser):
         return False, [f"{api_configuration.parser.name} isn't an API parser"]
@@ -182,7 +183,7 @@ def api_check_connection(
     return format_valid, errors
 
 
-def instanciate_parser(parser: Parser) -> BaseParser:
+def _instanciate_parser(parser: Parser) -> BaseParser:
     parser_class = get_parser_class(parser.name)
     if not parser_class:
         raise ParserError(f"Parser {parser.name} not found in parser registry")
@@ -190,7 +191,7 @@ def instanciate_parser(parser: Parser) -> BaseParser:
     return parser_instance
 
 
-def process_data(import_parameters: ImportParameters) -> Tuple[int, int, int, str]:
+def _process_data(import_parameters: ImportParameters) -> Tuple[int, int, int, str]:
     observations_new = 0
     observations_updated = 0
 
@@ -216,7 +217,7 @@ def process_data(import_parameters: ImportParameters) -> Tuple[int, int, int, st
 
     for imported_observation in import_parameters.imported_observations:
         # Set additional data in newly uploaded observation
-        prepare_imported_observation(
+        _prepare_imported_observation(
             import_parameters,
             imported_observation,
         )
@@ -231,7 +232,7 @@ def process_data(import_parameters: ImportParameters) -> Tuple[int, int, int, st
                 imported_observation.identity_hash
             )
             if observation_before:
-                process_current_observation(imported_observation, observation_before)
+                _process_current_observation(imported_observation, observation_before)
 
                 rule_engine.apply_rules_for_observation(observation_before)
 
@@ -244,7 +245,7 @@ def process_data(import_parameters: ImportParameters) -> Tuple[int, int, int, st
                 observations_this_run.add(observation_before.identity_hash)
                 vulnerability_check_observations.add(observation_before)
             else:
-                process_new_observation(imported_observation)
+                _process_new_observation(imported_observation)
 
                 rule_engine.apply_rules_for_observation(imported_observation)
 
@@ -257,7 +258,7 @@ def process_data(import_parameters: ImportParameters) -> Tuple[int, int, int, st
 
         scanner = imported_observation.scanner
 
-    observations_resolved = resolve_unimported_observations(observations_before)
+    observations_resolved = _resolve_unimported_observations(observations_before)
     vulnerability_check_observations.update(observations_resolved)
     check_security_gate(import_parameters.product)
     set_repository_default_branch(import_parameters.product)
@@ -267,11 +268,12 @@ def process_data(import_parameters: ImportParameters) -> Tuple[int, int, int, st
     push_observations_to_issue_tracker(
         import_parameters.product, vulnerability_check_observations
     )
+    find_potential_duplicates(vulnerability_check_observations)
 
     return observations_new, observations_updated, len(observations_resolved), scanner
 
 
-def prepare_imported_observation(
+def _prepare_imported_observation(
     import_parameters: ImportParameters, imported_observation: Observation
 ) -> None:
     imported_observation.product = import_parameters.product
@@ -298,7 +300,7 @@ def prepare_imported_observation(
         imported_observation.origin_endpoint_url = import_parameters.endpoint_url
 
 
-def process_current_observation(
+def _process_current_observation(
     imported_observation: Observation, observation_before: Observation
 ) -> None:
     # Set data in the current observation from the new observation
@@ -377,7 +379,7 @@ def process_current_observation(
         )
 
 
-def process_new_observation(imported_observation: Observation) -> None:
+def _process_new_observation(imported_observation: Observation) -> None:
     imported_observation.current_severity = get_current_severity(imported_observation)
 
     if not imported_observation.parser_status:
@@ -415,7 +417,7 @@ def process_new_observation(imported_observation: Observation) -> None:
     )
 
 
-def resolve_unimported_observations(
+def _resolve_unimported_observations(
     observations_before: dict[str, Observation]
 ) -> set[Observation]:
     # All observations that are still in observations_before are not in the imported scan
