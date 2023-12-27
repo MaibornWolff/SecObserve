@@ -1,7 +1,7 @@
 from typing import Optional
 
 from application.commons.services.global_request import get_current_user
-from application.core.models import Observation, Potential_Duplicate
+from application.core.models import Observation
 from application.core.services.observation import (
     get_current_severity,
     get_current_status,
