@@ -74,6 +74,6 @@ django-extensions = "3.2.3"  # https://github.com/django-extensions/django-exten
 gunicorn = "21.2.0"  # https://github.com/benoitc/gunicorn
 
 [tool.poetry.group.unittests.dependencies]
-coverage = "7.3.4"  # https://github.com/nedbat/coveragepy
+coverage = "7.4.0"  # https://github.com/nedbat/coveragepy
 django-extensions = "3.2.3"  # https://github.com/django-extensions/django-extensions
 django-coverage-plugin = "3.1.0"  # https://github.com/nedbat/django_coverage_plugin
