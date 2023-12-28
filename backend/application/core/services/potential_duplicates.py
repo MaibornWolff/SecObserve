@@ -12,7 +12,7 @@ def find_potential_duplicates(
     observations = Observation.objects.filter(
         product=product,
         branch=branch,
-        origin_service=service,
+        origin_service_name=service,
     )
 
     for observation in observations:
