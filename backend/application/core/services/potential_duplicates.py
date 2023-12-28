@@ -1,22 +1,31 @@
-from application.core.models import Observation, Potential_Duplicate
+from typing import Optional
+
+from huey.contrib.djhuey import db_task
+
+from application.core.models import Branch, Observation, Potential_Duplicate, Product
 
 
-def find_potential_duplicates(observations: set[Observation]) -> None:
-    if observations:
-        potential_duplicate_observations = Observation.objects.filter(
-            product=list(observations)[0].product,
-            branch=list(observations)[0].branch,
-            origin_service=list(observations)[0].origin_service,
-            current_status=Observation.STATUS_OPEN,
-        )
+@db_task()
+def find_potential_duplicates(
+    product: Product, branch: Optional[Branch], service: Optional[str]
+) -> None:
+    observations = Observation.objects.filter(
+        product=product,
+        branch=branch,
+        origin_service=service,
+    )
 
     for observation in observations:
         Potential_Duplicate.objects.filter(observation=observation).delete()
         initial_has_potential_duplicates = observation.has_potential_duplicates
         observation.has_potential_duplicates = False
         if observation.current_status == Observation.STATUS_OPEN:
-            for potential_duplicate_observation in potential_duplicate_observations:
-                if observation != potential_duplicate_observation:
+            for potential_duplicate_observation in observations:
+                if (
+                    observation != potential_duplicate_observation
+                    and potential_duplicate_observation.current_status
+                    == Observation.STATUS_OPEN
+                ):
                     potential_duplicate_type = None
                     if (
                         observation.origin_component_name
@@ -46,8 +55,8 @@ def find_potential_duplicates(observations: set[Observation]) -> None:
                             type=potential_duplicate_type,
                         )
                         observation.has_potential_duplicates = True
-            if observation.has_potential_duplicates != initial_has_potential_duplicates:
-                observation.save()
+        if observation.has_potential_duplicates != initial_has_potential_duplicates:
+            observation.save()
 
 
 def set_potential_duplicate_both_ways(observation: Observation) -> None:

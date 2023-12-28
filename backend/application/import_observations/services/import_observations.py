@@ -268,7 +268,9 @@ def _process_data(import_parameters: ImportParameters) -> Tuple[int, int, int, s
     push_observations_to_issue_tracker(
         import_parameters.product, vulnerability_check_observations
     )
-    find_potential_duplicates(vulnerability_check_observations)
+    find_potential_duplicates(
+        import_parameters.product, import_parameters.branch, import_parameters.service
+    )
 
     return observations_new, observations_updated, len(observations_resolved), scanner
 
