@@ -244,6 +244,11 @@ class EvidenceFilter(FilterSet):
 
 
 class PotentialDuplicateFilter(FilterSet):
+    status = ChoiceFilter(
+        field_name="potential_duplicate_observation__current_status",
+        choices=Observation.STATUS_CHOICES,
+    )
+
     class Meta:
         model = Potential_Duplicate
         fields = ["observation"]

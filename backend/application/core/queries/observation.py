@@ -98,9 +98,7 @@ def get_potential_duplicates() -> QuerySet[Potential_Duplicate]:
     if user is None:
         return Potential_Duplicate.objects.none()
 
-    potential_duplicates = Potential_Duplicate.objects.filter(
-        potential_duplicate_observation__current_status=Observation.STATUS_OPEN
-    )
+    potential_duplicates = Potential_Duplicate.objects.all()
 
     if not user.is_superuser:
         product_members = Product_Member.objects.filter(

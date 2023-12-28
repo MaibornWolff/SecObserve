@@ -52,8 +52,10 @@ def observations_bulk_mark_duplicates(
                 f"Observation {observation.pk} does not belong to product {product.pk}"
             )
     except Observation.DoesNotExist:
-        raise ValidationError("Observation does not exist")  # pylint: disable=raise-missing-from
-        # The DoesNotExist exception is not relevant
+        raise ValidationError(  # pylint: disable=raise-missing-from
+            "Observation does not exist"
+        )
+        # The DoesNotExist exception itself is not relevant and must not be re-raised
 
     observation_ids = []
     for potential_duplicate_id in potential_duplicate_ids:

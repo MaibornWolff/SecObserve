@@ -655,6 +655,24 @@
         }
     },
     {
+        "model": "core.potential_duplicate",
+        "pk": 1,
+        "fields": {
+            "observation": 1,
+            "potential_duplicate_observation": "1",
+            "type": "Component"
+        }
+    },
+    {
+        "model": "core.potential_duplicate",
+        "pk": 2,
+        "fields": {
+            "observation": 2,
+            "potential_duplicate_observation": "2",
+            "type": "Source"
+        }
+    },
+    {
         "model": "commons.notification",
         "pk": 1,
         "fields": {

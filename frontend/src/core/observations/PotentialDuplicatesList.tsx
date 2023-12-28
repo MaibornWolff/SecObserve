@@ -13,6 +13,7 @@ import {
 import { PERMISSION_OBSERVATION_ASSESSMENT } from "../../access_control/types";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { humanReadableDate } from "../../commons/functions";
+import { OBSERVATION_STATUS_OPEN } from "../types";
 import { Observation } from "../types";
 import ObservationBulkDuplicatesButton from "./ObservationBulkDuplicatesButton";
 
@@ -38,7 +39,7 @@ const BulkActionButtons = (observation: any) => (
 
 const PotentialDuplicatesList = ({ observation }: PotentialDuplicatesListProps) => {
     const listContext = useListController({
-        filter: { observation: Number(observation.id) },
+        filter: { observation: Number(observation.id), status: OBSERVATION_STATUS_OPEN },
         perPage: 25,
         resource: "potential_duplicates",
         sort: { field: "current_severity", order: "ASC" },
