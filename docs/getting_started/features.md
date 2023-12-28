@@ -8,7 +8,7 @@
 | [Observations with a wide range of information](../getting_started/anatomy_of_an_observation.md) | :material-plus-circle-outline: |
 | [Multiple branches per product](../usage/branches.md) | :material-plus-circle-outline: |
 | [Automatic resolution of fixed vulnerabilities](../usage/import_observations.md#import-algorithm) | :material-plus-circle-outline: |
-| [Detection and management of duplicates](../usage/duplicates.md) | :material-plus-circle-outline: |
+| [Identification and management of duplicates](../usage/duplicates.md) | :material-plus-circle-outline: |
 | [Manual assessment of severity and status](../usage/assess_observations.md) | :material-plus-circle-outline: |
 | [Rule based assessment of severity and status](../usage/rule_engine.md) | :material-plus-circle-outline: |
 | [Security gates](../usage/security_gates.md) | :material-plus-circle-outline: |

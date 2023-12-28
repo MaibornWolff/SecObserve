@@ -37,7 +37,7 @@ Every time either the severity or the status get changed by an import or an asse
 
 *(not shown in the screenshot)*
 
-If an observation has [potential duplicates](../usage/duplicates.md#find-potential-duplicates), they are listed here and can be [marked as duplicates](../usage/duplicates.md#mark-duplicates).
+If an observation has [potential duplicates](../usage/duplicates.md#identify-potential-duplicates), they are listed here and can be [marked as duplicates](../usage/duplicates.md#mark-duplicates).
 
 
 ## Metadata
