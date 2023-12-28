@@ -1,43 +1,43 @@
-<mxfile host="Electron" modified="2023-10-28T05:02:20.142Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.0.3 Chrome/114.0.5735.289 Electron/25.8.4 Safari/537.36" etag="XqT20mNL8c9Q0xIHJFNe" version="22.0.3" type="device">
+<mxfile host="Electron" modified="2023-12-28T14:52:28.146Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.11 Chrome/114.0.5735.289 Electron/25.9.8 Safari/537.36" etag="YEvGWWitOXg5hAy0t2dT" version="22.1.11" type="device">
   <diagram name="Page-1" id="VX-3E3aqqD7pf1Rg54WV">
-    <mxGraphModel dx="1421" dy="898" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="1421" dy="944" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="NQz_Nwzh-ESSq-r7xiTD-1" value="SecObserve" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#666666;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
+        <mxCell id="NQz_Nwzh-ESSq-r7xiTD-1" value="SecObserve" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#0086B4;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="520" y="400" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="NQz_Nwzh-ESSq-r7xiTD-2" value="Microsoft Teams" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#999999;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
+        <mxCell id="NQz_Nwzh-ESSq-r7xiTD-2" value="Microsoft Teams" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="760" y="640" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="NQz_Nwzh-ESSq-r7xiTD-3" value="GitHub" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#999999;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
+        <mxCell id="NQz_Nwzh-ESSq-r7xiTD-3" value="GitHub" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="760" y="360" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="NQz_Nwzh-ESSq-r7xiTD-4" value="Email" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#999999;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
+        <mxCell id="NQz_Nwzh-ESSq-r7xiTD-4" value="Email" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="760" y="720" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="NQz_Nwzh-ESSq-r7xiTD-5" value="GitLab" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#999999;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
+        <mxCell id="NQz_Nwzh-ESSq-r7xiTD-5" value="GitLab" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="760" y="440" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="NQz_Nwzh-ESSq-r7xiTD-6" value="OpenID Connect" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#999999;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
+        <mxCell id="NQz_Nwzh-ESSq-r7xiTD-6" value="OpenID Connect" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="520" y="220" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="NQz_Nwzh-ESSq-r7xiTD-7" value="EPSS" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#999999;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
+        <mxCell id="NQz_Nwzh-ESSq-r7xiTD-7" value="EPSS" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="520" y="580" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="NQz_Nwzh-ESSq-r7xiTD-9" value="" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#999999;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
+        <mxCell id="NQz_Nwzh-ESSq-r7xiTD-9" value="" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="280" y="400" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="NQz_Nwzh-ESSq-r7xiTD-8" value="Open Source&lt;br&gt;Vulnerability&lt;br&gt;Scanners" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#999999;strokeColor=#ffffff;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
+        <mxCell id="NQz_Nwzh-ESSq-r7xiTD-8" value="Open Source&lt;br&gt;Vulnerability&lt;br&gt;Scanners" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=#ffffff;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="270" y="390" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="NQz_Nwzh-ESSq-r7xiTD-10" value="CodeCharta" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#999999;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
+        <mxCell id="NQz_Nwzh-ESSq-r7xiTD-10" value="CodeCharta" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="760" y="160" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="NQz_Nwzh-ESSq-r7xiTD-11" value="Microsoft Excel" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#999999;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
+        <mxCell id="NQz_Nwzh-ESSq-r7xiTD-11" value="Microsoft Excel" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="760" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="NQz_Nwzh-ESSq-r7xiTD-12" value="CSV" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#999999;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
+        <mxCell id="NQz_Nwzh-ESSq-r7xiTD-12" value="CSV" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="760" y="80" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="NQz_Nwzh-ESSq-r7xiTD-13" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.25;exitDx=0;exitDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" parent="1" source="NQz_Nwzh-ESSq-r7xiTD-1" target="NQz_Nwzh-ESSq-r7xiTD-11" edge="1">
@@ -123,7 +123,7 @@
         <mxCell id="NQz_Nwzh-ESSq-r7xiTD-29" value="Issues&lt;br&gt;Code-Link" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=11;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" parent="1" vertex="1">
           <mxGeometry x="670" y="410" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="ckfRxN6suAOy0oSwesAX-1" value="Jira (Cloud)" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#999999;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
+        <mxCell id="ckfRxN6suAOy0oSwesAX-1" value="Jira (Cloud)" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="760" y="520" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="ckfRxN6suAOy0oSwesAX-3" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" parent="1" source="NQz_Nwzh-ESSq-r7xiTD-1" target="ckfRxN6suAOy0oSwesAX-1" edge="1">
@@ -137,7 +137,7 @@
             <mxPoint y="-1" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="t_NOycPIsL9wbnrStvVd-1" value="Azure DevOps" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#999999;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
+        <mxCell id="t_NOycPIsL9wbnrStvVd-1" value="Azure DevOps" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="760" y="280" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="t_NOycPIsL9wbnrStvVd-2" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" parent="1" source="NQz_Nwzh-ESSq-r7xiTD-1" target="t_NOycPIsL9wbnrStvVd-1" edge="1">

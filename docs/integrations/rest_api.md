@@ -32,7 +32,7 @@ API tokens can be created for a product or a user.
 
 ![Create product API token 1](../assets/images/screenshot_product_api_token_1.png)
 
-A role (see [Roles and permissions](../../usage/users_permissions/#roles-and-permissions)) must be selected during creation of a product API token, to determine the permissions of the API token for the product.
+A role (see [Roles and permissions](../usage/users_permissions.md#roles-and-permissions)) must be selected during creation of a product API token, to determine the permissions of the API token for the product.
 
 ![Create product API token 2](../assets/images/screenshot_product_api_token_2.png){ width="60%" style="display: block; margin: 0 auto" }
 
