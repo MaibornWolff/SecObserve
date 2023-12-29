@@ -70,6 +70,7 @@ nav:
     - Branches: usage/branches.md
     - Rule engine: usage/rule_engine.md
     - Security gates: usage/security_gates.md
+    - Duplicates: usage/duplicates.md
     - Metrics: usage/metrics.md
     - Users and permissions: usage/users_permissions.md
   - Integrations:

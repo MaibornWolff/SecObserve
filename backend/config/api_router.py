@@ -7,6 +7,7 @@ from application.core.api.views import (
     EvidenceViewSet,
     ObservationViewSet,
     ParserViewSet,
+    PotentialDuplicateViewSet,
     ProductGroupViewSet,
     ProductMemberViewSet,
     ProductViewSet,
@@ -37,6 +38,7 @@ router.register("product_rules", ProductRuleViewSet)
 router.register("evidences", EvidenceViewSet)
 router.register("notifications", NotificationViewSet)
 router.register("vulnerability_checks", VulnerabilityCheckViewSet)
+router.register("potential_duplicates", PotentialDuplicateViewSet)
 
 app_name = "api"
 urlpatterns = router.urls

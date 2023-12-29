@@ -27,6 +27,7 @@ from application.core.models import (
     Observation,
     Observation_Log,
     Parser,
+    Potential_Duplicate,
     Product,
     Product_Member,
     Reference,
@@ -464,10 +465,7 @@ class ObservationSerializer(ModelSerializer):
         return response
 
     def get_branch_name(self, observation: Observation) -> str:
-        if not observation.branch:
-            return ""
-
-        return observation.branch.name
+        return _get_branch_name(observation)
 
     def get_origin_source_file_url(self, observation: Observation) -> Optional[str]:
         origin_source_file_url = None
@@ -552,31 +550,13 @@ class ObservationListSerializer(ModelSerializer):
         exclude = ["numerical_severity", "issue_tracker_jira_initial_status"]
 
     def get_branch_name(self, observation: Observation) -> str:
-        if not observation.branch:
-            return ""
-
-        return observation.branch.name
+        return _get_branch_name(observation)
 
     def get_scanner_name(self, observation: Observation) -> str:
-        if not observation.scanner:
-            return ""
-
-        scanner_parts = observation.scanner.split("/")
-        return scanner_parts[0].strip()
+        return _get_scanner_name(observation)
 
     def get_origin_component_name_version(self, observation: Observation) -> str:
-        if not observation.origin_component_name:
-            return ""
-
-        origin_component_name_version_with_type = (
-            observation.origin_component_name_version
-        )
-        if observation.origin_component_purl:
-            purl = PackageURL.from_string(observation.origin_component_purl)
-            if purl.type:
-                origin_component_name_version_with_type += f" ({purl.type})"
-
-        return origin_component_name_version_with_type
+        return _get_origin_component_name_version(observation)
 
 
 class ObservationUpdateSerializer(ModelSerializer):
@@ -736,3 +716,61 @@ class ObservationBulkAssessmentSerializer(Serializer):
     observations = ListField(
         child=IntegerField(min_value=1), min_length=0, max_length=100, required=True
     )
+
+
+class ObservationBulkMarkDuplicatesSerializer(Serializer):
+    observation_id = IntegerField(min_value=1, required=True)
+    potential_duplicates = ListField(
+        child=IntegerField(min_value=1), min_length=0, max_length=100, required=True
+    )
+
+
+class NestedObservationSerializer(ModelSerializer):
+    scanner_name = SerializerMethodField()
+    origin_component_name_version = SerializerMethodField()
+
+    class Meta:
+        model = Observation
+        exclude = ["numerical_severity", "issue_tracker_jira_initial_status"]
+
+    def get_scanner_name(self, observation: Observation) -> str:
+        return _get_scanner_name(observation)
+
+    def get_origin_component_name_version(self, observation: Observation) -> str:
+        return _get_origin_component_name_version(observation)
+
+
+class PotentialDuplicateSerializer(ModelSerializer):
+    potential_duplicate_observation = NestedObservationSerializer()
+
+    class Meta:
+        model = Potential_Duplicate
+        fields = "__all__"
+
+
+def _get_branch_name(observation: Observation) -> str:
+    if not observation.branch:
+        return ""
+
+    return observation.branch.name
+
+
+def _get_scanner_name(observation: Observation) -> str:
+    if not observation.scanner:
+        return ""
+
+    scanner_parts = observation.scanner.split("/")
+    return scanner_parts[0].strip()
+
+
+def _get_origin_component_name_version(observation: Observation) -> str:
+    if not observation.origin_component_name:
+        return ""
+
+    origin_component_name_version_with_type = observation.origin_component_name_version
+    if observation.origin_component_purl:
+        purl = PackageURL.from_string(observation.origin_component_purl)
+        if purl.type:
+            origin_component_name_version_with_type += f" ({purl.type})"
+
+    return origin_component_name_version_with_type

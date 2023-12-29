@@ -1,11 +1,13 @@
 import { Stack } from "@mui/material";
 import {
     AutocompleteInput,
+    BooleanField,
     ChipField,
     DatagridConfigurable,
     FilterButton,
     FunctionField,
     List,
+    NullableBooleanInput,
     NumberField,
     ReferenceInput,
     SelectColumnsButton,
@@ -48,6 +50,7 @@ const listFilters = [
     <TextInput source="origin_source_file" label="Source" />,
     <TextInput source="scanner" alwaysOn />,
     <AutocompleteInputMedium source="age" choices={AGE_CHOICES} alwaysOn />,
+    <NullableBooleanInput source="has_potential_duplicates" label="Duplicates" alwaysOn />,
 ];
 
 const ListActions = () => (
@@ -93,6 +96,7 @@ const ObservationList = () => {
                     sortBy="last_observation_log"
                     render={(record) => (record ? humanReadableDate(record.last_observation_log) : "")}
                 />
+                <BooleanField source="has_potential_duplicates" label="Dupl." />
             </DatagridConfigurable>
         </List>
     );
