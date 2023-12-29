@@ -71,8 +71,7 @@ def observations_bulk_mark_duplicates(
     elif (
         potential_duplicate.type == Potential_Duplicate.POTENTIAL_DUPLICATE_TYPE_SOURCE
     ):
-        comment = f"Duplicate of {observation.title}"
-        comment += f" at {observation.origin_source_file} / {observation.origin_source_line_start}"
+        comment = f"Duplicate of {observation.title} from scanner {observation.scanner}"
     else:
         raise ValidationError("Invalid potential duplicate type")
 

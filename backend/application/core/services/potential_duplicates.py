@@ -9,6 +9,8 @@ from application.core.models import Branch, Observation, Potential_Duplicate, Pr
 def find_potential_duplicates(
     product: Product, branch: Optional[Branch], service: Optional[str]
 ) -> None:
+    if not service:
+        service = ""
     observations = Observation.objects.filter(
         product=product,
         branch=branch,
