@@ -116,6 +116,7 @@ export interface Observation extends RaRecord {
     origin_cloud_provider: string;
     origin_cloud_account_subscription_project: string;
     origin_cloud_resource: string;
+    origin_cloud_resource_type: string;
     origin_cloud_qualified_resource: string;
     cvss3_score: number;
     cvss3_vector: string;
