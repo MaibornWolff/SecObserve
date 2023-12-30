@@ -13,6 +13,7 @@ export interface GeneralRule extends RaRecord {
     origin_endpoint_url: string;
     origin_service_name: string;
     origin_source_file: string;
+    origin_cloud_qualified_resource: string;
     new_severity: string;
     new_status: string;
 }
@@ -30,6 +31,7 @@ export interface ProductRule extends RaRecord {
     origin_endpoint_url: string;
     origin_service_name: string;
     origin_source_file: string;
+    origin_cloud_qualified_resource: string;
     new_severity: string;
     new_status: string;
     enabled: boolean;

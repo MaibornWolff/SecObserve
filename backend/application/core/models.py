@@ -490,6 +490,11 @@ class Observation(Model):
     origin_source_line_end = IntegerField(
         null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]
     )
+    origin_cloud_provider = CharField(max_length=255, blank=True)
+    origin_cloud_account_subscription_project = CharField(max_length=255, blank=True)
+    origin_cloud_resource = CharField(max_length=255, blank=True)
+    origin_cloud_resource_type = CharField(max_length=255, blank=True)
+    origin_cloud_qualified_resource = CharField(max_length=255, blank=True)
     cvss3_score = DecimalField(max_digits=3, decimal_places=1, null=True)
     cvss3_vector = CharField(max_length=255, blank=True)
     cwe = IntegerField(
@@ -547,6 +552,7 @@ class Observation(Model):
             Index(fields=["origin_service_name"]),
             Index(fields=["origin_endpoint_hostname"]),
             Index(fields=["origin_source_file"]),
+            Index(fields=["origin_cloud_qualified_resource"]),
             Index(fields=["last_observation_log"]),
             Index(fields=["epss_score"]),
             Index(fields=["scanner"]),

@@ -24,6 +24,7 @@ class Rule(Model):
     origin_endpoint_url = TextField(max_length=2048, blank=True)
     origin_service_name = CharField(max_length=255, blank=True)
     origin_source_file = CharField(max_length=255, blank=True)
+    origin_cloud_qualified_resource = CharField(max_length=255, blank=True)
     new_severity = CharField(
         max_length=12, choices=Observation.SEVERITY_CHOICES, blank=True
     )

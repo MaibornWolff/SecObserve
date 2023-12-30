@@ -48,6 +48,7 @@ const listFilters = [
     <TextInput source="origin_docker_image_name_tag_short" label="Container" />,
     <TextInput source="origin_endpoint_hostname" label="Host" />,
     <TextInput source="origin_source_file" label="Source" />,
+    <TextInput source="origin_cloud_qualified_resource" label="Resource" />,
     <TextInput source="scanner" alwaysOn />,
     <AutocompleteInputMedium source="age" choices={AGE_CHOICES} alwaysOn />,
     <NullableBooleanInput source="has_potential_duplicates" label="Duplicates" alwaysOn />,
@@ -90,6 +91,7 @@ const ObservationList = () => {
                 <TextField source="origin_docker_image_name_tag_short" label="Container" />
                 <TextField source="origin_endpoint_hostname" label="Host" />
                 <TextField source="origin_source_file" label="Source" />
+                <TextField source="origin_cloud_qualified_resource" label="Resource" />,
                 <TextField source="scanner_name" label="Scanner" />
                 <FunctionField<Observation>
                     label="Age"

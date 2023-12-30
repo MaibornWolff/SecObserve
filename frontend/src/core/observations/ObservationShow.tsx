@@ -334,6 +334,38 @@ const ObservationShow = () => {
                                 </Stack>
                             </div>
                         )}
+                        {observation.origin_cloud_provider != "" && (
+                            <div>
+                                <Typography variant="subtitle1" sx={{ paddingTop: "8px" }}>
+                                    Cloud
+                                </Typography>
+                                <Stack direction="row" spacing={4}>
+                                    {observation.origin_cloud_provider != "" && (
+                                        <Labeled>
+                                            <TextField source="origin_cloud_provider" label="Provider" />
+                                        </Labeled>
+                                    )}
+                                    {observation.origin_cloud_account_subscription_project != null && (
+                                        <Labeled>
+                                            <TextField
+                                                source="origin_cloud_account_subscription_project"
+                                                label="Account / Provider / Project"
+                                            />
+                                        </Labeled>
+                                    )}
+                                    {observation.origin_cloud_resource != null && (
+                                        <Labeled>
+                                            <TextField source="origin_cloud_resource" label="Resource" />
+                                        </Labeled>
+                                    )}
+                                    {observation.origin_cloud_resource_type != null && (
+                                        <Labeled>
+                                            <TextField source="origin_cloud_resource_type" label="Resource type" />
+                                        </Labeled>
+                                    )}
+                                </Stack>
+                            </div>
+                        )}
                         <Typography variant="h6" sx={{ paddingTop: "16px" }}>
                             Log
                         </Typography>{" "}

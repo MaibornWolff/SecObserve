@@ -65,11 +65,42 @@ class ProwlerParser(BaseParser, BaseFileParser):
                 description = self.get_description(prowler_observation)
                 recommendation = self.get_recommendation(prowler_observation)
 
+                provider = prowler_observation.get("Provider", "")
+                if provider == "aws":
+                    provider = "AWS"
+                else:
+                    provider = provider.title()
+
+                account_id = prowler_observation.get("AccountId")
+                account_name = prowler_observation.get("AccountName")
+                subscription = prowler_observation.get("Subscription")
+                account_subscription_project = ""
+                if account_name:
+                    account_subscription_project = account_name
+                elif account_id:
+                    account_subscription_project = account_id
+                elif subscription:
+                    account_subscription_project = subscription
+
+                resource_id = prowler_observation.get("ResourceId")
+                resource_name = prowler_observation.get("ResourceName")
+                resource = ""
+                if resource_name:
+                    resource = resource_name
+                elif resource_id:
+                    resource = resource_id
+
+                resource_type = prowler_observation.get("ResourceType", "")
+
                 observation = Observation(
                     title=status_extended,
                     parser_severity=severity.title(),
                     description=description,
                     recommendation=recommendation,
+                    origin_cloud_provider=provider,
+                    origin_cloud_account_subscription_project=account_subscription_project,
+                    origin_cloud_resource=resource,
+                    origin_cloud_resource_type=resource_type,
                 )
 
                 evidence = []
@@ -87,25 +118,14 @@ class ProwlerParser(BaseParser, BaseFileParser):
 
     def get_description(self, prowler_observation: dict) -> str:
         check_title = prowler_observation.get("CheckTitle")
-        resource_type = prowler_observation.get("ResourceType")
-        resource_id = prowler_observation.get("ResourceId")
         prowler_description = prowler_observation.get("Description")
         risk = prowler_observation.get("Risk")
-        subscription = prowler_observation.get("Subscription")
-        account_id = prowler_observation.get("AccountId")
+
         description = check_title if check_title else ""
         if check_title != prowler_description:
             description += f"\n\n{prowler_description}"
         if risk:
             description += f"\n\n{risk}"
-        if account_id:
-            description += f"\n\n**Account id:** {account_id}"
-        if subscription:
-            description += f"\n\n**Subscription:** {subscription}"
-        if resource_id:
-            description += f"\n\n**Resource id:** {resource_id}"
-        if resource_type:
-            description += f"\n\n**Resource type:** {resource_type}"
         return description
 
     def get_recommendation(self, prowler_observation: dict) -> str:

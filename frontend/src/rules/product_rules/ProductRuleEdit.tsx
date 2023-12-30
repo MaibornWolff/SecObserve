@@ -54,6 +54,9 @@ const ProductRuleEdit = () => {
         if (data.origin_source_file == null) {
             data.origin_source_file = "";
         }
+        if (data.origin_cloud_qualified_resource == null) {
+            data.origin_cloud_qualified_resource = "";
+        }
         if (data.new_severity == null) {
             data.new_severity = "";
         }
@@ -72,6 +75,7 @@ const ProductRuleEdit = () => {
             origin_endpoint_url: data.origin_endpoint_url,
             origin_service_name: data.origin_service_name,
             origin_source_file: data.origin_source_file,
+            origin_cloud_qualified_resource: data.origin_cloud_qualified_resource,
             new_severity: data.new_severity,
             new_status: data.new_status,
             enabled: data.enabled,
@@ -177,6 +181,11 @@ const ProductRuleEdit = () => {
                             source="origin_source_file"
                             label="Origin source file"
                             helperText="Regular expression to match the source file"
+                        />
+                        <TextInputWide
+                            source="origin_cloud_qualified_resource"
+                            label="Origin cloud qualified resource"
+                            helperText="Regular expression to match the qualified resource name"
                         />
                         <AutocompleteInputMedium source="new_severity" choices={OBSERVATION_SEVERITY_CHOICES} />
                         <AutocompleteInputMedium source="new_status" choices={OBSERVATION_STATUS_CHOICES} />
