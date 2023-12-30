@@ -69,6 +69,7 @@ function listFilters(product: Product) {
         <TextInput source="origin_docker_image_name_tag_short" label="Container" alwaysOn />,
         <TextInput source="origin_endpoint_hostname" label="Host" alwaysOn />,
         <TextInput source="origin_source_file" label="Source" alwaysOn />,
+        <TextInput source="origin_cloud_qualified_resource" label="Resource" alwaysOn />,
         <TextInput source="scanner" alwaysOn />,
         <AutocompleteInputMedium source="age" choices={AGE_CHOICES} alwaysOn />,
         <TextInput source="upload_filename" label="Filename" />,
@@ -166,6 +167,7 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
                         <TextField source="origin_docker_image_name_tag_short" label="Container" />
                         <TextField source="origin_endpoint_hostname" label="Host" />
                         <TextField source="origin_source_file" label="Source" />
+                        <TextField source="origin_cloud_qualified_resource" label="Resource" />
                         <TextField source="scanner_name" label="Scanner" />
                         <FunctionField<Observation>
                             label="Age"

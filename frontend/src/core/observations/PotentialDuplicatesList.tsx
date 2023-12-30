@@ -79,6 +79,11 @@ const PotentialDuplicatesList = ({ observation }: PotentialDuplicatesListProps) 
                         />
                         <TextField source="potential_duplicate_observation.origin_endpoint_hostname" label="Host" />
                         <TextField source="potential_duplicate_observation.origin_source_file" label="Source" />
+                        <TextField
+                            source="potential_duplicate_observation.origin_cloud_qualified_resource"
+                            label="Resource"
+                        />
+                        ,
                         <TextField source="potential_duplicate_observation.scanner_name" label="Scanner" />
                         <FunctionField<Observation>
                             label="Age"

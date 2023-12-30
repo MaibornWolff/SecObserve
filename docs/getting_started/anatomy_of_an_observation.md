@@ -28,6 +28,7 @@ An observation can be found at different origins:
 * **Docker image**: Name and tag of a Docker image, where the observation was found.
 * **Endpoint**: The URL of a web address.
 * **Source file**: Path and name of a source file, start and end lines are optional. The source file will be shown as a link to the source in the repository, if a **Repository prefix** has been configured in the product.
+* **Cloud**: The name of the cloud provider, account (AWS) or subscription (Azure) or project (GCP), resource and resource type, where the observation was found.
 
 ## Log
 

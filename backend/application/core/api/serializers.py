@@ -634,6 +634,10 @@ class ObservationUpdateSerializer(ModelSerializer):
             "origin_source_file",
             "origin_source_line_start",
             "origin_source_line_end",
+            "origin_cloud_provider",
+            "origin_cloud_account_subscription_project",
+            "origin_cloud_resource",
+            "origin_cloud_resource_type",
         ]
 
 
@@ -690,6 +694,10 @@ class ObservationCreateSerializer(ModelSerializer):
             "origin_source_file",
             "origin_source_line_start",
             "origin_source_line_end",
+            "origin_cloud_provider",
+            "origin_cloud_account_subscription_project",
+            "origin_cloud_resource",
+            "origin_cloud_resource_type",
         ]
 
 

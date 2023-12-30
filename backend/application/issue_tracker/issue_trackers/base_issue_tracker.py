@@ -72,6 +72,12 @@ class BaseIssueTracker:
             if origin:
                 origin += " / "
             origin += f"{observation.origin_source_file}"
+        if observation.origin_cloud_provider:
+            if origin:
+                origin += " / "
+            origin += f"{observation.origin_cloud_provider} / "
+            origin += f"{observation.origin_cloud_account_subscription_project} / "
+            origin += f"{observation.origin_cloud_resource}"
         return origin
 
     def _get_description_for_deleted_observation(
