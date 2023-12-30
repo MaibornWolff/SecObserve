@@ -349,7 +349,7 @@ const ObservationShow = () => {
                                         <Labeled>
                                             <TextField
                                                 source="origin_cloud_account_subscription_project"
-                                                label="Account / Provider / Project"
+                                                label="Account / Subscription / Project"
                                             />
                                         </Labeled>
                                     )}
