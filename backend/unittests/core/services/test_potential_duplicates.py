@@ -1,7 +1,10 @@
-from unittest.mock import patch, call
+from unittest.mock import call, patch
 
 from application.core.models import Observation, Potential_Duplicate
-from application.core.services.potential_duplicates import set_potential_duplicate, set_potential_duplicate_both_ways
+from application.core.services.potential_duplicates import (
+    set_potential_duplicate,
+    set_potential_duplicate_both_ways,
+)
 from unittests.base_test_case import BaseTestCase
 
 
@@ -14,12 +17,18 @@ class TestSetPotentialDuplicate(BaseTestCase):
 
     @patch("application.core.services.potential_duplicates.set_potential_duplicate")
     @patch("application.core.models.Potential_Duplicate.objects.filter")
-    def test_set_potential_duplicate_both_ways(self, filter_mock, set_potential_duplicate_mock):
-        potential_duplicate_observation = Observation(title="observation_2", product=self.product_1)
+    def test_set_potential_duplicate_both_ways(
+        self, filter_mock, set_potential_duplicate_mock
+    ):
+        potential_duplicate_observation = Observation(
+            title="observation_2", product=self.product_1
+        )
 
         potential_duplicate = Potential_Duplicate()
         potential_duplicate.observation = self.observation_1
-        potential_duplicate.potential_duplicate_observation = potential_duplicate_observation
+        potential_duplicate.potential_duplicate_observation = (
+            potential_duplicate_observation
+        )
 
         filter_mock.return_value = [potential_duplicate]
 
