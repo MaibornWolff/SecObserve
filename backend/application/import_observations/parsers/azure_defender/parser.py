@@ -1,5 +1,6 @@
 import csv
 import io
+import re
 from json import dumps
 
 from django.core.files.base import File
@@ -52,7 +53,9 @@ class AzureDefenderParser(BaseParser, BaseFileParser):
                 resourceName = row.get("resourceName", "")
                 recommendationDisplayName = row.get("recommendationDisplayName", "")
                 description = row.get("description", "")
+                description = self.format_markdown(description)
                 remediationSteps = row.get("remediationSteps", "")
+                remediationSteps = self.format_markdown(remediationSteps)
                 severity = row.get("severity", "")
                 cloud = row.get("cloud", "")
 
@@ -76,3 +79,24 @@ class AzureDefenderParser(BaseParser, BaseFileParser):
                 observations.append(observation)
 
         return observations
+
+    def format_markdown(self, string: str) -> str:
+        string = self.replace_string_with_newlines(string, r"\.[A-Z]")
+        string = self.replace_string_with_newlines(string, r"\:[A-Z]")
+        string = self.replace_string_with_newlines(string, r"\.[1-9]\.")
+        string = self.replace_string_with_newlines(string, r"\:[1-9]\.")
+        string = self.replace_string_with_newlines(string, r" [1-9]\.")
+        return string
+
+    def replace_string_with_newlines(self, string: str, regex: str) -> str:
+        match: re.Match[str] | None | str = "initial_match"
+        while match:
+            match = re.search(regex, string)
+            if match:
+                string = (
+                    string[: match.start() + 1]
+                    + "\n\n"
+                    + string[match.start() + 1 :]  # noqa: E203
+                    # black inserts a space before the colon
+                )
+        return string
