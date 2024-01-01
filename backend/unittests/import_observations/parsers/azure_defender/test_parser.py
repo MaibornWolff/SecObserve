@@ -82,3 +82,26 @@ class TestAzureDefenderParser(TestCase):
             self.assertEqual("storageaccounts", observation.origin_cloud_resource_type)
             self.assertEqual("Result", observation.unsaved_evidences[0][0])
             self.assertIn("test-weu-prod-rg", observation.unsaved_evidences[0][1])
+
+            observation = observations[1]
+            self.assertEqual(
+                "Blocked accounts with read and write permissions on Azure resources should be removed",
+                observation.title,
+            )
+            description = """Accounts that have been blocked from signing in on Active Directory, should be removed from your Azure resources.
+
+These accounts can be targets for attackers looking to find ways to access your data without being noticed."""
+            self.assertEqual(description, observation.description)
+            self.assertEqual(Observation.SEVERITY_HIGH, observation.parser_severity)
+            recommendation = """Review the list of accounts that are blocked from signing in on the Accounts section. Select an account to view its role definitions and locate the source scope. If you accept the risk for specific account, use the exempt capability to exclude it from evaluation.
+
+Go to the Azure portal.
+
+Open Access control (IAM) at a scope, such as management group, subscription, resource group, or resource, where the guest user has a role assignment.
+
+Click the Role assignments tab to view all the role assignments.
+
+In the list of role assignments, add a checkmark next to the blocked user with the role assignment you want to remove.
+
+Click Remove. In the remove role assignment message that appears, click Yes."""
+            self.assertEqual(recommendation, observation.recommendation)

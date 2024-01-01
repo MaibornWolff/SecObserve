@@ -345,7 +345,7 @@ const ObservationShow = () => {
                                             <TextField source="origin_cloud_provider" label="Provider" />
                                         </Labeled>
                                     )}
-                                    {observation.origin_cloud_account_subscription_project != null && (
+                                    {observation.origin_cloud_account_subscription_project != "" && (
                                         <Labeled>
                                             <TextField
                                                 source="origin_cloud_account_subscription_project"
@@ -353,12 +353,12 @@ const ObservationShow = () => {
                                             />
                                         </Labeled>
                                     )}
-                                    {observation.origin_cloud_resource != null && (
+                                    {observation.origin_cloud_resource != "" && (
                                         <Labeled>
                                             <TextField source="origin_cloud_resource" label="Resource" />
                                         </Labeled>
                                     )}
-                                    {observation.origin_cloud_resource_type != null && (
+                                    {observation.origin_cloud_resource_type != "" && (
                                         <Labeled>
                                             <TextField source="origin_cloud_resource_type" label="Resource type" />
                                         </Labeled>
