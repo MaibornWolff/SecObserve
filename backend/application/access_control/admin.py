@@ -31,6 +31,7 @@ class UserAdmin(auth_admin.UserAdmin):
             {
                 "fields": (
                     "setting_theme",
+                    "setting_list_size",
                     "setting_list_properties",
                 ),
             },

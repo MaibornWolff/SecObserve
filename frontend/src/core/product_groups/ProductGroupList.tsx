@@ -3,6 +3,7 @@ import { CreateButton, Datagrid, List, TextField, TextInput, TopToolbar } from "
 import { PERMISSION_PRODUCT_GROUP_CREATE } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
+import { getSettingListSize } from "../../commons/settings/functions";
 
 const listFilters = [<TextInput source="name" alwaysOn />];
 
@@ -26,7 +27,7 @@ const ProductGroupList = () => {
             disableSyncWithLocation={false}
             storeKey="product_groups.list"
         >
-            <Datagrid size="medium" rowClick="show" bulkActionButtons={false}>
+            <Datagrid size={getSettingListSize()} rowClick="show" bulkActionButtons={false}>
                 <TextField source="name" />
                 <TextField source="products_count" label="Products" />
                 <ObservationsCountField withLabel={false} />

@@ -15,6 +15,7 @@ import {
 
 import { PERMISSION_PRODUCT_RULE_DELETE, PERMISSION_PRODUCT_RULE_EDIT } from "../../access_control/types";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
+import { getSettingListSize } from "../../commons/settings/functions";
 import ProductRuleDelete from "./ProductRuleDelete";
 import ProductRuleEdit from "./ProductRuleEdit";
 
@@ -52,7 +53,7 @@ const ProductRuleEmbeddedList = ({ product }: ProductRuleEmbeddedListProps) => {
             <div style={{ width: "100%" }}>
                 <FilterForm filters={listFilters} />
                 <Paper>
-                    <Datagrid size="medium" sx={{ width: "100%" }} bulkActionButtons={false}>
+                    <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false}>
                         <TextField source="name" />
                         <ReferenceField source="parser" reference="parsers" link={false} />
                         <TextField source="scanner_prefix" />

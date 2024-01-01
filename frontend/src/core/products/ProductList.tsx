@@ -18,6 +18,7 @@ import ObservationsCountField from "../../commons/custom_fields/ObservationsCoun
 import { SecurityGateTextField } from "../../commons/custom_fields/SecurityGateTextField";
 import { humanReadableDate } from "../../commons/functions";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
+import { getSettingListSize } from "../../commons/settings/functions";
 import { Product } from "../types";
 import { AGE_CHOICES } from "../types";
 
@@ -58,7 +59,7 @@ const ProductList = () => {
             disableSyncWithLocation={false}
             storeKey="products.list"
         >
-            <Datagrid size="medium" rowClick="show" bulkActionButtons={<BulkActionButtons />}>
+            <Datagrid size={getSettingListSize()} rowClick="show" bulkActionButtons={<BulkActionButtons />}>
                 <TextField source="name" />
                 <TextField source="product_group_name" label="Product Group" />
                 <TextField source="repository_default_branch_name" label="Default branch" sortable={false} />

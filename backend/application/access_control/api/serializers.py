@@ -29,6 +29,7 @@ class UserSerializer(ModelSerializer):
             "is_superuser",
             "is_external",
             "setting_theme",
+            "setting_list_size",
             "permissions",
             "setting_list_properties",
         ]
@@ -42,6 +43,7 @@ class UserSettingsSerializer(ModelSerializer):
         model = User
         fields = [
             "setting_theme",
+            "setting_list_size",
             "setting_list_properties",
         ]
 
