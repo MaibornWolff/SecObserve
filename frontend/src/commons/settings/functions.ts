@@ -17,6 +17,22 @@ export function getSettingTheme(): string {
     return theme;
 }
 
+export function saveSettingListSize(list_size: string) {
+    saveSetting({ setting_list_size: list_size });
+}
+
+export function getSettingListSize(): "small" | "medium" | undefined {
+    let list_size: "small" | "medium" | undefined = "medium";
+
+    const user = localStorage.getItem("user");
+    if (user) {
+        const user_json = JSON.parse(user);
+        list_size = user_json.setting_list_size as "small" | "medium" | undefined;
+    }
+
+    return list_size;
+}
+
 export function getTheme() {
     const setting_theme = getSettingTheme();
     if (setting_theme == "dark") {

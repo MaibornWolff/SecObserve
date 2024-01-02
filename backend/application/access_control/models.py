@@ -19,9 +19,20 @@ class User(AbstractUser):
         (THEME_DARK, THEME_DARK),
     ]
 
+    LIST_SIZE_SMALL = "small"
+    LIST_SIZE_MEDIUM = "medium"
+
+    LIST_SIZE_CHOICES = [
+        (LIST_SIZE_SMALL, LIST_SIZE_SMALL),
+        (LIST_SIZE_MEDIUM, LIST_SIZE_MEDIUM),
+    ]
+
     full_name = CharField(max_length=301, blank=True)
     is_external = BooleanField(default=False)
     setting_theme = CharField(max_length=5, choices=THEME_CHOICES, default=THEME_LIGHT)
+    setting_list_size = CharField(
+        max_length=6, choices=LIST_SIZE_CHOICES, default=LIST_SIZE_MEDIUM
+    )
     setting_list_properties = TextField(max_length=2048, blank=True)
 
     def save(self, *args, **kwargs):

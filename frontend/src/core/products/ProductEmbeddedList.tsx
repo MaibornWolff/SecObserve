@@ -13,6 +13,7 @@ import {
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
 import { SecurityGateTextField } from "../../commons/custom_fields/SecurityGateTextField";
 import { humanReadableDate } from "../../commons/functions";
+import { getSettingListSize } from "../../commons/settings/functions";
 import { Product } from "../types";
 
 type ProductEmbeddedListProps = {
@@ -53,7 +54,7 @@ const ProductEmbeddedList = ({ product_group }: ProductEmbeddedListProps) => {
             <div style={{ width: "100%" }}>
                 <FilterForm filters={listFilters()} />
                 <Paper>
-                    <Datagrid size="medium" rowClick={ShowProducts} bulkActionButtons={false}>
+                    <Datagrid size={getSettingListSize()} rowClick={ShowProducts} bulkActionButtons={false}>
                         <TextField source="name" />
                         <TextField source="repository_default_branch_name" label="Default branch" sortable={false} />
                         <SecurityGateTextField />

@@ -14,6 +14,7 @@ import {
     PERMISSION_PRODUCT_MEMBER_EDIT,
     ROLE_CHOICES,
 } from "../../access_control/types";
+import { getSettingListSize } from "../../commons/settings/functions";
 import ProductMemberDelete from "./ProductMemberDelete";
 import ProductMemberEdit from "./ProductMemberEdit";
 
@@ -43,7 +44,7 @@ const ProductMemberEmbeddedList = ({ product }: ProductMemberEmbeddedListProps) 
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
                 <Paper>
-                    <Datagrid size="medium" sx={{ width: "100%" }} bulkActionButtons={false}>
+                    <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false}>
                         <TextField source="user_data.full_name" label="User" />
                         <SelectField source="role" choices={ROLE_CHOICES} />
                         <WithRecord

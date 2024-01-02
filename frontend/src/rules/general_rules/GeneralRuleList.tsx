@@ -14,6 +14,7 @@ import {
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
+import { getSettingListSize } from "../../commons/settings/functions";
 
 const listFilters = [
     <TextInput source="name" alwaysOn />,
@@ -47,7 +48,7 @@ const GeneralRuleList = () => {
             storeKey="general_rules.list"
         >
             <Datagrid
-                size="medium"
+                size={getSettingListSize()}
                 rowClick="show"
                 bulkActionButtons={user && JSON.parse(user).is_superuser && <BulkActionButtons />}
             >

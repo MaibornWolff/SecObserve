@@ -19,6 +19,7 @@ import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { humanReadableDate } from "../../commons/functions";
 import { AutocompleteInputMedium, AutocompleteInputWide } from "../../commons/layout/themes";
+import { getSettingListSize } from "../../commons/settings/functions";
 import {
     AGE_CHOICES,
     OBSERVATION_SEVERITY_CHOICES,
@@ -76,7 +77,7 @@ const ObservationList = () => {
             storeKey="observations.list"
             actions={<ListActions />}
         >
-            <Datagrid size="medium" rowClick="show" bulkActionButtons={false}>
+            <Datagrid size={getSettingListSize()} rowClick="show" bulkActionButtons={false}>
                 <TextField source="product_data.name" label="Product" />
                 <TextField source="product_data.product_group_name" label="Group" />
                 <TextField source="branch_name" label="Branch" />

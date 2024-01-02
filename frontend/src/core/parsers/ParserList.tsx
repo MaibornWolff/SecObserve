@@ -1,6 +1,7 @@
 import { Datagrid, List, SelectInput, TextField, TextInput } from "react-admin";
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
+import { getSettingListSize } from "../../commons/settings/functions";
 import { PARSER_SOURCE_CHOICES, SCANNER_TYPE_CHOICES } from "../types";
 
 const listFilters = [
@@ -19,7 +20,7 @@ const ParserList = () => {
             actions={false}
             disableSyncWithLocation={false}
         >
-            <Datagrid size="medium" rowClick={false} bulkActionButtons={false}>
+            <Datagrid size={getSettingListSize()} rowClick={false} bulkActionButtons={false}>
                 <TextField source="name" />
                 <TextField source="type" />
                 <TextField source="source" />
