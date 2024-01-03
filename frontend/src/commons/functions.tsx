@@ -84,5 +84,5 @@ export const humanReadableDate = (date: string | undefined) => {
     const today = new Date().setHours(23, 59, 59, 999);
     const diffInMs = Date.parse(date).valueOf() - today.valueOf();
     const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
-    return rtf.format(Math.trunc(diffInDays), "day");
+    return rtf.format(Math.trunc(diffInDays), "day").replace(" ago", "");
 };
