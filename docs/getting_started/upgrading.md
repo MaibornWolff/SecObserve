@@ -10,6 +10,12 @@
 
 * There will be specific upgrade instructions if necessary, e.g. when there are new configuration parameters.
 
+## Release 1.3.0
+
+**Breaking changes**
+
+* The [ZAP project](https://www.zaproxy.org) has had a rebranding as a result of the move to the Software Security Project. To reflect this, the name of the parser has been changed from `OWASP ZAP` to `ZAP`. The GitLab template and GitLab action for `ZAP` have been renamed as well. These changes are not backwards compatible, so you need to update your configuration files and pipelines.
+
 ## Release 1.1.0
 
 **Breaking changes**
