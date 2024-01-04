@@ -42,7 +42,7 @@ A `Service` is a self-contained piece of functionality of a product. Can be some
 
 ## Vulnerability Check
 
-An import for one product, one branch and one file name resp. one API configuration is a so-called vulnerability check. See more in [Import algorithm](../../usage/import_observations/#import-algorithm).
+An import for one product, one branch and one file name resp. one API configuration is a so-called vulnerability check. See more in [Import algorithm](../usage/import_observations.md#import-algorithm).
 
 ## Parser
 

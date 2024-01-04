@@ -490,6 +490,11 @@ class Observation(Model):
     origin_source_line_end = IntegerField(
         null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]
     )
+    origin_cloud_provider = CharField(max_length=255, blank=True)
+    origin_cloud_account_subscription_project = CharField(max_length=255, blank=True)
+    origin_cloud_resource = CharField(max_length=255, blank=True)
+    origin_cloud_resource_type = CharField(max_length=255, blank=True)
+    origin_cloud_qualified_resource = CharField(max_length=255, blank=True)
     cvss3_score = DecimalField(max_digits=3, decimal_places=1, null=True)
     cvss3_vector = CharField(max_length=255, blank=True)
     cwe = IntegerField(
@@ -532,6 +537,7 @@ class Observation(Model):
     )
     issue_tracker_issue_id = CharField(max_length=255, blank=True)
     issue_tracker_jira_initial_status = CharField(max_length=255, blank=True)
+    has_potential_duplicates = BooleanField(default=False)
 
     class Meta:
         indexes = [
@@ -546,6 +552,7 @@ class Observation(Model):
             Index(fields=["origin_service_name"]),
             Index(fields=["origin_endpoint_hostname"]),
             Index(fields=["origin_source_file"]),
+            Index(fields=["origin_cloud_qualified_resource"]),
             Index(fields=["last_observation_log"]),
             Index(fields=["epss_score"]),
             Index(fields=["scanner"]),
@@ -603,3 +610,25 @@ class Evidence(Model):
 class Reference(Model):
     observation = ForeignKey(Observation, related_name="references", on_delete=CASCADE)
     url = TextField(max_length=2048)
+
+
+class Potential_Duplicate(Model):
+    POTENTIAL_DUPLICATE_TYPE_COMPONENT = "Component"
+    POTENTIAL_DUPLICATE_TYPE_SOURCE = "Source"
+
+    POTENTIAL_DUPLICATE_TYPES = [
+        (POTENTIAL_DUPLICATE_TYPE_COMPONENT, POTENTIAL_DUPLICATE_TYPE_COMPONENT),
+        (POTENTIAL_DUPLICATE_TYPE_SOURCE, POTENTIAL_DUPLICATE_TYPE_SOURCE),
+    ]
+
+    observation = ForeignKey(
+        Observation, related_name="potential_duplicates", on_delete=CASCADE
+    )
+    potential_duplicate_observation = ForeignKey(Observation, on_delete=CASCADE)
+    type = CharField(max_length=12, choices=POTENTIAL_DUPLICATE_TYPES)
+
+    class Meta:
+        unique_together = (
+            "observation",
+            "potential_duplicate_observation",
+        )

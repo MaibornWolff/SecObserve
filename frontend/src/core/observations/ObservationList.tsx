@@ -1,14 +1,15 @@
 import { Stack } from "@mui/material";
 import {
     AutocompleteInput,
+    BooleanField,
     ChipField,
-    DatagridConfigurable,
+    Datagrid,
     FilterButton,
     FunctionField,
     List,
+    NullableBooleanInput,
     NumberField,
     ReferenceInput,
-    SelectColumnsButton,
     TextField,
     TextInput,
     TopToolbar,
@@ -18,6 +19,7 @@ import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { humanReadableDate } from "../../commons/functions";
 import { AutocompleteInputMedium, AutocompleteInputWide } from "../../commons/layout/themes";
+import { getSettingListSize } from "../../commons/settings/functions";
 import {
     AGE_CHOICES,
     OBSERVATION_SEVERITY_CHOICES,
@@ -46,15 +48,16 @@ const listFilters = [
     <TextInput source="origin_docker_image_name_tag_short" label="Container" />,
     <TextInput source="origin_endpoint_hostname" label="Host" />,
     <TextInput source="origin_source_file" label="Source" />,
+    <TextInput source="origin_cloud_qualified_resource" label="Resource" />,
     <TextInput source="scanner" alwaysOn />,
     <AutocompleteInputMedium source="age" choices={AGE_CHOICES} alwaysOn />,
+    <NullableBooleanInput source="has_potential_duplicates" label="Duplicates" alwaysOn />,
 ];
 
 const ListActions = () => (
     <TopToolbar>
         <Stack spacing={0.5} alignItems="flex-end">
             <FilterButton />
-            <SelectColumnsButton />
         </Stack>
     </TopToolbar>
 );
@@ -74,7 +77,7 @@ const ObservationList = () => {
             storeKey="observations.list"
             actions={<ListActions />}
         >
-            <DatagridConfigurable size="medium" rowClick="show" bulkActionButtons={false}>
+            <Datagrid size={getSettingListSize()} rowClick="show" bulkActionButtons={false}>
                 <TextField source="product_data.name" label="Product" />
                 <TextField source="product_data.product_group_name" label="Group" />
                 <TextField source="branch_name" label="Branch" />
@@ -87,13 +90,15 @@ const ObservationList = () => {
                 <TextField source="origin_docker_image_name_tag_short" label="Container" />
                 <TextField source="origin_endpoint_hostname" label="Host" />
                 <TextField source="origin_source_file" label="Source" />
+                <TextField source="origin_cloud_qualified_resource" label="Resource" />,
                 <TextField source="scanner_name" label="Scanner" />
                 <FunctionField<Observation>
                     label="Age"
                     sortBy="last_observation_log"
                     render={(record) => (record ? humanReadableDate(record.last_observation_log) : "")}
                 />
-            </DatagridConfigurable>
+                <BooleanField source="has_potential_duplicates" label="Dupl." />
+            </Datagrid>
         </List>
     );
 };

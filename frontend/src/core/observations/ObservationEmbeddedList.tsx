@@ -3,12 +3,14 @@ import { Fragment } from "react";
 import { useEffect } from "react";
 import {
     AutocompleteInput,
+    BooleanField,
     ChipField,
     DatagridConfigurable,
     FilterForm,
     FunctionField,
     Identifier,
     ListContextProvider,
+    NullableBooleanInput,
     NumberField,
     Pagination,
     ReferenceInput,
@@ -24,6 +26,7 @@ import { PERMISSION_OBSERVATION_ASSESSMENT, PERMISSION_OBSERVATION_DELETE } from
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { humanReadableDate } from "../../commons/functions";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
+import { getSettingListSize } from "../../commons/settings/functions";
 import {
     AGE_CHOICES,
     OBSERVATION_SEVERITY_CHOICES,
@@ -67,10 +70,12 @@ function listFilters(product: Product) {
         <TextInput source="origin_docker_image_name_tag_short" label="Container" alwaysOn />,
         <TextInput source="origin_endpoint_hostname" label="Host" alwaysOn />,
         <TextInput source="origin_source_file" label="Source" alwaysOn />,
+        <TextInput source="origin_cloud_qualified_resource" label="Resource" alwaysOn />,
         <TextInput source="scanner" alwaysOn />,
         <AutocompleteInputMedium source="age" choices={AGE_CHOICES} alwaysOn />,
         <TextInput source="upload_filename" label="Filename" />,
         <TextInput source="api_configuration_name" label="API configuration" />,
+        <NullableBooleanInput source="has_potential_duplicates" label="Duplicates" alwaysOn />,
     ];
 }
 
@@ -141,7 +146,7 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
                 </Stack>
                 <Paper>
                     <DatagridConfigurable
-                        size="medium"
+                        size={getSettingListSize()}
                         sx={{ width: "100%" }}
                         rowClick={ShowObservations}
                         bulkActionButtons={
@@ -163,12 +168,14 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
                         <TextField source="origin_docker_image_name_tag_short" label="Container" />
                         <TextField source="origin_endpoint_hostname" label="Host" />
                         <TextField source="origin_source_file" label="Source" />
+                        <TextField source="origin_cloud_qualified_resource" label="Resource" />
                         <TextField source="scanner_name" label="Scanner" />
                         <FunctionField<Observation>
                             label="Age"
                             sortBy="last_observation_log"
                             render={(record) => (record ? humanReadableDate(record.last_observation_log) : "")}
                         />
+                        <BooleanField source="has_potential_duplicates" label="Dupl." />
                     </DatagridConfigurable>
                 </Paper>
                 <Pagination />

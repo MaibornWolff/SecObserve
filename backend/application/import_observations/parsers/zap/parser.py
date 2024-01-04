@@ -17,10 +17,10 @@ SEVERITIES = {
 }
 
 
-class OWASPZAPParser(BaseParser, BaseFileParser):
+class ZAPParser(BaseParser, BaseFileParser):
     @classmethod
     def get_name(cls) -> str:
-        return "OWASP ZAP"
+        return "ZAP"
 
     @classmethod
     def get_type(cls) -> str:
@@ -32,8 +32,8 @@ class OWASPZAPParser(BaseParser, BaseFileParser):
         except Exception:
             return False, ["File is not valid JSON"], {}
 
-        if not data.get("@programName") == "OWASP ZAP":
-            return False, ["File is not an OWASP ZAP format"], {}
+        if "ZAP" not in data.get("@programName", ""):
+            return False, ["File is not a ZAP format"], {}
 
         return True, [], data
 

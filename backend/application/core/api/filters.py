@@ -15,6 +15,7 @@ from application.core.models import (
     Evidence,
     Observation,
     Parser,
+    Potential_Duplicate,
     Product,
     Product_Member,
     Service,
@@ -167,6 +168,9 @@ class ObservationFilter(FilterSet):
     origin_source_file = CharFilter(
         field_name="origin_source_file", lookup_expr="icontains"
     )
+    origin_cloud_qualified_resource = CharFilter(
+        field_name="origin_cloud_qualified_resource", lookup_expr="icontains"
+    )
     scanner = CharFilter(field_name="scanner", lookup_expr="icontains")
     age = ChoiceFilter(field_name="age", method="get_age", choices=AGE_CHOICES)
     product_group = ModelChoiceFilter(
@@ -191,11 +195,13 @@ class ObservationFilter(FilterSet):
             ("origin_service_name", "origin_service_name"),
             ("origin_endpoint_hostname", "origin_endpoint_hostname"),
             ("origin_source_file", "origin_source_file"),
+            ("origin_cloud_qualified_resource", "origin_cloud_qualified_resource"),
             ("parser__name", "parser_data.name"),
             ("parser__type", "parser_data.type"),
             ("scanner", "scanner_name"),
             ("last_observation_log", "last_observation_log"),
             ("epss_score", "epss_score"),
+            ("has_potential_duplicates", "has_potential_duplicates"),
         ),
     )
 
@@ -212,6 +218,7 @@ class ObservationFilter(FilterSet):
             "upload_filename",
             "api_configuration_name",
             "origin_service",
+            "has_potential_duplicates",
         ]
 
     def get_age(self, queryset, field_name, value):  # pylint: disable=unused-argument
@@ -238,3 +245,14 @@ class EvidenceFilter(FilterSet):
     class Meta:
         model = Evidence
         fields = ["name", "observation"]
+
+
+class PotentialDuplicateFilter(FilterSet):
+    status = ChoiceFilter(
+        field_name="potential_duplicate_observation__current_status",
+        choices=Observation.STATUS_CHOICES,
+    )
+
+    class Meta:
+        model = Potential_Duplicate
+        fields = ["observation"]

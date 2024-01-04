@@ -24,6 +24,7 @@ from application.core.api.filters import (
     EvidenceFilter,
     ObservationFilter,
     ParserFilter,
+    PotentialDuplicateFilter,
     ProductFilter,
     ProductGroupFilter,
     ProductMemberFilter,
@@ -42,12 +43,14 @@ from application.core.api.serializers import (
     ObservationAssessmentSerializer,
     ObservationBulkAssessmentSerializer,
     ObservationBulkDeleteSerializer,
+    ObservationBulkMarkDuplicatesSerializer,
     ObservationCreateSerializer,
     ObservationListSerializer,
     ObservationRemoveAssessmentSerializer,
     ObservationSerializer,
     ObservationUpdateSerializer,
     ParserSerializer,
+    PotentialDuplicateSerializer,
     ProductGroupSerializer,
     ProductMemberSerializer,
     ProductSerializer,
@@ -58,6 +61,7 @@ from application.core.models import (
     Evidence,
     Observation,
     Parser,
+    Potential_Duplicate,
     Product,
     Product_Member,
     Service,
@@ -67,6 +71,7 @@ from application.core.queries.observation import (
     get_evidences,
     get_observation_by_id,
     get_observations,
+    get_potential_duplicates,
 )
 from application.core.queries.product import get_product_by_id, get_products
 from application.core.queries.product_member import get_product_members
@@ -79,6 +84,10 @@ from application.core.services.export_observations import (
 from application.core.services.observations_bulk_actions import (
     observations_bulk_assessment,
     observations_bulk_delete,
+    observations_bulk_mark_duplicates,
+)
+from application.core.services.potential_duplicates import (
+    set_potential_duplicate_both_ways,
 )
 from application.core.services.security_gate import check_security_gate
 from application.issue_tracker.services.issue_tracker import (
@@ -246,6 +255,27 @@ class ProductViewSet(ModelViewSet):
 
     @extend_schema(
         methods=["POST"],
+        request=ObservationBulkMarkDuplicatesSerializer,
+        responses={HTTP_204_NO_CONTENT: None},
+    )
+    @action(detail=True, methods=["post"])
+    def observations_bulk_mark_duplicates(self, request, pk=None):
+        product = self.__get_product(pk)
+        user_has_permission_or_403(product, Permissions.Observation_Assessment)
+
+        request_serializer = ObservationBulkMarkDuplicatesSerializer(data=request.data)
+        if not request_serializer.is_valid():
+            raise ValidationError(request_serializer.errors)
+
+        observations_bulk_mark_duplicates(
+            product,
+            request_serializer.validated_data.get("observation_id"),
+            request_serializer.validated_data.get("potential_duplicates"),
+        )
+        return Response(status=HTTP_204_NO_CONTENT)
+
+    @extend_schema(
+        methods=["POST"],
         request=ObservationBulkDeleteSerializer,
         responses={HTTP_204_NO_CONTENT: None},
     )
@@ -403,6 +433,7 @@ class ObservationViewSet(ModelViewSet):
         comment = request_serializer.validated_data.get("comment")
 
         save_assessment(observation, new_severity, new_status, comment)
+        set_potential_duplicate_both_ways(observation)
 
         return Response()
 
@@ -426,6 +457,7 @@ class ObservationViewSet(ModelViewSet):
         comment = request_serializer.validated_data.get("comment")
 
         remove_assessment(observation, comment)
+        set_potential_duplicate_both_ways(observation)
 
         return Response()
 
@@ -437,3 +469,12 @@ class EvidenceViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
 
     def get_queryset(self):
         return get_evidences()
+
+
+class PotentialDuplicateViewSet(GenericViewSet, ListModelMixin):
+    serializer_class = PotentialDuplicateSerializer
+    filterset_class = PotentialDuplicateFilter
+    queryset = Potential_Duplicate.objects.none()
+
+    def get_queryset(self):
+        return get_potential_duplicates()

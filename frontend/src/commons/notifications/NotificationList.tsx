@@ -13,6 +13,7 @@ import {
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { AutocompleteInputMedium } from "../layout/themes";
+import { getSettingListSize } from "../settings/functions";
 import { TYPE_CHOICES } from "../types";
 import NotificationBulkDeleteButton from "./NotificationBulkDeleteButton";
 
@@ -52,7 +53,7 @@ const NotificationList = () => {
             storeKey="notifications.list"
             actions={<ListActions />}
         >
-            <DatagridConfigurable size="medium" rowClick="show" bulkActionButtons={<BulkActionButtons />}>
+            <DatagridConfigurable size={getSettingListSize()} rowClick="show" bulkActionButtons={<BulkActionButtons />}>
                 <TextField source="type" />
                 <TextField source="name" />
                 <DateField source="created" showTime={true} />

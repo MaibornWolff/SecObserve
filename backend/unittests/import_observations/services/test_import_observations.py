@@ -46,8 +46,12 @@ class TestImportObservations(BaseTestCase):
     @patch(
         "application.import_observations.services.import_observations.epss_apply_observation"
     )
+    @patch(
+        "application.import_observations.services.import_observations.find_potential_duplicates"
+    )
     def test_file_upload_observations_with_branch(
         self,
+        mock_find_potential_duplicates,
         mock_epss_apply_observation,
         mock_push_observations_to_issue_tracker,
         mock_set_repository_default_branch,
@@ -70,6 +74,7 @@ class TestImportObservations(BaseTestCase):
         )
         self.assertEqual(mock_push_observations_to_issue_tracker.call_count, 2)
         self.assertEqual(mock_epss_apply_observation.call_count, 4)
+        self.assertEqual(mock_find_potential_duplicates.call_count, 2)
 
     @patch("application.commons.services.global_request.get_current_request")
     @patch(
@@ -84,8 +89,12 @@ class TestImportObservations(BaseTestCase):
     @patch(
         "application.import_observations.services.import_observations.epss_apply_observation"
     )
+    @patch(
+        "application.import_observations.services.import_observations.find_potential_duplicates"
+    )
     def test_file_upload_observations_without_branch(
         self,
+        mock_find_potential_duplicates,
         mock_epss_apply_observation,
         mock_push_observations_to_issue_tracker,
         mock_set_repository_default_branch,
@@ -102,6 +111,7 @@ class TestImportObservations(BaseTestCase):
         )
         self.assertEqual(mock_push_observations_to_issue_tracker.call_count, 2)
         self.assertEqual(mock_epss_apply_observation.call_count, 4)
+        self.assertEqual(mock_find_potential_duplicates.call_count, 2)
 
     def _file_upload_observations(
         self, branch, service, docker_image_name_tag, endpoint_url

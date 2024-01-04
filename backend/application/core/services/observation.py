@@ -44,6 +44,14 @@ def _get_string_to_hash(observation):  # pylint: disable=too-many-branches
         hash_string += str(observation.origin_source_line_start)
     if observation.origin_source_line_end:
         hash_string += str(observation.origin_source_line_end)
+
+    if observation.origin_cloud_provider:
+        hash_string += observation.origin_cloud_provider
+    if observation.origin_cloud_account_subscription_project:
+        hash_string += observation.origin_cloud_account_subscription_project
+    if observation.origin_cloud_resource:
+        hash_string += observation.origin_cloud_resource
+
     return hash_string
 
 
@@ -103,6 +111,7 @@ def normalize_observation_fields(observation) -> None:
     normalize_origin_component(observation)
     normalize_origin_docker(observation)
     normalize_origin_endpoint(observation)
+    normalize_origin_cloud(observation)
 
     normalize_severity(observation)
     normalize_status(observation)
@@ -258,6 +267,36 @@ def normalize_origin_endpoint(observation):
         observation.origin_endpoint_query = ""
     if observation.origin_endpoint_fragment is None:
         observation.origin_endpoint_fragment = ""
+
+
+def normalize_origin_cloud(observation):
+    if observation.origin_cloud_provider is None:
+        observation.origin_cloud_provider = ""
+    if observation.origin_cloud_account_subscription_project is None:
+        observation.origin_cloud_account_subscription_project = ""
+    if observation.origin_cloud_resource is None:
+        observation.origin_cloud_resource = ""
+    if observation.origin_cloud_resource_type is None:
+        observation.origin_cloud_resource_type = ""
+
+    observation.origin_cloud_qualified_resource = ""
+    if observation.origin_cloud_account_subscription_project:
+        observation.origin_cloud_qualified_resource = (
+            (observation.origin_cloud_account_subscription_project[:119] + "...")
+            if len(observation.origin_cloud_account_subscription_project) > 122
+            else observation.origin_cloud_account_subscription_project
+        )
+    if (
+        observation.origin_cloud_account_subscription_project
+        and observation.origin_cloud_resource
+    ):
+        observation.origin_cloud_qualified_resource += " / "
+    if observation.origin_cloud_resource:
+        observation.origin_cloud_qualified_resource += (
+            (observation.origin_cloud_resource[:119] + "...")
+            if len(observation.origin_cloud_resource) > 122
+            else observation.origin_cloud_resource
+        )
 
 
 def normalize_severity(observation):

@@ -183,12 +183,22 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         container = ""
         file = ""
 
-        tools = data.get("metadata", {}).get("tools", [])
-        if len(tools) >= 1:
-            scanner = tools[0].get("name", "")
-            version = tools[0].get("version")
-            if version:
-                scanner += " / " + version
+        tools = data.get("metadata", {}).get("tools")
+        if tools:
+            if isinstance(tools, dict):
+                components_or_services = tools.get("components", [])
+                if not components_or_services:
+                    components_or_services = tools.get("services", [])
+                if components_or_services:
+                    scanner = components_or_services[0].get("name", "")
+                    version = components_or_services[0].get("version")
+                    if version:
+                        scanner += " / " + version
+            if isinstance(tools, list):
+                scanner = tools[0].get("name", "")
+                version = tools[0].get("version")
+                if version:
+                    scanner += " / " + version
 
         component_type = data.get("metadata", {}).get("component", {}).get("type")
         component_name = data.get("metadata", {}).get("component", {}).get("name", "")

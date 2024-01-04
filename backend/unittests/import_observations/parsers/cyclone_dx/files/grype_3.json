@@ -1,0 +1,142 @@
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.5.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:6b28490c-3ce0-48f1-89f1-067491575c2f",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2024-01-03T12:21:59Z",
+    "tools": {
+      "components": [
+        {
+          "type": "application",
+          "author": "anchore",
+          "name": "grype",
+          "version": "0.73.5"
+        }
+      ]
+    },
+    "component": {
+      "bom-ref": "c23595fd1c11164b",
+      "type": "container",
+      "name": "example/example-backend",
+      "version": "dev"
+    },
+    "properties": null
+  },
+  "components": [
+    {
+      "bom-ref": "pkg:apk/alpine/busybox@1.36.1-r15?arch=x86_64&distro=alpine-3.19.0&package-id=6d810d507355b170",
+      "type": "library",
+      "publisher": "Sören Tempel <soeren+alpine@soeren-tempel.net>",
+      "name": "busybox",
+      "version": "1.36.1-r15",
+      "description": "Size optimized toolbox of many common UNIX utilities",
+      "licenses": [
+        {
+          "license": {
+            "id": "GPL-2.0-only"
+          }
+        }
+      ],
+      "cpe": "cpe:2.3:a:busybox:busybox:1.36.1-r15:*:*:*:*:*:*:*",
+      "purl": "pkg:apk/alpine/busybox@1.36.1-r15?arch=x86_64&distro=alpine-3.19.0",
+      "externalReferences": [
+        {
+          "url": "https://busybox.net/",
+          "type": "distribution"
+        }
+      ],
+      "properties": [
+        {
+          "name": "syft:package:foundBy",
+          "value": "apk-db-cataloger"
+        },
+        {
+          "name": "syft:package:type",
+          "value": "apk"
+        },
+        {
+          "name": "syft:package:metadataType",
+          "value": "apk-db-entry"
+        },
+        {
+          "name": "syft:location:0:layerID",
+          "value": "sha256:ba84423610d66e038209adda4df93894688be086d4dfea1de7f13937aa5dff96"
+        },
+        {
+          "name": "syft:location:0:path",
+          "value": "/lib/apk/db/installed"
+        },
+        {
+          "name": "syft:metadata:gitCommitOfApkPort",
+          "value": "d1b6f274f29076967826e0ecf6ebcaa5d360272f"
+        },
+        {
+          "name": "syft:metadata:installedSize",
+          "value": "946176"
+        },
+        {
+          "name": "syft:metadata:originPackage",
+          "value": "busybox"
+        },
+        {
+          "name": "syft:metadata:provides:0",
+          "value": "cmd:busybox=1.36.1-r15"
+        },
+        {
+          "name": "syft:metadata:pullChecksum",
+          "value": "Q1AYNx2pLOAHRYZQgv3nM8TNtvRWY="
+        },
+        {
+          "name": "syft:metadata:pullDependencies:0",
+          "value": "so:libc.musl-x86_64.so.1"
+        },
+        {
+          "name": "syft:metadata:size",
+          "value": "506796"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+  ],
+  "vulnerabilities": [
+    {
+      "bom-ref": "urn:uuid:a02fff5e-7832-425a-90e0-cc7485442825",
+      "id": "CVE-2023-42363",
+      "source": {
+        "name": "nvd-cpe",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-42363"
+      },
+      "references": [
+        {
+          "id": "CVE-2023-42363",
+          "source": {
+            "name": "nvd-cpe",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-42363"
+          }
+        }
+      ],
+      "ratings": [
+        {
+          "score": 5.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H"
+        }
+      ],
+      "description": "A use-after-free vulnerability was discovered in xasprintf function in xfuncs_printf.c:344 in BusyBox v.1.36.1.",
+      "advisories": [
+        {
+          "url": "https://bugs.busybox.net/show_bug.cgi?id=15865"
+        }
+      ],
+      "affects": [
+        {
+          "ref": "pkg:apk/alpine/busybox@1.36.1-r15?arch=x86_64&distro=alpine-3.19.0&package-id=6d810d507355b170"
+        }
+      ]
+    }
+  ]
+}

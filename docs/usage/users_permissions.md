@@ -7,7 +7,7 @@
 SecObserve supports two types of users:
 
 * **Internally managed users**: You need a username and password given by a SecObserve administrator and use the `SIGN IN WITH USER` button.
-* **Users managed in Azure AD:** The button `SIGN IN WITH MICROSOFT` will redirect you to login page of Microsoft.
+* **Users managed in a directory:** The button `ENTERPRISE SIGN` will redirect you to login page of your users directory, if [OpenID Connect](../integrations/oidc_authentication.md) is configured.
 
 Users have specified permissions depending on their type and role in a product.
 

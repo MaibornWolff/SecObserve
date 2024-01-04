@@ -93,14 +93,3 @@ class UserHasObservationPermission(BasePermission):
             Permissions.Observation_Edit,
             Permissions.Observation_Delete,
         )
-
-
-class UserHasEvidencePermission(BasePermission):
-    def has_object_permission(self, request, view, obj):
-        return check_object_permission(
-            request,
-            obj,
-            Permissions.Observation_View,
-            None,
-            None,
-        )

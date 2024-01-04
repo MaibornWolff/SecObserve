@@ -73,6 +73,10 @@ class Rule_Engine:
                 and self._check_regex(
                     rule.origin_source_file, observation.origin_source_file
                 )
+                and self._check_regex(
+                    rule.origin_cloud_qualified_resource,
+                    observation.origin_cloud_qualified_resource,
+                )
             ):
                 previous_severity = observation.current_severity
                 previous_rule_severity = observation.rule_severity

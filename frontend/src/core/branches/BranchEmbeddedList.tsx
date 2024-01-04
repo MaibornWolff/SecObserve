@@ -12,6 +12,7 @@ import {
 import { PERMISSION_BRANCH_DELETE, PERMISSION_BRANCH_EDIT } from "../../access_control/types";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
+import { getSettingListSize } from "../../commons/settings/functions";
 import BranchDelete from "./BranchDelete";
 import BranchEdit from "./BranchEdit";
 
@@ -45,7 +46,7 @@ const BranchEmbeddedList = ({ product }: BranchEmbeddedListProps) => {
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
                 <Paper>
-                    <Datagrid size="medium" sx={{ width: "100%" }} bulkActionButtons={false}>
+                    <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false}>
                         <WithRecord
                             label="Name"
                             render={(branch) => (

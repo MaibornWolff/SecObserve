@@ -86,6 +86,9 @@ const ProductRuleCreate = ({ id }: ProductRuleCreateProps) => {
         if (data.origin_source_file == null) {
             data.origin_source_file = "";
         }
+        if (data.origin_cloud_qualified_resource == null) {
+            data.origin_cloud_qualified_resource = "";
+        }
         if (data.new_severity == null) {
             data.new_severity = "";
         }
@@ -163,6 +166,11 @@ const ProductRuleCreate = ({ id }: ProductRuleCreateProps) => {
                                 source="origin_source_file"
                                 label="Origin source file"
                                 helperText="Regular expression to match the source file"
+                            />
+                            <TextInputWide
+                                source="origin_cloud_qualified_resource"
+                                label="Origin cloud qualified resource"
+                                helperText="Regular expression to match the qualified resource name"
                             />
                             <AutocompleteInputMedium source="new_severity" choices={OBSERVATION_SEVERITY_CHOICES} />
                             <AutocompleteInputMedium source="new_status" choices={OBSERVATION_STATUS_CHOICES} />

@@ -1,3 +1,5 @@
+from typing import Optional
+
 from application.commons.services.global_request import get_current_user
 from application.core.models import Observation
 from application.core.services.observation import (
@@ -12,7 +14,10 @@ from application.issue_tracker.services.issue_tracker import (
 
 
 def save_assessment(
-    observation: Observation, new_severity: str, new_status: str, comment: str
+    observation: Observation,
+    new_severity: Optional[str],
+    new_status: Optional[str],
+    comment: str,
 ) -> None:
     previous_severity = observation.current_severity
     previous_assessment_severity = observation.assessment_severity

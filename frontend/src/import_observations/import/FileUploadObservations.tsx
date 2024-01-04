@@ -149,7 +149,7 @@ const FileUploadObservations = () => {
                             className={classes.input}
                             type="file"
                             onChange={handleFileChange}
-                            accept=".json, .sarif"
+                            accept=".csv, .json, .sarif"
                         />
                         <WithRecord
                             render={(product) => (

@@ -14,6 +14,7 @@ import {
 
 import { PERMISSION_API_CONFIGURATION_DELETE, PERMISSION_API_CONFIGURATION_EDIT } from "../../access_control/types";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
+import { getSettingListSize } from "../../commons/settings/functions";
 import APIConfigurationDelete from "./ApiConfigurationDelete";
 import ApiConfigurationEdit from "./ApiConfigurationEdit";
 
@@ -51,7 +52,7 @@ const ApiConfigurationEmbeddedList = ({ product }: ApiConfigurationEmbeddedListP
             <div style={{ width: "100%" }}>
                 <FilterForm filters={listFilters} />
                 <Paper>
-                    <Datagrid size="medium" sx={{ width: "100%" }} bulkActionButtons={false}>
+                    <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false}>
                         <TextField source="name" />
                         <ReferenceField source="parser" reference="parsers" link={false} />
                         <TextField source="base_url" label="Base URL" />

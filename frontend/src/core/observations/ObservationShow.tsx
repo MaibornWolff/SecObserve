@@ -1,4 +1,5 @@
 import { Stack, Typography } from "@mui/material";
+import { Fragment } from "react";
 import {
     ArrayField,
     ChipField,
@@ -28,6 +29,7 @@ import { OBSERVATION_STATUS_OPEN } from "../types";
 import ObservationAssessment from "./ObservationAssessment";
 import ObservationRemoveAssessment from "./ObservationRemoveAssessment";
 import ObservationsShowAside from "./ObservationShowAside";
+import PotentialDuplicatesList from "./PotentialDuplicatesList";
 
 type ShowActionsProps = {
     filter: any;
@@ -332,6 +334,38 @@ const ObservationShow = () => {
                                 </Stack>
                             </div>
                         )}
+                        {observation.origin_cloud_provider != "" && (
+                            <div>
+                                <Typography variant="subtitle1" sx={{ paddingTop: "8px" }}>
+                                    Cloud
+                                </Typography>
+                                <Stack direction="row" spacing={4}>
+                                    {observation.origin_cloud_provider != "" && (
+                                        <Labeled>
+                                            <TextField source="origin_cloud_provider" label="Provider" />
+                                        </Labeled>
+                                    )}
+                                    {observation.origin_cloud_account_subscription_project != "" && (
+                                        <Labeled>
+                                            <TextField
+                                                source="origin_cloud_account_subscription_project"
+                                                label="Account / Subscription / Project"
+                                            />
+                                        </Labeled>
+                                    )}
+                                    {observation.origin_cloud_resource != "" && (
+                                        <Labeled>
+                                            <TextField source="origin_cloud_resource" label="Resource" />
+                                        </Labeled>
+                                    )}
+                                    {observation.origin_cloud_resource_type != "" && (
+                                        <Labeled>
+                                            <TextField source="origin_cloud_resource_type" label="Resource type" />
+                                        </Labeled>
+                                    )}
+                                </Stack>
+                            </div>
+                        )}
                         <Typography variant="h6" sx={{ paddingTop: "16px" }}>
                             Log
                         </Typography>{" "}
@@ -346,6 +380,14 @@ const ObservationShow = () => {
                                 <DateField source="created" showTime />
                             </Datagrid>
                         </ArrayField>
+                        {observation && observation.has_potential_duplicates && (
+                            <Fragment>
+                                <Typography variant="h6" sx={{ paddingTop: "16px", paddingBottom: "8px" }}>
+                                    Potential Duplicates
+                                </Typography>{" "}
+                                <PotentialDuplicatesList observation={observation} />
+                            </Fragment>
+                        )}
                     </SimpleShowLayout>
                 )}
             />

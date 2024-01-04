@@ -2,6 +2,7 @@ import { Paper } from "@mui/material";
 import { Datagrid, ListContextProvider, Pagination, SelectField, useListController } from "react-admin";
 
 import { PERMISSION_PRODUCT_API_TOKEN_REVOKE, ROLE_CHOICES } from "../../access_control/types";
+import { getSettingListSize } from "../../commons/settings/functions";
 import RevokeProductApiToken from "./ProductApiTokenRevoke";
 
 type ProductApiTokenEmbeddedListProps = {
@@ -30,7 +31,7 @@ const ProductApiTokenEmbeddedList = ({ product }: ProductApiTokenEmbeddedListPro
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
                 <Paper>
-                    <Datagrid size="medium" sx={{ width: "100%" }} bulkActionButtons={false}>
+                    <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false}>
                         <SelectField source="role" choices={ROLE_CHOICES} />
                         {product && product.permissions.includes(PERMISSION_PRODUCT_API_TOKEN_REVOKE) && (
                             <RevokeProductApiToken product={product} />

@@ -80,13 +80,7 @@ class TestProwlerParser(TestCase):
             )
             description = """Ensure RDS instances have minor version upgrade enabled.
 
-Auto Minor Version Upgrade is a feature that you can enable to have your database automatically upgraded when a new minor database engine version is available. Minor version upgrades often patch security vulnerabilities and fix bugs and therefore should be applied.
-
-**Account id:** ACCOUNT_ID
-
-**Resource id:** rds-instance-id
-
-**Resource type:** AwsRdsDbInstance"""
+Auto Minor Version Upgrade is a feature that you can enable to have your database automatically upgraded when a new minor database engine version is available. Minor version upgrades often patch security vulnerabilities and fix bugs and therefore should be applied."""
             self.assertEqual(description, observation.description)
             self.assertEqual(Observation.SEVERITY_LOW, observation.parser_severity)
             self.assertIn(
@@ -101,6 +95,12 @@ Auto Minor Version Upgrade is a feature that you can enable to have your databas
                 "* **NativeIaC:** https://docs.bridgecrew.io/docs/ensure-aws-db-instance-gets-all-minor-upgrades-automatically#cloudformation",
                 observation.recommendation,
             )
+            self.assertEqual("AWS", observation.origin_cloud_provider)
+            self.assertEqual(
+                "ACCOUNT_ID", observation.origin_cloud_account_subscription_project
+            )
+            self.assertEqual("rds-instance-id", observation.origin_cloud_resource)
+            self.assertEqual("AwsRdsDbInstance", observation.origin_cloud_resource_type)
             self.assertEqual(
                 "https://aws.amazon.com/blogs/database/best-practices-for-upgrading-amazon-rds-to-major-and-minor-versions-of-postgresql/",
                 observation.unsaved_references[0],
@@ -125,13 +125,7 @@ Auto Minor Version Upgrade is a feature that you can enable to have your databas
             )
             description = """Ensure That Microsoft Defender for App Services Is Set To 'On' 
 
-Turning on Microsoft Defender for App Service enables threat detection for App Service, providing threat intelligence, anomaly detection, and behavior analytics in the Microsoft Defender for Cloud.
-
-**Subscription:** Example_Subscription - XAKS
-
-**Resource id:** /subscriptions/e1f7e378-d186-11ed-afa1-0242ac120002/providers/Microsoft.Security/pricings/AppServices
-
-**Resource type:** AzureDefenderPlan"""
+Turning on Microsoft Defender for App Service enables threat detection for App Service, providing threat intelligence, anomaly detection, and behavior analytics in the Microsoft Defender for Cloud."""
             self.assertEqual(description, observation.description)
             self.assertEqual(Observation.SEVERITY_HIGH, observation.parser_severity)
             recommendation = """By default, Microsoft Defender for Cloud is not enabled for your App Service instances. Enabling the Defender security service for App Service instances allows for advanced security defense using threat detection capabilities provided by Microsoft Security Response Center.
@@ -142,6 +136,17 @@ Turning on Microsoft Defender for App Service enables threat detection for App S
 
 * **Other:** https://www.trendmicro.com/cloudoneconformity/knowledge-base/azure/SecurityCenter/defender-app-service.html"""
             self.assertEqual(recommendation, observation.recommendation)
+            self.assertEqual("Azure", observation.origin_cloud_provider)
+            self.assertEqual(
+                "Example_Subscription - XAKS",
+                observation.origin_cloud_account_subscription_project,
+            )
+            self.assertEqual(
+                "Defender plan App Services", observation.origin_cloud_resource
+            )
+            self.assertEqual(
+                "AzureDefenderPlan", observation.origin_cloud_resource_type
+            )
             self.assertEqual("Result", observation.unsaved_evidences[0][0])
             self.assertIn(
                 "defender_ensure_defender_for_app_services_is_on",
