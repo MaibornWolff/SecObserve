@@ -54,6 +54,16 @@ def send_product_security_gate_notification(product: Product) -> None:
             product_url=f"{get_base_url_frontend()}#/products/{product.id}/show",
         )
 
+    notification_slack_webhook = _get_notification_slack_webhook(product)
+    if notification_slack_webhook:
+        _send_slack_notification(
+            notification_slack_webhook,
+            "slack_product_security_gate.tpl",
+            product=product,
+            security_gate_status=security_gate_status,
+            product_url=f"{get_base_url_frontend()}#/products/{product.id}/show",
+        )
+
     Notification.objects.create(
         name=f"Security gate has changed to {security_gate_status}",
         product=product,
@@ -83,6 +93,16 @@ def send_exception_notification(exception: Exception) -> None:
             _send_msteams_notification(
                 config.EXCEPTION_MS_TEAMS_WEBHOOK,
                 "msteams_exception.tpl",
+                exception_class=get_classname(exception),
+                exception_message=str(exception),
+                exception_trace=_get_stack_trace(exception, True),
+                date_time=datetime.now(),
+            )
+
+        if config.EXCEPTION_SLACK_WEBHOOK:
+            _send_slack_notification(
+                config.EXCEPTION_SLACK_WEBHOOK,
+                "slack_exception.tpl",
                 exception_class=get_classname(exception),
                 exception_message=str(exception),
                 exception_trace=_get_stack_trace(exception, True),
@@ -126,6 +146,19 @@ def send_task_exception_notification(
             _send_msteams_notification(
                 config.EXCEPTION_MS_TEAMS_WEBHOOK,
                 "msteams_task_exception.tpl",
+                function=function,
+                arguments=str(arguments),
+                user=user,
+                exception_class=get_classname(exception),
+                exception_message=str(exception),
+                exception_trace=_get_stack_trace(exception, True),
+                date_time=datetime.now(),
+            )
+
+        if config.EXCEPTION_SLACK_WEBHOOK:
+            _send_slack_notification(
+                config.EXCEPTION_SLACK_WEBHOOK,
+                "slack_task_exception.tpl",
                 function=function,
                 arguments=str(arguments),
                 user=user,
@@ -196,6 +229,26 @@ def _send_msteams_notification(webhook: str, template: str, **kwargs) -> None:
             )
 
 
+def _send_slack_notification(webhook: str, template: str, **kwargs) -> None:
+    notification_message = _create_notification_message(template, **kwargs)
+    if notification_message:
+        try:
+            response = requests.request(
+                method="POST",
+                url=webhook,
+                data=notification_message,
+                timeout=60,
+            )
+            response.raise_for_status()
+        except Exception as e:
+            logger.error(
+                format_log_message(
+                    message=f"Error while calling Slack webhook {webhook}",
+                    exception=e,
+                )
+            )
+
+
 def _create_notification_message(template: str, **kwargs) -> Optional[str]:
     try:
         return render_to_string(template, kwargs)
@@ -252,6 +305,16 @@ def _get_notification_ms_teams_webhook(product: Product) -> Optional[str]:
 
     if product.product_group and product.product_group.notification_ms_teams_webhook:
         return product.product_group.notification_ms_teams_webhook
+
+    return None
+
+
+def _get_notification_slack_webhook(product: Product) -> Optional[str]:
+    if product.notification_slack_webhook:
+        return product.notification_slack_webhook
+
+    if product.product_group and product.product_group.notification_slack_webhook:
+        return product.product_group.notification_slack_webhook
 
     return None
 

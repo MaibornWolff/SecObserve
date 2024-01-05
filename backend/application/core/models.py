@@ -85,6 +85,7 @@ class Product(Model):
     apply_general_rules = BooleanField(default=True)
 
     notification_ms_teams_webhook = CharField(max_length=255, blank=True)
+    notification_slack_webhook = CharField(max_length=255, blank=True)
     notification_email_to = CharField(max_length=255, blank=True)
 
     issue_tracker_active = BooleanField(default=False)
