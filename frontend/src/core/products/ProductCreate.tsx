@@ -40,6 +40,9 @@ const ProductCreate = () => {
         if (!data.notification_ms_teams_webhook) {
             data.notification_ms_teams_webhook = "";
         }
+        if (!data.notification_slack_webhook) {
+            data.notification_slack_webhook = "";
+        }
         if (data.security_gate_active) {
             if (data.security_gate_threshold_critical == "") {
                 data.security_gate_threshold_critical = 0;
@@ -178,6 +181,11 @@ const ProductCreate = () => {
                     source="notification_ms_teams_webhook"
                     label="MS Teams"
                     helperText="Webhook URL to send notifications to MS Teams"
+                />
+                <TextInputWide
+                    source="notification_slack_webhook"
+                    label="Slack"
+                    helperText="Webhook URL to send notifications to Slack"
                 />
 
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>

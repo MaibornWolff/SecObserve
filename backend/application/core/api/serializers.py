@@ -137,6 +137,7 @@ class ProductGroupSerializer(ProductCoreSerializer):
             "repository_branch_housekeeping_keep_inactive_days",
             "repository_branch_housekeeping_exempt_branches",
             "notification_ms_teams_webhook",
+            "notification_slack_webhook",
             "notification_email_to",
             "security_gate_active",
             "security_gate_threshold_critical",

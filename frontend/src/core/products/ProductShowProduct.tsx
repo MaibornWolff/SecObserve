@@ -81,7 +81,9 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                 </Labeled>
             )}
 
-            {(product.notification_email_to || product.notification_ms_teams_webhook) && (
+            {(product.notification_email_to ||
+                product.notification_ms_teams_webhook ||
+                product.notification_slack_webhook) && (
                 <Typography variant="h6" sx={{ marginTop: "1em" }}>
                     Notifications
                 </Typography>
@@ -90,6 +92,7 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
             {product.notification_ms_teams_webhook && (
                 <TextField source="notification_ms_teams_webhook" label="MS Teams" />
             )}
+            {product.notification_slack_webhook && <TextField source="notification_slack_webhook" label="Slack" />}
 
             {((!product.product_group && product.security_gate_active != null) ||
                 (product.product_group &&

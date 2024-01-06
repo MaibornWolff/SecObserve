@@ -1,6 +1,7 @@
 from threading import current_thread
 from typing import Optional
 
+from django.contrib.auth.models import AnonymousUser
 from django.http.request import HttpRequest
 
 from application.access_control.models import User
@@ -15,8 +16,8 @@ def get_current_request() -> Optional[HttpRequest]:
 
 def get_current_user() -> Optional[User]:
     request = get_current_request()
-    if request:
-        return request.user  # type: ignore[return-value]
+    if request and request.user and not isinstance(request.user, AnonymousUser):
+        return request.user
 
     return None
 
