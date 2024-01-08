@@ -116,35 +116,35 @@ trivy_image_frontend_main:
   SO_ORIGIN_SERVICE: "frontend"
   SO_BRANCH_NAME: "main"
 
-cryptolyzer_backend_main:
-  SCANNER: cryptolyzer
-  TARGET: "secobserve-backend.maibornwolff.de"
-  REPORT_NAME: "cryptolyzer_backend_main.json"
-  SO_ORIGIN_SERVICE: "backend"
-  SO_BRANCH_NAME: "main"
+# cryptolyzer_backend_main:
+#   SCANNER: cryptolyzer
+#   TARGET: "secobserve-backend.maibornwolff.de"
+#   REPORT_NAME: "cryptolyzer_backend_main.json"
+#   SO_ORIGIN_SERVICE: "backend"
+#   SO_BRANCH_NAME: "main"
 
-drheader_backend_main:
-  SCANNER: drheader
-  TARGET: "https://secobserve-backend.maibornwolff.de"
-  REPORT_NAME: "drheader_backend_main.json"
-  SO_ORIGIN_SERVICE: "backend"
-  SO_ORIGIN_ENDPOINT_URL: "https://secobserve-backend.maibornwolff.de"
-  SO_BRANCH_NAME: "main"
+# drheader_backend_main:
+#   SCANNER: drheader
+#   TARGET: "https://secobserve-backend.maibornwolff.de"
+#   REPORT_NAME: "drheader_backend_main.json"
+#   SO_ORIGIN_SERVICE: "backend"
+#   SO_ORIGIN_ENDPOINT_URL: "https://secobserve-backend.maibornwolff.de"
+#   SO_BRANCH_NAME: "main"
 
-cryptolyzer_frontend_main:
-  SCANNER: cryptolyzer
-  TARGET: "secobserve.maibornwolff.de"
-  REPORT_NAME: "cryptolyzer_frontend_main.json"
-  SO_ORIGIN_SERVICE: "frontend"
-  SO_BRANCH_NAME: "main"
+# cryptolyzer_frontend_main:
+#   SCANNER: cryptolyzer
+#   TARGET: "secobserve.maibornwolff.de"
+#   REPORT_NAME: "cryptolyzer_frontend_main.json"
+#   SO_ORIGIN_SERVICE: "frontend"
+#   SO_BRANCH_NAME: "main"
 
-drheader_frontend_main:
-  SCANNER: drheader
-  TARGET: "https://secobserve.maibornwolff.de"
-  REPORT_NAME: "drheader_frontend_main.json"
-  SO_ORIGIN_SERVICE: "frontend"
-  SO_ORIGIN_ENDPOINT_URL: "https://secobserve-backend.maibornwolff.de"
-  SO_BRANCH_NAME: "main"
+# drheader_frontend_main:
+#   SCANNER: drheader
+#   TARGET: "https://secobserve.maibornwolff.de"
+#   REPORT_NAME: "drheader_frontend_main.json"
+#   SO_ORIGIN_SERVICE: "frontend"
+#   SO_ORIGIN_ENDPOINT_URL: "https://secobserve.maibornwolff.de"
+#   SO_BRANCH_NAME: "main"
 
 importer:
   SO_UPLOAD: "true"
