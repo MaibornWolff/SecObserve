@@ -17,9 +17,9 @@ from application.metrics.services.export_metrics import (
     export_product_metrics_excel,
 )
 from application.metrics.services.metrics import (
+    get_codecharta_metrics,
     get_product_metrics_current,
     get_product_metrics_timeline,
-    get_codecharta_metrics,
 )
 
 
@@ -73,6 +73,7 @@ class ProductMetricsExportCsvView(APIView):
         export_product_metrics_csv(response, product)
 
         return response
+
 
 class ProductMetricsExportCodeChartaView(APIView):
     @action(detail=False, methods=["get"])
