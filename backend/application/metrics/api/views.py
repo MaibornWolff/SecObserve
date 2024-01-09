@@ -4,6 +4,7 @@ from tempfile import NamedTemporaryFile
 from constance import config
 from django.http import HttpResponse
 from rest_framework.decorators import action
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -79,6 +80,8 @@ class ProductMetricsExportCodeChartaView(APIView):
     @action(detail=False, methods=["get"])
     def get(self, request):
         product = _get_and_check_product(request)
+        if not product:
+            raise ValidationError("Product not found")
 
         response = HttpResponse(content_type="text/csv")
         response[
