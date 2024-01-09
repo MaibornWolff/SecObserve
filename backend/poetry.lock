@@ -945,91 +945,6 @@ isort = ">=5.0.0,<6"
 test = ["pytest"]
 
 [[package]]
-name = "grimp"
-version = "3.2"
-description = "Builds a queryable graph of the imports within one or more Python packages."
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "grimp-3.2-cp310-cp310-macosx_10_12_x86_64.whl", hash = "sha256:4bb53fd3994e9bb2ba57f68eeb1c8dc25713ee46908b590e323a163c65dd2046"},
-    {file = "grimp-3.2-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:a4b7edeb5745ae47a20989fd488bfee49970429898cb3952b7c284ec136f3f00"},
-    {file = "grimp-3.2-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:d4e88f311db803773a98799bf90046fae88790dbac954763e4907e0e88fb7cbe"},
-    {file = "grimp-3.2-cp310-cp310-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:6107b1d242ffb4e577527e7a66583d68c119944694139790f926566857dddc18"},
-    {file = "grimp-3.2-cp310-cp310-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:72a3daf117d997712938e57763a95ae6e5d703b001ca46908b44884b220005b1"},
-    {file = "grimp-3.2-cp310-cp310-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:b6502ca836895eb56f1363d808d00c7571ccaca170dca9bf8e92dc44ca00aa5c"},
-    {file = "grimp-3.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e133d5adc1093fe66ef58b8cdc4a96b7928678e1624c1cf47a33231e1953df8d"},
-    {file = "grimp-3.2-cp310-cp310-manylinux_2_5_i686.manylinux1_i686.whl", hash = "sha256:ab50b3684210032aee6665c924b1b49ef7a044cc64761fb1173d967b9995fb68"},
-    {file = "grimp-3.2-cp310-none-win32.whl", hash = "sha256:e537464745084bc4e2c1786dd3848b895a66a62e7205532c7c28224e7550496f"},
-    {file = "grimp-3.2-cp310-none-win_amd64.whl", hash = "sha256:284bd64133f562e617645ec35355365d56303fd7fa607ebdd144c04cbf335b02"},
-    {file = "grimp-3.2-cp311-cp311-macosx_10_12_x86_64.whl", hash = "sha256:2c746d6894cd6ed836377977343add3b591b17529d06b8e6904ce264e40fd395"},
-    {file = "grimp-3.2-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:7c19629f6164363b20690ff09480051d85a6ed99501e7208c2ac8a1b85cee75d"},
-    {file = "grimp-3.2-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:523c33702a0544d9ebd000217b375534d9291a40fefc7d8da7317f2f74041fd9"},
-    {file = "grimp-3.2-cp311-cp311-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:c657c1cbabe9534cfbf6e0d9c7b0743f7b656a30763243a336366a59c06c4f48"},
-    {file = "grimp-3.2-cp311-cp311-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:3855540cbb952a74a70786f32774cfbaccf45fa3b268a7ef7bf969bd6b80de95"},
-    {file = "grimp-3.2-cp311-cp311-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:132e0714bbd0fa2ddd8a66483ca0cdf3b2a1a9a01ad0b7b6da470fb4692b1a87"},
-    {file = "grimp-3.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:dba38c70c58f5b9dd9f72ffd996858cf4f1e4862d32d76efe51a42975cd130bd"},
-    {file = "grimp-3.2-cp311-cp311-manylinux_2_5_i686.manylinux1_i686.whl", hash = "sha256:0e24b4a9cbe4be686508e103d4520cd3af0200c7743f1ffafcfc1fd2d130efbf"},
-    {file = "grimp-3.2-cp311-none-win32.whl", hash = "sha256:192e00612e0ff4d6262f1080f71459997a1ab2efac4343e0630415e3e320d688"},
-    {file = "grimp-3.2-cp311-none-win_amd64.whl", hash = "sha256:3419aace4bb2cfb2e08c03951c9412c9097a5dcc8bdbc65dbdf88d673cda898b"},
-    {file = "grimp-3.2-cp312-cp312-macosx_10_12_x86_64.whl", hash = "sha256:9021541c5155ae454da3bfa639e8ca01965d6adbaf6f46808a0d6782a6dc072d"},
-    {file = "grimp-3.2-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:e0bc593f9eda9ec056bf6d9309542e44215440f8512586b3ba4267d41d5833e7"},
-    {file = "grimp-3.2-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:4b8fb16982fe646a682b8bf7cdd4d6db1812c1e54583c7821d0e7d197895c2bd"},
-    {file = "grimp-3.2-cp312-cp312-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:085119de62cf07ece8e80cb4a55fa0883d3cefa35f05d7025f0c98abece51119"},
-    {file = "grimp-3.2-cp312-cp312-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:eacf611157e61c4140382a1893479664a33b158b08f605f1ea63cabe996b7cf0"},
-    {file = "grimp-3.2-cp312-cp312-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:08d7b6f63b3ad2e18956508500fbff840ec0fa0e789b629bec29966df3686f2f"},
-    {file = "grimp-3.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:cad714ca909eefc9fcc189c3fdefbc012cae7e4d4d4bb2f9496e98da87a27136"},
-    {file = "grimp-3.2-cp312-cp312-manylinux_2_5_i686.manylinux1_i686.whl", hash = "sha256:05a2f1f3a2e69fae9469c89f48c516cab862403256c5441b524784c74ac43f0d"},
-    {file = "grimp-3.2-cp312-none-win32.whl", hash = "sha256:15013ae12d2b5659d5f55f98941acc8da0172151b21ef29fa6e4f355266594b9"},
-    {file = "grimp-3.2-cp312-none-win_amd64.whl", hash = "sha256:414f0d2c772df180a287ddf8897c28e6bf71b597de6363fc3e5ff2456a168a5a"},
-    {file = "grimp-3.2-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:adf032c8f5014da61aba7689e05831843b4e8c5209c2792a5fb8acd7a01ece5d"},
-    {file = "grimp-3.2-cp313-cp313-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:36404520c1b02b6f5a12f4da738f64a9c1559fc026e9a68a64eff408b1642158"},
-    {file = "grimp-3.2-cp313-cp313-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:8eb1fd52f6251f90b246d43038a421fde21cc3d4b16c99646753086a9749ce7f"},
-    {file = "grimp-3.2-cp313-cp313-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:8ad66be05a325c80655861bcbe6b86e50a890ca17ebb00b9c8d23d38f89485dd"},
-    {file = "grimp-3.2-cp38-cp38-macosx_10_12_x86_64.whl", hash = "sha256:b092dc245981a672570ae7c772e99f81f10efc11bbe6d3bca3e8ed1ac83c586d"},
-    {file = "grimp-3.2-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:6f17a817f9410e10bbcccb021dd160c08f8ee2b3d8e546f358603bba0e16a4f4"},
-    {file = "grimp-3.2-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:f4c80ae001b4bbe5b50f2c6a532553ef099e7b62bc08b3a7df4446346ad62eaf"},
-    {file = "grimp-3.2-cp38-cp38-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:232af9c0a9bf14b3588df5f4b857e38b77cd7e829ec664b191e057e113e1b695"},
-    {file = "grimp-3.2-cp38-cp38-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:b8f18e4c913019bcfcaf3396e64cdfc76890ec942b420ee3c025094f16560288"},
-    {file = "grimp-3.2-cp38-cp38-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:37fe23a595f26ea91022a9166b8b7353f788686d650705d30ead2c8ef88da17d"},
-    {file = "grimp-3.2-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:34833ac76c5f23e523aab9701d2b6c051d1fdef330b53a569cb316ed6cac8c93"},
-    {file = "grimp-3.2-cp38-cp38-manylinux_2_5_i686.manylinux1_i686.whl", hash = "sha256:c4cf735df220895e8a10d3e61e4d9a5d5a483464a27086f677798936dd3dcc73"},
-    {file = "grimp-3.2-cp38-none-win32.whl", hash = "sha256:ca3828d1d151eb960fa7106cacf89ac8f41f316a954f64023610efa2c891e349"},
-    {file = "grimp-3.2-cp38-none-win_amd64.whl", hash = "sha256:7ea0c58cceab6c75452a6ab9617698b3ece2eb20938d91419ec3ed35d7ab3be5"},
-    {file = "grimp-3.2-cp39-cp39-macosx_10_12_x86_64.whl", hash = "sha256:c4a86f86b7e0f0d81da587f01f30fa04a9f087de76e40c1fe790cb5525b2e2de"},
-    {file = "grimp-3.2-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:5054e0f5d8b19970881f060c879e5fd69045b9f45c0c51afd0314268db21c02f"},
-    {file = "grimp-3.2-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:474be3c8f1b5b79611421b75f035ccfe176355e139624503b19510147edf9566"},
-    {file = "grimp-3.2-cp39-cp39-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:217320c5851df9b761d6195884e28f0f82b562237776b092b0e216ff5c57f5d1"},
-    {file = "grimp-3.2-cp39-cp39-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:7342d444caa2f0e49efb6f30d550ab77acffa6ec53efaafff9ea6023578fa720"},
-    {file = "grimp-3.2-cp39-cp39-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:05feca9c9f20f0b227a747a3300c49628cafc852e7f63f476f6adcfc2a81421a"},
-    {file = "grimp-3.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:0690fdde12d5224b7787e3aea14cb9579569e9cb503ce4334eb19fb5e224901a"},
-    {file = "grimp-3.2-cp39-cp39-manylinux_2_5_i686.manylinux1_i686.whl", hash = "sha256:f39eadd5b74119355a871f98b904e7e0b25a5eba06fda315c097962acef61841"},
-    {file = "grimp-3.2-cp39-none-win32.whl", hash = "sha256:038779ebb05509de9c418555e5d7b8857f90d7a095baf0f4e0ec261fcfae22ba"},
-    {file = "grimp-3.2-cp39-none-win_amd64.whl", hash = "sha256:436931ba7d4644b5b55f84d92c12d18365d3ec94f8e4b4ee874d12f5b961c30c"},
-    {file = "grimp-3.2-pp310-pypy310_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:1bb65430aa58f81bece95927bb87c092a34f5c8295fe8dc81c312764a6a709f1"},
-    {file = "grimp-3.2-pp310-pypy310_pp73-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:55332ec2cca39d7604b9a1f08c63eabaf965008b8bed0fdc80d684383cb5e194"},
-    {file = "grimp-3.2-pp310-pypy310_pp73-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:02f58a0afa5fa06f6f98bad28a5e1a33c9e32b2c8281df7069f932dc56719335"},
-    {file = "grimp-3.2-pp310-pypy310_pp73-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:ff9e87f38c6a31d7aa16f8cc93efe8a5ba3195ea8f9260eceed2b56395965276"},
-    {file = "grimp-3.2-pp310-pypy310_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:b0726e943fccaa60f823675a236e413cafb4526cafadec334903b1b217c317ed"},
-    {file = "grimp-3.2-pp310-pypy310_pp73-manylinux_2_5_i686.manylinux1_i686.whl", hash = "sha256:d999fa016aff0cdbddc3375538cd7b8acf76112d5760ef0b21a1be6866278628"},
-    {file = "grimp-3.2-pp38-pypy38_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:bf10209fc39edfa95a3409a4a4921a9370414e8e6b38672494e7e01f437a2b1f"},
-    {file = "grimp-3.2-pp38-pypy38_pp73-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:7462e673623e905c358275900550a7b605b0a89bfbc671602dc150bea0afd4bd"},
-    {file = "grimp-3.2-pp38-pypy38_pp73-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:83acb48ed49c123111cb098cae39625bfbf454524f6f89182cc0a3b6860a63cd"},
-    {file = "grimp-3.2-pp38-pypy38_pp73-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:fd1a7d82a3d4529561d3fb152797d66b0e63823c8b875662fc7c7d7231752c42"},
-    {file = "grimp-3.2-pp38-pypy38_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:f9887a8ddbd3e3ccb2d21fec98f4ab1b311baff25013d21486abb9f63b1d0bae"},
-    {file = "grimp-3.2-pp38-pypy38_pp73-manylinux_2_5_i686.manylinux1_i686.whl", hash = "sha256:5ba0d863b10c6b612486e2d1b97539894c7f3f71fd67ef126b2c77eb9c027d5c"},
-    {file = "grimp-3.2-pp39-pypy39_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:b34c5c891669b5691894649554c91f118925132d892a660847c7b4f8b8cfc023"},
-    {file = "grimp-3.2-pp39-pypy39_pp73-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:7c0d2793022efa837f3cad413dd70e11496e3511570c5bb78c0e667813196e75"},
-    {file = "grimp-3.2-pp39-pypy39_pp73-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:4e72e0c8f56bd54e8e61bd7ed34bf62ca0821aa32536564241334be7704da739"},
-    {file = "grimp-3.2-pp39-pypy39_pp73-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:090b545afc14d090d5f15570cde2e5ce46700787f364130afcc12d4f2d8c8c26"},
-    {file = "grimp-3.2-pp39-pypy39_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8493e03a968507ac7212c0571ef2ab5094f950370a37db2c98b3a73b965b6db9"},
-    {file = "grimp-3.2-pp39-pypy39_pp73-manylinux_2_5_i686.manylinux1_i686.whl", hash = "sha256:2e173ec37da134f48c48d85f6b57f72a22a5abdba69bfae2516f0c5aea5aba88"},
-    {file = "grimp-3.2.tar.gz", hash = "sha256:5ec7e7475a3616b1bec14d852784fa2e3829a4331fd2309a055f1e75ba5a4f50"},
-]
-
-[package.dependencies]
-typing-extensions = ">=3.10.0.0"
-
-[[package]]
 name = "gunicorn"
 version = "21.2.0"
 description = "WSGI HTTP Server for UNIX"
@@ -1087,23 +1002,6 @@ files = [
     {file = "idna-3.6-py3-none-any.whl", hash = "sha256:c05567e9c24a6b9faaa835c4821bad0590fbb9d5779e7caa6e1cc4978e7eb24f"},
     {file = "idna-3.6.tar.gz", hash = "sha256:9ecdbbd083b06798ae1e86adcbfe8ab1479cf864e4ee30fe4e46a003d12491ca"},
 ]
-
-[[package]]
-name = "import-linter"
-version = "2.0"
-description = "Enforces rules for the imports within and between Python packages."
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "import-linter-2.0.tar.gz", hash = "sha256:b067cf0cdbf11c4f87524e32c2e3eaa62d46572e9e06511e6b453198b15b1c9a"},
-    {file = "import_linter-2.0-py3-none-any.whl", hash = "sha256:200f9b46d20a055c1f6f514e4cd8074852261bc9c8733d028201a55be6058bb0"},
-]
-
-[package.dependencies]
-click = ">=6"
-grimp = ">=3.2"
-tomli = {version = ">=1.2.1", markers = "python_version < \"3.11\""}
-typing-extensions = ">=3.10.0.0"
 
 [[package]]
 name = "inflection"
@@ -2476,4 +2374,4 @@ brotli = ["Brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">= 3.10, < 3.13"
-content-hash = "6110222e57f12751ed505817aeb7018753083284bd34269e447f6fc9d8f48a89"
+content-hash = "19930ee84468efe7cbd2bbdfe9c21d860d16fad387ecc2bf6ba089f2159ac6ab"
