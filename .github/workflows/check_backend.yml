@@ -18,7 +18,7 @@ jobs:
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
-          python-version: 3.11
+          python-version: 3.12
 
       - name: Install dependencies
         working-directory: ./backend
@@ -55,7 +55,7 @@ jobs:
       - name: Import linter
         working-directory: ./backend
         run: |
-          python -m lint-imports --no-cache
+          lint-imports --no-cache
 
       - name: Unittests
         run: |
