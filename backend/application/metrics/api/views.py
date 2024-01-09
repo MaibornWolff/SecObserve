@@ -1,3 +1,4 @@
+import csv
 from tempfile import NamedTemporaryFile
 
 from constance import config
@@ -8,6 +9,7 @@ from rest_framework.views import APIView
 
 from application.access_control.services.authorization import user_has_permission_or_403
 from application.access_control.services.roles_permissions import Permissions
+from application.core.models import Observation
 from application.core.queries.product import get_product_by_id
 from application.metrics.models import Product_Metrics_Status
 from application.metrics.services.export_metrics import (
@@ -17,6 +19,7 @@ from application.metrics.services.export_metrics import (
 from application.metrics.services.metrics import (
     get_product_metrics_current,
     get_product_metrics_timeline,
+    get_codecharta_metrics,
 )
 
 
@@ -68,6 +71,38 @@ class ProductMetricsExportCsvView(APIView):
         response["Content-Disposition"] = "attachment; filename=product_metrics.csv"
 
         export_product_metrics_csv(response, product)
+
+        return response
+
+class ProductMetricsExportCodeChartaView(APIView):
+    @action(detail=False, methods=["get"])
+    def get(self, request):
+        product = _get_and_check_product(request)
+
+        response = HttpResponse(content_type="text/csv")
+        response[
+            "Content-Disposition"
+        ] = 'attachment; filename="secobserve_codecharta_metrics.csv"'
+
+        writer = csv.DictWriter(
+            response,
+            fieldnames=[
+                "source_file",
+                "Vulnerabilities_Total".lower(),
+                f"Vulnerabilities_{Observation.SEVERITY_CRITICAL}".lower(),
+                f"Vulnerabilities_{Observation.SEVERITY_HIGH}".lower(),
+                f"Vulnerabilities_{Observation.SEVERITY_MEDIUM}".lower(),
+                f"Vulnerabilities_{Observation.SEVERITY_LOW}".lower(),
+                f"Vulnerabilities_{Observation.SEVERITY_NONE}".lower(),
+                f"Vulnerabilities_{Observation.SEVERITY_UNKOWN}".lower(),
+                f"Vulnerabilities_{Observation.SEVERITY_HIGH}_and_above".lower(),
+                f"Vulnerabilities_{Observation.SEVERITY_MEDIUM}_and_above".lower(),
+                f"Vulnerabilities_{Observation.SEVERITY_LOW}_and_above".lower(),
+            ],
+        )
+        writer.writeheader()
+        for row in get_codecharta_metrics(product):
+            writer.writerow(row)
 
         return response
 

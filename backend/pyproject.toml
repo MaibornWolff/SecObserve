@@ -66,6 +66,7 @@ pre-commit = "3.6.0"  # https://github.com/pre-commit/pre-commit
 mypy = "1.8.0"  # https://github.com/python/mypy
 django-stubs = "4.2.7"  # https://github.com/typeddjango/django-stubs
 djangorestframework-stubs = "3.14.5"  # https://github.com/typeddjango/djangorestframework-stubs
+import-linter = "2.0"  # https://github.com/seddonym/import-linter
 # Django
 # ------------------------------------------------------------------------------
 django-extensions = "3.2.3"  # https://github.com/django-extensions/django-extensions

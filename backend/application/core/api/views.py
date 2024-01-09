@@ -1,4 +1,3 @@
-import csv
 from tempfile import NamedTemporaryFile
 from typing import Any
 
@@ -94,7 +93,6 @@ from application.issue_tracker.services.issue_tracker import (
     push_deleted_observation_to_issue_tracker,
     push_observations_to_issue_tracker,
 )
-from application.metrics.services.metrics import get_codecharta_metrics
 from application.rules.services.rule_engine import Rule_Engine
 
 
@@ -124,41 +122,6 @@ class ProductViewSet(ModelViewSet):
             .select_related("product_group")
             .select_related("repository_default_branch")
         )
-
-    @extend_schema(
-        methods=["GET"],
-        responses={200: None},
-    )
-    @action(detail=True, methods=["get"])
-    def export_codecharta_metrics(self, request, pk=None):
-        product = self.__get_product(pk)
-
-        response = HttpResponse(content_type="text/csv")
-        response[
-            "Content-Disposition"
-        ] = 'attachment; filename="secobserve_codecharta_metrics.csv"'
-
-        writer = csv.DictWriter(
-            response,
-            fieldnames=[
-                "source_file",
-                "Vulnerabilities_Total".lower(),
-                f"Vulnerabilities_{Observation.SEVERITY_CRITICAL}".lower(),
-                f"Vulnerabilities_{Observation.SEVERITY_HIGH}".lower(),
-                f"Vulnerabilities_{Observation.SEVERITY_MEDIUM}".lower(),
-                f"Vulnerabilities_{Observation.SEVERITY_LOW}".lower(),
-                f"Vulnerabilities_{Observation.SEVERITY_NONE}".lower(),
-                f"Vulnerabilities_{Observation.SEVERITY_UNKOWN}".lower(),
-                f"Vulnerabilities_{Observation.SEVERITY_HIGH}_and_above".lower(),
-                f"Vulnerabilities_{Observation.SEVERITY_MEDIUM}_and_above".lower(),
-                f"Vulnerabilities_{Observation.SEVERITY_LOW}_and_above".lower(),
-            ],
-        )
-        writer.writeheader()
-        for row in get_codecharta_metrics(product):
-            writer.writerow(row)
-
-        return response
 
     @extend_schema(
         methods=["GET"],

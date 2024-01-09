@@ -9,7 +9,7 @@ env:
   POETRY_NO_INTERACTION: 1
 
 jobs:
-  build:
+  check_backend:
 
     runs-on: ubuntu-latest
 
@@ -50,6 +50,11 @@ jobs:
         working-directory: ./backend
         run: |
           ./bin/run_pylint.sh
+
+      - name: Import linter
+        working-directory: ./backend
+        run: |
+          poetry run lint-imports --no-cache
 
       - name: Unittests
         run: |
