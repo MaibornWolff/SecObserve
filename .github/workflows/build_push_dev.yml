@@ -34,7 +34,7 @@ jobs:
           file: ./docker/backend/prod/django/Dockerfile
           push: true
           tags: maibornwolff/secobserve-backend:dev
-          build-args:
+          build-args: |
             CREATED=$CREATED
             REVISION=${{ github.sha }}
             VERSION=dev
