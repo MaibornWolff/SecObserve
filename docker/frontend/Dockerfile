@@ -38,6 +38,9 @@ ARG VERSION=unkown
 ARG CREATED
 ARG REVISION
 
+# Maintainer is deprecated, but we want to overwrite what's coming from the base image
+MAINTAINER stefan.fleckenstein@maibornwolff.de
+
 LABEL org.opencontainers.image.authors="stefan.fleckenstein@maibornwolff.de"
 LABEL org.opencontainers.image.created=${CREATED}
 LABEL org.opencontainers.image.description="SecObserve is an open source vulnerability management system for software development teams."
