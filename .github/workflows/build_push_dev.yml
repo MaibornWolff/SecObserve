@@ -24,6 +24,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
+        name: Set current date as env variable
+        run: echo "CREATED=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
+      -
         name: Build and push backend
         uses: docker/build-push-action@v5
         with:
@@ -32,6 +35,8 @@ jobs:
           push: true
           tags: maibornwolff/secobserve-backend:dev
           build-args:
+            CREATED=$CREATED
+            REVISION=${{ github.sha }}
             VERSION=dev
       -
         name: Build and push frontend
