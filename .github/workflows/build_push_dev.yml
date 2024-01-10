@@ -35,7 +35,7 @@ jobs:
           push: true
           tags: maibornwolff/secobserve-backend:dev
           build-args: |
-            CREATED=$CREATED
+            CREATED=${{ env.CREATED }}
             REVISION=${{ github.sha }}
             VERSION=dev
       -
