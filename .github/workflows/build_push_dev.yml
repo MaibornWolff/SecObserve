@@ -1,6 +1,9 @@
 name: Build and push dev images
 
-on: workflow_dispatch
+on:
+  push:
+    branches:
+      - dev
 
 permissions: read-all
 
@@ -46,5 +49,7 @@ jobs:
           file: ./docker/frontend/Dockerfile
           push: true
           tags: maibornwolff/secobserve-frontend:dev
-          build-args:
+          build-args: |
+            CREATED=${{ env.CREATED }}
+            REVISION=${{ github.sha }}
             VERSION=dev
