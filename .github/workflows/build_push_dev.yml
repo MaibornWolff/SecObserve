@@ -1,6 +1,9 @@
 name: Build and push dev images
 
-on: workflow_dispatch
+on:
+  push:
+    branches:
+      - dev
 
 permissions: read-all
 
