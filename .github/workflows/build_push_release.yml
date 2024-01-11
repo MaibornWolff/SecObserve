@@ -62,3 +62,15 @@ jobs:
             CREATED=${{ env.CREATED }}
             REVISION=${{ github.sha }}
             VERSION=${{ github.event.inputs.release }}
+      - 
+        name: Run vulnerability scanners for images
+        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@main
+        with:
+          so_configuration: 'so_configuration_images.yml'
+          SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
+      - 
+        name: Run vulnerability scanners for endpoints
+        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@main
+        with:
+          so_configuration: 'so_configuration_endpoints.yml'
+          SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
