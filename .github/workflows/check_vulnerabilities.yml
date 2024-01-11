@@ -1,15 +1,11 @@
-name: Check for vulnerabilities
+name: Check for vulnerabilities in the code
 
-on:
-  push:
-    branches-ignore:    
-      - dev
-      - master
+on: [push]
 
 permissions: read-all
 
 jobs:
-  build:
+  check_code_vulnerabilities:
 
     runs-on: ubuntu-latest
 
@@ -17,8 +13,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run vulnerability scanners
+      - name: Run vulnerability scanners for code
         uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@main
         with:
-          so_configuration: 'so_configuration.yml'
+          so_configuration: 'so_configuration_code.yml'
           SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
