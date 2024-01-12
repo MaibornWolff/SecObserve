@@ -42,7 +42,7 @@ class User(AbstractUser):
             self.full_name = self.first_name
         elif self.last_name:
             self.full_name = self.last_name
-        else:
+        elif not self.full_name:
             self.full_name = self.username
 
         super().save(*args, **kwargs)

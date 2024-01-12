@@ -55,6 +55,7 @@ services:
       OIDC_USERNAME: ${SO_OIDC_USERNAME:-preferred_username}
       OIDC_FIRST_NAME: ${SO_OIDC_FIRST_NAME:-given_name}
       OIDC_LAST_NAME: ${SO_OIDC_LAST_NAME:-family_name}
+      OIDC_FULL_NAME: ${SO_OIDC_FULL_NAME:-}
       OIDC_EMAIL: ${SO_OIDC_EMAIL:-email}
       # --- Development ---
       USE_DOCKER: yes

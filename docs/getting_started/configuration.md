@@ -30,6 +30,7 @@ was registered. |
 | `OIDC_USERNAME`        | mandatory   | The claim that contains the username to find or create the user. |
 | `OIDC_FIRST_NAME`      | mandatory   | The claim that contains the first name of the user. |
 | `OIDC_LAST_NAME`       | mandatory   | The claim that contains the last name of the user. |
+| `OIDC_FULL_NAME`       | mandatory   | The claim that contains the full name of the user. |
 | `OIDC_EMAIL`           | mandatory   | The claim that contains the email address of the user. |
 
 
