@@ -90,6 +90,8 @@ class OIDCAuthentication(BaseAuthentication):
         user = User(username=username, first_name="", last_name="", email="")
         if os.environ.get("OIDC_EMAIL"):
             user.email = payload[os.environ["OIDC_EMAIL"]]
+        if os.environ.get("OIDC_FULL_NAME"):
+            user.full_name = payload[os.environ["OIDC_FULL_NAME"]]
         if os.environ.get("OIDC_FIRST_NAME"):
             user.first_name = payload[os.environ["OIDC_FIRST_NAME"]]
         if os.environ.get("OIDC_LAST_NAME"):
@@ -112,6 +114,12 @@ class OIDCAuthentication(BaseAuthentication):
             and user.email != payload[os.environ["OIDC_EMAIL"]]
         ):
             user.email = payload[os.environ["OIDC_EMAIL"]]
+            user_changed = True
+        if (
+            os.environ.get("OIDC_FULL_NAME")
+            and user.full_name != payload[os.environ["OIDC_FULL_NAME"]]
+        ):
+            user.full_name = payload[os.environ["OIDC_FULL_NAME"]]
             user_changed = True
         if (
             os.environ.get("OIDC_FIRST_NAME")

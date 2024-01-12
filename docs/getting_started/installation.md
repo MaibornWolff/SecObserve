@@ -93,6 +93,7 @@ services:
       OIDC_USERNAME: ${SO_OIDC_USERNAME:-}
       OIDC_FIRST_NAME: ${SO_OIDC_FIRST_NAME:-}
       OIDC_LAST_NAME: ${SO_OIDC_LAST_NAME:-}
+      OIDC_FULL_NAME: ${SO_OIDC_FULL_NAME:-}
       OIDC_EMAIL: ${SO_OIDC_EMAIL:-}
     command: /start
     networks:
