@@ -1,6 +1,6 @@
 # Notifications
 
-SecObserve can send notifications to email addresses or Microsoft Teams channels for 3 kinds of events:
+SecObserve can send notifications to email addresses, Microsoft Teams or Slack for 3 kinds of events:
 
 * When the [security gate](../usage/security_gates.md) of a product changes.
 * When an exception occurs while processing a request.
@@ -24,7 +24,7 @@ When creating or editing a product, the field `Email` can be set in the *Notific
 
 An admistrator can configure the field `EXCEPTION_EMAIL_TO` in the Django Admin user interface. If an exception occurs while processing a request and this field is filled with a comma separated list of email addresses, a notifications is sent each of the email addresses before returning the HTTP code 500 via the REST API.
 
-##  Notifications to Microsoft Teams channels
+##  Notifications to Microsoft Teams and Slack
 
 ####  Settings in Microsoft Teams
 
@@ -32,15 +32,19 @@ For both types of notifications an incoming webhook has to be set for a channel,
 
 The messages do not include mentions, but a user can set the "Channel notifications" to "All activities" in Teams, to get an active notification when an entry is generated. 
 
+####  Settings in Slack
+
+For both types of notifications an incoming webhook has to be set for a channel, where the notifications shall appear. How to do this is explained in [Sending messages using Incoming Webhooks](https://api.slack.com/messaging/webhooks). Copy the URL of the webhook to the clipboard, to have it available to set it in SecObserve.
+
 #### Notifications for security gates
 
-When creating or editing a product, the field `MS Teams` can be set in the *Notification* section with the copied webhook URL. If the [security gate](../usage/security_gates.md) of the product changes and this field is filled, then a notification is sent to Microsoft Teams.
+When creating or editing a product, the fields `MS Teams` and/or `Slack` can be set in the *Notification* section with the copied webhook URL. If the [security gate](../usage/security_gates.md) of the product changes and this field is filled, then a notification is sent to Microsoft Teams and/or Slack.
 
 ![MS Teams notification](../assets/images/screenshot_ms_teams.png)
 
 #### Notifications for exceptions
 
-An admistrator can configure the field `EXCEPTION_MS_TEAMS_WEBHOOK` in the Django Admin user interface. If an exception occurs while processing a request and this field is filled with the copied webhook URL, a notifications is sent to Teams before returning the HTTP code 500 via the REST API.
+An admistrator can configure the fields `EXCEPTION_MS_TEAMS_WEBHOOK` and/or `EXCEPTION_SLACK_WEBHOOK` in the Django Admin user interface. If an exception occurs while processing a request and this field is filled with the copied webhook URL, a notifications is sent to Microsoft Teams and/or Slack before returning the HTTP code 500 via the REST API.
 
 ## Notifications in the user interface
 

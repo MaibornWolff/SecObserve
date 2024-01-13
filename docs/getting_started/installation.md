@@ -47,7 +47,7 @@ services:
       - default
 
   frontend:
-    image: maibornwolff/secobserve-frontend:1.3.0
+    image: maibornwolff/secobserve-frontend:1.4.0
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=Host(`secobserve.localhost`)"
@@ -63,7 +63,7 @@ services:
       - traefik
 
   backend:
-    image: maibornwolff/secobserve-backend:1.3.0
+    image: maibornwolff/secobserve-backend:1.4.0
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend.rule=Host(`secobserve-backend.localhost`)"
@@ -93,6 +93,7 @@ services:
       OIDC_USERNAME: ${SO_OIDC_USERNAME:-}
       OIDC_FIRST_NAME: ${SO_OIDC_FIRST_NAME:-}
       OIDC_LAST_NAME: ${SO_OIDC_LAST_NAME:-}
+      OIDC_FULL_NAME: ${SO_OIDC_FULL_NAME:-}
       OIDC_EMAIL: ${SO_OIDC_EMAIL:-}
     command: /start
     networks:

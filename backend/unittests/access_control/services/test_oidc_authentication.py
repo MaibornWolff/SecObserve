@@ -281,6 +281,7 @@ class TestOIDCAuthentication(BaseTestCase):
                 "preferred_username": "test_username",
                 "given_name": "test_first_name",
                 "family_name": "test_last_name",
+                "name": "test_full_name",
                 "email": "test_email",
             },
         )
@@ -288,6 +289,7 @@ class TestOIDCAuthentication(BaseTestCase):
         self.assertEqual("test_username", user.username)
         self.assertEqual("test_first_name", user.first_name)
         self.assertEqual("test_last_name", user.last_name)
+        self.assertEqual("test_full_name", user.full_name)
         self.assertEqual("test_email", user.email)
         user_save_mock.assert_called_once()
 
@@ -297,6 +299,7 @@ class TestOIDCAuthentication(BaseTestCase):
             username="test_username",
             first_name="test_first_name",
             last_name="test_last_name",
+            full_name="test_full_name",
             email="test_email",
         )
         oidc_authentication = OIDCAuthentication()
@@ -306,6 +309,7 @@ class TestOIDCAuthentication(BaseTestCase):
                 "preferred_username": "test_username",
                 "given_name": "test_first_name",
                 "family_name": "test_last_name",
+                "name": "test_full_name",
                 "email": "test_email",
             },
         )
@@ -313,6 +317,7 @@ class TestOIDCAuthentication(BaseTestCase):
         self.assertEqual("test_username", new_user.username)
         self.assertEqual("test_first_name", new_user.first_name)
         self.assertEqual("test_last_name", new_user.last_name)
+        self.assertEqual("test_full_name", new_user.full_name)
         self.assertEqual("test_email", new_user.email)
         user_save_mock.assert_not_called()
 
@@ -322,6 +327,7 @@ class TestOIDCAuthentication(BaseTestCase):
             username="test_username",
             first_name="test_first_name",
             last_name="test_last_name",
+            full_name="test_full_name",
             email="test_email",
         )
         oidc_authentication = OIDCAuthentication()
@@ -331,6 +337,7 @@ class TestOIDCAuthentication(BaseTestCase):
                 "preferred_username": "test_username",
                 "given_name": "test_first_name_new",
                 "family_name": "test_last_name_new",
+                "name": "test_full_name_new",
                 "email": "test_email_new",
             },
         )
@@ -338,6 +345,7 @@ class TestOIDCAuthentication(BaseTestCase):
         self.assertEqual("test_username", new_user.username)
         self.assertEqual("test_first_name_new", new_user.first_name)
         self.assertEqual("test_last_name_new", new_user.last_name)
+        self.assertEqual("test_full_name_new", new_user.full_name)
         self.assertEqual("test_email_new", new_user.email)
         user_save_mock.assert_called_once()
 

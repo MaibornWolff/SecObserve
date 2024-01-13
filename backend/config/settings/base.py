@@ -460,6 +460,11 @@ CONSTANCE_CONFIG = {
         "MS Teams webhook to send exception notifications",
         str,
     ),
+    "EXCEPTION_SLACK_WEBHOOK": (
+        "",
+        "Slack webhook to send exception notifications",
+        str,
+    ),
     "EXCEPTION_RATELIMIT": (
         3600,
         "Timedelta in seconds when to send the same exception the next time",
@@ -536,6 +541,7 @@ CONSTANCE_CONFIG_FIELDSETS = {
         "EMAIL_FROM",
         "EXCEPTION_EMAIL_TO",
         "EXCEPTION_MS_TEAMS_WEBHOOK",
+        "EXCEPTION_SLACK_WEBHOOK",
         "EXCEPTION_RATELIMIT",
     ),
     "Background tasks (restart needed)": (

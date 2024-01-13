@@ -237,6 +237,7 @@ class TestAuthentication(BaseTestCase):
 
         self._check_authentication(["get"], "/api/metrics/export_csv/")
         self._check_authentication(["get"], "/api/metrics/export_excel/")
+        self._check_authentication(["get"], "/api/metrics/export_codecharta/")
         self._check_authentication(["get"], "/api/metrics/product_metrics_current/")
         self._check_authentication(["get"], "/api/metrics/product_metrics_timeline/")
         self._check_authentication(["get"], "/api/metrics/product_metrics_status/")
@@ -295,9 +296,6 @@ class TestAuthentication(BaseTestCase):
             ["post"], "/api/products/1/observations_bulk_delete/"
         )
 
-        self._check_authentication(
-            ["get"], "/api/products/1/export_codecharta_metrics/"
-        )
         self._check_authentication(["get"], "/api/products/1/export_observations_csv/")
         self._check_authentication(
             ["get"], "/api/products/1/export_observations_excel/"

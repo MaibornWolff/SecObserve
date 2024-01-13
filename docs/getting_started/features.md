@@ -26,7 +26,7 @@
 | [Export vulnerabilities to issue trackers (Jira, GitLab, GitHub)](../integrations/issue_trackers.md) | :material-plus-circle-outline: |
 | [Export of data to Microsoft Excel and CSV](../integrations/observations_export.md) | :material-plus-circle-outline: |
 | [Export metrics to CodeCharta](../integrations/codecharta.md) | :material-plus-circle-outline: |
-| [Notifications to Microsoft Teams and email](../integrations/notifications.md) | :material-plus-circle-outline: |
+| [Notifications to Microsoft Teams, Slack and email](../integrations/notifications.md) | :material-plus-circle-outline: |
 | [REST API](../integrations/rest_api.md) | :material-plus-circle-outline: |
 
 ## Access Control

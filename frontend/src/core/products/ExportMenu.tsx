@@ -81,7 +81,7 @@ const ExportMenu = (props: ExportMenuProps) => {
 
     const exportCodeChartaMetrics = async () => {
         exportDataCsv(
-            "/products/" + props.product.id + "/export_codecharta_metrics/",
+            "/metrics/export_codecharta?product_id=" + props.product.id,
             "secobserve_codecharta_metrics.csv",
             "CodeCharta metrics"
         );

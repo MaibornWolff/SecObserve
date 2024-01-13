@@ -43,12 +43,11 @@ Backend
 
 | Environment variable | Value                                              |
 |----------------------|----------------------------------------------------|
-| `OIDC_AUTHORITY`     | `https://login.microsoftonline.com/TENANT_ID`      |
+| `OIDC_AUTHORITY`     | `https://login.microsoftonline.com/TENANT_ID/v2.0` |
 | `OIDC_CLIENT_ID`     | `CLIENT_ID`                                        |
-| `OIDC_USERNAME`      | `upn`                                              |
-| `OIDC_FIRST_NAME`    | `given_name`                                       |
-| `OIDC_LAST_NAME`     | `family_name`                                      |
-| `OIDC_EMAIL`         | `upn`                                              |
+| `OIDC_USERNAME`      | `preferred_username`                               |
+| `OIDC_FULL_NAME`     | `name`                                             |
+| `OIDC_EMAIL`         | `email`                                            |
 
 
 Frontend

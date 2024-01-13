@@ -24,6 +24,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
+        name: Set current date as env variable
+        run: echo "CREATED=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
+      -
         name: Build and push backend
         uses: docker/build-push-action@v5
         with:
@@ -31,7 +34,9 @@ jobs:
           file: ./docker/backend/prod/django/Dockerfile
           push: true
           tags: maibornwolff/secobserve-backend:dev
-          build-args:
+          build-args: |
+            CREATED=${{ env.CREATED }}
+            REVISION=${{ github.sha }}
             VERSION=dev
       -
         name: Build and push frontend
@@ -41,5 +46,13 @@ jobs:
           file: ./docker/frontend/Dockerfile
           push: true
           tags: maibornwolff/secobserve-frontend:dev
-          build-args:
+          build-args: |
+            CREATED=${{ env.CREATED }}
+            REVISION=${{ github.sha }}
             VERSION=dev
+      - 
+        name: Run vulnerability scanners for images
+        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@main
+        with:
+          so_configuration: 'so_configuration_images.yml'
+          SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}

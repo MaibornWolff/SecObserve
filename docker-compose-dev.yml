@@ -55,6 +55,7 @@ services:
       OIDC_USERNAME: ${SO_OIDC_USERNAME:-preferred_username}
       OIDC_FIRST_NAME: ${SO_OIDC_FIRST_NAME:-given_name}
       OIDC_LAST_NAME: ${SO_OIDC_LAST_NAME:-family_name}
+      OIDC_FULL_NAME: ${SO_OIDC_FULL_NAME:-}
       OIDC_EMAIL: ${SO_OIDC_EMAIL:-email}
       # --- Development ---
       USE_DOCKER: yes
@@ -98,7 +99,7 @@ services:
       - "8025:8025"
 
   keycloak:
-    image: keycloak/keycloak:23.0.3
+    image: keycloak/keycloak:23.0.4
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin

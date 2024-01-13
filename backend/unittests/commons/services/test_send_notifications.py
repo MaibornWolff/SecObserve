@@ -16,6 +16,7 @@ from application.commons.services.send_notifications import (
     _ratelimit_exception,
     _send_email_notification,
     _send_msteams_notification,
+    _send_slack_notification,
     get_base_url_frontend,
     send_exception_notification,
     send_product_security_gate_notification,
@@ -27,10 +28,14 @@ from unittests.base_test_case import BaseTestCase
 class TestPushNotifications(BaseTestCase):
     # --- send_product_security_gate_notification ---
 
+    @patch("application.commons.services.send_notifications._send_slack_notification")
     @patch("application.commons.services.send_notifications._send_msteams_notification")
     @patch("application.commons.services.send_notifications._send_email_notification")
     @patch("application.commons.services.send_notifications.get_current_user")
     @patch("application.commons.services.send_notifications._get_notification_email_to")
+    @patch(
+        "application.commons.services.send_notifications._get_notification_slack_webhook"
+    )
     @patch(
         "application.commons.services.send_notifications._get_notification_ms_teams_webhook"
     )
@@ -39,20 +44,25 @@ class TestPushNotifications(BaseTestCase):
         self,
         mock_notification_create,
         mock_get_notification_ms_teams_webhook,
+        mock_get_notification_slack_webhook,
         mock_get_notification_email_to,
         mock_current_user,
         mock_send_email,
         mock_send_teams,
+        mock_send_slack,
     ):
         mock_current_user.return_value = self.user_internal
         mock_get_notification_email_to.return_value = ""
         mock_get_notification_ms_teams_webhook.return_value = ""
+        mock_get_notification_slack_webhook.return_value = ""
 
         send_product_security_gate_notification(self.product_1)
 
         mock_get_notification_email_to.assert_called_with(self.product_1)
         mock_get_notification_ms_teams_webhook.assert_called_with(self.product_1)
+        mock_get_notification_slack_webhook.assert_called_with(self.product_1)
         mock_send_teams.assert_not_called()
+        mock_send_slack.assert_not_called()
         mock_send_email.assert_not_called()
         mock_notification_create.assert_called_with(
             name="Security gate has changed to None",
@@ -62,12 +72,16 @@ class TestPushNotifications(BaseTestCase):
         )
 
     @override_config(EMAIL_FROM="secobserve@example.com")
+    @patch("application.commons.services.send_notifications._send_slack_notification")
     @patch("application.commons.services.send_notifications._send_msteams_notification")
     @patch("application.commons.services.send_notifications._send_email_notification")
     @patch("application.commons.services.send_notifications.get_base_url_frontend")
     @patch("application.commons.services.send_notifications._get_first_name")
     @patch("application.commons.services.send_notifications.get_current_user")
     @patch("application.commons.services.send_notifications._get_notification_email_to")
+    @patch(
+        "application.commons.services.send_notifications._get_notification_slack_webhook"
+    )
     @patch(
         "application.commons.services.send_notifications._get_notification_ms_teams_webhook"
     )
@@ -76,12 +90,14 @@ class TestPushNotifications(BaseTestCase):
         self,
         mock_notification_create,
         mock_get_notification_ms_teams_webhook,
+        mock_get_notification_slack_webhook,
         mock_get_notification_email_to,
         mock_current_user,
         mock_get_first_name,
         mock_base_url,
         mock_send_email,
         mock_send_teams,
+        mock_send_slack,
     ):
         mock_base_url.return_value = "https://secobserve.com/"
         mock_get_first_name.return_value = "first_name"
@@ -92,12 +108,16 @@ class TestPushNotifications(BaseTestCase):
         mock_get_notification_ms_teams_webhook.return_value = (
             "https://msteams.microsoft.com"
         )
+        mock_get_notification_slack_webhook.return_value = (
+            "https://secobserve.slack.com"
+        )
         self.product_1.security_gate_passed = None
         self.product_1.pk = 1
 
         send_product_security_gate_notification(self.product_1)
 
         mock_get_notification_email_to.assert_called_with(self.product_1)
+        mock_get_notification_ms_teams_webhook.assert_called_with(self.product_1)
         mock_get_notification_ms_teams_webhook.assert_called_with(self.product_1)
         expected_calls_email = [
             call(
@@ -127,6 +147,13 @@ class TestPushNotifications(BaseTestCase):
             security_gate_status="None",
             product_url="https://secobserve.com/#/products/1/show",
         )
+        mock_send_slack.assert_called_with(
+            "https://secobserve.slack.com",
+            "slack_product_security_gate.tpl",
+            product=self.product_1,
+            security_gate_status="None",
+            product_url="https://secobserve.com/#/products/1/show",
+        )
         expected_calls_get_first_name = [
             call("test1@example.com"),
             call("test2@example.com"),
@@ -140,12 +167,16 @@ class TestPushNotifications(BaseTestCase):
         )
 
     @override_config(EMAIL_FROM="secobserve@example.com")
+    @patch("application.commons.services.send_notifications._send_slack_notification")
     @patch("application.commons.services.send_notifications._send_msteams_notification")
     @patch("application.commons.services.send_notifications._send_email_notification")
     @patch("application.commons.services.send_notifications.get_base_url_frontend")
     @patch("application.commons.services.send_notifications._get_first_name")
     @patch("application.commons.services.send_notifications.get_current_user")
     @patch("application.commons.services.send_notifications._get_notification_email_to")
+    @patch(
+        "application.commons.services.send_notifications._get_notification_slack_webhook"
+    )
     @patch(
         "application.commons.services.send_notifications._get_notification_ms_teams_webhook"
     )
@@ -154,12 +185,14 @@ class TestPushNotifications(BaseTestCase):
         self,
         mock_notification_create,
         mock_get_notification_ms_teams_webhook,
+        mock_get_notification_slack_webhook,
         mock_get_notification_email_to,
         mock_current_user,
         mock_get_first_name,
         mock_base_url,
         mock_send_email,
         mock_send_teams,
+        mock_send_slack,
     ):
         mock_base_url.return_value = "https://secobserve.com/"
         mock_get_first_name.return_value = "first_name"
@@ -170,6 +203,9 @@ class TestPushNotifications(BaseTestCase):
         mock_get_notification_ms_teams_webhook.return_value = (
             "https://msteams.microsoft.com"
         )
+        mock_get_notification_slack_webhook.return_value = (
+            "https://secobserve.slack.com"
+        )
         self.product_1.security_gate_passed = True
         self.product_1.pk = 1
 
@@ -177,6 +213,7 @@ class TestPushNotifications(BaseTestCase):
 
         mock_get_notification_email_to.assert_called_with(self.product_1)
         mock_get_notification_ms_teams_webhook.assert_called_with(self.product_1)
+        mock_get_notification_slack_webhook.assert_called_with(self.product_1)
         expected_calls_email = [
             call(
                 "test1@example.com",
@@ -205,6 +242,13 @@ class TestPushNotifications(BaseTestCase):
             security_gate_status="Passed",
             product_url="https://secobserve.com/#/products/1/show",
         )
+        mock_send_slack.assert_called_with(
+            "https://secobserve.slack.com",
+            "slack_product_security_gate.tpl",
+            product=self.product_1,
+            security_gate_status="Passed",
+            product_url="https://secobserve.com/#/products/1/show",
+        )
         expected_calls_get_first_name = [
             call("test1@example.com"),
             call("test2@example.com"),
@@ -218,12 +262,16 @@ class TestPushNotifications(BaseTestCase):
         )
 
     @override_config(EMAIL_FROM="secobserve@example.com")
+    @patch("application.commons.services.send_notifications._send_slack_notification")
     @patch("application.commons.services.send_notifications._send_msteams_notification")
     @patch("application.commons.services.send_notifications._send_email_notification")
     @patch("application.commons.services.send_notifications.get_base_url_frontend")
     @patch("application.commons.services.send_notifications._get_first_name")
     @patch("application.commons.services.send_notifications.get_current_user")
     @patch("application.commons.services.send_notifications._get_notification_email_to")
+    @patch(
+        "application.commons.services.send_notifications._get_notification_slack_webhook"
+    )
     @patch(
         "application.commons.services.send_notifications._get_notification_ms_teams_webhook"
     )
@@ -232,12 +280,14 @@ class TestPushNotifications(BaseTestCase):
         self,
         mock_notification_create,
         mock_get_notification_ms_teams_webhook,
+        mock_get_notification_slack_webhook,
         mock_get_notification_email_to,
         mock_current_user,
         mock_get_first_name,
         mock_base_url,
         mock_send_email,
         mock_send_teams,
+        mock_send_slack,
     ):
         mock_base_url.return_value = "https://secobserve.com/"
         mock_get_first_name.return_value = "first_name"
@@ -248,6 +298,9 @@ class TestPushNotifications(BaseTestCase):
         mock_get_notification_ms_teams_webhook.return_value = (
             "https://msteams.microsoft.com"
         )
+        mock_get_notification_slack_webhook.return_value = (
+            "https://secobserve.slack.com"
+        )
         self.product_1.security_gate_passed = False
         self.product_1.pk = 1
 
@@ -255,6 +308,7 @@ class TestPushNotifications(BaseTestCase):
 
         mock_get_notification_email_to.assert_called_with(self.product_1)
         mock_get_notification_ms_teams_webhook.assert_called_with(self.product_1)
+        mock_get_notification_slack_webhook.assert_called_with(self.product_1)
         expected_calls_email = [
             call(
                 "test1@example.com",
@@ -283,6 +337,13 @@ class TestPushNotifications(BaseTestCase):
             security_gate_status="Failed",
             product_url="https://secobserve.com/#/products/1/show",
         )
+        mock_send_slack.assert_called_with(
+            "https://secobserve.slack.com",
+            "slack_product_security_gate.tpl",
+            product=self.product_1,
+            security_gate_status="Failed",
+            product_url="https://secobserve.com/#/products/1/show",
+        )
         expected_calls_get_first_name = [
             call("test1@example.com"),
             call("test2@example.com"),
@@ -298,9 +359,11 @@ class TestPushNotifications(BaseTestCase):
     # --- send_exception_notification ---
 
     @override_config(EXCEPTION_MS_TEAMS_WEBHOOK="")
+    @override_config(EXCEPTION_SLACK_WEBHOOK="")
     @override_config(EXCEPTION_EMAIL_TO="")
     @patch("application.commons.services.send_notifications._ratelimit_exception")
     @patch("application.commons.services.send_notifications._send_msteams_notification")
+    @patch("application.commons.services.send_notifications._send_slack_notification")
     @patch("application.commons.services.send_notifications._send_email_notification")
     @patch("application.commons.services.send_notifications.get_current_user")
     @patch("application.commons.models.Notification.objects.create")
@@ -309,6 +372,7 @@ class TestPushNotifications(BaseTestCase):
         mock_notification_create,
         mock_current_user,
         mock_send_email,
+        mock_send_slack,
         mock_send_teams,
         mock_ratelimit,
     ):
@@ -318,6 +382,7 @@ class TestPushNotifications(BaseTestCase):
         send_exception_notification(Exception("test_exception"))
 
         mock_send_teams.assert_not_called()
+        mock_send_slack.assert_not_called()
         mock_send_email.assert_not_called()
         mock_notification_create.assert_called_with(
             name='Exception "builtins.Exception" has occured',
@@ -327,26 +392,31 @@ class TestPushNotifications(BaseTestCase):
         )
 
     @override_config(EXCEPTION_MS_TEAMS_WEBHOOK="https://msteams.microsoft.com")
+    @override_config(EXCEPTION_SLACK_WEBHOOK="https://secobserve.slack.com")
     @override_config(EXCEPTION_EMAIL_TO="test1@example.com, test2@example.com")
     @override_config(EMAIL_FROM="secobserve@example.com")
     @patch("application.commons.services.send_notifications._ratelimit_exception")
     @patch("application.commons.services.send_notifications._send_msteams_notification")
+    @patch("application.commons.services.send_notifications._send_slack_notification")
     @patch("application.commons.services.send_notifications._send_email_notification")
     def test_send_exception_notification_no_ratelimit(
-        self, mock_send_email, mock_send_teams, mock_ratelimit
+        self, mock_send_email, mock_send_slack, mock_send_teams, mock_ratelimit
     ):
         mock_ratelimit.return_value = False
         exception = Exception("test_exception")
         send_exception_notification(exception)
         mock_ratelimit.assert_called_with(exception)
         mock_send_teams.assert_not_called()
+        mock_send_slack.assert_not_called()
         mock_send_email.assert_not_called()
 
     @override_config(EXCEPTION_MS_TEAMS_WEBHOOK="https://msteams.microsoft.com")
+    @override_config(EXCEPTION_SLACK_WEBHOOK="https://secobserve.slack.com")
     @override_config(EXCEPTION_EMAIL_TO="test1@example.com, test2@example.com")
     @override_config(EMAIL_FROM="secobserve@example.com")
     @patch("application.commons.services.send_notifications._ratelimit_exception")
     @patch("application.commons.services.send_notifications._send_msteams_notification")
+    @patch("application.commons.services.send_notifications._send_slack_notification")
     @patch("application.commons.services.send_notifications._send_email_notification")
     @patch("application.commons.services.send_notifications._get_first_name")
     @patch("application.commons.services.send_notifications.get_current_user")
@@ -357,6 +427,7 @@ class TestPushNotifications(BaseTestCase):
         mock_current_user,
         mock_get_first_name,
         mock_send_email,
+        mock_send_slack,
         mock_send_teams,
         mock_ratelimit,
     ):
@@ -399,6 +470,14 @@ class TestPushNotifications(BaseTestCase):
             exception_trace="",
             date_time=ANY,
         )
+        mock_send_slack.assert_called_with(
+            "https://secobserve.slack.com",
+            "slack_exception.tpl",
+            exception_class="builtins.Exception",
+            exception_message="test_exception",
+            exception_trace="",
+            date_time=ANY,
+        )
         expected_calls_get_first_name = [
             call("test1@example.com"),
             call("test2@example.com"),
@@ -414,13 +493,20 @@ class TestPushNotifications(BaseTestCase):
     # --- send_task_exception_notification ---
 
     @override_config(EXCEPTION_MS_TEAMS_WEBHOOK="")
+    @override_config(EXCEPTION_SLACK_WEBHOOK="")
     @override_config(EXCEPTION_EMAIL_TO="")
     @patch("application.commons.services.send_notifications._ratelimit_exception")
     @patch("application.commons.services.send_notifications._send_msteams_notification")
+    @patch("application.commons.services.send_notifications._send_slack_notification")
     @patch("application.commons.services.send_notifications._send_email_notification")
     @patch("application.commons.models.Notification.objects.create")
     def test_send_task_exception_notification_no_webhook_no_email(
-        self, mock_notification_create, mock_send_email, mock_send_teams, mock_ratelimit
+        self,
+        mock_notification_create,
+        mock_send_email,
+        mock_send_slack,
+        mock_send_teams,
+        mock_ratelimit,
     ):
         arguments = {"argument": "test_argument"}
         mock_ratelimit.return_value = True
@@ -431,6 +517,7 @@ class TestPushNotifications(BaseTestCase):
             exception=Exception("test_exception"),
         )
         mock_send_teams.assert_not_called()
+        mock_send_slack.assert_not_called()
         mock_send_email.assert_not_called()
         mock_notification_create.assert_called_with(
             name='Exception "builtins.Exception" has occured',
@@ -444,13 +531,15 @@ class TestPushNotifications(BaseTestCase):
         )
 
     @override_config(EXCEPTION_MS_TEAMS_WEBHOOK="https://msteams.microsoft.com")
+    @override_config(EXCEPTION_SLACK_WEBHOOK="https://secobserve.slack.com")
     @override_config(EXCEPTION_EMAIL_TO="test1@example.com, test2@example.com")
     @override_config(EMAIL_FROM="secobserve@example.com")
     @patch("application.commons.services.send_notifications._ratelimit_exception")
     @patch("application.commons.services.send_notifications._send_msteams_notification")
+    @patch("application.commons.services.send_notifications._send_slack_notification")
     @patch("application.commons.services.send_notifications._send_email_notification")
     def test_send_task_exception_notification_no_ratelimit(
-        self, mock_send_email, mock_send_teams, mock_ratelimit
+        self, mock_send_email, mock_send_slack, mock_send_teams, mock_ratelimit
     ):
         mock_ratelimit.return_value = False
         exception = Exception("test_exception")
@@ -462,13 +551,16 @@ class TestPushNotifications(BaseTestCase):
         )
         mock_ratelimit.assert_called_with(exception, "test_function", "test_arguments")
         mock_send_teams.assert_not_called()
+        mock_send_slack.assert_not_called()
         mock_send_email.assert_not_called()
 
     @override_config(EXCEPTION_MS_TEAMS_WEBHOOK="https://msteams.microsoft.com")
+    @override_config(EXCEPTION_SLACK_WEBHOOK="https://secobserve.slack.com")
     @override_config(EXCEPTION_EMAIL_TO="test1@example.com, test2@example.com")
     @override_config(EMAIL_FROM="secobserve@example.com")
     @patch("application.commons.services.send_notifications._ratelimit_exception")
     @patch("application.commons.services.send_notifications._send_msteams_notification")
+    @patch("application.commons.services.send_notifications._send_slack_notification")
     @patch("application.commons.services.send_notifications._send_email_notification")
     @patch("application.commons.services.send_notifications._get_first_name")
     @patch("application.commons.models.Notification.objects.create")
@@ -477,6 +569,7 @@ class TestPushNotifications(BaseTestCase):
         mock_notification_create,
         mock_get_first_name,
         mock_send_email,
+        mock_send_slack,
         mock_send_teams,
         mock_ratelimit,
     ):
@@ -525,6 +618,17 @@ class TestPushNotifications(BaseTestCase):
         mock_send_teams.assert_called_with(
             "https://msteams.microsoft.com",
             "msteams_task_exception.tpl",
+            function="test_function",
+            arguments=str(arguments),
+            user=self.user_internal,
+            exception_class="builtins.Exception",
+            exception_message="test_exception",
+            exception_trace="",
+            date_time=ANY,
+        )
+        mock_send_slack.assert_called_with(
+            "https://secobserve.slack.com",
+            "slack_task_exception.tpl",
             function="test_function",
             arguments=str(arguments),
             user=self.user_internal,
@@ -691,6 +795,89 @@ class TestPushNotifications(BaseTestCase):
         mock_request.return_value = response
 
         _send_msteams_notification("test_webhook", "test_template")
+
+        mock_create_message.assert_called_with("test_template")
+        mock_request.assert_called_with(
+            method="POST", url="test_webhook", data="test_message", timeout=60
+        )
+        mock_logger.assert_not_called()
+        mock_format.assert_not_called()
+
+    # --- _send_slack_notification ---
+
+    @patch(
+        "application.commons.services.send_notifications._create_notification_message"
+    )
+    @patch("application.commons.services.send_notifications.requests.request")
+    def test_send_slack_notification_empty_message(
+        self, mock_request, mock_create_message
+    ):
+        mock_create_message.return_value = None
+
+        _send_slack_notification("test_webhook", "test_template")
+
+        mock_create_message.assert_called_with("test_template")
+        mock_request.assert_not_called()
+
+    @patch(
+        "application.commons.services.send_notifications._create_notification_message"
+    )
+    @patch("application.commons.services.send_notifications.requests.request")
+    @patch("application.commons.services.send_notifications.logger.error")
+    @patch("application.commons.services.send_notifications.format_log_message")
+    def test_send_slack_notification_exception(
+        self, mock_format, mock_logger, mock_request, mock_create_message
+    ):
+        mock_create_message.return_value = "test_message"
+        mock_request.side_effect = Exception("test_exception")
+
+        _send_slack_notification("test_webhook", "test_template")
+
+        mock_create_message.assert_called_with("test_template")
+        mock_request.assert_called_with(
+            method="POST", url="test_webhook", data="test_message", timeout=60
+        )
+        mock_logger.assert_called_once()
+        mock_format.assert_called_once()
+
+    @patch(
+        "application.commons.services.send_notifications._create_notification_message"
+    )
+    @patch("application.commons.services.send_notifications.requests.request")
+    @patch("application.commons.services.send_notifications.logger.error")
+    @patch("application.commons.services.send_notifications.format_log_message")
+    def test_send_slack_notification_not_ok(
+        self, mock_format, mock_logger, mock_request, mock_create_message
+    ):
+        mock_create_message.return_value = "test_message"
+        response = Response()
+        response.status_code = 400
+        mock_request.return_value = response
+
+        _send_slack_notification("test_webhook", "test_template")
+
+        mock_create_message.assert_called_with("test_template")
+        mock_request.assert_called_with(
+            method="POST", url="test_webhook", data="test_message", timeout=60
+        )
+        mock_logger.assert_called_once()
+        mock_format.assert_called_once()
+
+    @patch(
+        "application.commons.services.send_notifications._create_notification_message"
+    )
+    @patch("application.commons.services.send_notifications.requests.request")
+    @patch("application.commons.services.send_notifications.logger.error")
+    @patch("application.commons.services.send_notifications.format_log_message")
+    def test_send_slack_notification_success(
+        self, mock_format, mock_logger, mock_request, mock_create_message
+    ):
+        mock_create_message.return_value = "test_message"
+        response = Response()
+        response.status_code = 200
+        mock_request.return_value = response
+
+        _send_slack_notification("test_webhook", "test_template")
 
         mock_create_message.assert_called_with("test_template")
         mock_request.assert_called_with(

@@ -22,6 +22,7 @@ from application.import_observations.api.views import (
 )
 from application.metrics.api.views import (
     ProductMetricsCurrentView,
+    ProductMetricsExportCodeChartaView,
     ProductMetricsExportCsvView,
     ProductMetricsExportExcelView,
     ProductMetricsStatusView,
@@ -83,6 +84,9 @@ urlpatterns += [
     path("api/metrics/product_metrics_status/", ProductMetricsStatusView.as_view()),
     path("api/metrics/export_excel/", ProductMetricsExportExcelView.as_view()),
     path("api/metrics/export_csv/", ProductMetricsExportCsvView.as_view()),
+    path(
+        "api/metrics/export_codecharta/", ProductMetricsExportCodeChartaView.as_view()
+    ),
     # OpenAPI 3
     path("api/oa3/schema/", SpectacularAPIView.as_view(), name="schema_oa3"),
     path(

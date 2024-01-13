@@ -105,7 +105,8 @@ const ProductGroupShow = () => {
                                     )}
 
                                     {(product_group.notification_email_to ||
-                                        product_group.notification_ms_teams_webhook) && (
+                                        product_group.notification_ms_teams_webhook ||
+                                        product_group.notification_slack_webhook) && (
                                         <Typography variant="h6" sx={{ marginTop: "1em" }}>
                                             Notifications (for products)
                                         </Typography>
@@ -115,6 +116,9 @@ const ProductGroupShow = () => {
                                     )}
                                     {product_group.notification_ms_teams_webhook && (
                                         <TextField source="notification_ms_teams_webhook" label="MS Teams" />
+                                    )}
+                                    {product_group.notification_slack_webhook && (
+                                        <TextField source="notification_slack_webhook" label="Slack" />
                                     )}
 
                                     {product_group.security_gate_active != null && (
