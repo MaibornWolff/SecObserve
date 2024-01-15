@@ -212,6 +212,7 @@ def _send_email_notification(
 def _send_msteams_notification(webhook: str, template: str, **kwargs) -> None:
     notification_message = _create_notification_message(template, **kwargs)
     if notification_message:
+        notification_message = notification_message.replace("&quot;", '\\"')
         try:
             response = requests.request(
                 method="POST",
@@ -232,6 +233,8 @@ def _send_msteams_notification(webhook: str, template: str, **kwargs) -> None:
 def _send_slack_notification(webhook: str, template: str, **kwargs) -> None:
     notification_message = _create_notification_message(template, **kwargs)
     if notification_message:
+        notification_message = notification_message.replace("&#x27;", "\\'")
+        notification_message = notification_message.replace("&quot;", '\\"')
         try:
             response = requests.request(
                 method="POST",
@@ -336,12 +339,14 @@ def _get_first_name(email: str) -> str:
     return ""
 
 
-def _get_stack_trace(exc: Exception, msteams: bool) -> str:
-    if msteams:
-        delimiter = "/n/n"
-    else:
-        delimiter = ""
-    return delimiter.join(traceback.format_tb(exc.__traceback__))
+def _get_stack_trace(exc: Exception, format_as_code: bool) -> str:
+    delimiter = ""
+    stack_trace = delimiter.join(traceback.format_tb(exc.__traceback__))
+
+    if stack_trace and format_as_code:
+        stack_trace = f"```\n{stack_trace}\n```"
+
+    return stack_trace
 
 
 def _get_arguments_string(arguments: Optional[dict]) -> str:
