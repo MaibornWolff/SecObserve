@@ -4,7 +4,7 @@
     "private": true,
     "dependencies": {
         "@mui/icons-material": "5.15.4",
-        "@mui/material": "5.15.4",
+        "@mui/material": "5.15.5",
         "@types/inflection": "1.13.2",
         "@types/recharts": "1.8.29",
         "prop-types": "15.8.1",
