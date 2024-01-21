@@ -20,16 +20,29 @@ from unittests.base_test_case import BaseTestCase
 
 
 class TestExceptionHandler(BaseTestCase):
-    def test_protected_error(self):
+    def test_protected_error_formatted(self):
         exception = ProtectedError(
-            "Cannot delete some instances of model 'Product' because they are referenced through protected foreign keys: 'Observation.product'.",
+            "Cannot delete some instances of model 'Product' because they are referenced through protected foreign keys: 'Service.product_group', 'Observation.product'.",
             None,
         )
         response = custom_exception_handler(exception, None)
 
         self.assertEqual(HTTP_409_CONFLICT, response.status_code)
         data = {
-            "message": "Cannot delete some instances of model 'Product' because they are referenced through protected foreign keys"
+            "message": "Cannot delete Product because it still has Services, Observations."
+        }
+        self.assertEqual(data, response.data)
+
+    def test_protected_error_raw(self):
+        exception = ProtectedError(
+            "Cannot delete some instances of model Product because they are referenced through protected foreign keys: Service.product_group, 'Observation.product'.",
+            None,
+        )
+        response = custom_exception_handler(exception, None)
+
+        self.assertEqual(HTTP_409_CONFLICT, response.status_code)
+        data = {
+            "message": "Cannot delete some instances of model Product because they are referenced through protected foreign keys: Service.product_group, 'Observation.product'."
         }
         self.assertEqual(data, response.data)
 

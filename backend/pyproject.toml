@@ -51,6 +51,9 @@ huey = "2.5.0"  # https://github.com/coleifer/huey
 # Issue tracker
 # ------------------------------------------------------------------------------
 jira = "3.6.0"  # https://github.com/pycontribs/jira
+# Others
+# ------------------------------------------------------------------------------
+inflect = "7.0.0"  # https://github.com/jaraco/inflect
 
 [tool.poetry.group.dev.dependencies]
 Werkzeug = { version = "3.0.1", extras = ["watchdog"] }  # https://github.com/pallets/werkzeug

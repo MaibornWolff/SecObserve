@@ -126,7 +126,9 @@ class TestAuthorizationProductRules(TestAuthorizationBase):
             )
         )
 
-        expected_data = "{'message': \"Cannot delete some instances of model 'Rule' because they are referenced through protected foreign keys\"}"
+        expected_data = (
+            "{'message': 'Cannot delete Rule because it still has Observations.'}"
+        )
         self._test_api(
             APITest(
                 "db_internal_write",
