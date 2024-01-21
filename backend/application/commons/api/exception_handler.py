@@ -1,7 +1,9 @@
 import logging
+import re
 import traceback
 from typing import Optional
 
+import inflect
 from django.db.models.deletion import ProtectedError
 from rest_framework.response import Response
 from rest_framework.status import (
@@ -90,6 +92,23 @@ def format_exception_message(exc):
         return " / ".join(exc.detail)
 
     if hasattr(exc, "args") and exc.args and "protected foreign keys" in exc.args[0]:
-        return exc.args[0].split("protected foreign keys")[0] + "protected foreign keys"
+        return _format_protected_foreign_keys(exc.args[0])
 
     return str(exc)
+
+
+def _format_protected_foreign_keys(message: str) -> str:
+    results = re.findall(r"'[a-zA-Z\.\_]*'", message)
+    if len(results) >= 2:
+        second_results = []
+        p = inflect.engine()
+        for i, result in enumerate(results):
+            if i == 0:
+                first_result = result.replace("'", "")
+            else:
+                second_results.append(p.plural(result.split(".")[0].replace("'", "")))
+        second_result = ", ".join(second_results)
+
+        return f"Cannot delete {first_result} because it still has {second_result}."
+
+    return message
