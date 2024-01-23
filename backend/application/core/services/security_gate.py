@@ -60,7 +60,8 @@ def _calculate_active_product_security_gate(product: Product) -> bool:
         security_gate_threshold_unkown = product.security_gate_threshold_unkown
 
     if (
-        product.open_critical_observation_count > security_gate_threshold_critical
+        product.open_critical_observation_count  # pylint: disable=too-many-boolean-expressions
+        > security_gate_threshold_critical
         or product.open_high_observation_count > security_gate_threshold_high
         or product.open_medium_observation_count > security_gate_threshold_medium
         or product.open_low_observation_count > security_gate_threshold_low
@@ -76,7 +77,7 @@ def _calculate_active_config_security_gate(product: Product) -> bool:
     new_security_gate_passed = True
 
     if (
-        product.open_critical_observation_count
+        product.open_critical_observation_count  # pylint: disable=too-many-boolean-expressions
         > config.SECURITY_GATE_THRESHOLD_CRITICAL
         or product.open_high_observation_count > config.SECURITY_GATE_THRESHOLD_HIGH
         or product.open_medium_observation_count > config.SECURITY_GATE_THRESHOLD_MEDIUM
