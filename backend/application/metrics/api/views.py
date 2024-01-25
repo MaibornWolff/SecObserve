@@ -84,9 +84,9 @@ class ProductMetricsExportCodeChartaView(APIView):
             raise ValidationError("Product not found")
 
         response = HttpResponse(content_type="text/csv")
-        response[
-            "Content-Disposition"
-        ] = 'attachment; filename="secobserve_codecharta_metrics.csv"'
+        response["Content-Disposition"] = (
+            'attachment; filename="secobserve_codecharta_metrics.csv"'
+        )
 
         writer = csv.DictWriter(
             response,
