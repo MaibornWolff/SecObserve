@@ -10,6 +10,12 @@
 
 * There will be specific upgrade instructions if necessary, e.g. when there are new configuration parameters.
 
+## Release 1.5.0
+
+**Breaking changes**
+
+* The tag of the docker image is not part of the identity hash anymore, to allow updates of the docker image within a vulnerability check without creating a new observation.
+
 ## Release 1.3.0
 
 **Breaking changes**

@@ -24,13 +24,10 @@ def _get_string_to_hash(observation):  # pylint: disable=too-many-branches
         if observation.origin_component_version:
             hash_string += observation.origin_component_version
 
-    if observation.origin_docker_image_name_tag:
+    if observation.origin_docker_image_name:
+        hash_string += observation.origin_docker_image_name
+    elif observation.origin_docker_image_name_tag:
         hash_string += observation.origin_docker_image_name_tag
-    else:
-        if observation.origin_docker_image_name:
-            hash_string += observation.origin_docker_image_name
-        if observation.origin_docker_image_tag:
-            hash_string += observation.origin_docker_image_tag
 
     if observation.origin_endpoint_url:
         hash_string += observation.origin_endpoint_url
