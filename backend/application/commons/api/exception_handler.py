@@ -62,9 +62,9 @@ def custom_exception_handler(exc, context):
                 logger.error(traceback.format_exc())
                 send_exception_notification(exc)
                 response.data = {}
-                response.data[
-                    "message"
-                ] = "Internal server error, check logs for details"
+                response.data["message"] = (
+                    "Internal server error, check logs for details"
+                )
 
     return response
 
