@@ -33,6 +33,7 @@ class TestObservation(BaseTestCase):
         observation = Observation(
             title="full",
             origin_component_name_version="component_name:version",
+            origin_docker_image_name="docker_image_name",
             origin_docker_image_name_tag="docker_image_name:tag",
             origin_endpoint_url="endpoint_url",
             origin_service_name="service_name",
@@ -41,7 +42,7 @@ class TestObservation(BaseTestCase):
             origin_source_line_end=999,
         )
         self.assertEqual(
-            "fullcomponent_name:versiondocker_image_name:tagendpoint_urlservice_namesource_file1999",
+            "fullcomponent_name:versiondocker_image_nameendpoint_urlservice_namesource_file1999",
             _get_string_to_hash(observation),
         )
 
@@ -50,11 +51,10 @@ class TestObservation(BaseTestCase):
             title="intermediate",
             origin_component_name="component_name",
             origin_component_version="component_version",
-            origin_docker_image_name="docker_image_name",
-            origin_docker_image_tag="docker_image_tag",
+            origin_docker_image_name_tag="docker_image_name:tag",
         )
         self.assertEqual(
-            "intermediatecomponent_namecomponent_versiondocker_image_namedocker_image_tag",
+            "intermediatecomponent_namecomponent_versiondocker_image_name:tag",
             _get_string_to_hash(observation),
         )
 
