@@ -279,41 +279,26 @@ Using multiple vulnerability scanners makes the pipeline quite complex. To make 
 #### Example pipeline for GitHub
 
 ```yaml
-name: Check for vulnerabilities
+name: Check for vulnerabilities in the code
 
 on: [push]
 
 permissions: read-all
 
 jobs:
-  build:
+  check_vulnerabilities:
+
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Run vulnerability scanners
         uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@main
         with:
           so_configuration: 'so_configuration.yml'
-
-      - name: Upload results
-        uses: actions/upload-artifact@v3
-        with:
-          name: secobserve
-          path: |
-            bandit_backend.sarif
-            checkov.sarif
-            eslint_frontend.sarif
-            gitleaks.sarif
-            grype_backend_image.json
-            grype_frontend_image.json
-            kics.sarif
-            semgrep_backend.sarif
-            semgrep_frontend.sarif
-            trivy_frontend_npm.json
-            trivy_backend_image.json
-            trivy_frontend_image.json
+          SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
 ```
 
 #### Example pipeline for GitLab
@@ -326,7 +311,7 @@ vulnerability_scans:
   stage: test
   extends: .vulnerability_scanner
   variables:
-    SO_CONFIGURATION: "so_config_sast_sca_secrets.yml"
+    SO_CONFIGURATION: "so_configuration.yml"
   needs: []
 ```
 
@@ -335,87 +320,76 @@ vulnerability_scans:
 ```yaml 
 bandit_backend:
   SCANNER: bandit
-  RUN_DIRECTORY: SecObserve
+  RUN_DIRECTORY: "."
   TARGET: backend
   REPORT_NAME: bandit_backend.sarif
   SO_ORIGIN_SERVICE: backend
+  SO_BRANCH_NAME: $GITHUB_REF_NAME
 
 checkov:
   SCANNER: checkov
-  RUN_DIRECTORY: SecObserve
+  RUN_DIRECTORY: "."
   TARGET: "."
   REPORT_NAME: checkov.sarif
+  SO_BRANCH_NAME: $GITHUB_REF_NAME
 
 eslint_frontend:
   SCANNER: eslint
-  RUN_DIRECTORY: "SecObserve/frontend"
+  RUN_DIRECTORY: "frontend"
   TARGET: "src"
   REPORT_NAME: "eslint_frontend.sarif"
   SO_ORIGIN_SERVICE: "frontend"
+  SO_BRANCH_NAME: $GITHUB_REF_NAME
 
 gitleaks:
   SCANNER: gitleaks
-  RUN_DIRECTORY: "SecObserve"
+  RUN_DIRECTORY: "."
   REPORT_NAME: "gitleaks.sarif"
-
-grype_image_backend:
-  SCANNER: grype_image
-  TARGET: "maibornwolff/secobserve-backend:latest"
-  REPORT_NAME: "grype_backend_image.json"
-  SO_ORIGIN_SERVICE: "backend"
-
-grype_image_frontend:
-  SCANNER: grype_image
-  TARGET: "maibornwolff/secobserve-frontend:latest"
-  REPORT_NAME: "grype_frontend_image.json"
-  SO_ORIGIN_SERVICE: "frontend"
+  SO_BRANCH_NAME: $GITHUB_REF_NAME
 
 kics:
   SCANNER: kics
-  RUN_DIRECTORY: "SecObserve"
+  RUN_DIRECTORY: "."
   TARGET: "."
   REPORT_NAME: "kics.sarif"
+  SO_BRANCH_NAME: $GITHUB_REF_NAME
 
 semgrep_backend:
   SCANNER: semgrep
-  RUN_DIRECTORY: "SecObserve"
+  RUN_DIRECTORY: "."
   CONFIGURATION: "r/python"
   TARGET: "backend"
-  REPORT_NAME: "semgrep_backend.json"
+  REPORT_NAME: "semgrep_backend.sarif"
   SO_ORIGIN_SERVICE: "backend"
+  SO_BRANCH_NAME: $GITHUB_REF_NAME
 
 semgrep_frontend:
   SCANNER: semgrep
-  RUN_DIRECTORY: "SecObserve"
+  RUN_DIRECTORY: "."
   CONFIGURATION: "r/typescript"
   TARGET: "frontend/src"
-  REPORT_NAME: "semgrep_frontend.json"
+  REPORT_NAME: "semgrep_frontend.sarif"
   SO_ORIGIN_SERVICE: "frontend"
+  SO_BRANCH_NAME: $GITHUB_REF_NAME
 
 trivy_filesystem_frontend:
   SCANNER: trivy_filesystem
-  RUN_DIRECTORY: "SecObserve"
+  RUN_DIRECTORY: "."
   TARGET: "frontend/package-lock.json"
   REPORT_NAME: "trivy_frontend_npm.json"
   SO_ORIGIN_SERVICE: "frontend"
-
-trivy_image_backend:
-  SCANNER: trivy_image
-  RUN_DIRECTORY: "SecObserve"
-  TARGET: "maibornwolff/secobserve-backend:latest"
-  REPORT_NAME: "trivy_backend_image.json"
-  SO_ORIGIN_SERVICE: "backend"
-
-trivy_image_frontend:
-  SCANNER: trivy_image
-  RUN_DIRECTORY: "SecObserve"
-  TARGET: "maibornwolff/secobserve-frontend:latest"
-  REPORT_NAME: "trivy_frontend_image.json"
-  SO_ORIGIN_SERVICE: "frontend"
+  SO_BRANCH_NAME: $GITHUB_REF_NAME
 
 importer:
   SO_UPLOAD: "true"
   SO_API_BASE_URL: https://secobserve.example.com
   SO_PRODUCT_NAME: SecObserve
-  SO_BRANCH_NAME: main
 ```
+
+#### Real life examples
+
+Some real life examples can be found in the SecObserve GitHub repository:
+
+* [so_configuration_code.yml](https://github.com/MaibornWolff/SecObserve/blob/main/so_configuration_code.yml)
+* [so_configuration_endpoints.yml](https://github.com/MaibornWolff/SecObserve/blob/main/so_configuration_endpoints.yml)
+* [so_configuration_images.yml](https://github.com/MaibornWolff/SecObserve/blob/main/so_configuration_images.yml)
