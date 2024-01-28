@@ -189,7 +189,7 @@ class TestAuthorizationProducts(TestAuthorizationBase):
                 expected_data,
             )
         )
-        expected_data = "{'message': \"Cannot delete some instances of model 'Product' because they are referenced through protected foreign keys\"}"
+        expected_data = "{'message': 'Cannot delete Product because it still has Services, Observations, Rules.'}"
         self._test_api(
             APITest(
                 "db_internal_write",

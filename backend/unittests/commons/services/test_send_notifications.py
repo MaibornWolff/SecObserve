@@ -12,6 +12,7 @@ from application.commons.services.send_notifications import (
     _get_first_name,
     _get_notification_email_to,
     _get_notification_ms_teams_webhook,
+    _get_notification_slack_webhook,
     _get_stack_trace,
     _ratelimit_exception,
     _send_email_notification,
@@ -1034,14 +1035,14 @@ class TestPushNotifications(BaseTestCase):
     ## --- _get_stack_trace ---
 
     @patch("application.commons.services.send_notifications.traceback.format_tb")
-    def test_get_stack_trace_msteams(self, mock_format):
+    def test_get_stack_trace_format_as_code(self, mock_format):
         mock_format.return_value = ["line1", "line2"]
         exception = Exception("test_exception")
-        self.assertEqual("line1/n/nline2", _get_stack_trace(exception, True))
+        self.assertEqual("```\nline1line2\n```", _get_stack_trace(exception, True))
         mock_format.assert_called_once()
 
     @patch("application.commons.services.send_notifications.traceback.format_tb")
-    def test_get_stack_trace_email(self, mock_format):
+    def test_get_stack_trace_plain(self, mock_format):
         mock_format.return_value = ["line1", "line2"]
         exception = Exception("test_exception")
         self.assertEqual("line1line2", _get_stack_trace(exception, False))
@@ -1086,3 +1087,25 @@ class TestPushNotifications(BaseTestCase):
 
     def test_get_notification_ms_teams_webhook_product_webhook_empty(self):
         self.assertEqual(None, _get_notification_ms_teams_webhook(self.product_1))
+
+    ## --- _get_notification_slack_webhook ---
+
+    def test_get_notification_slack_webhook_product_webhook(self):
+        self.product_1.notification_slack_webhook = "test@example.com"
+        self.assertEqual(
+            "test@example.com", _get_notification_slack_webhook(self.product_1)
+        )
+
+    def test_get_notification_slack_webhook_product_group_webhook(self):
+        self.product_group_1.notification_slack_webhook = "test@example.com"
+        self.product_1.product_group = self.product_group_1
+        self.assertEqual(
+            "test@example.com", _get_notification_slack_webhook(self.product_1)
+        )
+
+    def test_get_notification_slack_webhook_product_group_webhook_empty(self):
+        self.product_1.product_group = self.product_group_1
+        self.assertEqual(None, _get_notification_slack_webhook(self.product_1))
+
+    def test_get_notification_slack_webhook_product_webhook_empty(self):
+        self.assertEqual(None, _get_notification_slack_webhook(self.product_1))
