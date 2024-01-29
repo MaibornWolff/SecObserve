@@ -102,6 +102,7 @@ export interface Observation extends RaRecord {
     origin_docker_image_tag: string;
     origin_docker_image_name_tag: string;
     origin_docker_image_name_tag_short: string;
+    origin_docker_image_digest: string;
     origin_endpoint_url: string;
     origin_endpoint_scheme: string;
     origin_endpoint_hostname: string;

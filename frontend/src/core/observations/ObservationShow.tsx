@@ -272,6 +272,11 @@ const ObservationShow = () => {
                                         </Labeled>
                                     )}
                                 </Stack>
+                                {observation.origin_docker_image_digest != "" && (
+                                    <Labeled>
+                                        <TextField source="origin_docker_image_digest" label="Docker image digest" />
+                                    </Labeled>
+                                )}
                             </div>
                         )}
                         {observation.origin_endpoint_url != "" && (

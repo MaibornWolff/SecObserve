@@ -25,7 +25,9 @@ class Component:
 @dataclass
 class Metadata:
     scanner: str
-    container: str
+    container_name: str
+    container_tag: str
+    container_digest: str
     file: str
 
 
@@ -139,7 +141,9 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                             cvss3_vector=cvss3_vector,
                             cwe=cwe,
                             scanner=metadata.scanner,
-                            origin_docker_image_name_tag=metadata.container,
+                            origin_docker_image_name=metadata.container_name,
+                            origin_docker_image_tag=metadata.container_tag,
+                            origin_docker_image_digest=metadata.container_digest,
                             origin_source_file=metadata.file,
                         )
 
@@ -180,7 +184,9 @@ class CycloneDXParser(BaseParser, BaseFileParser):
 
     def _get_metadata(self, data: dict) -> Metadata:
         scanner = ""
-        container = ""
+        container_name = ""
+        container_tag = ""
+        container_digest = ""
         file = ""
 
         tools = data.get("metadata", {}).get("tools")
@@ -206,13 +212,21 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             data.get("metadata", {}).get("component", {}).get("version", "")
         )
         if component_type == "container":
-            container = component_name
-            if component_version and ":" not in container:
-                container += f":{component_version}"
+            container_name = component_name
+            if component_version and component_version.startswith("sha256:"):
+                container_digest = component_version
+            elif component_version:
+                container_tag = component_version
         if component_type == "file":
             file = component_name
 
-        return Metadata(scanner=scanner, container=container, file=file)
+        return Metadata(
+            scanner=scanner,
+            container_name=container_name,
+            container_tag=container_tag,
+            container_digest=container_digest,
+            file=file,
+        )
 
     def _get_cvss3(self, vulnerability):
         ratings = vulnerability.get("ratings", [])

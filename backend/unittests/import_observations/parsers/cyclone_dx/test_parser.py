@@ -56,7 +56,12 @@ class TestCycloneDXParser(TestCase):
                 observation.origin_component_cpe,
             )
             self.assertEqual(
-                "example/example:dev", observation.origin_docker_image_name_tag
+                "example/example:dev", observation.origin_docker_image_name
+            )
+            self.assertEqual("", observation.origin_docker_image_tag)
+            self.assertEqual(
+                "sha256:88901af20b50287be153ec4f20ed78f947eb5fa0d0a52432ced6e261b66b6cbc",
+                observation.origin_docker_image_digest,
             )
             self.assertEqual(
                 "http://mail.python.org/pipermail/python-dev/2007-August/074290.html",
@@ -98,7 +103,12 @@ class TestCycloneDXParser(TestCase):
                 observation.origin_component_cpe,
             )
             self.assertEqual(
-                "example/example:dev", observation.origin_docker_image_name_tag
+                "example/example:dev", observation.origin_docker_image_name
+            )
+            self.assertEqual("", observation.origin_docker_image_tag)
+            self.assertEqual(
+                "sha256:88901af20b50287be153ec4f20ed78f947eb5fa0d0a52432ced6e261b66b6cbc",
+                observation.origin_docker_image_digest,
             )
             self.assertEqual(
                 "https://github.com/MariaDB/server/commit/be0a46b3d52b58956fd0d47d040b9f4514406954",
@@ -133,8 +143,10 @@ class TestCycloneDXParser(TestCase):
             self.assertEqual("CVE-2018-20225", observation.vulnerability_id)
             self.assertEqual("grype / 0.65.1", observation.scanner)
             self.assertEqual(
-                "example/example-backend:dev", observation.origin_docker_image_name_tag
+                "example/example-backend", observation.origin_docker_image_name
             )
+            self.assertEqual("dev", observation.origin_docker_image_tag)
+            self.assertEqual("", observation.origin_docker_image_digest)
 
     def test_grype_tools_components(self):
         with open(path.dirname(__file__) + "/files/grype_3.json") as testfile:
@@ -150,8 +162,10 @@ class TestCycloneDXParser(TestCase):
             self.assertEqual("CVE-2023-42363", observation.vulnerability_id)
             self.assertEqual("grype / 0.73.5", observation.scanner)
             self.assertEqual(
-                "example/example-backend:dev", observation.origin_docker_image_name_tag
+                "example/example-backend", observation.origin_docker_image_name
             )
+            self.assertEqual("dev", observation.origin_docker_image_tag)
+            self.assertEqual("", observation.origin_docker_image_digest)
 
     def test_trivy(self):
         with open(path.dirname(__file__) + "/files/trivy.json") as testfile:
@@ -184,8 +198,10 @@ class TestCycloneDXParser(TestCase):
                 observation.origin_component_purl,
             )
             self.assertEqual(
-                "example/example-frontend:dev", observation.origin_docker_image_name_tag
+                "example/example-frontend:dev", observation.origin_docker_image_name
             )
+            self.assertEqual("", observation.origin_docker_image_tag)
+            self.assertEqual("", observation.origin_docker_image_digest)
             self.assertEqual(
                 "https://access.redhat.com/security/cve/CVE-2023-29469",
                 observation.unsaved_references[0],

@@ -472,6 +472,7 @@ class Observation(Model):
     origin_docker_image_tag = CharField(max_length=255, blank=True)
     origin_docker_image_name_tag = CharField(max_length=513, blank=True)
     origin_docker_image_name_tag_short = CharField(max_length=513, blank=True)
+    origin_docker_image_digest = CharField(max_length=255, blank=True)
     origin_endpoint_url = TextField(max_length=2048, blank=True)
     origin_endpoint_scheme = CharField(max_length=255, blank=True)
     origin_endpoint_hostname = CharField(max_length=255, blank=True)
