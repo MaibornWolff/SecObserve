@@ -2,7 +2,7 @@
 
 ## Reporting a Vulnerability
 
-Please use the "Private vulnerability reporting" feature in the GitHub repository (under the "Security" tab).
+Please use the ["Report a vulnerability"](https://github.com/MaibornWolff/SecObserve/security/advisories/new) button in the GitHub repository (under the "Security" tab) to report a vulnerability.
 
 **Please do not report security vulnerabilities through public GitHub issues, discussions, or pull requests.**
 
