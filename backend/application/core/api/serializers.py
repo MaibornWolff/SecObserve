@@ -586,6 +586,7 @@ class ObservationUpdateSerializer(ModelSerializer):
 
         instance.origin_docker_image_name = ""
         instance.origin_docker_image_tag = ""
+        instance.origin_docker_image_digest = ""
 
         observation: Observation = super().update(instance, validated_data)
 

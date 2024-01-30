@@ -229,6 +229,8 @@ def normalize_origin_docker(observation):
         observation.origin_docker_image_name = ""
     if observation.origin_docker_image_tag is None:
         observation.origin_docker_image_tag = ""
+    if observation.origin_docker_image_digest is None:
+        observation.origin_docker_image_digest = ""
 
 
 def normalize_origin_endpoint(observation):
