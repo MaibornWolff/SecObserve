@@ -3,7 +3,6 @@ import { RichTextInput } from "ra-input-rich-text";
 import { Create, FormDataConsumer, NullableBooleanInput, NumberInput, SimpleForm, required } from "react-admin";
 
 import { TextInputWide } from "../../commons/layout/themes";
-import { getElevation } from "../../metrics/functions";
 
 const ProductGroupCreate = () => {
     const transform = (data: any) => {

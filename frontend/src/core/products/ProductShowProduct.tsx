@@ -2,7 +2,6 @@ import { Divider, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
 import { BooleanField, Labeled, NumberField, ReferenceField, RichTextField, TextField } from "react-admin";
 
-import { getElevation } from "../../metrics/functions";
 import { Product } from "../types";
 
 type ProductShowProductProps = {

@@ -17,7 +17,6 @@ import {
 
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../../core/types";
-import { getElevation } from "../../metrics/functions";
 import { validateRuleForm } from "../functions";
 
 export type ProductRuleCreateProps = {

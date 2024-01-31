@@ -15,7 +15,6 @@ import {
 
 import { PERMISSION_PRODUCT_DELETE } from "../../access_control/types";
 import { TextInputWide } from "../../commons/layout/themes";
-import { getElevation } from "../../metrics/functions";
 
 const CustomToolbar = () => {
     const product = useRecordContext();

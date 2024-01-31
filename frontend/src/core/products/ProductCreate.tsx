@@ -1,6 +1,5 @@
 import { Divider, Stack, Typography } from "@mui/material";
 import { RichTextInput } from "ra-input-rich-text";
-import { Fragment } from "react";
 import {
     BooleanInput,
     Create,
@@ -8,9 +7,7 @@ import {
     NullableBooleanInput,
     NumberInput,
     ReferenceInput,
-    SaveButton,
     SimpleForm,
-    Toolbar,
     required,
 } from "react-admin";
 

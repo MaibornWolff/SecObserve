@@ -1,5 +1,5 @@
 import { Divider, Stack, Typography } from "@mui/material";
-import { BooleanInput, Create, ReferenceInput, SaveButton, SimpleForm, Toolbar, required } from "react-admin";
+import { BooleanInput, Create, ReferenceInput, SimpleForm, required } from "react-admin";
 
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../../core/types";
@@ -48,7 +48,7 @@ const transform = (data: any) => {
 const GeneralRuleCreate = () => {
     return (
         <Create redirect="show" transform={transform}>
-        <SimpleForm warnWhenUnsavedChanges validate={validateRuleForm}>
+            <SimpleForm warnWhenUnsavedChanges validate={validateRuleForm}>
                 <Typography variant="h6" sx={{ marginBottom: 1 }}>
                     Rule
                 </Typography>
@@ -59,10 +59,8 @@ const GeneralRuleCreate = () => {
                     <AutocompleteInputMedium source="new_status" choices={OBSERVATION_STATUS_CHOICES} />
                     <BooleanInput source="enabled" defaultValue={true} />
                 </Stack>{" "}
-
                 <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
-
-<Typography variant="h6" sx={{ marginBottom: 1 }}>
+                <Typography variant="h6" sx={{ marginBottom: 1 }}>
                     Observation
                 </Typography>
                 <Stack>
@@ -81,10 +79,8 @@ const GeneralRuleCreate = () => {
                         helperText="Regular expression to match the observation's description"
                     />
                 </Stack>
-
                 <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
-
-<Typography variant="h6" sx={{ marginBottom: 1 }}>
+                <Typography variant="h6" sx={{ marginBottom: 1 }}>
                     Origins
                 </Typography>
                 <Stack>
@@ -119,7 +115,7 @@ const GeneralRuleCreate = () => {
                         helperText="Regular expression to match the qualified resource name"
                     />
                 </Stack>
-        </SimpleForm>
+            </SimpleForm>
         </Create>
     );
 };
