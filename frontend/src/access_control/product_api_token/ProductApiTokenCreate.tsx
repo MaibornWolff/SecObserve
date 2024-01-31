@@ -47,7 +47,6 @@ const CreateProductApiToken = (props: CreateProductApiTokenProps) => {
                 direction: "row",
                 justifyContent: "center",
                 alignItems: "center",
-                color: "#000000dd",
             }}
             variant="contained"
             onClick={handleRoleCancel}

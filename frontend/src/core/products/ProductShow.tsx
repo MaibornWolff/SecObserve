@@ -12,7 +12,6 @@ import {
     EditButton,
     PrevNextButtons,
     Show,
-    SimpleShowLayout,
     Tab,
     TabbedShowLayout,
     TopToolbar,
@@ -128,21 +127,20 @@ const ProductShow = () => {
                                 <ObservationsEmbeddedList product={product} />
                             </Tab>
                             <Tab label="Metrics" path="metrics" icon={<BarChartIcon />} onClick={hideSettingsTabs}>
-                                <SimpleShowLayout>
-                                    <MetricsHeader repository_default_branch={product.repository_default_branch_name} />
-                                    <Stack
-                                        direction="row"
-                                        spacing={2}
-                                        sx={{
-                                            alignItems: "center",
-                                            marginTop: 2,
-                                        }}
-                                    >
-                                        <MetricsSeveritiesCurrent product_id={product.id} />
-                                        <MetricsSeveritiesTimeline product_id={product.id} />
-                                        <MetricsStatusCurrent product_id={product.id} />
-                                    </Stack>{" "}
-                                </SimpleShowLayout>
+                                <MetricsHeader repository_default_branch={product.repository_default_branch_name} />
+                                <Stack
+                                    direction="row"
+                                    spacing={2}
+                                    sx={{
+                                        alignItems: "center",
+                                        marginTop: 1,
+                                        marginBottom: 1,
+                                    }}
+                                >
+                                    <MetricsSeveritiesCurrent product_id={product.id} />
+                                    <MetricsSeveritiesTimeline product_id={product.id} />
+                                    <MetricsStatusCurrent product_id={product.id} />
+                                </Stack>
                             </Tab>
                             <Tab
                                 label="Vulnerability Checks"

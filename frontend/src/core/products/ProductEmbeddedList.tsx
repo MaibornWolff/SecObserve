@@ -1,4 +1,3 @@
-import { Paper } from "@mui/material";
 import {
     Datagrid,
     FilterForm,
@@ -53,19 +52,17 @@ const ProductEmbeddedList = ({ product_group }: ProductEmbeddedListProps) => {
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
                 <FilterForm filters={listFilters()} />
-                <Paper>
-                    <Datagrid size={getSettingListSize()} rowClick={ShowProducts} bulkActionButtons={false}>
-                        <TextField source="name" />
-                        <TextField source="repository_default_branch_name" label="Default branch" sortable={false} />
-                        <SecurityGateTextField />
-                        <ObservationsCountField withLabel={false} />
-                        <FunctionField<Product>
-                            label="Last observation change"
-                            sortBy="last_observation_change"
-                            render={(record) => (record ? humanReadableDate(record.last_observation_change) : "")}
-                        />
-                    </Datagrid>
-                </Paper>
+                <Datagrid size={getSettingListSize()} rowClick={ShowProducts} bulkActionButtons={false}>
+                    <TextField source="name" />
+                    <TextField source="repository_default_branch_name" label="Default branch" sortable={false} />
+                    <SecurityGateTextField />
+                    <ObservationsCountField withLabel={false} />
+                    <FunctionField<Product>
+                        label="Last observation change"
+                        sortBy="last_observation_change"
+                        render={(record) => (record ? humanReadableDate(record.last_observation_change) : "")}
+                    />
+                </Datagrid>
                 <Pagination />
             </div>
         </ListContextProvider>

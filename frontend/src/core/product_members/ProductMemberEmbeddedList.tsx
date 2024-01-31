@@ -1,4 +1,4 @@
-import { Paper, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import {
     Datagrid,
     ListContextProvider,
@@ -43,24 +43,22 @@ const ProductMemberEmbeddedList = ({ product }: ProductMemberEmbeddedListProps) 
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
-                <Paper>
-                    <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false}>
-                        <TextField source="user_data.full_name" label="User" />
-                        <SelectField source="role" choices={ROLE_CHOICES} />
-                        <WithRecord
-                            render={(product_member) => (
-                                <Stack direction="row" spacing={4}>
-                                    {product && product.permissions.includes(PERMISSION_PRODUCT_MEMBER_EDIT) && (
-                                        <ProductMemberEdit />
-                                    )}
-                                    {product && product.permissions.includes(PERMISSION_PRODUCT_MEMBER_DELETE) && (
-                                        <ProductMemberDelete product_member={product_member} />
-                                    )}
-                                </Stack>
-                            )}
-                        />
-                    </Datagrid>
-                </Paper>
+                <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false}>
+                    <TextField source="user_data.full_name" label="User" />
+                    <SelectField source="role" choices={ROLE_CHOICES} />
+                    <WithRecord
+                        render={(product_member) => (
+                            <Stack direction="row" spacing={4}>
+                                {product && product.permissions.includes(PERMISSION_PRODUCT_MEMBER_EDIT) && (
+                                    <ProductMemberEdit />
+                                )}
+                                {product && product.permissions.includes(PERMISSION_PRODUCT_MEMBER_DELETE) && (
+                                    <ProductMemberDelete product_member={product_member} />
+                                )}
+                            </Stack>
+                        )}
+                    />
+                </Datagrid>
                 <Pagination />
             </div>
         </ListContextProvider>

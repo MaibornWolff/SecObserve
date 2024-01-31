@@ -1,5 +1,6 @@
-import { Typography } from "@mui/material";
+import { Divider, Stack, Typography } from "@mui/material";
 import { RichTextInput } from "ra-input-rich-text";
+import { Fragment } from "react";
 import {
     BooleanInput,
     Create,
@@ -7,7 +8,9 @@ import {
     NullableBooleanInput,
     NumberInput,
     ReferenceInput,
+    SaveButton,
     SimpleForm,
+    Toolbar,
     required,
 } from "react-admin";
 
@@ -112,7 +115,9 @@ const ProductCreate = () => {
     return (
         <Create redirect="show" transform={transform}>
             <SimpleForm warnWhenUnsavedChanges>
-                <Typography variant="h6">Product</Typography>
+                <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                    Product
+                </Typography>
                 <TextInputWide autoFocus source="name" validate={requiredValidate} />
                 <RichTextInput source="description" />
                 <ReferenceInput
@@ -123,28 +128,33 @@ const ProductCreate = () => {
                     <AutocompleteInputWide optionText="name" />
                 </ReferenceInput>
 
-                <Typography variant="h6" sx={{ marginTop: "1em" }}>
+                <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+
+                <Typography variant="h6" sx={{ marginBottom: 1 }}>
                     Rules
                 </Typography>
                 <BooleanInput source="apply_general_rules" defaultValue={true} />
 
-                <Typography variant="h6" sx={{ marginTop: "1em" }}>
+                <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+
+                <Typography variant="h6" sx={{ marginBottom: 2 }}>
                     Source code repository
                 </Typography>
-                <TextInputWide
-                    source="repository_prefix"
-                    helperText="URL prefix to link to a file in the source code repository"
-                />
-                <NullableBooleanInput
-                    source="repository_branch_housekeeping_active"
-                    label="Housekeeping"
-                    defaultValue={null}
-                    nullLabel="Standard"
-                    falseLabel="Disabled"
-                    trueLabel="Product specific"
-                    helperText="Delete inactive branches"
-                    sx={{ width: "15em" }}
-                />
+                <Stack spacing={2} sx={{ marginBottom: 2 }}>
+                    <TextInputWide
+                        source="repository_prefix"
+                        helperText="URL prefix to link to a file in the source code repository"
+                    />
+                    <NullableBooleanInput
+                        source="repository_branch_housekeeping_active"
+                        label="Housekeeping"
+                        defaultValue={null}
+                        nullLabel="Standard"
+                        falseLabel="Disabled"
+                        trueLabel="Product specific"
+                        helperText="Delete inactive branches"
+                    />
+                </Stack>
                 <FormDataConsumer>
                     {({ formData }) =>
                         formData.repository_branch_housekeeping_active && (
@@ -169,26 +179,32 @@ const ProductCreate = () => {
                     }
                 </FormDataConsumer>
 
-                <Typography variant="h6" sx={{ marginTop: "1em" }}>
+                <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+
+                <Typography variant="h6" sx={{ marginBottom: 2 }}>
                     Notifications
                 </Typography>
-                <TextInputWide
-                    source="notification_email_to"
-                    label="Email"
-                    helperText="Comma separated email to addresses to send notifications via email"
-                />
-                <TextInputWide
-                    source="notification_ms_teams_webhook"
-                    label="MS Teams"
-                    helperText="Webhook URL to send notifications to MS Teams"
-                />
-                <TextInputWide
-                    source="notification_slack_webhook"
-                    label="Slack"
-                    helperText="Webhook URL to send notifications to Slack"
-                />
+                <Stack spacing={2}>
+                    <TextInputWide
+                        source="notification_email_to"
+                        label="Email"
+                        helperText="Comma separated email to addresses to send notifications via email"
+                    />
+                    <TextInputWide
+                        source="notification_ms_teams_webhook"
+                        label="MS Teams"
+                        helperText="Webhook URL to send notifications to MS Teams"
+                    />
+                    <TextInputWide
+                        source="notification_slack_webhook"
+                        label="Slack"
+                        helperText="Webhook URL to send notifications to Slack"
+                    />
+                </Stack>
 
-                <Typography variant="h6" sx={{ marginTop: "1em" }}>
+                <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+
+                <Typography variant="h6" sx={{ marginBottom: 1 }}>
                     Security Gate
                 </Typography>
                 <NullableBooleanInput
@@ -203,54 +219,57 @@ const ProductCreate = () => {
                 <FormDataConsumer>
                     {({ formData }) =>
                         formData.security_gate_active && (
-                            <div>
+                            <Stack spacing={1}>
                                 <NumberInput
                                     label="Threshold critical"
                                     source="security_gate_threshold_critical"
                                     min={0}
                                     max={999999}
+                                    sx={{ width: "12em" }}
                                 />
-                                <br />
                                 <NumberInput
                                     label="Threshold high"
                                     source="security_gate_threshold_high"
                                     min={0}
                                     max={999999}
+                                    sx={{ width: "12em" }}
                                 />
-                                <br />
                                 <NumberInput
                                     label="Threshold medium"
                                     source="security_gate_threshold_medium"
                                     min={0}
                                     max={999999}
+                                    sx={{ width: "12em" }}
                                 />
-                                <br />
                                 <NumberInput
                                     label="Threshold low"
                                     source="security_gate_threshold_low"
                                     min={0}
                                     max={999999}
+                                    sx={{ width: "12em" }}
                                 />
-                                <br />
                                 <NumberInput
                                     label="Threshold none"
                                     source="security_gate_threshold_none"
                                     min={0}
                                     max={999999}
+                                    sx={{ width: "12em" }}
                                 />
-                                <br />
                                 <NumberInput
                                     label="Threshold unkown"
                                     source="security_gate_threshold_unkown"
                                     min={0}
                                     max={999999}
+                                    sx={{ width: "12em" }}
                                 />
-                                <br />
-                            </div>
+                            </Stack>
                         )
                     }
                 </FormDataConsumer>
-                <Typography variant="h6" sx={{ marginTop: "1em" }}>
+
+                <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+
+                <Typography variant="h6" sx={{ marginBottom: 2 }}>
                     Issue Tracker
                 </Typography>
                 <BooleanInput
@@ -258,6 +277,7 @@ const ProductCreate = () => {
                     label="Active"
                     defaultValue={false}
                     helperText="Send observations to an issue tracker"
+                    sx={{ marginBottom: 2 }}
                 />
                 <AutocompleteInputMedium
                     source="issue_tracker_type"
@@ -267,39 +287,32 @@ const ProductCreate = () => {
                 <FormDataConsumer>
                     {({ formData }) =>
                         formData.issue_tracker_type && (
-                            <div>
+                            <Stack spacing={1}>
                                 <TextInputWide source="issue_tracker_base_url" label="Base URL" />
-                                <br />
                                 <TextInputWide source="issue_tracker_api_key" label="API key" />
-                                <br />
                                 <TextInputWide source="issue_tracker_project_id" label="Project id" />
-                                <br />
                                 <TextInputWide source="issue_tracker_labels" label="Labels" />
-                                <br />
                                 <FormDataConsumer>
                                     {({ formData }) =>
                                         formData.issue_tracker_type == "Jira" && (
-                                            <div>
+                                            <Stack spacing={1}>
                                                 <TextInputWide
                                                     source="issue_tracker_username"
                                                     label="Username (only for Jira)"
                                                 />
-                                                <br />
                                                 <TextInputWide
                                                     source="issue_tracker_issue_type"
                                                     label="Issue type (only for Jira)"
                                                 />
-                                                <br />
                                                 <TextInputWide
                                                     source="issue_tracker_status_closed"
                                                     label="Closed status (only for Jira)"
                                                 />
-                                                <br />
-                                            </div>
+                                            </Stack>
                                         )
                                     }
                                 </FormDataConsumer>
-                            </div>
+                            </Stack>
                         )
                     }
                 </FormDataConsumer>

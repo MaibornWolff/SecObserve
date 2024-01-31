@@ -1,4 +1,3 @@
-import { Paper } from "@mui/material";
 import { Datagrid, ListContextProvider, Pagination, SelectField, useListController } from "react-admin";
 
 import { PERMISSION_PRODUCT_API_TOKEN_REVOKE, ROLE_CHOICES } from "../../access_control/types";
@@ -30,14 +29,12 @@ const ProductApiTokenEmbeddedList = ({ product }: ProductApiTokenEmbeddedListPro
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
-                <Paper>
-                    <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false}>
-                        <SelectField source="role" choices={ROLE_CHOICES} />
-                        {product && product.permissions.includes(PERMISSION_PRODUCT_API_TOKEN_REVOKE) && (
-                            <RevokeProductApiToken product={product} />
-                        )}
-                    </Datagrid>
-                </Paper>
+                <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false}>
+                    <SelectField source="role" choices={ROLE_CHOICES} />
+                    {product && product.permissions.includes(PERMISSION_PRODUCT_API_TOKEN_REVOKE) && (
+                        <RevokeProductApiToken product={product} />
+                    )}
+                </Datagrid>
                 <Pagination />
             </div>
         </ListContextProvider>

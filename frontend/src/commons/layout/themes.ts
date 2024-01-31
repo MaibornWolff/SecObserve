@@ -28,7 +28,7 @@ export function getLinkColor() {
     if (getSettingTheme() == "dark") {
         return "#6ed2f0";
     } else {
-        return "#00b4f0";
+        return "#00B3F0";
     }
 }
 
@@ -56,6 +56,9 @@ export const darkTheme = {
         },
         secondary: {
             main: "#FBBA72",
+        },
+        background: {
+            default: "#313131",
         },
         mode: "dark" as const, // Switching the dark mode on is a single property value change.
     },
@@ -102,7 +105,7 @@ export const lightTheme = {
             contrastText: "#fff",
         },
         background: {
-            default: "#fcfcfe",
+            default: "#fafafb",
         },
         mode: "light" as const,
     },
@@ -118,9 +121,9 @@ export const lightTheme = {
             styleOverrides: {
                 root: {
                     "& .RaReferenceField-link>*": {
-                        color: "#00b4f0",
+                        color: "#00B3F0",
                         ":visited": {
-                            color: "#00b4f0",
+                            color: "#00B3F0",
                         },
                     },
                 },
