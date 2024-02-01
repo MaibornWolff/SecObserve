@@ -6,6 +6,7 @@ import {
     Labeled,
     PrevNextButtons,
     ReferenceField,
+    RichTextField,
     Show,
     SimpleShowLayout,
     TextField,
@@ -44,7 +45,7 @@ const GeneralRuleComponent = () => {
                             </Labeled>
                             {rule.description && (
                                 <Labeled label="Description">
-                                    <TextField source="description" />
+                                    <RichTextField source="description" />
                                 </Labeled>
                             )}
 
@@ -61,7 +62,7 @@ const GeneralRuleComponent = () => {
                             <Labeled label="Enabled">
                                 <BooleanField source="enabled" />
                             </Labeled>
-                        </Stack>{" "}
+                        </Stack>
                     </Paper>
 
                     <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
@@ -87,7 +88,7 @@ const GeneralRuleComponent = () => {
                                     <TextField source="description_observation" />
                                 </Labeled>
                             )}
-                        </Stack>{" "}
+                        </Stack>
                     </Paper>
 
                     {rule &&
@@ -132,7 +133,7 @@ const GeneralRuleComponent = () => {
                                             <TextField source="origin_cloud_qualified_resource" />
                                         </Labeled>
                                     )}
-                                </Stack>{" "}
+                                </Stack>
                             </Paper>
                         )}
                 </SimpleShowLayout>

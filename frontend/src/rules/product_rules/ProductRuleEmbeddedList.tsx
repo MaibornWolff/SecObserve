@@ -4,7 +4,6 @@ import {
     Datagrid,
     FilterForm,
     ListContextProvider,
-    Pagination,
     ReferenceField,
     ReferenceInput,
     TextField,
@@ -14,6 +13,7 @@ import {
 } from "react-admin";
 
 import { PERMISSION_PRODUCT_RULE_DELETE, PERMISSION_PRODUCT_RULE_EDIT } from "../../access_control/types";
+import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/settings/functions";
 import ProductRuleDelete from "./ProductRuleDelete";
@@ -73,7 +73,7 @@ const ProductRuleEmbeddedList = ({ product }: ProductRuleEmbeddedListProps) => {
                         )}
                     />
                 </Datagrid>
-                <Pagination />
+                <CustomPagination />
             </div>
         </ListContextProvider>
     );

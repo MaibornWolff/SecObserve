@@ -1,5 +1,5 @@
 import { Stack } from "@mui/material";
-import React from "react";
+import { Fragment } from "react";
 import { useAuth } from "react-oidc-context";
 
 import { jwt_signed_in } from "../access_control/authProvider";
@@ -14,7 +14,7 @@ const Dashboard = () => {
 
     return (
         (jwt_signed_in() || auth.isAuthenticated) && (
-            <React.Fragment>
+            <Fragment>
                 <MetricsHeader repository_default_branch={undefined} on_dashboard={true} />
                 <Stack
                     direction="row"
@@ -29,7 +29,7 @@ const Dashboard = () => {
                     <MetricsStatusCurrent product_id={undefined} on_dashboard={true} />
                 </Stack>
                 <ObservationDashboardList />
-            </React.Fragment>
+            </Fragment>
         )
     );
 };

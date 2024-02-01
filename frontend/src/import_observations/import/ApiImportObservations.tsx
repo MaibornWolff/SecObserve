@@ -2,8 +2,9 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import UploadIcon from "@mui/icons-material/CloudUpload";
 import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { ReferenceInput, SaveButton, SimpleForm, Toolbar, required, useNotify, useRefresh } from "react-admin";
+import { ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
 
+import { validate_255, validate_2048, validate_required } from "../../commons/custom_validators";
 import { getIconAndFontColor } from "../../commons/functions";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
@@ -126,7 +127,7 @@ const ApiImportObservations = (product: any) => {
                             <AutocompleteInputWide
                                 optionText="name"
                                 label="API configuration"
-                                validate={requiredValidate}
+                                validate={validate_required}
                             />
                         </ReferenceInput>
                         <ReferenceInput
@@ -138,9 +139,13 @@ const ApiImportObservations = (product: any) => {
                         >
                             <AutocompleteInputWide optionText="name" />
                         </ReferenceInput>
-                        <TextInputWide source="service" />
-                        <TextInputWide source="docker_image_name_tag" label="Docker image name:tag" />
-                        <TextInputWide source="endpoint_url" />
+                        <TextInputWide source="service" validate={validate_255} />
+                        <TextInputWide
+                            source="docker_image_name_tag"
+                            label="Docker image name:tag"
+                            validate={validate_255}
+                        />
+                        <TextInputWide source="endpoint_url" validate={validate_2048} />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>
@@ -152,7 +157,5 @@ const ApiImportObservations = (product: any) => {
         </Fragment>
     );
 };
-
-const requiredValidate = [required()];
 
 export default ApiImportObservations;

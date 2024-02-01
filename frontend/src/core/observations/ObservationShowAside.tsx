@@ -1,5 +1,6 @@
 import { Box, Paper, Typography } from "@mui/material";
 import { TableHead } from "@mui/material";
+import { Fragment } from "react";
 import {
     ArrayField,
     Datagrid,
@@ -97,7 +98,7 @@ const References = () => {
     return (
         <WithRecord
             render={(observation) => (
-                <div>
+                <Fragment>
                     {observation.references && observation.references.length > 0 && (
                         <Paper sx={{ marginBottom: 2 }}>
                             <Typography variant="h6" sx={{ paddingLeft: 2, paddingTop: 1 }}>
@@ -114,7 +115,7 @@ const References = () => {
                             </ArrayField>
                         </Paper>
                     )}
-                </div>
+                </Fragment>
             )}
         />
     );
@@ -125,7 +126,7 @@ const Evidences = () => {
     return (
         <WithRecord
             render={(observation) => (
-                <div>
+                <Fragment>
                     {observation.evidences && observation.evidences.length > 0 && (
                         <Paper sx={{ marginBottom: 2 }}>
                             <Typography variant="h6" sx={{ paddingLeft: 2, paddingTop: 1 }}>
@@ -147,8 +148,8 @@ const Evidences = () => {
                                 </Datagrid>
                             </ArrayField>
                         </Paper>
-                    )}{" "}
-                </div>
+                    )}
+                </Fragment>
             )}
         />
     );

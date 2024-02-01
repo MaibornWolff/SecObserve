@@ -1,7 +1,8 @@
 import { Stack } from "@mui/material";
-import { Datagrid, ListContextProvider, Pagination, WithRecord, useListController } from "react-admin";
+import { Datagrid, ListContextProvider, WithRecord, useListController } from "react-admin";
 
 import { PERMISSION_SERVICE_DELETE } from "../../access_control/types";
+import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import { getSettingListSize } from "../../commons/settings/functions";
@@ -65,7 +66,7 @@ const ServiceEmbeddedList = ({ product }: ServiceEmbeddedListProps) => {
                         )}
                     />
                 </Datagrid>
-                <Pagination />
+                <CustomPagination />
             </div>
         </ListContextProvider>
     );

@@ -1,14 +1,14 @@
 import ArticleIcon from "@mui/icons-material/Article";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { Box, Divider, ListItemIcon, ListItemText, MenuItem, Theme, Typography, useMediaQuery } from "@mui/material";
-import * as React from "react";
+import { forwardRef } from "react";
 import { AppBar, Logout, UserMenu, useUserMenu } from "react-admin";
 import { Link } from "react-router-dom";
 
 import About from "../about/About";
 import Logo from "./Logo";
 
-const DocumentationMenu = React.forwardRef(() => {
+const DocumentationMenu = forwardRef(() => {
     const { onClose } = useUserMenu();
 
     return (
@@ -29,7 +29,7 @@ const DocumentationMenu = React.forwardRef(() => {
     );
 });
 
-const SettingsMenu = React.forwardRef(() => {
+const SettingsMenu = forwardRef(() => {
     const { onClose } = useUserMenu();
 
     return (

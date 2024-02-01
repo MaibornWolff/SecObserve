@@ -1,15 +1,8 @@
 import { Stack } from "@mui/material";
-import {
-    BooleanField,
-    Datagrid,
-    DateField,
-    ListContextProvider,
-    Pagination,
-    WithRecord,
-    useListController,
-} from "react-admin";
+import { BooleanField, Datagrid, DateField, ListContextProvider, WithRecord, useListController } from "react-admin";
 
 import { PERMISSION_BRANCH_DELETE, PERMISSION_BRANCH_EDIT } from "../../access_control/types";
+import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import { getSettingListSize } from "../../commons/settings/functions";
@@ -70,7 +63,7 @@ const BranchEmbeddedList = ({ product }: BranchEmbeddedListProps) => {
                         )}
                     />
                 </Datagrid>
-                <Pagination />
+                <CustomPagination />
             </div>
         </ListContextProvider>
     );

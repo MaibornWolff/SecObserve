@@ -1,19 +1,12 @@
 import { Stack } from "@mui/material";
-import {
-    Datagrid,
-    ListContextProvider,
-    Pagination,
-    SelectField,
-    TextField,
-    WithRecord,
-    useListController,
-} from "react-admin";
+import { Datagrid, ListContextProvider, SelectField, TextField, WithRecord, useListController } from "react-admin";
 
 import {
     PERMISSION_PRODUCT_MEMBER_DELETE,
     PERMISSION_PRODUCT_MEMBER_EDIT,
     ROLE_CHOICES,
 } from "../../access_control/types";
+import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { getSettingListSize } from "../../commons/settings/functions";
 import ProductMemberDelete from "./ProductMemberDelete";
 import ProductMemberEdit from "./ProductMemberEdit";
@@ -59,7 +52,7 @@ const ProductMemberEmbeddedList = ({ product }: ProductMemberEmbeddedListProps) 
                         )}
                     />
                 </Datagrid>
-                <Pagination />
+                <CustomPagination />
             </div>
         </ListContextProvider>
     );

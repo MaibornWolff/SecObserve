@@ -12,11 +12,16 @@ import {
     SimpleForm,
     Toolbar,
     WithRecord,
-    required,
     useRecordContext,
 } from "react-admin";
 
 import { PERMISSION_PRODUCT_DELETE } from "../../access_control/types";
+import {
+    validate_255,
+    validate_2048,
+    validate_min_0_999999,
+    validate_required_255,
+} from "../../commons/custom_validators";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { ISSUE_TRACKER_TYPE_CHOICES } from "../types";
 
@@ -134,8 +139,8 @@ const ProductEdit = () => {
                 <Typography variant="h6" sx={{ marginBottom: 1 }}>
                     Product
                 </Typography>
-                <TextInputWide autoFocus source="name" validate={requiredValidate} />
-                <RichTextInput source="description" />
+                <TextInputWide autoFocus source="name" validate={validate_required_255} />
+                <RichTextInput source="description" validate={validate_2048} />
                 <ReferenceInput
                     source="product_group"
                     reference="product_groups"
@@ -192,11 +197,13 @@ const ProductEdit = () => {
                                     min={1}
                                     max={999999}
                                     sx={{ width: "10em" }}
+                                    validate={validate_min_0_999999}
                                 />
                                 <TextInputWide
                                     source="repository_branch_housekeeping_exempt_branches"
                                     label="Exempt branches"
                                     helperText="Regular expression which branches to exempt from deletion"
+                                    validate={validate_255}
                                 />
                             </Stack>
                         )
@@ -213,16 +220,19 @@ const ProductEdit = () => {
                         source="notification_email_to"
                         label="Email"
                         helperText="Comma separated email to addresses"
+                        validate={validate_255}
                     />
                     <TextInputWide
                         source="notification_ms_teams_webhook"
                         label="MS Teams"
                         helperText="Webhook URL to send notifications to MS Teams"
+                        validate={validate_255}
                     />
                     <TextInputWide
                         source="notification_slack_webhook"
                         label="Slack"
                         helperText="Webhook URL to send notifications to Slack"
+                        validate={validate_255}
                     />
                 </Stack>
 
@@ -249,6 +259,7 @@ const ProductEdit = () => {
                                     min={0}
                                     max={999999}
                                     sx={{ width: "12em" }}
+                                    validate={validate_min_0_999999}
                                 />
                                 <NumberInput
                                     label="Threshold high"
@@ -256,6 +267,7 @@ const ProductEdit = () => {
                                     min={0}
                                     max={999999}
                                     sx={{ width: "12em" }}
+                                    validate={validate_min_0_999999}
                                 />
                                 <NumberInput
                                     label="Threshold medium"
@@ -263,6 +275,7 @@ const ProductEdit = () => {
                                     min={0}
                                     max={999999}
                                     sx={{ width: "12em" }}
+                                    validate={validate_min_0_999999}
                                 />
                                 <NumberInput
                                     label="Threshold low"
@@ -270,6 +283,7 @@ const ProductEdit = () => {
                                     min={0}
                                     max={999999}
                                     sx={{ width: "12em" }}
+                                    validate={validate_min_0_999999}
                                 />
                                 <NumberInput
                                     label="Threshold none"
@@ -277,6 +291,7 @@ const ProductEdit = () => {
                                     min={0}
                                     max={999999}
                                     sx={{ width: "12em" }}
+                                    validate={validate_min_0_999999}
                                 />
                                 <NumberInput
                                     label="Threshold unkown"
@@ -284,6 +299,7 @@ const ProductEdit = () => {
                                     min={0}
                                     max={999999}
                                     sx={{ width: "12em" }}
+                                    validate={validate_min_0_999999}
                                 />
                             </Stack>
                         )
@@ -305,10 +321,18 @@ const ProductEdit = () => {
                     {({ formData }) =>
                         formData.issue_tracker_type && (
                             <Stack spacing={1}>
-                                <TextInputWide source="issue_tracker_base_url" label="Base URL" />
-                                <TextInputWide source="issue_tracker_api_key" label="API key" />
-                                <TextInputWide source="issue_tracker_project_id" label="Project id" />
-                                <TextInputWide source="issue_tracker_labels" label="Labels" />
+                                <TextInputWide
+                                    source="issue_tracker_base_url"
+                                    label="Base URL"
+                                    validate={validate_255}
+                                />
+                                <TextInputWide source="issue_tracker_api_key" label="API key" validate={validate_255} />
+                                <TextInputWide
+                                    source="issue_tracker_project_id"
+                                    label="Project id"
+                                    validate={validate_255}
+                                />
+                                <TextInputWide source="issue_tracker_labels" label="Labels" validate={validate_255} />
                                 <FormDataConsumer>
                                     {({ formData }) =>
                                         formData.issue_tracker_type == "Jira" && (
@@ -316,14 +340,17 @@ const ProductEdit = () => {
                                                 <TextInputWide
                                                     source="issue_tracker_username"
                                                     label="Username (only for Jira)"
+                                                    validate={validate_255}
                                                 />
                                                 <TextInputWide
                                                     source="issue_tracker_issue_type"
                                                     label="Issue type (only for Jira)"
+                                                    validate={validate_255}
                                                 />
                                                 <TextInputWide
                                                     source="issue_tracker_status_closed"
                                                     label="Closed status (only for Jira)"
+                                                    validate={validate_255}
                                                 />
                                             </Stack>
                                         )
@@ -337,7 +364,5 @@ const ProductEdit = () => {
         </Edit>
     );
 };
-
-const requiredValidate = [required()];
 
 export default ProductEdit;

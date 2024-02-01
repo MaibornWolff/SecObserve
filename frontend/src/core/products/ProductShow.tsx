@@ -7,6 +7,7 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import SettingsIcon from "@mui/icons-material/Settings";
 import TokenIcon from "@mui/icons-material/Token";
 import { Stack } from "@mui/material";
+import { Fragment } from "react";
 import { useState } from "react";
 import {
     EditButton,
@@ -105,7 +106,7 @@ const ProductShow = () => {
     }
 
     return (
-        <div>
+        <Fragment>
             <ProductHeader />
             <Show actions={<ShowActions filter={filter} storeKey={storeKey} />}>
                 <WithRecord
@@ -219,7 +220,7 @@ const ProductShow = () => {
                     )}
                 />
             </Show>
-        </div>
+        </Fragment>
     );
 };
 

@@ -63,7 +63,7 @@ const ShowActions = () => {
 
 const ProductGroupShow = () => {
     return (
-        <div>
+        <Fragment>
             <ProductGroupHeader />
             <Show actions={<ShowActions />}>
                 <WithRecord
@@ -80,7 +80,7 @@ const ProductGroupShow = () => {
                                             <RichTextField source="description" label="Description" />
                                         </Labeled>
                                     )}
-                                </Stack>{" "}
+                                </Stack>
                                 {product_group.repository_branch_housekeeping_active != null && (
                                     <Fragment>
                                         <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
@@ -222,7 +222,7 @@ const ProductGroupShow = () => {
                     )}
                 />
             </Show>
-        </div>
+        </Fragment>
     );
 };
 

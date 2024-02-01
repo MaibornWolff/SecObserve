@@ -23,7 +23,6 @@ const ProductHeader = () => {
 
     return (
         <RecordContextProvider value={product}>
-            {" "}
             <Paper
                 sx={{
                     alignItems: "top",

@@ -3,12 +3,12 @@ import {
     FilterForm,
     FunctionField,
     ListContextProvider,
-    Pagination,
     TextField,
     TextInput,
     useListController,
 } from "react-admin";
 
+import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
 import { SecurityGateTextField } from "../../commons/custom_fields/SecurityGateTextField";
 import { humanReadableDate } from "../../commons/functions";
@@ -63,7 +63,7 @@ const ProductEmbeddedList = ({ product_group }: ProductEmbeddedListProps) => {
                         render={(record) => (record ? humanReadableDate(record.last_observation_change) : "")}
                     />
                 </Datagrid>
-                <Pagination />
+                <CustomPagination />
             </div>
         </ListContextProvider>
     );

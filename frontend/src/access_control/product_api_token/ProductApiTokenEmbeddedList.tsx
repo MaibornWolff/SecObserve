@@ -1,4 +1,4 @@
-import { Datagrid, ListContextProvider, Pagination, SelectField, useListController } from "react-admin";
+import { Datagrid, ListContextProvider, SelectField, useListController } from "react-admin";
 
 import { PERMISSION_PRODUCT_API_TOKEN_REVOKE, ROLE_CHOICES } from "../../access_control/types";
 import { getSettingListSize } from "../../commons/settings/functions";
@@ -35,7 +35,6 @@ const ProductApiTokenEmbeddedList = ({ product }: ProductApiTokenEmbeddedListPro
                         <RevokeProductApiToken product={product} />
                     )}
                 </Datagrid>
-                <Pagination />
             </div>
         </ListContextProvider>
     );

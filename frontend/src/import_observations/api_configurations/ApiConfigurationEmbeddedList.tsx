@@ -3,7 +3,6 @@ import {
     Datagrid,
     FilterForm,
     ListContextProvider,
-    Pagination,
     ReferenceField,
     ReferenceInput,
     TextField,
@@ -13,6 +12,7 @@ import {
 } from "react-admin";
 
 import { PERMISSION_API_CONFIGURATION_DELETE, PERMISSION_API_CONFIGURATION_EDIT } from "../../access_control/types";
+import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/settings/functions";
 import APIConfigurationDelete from "./ApiConfigurationDelete";
@@ -69,7 +69,7 @@ const ApiConfigurationEmbeddedList = ({ product }: ApiConfigurationEmbeddedListP
                         )}
                     />
                 </Datagrid>
-                <Pagination />
+                <CustomPagination />
             </div>
         </ListContextProvider>
     );
