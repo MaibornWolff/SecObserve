@@ -1,14 +1,7 @@
 import { Paper, Typography } from "@mui/material";
-import {
-    ChipField,
-    Datagrid,
-    FunctionField,
-    ListContextProvider,
-    Pagination,
-    TextField,
-    useListController,
-} from "react-admin";
+import { ChipField, Datagrid, FunctionField, ListContextProvider, TextField, useListController } from "react-admin";
 
+import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { humanReadableDate } from "../../commons/functions";
 import { getSettingListSize } from "../../commons/settings/functions";
@@ -67,7 +60,7 @@ const ObservationDashboardList = () => {
                             render={(record) => (record ? humanReadableDate(record.last_observation_log) : "")}
                         />
                     </Datagrid>
-                    <Pagination />
+                    <CustomPagination />
                 </div>
             </ListContextProvider>
         </Paper>

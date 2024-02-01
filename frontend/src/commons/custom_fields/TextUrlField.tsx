@@ -1,4 +1,5 @@
 import LaunchIcon from "@mui/icons-material/Launch";
+import { Fragment } from "react";
 
 import { useStyles } from "../../commons/layout/themes";
 
@@ -36,7 +37,7 @@ const TextUrlField = (props: TextUrlFieldProps) => {
     const { classes } = useStyles();
 
     return (
-        <div>
+        <Fragment>
             {is_valid_url(props.url) && (
                 <a
                     href={props.url} // nosemgrep: typescript.react.security.audit.react-href-var.react-href-var
@@ -79,7 +80,7 @@ const TextUrlField = (props: TextUrlFieldProps) => {
                     {props.text}
                 </span>
             )}
-        </div>
+        </Fragment>
     );
 };
 

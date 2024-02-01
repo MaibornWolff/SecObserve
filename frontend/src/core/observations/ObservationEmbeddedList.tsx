@@ -12,7 +12,6 @@ import {
     ListContextProvider,
     NullableBooleanInput,
     NumberField,
-    Pagination,
     ReferenceInput,
     SelectColumnsButton,
     TextField,
@@ -23,6 +22,7 @@ import {
 import { useNavigate } from "react-router";
 
 import { PERMISSION_OBSERVATION_ASSESSMENT, PERMISSION_OBSERVATION_DELETE } from "../../access_control/types";
+import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { humanReadableDate } from "../../commons/functions";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
@@ -176,7 +176,7 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
                     />
                     <BooleanField source="has_potential_duplicates" label="Dupl." />
                 </DatagridConfigurable>
-                <Pagination />
+                <CustomPagination />
             </div>
         </ListContextProvider>
     );

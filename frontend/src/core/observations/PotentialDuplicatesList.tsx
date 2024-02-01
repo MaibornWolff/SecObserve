@@ -1,15 +1,8 @@
 import { Fragment } from "react";
-import {
-    ChipField,
-    Datagrid,
-    FunctionField,
-    ListContextProvider,
-    Pagination,
-    TextField,
-    useListController,
-} from "react-admin";
+import { ChipField, Datagrid, FunctionField, ListContextProvider, TextField, useListController } from "react-admin";
 
 import { PERMISSION_OBSERVATION_ASSESSMENT } from "../../access_control/types";
+import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { humanReadableDate } from "../../commons/functions";
 import { getSettingListSize } from "../../commons/settings/functions";
@@ -84,7 +77,7 @@ const PotentialDuplicatesList = ({ observation }: PotentialDuplicatesListProps) 
                     }
                 />
             </Datagrid>
-            <Pagination />
+            <CustomPagination />
         </ListContextProvider>
     );
 };

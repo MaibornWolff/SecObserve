@@ -1,14 +1,15 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
-import * as React from "react";
-import { SaveButton, SimpleForm, Toolbar, required, useNotify, useRefresh } from "react-admin";
+import { Fragment, useState } from "react";
+import { SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
 
+import { validate_required_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
 const ObservationRemoveAssessment = () => {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const refresh = useRefresh();
     const notify = useNotify();
     const handleOpen = () => setOpen(true);
@@ -66,7 +67,7 @@ const ObservationRemoveAssessment = () => {
         </Toolbar>
     );
     return (
-        <React.Fragment>
+        <Fragment>
             <Button
                 onClick={handleOpen}
                 size="small"
@@ -83,14 +84,12 @@ const ObservationRemoveAssessment = () => {
                 <DialogTitle>Observation Remove Assessment</DialogTitle>
                 <DialogContent>
                     <SimpleForm onSubmit={observationUpdate} toolbar={<CustomToolbar />}>
-                        <TextInputWide multiline source="comment" validate={requiredValidate} />
+                        <TextInputWide source="comment" validate={validate_required_255} />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>
-        </React.Fragment>
+        </Fragment>
     );
 };
-
-const requiredValidate = [required()];
 
 export default ObservationRemoveAssessment;

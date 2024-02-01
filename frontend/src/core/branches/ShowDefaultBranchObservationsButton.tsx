@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import * as React from "react";
+import { Fragment } from "react";
 import { Identifier } from "react-admin";
 import { useNavigate } from "react-router";
 
@@ -22,7 +22,7 @@ const ShowDefaultBranchObservationsButton = ({ product }: ShowDefaultBranchObser
     };
 
     return (
-        <React.Fragment>
+        <Fragment>
             <Button
                 variant="contained"
                 onClick={navigateToObservations}
@@ -31,7 +31,7 @@ const ShowDefaultBranchObservationsButton = ({ product }: ShowDefaultBranchObser
             >
                 Show default branch observations
             </Button>
-        </React.Fragment>
+        </Fragment>
     );
 };
 

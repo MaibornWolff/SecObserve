@@ -61,7 +61,7 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                         (product.product_group &&
                             product.product_group_repository_branch_housekeeping_active == null &&
                             product.repository_branch_housekeeping_active != null)) && (
-                        <div>
+                        <Fragment>
                             <Labeled label="Housekeeping">
                                 <BooleanField
                                     source="repository_branch_housekeeping_active"
@@ -78,8 +78,8 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                                         <TextField source="repository_branch_housekeeping_exempt_branches" />
                                     </Labeled>
                                 </Stack>
-                            )}{" "}
-                        </div>
+                            )}
+                        </Fragment>
                     )}
                     {product.product_group && product.product_group_repository_branch_housekeeping_active != null && (
                         <Labeled label="Housekeeping (from product group)">

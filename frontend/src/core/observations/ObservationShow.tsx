@@ -211,17 +211,17 @@ const ObservationShowComponent = () => {
                         <Paper sx={{ marginBottom: 2, padding: 2 }}>
                             <Typography variant="h6">Origins</Typography>
                             {observation.origin_service_name != "" && (
-                                <div>
+                                <Fragment>
                                     <Typography variant="subtitle1" sx={{ paddingTop: 1 }}>
                                         Service
                                     </Typography>
                                     <Labeled>
                                         <TextField source="origin_service_name" label="Name" />
                                     </Labeled>
-                                </div>
+                                </Fragment>
                             )}
                             {observation.origin_component_name != "" && (
-                                <div>
+                                <Fragment>
                                     <Typography variant="subtitle1" sx={{ paddingTop: 1 }}>
                                         Component
                                     </Typography>
@@ -255,10 +255,10 @@ const ObservationShowComponent = () => {
                                             <LabeledTextField text={observation.origin_component_dependencies} />
                                         </Labeled>
                                     )}
-                                </div>
+                                </Fragment>
                             )}
                             {observation.origin_docker_image_name != "" && (
-                                <div>
+                                <Fragment>
                                     <Typography variant="subtitle1" sx={{ paddingTop: 1 }}>
                                         Docker
                                     </Typography>
@@ -285,10 +285,10 @@ const ObservationShowComponent = () => {
                                             />
                                         </Labeled>
                                     )}
-                                </div>
+                                </Fragment>
                             )}
                             {observation.origin_endpoint_url != "" && (
-                                <div>
+                                <Fragment>
                                     <Typography variant="subtitle1" sx={{ paddingTop: 1 }}>
                                         Endpoint
                                     </Typography>
@@ -317,10 +317,10 @@ const ObservationShowComponent = () => {
                                             </Labeled>
                                         )}
                                     </Stack>
-                                </div>
+                                </Fragment>
                             )}
                             {observation.origin_source_file != "" && (
-                                <div>
+                                <Fragment>
                                     <Typography variant="subtitle1" sx={{ paddingTop: 1 }}>
                                         Source
                                     </Typography>
@@ -348,10 +348,10 @@ const ObservationShowComponent = () => {
                                             </Labeled>
                                         )}
                                     </Stack>
-                                </div>
+                                </Fragment>
                             )}
                             {observation.origin_cloud_provider != "" && (
-                                <div>
+                                <Fragment>
                                     <Typography variant="subtitle1" sx={{ paddingTop: 1 }}>
                                         Cloud
                                     </Typography>
@@ -380,7 +380,7 @@ const ObservationShowComponent = () => {
                                             </Labeled>
                                         )}
                                     </Stack>
-                                </div>
+                                </Fragment>
                             )}
                         </Paper>
                     )}
@@ -388,7 +388,7 @@ const ObservationShowComponent = () => {
                     <Paper sx={{ marginBottom: 2, padding: 2 }}>
                         <Typography variant="h6" sx={{ paddingBottom: 1 }}>
                             Log
-                        </Typography>{" "}
+                        </Typography>
                         <ArrayField label={false} source="observation_logs">
                             <Datagrid bulkActionButtons={false}>
                                 <ReferenceField source="user" reference="users">
@@ -406,7 +406,7 @@ const ObservationShowComponent = () => {
                         <Paper sx={{ marginBottom: 2, paddingTop: 2, paddingLeft: 2, paddingRight: 2 }}>
                             <Typography variant="h6" sx={{ paddingBottom: 1 }}>
                                 Potential Duplicates
-                            </Typography>{" "}
+                            </Typography>
                             <PotentialDuplicatesList observation={observation} />
                         </Paper>
                     )}

@@ -6,7 +6,7 @@ import { ListItemIcon } from "@mui/material";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { useState } from "react";
+import { Fragment, MouseEvent, useState } from "react";
 import { useNotify } from "react-admin";
 
 import axios_instance from "../../access_control/axios_instance";
@@ -21,7 +21,7 @@ const ExportMenu = (props: ExportMenuProps) => {
     const notify = useNotify();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
@@ -132,7 +132,7 @@ const ExportMenu = (props: ExportMenuProps) => {
     };
 
     return (
-        <div>
+        <Fragment>
             <Button
                 id="export-button"
                 aria-controls={open ? "export-menu" : undefined}
@@ -199,7 +199,7 @@ const ExportMenu = (props: ExportMenuProps) => {
                     </MenuItem>
                 )}
             </Menu>
-        </div>
+        </Fragment>
     );
 };
 

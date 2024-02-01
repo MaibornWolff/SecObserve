@@ -1,4 +1,5 @@
 import { Paper } from "@mui/material";
+import { Fragment } from "react";
 import { useState } from "react";
 import { Labeled, useNotify } from "react-admin";
 
@@ -44,13 +45,21 @@ const MetricsHeader = (props: MetricsHeaderProps) => {
         setLoading(false);
     }
 
-    function get_left_margin(repository_default_branch: string | undefined) {
+    function get_margin_left(repository_default_branch: string | undefined) {
         if (repository_default_branch) {
             return 8;
         }
 
         return 0;
     }
+
+    const get_margin_top = (on_dashboard: boolean | undefined) => {
+        if (on_dashboard) {
+            return 2;
+        }
+
+        return 0;
+    };
 
     if (!loaded) {
         get_data();
@@ -64,11 +73,11 @@ const MetricsHeader = (props: MetricsHeaderProps) => {
                 display: "flex",
                 justifyContent: "flex-start",
                 padding: 2,
-                marginTop: 2,
+                marginTop: get_margin_top(props.on_dashboard),
             }}
         >
             {!loading && (
-                <div>
+                <Fragment>
                     {props.repository_default_branch && (
                         <Labeled label="Default branch">
                             <LabeledTextField text={props.repository_default_branch} />
@@ -76,14 +85,14 @@ const MetricsHeader = (props: MetricsHeaderProps) => {
                     )}
                     <Labeled
                         label="Metrics last calculated"
-                        sx={{ marginLeft: get_left_margin(props.repository_default_branch) }}
+                        sx={{ marginLeft: get_margin_left(props.repository_default_branch) }}
                     >
                         <LabeledTextField text={new Date(data.last_calculated).toLocaleString()} />
                     </Labeled>
                     <Labeled label="Metrics calculation interval" sx={{ marginLeft: 8 }}>
                         <LabeledTextField text={data.calculation_interval + " minutes"} />
                     </Labeled>
-                </div>
+                </Fragment>
             )}
         </Paper>
     );

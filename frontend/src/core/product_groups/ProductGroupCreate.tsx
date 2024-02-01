@@ -1,7 +1,13 @@
 import { Divider, Stack, Typography } from "@mui/material";
 import { RichTextInput } from "ra-input-rich-text";
-import { Create, FormDataConsumer, NullableBooleanInput, NumberInput, SimpleForm, required } from "react-admin";
+import { Create, FormDataConsumer, NullableBooleanInput, NumberInput, SimpleForm } from "react-admin";
 
+import {
+    validate_255,
+    validate_2048,
+    validate_min_0_999999,
+    validate_required_255,
+} from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 
 const ProductGroupCreate = () => {
@@ -78,8 +84,8 @@ const ProductGroupCreate = () => {
                 <Typography variant="h6" sx={{ marginBottom: 1 }}>
                     Product Group
                 </Typography>
-                <TextInputWide autoFocus source="name" validate={requiredValidate} />
-                <RichTextInput source="description" />
+                <TextInputWide autoFocus source="name" validate={validate_required_255} />
+                <RichTextInput source="description" validate={validate_2048} />
 
                 <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
@@ -99,7 +105,7 @@ const ProductGroupCreate = () => {
                 <FormDataConsumer>
                     {({ formData }) =>
                         formData.repository_branch_housekeeping_active && (
-                            <div>
+                            <Stack spacing={2}>
                                 <NumberInput
                                     source="repository_branch_housekeeping_keep_inactive_days"
                                     label="Keep inactive"
@@ -107,15 +113,15 @@ const ProductGroupCreate = () => {
                                     defaultValue={30}
                                     min={1}
                                     max={999999}
+                                    validate={validate_min_0_999999}
                                 />
-                                <br />
                                 <TextInputWide
                                     source="repository_branch_housekeeping_exempt_branches"
                                     label="Exempt branches"
                                     helperText="Regular expression which branches to exempt from deletion"
+                                    validate={validate_255}
                                 />
-                                <br />
-                            </div>
+                            </Stack>
                         )
                     }
                 </FormDataConsumer>
@@ -130,16 +136,19 @@ const ProductGroupCreate = () => {
                         source="notification_email_to"
                         label="Email"
                         helperText="Comma separated email to addresses to send notifications via email"
+                        validate={validate_255}
                     />
                     <TextInputWide
                         source="notification_ms_teams_webhook"
                         label="MS Teams"
                         helperText="Webhook URL to send notifications to MS Teams"
+                        validate={validate_255}
                     />
                     <TextInputWide
                         source="notification_slack_webhook"
                         label="Slack"
                         helperText="Webhook URL to send notifications to Slack"
+                        validate={validate_255}
                     />
                 </Stack>
 
@@ -160,50 +169,50 @@ const ProductGroupCreate = () => {
                 <FormDataConsumer>
                     {({ formData }) =>
                         formData.security_gate_active && (
-                            <div>
+                            <Stack spacing={1}>
                                 <NumberInput
                                     label="Threshold critical"
                                     source="security_gate_threshold_critical"
                                     min={0}
                                     max={999999}
+                                    validate={validate_min_0_999999}
                                 />
-                                <br />
                                 <NumberInput
                                     label="Threshold high"
                                     source="security_gate_threshold_high"
                                     min={0}
                                     max={999999}
+                                    validate={validate_min_0_999999}
                                 />
-                                <br />
                                 <NumberInput
                                     label="Threshold medium"
                                     source="security_gate_threshold_medium"
                                     min={0}
                                     max={999999}
+                                    validate={validate_min_0_999999}
                                 />
-                                <br />
                                 <NumberInput
                                     label="Threshold low"
                                     source="security_gate_threshold_low"
                                     min={0}
                                     max={999999}
+                                    validate={validate_min_0_999999}
                                 />
-                                <br />
                                 <NumberInput
                                     label="Threshold none"
                                     source="security_gate_threshold_none"
                                     min={0}
                                     max={999999}
+                                    validate={validate_min_0_999999}
                                 />
-                                <br />
                                 <NumberInput
                                     label="Threshold unkown"
                                     source="security_gate_threshold_unkown"
                                     min={0}
                                     max={999999}
+                                    validate={validate_min_0_999999}
                                 />
-                                <br />
-                            </div>
+                            </Stack>
                         )
                     }
                 </FormDataConsumer>
@@ -211,7 +220,5 @@ const ProductGroupCreate = () => {
         </Create>
     );
 };
-
-const requiredValidate = [required()];
 
 export default ProductGroupCreate;
