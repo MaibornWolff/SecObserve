@@ -31,7 +31,7 @@
         "@emotion/styled": "11.11.0",
         "runtime-env-cra": "0.2.4",
         "oidc-client-ts": "3.0.0",
-        "react-oidc-context": "2.3.1"
+        "react-oidc-context": "3.0.0"
     },
     "scripts": {
         "start": "NODE_ENV=development runtime-env-cra --config-name=./public/runtime-env.js && vite",
