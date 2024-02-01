@@ -1,4 +1,3 @@
-// import Card from "@mui/material/Card";
 import {
     Box,
     Card,
@@ -10,22 +9,32 @@ import {
     RadioGroup,
     Stack,
 } from "@mui/material";
+import { useState } from "react";
 import { Title, useTheme } from "react-admin";
 
 import { darkTheme, lightTheme } from "../layout/themes";
 import { getSettingListSize, getSettingTheme, saveSettingListSize, saveSettingTheme } from "./functions";
 
 const Settings = () => {
+    const [previousTheme, setPreviousTheme] = useState(getSettingTheme());
     const [, setTheme] = useTheme();
 
     function setLightTheme() {
         setTheme(lightTheme);
         saveSettingTheme("light");
+        if (previousTheme != "light") {
+            window.location.reload();
+        }
+        setPreviousTheme("light");
     }
 
     function setDarkTheme() {
         setTheme(darkTheme);
         saveSettingTheme("dark");
+        if (previousTheme != "dark") {
+            window.location.reload();
+        }
+        setPreviousTheme("dark");
     }
 
     return (

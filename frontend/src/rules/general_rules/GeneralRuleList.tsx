@@ -53,12 +53,12 @@ const GeneralRuleList = () => {
                 bulkActionButtons={user && JSON.parse(user).is_superuser && <BulkActionButtons />}
             >
                 <TextField source="name" />
-                <ReferenceField source="parser" reference="parsers" link={false} />
-                <TextField source="scanner_prefix" />
-                <TextField source="title" label="Observation title" />
                 <TextField source="new_severity" />
                 <TextField source="new_status" />
                 <BooleanField source="enabled" />
+                <ReferenceField source="parser" reference="parsers" link={false} />
+                <TextField source="scanner_prefix" />
+                <TextField source="title" label="Observation title" />
             </Datagrid>
         </List>
     );

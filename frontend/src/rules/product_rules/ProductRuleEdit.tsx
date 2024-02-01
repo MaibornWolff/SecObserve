@@ -1,6 +1,6 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import EditIcon from "@mui/icons-material/Edit";
-import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Button, Dialog, DialogContent, DialogTitle, Divider, Typography } from "@mui/material";
 import * as React from "react";
 import {
     BooleanInput,
@@ -16,6 +16,7 @@ import {
 
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../../core/types";
+import { validateRuleForm } from "../functions";
 
 const ProductRuleEdit = () => {
     const [open, setOpen] = React.useState(false);
@@ -111,7 +112,6 @@ const ProductRuleEdit = () => {
                 direction: "row",
                 justifyContent: "center",
                 alignItems: "center",
-                color: "#000000dd",
             }}
             variant="contained"
             onClick={handleCancel}
@@ -141,55 +141,64 @@ const ProductRuleEdit = () => {
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Edit product rule</DialogTitle>
                 <DialogContent>
-                    <SimpleForm onSubmit={product_rule_update} toolbar={<CustomToolbar />}>
+                    <SimpleForm onSubmit={product_rule_update} toolbar={<CustomToolbar />} validate={validateRuleForm}>
+                        <Typography variant="h6">Rule</Typography>
                         <TextInputWide autoFocus source="name" validate={requiredValidate} />
+                        <AutocompleteInputMedium source="new_severity" choices={OBSERVATION_SEVERITY_CHOICES} />
+                        <AutocompleteInputMedium source="new_status" choices={OBSERVATION_STATUS_CHOICES} />
+                        <BooleanInput source="enabled" />
+
+                        <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+
+                        <Typography variant="h6">Observation</Typography>
                         <ReferenceInput source="parser" reference="parsers" sort={{ field: "name", order: "ASC" }}>
                             <AutocompleteInputWide optionText="name" />
                         </ReferenceInput>
                         <TextInputWide source="scanner_prefix" />
                         <TextInputWide
                             source="title"
-                            label="Observation title"
+                            label="Title"
                             helperText="Regular expression to match the observation's title"
                         />
                         <TextInputWide
                             source="description_observation"
-                            label="Observation description"
+                            label="Description"
                             helperText="Regular expression to match the observation's description"
                         />
+
+                        <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+
+                        <Typography variant="h6">Origins</Typography>
                         <TextInputWide
                             source="origin_component_name_version"
-                            label="Origin component name:version"
+                            label="Component name:version"
                             helperText="Regular expression to match the component name:version"
                         />
                         <TextInputWide
                             source="origin_docker_image_name_tag"
-                            label="Origin docker image name:tag"
+                            label="Docker image name:tag"
                             helperText="Regular expression to match the docker image name:tag"
                         />
                         <TextInputWide
                             source="origin_endpoint_url"
-                            label="Origin endpoint URL"
+                            label="Endpoint URL"
                             helperText="Regular expression to match the endpoint URL"
                         />
                         <TextInputWide
                             source="origin_service_name"
-                            label="Origin service name"
+                            label="Service name"
                             helperText="Regular expression to match the service name"
                         />
                         <TextInputWide
                             source="origin_source_file"
-                            label="Origin source file"
+                            label="Source file"
                             helperText="Regular expression to match the source file"
                         />
                         <TextInputWide
                             source="origin_cloud_qualified_resource"
-                            label="Origin cloud qualified resource"
+                            label="Cloud qualified resource"
                             helperText="Regular expression to match the qualified resource name"
                         />
-                        <AutocompleteInputMedium source="new_severity" choices={OBSERVATION_SEVERITY_CHOICES} />
-                        <AutocompleteInputMedium source="new_status" choices={OBSERVATION_STATUS_CHOICES} />
-                        <BooleanInput source="enabled" defaultValue={true} />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>

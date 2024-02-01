@@ -1,17 +1,18 @@
+import { Divider, Stack, Typography } from "@mui/material";
 import {
     BooleanInput,
     DeleteButton,
     Edit,
     ReferenceInput,
     SaveButton,
-    SelectInput,
     SimpleForm,
     Toolbar,
     required,
 } from "react-admin";
 
-import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../../core/types";
+import { validateRuleForm } from "../functions";
 
 const CustomToolbar = () => {
     return (
@@ -23,6 +24,9 @@ const CustomToolbar = () => {
 };
 
 const transform = (data: any) => {
+    if (data.description == null) {
+        data.description = "";
+    }
     if (data.scanner_prefix == null) {
         data.scanner_prefix = "";
     }
@@ -62,56 +66,73 @@ const transform = (data: any) => {
 const GeneralRuleEdit = () => {
     return (
         <Edit redirect="show" mutationMode="pessimistic" transform={transform}>
-            <SimpleForm warnWhenUnsavedChanges toolbar={<CustomToolbar />}>
-                <TextInputWide autoFocus source="name" validate={requiredValidate} />
-                <TextInputWide multiline source="description" />
-                <ReferenceInput source="parser" reference="parsers" sort={{ field: "name", order: "ASC" }}>
-                    <SelectInput optionText="name" />
-                </ReferenceInput>
-                <TextInputWide source="scanner_prefix" />
-                <TextInputWide
-                    source="title"
-                    label="Observation title"
-                    helperText="Regular expression to match the observation's title"
-                />
-                <TextInputWide
-                    source="description_observation"
-                    label="Observation description"
-                    helperText="Regular expression to match the observation's description"
-                />
-                <TextInputWide
-                    source="origin_component_name_version"
-                    label="Origin component name:version"
-                    helperText="Regular expression to match the component name:version"
-                />
-                <TextInputWide
-                    source="origin_docker_image_name_tag"
-                    label="Origin docker image name:tag"
-                    helperText="Regular expression to match the docker image name:tag"
-                />
-                <TextInputWide
-                    source="origin_endpoint_url"
-                    label="Origin endpoint URL"
-                    helperText="Regular expression to match the endpoint URL"
-                />
-                <TextInputWide
-                    source="origin_service_name"
-                    label="Origin service name"
-                    helperText="Regular expression to match the service name"
-                />
-                <TextInputWide
-                    source="origin_source_file"
-                    label="Origin source file"
-                    helperText="Regular expression to match the source file"
-                />
-                <TextInputWide
-                    source="origin_cloud_qualified_resource"
-                    label="Origin cloud qualified resource"
-                    helperText="Regular expression to match the qualified resource name"
-                />
-                <AutocompleteInputMedium source="new_severity" choices={OBSERVATION_SEVERITY_CHOICES} />
-                <AutocompleteInputMedium source="new_status" choices={OBSERVATION_STATUS_CHOICES} />
-                <BooleanInput source="enabled" defaultValue={true} />
+            <SimpleForm warnWhenUnsavedChanges toolbar={<CustomToolbar />} validate={validateRuleForm}>
+                <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                    Rule
+                </Typography>
+                <Stack>
+                    <TextInputWide autoFocus source="name" validate={requiredValidate} />
+                    <TextInputWide multiline source="description" />
+                    <AutocompleteInputMedium source="new_severity" choices={OBSERVATION_SEVERITY_CHOICES} />
+                    <AutocompleteInputMedium source="new_status" choices={OBSERVATION_STATUS_CHOICES} />
+                    <BooleanInput source="enabled" defaultValue={true} />
+                </Stack>{" "}
+                <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+                <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                    Observation
+                </Typography>
+                <Stack>
+                    <ReferenceInput source="parser" reference="parsers" sort={{ field: "name", order: "ASC" }}>
+                        <AutocompleteInputWide optionText="name" />
+                    </ReferenceInput>
+                    <TextInputWide source="scanner_prefix" />
+                    <TextInputWide
+                        source="title"
+                        label="Title"
+                        helperText="Regular expression to match the observation's title"
+                    />
+                    <TextInputWide
+                        source="description_observation"
+                        label="Description"
+                        helperText="Regular expression to match the observation's description"
+                    />
+                </Stack>
+                <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+                <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                    Origins
+                </Typography>
+                <Stack>
+                    <TextInputWide
+                        source="origin_component_name_version"
+                        label="Component name:version"
+                        helperText="Regular expression to match the component name:version"
+                    />
+                    <TextInputWide
+                        source="origin_docker_image_name_tag"
+                        label="Docker image name:tag"
+                        helperText="Regular expression to match the docker image name:tag"
+                    />
+                    <TextInputWide
+                        source="origin_endpoint_url"
+                        label="Endpoint URL"
+                        helperText="Regular expression to match the endpoint URL"
+                    />
+                    <TextInputWide
+                        source="origin_service_name"
+                        label="Service name"
+                        helperText="Regular expression to match the service name"
+                    />
+                    <TextInputWide
+                        source="origin_source_file"
+                        label="Source file"
+                        helperText="Regular expression to match the source file"
+                    />
+                    <TextInputWide
+                        source="origin_cloud_qualified_resource"
+                        label="Cloud qualified resource"
+                        helperText="Regular expression to match the qualified resource name"
+                    />
+                </Stack>
             </SimpleForm>
         </Edit>
     );

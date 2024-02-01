@@ -1,7 +1,10 @@
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 import { darkTheme, lightTheme } from "../layout/themes";
 
-export function saveSettingTheme(theme: string) {
+export async function saveSettingTheme(theme: string) {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    user.setting_theme = theme;
+    localStorage.setItem("user", JSON.stringify(user));
     saveSetting({ setting_theme: theme });
 }
 

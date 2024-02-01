@@ -1,4 +1,4 @@
-import { Paper, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import {
     BooleanField,
     Datagrid,
@@ -45,35 +45,31 @@ const BranchEmbeddedList = ({ product }: BranchEmbeddedListProps) => {
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
-                <Paper>
-                    <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false}>
-                        <WithRecord
-                            label="Name"
-                            render={(branch) => (
-                                <TextUrlField text={branch.name} url={get_observations_url(product.id, branch.id)} />
-                            )}
-                        />
-                        <BooleanField source="is_default_branch" label="Default branch" sortable={false} />
-                        <ObservationsCountField withLabel={false} />
-                        <DateField source="last_import" showTime />
-                        <WithRecord
-                            label="Protect"
-                            render={(branch) =>
-                                !branch.is_default_branch && <BooleanField source="housekeeping_protect" />
-                            }
-                        />
-                        <WithRecord
-                            render={(branch) => (
-                                <Stack direction="row" spacing={4}>
-                                    {product && product.permissions.includes(PERMISSION_BRANCH_EDIT) && <BranchEdit />}
-                                    {product &&
-                                        product.permissions.includes(PERMISSION_BRANCH_DELETE) &&
-                                        !branch.is_default_branch && <BranchDelete branch={branch} />}
-                                </Stack>
-                            )}
-                        />
-                    </Datagrid>
-                </Paper>
+                <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false}>
+                    <WithRecord
+                        label="Name"
+                        render={(branch) => (
+                            <TextUrlField text={branch.name} url={get_observations_url(product.id, branch.id)} />
+                        )}
+                    />
+                    <BooleanField source="is_default_branch" label="Default branch" sortable={false} />
+                    <ObservationsCountField withLabel={false} />
+                    <DateField source="last_import" showTime />
+                    <WithRecord
+                        label="Protect"
+                        render={(branch) => !branch.is_default_branch && <BooleanField source="housekeeping_protect" />}
+                    />
+                    <WithRecord
+                        render={(branch) => (
+                            <Stack direction="row" spacing={4}>
+                                {product && product.permissions.includes(PERMISSION_BRANCH_EDIT) && <BranchEdit />}
+                                {product &&
+                                    product.permissions.includes(PERMISSION_BRANCH_DELETE) &&
+                                    !branch.is_default_branch && <BranchDelete branch={branch} />}
+                            </Stack>
+                        )}
+                    />
+                </Datagrid>
                 <Pagination />
             </div>
         </ListContextProvider>

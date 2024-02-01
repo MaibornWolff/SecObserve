@@ -24,10 +24,14 @@ export function getFontColor() {
     }
 }
 
-export function getElevation() {
+export function getElevation(on_dashboard?: boolean) {
+    if (on_dashboard) {
+        return 1;
+    }
+
     if (getSettingTheme() == "dark") {
         return 4;
     } else {
-        return 2;
+        return 1;
     }
 }

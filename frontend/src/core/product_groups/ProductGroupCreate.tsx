@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Divider, Stack, Typography } from "@mui/material";
 import { RichTextInput } from "ra-input-rich-text";
 import { Create, FormDataConsumer, NullableBooleanInput, NumberInput, SimpleForm, required } from "react-admin";
 
@@ -75,12 +75,16 @@ const ProductGroupCreate = () => {
     return (
         <Create redirect="show" transform={transform}>
             <SimpleForm warnWhenUnsavedChanges>
-                <Typography variant="h6">Product Group</Typography>
+                <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                    Product Group
+                </Typography>
                 <TextInputWide autoFocus source="name" validate={requiredValidate} />
                 <RichTextInput source="description" />
 
-                <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                    Source code repository (for products)
+                <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+
+                <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                    Housekeeping (for products)
                 </Typography>
                 <NullableBooleanInput
                     source="repository_branch_housekeeping_active"
@@ -116,26 +120,32 @@ const ProductGroupCreate = () => {
                     }
                 </FormDataConsumer>
 
-                <Typography variant="h6" sx={{ marginTop: "1em" }}>
+                <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+
+                <Typography variant="h6" sx={{ marginBottom: 2 }}>
                     Notifications (for products)
                 </Typography>
-                <TextInputWide
-                    source="notification_email_to"
-                    label="Email"
-                    helperText="Comma separated email to addresses to send notifications via email"
-                />
-                <TextInputWide
-                    source="notification_ms_teams_webhook"
-                    label="MS Teams"
-                    helperText="Webhook URL to send notifications to MS Teams"
-                />
-                <TextInputWide
-                    source="notification_slack_webhook"
-                    label="Slack"
-                    helperText="Webhook URL to send notifications to Slack"
-                />
+                <Stack spacing={2}>
+                    <TextInputWide
+                        source="notification_email_to"
+                        label="Email"
+                        helperText="Comma separated email to addresses to send notifications via email"
+                    />
+                    <TextInputWide
+                        source="notification_ms_teams_webhook"
+                        label="MS Teams"
+                        helperText="Webhook URL to send notifications to MS Teams"
+                    />
+                    <TextInputWide
+                        source="notification_slack_webhook"
+                        label="Slack"
+                        helperText="Webhook URL to send notifications to Slack"
+                    />
+                </Stack>
 
-                <Typography variant="h6" sx={{ marginTop: "1em" }}>
+                <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+
+                <Typography variant="h6" sx={{ marginBottom: 1 }}>
                     Security Gate (for products)
                 </Typography>
                 <NullableBooleanInput

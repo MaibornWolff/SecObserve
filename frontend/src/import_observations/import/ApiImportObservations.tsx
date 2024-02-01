@@ -79,7 +79,6 @@ const ApiImportObservations = (product: any) => {
                 direction: "row",
                 justifyContent: "center",
                 alignItems: "center",
-                color: "#000000dd",
             }}
             variant="contained"
             onClick={handleCancel}

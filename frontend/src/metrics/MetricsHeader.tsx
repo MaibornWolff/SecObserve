@@ -8,6 +8,7 @@ import { getElevation } from "./functions";
 
 interface MetricsHeaderProps {
     repository_default_branch: string | undefined;
+    on_dashboard?: boolean;
 }
 
 const MetricsHeader = (props: MetricsHeaderProps) => {
@@ -57,7 +58,7 @@ const MetricsHeader = (props: MetricsHeaderProps) => {
 
     return (
         <Paper
-            elevation={getElevation()}
+            elevation={getElevation(props.on_dashboard)}
             sx={{
                 alignItems: "top",
                 display: "flex",

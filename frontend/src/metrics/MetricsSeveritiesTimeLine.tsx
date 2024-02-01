@@ -28,6 +28,7 @@ import { getBackgroundColor, getElevation, getFontColor, getGridColor } from "./
 
 interface MetricsSeveritiesTimelineProps {
     product_id: Identifier | undefined;
+    on_dashboard?: boolean;
 }
 
 const MetricsSeveritiesTimeline = (props: MetricsSeveritiesTimelineProps) => {
@@ -218,7 +219,7 @@ const MetricsSeveritiesTimeline = (props: MetricsSeveritiesTimelineProps) => {
 
     return (
         <Paper
-            elevation={getElevation()}
+            elevation={getElevation(props.on_dashboard)}
             sx={{
                 alignItems: "top",
                 display: "flex",

@@ -1,4 +1,5 @@
 import { Stack, Typography } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import { Fragment } from "react";
 import {
     ArrayField,
@@ -11,7 +12,6 @@ import {
     PrevNextButtons,
     ReferenceField,
     Show,
-    SimpleShowLayout,
     TextField,
     TopToolbar,
     WithRecord,
@@ -71,36 +71,26 @@ const ShowActions = (props: ShowActionsProps) => {
     );
 };
 
-const ObservationShow = () => {
+const ObservationShowComponent = () => {
     const { classes } = useStyles();
 
-    let filter = {};
-    let storeKey = "observations.list";
-    const product_id = localStorage.getItem("observationembeddedlist.product");
-    if (product_id !== null) {
-        filter = { product: Number(product_id) };
-        storeKey = "observations.embedded";
-    } else if (localStorage.getItem("observationdashboardlist") === "true") {
-        filter = { age: "Past 7 days", current_status: "Open" };
-        storeKey = "observations.dashboard";
-    }
-
     return (
-        <Show actions={<ShowActions filter={filter} storeKey={storeKey} />} aside={<ObservationsShowAside />}>
-            <WithRecord
-                render={(observation) => (
-                    <SimpleShowLayout>
+        <WithRecord
+            render={(observation) => (
+                <Box width={"100%"} ml={2}>
+                    <Paper sx={{ marginBottom: 2, padding: 2 }}>
                         <Typography variant="h6">Observation</Typography>
                         <Stack direction="row" spacing={4}>
                             <Stack spacing={2}>
                                 <Labeled>
                                     <SeverityField source="current_severity" />
                                 </Labeled>
-                                {observation.parser_severity != "" && (
-                                    <Labeled>
-                                        <TextField source="parser_severity" />
-                                    </Labeled>
-                                )}
+                                {observation.parser_severity != "" &&
+                                    (observation.rule_severity != "" || observation.assessment_severity != "") && (
+                                        <Labeled>
+                                            <TextField source="parser_severity" />
+                                        </Labeled>
+                                    )}
                                 {observation.rule_severity != "" && (
                                     <Labeled>
                                         <TextField source="rule_severity" />
@@ -116,11 +106,12 @@ const ObservationShow = () => {
                                 <Labeled>
                                     <ChipField source="current_status" label="Status" />
                                 </Labeled>
-                                {observation.parser_status != "" && (
-                                    <Labeled>
-                                        <TextField source="parser_status" />
-                                    </Labeled>
-                                )}
+                                {observation.parser_status != "" &&
+                                    (observation.rule_status != "" || observation.assessment_status != "") && (
+                                        <Labeled>
+                                            <TextField source="parser_status" />
+                                        </Labeled>
+                                    )}
                                 {observation.rule_status != "" && (
                                     <Labeled>
                                         <TextField source="rule_status" />
@@ -141,237 +132,261 @@ const ObservationShow = () => {
                                 <TextField source="title" className={classes.fontBigBold} />
                             </Labeled>
                         </Stack>
-                        {observation.description != "" && (
-                            <Labeled label="Description">
-                                <MarkdownField content={observation.description} />
-                            </Labeled>
-                        )}
-                        {observation.recommendation != "" && (
-                            <Labeled label="Recommendation">
-                                <MarkdownField content={observation.recommendation} />
-                            </Labeled>
-                        )}
-                        {(observation.vulnerability_id != "" ||
-                            observation.cvss3_score != null ||
-                            observation.cvss3_vector != "" ||
-                            observation.cwe != null ||
-                            observation.epss_score != null ||
-                            observation.epss_percentile != null) && (
-                            <div>
-                                <Typography variant="h6" sx={{ paddingTop: "16px" }}>
-                                    Vulnerability
-                                </Typography>
-                                <Stack direction="row" spacing={4}>
-                                    {observation.vulnerability_id != "" &&
-                                        get_vulnerability_url(observation.vulnerability_id) == null && (
+                        <Stack spacing={2}>
+                            {observation.description != "" && (
+                                <Labeled label="Description" sx={{ paddingTop: 2 }}>
+                                    <MarkdownField content={observation.description} />
+                                </Labeled>
+                            )}
+                            {observation.recommendation != "" && (
+                                <Labeled label="Recommendation">
+                                    <MarkdownField content={observation.recommendation} />
+                                </Labeled>
+                            )}
+                        </Stack>
+                    </Paper>
+
+                    {(observation.vulnerability_id != "" ||
+                        observation.cvss3_score != null ||
+                        observation.cvss3_vector != "" ||
+                        observation.cwe != null ||
+                        observation.epss_score != null ||
+                        observation.epss_percentile != null) && (
+                        <Paper sx={{ marginBottom: 2, padding: 2 }}>
+                            <Typography variant="h6">Vulnerability</Typography>
+                            <Stack direction="row" spacing={4}>
+                                {observation.vulnerability_id != "" &&
+                                    get_vulnerability_url(observation.vulnerability_id) == null && (
+                                        <Labeled>
+                                            <TextField source="vulnerability_id" label="Vulnerability ID" />
+                                        </Labeled>
+                                    )}
+                                {observation.vulnerability_id != "" &&
+                                    get_vulnerability_url(observation.vulnerability_id) != null && (
+                                        <Labeled label="Vulnerability ID">
+                                            <TextUrlField
+                                                text={observation.vulnerability_id}
+                                                url={
+                                                    observation.vulnerability_id &&
+                                                    get_vulnerability_url(observation.vulnerability_id)
+                                                }
+                                            />
+                                        </Labeled>
+                                    )}
+                                {observation.cvss3_score != null && (
+                                    <Labeled label="CVSS3 score">
+                                        <NumberField source="cvss3_score" />
+                                    </Labeled>
+                                )}
+                                {observation.cvss3_vector != "" && (
+                                    <Labeled label="CVSS3 vector">
+                                        <TextField source="cvss3_vector" />
+                                    </Labeled>
+                                )}
+                                {observation.cwe != null && (
+                                    <Labeled label="CWE">
+                                        <TextUrlField text={observation.cwe} url={get_cwe_url(observation.cwe)} />
+                                    </Labeled>
+                                )}
+                                {observation.epss_score != null && (
+                                    <Labeled label="EPSS score (%)">
+                                        <NumberField source="epss_score" />
+                                    </Labeled>
+                                )}
+                                {observation.epss_percentile != null && (
+                                    <Labeled label="EPSS percentile (%)">
+                                        <NumberField source="epss_percentile" />
+                                    </Labeled>
+                                )}
+                            </Stack>
+                        </Paper>
+                    )}
+
+                    {(observation.origin_service_name != "" ||
+                        observation.origin_component_name != "" ||
+                        observation.origin_docker_image_name != "" ||
+                        observation.origin_endpoint_url != "" ||
+                        observation.origin_source_file != "" ||
+                        observation.origin_cloud_provider != "") && (
+                        <Paper sx={{ marginBottom: 2, padding: 2 }}>
+                            <Typography variant="h6">Origins</Typography>
+                            {observation.origin_service_name != "" && (
+                                <div>
+                                    <Typography variant="subtitle1" sx={{ paddingTop: 1 }}>
+                                        Service
+                                    </Typography>
+                                    <Labeled>
+                                        <TextField source="origin_service_name" label="Name" />
+                                    </Labeled>
+                                </div>
+                            )}
+                            {observation.origin_component_name != "" && (
+                                <div>
+                                    <Typography variant="subtitle1" sx={{ paddingTop: 1 }}>
+                                        Component
+                                    </Typography>
+                                    <Stack direction="row" spacing={4}>
+                                        {observation.origin_component_name != "" && (
                                             <Labeled>
-                                                <TextField source="vulnerability_id" label="Vulnerability id" />
+                                                <TextField source="origin_component_name" label="Component name" />
                                             </Labeled>
                                         )}
-                                    {observation.vulnerability_id != "" &&
-                                        get_vulnerability_url(observation.vulnerability_id) != null && (
-                                            <Labeled label="Vulnerability id">
-                                                <TextUrlField
-                                                    text={observation.vulnerability_id}
-                                                    url={
-                                                        observation.vulnerability_id &&
-                                                        get_vulnerability_url(observation.vulnerability_id)
-                                                    }
+                                        {observation.origin_component_version != "" && (
+                                            <Labeled>
+                                                <TextField
+                                                    source="origin_component_version"
+                                                    label="Component version"
                                                 />
                                             </Labeled>
                                         )}
-                                    {observation.cvss3_score != null && (
-                                        <Labeled label="CVSS3 score">
-                                            <NumberField source="cvss3_score" />
+                                        {observation.origin_component_purl != "" && (
+                                            <Labeled>
+                                                <TextField source="origin_component_purl" label="Component PURL" />
+                                            </Labeled>
+                                        )}
+                                        {observation.origin_component_cpe != "" && (
+                                            <Labeled>
+                                                <TextField source="origin_component_cpe" label="Component CPE" />
+                                            </Labeled>
+                                        )}
+                                    </Stack>
+                                    {observation.origin_component_dependencies != "" && (
+                                        <Labeled label="First component dependency" sx={{ marginTop: 2 }}>
+                                            <LabeledTextField text={observation.origin_component_dependencies} />
                                         </Labeled>
                                     )}
-                                    {observation.cvss3_vector != "" && (
-                                        <Labeled label="CVSS3 Vector">
-                                            <TextField source="cvss3_vector" />
-                                        </Labeled>
-                                    )}
-                                    {observation.cwe != null && (
-                                        <Labeled label="CWE">
-                                            <TextUrlField text={observation.cwe} url={get_cwe_url(observation.cwe)} />
-                                        </Labeled>
-                                    )}
-                                    {observation.epss_score != null && (
-                                        <Labeled label="EPSS score (%)">
-                                            <NumberField source="epss_score" />
-                                        </Labeled>
-                                    )}
-                                    {observation.epss_percentile != null && (
-                                        <Labeled label="EPSS percentile (%)">
-                                            <NumberField source="epss_percentile" />
-                                        </Labeled>
-                                    )}
-                                </Stack>
-                            </div>
-                        )}
-                        <Typography variant="h6" sx={{ paddingTop: "16px" }}>
-                            Origins
-                        </Typography>
-                        {observation.origin_service_name != "" && (
-                            <div>
-                                <Typography variant="subtitle1" sx={{ paddingTop: "8px" }}>
-                                    Service
-                                </Typography>
-                                <Labeled>
-                                    <TextField source="origin_service_name" label="Name" />
-                                </Labeled>
-                            </div>
-                        )}
-                        {observation.origin_component_name != "" && (
-                            <div>
-                                <Typography variant="subtitle1" sx={{ paddingTop: "8px" }}>
-                                    Component
-                                </Typography>
-                                <Stack direction="row" spacing={4}>
-                                    {observation.origin_component_name != "" && (
-                                        <Labeled>
-                                            <TextField source="origin_component_name" label="Component name" />
-                                        </Labeled>
-                                    )}
-                                    {observation.origin_component_version != "" && (
-                                        <Labeled>
-                                            <TextField source="origin_component_version" label="Component version" />
-                                        </Labeled>
-                                    )}
-                                    {observation.origin_component_purl != "" && (
-                                        <Labeled>
-                                            <TextField source="origin_component_purl" label="Component PURL" />
-                                        </Labeled>
-                                    )}
-                                    {observation.origin_component_cpe != "" && (
-                                        <Labeled>
-                                            <TextField source="origin_component_cpe" label="Component CPE" />
-                                        </Labeled>
-                                    )}
-                                </Stack>
-                                {observation.origin_component_dependencies != "" && (
-                                    <Labeled label="First component dependency" sx={{ marginTop: 2 }}>
-                                        <LabeledTextField text={observation.origin_component_dependencies} />
-                                    </Labeled>
-                                )}
-                            </div>
-                        )}
-                        {observation.origin_docker_image_name != "" && (
-                            <div>
-                                <Typography variant="subtitle1" sx={{ paddingTop: "8px" }}>
-                                    Docker
-                                </Typography>
-                                <Stack direction="row" spacing={4}>
-                                    {observation.origin_docker_image_name != "" && (
-                                        <Labeled>
-                                            <TextField source="origin_docker_image_name" label="Docker image name" />
-                                        </Labeled>
-                                    )}
-                                    {observation.origin_docker_image_tag != "" && (
-                                        <Labeled>
-                                            <TextField source="origin_docker_image_tag" label="Docker image tag" />
-                                        </Labeled>
-                                    )}
-                                </Stack>
-                                {observation.origin_docker_image_digest != "" && (
-                                    <Labeled>
-                                        <TextField source="origin_docker_image_digest" label="Docker image digest" />
-                                    </Labeled>
-                                )}
-                            </div>
-                        )}
-                        {observation.origin_endpoint_url != "" && (
-                            <div>
-                                <Typography variant="subtitle1" sx={{ paddingTop: "8px" }}>
-                                    Endpoint
-                                </Typography>
-                                {observation.origin_endpoint_url != "" && (
-                                    <Labeled label="Endpoint URL">
-                                        <TextUrlField
-                                            text={observation.origin_endpoint_url}
-                                            url={observation.origin_endpoint_url}
-                                        />
-                                    </Labeled>
-                                )}
-                                <Stack direction="row" spacing={4}>
-                                    {observation.origin_endpoint_scheme != "" && (
-                                        <Labeled>
-                                            <TextField source="origin_endpoint_scheme" label="Endpoint scheme" />
-                                        </Labeled>
-                                    )}
-                                    {observation.origin_endpoint_hostname != "" && (
-                                        <Labeled>
-                                            <TextField source="origin_endpoint_hostname" label="Endpoint host" />
-                                        </Labeled>
-                                    )}
-                                    {observation.origin_endpoint_port != null && (
-                                        <Labeled>
-                                            <TextField source="origin_endpoint_port" label="Endpoint port" />
-                                        </Labeled>
-                                    )}
-                                </Stack>
-                            </div>
-                        )}
-                        {observation.origin_source_file != "" && (
-                            <div>
-                                <Typography variant="subtitle1" sx={{ paddingTop: "8px" }}>
-                                    Source
-                                </Typography>
-                                <Stack direction="row" spacing={4}>
-                                    {observation.origin_source_file != "" && (
-                                        <Labeled>
-                                            <TextUrlField
-                                                text={observation.origin_source_file}
-                                                url={observation.origin_source_file_url}
-                                                label="Source file"
-                                            />
-                                        </Labeled>
-                                    )}
-                                    {observation.origin_source_line_start != null && (
-                                        <Labeled>
-                                            <TextField source="origin_source_line_start" label="Source line start" />
-                                        </Labeled>
-                                    )}
-                                    {observation.origin_source_line_end != null && (
-                                        <Labeled>
-                                            <TextField source="origin_source_line_end" label="Source line end" />
-                                        </Labeled>
-                                    )}
-                                </Stack>
-                            </div>
-                        )}
-                        {observation.origin_cloud_provider != "" && (
-                            <div>
-                                <Typography variant="subtitle1" sx={{ paddingTop: "8px" }}>
-                                    Cloud
-                                </Typography>
-                                <Stack direction="row" spacing={4}>
-                                    {observation.origin_cloud_provider != "" && (
-                                        <Labeled>
-                                            <TextField source="origin_cloud_provider" label="Provider" />
-                                        </Labeled>
-                                    )}
-                                    {observation.origin_cloud_account_subscription_project != "" && (
+                                </div>
+                            )}
+                            {observation.origin_docker_image_name != "" && (
+                                <div>
+                                    <Typography variant="subtitle1" sx={{ paddingTop: 1 }}>
+                                        Docker
+                                    </Typography>
+                                    <Stack direction="row" spacing={4}>
+                                        {observation.origin_docker_image_name != "" && (
+                                            <Labeled>
+                                                <TextField
+                                                    source="origin_docker_image_name"
+                                                    label="Docker image name"
+                                                />
+                                            </Labeled>
+                                        )}
+                                        {observation.origin_docker_image_tag != "" && (
+                                            <Labeled>
+                                                <TextField source="origin_docker_image_tag" label="Docker image tag" />
+                                            </Labeled>
+                                        )}
+                                    </Stack>
+                                    {observation.origin_docker_image_digest != "" && (
                                         <Labeled>
                                             <TextField
-                                                source="origin_cloud_account_subscription_project"
-                                                label="Account / Subscription / Project"
+                                                source="origin_docker_image_digest"
+                                                label="Docker image digest"
                                             />
                                         </Labeled>
                                     )}
-                                    {observation.origin_cloud_resource != "" && (
-                                        <Labeled>
-                                            <TextField source="origin_cloud_resource" label="Resource" />
+                                </div>
+                            )}
+                            {observation.origin_endpoint_url != "" && (
+                                <div>
+                                    <Typography variant="subtitle1" sx={{ paddingTop: 1 }}>
+                                        Endpoint
+                                    </Typography>
+                                    {observation.origin_endpoint_url != "" && (
+                                        <Labeled label="Endpoint URL">
+                                            <TextUrlField
+                                                text={observation.origin_endpoint_url}
+                                                url={observation.origin_endpoint_url}
+                                            />
                                         </Labeled>
                                     )}
-                                    {observation.origin_cloud_resource_type != "" && (
-                                        <Labeled>
-                                            <TextField source="origin_cloud_resource_type" label="Resource type" />
-                                        </Labeled>
-                                    )}
-                                </Stack>
-                            </div>
-                        )}
-                        <Typography variant="h6" sx={{ paddingTop: "16px" }}>
+                                    <Stack direction="row" spacing={4}>
+                                        {observation.origin_endpoint_scheme != "" && (
+                                            <Labeled>
+                                                <TextField source="origin_endpoint_scheme" label="Endpoint scheme" />
+                                            </Labeled>
+                                        )}
+                                        {observation.origin_endpoint_hostname != "" && (
+                                            <Labeled>
+                                                <TextField source="origin_endpoint_hostname" label="Endpoint host" />
+                                            </Labeled>
+                                        )}
+                                        {observation.origin_endpoint_port != null && (
+                                            <Labeled>
+                                                <TextField source="origin_endpoint_port" label="Endpoint port" />
+                                            </Labeled>
+                                        )}
+                                    </Stack>
+                                </div>
+                            )}
+                            {observation.origin_source_file != "" && (
+                                <div>
+                                    <Typography variant="subtitle1" sx={{ paddingTop: 1 }}>
+                                        Source
+                                    </Typography>
+                                    <Stack direction="row" spacing={4}>
+                                        {observation.origin_source_file != "" && (
+                                            <Labeled>
+                                                <TextUrlField
+                                                    text={observation.origin_source_file}
+                                                    url={observation.origin_source_file_url}
+                                                    label="Source file"
+                                                />
+                                            </Labeled>
+                                        )}
+                                        {observation.origin_source_line_start != null && (
+                                            <Labeled>
+                                                <TextField
+                                                    source="origin_source_line_start"
+                                                    label="Source line start"
+                                                />
+                                            </Labeled>
+                                        )}
+                                        {observation.origin_source_line_end != null && (
+                                            <Labeled>
+                                                <TextField source="origin_source_line_end" label="Source line end" />
+                                            </Labeled>
+                                        )}
+                                    </Stack>
+                                </div>
+                            )}
+                            {observation.origin_cloud_provider != "" && (
+                                <div>
+                                    <Typography variant="subtitle1" sx={{ paddingTop: 1 }}>
+                                        Cloud
+                                    </Typography>
+                                    <Stack direction="row" spacing={4}>
+                                        {observation.origin_cloud_provider != "" && (
+                                            <Labeled>
+                                                <TextField source="origin_cloud_provider" label="Provider" />
+                                            </Labeled>
+                                        )}
+                                        {observation.origin_cloud_account_subscription_project != "" && (
+                                            <Labeled>
+                                                <TextField
+                                                    source="origin_cloud_account_subscription_project"
+                                                    label="Account / Subscription / Project"
+                                                />
+                                            </Labeled>
+                                        )}
+                                        {observation.origin_cloud_resource != "" && (
+                                            <Labeled>
+                                                <TextField source="origin_cloud_resource" label="Resource" />
+                                            </Labeled>
+                                        )}
+                                        {observation.origin_cloud_resource_type != "" && (
+                                            <Labeled>
+                                                <TextField source="origin_cloud_resource_type" label="Resource type" />
+                                            </Labeled>
+                                        )}
+                                    </Stack>
+                                </div>
+                            )}
+                        </Paper>
+                    )}
+
+                    <Paper sx={{ marginBottom: 2, padding: 2 }}>
+                        <Typography variant="h6" sx={{ paddingBottom: 1 }}>
                             Log
                         </Typography>{" "}
                         <ArrayField label={false} source="observation_logs">
@@ -385,17 +400,41 @@ const ObservationShow = () => {
                                 <DateField source="created" showTime />
                             </Datagrid>
                         </ArrayField>
-                        {observation && observation.has_potential_duplicates && (
-                            <Fragment>
-                                <Typography variant="h6" sx={{ paddingTop: "16px", paddingBottom: "8px" }}>
-                                    Potential Duplicates
-                                </Typography>{" "}
-                                <PotentialDuplicatesList observation={observation} />
-                            </Fragment>
-                        )}
-                    </SimpleShowLayout>
-                )}
-            />
+                    </Paper>
+
+                    {observation && observation.has_potential_duplicates && (
+                        <Paper sx={{ marginBottom: 2, paddingTop: 2, paddingLeft: 2, paddingRight: 2 }}>
+                            <Typography variant="h6" sx={{ paddingBottom: 1 }}>
+                                Potential Duplicates
+                            </Typography>{" "}
+                            <PotentialDuplicatesList observation={observation} />
+                        </Paper>
+                    )}
+                </Box>
+            )}
+        />
+    );
+};
+
+const ObservationShow = () => {
+    let filter = {};
+    let storeKey = "observations.list";
+    const product_id = localStorage.getItem("observationembeddedlist.product");
+    if (product_id !== null) {
+        filter = { product: Number(product_id) };
+        storeKey = "observations.embedded";
+    } else if (localStorage.getItem("observationdashboardlist") === "true") {
+        filter = { age: "Past 7 days", current_status: "Open" };
+        storeKey = "observations.dashboard";
+    }
+
+    return (
+        <Show
+            actions={<ShowActions filter={filter} storeKey={storeKey} />}
+            component={ObservationShowComponent}
+            aside={<ObservationsShowAside />}
+        >
+            <Fragment />
         </Show>
     );
 };

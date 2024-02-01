@@ -1,4 +1,4 @@
-import { Paper, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import {
     Datagrid,
     FilterForm,
@@ -51,26 +51,24 @@ const ApiConfigurationEmbeddedList = ({ product }: ApiConfigurationEmbeddedListP
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
                 <FilterForm filters={listFilters} />
-                <Paper>
-                    <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false}>
-                        <TextField source="name" />
-                        <ReferenceField source="parser" reference="parsers" link={false} />
-                        <TextField source="base_url" label="Base URL" />
-                        <TextField source="project_key" />
-                        <WithRecord
-                            render={(api_configuration) => (
-                                <Stack direction="row" spacing={4}>
-                                    {product && product.permissions.includes(PERMISSION_API_CONFIGURATION_EDIT) && (
-                                        <ApiConfigurationEdit />
-                                    )}
-                                    {product && product.permissions.includes(PERMISSION_API_CONFIGURATION_DELETE) && (
-                                        <APIConfigurationDelete api_configuration={api_configuration} />
-                                    )}
-                                </Stack>
-                            )}
-                        />
-                    </Datagrid>
-                </Paper>
+                <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false}>
+                    <TextField source="name" />
+                    <ReferenceField source="parser" reference="parsers" link={false} />
+                    <TextField source="base_url" label="Base URL" />
+                    <TextField source="project_key" />
+                    <WithRecord
+                        render={(api_configuration) => (
+                            <Stack direction="row" spacing={4}>
+                                {product && product.permissions.includes(PERMISSION_API_CONFIGURATION_EDIT) && (
+                                    <ApiConfigurationEdit />
+                                )}
+                                {product && product.permissions.includes(PERMISSION_API_CONFIGURATION_DELETE) && (
+                                    <APIConfigurationDelete api_configuration={api_configuration} />
+                                )}
+                            </Stack>
+                        )}
+                    />
+                </Datagrid>
                 <Pagination />
             </div>
         </ListContextProvider>

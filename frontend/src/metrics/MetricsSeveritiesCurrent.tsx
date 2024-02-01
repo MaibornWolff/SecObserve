@@ -18,6 +18,7 @@ import { getBackgroundColor, getElevation, getFontColor, getGridColor } from "./
 
 interface MetricsSeveritiesCurrentProps {
     product_id: Identifier | undefined;
+    on_dashboard?: boolean;
 }
 
 const MetricsSeveritiesCurrent = (props: MetricsSeveritiesCurrentProps) => {
@@ -96,7 +97,7 @@ const MetricsSeveritiesCurrent = (props: MetricsSeveritiesCurrentProps) => {
 
     return (
         <Paper
-            elevation={getElevation()}
+            elevation={getElevation(props.on_dashboard)}
             sx={{
                 alignItems: "center",
                 display: "flex",
