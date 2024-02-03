@@ -2,6 +2,7 @@ import { Divider, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
 import { BooleanField, Labeled, NumberField, ReferenceField, RichTextField, TextField } from "react-admin";
 
+import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { Product } from "../types";
 
 type ProductShowProductProps = {
@@ -191,6 +192,11 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                     <Labeled>
                         <TextField source="issue_tracker_labels" label="Labels" />
                     </Labeled>
+                    {product && product.issue_tracker_minimum_severity && (
+                        <Labeled>
+                            <SeverityField source="issue_tracker_minimum_severity" label="Minimum severity" />
+                        </Labeled>
+                    )}
                     {product.issue_tracker_username && (
                         <Labeled>
                             <TextField source="issue_tracker_username" label="Username (only for Jira)" />

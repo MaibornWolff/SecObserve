@@ -4,6 +4,7 @@ from typing import Optional
 from django.utils import timezone
 
 from application.core.models import Observation, Product
+from application.core.types import Severity
 from application.metrics.models import Product_Metrics, Product_Metrics_Status
 from application.metrics.queries.product_metrics import (
     get_product_metrics,
@@ -86,17 +87,17 @@ def calculate_metrics_for_product(  # pylint: disable=too-many-branches
         for observation in observations:
             if observation.get("current_status") == Observation.STATUS_OPEN:
                 todays_product_metrics.open += 1
-                if observation.get("current_severity") == Observation.SEVERITY_CRITICAL:
+                if observation.get("current_severity") == Severity.SEVERITY_CRITICAL:
                     todays_product_metrics.open_critical += 1
-                elif observation.get("current_severity") == Observation.SEVERITY_HIGH:
+                elif observation.get("current_severity") == Severity.SEVERITY_HIGH:
                     todays_product_metrics.open_high += 1
-                elif observation.get("current_severity") == Observation.SEVERITY_MEDIUM:
+                elif observation.get("current_severity") == Severity.SEVERITY_MEDIUM:
                     todays_product_metrics.open_medium += 1
-                elif observation.get("current_severity") == Observation.SEVERITY_LOW:
+                elif observation.get("current_severity") == Severity.SEVERITY_LOW:
                     todays_product_metrics.open_low += 1
-                elif observation.get("current_severity") == Observation.SEVERITY_NONE:
+                elif observation.get("current_severity") == Severity.SEVERITY_NONE:
                     todays_product_metrics.open_none += 1
-                elif observation.get("current_severity") == Observation.SEVERITY_UNKOWN:
+                elif observation.get("current_severity") == Severity.SEVERITY_UNKOWN:
                     todays_product_metrics.open_unknown += 1
             elif observation.get("current_status") == Observation.STATUS_RESOLVED:
                 todays_product_metrics.resolved += 1
@@ -270,31 +271,31 @@ def get_codecharta_metrics(product: Product) -> list[dict]:
                 file_severities_value["source_file"] = observation.origin_source_file
                 file_severities_value["Vulnerabilities_Total".lower()] = 0
                 file_severities_value[
-                    f"Vulnerabilities_{Observation.SEVERITY_CRITICAL}".lower()
+                    f"Vulnerabilities_{Severity.SEVERITY_CRITICAL}".lower()
                 ] = 0
                 file_severities_value[
-                    f"Vulnerabilities_{Observation.SEVERITY_HIGH}".lower()
+                    f"Vulnerabilities_{Severity.SEVERITY_HIGH}".lower()
                 ] = 0
                 file_severities_value[
-                    f"Vulnerabilities_{Observation.SEVERITY_MEDIUM}".lower()
+                    f"Vulnerabilities_{Severity.SEVERITY_MEDIUM}".lower()
                 ] = 0
                 file_severities_value[
-                    f"Vulnerabilities_{Observation.SEVERITY_LOW}".lower()
+                    f"Vulnerabilities_{Severity.SEVERITY_LOW}".lower()
                 ] = 0
                 file_severities_value[
-                    f"Vulnerabilities_{Observation.SEVERITY_NONE}".lower()
+                    f"Vulnerabilities_{Severity.SEVERITY_NONE}".lower()
                 ] = 0
                 file_severities_value[
-                    f"Vulnerabilities_{Observation.SEVERITY_UNKOWN}".lower()
+                    f"Vulnerabilities_{Severity.SEVERITY_UNKOWN}".lower()
                 ] = 0
                 file_severities_value[
-                    f"Vulnerabilities_{Observation.SEVERITY_HIGH}_and_above".lower()
+                    f"Vulnerabilities_{Severity.SEVERITY_HIGH}_and_above".lower()
                 ] = 0
                 file_severities_value[
-                    f"Vulnerabilities_{Observation.SEVERITY_MEDIUM}_and_above".lower()
+                    f"Vulnerabilities_{Severity.SEVERITY_MEDIUM}_and_above".lower()
                 ] = 0
                 file_severities_value[
-                    f"Vulnerabilities_{Observation.SEVERITY_LOW}_and_above".lower()
+                    f"Vulnerabilities_{Severity.SEVERITY_LOW}_and_above".lower()
                 ] = 0
                 file_severities_dict[observation.origin_source_file] = (
                     file_severities_value
@@ -306,30 +307,30 @@ def get_codecharta_metrics(product: Product) -> list[dict]:
             ] += 1
 
             if observation.current_severity in (
-                Observation.SEVERITY_CRITICAL,
-                Observation.SEVERITY_HIGH,
+                Severity.SEVERITY_CRITICAL,
+                Severity.SEVERITY_HIGH,
             ):
                 file_severities_value[
-                    f"Vulnerabilities_{Observation.SEVERITY_HIGH}_and_above".lower()
+                    f"Vulnerabilities_{Severity.SEVERITY_HIGH}_and_above".lower()
                 ] += 1
                 file_severities_value[
-                    f"Vulnerabilities_{Observation.SEVERITY_MEDIUM}_and_above".lower()
+                    f"Vulnerabilities_{Severity.SEVERITY_MEDIUM}_and_above".lower()
                 ] += 1
                 file_severities_value[
-                    f"Vulnerabilities_{Observation.SEVERITY_LOW}_and_above".lower()
-                ] += 1
-
-            if observation.current_severity == Observation.SEVERITY_MEDIUM:
-                file_severities_value[
-                    f"Vulnerabilities_{Observation.SEVERITY_MEDIUM}_and_above".lower()
-                ] += 1
-                file_severities_value[
-                    f"Vulnerabilities_{Observation.SEVERITY_LOW}_and_above".lower()
+                    f"Vulnerabilities_{Severity.SEVERITY_LOW}_and_above".lower()
                 ] += 1
 
-            if observation.current_severity == Observation.SEVERITY_LOW:
+            if observation.current_severity == Severity.SEVERITY_MEDIUM:
                 file_severities_value[
-                    f"Vulnerabilities_{Observation.SEVERITY_LOW}_and_above".lower()
+                    f"Vulnerabilities_{Severity.SEVERITY_MEDIUM}_and_above".lower()
+                ] += 1
+                file_severities_value[
+                    f"Vulnerabilities_{Severity.SEVERITY_LOW}_and_above".lower()
+                ] += 1
+
+            if observation.current_severity == Severity.SEVERITY_LOW:
+                file_severities_value[
+                    f"Vulnerabilities_{Severity.SEVERITY_LOW}_and_above".lower()
                 ] += 1
 
     return list(file_severities_dict.values())

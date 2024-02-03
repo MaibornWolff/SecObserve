@@ -1,7 +1,7 @@
 from os import path
 from unittest import TestCase
 
-from application.core.models import Observation
+from application.core.models import Severity
 from application.import_observations.parsers.cyclone_dx.parser import CycloneDXParser
 
 
@@ -45,7 +45,7 @@ class TestCycloneDXParser(TestCase):
             description = """Directory traversal vulnerability in the (1) extract and (2) extractall functions in the tarfile module in Python allows user-assisted remote attackers to overwrite arbitrary files via a .. (dot dot) sequence in filenames in a TAR archive, a related issue to CVE-2001-1267."""
             self.assertEqual(description, observation.description)
             self.assertEqual("CVE-2007-4559", observation.vulnerability_id)
-            self.assertEqual(Observation.SEVERITY_MEDIUM, observation.parser_severity)
+            self.assertEqual(Severity.SEVERITY_MEDIUM, observation.parser_severity)
             self.assertEqual("python", observation.origin_component_name)
             self.assertEqual("3.11.3", observation.origin_component_version)
             self.assertEqual(

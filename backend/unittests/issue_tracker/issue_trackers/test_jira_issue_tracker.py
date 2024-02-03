@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from unittest.mock import patch
 
 from application.core.models import Observation
+from application.core.types import Severity
 from application.issue_tracker.issue_trackers.base_issue_tracker import Issue
 from application.issue_tracker.issue_trackers.jira_issue_tracker import JiraIssueTracker
 from unittests.base_test_case import BaseTestCase
@@ -29,7 +30,7 @@ class TestJiraIssueTracker(BaseTestCase):
     def setUp(self):
         super().setUp()
         self.observation_1.pk = 1
-        self.observation_1.current_severity = Observation.SEVERITY_CRITICAL
+        self.observation_1.current_severity = Severity.SEVERITY_CRITICAL
         self.observation_1.description = "description_1"
         self.observation_1.product.issue_tracker_project_id = "jira_project_1"
         self.observation_1.product.issue_tracker_base_url = "https://jira.com"
@@ -63,7 +64,7 @@ class TestJiraIssueTracker(BaseTestCase):
         )
 
         issue_tracker = JiraIssueTracker(self.observation_1.product)
-        issue_tracker.create_issue(self.observation_1)
+        issue_id = issue_tracker.create_issue(self.observation_1)
 
         create_issue_mock.assert_called_once_with(
             project="jira_project_1",
@@ -74,7 +75,7 @@ class TestJiraIssueTracker(BaseTestCase):
         )
         base_url_mock.assert_called_once()
         save_mock.assert_called_once()
-        self.assertEqual("jira_issue_1", self.observation_1.issue_tracker_issue_id)
+        self.assertEqual("jira_issue_1", issue_id)
         self.assertEqual("Open", self.observation_1.issue_tracker_jira_initial_status)
 
     @patch(

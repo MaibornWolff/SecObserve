@@ -5,6 +5,7 @@ from typing import Optional
 from django.core.files.base import File
 
 from application.core.models import Observation, Parser
+from application.core.types import Severity
 from application.import_observations.parsers.base_parser import (
     BaseFileParser,
     BaseParser,
@@ -244,15 +245,13 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         return None, None
 
     def _get_highest_severity(self, vulnerability):
-        current_severity = Observation.SEVERITY_UNKOWN
+        current_severity = Severity.SEVERITY_UNKOWN
         current_numerical_severity = 999
         ratings = vulnerability.get("ratings", [])
         if ratings:
             for rating in ratings:
-                severity = rating.get(
-                    "severity", Observation.SEVERITY_UNKOWN
-                ).capitalize()
-                numerical_severity = Observation.NUMERICAL_SEVERITIES.get(severity, 99)
+                severity = rating.get("severity", Severity.SEVERITY_UNKOWN).capitalize()
+                numerical_severity = Severity.NUMERICAL_SEVERITIES.get(severity, 99)
                 if numerical_severity < current_numerical_severity:
                     current_severity = severity
         return current_severity

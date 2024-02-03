@@ -4,6 +4,8 @@ from urllib.parse import urlparse
 from django.apps import apps
 from django.db.models.fields import CharField, TextField
 
+from application.core.types import Severity
+
 # Parameter observation cannot be typed, because some methods are used in the model class
 
 
@@ -66,24 +68,22 @@ def get_current_severity(observation) -> str:
 
 
 def _get_cvss3_severity(cvss3_score: int):
-    Observation = apps.get_model("core", "Observation")
-
     if cvss3_score is None:
-        return Observation.SEVERITY_UNKOWN
+        return Severity.SEVERITY_UNKOWN
 
     if cvss3_score >= 9:
-        return Observation.SEVERITY_CRITICAL
+        return Severity.SEVERITY_CRITICAL
 
     if cvss3_score >= 7:
-        return Observation.SEVERITY_HIGH
+        return Severity.SEVERITY_HIGH
 
     if cvss3_score >= 4:
-        return Observation.SEVERITY_MEDIUM
+        return Severity.SEVERITY_MEDIUM
 
     if cvss3_score >= 0.1:
-        return Observation.SEVERITY_LOW
+        return Severity.SEVERITY_LOW
 
-    return Observation.SEVERITY_NONE
+    return Severity.SEVERITY_NONE
 
 
 def get_current_status(observation) -> str:
@@ -311,12 +311,12 @@ def normalize_severity(observation):
         if (
             observation.parser_severity,
             observation.parser_severity,
-        ) not in observation.SEVERITY_CHOICES:
-            observation.parser_severity = observation.SEVERITY_UNKOWN
+        ) not in Severity.SEVERITY_CHOICES:
+            observation.parser_severity = Severity.SEVERITY_UNKOWN
 
     observation.current_severity = get_current_severity(observation)
 
-    observation.numerical_severity = observation.NUMERICAL_SEVERITIES.get(
+    observation.numerical_severity = Severity.NUMERICAL_SEVERITIES.get(
         observation.current_severity
     )
 
