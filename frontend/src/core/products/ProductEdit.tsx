@@ -23,7 +23,7 @@ import {
     validate_required_255,
 } from "../../commons/custom_validators";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
-import { ISSUE_TRACKER_TYPE_CHOICES } from "../types";
+import { ISSUE_TRACKER_TYPE_CHOICES, OBSERVATION_SEVERITY_CHOICES } from "../types";
 
 const CustomToolbar = () => {
     const product = useRecordContext();
@@ -129,6 +129,9 @@ const ProductEdit = () => {
         }
         if (!data.issue_tracker_status_closed) {
             data.issue_tracker_status_closed = "";
+        }
+        if (!data.issue_tracker_minimum_severity) {
+            data.issue_tracker_minimum_severity = "";
         }
         return data;
     };
@@ -333,6 +336,11 @@ const ProductEdit = () => {
                                     validate={validate_255}
                                 />
                                 <TextInputWide source="issue_tracker_labels" label="Labels" validate={validate_255} />
+                                <AutocompleteInputMedium
+                            source="issue_tracker_minimum_severity"
+                            label="Minimum severity"
+                            choices={OBSERVATION_SEVERITY_CHOICES}
+                        />
                                 <FormDataConsumer>
                                     {({ formData }) =>
                                         formData.issue_tracker_type == "Jira" && (

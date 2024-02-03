@@ -1,6 +1,7 @@
 import { ChipField, useRecordContext } from "react-admin";
 
 import { get_severity_color } from "../functions";
+import { any } from "prop-types";
 
 interface SeverityProps {
     source: string;
@@ -11,8 +12,10 @@ interface SeverityProps {
 function get_current_severity(record: any) {
     if (record.current_severity !== undefined) {
         return record.current_severity;
-    } else if (record.potential_duplicate_observation.current_severity !== undefined) {
+    } else if (record.potential_duplicate_observation !== undefined && record.potential_duplicate_observation.current_severity !== undefined) {
         return record.potential_duplicate_observation.current_severity;
+    } else if (record.issue_tracker_minimum_severity !== undefined) {
+        return record.issue_tracker_minimum_severity;
     } else {
         return null;
     }
@@ -28,6 +31,7 @@ export const SeverityField = (props: SeverityProps) => {
             sx={{
                 backgroundColor: get_severity_color(get_current_severity(record)),
                 color: "white",
+                width: "fit-content",
             }}
         />
     ) : null;

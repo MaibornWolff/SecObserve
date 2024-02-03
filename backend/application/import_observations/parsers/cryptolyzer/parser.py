@@ -4,6 +4,7 @@ from typing import Optional
 from django.core.files.base import File
 
 from application.core.models import Observation, Parser
+from application.core.types import Severity
 from application.import_observations.parsers.base_parser import (
     BaseFileParser,
     BaseParser,
@@ -184,7 +185,7 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
         observation = Observation(
             title="Weak protocols detected",
             description=description,
-            parser_severity=Observation.SEVERITY_HIGH,
+            parser_severity=Severity.SEVERITY_HIGH,
             origin_endpoint_url=endpoint_url,
             scanner=self.get_name(),
         )
@@ -224,7 +225,7 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
                     observation = Observation(
                         title="Unrecommended " + protocol_name + " cipher suites",
                         description=description,
-                        parser_severity=Observation.SEVERITY_MEDIUM,
+                        parser_severity=Severity.SEVERITY_MEDIUM,
                         origin_endpoint_url=endpoint_url,
                         scanner=self.get_name(),
                     )
@@ -262,7 +263,7 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
         observation = Observation(
             title="Unrecommended elliptic curves",
             description=description,
-            parser_severity=Observation.SEVERITY_MEDIUM,
+            parser_severity=Severity.SEVERITY_MEDIUM,
             origin_endpoint_url=endpoint_url,
             scanner=self.get_name(),
         )
@@ -301,7 +302,7 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
         observation = Observation(
             title="Unrecommended signature algorithms",
             description=description,
-            parser_severity=Observation.SEVERITY_MEDIUM,
+            parser_severity=Severity.SEVERITY_MEDIUM,
             origin_endpoint_url=endpoint_url,
             scanner=self.get_name(),
         )

@@ -1,6 +1,7 @@
 from unittest.mock import patch
 
 from application.core.models import Observation, Parser, Product
+from application.core.types import Severity
 from unittests.base_test_case import BaseTestCase
 
 
@@ -17,7 +18,7 @@ class TestProduct(BaseTestCase):
         mock.assert_called_with(
             product=product,
             branch=None,
-            current_severity=Observation.SEVERITY_CRITICAL,
+            current_severity=Severity.SEVERITY_CRITICAL,
             current_status=Observation.STATUS_OPEN,
         )
 
@@ -29,7 +30,7 @@ class TestProduct(BaseTestCase):
         mock.assert_called_with(
             product=product,
             branch=None,
-            current_severity=Observation.SEVERITY_HIGH,
+            current_severity=Severity.SEVERITY_HIGH,
             current_status=Observation.STATUS_OPEN,
         )
 
@@ -41,7 +42,7 @@ class TestProduct(BaseTestCase):
         mock.assert_called_with(
             product=product,
             branch=None,
-            current_severity=Observation.SEVERITY_MEDIUM,
+            current_severity=Severity.SEVERITY_MEDIUM,
             current_status=Observation.STATUS_OPEN,
         )
 
@@ -53,7 +54,7 @@ class TestProduct(BaseTestCase):
         mock.assert_called_with(
             product=product,
             branch=None,
-            current_severity=Observation.SEVERITY_LOW,
+            current_severity=Severity.SEVERITY_LOW,
             current_status=Observation.STATUS_OPEN,
         )
 
@@ -65,7 +66,7 @@ class TestProduct(BaseTestCase):
         mock.assert_called_with(
             product=product,
             branch=None,
-            current_severity=Observation.SEVERITY_NONE,
+            current_severity=Severity.SEVERITY_NONE,
             current_status=Observation.STATUS_OPEN,
         )
 
@@ -77,7 +78,7 @@ class TestProduct(BaseTestCase):
         mock.assert_called_with(
             product=product,
             branch=None,
-            current_severity=Observation.SEVERITY_UNKOWN,
+            current_severity=Severity.SEVERITY_UNKOWN,
             current_status=Observation.STATUS_OPEN,
         )
 

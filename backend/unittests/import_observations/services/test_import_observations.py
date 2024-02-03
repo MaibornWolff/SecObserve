@@ -13,6 +13,7 @@ from application.core.models import (
     Product,
     Reference,
 )
+from application.core.types import Severity
 from application.import_observations.apps import _register_parser
 from application.import_observations.models import Vulnerability_Check
 from application.import_observations.services.import_observations import (
@@ -240,7 +241,7 @@ class TestImportObservations(BaseTestCase):
         self.assertEqual(len(observation_logs), 7)
 
         self.assertEqual(observation_logs[4].observation, observations[1])
-        self.assertEqual(observation_logs[4].severity, Observation.SEVERITY_HIGH)
+        self.assertEqual(observation_logs[4].severity, Severity.SEVERITY_HIGH)
         self.assertEqual(observation_logs[4].status, "")
         self.assertEqual(observation_logs[4].comment, "Updated by parser")
 

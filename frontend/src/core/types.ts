@@ -30,6 +30,7 @@ export interface Product extends RaRecord {
     issue_tracker_labels: string;
     issue_tracker_issue_type: string;
     issue_tracker_status_closed: string;
+    issue_tracker_minimum_severity: string;
     last_observation_change: string;
 }
 

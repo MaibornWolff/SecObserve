@@ -1,6 +1,7 @@
 from typing import Optional
 
 from jira.client import JIRA
+from jira.exceptions import JIRAError
 from jira.resources import Issue as JiraIssue
 
 from application.commons.services.functions import get_base_url_frontend
@@ -22,7 +23,7 @@ class JiraIssueTracker(BaseIssueTracker):
                 ),
             )
 
-    def create_issue(self, observation: Observation) -> None:
+    def create_issue(self, observation: Observation) -> str:
         labels = observation.product.issue_tracker_labels.split(",")
 
         jira_issue = self.jira.create_issue(
@@ -33,9 +34,10 @@ class JiraIssueTracker(BaseIssueTracker):
             issuetype=observation.product.issue_tracker_issue_type,
         )
 
-        observation.issue_tracker_issue_id = jira_issue.key
         observation.issue_tracker_jira_initial_status = str(jira_issue.fields.status)
         observation.save()
+
+        return jira_issue.key
 
     def get_issue(self, product: Product, issue_id: str) -> Optional[Issue]:
         jira_issue = self._get_jira_issue(issue_id)
@@ -125,4 +127,9 @@ class JiraIssueTracker(BaseIssueTracker):
         return description
 
     def _get_jira_issue(self, issue_id: str) -> Optional[JiraIssue]:
-        return self.jira.issue(issue_id, fields="summary,description,labels,status")
+        try:
+            return self.jira.issue(issue_id, fields="summary,description,labels,status")
+        except JIRAError as e:
+            if e.status_code == 404:
+                return None
+            raise

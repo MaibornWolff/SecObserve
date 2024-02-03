@@ -8,6 +8,7 @@ from application.core.services.observation import (
     get_identity_hash,
     normalize_observation_fields,
 )
+from application.core.types import Severity
 from unittests.base_test_case import BaseTestCase
 
 
@@ -63,81 +64,79 @@ class TestObservation(BaseTestCase):
     def test_get_current_severity_unkown(self):
         observation = Observation(
             title="unkown",
-            current_severity=Observation.SEVERITY_NONE,
+            current_severity=Severity.SEVERITY_NONE,
         )
-        self.assertEqual(Observation.SEVERITY_UNKOWN, get_current_severity(observation))
+        self.assertEqual(Severity.SEVERITY_UNKOWN, get_current_severity(observation))
 
     def test_get_current_severity_assessment(self):
         observation = Observation(
             title="assessment_severity",
-            current_severity=Observation.SEVERITY_NONE,
-            parser_severity=Observation.SEVERITY_LOW,
-            rule_severity=Observation.SEVERITY_LOW,
-            assessment_severity=Observation.SEVERITY_MEDIUM,
+            current_severity=Severity.SEVERITY_NONE,
+            parser_severity=Severity.SEVERITY_LOW,
+            rule_severity=Severity.SEVERITY_LOW,
+            assessment_severity=Severity.SEVERITY_MEDIUM,
             cvss3_score=9.5,
         )
-        self.assertEqual(Observation.SEVERITY_MEDIUM, get_current_severity(observation))
+        self.assertEqual(Severity.SEVERITY_MEDIUM, get_current_severity(observation))
 
     def test_get_current_severity_rule(self):
         observation = Observation(
             title="rule_severity",
-            current_severity=Observation.SEVERITY_NONE,
-            parser_severity=Observation.SEVERITY_LOW,
-            rule_severity=Observation.SEVERITY_MEDIUM,
+            current_severity=Severity.SEVERITY_NONE,
+            parser_severity=Severity.SEVERITY_LOW,
+            rule_severity=Severity.SEVERITY_MEDIUM,
             cvss3_score=9.5,
         )
-        self.assertEqual(Observation.SEVERITY_MEDIUM, get_current_severity(observation))
+        self.assertEqual(Severity.SEVERITY_MEDIUM, get_current_severity(observation))
 
     def test_get_current_severity_parser(self):
         observation = Observation(
             title="parser_severity",
-            current_severity=Observation.SEVERITY_NONE,
-            parser_severity=Observation.SEVERITY_LOW,
+            current_severity=Severity.SEVERITY_NONE,
+            parser_severity=Severity.SEVERITY_LOW,
             cvss3_score=9.5,
         )
-        self.assertEqual(Observation.SEVERITY_LOW, get_current_severity(observation))
+        self.assertEqual(Severity.SEVERITY_LOW, get_current_severity(observation))
 
     def test_get_current_severity_cvss_critical(self):
         observation = Observation(
             title="parser_severity",
-            current_severity=Observation.SEVERITY_NONE,
+            current_severity=Severity.SEVERITY_NONE,
             cvss3_score=9,
         )
-        self.assertEqual(
-            Observation.SEVERITY_CRITICAL, get_current_severity(observation)
-        )
+        self.assertEqual(Severity.SEVERITY_CRITICAL, get_current_severity(observation))
 
     def test_get_current_severity_cvss_high(self):
         observation = Observation(
             title="parser_severity",
-            current_severity=Observation.SEVERITY_NONE,
+            current_severity=Severity.SEVERITY_NONE,
             cvss3_score=7,
         )
-        self.assertEqual(Observation.SEVERITY_HIGH, get_current_severity(observation))
+        self.assertEqual(Severity.SEVERITY_HIGH, get_current_severity(observation))
 
     def test_get_current_severity_cvss_medium(self):
         observation = Observation(
             title="parser_severity",
-            current_severity=Observation.SEVERITY_NONE,
+            current_severity=Severity.SEVERITY_NONE,
             cvss3_score=4,
         )
-        self.assertEqual(Observation.SEVERITY_MEDIUM, get_current_severity(observation))
+        self.assertEqual(Severity.SEVERITY_MEDIUM, get_current_severity(observation))
 
     def test_get_current_severity_cvss_low(self):
         observation = Observation(
             title="parser_severity",
-            current_severity=Observation.SEVERITY_NONE,
+            current_severity=Severity.SEVERITY_NONE,
             cvss3_score=0.1,
         )
-        self.assertEqual(Observation.SEVERITY_LOW, get_current_severity(observation))
+        self.assertEqual(Severity.SEVERITY_LOW, get_current_severity(observation))
 
     def test_get_current_severity_cvss_none(self):
         observation = Observation(
             title="parser_severity",
-            current_severity=Observation.SEVERITY_MEDIUM,
+            current_severity=Severity.SEVERITY_MEDIUM,
             cvss3_score=0,
         )
-        self.assertEqual(Observation.SEVERITY_NONE, get_current_severity(observation))
+        self.assertEqual(Severity.SEVERITY_NONE, get_current_severity(observation))
 
     # --- get_current_status ---
 
@@ -187,7 +186,7 @@ class TestObservation(BaseTestCase):
         before_observation = Observation(title="empty")
         after_observation = deepcopy(before_observation)
 
-        before_observation.current_severity = Observation.SEVERITY_UNKOWN
+        before_observation.current_severity = Severity.SEVERITY_UNKOWN
         before_observation.numerical_severity = 6
         before_observation.current_status = Observation.STATUS_OPEN
 
@@ -208,7 +207,7 @@ class TestObservation(BaseTestCase):
                     after_observation.__dict__[key] = None
                     value = None
 
-        before_observation.current_severity = Observation.SEVERITY_UNKOWN
+        before_observation.current_severity = Severity.SEVERITY_UNKOWN
         before_observation.numerical_severity = 6
         before_observation.current_status = Observation.STATUS_OPEN
 
@@ -223,7 +222,7 @@ class TestObservation(BaseTestCase):
         )
         after_observation = deepcopy(before_observation)
 
-        before_observation.current_severity = Observation.SEVERITY_UNKOWN
+        before_observation.current_severity = Severity.SEVERITY_UNKOWN
         before_observation.numerical_severity = 6
         before_observation.current_status = Observation.STATUS_OPEN
         before_observation.description = "desc"
@@ -241,7 +240,7 @@ class TestObservation(BaseTestCase):
         )
         after_observation = deepcopy(before_observation)
 
-        before_observation.current_severity = Observation.SEVERITY_UNKOWN
+        before_observation.current_severity = Severity.SEVERITY_UNKOWN
         before_observation.numerical_severity = 6
         before_observation.current_status = Observation.STATUS_OPEN
         before_observation.origin_component_name = "component_name"
@@ -257,7 +256,7 @@ class TestObservation(BaseTestCase):
         )
         after_observation = deepcopy(before_observation)
 
-        before_observation.current_severity = Observation.SEVERITY_UNKOWN
+        before_observation.current_severity = Severity.SEVERITY_UNKOWN
         before_observation.numerical_severity = 6
         before_observation.current_status = Observation.STATUS_OPEN
         before_observation.origin_component_name = "component_name"
@@ -274,7 +273,7 @@ class TestObservation(BaseTestCase):
         )
         after_observation = deepcopy(before_observation)
 
-        before_observation.current_severity = Observation.SEVERITY_UNKOWN
+        before_observation.current_severity = Severity.SEVERITY_UNKOWN
         before_observation.numerical_severity = 6
         before_observation.current_status = Observation.STATUS_OPEN
         before_observation.origin_component_name_version = (
@@ -290,7 +289,7 @@ class TestObservation(BaseTestCase):
         )
         after_observation = deepcopy(before_observation)
 
-        before_observation.current_severity = Observation.SEVERITY_UNKOWN
+        before_observation.current_severity = Severity.SEVERITY_UNKOWN
         before_observation.numerical_severity = 6
         before_observation.current_status = Observation.STATUS_OPEN
         before_observation.origin_component_name_version = "component_name"
@@ -304,7 +303,7 @@ class TestObservation(BaseTestCase):
         )
         after_observation = deepcopy(before_observation)
 
-        before_observation.current_severity = Observation.SEVERITY_UNKOWN
+        before_observation.current_severity = Severity.SEVERITY_UNKOWN
         before_observation.numerical_severity = 6
         before_observation.current_status = Observation.STATUS_OPEN
         before_observation.origin_docker_image_name = "docker_image_name"
@@ -320,7 +319,7 @@ class TestObservation(BaseTestCase):
         )
         after_observation = deepcopy(before_observation)
 
-        before_observation.current_severity = Observation.SEVERITY_UNKOWN
+        before_observation.current_severity = Severity.SEVERITY_UNKOWN
         before_observation.numerical_severity = 6
         before_observation.current_status = Observation.STATUS_OPEN
         before_observation.origin_docker_image_name = "docker_image_name"
@@ -342,7 +341,7 @@ class TestObservation(BaseTestCase):
         )
         after_observation = deepcopy(before_observation)
 
-        before_observation.current_severity = Observation.SEVERITY_UNKOWN
+        before_observation.current_severity = Severity.SEVERITY_UNKOWN
         before_observation.numerical_severity = 6
         before_observation.current_status = Observation.STATUS_OPEN
         before_observation.origin_docker_image_name_tag = (
@@ -361,7 +360,7 @@ class TestObservation(BaseTestCase):
         )
         after_observation = deepcopy(before_observation)
 
-        before_observation.current_severity = Observation.SEVERITY_UNKOWN
+        before_observation.current_severity = Severity.SEVERITY_UNKOWN
         before_observation.numerical_severity = 6
         before_observation.current_status = Observation.STATUS_OPEN
         before_observation.origin_docker_image_name_tag = "docker_image_name"

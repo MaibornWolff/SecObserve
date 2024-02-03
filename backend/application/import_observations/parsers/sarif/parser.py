@@ -6,16 +6,17 @@ from django.core.files.base import File
 from packageurl import PackageURL
 
 from application.core.models import Observation, Parser
+from application.core.types import Severity
 from application.import_observations.parsers.base_parser import (
     BaseFileParser,
     BaseParser,
 )
 
 SEVERITIES = {
-    "error": Observation.SEVERITY_HIGH,
-    "warning": Observation.SEVERITY_MEDIUM,
-    "note": Observation.SEVERITY_LOW,
-    "none": Observation.SEVERITY_NONE,
+    "error": Severity.SEVERITY_HIGH,
+    "warning": Severity.SEVERITY_MEDIUM,
+    "note": Severity.SEVERITY_LOW,
+    "none": Severity.SEVERITY_NONE,
 }
 
 
@@ -243,17 +244,17 @@ class SARIFParser(BaseParser, BaseFileParser):
         sarif_level = result.get("level")
         if sarif_level:
             parser_severity = SEVERITIES.get(
-                sarif_level.lower(), Observation.SEVERITY_UNKOWN
+                sarif_level.lower(), Severity.SEVERITY_UNKOWN
             )
         elif sarif_rule.default_level:
             parser_severity = SEVERITIES.get(
                 sarif_rule.default_level.lower(),
-                Observation.SEVERITY_UNKOWN,
+                Severity.SEVERITY_UNKOWN,
             )
         elif self.get_bandit_severity(sarif_scanner, result):
             parser_severity = self.get_bandit_severity(sarif_scanner, result)
         else:
-            parser_severity = Observation.SEVERITY_UNKOWN
+            parser_severity = Severity.SEVERITY_UNKOWN
 
         return parser_severity
 

@@ -3,6 +3,7 @@ from json import dumps, load
 from django.core.files.base import File
 
 from application.core.models import Observation, Parser
+from application.core.types import Severity
 from application.import_observations.parsers.base_parser import (
     BaseFileParser,
     BaseParser,
@@ -57,10 +58,10 @@ class ProwlerParser(BaseParser, BaseFileParser):
                     "StatusExtended", "No StatusExtended found"
                 )
                 severity = prowler_observation.get(
-                    "Severity", Observation.SEVERITY_UNKOWN
+                    "Severity", Severity.SEVERITY_UNKOWN
                 ).capitalize()
                 if severity == "Informational":
-                    severity = Observation.SEVERITY_NONE
+                    severity = Severity.SEVERITY_NONE
 
                 description = self.get_description(prowler_observation)
                 recommendation = self.get_recommendation(prowler_observation)

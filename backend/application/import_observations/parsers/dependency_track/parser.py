@@ -4,6 +4,7 @@ from typing import Optional
 import requests
 
 from application.core.models import Observation, Parser
+from application.core.types import Severity
 from application.import_observations.models import Api_Configuration
 from application.import_observations.parsers.base_parser import (
     BaseAPIParser,
@@ -78,7 +79,7 @@ class DependencyTrack(BaseParser, BaseAPIParser):
             cvss_v3_base_score = finding.get("vulnerability", {}).get("cvssV3BaseScore")
             cvss_v3_vector = finding.get("vulnerability", {}).get("cvssV3Vector")
             severity = finding.get("vulnerability", {}).get(
-                "severity", Observation.SEVERITY_UNKOWN
+                "severity", Severity.SEVERITY_UNKOWN
             )
             description = finding.get("vulnerability", {}).get("description")
 
@@ -124,10 +125,10 @@ class DependencyTrack(BaseParser, BaseAPIParser):
         if (
             severity.capitalize(),
             severity.capitalize(),
-        ) in Observation.SEVERITY_CHOICES:
+        ) in Severity.SEVERITY_CHOICES:
             return severity.capitalize()
 
-        return Observation.SEVERITY_UNKOWN
+        return Severity.SEVERITY_UNKOWN
 
     def get_cwe(self, cwes: list[dict]) -> int | None:
         if cwes:

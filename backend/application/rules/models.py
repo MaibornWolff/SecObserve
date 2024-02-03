@@ -9,6 +9,7 @@ from django.db.models import (
 )
 
 from application.core.models import Observation, Parser, Product
+from application.core.types import Severity
 
 
 class Rule(Model):
@@ -26,7 +27,7 @@ class Rule(Model):
     origin_source_file = CharField(max_length=255, blank=True)
     origin_cloud_qualified_resource = CharField(max_length=255, blank=True)
     new_severity = CharField(
-        max_length=12, choices=Observation.SEVERITY_CHOICES, blank=True
+        max_length=12, choices=Severity.SEVERITY_CHOICES, blank=True
     )
     new_status = CharField(
         max_length=16, choices=Observation.STATUS_CHOICES, blank=True

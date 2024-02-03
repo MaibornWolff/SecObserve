@@ -1,7 +1,7 @@
 from os import path
 from unittest import TestCase
 
-from application.core.models import Observation
+from application.core.models import Severity
 from application.import_observations.parsers.sarif.parser import SARIFParser
 
 
@@ -68,7 +68,7 @@ class TestSarifParser(TestCase):
             )
             self.assertEqual(1, observation.origin_source_line_start)
             self.assertEqual(41, observation.origin_source_line_end)
-            self.assertEqual(Observation.SEVERITY_HIGH, observation.parser_severity)
+            self.assertEqual(Severity.SEVERITY_HIGH, observation.parser_severity)
             self.assertEqual(
                 "https://docs.bridgecrew.io/docs/ensure-that-healthcheck-instructions-have-been-added-to-container-images",
                 observation.unsaved_references[0],
@@ -105,7 +105,7 @@ class TestSarifParser(TestCase):
             )
             self.assertEqual(19, observation.origin_source_line_start)
             self.assertEqual(19, observation.origin_source_line_end)
-            self.assertEqual(Observation.SEVERITY_MEDIUM, observation.parser_severity)
+            self.assertEqual(Severity.SEVERITY_MEDIUM, observation.parser_severity)
             self.assertEqual(
                 "https://typescript-eslint.io/rules/no-unused-vars",
                 observation.unsaved_references[0],
@@ -149,7 +149,7 @@ class TestSarifParser(TestCase):
             )
             self.assertEqual(14, observation.origin_source_line_start)
             self.assertIsNone(observation.origin_source_line_end)
-            self.assertEqual(Observation.SEVERITY_MEDIUM, observation.parser_severity)
+            self.assertEqual(Severity.SEVERITY_MEDIUM, observation.parser_severity)
             self.assertEqual(
                 "https://bandit.readthedocs.io/en/1.7.4/plugins/b104_hardcoded_bind_all_interfaces.html",
                 observation.unsaved_references[0],
@@ -183,7 +183,7 @@ class TestSarifParser(TestCase):
             )
             self.assertEqual(34, observation.origin_source_line_start)
             self.assertIsNone(observation.origin_source_line_end)
-            self.assertEqual(Observation.SEVERITY_HIGH, observation.parser_severity)
+            self.assertEqual(Severity.SEVERITY_HIGH, observation.parser_severity)
             self.assertEqual(
                 "https://docs.docker.com/compose/compose-file/#volumes",
                 observation.unsaved_references[0],
@@ -231,7 +231,7 @@ Set when the resource will be become inactive.
             )
             self.assertEqual(164, observation.origin_source_line_start)
             self.assertEqual(176, observation.origin_source_line_end)
-            self.assertEqual(Observation.SEVERITY_MEDIUM, observation.parser_severity)
+            self.assertEqual(Severity.SEVERITY_MEDIUM, observation.parser_severity)
             self.assertEqual(
                 "https://avd.aquasec.com/misconfig/avd-azu-0014",
                 observation.unsaved_references[0],
@@ -297,7 +297,7 @@ Set when the resource will be become inactive.
             )
             self.assertEqual(27, observation.origin_source_line_start)
             self.assertEqual(33, observation.origin_source_line_end)
-            self.assertEqual(Observation.SEVERITY_MEDIUM, observation.parser_severity)
+            self.assertEqual(Severity.SEVERITY_MEDIUM, observation.parser_severity)
             self.assertEqual(
                 "https://semgrep.dev/r/typescript.react.portability.i18next.jsx-not-internationalized.jsx-not-internationalized",
                 observation.unsaved_references[0],
