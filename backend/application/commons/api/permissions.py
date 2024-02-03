@@ -14,6 +14,8 @@ class UserHasNotificationPermission(BasePermission):
                 None,
                 Permissions.Product_Delete,
             )
-        else:
-            if request.user.is_superuser:
-                return True
+
+        if request.user and request.user.is_superuser:
+            return True
+
+        return False
