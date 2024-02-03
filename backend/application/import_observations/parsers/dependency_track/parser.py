@@ -3,13 +3,14 @@ from typing import Optional
 
 import requests
 
-from application.core.models import Observation, Parser
+from application.core.models import Observation
 from application.core.types import Severity, Status
 from application.import_observations.models import Api_Configuration
 from application.import_observations.parsers.base_parser import (
     BaseAPIParser,
     BaseParser,
 )
+from application.import_observations.types import Parser_Type
 
 STATUS_MAPPING = {
     "NOT_SET": "",
@@ -31,7 +32,7 @@ class DependencyTrack(BaseParser, BaseAPIParser):
 
     @classmethod
     def get_type(cls) -> str:
-        return Parser.TYPE_SCA
+        return Parser_Type.TYPE_SCA
 
     def check_connection(
         self, api_configuration: Api_Configuration

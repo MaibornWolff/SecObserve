@@ -9,6 +9,7 @@ from application.import_observations.parsers.base_parser import (
     BaseFileParser,
     BaseParser,
 )
+from application.import_observations.types import Parser_Source, Parser_Type
 
 logger = logging.getLogger("secobserve.import_observations")
 
@@ -29,13 +30,13 @@ def register_parser(parser_class: Type[BaseParser]) -> None:
 
     SCANNERS[name] = parser_class
 
-    source = Parser.SOURCE_UNKOWN
+    source = Parser_Source.SOURCE_UNKOWN
     for base in parser_class.__bases__:
         if base is BaseAPIParser:
-            source = Parser.SOURCE_API
+            source = Parser_Source.SOURCE_API
             break
         if base is BaseFileParser:
-            source = Parser.SOURCE_FILE
+            source = Parser_Source.SOURCE_FILE
             break
 
     parser = get_parser_by_name(name)
@@ -55,15 +56,17 @@ def register_parser(parser_class: Type[BaseParser]) -> None:
 
 def create_manual_parser() -> None:
     try:
-        Parser.objects.get(type=Parser.TYPE_MANUAL)
+        Parser.objects.get(type=Parser_Type.TYPE_MANUAL)
     except Parser.DoesNotExist:
         Parser(
-            name="Manual", source=Parser.SOURCE_MANUAL, type=Parser.TYPE_MANUAL
+            name="Manual",
+            source=Parser_Source.SOURCE_MANUAL,
+            type=Parser_Type.TYPE_MANUAL,
         ).save()
     except Parser.MultipleObjectsReturned:
         # Delete all manual parsers except the first one
         first_parser = True
-        for parser in Parser.objects.filter(type=Parser.TYPE_MANUAL):
+        for parser in Parser.objects.filter(type=Parser_Type.TYPE_MANUAL):
             if first_parser:
                 first_parser = False
             else:

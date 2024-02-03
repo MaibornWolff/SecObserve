@@ -5,12 +5,13 @@ from typing import Optional, Tuple
 from django.core.files.base import File
 from packageurl import PackageURL
 
-from application.core.models import Observation, Parser
+from application.core.models import Observation
 from application.core.types import Severity
 from application.import_observations.parsers.base_parser import (
     BaseFileParser,
     BaseParser,
 )
+from application.import_observations.types import Parser_Type
 
 SEVERITIES = {
     "error": Severity.SEVERITY_HIGH,
@@ -48,7 +49,7 @@ class SARIFParser(BaseParser, BaseFileParser):
 
     @classmethod
     def get_type(cls) -> str:
-        return Parser.TYPE_SAST
+        return Parser_Type.TYPE_SAST
 
     def check_format(self, file: File) -> tuple[bool, list[str], dict]:
         try:

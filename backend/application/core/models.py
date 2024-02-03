@@ -23,6 +23,7 @@ from application.core.services.observation import (
     normalize_observation_fields,
 )
 from application.core.types import Severity, Status
+from application.import_observations.types import Parser_Source, Parser_Type
 from application.issue_tracker.types import Issue_Tracker
 
 
@@ -347,41 +348,9 @@ class Product_Member(Model):
 
 
 class Parser(Model):
-    TYPE_SCA = "SCA"
-    TYPE_SAST = "SAST"
-    TYPE_DAST = "DAST"
-    TYPE_IAST = "IAST"
-    TYPE_SECRETS = "Secrets"
-    TYPE_INFRASTRUCTURE = "Infrastructure"
-    TYPE_OTHER = "Other"
-    TYPE_MANUAL = "Manual"
-
-    TYPE_CHOICES = [
-        (TYPE_SCA, TYPE_SCA),
-        (TYPE_SAST, TYPE_SAST),
-        (TYPE_DAST, TYPE_DAST),
-        (TYPE_IAST, TYPE_IAST),
-        (TYPE_SECRETS, TYPE_SECRETS),
-        (TYPE_INFRASTRUCTURE, TYPE_INFRASTRUCTURE),
-        (TYPE_OTHER, TYPE_OTHER),
-        (TYPE_MANUAL, TYPE_MANUAL),
-    ]
-
-    SOURCE_API = "API"
-    SOURCE_FILE = "File"
-    SOURCE_MANUAL = "Manual"
-    SOURCE_UNKOWN = "Unkown"
-
-    SOURCE_CHOICES = [
-        (SOURCE_API, SOURCE_API),
-        (SOURCE_FILE, SOURCE_FILE),
-        (SOURCE_MANUAL, SOURCE_MANUAL),
-        (SOURCE_UNKOWN, SOURCE_UNKOWN),
-    ]
-
     name = CharField(max_length=255, unique=True)
-    type = CharField(max_length=16, choices=TYPE_CHOICES)
-    source = CharField(max_length=16, choices=SOURCE_CHOICES)
+    type = CharField(max_length=16, choices=Parser_Type.TYPE_CHOICES)
+    source = CharField(max_length=16, choices=Parser_Source.SOURCE_CHOICES)
 
     class Meta:
         indexes = [

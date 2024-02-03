@@ -37,6 +37,7 @@ from application.core.queries.product_member import get_product_member
 from application.core.services.observation_log import create_observation_log
 from application.core.services.security_gate import check_security_gate
 from application.core.types import Severity, Status
+from application.import_observations.types import Parser_Type
 from application.issue_tracker.services.issue_tracker import (
     issue_tracker_factory,
     push_observation_to_issue_tracker,
@@ -565,7 +566,7 @@ class ObservationListSerializer(ModelSerializer):
 class ObservationUpdateSerializer(ModelSerializer):
     def validate(self, attrs: dict):
         self.instance: Observation
-        if self.instance and self.instance.parser.type != Parser.TYPE_MANUAL:
+        if self.instance and self.instance.parser.type != Parser_Type.TYPE_MANUAL:
             raise ValidationError("Only manual observations can be updated")
 
         attrs["import_last_seen"] = timezone.now()
@@ -651,8 +652,8 @@ class ObservationUpdateSerializer(ModelSerializer):
 
 class ObservationCreateSerializer(ModelSerializer):
     def validate(self, attrs):
-        attrs["parser"] = Parser.objects.get(type=Parser.TYPE_MANUAL)
-        attrs["scanner"] = Parser.TYPE_MANUAL
+        attrs["parser"] = Parser.objects.get(type=Parser_Type.TYPE_MANUAL)
+        attrs["scanner"] = Parser_Type.TYPE_MANUAL
         attrs["import_last_seen"] = timezone.now()
 
         if attrs.get("branch"):
