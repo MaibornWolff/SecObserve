@@ -1,7 +1,7 @@
 from os import path
 from unittest import TestCase
 
-from application.core.models import Severity
+from application.core.types import Severity
 from application.import_observations.parsers.drheader.parser import DrHEADerParser
 
 
