@@ -41,6 +41,7 @@ from application.issue_tracker.services.issue_tracker import (
     issue_tracker_factory,
     push_observation_to_issue_tracker,
 )
+from application.issue_tracker.types import Issue_Tracker
 
 
 class ProductCoreSerializer(ModelSerializer):
@@ -200,7 +201,7 @@ class ProductSerializer(ProductCoreSerializer):
 
     def validate(self, attrs: dict):  # pylint: disable=too-many-branches
         # There are quite a lot of branches, but at least they are not nested too much
-        if attrs.get("issue_tracker_type") == Product.ISSUE_TRACKER_GITHUB:
+        if attrs.get("issue_tracker_type") == Issue_Tracker.ISSUE_TRACKER_GITHUB:
             attrs["issue_tracker_base_url"] = "https://api.github.com"
 
         if not (
@@ -223,7 +224,7 @@ class ProductSerializer(ProductCoreSerializer):
                 "Issue tracker data must be set when issue tracking is active"
             )
 
-        if attrs.get("issue_tracker_type") == Product.ISSUE_TRACKER_JIRA:
+        if attrs.get("issue_tracker_type") == Issue_Tracker.ISSUE_TRACKER_JIRA:
             if not attrs.get("issue_tracker_username"):
                 raise ValidationError(
                     "Username must be set when issue tracker type is Jira"
@@ -239,7 +240,7 @@ class ProductSerializer(ProductCoreSerializer):
 
         if (
             attrs.get("issue_tracker_type")
-            and attrs.get("issue_tracker_type") != Product.ISSUE_TRACKER_JIRA
+            and attrs.get("issue_tracker_type") != Issue_Tracker.ISSUE_TRACKER_JIRA
         ):
             if attrs.get("issue_tracker_username"):
                 raise ValidationError(

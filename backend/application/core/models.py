@@ -23,19 +23,10 @@ from application.core.services.observation import (
     normalize_observation_fields,
 )
 from application.core.types import Severity, Status
+from application.issue_tracker.types import Issue_Tracker
 
 
 class Product(Model):
-    ISSUE_TRACKER_GITHUB = "GitHub"
-    ISSUE_TRACKER_GITLAB = "GitLab"
-    ISSUE_TRACKER_JIRA = "Jira"
-
-    ISSUE_TRACKER_TYPE_CHOICES = [
-        (ISSUE_TRACKER_GITHUB, ISSUE_TRACKER_GITHUB),
-        (ISSUE_TRACKER_GITLAB, ISSUE_TRACKER_GITLAB),
-        (ISSUE_TRACKER_JIRA, ISSUE_TRACKER_JIRA),
-    ]
-
     name = CharField(max_length=255, unique=True)
     description = TextField(max_length=2048, blank=True)
 
@@ -91,7 +82,7 @@ class Product(Model):
 
     issue_tracker_active = BooleanField(default=False)
     issue_tracker_type = CharField(
-        max_length=12, choices=ISSUE_TRACKER_TYPE_CHOICES, blank=True
+        max_length=12, choices=Issue_Tracker.ISSUE_TRACKER_TYPE_CHOICES, blank=True
     )
     issue_tracker_base_url = CharField(max_length=255, blank=True)
     issue_tracker_username = CharField(max_length=255, blank=True)

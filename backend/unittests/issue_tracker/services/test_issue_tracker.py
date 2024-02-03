@@ -18,6 +18,7 @@ from application.issue_tracker.services.issue_tracker import (
     push_observation_to_issue_tracker,
     push_observations_to_issue_tracker,
 )
+from application.issue_tracker.types import Issue_Tracker
 from unittests.base_test_case import BaseTestCase
 
 
@@ -365,12 +366,12 @@ class TestIssueTracker(BaseTestCase):
 
     def test_issue_tracker_factory_GitHub(self):
         product = Product.objects.get(pk=1)
-        product.issue_tracker_type = Product.ISSUE_TRACKER_GITHUB
+        product.issue_tracker_type = Issue_Tracker.ISSUE_TRACKER_GITHUB
         self.assertIsInstance(issue_tracker_factory(product), GitHubIssueTracker)
 
     def test_issue_tracker_factory_GitLab(self):
         product = Product.objects.get(pk=1)
-        product.issue_tracker_type = Product.ISSUE_TRACKER_GITLAB
+        product.issue_tracker_type = Issue_Tracker.ISSUE_TRACKER_GITLAB
         self.assertIsInstance(issue_tracker_factory(product), GitLabIssueTracker)
 
     def test_issue_tracker_exception(self):
