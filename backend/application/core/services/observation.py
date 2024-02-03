@@ -190,25 +190,10 @@ def normalize_origin_component(observation):  # pylint: disable=too-many-branche
 
 def normalize_origin_docker(observation):
     if not observation.origin_docker_image_name_tag:
-        if observation.origin_docker_image_name and observation.origin_docker_image_tag:
-            observation.origin_docker_image_name_tag = (
-                observation.origin_docker_image_name
-                + ":"
-                + observation.origin_docker_image_tag
-            )
-        elif observation.origin_docker_image_name:
-            observation.origin_docker_image_name_tag = (
-                observation.origin_docker_image_name
-            )
+        _normalize_origin_docker_image_name(observation)
     else:
-        docker_image_parts = observation.origin_docker_image_name_tag.split(":")
-        if len(docker_image_parts) == 2:
-            observation.origin_docker_image_name = docker_image_parts[0]
-            observation.origin_docker_image_tag = docker_image_parts[1]
-        else:
-            observation.origin_docker_image_name = (
-                observation.origin_docker_image_name_tag
-            )
+        _normalize_origin_docker_image_name_tag(observation)
+
     if observation.origin_docker_image_name_tag:
         origin_docker_image_name_tag_parts = (
             observation.origin_docker_image_name_tag.split("/")
@@ -229,6 +214,32 @@ def normalize_origin_docker(observation):
         observation.origin_docker_image_tag = ""
     if observation.origin_docker_image_digest is None:
         observation.origin_docker_image_digest = ""
+
+
+def _normalize_origin_docker_image_name(observation):
+    if observation.origin_docker_image_name and not observation.origin_docker_image_tag:
+        docker_image_parts = observation.origin_docker_image_name.split(":")
+        if len(docker_image_parts) == 2:
+            observation.origin_docker_image_name = docker_image_parts[0]
+            observation.origin_docker_image_tag = docker_image_parts[1]
+
+    if observation.origin_docker_image_name and observation.origin_docker_image_tag:
+        observation.origin_docker_image_name_tag = (
+            observation.origin_docker_image_name
+            + ":"
+            + observation.origin_docker_image_tag
+        )
+    else:
+        observation.origin_docker_image_name_tag = observation.origin_docker_image_name
+
+
+def _normalize_origin_docker_image_name_tag(observation):
+    docker_image_parts = observation.origin_docker_image_name_tag.split(":")
+    if len(docker_image_parts) == 2:
+        observation.origin_docker_image_name = docker_image_parts[0]
+        observation.origin_docker_image_tag = docker_image_parts[1]
+    else:
+        observation.origin_docker_image_name = observation.origin_docker_image_name_tag
 
 
 def normalize_origin_endpoint(observation):
