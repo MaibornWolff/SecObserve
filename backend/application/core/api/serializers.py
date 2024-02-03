@@ -36,11 +36,13 @@ from application.core.models import (
 from application.core.queries.product_member import get_product_member
 from application.core.services.observation_log import create_observation_log
 from application.core.services.security_gate import check_security_gate
-from application.core.types import Severity
+from application.core.types import Severity, Status
+from application.import_observations.types import Parser_Type
 from application.issue_tracker.services.issue_tracker import (
     issue_tracker_factory,
     push_observation_to_issue_tracker,
 )
+from application.issue_tracker.types import Issue_Tracker
 
 
 class ProductCoreSerializer(ModelSerializer):
@@ -200,7 +202,7 @@ class ProductSerializer(ProductCoreSerializer):
 
     def validate(self, attrs: dict):  # pylint: disable=too-many-branches
         # There are quite a lot of branches, but at least they are not nested too much
-        if attrs.get("issue_tracker_type") == Product.ISSUE_TRACKER_GITHUB:
+        if attrs.get("issue_tracker_type") == Issue_Tracker.ISSUE_TRACKER_GITHUB:
             attrs["issue_tracker_base_url"] = "https://api.github.com"
 
         if not (
@@ -223,7 +225,7 @@ class ProductSerializer(ProductCoreSerializer):
                 "Issue tracker data must be set when issue tracking is active"
             )
 
-        if attrs.get("issue_tracker_type") == Product.ISSUE_TRACKER_JIRA:
+        if attrs.get("issue_tracker_type") == Issue_Tracker.ISSUE_TRACKER_JIRA:
             if not attrs.get("issue_tracker_username"):
                 raise ValidationError(
                     "Username must be set when issue tracker type is Jira"
@@ -239,7 +241,7 @@ class ProductSerializer(ProductCoreSerializer):
 
         if (
             attrs.get("issue_tracker_type")
-            and attrs.get("issue_tracker_type") != Product.ISSUE_TRACKER_JIRA
+            and attrs.get("issue_tracker_type") != Issue_Tracker.ISSUE_TRACKER_JIRA
         ):
             if attrs.get("issue_tracker_username"):
                 raise ValidationError(
@@ -564,7 +566,7 @@ class ObservationListSerializer(ModelSerializer):
 class ObservationUpdateSerializer(ModelSerializer):
     def validate(self, attrs: dict):
         self.instance: Observation
-        if self.instance and self.instance.parser.type != Parser.TYPE_MANUAL:
+        if self.instance and self.instance.parser.type != Parser_Type.TYPE_MANUAL:
             raise ValidationError("Only manual observations can be updated")
 
         attrs["import_last_seen"] = timezone.now()
@@ -650,8 +652,8 @@ class ObservationUpdateSerializer(ModelSerializer):
 
 class ObservationCreateSerializer(ModelSerializer):
     def validate(self, attrs):
-        attrs["parser"] = Parser.objects.get(type=Parser.TYPE_MANUAL)
-        attrs["scanner"] = Parser.TYPE_MANUAL
+        attrs["parser"] = Parser.objects.get(type=Parser_Type.TYPE_MANUAL)
+        attrs["scanner"] = Parser_Type.TYPE_MANUAL
         attrs["import_last_seen"] = timezone.now()
 
         if attrs.get("branch"):
@@ -714,7 +716,7 @@ class ObservationCreateSerializer(ModelSerializer):
 
 class ObservationAssessmentSerializer(Serializer):
     severity = ChoiceField(choices=Severity.SEVERITY_CHOICES, required=False)
-    status = ChoiceField(choices=Observation.STATUS_CHOICES, required=False)
+    status = ChoiceField(choices=Status.STATUS_CHOICES, required=False)
     comment = CharField(max_length=255, required=True)
 
 
@@ -730,7 +732,7 @@ class ObservationBulkDeleteSerializer(Serializer):
 
 class ObservationBulkAssessmentSerializer(Serializer):
     severity = ChoiceField(choices=Severity.SEVERITY_CHOICES, required=False)
-    status = ChoiceField(choices=Observation.STATUS_CHOICES, required=False)
+    status = ChoiceField(choices=Status.STATUS_CHOICES, required=False)
     comment = CharField(max_length=255, required=True)
     observations = ListField(
         child=IntegerField(min_value=1), min_length=0, max_length=100, required=True

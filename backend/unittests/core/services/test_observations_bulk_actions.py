@@ -9,7 +9,7 @@ from application.core.services.observations_bulk_actions import (
     observations_bulk_assessment,
     observations_bulk_delete,
 )
-from application.core.types import Severity
+from application.core.types import Severity, Status
 from unittests.base_test_case import BaseTestCase
 
 
@@ -27,7 +27,7 @@ class TestObservationsBulkActions(BaseTestCase):
         observations_bulk_assessment(
             self.product_1,
             Severity.SEVERITY_CRITICAL,
-            Observation.STATUS_OPEN,
+            Status.STATUS_OPEN,
             "comment",
             [1, 2],
         )
@@ -37,13 +37,13 @@ class TestObservationsBulkActions(BaseTestCase):
             call(
                 self.observation_1,
                 Severity.SEVERITY_CRITICAL,
-                Observation.STATUS_OPEN,
+                Status.STATUS_OPEN,
                 "comment",
             ),
             call(
                 observation_2,
                 Severity.SEVERITY_CRITICAL,
-                Observation.STATUS_OPEN,
+                Status.STATUS_OPEN,
                 "comment",
             ),
         ]

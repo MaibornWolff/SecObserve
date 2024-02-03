@@ -2,12 +2,13 @@ from json import dumps, load
 
 from django.core.files.base import File
 
-from application.core.models import Observation, Parser
+from application.core.models import Observation
 from application.core.types import Severity
 from application.import_observations.parsers.base_parser import (
     BaseFileParser,
     BaseParser,
 )
+from application.import_observations.types import Parser_Type
 
 SEVERITIES = {
     "0": Severity.SEVERITY_NONE,
@@ -25,7 +26,7 @@ class ZAPParser(BaseParser, BaseFileParser):
 
     @classmethod
     def get_type(cls) -> str:
-        return Parser.TYPE_DAST
+        return Parser_Type.TYPE_DAST
 
     def check_format(self, file: File) -> tuple[bool, list[str], dict]:
         try:

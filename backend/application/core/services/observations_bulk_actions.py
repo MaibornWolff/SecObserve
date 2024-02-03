@@ -7,6 +7,7 @@ from application.core.models import Observation, Potential_Duplicate, Product
 from application.core.services.assessment import save_assessment
 from application.core.services.potential_duplicates import set_potential_duplicate
 from application.core.services.security_gate import check_security_gate
+from application.core.types import Status
 from application.issue_tracker.services.issue_tracker import (
     push_deleted_observation_to_issue_tracker,
 )
@@ -77,7 +78,7 @@ def observations_bulk_mark_duplicates(
 
     for duplicate in duplicates:
         duplicate.has_potential_duplicates = False
-        save_assessment(duplicate, None, Observation.STATUS_DUPLICATE, comment)
+        save_assessment(duplicate, None, Status.STATUS_DUPLICATE, comment)
 
     set_potential_duplicate(observation)
 

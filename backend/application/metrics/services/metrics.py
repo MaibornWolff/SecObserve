@@ -4,7 +4,7 @@ from typing import Optional
 from django.utils import timezone
 
 from application.core.models import Observation, Product
-from application.core.types import Severity
+from application.core.types import Severity, Status
 from application.metrics.models import Product_Metrics, Product_Metrics_Status
 from application.metrics.queries.product_metrics import (
     get_product_metrics,
@@ -85,7 +85,7 @@ def calculate_metrics_for_product(  # pylint: disable=too-many-branches
         ).values("current_severity", "current_status")
 
         for observation in observations:
-            if observation.get("current_status") == Observation.STATUS_OPEN:
+            if observation.get("current_status") == Status.STATUS_OPEN:
                 todays_product_metrics.open += 1
                 if observation.get("current_severity") == Severity.SEVERITY_CRITICAL:
                     todays_product_metrics.open_critical += 1
@@ -99,19 +99,19 @@ def calculate_metrics_for_product(  # pylint: disable=too-many-branches
                     todays_product_metrics.open_none += 1
                 elif observation.get("current_severity") == Severity.SEVERITY_UNKOWN:
                     todays_product_metrics.open_unknown += 1
-            elif observation.get("current_status") == Observation.STATUS_RESOLVED:
+            elif observation.get("current_status") == Status.STATUS_RESOLVED:
                 todays_product_metrics.resolved += 1
-            elif observation.get("current_status") == Observation.STATUS_DUPLICATE:
+            elif observation.get("current_status") == Status.STATUS_DUPLICATE:
                 todays_product_metrics.duplicate += 1
-            elif observation.get("current_status") == Observation.STATUS_FALSE_POSITIVE:
+            elif observation.get("current_status") == Status.STATUS_FALSE_POSITIVE:
                 todays_product_metrics.false_positive += 1
-            elif observation.get("current_status") == Observation.STATUS_IN_REVIEW:
+            elif observation.get("current_status") == Status.STATUS_IN_REVIEW:
                 todays_product_metrics.in_review += 1
-            elif observation.get("current_status") == Observation.STATUS_NOT_AFFECTED:
+            elif observation.get("current_status") == Status.STATUS_NOT_AFFECTED:
                 todays_product_metrics.not_affected += 1
-            elif observation.get("current_status") == Observation.STATUS_NOT_SECURITY:
+            elif observation.get("current_status") == Status.STATUS_NOT_SECURITY:
                 todays_product_metrics.not_security += 1
-            elif observation.get("current_status") == Observation.STATUS_RISK_ACCEPTED:
+            elif observation.get("current_status") == Status.STATUS_RISK_ACCEPTED:
                 todays_product_metrics.risk_accepted += 1
 
         todays_product_metrics.save()
@@ -259,7 +259,7 @@ def get_codecharta_metrics(product: Product) -> list[dict]:
     observations = Observation.objects.filter(
         product=product,
         branch=product.repository_default_branch,
-        current_status=Observation.STATUS_OPEN,
+        current_status=Status.STATUS_OPEN,
     )
     for observation in observations:
         if observation.origin_source_file:

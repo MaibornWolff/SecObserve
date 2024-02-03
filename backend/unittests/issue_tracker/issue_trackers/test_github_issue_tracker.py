@@ -3,8 +3,7 @@ from unittest.mock import patch
 from requests import Response
 from requests.exceptions import HTTPError
 
-from application.core.models import Observation
-from application.core.types import Severity
+from application.core.types import Severity, Status
 from application.issue_tracker.issue_trackers.base_issue_tracker import Issue
 from application.issue_tracker.issue_trackers.github_issue_tracker import (
     GitHubIssueTracker,
@@ -220,7 +219,7 @@ class TestGitHubIssueTracker(BaseTestCase):
         patch_mock.return_value = response
         self.observation_1.issue_tracker_issue_id = "gh_1"
         self.observation_1.product.issue_tracker_labels = "label_2,label_3"
-        self.observation_1.current_status = Observation.STATUS_RESOLVED
+        self.observation_1.current_status = Status.STATUS_RESOLVED
         with self.assertRaises(HTTPError) as e:
             issue_tracker = GitHubIssueTracker()
             issue = Issue(
@@ -250,7 +249,7 @@ class TestGitHubIssueTracker(BaseTestCase):
         patch_mock.return_value.status_code = 200
         self.observation_1.issue_tracker_issue_id = "gh_1"
         self.observation_1.product.issue_tracker_labels = "label_2,label_3"
-        self.observation_1.current_status = Observation.STATUS_RESOLVED
+        self.observation_1.current_status = Status.STATUS_RESOLVED
         issue_tracker = GitHubIssueTracker()
         issue = Issue(
             id="gh_1",

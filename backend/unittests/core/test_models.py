@@ -1,7 +1,7 @@
 from unittest.mock import patch
 
 from application.core.models import Observation, Parser, Product
-from application.core.types import Severity
+from application.core.types import Severity, Status
 from unittests.base_test_case import BaseTestCase
 
 
@@ -19,7 +19,7 @@ class TestProduct(BaseTestCase):
             product=product,
             branch=None,
             current_severity=Severity.SEVERITY_CRITICAL,
-            current_status=Observation.STATUS_OPEN,
+            current_status=Status.STATUS_OPEN,
         )
 
     @patch("application.core.models.Observation.objects.filter")
@@ -31,7 +31,7 @@ class TestProduct(BaseTestCase):
             product=product,
             branch=None,
             current_severity=Severity.SEVERITY_HIGH,
-            current_status=Observation.STATUS_OPEN,
+            current_status=Status.STATUS_OPEN,
         )
 
     @patch("application.core.models.Observation.objects.filter")
@@ -43,7 +43,7 @@ class TestProduct(BaseTestCase):
             product=product,
             branch=None,
             current_severity=Severity.SEVERITY_MEDIUM,
-            current_status=Observation.STATUS_OPEN,
+            current_status=Status.STATUS_OPEN,
         )
 
     @patch("application.core.models.Observation.objects.filter")
@@ -55,7 +55,7 @@ class TestProduct(BaseTestCase):
             product=product,
             branch=None,
             current_severity=Severity.SEVERITY_LOW,
-            current_status=Observation.STATUS_OPEN,
+            current_status=Status.STATUS_OPEN,
         )
 
     @patch("application.core.models.Observation.objects.filter")
@@ -67,7 +67,7 @@ class TestProduct(BaseTestCase):
             product=product,
             branch=None,
             current_severity=Severity.SEVERITY_NONE,
-            current_status=Observation.STATUS_OPEN,
+            current_status=Status.STATUS_OPEN,
         )
 
     @patch("application.core.models.Observation.objects.filter")
@@ -79,7 +79,7 @@ class TestProduct(BaseTestCase):
             product=product,
             branch=None,
             current_severity=Severity.SEVERITY_UNKOWN,
-            current_status=Observation.STATUS_OPEN,
+            current_status=Status.STATUS_OPEN,
         )
 
 

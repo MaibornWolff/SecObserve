@@ -8,8 +8,8 @@ from django.db.models import (
     TextField,
 )
 
-from application.core.models import Observation, Parser, Product
-from application.core.types import Severity
+from application.core.models import Parser, Product
+from application.core.types import Severity, Status
 
 
 class Rule(Model):
@@ -29,9 +29,7 @@ class Rule(Model):
     new_severity = CharField(
         max_length=12, choices=Severity.SEVERITY_CHOICES, blank=True
     )
-    new_status = CharField(
-        max_length=16, choices=Observation.STATUS_CHOICES, blank=True
-    )
+    new_status = CharField(max_length=16, choices=Status.STATUS_CHOICES, blank=True)
     enabled = BooleanField(default=True)
 
     class Meta:

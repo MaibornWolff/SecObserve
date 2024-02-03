@@ -22,20 +22,12 @@ from application.core.services.observation import (
     get_identity_hash,
     normalize_observation_fields,
 )
-from application.core.types import Severity
+from application.core.types import Severity, Status
+from application.import_observations.types import Parser_Source, Parser_Type
+from application.issue_tracker.types import Issue_Tracker
 
 
 class Product(Model):
-    ISSUE_TRACKER_GITHUB = "GitHub"
-    ISSUE_TRACKER_GITLAB = "GitLab"
-    ISSUE_TRACKER_JIRA = "Jira"
-
-    ISSUE_TRACKER_TYPE_CHOICES = [
-        (ISSUE_TRACKER_GITHUB, ISSUE_TRACKER_GITHUB),
-        (ISSUE_TRACKER_GITLAB, ISSUE_TRACKER_GITLAB),
-        (ISSUE_TRACKER_JIRA, ISSUE_TRACKER_JIRA),
-    ]
-
     name = CharField(max_length=255, unique=True)
     description = TextField(max_length=2048, blank=True)
 
@@ -91,7 +83,7 @@ class Product(Model):
 
     issue_tracker_active = BooleanField(default=False)
     issue_tracker_type = CharField(
-        max_length=12, choices=ISSUE_TRACKER_TYPE_CHOICES, blank=True
+        max_length=12, choices=Issue_Tracker.ISSUE_TRACKER_TYPE_CHOICES, blank=True
     )
     issue_tracker_base_url = CharField(max_length=255, blank=True)
     issue_tracker_username = CharField(max_length=255, blank=True)
@@ -125,7 +117,7 @@ class Product(Model):
         return Observation.objects.filter(
             product=self,
             branch=self.repository_default_branch,
-            current_status=Observation.STATUS_OPEN,
+            current_status=Status.STATUS_OPEN,
             current_severity=Severity.SEVERITY_CRITICAL,
         ).count()
 
@@ -140,7 +132,7 @@ class Product(Model):
         return Observation.objects.filter(
             product=self,
             branch=self.repository_default_branch,
-            current_status=Observation.STATUS_OPEN,
+            current_status=Status.STATUS_OPEN,
             current_severity=Severity.SEVERITY_HIGH,
         ).count()
 
@@ -155,7 +147,7 @@ class Product(Model):
         return Observation.objects.filter(
             product=self,
             branch=self.repository_default_branch,
-            current_status=Observation.STATUS_OPEN,
+            current_status=Status.STATUS_OPEN,
             current_severity=Severity.SEVERITY_MEDIUM,
         ).count()
 
@@ -170,7 +162,7 @@ class Product(Model):
         return Observation.objects.filter(
             product=self,
             branch=self.repository_default_branch,
-            current_status=Observation.STATUS_OPEN,
+            current_status=Status.STATUS_OPEN,
             current_severity=Severity.SEVERITY_LOW,
         ).count()
 
@@ -185,7 +177,7 @@ class Product(Model):
         return Observation.objects.filter(
             product=self,
             branch=self.repository_default_branch,
-            current_status=Observation.STATUS_OPEN,
+            current_status=Status.STATUS_OPEN,
             current_severity=Severity.SEVERITY_NONE,
         ).count()
 
@@ -200,7 +192,7 @@ class Product(Model):
         return Observation.objects.filter(
             product=self,
             branch=self.repository_default_branch,
-            current_status=Observation.STATUS_OPEN,
+            current_status=Status.STATUS_OPEN,
             current_severity=Severity.SEVERITY_UNKOWN,
         ).count()
 
@@ -228,7 +220,7 @@ class Branch(Model):
         return Observation.objects.filter(
             branch=self,
             current_severity=Severity.SEVERITY_CRITICAL,
-            current_status=Observation.STATUS_OPEN,
+            current_status=Status.STATUS_OPEN,
         ).count()
 
     @property
@@ -236,7 +228,7 @@ class Branch(Model):
         return Observation.objects.filter(
             branch=self,
             current_severity=Severity.SEVERITY_HIGH,
-            current_status=Observation.STATUS_OPEN,
+            current_status=Status.STATUS_OPEN,
         ).count()
 
     @property
@@ -244,7 +236,7 @@ class Branch(Model):
         return Observation.objects.filter(
             branch=self,
             current_severity=Severity.SEVERITY_MEDIUM,
-            current_status=Observation.STATUS_OPEN,
+            current_status=Status.STATUS_OPEN,
         ).count()
 
     @property
@@ -252,7 +244,7 @@ class Branch(Model):
         return Observation.objects.filter(
             branch=self,
             current_severity=Severity.SEVERITY_LOW,
-            current_status=Observation.STATUS_OPEN,
+            current_status=Status.STATUS_OPEN,
         ).count()
 
     @property
@@ -260,7 +252,7 @@ class Branch(Model):
         return Observation.objects.filter(
             branch=self,
             current_severity=Severity.SEVERITY_NONE,
-            current_status=Observation.STATUS_OPEN,
+            current_status=Status.STATUS_OPEN,
         ).count()
 
     @property
@@ -268,7 +260,7 @@ class Branch(Model):
         return Observation.objects.filter(
             branch=self,
             current_severity=Severity.SEVERITY_UNKOWN,
-            current_status=Observation.STATUS_OPEN,
+            current_status=Status.STATUS_OPEN,
         ).count()
 
 
@@ -294,7 +286,7 @@ class Service(Model):
             origin_service=self,
             branch=self.product.repository_default_branch,
             current_severity=Severity.SEVERITY_CRITICAL,
-            current_status=Observation.STATUS_OPEN,
+            current_status=Status.STATUS_OPEN,
         ).count()
 
     @property
@@ -303,7 +295,7 @@ class Service(Model):
             origin_service=self,
             branch=self.product.repository_default_branch,
             current_severity=Severity.SEVERITY_HIGH,
-            current_status=Observation.STATUS_OPEN,
+            current_status=Status.STATUS_OPEN,
         ).count()
 
     @property
@@ -312,7 +304,7 @@ class Service(Model):
             origin_service=self,
             branch=self.product.repository_default_branch,
             current_severity=Severity.SEVERITY_MEDIUM,
-            current_status=Observation.STATUS_OPEN,
+            current_status=Status.STATUS_OPEN,
         ).count()
 
     @property
@@ -321,7 +313,7 @@ class Service(Model):
             origin_service=self,
             branch=self.product.repository_default_branch,
             current_severity=Severity.SEVERITY_LOW,
-            current_status=Observation.STATUS_OPEN,
+            current_status=Status.STATUS_OPEN,
         ).count()
 
     @property
@@ -330,7 +322,7 @@ class Service(Model):
             origin_service=self,
             branch=self.product.repository_default_branch,
             current_severity=Severity.SEVERITY_NONE,
-            current_status=Observation.STATUS_OPEN,
+            current_status=Status.STATUS_OPEN,
         ).count()
 
     @property
@@ -339,7 +331,7 @@ class Service(Model):
             origin_service=self,
             branch=self.product.repository_default_branch,
             current_severity=Severity.SEVERITY_UNKOWN,
-            current_status=Observation.STATUS_OPEN,
+            current_status=Status.STATUS_OPEN,
         ).count()
 
 
@@ -356,41 +348,9 @@ class Product_Member(Model):
 
 
 class Parser(Model):
-    TYPE_SCA = "SCA"
-    TYPE_SAST = "SAST"
-    TYPE_DAST = "DAST"
-    TYPE_IAST = "IAST"
-    TYPE_SECRETS = "Secrets"
-    TYPE_INFRASTRUCTURE = "Infrastructure"
-    TYPE_OTHER = "Other"
-    TYPE_MANUAL = "Manual"
-
-    TYPE_CHOICES = [
-        (TYPE_SCA, TYPE_SCA),
-        (TYPE_SAST, TYPE_SAST),
-        (TYPE_DAST, TYPE_DAST),
-        (TYPE_IAST, TYPE_IAST),
-        (TYPE_SECRETS, TYPE_SECRETS),
-        (TYPE_INFRASTRUCTURE, TYPE_INFRASTRUCTURE),
-        (TYPE_OTHER, TYPE_OTHER),
-        (TYPE_MANUAL, TYPE_MANUAL),
-    ]
-
-    SOURCE_API = "API"
-    SOURCE_FILE = "File"
-    SOURCE_MANUAL = "Manual"
-    SOURCE_UNKOWN = "Unkown"
-
-    SOURCE_CHOICES = [
-        (SOURCE_API, SOURCE_API),
-        (SOURCE_FILE, SOURCE_FILE),
-        (SOURCE_MANUAL, SOURCE_MANUAL),
-        (SOURCE_UNKOWN, SOURCE_UNKOWN),
-    ]
-
     name = CharField(max_length=255, unique=True)
-    type = CharField(max_length=16, choices=TYPE_CHOICES)
-    source = CharField(max_length=16, choices=SOURCE_CHOICES)
+    type = CharField(max_length=16, choices=Parser_Type.TYPE_CHOICES)
+    source = CharField(max_length=16, choices=Parser_Source.SOURCE_CHOICES)
 
     class Meta:
         indexes = [
@@ -402,26 +362,6 @@ class Parser(Model):
 
 
 class Observation(Model):
-    STATUS_OPEN = "Open"
-    STATUS_RESOLVED = "Resolved"
-    STATUS_DUPLICATE = "Duplicate"
-    STATUS_FALSE_POSITIVE = "False positive"
-    STATUS_IN_REVIEW = "In review"
-    STATUS_NOT_AFFECTED = "Not affected"
-    STATUS_NOT_SECURITY = "Not security"
-    STATUS_RISK_ACCEPTED = "Risk accepted"
-
-    STATUS_CHOICES = [
-        (STATUS_OPEN, STATUS_OPEN),
-        (STATUS_RESOLVED, STATUS_RESOLVED),
-        (STATUS_DUPLICATE, STATUS_DUPLICATE),
-        (STATUS_FALSE_POSITIVE, STATUS_FALSE_POSITIVE),
-        (STATUS_IN_REVIEW, STATUS_IN_REVIEW),
-        (STATUS_NOT_AFFECTED, STATUS_NOT_AFFECTED),
-        (STATUS_NOT_SECURITY, STATUS_NOT_SECURITY),
-        (STATUS_RISK_ACCEPTED, STATUS_RISK_ACCEPTED),
-    ]
-
     product = ForeignKey(Product, on_delete=PROTECT)
     branch = ForeignKey(Branch, on_delete=CASCADE, null=True)
     parser = ForeignKey(Parser, on_delete=PROTECT)
@@ -441,10 +381,12 @@ class Observation(Model):
     assessment_severity = CharField(
         max_length=12, choices=Severity.SEVERITY_CHOICES, blank=True
     )
-    current_status = CharField(max_length=16, choices=STATUS_CHOICES)
-    parser_status = CharField(max_length=16, choices=STATUS_CHOICES, blank=True)
-    rule_status = CharField(max_length=16, choices=STATUS_CHOICES, blank=True)
-    assessment_status = CharField(max_length=16, choices=STATUS_CHOICES, blank=True)
+    current_status = CharField(max_length=16, choices=Status.STATUS_CHOICES)
+    parser_status = CharField(max_length=16, choices=Status.STATUS_CHOICES, blank=True)
+    rule_status = CharField(max_length=16, choices=Status.STATUS_CHOICES, blank=True)
+    assessment_status = CharField(
+        max_length=16, choices=Status.STATUS_CHOICES, blank=True
+    )
     scanner_observation_id = CharField(max_length=255, blank=True)
     vulnerability_id = CharField(max_length=255, blank=True)
     origin_component_name = CharField(max_length=255, blank=True)
@@ -570,7 +512,7 @@ class Observation_Log(Model):
         "access_control.User", related_name="observation_logs", on_delete=PROTECT
     )
     severity = CharField(max_length=12, choices=Severity.SEVERITY_CHOICES, blank=True)
-    status = CharField(max_length=16, choices=Observation.STATUS_CHOICES, blank=True)
+    status = CharField(max_length=16, choices=Status.STATUS_CHOICES, blank=True)
     comment = CharField(max_length=255)
     created = DateTimeField(auto_now_add=True)
 

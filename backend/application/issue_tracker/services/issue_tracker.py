@@ -6,7 +6,7 @@ from application.access_control.models import User
 from application.commons.services.global_request import get_current_user
 from application.commons.services.tasks import handle_task_exception
 from application.core.models import Observation, Product
-from application.core.types import Severity
+from application.core.types import Severity, Status
 from application.issue_tracker.issue_trackers.base_issue_tracker import (
     BaseIssueTracker,
     Issue,
@@ -18,6 +18,7 @@ from application.issue_tracker.issue_trackers.gitlab_issue_tracker import (
     GitLabIssueTracker,
 )
 from application.issue_tracker.issue_trackers.jira_issue_tracker import JiraIssueTracker
+from application.issue_tracker.types import Issue_Tracker
 
 
 def push_observations_to_issue_tracker(
@@ -43,7 +44,7 @@ def push_observation_to_issue_tracker(observation: Observation, user: User) -> N
                 observation.issue_tracker_issue_id = ""
                 observation.save()
 
-            if observation.current_status == Observation.STATUS_OPEN:
+            if observation.current_status == Status.STATUS_OPEN:
                 if observation.product.issue_tracker_minimum_severity:
                     numerical_minimum_severity = Severity.NUMERICAL_SEVERITIES.get(
                         observation.product.issue_tracker_minimum_severity, 99
@@ -89,13 +90,13 @@ def push_deleted_observation_to_issue_tracker(
 def issue_tracker_factory(
     product: Product, with_communication: bool = True
 ) -> BaseIssueTracker:
-    if product.issue_tracker_type == Product.ISSUE_TRACKER_GITHUB:
+    if product.issue_tracker_type == Issue_Tracker.ISSUE_TRACKER_GITHUB:
         return GitHubIssueTracker()
 
-    if product.issue_tracker_type == Product.ISSUE_TRACKER_GITLAB:
+    if product.issue_tracker_type == Issue_Tracker.ISSUE_TRACKER_GITLAB:
         return GitLabIssueTracker()
 
-    if product.issue_tracker_type == Product.ISSUE_TRACKER_JIRA:
+    if product.issue_tracker_type == Issue_Tracker.ISSUE_TRACKER_JIRA:
         return JiraIssueTracker(product=product, with_communication=with_communication)
 
     raise ValueError(f"Unknown issue tracker type: {product.issue_tracker_type}")

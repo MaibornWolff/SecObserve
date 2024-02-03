@@ -1,8 +1,7 @@
 from dataclasses import dataclass
 from unittest.mock import patch
 
-from application.core.models import Observation
-from application.core.types import Severity
+from application.core.types import Severity, Status
 from application.issue_tracker.issue_trackers.base_issue_tracker import Issue
 from application.issue_tracker.issue_trackers.jira_issue_tracker import JiraIssueTracker
 from unittests.base_test_case import BaseTestCase
@@ -328,7 +327,7 @@ class TestJiraIssueTracker(BaseTestCase):
         self, transition_issue_mock, update_mock, issue_mock, jira_mock
     ):
         self.observation_1.issue_tracker_issue_id = "jira_1"
-        self.observation_1.current_status = Observation.STATUS_RESOLVED
+        self.observation_1.current_status = Status.STATUS_RESOLVED
         issue = Issue(
             id="jira_1",
             title="title_1",
