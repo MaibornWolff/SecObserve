@@ -193,9 +193,9 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                         <TextField source="issue_tracker_labels" label="Labels" />
                     </Labeled>
                     {product && product.issue_tracker_minimum_severity && (
-                    <Labeled>
-                        <SeverityField source="issue_tracker_minimum_severity" label="Minimum severity" />
-                    </Labeled>
+                        <Labeled>
+                            <SeverityField source="issue_tracker_minimum_severity" label="Minimum severity" />
+                        </Labeled>
                     )}
                     {product.issue_tracker_username && (
                         <Labeled>

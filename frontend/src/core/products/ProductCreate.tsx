@@ -316,10 +316,10 @@ const ProductCreate = () => {
                                 />
                                 <TextInputWide source="issue_tracker_labels" label="Labels" validate={validate_255} />
                                 <AutocompleteInputMedium
-                            source="issue_tracker_minimum_severity"
-                            label="Minimum severity"
-                            choices={OBSERVATION_SEVERITY_CHOICES}
-                        />
+                                    source="issue_tracker_minimum_severity"
+                                    label="Minimum severity"
+                                    choices={OBSERVATION_SEVERITY_CHOICES}
+                                />
                                 <FormDataConsumer>
                                     {({ formData }) =>
                                         formData.issue_tracker_type == "Jira" && (
