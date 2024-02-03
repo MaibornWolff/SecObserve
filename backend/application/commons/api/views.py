@@ -4,12 +4,14 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.filters import SearchFilter
 from rest_framework.mixins import DestroyModelMixin, ListModelMixin, RetrieveModelMixin
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_204_NO_CONTENT
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
 from application.commons.api.filters import NotificationFilter
+from application.commons.api.permissions import UserHasNotificationPermission
 from application.commons.api.serializers import (
     NotificationBulkSerializer,
     NotificationSerializer,
@@ -49,6 +51,7 @@ class NotificationViewSet(
 ):
     serializer_class = NotificationSerializer
     filterset_class = NotificationFilter
+    permission_classes = (IsAuthenticated, UserHasNotificationPermission)
     queryset = Notification.objects.all()
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["name"]
