@@ -1,4 +1,3 @@
-import { any } from "prop-types";
 import { ChipField, useRecordContext } from "react-admin";
 
 import { get_severity_color } from "../functions";
