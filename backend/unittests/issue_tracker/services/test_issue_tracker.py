@@ -4,7 +4,7 @@ from django.core.management import call_command
 
 from application.access_control.models import User
 from application.core.models import Branch, Observation, Product
-from application.core.types import Severity
+from application.core.types import Severity, Status
 from application.issue_tracker.issue_trackers.base_issue_tracker import Issue
 from application.issue_tracker.issue_trackers.github_issue_tracker import (
     GitHubIssueTracker,
@@ -80,7 +80,7 @@ class TestIssueTracker(BaseTestCase):
 
         observation = Observation.objects.get(pk=1)
         observation.product.issue_tracker_active = True
-        observation.current_status = Observation.STATUS_OPEN
+        observation.current_status = Status.STATUS_OPEN
 
         push_observation_to_issue_tracker(observation, None)
 
@@ -98,7 +98,7 @@ class TestIssueTracker(BaseTestCase):
 
         observation = Observation.objects.get(pk=1)
         observation.product.issue_tracker_active = True
-        observation.current_status = Observation.STATUS_OPEN
+        observation.current_status = Status.STATUS_OPEN
         observation.issue_tracker_issue_id = "123"
 
         push_observation_to_issue_tracker(observation, None)
@@ -120,7 +120,7 @@ class TestIssueTracker(BaseTestCase):
 
         observation = Observation.objects.get(pk=1)
         observation.product.issue_tracker_active = True
-        observation.current_status = Observation.STATUS_NOT_AFFECTED
+        observation.current_status = Status.STATUS_NOT_AFFECTED
 
         push_observation_to_issue_tracker(observation, None)
 
@@ -138,7 +138,7 @@ class TestIssueTracker(BaseTestCase):
 
         observation = Observation.objects.get(pk=1)
         observation.product.issue_tracker_active = True
-        observation.current_status = Observation.STATUS_FALSE_POSITIVE
+        observation.current_status = Status.STATUS_FALSE_POSITIVE
         observation.issue_tracker_issue_id = "123"
 
         push_observation_to_issue_tracker(observation, None)
@@ -178,7 +178,7 @@ class TestIssueTracker(BaseTestCase):
         observation = Observation.objects.get(pk=1)
         observation.product.issue_tracker_active = True
         observation.product.issue_tracker_minimum_severity = Severity.SEVERITY_HIGH
-        observation.current_status = Observation.STATUS_OPEN
+        observation.current_status = Status.STATUS_OPEN
         observation.current_severity = Severity.SEVERITY_HIGH
         observation.numerical_severity = Severity.NUMERICAL_SEVERITIES.get(
             observation.current_severity, 99
@@ -206,7 +206,7 @@ class TestIssueTracker(BaseTestCase):
         observation = Observation.objects.get(pk=1)
         observation.product.issue_tracker_active = True
         observation.product.issue_tracker_minimum_severity = Severity.SEVERITY_HIGH
-        observation.current_status = Observation.STATUS_OPEN
+        observation.current_status = Status.STATUS_OPEN
         observation.current_severity = Severity.SEVERITY_HIGH
         observation.numerical_severity = Severity.NUMERICAL_SEVERITIES.get(
             observation.current_severity, 99
@@ -235,7 +235,7 @@ class TestIssueTracker(BaseTestCase):
         observation = Observation.objects.get(pk=1)
         observation.product.issue_tracker_active = True
         observation.product.issue_tracker_minimum_severity = Severity.SEVERITY_HIGH
-        observation.current_status = Observation.STATUS_OPEN
+        observation.current_status = Status.STATUS_OPEN
         observation.current_severity = Severity.SEVERITY_MEDIUM
         observation.numerical_severity = Severity.NUMERICAL_SEVERITIES.get(
             observation.current_severity, 99
@@ -260,7 +260,7 @@ class TestIssueTracker(BaseTestCase):
         observation = Observation.objects.get(pk=1)
         observation.product.issue_tracker_active = True
         observation.product.issue_tracker_minimum_severity = Severity.SEVERITY_HIGH
-        observation.current_status = Observation.STATUS_OPEN
+        observation.current_status = Status.STATUS_OPEN
         observation.current_severity = Severity.SEVERITY_MEDIUM
         observation.numerical_severity = Severity.NUMERICAL_SEVERITIES.get(
             observation.current_severity, 99
@@ -288,7 +288,7 @@ class TestIssueTracker(BaseTestCase):
         observation = Observation.objects.get(pk=1)
         observation.product.issue_tracker_active = True
         observation.product.issue_tracker_minimum_severity = Severity.SEVERITY_HIGH
-        observation.current_status = Observation.STATUS_OPEN
+        observation.current_status = Status.STATUS_OPEN
         observation.current_severity = Severity.SEVERITY_MEDIUM
         observation.numerical_severity = Severity.NUMERICAL_SEVERITIES.get(
             observation.current_severity, 99

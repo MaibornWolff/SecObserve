@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 from django.apps import apps
 from django.db.models.fields import CharField, TextField
 
-from application.core.types import Severity
+from application.core.types import Severity, Status
 
 # Parameter observation cannot be typed, because some methods are used in the model class
 
@@ -87,9 +87,7 @@ def _get_cvss3_severity(cvss3_score: int):
 
 
 def get_current_status(observation) -> str:
-    Observation = apps.get_model("core", "Observation")
-
-    if observation.parser_status == Observation.STATUS_RESOLVED:
+    if observation.parser_status == Status.STATUS_RESOLVED:
         return observation.parser_status
 
     if observation.assessment_status:
@@ -101,7 +99,7 @@ def get_current_status(observation) -> str:
     if observation.parser_status:
         return observation.parser_status
 
-    return Observation.STATUS_OPEN
+    return Status.STATUS_OPEN
 
 
 def normalize_observation_fields(observation) -> None:

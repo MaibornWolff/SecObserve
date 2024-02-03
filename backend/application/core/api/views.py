@@ -89,6 +89,7 @@ from application.core.services.potential_duplicates import (
     set_potential_duplicate_both_ways,
 )
 from application.core.services.security_gate import check_security_gate
+from application.core.types import Status
 from application.issue_tracker.services.issue_tracker import (
     push_deleted_observation_to_issue_tracker,
     push_observations_to_issue_tracker,
@@ -135,7 +136,7 @@ class ProductViewSet(ModelViewSet):
         product = self.__get_product(pk)
 
         status = self.request.query_params.get("status")
-        if status and (status, status) not in Observation.STATUS_CHOICES:
+        if status and (status, status) not in Status.STATUS_CHOICES:
             raise ValidationError(f"Status {status} is not a valid choice")
 
         workbook = export_observations_excel(product, status)
@@ -168,7 +169,7 @@ class ProductViewSet(ModelViewSet):
         product = self.__get_product(pk)
 
         status = self.request.query_params.get("status")
-        if status and (status, status) not in Observation.STATUS_CHOICES:
+        if status and (status, status) not in Status.STATUS_CHOICES:
             raise ValidationError(f"Status {status} is not a valid choice")
 
         response = HttpResponse(content_type="text/csv")

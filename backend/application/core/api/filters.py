@@ -20,6 +20,7 @@ from application.core.models import (
     Product_Member,
     Service,
 )
+from application.core.types import Status
 
 AGE_DAY = "Today"
 AGE_WEEK = "Past 7 days"
@@ -250,7 +251,7 @@ class EvidenceFilter(FilterSet):
 class PotentialDuplicateFilter(FilterSet):
     status = ChoiceFilter(
         field_name="potential_duplicate_observation__current_status",
-        choices=Observation.STATUS_CHOICES,
+        choices=Status.STATUS_CHOICES,
     )
 
     class Meta:

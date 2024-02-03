@@ -36,7 +36,7 @@ from application.core.models import (
 from application.core.queries.product_member import get_product_member
 from application.core.services.observation_log import create_observation_log
 from application.core.services.security_gate import check_security_gate
-from application.core.types import Severity
+from application.core.types import Severity, Status
 from application.issue_tracker.services.issue_tracker import (
     issue_tracker_factory,
     push_observation_to_issue_tracker,
@@ -714,7 +714,7 @@ class ObservationCreateSerializer(ModelSerializer):
 
 class ObservationAssessmentSerializer(Serializer):
     severity = ChoiceField(choices=Severity.SEVERITY_CHOICES, required=False)
-    status = ChoiceField(choices=Observation.STATUS_CHOICES, required=False)
+    status = ChoiceField(choices=Status.STATUS_CHOICES, required=False)
     comment = CharField(max_length=255, required=True)
 
 
@@ -730,7 +730,7 @@ class ObservationBulkDeleteSerializer(Serializer):
 
 class ObservationBulkAssessmentSerializer(Serializer):
     severity = ChoiceField(choices=Severity.SEVERITY_CHOICES, required=False)
-    status = ChoiceField(choices=Observation.STATUS_CHOICES, required=False)
+    status = ChoiceField(choices=Status.STATUS_CHOICES, required=False)
     comment = CharField(max_length=255, required=True)
     observations = ListField(
         child=IntegerField(min_value=1), min_length=0, max_length=100, required=True

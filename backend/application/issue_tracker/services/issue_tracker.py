@@ -6,7 +6,7 @@ from application.access_control.models import User
 from application.commons.services.global_request import get_current_user
 from application.commons.services.tasks import handle_task_exception
 from application.core.models import Observation, Product
-from application.core.types import Severity
+from application.core.types import Severity, Status
 from application.issue_tracker.issue_trackers.base_issue_tracker import (
     BaseIssueTracker,
     Issue,
@@ -43,7 +43,7 @@ def push_observation_to_issue_tracker(observation: Observation, user: User) -> N
                 observation.issue_tracker_issue_id = ""
                 observation.save()
 
-            if observation.current_status == Observation.STATUS_OPEN:
+            if observation.current_status == Status.STATUS_OPEN:
                 if observation.product.issue_tracker_minimum_severity:
                     numerical_minimum_severity = Severity.NUMERICAL_SEVERITIES.get(
                         observation.product.issue_tracker_minimum_severity, 99

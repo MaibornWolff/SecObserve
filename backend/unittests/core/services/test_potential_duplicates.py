@@ -5,13 +5,14 @@ from application.core.services.potential_duplicates import (
     set_potential_duplicate,
     set_potential_duplicate_both_ways,
 )
+from application.core.types import Status
 from unittests.base_test_case import BaseTestCase
 
 
 class TestSetPotentialDuplicate(BaseTestCase):
     def setUp(self):
         self.observation = Observation()
-        self.observation.current_status = Observation.STATUS_OPEN
+        self.observation.current_status = Status.STATUS_OPEN
         self.observation.has_potential_duplicates = True
         super().setUp()
 
@@ -59,7 +60,7 @@ class TestSetPotentialDuplicate(BaseTestCase):
 
     @patch("application.core.models.Observation.save")
     def test_set_potential_duplicate_closed_observation(self, save_mock):
-        self.observation.current_status = Observation.STATUS_RESOLVED
+        self.observation.current_status = Status.STATUS_RESOLVED
 
         set_potential_duplicate(self.observation)
 
