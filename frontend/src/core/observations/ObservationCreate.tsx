@@ -1,26 +1,28 @@
 import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { Button, Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
-import * as React from "react";
+import { Button, Dialog, DialogContent, DialogTitle, Divider, Stack, Typography } from "@mui/material";
+import { Fragment, useState } from "react";
 import {
     CreateBase,
     NumberInput,
     ReferenceInput,
     SaveButton,
     SimpleForm,
+    TextInput,
     Toolbar,
-    required,
     useCreate,
     useNotify,
     useRefresh,
 } from "react-admin";
 
 import {
-    AutocompleteInputMedium,
-    AutocompleteInputWide,
-    SelectInputWide,
-    TextInputWide,
-} from "../../commons/layout/themes";
+    validate_255,
+    validate_2048,
+    validate_min_0_999999,
+    validate_required,
+    validate_required_255,
+} from "../../commons/custom_validators";
+import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES, OBSERVATION_STATUS_OPEN } from "../../core/types";
 
 export type ObservationCreateProps = {
@@ -28,7 +30,7 @@ export type ObservationCreateProps = {
 };
 
 const ObservationCreate = ({ id }: ObservationCreateProps) => {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const refresh = useRefresh();
     const notify = useNotify();
     const [create] = useCreate();
@@ -46,7 +48,6 @@ const ObservationCreate = ({ id }: ObservationCreateProps) => {
                 direction: "row",
                 justifyContent: "center",
                 alignItems: "center",
-                color: "#000000dd",
             }}
             variant="contained"
             onClick={handleCancel}
@@ -84,7 +85,7 @@ const ObservationCreate = ({ id }: ObservationCreateProps) => {
     };
 
     return (
-        <React.Fragment>
+        <Fragment>
             <Button
                 variant="contained"
                 onClick={handleOpen}
@@ -93,59 +94,132 @@ const ObservationCreate = ({ id }: ObservationCreateProps) => {
             >
                 Add observation
             </Button>
-            <Dialog open={open} onClose={handleClose}>
+            <Dialog open={open} onClose={handleClose} maxWidth={"lg"}>
                 <DialogTitle>Add observation</DialogTitle>
                 <DialogContent>
                     <CreateBase resource="observations">
                         <SimpleForm onSubmit={create_observation} toolbar={<CustomToolbar />}>
-                            <ReferenceInput
-                                source="product"
-                                reference="products"
-                                sort={{ field: "name", order: "ASC" }}
-                            >
-                                <SelectInputWide optionText="name" defaultValue={id} disabled={true} />
-                            </ReferenceInput>
                             <Typography variant="h6">Observation</Typography>
-                            <ReferenceInput
-                                source="branch"
-                                reference="branches"
-                                sort={{ field: "name", order: "ASC" }}
-                                filter={{ product: id }}
-                            >
-                                <AutocompleteInputWide optionText="name" />
-                            </ReferenceInput>
-                            <TextInputWide autoFocus source="title" validate={requiredValidate} />
-                            <AutocompleteInputMedium
-                                source="parser_severity"
-                                label="Severity"
-                                choices={OBSERVATION_SEVERITY_CHOICES}
-                                validate={requiredValidate}
-                            />
-                            <AutocompleteInputMedium
-                                source="parser_status"
-                                label="Status"
-                                choices={OBSERVATION_STATUS_CHOICES}
-                                defaultValue={OBSERVATION_STATUS_OPEN}
-                                validate={requiredValidate}
-                            />
-                            <TextInputWide source="description" multiline />
-                            <TextInputWide source="recommendation" multiline />
+                            <Stack>
+                                <TextInputWide autoFocus source="title" validate={validate_required_255} />
+                                <Stack direction="row" spacing={2}>
+                                    <AutocompleteInputMedium
+                                        source="parser_severity"
+                                        label="Severity"
+                                        choices={OBSERVATION_SEVERITY_CHOICES}
+                                        validate={validate_required}
+                                    />
+                                    <AutocompleteInputMedium
+                                        source="parser_status"
+                                        label="Status"
+                                        choices={OBSERVATION_STATUS_CHOICES}
+                                        defaultValue={OBSERVATION_STATUS_OPEN}
+                                        validate={validate_required}
+                                    />
+                                </Stack>
+                                <TextInputWide
+                                    source="description"
+                                    multiline
+                                    minRows={3}
+                                    validate={validate_2048}
+                                    helperText="Markdown is supported when showing the observation"
+                                />
+                                <TextInputWide
+                                    source="recommendation"
+                                    multiline
+                                    minRows={3}
+                                    validate={validate_2048}
+                                    helperText="Markdown is supported when showing the observation"
+                                />
+                            </Stack>
+
+                            <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+
+                            <Typography variant="h6">Product</Typography>
+                            <Stack>
+                                <ReferenceInput
+                                    source="product"
+                                    reference="products"
+                                    sort={{ field: "name", order: "ASC" }}
+                                >
+                                    <AutocompleteInputWide optionText="name" defaultValue={id} disabled={true} />
+                                </ReferenceInput>
+                                <ReferenceInput
+                                    source="branch"
+                                    reference="branches"
+                                    sort={{ field: "name", order: "ASC" }}
+                                    filter={{ product: id }}
+                                >
+                                    <AutocompleteInputWide optionText="name" />
+                                </ReferenceInput>
+                            </Stack>
+
+                            <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+
                             <Typography variant="h6">Origins</Typography>
-                            <TextInputWide source="origin_service_name" label="Service name" />
-                            <TextInputWide source="origin_component_name_version" label="Component name:version" />
-                            <TextInputWide source="origin_docker_image_name_tag" label="Container name:tag" />
-                            <TextInputWide source="origin_endpoint_url" label="Endpoint URL" />
-                            <TextInputWide source="origin_source_file" label="Source file" />
-                            <NumberInput source="origin_source_line_start" label="Source line start" min={0} step={1} />
-                            <NumberInput source="origin_source_line_end" label="Source line end" min={0} step={1} />
+                            <Stack>
+                                <TextInputWide
+                                    source="origin_service_name"
+                                    label="Service name"
+                                    validate={validate_255}
+                                />
+                                <Stack direction="row" spacing={2}>
+                                    <TextInputWide
+                                        source="origin_component_name"
+                                        label="Component name"
+                                        validate={validate_255}
+                                    />
+                                    <TextInput
+                                        source="origin_component_version"
+                                        label="Component version"
+                                        validate={validate_255}
+                                    />
+                                </Stack>
+                                <Stack direction="row" spacing={2}>
+                                    <TextInputWide
+                                        source="origin_docker_image_name"
+                                        label="Container name"
+                                        validate={validate_255}
+                                    />
+                                    <TextInput
+                                        source="origin_docker_image_tag"
+                                        label="Container tag"
+                                        validate={validate_255}
+                                    />
+                                </Stack>
+                                <TextInputWide
+                                    source="origin_endpoint_url"
+                                    label="Endpoint URL"
+                                    validate={validate_2048}
+                                />
+                                <Stack direction="row" spacing={2}>
+                                    <TextInputWide
+                                        source="origin_source_file"
+                                        label="Source file"
+                                        validate={validate_255}
+                                    />
+                                    <NumberInput
+                                        source="origin_source_line_start"
+                                        label="Source line start"
+                                        min={0}
+                                        step={1}
+                                        validate={validate_min_0_999999}
+                                    />
+                                    <NumberInput
+                                        source="origin_source_line_end"
+                                        label="Source line end"
+                                        min={0}
+                                        step={1}
+                                        validate={validate_min_0_999999}
+                                    />
+                                </Stack>
+                            </Stack>
                         </SimpleForm>
                     </CreateBase>
                 </DialogContent>
             </Dialog>
-        </React.Fragment>
+        </Fragment>
     );
 };
-
-const requiredValidate = [required()];
 
 export default ObservationCreate;

@@ -13,6 +13,7 @@ from application.core.models import (
     Product,
     Reference,
 )
+from application.core.types import Severity, Status
 from application.import_observations.apps import _register_parser
 from application.import_observations.models import Vulnerability_Check
 from application.import_observations.services.import_observations import (
@@ -156,11 +157,9 @@ class TestImportObservations(BaseTestCase):
         else:
             self.assertEqual(observations[0].origin_endpoint_url, "")
 
-        self.assertEqual(observations[0].current_status, Observation.STATUS_OPEN)
-        self.assertEqual(observations[1].current_status, Observation.STATUS_OPEN)
-        self.assertEqual(
-            observations[2].current_status, Observation.STATUS_NOT_AFFECTED
-        )
+        self.assertEqual(observations[0].current_status, Status.STATUS_OPEN)
+        self.assertEqual(observations[1].current_status, Status.STATUS_OPEN)
+        self.assertEqual(observations[2].current_status, Status.STATUS_NOT_AFFECTED)
 
         observation_logs = Observation_Log.objects.filter(
             observation__product=1
@@ -172,7 +171,7 @@ class TestImportObservations(BaseTestCase):
 
         self.assertEqual(observation_logs[2].observation, observations[2])
         self.assertEqual(observation_logs[2].severity, observations[2].current_severity)
-        self.assertEqual(observation_logs[2].status, Observation.STATUS_OPEN)
+        self.assertEqual(observation_logs[2].status, Status.STATUS_OPEN)
         self.assertEqual(observation_logs[2].comment, "Set by parser")
 
         self.assertEqual(observation_logs[3].observation, observations[2])
@@ -230,9 +229,9 @@ class TestImportObservations(BaseTestCase):
         observations = Observation.objects.filter(product=1).order_by("id")
         self.assertEqual(len(observations), 3)
 
-        self.assertEqual(observations[0].current_status, Observation.STATUS_RESOLVED)
-        self.assertEqual(observations[1].current_status, Observation.STATUS_OPEN)
-        self.assertEqual(observations[2].current_status, Observation.STATUS_RESOLVED)
+        self.assertEqual(observations[0].current_status, Status.STATUS_RESOLVED)
+        self.assertEqual(observations[1].current_status, Status.STATUS_OPEN)
+        self.assertEqual(observations[2].current_status, Status.STATUS_RESOLVED)
 
         observation_logs = Observation_Log.objects.filter(
             observation__product=1
@@ -240,20 +239,20 @@ class TestImportObservations(BaseTestCase):
         self.assertEqual(len(observation_logs), 7)
 
         self.assertEqual(observation_logs[4].observation, observations[1])
-        self.assertEqual(observation_logs[4].severity, Observation.SEVERITY_HIGH)
+        self.assertEqual(observation_logs[4].severity, Severity.SEVERITY_HIGH)
         self.assertEqual(observation_logs[4].status, "")
         self.assertEqual(observation_logs[4].comment, "Updated by parser")
 
         self.assertEqual(observation_logs[5].observation, observations[0])
         self.assertEqual(observation_logs[5].severity, "")
-        self.assertEqual(observation_logs[5].status, Observation.STATUS_RESOLVED)
+        self.assertEqual(observation_logs[5].status, Status.STATUS_RESOLVED)
         self.assertEqual(
             observation_logs[5].comment, "Observation not found in latest scan"
         )
 
         self.assertEqual(observation_logs[6].observation, observations[2])
         self.assertEqual(observation_logs[6].severity, "")
-        self.assertEqual(observation_logs[6].status, Observation.STATUS_RESOLVED)
+        self.assertEqual(observation_logs[6].status, Status.STATUS_RESOLVED)
         self.assertEqual(
             observation_logs[6].comment, "Observation not found in latest scan"
         )

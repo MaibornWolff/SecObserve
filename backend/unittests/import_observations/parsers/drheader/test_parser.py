@@ -1,7 +1,7 @@
 from os import path
 from unittest import TestCase
 
-from application.core.models import Observation
+from application.core.types import Severity
 from application.import_observations.parsers.drheader.parser import DrHEADerParser
 
 
@@ -57,7 +57,7 @@ class TestCycloneDXParser(TestCase):
 
 **Expected:** no-cache"""
             self.assertEqual(description, observation.description)
-            self.assertEqual(Observation.SEVERITY_HIGH, observation.parser_severity)
+            self.assertEqual(Severity.SEVERITY_HIGH, observation.parser_severity)
             self.assertEqual(
                 "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Pragma",
                 observation.unsaved_references[0],
@@ -79,7 +79,7 @@ class TestCycloneDXParser(TestCase):
 * strict-origin-when-cross-origin
 * no-referrer"""
             self.assertEqual(description, observation.description)
-            self.assertEqual(Observation.SEVERITY_HIGH, observation.parser_severity)
+            self.assertEqual(Severity.SEVERITY_HIGH, observation.parser_severity)
             self.assertEqual(
                 "https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#referrer-policy",
                 observation.unsaved_references[0],
@@ -96,7 +96,7 @@ class TestCycloneDXParser(TestCase):
 
 **Expected:** max-age=31536000; includeSubDomains"""
             self.assertEqual(description, observation.description)
-            self.assertEqual(Observation.SEVERITY_HIGH, observation.parser_severity)
+            self.assertEqual(Severity.SEVERITY_HIGH, observation.parser_severity)
             self.assertEqual(
                 "https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Strict_Transport_Security_Cheat_Sheet.html",
                 observation.unsaved_references[0],

@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import React from "react";
+import { Fragment } from "react";
 import { DashboardMenuItem, MenuItemLink, MenuProps, useSidebarState, useTranslate } from "react-admin";
 
 import observations from "../../core/observations";
@@ -14,7 +14,7 @@ const Menu = ({ dense = false }: MenuProps) => {
     const [open] = useSidebarState();
 
     return (
-        <React.Fragment>
+        <Fragment>
             <Box
                 sx={{
                     width: open ? 200 : 50,
@@ -92,7 +92,7 @@ const Menu = ({ dense = false }: MenuProps) => {
                     <img src="maibornwolff.svg" height={"24px"} />
                 </a>
             </Box>
-        </React.Fragment>
+        </Fragment>
     );
 };
 

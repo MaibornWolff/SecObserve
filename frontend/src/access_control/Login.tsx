@@ -3,6 +3,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import { Avatar, Button, Card, CardActions, CircularProgress, Stack } from "@mui/material";
 import Box from "@mui/material/Box";
 import PropTypes from "prop-types";
+import { Fragment } from "react";
 import { useState } from "react";
 import { Form, TextInput, required, useLogin, useNotify, useTheme } from "react-admin";
 import { useAuth } from "react-oidc-context";
@@ -47,7 +48,7 @@ const Login = () => {
     };
 
     return (
-        <div>
+        <Fragment>
             {isAuthenticated && <Navigate to="/" replace={true} />}
             {!isAuthenticated && !auth.isLoading && (
                 <Form onSubmit={handleSubmit} noValidate>
@@ -117,7 +118,7 @@ const Login = () => {
                     </Box>
                 </Form>
             )}
-        </div>
+        </Fragment>
     );
 };
 

@@ -1,19 +1,19 @@
 import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
-import * as React from "react";
+import { Fragment, useState } from "react";
 import {
     BooleanInput,
     CreateBase,
     SaveButton,
     SimpleForm,
     Toolbar,
-    required,
     useCreate,
     useNotify,
     useRefresh,
 } from "react-admin";
 
+import { validate_required_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 
 export type BranchCreateProps = {
@@ -21,7 +21,7 @@ export type BranchCreateProps = {
 };
 
 const BranchCreate = ({ id }: BranchCreateProps) => {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const refresh = useRefresh();
     const notify = useNotify();
     const [create] = useCreate();
@@ -38,7 +38,6 @@ const BranchCreate = ({ id }: BranchCreateProps) => {
                 direction: "row",
                 justifyContent: "center",
                 alignItems: "center",
-                color: "#000000dd",
             }}
             variant="contained"
             onClick={handleCancel}
@@ -75,7 +74,7 @@ const BranchCreate = ({ id }: BranchCreateProps) => {
     };
 
     return (
-        <React.Fragment>
+        <Fragment>
             <Button
                 variant="contained"
                 onClick={handleOpen}
@@ -89,7 +88,7 @@ const BranchCreate = ({ id }: BranchCreateProps) => {
                 <DialogContent>
                     <CreateBase resource="branches">
                         <SimpleForm onSubmit={create_branch} toolbar={<CustomToolbar />}>
-                            <TextInputWide source="name" validate={requiredValidate} />
+                            <TextInputWide source="name" validate={validate_required_255} />
                             <BooleanInput
                                 source="housekeeping_protect"
                                 label="Protect from housekeeping"
@@ -99,10 +98,8 @@ const BranchCreate = ({ id }: BranchCreateProps) => {
                     </CreateBase>
                 </DialogContent>
             </Dialog>
-        </React.Fragment>
+        </Fragment>
     );
 };
-
-const requiredValidate = [required()];
 
 export default BranchCreate;

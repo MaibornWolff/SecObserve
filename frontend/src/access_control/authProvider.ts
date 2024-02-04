@@ -49,6 +49,7 @@ const authProvider: AuthProvider = {
 
         if (oidc_signed_in()) {
             const user_manager = new UserManager(oidcConfig);
+            user_manager.removeUser();
             return user_manager.signoutRedirect();
         }
 

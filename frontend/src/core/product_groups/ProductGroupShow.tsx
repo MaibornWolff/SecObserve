@@ -1,7 +1,8 @@
 import BarChartIcon from "@mui/icons-material/BarChart";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import TokenIcon from "@mui/icons-material/Token";
-import { Stack, Typography } from "@mui/material";
+import { Divider, Stack, Typography } from "@mui/material";
+import { Fragment } from "react";
 import {
     BooleanField,
     EditButton,
@@ -10,7 +11,6 @@ import {
     PrevNextButtons,
     RichTextField,
     Show,
-    SimpleShowLayout,
     Tab,
     TabbedShowLayout,
     TextField,
@@ -63,127 +63,127 @@ const ShowActions = () => {
 
 const ProductGroupShow = () => {
     return (
-        <div>
+        <Fragment>
             <ProductGroupHeader />
             <Show actions={<ShowActions />}>
                 <WithRecord
                     render={(product_group) => (
                         <TabbedShowLayout>
                             <Tab label="Overview" icon={<product_groups.icon />}>
-                                <SimpleShowLayout>
-                                    <Typography variant="h6">Product Group</Typography>
-                                    <TextField source="name" />
-                                    {product_group.description && <RichTextField source="description" />}
-
-                                    {product_group.repository_branch_housekeeping_active != null && (
-                                        <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                                            Source code repository (for products)
-                                        </Typography>
+                                <Typography variant="h6">Product Group</Typography>
+                                <Stack spacing={1}>
+                                    <Labeled>
+                                        <TextField source="name" />
+                                    </Labeled>
+                                    {product_group.description && (
+                                        <Labeled>
+                                            <RichTextField source="description" label="Description" />
+                                        </Labeled>
                                     )}
-                                    {product_group.repository_branch_housekeeping_active != null && (
-                                        <div>
-                                            <Labeled label="Housekeeping">
-                                                <BooleanField
-                                                    source="repository_branch_housekeeping_active"
-                                                    valueLabelFalse="Disabled"
-                                                    valueLabelTrue="Product group specific"
-                                                />
-                                            </Labeled>
-                                            {product_group.repository_branch_housekeeping_active == true && (
-                                                <div>
-                                                    <Labeled label="Keep inactive">
-                                                        <NumberField source="repository_branch_housekeeping_keep_inactive_days" />
-                                                    </Labeled>
-                                                    <br />
-                                                    <Labeled label="Exempt branches">
-                                                        <TextField source="repository_branch_housekeeping_exempt_branches" />
-                                                    </Labeled>
-                                                    <br />
-                                                </div>
+                                </Stack>
+                                {product_group.repository_branch_housekeeping_active != null && (
+                                    <Fragment>
+                                        <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+                                        <Typography variant="h6">Housekeeping (for products)</Typography>
+
+                                        <Labeled label="Housekeeping">
+                                            <BooleanField
+                                                source="repository_branch_housekeeping_active"
+                                                valueLabelFalse="Disabled"
+                                                valueLabelTrue="Product group specific"
+                                            />
+                                        </Labeled>
+                                        {product_group.repository_branch_housekeeping_active == true && (
+                                            <Stack spacing={1}>
+                                                <Labeled label="Keep inactive">
+                                                    <NumberField source="repository_branch_housekeeping_keep_inactive_days" />
+                                                </Labeled>
+                                                <Labeled label="Exempt branches">
+                                                    <TextField source="repository_branch_housekeeping_exempt_branches" />
+                                                </Labeled>
+                                            </Stack>
+                                        )}
+                                    </Fragment>
+                                )}
+                                {(product_group.notification_email_to ||
+                                    product_group.notification_ms_teams_webhook ||
+                                    product_group.notification_slack_webhook) && (
+                                    <Fragment>
+                                        <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+                                        <Typography variant="h6">Notifications (for products)</Typography>
+                                        <Stack spacing={1}>
+                                            {product_group.notification_email_to && (
+                                                <Labeled label="Email">
+                                                    <TextField source="notification_email_to" />
+                                                </Labeled>
                                             )}
-                                        </div>
-                                    )}
-
-                                    {(product_group.notification_email_to ||
-                                        product_group.notification_ms_teams_webhook ||
-                                        product_group.notification_slack_webhook) && (
-                                        <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                                            Notifications (for products)
-                                        </Typography>
-                                    )}
-                                    {product_group.notification_email_to && (
-                                        <TextField source="notification_email_to" label="Email" />
-                                    )}
-                                    {product_group.notification_ms_teams_webhook && (
-                                        <TextField source="notification_ms_teams_webhook" label="MS Teams" />
-                                    )}
-                                    {product_group.notification_slack_webhook && (
-                                        <TextField source="notification_slack_webhook" label="Slack" />
-                                    )}
-
-                                    {product_group.security_gate_active != null && (
-                                        <div>
-                                            <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                                                Security Gate (for products)
-                                            </Typography>
-                                            <Labeled label="Security gate">
-                                                <BooleanField
-                                                    source="security_gate_active"
-                                                    valueLabelFalse="Disabled"
-                                                    valueLabelTrue="Product group specific"
-                                                />
-                                            </Labeled>
-                                            {product_group.security_gate_active == true && (
-                                                <div>
-                                                    <Labeled>
-                                                        <NumberField source="security_gate_threshold_critical" />
-                                                    </Labeled>
-                                                    <br />
-                                                    <Labeled>
-                                                        <NumberField source="security_gate_threshold_high" />
-                                                    </Labeled>
-                                                    <br />
-                                                    <Labeled>
-                                                        <NumberField source="security_gate_threshold_medium" />
-                                                    </Labeled>
-                                                    <br />
-                                                    <Labeled>
-                                                        <NumberField source="security_gate_threshold_low" />
-                                                    </Labeled>
-                                                    <br />
-                                                    <Labeled>
-                                                        <NumberField source="security_gate_threshold_none" />
-                                                    </Labeled>
-                                                    <br />
-                                                    <Labeled>
-                                                        <NumberField source="security_gate_unkown" />
-                                                    </Labeled>
-                                                    <br />
-                                                </div>
+                                            {product_group.notification_ms_teams_webhook && (
+                                                <Labeled label="MS Teams">
+                                                    <TextField source="notification_ms_teams_webhook" />
+                                                </Labeled>
                                             )}
-                                        </div>
-                                    )}
-                                </SimpleShowLayout>
+                                            {product_group.notification_slack_webhook && (
+                                                <Labeled label="Slack">
+                                                    <TextField source="notification_slack_webhook" />
+                                                </Labeled>
+                                            )}
+                                        </Stack>
+                                    </Fragment>
+                                )}
+                                {product_group.security_gate_active != null && (
+                                    <Fragment>
+                                        <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+                                        <Typography variant="h6">Security Gate (for products)</Typography>
+                                        <Labeled label="Security gate">
+                                            <BooleanField
+                                                source="security_gate_active"
+                                                valueLabelFalse="Disabled"
+                                                valueLabelTrue="Product group specific"
+                                            />
+                                        </Labeled>
+                                        {product_group.security_gate_active == true && (
+                                            <Stack spacing={1}>
+                                                <Labeled>
+                                                    <NumberField source="security_gate_threshold_critical" />
+                                                </Labeled>
+                                                <Labeled>
+                                                    <NumberField source="security_gate_threshold_high" />
+                                                </Labeled>
+                                                <Labeled>
+                                                    <NumberField source="security_gate_threshold_medium" />
+                                                </Labeled>
+                                                <Labeled>
+                                                    <NumberField source="security_gate_threshold_low" />
+                                                </Labeled>
+                                                <Labeled>
+                                                    <NumberField source="security_gate_threshold_none" />
+                                                </Labeled>
+                                                <Labeled>
+                                                    <NumberField source="security_gate_threshold_unkown" />
+                                                </Labeled>
+                                            </Stack>
+                                        )}
+                                    </Fragment>
+                                )}
                             </Tab>
                             <Tab label="Products" path="products" icon={<product.icon />}>
                                 <ProductEmbeddedList product_group={product_group} />
                             </Tab>
                             <Tab label="Metrics" path="metrics" icon={<BarChartIcon />}>
-                                <SimpleShowLayout>
-                                    <MetricsHeader repository_default_branch={undefined} />
-                                    <Stack
-                                        direction="row"
-                                        spacing={2}
-                                        sx={{
-                                            alignItems: "center",
-                                            marginTop: 2,
-                                        }}
-                                    >
-                                        <MetricsSeveritiesCurrent product_id={product_group.id} />
-                                        <MetricsSeveritiesTimeline product_id={product_group.id} />
-                                        <MetricsStatusCurrent product_id={product_group.id} />
-                                    </Stack>{" "}
-                                </SimpleShowLayout>
+                                <MetricsHeader repository_default_branch={undefined} />
+                                <Stack
+                                    direction="row"
+                                    spacing={2}
+                                    sx={{
+                                        alignItems: "center",
+                                        marginTop: 1,
+                                        marginBottom: 1,
+                                    }}
+                                >
+                                    <MetricsSeveritiesCurrent product_id={product_group.id} />
+                                    <MetricsSeveritiesTimeline product_id={product_group.id} />
+                                    <MetricsStatusCurrent product_id={product_group.id} />
+                                </Stack>
                             </Tab>
                             <Tab label="Rules" path="rules" icon={<general_rules.icon />}>
                                 <Stack
@@ -222,7 +222,7 @@ const ProductGroupShow = () => {
                     )}
                 />
             </Show>
-        </div>
+        </Fragment>
     );
 };
 

@@ -1,20 +1,20 @@
 import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
-import * as React from "react";
+import { Fragment, useState } from "react";
 import {
     CreateBase,
     ReferenceInput,
     SaveButton,
     SimpleForm,
     Toolbar,
-    required,
     useCreate,
     useNotify,
     useRefresh,
 } from "react-admin";
 
 import { ROLE_CHOICES } from "../../access_control/types";
+import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
 
 export type ProductMemberCreateProps = {
@@ -22,7 +22,7 @@ export type ProductMemberCreateProps = {
 };
 
 const ProductMemberCreate = ({ id }: ProductMemberCreateProps) => {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const refresh = useRefresh();
     const notify = useNotify();
     const [create] = useCreate();
@@ -39,7 +39,6 @@ const ProductMemberCreate = ({ id }: ProductMemberCreateProps) => {
                 direction: "row",
                 justifyContent: "center",
                 alignItems: "center",
-                color: "#000000dd",
             }}
             variant="contained"
             onClick={handleCancel}
@@ -76,7 +75,7 @@ const ProductMemberCreate = ({ id }: ProductMemberCreateProps) => {
     };
 
     return (
-        <React.Fragment>
+        <Fragment>
             <Button
                 variant="contained"
                 onClick={handleOpen}
@@ -96,17 +95,15 @@ const ProductMemberCreate = ({ id }: ProductMemberCreateProps) => {
                                 label="User Category"
                                 sort={{ field: "full_name", order: "ASC" }}
                             >
-                                <AutocompleteInputWide optionText="full_name" validate={requiredValidate} />
+                                <AutocompleteInputWide optionText="full_name" validate={validate_required} />
                             </ReferenceInput>
-                            <AutocompleteInputWide source="role" choices={ROLE_CHOICES} validate={requiredValidate} />
+                            <AutocompleteInputWide source="role" choices={ROLE_CHOICES} validate={validate_required} />
                         </SimpleForm>
                     </CreateBase>
                 </DialogContent>
             </Dialog>
-        </React.Fragment>
+        </Fragment>
     );
 };
-
-const requiredValidate = [required()];
 
 export default ProductMemberCreate;

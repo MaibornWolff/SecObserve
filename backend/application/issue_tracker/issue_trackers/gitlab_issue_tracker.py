@@ -11,7 +11,7 @@ from application.issue_tracker.issue_trackers.base_issue_tracker import (
 
 
 class GitLabIssueTracker(BaseIssueTracker):
-    def create_issue(self, observation: Observation) -> None:
+    def create_issue(self, observation: Observation) -> str:
         data = {
             "title": self._get_title(observation),
             "description": self._get_description(observation),
@@ -26,8 +26,7 @@ class GitLabIssueTracker(BaseIssueTracker):
             timeout=60,
         )
         response.raise_for_status()
-        observation.issue_tracker_issue_id = response.json().get("iid")
-        observation.save()
+        return response.json().get("iid")
 
     def get_issue(self, product: Product, issue_id: str) -> Optional[Issue]:
         response = requests.get(

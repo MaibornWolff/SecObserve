@@ -2,18 +2,10 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import UploadIcon from "@mui/icons-material/Upload";
 import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { ChangeEvent, Fragment, useState } from "react";
-import {
-    ReferenceInput,
-    SaveButton,
-    SimpleForm,
-    Toolbar,
-    WithRecord,
-    required,
-    useNotify,
-    useRefresh,
-} from "react-admin";
+import { ReferenceInput, SaveButton, SimpleForm, Toolbar, WithRecord, useNotify, useRefresh } from "react-admin";
 import { makeStyles } from "tss-react/mui";
 
+import { validate_255, validate_2048, validate_required } from "../../commons/custom_validators";
 import { getIconAndFontColor } from "../../commons/functions";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
@@ -106,7 +98,6 @@ const FileUploadObservations = () => {
                 direction: "row",
                 justifyContent: "center",
                 alignItems: "center",
-                color: "#000000dd",
             }}
             variant="contained"
             onClick={handleCancel}
@@ -170,11 +161,15 @@ const FileUploadObservations = () => {
                             sort={{ field: "name", order: "ASC" }}
                             filter={{ source: "File" }}
                         >
-                            <AutocompleteInputWide optionText="name" validate={requiredValidate} />
+                            <AutocompleteInputWide optionText="name" validate={validate_required} />
                         </ReferenceInput>
-                        <TextInputWide source="service" />
-                        <TextInputWide source="docker_image_name_tag" label="Docker image name:tag" />
-                        <TextInputWide source="endpoint_url" />
+                        <TextInputWide source="service" validate={validate_255} />
+                        <TextInputWide
+                            source="docker_image_name_tag"
+                            label="Docker image name:tag"
+                            validate={validate_255}
+                        />
+                        <TextInputWide source="endpoint_url" validate={validate_2048} />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>
@@ -186,7 +181,5 @@ const FileUploadObservations = () => {
         </Fragment>
     );
 };
-
-const requiredValidate = [required()];
 
 export default FileUploadObservations;

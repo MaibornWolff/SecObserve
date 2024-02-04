@@ -1,6 +1,7 @@
 from unittest.mock import patch
 
 from application.core.models import Observation
+from application.core.types import Severity
 from application.issue_tracker.issue_trackers.base_issue_tracker import BaseIssueTracker
 from unittests.base_test_case import BaseTestCase
 
@@ -8,7 +9,7 @@ from unittests.base_test_case import BaseTestCase
 class TestBaseIssueTracker(BaseTestCase):
     def setUp(self) -> None:
         super().setUp()
-        self.observation_1.current_severity = Observation.SEVERITY_HIGH
+        self.observation_1.current_severity = Severity.SEVERITY_HIGH
 
     def test_get_title_no_origin(self):
         issue_tracker = BaseIssueTracker()

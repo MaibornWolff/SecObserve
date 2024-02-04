@@ -10,6 +10,7 @@ from application.core.models import (
     Product,
     Product_Member,
 )
+from application.core.types import Severity, Status
 from application.import_observations.models import Api_Configuration
 from application.rules.models import Rule
 
@@ -31,8 +32,8 @@ class BaseTestCase(TestCase):
         self.observation_log_1 = Observation_Log(
             observation=self.observation_1,
             user=self.user_internal,
-            severity=Observation.SEVERITY_CRITICAL,
-            status=Observation.STATUS_DUPLICATE,
+            severity=Severity.SEVERITY_CRITICAL,
+            status=Status.STATUS_DUPLICATE,
             comment="comment",
         )
         self.product_rule_1 = Rule(name="rule_1", product=self.product_1)

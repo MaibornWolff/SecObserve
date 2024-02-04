@@ -1,4 +1,6 @@
 import { Box, Paper, Typography } from "@mui/material";
+import { TableHead } from "@mui/material";
+import { Fragment } from "react";
 import {
     ArrayField,
     Datagrid,
@@ -17,7 +19,7 @@ import { useStyles } from "../../commons/layout/themes";
 
 const ObservationsShowAside = () => {
     return (
-        <Box width={"33%"} ml={2}>
+        <Box width={"33%"} marginLeft={2} marginRight={1}>
             <MetaData />
             <References />
             <Evidences />
@@ -27,7 +29,7 @@ const ObservationsShowAside = () => {
 
 const MetaData = () => {
     return (
-        <Paper sx={{ mb: 2 }}>
+        <Paper sx={{ marginBottom: 2 }}>
             <WithRecord
                 render={(observation) => (
                     <SimpleShowLayout>
@@ -88,33 +90,32 @@ const MetaData = () => {
     );
 };
 
+const EmptyDatagridHeader = () => <TableHead />;
+
 const References = () => {
     const { classes } = useStyles();
 
     return (
         <WithRecord
             render={(observation) => (
-                <div>
-                    {" "}
+                <Fragment>
                     {observation.references && observation.references.length > 0 && (
-                        <Paper>
-                            <Typography
-                                variant="h6"
-                                sx={{
-                                    paddingLeft: "16px",
-                                    paddingTop: "8px",
-                                }}
-                            >
+                        <Paper sx={{ marginBottom: 2 }}>
+                            <Typography variant="h6" sx={{ paddingLeft: 2, paddingTop: 1 }}>
                                 References
                             </Typography>
                             <ArrayField source="references" label={false}>
-                                <Datagrid bulkActionButtons={false}>
+                                <Datagrid
+                                    bulkActionButtons={false}
+                                    header={EmptyDatagridHeader}
+                                    sx={{ paddingBottom: 2 }}
+                                >
                                     <UrlField source="url" label={false} target="_blank" className={classes.link} />
                                 </Datagrid>
                             </ArrayField>
                         </Paper>
-                    )}{" "}
-                </div>
+                    )}
+                </Fragment>
             )}
         />
     );
@@ -125,25 +126,18 @@ const Evidences = () => {
     return (
         <WithRecord
             render={(observation) => (
-                <div>
-                    {" "}
+                <Fragment>
                     {observation.evidences && observation.evidences.length > 0 && (
-                        <Paper
-                            sx={{
-                                marginTop: "16px",
-                            }}
-                        >
-                            <Typography
-                                variant="h6"
-                                sx={{
-                                    paddingLeft: "16px",
-                                    paddingTop: "8px",
-                                }}
-                            >
+                        <Paper sx={{ marginBottom: 2 }}>
+                            <Typography variant="h6" sx={{ paddingLeft: 2, paddingTop: 1 }}>
                                 Evidences
                             </Typography>
                             <ArrayField source="evidences" label={false}>
-                                <Datagrid bulkActionButtons={false}>
+                                <Datagrid
+                                    bulkActionButtons={false}
+                                    header={EmptyDatagridHeader}
+                                    sx={{ paddingBottom: 2 }}
+                                >
                                     <WithRecord
                                         render={(evidence) => (
                                             <Link to={"/evidences/" + evidence.id + "/show"} className={classes.link}>
@@ -154,8 +148,8 @@ const Evidences = () => {
                                 </Datagrid>
                             </ArrayField>
                         </Paper>
-                    )}{" "}
-                </div>
+                    )}
+                </Fragment>
             )}
         />
     );

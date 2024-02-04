@@ -5,6 +5,7 @@ from huey.contrib.djhuey import db_task
 
 from application.commons.services.tasks import handle_task_exception
 from application.core.models import Branch, Observation, Potential_Duplicate, Product
+from application.core.types import Status
 
 
 @db_task()
@@ -31,12 +32,11 @@ def _handle_observation(observation: Observation, observations: QuerySet[Observa
     Potential_Duplicate.objects.filter(observation=observation).delete()
     initial_has_potential_duplicates = observation.has_potential_duplicates
     observation.has_potential_duplicates = False
-    if observation.current_status == Observation.STATUS_OPEN:
+    if observation.current_status == Status.STATUS_OPEN:
         for potential_duplicate_observation in observations:
             if (
                 observation != potential_duplicate_observation
-                and potential_duplicate_observation.current_status
-                == Observation.STATUS_OPEN
+                and potential_duplicate_observation.current_status == Status.STATUS_OPEN
             ):
                 potential_duplicate_type = None
                 if (
@@ -83,10 +83,10 @@ def set_potential_duplicate_both_ways(observation: Observation) -> None:
 def set_potential_duplicate(observation: Observation) -> None:
     initial_has_potential_duplicates = observation.has_potential_duplicates
 
-    if observation.current_status == Observation.STATUS_OPEN:
+    if observation.current_status == Status.STATUS_OPEN:
         open_potential_duplicates = Potential_Duplicate.objects.filter(
             observation=observation,
-            potential_duplicate_observation__current_status=Observation.STATUS_OPEN,
+            potential_duplicate_observation__current_status=Status.STATUS_OPEN,
         ).count()
         if open_potential_duplicates == 0:
             observation.has_potential_duplicates = False

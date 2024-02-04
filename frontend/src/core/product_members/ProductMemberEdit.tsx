@@ -1,23 +1,15 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import EditIcon from "@mui/icons-material/Edit";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
-import * as React from "react";
-import {
-    ReferenceInput,
-    SaveButton,
-    SimpleForm,
-    Toolbar,
-    required,
-    useNotify,
-    useRefresh,
-    useUpdate,
-} from "react-admin";
+import { Fragment, useState } from "react";
+import { ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh, useUpdate } from "react-admin";
 
 import { ROLE_CHOICES } from "../../access_control/types";
+import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
 
 const ProductMemberEdit = () => {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const [update] = useUpdate();
     const refresh = useRefresh();
     const notify = useNotify();
@@ -63,7 +55,6 @@ const ProductMemberEdit = () => {
                 direction: "row",
                 justifyContent: "center",
                 alignItems: "center",
-                color: "#000000dd",
             }}
             variant="contained"
             onClick={handleCancel}
@@ -81,7 +72,7 @@ const ProductMemberEdit = () => {
         </Toolbar>
     );
     return (
-        <React.Fragment>
+        <Fragment>
             <Button
                 onClick={handleOpen}
                 size="small"
@@ -97,14 +88,12 @@ const ProductMemberEdit = () => {
                         <ReferenceInput source="user" reference="users" sort={{ field: "full_name", order: "ASC" }}>
                             <AutocompleteInputWide optionText="full_name" disabled />
                         </ReferenceInput>
-                        <AutocompleteInputWide source="role" choices={ROLE_CHOICES} validate={requiredValidate} />
+                        <AutocompleteInputWide source="role" choices={ROLE_CHOICES} validate={validate_required} />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>
-        </React.Fragment>
+        </Fragment>
     );
 };
-
-const requiredValidate = [required()];
 
 export default ProductMemberEdit;

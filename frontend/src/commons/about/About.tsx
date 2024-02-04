@@ -12,15 +12,15 @@ import {
     Stack,
     Typography,
 } from "@mui/material";
-import * as React from "react";
+import { Fragment, useState } from "react";
 
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
 const About = () => {
     const get_version = "version_unkown";
 
-    const [open, setOpen] = React.useState(false);
-    const [backendVersion, setBackendVersion] = React.useState("...");
+    const [open, setOpen] = useState(false);
+    const [backendVersion, setBackendVersion] = useState("...");
 
     const getBackendVersion = async () => {
         httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/status/version", {
@@ -52,13 +52,11 @@ const About = () => {
                 direction: "row",
                 justifyContent: "center",
                 alignItems: "center",
-                color: "#000000dd",
             }}
             variant="contained"
             onClick={handleOk}
             color="inherit"
         >
-            {" "}
             OK
         </Button>
     );
@@ -68,13 +66,12 @@ const About = () => {
     }
 
     return (
-        <React.Fragment>
+        <Fragment>
             <MenuItem
                 onClick={() => {
                     handleOpen();
                 }}
             >
-                {" "}
                 <ListItemIcon>
                     <InfoIcon />
                 </ListItemIcon>
@@ -85,7 +82,7 @@ const About = () => {
                 <DialogContent>
                     <Typography sx={{ marginBottom: 4 }}>
                         SecObserve gathers results about potential security flaws from various vulnerability scanning
-                        tools and makes them available for assessment and reporting.{" "}
+                        tools and makes them available for assessment and reporting.
                     </Typography>
                     <Grid container spacing={2}>
                         <Grid item xs={4}>
@@ -134,7 +131,7 @@ const About = () => {
                     </Stack>
                 </DialogContent>
             </Dialog>
-        </React.Fragment>
+        </Fragment>
     );
 };
 

@@ -3,11 +3,13 @@ from typing import Optional
 
 from django.core.files.base import File
 
-from application.core.models import Observation, Parser
+from application.core.models import Observation
+from application.core.types import Severity
 from application.import_observations.parsers.base_parser import (
     BaseFileParser,
     BaseParser,
 )
+from application.import_observations.types import Parser_Type
 
 # Recommended cipher suites, curves and signature algorithms according to German BSI as of 2023
 TLS12_RECOMMENDED_CIPHERS = [
@@ -120,7 +122,7 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
 
     @classmethod
     def get_type(cls) -> str:
-        return Parser.TYPE_DAST  # pylint: disable=duplicate-code
+        return Parser_Type.TYPE_DAST  # pylint: disable=duplicate-code
 
     def check_format(self, file: File) -> tuple[bool, list[str], dict]:
         try:
@@ -184,7 +186,7 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
         observation = Observation(
             title="Weak protocols detected",
             description=description,
-            parser_severity=Observation.SEVERITY_HIGH,
+            parser_severity=Severity.SEVERITY_HIGH,
             origin_endpoint_url=endpoint_url,
             scanner=self.get_name(),
         )
@@ -224,7 +226,7 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
                     observation = Observation(
                         title="Unrecommended " + protocol_name + " cipher suites",
                         description=description,
-                        parser_severity=Observation.SEVERITY_MEDIUM,
+                        parser_severity=Severity.SEVERITY_MEDIUM,
                         origin_endpoint_url=endpoint_url,
                         scanner=self.get_name(),
                     )
@@ -262,7 +264,7 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
         observation = Observation(
             title="Unrecommended elliptic curves",
             description=description,
-            parser_severity=Observation.SEVERITY_MEDIUM,
+            parser_severity=Severity.SEVERITY_MEDIUM,
             origin_endpoint_url=endpoint_url,
             scanner=self.get_name(),
         )
@@ -301,7 +303,7 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
         observation = Observation(
             title="Unrecommended signature algorithms",
             description=description,
-            parser_severity=Observation.SEVERITY_MEDIUM,
+            parser_severity=Severity.SEVERITY_MEDIUM,
             origin_endpoint_url=endpoint_url,
             scanner=self.get_name(),
         )

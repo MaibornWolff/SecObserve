@@ -3,7 +3,7 @@ from unittest.mock import patch
 from requests import Response
 from requests.exceptions import HTTPError
 
-from application.core.models import Observation
+from application.core.types import Severity, Status
 from application.issue_tracker.issue_trackers.base_issue_tracker import Issue
 from application.issue_tracker.issue_trackers.gitlab_issue_tracker import (
     GitLabIssueTracker,
@@ -15,7 +15,7 @@ class TestGitLabIssueTracker(BaseTestCase):
     def setUp(self):
         super().setUp()
         self.observation_1.pk = 1
-        self.observation_1.current_severity = Observation.SEVERITY_CRITICAL
+        self.observation_1.current_severity = Severity.SEVERITY_CRITICAL
         self.observation_1.description = "description_1"
         self.observation_1.product.issue_tracker_project_id = "gh_project_1"
         self.observation_1.product.issue_tracker_labels = "label_1, label_2"
@@ -23,10 +23,20 @@ class TestGitLabIssueTracker(BaseTestCase):
         self.observation_1.product.issue_tracker_base_url = "https://gitlab.example.com"
 
     @patch("requests.post")
-    @patch("application.core.models.Observation.save")
-    def test_create_issue(self, save_mock, post_mock):
+    def test_create_issue(self, post_mock):
+        class MockResponse:
+            def raise_for_status(self):
+                pass
+
+            def json(self):
+                return {"iid": "gl_1"}
+
+        response = MockResponse()
+        post_mock.return_value = response
+
         issue_tracker = GitLabIssueTracker()
-        issue_tracker.create_issue(self.observation_1)
+        issue_id = issue_tracker.create_issue(self.observation_1)
+
         post_mock.assert_called_once_with(
             url="https://gitlab.example.com/api/v4/projects/gh_project_1/issues",
             headers={"PRIVATE-TOKEN": "api_key_1"},
@@ -38,7 +48,7 @@ class TestGitLabIssueTracker(BaseTestCase):
             },
             timeout=60,
         )
-        save_mock.assert_called_once()
+        self.assertEqual("gl_1", issue_id)
 
     @patch("requests.post")
     def test_create_issue_exception(self, post_mock):
@@ -213,7 +223,7 @@ class TestGitLabIssueTracker(BaseTestCase):
         put_mock.return_value = response
         self.observation_1.issue_tracker_issue_id = "gh_1"
         self.observation_1.product.issue_tracker_labels = "label_2,label_3"
-        self.observation_1.current_status = Observation.STATUS_RESOLVED
+        self.observation_1.current_status = Status.STATUS_RESOLVED
         with self.assertRaises(HTTPError) as e:
             issue_tracker = GitLabIssueTracker()
             issue = Issue(
@@ -246,7 +256,7 @@ class TestGitLabIssueTracker(BaseTestCase):
         put_mock.return_value.status_code = 200
         self.observation_1.issue_tracker_issue_id = "gh_1"
         self.observation_1.product.issue_tracker_labels = "label_2,label_3"
-        self.observation_1.current_status = Observation.STATUS_RESOLVED
+        self.observation_1.current_status = Status.STATUS_RESOLVED
         issue_tracker = GitLabIssueTracker()
         issue = Issue(
             id="gh_1",

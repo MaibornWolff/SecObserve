@@ -2,17 +2,9 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import {
-    SaveButton,
-    SimpleForm,
-    Toolbar,
-    required,
-    useListContext,
-    useNotify,
-    useRefresh,
-    useUnselectAll,
-} from "react-admin";
+import { SaveButton, SimpleForm, Toolbar, useListContext, useNotify, useRefresh, useUnselectAll } from "react-admin";
 
+import { validate_required_255 } from "../../commons/custom_validators";
 import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../types";
@@ -80,7 +72,6 @@ const ObservationBulkAssessment = (props: ObservationBulkAssessmentButtonProps) 
                 direction: "row",
                 justifyContent: "center",
                 alignItems: "center",
-                color: "#000000dd",
             }}
             variant="contained"
             onClick={handleCancel}
@@ -121,7 +112,7 @@ const ObservationBulkAssessment = (props: ObservationBulkAssessmentButtonProps) 
                             label="Status"
                             choices={OBSERVATION_STATUS_CHOICES}
                         />
-                        <TextInputWide multiline source="comment" validate={requiredValidate} />
+                        <TextInputWide source="comment" validate={validate_required_255} />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>
@@ -133,7 +124,5 @@ const ObservationBulkAssessment = (props: ObservationBulkAssessmentButtonProps) 
         </Fragment>
     );
 };
-
-const requiredValidate = [required()];
 
 export default ObservationBulkAssessment;

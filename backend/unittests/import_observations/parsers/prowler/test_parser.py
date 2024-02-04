@@ -1,7 +1,7 @@
 from os import path
 from unittest import TestCase
 
-from application.core.models import Observation
+from application.core.types import Severity
 from application.import_observations.parsers.prowler.parser import ProwlerParser
 
 
@@ -82,7 +82,7 @@ class TestProwlerParser(TestCase):
 
 Auto Minor Version Upgrade is a feature that you can enable to have your database automatically upgraded when a new minor database engine version is available. Minor version upgrades often patch security vulnerabilities and fix bugs and therefore should be applied."""
             self.assertEqual(description, observation.description)
-            self.assertEqual(Observation.SEVERITY_LOW, observation.parser_severity)
+            self.assertEqual(Severity.SEVERITY_LOW, observation.parser_severity)
             self.assertIn(
                 "Enable auto minor version upgrade for all databases and environments.",
                 observation.recommendation,
@@ -127,7 +127,7 @@ Auto Minor Version Upgrade is a feature that you can enable to have your databas
 
 Turning on Microsoft Defender for App Service enables threat detection for App Service, providing threat intelligence, anomaly detection, and behavior analytics in the Microsoft Defender for Cloud."""
             self.assertEqual(description, observation.description)
-            self.assertEqual(Observation.SEVERITY_HIGH, observation.parser_severity)
+            self.assertEqual(Severity.SEVERITY_HIGH, observation.parser_severity)
             recommendation = """By default, Microsoft Defender for Cloud is not enabled for your App Service instances. Enabling the Defender security service for App Service instances allows for advanced security defense using threat detection capabilities provided by Microsoft Security Response Center.
 
 * **Terraform:** https://docs.bridgecrew.io/docs/ensure-that-azure-defender-is-set-to-on-for-app-service#terraform

@@ -7,12 +7,12 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import SettingsIcon from "@mui/icons-material/Settings";
 import TokenIcon from "@mui/icons-material/Token";
 import { Stack } from "@mui/material";
+import { Fragment } from "react";
 import { useState } from "react";
 import {
     EditButton,
     PrevNextButtons,
     Show,
-    SimpleShowLayout,
     Tab,
     TabbedShowLayout,
     TopToolbar,
@@ -106,7 +106,7 @@ const ProductShow = () => {
     }
 
     return (
-        <div>
+        <Fragment>
             <ProductHeader />
             <Show actions={<ShowActions filter={filter} storeKey={storeKey} />}>
                 <WithRecord
@@ -128,21 +128,20 @@ const ProductShow = () => {
                                 <ObservationsEmbeddedList product={product} />
                             </Tab>
                             <Tab label="Metrics" path="metrics" icon={<BarChartIcon />} onClick={hideSettingsTabs}>
-                                <SimpleShowLayout>
-                                    <MetricsHeader repository_default_branch={product.repository_default_branch_name} />
-                                    <Stack
-                                        direction="row"
-                                        spacing={2}
-                                        sx={{
-                                            alignItems: "center",
-                                            marginTop: 2,
-                                        }}
-                                    >
-                                        <MetricsSeveritiesCurrent product_id={product.id} />
-                                        <MetricsSeveritiesTimeline product_id={product.id} />
-                                        <MetricsStatusCurrent product_id={product.id} />
-                                    </Stack>{" "}
-                                </SimpleShowLayout>
+                                <MetricsHeader repository_default_branch={product.repository_default_branch_name} />
+                                <Stack
+                                    direction="row"
+                                    spacing={2}
+                                    sx={{
+                                        alignItems: "center",
+                                        marginTop: 1,
+                                        marginBottom: 1,
+                                    }}
+                                >
+                                    <MetricsSeveritiesCurrent product_id={product.id} />
+                                    <MetricsSeveritiesTimeline product_id={product.id} />
+                                    <MetricsStatusCurrent product_id={product.id} />
+                                </Stack>
                             </Tab>
                             <Tab
                                 label="Vulnerability Checks"
@@ -221,7 +220,7 @@ const ProductShow = () => {
                     )}
                 />
             </Show>
-        </div>
+        </Fragment>
     );
 };
 

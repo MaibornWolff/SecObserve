@@ -1,7 +1,7 @@
 from os import path
 from unittest import TestCase
 
-from application.core.models import Observation
+from application.core.types import Severity
 from application.import_observations.parsers.cryptolyzer.parser import CryptoLyzerParser
 
 
@@ -54,7 +54,7 @@ class TestCryptolyzeParser(TestCase):
                 "**Unrecommended cipher suites according to BSI recommendations:**\n* TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256",
                 observation.description,
             )
-            self.assertEqual(Observation.SEVERITY_MEDIUM, observation.parser_severity)
+            self.assertEqual(Severity.SEVERITY_MEDIUM, observation.parser_severity)
             self.assertEqual(
                 "https://www.example.org:443", observation.origin_endpoint_url
             )
@@ -75,7 +75,7 @@ class TestCryptolyzeParser(TestCase):
                 "**Unrecommended cipher suites according to BSI recommendations:**\n* TLS_CHACHA20_POLY1305_SHA256",
                 observation.description,
             )
-            self.assertEqual(Observation.SEVERITY_MEDIUM, observation.parser_severity)
+            self.assertEqual(Severity.SEVERITY_MEDIUM, observation.parser_severity)
             self.assertEqual(
                 "https://www.example.org:443", observation.origin_endpoint_url
             )
@@ -95,7 +95,7 @@ class TestCryptolyzeParser(TestCase):
                 "**Unrecommended elliptic curves according to BSI recommendations:**\n* X25519\n* X448",
                 observation.description,
             )
-            self.assertEqual(Observation.SEVERITY_MEDIUM, observation.parser_severity)
+            self.assertEqual(Severity.SEVERITY_MEDIUM, observation.parser_severity)
             self.assertEqual(
                 "https://www.example.org:443", observation.origin_endpoint_url
             )
@@ -113,7 +113,7 @@ class TestCryptolyzeParser(TestCase):
                 "**Unrecommended signature algorithms according to BSI recommendations:**\n* RSA_SHA1\n* RSA_SHA224",
                 observation.description,
             )
-            self.assertEqual(Observation.SEVERITY_MEDIUM, observation.parser_severity)
+            self.assertEqual(Severity.SEVERITY_MEDIUM, observation.parser_severity)
             self.assertEqual(
                 "https://www.example.org:443", observation.origin_endpoint_url
             )
@@ -141,7 +141,7 @@ class TestCryptolyzeParser(TestCase):
                 "**Weak protocols according to BSI recommendations:**\n* tls1\n* tls1_1",
                 observation.description,
             )
-            self.assertEqual(Observation.SEVERITY_HIGH, observation.parser_severity)
+            self.assertEqual(Severity.SEVERITY_HIGH, observation.parser_severity)
             self.assertEqual(
                 "https://tls-v1-0.badssl.com:443", observation.origin_endpoint_url
             )

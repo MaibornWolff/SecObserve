@@ -2,18 +2,20 @@ from json import dumps, load
 
 from django.core.files.base import File
 
-from application.core.models import Observation, Parser
+from application.core.models import Observation
+from application.core.types import Severity
 from application.import_observations.parsers.base_parser import (
     BaseFileParser,
     BaseParser,
 )
+from application.import_observations.types import Parser_Type
 
 SEVERITIES = {
-    "0": Observation.SEVERITY_NONE,
-    "1": Observation.SEVERITY_LOW,
-    "2": Observation.SEVERITY_MEDIUM,
-    "3": Observation.SEVERITY_HIGH,
-    "4": Observation.SEVERITY_CRITICAL,
+    "0": Severity.SEVERITY_NONE,
+    "1": Severity.SEVERITY_LOW,
+    "2": Severity.SEVERITY_MEDIUM,
+    "3": Severity.SEVERITY_HIGH,
+    "4": Severity.SEVERITY_CRITICAL,
 }
 
 
@@ -24,7 +26,7 @@ class ZAPParser(BaseParser, BaseFileParser):
 
     @classmethod
     def get_type(cls) -> str:
-        return Parser.TYPE_DAST
+        return Parser_Type.TYPE_DAST
 
     def check_format(self, file: File) -> tuple[bool, list[str], dict]:
         try:
@@ -47,7 +49,7 @@ class ZAPParser(BaseParser, BaseFileParser):
             for alert in site.get("alerts"):
                 data_title = alert.get("alert")
                 data_severity = SEVERITIES.get(
-                    alert.get("riskcode"), Observation.SEVERITY_UNKOWN
+                    alert.get("riskcode"), Severity.SEVERITY_UNKOWN
                 )
 
                 data_description = self.get_description(alert)

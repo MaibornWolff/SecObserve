@@ -1,7 +1,8 @@
-import { Paper, Stack } from "@mui/material";
-import { Datagrid, ListContextProvider, Pagination, WithRecord, useListController } from "react-admin";
+import { Stack } from "@mui/material";
+import { Datagrid, ListContextProvider, WithRecord, useListController } from "react-admin";
 
 import { PERMISSION_SERVICE_DELETE } from "../../access_control/types";
+import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import { getSettingListSize } from "../../commons/settings/functions";
@@ -44,34 +45,28 @@ const ServiceEmbeddedList = ({ product }: ServiceEmbeddedListProps) => {
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
-                <Paper>
-                    <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false}>
-                        <WithRecord
-                            label="Name"
-                            render={(service) => (
-                                <TextUrlField
-                                    text={service.name}
-                                    url={get_observations_url(
-                                        product.id,
-                                        service.id,
-                                        product.repository_default_branch
-                                    )}
-                                />
-                            )}
-                        />
-                        <ObservationsCountField withLabel={false} />
-                        <WithRecord
-                            render={(service) => (
-                                <Stack direction="row" spacing={4}>
-                                    {product &&
-                                        product.permissions.includes(PERMISSION_SERVICE_DELETE) &&
-                                        !service.is_default_service && <ServiceDelete service={service} />}
-                                </Stack>
-                            )}
-                        />
-                    </Datagrid>
-                </Paper>
-                <Pagination />
+                <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false}>
+                    <WithRecord
+                        label="Name"
+                        render={(service) => (
+                            <TextUrlField
+                                text={service.name}
+                                url={get_observations_url(product.id, service.id, product.repository_default_branch)}
+                            />
+                        )}
+                    />
+                    <ObservationsCountField withLabel={false} />
+                    <WithRecord
+                        render={(service) => (
+                            <Stack direction="row" spacing={4}>
+                                {product &&
+                                    product.permissions.includes(PERMISSION_SERVICE_DELETE) &&
+                                    !service.is_default_service && <ServiceDelete service={service} />}
+                            </Stack>
+                        )}
+                    />
+                </Datagrid>
+                <CustomPagination />
             </div>
         </ListContextProvider>
     );

@@ -1,7 +1,7 @@
 from os import path
 from unittest import TestCase
 
-from application.core.models import Observation
+from application.core.types import Severity
 from application.import_observations.parsers.azure_defender.parser import (
     AzureDefenderParser,
 )
@@ -68,7 +68,7 @@ class TestAzureDefenderParser(TestCase):
             )
             description = """Private links enforce secure communication, by providing private connectivity to the storage account"""
             self.assertEqual(description, observation.description)
-            self.assertEqual(Observation.SEVERITY_MEDIUM, observation.parser_severity)
+            self.assertEqual(Severity.SEVERITY_MEDIUM, observation.parser_severity)
             self.assertEqual(
                 "To enforce secure communications for your storage accounts, add a private endpoint as described here: https://aka.ms/connectprivatelytostorageaccount.",
                 observation.recommendation,
@@ -92,7 +92,7 @@ class TestAzureDefenderParser(TestCase):
 
 These accounts can be targets for attackers looking to find ways to access your data without being noticed."""
             self.assertEqual(description, observation.description)
-            self.assertEqual(Observation.SEVERITY_HIGH, observation.parser_severity)
+            self.assertEqual(Severity.SEVERITY_HIGH, observation.parser_severity)
             recommendation = """Review the list of accounts that are blocked from signing in on the Accounts section. Select an account to view its role definitions and locate the source scope. If you accept the risk for specific account, use the exempt capability to exclude it from evaluation.
 
 Go to the Azure portal.

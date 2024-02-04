@@ -5,11 +5,12 @@ from json import dumps
 
 from django.core.files.base import File
 
-from application.core.models import Observation, Parser
+from application.core.models import Observation
 from application.import_observations.parsers.base_parser import (
     BaseFileParser,
     BaseParser,
 )
+from application.import_observations.types import Parser_Type
 
 
 class AzureDefenderParser(BaseParser, BaseFileParser):
@@ -19,7 +20,7 @@ class AzureDefenderParser(BaseParser, BaseFileParser):
 
     @classmethod
     def get_type(cls) -> str:
-        return Parser.TYPE_INFRASTRUCTURE
+        return Parser_Type.TYPE_INFRASTRUCTURE
 
     def check_format(self, file: File) -> tuple[bool, list[str], dict | list]:
         if file.name and not file.name.endswith(".csv"):

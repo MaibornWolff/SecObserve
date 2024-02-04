@@ -30,6 +30,7 @@ export interface Product extends RaRecord {
     issue_tracker_labels: string;
     issue_tracker_issue_type: string;
     issue_tracker_status_closed: string;
+    issue_tracker_minimum_severity: string;
     last_observation_change: string;
 }
 
@@ -102,6 +103,7 @@ export interface Observation extends RaRecord {
     origin_docker_image_tag: string;
     origin_docker_image_name_tag: string;
     origin_docker_image_name_tag_short: string;
+    origin_docker_image_digest: string;
     origin_endpoint_url: string;
     origin_endpoint_scheme: string;
     origin_endpoint_hostname: string;

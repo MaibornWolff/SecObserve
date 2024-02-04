@@ -15,7 +15,6 @@ const ProductGroupHeader = () => {
 
     return (
         <RecordContextProvider value={product_group}>
-            {" "}
             <Paper
                 sx={{
                     alignItems: "top",

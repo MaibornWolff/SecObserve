@@ -1,7 +1,7 @@
 import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
-import * as React from "react";
+import { Fragment, useState } from "react";
 import {
     BooleanInput,
     CreateBase,
@@ -9,12 +9,12 @@ import {
     SaveButton,
     SimpleForm,
     Toolbar,
-    required,
     useCreate,
     useNotify,
     useRefresh,
 } from "react-admin";
 
+import { validate_required, validate_required_255 } from "../../commons/custom_validators";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 
 export type ApiConfigurationCreateProps = {
@@ -22,7 +22,7 @@ export type ApiConfigurationCreateProps = {
 };
 
 const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const refresh = useRefresh();
     const notify = useNotify();
     const [create] = useCreate();
@@ -40,7 +40,6 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
                 direction: "row",
                 justifyContent: "center",
                 alignItems: "center",
-                color: "#000000dd",
             }}
             variant="contained"
             onClick={handleCancel}
@@ -77,7 +76,7 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
     };
 
     return (
-        <React.Fragment>
+        <Fragment>
             <Button
                 variant="contained"
                 onClick={handleOpen}
@@ -91,27 +90,25 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
                 <DialogContent>
                     <CreateBase resource="api_configurations">
                         <SimpleForm onSubmit={create_api_configuration} toolbar={<CustomToolbar />}>
-                            <TextInputWide autoFocus source="name" validate={requiredValidate} />
+                            <TextInputWide autoFocus source="name" validate={validate_required_255} />
                             <ReferenceInput
                                 source="parser"
                                 reference="parsers"
                                 sort={{ field: "name", order: "ASC" }}
                                 filter={{ source: "API" }}
                             >
-                                <AutocompleteInputWide optionText="name" validate={requiredValidate} />
+                                <AutocompleteInputWide optionText="name" validate={validate_required} />
                             </ReferenceInput>
-                            <TextInputWide source="base_url" validate={requiredValidate} label="Base URL" />
-                            <TextInputWide source="project_key" validate={requiredValidate} />
-                            <TextInputWide source="api_key" label="API key" validate={requiredValidate} />
+                            <TextInputWide source="base_url" label="Base URL" validate={validate_required_255} />
+                            <TextInputWide source="project_key" validate={validate_required_255} />
+                            <TextInputWide source="api_key" label="API key" validate={validate_required_255} />
                             <BooleanInput source="test_connection" defaultValue={true} />
                         </SimpleForm>
                     </CreateBase>
                 </DialogContent>
             </Dialog>
-        </React.Fragment>
+        </Fragment>
     );
 };
-
-const requiredValidate = [required()];
 
 export default ApiConfigurationCreate;

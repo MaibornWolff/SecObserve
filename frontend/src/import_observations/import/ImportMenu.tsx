@@ -2,7 +2,7 @@ import UploadIcon from "@mui/icons-material/Upload";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { useState } from "react";
+import { Fragment, MouseEvent, useState } from "react";
 
 import ApiImportObservations from "./ApiImportObservations";
 import FileUploadObservations from "./FileUploadObservations";
@@ -14,7 +14,7 @@ interface ImportMenuProps {
 const ImportMenu = (props: ImportMenuProps) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
@@ -22,7 +22,7 @@ const ImportMenu = (props: ImportMenuProps) => {
     };
 
     return (
-        <div>
+        <Fragment>
             <Button
                 id="import-button"
                 aria-controls={open ? "import-menu" : undefined}
@@ -51,7 +51,7 @@ const ImportMenu = (props: ImportMenuProps) => {
                     <ApiImportObservations product={props.product} />
                 </MenuItem>
             </Menu>
-        </div>
+        </Fragment>
     );
 };
 

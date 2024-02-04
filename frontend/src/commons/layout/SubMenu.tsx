@@ -1,5 +1,6 @@
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { Collapse, List, ListItemIcon, MenuItem, Tooltip, Typography } from "@mui/material";
+import { Fragment } from "react";
 import * as React from "react";
 import { ReactElement, ReactNode } from "react";
 import { useSidebarState, useTranslate } from "react-admin";
@@ -29,7 +30,7 @@ const SubMenu = (props: Props) => {
     );
 
     return (
-        <div>
+        <Fragment>
             {sidebarIsOpen || isOpen ? (
                 header
             ) : (
@@ -52,7 +53,7 @@ const SubMenu = (props: Props) => {
                     {children}
                 </List>
             </Collapse>
-        </div>
+        </Fragment>
     );
 };
 

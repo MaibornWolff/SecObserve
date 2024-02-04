@@ -1,15 +1,16 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
-import * as React from "react";
-import { SaveButton, SimpleForm, Toolbar, required, useNotify, useRefresh } from "react-admin";
+import { Fragment, useState } from "react";
+import { SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
 
+import { validate_required, validate_required_255 } from "../../commons/custom_validators";
 import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../types";
 
 const ObservationAssessment = () => {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const refresh = useRefresh();
     const notify = useNotify();
 
@@ -55,7 +56,6 @@ const ObservationAssessment = () => {
                 direction: "row",
                 justifyContent: "center",
                 alignItems: "center",
-                color: "#000000dd",
             }}
             variant="contained"
             onClick={handleCancel}
@@ -73,7 +73,7 @@ const ObservationAssessment = () => {
         </Toolbar>
     );
     return (
-        <React.Fragment>
+        <Fragment>
             <Button
                 onClick={handleOpen}
                 size="small"
@@ -89,21 +89,19 @@ const ObservationAssessment = () => {
                         <AutocompleteInputMedium
                             source="current_severity"
                             choices={OBSERVATION_SEVERITY_CHOICES}
-                            validate={requiredValidate}
+                            validate={validate_required}
                         />
                         <AutocompleteInputMedium
                             source="current_status"
                             choices={OBSERVATION_STATUS_CHOICES}
-                            validate={requiredValidate}
+                            validate={validate_required}
                         />
-                        <TextInputWide multiline source="comment" validate={requiredValidate} />
+                        <TextInputWide source="comment" validate={validate_required_255} />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>
-        </React.Fragment>
+        </Fragment>
     );
 };
-
-const requiredValidate = [required()];
 
 export default ObservationAssessment;

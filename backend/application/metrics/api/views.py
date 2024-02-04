@@ -10,8 +10,8 @@ from rest_framework.views import APIView
 
 from application.access_control.services.authorization import user_has_permission_or_403
 from application.access_control.services.roles_permissions import Permissions
-from application.core.models import Observation
 from application.core.queries.product import get_product_by_id
+from application.core.types import Severity
 from application.metrics.models import Product_Metrics_Status
 from application.metrics.services.export_metrics import (
     export_product_metrics_csv,
@@ -93,15 +93,15 @@ class ProductMetricsExportCodeChartaView(APIView):
             fieldnames=[
                 "source_file",
                 "Vulnerabilities_Total".lower(),
-                f"Vulnerabilities_{Observation.SEVERITY_CRITICAL}".lower(),
-                f"Vulnerabilities_{Observation.SEVERITY_HIGH}".lower(),
-                f"Vulnerabilities_{Observation.SEVERITY_MEDIUM}".lower(),
-                f"Vulnerabilities_{Observation.SEVERITY_LOW}".lower(),
-                f"Vulnerabilities_{Observation.SEVERITY_NONE}".lower(),
-                f"Vulnerabilities_{Observation.SEVERITY_UNKOWN}".lower(),
-                f"Vulnerabilities_{Observation.SEVERITY_HIGH}_and_above".lower(),
-                f"Vulnerabilities_{Observation.SEVERITY_MEDIUM}_and_above".lower(),
-                f"Vulnerabilities_{Observation.SEVERITY_LOW}_and_above".lower(),
+                f"Vulnerabilities_{Severity.SEVERITY_CRITICAL}".lower(),
+                f"Vulnerabilities_{Severity.SEVERITY_HIGH}".lower(),
+                f"Vulnerabilities_{Severity.SEVERITY_MEDIUM}".lower(),
+                f"Vulnerabilities_{Severity.SEVERITY_LOW}".lower(),
+                f"Vulnerabilities_{Severity.SEVERITY_NONE}".lower(),
+                f"Vulnerabilities_{Severity.SEVERITY_UNKOWN}".lower(),
+                f"Vulnerabilities_{Severity.SEVERITY_HIGH}_and_above".lower(),
+                f"Vulnerabilities_{Severity.SEVERITY_MEDIUM}_and_above".lower(),
+                f"Vulnerabilities_{Severity.SEVERITY_LOW}_and_above".lower(),
             ],
         )
         writer.writeheader()

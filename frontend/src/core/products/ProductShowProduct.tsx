@@ -1,14 +1,8 @@
-import { Typography } from "@mui/material";
-import {
-    BooleanField,
-    Labeled,
-    NumberField,
-    ReferenceField,
-    RichTextField,
-    SimpleShowLayout,
-    TextField,
-} from "react-admin";
+import { Divider, Stack, Typography } from "@mui/material";
+import { Fragment } from "react";
+import { BooleanField, Labeled, NumberField, ReferenceField, RichTextField, TextField } from "react-admin";
 
+import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { Product } from "../types";
 
 type ProductShowProductProps = {
@@ -17,91 +11,122 @@ type ProductShowProductProps = {
 
 const ProductShowProduct = ({ product }: ProductShowProductProps) => {
     return (
-        <SimpleShowLayout>
+        <Fragment>
             <Typography variant="h6">Product</Typography>
-            <TextField source="name" />
-            {product.description && <RichTextField source="description" />}
-            {product.product_group && (
-                <ReferenceField source="product_group" reference="product_groups" link="show">
+            <Stack spacing={1}>
+                <Labeled>
                     <TextField source="name" />
-                </ReferenceField>
-            )}
+                </Labeled>
+                {product.description && (
+                    <Labeled>
+                        <RichTextField source="description" />
+                    </Labeled>
+                )}
+                {product.product_group && (
+                    <Labeled label="Product group">
+                        <ReferenceField source="product_group" reference="product_groups" link="show">
+                            <TextField source="name" />
+                        </ReferenceField>
+                    </Labeled>
+                )}
+            </Stack>
 
-            <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                Rules
-            </Typography>
-            <BooleanField source="apply_general_rules" />
+            <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+
+            <Typography variant="h6">Rules</Typography>
+            <Labeled label="Apply general rules">
+                <BooleanField source="apply_general_rules" />
+            </Labeled>
 
             {(product.repository_prefix ||
                 product.repository_default_branch ||
                 product.repository_branch_housekeeping_active != null) && (
-                <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                    Source code repository
-                </Typography>
-            )}
-            {product.repository_prefix && <TextField source="repository_prefix" />}
-            {product.repository_default_branch && (
-                <ReferenceField source="repository_default_branch" reference="branches" link={false}>
-                    <TextField source="name" />
-                </ReferenceField>
-            )}
-            {((!product.product_group && product.repository_branch_housekeeping_active != null) ||
-                (product.product_group &&
-                    product.product_group_repository_branch_housekeeping_active == null &&
-                    product.repository_branch_housekeeping_active != null)) && (
-                <div>
-                    <Labeled label="Housekeeping">
-                        <BooleanField
-                            source="repository_branch_housekeeping_active"
-                            valueLabelFalse="Disabled"
-                            valueLabelTrue="Product specific"
-                        />
-                    </Labeled>
-                    {product.repository_branch_housekeeping_active == true && (
-                        <div>
-                            <Labeled label="Keep inactive">
-                                <NumberField source="repository_branch_housekeeping_keep_inactive_days" />
+                <Fragment>
+                    <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+                    <Typography variant="h6">Source code repository</Typography>
+                    <Stack spacing={1}>
+                        {product.repository_prefix && (
+                            <Labeled>
+                                <TextField source="repository_prefix" />
                             </Labeled>
-                            <br />
-                            <Labeled label="Exempt branches">
-                                <TextField source="repository_branch_housekeeping_exempt_branches" />
+                        )}
+                        {product.repository_default_branch && (
+                            <ReferenceField source="repository_default_branch" reference="branches" link={false}>
+                                <Labeled label="Default branch">
+                                    <TextField source="name" />
+                                </Labeled>
+                            </ReferenceField>
+                        )}
+                    </Stack>
+                    {((!product.product_group && product.repository_branch_housekeeping_active != null) ||
+                        (product.product_group &&
+                            product.product_group_repository_branch_housekeeping_active == null &&
+                            product.repository_branch_housekeeping_active != null)) && (
+                        <Fragment>
+                            <Labeled label="Housekeeping">
+                                <BooleanField
+                                    source="repository_branch_housekeeping_active"
+                                    valueLabelFalse="Disabled"
+                                    valueLabelTrue="Product specific"
+                                />
                             </Labeled>
-                            <br />
-                        </div>
+                            {product.repository_branch_housekeeping_active == true && (
+                                <Stack spacing={1}>
+                                    <Labeled label="Keep inactive">
+                                        <NumberField source="repository_branch_housekeeping_keep_inactive_days" />
+                                    </Labeled>
+                                    <Labeled label="Exempt branches">
+                                        <TextField source="repository_branch_housekeeping_exempt_branches" />
+                                    </Labeled>
+                                </Stack>
+                            )}
+                        </Fragment>
                     )}
-                </div>
-            )}
-            {product.product_group && product.product_group_repository_branch_housekeeping_active != null && (
-                <Labeled label="Housekeeping (from product group)">
-                    <BooleanField
-                        source="product_group_repository_branch_housekeeping_active"
-                        valueLabelFalse="Disabled"
-                        valueLabelTrue="Product group specific"
-                    />
-                </Labeled>
+                    {product.product_group && product.product_group_repository_branch_housekeeping_active != null && (
+                        <Labeled label="Housekeeping (from product group)">
+                            <BooleanField
+                                source="product_group_repository_branch_housekeeping_active"
+                                valueLabelFalse="Disabled"
+                                valueLabelTrue="Product group specific"
+                            />
+                        </Labeled>
+                    )}
+                </Fragment>
             )}
 
             {(product.notification_email_to ||
                 product.notification_ms_teams_webhook ||
                 product.notification_slack_webhook) && (
-                <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                    Notifications
-                </Typography>
+                <Fragment>
+                    <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+                    <Typography variant="h6">Notifications</Typography>
+                    <Stack spacing={1}>
+                        {product.notification_email_to && (
+                            <Labeled label="Email">
+                                <TextField source="notification_email_to" />
+                            </Labeled>
+                        )}
+                        {product.notification_ms_teams_webhook && (
+                            <Labeled label="MS Teams">
+                                <TextField source="notification_ms_teams_webhook" />
+                            </Labeled>
+                        )}
+                        {product.notification_slack_webhook && (
+                            <Labeled label="Slack">
+                                <TextField source="notification_slack_webhook" />
+                            </Labeled>
+                        )}
+                    </Stack>
+                </Fragment>
             )}
-            {product.notification_email_to && <TextField source="notification_email_to" label="Email" />}
-            {product.notification_ms_teams_webhook && (
-                <TextField source="notification_ms_teams_webhook" label="MS Teams" />
-            )}
-            {product.notification_slack_webhook && <TextField source="notification_slack_webhook" label="Slack" />}
 
             {((!product.product_group && product.security_gate_active != null) ||
                 (product.product_group &&
                     product.product_group_security_gate_active == null &&
                     product.security_gate_active != null)) && (
-                <div>
-                    <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                        Security Gate
-                    </Typography>
+                <Fragment>
+                    <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+                    <Typography variant="h6">Security Gate</Typography>
                     <Labeled label="Security gate">
                         <BooleanField
                             source="security_gate_active"
@@ -110,40 +135,34 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                         />
                     </Labeled>
                     {product.security_gate_active == true && (
-                        <div>
+                        <Stack spacing={1}>
                             <Labeled>
                                 <NumberField source="security_gate_threshold_critical" />
                             </Labeled>
-                            <br />
                             <Labeled>
                                 <NumberField source="security_gate_threshold_high" />
                             </Labeled>
-                            <br />
                             <Labeled>
                                 <NumberField source="security_gate_threshold_medium" />
                             </Labeled>
-                            <br />
                             <Labeled>
                                 <NumberField source="security_gate_threshold_low" />
                             </Labeled>
-                            <br />
                             <Labeled>
                                 <NumberField source="security_gate_threshold_none" />
                             </Labeled>
-                            <br />
                             <Labeled>
                                 <NumberField source="security_gate_threshold_unkown" />
                             </Labeled>
-                            <br />
-                        </div>
+                        </Stack>
                     )}
-                </div>
+                </Fragment>
             )}
+
             {product.product_group && product.product_group_security_gate_active != null && (
-                <div>
-                    <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                        Security Gate
-                    </Typography>
+                <Fragment>
+                    <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+                    <Typography variant="h6">Security Gate</Typography>
                     <Labeled label="Security gate (from product group)">
                         <BooleanField
                             source="product_group_security_gate_active"
@@ -151,58 +170,51 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                             valueLabelTrue="Product group specific"
                         />
                     </Labeled>
-                </div>
+                </Fragment>
             )}
 
-            <Typography variant="h6" sx={{ marginTop: "1em" }}>
-                Issue Tracker
-            </Typography>
-            <BooleanField source="issue_tracker_active" label="Active" />
-            {product.issue_tracker_type && (
-                <div>
+            <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+            <Typography variant="h6">Issue Tracker</Typography>
+            <Labeled label="Active">
+                <BooleanField source="issue_tracker_active" />
+            </Labeled>
+            {product.issue_tracker_active && (
+                <Stack spacing={1}>
                     <Labeled>
                         <TextField source="issue_tracker_type" label="Type" />
                     </Labeled>
-                    <br />
                     <Labeled>
                         <TextField source="issue_tracker_base_url" label="Base URL" />
                     </Labeled>
-                    <br />
                     <Labeled>
                         <TextField source="issue_tracker_project_id" label="Project id" />
                     </Labeled>
-                    <br />
                     <Labeled>
                         <TextField source="issue_tracker_labels" label="Labels" />
                     </Labeled>
-                    <br />
+                    {product && product.issue_tracker_minimum_severity && (
+                        <Labeled>
+                            <SeverityField source="issue_tracker_minimum_severity" label="Minimum severity" />
+                        </Labeled>
+                    )}
                     {product.issue_tracker_username && (
-                        <div>
-                            <Labeled>
-                                <TextField source="issue_tracker_username" label="Username (only for Jira)" />
-                            </Labeled>
-                            <br />
-                        </div>
+                        <Labeled>
+                            <TextField source="issue_tracker_username" label="Username (only for Jira)" />
+                        </Labeled>
                     )}
                     {product.issue_tracker_issue_type && (
-                        <div>
-                            <Labeled>
-                                <TextField source="issue_tracker_issue_type" label="Issue type (only for Jira)" />
-                            </Labeled>
-                            <br />
-                        </div>
+                        <Labeled>
+                            <TextField source="issue_tracker_issue_type" label="Issue type (only for Jira)" />
+                        </Labeled>
                     )}
                     {product.issue_tracker_status_closed && (
-                        <div>
-                            <Labeled>
-                                <TextField source="issue_tracker_status_closed" label="Closed status (only for Jira)" />
-                            </Labeled>
-                            <br />
-                        </div>
+                        <Labeled>
+                            <TextField source="issue_tracker_status_closed" label="Closed status (only for Jira)" />
+                        </Labeled>
                     )}
-                </div>
+                </Stack>
             )}
-        </SimpleShowLayout>
+        </Fragment>
     );
 };
 

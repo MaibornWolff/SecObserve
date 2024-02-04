@@ -20,6 +20,8 @@ from application.core.models import (
     Product_Member,
     Service,
 )
+from application.core.types import Status
+from application.import_observations.types import Parser_Source, Parser_Type
 
 AGE_DAY = "Today"
 AGE_WEEK = "Past 7 days"
@@ -138,8 +140,8 @@ class ServiceFilter(FilterSet):
 
 class ParserFilter(FilterSet):
     name = CharFilter(field_name="name", lookup_expr="icontains")
-    type = ChoiceFilter(field_name="type", choices=Parser.TYPE_CHOICES)
-    source = ChoiceFilter(field_name="source", choices=Parser.SOURCE_CHOICES)
+    type = ChoiceFilter(field_name="type", choices=Parser_Type.TYPE_CHOICES)
+    source = ChoiceFilter(field_name="source", choices=Parser_Source.SOURCE_CHOICES)
 
     ordering = OrderingFilter(
         # tuple-mapping retains order
@@ -250,7 +252,7 @@ class EvidenceFilter(FilterSet):
 class PotentialDuplicateFilter(FilterSet):
     status = ChoiceFilter(
         field_name="potential_duplicate_observation__current_status",
-        choices=Observation.STATUS_CHOICES,
+        choices=Status.STATUS_CHOICES,
     )
 
     class Meta:

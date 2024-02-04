@@ -44,7 +44,7 @@ const EvidenceShow = () => {
                 <TextField source="name" />
                 <WithRecord
                     render={(evidence) => (
-                        <Labeled label="Evidence">
+                        <Labeled label="Evidence" width={"100%"}>
                             <JsonViewer
                                 value={JSON.parse(evidence.evidence)}
                                 groupArraysAfterLength={10000}
@@ -55,6 +55,7 @@ const EvidenceShow = () => {
                                 enableClipboard={false}
                                 className={classes.displayFontSize}
                                 theme={getSettingTheme() as JsonViewerTheme}
+                                sx={{ padding: 1 }}
                             />
                         </Labeled>
                     )}

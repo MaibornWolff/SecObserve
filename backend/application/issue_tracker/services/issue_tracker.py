@@ -6,7 +6,11 @@ from application.access_control.models import User
 from application.commons.services.global_request import get_current_user
 from application.commons.services.tasks import handle_task_exception
 from application.core.models import Observation, Product
-from application.issue_tracker.issue_trackers.base_issue_tracker import BaseIssueTracker
+from application.core.types import Severity, Status
+from application.issue_tracker.issue_trackers.base_issue_tracker import (
+    BaseIssueTracker,
+    Issue,
+)
 from application.issue_tracker.issue_trackers.github_issue_tracker import (
     GitHubIssueTracker,
 )
@@ -14,6 +18,7 @@ from application.issue_tracker.issue_trackers.gitlab_issue_tracker import (
     GitLabIssueTracker,
 )
 from application.issue_tracker.issue_trackers.jira_issue_tracker import JiraIssueTracker
+from application.issue_tracker.types import Issue_Tracker
 
 
 def push_observations_to_issue_tracker(
@@ -32,27 +37,38 @@ def push_observation_to_issue_tracker(observation: Observation, user: User) -> N
             and observation.branch == observation.product.repository_default_branch
         ):
             issue_tracker = issue_tracker_factory(observation.product)
-
-            if observation.issue_tracker_issue_id:
-                issue = issue_tracker.get_issue(
-                    observation.product, observation.issue_tracker_issue_id
-                )
-            else:
-                issue = None
+            issue = _get_issue(observation, issue_tracker)
 
             # If the issue_tracker_issue_id is set but the issue does not exist, remove the id
             if observation.issue_tracker_issue_id and not issue:
                 observation.issue_tracker_issue_id = ""
                 observation.save()
 
-            if observation.current_status == Observation.STATUS_OPEN:
-                if issue:
-                    issue_tracker.update_issue(observation, issue)
+            if observation.current_status == Status.STATUS_OPEN:
+                if observation.product.issue_tracker_minimum_severity:
+                    numerical_minimum_severity = Severity.NUMERICAL_SEVERITIES.get(
+                        observation.product.issue_tracker_minimum_severity, 99
+                    )
                 else:
-                    issue_tracker.create_issue(observation)
+                    numerical_minimum_severity = 99
+
+                if observation.numerical_severity <= numerical_minimum_severity:
+                    if issue:
+                        issue_tracker.update_issue(observation, issue)
+                    else:
+                        issue_id = issue_tracker.create_issue(observation)
+                        observation.issue_tracker_issue_id = issue_id
+                        observation.save()
+                else:
+                    if issue and not observation.issue_tracker_issue_closed:
+                        issue_tracker.close_issue(observation, issue)
+                        observation.issue_tracker_issue_closed = True
+                        observation.save()
             else:
                 if issue:
                     issue_tracker.close_issue(observation, issue)
+                    observation.issue_tracker_issue_closed = True
+                    observation.save()
     except Exception as e:
         handle_task_exception(e, user)
 
@@ -74,13 +90,25 @@ def push_deleted_observation_to_issue_tracker(
 def issue_tracker_factory(
     product: Product, with_communication: bool = True
 ) -> BaseIssueTracker:
-    if product.issue_tracker_type == Product.ISSUE_TRACKER_GITHUB:
+    if product.issue_tracker_type == Issue_Tracker.ISSUE_TRACKER_GITHUB:
         return GitHubIssueTracker()
 
-    if product.issue_tracker_type == Product.ISSUE_TRACKER_GITLAB:
+    if product.issue_tracker_type == Issue_Tracker.ISSUE_TRACKER_GITLAB:
         return GitLabIssueTracker()
 
-    if product.issue_tracker_type == Product.ISSUE_TRACKER_JIRA:
+    if product.issue_tracker_type == Issue_Tracker.ISSUE_TRACKER_JIRA:
         return JiraIssueTracker(product=product, with_communication=with_communication)
 
     raise ValueError(f"Unknown issue tracker type: {product.issue_tracker_type}")
+
+
+def _get_issue(
+    observation: Observation, issue_tracker: BaseIssueTracker
+) -> Optional[Issue]:
+    if observation.issue_tracker_issue_id:
+        issue = issue_tracker.get_issue(
+            observation.product, observation.issue_tracker_issue_id
+        )
+    else:
+        issue = None
+    return issue

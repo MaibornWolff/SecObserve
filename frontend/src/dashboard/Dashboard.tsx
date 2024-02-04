@@ -1,5 +1,5 @@
-import { Stack, Typography } from "@mui/material";
-import React from "react";
+import { Stack } from "@mui/material";
+import { Fragment } from "react";
 import { useAuth } from "react-oidc-context";
 
 import { jwt_signed_in } from "../access_control/authProvider";
@@ -14,8 +14,8 @@ const Dashboard = () => {
 
     return (
         (jwt_signed_in() || auth.isAuthenticated) && (
-            <React.Fragment>
-                <MetricsHeader repository_default_branch={undefined} />
+            <Fragment>
+                <MetricsHeader repository_default_branch={undefined} on_dashboard={true} />
                 <Stack
                     direction="row"
                     spacing={2}
@@ -24,15 +24,12 @@ const Dashboard = () => {
                         marginTop: 2,
                     }}
                 >
-                    <MetricsSeveritiesCurrent product_id={undefined} />
-                    <MetricsSeveritiesTimeline product_id={undefined} />
-                    <MetricsStatusCurrent product_id={undefined} />
+                    <MetricsSeveritiesCurrent product_id={undefined} on_dashboard={true} />
+                    <MetricsSeveritiesTimeline product_id={undefined} on_dashboard={true} />
+                    <MetricsStatusCurrent product_id={undefined} on_dashboard={true} />
                 </Stack>
-                <Typography variant="h6" sx={{ marginTop: 4, marginBottom: 2 }}>
-                    Open observations of the last 7 days
-                </Typography>
                 <ObservationDashboardList />
-            </React.Fragment>
+            </Fragment>
         )
     );
 };

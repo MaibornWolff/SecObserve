@@ -2,7 +2,8 @@ from unittest.mock import patch
 
 from application.access_control.services.roles_permissions import Permissions, Roles
 from application.core.api.serializers import BranchSerializer, ProductSerializer
-from application.core.models import Observation, Product_Member
+from application.core.models import Product_Member
+from application.core.types import Severity, Status
 from unittests.base_test_case import BaseTestCase
 
 
@@ -25,8 +26,8 @@ class TestBranchSerializer(BaseTestCase):
         )
         mock_filter.assert_called_with(
             branch=self.branch_1,
-            current_severity=Observation.SEVERITY_CRITICAL,
-            current_status=Observation.STATUS_OPEN,
+            current_severity=Severity.SEVERITY_CRITICAL,
+            current_status=Status.STATUS_OPEN,
         )
 
     @patch("application.core.models.Observation.objects.filter")
@@ -38,8 +39,8 @@ class TestBranchSerializer(BaseTestCase):
         )
         mock_filter.assert_called_with(
             branch=self.branch_1,
-            current_severity=Observation.SEVERITY_HIGH,
-            current_status=Observation.STATUS_OPEN,
+            current_severity=Severity.SEVERITY_HIGH,
+            current_status=Status.STATUS_OPEN,
         )
 
     @patch("application.core.models.Observation.objects.filter")
@@ -51,8 +52,8 @@ class TestBranchSerializer(BaseTestCase):
         )
         mock_filter.assert_called_with(
             branch=self.branch_1,
-            current_severity=Observation.SEVERITY_MEDIUM,
-            current_status=Observation.STATUS_OPEN,
+            current_severity=Severity.SEVERITY_MEDIUM,
+            current_status=Status.STATUS_OPEN,
         )
 
     @patch("application.core.models.Observation.objects.filter")
@@ -64,8 +65,8 @@ class TestBranchSerializer(BaseTestCase):
         )
         mock_filter.assert_called_with(
             branch=self.branch_1,
-            current_severity=Observation.SEVERITY_LOW,
-            current_status=Observation.STATUS_OPEN,
+            current_severity=Severity.SEVERITY_LOW,
+            current_status=Status.STATUS_OPEN,
         )
 
     @patch("application.core.models.Observation.objects.filter")
@@ -77,8 +78,8 @@ class TestBranchSerializer(BaseTestCase):
         )
         mock_filter.assert_called_with(
             branch=self.branch_1,
-            current_severity=Observation.SEVERITY_NONE,
-            current_status=Observation.STATUS_OPEN,
+            current_severity=Severity.SEVERITY_NONE,
+            current_status=Status.STATUS_OPEN,
         )
 
     @patch("application.core.models.Observation.objects.filter")
@@ -90,8 +91,8 @@ class TestBranchSerializer(BaseTestCase):
         )
         mock_filter.assert_called_with(
             branch=self.branch_1,
-            current_severity=Observation.SEVERITY_UNKOWN,
-            current_status=Observation.STATUS_OPEN,
+            current_severity=Severity.SEVERITY_UNKOWN,
+            current_status=Status.STATUS_OPEN,
         )
 
 
@@ -107,8 +108,8 @@ class TestProductSerializer(BaseTestCase):
         mock_filter.assert_called_with(
             product=self.product_1,
             branch=self.branch_1,
-            current_severity=Observation.SEVERITY_CRITICAL,
-            current_status=Observation.STATUS_OPEN,
+            current_severity=Severity.SEVERITY_CRITICAL,
+            current_status=Status.STATUS_OPEN,
         )
 
     @patch("application.core.models.Observation.objects.filter")
@@ -121,8 +122,8 @@ class TestProductSerializer(BaseTestCase):
         mock_filter.assert_called_with(
             product=self.product_1,
             branch=self.branch_1,
-            current_severity=Observation.SEVERITY_HIGH,
-            current_status=Observation.STATUS_OPEN,
+            current_severity=Severity.SEVERITY_HIGH,
+            current_status=Status.STATUS_OPEN,
         )
 
     @patch("application.core.models.Observation.objects.filter")
@@ -135,8 +136,8 @@ class TestProductSerializer(BaseTestCase):
         mock_filter.assert_called_with(
             product=self.product_1,
             branch=self.branch_1,
-            current_severity=Observation.SEVERITY_MEDIUM,
-            current_status=Observation.STATUS_OPEN,
+            current_severity=Severity.SEVERITY_MEDIUM,
+            current_status=Status.STATUS_OPEN,
         )
 
     @patch("application.core.models.Observation.objects.filter")
@@ -149,8 +150,8 @@ class TestProductSerializer(BaseTestCase):
         mock_filter.assert_called_with(
             product=self.product_1,
             branch=self.branch_1,
-            current_severity=Observation.SEVERITY_LOW,
-            current_status=Observation.STATUS_OPEN,
+            current_severity=Severity.SEVERITY_LOW,
+            current_status=Status.STATUS_OPEN,
         )
 
     @patch("application.core.models.Observation.objects.filter")
@@ -163,8 +164,8 @@ class TestProductSerializer(BaseTestCase):
         mock_filter.assert_called_with(
             product=self.product_1,
             branch=self.branch_1,
-            current_severity=Observation.SEVERITY_NONE,
-            current_status=Observation.STATUS_OPEN,
+            current_severity=Severity.SEVERITY_NONE,
+            current_status=Status.STATUS_OPEN,
         )
 
     @patch("application.core.models.Observation.objects.filter")
@@ -177,8 +178,8 @@ class TestProductSerializer(BaseTestCase):
         mock_filter.assert_called_with(
             product=self.product_1,
             branch=self.branch_1,
-            current_severity=Observation.SEVERITY_UNKOWN,
-            current_status=Observation.STATUS_OPEN,
+            current_severity=Severity.SEVERITY_UNKOWN,
+            current_status=Status.STATUS_OPEN,
         )
 
     @patch("application.core.api.serializers.get_current_user")

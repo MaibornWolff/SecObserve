@@ -1,13 +1,14 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import EditIcon from "@mui/icons-material/Edit";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
-import * as React from "react";
-import { BooleanInput, SaveButton, SimpleForm, Toolbar, required, useNotify, useRefresh, useUpdate } from "react-admin";
+import { Fragment, useState } from "react";
+import { BooleanInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh, useUpdate } from "react-admin";
 
+import { validate_required_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 
 const BranchEdit = () => {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const [update] = useUpdate();
     const refresh = useRefresh();
     const notify = useNotify();
@@ -53,7 +54,6 @@ const BranchEdit = () => {
                 direction: "row",
                 justifyContent: "center",
                 alignItems: "center",
-                color: "#000000dd",
             }}
             variant="contained"
             onClick={handleCancel}
@@ -71,7 +71,7 @@ const BranchEdit = () => {
         </Toolbar>
     );
     return (
-        <React.Fragment>
+        <Fragment>
             <Button
                 onClick={handleOpen}
                 size="small"
@@ -84,15 +84,13 @@ const BranchEdit = () => {
                 <DialogTitle>Edit branch</DialogTitle>
                 <DialogContent>
                     <SimpleForm onSubmit={branch_update} toolbar={<CustomToolbar />}>
-                        <TextInputWide source="name" validate={requiredValidate} />
+                        <TextInputWide source="name" validate={validate_required_255} />
                         <BooleanInput source="housekeeping_protect" label="Protect from housekeeping" />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>
-        </React.Fragment>
+        </Fragment>
     );
 };
-
-const requiredValidate = [required()];
 
 export default BranchEdit;

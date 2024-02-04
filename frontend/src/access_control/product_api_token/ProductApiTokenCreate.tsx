@@ -2,9 +2,10 @@ import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField } from "@mui/material";
 import { useState } from "react";
-import { SaveButton, SimpleForm, Toolbar, required, useNotify, useRefresh } from "react-admin";
+import { SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
 
 import CopyToClipboardButton from "../../commons/custom_fields/CopyToClipboardButton";
+import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 import { ROLE_CHOICES } from "../types";
@@ -47,7 +48,6 @@ const CreateProductApiToken = (props: CreateProductApiTokenProps) => {
                 direction: "row",
                 justifyContent: "center",
                 alignItems: "center",
-                color: "#000000dd",
             }}
             variant="contained"
             onClick={handleRoleCancel}
@@ -106,29 +106,33 @@ const CreateProductApiToken = (props: CreateProductApiTokenProps) => {
                 <DialogTitle>Create product API token</DialogTitle>
                 <DialogContent>
                     <SimpleForm onSubmit={handleApiTokenCreate} toolbar={<CustomToolbar />}>
-                        <AutocompleteInputWide source="role" choices={ROLE_CHOICES} validate={requiredValidate} />
+                        <AutocompleteInputWide source="role" choices={ROLE_CHOICES} validate={validate_required} />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>
             <Dialog open={showApiTokenOpen} onClose={handleApiTokenClose}>
                 <DialogTitle>Create product API token</DialogTitle>
                 <DialogContent>
-                    <Stack direction="row" spacing={2} justifyContent="center" alignItems="center">
+                    <Stack
+                        direction="row"
+                        spacing={2}
+                        justifyContent="center"
+                        alignItems="center"
+                        sx={{ marginBottom: 4 }}
+                    >
                         <TextField disabled defaultValue={apiToken} sx={{ width: "50ch" }} />
                         <CopyToClipboardButton text={apiToken} />
                     </Stack>
-                    <br />
-                    <br />
                     Make sure to copy the token now. You won&apos;t be able to see it again!
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleApiTokenOk}>OK</Button>
+                    <Button variant="contained" color="inherit" onClick={handleApiTokenOk}>
+                        OK
+                    </Button>
                 </DialogActions>
             </Dialog>
         </>
     );
 };
-
-const requiredValidate = [required()];
 
 export default CreateProductApiToken;

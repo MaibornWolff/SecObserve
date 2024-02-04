@@ -4,11 +4,13 @@ from typing import Optional
 
 from django.core.files.base import File
 
-from application.core.models import Observation, Parser
+from application.core.models import Observation
+from application.core.types import Severity
 from application.import_observations.parsers.base_parser import (
     BaseFileParser,
     BaseParser,
 )
+from application.import_observations.types import Parser_Type
 
 
 @dataclass
@@ -25,7 +27,9 @@ class Component:
 @dataclass
 class Metadata:
     scanner: str
-    container: str
+    container_name: str
+    container_tag: str
+    container_digest: str
     file: str
 
 
@@ -36,7 +40,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
 
     @classmethod
     def get_type(cls) -> str:
-        return Parser.TYPE_SCA
+        return Parser_Type.TYPE_SCA
 
     def check_format(self, file: File) -> tuple[bool, list[str], dict]:
         try:
@@ -139,7 +143,9 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                             cvss3_vector=cvss3_vector,
                             cwe=cwe,
                             scanner=metadata.scanner,
-                            origin_docker_image_name_tag=metadata.container,
+                            origin_docker_image_name=metadata.container_name,
+                            origin_docker_image_tag=metadata.container_tag,
+                            origin_docker_image_digest=metadata.container_digest,
                             origin_source_file=metadata.file,
                         )
 
@@ -180,7 +186,9 @@ class CycloneDXParser(BaseParser, BaseFileParser):
 
     def _get_metadata(self, data: dict) -> Metadata:
         scanner = ""
-        container = ""
+        container_name = ""
+        container_tag = ""
+        container_digest = ""
         file = ""
 
         tools = data.get("metadata", {}).get("tools")
@@ -206,13 +214,21 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             data.get("metadata", {}).get("component", {}).get("version", "")
         )
         if component_type == "container":
-            container = component_name
-            if component_version and ":" not in container:
-                container += f":{component_version}"
+            container_name = component_name
+            if component_version and component_version.startswith("sha256:"):
+                container_digest = component_version
+            elif component_version:
+                container_tag = component_version
         if component_type == "file":
             file = component_name
 
-        return Metadata(scanner=scanner, container=container, file=file)
+        return Metadata(
+            scanner=scanner,
+            container_name=container_name,
+            container_tag=container_tag,
+            container_digest=container_digest,
+            file=file,
+        )
 
     def _get_cvss3(self, vulnerability):
         ratings = vulnerability.get("ratings", [])
@@ -230,15 +246,13 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         return None, None
 
     def _get_highest_severity(self, vulnerability):
-        current_severity = Observation.SEVERITY_UNKOWN
+        current_severity = Severity.SEVERITY_UNKOWN
         current_numerical_severity = 999
         ratings = vulnerability.get("ratings", [])
         if ratings:
             for rating in ratings:
-                severity = rating.get(
-                    "severity", Observation.SEVERITY_UNKOWN
-                ).capitalize()
-                numerical_severity = Observation.NUMERICAL_SEVERITIES.get(severity, 99)
+                severity = rating.get("severity", Severity.SEVERITY_UNKOWN).capitalize()
+                numerical_severity = Severity.NUMERICAL_SEVERITIES.get(severity, 99)
                 if numerical_severity < current_numerical_severity:
                     current_severity = severity
         return current_severity

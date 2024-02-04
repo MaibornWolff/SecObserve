@@ -1,5 +1,5 @@
 import { styled } from "@mui/system";
-import { AutocompleteInput, PasswordInput, SelectInput, TextInput, defaultTheme } from "react-admin";
+import { AutocompleteInput, TextInput, defaultTheme } from "react-admin";
 import { makeStyles } from "tss-react/mui";
 
 import { getSettingTheme } from "../../commons/settings/functions";
@@ -12,15 +12,7 @@ export const AutocompleteInputMedium = styled(AutocompleteInput)({
     width: "15em",
 });
 
-export const SelectInputWide = styled(SelectInput)({
-    width: "30em",
-});
-
 export const TextInputWide = styled(TextInput)({
-    width: "30em",
-});
-
-export const PasswordInputWide = styled(PasswordInput)({
     width: "30em",
 });
 
@@ -28,7 +20,7 @@ export function getLinkColor() {
     if (getSettingTheme() == "dark") {
         return "#6ed2f0";
     } else {
-        return "#00b4f0";
+        return "#00B3F0";
     }
 }
 
@@ -56,6 +48,9 @@ export const darkTheme = {
         },
         secondary: {
             main: "#FBBA72",
+        },
+        background: {
+            default: "#313131",
         },
         mode: "dark" as const, // Switching the dark mode on is a single property value change.
     },
@@ -102,7 +97,7 @@ export const lightTheme = {
             contrastText: "#fff",
         },
         background: {
-            default: "#fcfcfe",
+            default: "#fafafb",
         },
         mode: "light" as const,
     },
@@ -118,9 +113,9 @@ export const lightTheme = {
             styleOverrides: {
                 root: {
                     "& .RaReferenceField-link>*": {
-                        color: "#00b4f0",
+                        color: "#00B3F0",
                         ":visited": {
-                            color: "#00b4f0",
+                            color: "#00B3F0",
                         },
                     },
                 },

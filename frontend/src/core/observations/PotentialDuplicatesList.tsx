@@ -1,16 +1,8 @@
-import { Paper } from "@mui/material";
 import { Fragment } from "react";
-import {
-    ChipField,
-    Datagrid,
-    FunctionField,
-    ListContextProvider,
-    Pagination,
-    TextField,
-    useListController,
-} from "react-admin";
+import { ChipField, Datagrid, FunctionField, ListContextProvider, TextField, useListController } from "react-admin";
 
 import { PERMISSION_OBSERVATION_ASSESSMENT } from "../../access_control/types";
+import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { humanReadableDate } from "../../commons/functions";
 import { getSettingListSize } from "../../commons/settings/functions";
@@ -58,47 +50,34 @@ const PotentialDuplicatesList = ({ observation }: PotentialDuplicatesListProps) 
 
     return (
         <ListContextProvider value={listContext}>
-            <div style={{ width: "100%" }}>
-                <Paper>
-                    <Datagrid
-                        size={getSettingListSize()}
-                        sx={{ width: "100%" }}
-                        rowClick={ShowObservations}
-                        bulkActionButtons={<BulkActionButtons observation={observation} />}
-                    >
-                        <TextField source="potential_duplicate_observation.title" label="Title" />
-                        <SeverityField source="potential_duplicate_observation.current_severity" />
-                        <ChipField source="potential_duplicate_observation.current_status" label="Status" />
-                        <TextField source="potential_duplicate_observation.origin_service_name" label="Service" />
-                        <TextField
-                            source="potential_duplicate_observation.origin_component_name_version"
-                            label="Component"
-                        />
-                        <TextField
-                            source="potential_duplicate_observation.origin_docker_image_name_tag_short"
-                            label="Container"
-                        />
-                        <TextField source="potential_duplicate_observation.origin_endpoint_hostname" label="Host" />
-                        <TextField source="potential_duplicate_observation.origin_source_file" label="Source" />
-                        <TextField
-                            source="potential_duplicate_observation.origin_cloud_qualified_resource"
-                            label="Resource"
-                        />
-                        ,
-                        <TextField source="potential_duplicate_observation.scanner_name" label="Scanner" />
-                        <FunctionField<Observation>
-                            label="Age"
-                            sortBy="last_observation_log"
-                            render={(record) =>
-                                record
-                                    ? humanReadableDate(record.potential_duplicate_observation.last_observation_log)
-                                    : ""
-                            }
-                        />
-                    </Datagrid>
-                </Paper>
-                <Pagination />
-            </div>
+            <Datagrid
+                size={getSettingListSize()}
+                rowClick={ShowObservations}
+                bulkActionButtons={<BulkActionButtons observation={observation} />}
+            >
+                <TextField source="potential_duplicate_observation.title" label="Title" />
+                <SeverityField source="potential_duplicate_observation.current_severity" />
+                <ChipField source="potential_duplicate_observation.current_status" label="Status" />
+                <TextField source="potential_duplicate_observation.origin_service_name" label="Service" />
+                <TextField source="potential_duplicate_observation.origin_component_name_version" label="Component" />
+                <TextField
+                    source="potential_duplicate_observation.origin_docker_image_name_tag_short"
+                    label="Container"
+                />
+                <TextField source="potential_duplicate_observation.origin_endpoint_hostname" label="Host" />
+                <TextField source="potential_duplicate_observation.origin_source_file" label="Source" />
+                <TextField source="potential_duplicate_observation.origin_cloud_qualified_resource" label="Resource" />
+                ,
+                <TextField source="potential_duplicate_observation.scanner_name" label="Scanner" />
+                <FunctionField<Observation>
+                    label="Age"
+                    sortBy="last_observation_log"
+                    render={(record) =>
+                        record ? humanReadableDate(record.potential_duplicate_observation.last_observation_log) : ""
+                    }
+                />
+            </Datagrid>
+            <CustomPagination />
         </ListContextProvider>
     );
 };

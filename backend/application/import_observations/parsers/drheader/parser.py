@@ -2,11 +2,13 @@ from json import dumps, load
 
 from django.core.files.base import File
 
-from application.core.models import Observation, Parser
+from application.core.models import Observation
+from application.core.types import Severity
 from application.import_observations.parsers.base_parser import (
     BaseFileParser,
     BaseParser,
 )
+from application.import_observations.types import Parser_Type
 
 REFERENCES = {
     "Access-Control-Allow-Origin": [
@@ -93,7 +95,7 @@ class DrHEADerParser(BaseParser, BaseFileParser):
 
     @classmethod
     def get_type(cls) -> str:
-        return Parser.TYPE_DAST
+        return Parser_Type.TYPE_DAST
 
     def check_format(self, file: File) -> tuple[bool, list[str], dict | list]:
         try:  # pylint: disable=duplicate-code
@@ -129,7 +131,7 @@ class DrHEADerParser(BaseParser, BaseFileParser):
         for drheader_observation in data:
             rule = drheader_observation.get("rule")
             message = drheader_observation.get("message")
-            severity = drheader_observation.get("severity", Observation.SEVERITY_UNKOWN)
+            severity = drheader_observation.get("severity", Severity.SEVERITY_UNKOWN)
             value = drheader_observation.get("value")
             expected = drheader_observation.get("expected")
             delimiter = drheader_observation.get("delimiter")

@@ -1,15 +1,14 @@
-import { Paper } from "@mui/material";
 import {
     Datagrid,
     FilterForm,
     FunctionField,
     ListContextProvider,
-    Pagination,
     TextField,
     TextInput,
     useListController,
 } from "react-admin";
 
+import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
 import { SecurityGateTextField } from "../../commons/custom_fields/SecurityGateTextField";
 import { humanReadableDate } from "../../commons/functions";
@@ -53,20 +52,18 @@ const ProductEmbeddedList = ({ product_group }: ProductEmbeddedListProps) => {
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
                 <FilterForm filters={listFilters()} />
-                <Paper>
-                    <Datagrid size={getSettingListSize()} rowClick={ShowProducts} bulkActionButtons={false}>
-                        <TextField source="name" />
-                        <TextField source="repository_default_branch_name" label="Default branch" sortable={false} />
-                        <SecurityGateTextField />
-                        <ObservationsCountField withLabel={false} />
-                        <FunctionField<Product>
-                            label="Last observation change"
-                            sortBy="last_observation_change"
-                            render={(record) => (record ? humanReadableDate(record.last_observation_change) : "")}
-                        />
-                    </Datagrid>
-                </Paper>
-                <Pagination />
+                <Datagrid size={getSettingListSize()} rowClick={ShowProducts} bulkActionButtons={false}>
+                    <TextField source="name" />
+                    <TextField source="repository_default_branch_name" label="Default branch" sortable={false} />
+                    <SecurityGateTextField />
+                    <ObservationsCountField withLabel={false} />
+                    <FunctionField<Product>
+                        label="Last observation change"
+                        sortBy="last_observation_change"
+                        render={(record) => (record ? humanReadableDate(record.last_observation_change) : "")}
+                    />
+                </Datagrid>
+                <CustomPagination />
             </div>
         </ListContextProvider>
     );

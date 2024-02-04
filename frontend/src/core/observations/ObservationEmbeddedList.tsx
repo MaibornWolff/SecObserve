@@ -1,4 +1,4 @@
-import { Paper, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import { Fragment } from "react";
 import { useEffect } from "react";
 import {
@@ -12,7 +12,6 @@ import {
     ListContextProvider,
     NullableBooleanInput,
     NumberField,
-    Pagination,
     ReferenceInput,
     SelectColumnsButton,
     TextField,
@@ -23,6 +22,7 @@ import {
 import { useNavigate } from "react-router";
 
 import { PERMISSION_OBSERVATION_ASSESSMENT, PERMISSION_OBSERVATION_DELETE } from "../../access_control/types";
+import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { humanReadableDate } from "../../commons/functions";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
@@ -144,41 +144,39 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
                     <FilterForm filters={listFilters(product)} />
                     <ListActions />
                 </Stack>
-                <Paper>
-                    <DatagridConfigurable
-                        size={getSettingListSize()}
-                        sx={{ width: "100%" }}
-                        rowClick={ShowObservations}
-                        bulkActionButtons={
-                            product &&
-                            (product.permissions.includes(PERMISSION_OBSERVATION_ASSESSMENT) ||
-                                product.permissions.includes(PERMISSION_OBSERVATION_DELETE)) && (
-                                <BulkActionButtons product={product} />
-                            )
-                        }
-                        preferenceKey="observations.embedded"
-                    >
-                        <TextField source="branch_name" label="Branch" />
-                        <TextField source="title" />
-                        <SeverityField source="current_severity" />
-                        <ChipField source="current_status" label="Status" />
-                        <NumberField source="epss_score" label="EPSS" />
-                        <TextField source="origin_service_name" label="Service" />
-                        <TextField source="origin_component_name_version" label="Component" />
-                        <TextField source="origin_docker_image_name_tag_short" label="Container" />
-                        <TextField source="origin_endpoint_hostname" label="Host" />
-                        <TextField source="origin_source_file" label="Source" />
-                        <TextField source="origin_cloud_qualified_resource" label="Resource" />
-                        <TextField source="scanner_name" label="Scanner" />
-                        <FunctionField<Observation>
-                            label="Age"
-                            sortBy="last_observation_log"
-                            render={(record) => (record ? humanReadableDate(record.last_observation_log) : "")}
-                        />
-                        <BooleanField source="has_potential_duplicates" label="Dupl." />
-                    </DatagridConfigurable>
-                </Paper>
-                <Pagination />
+                <DatagridConfigurable
+                    size={getSettingListSize()}
+                    sx={{ width: "100%" }}
+                    rowClick={ShowObservations}
+                    bulkActionButtons={
+                        product &&
+                        (product.permissions.includes(PERMISSION_OBSERVATION_ASSESSMENT) ||
+                            product.permissions.includes(PERMISSION_OBSERVATION_DELETE)) && (
+                            <BulkActionButtons product={product} />
+                        )
+                    }
+                    preferenceKey="observations.embedded"
+                >
+                    <TextField source="branch_name" label="Branch" />
+                    <TextField source="title" />
+                    <SeverityField source="current_severity" />
+                    <ChipField source="current_status" label="Status" />
+                    <NumberField source="epss_score" label="EPSS" />
+                    <TextField source="origin_service_name" label="Service" />
+                    <TextField source="origin_component_name_version" label="Component" />
+                    <TextField source="origin_docker_image_name_tag_short" label="Container" />
+                    <TextField source="origin_endpoint_hostname" label="Host" />
+                    <TextField source="origin_source_file" label="Source" />
+                    <TextField source="origin_cloud_qualified_resource" label="Resource" />
+                    <TextField source="scanner_name" label="Scanner" />
+                    <FunctionField<Observation>
+                        label="Age"
+                        sortBy="last_observation_log"
+                        render={(record) => (record ? humanReadableDate(record.last_observation_log) : "")}
+                    />
+                    <BooleanField source="has_potential_duplicates" label="Dupl." />
+                </DatagridConfigurable>
+                <CustomPagination />
             </div>
         </ListContextProvider>
     );

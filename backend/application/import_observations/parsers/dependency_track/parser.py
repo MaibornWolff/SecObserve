@@ -3,20 +3,22 @@ from typing import Optional
 
 import requests
 
-from application.core.models import Observation, Parser
+from application.core.models import Observation
+from application.core.types import Severity, Status
 from application.import_observations.models import Api_Configuration
 from application.import_observations.parsers.base_parser import (
     BaseAPIParser,
     BaseParser,
 )
+from application.import_observations.types import Parser_Type
 
 STATUS_MAPPING = {
     "NOT_SET": "",
-    "EXPLOITABLE": Observation.STATUS_OPEN,
-    "IN_TRIAGE": Observation.STATUS_IN_REVIEW,
-    "RESOLVED": Observation.STATUS_RESOLVED,
-    "FALSE_POSITIVE": Observation.STATUS_FALSE_POSITIVE,
-    "NOT_AFFECTED": Observation.STATUS_NOT_AFFECTED,
+    "EXPLOITABLE": Status.STATUS_OPEN,
+    "IN_TRIAGE": Status.STATUS_IN_REVIEW,
+    "RESOLVED": Status.STATUS_RESOLVED,
+    "FALSE_POSITIVE": Status.STATUS_FALSE_POSITIVE,
+    "NOT_AFFECTED": Status.STATUS_NOT_AFFECTED,
 }
 
 
@@ -30,7 +32,7 @@ class DependencyTrack(BaseParser, BaseAPIParser):
 
     @classmethod
     def get_type(cls) -> str:
-        return Parser.TYPE_SCA
+        return Parser_Type.TYPE_SCA
 
     def check_connection(
         self, api_configuration: Api_Configuration
@@ -78,7 +80,7 @@ class DependencyTrack(BaseParser, BaseAPIParser):
             cvss_v3_base_score = finding.get("vulnerability", {}).get("cvssV3BaseScore")
             cvss_v3_vector = finding.get("vulnerability", {}).get("cvssV3Vector")
             severity = finding.get("vulnerability", {}).get(
-                "severity", Observation.SEVERITY_UNKOWN
+                "severity", Severity.SEVERITY_UNKOWN
             )
             description = finding.get("vulnerability", {}).get("description")
 
@@ -124,10 +126,10 @@ class DependencyTrack(BaseParser, BaseAPIParser):
         if (
             severity.capitalize(),
             severity.capitalize(),
-        ) in Observation.SEVERITY_CHOICES:
+        ) in Severity.SEVERITY_CHOICES:
             return severity.capitalize()
 
-        return Observation.SEVERITY_UNKOWN
+        return Severity.SEVERITY_UNKOWN
 
     def get_cwe(self, cwes: list[dict]) -> int | None:
         if cwes:

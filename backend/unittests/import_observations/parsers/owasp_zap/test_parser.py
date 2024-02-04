@@ -1,7 +1,7 @@
 from os import path
 from unittest import TestCase
 
-from application.core.models import Observation
+from application.core.types import Severity
 from application.import_observations.parsers.zap.parser import ZAPParser
 
 
@@ -37,7 +37,7 @@ class TestZAPParserParser(TestCase):
             self.assertEqual(5, len(observations))
 
             observation = observations[0]
-            self.assertEqual(Observation.SEVERITY_MEDIUM, observation.parser_severity)
+            self.assertEqual(Severity.SEVERITY_MEDIUM, observation.parser_severity)
             self.assertEqual(
                 "https://vulncat.fortify.com/en/detail?id=desc.config.dotnet.html5_overly_permissive_cors_policy",
                 observation.unsaved_references[0],
@@ -64,7 +64,7 @@ class TestZAPParserParser(TestCase):
                 "<p>Remove all comments that return information that may help an attacker and fix any underlying problems they refer to.</p>",
                 observation.recommendation,
             )
-            self.assertEqual(Observation.SEVERITY_NONE, observation.parser_severity)
+            self.assertEqual(Severity.SEVERITY_NONE, observation.parser_severity)
             self.assertEqual("200", observation.cwe)
             self.assertEqual(
                 "https://example-backend.example.com", observation.origin_endpoint_url

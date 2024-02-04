@@ -4,6 +4,8 @@ from urllib.parse import urlparse
 from django.apps import apps
 from django.db.models.fields import CharField, TextField
 
+from application.core.types import Severity, Status
+
 # Parameter observation cannot be typed, because some methods are used in the model class
 
 
@@ -66,30 +68,26 @@ def get_current_severity(observation) -> str:
 
 
 def _get_cvss3_severity(cvss3_score: int):
-    Observation = apps.get_model("core", "Observation")
-
     if cvss3_score is None:
-        return Observation.SEVERITY_UNKOWN
+        return Severity.SEVERITY_UNKOWN
 
     if cvss3_score >= 9:
-        return Observation.SEVERITY_CRITICAL
+        return Severity.SEVERITY_CRITICAL
 
     if cvss3_score >= 7:
-        return Observation.SEVERITY_HIGH
+        return Severity.SEVERITY_HIGH
 
     if cvss3_score >= 4:
-        return Observation.SEVERITY_MEDIUM
+        return Severity.SEVERITY_MEDIUM
 
     if cvss3_score >= 0.1:
-        return Observation.SEVERITY_LOW
+        return Severity.SEVERITY_LOW
 
-    return Observation.SEVERITY_NONE
+    return Severity.SEVERITY_NONE
 
 
 def get_current_status(observation) -> str:
-    Observation = apps.get_model("core", "Observation")
-
-    if observation.parser_status == Observation.STATUS_RESOLVED:
+    if observation.parser_status == Status.STATUS_RESOLVED:
         return observation.parser_status
 
     if observation.assessment_status:
@@ -101,7 +99,7 @@ def get_current_status(observation) -> str:
     if observation.parser_status:
         return observation.parser_status
 
-    return Observation.STATUS_OPEN
+    return Status.STATUS_OPEN
 
 
 def normalize_observation_fields(observation) -> None:
@@ -192,25 +190,10 @@ def normalize_origin_component(observation):  # pylint: disable=too-many-branche
 
 def normalize_origin_docker(observation):
     if not observation.origin_docker_image_name_tag:
-        if observation.origin_docker_image_name and observation.origin_docker_image_tag:
-            observation.origin_docker_image_name_tag = (
-                observation.origin_docker_image_name
-                + ":"
-                + observation.origin_docker_image_tag
-            )
-        elif observation.origin_docker_image_name:
-            observation.origin_docker_image_name_tag = (
-                observation.origin_docker_image_name
-            )
+        _normalize_origin_docker_image_name(observation)
     else:
-        docker_image_parts = observation.origin_docker_image_name_tag.split(":")
-        if len(docker_image_parts) == 2:
-            observation.origin_docker_image_name = docker_image_parts[0]
-            observation.origin_docker_image_tag = docker_image_parts[1]
-        else:
-            observation.origin_docker_image_name = (
-                observation.origin_docker_image_name_tag
-            )
+        _normalize_origin_docker_image_name_tag(observation)
+
     if observation.origin_docker_image_name_tag:
         origin_docker_image_name_tag_parts = (
             observation.origin_docker_image_name_tag.split("/")
@@ -229,6 +212,34 @@ def normalize_origin_docker(observation):
         observation.origin_docker_image_name = ""
     if observation.origin_docker_image_tag is None:
         observation.origin_docker_image_tag = ""
+    if observation.origin_docker_image_digest is None:
+        observation.origin_docker_image_digest = ""
+
+
+def _normalize_origin_docker_image_name(observation):
+    if observation.origin_docker_image_name and not observation.origin_docker_image_tag:
+        docker_image_parts = observation.origin_docker_image_name.split(":")
+        if len(docker_image_parts) == 2:
+            observation.origin_docker_image_name = docker_image_parts[0]
+            observation.origin_docker_image_tag = docker_image_parts[1]
+
+    if observation.origin_docker_image_name and observation.origin_docker_image_tag:
+        observation.origin_docker_image_name_tag = (
+            observation.origin_docker_image_name
+            + ":"
+            + observation.origin_docker_image_tag
+        )
+    else:
+        observation.origin_docker_image_name_tag = observation.origin_docker_image_name
+
+
+def _normalize_origin_docker_image_name_tag(observation):
+    docker_image_parts = observation.origin_docker_image_name_tag.split(":")
+    if len(docker_image_parts) == 2:
+        observation.origin_docker_image_name = docker_image_parts[0]
+        observation.origin_docker_image_tag = docker_image_parts[1]
+    else:
+        observation.origin_docker_image_name = observation.origin_docker_image_name_tag
 
 
 def normalize_origin_endpoint(observation):
@@ -309,12 +320,12 @@ def normalize_severity(observation):
         if (
             observation.parser_severity,
             observation.parser_severity,
-        ) not in observation.SEVERITY_CHOICES:
-            observation.parser_severity = observation.SEVERITY_UNKOWN
+        ) not in Severity.SEVERITY_CHOICES:
+            observation.parser_severity = Severity.SEVERITY_UNKOWN
 
     observation.current_severity = get_current_severity(observation)
 
-    observation.numerical_severity = observation.NUMERICAL_SEVERITIES.get(
+    observation.numerical_severity = Severity.NUMERICAL_SEVERITIES.get(
         observation.current_severity
     )
 
