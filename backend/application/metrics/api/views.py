@@ -10,8 +10,8 @@ from rest_framework.views import APIView
 
 from application.access_control.services.authorization import user_has_permission_or_403
 from application.access_control.services.roles_permissions import Permissions
-from application.core.models import Severity
 from application.core.queries.product import get_product_by_id
+from application.core.types import Severity
 from application.metrics.models import Product_Metrics_Status
 from application.metrics.services.export_metrics import (
     export_product_metrics_csv,
