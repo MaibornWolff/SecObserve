@@ -36,7 +36,7 @@ PyJWT = "2.8.0"  # https://github.com/jpadilla/pyjwt
 requests = "2.31.0"  # https://github.com/psf/requests
 # Database
 # ------------------------------------------------------------------------------
-mysqlclient = "2.2.2"
+mysqlclient = "2.2.3"
 psycopg = { version = "3.1.17", extras = ["binary"] }
 # Excel and CSV
 # ------------------------------------------------------------------------------
