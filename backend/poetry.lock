@@ -1355,20 +1355,20 @@ files = [
 
 [[package]]
 name = "mysqlclient"
-version = "2.2.1"
+version = "2.2.2"
 description = "Python interface to MySQL"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "mysqlclient-2.2.1-cp310-cp310-win_amd64.whl", hash = "sha256:c5a293baebbfcfa2905545198a54e90f1cf00f211eae6637d24930abb6432cba"},
-    {file = "mysqlclient-2.2.1-cp311-cp311-win_amd64.whl", hash = "sha256:8f40c872f19639366e3df27bef2ff087be0e3ee0bd3453470bd29f46b54a90f6"},
-    {file = "mysqlclient-2.2.1-cp312-cp312-win_amd64.whl", hash = "sha256:45600f4f321096bd1ead3355bc62cfcf8d97dc78df94e4ab5db72ecb5db1bd04"},
-    {file = "mysqlclient-2.2.1-cp38-cp38-win_amd64.whl", hash = "sha256:1f8889cc5f0141bb307b915e981a66793df663ace92259344661084a7dd8d12a"},
-    {file = "mysqlclient-2.2.1-cp39-cp39-win_amd64.whl", hash = "sha256:9db6305cdf2a1da350f827d2a19be7f2666eafd9eb8d4f7cbbac5df847d61b99"},
-    {file = "mysqlclient-2.2.1-pp310-pypy310_pp73-win_amd64.whl", hash = "sha256:97eee76818774bb695e018ff4c3dafaab74b9a0b0cf32c90b02caeec3b19cd8e"},
-    {file = "mysqlclient-2.2.1-pp38-pypy38_pp73-win_amd64.whl", hash = "sha256:4fabe1f4b545ed6244ad0ff426e6b27054b7e5c5b1392be0de2e5f2f59be0392"},
-    {file = "mysqlclient-2.2.1-pp39-pypy39_pp73-win_amd64.whl", hash = "sha256:641a7c9de443ddef186a0e89f24b4251ad44f4ddc5e7094332bf2d286d7c9e33"},
-    {file = "mysqlclient-2.2.1.tar.gz", hash = "sha256:2c7ad15b87293b12fd44b47c46879ec95ec647f4567e866ccd70b8337584e9b2"},
+    {file = "mysqlclient-2.2.2-cp310-cp310-win_amd64.whl", hash = "sha256:3f2742b7791aa3c4cbdc2a972524aa63443414c0582e601bc8d948f43d7f5dd9"},
+    {file = "mysqlclient-2.2.2-cp311-cp311-win_amd64.whl", hash = "sha256:3d4ebe14e6a00b0abf6e467c95cf1ec5902c605e4090c0c2ebbc1dee8fc0d795"},
+    {file = "mysqlclient-2.2.2-cp312-cp312-win_amd64.whl", hash = "sha256:20ad697e188ce175903b3ad66cddab751c28bc132ff0f7b5cefa6173b99fa608"},
+    {file = "mysqlclient-2.2.2-cp38-cp38-win_amd64.whl", hash = "sha256:8b3771525532cdef672f2808a485fe71216625c41c38dd9dbbe96e3aa0e99bbb"},
+    {file = "mysqlclient-2.2.2-cp39-cp39-win_amd64.whl", hash = "sha256:45b1785afeecc4f3b998ab7ea7bf25351c03a11dabbfe34590d70290e4f4496c"},
+    {file = "mysqlclient-2.2.2-pp310-pypy310_pp73-win_amd64.whl", hash = "sha256:675336353b608916f1bf1d4aedf0dc1172bc544135c88bddd57f3a5ccc81bd90"},
+    {file = "mysqlclient-2.2.2-pp38-pypy38_pp73-win_amd64.whl", hash = "sha256:e23e71ce4940949a65288ec7d189308129ba0c35d0a1b27fbeb89740e5ff2f43"},
+    {file = "mysqlclient-2.2.2-pp39-pypy39_pp73-win_amd64.whl", hash = "sha256:52e37fd8fc0ae3a0f4dd6897449abc2e5438985e453ddfb894b5c3a7301602cc"},
+    {file = "mysqlclient-2.2.2.tar.gz", hash = "sha256:6f57715fb08c80ab80d34febe0aa8ef8810e52d527ad7da2da76e8ce25e2f2e9"},
 ]
 
 [[package]]
@@ -2535,4 +2535,4 @@ brotli = ["Brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">= 3.10, < 3.13"
-content-hash = "605672cfdf43fd436bdeb1e91336665772cedbb73626d7f3b05b883401f9cfb5"
+content-hash = "b616e116a64d1841903e69ca82252022aff41a03e0aaf0e990efd62b6005779a"
