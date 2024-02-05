@@ -78,7 +78,6 @@ export function get_component_purl_url(
         return null;
     }
 
-
     const typeArray: Array<string> = ["cargo", "go", "maven", "npm", "nuget", "pypi"];
     if (!typeArray.includes(purl_type)) {
         return null;
