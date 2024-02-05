@@ -457,6 +457,7 @@ class ObservationSerializer(ModelSerializer):
     references = NestedReferenceSerializer(many=True)
     evidences = NestedEvidenceSerializer(many=True)
     origin_source_file_url = SerializerMethodField()
+    origin_component_purl_type = SerializerMethodField()
     issue_tracker_issue_url = SerializerMethodField()
 
     class Meta:
@@ -488,6 +489,12 @@ class ObservationSerializer(ModelSerializer):
                 )
 
         return origin_source_file_url
+
+    def get_origin_component_purl_type(self, observation: Observation) -> str:
+        if observation.origin_component_purl:
+            purl = PackageURL.from_string(observation.origin_component_purl)
+            return purl.type
+        return ""
 
     def _create_azure_devops_url(
         self, observation: Observation, origin_source_file_url: str
