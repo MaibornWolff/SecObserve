@@ -36,12 +36,12 @@ PyJWT = "2.8.0"  # https://github.com/jpadilla/pyjwt
 requests = "2.31.0"  # https://github.com/psf/requests
 # Database
 # ------------------------------------------------------------------------------
-mysqlclient = "2.2.3"
-psycopg = { version = "3.1.18", extras = ["binary"] }
+pymysql = "1.1.0"  # https://github.com/PyMySQL/PyMySQL
+psycopg = { version = "3.1.18", extras = ["binary"] }  # https://github.com/psycopg/psycopg
 # Excel and CSV
 # ------------------------------------------------------------------------------
-defusedcsv = "2.0.0"
-openpyxl = "3.1.2"
+defusedcsv = "2.0.0"  # https://github.com/raphaelm/defusedcsv
+openpyxl = "3.1.2"  # https://foss.heptapod.net/openpyxl/openpyxl
 # Package URL
 # ------------------------------------------------------------------------------
 packageurl-python = "0.13.4"  # https://github.com/package-url/packageurl-python
