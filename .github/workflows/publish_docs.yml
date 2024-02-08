@@ -6,9 +6,8 @@ on:
       - main
       - chore/deploy-docs
 
-permissions: read-all
-# permissions:
-#   contents: write
+permissions:
+  pages: write
 
 jobs:
   deploy:
