@@ -491,7 +491,7 @@ class ObservationSerializer(ModelSerializer):
                 return None
 
             parsed_url = urlparse(observation.product.repository_prefix)
-            if not parsed_url.scheme in ["http", "https"]:
+            if parsed_url.scheme not in ["http", "https"]:
                 return None
 
             origin_source_file_url = observation.product.repository_prefix
