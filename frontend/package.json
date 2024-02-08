@@ -3,8 +3,8 @@
     "version": "1.6.0",
     "private": true,
     "dependencies": {
-        "@mui/icons-material": "5.15.8",
-        "@mui/material": "5.15.7",
+        "@mui/icons-material": "5.15.9",
+        "@mui/material": "5.15.9",
         "@types/inflection": "1.13.2",
         "@types/recharts": "1.8.29",
         "prop-types": "15.8.1",
