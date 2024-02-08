@@ -1,4 +1,4 @@
-FROM python:3.12.1-alpine as python
+FROM python:3.12.1-alpine@sha256:849ed6079c9f797ca9c1b7d6aea1c00aea3ac35110cbd0d6003f15950017ea8d as python
 
 # Python build stage
 FROM python as python-build-stage
