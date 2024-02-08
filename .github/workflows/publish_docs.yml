@@ -4,10 +4,11 @@ on:
   push:
     branches:
       - main
-      - fix/doc_api_base_url
+      - chore/deploy-docs
 
-permissions:
-  contents: write
+permissions: read-all
+# permissions:
+#   contents: write
 
 jobs:
   deploy:
