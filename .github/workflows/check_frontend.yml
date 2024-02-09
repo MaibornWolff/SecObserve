@@ -5,7 +5,7 @@ on: [push]
 permissions: read-all
 
 jobs:
-  build:
+  check_frontend:
 
     runs-on: ubuntu-latest
 
