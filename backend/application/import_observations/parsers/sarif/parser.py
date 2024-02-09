@@ -299,7 +299,7 @@ class SARIFParser(BaseParser, BaseFileParser):
                 f"**Rule full description:** {sarif_rule.full_description}\n\n"
             )
 
-        if (
+        if (  # pylint: disable=too-many-boolean-expressions
             sarif_rule.help
             and sarif_rule.help not in sarif_message_text
             and sarif_rule.help not in rule_short_description
@@ -307,6 +307,7 @@ class SARIFParser(BaseParser, BaseFileParser):
             and not sarif_scanner.lower().startswith("semgrep")
             and not sarif_scanner.lower().startswith("checkov")
         ):
+            # Still pretty easy to understand
             # Help text of some scanners have only redundant information
             description += f"**Rule help:** {sarif_rule.help}\n\n"
 
