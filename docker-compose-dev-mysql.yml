@@ -30,7 +30,7 @@ services:
       dockerfile: ./docker/backend/dev/django/Dockerfile
     image: secobserve_backend_dev
     depends_on:
-      - postgres
+      - mysql
       - keycloak
     environment:
       # --- Admin user ---
@@ -38,9 +38,9 @@ services:
       ADMIN_PASSWORD: ${SO_ADMIN_PASSWORD:-admin}
       ADMIN_EMAIL: ${SO_ADMIN_EMAIL:-admin@example.com}
       # --- Database ---
-      DATABASE_ENGINE: ${SO_DATABASE_ENGINE:-django.db.backends.postgresql}
-      DATABASE_HOST: ${SO_DATABASE_HOST:-postgres}
-      DATABASE_PORT: ${SO_DATABASE_PORT:-5432}
+      DATABASE_ENGINE: ${SO_DATABASE_ENGINE:-django.db.backends.mysql}
+      DATABASE_HOST: ${SO_DATABASE_HOST:-mysql}
+      DATABASE_PORT: ${SO_DATABASE_PORT:-3306}
       DATABASE_DB: ${SO_DATABASE_DB:-secobserve}
       DATABASE_USER: ${SO_DATABASE_USER:-secobserve}
       DATABASE_PASSWORD: ${SO_DATABASE_PASSWORD:-secobserve}
@@ -66,16 +66,17 @@ services:
       - "8000:8000"
     command: /start
 
-  postgres:
-    image: postgres:15.5-alpine
-    volumes:
-      - dev_postgres_data:/var/lib/postgresql/data
+  mysql:
+    image: mysql:8.3.0
     environment:
-      POSTGRES_DB: ${SO_POSTGRES_DB:-secobserve}
-      POSTGRES_USER: ${SO_POSTGRES_USER:-secobserve}
-      POSTGRES_PASSWORD: ${SO_POSTGRES_PASSWORD:-secobserve}
+      MYSQL_RANDOM_ROOT_PASSWORD: ${SO_MYSQL_RANDOM_ROOT_PASSWORD:-yes}
+      MYSQL_DATABASE: ${SO_MYSQL_DATABASE:-secobserve}
+      MYSQL_USER: ${SO_MYSQL_USER:-secobserve}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-secobserve}
+    volumes:
+      - dev_mysql_data:/var/lib/mysql
     ports:
-      - "5432:5432"
+      - "3306:3306"
 
   mailhog:
     image: mailhog/mailhog:v1.0.1
