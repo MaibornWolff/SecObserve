@@ -59,8 +59,6 @@ class TestSarifParser(TestCase):
             )
             description = """Ensure that HEALTHCHECK instructions have been added to container images
 
-**Rule help:** \"Ensure that HEALTHCHECK instructions have been added to container images\nResource: /frontend/docker/Dockerfile.\"
-
 """
             self.assertEqual(description, observation.description)
             self.assertEqual(
