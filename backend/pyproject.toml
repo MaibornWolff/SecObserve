@@ -13,7 +13,6 @@ python = ">= 3.10, < 3.13"
 # ------------------------------------------------------------------------------
 django = "4.2.10"  # https://www.djangoproject.com/
 django-environ = "0.11.2"  # https://github.com/joke2k/django-environ
-django-model-utils = "4.3.1"  # https://github.com/jazzband/django-model-utils
 django-filter = "23.5"  # https://github.com/carltongibson/django-filter 
 django-csp = "3.7"  # https://github.com/mozilla/django-csp
 django-constance = { version = "3.1.0", extras = ["database"] }  # https://github.com/jazzband/django-constance
