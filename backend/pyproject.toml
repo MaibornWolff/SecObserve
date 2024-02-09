@@ -54,6 +54,7 @@ jira = "3.6.0"  # https://github.com/pycontribs/jira
 # Others
 # ------------------------------------------------------------------------------
 inflect = "7.0.0"  # https://github.com/jaraco/inflect
+validators = "0.22.0"  # https://github.com/python-validators/validators
 
 [tool.poetry.group.dev.dependencies]
 Werkzeug = { version = "3.0.1", extras = ["watchdog"] }  # https://github.com/pallets/werkzeug
