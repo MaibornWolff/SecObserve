@@ -70,14 +70,16 @@ else:
         }
     }
 
-    if env("MYSQL_AZURE", default="false") == "single":
-        DATABASES["default"]["OPTIONS"] = {
-            "ssl": {"ca": "/app/BaltimoreCyberTrustRoot_combined.crt.pem"}
-        }
-    if env("MYSQL_AZURE", default="false") == "flexible":
-        DATABASES["default"]["OPTIONS"] = {
-            "ssl": {"ca": "/app/DigiCertGlobalRootCA.crt.pem"}
-        }
+    if env("DATABASE_ENGINE") == "django.db.backends.mysql":
+        DATABASES["default"]["OPTIONS"] = {"charset": "utf8mb4"}
+        if env("MYSQL_AZURE", default="false") == "single":
+            DATABASES["default"]["OPTIONS"]["ssl"] = {
+                "ca": "/app/BaltimoreCyberTrustRoot_combined.crt.pem"
+            }
+        if env("MYSQL_AZURE", default="false") == "flexible":
+            DATABASES["default"]["OPTIONS"]["ssl"] = {
+                "ca": "/app/DigiCertGlobalRootCA.crt.pem"
+            }
 
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
