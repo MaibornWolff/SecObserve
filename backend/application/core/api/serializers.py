@@ -1,5 +1,7 @@
 from typing import Optional
+from urllib.parse import urlparse
 
+import validators
 from django.utils import timezone
 from packageurl import PackageURL
 from rest_framework.exceptions import PermissionDenied
@@ -264,6 +266,15 @@ class ProductSerializer(ProductCoreSerializer):
 
         return product
 
+    def validate_repository_prefix(self, repository_prefix: str) -> str:
+        return _validate_url(repository_prefix)
+
+    def validate_notification_ms_teams_webhook(self, repository_prefix: str) -> str:
+        return _validate_url(repository_prefix)
+
+    def validate_notification_slack_webhook(self, repository_prefix: str) -> str:
+        return _validate_url(repository_prefix)
+
 
 class NestedProductSerializer(ModelSerializer):
     permissions = SerializerMethodField()
@@ -457,6 +468,7 @@ class ObservationSerializer(ModelSerializer):
     references = NestedReferenceSerializer(many=True)
     evidences = NestedEvidenceSerializer(many=True)
     origin_source_file_url = SerializerMethodField()
+    origin_component_purl_type = SerializerMethodField()
     issue_tracker_issue_url = SerializerMethodField()
 
     class Meta:
@@ -475,10 +487,17 @@ class ObservationSerializer(ModelSerializer):
         origin_source_file_url = None
 
         if observation.product.repository_prefix and observation.origin_source_file:
+            if not validators.url(observation.product.repository_prefix):
+                return None
+
+            parsed_url = urlparse(observation.product.repository_prefix)
+            if parsed_url.scheme not in ["http", "https"]:
+                return None
+
             origin_source_file_url = observation.product.repository_prefix
             if origin_source_file_url.endswith("/"):
                 origin_source_file_url = origin_source_file_url[:-1]
-            if "dev.azure.com" in observation.product.repository_prefix:
+            if parsed_url.netloc == "dev.azure.com":
                 origin_source_file_url = self._create_azure_devops_url(
                     observation, origin_source_file_url
                 )
@@ -488,6 +507,12 @@ class ObservationSerializer(ModelSerializer):
                 )
 
         return origin_source_file_url
+
+    def get_origin_component_purl_type(self, observation: Observation) -> str:
+        if observation.origin_component_purl:
+            purl = PackageURL.from_string(observation.origin_component_purl)
+            return purl.type
+        return ""
 
     def _create_azure_devops_url(
         self, observation: Observation, origin_source_file_url: str
@@ -795,3 +820,10 @@ def _get_origin_component_name_version(observation: Observation) -> str:
             origin_component_name_version_with_type += f" ({purl.type})"
 
     return origin_component_name_version_with_type
+
+
+def _validate_url(url: str) -> str:
+    if url and not validators.url(url):
+        raise ValidationError("Not a valid URL")
+
+    return url

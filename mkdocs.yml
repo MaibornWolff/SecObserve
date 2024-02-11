@@ -83,6 +83,7 @@ nav:
     - Notifications: integrations/notifications.md
     - Export of observations: integrations/observations_export.md
     - CodeCharta: integrations/codecharta.md
+    - Links to additional information: integrations/links.md
     - REST API: integrations/rest_api.md
   # - Development:
   #   - Overview: development/overview.md

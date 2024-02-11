@@ -69,6 +69,28 @@ export function get_vulnerability_url(vulnerability_id: string): string | null {
     return return_value;
 }
 
+export function get_component_purl_url(
+    component_name: string,
+    component_version: string | null,
+    purl_type: string | null
+): string | null {
+    if (purl_type === null) {
+        return null;
+    }
+
+    const typeArray: Array<string> = ["cargo", "go", "maven", "npm", "nuget", "pypi"];
+    if (!typeArray.includes(purl_type)) {
+        return null;
+    }
+
+    let component_purl_url = "https://deps.dev/" + purl_type + "/" + component_name;
+    if (component_version !== null) {
+        component_purl_url = component_purl_url + "/" + component_version;
+    }
+
+    return encodeURI(component_purl_url);
+}
+
 const rtf = new Intl.RelativeTimeFormat("en", {
     localeMatcher: "best fit",
     numeric: "auto", // change to "always" if you want 1 day ago/from now

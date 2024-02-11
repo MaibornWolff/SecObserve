@@ -1,5 +1,7 @@
 from unittest.mock import patch
 
+from rest_framework.serializers import ValidationError
+
 from application.access_control.services.roles_permissions import Permissions, Roles
 from application.core.api.serializers import BranchSerializer, ProductSerializer
 from application.core.models import Product_Member
@@ -273,3 +275,44 @@ class TestProductSerializer(BaseTestCase):
         self.assertEqual(4, data["security_gate_threshold_low"])
         self.assertEqual(5, data["security_gate_threshold_none"])
         self.assertEqual(6, data["security_gate_threshold_unkown"])
+
+    def test_validate_repository_prefix_empty(self):
+        self.product_1.repository_prefix = ""
+        product_serializer = ProductSerializer(self.product_1)
+
+        validated_data = product_serializer.run_validation(product_serializer.data)
+
+        self.assertEqual("", validated_data["repository_prefix"])
+
+    def test_validate_repository_prefix_invalid(self):
+        self.product_1.repository_prefix = "invalid_url"
+        product_serializer = ProductSerializer(self.product_1)
+
+        with self.assertRaises(ValidationError) as e:
+            product_serializer.run_validation(product_serializer.data)
+
+        self.assertEqual(
+            "{'repository_prefix': [ErrorDetail(string='Not a valid URL', code='invalid')]}",
+            str(e.exception),
+        )
+
+    def test_validate_repository_prefix_valid(self):
+        self.product_1.repository_prefix = "https://example.com"
+        product_serializer = ProductSerializer(self.product_1)
+
+        validated_data = product_serializer.run_validation(product_serializer.data)
+
+        self.assertEqual("https://example.com", validated_data["repository_prefix"])
+
+    def test_validate_notification_msteams_slack_invalid(self):
+        self.product_1.notification_ms_teams_webhook = "invalid_url"
+        self.product_1.notification_slack_webhook = "invalid_url"
+        product_serializer = ProductSerializer(self.product_1)
+
+        with self.assertRaises(ValidationError) as e:
+            product_serializer.run_validation(product_serializer.data)
+
+        self.assertEqual(
+            "{'notification_ms_teams_webhook': [ErrorDetail(string='Not a valid URL', code='invalid')], 'notification_slack_webhook': [ErrorDetail(string='Not a valid URL', code='invalid')]}",
+            str(e.exception),
+        )

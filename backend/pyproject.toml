@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "SecObserve"
-version = "1.6.0"
+version = "1.7.0"
 description = "SecObserve is an open source vulnerability management system for software development teams. "
 license = "BSD-3-Clause"
 authors = [
@@ -11,7 +11,7 @@ authors = [
 python = ">= 3.10, < 3.13"
 # Django
 # ------------------------------------------------------------------------------
-django = "4.2.9"  # https://www.djangoproject.com/
+django = "4.2.10"  # https://www.djangoproject.com/
 django-environ = "0.11.2"  # https://github.com/joke2k/django-environ
 django-model-utils = "4.3.1"  # https://github.com/jazzband/django-model-utils
 django-filter = "23.5"  # https://github.com/carltongibson/django-filter 
@@ -36,12 +36,12 @@ PyJWT = "2.8.0"  # https://github.com/jpadilla/pyjwt
 requests = "2.31.0"  # https://github.com/psf/requests
 # Database
 # ------------------------------------------------------------------------------
-mysqlclient = "2.2.2"
-psycopg = { version = "3.1.17", extras = ["binary"] }
+pymysql = "1.1.0"  # https://github.com/PyMySQL/PyMySQL
+psycopg = { version = "3.1.18", extras = ["binary"] }  # https://github.com/psycopg/psycopg
 # Excel and CSV
 # ------------------------------------------------------------------------------
-defusedcsv = "2.0.0"
-openpyxl = "3.1.2"
+defusedcsv = "2.0.0"  # https://github.com/raphaelm/defusedcsv
+openpyxl = "3.1.2"  # https://foss.heptapod.net/openpyxl/openpyxl
 # Package URL
 # ------------------------------------------------------------------------------
 packageurl-python = "0.13.4"  # https://github.com/package-url/packageurl-python
@@ -54,6 +54,7 @@ jira = "3.6.0"  # https://github.com/pycontribs/jira
 # Others
 # ------------------------------------------------------------------------------
 inflect = "7.0.0"  # https://github.com/jaraco/inflect
+validators = "0.22.0"  # https://github.com/python-validators/validators
 
 [tool.poetry.group.dev.dependencies]
 Werkzeug = { version = "3.0.1", extras = ["watchdog"] }  # https://github.com/pallets/werkzeug
@@ -65,10 +66,11 @@ flake8 = "7.0.0"  # https://github.com/PyCQA/flake8
 flake8-isort = "6.1.1"  # https://github.com/gforcada/flake8-isort
 black = "24.1.1"  # https://github.com/psf/black
 pylint-django = "2.5.5"  # https://github.com/PyCQA/pylint-django
-pre-commit = "3.6.0"  # https://github.com/pre-commit/pre-commit
+pre-commit = "3.6.1"  # https://github.com/pre-commit/pre-commit
 mypy = "1.8.0"  # https://github.com/python/mypy
 django-stubs = "4.2.7"  # https://github.com/typeddjango/django-stubs
 djangorestframework-stubs = "3.14.5"  # https://github.com/typeddjango/djangorestframework-stubs
+types-PyMySQL = "1.1.0.1"  # https://github.com/python/typeshed
 # import-linter = "2.0"  # https://github.com/seddonym/import-linter --> Cannot be build with Docker
 # Django
 # ------------------------------------------------------------------------------

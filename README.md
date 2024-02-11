@@ -2,7 +2,11 @@
 
 # SecObserve
 
-SecObserve gathers results about potential security flaws from various vulnerability scanning tools and makes them available for assessment and reporting.
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8388/badge)](https://www.bestpractices.dev/projects/8388) [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/MaibornWolff/SecObserve/badge)](https://securityscorecards.dev/viewer/?uri=github.com/MaibornWolff/SecObserve)
+
+
+
+SecObserve is an open source vulnerability management system for software development teams that supports a variety of open source vulnerability scanners and integrates easily into CI/CD pipelines. It gathers results about potential security flaws from various vulnerability scanning tools and makes them available for assessment and reporting.
 
 ![Dashboard](docs/assets/images/screenshot_dashboard.png)
 
@@ -28,7 +32,11 @@ The full documentation how to install and use Secobserve can be found here: [htt
 
 ## Code of Conduct
 
-Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+Please note that this project is released with a [Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+
+## Contributing
+
+Please see the [Contributing Guidelines](CONTRIBUTING.md) for more information on how to get involved in the project.
 
 ## License
 

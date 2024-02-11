@@ -278,7 +278,9 @@ class SARIFParser(BaseParser, BaseFileParser):
             sarif_rule.short_description
             and sarif_rule.short_description not in sarif_message_text
             and sarif_rule.short_description not in title
+            and not sarif_scanner.lower().startswith("semgrep")
         ):
+            # Rule short description of some scanners have only redundant information
             description += (
                 f"**Rule short description:** {sarif_rule.short_description}\n\n"
             )
@@ -290,18 +292,23 @@ class SARIFParser(BaseParser, BaseFileParser):
             sarif_rule.full_description
             and sarif_rule.full_description not in sarif_message_text
             and sarif_rule.full_description not in rule_short_description
+            and not sarif_scanner.lower().startswith("semgrep")
         ):
+            # Rule short description of some scanners have only redundant information
             description += (
                 f"**Rule full description:** {sarif_rule.full_description}\n\n"
             )
 
-        if (
+        if (  # pylint: disable=too-many-boolean-expressions
             sarif_rule.help
             and sarif_rule.help not in sarif_message_text
             and sarif_rule.help not in rule_short_description
             and not sarif_scanner.lower().startswith("trivy")
+            and not sarif_scanner.lower().startswith("semgrep")
+            and not sarif_scanner.lower().startswith("checkov")
         ):
-            # Help text of Trivy has only redundant information
+            # Still pretty easy to understand
+            # Help text of some scanners have only redundant information
             description += f"**Rule help:** {sarif_rule.help}\n\n"
 
         if sarif_snippet:

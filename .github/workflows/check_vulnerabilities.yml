@@ -11,10 +11,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: Run vulnerability scanners for code
-        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@main
+        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@6fad8b2c5deca101131d74c8387e7301ac9371e8 # main
         with:
           so_configuration: 'so_configuration_code.yml'
           SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
