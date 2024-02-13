@@ -1,0 +1,7 @@
+[
+    {
+        "op": "replace",
+        "path": "/specVersion",
+        "value": "1.4"
+    }
+]

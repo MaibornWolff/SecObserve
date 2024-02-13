@@ -1,0 +1,36 @@
+name: Build and push release images
+
+on:
+  workflow_dispatch:
+    inputs:
+      #checkov:skip=CKV_GHA_7:This is a false positive
+      release:
+        description: 'SecObserve release (without the v)'
+        required: true
+
+permissions: read-all
+
+jobs:
+  generate_sboms:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          ref: 'v${{ github.event.inputs.release }}'
+      - name: Install programs
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip npm
+          python -m pip install --upgrade cyclonedx-bom==4.1.1
+          npm install -g @cyclonedx/cyclonedx-npm@1.16.1
+          cd /usr/local/bin
+          wget --no-verbose https://github.com/CycloneDX/sbom-utility/releases/download/v0.15.0/sbom-utility-v0.15.0-linux-amd64.tar.gz -O - | tar -zxf -
+          wget --no-verbose https://github.com/snyk/parlay/releases/download/v0.2.2/parlay_Linux_x86_64.tar.gz -O - | tar -zxf -
+          wget --no-verbose https://github.com/aquasecurity/trivy/releases/download/v0.49.1/trivy_0.49.1_Linux-64bit.tar.gz -O - | tar -zxf -
+      - name: Generate SBOMs
+        working-directory: ./sbom
+        run: |
+          cyclonedx-py poetry --only main,prod --output-format json ../backend \
+            | sbom-utility patch --patch-file ./configuration/patch_1.4.json --input-file -
