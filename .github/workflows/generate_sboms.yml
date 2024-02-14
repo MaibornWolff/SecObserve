@@ -38,6 +38,7 @@ jobs:
           VERSION: ${{ github.event.inputs.release }}
         working-directory: ./sbom
         run: |
+          sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_backend_application.json
           cyclonedx-py poetry --only main,prod --output-format json ../backend \
             | sbom-utility patch --patch-file ./configuration/patch_1.4.json --quiet --input-file - \
             | parlay ecosystems enrich - \
@@ -51,6 +52,7 @@ jobs:
           VERSION: ${{ github.event.inputs.release }}
         working-directory: ./sbom
         run: |
+          sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_frontend_application.json
           cyclonedx-npm --omit dev --package-lock-only --output-format JSON ../frontend/package-lock.json \
             | sbom-utility patch --patch-file ./configuration/patch_1.4.json --quiet --input-file - \
             | parlay ecosystems enrich - \
