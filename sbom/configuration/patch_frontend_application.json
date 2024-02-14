@@ -1,9 +1,5 @@
 [
     {
-        "op": "remove",
-        "path": "/metadata/component/purl"
-    },
-    {
         "op": "replace",
         "path": "/metadata/component/name",
         "value": "SecObserve Frontend Application"
@@ -12,6 +8,11 @@
         "op": "replace",
         "path": "/metadata/component/description",
         "value": "Frontend application of SecObserve, the open source vulnerability management system for software development teams"
+    },
+    {
+        "op": "replace",
+        "path": "/metadata/component/version",
+        "value": "REPLACE_VERSION"
     },
     {
         "op": "replace",
