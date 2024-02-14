@@ -13,6 +13,8 @@ permissions: read-all
 jobs:
   generate_sboms:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       -
         name: Checkout
