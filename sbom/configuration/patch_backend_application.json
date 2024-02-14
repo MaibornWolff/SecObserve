@@ -1,0 +1,12 @@
+[
+    {
+        "op": "replace",
+        "path": "/metadata/component/name",
+        "value": "SecObserve Backend Application"
+    },
+    {
+        "op": "replace",
+        "path": "/metadata/component/description",
+        "value": "Backend application of SecObserve, the open source vulnerability management system for software development teams"
+    }
+]
