@@ -89,4 +89,4 @@ jobs:
           create_branch: true
           commit_message: "chore: generate SBOMs for release ${{ github.event.inputs.release }}"
           branch: "chore/sboms_release_${{ github.event.inputs.release }}"
-          file_pattern: "sbom/*.json"
+          file_pattern: "sbom/sbom*.json"
