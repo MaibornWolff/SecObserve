@@ -13,12 +13,13 @@ This directory contains the CycloneDX SBOMs for the project of the last 3 releas
 * `metadata/component` 
     * name
     * description
+    * purl
     * version
     * license (for application SBOMs)
 * `components`
-    * bom-ref
-    * name
     * type
+    * name
+    * purl
     * version
     * licenses
 * `dependencies`
@@ -27,11 +28,11 @@ This directory contains the CycloneDX SBOMs for the project of the last 3 releas
 
 ## Design decisions
 
-* Split into 4 SBOMs
+* **Split into 4 SBOMs**
     * Backend and frontend could be installed separately
     * Backend and frontend could be installed without using the docker images
     * Backend container does not contain hierarchy of Python libraries
     * Frontend container does not contain identifiable NPM libraries, because of the `vite` build process
-* Automated generation by GitHub workflow [generate_sboms.yml](../.github/workflows/generate_sboms.yml)
+* **Automated generation by GitHub workflow [generate_sboms.yml](../.github/workflows/generate_sboms.yml)**
     * Tracebility of SBOM content to the source files
 
