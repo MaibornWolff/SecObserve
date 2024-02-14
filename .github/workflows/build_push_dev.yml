@@ -52,7 +52,7 @@ jobs:
             VERSION=dev
       - 
         name: Run vulnerability scanners for images
-        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@6fad8b2c5deca101131d74c8387e7301ac9371e8 # main
+        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@a242f92f12e104d39593fd689e12b5a6135fc2e7 # main
         with:
           so_configuration: 'so_configuration_images.yml'
           SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
