@@ -12,6 +12,6 @@
     {
         "op": "add",
         "path": "/metadata/component/version",
-        "value": "1.7.0"
+        "value": "REPLACE_VERSION"
     }
 ]
