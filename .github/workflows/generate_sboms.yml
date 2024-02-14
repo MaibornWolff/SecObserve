@@ -1,4 +1,4 @@
-name: Build and push release images
+name: Generate SBOMs for a release
 
 on:
   workflow_dispatch:
@@ -18,9 +18,9 @@ jobs:
         name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
-          # ref: 'v${{ github.event.inputs.release }}'
-          ref: 'chore/sbom'
-      - name: Install programs
+          ref: 'v${{ github.event.inputs.release }}'
+      - 
+        name: Install programs
         run: |
           sudo apt-get update
           sudo apt-get install -y python3-pip npm
@@ -30,15 +30,12 @@ jobs:
           wget --no-verbose https://github.com/CycloneDX/sbom-utility/releases/download/v0.15.0/sbom-utility-v0.15.0-linux-amd64.tar.gz -O - | tar -zxf -
           wget --no-verbose https://github.com/snyk/parlay/releases/download/v0.2.2/parlay_Linux_x86_64.tar.gz -O - | tar -zxf -
           wget --no-verbose https://github.com/aquasecurity/trivy/releases/download/v0.49.1/trivy_0.49.1_Linux-64bit.tar.gz -O - | tar -zxf -
-      - name: Generate SBOMs
+      - 
+        name: Generate SBOM for backend application
         env:
           VERSION: ${{ github.event.inputs.release }}
         working-directory: ./sbom
         run: |
-          sed -i 's|REPLACE_VERSION|"$VERSION"|g' ./configuration/patch_backend_container.json
-          sed -i 's|REPLACE_VERSION|"$VERSION"|g' ./configuration/patch_frontend_container.json
-          echo "Generating backend application SBOM ..."
-          echo
           cyclonedx-py poetry --only main,prod --output-format json ../backend \
             | sbom-utility patch --patch-file ./configuration/patch_1.4.json --quiet --input-file - \
             | parlay ecosystems enrich - \
@@ -46,9 +43,12 @@ jobs:
             | sbom-utility trim --keys=externalReferences,properties,vulnerabilities --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_backend_application.json --quiet --input-file - --output-file sbom_backend_application_"$VERSION".json
           sbom-utility validate --input-file sbom_backend_application_"$VERSION".json
-          echo
-          echo "Generating frontend application SBOM ..."
-          echo
+      - 
+        name: Generate SBOM for frontend application
+        env:
+          VERSION: ${{ github.event.inputs.release }}
+        working-directory: ./sbom
+        run: |
           cyclonedx-npm --omit dev --package-lock-only --output-format JSON ../frontend/package-lock.json \
             | sbom-utility patch --patch-file ./configuration/patch_1.4.json --quiet --input-file - \
             | parlay ecosystems enrich - \
@@ -56,18 +56,35 @@ jobs:
             | sbom-utility trim --keys=externalReferences,properties,vulnerabilities --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_frontend_application.json --quiet --input-file - --output-file sbom_frontend_application_"$VERSION".json
           sbom-utility validate --input-file sbom_frontend_application_"$VERSION".json
-          echo
-          echo "Generating backend container SBOM ..."
-          echo
+      - 
+        name: Generate SBOM for backend container
+        env:
+          VERSION: ${{ github.event.inputs.release }}
+        working-directory: ./sbom
+        run: |
+          sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_backend_container.json
           trivy image --vuln-type os --scanners license --format cyclonedx --quiet maibornwolff/secobserve-backend:"$VERSION" \
             | sbom-utility trim --keys=externalReferences,properties,vulnerabilities --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_backend_container.json --quiet --input-file - --output-file sbom_backend_container_"$VERSION".json
           sbom-utility validate --input-file sbom_backend_container_"$VERSION".json
-          echo
-          echo "Generating frontend container SBOM ..."
-          echo
-          trivy image --vuln-type os --scanners license --format cyclonedx maibornwolff/secobserve-frontend:"$VERSION" \
+      - 
+        name: Generate SBOM for frontend container
+        env:
+          VERSION: ${{ github.event.inputs.release }}
+        working-directory: ./sbom
+        run: |
+          sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_frontend_container.json
+          trivy image --vuln-type os --scanners license --format cyclonedx --quiet maibornwolff/secobserve-frontend:"$VERSION" \
             | sbom-utility trim --keys=externalReferences,properties,vulnerabilities --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_frontend_container.json --quiet --input-file - --output-file sbom_frontend_container_"$VERSION".json
+          # Disabled until https://github.com/aquasecurity/trivy/issues/6128 is fixed
           # sbom-utility validate --input-file sbom_frontend_container_"$VERSION".json
-          cat sbom_backend_container_"$VERSION".json
+      - 
+        name: Commit SBOMs
+        uses: stefanzweifel/git-auto-commit-action@8756aa072ef5b4a080af5dc8fef36c5d586e521d # v5
+        with:
+          skip_fetch: true
+          create_branch: true
+          commit_message: "chore: generate SBOMs for release ${{ github.event.inputs.release }}"
+          branch: "chore/sboms_release_${{ github.event.inputs.release }}"
+          file_pattern: "sbom/*.json"
