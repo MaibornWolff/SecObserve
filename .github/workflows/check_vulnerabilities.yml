@@ -1,6 +1,6 @@
 name: Check for vulnerabilities in the code
 
-on: [pull_request]
+on: [pull_request_target]
 
 permissions: read-all
 
@@ -10,10 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - 
+        name: Checkout code
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-
-      - name: Run vulnerability scanners for code
+        with:
+          persist-credentials: false
+          ref: "${{ github.event.pull_request.merge_commit_sha }}"
+      -
+        name: Run vulnerability scanners for code
         uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@a242f92f12e104d39593fd689e12b5a6135fc2e7 # main
         with:
           so_configuration: 'so_configuration_code.yml'
