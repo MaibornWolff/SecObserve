@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from json import dumps, load
+import re
 from typing import Optional, Tuple
 
 from django.core.files.base import File
@@ -146,8 +147,8 @@ class SARIFParser(BaseParser, BaseFileParser):
         if sarif_rule.properties and isinstance(sarif_rule.properties, dict):
             sarif_cwe = self.get_cwe(sarif_rule.properties.get("tags", []))
 
-        parser_vulnerability_id = self.get_dependency_check_vulnerability_id(
-            sarif_scanner, title
+        parser_vulnerability_id = self.get_vulnerability_id(
+            sarif_scanner, title, sarif_rule_id
         )
 
         origin_component_purl = self.get_dependency_check_origin_component_purl(
@@ -403,14 +404,26 @@ class SARIFParser(BaseParser, BaseFileParser):
 
         return None
 
-    def get_dependency_check_vulnerability_id(
-        self, sarif_scanner: str, title: str
+    def get_vulnerability_id(
+        self, sarif_scanner: str, title: str, sarif_rule_id: str
     ) -> str:
         # Dependency Check sets the title with a vulnerability
         if sarif_scanner.lower().startswith("dependency-check") and (
             title.startswith("CVE-") or title.startswith("GHSA-")
         ):
             return title
+
+        # For Trivy and Grype: the beginning of the rule id is the vulnerability id
+        pattern = r"^CVE-\d{4}-\d{4,}"
+        match = re.search(pattern, sarif_rule_id)
+        if match:
+            return match.group()
+
+        # Regex taken from: https://docs.github.com/en/code-security/security-advisories/working-with-global-security-advisories-from-the-github-advisory-database/about-the-github-advisory-database#about-ghsa-ids
+        pattern = r"^GHSA(-[23456789cfghjmpqrvwx]{4}){3}"
+        match = re.search(pattern, sarif_rule_id)
+        if match:
+            return match.group()
 
         return ""
 
