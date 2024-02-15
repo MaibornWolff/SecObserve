@@ -1,6 +1,6 @@
 name: Check backend
 
-on: [push]
+on: [push, pull_request]
 
 permissions: read-all
 
