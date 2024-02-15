@@ -71,6 +71,7 @@ function listFilters(product: Product) {
         <TextInput source="origin_endpoint_hostname" label="Host" alwaysOn />,
         <TextInput source="origin_source_file" label="Source" alwaysOn />,
         <TextInput source="origin_cloud_qualified_resource" label="Resource" alwaysOn />,
+        <TextInput source="vulnerability_id" label="Vulnerability ID" alwaysOn />,
         <TextInput source="scanner" alwaysOn />,
         <AutocompleteInputMedium source="age" choices={AGE_CHOICES} alwaysOn />,
         <TextInput source="upload_filename" label="Filename" />,

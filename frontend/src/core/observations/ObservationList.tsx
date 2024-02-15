@@ -49,6 +49,7 @@ const listFilters = [
     <TextInput source="origin_endpoint_hostname" label="Host" />,
     <TextInput source="origin_source_file" label="Source" />,
     <TextInput source="origin_cloud_qualified_resource" label="Resource" />,
+    <TextInput source="vulnerability_id" label="Vulnerability ID" alwaysOn />,
     <TextInput source="scanner" alwaysOn />,
     <AutocompleteInputMedium source="age" choices={AGE_CHOICES} alwaysOn />,
     <NullableBooleanInput source="has_potential_duplicates" label="Duplicates" alwaysOn />,
