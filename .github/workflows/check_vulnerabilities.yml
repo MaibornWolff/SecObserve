@@ -1,6 +1,6 @@
 name: Check for vulnerabilities in the code
 
-on: [push, pull_request]
+on: [pull_request]
 
 permissions: read-all
 
