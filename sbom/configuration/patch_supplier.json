@@ -1,0 +1,12 @@
+[
+    {
+        "op": "add",
+        "path": "/metadata/component/supplier",
+        "value": {
+            "name": "MaibornwWolff Open Source Community and contributors",
+            "url": [
+                "https://github.com/MaibornWolff/SecObserve"
+            ]
+        }
+    }
+]
