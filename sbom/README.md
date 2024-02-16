@@ -12,16 +12,17 @@ This directory contains the CycloneDX SBOMs for the project of the last 3 releas
 
 * `metadata/component` 
     * name
-    * description
-    * purl
     * version
+    * description
+    * supplier
+    * purl
     * license (for application SBOMs)
 * `components`
-    * type
     * name
-    * purl
     * version
+    * purl
     * licenses
+    * type
 * `dependencies`
     * hierarchical dependencies, starting from the `metadata/component`
 
