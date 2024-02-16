@@ -10,6 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - 
+        name: Debug
+        env:
+          REPOSITORY_NAME: ${{ github.event.repository.name }}
+        run: |
+          echo "Repository name: $REPOSITORY_NAME"
+      - 
         name: Checkout code
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       -
