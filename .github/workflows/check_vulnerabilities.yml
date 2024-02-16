@@ -12,9 +12,13 @@ jobs:
       - 
         name: Debug
         env:
+          REPOSITORY_ID:   ${{ github.event.repository.id }}
           REPOSITORY_NAME: ${{ github.event.repository.name }}
+          REPOSITORY_URL:  ${{ github.event.repository.url }}
         run: |
+          echo "Repository id:   $REPOSITORY_ID"
           echo "Repository name: $REPOSITORY_NAME"
+          echo "Repository url:  $REPOSITORY_URL"
       # - 
       #   name: Checkout code
       #   uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
