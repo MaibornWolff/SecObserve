@@ -6,25 +6,15 @@ permissions: read-all
 
 jobs:
   check_code_vulnerabilities:
-    # if: github.event.repository.name == 'MaibornWolff/SecObserve'
+    if: github.event.repository.url == 'https://github.com/MaibornWolff/SecObserve'
     runs-on: ubuntu-latest
     steps:
       - 
-        name: Debug
-        env:
-          REPOSITORY_ID:   ${{ github.event.repository.id }}
-          REPOSITORY_NAME: ${{ github.event.repository.name }}
-          REPOSITORY_URL:  ${{ github.event.repository.url }}
-        run: |
-          echo "Repository id:   $REPOSITORY_ID"
-          echo "Repository name: $REPOSITORY_NAME"
-          echo "Repository url:  $REPOSITORY_URL"
-      # - 
-      #   name: Checkout code
-      #   uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-      # -
-      #   name: Run vulnerability scanners for code
-      #   uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@a242f92f12e104d39593fd689e12b5a6135fc2e7 # main
-      #   with:
-      #     so_configuration: 'so_configuration_code.yml'
-      #     SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
+        name: Checkout code
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      -
+        name: Run vulnerability scanners for code
+        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@a242f92f12e104d39593fd689e12b5a6135fc2e7 # main
+        with:
+          so_configuration: 'so_configuration_code.yml'
+          SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
