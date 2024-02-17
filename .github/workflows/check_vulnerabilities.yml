@@ -1,14 +1,13 @@
 name: Check for vulnerabilities in the code
 
-on: [pull_request]
+on: [push]
 
 permissions: read-all
 
 jobs:
   check_code_vulnerabilities:
-    if: github.event.pull_request.head.repo.full_name == github.repository
+    if: github.event.repository.url == 'https://github.com/MaibornWolff/SecObserve'
     runs-on: ubuntu-latest
-
     steps:
       - 
         name: Checkout code
