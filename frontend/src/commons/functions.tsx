@@ -1,3 +1,4 @@
+import { httpClient } from "../commons/ra-data-django-rest-framework";
 import {
     OBSERVATION_SEVERITY_CRITICAL,
     OBSERVATION_SEVERITY_HIGH,
@@ -107,4 +108,17 @@ export const humanReadableDate = (date: string | undefined) => {
     const diffInMs = Date.parse(date).valueOf() - today.valueOf();
     const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
     return rtf.format(Math.trunc(diffInDays), "day").replace(" ago", "");
+};
+
+export async function set_settings_in_local_storage() {
+    await httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/status/settings/").then((response) => {
+        localStorage.setItem("settings", JSON.stringify(response.json));
+    });
+}
+
+export const feature_vex_enabled = () => {
+    const settings = JSON.parse(localStorage.getItem("settings") || "{}");
+    const features = settings.features || [];
+    const feature_vex_position = features.indexOf("feature_vex");
+    return feature_vex_position !== -1;
 };

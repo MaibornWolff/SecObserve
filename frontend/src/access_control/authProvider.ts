@@ -2,6 +2,7 @@ import { User, WebStorageStateStore } from "oidc-client-ts";
 import { UserManager } from "oidc-client-ts";
 import { AuthProvider } from "react-admin";
 
+import { set_settings_in_local_storage } from "../commons/functions";
 import { httpClient } from "../commons/ra-data-django-rest-framework";
 import { getSettingTheme, saveSettingListProperties, setListProperties } from "../commons/settings/functions";
 
@@ -87,6 +88,8 @@ const authProvider: AuthProvider = {
             const { id: id, full_name: fullName, username: avatar } = userinfo;
             return Promise.resolve({ id, fullName, avatar });
         }
+
+        set_settings_in_local_storage();
 
         return Promise.resolve({ id, fullName, avatar });
     },
