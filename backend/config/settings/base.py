@@ -523,6 +523,11 @@ CONSTANCE_CONFIG = {
         "Regular expression which branches to exempt from deletion",
         str,
     ),
+    "FEATURE_VEX": (
+        False,
+        "Only for development - no meaningful functionality yet.",
+        bool,
+    ),
 }
 
 CONSTANCE_CONFIG_FIELDSETS = {
@@ -559,6 +564,7 @@ CONSTANCE_CONFIG_FIELDSETS = {
         "BRANCH_HOUSEKEEPING_KEEP_INACTIVE_DAYS",
         "BRANCH_HOUSEKEEPING_EXEMPT_BRANCHES",
     ),
+    "Features": ("FEATURE_VEX",),
 }
 
 FIELD_ENCRYPTION_KEY = env("FIELD_ENCRYPTION_KEY")
