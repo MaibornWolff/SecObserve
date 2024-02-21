@@ -28,6 +28,10 @@ from application.metrics.api.views import (
     ProductMetricsStatusView,
     ProductMetricsTimelineView,
 )
+from application.vex.api.views import (
+    OpenVEXDocumentCreateView,
+    OpenVEXDocumentUpdateView,
+)
 
 urlpatterns = [
     path("", empty_view),
@@ -88,6 +92,8 @@ urlpatterns += [
     path(
         "api/metrics/export_codecharta/", ProductMetricsExportCodeChartaView.as_view()
     ),
+    path("api/vex/open_vex/create", OpenVEXDocumentCreateView.as_view()),
+    path("api/vex/open_vex/update", OpenVEXDocumentUpdateView.as_view()),
     # OpenAPI 3
     path("api/oa3/schema/", SpectacularAPIView.as_view(), name="schema_oa3"),
     path(
