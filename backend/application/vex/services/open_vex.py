@@ -76,9 +76,12 @@ def create_open_vex_document(
 
     _check_open_vex_document_does_not_exist(product)
 
+    if vulnerability_name is None:
+        vulnerability_name = ""
+
     open_vex = OpenVEX.objects.create(
         product=product,
-        vulnerability=vulnerability,
+        vulnerability_name=vulnerability_name,
         document_base_id=document_base_id,
         document_id=document_id,
         author=author,
@@ -132,9 +135,10 @@ def update_open_vex_document(
         # The DoesNotExist exception itself is not relevant and must not be re-raised
 
     statements = []
-    if open_vex.vulnerability and not open_vex.product:
-        statements = _get_statements_for_vulnerability(open_vex.vulnerability)
-    elif open_vex.product and not open_vex.vulnerability:
+    if open_vex.vulnerability_name and not open_vex.product:
+        vulnerability = get_vulnerability(open_vex.vulnerability_name)
+        statements = _get_statements_for_vulnerability(vulnerability)
+    elif open_vex.product and not open_vex.vulnerability_name:
         statements = _get_statements_for_product(open_vex.product)
 
     statements_json = jsonpickle.encode(statements, unpicklable=False)
@@ -221,7 +225,7 @@ def _get_statements_for_vulnerability(
 
         existing_statement = statements.get(hashed_string)
         if existing_statement:
-            if open_vex_product not in prepared_statement.products:
+            if open_vex_product not in existing_statement.products:
                 existing_statement.products.append(open_vex_product)
         else:
             prepared_statement.vulnerability = open_vex_vulnerability

@@ -1,3 +1,4 @@
+from constance import config
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -29,8 +30,8 @@ from application.metrics.api.views import (
     ProductMetricsTimelineView,
 )
 from application.vex.api.views import (
-    OpenVEXCreateView,
-    OpenVEXUpdateView,
+    OpenVEXDocumentCreateView,
+    OpenVEXDocumentUpdateView,
 )
 
 urlpatterns = [
@@ -92,11 +93,6 @@ urlpatterns += [
     path(
         "api/metrics/export_codecharta/", ProductMetricsExportCodeChartaView.as_view()
     ),
-    path("api/vex/open_vex/create/", OpenVEXCreateView.as_view()),
-    path(
-        "api/vex/open_vex/update/<str:document_base_id>/",
-        OpenVEXUpdateView.as_view(),
-    ),
     # OpenAPI 3
     path("api/oa3/schema/", SpectacularAPIView.as_view(), name="schema_oa3"),
     path(
@@ -105,6 +101,15 @@ urlpatterns += [
         name="swagger-ui_oa3",
     ),
 ]
+
+if config.FEATURE_VEX:
+    urlpatterns += [
+        path("api/vex/open_vex_document/create/", OpenVEXDocumentCreateView.as_view()),
+        path(
+            "api/vex/open_vex_document/update/<str:document_base_id>/",
+            OpenVEXDocumentUpdateView.as_view(),
+        ),
+    ]
 
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit

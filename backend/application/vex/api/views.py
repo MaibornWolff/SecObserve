@@ -3,36 +3,46 @@ from typing import Any
 
 import jsonpickle
 from django.http import HttpResponse
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.mixins import DestroyModelMixin, ListModelMixin, RetrieveModelMixin
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK, HTTP_204_NO_CONTENT
+from rest_framework.status import (
+    HTTP_200_OK,
+    HTTP_204_NO_CONTENT,
+    HTTP_501_NOT_IMPLEMENTED,
+)
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
+from application.vex.api.filters import OpenVEXFilter
 from application.vex.api.serializers import (
-    OpenVEXCreateSerializer,
-    OpenVEXUpdateSerializer,
+    OpenVEXDocumentCreateSerializer,
+    OpenVEXDocumentUpdateSerializer,
     OpenVEXSerializer,
 )
+from application.vex.models import OpenVEX
 from application.vex.services.open_vex import (
     create_open_vex_document,
     update_open_vex_document,
 )
-from application.vex.models import OpenVEX
+from constance import config
 
 
-class OpenVEXCreateView(APIView):
+class OpenVEXDocumentCreateView(APIView):
     @extend_schema(
         methods=["POST"],
-        request=OpenVEXCreateSerializer,
+        request=OpenVEXDocumentCreateSerializer,
         responses={HTTP_200_OK: bytes},
     )
     @action(detail=True, methods=["post"])
     def post(self, request):
-        serializer = OpenVEXCreateSerializer(data=request.data)
+        if not config.FEATURE_VEX:
+            return Response(status=HTTP_501_NOT_IMPLEMENTED)
+
+        serializer = OpenVEXDocumentCreateSerializer(data=request.data)
         if not serializer.is_valid():
             raise ValidationError(serializer.errors)
 
@@ -61,15 +71,18 @@ class OpenVEXCreateView(APIView):
         return response
 
 
-class OpenVEXUpdateView(APIView):
+class OpenVEXDocumentUpdateView(APIView):
     @extend_schema(
         methods=["POST"],
-        request=OpenVEXUpdateSerializer,
+        request=OpenVEXDocumentUpdateSerializer,
         responses={HTTP_200_OK: bytes},
     )
     @action(detail=True, methods=["post"])
     def post(self, request, document_base_id=None):
-        serializer = OpenVEXUpdateSerializer(data=request.data)
+        if not config.FEATURE_VEX:
+            return Response(status=HTTP_501_NOT_IMPLEMENTED)
+
+        serializer = OpenVEXDocumentUpdateSerializer(data=request.data)
         if not serializer.is_valid():
             raise ValidationError(serializer.errors)
 
@@ -101,8 +114,23 @@ class OpenVEXViewSet(
 ):
     serializer_class = OpenVEXSerializer
     queryset = OpenVEX.objects.all()
-    # filterset_class = ParserFilter
-    # filter_backends = [DjangoFilterBackend]
+    filterset_class = OpenVEXFilter
+    filter_backends = [DjangoFilterBackend]
+
+    def destroy(self, request, *args, **kwargs):
+        if not config.FEATURE_VEX:
+            return Response(status=HTTP_501_NOT_IMPLEMENTED)
+        return super().destroy(request, *args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        if not config.FEATURE_VEX:
+            return Response(status=HTTP_501_NOT_IMPLEMENTED)
+        return super().list(request, *args, **kwargs)
+
+    def retrieve(self, request, *args, **kwargs):
+        if not config.FEATURE_VEX:
+            return Response(status=HTTP_501_NOT_IMPLEMENTED)
+        return super().retrieve(request, *args, **kwargs)
 
 
 def _object_to_json(object_to_encode: Any) -> str:

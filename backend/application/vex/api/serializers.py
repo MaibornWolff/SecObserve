@@ -9,7 +9,7 @@ from rest_framework.serializers import (
 from application.vex.models import OpenVEX
 
 
-class OpenVEXCreateSerializer(Serializer):
+class OpenVEXDocumentCreateSerializer(Serializer):
     product_id = IntegerField(validators=[MinValueValidator(0)], required=False)
     vulnerability_name = CharField(max_length=255, required=False)
     document_id_prefix = CharField(max_length=200, required=True)
@@ -17,7 +17,7 @@ class OpenVEXCreateSerializer(Serializer):
     role = CharField(max_length=255, required=False)
 
 
-class OpenVEXUpdateSerializer(Serializer):
+class OpenVEXDocumentUpdateSerializer(Serializer):
     author = CharField(max_length=255, required=False)
     role = CharField(max_length=255, required=False)
 

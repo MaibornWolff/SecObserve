@@ -1,10 +1,8 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import (
     CASCADE,
-    PROTECT,
     CharField,
     DateTimeField,
-    ForeignKey,
     IntegerField,
     Model,
     OneToOneField,
@@ -23,7 +21,7 @@ class Vulnerability(Model):
 
 class VEX_Base(Model):
     product = OneToOneField(Product, on_delete=CASCADE, null=True)
-    vulnerability = ForeignKey(Vulnerability, on_delete=PROTECT, null=True)
+    vulnerability_name = CharField(max_length=255, blank=True)
     document_base_id = CharField(max_length=36, unique=True)
     document_id = CharField(max_length=255)
     version = IntegerField(validators=[MinValueValidator(0), MaxValueValidator(999999)])
