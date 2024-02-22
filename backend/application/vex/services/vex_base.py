@@ -50,3 +50,14 @@ def get_observations_for_vulnerability(
     return list(
         get_observations().filter(vulnerability_id=vulnerability.name).order_by("id")
     )
+
+
+def get_observations_for_product(
+    product: Product,
+) -> list[Observation]:
+    return list(
+        get_observations()
+        .filter(product_id=product.id)
+        .exclude(vulnerability_id="")
+        .order_by("id")
+    )

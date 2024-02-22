@@ -24,7 +24,8 @@ class Vulnerability(Model):
 class VEX_Base(Model):
     product = OneToOneField(Product, on_delete=CASCADE, null=True)
     vulnerability = ForeignKey(Vulnerability, on_delete=PROTECT, null=True)
-    document_id = CharField(max_length=255, unique=True)
+    document_base_id = CharField(max_length=36, unique=True)
+    document_id = CharField(max_length=255)
     version = IntegerField(validators=[MinValueValidator(0), MaxValueValidator(999999)])
     content_hash = CharField(max_length=256, blank=True)
 
@@ -32,13 +33,14 @@ class VEX_Base(Model):
         abstract = True
 
 
-class OpenVEX_Document(VEX_Base):
+class OpenVEX(VEX_Base):
     author = CharField(max_length=255)
+    role = CharField(max_length=255, blank=True)
     timestamp = DateTimeField(auto_now_add=True)
     last_updated = DateTimeField(auto_now=True)
 
 
-class CSAF_Document(VEX_Base):
+class CSAF(VEX_Base):
     title = CharField(max_length=255)
     tracking_initial_release_date = DateTimeField(auto_now_add=True)
     tracking_current_release_date = DateTimeField(auto_now=True)

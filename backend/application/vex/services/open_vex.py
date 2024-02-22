@@ -8,12 +8,13 @@ import validators
 from rest_framework.exceptions import ValidationError
 
 from application.__init__ import __version__
-from application.core.models import Observation_Log, Product
+from application.core.models import Observation, Observation_Log, Product
 from application.core.types import Status
-from application.vex.models import OpenVEX_Document, Vulnerability
+from application.vex.models import OpenVEX, Vulnerability
 from application.vex.services.vex_base import (
     check_either_product_or_vulnerability,
     get_and_check_product,
+    get_observations_for_product,
     get_observations_for_vulnerability,
     get_vulnerability,
 )
@@ -37,7 +38,7 @@ class OpenVEXStatement:
     status_notes: Optional[str]
     justification: Optional[str]
     action_statement: Optional[str]
-    vulnerability: OpenVEXVulnerability
+    vulnerability: Optional[OpenVEXVulnerability]
     products: list[OpenVEXProduct]
 
 
@@ -47,28 +48,41 @@ class OpenVEXDocument:
     id: str
     version: int
     author: str
+    role: str
     timestamp: str
     last_updated: str
     tooling: str
     statements: list[OpenVEXStatement]
 
+    def get_base_id(self) -> str:
+        if len(self.id) > 36:
+            return self.id[-36:]
+        return ""
+
 
 def create_open_vex_document(
-    product_id: int, vulnerability_name: str, document_id_prefix: str, author: str
-) -> OpenVEXDocument:
+    product_id: int,
+    vulnerability_name: str,
+    document_id_prefix: str,
+    author: str,
+    role: str,
+) -> Optional[OpenVEXDocument]:
     check_either_product_or_vulnerability(product_id, vulnerability_name)
 
     product = get_and_check_product(product_id)
     vulnerability = get_vulnerability(vulnerability_name)
-    document_id = _get_document_id(document_id_prefix)
+    document_base_id = str(uuid.uuid4())
+    document_id = _get_document_id(document_id_prefix, document_base_id)
 
     _check_open_vex_document_does_not_exist(product)
 
-    open_vex = OpenVEX_Document.objects.create(
+    open_vex = OpenVEX.objects.create(
         product=product,
         vulnerability=vulnerability,
+        document_base_id=document_base_id,
         document_id=document_id,
         author=author,
+        role=role,
         version=1,
     )
 
@@ -77,6 +91,7 @@ def create_open_vex_document(
         id=open_vex.document_id,
         version=open_vex.version,
         author=open_vex.author,
+        role=open_vex.role,
         timestamp=open_vex.timestamp.isoformat(),
         last_updated=open_vex.last_updated.isoformat(),
         tooling="SecOberserve / " + __version__,
@@ -84,8 +99,10 @@ def create_open_vex_document(
     )
 
     statements = []
-    if vulnerability:
+    if vulnerability and not product:
         statements = _get_statements_for_vulnerability(vulnerability)
+    elif product and not vulnerability:
+        statements = _get_statements_for_product(product)
 
     statements_json = jsonpickle.encode(statements, unpicklable=False)
     statements_hash = hashlib.sha256(
@@ -94,6 +111,9 @@ def create_open_vex_document(
     open_vex.content_hash = statements_hash
     open_vex.save()
 
+    if not statements:
+        return None
+
     for statement in statements:
         open_vex_document.statements.append(statement)
 
@@ -101,19 +121,21 @@ def create_open_vex_document(
 
 
 def update_open_vex_document(
-    document_id: str, author: str
+    document_base_id: str, author: str, role: str
 ) -> Optional[OpenVEXDocument]:
     try:
-        open_vex = OpenVEX_Document.objects.get(document_id=document_id)
-    except OpenVEX_Document.DoesNotExist:
+        open_vex = OpenVEX.objects.get(document_base_id=document_base_id)
+    except OpenVEX.DoesNotExist:
         raise ValidationError(  # pylint: disable=raise-missing-from
-            f"OpenVEX document with id {document_id} does not exist"
+            f"OpenVEX document with id {document_base_id} does not exist"
         )
         # The DoesNotExist exception itself is not relevant and must not be re-raised
 
     statements = []
-    if open_vex.vulnerability:
+    if open_vex.vulnerability and not open_vex.product:
         statements = _get_statements_for_vulnerability(open_vex.vulnerability)
+    elif open_vex.product and not open_vex.vulnerability:
+        statements = _get_statements_for_product(open_vex.product)
 
     statements_json = jsonpickle.encode(statements, unpicklable=False)
     statements_hash = hashlib.sha256(
@@ -125,6 +147,8 @@ def update_open_vex_document(
 
     if author:
         open_vex.author = author
+    if role:
+        open_vex.role = role
     open_vex.version += 1
     open_vex.content_hash = statements_hash
     open_vex.save()
@@ -134,6 +158,7 @@ def update_open_vex_document(
         id=open_vex.document_id,
         version=open_vex.version,
         author=open_vex.author,
+        role=open_vex.role,
         timestamp=open_vex.timestamp.isoformat(),
         last_updated=open_vex.last_updated.isoformat(),
         tooling="SecOberserve / " + __version__,
@@ -149,22 +174,22 @@ def update_open_vex_document(
 def _check_open_vex_document_does_not_exist(product: Optional[Product]):
     if product:
         try:
-            OpenVEX_Document.objects.get(product=product)
+            OpenVEX.objects.get(product=product)
             raise ValidationError(
                 f"OpenVEX document for product {product.id} already exists"
             )
-        except OpenVEX_Document.DoesNotExist:
+        except OpenVEX.DoesNotExist:
             pass
 
 
-def _get_document_id(document_id_prefix: str) -> str:
+def _get_document_id(document_id_prefix: str, document_base_id: str) -> str:
     if not validators.url(document_id_prefix):
         raise ValidationError("Document ID prefix must be a valid URL")
 
     if not document_id_prefix.endswith("/"):
         document_id_prefix += "/"
 
-    return document_id_prefix + "OpenVEX-" + str(uuid.uuid4())
+    return document_id_prefix + "OpenVEX-" + document_base_id
 
 
 def _get_statements_for_vulnerability(
@@ -172,61 +197,104 @@ def _get_statements_for_vulnerability(
 ) -> list[OpenVEXStatement]:
     statements: dict[str, OpenVEXStatement] = {}
 
-    open_vev_vulnerability = OpenVEXVulnerability(
+    open_vex_vulnerability = OpenVEXVulnerability(
         name=vulnerability.name, description=vulnerability.description
     )
 
     observations = get_observations_for_vulnerability(vulnerability)
     for observation in observations:
-        open_vex_status = _map_status(observation.current_status)
-        if not open_vex_status:
+        prepared_statement = _prepare_statement(observation)
+        if not prepared_statement:
             continue
 
         open_vex_product = OpenVEXProduct(id=observation.product.name)
 
-        open_vex_justification = None
-
-        open_vex_status_notes = None
-        if open_vex_status != OpenVEX_Status.OPEN_VEX_STATUS_AFFECTED:
-            try:
-                observation_log = Observation_Log.objects.filter(
-                    observation=observation
-                ).latest("created")
-            except Observation_Log.DoesNotExist:
-                observation_log = None
-            if observation_log:
-                open_vex_status_notes = observation_log.comment
-
-        open_vex_action_statement = None
-        if observation.recommendation:
-            open_vex_action_statement = observation.recommendation
-
         string_to_hash = (
-            str(open_vex_status)
-            + str(open_vex_justification)
-            + str(open_vex_status_notes)
-            + str(open_vex_action_statement)
+            str(prepared_statement.status)
+            + str(prepared_statement.justification)
+            + str(prepared_statement.status_notes)
+            + str(prepared_statement.action_statement)
         )
         hashed_string = hashlib.sha256(
             string_to_hash.casefold().encode("utf-8").strip()
         ).hexdigest()
 
-        open_vex_statement = statements.get(hashed_string)
-        if open_vex_statement:
-            if open_vex_product not in open_vex_statement.products:
-                open_vex_statement.products.append(open_vex_product)
+        existing_statement = statements.get(hashed_string)
+        if existing_statement:
+            if open_vex_product not in prepared_statement.products:
+                existing_statement.products.append(open_vex_product)
         else:
-            open_vex_statement = OpenVEXStatement(
-                status=open_vex_status,
-                status_notes=open_vex_status_notes,
-                justification=open_vex_justification,
-                action_statement=open_vex_action_statement,
-                vulnerability=open_vev_vulnerability,
-                products=[open_vex_product],
-            )
-            statements[hashed_string] = open_vex_statement
+            prepared_statement.vulnerability = open_vex_vulnerability
+            prepared_statement.products.append(open_vex_product)
+            statements[hashed_string] = prepared_statement
 
     return list(statements.values())
+
+
+def _get_statements_for_product(product: Product) -> list[OpenVEXStatement]:
+    statements: dict[str, OpenVEXStatement] = {}
+
+    open_vex_product = OpenVEXProduct(id=product.name)
+
+    observations = get_observations_for_product(product)
+    for observation in observations:
+        prepared_statement = _prepare_statement(observation)
+        if not prepared_statement:
+            continue
+
+        open_vex_vulnerability = OpenVEXVulnerability(
+            name=observation.vulnerability_id, description=observation.description
+        )
+
+        string_to_hash = (
+            str(open_vex_vulnerability.name)
+            + str(prepared_statement.status)
+            + str(prepared_statement.justification)
+            + str(prepared_statement.status_notes)
+            + str(prepared_statement.action_statement)
+        )
+        hashed_string = hashlib.sha256(
+            string_to_hash.casefold().encode("utf-8").strip()
+        ).hexdigest()
+
+        if not statements.get(hashed_string):
+            prepared_statement.vulnerability = open_vex_vulnerability
+            prepared_statement.products.append(open_vex_product)
+            statements[hashed_string] = prepared_statement
+
+    return list(statements.values())
+
+
+def _prepare_statement(observation: Observation) -> Optional[OpenVEXStatement]:
+    open_vex_status = _map_status(observation.current_status)
+    if not open_vex_status:
+        return None
+
+    open_vex_justification = None
+
+    open_vex_status_notes = None
+    if open_vex_status != OpenVEX_Status.OPEN_VEX_STATUS_AFFECTED:
+        try:
+            observation_log = Observation_Log.objects.filter(
+                observation=observation
+            ).latest("created")
+        except Observation_Log.DoesNotExist:
+            observation_log = None
+        if observation_log:
+            open_vex_status_notes = observation_log.comment
+
+    open_vex_action_statement = None
+    if observation.recommendation:
+        open_vex_action_statement = observation.recommendation
+
+    return OpenVEXStatement(
+        status=open_vex_status,
+        status_notes=open_vex_status_notes,
+        justification=open_vex_justification,
+        action_statement=open_vex_action_statement,
+        vulnerability=None,
+        products=[],
+    )
 
 
 def _map_status(secobserve_status: str) -> Optional[str]:

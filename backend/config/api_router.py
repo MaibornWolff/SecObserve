@@ -18,6 +18,7 @@ from application.import_observations.api.views import (
     VulnerabilityCheckViewSet,
 )
 from application.rules.api.views import GeneralRuleViewSet, ProductRuleViewSet
+from application.vex.api.views import OpenVEXViewSet
 
 router = SimpleRouter()
 
@@ -39,6 +40,7 @@ router.register("evidences", EvidenceViewSet)
 router.register("notifications", NotificationViewSet)
 router.register("vulnerability_checks", VulnerabilityCheckViewSet)
 router.register("potential_duplicates", PotentialDuplicateViewSet)
+router.register("vex/openvex", OpenVEXViewSet)
 
 app_name = "api"
 urlpatterns = router.urls
