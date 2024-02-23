@@ -4,7 +4,6 @@ from dataclasses import dataclass
 from typing import Optional
 
 import jsonpickle
-import validators
 from rest_framework.exceptions import ValidationError
 
 from application.__init__ import __version__
@@ -187,9 +186,6 @@ def _check_open_vex_document_does_not_exist(product: Optional[Product]):
 
 
 def _get_document_id(document_id_prefix: str, document_base_id: str) -> str:
-    if not validators.url(document_id_prefix):
-        raise ValidationError("Document ID prefix must be a valid URL")
-
     if not document_id_prefix.endswith("/"):
         document_id_prefix += "/"
 

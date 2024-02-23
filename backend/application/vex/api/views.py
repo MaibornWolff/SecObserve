@@ -2,6 +2,7 @@ import json
 from typing import Any
 
 import jsonpickle
+from constance import config
 from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
@@ -17,18 +18,89 @@ from rest_framework.status import (
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
-from application.vex.api.filters import OpenVEXFilter
+from application.vex.api.filters import CSAFFilter, OpenVEXFilter
 from application.vex.api.serializers import (
+    CSAFDocumentCreateSerializer,
+    CSAFSerializer,
     OpenVEXDocumentCreateSerializer,
     OpenVEXDocumentUpdateSerializer,
     OpenVEXSerializer,
 )
-from application.vex.models import OpenVEX
+from application.vex.models import CSAF, OpenVEX
+from application.vex.services.csaf import CSAFCreateParameters, create_csaf_document
 from application.vex.services.open_vex import (
     create_open_vex_document,
     update_open_vex_document,
 )
-from constance import config
+
+
+class CSAFDocumentCreateView(APIView):
+    @extend_schema(
+        methods=["POST"],
+        request=CSAFDocumentCreateSerializer,
+        responses={HTTP_200_OK: bytes},
+    )
+    @action(detail=True, methods=["post"])
+    def post(self, request):
+        if not config.FEATURE_VEX:
+            return Response(status=HTTP_501_NOT_IMPLEMENTED)
+
+        serializer = CSAFDocumentCreateSerializer(data=request.data)
+        if not serializer.is_valid():
+            raise ValidationError(serializer.errors)
+
+        csaf_create_parameters = CSAFCreateParameters(
+            product_id=serializer.validated_data.get("product_id"),
+            vulnerability_name=serializer.validated_data.get("vulnerability_name"),
+            document_id_prefix=serializer.validated_data.get("document_id_prefix"),
+            title=serializer.validated_data.get("title"),
+            publisher_name=serializer.validated_data.get("publisher_name"),
+            publisher_category=serializer.validated_data.get("publisher_category"),
+            publisher_namespace=serializer.validated_data.get("publisher_namespace"),
+            tracking_status=serializer.validated_data.get("tracking_status"),
+        )
+
+        csaf_document = create_csaf_document(csaf_create_parameters)
+
+        if not csaf_document:
+            return Response(status=HTTP_204_NO_CONTENT)
+
+        response = HttpResponse(
+            content=_object_to_json(csaf_document),
+            content_type="text/json",
+        )
+        response["Content-Disposition"] = (
+            "attachment; filename=csaf_"
+            + csaf_document.get_base_id()
+            + "_"
+            + str(csaf_document.document.tracking.version)
+            + ".json"
+        )
+        return response
+
+
+class CSAFViewSet(
+    GenericViewSet, DestroyModelMixin, ListModelMixin, RetrieveModelMixin
+):
+    serializer_class = CSAFSerializer
+    queryset = CSAF.objects.all()
+    filterset_class = CSAFFilter
+    filter_backends = [DjangoFilterBackend]
+
+    def destroy(self, request, *args, **kwargs):
+        if not config.FEATURE_VEX:
+            return Response(status=HTTP_501_NOT_IMPLEMENTED)
+        return super().destroy(request, *args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        if not config.FEATURE_VEX:
+            return Response(status=HTTP_501_NOT_IMPLEMENTED)
+        return super().list(request, *args, **kwargs)
+
+    def retrieve(self, request, *args, **kwargs):
+        if not config.FEATURE_VEX:
+            return Response(status=HTTP_501_NOT_IMPLEMENTED)
+        return super().retrieve(request, *args, **kwargs)
 
 
 class OpenVEXDocumentCreateView(APIView):

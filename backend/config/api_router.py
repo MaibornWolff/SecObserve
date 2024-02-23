@@ -19,7 +19,7 @@ from application.import_observations.api.views import (
     VulnerabilityCheckViewSet,
 )
 from application.rules.api.views import GeneralRuleViewSet, ProductRuleViewSet
-from application.vex.api.views import OpenVEXViewSet
+from application.vex.api.views import CSAFViewSet, OpenVEXViewSet
 
 router = SimpleRouter()
 
@@ -43,6 +43,7 @@ router.register("vulnerability_checks", VulnerabilityCheckViewSet)
 router.register("potential_duplicates", PotentialDuplicateViewSet)
 if config.FEATURE_VEX:
     router.register("vex/openvex", OpenVEXViewSet)
+    router.register("vex/csaf", CSAFViewSet)
 
 app_name = "api"
 urlpatterns = router.urls

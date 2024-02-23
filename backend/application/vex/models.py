@@ -3,6 +3,7 @@ from django.db.models import (
     CASCADE,
     CharField,
     DateTimeField,
+    ForeignKey,
     IntegerField,
     Model,
     OneToOneField,
@@ -10,13 +11,12 @@ from django.db.models import (
 )
 
 from application.core.models import Product
-from application.vex.types import CSAF_Role, CSAF_Status
+from application.vex.types import CSAF_Publisher_Category, CSAF_Tracking_Status
 
 
 class Vulnerability(Model):
     name = CharField(max_length=255, unique=True)
     description = TextField(max_length=2048, blank=True)
-    recommendation = TextField(max_length=2048, blank=True)
 
 
 class VEX_Base(Model):
@@ -42,7 +42,20 @@ class CSAF(VEX_Base):
     title = CharField(max_length=255)
     tracking_initial_release_date = DateTimeField(auto_now_add=True)
     tracking_current_release_date = DateTimeField(auto_now=True)
-    tracking_status = CharField(max_length=16, choices=CSAF_Status.CSAF_STATUS_CHOICES)
+    tracking_status = CharField(
+        max_length=16, choices=CSAF_Tracking_Status.CSAF_TRACKING_STATUS_CHOICES
+    )
     publisher_name = CharField(max_length=255)
-    publisher_category = CharField(max_length=16, choices=CSAF_Role.CSAF_ROLE_CHOICES)
+    publisher_category = CharField(
+        max_length=16, choices=CSAF_Publisher_Category.CSAF_PUBLISHER_CATEGORY_CHOICES
+    )
     publisher_namespace = CharField(max_length=255)
+
+
+class CSAF_Revision(Model):
+    csaf = ForeignKey(CSAF, on_delete=CASCADE)
+    revision_date = DateTimeField()
+    revision_version = IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(999999)]
+    )
+    summary = TextField(max_length=255)
