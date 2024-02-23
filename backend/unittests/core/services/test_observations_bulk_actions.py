@@ -9,7 +9,7 @@ from application.core.services.observations_bulk_actions import (
     observations_bulk_assessment,
     observations_bulk_delete,
 )
-from application.core.types import Severity, Status
+from application.core.types import Severity, Status, VexJustification
 from unittests.base_test_case import BaseTestCase
 
 
@@ -30,6 +30,7 @@ class TestObservationsBulkActions(BaseTestCase):
             Status.STATUS_OPEN,
             "comment",
             [1, 2],
+            VexJustification.STATUS_COMPONENT_NOT_PRESENT,
         )
 
         check_mock.assert_called_with(self.product_1, [1, 2])
@@ -39,12 +40,14 @@ class TestObservationsBulkActions(BaseTestCase):
                 Severity.SEVERITY_CRITICAL,
                 Status.STATUS_OPEN,
                 "comment",
+                VexJustification.STATUS_COMPONENT_NOT_PRESENT,
             ),
             call(
                 observation_2,
                 Severity.SEVERITY_CRITICAL,
                 Status.STATUS_OPEN,
                 "comment",
+                VexJustification.STATUS_COMPONENT_NOT_PRESENT,
             ),
         ]
         save_mock.assert_has_calls(expected_calls, any_order=False)

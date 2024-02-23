@@ -5,9 +5,15 @@ import { Fragment, useState } from "react";
 import { SaveButton, SimpleForm, Toolbar, useListContext, useNotify, useRefresh, useUnselectAll } from "react-admin";
 
 import { validate_required_255 } from "../../commons/custom_validators";
+import { feature_vex_enabled } from "../../commons/functions";
 import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
-import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../types";
+import {
+    OBSERVATION_SEVERITY_CHOICES,
+    OBSERVATION_STATUS_CHOICES,
+    OBSERVATION_STATUS_OPEN,
+    OBSERVATION_VEX_JUSTIFICATION_CHOICES,
+} from "../types";
 
 type ObservationBulkAssessmentButtonProps = {
     product: any;
@@ -15,6 +21,7 @@ type ObservationBulkAssessmentButtonProps = {
 
 const ObservationBulkAssessment = (props: ObservationBulkAssessmentButtonProps) => {
     const [open, setOpen] = useState(false);
+    const [status, setStatus] = useState(OBSERVATION_STATUS_OPEN);
     const refresh = useRefresh();
     const [loading, setLoading] = useState(false);
     const notify = useNotify();
@@ -29,6 +36,7 @@ const ObservationBulkAssessment = (props: ObservationBulkAssessmentButtonProps) 
             severity: data.current_severity,
             status: data.current_status,
             comment: data.comment,
+            vex_justification: feature_vex_enabled() ? data.current_vex_justification : "",
             observations: selectedIds,
         };
 
@@ -111,7 +119,15 @@ const ObservationBulkAssessment = (props: ObservationBulkAssessmentButtonProps) 
                             source="current_status"
                             label="Status"
                             choices={OBSERVATION_STATUS_CHOICES}
+                            onChange={(e) => setStatus(e)}
                         />
+                        {feature_vex_enabled() && status === "Not affected" && (
+                            <AutocompleteInputMedium
+                                source="current_vex_justification"
+                                label="Current VEX justification"
+                                choices={OBSERVATION_VEX_JUSTIFICATION_CHOICES}
+                            />
+                        )}
                         <TextInputWide source="comment" validate={validate_required_255} />
                     </SimpleForm>
                 </DialogContent>

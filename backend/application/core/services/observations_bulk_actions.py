@@ -19,10 +19,13 @@ def observations_bulk_assessment(
     new_status: str,
     comment: str,
     observation_ids: list[int],
+    new_vex_justification: str,
 ) -> None:
     observations = _check_observations(product, observation_ids)
     for observation in observations:
-        save_assessment(observation, new_severity, new_status, comment)
+        save_assessment(
+            observation, new_severity, new_status, comment, new_vex_justification
+        )
 
 
 def observations_bulk_delete(product: Product, observation_ids: list[int]) -> None:
@@ -78,7 +81,7 @@ def observations_bulk_mark_duplicates(
 
     for duplicate in duplicates:
         duplicate.has_potential_duplicates = False
-        save_assessment(duplicate, None, Status.STATUS_DUPLICATE, comment)
+        save_assessment(duplicate, None, Status.STATUS_DUPLICATE, comment, "")
 
     set_potential_duplicate(observation)
 

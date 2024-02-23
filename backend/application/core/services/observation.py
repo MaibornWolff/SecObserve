@@ -102,6 +102,19 @@ def get_current_status(observation) -> str:
     return Status.STATUS_OPEN
 
 
+def get_current_vex_justification(observation) -> str:
+    if observation.assessment_vex_justification:
+        return observation.assessment_vex_justification
+
+    if observation.rule_vex_justification:
+        return observation.rule_vex_justification
+
+    if observation.parser_vex_justification:
+        return observation.parser_vex_justification
+
+    return ""
+
+
 def normalize_observation_fields(observation) -> None:
     normalize_origin_component(observation)
     normalize_origin_docker(observation)

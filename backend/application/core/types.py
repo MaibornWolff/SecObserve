@@ -45,3 +45,27 @@ class Status:
         (STATUS_NOT_SECURITY, STATUS_NOT_SECURITY),
         (STATUS_RISK_ACCEPTED, STATUS_RISK_ACCEPTED),
     ]
+
+
+class VexJustification:
+    STATUS_COMPONENT_NOT_PRESENT = "component_not_present"
+    STATUS_VULNERABLE_CODE_NOT_PRESENT = "vulnerable_code_not_present"
+    STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY = (
+        "vulnerable_code_cannot_be_controlled_by_adversary"
+    )
+    STATUS_VULNERABLE_CODE_NOT_IN_EXECUTE_PATH = "vulnerable_code_not_in_execute_path"
+    STATUS_INLINE_MITIGATIONS_ALREADY_EXIST = "inline_mitigations_already_exist"
+
+    VEX_JUSTIFICATION_CHOICES = [
+        (STATUS_COMPONENT_NOT_PRESENT, "Component not present"),
+        (STATUS_VULNERABLE_CODE_NOT_PRESENT, "Vulnerable code not present"),
+        (
+            STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,
+            "Vulnerable code cannot be controlled by adversary",
+        ),
+        (
+            STATUS_VULNERABLE_CODE_NOT_IN_EXECUTE_PATH,
+            "Vulnerable code not in execute path",
+        ),
+        (STATUS_INLINE_MITIGATIONS_ALREADY_EXIST, "Inline mitigations already exist"),
+    ]

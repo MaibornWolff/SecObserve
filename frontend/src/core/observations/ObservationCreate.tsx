@@ -22,8 +22,14 @@ import {
     validate_required,
     validate_required_255,
 } from "../../commons/custom_validators";
+import { feature_vex_enabled } from "../../commons/functions";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
-import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES, OBSERVATION_STATUS_OPEN } from "../../core/types";
+import {
+    OBSERVATION_SEVERITY_CHOICES,
+    OBSERVATION_STATUS_CHOICES,
+    OBSERVATION_STATUS_OPEN,
+    OBSERVATION_VEX_JUSTIFICATION_CHOICES,
+} from "../../core/types";
 
 export type ObservationCreateProps = {
     id: any;
@@ -116,6 +122,13 @@ const ObservationCreate = ({ id }: ObservationCreateProps) => {
                                         defaultValue={OBSERVATION_STATUS_OPEN}
                                         validate={validate_required}
                                     />
+                                    {feature_vex_enabled() && (
+                                        <AutocompleteInputMedium
+                                            source="parser_vex_justification"
+                                            label="VEX Justification"
+                                            choices={OBSERVATION_VEX_JUSTIFICATION_CHOICES}
+                                        />
+                                    )}
                                 </Stack>
                                 <TextInputWide
                                     source="description"

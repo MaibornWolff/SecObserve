@@ -5,19 +5,26 @@ import { Fragment, useState } from "react";
 import { SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
 
 import { validate_required, validate_required_255 } from "../../commons/custom_validators";
+import { feature_vex_enabled } from "../../commons/functions";
 import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
-import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../types";
+import {
+    OBSERVATION_SEVERITY_CHOICES,
+    OBSERVATION_STATUS_CHOICES,
+    OBSERVATION_STATUS_OPEN,
+    OBSERVATION_VEX_JUSTIFICATION_CHOICES,
+} from "../types";
 
 const ObservationAssessment = () => {
     const [open, setOpen] = useState(false);
+    const [status, setStatus] = useState(OBSERVATION_STATUS_OPEN);
     const refresh = useRefresh();
     const notify = useNotify();
-
     const observationUpdate = async (data: any) => {
         const patch = {
             severity: data.current_severity,
             status: data.current_status,
+            vex_justification: feature_vex_enabled() ? data.current_vex_justification : "",
             comment: data.comment,
         };
 
@@ -95,7 +102,15 @@ const ObservationAssessment = () => {
                             source="current_status"
                             choices={OBSERVATION_STATUS_CHOICES}
                             validate={validate_required}
+                            onChange={(e) => setStatus(e)}
                         />
+                        {feature_vex_enabled() && status === "Not affected" && (
+                            <AutocompleteInputMedium
+                                source="current_vex_justification"
+                                label="Current VEX justification"
+                                choices={OBSERVATION_VEX_JUSTIFICATION_CHOICES}
+                            />
+                        )}
                         <TextInputWide source="comment" validate={validate_required_255} />
                     </SimpleForm>
                 </DialogContent>
