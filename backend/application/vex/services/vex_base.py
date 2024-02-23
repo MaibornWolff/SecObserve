@@ -42,9 +42,14 @@ def check_vulnerabilities(vulnerability_names: list[str]) -> None:
 def get_observations_for_vulnerability(
     vulnerability_name: str,
 ) -> list[Observation]:
-    return list(
+    observations = (
         get_observations().filter(vulnerability_id=vulnerability_name).order_by("id")
     )
+    observations_list = []
+    for observation in observations:
+        if observation.branch == observation.product.repository_default_branch:
+            observations_list.append(observation)
+    return observations_list
 
 
 def get_observations_for_product(
@@ -52,11 +57,22 @@ def get_observations_for_product(
 ) -> list[Observation]:
     return list(
         get_observations()
-        .filter(product_id=product.id)
+        .filter(product_id=product.pk, branch=product.repository_default_branch)
         .exclude(vulnerability_id="")
         .order_by("id")
     )
 
+
+def get_product_id(product: Product) -> str:
+    return product.name
+
+
+def get_component_id(observation: Observation) -> str:
+    if observation.origin_component_purl:
+        return observation.origin_component_purl
+    if observation.origin_component_cpe:
+        return observation.origin_component_cpe
+    return ""
 
 VULNERABILITY_URLS = {
     "CVE": "https://nvd.nist.gov/vuln/detail/",

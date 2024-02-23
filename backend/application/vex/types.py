@@ -160,8 +160,14 @@ class OpenVEX_Status:
 
 
 @dataclass(frozen=True)
+class OpenVEXSubcomponent:
+    id: str
+
+
+@dataclass(frozen=True)
 class OpenVEXProduct:
     id: str
+    subcomponents: list[OpenVEXSubcomponent]
 
 
 @dataclass()

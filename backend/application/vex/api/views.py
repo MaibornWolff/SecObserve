@@ -273,7 +273,7 @@ def _object_to_json(object_to_encode: Any, vex_type: str) -> str:
     json_dict = _remove_empty_elements(json_dict)
     if vex_type == VEX_TYPE_OPENVEX:
         json_dict = _change_keys(json_dict)
-    return json.dumps(json_dict, indent=4)
+    return json.dumps(json_dict, indent=4, sort_keys=True)
 
 
 def _remove_empty_elements(d: dict) -> dict:

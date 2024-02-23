@@ -14,8 +14,10 @@ from application.vex.services.vex_base import (
     check_and_get_product,
     check_either_product_or_vulnerabilities,
     check_vulnerabilities,
+    get_component_id,
     get_observations_for_product,
     get_observations_for_vulnerability,
+    get_product_id,
     get_vulnerability_url,
 )
 from application.vex.types import (
@@ -23,6 +25,7 @@ from application.vex.types import (
     OpenVEXDocument,
     OpenVEXProduct,
     OpenVEXStatement,
+    OpenVEXSubcomponent,
     OpenVEXVulnerability,
 )
 
@@ -168,8 +171,6 @@ def _get_statements_for_vulnerabilities(
             if not prepared_statement:
                 continue
 
-            open_vex_product = OpenVEXProduct(id=observation.product.name)
-
             string_to_hash = (
                 str(open_vex_vulnerability.name)
                 + str(prepared_statement.status)
@@ -183,12 +184,25 @@ def _get_statements_for_vulnerabilities(
 
             existing_statement = statements.get(hashed_string)
             if existing_statement:
-                if open_vex_product not in existing_statement.products:
+                existing_product = get_open_vex_product_by_id(
+                    existing_statement.products, get_product_id(observation.product)
+                )
+                if existing_product:
+                    _add_subcomponent(observation, existing_product)
+                else:
+                    open_vex_product = OpenVEXProduct(
+                        id=get_product_id(observation.product), subcomponents=[]
+                    )
+                    _add_subcomponent(observation, open_vex_product)
                     existing_statement.products.append(open_vex_product)
             else:
                 if observation.description:
                     open_vex_vulnerability.description = observation.description
                 prepared_statement.vulnerability = open_vex_vulnerability
+                open_vex_product = OpenVEXProduct(
+                    id=get_product_id(observation.product), subcomponents=[]
+                )
+                _add_subcomponent(observation, open_vex_product)
                 prepared_statement.products.append(open_vex_product)
                 statements[hashed_string] = prepared_statement
 
@@ -198,7 +212,6 @@ def _get_statements_for_vulnerabilities(
 def _get_statements_for_product(product: Product) -> list[OpenVEXStatement]:
     statements: dict[str, OpenVEXStatement] = {}
 
-    open_vex_product = OpenVEXProduct(id=product.name)
     vulnerability_cache = OpenVEXVulnerabilityCache()
 
     observations = get_observations_for_product(product)
@@ -229,8 +242,23 @@ def _get_statements_for_product(product: Product) -> list[OpenVEXStatement]:
             string_to_hash.casefold().encode("utf-8").strip()
         ).hexdigest()
 
-        if not statements.get(hashed_string):
+        existing_statement = statements.get(hashed_string)
+        if existing_statement:
+            existing_product = get_open_vex_product_by_id(
+                existing_statement.products, get_product_id(product)
+            )
+            if existing_product:
+                _add_subcomponent(observation, existing_product)
+            else:
+                raise ValueError(
+                    f"Product {product.name} not found in existing statement"
+                )
+        else:
             prepared_statement.vulnerability = open_vex_vulnerability
+            open_vex_product = OpenVEXProduct(
+                id=get_product_id(product), subcomponents=[]
+            )
+            _add_subcomponent(observation, open_vex_product)
             prepared_statement.products.append(open_vex_product)
             statements[hashed_string] = prepared_statement
 
@@ -290,3 +318,21 @@ def _map_status(secobserve_status: str) -> Optional[str]:
         return None
 
     raise ValueError(f"Invalid status {secobserve_status}")
+
+
+def get_open_vex_product_by_id(
+    open_vex_products: list[OpenVEXProduct], product_id: str
+) -> Optional[OpenVEXProduct]:
+    for open_vex_product in open_vex_products:
+        if open_vex_product.id == product_id:
+            return open_vex_product
+    return None
+
+
+def _add_subcomponent(observation: Observation, existing_product: OpenVEXProduct):
+    if get_component_id(observation):
+        open_vex_subcomponent = OpenVEXSubcomponent(id=get_component_id(observation))
+        if open_vex_subcomponent not in existing_product.subcomponents:
+            existing_product.subcomponents.append(
+                OpenVEXSubcomponent(id=get_component_id(observation))
+            )

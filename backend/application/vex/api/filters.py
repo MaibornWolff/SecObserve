@@ -1,9 +1,6 @@
 from django_filters import FilterSet
 
-from application.vex.models import (
-    CSAF,
-    OpenVEX,
-)
+from application.vex.models import CSAF, OpenVEX
 
 
 class CSAFFilter(FilterSet):
