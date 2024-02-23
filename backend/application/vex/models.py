@@ -6,7 +6,6 @@ from django.db.models import (
     ForeignKey,
     IntegerField,
     Model,
-    OneToOneField,
     TextField,
 )
 
@@ -15,7 +14,7 @@ from application.vex.types import CSAF_Publisher_Category, CSAF_Tracking_Status
 
 
 class VEX_Base(Model):
-    product = OneToOneField(Product, on_delete=CASCADE, null=True)
+    product = ForeignKey(Product, on_delete=CASCADE, null=True)
     vulnerability_name = CharField(max_length=255, blank=True)
     document_base_id = CharField(max_length=36, unique=True)
     document_id = CharField(max_length=255)
@@ -32,9 +31,11 @@ class OpenVEX(VEX_Base):
     timestamp = DateTimeField(auto_now_add=True)
     last_updated = DateTimeField(auto_now=True)
 
+
 class OpenVEX_Vulnerability(Model):
     openvex = ForeignKey(OpenVEX, related_name="vulnerability_names", on_delete=CASCADE)
     name = CharField(max_length=255)
+
 
 class CSAF(VEX_Base):
     title = CharField(max_length=255)
@@ -49,6 +50,7 @@ class CSAF(VEX_Base):
     )
     publisher_namespace = CharField(max_length=255)
 
+
 class CSAF_Vulnerability(Model):
     csaf = ForeignKey(CSAF, related_name="vulnerability_names", on_delete=CASCADE)
     name = CharField(max_length=255)
@@ -57,7 +59,5 @@ class CSAF_Vulnerability(Model):
 class CSAF_Revision(Model):
     csaf = ForeignKey(CSAF, related_name="revisions", on_delete=CASCADE)
     date = DateTimeField()
-    version = IntegerField(
-        validators=[MinValueValidator(0), MaxValueValidator(999999)]
-    )
+    version = IntegerField(validators=[MinValueValidator(0), MaxValueValidator(999999)])
     summary = TextField(max_length=255)

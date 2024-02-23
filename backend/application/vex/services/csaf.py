@@ -4,28 +4,37 @@ from dataclasses import dataclass
 from typing import Optional
 
 import jsonpickle
-import validators
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import NotFound
 
 from application.__init__ import __version__
-from application.core.models import Observation, Observation_Log, Product
+from application.core.models import Observation, Product
 from application.core.types import Status
-from application.vex.models import CSAF, CSAF_Revision
+from application.vex.models import CSAF, CSAF_Revision, CSAF_Vulnerability
+from application.vex.services.csaf_helpers import get_vulnerability_ecosystem
 from application.vex.services.vex_base import (
     check_and_get_product,
     check_either_product_or_vulnerabilities,
     check_vulnerabilities,
     get_observations_for_product,
     get_observations_for_vulnerability,
+    get_vulnerability_url,
 )
 from application.vex.types import (
+    CSAF_Status,
     CSAFDocument,
     CSAFEngine,
+    CSAFFullProductName,
     CSAFGenerator,
+    CSAFId,
+    CSAFNote,
+    CSAFProductStatus,
+    CSAFProductTree,
     CSAFPublisher,
+    CSAFReference,
     CSAFRevisionHistory,
     CSAFRoot,
     CSAFTracking,
+    CSAFVulnerability,
 )
 
 
@@ -41,23 +50,32 @@ class CSAFCreateParameters:
     tracking_status: str
 
 
+@dataclass()
+class CSAFUpdateParameters:
+    document_base_id: str
+    publisher_name: str
+    publisher_category: str
+    publisher_namespace: str
+    tracking_status: str
+
+
+@dataclass()
+class CSAFContent:
+    vulnerabilities: list[CSAFVulnerability]
+    product_tree: CSAFProductTree
+
+
 def create_csaf_document(parameters: CSAFCreateParameters) -> Optional[CSAFRoot]:
     check_either_product_or_vulnerabilities(
-        parameters.product_id, parameters.vulnerability_name
+        parameters.product_id, parameters.vulnerability_names
     )
     product = check_and_get_product(parameters.product_id)
     check_vulnerabilities(parameters.vulnerability_names)
     document_base_id = str(uuid.uuid4())
     document_id = _get_document_id(parameters.document_id_prefix, document_base_id)
 
-    _check_csaf_document_does_not_exist(product)
-
-    if parameters.vulnerability_name is None:
-        parameters.vulnerability_name = ""
-
     csaf = CSAF.objects.create(
         product=product,
-        vulnerability_name=parameters.vulnerability_name,
         document_base_id=document_base_id,
         document_id=document_id,
         version=1,
@@ -69,14 +87,99 @@ def create_csaf_document(parameters: CSAFCreateParameters) -> Optional[CSAFRoot]
     )
     CSAF_Revision.objects.create(
         csaf=csaf,
-        revision_date=csaf.tracking_current_release_date,
-        revision_version=1,
+        date=csaf.tracking_current_release_date,
+        version=1,
         summary="Initial release",
+    )
+    for vulnerability_name in parameters.vulnerability_names:
+        if vulnerability_name is None:
+            vulnerability_name = ""
+        CSAF_Vulnerability.objects.create(csaf=csaf, name=vulnerability_name)
+
+    csaf_root = _create_csaf_root(csaf)
+
+    vulnerabilities = []
+    product_tree = CSAFProductTree(full_product_names=[])
+    if parameters.vulnerability_names and not product:
+        vulnerabilities, product_tree = _get_data_for_vulnerabilities(
+            parameters.vulnerability_names
+        )
+    elif product and not parameters.vulnerability_names:
+        vulnerabilities, product_tree = _get_data_for_product(product)
+
+    if not vulnerabilities:
+        return None
+
+    csaf_content = CSAFContent(vulnerabilities, product_tree)
+    content_json = jsonpickle.encode(csaf_content, unpicklable=False)
+    content_hash = hashlib.sha256(
+        content_json.casefold().encode("utf-8").strip()
+    ).hexdigest()
+    csaf.content_hash = content_hash
+    csaf.save()
+
+    csaf_root.product_tree = product_tree
+    csaf_root.vulnerabilities = vulnerabilities
+
+    return csaf_root
+
+
+def update_csaf_document(parameters: CSAFUpdateParameters) -> Optional[CSAFRoot]:
+    try:
+        csaf = CSAF.objects.get(document_base_id=parameters.document_base_id)
+        csaf_vulnerability_names = list(
+            CSAF_Vulnerability.objects.filter(csaf=csaf).values_list("name", flat=True)
+        )
+    except CSAF.DoesNotExist:
+        raise NotFound(  # pylint: disable=raise-missing-from
+            f"CSAF document with id {parameters.document_base_id} does not exist"
+        )
+        # The DoesNotExist exception itself is not relevant and must not be re-raised
+
+    vulnerabilities = []
+    product_tree = CSAFProductTree(full_product_names=[])
+    if csaf_vulnerability_names and not csaf.product:
+        vulnerabilities, product_tree = _get_data_for_vulnerabilities(
+            csaf_vulnerability_names
+        )
+    elif csaf.product and not csaf_vulnerability_names:
+        vulnerabilities, product_tree = _get_data_for_product(csaf.product)
+
+    csaf_content = CSAFContent(vulnerabilities, product_tree)
+    content_json = jsonpickle.encode(csaf_content, unpicklable=False)
+    content_hash = hashlib.sha256(
+        content_json.casefold().encode("utf-8").strip()
+    ).hexdigest()
+
+    if content_hash == csaf.content_hash:
+        return None
+
+    if parameters.publisher_name:
+        csaf.publisher_name = parameters.publisher_name
+    if parameters.publisher_category:
+        csaf.publisher_category = parameters.publisher_category
+    if parameters.publisher_namespace:
+        csaf.publisher_namespace = parameters.publisher_namespace
+    if parameters.tracking_status:
+        csaf.tracking_status = parameters.tracking_status
+    csaf.version += 1
+    csaf.content_hash = content_hash
+    csaf.save()
+
+    CSAF_Revision.objects.create(
+        csaf=csaf,
+        date=csaf.tracking_current_release_date,
+        version=csaf.version,
+        summary="Update",
     )
 
     csaf_root = _create_csaf_root(csaf)
 
+    csaf_root.product_tree = product_tree
+    csaf_root.vulnerabilities = vulnerabilities
+
     return csaf_root
+
 
 def _get_document_id(document_id_prefix: Optional[str], document_base_id: str) -> str:
     if not document_id_prefix:
@@ -85,18 +188,7 @@ def _get_document_id(document_id_prefix: Optional[str], document_base_id: str) -
     return document_id_prefix + "_" + document_base_id
 
 
-def _check_csaf_document_does_not_exist(product: Optional[Product]):
-    if product:
-        try:
-            CSAF.objects.get(product=product)
-            raise ValidationError(
-                f"CSAF document for product {product.id} already exists"
-            )
-        except CSAF.DoesNotExist:
-            pass
-
-
-def _create_csaf_root(csaf):
+def _create_csaf_root(csaf: CSAF) -> CSAFRoot:
     csaf_publisher = CSAFPublisher(
         name=csaf.publisher_name,
         category=csaf.publisher_category,
@@ -112,11 +204,15 @@ def _create_csaf_root(csaf):
         engine=csaf_engine,
     )
 
-    csaf_revision_history = CSAFRevisionHistory(
-        date=csaf.tracking_initial_release_date.isoformat(),
-        number=str(csaf.version),
-        summary="Initial release",
-    )
+    csaf_revision_history_list = []
+    csaf_revisions = CSAF_Revision.objects.filter(csaf=csaf)
+    for csaf_revision in csaf_revisions:
+        csaf_revision_history = CSAFRevisionHistory(
+            date=csaf_revision.date.isoformat(),
+            number=str(csaf_revision.version),
+            summary=csaf_revision.summary,
+        )
+        csaf_revision_history_list.append(csaf_revision_history)
 
     csaf_tracking = CSAFTracking(
         id=csaf.document_id,
@@ -125,7 +221,7 @@ def _create_csaf_root(csaf):
         version=str(csaf.version),
         status=csaf.tracking_status,
         generator=csaf_generator,
-        revision_history=[csaf_revision_history],
+        revision_history=csaf_revision_history_list,
     )
 
     csaf_document = CSAFDocument(
@@ -141,5 +237,160 @@ def _create_csaf_root(csaf):
         product_tree=None,
         vulnerabilities=[],
     )
-    
+
     return csaf_root
+
+
+def _get_data_for_vulnerabilities(vulnerability_names: list[str]) -> tuple:
+    vulnerabilities = []
+    product_tree = CSAFProductTree(full_product_names=[])
+    for vulnerability_name in vulnerability_names:
+        vulnerability = _create_vulnerability(vulnerability_name)
+        vulnerabilities.append(vulnerability)
+        current_vulnerability_description = None
+
+        observations = get_observations_for_vulnerability(vulnerability_name)
+        for observation in observations:
+            set_vulnerability_description(
+                vulnerability, observation, current_vulnerability_description
+            )
+
+            full_product_name = CSAFFullProductName(
+                name=observation.product.name,
+                product_id=observation.product.name,
+            )
+            if full_product_name not in product_tree.full_product_names:
+                product_tree.full_product_names.append(full_product_name)
+
+            set_product_status(vulnerability, observation)
+
+    return vulnerabilities, product_tree
+
+
+def _get_data_for_product(product: Product) -> tuple:
+    vulnerabilities: dict[str, CSAFVulnerability] = {}
+    product_tree = CSAFProductTree(full_product_names=[])
+
+    full_product_name = CSAFFullProductName(
+        name=product.name,
+        product_id=product.name,
+    )
+    product_tree.full_product_names.append(full_product_name)
+
+    observations = get_observations_for_product(product)
+    for observation in observations:
+        vulnerability = vulnerabilities.get(observation.vulnerability_id)
+        if not vulnerability:
+            vulnerability = _create_vulnerability(observation.vulnerability_id)
+            vulnerabilities[observation.vulnerability_id] = vulnerability
+            set_vulnerability_description(vulnerability, observation, None)
+        set_product_status(vulnerability, observation)
+
+    return list(vulnerabilities.values()), product_tree
+
+
+def _create_vulnerability(vulnerability_name) -> CSAFVulnerability:
+    product_status = CSAFProductStatus(
+        fixed=[], known_affected=[], known_not_affected=[], under_investigation=[]
+    )
+    if vulnerability_name.startswith("CVE"):
+        vulnerability = CSAFVulnerability(
+            cve=vulnerability_name,
+            product_status=product_status,
+            notes=[],
+            flags=[],
+            ids=[],
+            references=[],
+        )
+    else:
+        vulnerability_id = CSAFId(
+            text=vulnerability_name,
+            system_name=get_vulnerability_ecosystem(vulnerability_name),
+        )
+        vulnerability = CSAFVulnerability(
+            cve=None,
+            product_status=product_status,
+            notes=[],
+            flags=[],
+            ids=[vulnerability_id],
+            references=[],
+        )
+    reference_url = get_vulnerability_url(vulnerability_name)
+    if reference_url:
+        reference = CSAFReference(
+            category="external", url=reference_url, summary="Security Advisory"
+        )
+        vulnerability.references.append(reference)
+
+    return vulnerability
+
+
+def set_vulnerability_description(
+    vulnerability: CSAFVulnerability,
+    observation: Observation,
+    current_vulnerability_description: Optional[str],
+):
+    if (
+        not current_vulnerability_description
+        and current_vulnerability_description != "No description available"
+    ):
+        description = (
+            observation.description
+            if observation.description
+            else "No description available"
+        )
+        current_vulnerability_description = observation.description
+        csaf_note = CSAFNote(
+            category="description",
+            text=description,
+        )
+        vulnerability.notes.append(csaf_note)
+
+
+def set_product_status(vulnerability: CSAFVulnerability, observation: Observation):
+    csaf_status = _map_status(observation.current_status)
+    if csaf_status == CSAF_Status.CSAF_STATUS_NOT_AFFECTED:
+        if (
+            observation.product.name
+            not in vulnerability.product_status.known_not_affected
+        ):
+            vulnerability.product_status.known_not_affected.append(
+                observation.product.name
+            )
+    elif csaf_status == CSAF_Status.CSAF_STATUS_AFFECTED:
+        if observation.product.name not in vulnerability.product_status.known_affected:
+            vulnerability.product_status.known_affected.append(observation.product.name)
+    elif csaf_status == CSAF_Status.CSAF_STATUS_FIXED:
+        if observation.product.name not in vulnerability.product_status.fixed:
+            vulnerability.product_status.fixed.append(observation.product.name)
+    elif csaf_status == CSAF_Status.CSAF_STATUS_UNDER_INVESTIGATION:
+        if (
+            observation.product.name
+            not in vulnerability.product_status.under_investigation
+        ):
+            vulnerability.product_status.under_investigation.append(
+                observation.product.name
+            )
+
+
+def _map_status(secobserve_status: str) -> Optional[str]:
+    if secobserve_status in (Status.STATUS_OPEN, Status.STATUS_RISK_ACCEPTED):
+        return CSAF_Status.CSAF_STATUS_AFFECTED
+
+    if secobserve_status == Status.STATUS_RESOLVED:
+        return CSAF_Status.CSAF_STATUS_FIXED
+
+    if secobserve_status in (
+        Status.STATUS_NOT_AFFECTED,
+        Status.STATUS_NOT_SECURITY,
+        Status.STATUS_FALSE_POSITIVE,
+    ):
+        return CSAF_Status.CSAF_STATUS_NOT_AFFECTED
+
+    if secobserve_status == Status.STATUS_IN_REVIEW:
+        return CSAF_Status.CSAF_STATUS_UNDER_INVESTIGATION
+
+    if secobserve_status == Status.STATUS_DUPLICATE:
+        return None
+
+    raise ValueError(f"Invalid status {secobserve_status}")

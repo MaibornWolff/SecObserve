@@ -3,7 +3,7 @@ import uuid
 from typing import Optional
 
 import jsonpickle
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import NotFound
 
 from application.__init__ import __version__
 from application.core.models import Observation, Observation_Log, Product
@@ -41,8 +41,6 @@ def create_open_vex_document(
     document_base_id = str(uuid.uuid4())
     document_id = _get_document_id(document_id_prefix, document_base_id)
 
-    _check_open_vex_document_does_not_exist(product)
-
     open_vex = OpenVEX.objects.create(
         product=product,
         document_base_id=document_base_id,
@@ -54,9 +52,7 @@ def create_open_vex_document(
     for vulnerability_name in vulnerability_names:
         if vulnerability_name is None:
             vulnerability_name = ""
-        OpenVEX_Vulnerability.objects.create(
-            openvex=open_vex, name=vulnerability_name
-        )
+        OpenVEX_Vulnerability.objects.create(openvex=open_vex, name=vulnerability_name)
 
     open_vex_document = OpenVEXDocument(
         context="https://openvex.dev/ns/v0.2.0",
@@ -76,15 +72,15 @@ def create_open_vex_document(
     elif product and not vulnerability_names:
         statements = _get_statements_for_product(product)
 
+    if not statements:
+        return None
+
     statements_json = jsonpickle.encode(statements, unpicklable=False)
     statements_hash = hashlib.sha256(
         statements_json.casefold().encode("utf-8").strip()
     ).hexdigest()
     open_vex.content_hash = statements_hash
     open_vex.save()
-
-    if not statements:
-        return None
 
     for statement in statements:
         open_vex_document.statements.append(statement)
@@ -97,16 +93,21 @@ def update_open_vex_document(
 ) -> Optional[OpenVEXDocument]:
     try:
         open_vex = OpenVEX.objects.get(document_base_id=document_base_id)
+        open_vex_vulnerability_names = list(
+            OpenVEX_Vulnerability.objects.filter(openvex=open_vex).values_list(
+                "name", flat=True
+            )
+        )
     except OpenVEX.DoesNotExist:
-        raise ValidationError(  # pylint: disable=raise-missing-from
+        raise NotFound(  # pylint: disable=raise-missing-from
             f"OpenVEX document with id {document_base_id} does not exist"
         )
         # The DoesNotExist exception itself is not relevant and must not be re-raised
 
     statements = []
-    if open_vex.vulnerability_name and not open_vex.product:
-        statements = _get_statements_for_vulnerability(open_vex.vulnerability_name)
-    elif open_vex.product and not open_vex.vulnerability_name:
+    if open_vex_vulnerability_names and not open_vex.product:
+        statements = _get_statements_for_vulnerabilities(open_vex_vulnerability_names)
+    elif open_vex.product and not open_vex_vulnerability_names:
         statements = _get_statements_for_product(open_vex.product)
 
     statements_json = jsonpickle.encode(statements, unpicklable=False)
@@ -143,17 +144,6 @@ def update_open_vex_document(
     return open_vex_document
 
 
-def _check_open_vex_document_does_not_exist(product: Optional[Product]):
-    if product:
-        try:
-            OpenVEX.objects.get(product=product)
-            raise ValidationError(
-                f"OpenVEX document for product {product.id} already exists"
-            )
-        except OpenVEX.DoesNotExist:
-            pass
-
-
 def _get_document_id(document_id_prefix: str, document_base_id: str) -> str:
     if not document_id_prefix.endswith("/"):
         document_id_prefix += "/"
@@ -167,7 +157,7 @@ def _get_statements_for_vulnerabilities(
     statements: dict[str, OpenVEXStatement] = {}
 
     for vulnerability_name in vulnerability_names:
-    
+
         open_vex_vulnerability = OpenVEXVulnerability(
             name=vulnerability_name, id=get_vulnerability_url(vulnerability_name)
         )

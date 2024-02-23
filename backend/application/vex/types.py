@@ -32,6 +32,13 @@ class CSAF_Publisher_Category:
     ]
 
 
+class CSAF_Status:
+    CSAF_STATUS_NOT_AFFECTED = "known_not_affected"
+    CSAF_STATUS_AFFECTED = "known_affected"
+    CSAF_STATUS_FIXED = "fixed"
+    CSAF_STATUS_UNDER_INVESTIGATION = "under_investigation"
+
+
 @dataclass(frozen=True)
 class CSAFFullProductName:
     name: str
@@ -71,12 +78,20 @@ class CSAFProductStatus:
 
 
 @dataclass()
+class CSAFReference:
+    category: str
+    url: str
+    summary: str
+
+
+@dataclass()
 class CSAFVulnerability:
-    cve: str
+    cve: Optional[str]
     notes: list[CSAFNote]
     flags: list[CSAFFlag]
     ids: list[CSAFId]
     product_status: CSAFProductStatus
+    references: list[CSAFReference]
     # remediations are still missing
 
 
@@ -95,7 +110,7 @@ class CSAFEngine:
 
 @dataclass()
 class CSAFGenerator:
-    engine: str
+    engine: CSAFEngine
 
 
 @dataclass(frozen=True)
@@ -128,7 +143,7 @@ class CSAFDocument:
 @dataclass()
 class CSAFRoot:
     document: CSAFDocument
-    product_tree: CSAFProductTree
+    product_tree: Optional[CSAFProductTree]
     vulnerabilities: list[CSAFVulnerability]
 
     def get_base_id(self) -> str:

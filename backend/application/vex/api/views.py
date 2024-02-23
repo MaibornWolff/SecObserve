@@ -21,13 +21,19 @@ from rest_framework.viewsets import GenericViewSet
 from application.vex.api.filters import CSAFFilter, OpenVEXFilter
 from application.vex.api.serializers import (
     CSAFDocumentCreateSerializer,
+    CSAFDocumentUpdateSerializer,
     CSAFSerializer,
     OpenVEXDocumentCreateSerializer,
     OpenVEXDocumentUpdateSerializer,
     OpenVEXSerializer,
 )
 from application.vex.models import CSAF, OpenVEX
-from application.vex.services.csaf import CSAFCreateParameters, create_csaf_document
+from application.vex.services.csaf import (
+    CSAFCreateParameters,
+    CSAFUpdateParameters,
+    create_csaf_document,
+    update_csaf_document,
+)
 from application.vex.services.open_vex import (
     create_open_vex_document,
     update_open_vex_document,
@@ -54,7 +60,9 @@ class CSAFDocumentCreateView(APIView):
 
         unique_vulnerability_names = []
         if serializer.validated_data.get("vulnerability_names"):
-            unique_vulnerability_names = list(set(serializer.validated_data.get("vulnerability_names")))
+            unique_vulnerability_names = _remove_duplicates_keep_order(
+                serializer.validated_data.get("vulnerability_names")
+            )
 
         csaf_create_parameters = CSAFCreateParameters(
             product_id=serializer.validated_data.get("product_id"),
@@ -80,7 +88,48 @@ class CSAFDocumentCreateView(APIView):
             "attachment; filename=csaf_"
             + csaf_document.get_base_id()
             + "_"
-            + str(csaf_document.document.tracking.version)
+            + f"{int(csaf_document.document.tracking.version):04d}"
+            + ".json"
+        )
+        return response
+
+
+class CSAFDocumentUpdateView(APIView):
+    @extend_schema(
+        methods=["POST"],
+        request=CSAFDocumentUpdateSerializer,
+        responses={HTTP_200_OK: bytes},
+    )
+    def post(self, request, document_base_id=None):
+        if not config.FEATURE_VEX:
+            return Response(status=HTTP_501_NOT_IMPLEMENTED)
+
+        serializer = CSAFDocumentUpdateSerializer(data=request.data)
+        if not serializer.is_valid():
+            raise ValidationError(serializer.errors)
+
+        csaf_update_parameters = CSAFUpdateParameters(
+            document_base_id=document_base_id,
+            publisher_name=serializer.validated_data.get("publisher_name"),
+            publisher_category=serializer.validated_data.get("publisher_category"),
+            publisher_namespace=serializer.validated_data.get("publisher_namespace"),
+            tracking_status=serializer.validated_data.get("tracking_status"),
+        )
+
+        csaf_document = update_csaf_document(csaf_update_parameters)
+
+        if not csaf_document:
+            return Response(status=HTTP_204_NO_CONTENT)
+
+        response = HttpResponse(
+            content=_object_to_json(csaf_document, VEX_TYPE_CSAF),
+            content_type="text/json",
+        )
+        response["Content-Disposition"] = (
+            "attachment; filename=csaf_"
+            + csaf_document.get_base_id()
+            + "_"
+            + f"{int(csaf_document.document.tracking.version):04d}"
             + ".json"
         )
         return response
@@ -127,7 +176,9 @@ class OpenVEXDocumentCreateView(APIView):
 
         unique_vulnerability_names = []
         if serializer.validated_data.get("vulnerability_names"):
-            unique_vulnerability_names = list(set(serializer.validated_data.get("vulnerability_names")))
+            unique_vulnerability_names = _remove_duplicates_keep_order(
+                serializer.validated_data.get("vulnerability_names")
+            )
 
         open_vex_document = create_open_vex_document(
             product_id=serializer.validated_data.get("product_id"),
@@ -148,7 +199,7 @@ class OpenVEXDocumentCreateView(APIView):
             "attachment; filename=openvex_"
             + open_vex_document.get_base_id()
             + "_"
-            + str(open_vex_document.version)
+            + f"{open_vex_document.version:04d}"
             + ".json"
         )
         return response
@@ -186,7 +237,7 @@ class OpenVEXDocumentUpdateView(APIView):
             "attachment; filename=openvex_"
             + open_vex_document.get_base_id()
             + "_"
-            + str(open_vex_document.version)
+            + f"{open_vex_document.version:04d}"
             + ".json"
         )
         return response
@@ -255,3 +306,10 @@ def _change_keys(d: dict) -> dict:
         k.replace("id", "@id").replace("context", "@context"): _change_keys(v)
         for k, v in d.items()
     }
+
+
+# remove duplicates from a list and keep the order
+def _remove_duplicates_keep_order(items: list) -> list:
+    seen: set[Any] = set()
+    seen_add = seen.add
+    return [x for x in items if not (x in seen or seen_add(x))]

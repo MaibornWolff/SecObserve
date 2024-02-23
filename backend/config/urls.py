@@ -31,6 +31,7 @@ from application.metrics.api.views import (
 )
 from application.vex.api.views import (
     CSAFDocumentCreateView,
+    CSAFDocumentUpdateView,
     OpenVEXDocumentCreateView,
     OpenVEXDocumentUpdateView,
 )
@@ -106,6 +107,10 @@ urlpatterns += [
 if config.FEATURE_VEX:
     urlpatterns += [
         path("api/vex/csaf_document/create/", CSAFDocumentCreateView.as_view()),
+        path(
+            "api/vex/csaf_document/update/<str:document_base_id>/",
+            CSAFDocumentUpdateView.as_view(),
+        ),
         path("api/vex/openvex_document/create/", OpenVEXDocumentCreateView.as_view()),
         path(
             "api/vex/openvex_document/update/<str:document_base_id>/",

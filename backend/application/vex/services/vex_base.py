@@ -24,7 +24,7 @@ def check_and_get_product(product_id: int) -> Optional[Product]:
     if not product:
         raise ValidationError(f"Product with id {product_id} does not exist")
 
-    user_has_permission_or_403(product, Permissions.Product_View)
+    user_has_permission_or_403(product, Permissions.Product_VEX)
     return product
 
 

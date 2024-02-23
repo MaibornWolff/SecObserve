@@ -1,6 +1,9 @@
-from django_filters import FilterSet, ModelChoiceFilter
+from django_filters import FilterSet
 
-from application.vex.models import CSAF, OpenVEX, CSAF_Vulnerability, OpenVEX_Vulnerability
+from application.vex.models import (
+    CSAF,
+    OpenVEX,
+)
 
 
 class CSAFFilter(FilterSet):
