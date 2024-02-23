@@ -33,6 +33,9 @@ from application.vex.services.open_vex import (
     update_open_vex_document,
 )
 
+VEX_TYPE_CSAF = "csaf"
+VEX_TYPE_OPENVEX = "openvex"
+
 
 class CSAFDocumentCreateView(APIView):
     @extend_schema(
@@ -49,9 +52,13 @@ class CSAFDocumentCreateView(APIView):
         if not serializer.is_valid():
             raise ValidationError(serializer.errors)
 
+        unique_vulnerability_names = []
+        if serializer.validated_data.get("vulnerability_names"):
+            unique_vulnerability_names = list(set(serializer.validated_data.get("vulnerability_names")))
+
         csaf_create_parameters = CSAFCreateParameters(
             product_id=serializer.validated_data.get("product_id"),
-            vulnerability_name=serializer.validated_data.get("vulnerability_name"),
+            vulnerability_names=unique_vulnerability_names,
             document_id_prefix=serializer.validated_data.get("document_id_prefix"),
             title=serializer.validated_data.get("title"),
             publisher_name=serializer.validated_data.get("publisher_name"),
@@ -66,7 +73,7 @@ class CSAFDocumentCreateView(APIView):
             return Response(status=HTTP_204_NO_CONTENT)
 
         response = HttpResponse(
-            content=_object_to_json(csaf_document),
+            content=_object_to_json(csaf_document, VEX_TYPE_CSAF),
             content_type="text/json",
         )
         response["Content-Disposition"] = (
@@ -118,9 +125,13 @@ class OpenVEXDocumentCreateView(APIView):
         if not serializer.is_valid():
             raise ValidationError(serializer.errors)
 
+        unique_vulnerability_names = []
+        if serializer.validated_data.get("vulnerability_names"):
+            unique_vulnerability_names = list(set(serializer.validated_data.get("vulnerability_names")))
+
         open_vex_document = create_open_vex_document(
             product_id=serializer.validated_data.get("product_id"),
-            vulnerability_name=serializer.validated_data.get("vulnerability_name"),
+            vulnerability_names=unique_vulnerability_names,
             document_id_prefix=serializer.validated_data.get("document_id_prefix"),
             author=serializer.validated_data.get("author"),
             role=serializer.validated_data.get("role"),
@@ -130,7 +141,7 @@ class OpenVEXDocumentCreateView(APIView):
             return Response(status=HTTP_204_NO_CONTENT)
 
         response = HttpResponse(
-            content=_object_to_json(open_vex_document),
+            content=_object_to_json(open_vex_document, VEX_TYPE_OPENVEX),
             content_type="text/json",
         )
         response["Content-Disposition"] = (
@@ -168,7 +179,7 @@ class OpenVEXDocumentUpdateView(APIView):
             return Response(status=HTTP_204_NO_CONTENT)
 
         response = HttpResponse(
-            content=_object_to_json(open_vex_document),
+            content=_object_to_json(open_vex_document, VEX_TYPE_OPENVEX),
             content_type="text/json",
         )
         response["Content-Disposition"] = (
@@ -205,10 +216,12 @@ class OpenVEXViewSet(
         return super().retrieve(request, *args, **kwargs)
 
 
-def _object_to_json(object_to_encode: Any) -> str:
+def _object_to_json(object_to_encode: Any, vex_type: str) -> str:
     json_string = jsonpickle.encode(object_to_encode, unpicklable=False)
     json_dict = json.loads(json_string)
     json_dict = _remove_empty_elements(json_dict)
+    if vex_type == VEX_TYPE_OPENVEX:
+        json_dict = _change_keys(json_dict)
     return json.dumps(json_dict, indent=4)
 
 
@@ -227,4 +240,18 @@ def _remove_empty_elements(d: dict) -> dict:
         k: v
         for k, v in ((k, _remove_empty_elements(v)) for k, v in d.items())
         if not empty(v)
+    }
+
+
+# Change all keys with the value 'id' to '@id' and
+# all keys with the value 'context' to '@context' in a dictionary recursively
+def _change_keys(d: dict) -> dict:
+    if not isinstance(d, (dict, list)):
+        return d
+    if isinstance(d, list):
+        return [_change_keys(v) for v in d]
+
+    return {
+        k.replace("id", "@id").replace("context", "@context"): _change_keys(v)
+        for k, v in d.items()
     }

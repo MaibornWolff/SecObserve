@@ -10,125 +10,29 @@ from rest_framework.exceptions import ValidationError
 from application.__init__ import __version__
 from application.core.models import Observation, Observation_Log, Product
 from application.core.types import Status
-from application.vex.models import CSAF, Vulnerability, CSAF_Revision
+from application.vex.models import CSAF, CSAF_Revision
 from application.vex.services.vex_base import (
-    check_either_product_or_vulnerability,
-    get_and_check_product,
+    check_and_get_product,
+    check_either_product_or_vulnerabilities,
+    check_vulnerabilities,
     get_observations_for_product,
     get_observations_for_vulnerability,
-    get_vulnerability,
 )
-
-
-@dataclass(frozen=True)
-class CSAFFullProductName:
-    name: str
-    product_id: str
-    # product_identification_helper is still missing
-
-
-@dataclass()
-class CSAFProductTree:
-    full_product_names: list[CSAFFullProductName]
-
-
-@dataclass(frozen=True)
-class CSAFNote:
-    category: str
-    text: str
-
-
-@dataclass(frozen=True)
-class CSAFFlag:
-    label: str
-    product_ids: list[str]
-
-
-@dataclass(frozen=True)
-class CSAFId:
-    system_name: str
-    text: str
-
-
-@dataclass()
-class CSAFProductStatus:
-    fixed: list[str]
-    known_affected: list[str]
-    known_not_affected: list[str]
-    under_investigation: list[str]
-
-
-@dataclass()
-class CSAFVulnerability:
-    cve: str
-    notes: list[CSAFNote]
-    flags: list[CSAFFlag]
-    ids: list[CSAFId]
-    product_status: CSAFProductStatus
-    # remediations are still missing
-
-
-@dataclass()
-class CSAFPublisher:
-    name: str
-    category: str
-    namespace: str
-
-
-@dataclass()
-class CSAFEngine:
-    name: str
-    version: str
-
-
-@dataclass()
-class CSAFGenerator:
-    engine: str
-
-
-@dataclass(frozen=True)
-class CSAFRevisionHistory:
-    date: str
-    number: str
-    summary: str
-
-
-@dataclass()
-class CSAFTracking:
-    id: str
-    initial_release_date: str
-    current_release_date: str
-    version: str
-    status: str
-    generator: CSAFGenerator
-    revision_history: list[CSAFRevisionHistory]
-
-
-@dataclass()
-class CSAFDocument:
-    category: str
-    csaf_version: str
-    title: str
-    publisher: CSAFPublisher
-    tracking: CSAFTracking
-
-
-@dataclass()
-class CSAFRoot:
-    document: CSAFDocument
-    product_tree: CSAFProductTree
-    vulnerabilities: list[CSAFVulnerability]
-
-    def get_base_id(self) -> str:
-        if len(self.document.tracking.id) > 36:
-            return self.document.tracking.id[-36:]
-        return ""
+from application.vex.types import (
+    CSAFDocument,
+    CSAFEngine,
+    CSAFGenerator,
+    CSAFPublisher,
+    CSAFRevisionHistory,
+    CSAFRoot,
+    CSAFTracking,
+)
 
 
 @dataclass()
 class CSAFCreateParameters:
     product_id: int
-    vulnerability_name: str
+    vulnerability_names: list[str]
     document_id_prefix: str
     title: str
     publisher_name: str
@@ -138,12 +42,11 @@ class CSAFCreateParameters:
 
 
 def create_csaf_document(parameters: CSAFCreateParameters) -> Optional[CSAFRoot]:
-    check_either_product_or_vulnerability(
+    check_either_product_or_vulnerabilities(
         parameters.product_id, parameters.vulnerability_name
     )
-
-    product = get_and_check_product(parameters.product_id)
-    vulnerability = get_vulnerability(parameters.vulnerability_name)
+    product = check_and_get_product(parameters.product_id)
+    check_vulnerabilities(parameters.vulnerability_names)
     document_base_id = str(uuid.uuid4())
     document_id = _get_document_id(parameters.document_id_prefix, document_base_id)
 
@@ -171,6 +74,29 @@ def create_csaf_document(parameters: CSAFCreateParameters) -> Optional[CSAFRoot]
         summary="Initial release",
     )
 
+    csaf_root = _create_csaf_root(csaf)
+
+    return csaf_root
+
+def _get_document_id(document_id_prefix: Optional[str], document_base_id: str) -> str:
+    if not document_id_prefix:
+        return document_base_id
+
+    return document_id_prefix + "_" + document_base_id
+
+
+def _check_csaf_document_does_not_exist(product: Optional[Product]):
+    if product:
+        try:
+            CSAF.objects.get(product=product)
+            raise ValidationError(
+                f"CSAF document for product {product.id} already exists"
+            )
+        except CSAF.DoesNotExist:
+            pass
+
+
+def _create_csaf_root(csaf):
     csaf_publisher = CSAFPublisher(
         name=csaf.publisher_name,
         category=csaf.publisher_category,
@@ -215,23 +141,5 @@ def create_csaf_document(parameters: CSAFCreateParameters) -> Optional[CSAFRoot]
         product_tree=None,
         vulnerabilities=[],
     )
-
+    
     return csaf_root
-
-
-def _get_document_id(document_id_prefix: Optional[str], document_base_id: str) -> str:
-    if not document_id_prefix:
-        return document_base_id
-
-    return document_id_prefix + "_" + document_base_id
-
-
-def _check_csaf_document_does_not_exist(product: Optional[Product]):
-    if product:
-        try:
-            CSAF.objects.get(product=product)
-            raise ValidationError(
-                f"CSAF document for product {product.id} already exists"
-            )
-        except CSAF.DoesNotExist:
-            pass

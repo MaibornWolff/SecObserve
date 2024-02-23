@@ -1,6 +1,5 @@
 import hashlib
 import uuid
-from dataclasses import dataclass
 from typing import Optional
 
 import jsonpickle
@@ -9,84 +8,55 @@ from rest_framework.exceptions import ValidationError
 from application.__init__ import __version__
 from application.core.models import Observation, Observation_Log, Product
 from application.core.types import Status
-from application.vex.models import OpenVEX, Vulnerability
+from application.vex.models import OpenVEX, OpenVEX_Vulnerability
+from application.vex.services.open_vex_helpers import OpenVEXVulnerabilityCache
 from application.vex.services.vex_base import (
-    check_either_product_or_vulnerability,
-    get_and_check_product,
+    check_and_get_product,
+    check_either_product_or_vulnerabilities,
+    check_vulnerabilities,
     get_observations_for_product,
     get_observations_for_vulnerability,
-    get_vulnerability,
+    get_vulnerability_url,
 )
-from application.vex.types import OpenVEX_Status
-
-
-@dataclass(frozen=True)
-class OpenVEXProduct:
-    id: str
-
-
-@dataclass(frozen=True)
-class OpenVEXVulnerability:
-    name: str
-    description: str
-
-
-@dataclass
-class OpenVEXStatement:
-    status: str
-    status_notes: Optional[str]
-    justification: Optional[str]
-    action_statement: Optional[str]
-    vulnerability: Optional[OpenVEXVulnerability]
-    products: list[OpenVEXProduct]
-
-
-@dataclass
-class OpenVEXDocument:
-    context: str
-    id: str
-    version: int
-    author: str
-    role: str
-    timestamp: str
-    last_updated: str
-    tooling: str
-    statements: list[OpenVEXStatement]
-
-    def get_base_id(self) -> str:
-        if len(self.id) > 36:
-            return self.id[-36:]
-        return ""
+from application.vex.types import (
+    OpenVEX_Status,
+    OpenVEXDocument,
+    OpenVEXProduct,
+    OpenVEXStatement,
+    OpenVEXVulnerability,
+)
 
 
 def create_open_vex_document(
     product_id: int,
-    vulnerability_name: str,
+    vulnerability_names: list[str],
     document_id_prefix: str,
     author: str,
     role: str,
 ) -> Optional[OpenVEXDocument]:
-    check_either_product_or_vulnerability(product_id, vulnerability_name)
+    check_either_product_or_vulnerabilities(product_id, vulnerability_names)
 
-    product = get_and_check_product(product_id)
-    vulnerability = get_vulnerability(vulnerability_name)
+    product = check_and_get_product(product_id)
+    check_vulnerabilities(vulnerability_names)
     document_base_id = str(uuid.uuid4())
     document_id = _get_document_id(document_id_prefix, document_base_id)
 
     _check_open_vex_document_does_not_exist(product)
 
-    if vulnerability_name is None:
-        vulnerability_name = ""
-
     open_vex = OpenVEX.objects.create(
         product=product,
-        vulnerability_name=vulnerability_name,
         document_base_id=document_base_id,
         document_id=document_id,
         author=author,
         role=role,
         version=1,
     )
+    for vulnerability_name in vulnerability_names:
+        if vulnerability_name is None:
+            vulnerability_name = ""
+        OpenVEX_Vulnerability.objects.create(
+            openvex=open_vex, name=vulnerability_name
+        )
 
     open_vex_document = OpenVEXDocument(
         context="https://openvex.dev/ns/v0.2.0",
@@ -101,9 +71,9 @@ def create_open_vex_document(
     )
 
     statements = []
-    if vulnerability and not product:
-        statements = _get_statements_for_vulnerability(vulnerability)
-    elif product and not vulnerability:
+    if vulnerability_names and not product:
+        statements = _get_statements_for_vulnerabilities(vulnerability_names)
+    elif product and not vulnerability_names:
         statements = _get_statements_for_product(product)
 
     statements_json = jsonpickle.encode(statements, unpicklable=False)
@@ -135,8 +105,7 @@ def update_open_vex_document(
 
     statements = []
     if open_vex.vulnerability_name and not open_vex.product:
-        vulnerability = get_vulnerability(open_vex.vulnerability_name)
-        statements = _get_statements_for_vulnerability(vulnerability)
+        statements = _get_statements_for_vulnerability(open_vex.vulnerability_name)
     elif open_vex.product and not open_vex.vulnerability_name:
         statements = _get_statements_for_product(open_vex.product)
 
@@ -192,41 +161,46 @@ def _get_document_id(document_id_prefix: str, document_base_id: str) -> str:
     return document_id_prefix + "OpenVEX-" + document_base_id
 
 
-def _get_statements_for_vulnerability(
-    vulnerability: Vulnerability,
+def _get_statements_for_vulnerabilities(
+    vulnerability_names: list[str],
 ) -> list[OpenVEXStatement]:
     statements: dict[str, OpenVEXStatement] = {}
 
-    open_vex_vulnerability = OpenVEXVulnerability(
-        name=vulnerability.name, description=vulnerability.description
-    )
-
-    observations = get_observations_for_vulnerability(vulnerability)
-    for observation in observations:
-        prepared_statement = _prepare_statement(observation)
-        if not prepared_statement:
-            continue
-
-        open_vex_product = OpenVEXProduct(id=observation.product.name)
-
-        string_to_hash = (
-            str(prepared_statement.status)
-            + str(prepared_statement.justification)
-            + str(prepared_statement.status_notes)
-            + str(prepared_statement.action_statement)
+    for vulnerability_name in vulnerability_names:
+    
+        open_vex_vulnerability = OpenVEXVulnerability(
+            name=vulnerability_name, id=get_vulnerability_url(vulnerability_name)
         )
-        hashed_string = hashlib.sha256(
-            string_to_hash.casefold().encode("utf-8").strip()
-        ).hexdigest()
 
-        existing_statement = statements.get(hashed_string)
-        if existing_statement:
-            if open_vex_product not in existing_statement.products:
-                existing_statement.products.append(open_vex_product)
-        else:
-            prepared_statement.vulnerability = open_vex_vulnerability
-            prepared_statement.products.append(open_vex_product)
-            statements[hashed_string] = prepared_statement
+        observations = get_observations_for_vulnerability(vulnerability_name)
+        for observation in observations:
+            prepared_statement = _prepare_statement(observation)
+            if not prepared_statement:
+                continue
+
+            open_vex_product = OpenVEXProduct(id=observation.product.name)
+
+            string_to_hash = (
+                str(open_vex_vulnerability.name)
+                + str(prepared_statement.status)
+                + str(prepared_statement.justification)
+                + str(prepared_statement.status_notes)
+                + str(prepared_statement.action_statement)
+            )
+            hashed_string = hashlib.sha256(
+                string_to_hash.casefold().encode("utf-8").strip()
+            ).hexdigest()
+
+            existing_statement = statements.get(hashed_string)
+            if existing_statement:
+                if open_vex_product not in existing_statement.products:
+                    existing_statement.products.append(open_vex_product)
+            else:
+                if observation.description:
+                    open_vex_vulnerability.description = observation.description
+                prepared_statement.vulnerability = open_vex_vulnerability
+                prepared_statement.products.append(open_vex_product)
+                statements[hashed_string] = prepared_statement
 
     return list(statements.values())
 
@@ -235,6 +209,7 @@ def _get_statements_for_product(product: Product) -> list[OpenVEXStatement]:
     statements: dict[str, OpenVEXStatement] = {}
 
     open_vex_product = OpenVEXProduct(id=product.name)
+    vulnerability_cache = OpenVEXVulnerabilityCache()
 
     observations = get_observations_for_product(product)
     for observation in observations:
@@ -242,9 +217,16 @@ def _get_statements_for_product(product: Product) -> list[OpenVEXStatement]:
         if not prepared_statement:
             continue
 
-        open_vex_vulnerability = OpenVEXVulnerability(
-            name=observation.vulnerability_id, description=observation.description
+        open_vex_vulnerability = vulnerability_cache.get_vulnerability(
+            observation.vulnerability_id
         )
+        if not open_vex_vulnerability:
+            open_vex_vulnerability = OpenVEXVulnerability(
+                name=observation.vulnerability_id,
+                description=observation.description,
+                id=get_vulnerability_url(observation.vulnerability_id),
+            )
+            vulnerability_cache.add_vulnerability(open_vex_vulnerability)
 
         string_to_hash = (
             str(open_vex_vulnerability.name)

@@ -1,31 +1,19 @@
-from django_filters import FilterSet, OrderingFilter
+from django_filters import FilterSet, ModelChoiceFilter
 
-from application.vex.models import CSAF, OpenVEX
+from application.vex.models import CSAF, OpenVEX, CSAF_Vulnerability, OpenVEX_Vulnerability
 
 
 class CSAFFilter(FilterSet):
-    ordering = OrderingFilter(
-        # tuple-mapping retains order
-        fields=(
-            ("vulnerability_name", "vulnerability_name"),
-            ("product__name", "product"),
-        )
-    )
+    # vulnerability_name = ModelChoiceFilter(queryset=CSAF_Vulnerability.objects.all())
 
     class Meta:
         model = CSAF
-        fields = ["vulnerability_name", "product"]
+        fields = ["product"]
 
 
 class OpenVEXFilter(FilterSet):
-    ordering = OrderingFilter(
-        # tuple-mapping retains order
-        fields=(
-            ("vulnerability_name", "vulnerability_name"),
-            ("product__name", "product"),
-        )
-    )
+    # vulnerability_name = ModelChoiceFilter(queryset=OpenVEX_Vulnerability.objects.all())
 
     class Meta:
         model = OpenVEX
-        fields = ["vulnerability_name", "product"]
+        fields = ["product"]

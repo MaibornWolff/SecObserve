@@ -7,15 +7,16 @@ from rest_framework.serializers import (
     IntegerField,
     ModelSerializer,
     Serializer,
+    ListField,
 )
 
-from application.vex.models import CSAF, OpenVEX
+from application.vex.models import CSAF, OpenVEX, OpenVEX_Vulnerability, CSAF_Vulnerability, CSAF_Revision
 from application.vex.types import CSAF_Publisher_Category, CSAF_Tracking_Status
 
 
 class CSAFDocumentCreateSerializer(Serializer):
     product_id = IntegerField(validators=[MinValueValidator(0)], required=False)
-    vulnerability_name = CharField(max_length=255, required=False)
+    vulnerability_names = ListField(child=CharField(max_length=255), min_length=0, max_length=10, required=False)
     document_id_prefix = CharField(max_length=200, required=True)
     title = CharField(max_length=255, required=True)
     publisher_name = CharField(max_length=255, required=True)
@@ -31,15 +32,27 @@ class CSAFDocumentCreateSerializer(Serializer):
         return _validate_url(publisher_namespace)
 
 
+class CSAFRevisionSerializer(ModelSerializer):
+    class Meta:
+        model = CSAF_Revision
+        fields = ["date", "version", "summary"]
+
+class CSAFVulnerabilitySerializer(ModelSerializer):
+    class Meta:
+        model = CSAF_Vulnerability
+        fields = ["name"]
+
 class CSAFSerializer(ModelSerializer):
+    revisions = CSAFRevisionSerializer(many=True)
+    vulnerability_names = CSAFVulnerabilitySerializer(many=True)
+
     class Meta:
         model = CSAF
         fields = "__all__"
 
-
 class OpenVEXDocumentCreateSerializer(Serializer):
     product_id = IntegerField(validators=[MinValueValidator(0)], required=False)
-    vulnerability_name = CharField(max_length=255, required=False)
+    vulnerability_names = ListField(child=CharField(max_length=255), min_length=0, max_length=10, required=False)
     document_id_prefix = CharField(max_length=200, required=True)
     author = CharField(max_length=255, required=True)
     role = CharField(max_length=255, required=False)
@@ -53,11 +66,17 @@ class OpenVEXDocumentUpdateSerializer(Serializer):
     role = CharField(max_length=255, required=False)
 
 
+class OpenVEXVulnerabilitySerializer(ModelSerializer):
+    class Meta:
+        model = OpenVEX_Vulnerability
+        fields = ["name"]
+
 class OpenVEXSerializer(ModelSerializer):
+    vulnerability_names = OpenVEXVulnerabilitySerializer(many=True)
+
     class Meta:
         model = OpenVEX
         fields = "__all__"
-
 
 def _validate_url(url: str) -> str:
     if url and not validators.url(url):

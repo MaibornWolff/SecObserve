@@ -14,11 +14,6 @@ from application.core.models import Product
 from application.vex.types import CSAF_Publisher_Category, CSAF_Tracking_Status
 
 
-class Vulnerability(Model):
-    name = CharField(max_length=255, unique=True)
-    description = TextField(max_length=2048, blank=True)
-
-
 class VEX_Base(Model):
     product = OneToOneField(Product, on_delete=CASCADE, null=True)
     vulnerability_name = CharField(max_length=255, blank=True)
@@ -37,6 +32,9 @@ class OpenVEX(VEX_Base):
     timestamp = DateTimeField(auto_now_add=True)
     last_updated = DateTimeField(auto_now=True)
 
+class OpenVEX_Vulnerability(Model):
+    openvex = ForeignKey(OpenVEX, related_name="vulnerability_names", on_delete=CASCADE)
+    name = CharField(max_length=255)
 
 class CSAF(VEX_Base):
     title = CharField(max_length=255)
@@ -51,11 +49,15 @@ class CSAF(VEX_Base):
     )
     publisher_namespace = CharField(max_length=255)
 
+class CSAF_Vulnerability(Model):
+    csaf = ForeignKey(CSAF, related_name="vulnerability_names", on_delete=CASCADE)
+    name = CharField(max_length=255)
+
 
 class CSAF_Revision(Model):
-    csaf = ForeignKey(CSAF, on_delete=CASCADE)
-    revision_date = DateTimeField()
-    revision_version = IntegerField(
+    csaf = ForeignKey(CSAF, related_name="revisions", on_delete=CASCADE)
+    date = DateTimeField()
+    version = IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(999999)]
     )
     summary = TextField(max_length=255)
