@@ -408,17 +408,26 @@ def _set_product_status(vulnerability: CSAFVulnerability, observation: Observati
 def _remove_conflicting_product_status(vulnerability: CSAFVulnerability):
     product_ids = vulnerability.product_status.known_affected
 
+    under_investigation_product_ids = []
     for product_id in vulnerability.product_status.under_investigation:
-        if product_id in product_ids:
-            vulnerability.product_status.under_investigation.remove(product_id)
+        if product_id not in product_ids:
+            under_investigation_product_ids.append(product_id)
+            product_ids.append(product_id)
+    vulnerability.product_status.under_investigation = under_investigation_product_ids
 
+    known_not_affected_product_ids = []
     for product_id in vulnerability.product_status.known_not_affected:
-        if product_id in product_ids:
-            vulnerability.product_status.known_not_affected.remove(product_id)
+        if product_id not in product_ids:
+            known_not_affected_product_ids.append(product_id)
+            product_ids.append(product_id)
+    vulnerability.product_status.known_not_affected = known_not_affected_product_ids
 
+    fixed_product_ids = []
     for product_id in vulnerability.product_status.fixed:
-        if product_id in product_ids:
-            vulnerability.product_status.fixed.remove(product_id)
+        if product_id not in product_ids:
+            fixed_product_ids.append(product_id)
+            product_ids.append(product_id)
+    vulnerability.product_status.fixed = fixed_product_ids
 
 
 def _set_remediation(vulnerability: CSAFVulnerability, observation: Observation):
@@ -431,13 +440,13 @@ def _set_remediation(vulnerability: CSAFVulnerability, observation: Observation)
             if observation.recommendation
             else "No remediation available"
         )
-        found = False
-        for remediation in vulnerability.remediations:
-            if remediation.category == category and remediation.details == details:
-                if product_id not in remediation.product_ids:
-                    remediation.product_ids.append(product_id)
-                found = True
-                break
+
+        found = _check_and_append_none_available(vulnerability, product_id, category)
+
+        found = _check_and_append_mitigation(
+            found, vulnerability, product_id, category, details
+        )
+
         if not found:
             remediation = CSAFRemediation(
                 category=category,
@@ -445,6 +454,64 @@ def _set_remediation(vulnerability: CSAFVulnerability, observation: Observation)
                 product_ids=[product_id],
             )
             vulnerability.remediations.append(remediation)
+
+        # remove "none_available" remediation if mitigation is available
+        if category == "mitigation":
+            for remediation in vulnerability.remediations:
+                if (
+                    remediation.category == "none_available"
+                    and product_id in remediation.product_ids
+                ):
+                    remediation.product_ids.remove(product_id)
+
+        # remove remediations without product_ids
+        remediations = []
+        for remediation in vulnerability.remediations:
+            if remediation.product_ids:
+                remediations.append(remediation)
+        vulnerability.remediations = remediations
+
+
+def _check_and_append_none_available(
+    vulnerability: CSAFVulnerability, product_id: str, category: str
+) -> bool:
+    found = False
+
+    if category == "none_available":
+        for remediation in vulnerability.remediations:
+            if product_id in remediation.product_ids:
+                found = True
+                break
+
+        if not found:
+            for remediation in vulnerability.remediations:
+                if (
+                    remediation.category == "none_available"
+                    and product_id not in remediation.product_ids
+                ):
+                    remediation.product_ids.append(product_id)
+                    found = True
+                    break
+
+    return found
+
+
+def _check_and_append_mitigation(
+    found: bool,
+    vulnerability: CSAFVulnerability,
+    product_id: str,
+    category: str,
+    details: str,
+) -> bool:
+    if category == "mitigation":
+        for remediation in vulnerability.remediations:
+            if remediation.category == category and remediation.details == details:
+                if product_id not in remediation.product_ids:
+                    remediation.product_ids.append(product_id)
+                found = True
+                break
+
+    return found
 
 
 def _set_flag_or_threat(vulnerability: CSAFVulnerability, observation: Observation):
