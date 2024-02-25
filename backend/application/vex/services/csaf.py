@@ -114,7 +114,9 @@ def create_csaf_document(parameters: CSAFCreateParameters) -> Optional[CSAFRoot]
     product_tree = CSAFProductTree(full_product_names=[])
 
     if product:
-        vulnerabilities, product_tree = _get_data_for_product(product, parameters.vulnerability_names)
+        vulnerabilities, product_tree = _get_data_for_product(
+            product, parameters.vulnerability_names
+        )
     else:
         vulnerabilities, product_tree = _get_data_for_vulnerabilities(
             parameters.vulnerability_names
@@ -154,7 +156,9 @@ def update_csaf_document(parameters: CSAFUpdateParameters) -> Optional[CSAFRoot]
     product_tree = CSAFProductTree(full_product_names=[])
 
     if csaf.product:
-        vulnerabilities, product_tree = _get_data_for_product(csaf.product, csaf_vulnerability_names)
+        vulnerabilities, product_tree = _get_data_for_product(
+            csaf.product, csaf_vulnerability_names
+        )
     else:
         vulnerabilities, product_tree = _get_data_for_vulnerabilities(
             csaf_vulnerability_names
