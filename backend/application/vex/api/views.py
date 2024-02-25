@@ -39,6 +39,8 @@ from application.vex.services.open_vex import (
     create_open_vex_document,
     update_open_vex_document,
 )
+from application.vex.queries.open_vex import get_open_vex_s
+from application.vex.queries.csaf import get_csafs
 
 VEX_TYPE_CSAF = "csaf"
 VEX_TYPE_OPENVEX = "openvex"
@@ -133,9 +135,12 @@ class CSAFViewSet(
     GenericViewSet, DestroyModelMixin, ListModelMixin, RetrieveModelMixin
 ):
     serializer_class = CSAFSerializer
-    queryset = CSAF.objects.all()
+    queryset = CSAF.objects.none()
     filterset_class = CSAFFilter
     filter_backends = [DjangoFilterBackend]
+
+    def get_queryset(self):
+        return get_csafs()
 
     def destroy(self, request, *args, **kwargs):
         if not config.FEATURE_VEX:
@@ -241,9 +246,12 @@ class OpenVEXViewSet(
     GenericViewSet, DestroyModelMixin, ListModelMixin, RetrieveModelMixin
 ):
     serializer_class = OpenVEXSerializer
-    queryset = OpenVEX.objects.all()
+    queryset = OpenVEX.objects.none()
     filterset_class = OpenVEXFilter
     filter_backends = [DjangoFilterBackend]
+
+    def get_queryset(self):
+        return get_open_vex_s()
 
     def destroy(self, request, *args, **kwargs):
         if not config.FEATURE_VEX:
@@ -262,7 +270,7 @@ class OpenVEXViewSet(
 
 
 def _object_to_json(object_to_encode: Any, vex_type: str) -> str:
-    jsonpickle.set_encoder_options('json', ensure_ascii=False)
+    jsonpickle.set_encoder_options("json", ensure_ascii=False)
     json_string = jsonpickle.encode(object_to_encode, unpicklable=False)
 
     json_dict = json.loads(json_string)

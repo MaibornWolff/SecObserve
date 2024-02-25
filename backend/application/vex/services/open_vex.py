@@ -10,6 +10,7 @@ from application.commons.services.global_request import get_current_user
 from application.core.models import Observation, Observation_Log, Product
 from application.core.types import Status
 from application.vex.models import OpenVEX, OpenVEX_Vulnerability
+from application.vex.queries.open_vex import get_open_vex_by_document_base_id
 from application.vex.services.open_vex_helpers import OpenVEXVulnerabilityCache
 from application.vex.services.vex_base import (
     check_and_get_product,
@@ -101,18 +102,15 @@ def create_open_vex_document(
 def update_open_vex_document(
     document_base_id: str, author: str, role: str
 ) -> Optional[OpenVEXDocument]:
-    try:
-        open_vex = OpenVEX.objects.get(document_base_id=document_base_id)
-        open_vex_vulnerability_names = list(
-            OpenVEX_Vulnerability.objects.filter(openvex=open_vex).values_list(
-                "name", flat=True
-            )
+    open_vex = get_open_vex_by_document_base_id(document_base_id)
+    if not open_vex:
+        raise NotFound(f"OpenVEX document with id {document_base_id} does not exist")
+
+    open_vex_vulnerability_names = list(
+        OpenVEX_Vulnerability.objects.filter(openvex=open_vex).values_list(
+            "name", flat=True
         )
-    except OpenVEX.DoesNotExist:
-        raise NotFound(  # pylint: disable=raise-missing-from
-            f"OpenVEX document with id {document_base_id} does not exist"
-        )
-        # The DoesNotExist exception itself is not relevant and must not be re-raised
+    )
 
     statements = []
     if open_vex.product:

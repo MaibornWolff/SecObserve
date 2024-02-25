@@ -11,6 +11,7 @@ from application.commons.services.global_request import get_current_user
 from application.core.models import Observation, Observation_Log, Product
 from application.core.types import Status
 from application.vex.models import CSAF, CSAF_Revision, CSAF_Vulnerability
+from application.vex.queries.csaf import get_csaf_by_document_base_id
 from application.vex.services.csaf_helpers import get_vulnerability_ecosystem
 from application.vex.services.vex_base import (
     check_and_get_product,
@@ -141,16 +142,15 @@ def create_csaf_document(parameters: CSAFCreateParameters) -> Optional[CSAFRoot]
 
 
 def update_csaf_document(parameters: CSAFUpdateParameters) -> Optional[CSAFRoot]:
-    try:
-        csaf = CSAF.objects.get(document_base_id=parameters.document_base_id)
-        csaf_vulnerability_names = list(
-            CSAF_Vulnerability.objects.filter(csaf=csaf).values_list("name", flat=True)
-        )
-    except CSAF.DoesNotExist:
-        raise NotFound(  # pylint: disable=raise-missing-from
+    csaf = get_csaf_by_document_base_id(parameters.document_base_id)
+    if not csaf:
+        raise NotFound(
             f"CSAF document with id {parameters.document_base_id} does not exist"
         )
-        # The DoesNotExist exception itself is not relevant and must not be re-raised
+
+    csaf_vulnerability_names = list(
+        CSAF_Vulnerability.objects.filter(csaf=csaf).values_list("name", flat=True)
+    )
 
     vulnerabilities = []
     product_tree = CSAFProductTree(full_product_names=[])
