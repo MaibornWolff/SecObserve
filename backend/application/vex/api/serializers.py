@@ -25,7 +25,7 @@ from application.vex.types import (
 
 
 class CSAFDocumentCreateSerializer(Serializer):
-    product_id = IntegerField(validators=[MinValueValidator(0)], required=False)
+    product = IntegerField(validators=[MinValueValidator(0)], required=False)
     vulnerability_names = ListField(
         child=CharField(max_length=255), min_length=0, max_length=10, required=False
     )
@@ -83,7 +83,7 @@ class CSAFSerializer(ModelSerializer):
 
 
 class OpenVEXDocumentCreateSerializer(Serializer):
-    product_id = IntegerField(validators=[MinValueValidator(0)], required=False)
+    product = IntegerField(validators=[MinValueValidator(0)], required=False)
     vulnerability_names = ListField(
         child=CharField(max_length=255), min_length=0, max_length=10, required=False
     )

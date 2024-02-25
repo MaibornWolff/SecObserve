@@ -18,7 +18,7 @@ def check_and_get_product(product_id: int) -> Optional[Product]:
     if not product_id:
         return None
 
-    product = get_product_by_id(product_id)
+    product = get_product_by_id(product_id, is_product_group=False)
     if not product:
         raise ValidationError(f"Product with id {product_id} does not exist")
 

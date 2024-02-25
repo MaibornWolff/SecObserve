@@ -66,7 +66,7 @@ class CSAFDocumentCreateView(APIView):
             )
 
         csaf_create_parameters = CSAFCreateParameters(
-            product_id=serializer.validated_data.get("product_id"),
+            product_id=serializer.validated_data.get("product"),
             vulnerability_names=unique_vulnerability_names,
             document_id_prefix=serializer.validated_data.get("document_id_prefix"),
             title=serializer.validated_data.get("title"),
@@ -175,7 +175,7 @@ class OpenVEXDocumentCreateView(APIView):
             )
 
         open_vex_document = create_open_vex_document(
-            product_id=serializer.validated_data.get("product_id"),
+            product_id=serializer.validated_data.get("product"),
             vulnerability_names=unique_vulnerability_names,
             document_id_prefix=serializer.validated_data.get("document_id_prefix"),
             author=serializer.validated_data.get("author"),
@@ -262,12 +262,15 @@ class OpenVEXViewSet(
 
 
 def _object_to_json(object_to_encode: Any, vex_type: str) -> str:
+    jsonpickle.set_encoder_options('json', ensure_ascii=False)
     json_string = jsonpickle.encode(object_to_encode, unpicklable=False)
+
     json_dict = json.loads(json_string)
     json_dict = _remove_empty_elements(json_dict)
     if vex_type == VEX_TYPE_OPENVEX:
         json_dict = _change_keys(json_dict)
-    return json.dumps(json_dict, indent=4, sort_keys=True)
+
+    return json.dumps(json_dict, indent=4, sort_keys=True, ensure_ascii=False)
 
 
 def _remove_empty_elements(d: dict) -> dict:
