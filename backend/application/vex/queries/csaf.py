@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.db.models.query import QuerySet
 
 from application.commons.services.global_request import get_current_user
@@ -16,7 +18,7 @@ def get_csafs() -> QuerySet[CSAF]:
     return CSAF.objects.filter(user=user)
 
 
-def get_csaf_by_document_base_id(document_base_id: str) -> CSAF:
+def get_csaf_by_document_base_id(document_base_id: str) -> Optional[CSAF]:
     user = get_current_user()
 
     if user is None:

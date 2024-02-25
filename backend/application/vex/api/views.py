@@ -29,6 +29,8 @@ from application.vex.api.serializers import (
     OpenVEXSerializer,
 )
 from application.vex.models import CSAF, OpenVEX
+from application.vex.queries.csaf import get_csafs
+from application.vex.queries.open_vex import get_open_vex_s
 from application.vex.services.csaf import (
     CSAFCreateParameters,
     CSAFUpdateParameters,
@@ -39,8 +41,6 @@ from application.vex.services.open_vex import (
     create_open_vex_document,
     update_open_vex_document,
 )
-from application.vex.queries.open_vex import get_open_vex_s
-from application.vex.queries.csaf import get_csafs
 
 VEX_TYPE_CSAF = "csaf"
 VEX_TYPE_OPENVEX = "openvex"
