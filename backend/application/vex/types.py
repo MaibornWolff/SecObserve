@@ -14,6 +14,20 @@ class CSAF_Tracking_Status:
     ]
 
 
+class CSAF_TLP_Label:
+    CSAF_TLP_LABEL_AMBER = "AMBER"
+    CSAF_TLP_LABEL_GREEN = "GREEN"
+    CSAF_TLP_LABEL_RED = "RED"
+    CSAF_TLP_LABEL_WHITE = "WHITE"
+
+    CSAF_TLP_LABEL_CHOICES = [
+        (CSAF_TLP_LABEL_AMBER, CSAF_TLP_LABEL_AMBER),
+        (CSAF_TLP_LABEL_GREEN, CSAF_TLP_LABEL_GREEN),
+        (CSAF_TLP_LABEL_RED, CSAF_TLP_LABEL_RED),
+        (CSAF_TLP_LABEL_WHITE, CSAF_TLP_LABEL_WHITE),
+    ]
+
+
 class CSAF_Publisher_Category:
     CSAF_PUBLISHER_CATEGORY_COORDINATOR = "coordinator"
     CSAF_PUBLISHER_CATEGORY_DISCOVERER = "discoverer"
@@ -85,6 +99,20 @@ class CSAFReference:
 
 
 @dataclass()
+class CSAFRemediation:
+    category: str
+    details: str
+    product_ids: list[str]
+
+
+@dataclass()
+class CSAFThreat:
+    category: str
+    details: str
+    product_ids: list[str]
+
+
+@dataclass()
 class CSAFVulnerability:
     cve: Optional[str]
     notes: list[CSAFNote]
@@ -92,7 +120,8 @@ class CSAFVulnerability:
     ids: list[CSAFId]
     product_status: CSAFProductStatus
     references: list[CSAFReference]
-    # remediations are still missing
+    remediations: list[CSAFRemediation]
+    threats: list[CSAFThreat]
 
 
 @dataclass()
@@ -132,12 +161,23 @@ class CSAFTracking:
 
 
 @dataclass()
+class CSAFTLP:
+    label: str
+
+
+@dataclass()
+class CSAFDistribution:
+    tlp: CSAFTLP
+
+
+@dataclass()
 class CSAFDocument:
     category: str
     csaf_version: str
     title: str
     publisher: CSAFPublisher
     tracking: CSAFTracking
+    distribution: CSAFDistribution
 
 
 @dataclass()
@@ -183,6 +223,7 @@ class OpenVEXStatement:
     status_notes: Optional[str]
     justification: Optional[str]
     action_statement: Optional[str]
+    impact_statement: Optional[str]
     vulnerability: Optional[OpenVEXVulnerability]
     products: list[OpenVEXProduct]
 

@@ -17,7 +17,11 @@ from application.vex.models import (
     OpenVEX,
     OpenVEX_Vulnerability,
 )
-from application.vex.types import CSAF_Publisher_Category, CSAF_Tracking_Status
+from application.vex.types import (
+    CSAF_Publisher_Category,
+    CSAF_TLP_Label,
+    CSAF_Tracking_Status,
+)
 
 
 class CSAFDocumentCreateSerializer(Serializer):
@@ -34,6 +38,9 @@ class CSAFDocumentCreateSerializer(Serializer):
     publisher_namespace = CharField(max_length=255, required=True)
     tracking_status = ChoiceField(
         choices=CSAF_Tracking_Status.CSAF_TRACKING_STATUS_CHOICES, required=True
+    )
+    tlp_label = ChoiceField(
+        choices=CSAF_TLP_Label.CSAF_TLP_LABEL_CHOICES, required=True
     )
 
     def validate_publisher_namespace(self, publisher_namespace: str) -> str:

@@ -9,11 +9,9 @@ from application.core.queries.observation import get_observations
 from application.core.queries.product import get_product_by_id
 
 
-def check_either_product_or_vulnerabilities(product_id, vulnerability_names):
-    if (product_id and vulnerability_names) or (
-        not product_id and not vulnerability_names
-    ):
-        raise ValidationError("Either product or vulnerabilities must be set")
+def check_product_or_vulnerabilities(product_id, vulnerability_names):
+    if not product_id and not vulnerability_names:
+        raise ValidationError("Either product or vulnerabilities or both must be set")
 
 
 def check_and_get_product(product_id: int) -> Optional[Product]:
@@ -53,14 +51,17 @@ def get_observations_for_vulnerability(
 
 
 def get_observations_for_product(
-    product: Product,
+    product: Product, vulnerability_names: list[str]
 ) -> list[Observation]:
-    return list(
+    observations = (
         get_observations()
         .filter(product_id=product.pk, branch=product.repository_default_branch)
         .exclude(vulnerability_id="")
         .order_by("id")
     )
+    if vulnerability_names:
+        observations = observations.filter(vulnerability_id__in=vulnerability_names)
+    return list(observations)
 
 
 def get_product_id(product: Product) -> str:
@@ -73,6 +74,7 @@ def get_component_id(observation: Observation) -> str:
     if observation.origin_component_cpe:
         return observation.origin_component_cpe
     return ""
+
 
 VULNERABILITY_URLS = {
     "CVE": "https://nvd.nist.gov/vuln/detail/",

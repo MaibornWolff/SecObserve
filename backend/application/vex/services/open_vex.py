@@ -6,13 +6,14 @@ import jsonpickle
 from rest_framework.exceptions import NotFound
 
 from application.__init__ import __version__
+from application.commons.services.global_request import get_current_user
 from application.core.models import Observation, Observation_Log, Product
 from application.core.types import Status
 from application.vex.models import OpenVEX, OpenVEX_Vulnerability
 from application.vex.services.open_vex_helpers import OpenVEXVulnerabilityCache
 from application.vex.services.vex_base import (
     check_and_get_product,
-    check_either_product_or_vulnerabilities,
+    check_product_or_vulnerabilities,
     check_vulnerabilities,
     get_component_id,
     get_observations_for_product,
@@ -37,20 +38,26 @@ def create_open_vex_document(
     author: str,
     role: str,
 ) -> Optional[OpenVEXDocument]:
-    check_either_product_or_vulnerabilities(product_id, vulnerability_names)
+    check_product_or_vulnerabilities(product_id, vulnerability_names)
 
     product = check_and_get_product(product_id)
     check_vulnerabilities(vulnerability_names)
     document_base_id = str(uuid.uuid4())
     document_id = _get_document_id(document_id_prefix, document_base_id)
 
+    user = get_current_user()
+    if not user:
+        raise ValueError("No user in request")
+
     open_vex = OpenVEX.objects.create(
         product=product,
+        document_id_prefix=document_id_prefix,
         document_base_id=document_base_id,
         document_id=document_id,
         author=author,
         role=role,
         version=1,
+        user=user,
     )
     for vulnerability_name in vulnerability_names:
         if vulnerability_name is None:
@@ -70,10 +77,10 @@ def create_open_vex_document(
     )
 
     statements = []
-    if vulnerability_names and not product:
+    if product:
+        statements = _get_statements_for_product(product, vulnerability_names)
+    else:
         statements = _get_statements_for_vulnerabilities(vulnerability_names)
-    elif product and not vulnerability_names:
-        statements = _get_statements_for_product(product)
 
     if not statements:
         return None
@@ -108,10 +115,12 @@ def update_open_vex_document(
         # The DoesNotExist exception itself is not relevant and must not be re-raised
 
     statements = []
-    if open_vex_vulnerability_names and not open_vex.product:
+    if open_vex.product:
+        statements = _get_statements_for_product(
+            open_vex.product, open_vex_vulnerability_names
+        )
+    else:
         statements = _get_statements_for_vulnerabilities(open_vex_vulnerability_names)
-    elif open_vex.product and not open_vex_vulnerability_names:
-        statements = _get_statements_for_product(open_vex.product)
 
     statements_json = jsonpickle.encode(statements, unpicklable=False)
     statements_hash = hashlib.sha256(
@@ -209,12 +218,14 @@ def _get_statements_for_vulnerabilities(
     return list(statements.values())
 
 
-def _get_statements_for_product(product: Product) -> list[OpenVEXStatement]:
+def _get_statements_for_product(
+    product: Product, vulnerability_names: list[str]
+) -> list[OpenVEXStatement]:
     statements: dict[str, OpenVEXStatement] = {}
 
     vulnerability_cache = OpenVEXVulnerabilityCache()
 
-    observations = get_observations_for_product(product)
+    observations = get_observations_for_product(product, vulnerability_names)
     for observation in observations:
         prepared_statement = _prepare_statement(observation)
         if not prepared_statement:
@@ -237,6 +248,7 @@ def _get_statements_for_product(product: Product) -> list[OpenVEXStatement]:
             + str(prepared_statement.justification)
             + str(prepared_statement.status_notes)
             + str(prepared_statement.action_statement)
+            + str(prepared_statement.impact_statement)
         )
         hashed_string = hashlib.sha256(
             string_to_hash.casefold().encode("utf-8").strip()
@@ -271,25 +283,38 @@ def _prepare_statement(observation: Observation) -> Optional[OpenVEXStatement]:
         return None
 
     open_vex_justification = None
-
+    open_vex_impact_statement = None
+    open_vex_action_statement = None
     open_vex_status_notes = None
-    if open_vex_status != OpenVEX_Status.OPEN_VEX_STATUS_AFFECTED:
+
+    if open_vex_status == OpenVEX_Status.OPEN_VEX_STATUS_AFFECTED:
+        if observation.recommendation:
+            open_vex_action_statement = observation.recommendation
+        else:
+            open_vex_action_statement = (
+                "No recommendation for remediation or mitigation available"
+            )
+    else:
         try:
             observation_log = Observation_Log.objects.filter(
                 observation=observation
             ).latest("created")
         except Observation_Log.DoesNotExist:
             observation_log = None
-        if observation_log:
-            open_vex_status_notes = observation_log.comment
 
-    open_vex_action_statement = None
-    if observation.recommendation:
-        open_vex_action_statement = observation.recommendation
+        if open_vex_status == OpenVEX_Status.OPEN_VEX_STATUS_NOT_AFFECTED:
+            if observation_log:
+                open_vex_impact_statement = observation_log.comment
+            else:
+                open_vex_impact_statement = "No impact statement available"
+        else:
+            if observation_log:
+                open_vex_status_notes = observation_log.comment
 
     return OpenVEXStatement(
         status=open_vex_status,
         status_notes=open_vex_status_notes,
+        impact_statement=open_vex_impact_statement,
         justification=open_vex_justification,
         action_statement=open_vex_action_statement,
         vulnerability=None,

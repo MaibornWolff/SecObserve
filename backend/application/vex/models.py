@@ -9,13 +9,19 @@ from django.db.models import (
     TextField,
 )
 
+from application.access_control.models import User
 from application.core.models import Product
-from application.vex.types import CSAF_Publisher_Category, CSAF_Tracking_Status
+from application.vex.types import (
+    CSAF_Publisher_Category,
+    CSAF_TLP_Label,
+    CSAF_Tracking_Status,
+)
 
 
 class VEX_Base(Model):
+    user = ForeignKey(User, on_delete=CASCADE)
     product = ForeignKey(Product, on_delete=CASCADE, null=True)
-    vulnerability_name = CharField(max_length=255, blank=True)
+    document_id_prefix = CharField(max_length=200)
     document_base_id = CharField(max_length=36, unique=True)
     document_id = CharField(max_length=255)
     version = IntegerField(validators=[MinValueValidator(0), MaxValueValidator(999999)])
@@ -39,6 +45,7 @@ class OpenVEX_Vulnerability(Model):
 
 class CSAF(VEX_Base):
     title = CharField(max_length=255)
+    tlp_label = CharField(max_length=16, choices=CSAF_TLP_Label.CSAF_TLP_LABEL_CHOICES)
     tracking_initial_release_date = DateTimeField(auto_now_add=True)
     tracking_current_release_date = DateTimeField(auto_now=True)
     tracking_status = CharField(

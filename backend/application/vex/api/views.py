@@ -1,4 +1,5 @@
 import json
+import re
 from typing import Any
 
 import jsonpickle
@@ -73,6 +74,7 @@ class CSAFDocumentCreateView(APIView):
             publisher_category=serializer.validated_data.get("publisher_category"),
             publisher_namespace=serializer.validated_data.get("publisher_namespace"),
             tracking_status=serializer.validated_data.get("tracking_status"),
+            tlp_label=serializer.validated_data.get("tlp_label"),
         )
 
         csaf_document = create_csaf_document(csaf_create_parameters)
@@ -85,11 +87,7 @@ class CSAFDocumentCreateView(APIView):
             content_type="text/json",
         )
         response["Content-Disposition"] = (
-            "attachment; filename=csaf_"
-            + csaf_document.get_base_id()
-            + "_"
-            + f"{int(csaf_document.document.tracking.version):04d}"
-            + ".json"
+            f"attachment; filename={_get_csaf_filename(csaf_document.document.tracking.id)}.json"
         )
         return response
 
@@ -126,11 +124,7 @@ class CSAFDocumentUpdateView(APIView):
             content_type="text/json",
         )
         response["Content-Disposition"] = (
-            "attachment; filename=csaf_"
-            + csaf_document.get_base_id()
-            + "_"
-            + f"{int(csaf_document.document.tracking.version):04d}"
-            + ".json"
+            f"attachment; filename={_get_csaf_filename(csaf_document.document.tracking.id)}.json"
         )
         return response
 
@@ -313,3 +307,12 @@ def _remove_duplicates_keep_order(items: list) -> list:
     seen: set[Any] = set()
     seen_add = seen.add
     return [x for x in items if not (x in seen or seen_add(x))]
+
+
+def _get_csaf_filename(document_id: str) -> str:
+    filename = document_id.lower()
+    # find characters with regex [^+\-a-z0-9]+ and replace them with _
+    filename = re.sub(r"[^+\-a-z0-9]+", "_", filename)
+    # remove multiple underscores
+    filename = re.sub(r"__+", "_", filename)
+    return filename
