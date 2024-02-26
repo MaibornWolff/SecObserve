@@ -18,7 +18,7 @@ const Menu = ({ dense = false }: MenuProps) => {
     const [open] = useSidebarState();
     const [state, setState] = useState({ menuSettings: false });
     const handleToggle = (menu: MenuName) => {
-        setState((state) => ({ ...state, [menu]: !state[menu] }));
+        setState((state) => ({ ...state, [menu]: !state[menu] })); // eslint-disable-line security/detect-object-injection
     };
 
     return (
