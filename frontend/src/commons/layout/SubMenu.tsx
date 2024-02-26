@@ -1,9 +1,7 @@
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { Collapse, List, ListItemIcon, MenuItem, Tooltip, Typography } from "@mui/material";
-import { Fragment } from "react";
-import * as React from "react";
 import { ReactElement, ReactNode } from "react";
-import { useSidebarState, useTranslate } from "react-admin";
+import { useSidebarState } from "react-admin";
 
 interface Props {
     dense: boolean;
@@ -16,7 +14,6 @@ interface Props {
 
 const SubMenu = (props: Props) => {
     const { handleToggle, isOpen, name, icon, children, dense } = props;
-    const translate = useTranslate();
 
     const [sidebarIsOpen] = useSidebarState();
 
@@ -24,17 +21,17 @@ const SubMenu = (props: Props) => {
         <MenuItem dense={dense} onClick={handleToggle}>
             <ListItemIcon sx={{ minWidth: 5 }}>{isOpen ? <ExpandMore /> : icon}</ListItemIcon>
             <Typography variant="inherit" color="textSecondary">
-                {translate(name)}
+                {name}
             </Typography>
         </MenuItem>
     );
 
     return (
-        <Fragment>
+        <div>
             {sidebarIsOpen || isOpen ? (
                 header
             ) : (
-                <Tooltip title={translate(name)} placement="right">
+                <Tooltip title={name} placement="right">
                     {header}
                 </Tooltip>
             )}
@@ -44,16 +41,16 @@ const SubMenu = (props: Props) => {
                     component="div"
                     disablePadding
                     sx={{
-                        "& a": {
+                        "& .MuiMenuItem-root": {
                             transition: "padding-left 195ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
-                            paddingLeft: sidebarIsOpen ? 4 : 2,
+                            paddingLeft: (theme) => (sidebarIsOpen ? theme.spacing(4) : theme.spacing(2)),
                         },
                     }}
                 >
                     {children}
                 </List>
             </Collapse>
-        </Fragment>
+        </div>
     );
 };
 
