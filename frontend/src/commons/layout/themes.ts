@@ -121,16 +121,6 @@ export const lightTheme = {
                 },
             },
         },
-        RaMenuItemLink: {
-            styleOverrides: {
-                root: {
-                    borderLeft: "3px solid #fff",
-                    "&.RaMenuItemLink-active": {
-                        borderLeft: "3px solid #1e194b",
-                    },
-                },
-            },
-        },
         MuiPaper: {
             styleOverrides: {
                 elevation1: {
