@@ -1,3 +1,5 @@
+from typing import Optional
+
 import validators
 from django.core.validators import MinValueValidator
 from rest_framework.exceptions import ValidationError
@@ -77,21 +79,33 @@ class CSAFVulnerabilitySerializer(ModelSerializer):
 class CSAFSerializer(ModelSerializer):
     product_name = SerializerMethodField()
     revisions = CSAFRevisionSerializer(many=True)
-    vulnerability_names = CSAFVulnerabilitySerializer(many=True)
+    vulnerability_names = SerializerMethodField()
+    user_full_name = SerializerMethodField()
 
     class Meta:
         model = CSAF
         fields = "__all__"
 
-    def get_product_name(self, obj: CSAF):
+    def get_product_name(self, obj: CSAF) -> Optional[str]:
         if obj.product:
             return obj.product.name
+        return None
+
+    def get_vulnerability_names(self, obj: CSAF) -> Optional[str]:
+        vulnerabilities = [v.name for v in obj.vulnerability_names.all()]
+        if vulnerabilities:
+            return ", ".join(vulnerabilities)
+        return None
+
+    def get_user_full_name(self, obj: CSAF) -> Optional[str]:
+        if obj.user:
+            return obj.user.full_name
+
         return None
 
 
 class OpenVEXDocumentCreateSerializer(Serializer):
     product = IntegerField(validators=[MinValueValidator(0)], required=False)
-    product_name = SerializerMethodField()
     vulnerability_names = ListField(
         child=CharField(max_length=255), min_length=0, max_length=10, required=False
     )
@@ -101,9 +115,6 @@ class OpenVEXDocumentCreateSerializer(Serializer):
 
     def validate_document_id_prefix(self, document_id_prefix: str) -> str:
         return _validate_url(document_id_prefix)
-
-    def get_product_name(self, obj: OpenVEX):
-        return obj.product.name
 
 
 class OpenVEXDocumentUpdateSerializer(Serializer):
@@ -118,11 +129,30 @@ class OpenVEXVulnerabilitySerializer(ModelSerializer):
 
 
 class OpenVEXSerializer(ModelSerializer):
-    vulnerability_names = OpenVEXVulnerabilitySerializer(many=True)
+    product_name = SerializerMethodField()
+    vulnerability_names = SerializerMethodField()
+    user_full_name = SerializerMethodField()
 
     class Meta:
         model = OpenVEX
         fields = "__all__"
+
+    def get_product_name(self, obj: OpenVEX) -> Optional[str]:
+        if obj.product:
+            return obj.product.name
+        return None
+
+    def get_vulnerability_names(self, obj: OpenVEX) -> Optional[str]:
+        vulnerabilities = [v.name for v in obj.vulnerability_names.all()]
+        if vulnerabilities:
+            return ", ".join(vulnerabilities)
+        return None
+
+    def get_user_full_name(self, obj: OpenVEX) -> Optional[str]:
+        if obj.user:
+            return obj.user.full_name
+
+        return None
 
 
 def _validate_url(url: str) -> str:

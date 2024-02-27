@@ -6,8 +6,8 @@ import { humanReadableDate } from "../../commons/functions";
 import ListHeader from "../../commons/layout/ListHeader";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/settings/functions";
-import csaf from "../../vex/csaf";
-import { CSAF } from "../../vex/types";
+import openvex from "../../vex/openvex";
+import { OpenVEX } from "../../vex/types";
 
 const listFilters = [
     <ReferenceInput source="product" reference="products" sort={{ field: "name", order: "ASC" }} alwaysOn>
@@ -16,18 +16,18 @@ const listFilters = [
     <TextInput source="vulnerability_names__name" label="Vulnerability" alwaysOn />,
 ];
 
-const CSAFList = () => {
+const OpenVEXList = () => {
     return (
         <Fragment>
-            <ListHeader icon={csaf.icon} title="VEX / CSAF" />
+            <ListHeader icon={openvex.icon} title="VEX / OpenVEX" />
             <List
                 perPage={25}
                 pagination={<CustomPagination />}
                 filters={listFilters}
-                sort={{ field: "tracking_initial_release_date", order: "DESC" }}
+                sort={{ field: "timestamp", order: "DESC" }}
                 actions={false}
                 disableSyncWithLocation={false}
-                storeKey="csaf.list"
+                storeKey="openvex.list"
             >
                 <Datagrid size={getSettingListSize()} rowClick="show" bulkActionButtons={false}>
                     <TextField source="product_name" label="Product" />
@@ -35,17 +35,16 @@ const CSAFList = () => {
                     <TextField source="document_id_prefix" label="ID prefix" />
                     <TextField source="document_base_id" label="Base ID" />
                     <NumberField source="version" label="Version" />
-                    <TextField source="title" />
-                    <TextField source="publisher_name" label="Pub. name" />
-                    <FunctionField<CSAF>
+                    <TextField source="author" label="Author" />
+                    <FunctionField<OpenVEX>
                         label="Created"
-                        sortBy="tracking_initial_release_date"
-                        render={(record) => (record ? humanReadableDate(record.tracking_initial_release_date) : "")}
+                        sortBy="timestamp"
+                        render={(record) => (record ? humanReadableDate(record.timestamp) : "")}
                     />
-                    <FunctionField<CSAF>
+                    <FunctionField<OpenVEX>
                         label="Updated"
-                        sortBy="tracking_current_release_date"
-                        render={(record) => (record ? humanReadableDate(record.tracking_current_release_date) : "")}
+                        sortBy="last_updated"
+                        render={(record) => (record ? humanReadableDate(record.last_updated) : "")}
                     />
                     <TextField source="user_full_name" label="User" />
                 </Datagrid>
@@ -54,4 +53,4 @@ const CSAFList = () => {
     );
 };
 
-export default CSAFList;
+export default OpenVEXList;
