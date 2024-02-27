@@ -52,7 +52,7 @@ const GeneralRuleCreate = () => {
         <Create redirect="show" transform={transform}>
             <SimpleForm warnWhenUnsavedChanges validate={validateRuleForm}>
                 <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                    Rule
+                    General Rule
                 </Typography>
                 <Stack>
                     <TextInputWide autoFocus source="name" validate={validate_required_255} />

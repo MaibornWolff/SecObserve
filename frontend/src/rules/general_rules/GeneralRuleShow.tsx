@@ -37,7 +37,7 @@ const GeneralRuleComponent = () => {
                 <SimpleShowLayout>
                     <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
                         <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                            Rule
+                            General Rule
                         </Typography>
                         <Stack spacing={1}>
                             <Labeled label="Name">

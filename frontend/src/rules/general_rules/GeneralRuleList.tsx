@@ -12,7 +12,9 @@ import {
     TopToolbar,
 } from "react-admin";
 
+import general_rules from ".";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
+import ListHeader from "../../commons/layout/ListHeader";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/settings/functions";
 
@@ -38,29 +40,32 @@ const ListActions = () => {
 const GeneralRuleList = () => {
     const user = localStorage.getItem("user");
     return (
-        <List
-            perPage={25}
-            pagination={<CustomPagination />}
-            filters={listFilters}
-            sort={{ field: "name", order: "ASC" }}
-            actions={<ListActions />}
-            disableSyncWithLocation={false}
-            storeKey="general_rules.list"
-        >
-            <Datagrid
-                size={getSettingListSize()}
-                rowClick="show"
-                bulkActionButtons={user && JSON.parse(user).is_superuser && <BulkActionButtons />}
+        <Fragment>
+            <ListHeader icon={general_rules.icon} title="General Rules" />
+            <List
+                perPage={25}
+                pagination={<CustomPagination />}
+                filters={listFilters}
+                sort={{ field: "name", order: "ASC" }}
+                actions={<ListActions />}
+                disableSyncWithLocation={false}
+                storeKey="general_rules.list"
             >
-                <TextField source="name" />
-                <TextField source="new_severity" />
-                <TextField source="new_status" />
-                <BooleanField source="enabled" />
-                <ReferenceField source="parser" reference="parsers" link={false} />
-                <TextField source="scanner_prefix" />
-                <TextField source="title" label="Observation title" />
-            </Datagrid>
-        </List>
+                <Datagrid
+                    size={getSettingListSize()}
+                    rowClick="show"
+                    bulkActionButtons={user && JSON.parse(user).is_superuser && <BulkActionButtons />}
+                >
+                    <TextField source="name" />
+                    <TextField source="new_severity" />
+                    <TextField source="new_status" />
+                    <BooleanField source="enabled" />
+                    <ReferenceField source="parser" reference="parsers" link={false} />
+                    <TextField source="scanner_prefix" />
+                    <TextField source="title" label="Observation title" />
+                </Datagrid>
+            </List>
+        </Fragment>
     );
 };
 

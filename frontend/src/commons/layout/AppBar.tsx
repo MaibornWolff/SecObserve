@@ -74,7 +74,6 @@ const CustomAppBar = () => {
                     whiteSpace: "nowrap",
                     overflow: "hidden",
                 }}
-                id="react-admin-title"
             />
             {isLargeEnough && <Logo />}
             {isLargeEnough && <Box component="span" sx={{ flex: 1 }} />}

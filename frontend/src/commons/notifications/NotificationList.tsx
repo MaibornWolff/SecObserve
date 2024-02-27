@@ -11,7 +11,9 @@ import {
     TopToolbar,
 } from "react-admin";
 
+import notifications from ".";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
+import ListHeader from "../../commons/layout/ListHeader";
 import { AutocompleteInputMedium } from "../layout/themes";
 import { getSettingListSize } from "../settings/functions";
 import { TYPE_CHOICES } from "../types";
@@ -44,26 +46,33 @@ const ListActions = () => (
 
 const NotificationList = () => {
     return (
-        <List
-            perPage={25}
-            pagination={<CustomPagination />}
-            filters={listFilters}
-            sort={{ field: "created", order: "DESC" }}
-            disableSyncWithLocation={false}
-            storeKey="notifications.list"
-            actions={<ListActions />}
-        >
-            <DatagridConfigurable size={getSettingListSize()} rowClick="show" bulkActionButtons={<BulkActionButtons />}>
-                <TextField source="type" />
-                <TextField source="name" />
-                <DateField source="created" showTime={true} />
-                <TextField source="message" />
-                <TextField source="function" />
-                <TextField source="product_name" label="Product" />
-                <TextField source="observation_title" label="Observation" />
-                <TextField source="user_full_name" label="User" />
-            </DatagridConfigurable>
-        </List>
+        <Fragment>
+            <ListHeader icon={notifications.icon} title="Notifications" />
+            <List
+                perPage={25}
+                pagination={<CustomPagination />}
+                filters={listFilters}
+                sort={{ field: "created", order: "DESC" }}
+                disableSyncWithLocation={false}
+                storeKey="notifications.list"
+                actions={<ListActions />}
+            >
+                <DatagridConfigurable
+                    size={getSettingListSize()}
+                    rowClick="show"
+                    bulkActionButtons={<BulkActionButtons />}
+                >
+                    <TextField source="type" />
+                    <TextField source="name" />
+                    <DateField source="created" showTime={true} />
+                    <TextField source="message" />
+                    <TextField source="function" />
+                    <TextField source="product_name" label="Product" />
+                    <TextField source="observation_title" label="Observation" />
+                    <TextField source="user_full_name" label="User" />
+                </DatagridConfigurable>
+            </List>
+        </Fragment>
     );
 };
 
