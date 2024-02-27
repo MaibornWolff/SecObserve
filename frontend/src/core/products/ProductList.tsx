@@ -12,11 +12,13 @@ import {
     TopToolbar,
 } from "react-admin";
 
+import products from ".";
 import { PERMISSION_PRODUCT_CREATE } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
 import { SecurityGateTextField } from "../../commons/custom_fields/SecurityGateTextField";
 import { humanReadableDate } from "../../commons/functions";
+import ListHeader from "../../commons/layout/ListHeader";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/settings/functions";
 import { Product } from "../types";
@@ -50,28 +52,31 @@ const ProductList = () => {
     localStorage.removeItem("productembeddedlist.product_group");
 
     return (
-        <List
-            perPage={25}
-            pagination={<CustomPagination />}
-            filters={listFilters}
-            sort={{ field: "name", order: "ASC" }}
-            actions={<ListActions />}
-            disableSyncWithLocation={false}
-            storeKey="products.list"
-        >
-            <Datagrid size={getSettingListSize()} rowClick="show" bulkActionButtons={<BulkActionButtons />}>
-                <TextField source="name" />
-                <TextField source="product_group_name" label="Product Group" />
-                <TextField source="repository_default_branch_name" label="Default branch" sortable={false} />
-                <SecurityGateTextField />
-                <ObservationsCountField withLabel={false} />
-                <FunctionField<Product>
-                    label="Last observation change"
-                    sortBy="last_observation_change"
-                    render={(record) => (record ? humanReadableDate(record.last_observation_change) : "")}
-                />
-            </Datagrid>
-        </List>
+        <Fragment>
+            <ListHeader icon={products.icon} title="Products" />
+            <List
+                perPage={25}
+                pagination={<CustomPagination />}
+                filters={listFilters}
+                sort={{ field: "name", order: "ASC" }}
+                actions={<ListActions />}
+                disableSyncWithLocation={false}
+                storeKey="products.list"
+            >
+                <Datagrid size={getSettingListSize()} rowClick="show" bulkActionButtons={<BulkActionButtons />}>
+                    <TextField source="name" />
+                    <TextField source="product_group_name" label="Product Group" />
+                    <TextField source="repository_default_branch_name" label="Default branch" sortable={false} />
+                    <SecurityGateTextField />
+                    <ObservationsCountField withLabel={false} />
+                    <FunctionField<Product>
+                        label="Last observation change"
+                        sortBy="last_observation_change"
+                        render={(record) => (record ? humanReadableDate(record.last_observation_change) : "")}
+                    />
+                </Datagrid>
+            </List>
+        </Fragment>
     );
 };
 

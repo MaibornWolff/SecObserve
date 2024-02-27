@@ -1,4 +1,4 @@
-import { Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import {
     DateField,
     DeleteWithConfirmButton,
@@ -32,6 +32,7 @@ const NotificationShow = () => {
             <WithRecord
                 render={(notification) => (
                     <SimpleShowLayout>
+                        <Typography variant="h6">Notification</Typography>
                         <TextField source="type" />
                         <TextField source="name" />
                         <DateField source="created" showTime={true} />
