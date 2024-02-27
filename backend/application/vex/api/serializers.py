@@ -8,6 +8,7 @@ from rest_framework.serializers import (
     ListField,
     ModelSerializer,
     Serializer,
+    SerializerMethodField,
 )
 
 from application.vex.models import (
@@ -74,6 +75,7 @@ class CSAFVulnerabilitySerializer(ModelSerializer):
 
 
 class CSAFSerializer(ModelSerializer):
+    product_name = SerializerMethodField()
     revisions = CSAFRevisionSerializer(many=True)
     vulnerability_names = CSAFVulnerabilitySerializer(many=True)
 
@@ -81,9 +83,15 @@ class CSAFSerializer(ModelSerializer):
         model = CSAF
         fields = "__all__"
 
+    def get_product_name(self, obj: CSAF):
+        if obj.product:
+            return obj.product.name
+        return None
+
 
 class OpenVEXDocumentCreateSerializer(Serializer):
     product = IntegerField(validators=[MinValueValidator(0)], required=False)
+    product_name = SerializerMethodField()
     vulnerability_names = ListField(
         child=CharField(max_length=255), min_length=0, max_length=10, required=False
     )
@@ -93,6 +101,9 @@ class OpenVEXDocumentCreateSerializer(Serializer):
 
     def validate_document_id_prefix(self, document_id_prefix: str) -> str:
         return _validate_url(document_id_prefix)
+
+    def get_product_name(self, obj: OpenVEX):
+        return obj.product.name
 
 
 class OpenVEXDocumentUpdateSerializer(Serializer):
