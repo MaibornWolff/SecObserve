@@ -14,7 +14,6 @@ import {
 
 import general_rules from ".";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
-import { feature_vex_enabled } from "../../commons/functions";
 import ListHeader from "../../commons/layout/ListHeader";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/settings/functions";
@@ -60,7 +59,6 @@ const GeneralRuleList = () => {
                     <TextField source="name" />
                     <TextField source="new_severity" />
                     <TextField source="new_status" />
-                    {feature_vex_enabled() && <TextField source="new_vex_justification" />}
                     <BooleanField source="enabled" />
                     <ReferenceField source="parser" reference="parsers" link={false} />
                     <TextField source="scanner_prefix" />

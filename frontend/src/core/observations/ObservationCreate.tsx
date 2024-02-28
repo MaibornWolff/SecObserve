@@ -27,6 +27,9 @@ import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from ".
 import {
     OBSERVATION_SEVERITY_CHOICES,
     OBSERVATION_STATUS_CHOICES,
+    OBSERVATION_STATUS_FALSE_POSITIVE,
+    OBSERVATION_STATUS_NOT_AFFECTED,
+    OBSERVATION_STATUS_NOT_SECURITY,
     OBSERVATION_STATUS_OPEN,
     OBSERVATION_VEX_JUSTIFICATION_CHOICES,
 } from "../../core/types";
@@ -37,6 +40,12 @@ export type ObservationCreateProps = {
 
 const ObservationCreate = ({ id }: ObservationCreateProps) => {
     const [open, setOpen] = useState(false);
+    const [status, setStatus] = useState(OBSERVATION_STATUS_OPEN);
+    const justificationEnabled =
+        feature_vex_enabled() &&
+        [OBSERVATION_STATUS_NOT_AFFECTED, OBSERVATION_STATUS_NOT_SECURITY, OBSERVATION_STATUS_FALSE_POSITIVE].indexOf(
+            status
+        ) >= 0;
     const refresh = useRefresh();
     const notify = useNotify();
     const [create] = useCreate();
@@ -73,6 +82,9 @@ const ObservationCreate = ({ id }: ObservationCreateProps) => {
 
     const create_observation = (data: any) => {
         data.product = id;
+        if (!justificationEnabled) {
+            data.parser_vex_justification = "";
+        }
 
         create(
             "observations",
@@ -120,9 +132,10 @@ const ObservationCreate = ({ id }: ObservationCreateProps) => {
                                         label="Status"
                                         choices={OBSERVATION_STATUS_CHOICES}
                                         defaultValue={OBSERVATION_STATUS_OPEN}
+                                        onChange={(e) => setStatus(e)}
                                         validate={validate_required}
                                     />
-                                    {feature_vex_enabled() && (
+                                    {justificationEnabled && (
                                         <AutocompleteInputMedium
                                             source="parser_vex_justification"
                                             label="VEX Justification"

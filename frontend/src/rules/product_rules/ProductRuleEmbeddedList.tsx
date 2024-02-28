@@ -57,7 +57,6 @@ const ProductRuleEmbeddedList = ({ product }: ProductRuleEmbeddedListProps) => {
                     <TextField source="name" />
                     <TextField source="new_severity" />
                     <TextField source="new_status" />
-                    {feature_vex_enabled() && <TextField source="new_vex_justification" />}
                     <BooleanField source="enabled" />
                     <ReferenceField source="parser" reference="parsers" link={false} />
                     <TextField source="scanner_prefix" />

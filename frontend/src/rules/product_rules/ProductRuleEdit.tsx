@@ -9,6 +9,7 @@ import {
     SimpleForm,
     Toolbar,
     useNotify,
+    useRecordContext,
     useRefresh,
     useUpdate,
 } from "react-admin";
@@ -19,6 +20,10 @@ import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from ".
 import {
     OBSERVATION_SEVERITY_CHOICES,
     OBSERVATION_STATUS_CHOICES,
+    OBSERVATION_STATUS_FALSE_POSITIVE,
+    OBSERVATION_STATUS_NOT_AFFECTED,
+    OBSERVATION_STATUS_NOT_SECURITY,
+    OBSERVATION_STATUS_OPEN,
     OBSERVATION_VEX_JUSTIFICATION_CHOICES,
 } from "../../core/types";
 import { validateRuleForm } from "../functions";
@@ -28,6 +33,14 @@ const ProductRuleEdit = () => {
     const [update] = useUpdate();
     const refresh = useRefresh();
     const notify = useNotify();
+    const productRule = useRecordContext();
+    const [status, setStatus] = useState(productRule.new_status);
+    const justificationEnabled =
+        feature_vex_enabled() &&
+        [OBSERVATION_STATUS_NOT_AFFECTED, OBSERVATION_STATUS_NOT_SECURITY, OBSERVATION_STATUS_FALSE_POSITIVE].indexOf(
+            status
+        ) >= 0;
+
     const handleOpen = () => setOpen(true);
     const handleCancel = () => setOpen(false);
     const handleClose = (event: object, reason: string) => {
@@ -72,7 +85,7 @@ const ProductRuleEdit = () => {
         if (data.new_status == null) {
             data.new_status = "";
         }
-        if (data.new_vex_justification == null) {
+        if (!justificationEnabled || data.new_vex_justification == null) {
             data.new_vex_justification = "";
         }
 
@@ -159,8 +172,12 @@ const ProductRuleEdit = () => {
                         <TextInputWide autoFocus source="name" validate={validate_required_255} />
                         <TextInputWide source="description" multiline minRows={3} validate={validate_2048} />
                         <AutocompleteInputMedium source="new_severity" choices={OBSERVATION_SEVERITY_CHOICES} />
-                        <AutocompleteInputMedium source="new_status" choices={OBSERVATION_STATUS_CHOICES} />
-                        {feature_vex_enabled() && (
+                        <AutocompleteInputMedium
+                            source="new_status"
+                            choices={OBSERVATION_STATUS_CHOICES}
+                            onChange={(e) => setStatus(e)}
+                        />
+                        {justificationEnabled && (
                             <AutocompleteInputMedium
                                 source="new_vex_justification"
                                 choices={OBSERVATION_VEX_JUSTIFICATION_CHOICES}

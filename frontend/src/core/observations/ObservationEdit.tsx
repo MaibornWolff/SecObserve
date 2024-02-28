@@ -1,4 +1,5 @@
 import { Divider, Stack, Typography } from "@mui/material";
+import { useState } from "react";
 import {
     DeleteButton,
     Edit,
@@ -25,6 +26,10 @@ import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from ".
 import {
     OBSERVATION_SEVERITY_CHOICES,
     OBSERVATION_STATUS_CHOICES,
+    OBSERVATION_STATUS_FALSE_POSITIVE,
+    OBSERVATION_STATUS_NOT_AFFECTED,
+    OBSERVATION_STATUS_NOT_SECURITY,
+    OBSERVATION_STATUS_OPEN,
     OBSERVATION_VEX_JUSTIFICATION_CHOICES,
 } from "../../core/types";
 
@@ -42,6 +47,13 @@ const CustomToolbar = () => {
 };
 
 const ObservationEdit = () => {
+    const observation = useRecordContext();
+    const [status, setStatus] = useState(observation.parser_status);
+    const justificationEnabled =
+        feature_vex_enabled() &&
+        [OBSERVATION_STATUS_NOT_AFFECTED, OBSERVATION_STATUS_NOT_SECURITY, OBSERVATION_STATUS_FALSE_POSITIVE].indexOf(
+            status
+        ) >= 0;
     const transform = (data: any) => {
         if (!data.description) {
             data.description = "";
@@ -85,6 +97,9 @@ const ObservationEdit = () => {
         if (!data.origin_cloud_provider) {
             data.origin_cloud_provider = "";
         }
+        if (!justificationEnabled || !data.parser_vex_justification) {
+            data.parser_vex_justification = "";
+        }
         data.origin_component_name_version = "";
         data.origin_docker_image_name_tag = "";
         return data;
@@ -110,8 +125,9 @@ const ObservationEdit = () => {
                             label="Status"
                             choices={OBSERVATION_STATUS_CHOICES}
                             validate={validate_required}
+                            onChange={(e) => setStatus(e)}
                         />
-                        {feature_vex_enabled() && (
+                        {justificationEnabled && (
                             <AutocompleteInputMedium
                                 source="parser_vex_justification"
                                 label="VEX justification"

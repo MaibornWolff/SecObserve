@@ -11,6 +11,9 @@ import { httpClient } from "../../commons/ra-data-django-rest-framework";
 import {
     OBSERVATION_SEVERITY_CHOICES,
     OBSERVATION_STATUS_CHOICES,
+    OBSERVATION_STATUS_FALSE_POSITIVE,
+    OBSERVATION_STATUS_NOT_AFFECTED,
+    OBSERVATION_STATUS_NOT_SECURITY,
     OBSERVATION_STATUS_OPEN,
     OBSERVATION_VEX_JUSTIFICATION_CHOICES,
 } from "../types";
@@ -18,13 +21,18 @@ import {
 const ObservationAssessment = () => {
     const [open, setOpen] = useState(false);
     const [status, setStatus] = useState(OBSERVATION_STATUS_OPEN);
+    const justificationEnabled =
+        feature_vex_enabled() &&
+        [OBSERVATION_STATUS_NOT_AFFECTED, OBSERVATION_STATUS_NOT_SECURITY, OBSERVATION_STATUS_FALSE_POSITIVE].indexOf(
+            status
+        ) >= 0;
     const refresh = useRefresh();
     const notify = useNotify();
     const observationUpdate = async (data: any) => {
         const patch = {
             severity: data.current_severity,
             status: data.current_status,
-            vex_justification: feature_vex_enabled() ? data.current_vex_justification : "",
+            vex_justification: justificationEnabled ? data.current_vex_justification : "",
             comment: data.comment,
         };
 
@@ -104,7 +112,7 @@ const ObservationAssessment = () => {
                             validate={validate_required}
                             onChange={(e) => setStatus(e)}
                         />
-                        {feature_vex_enabled() && status === "Not affected" && (
+                        {justificationEnabled && (
                             <AutocompleteInputMedium
                                 source="current_vex_justification"
                                 label="Current VEX justification"

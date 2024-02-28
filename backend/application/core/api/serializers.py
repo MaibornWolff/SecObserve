@@ -730,6 +730,7 @@ class ObservationCreateSerializer(ModelSerializer):
             "recommendation",
             "parser_severity",
             "parser_status",
+            "parser_vex_justification",
             "origin_component_name_version",
             "origin_component_name",
             "origin_component_version",
