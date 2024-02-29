@@ -78,8 +78,12 @@ def remove_assessment(observation: Observation, comment: str) -> None:
     if observation.assessment_severity or observation.assessment_status:
         observation.assessment_severity = ""
         observation.assessment_status = ""
+        observation.assessment_vex_justification = ""
         observation.current_severity = get_current_severity(observation)
         observation.current_status = get_current_status(observation)
+        observation.current_vex_justification = get_current_vex_justification(
+            observation
+        )
 
         create_observation_log(observation, "", "", comment, "")
 

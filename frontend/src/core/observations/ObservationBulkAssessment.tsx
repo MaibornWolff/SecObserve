@@ -5,15 +5,12 @@ import { Fragment, useState } from "react";
 import { SaveButton, SimpleForm, Toolbar, useListContext, useNotify, useRefresh, useUnselectAll } from "react-admin";
 
 import { validate_required_255 } from "../../commons/custom_validators";
-import { feature_vex_enabled } from "../../commons/functions";
+import { justificationIsEnabledForStatus } from "../../commons/functions";
 import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 import {
     OBSERVATION_SEVERITY_CHOICES,
     OBSERVATION_STATUS_CHOICES,
-    OBSERVATION_STATUS_FALSE_POSITIVE,
-    OBSERVATION_STATUS_NOT_AFFECTED,
-    OBSERVATION_STATUS_NOT_SECURITY,
     OBSERVATION_STATUS_OPEN,
     OBSERVATION_VEX_JUSTIFICATION_CHOICES,
 } from "../types";
@@ -25,11 +22,7 @@ type ObservationBulkAssessmentButtonProps = {
 const ObservationBulkAssessment = (props: ObservationBulkAssessmentButtonProps) => {
     const [open, setOpen] = useState(false);
     const [status, setStatus] = useState(OBSERVATION_STATUS_OPEN);
-    const justificationEnabled =
-        feature_vex_enabled() &&
-        [OBSERVATION_STATUS_NOT_AFFECTED, OBSERVATION_STATUS_NOT_SECURITY, OBSERVATION_STATUS_FALSE_POSITIVE].indexOf(
-            status
-        ) >= 0;
+    const justificationEnabled = justificationIsEnabledForStatus(status);
     const refresh = useRefresh();
     const [loading, setLoading] = useState(false);
     const notify = useNotify();
@@ -132,7 +125,7 @@ const ObservationBulkAssessment = (props: ObservationBulkAssessmentButtonProps) 
                         {justificationEnabled && (
                             <AutocompleteInputMedium
                                 source="current_vex_justification"
-                                label="Current VEX justification"
+                                label="VEX justification"
                                 choices={OBSERVATION_VEX_JUSTIFICATION_CHOICES}
                             />
                         )}

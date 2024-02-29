@@ -15,15 +15,11 @@ import {
 } from "react-admin";
 
 import { validate_255, validate_513, validate_2048, validate_required_255 } from "../../commons/custom_validators";
-import { feature_vex_enabled } from "../../commons/functions";
+import { justificationIsEnabledForStatus } from "../../commons/functions";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import {
     OBSERVATION_SEVERITY_CHOICES,
     OBSERVATION_STATUS_CHOICES,
-    OBSERVATION_STATUS_FALSE_POSITIVE,
-    OBSERVATION_STATUS_NOT_AFFECTED,
-    OBSERVATION_STATUS_NOT_SECURITY,
-    OBSERVATION_STATUS_OPEN,
     OBSERVATION_VEX_JUSTIFICATION_CHOICES,
 } from "../../core/types";
 import { validateRuleForm } from "../functions";
@@ -35,11 +31,7 @@ const ProductRuleEdit = () => {
     const notify = useNotify();
     const productRule = useRecordContext();
     const [status, setStatus] = useState(productRule.new_status);
-    const justificationEnabled =
-        feature_vex_enabled() &&
-        [OBSERVATION_STATUS_NOT_AFFECTED, OBSERVATION_STATUS_NOT_SECURITY, OBSERVATION_STATUS_FALSE_POSITIVE].indexOf(
-            status
-        ) >= 0;
+    const justificationEnabled = justificationIsEnabledForStatus(status);
 
     const handleOpen = () => setOpen(true);
     const handleCancel = () => setOpen(false);
