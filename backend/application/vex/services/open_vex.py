@@ -84,6 +84,7 @@ def create_open_vex_document(
         statements = _get_statements_for_vulnerabilities(vulnerability_names)
 
     if not statements:
+        open_vex.delete()
         return None
 
     statements_json = jsonpickle.encode(statements, unpicklable=False)

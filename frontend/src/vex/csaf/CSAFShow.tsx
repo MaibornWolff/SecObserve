@@ -11,6 +11,8 @@ import {
     WithRecord,
 } from "react-admin";
 
+import CSAFUpdate from "./CSAFUpdate";
+
 const ShowActions = () => {
     return (
         <TopToolbar>
@@ -20,6 +22,7 @@ const ShowActions = () => {
                     sort={{ field: "tracking_initial_release_date", order: "DESC" }}
                     storeKey="csaf.list"
                 />
+                <CSAFUpdate />
                 <DeleteWithConfirmButton />
             </Stack>
         </TopToolbar>

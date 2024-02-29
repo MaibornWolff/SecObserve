@@ -11,11 +11,14 @@ import {
     WithRecord,
 } from "react-admin";
 
+import OpenVEXUpdate from "./OpenVEXUpdate";
+
 const ShowActions = () => {
     return (
         <TopToolbar>
             <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <PrevNextButtons linkType="show" sort={{ field: "timestamp", order: "DESC" }} storeKey="openvex.list" />
+                <OpenVEXUpdate />
                 <DeleteWithConfirmButton />
             </Stack>
         </TopToolbar>

@@ -84,9 +84,10 @@ class CSAFDocumentCreateView(APIView):
         if not csaf_document:
             return Response(status=HTTP_204_NO_CONTENT)
 
-        response = HttpResponse(
+        response = HttpResponse(  # pylint: disable=http-response-with-content-type-json
+            # HTTPResponse gives more control about JSON serialization
             content=_object_to_json(csaf_document, VEX_TYPE_CSAF),
-            content_type="text/json",
+            content_type="application/json",
         )
         response["Content-Disposition"] = (
             f"attachment; filename={_get_csaf_filename(csaf_document.document.tracking.id)}.json"
@@ -114,6 +115,7 @@ class CSAFDocumentUpdateView(APIView):
             publisher_category=serializer.validated_data.get("publisher_category"),
             publisher_namespace=serializer.validated_data.get("publisher_namespace"),
             tracking_status=serializer.validated_data.get("tracking_status"),
+            tlp_label=serializer.validated_data.get("tlp_label"),
         )
 
         csaf_document = update_csaf_document(csaf_update_parameters)
@@ -121,9 +123,10 @@ class CSAFDocumentUpdateView(APIView):
         if not csaf_document:
             return Response(status=HTTP_204_NO_CONTENT)
 
-        response = HttpResponse(
+        response = HttpResponse(  # pylint: disable=http-response-with-content-type-json
+            # HTTPResponse gives more control about JSON serialization
             content=_object_to_json(csaf_document, VEX_TYPE_CSAF),
-            content_type="text/json",
+            content_type="application/json",
         )
         response["Content-Disposition"] = (
             f"attachment; filename={_get_csaf_filename(csaf_document.document.tracking.id)}.json"
@@ -190,9 +193,10 @@ class OpenVEXDocumentCreateView(APIView):
         if not open_vex_document:
             return Response(status=HTTP_204_NO_CONTENT)
 
-        response = HttpResponse(
+        response = HttpResponse(  # pylint: disable=http-response-with-content-type-json
+            # HTTPResponse gives more control about JSON serialization
             content=_object_to_json(open_vex_document, VEX_TYPE_OPENVEX),
-            content_type="text/json",
+            content_type="application/json",
         )
         response["Content-Disposition"] = (
             "attachment; filename=openvex_"
@@ -228,9 +232,10 @@ class OpenVEXDocumentUpdateView(APIView):
         if not open_vex_document:
             return Response(status=HTTP_204_NO_CONTENT)
 
-        response = HttpResponse(
+        response = HttpResponse(  # pylint: disable=http-response-with-content-type-json
+            # HTTPResponse gives more control about JSON serialization
             content=_object_to_json(open_vex_document, VEX_TYPE_OPENVEX),
-            content_type="text/json",
+            content_type="application/json",
         )
         response["Content-Disposition"] = (
             "attachment; filename=openvex_"

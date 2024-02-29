@@ -64,6 +64,7 @@ class CSAFUpdateParameters:
     publisher_category: str
     publisher_namespace: str
     tracking_status: str
+    tlp_label: str
 
 
 @dataclass()
@@ -124,6 +125,7 @@ def create_csaf_document(parameters: CSAFCreateParameters) -> Optional[CSAFRoot]
         )
 
     if not vulnerabilities:
+        csaf.delete()
         return None
 
     csaf_content = CSAFContent(vulnerabilities, product_tree)
@@ -181,6 +183,8 @@ def update_csaf_document(parameters: CSAFUpdateParameters) -> Optional[CSAFRoot]
         csaf.publisher_namespace = parameters.publisher_namespace
     if parameters.tracking_status:
         csaf.tracking_status = parameters.tracking_status
+    if parameters.tlp_label:
+        csaf.tlp_label = parameters.tlp_label
     csaf.version += 1
     csaf.content_hash = content_hash
     csaf.save()
@@ -406,7 +410,10 @@ def _set_product_status(vulnerability: CSAFVulnerability, observation: Observati
 
 
 def _remove_conflicting_product_status(vulnerability: CSAFVulnerability):
-    product_ids = vulnerability.product_status.known_affected
+    product_ids = []
+
+    for product_id in vulnerability.product_status.known_affected:
+        product_ids.append(product_id)
 
     under_investigation_product_ids = []
     for product_id in vulnerability.product_status.under_investigation:

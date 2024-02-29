@@ -1,5 +1,14 @@
 import { Fragment } from "react";
-import { Datagrid, FunctionField, List, NumberField, ReferenceInput, TextField, TextInput } from "react-admin";
+import {
+    Datagrid,
+    FunctionField,
+    List,
+    NumberField,
+    ReferenceInput,
+    TextField,
+    TextInput,
+    TopToolbar,
+} from "react-admin";
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { humanReadableDate } from "../../commons/functions";
@@ -8,6 +17,7 @@ import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/settings/functions";
 import openvex from "../../vex/openvex";
 import { OpenVEX } from "../../vex/types";
+import OpenVEXCreate from "./OpenVEXCreate";
 
 const listFilters = [
     <ReferenceInput source="product" reference="products" sort={{ field: "name", order: "ASC" }} alwaysOn>
@@ -15,6 +25,12 @@ const listFilters = [
     </ReferenceInput>,
     <TextInput source="vulnerability_names__name" label="Vulnerability" alwaysOn />,
 ];
+
+const ListActions = () => (
+    <TopToolbar>
+        <OpenVEXCreate />
+    </TopToolbar>
+);
 
 const OpenVEXList = () => {
     return (
@@ -25,9 +41,10 @@ const OpenVEXList = () => {
                 pagination={<CustomPagination />}
                 filters={listFilters}
                 sort={{ field: "timestamp", order: "DESC" }}
-                actions={false}
+                actions={<ListActions />}
                 disableSyncWithLocation={false}
                 storeKey="openvex.list"
+                empty={false}
             >
                 <Datagrid size={getSettingListSize()} rowClick="show" bulkActionButtons={false}>
                     <TextField source="product_name" label="Product" />

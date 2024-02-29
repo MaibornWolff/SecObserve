@@ -30,7 +30,7 @@ from application.vex.types import (
 class CSAFDocumentCreateSerializer(Serializer):
     product = IntegerField(validators=[MinValueValidator(0)], required=False)
     vulnerability_names = ListField(
-        child=CharField(max_length=255), min_length=0, max_length=10, required=False
+        child=CharField(max_length=255), min_length=0, max_length=20, required=False
     )
     document_id_prefix = CharField(max_length=200, required=True)
     title = CharField(max_length=255, required=True)
@@ -51,6 +51,9 @@ class CSAFDocumentCreateSerializer(Serializer):
 
 
 class CSAFDocumentUpdateSerializer(Serializer):
+    tlp_label = ChoiceField(
+        choices=CSAF_TLP_Label.CSAF_TLP_LABEL_CHOICES, required=True
+    )
     publisher_name = CharField(max_length=255, required=False)
     publisher_category = ChoiceField(
         choices=CSAF_Publisher_Category.CSAF_PUBLISHER_CATEGORY_CHOICES, required=False
@@ -107,7 +110,7 @@ class CSAFSerializer(ModelSerializer):
 class OpenVEXDocumentCreateSerializer(Serializer):
     product = IntegerField(validators=[MinValueValidator(0)], required=False)
     vulnerability_names = ListField(
-        child=CharField(max_length=255), min_length=0, max_length=10, required=False
+        child=CharField(max_length=255), min_length=0, max_length=20, required=False
     )
     document_id_prefix = CharField(max_length=200, required=True)
     author = CharField(max_length=255, required=True)

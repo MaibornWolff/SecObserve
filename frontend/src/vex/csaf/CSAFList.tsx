@@ -1,5 +1,14 @@
 import { Fragment } from "react";
-import { Datagrid, FunctionField, List, NumberField, ReferenceInput, TextField, TextInput } from "react-admin";
+import {
+    Datagrid,
+    FunctionField,
+    List,
+    NumberField,
+    ReferenceInput,
+    TextField,
+    TextInput,
+    TopToolbar,
+} from "react-admin";
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { humanReadableDate } from "../../commons/functions";
@@ -8,6 +17,7 @@ import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/settings/functions";
 import csaf from "../../vex/csaf";
 import { CSAF } from "../../vex/types";
+import CSAFCreate from "./CSAFCreate";
 
 const listFilters = [
     <ReferenceInput source="product" reference="products" sort={{ field: "name", order: "ASC" }} alwaysOn>
@@ -15,6 +25,12 @@ const listFilters = [
     </ReferenceInput>,
     <TextInput source="vulnerability_names__name" label="Vulnerability" alwaysOn />,
 ];
+
+const ListActions = () => (
+    <TopToolbar>
+        <CSAFCreate />
+    </TopToolbar>
+);
 
 const CSAFList = () => {
     return (
@@ -25,9 +41,10 @@ const CSAFList = () => {
                 pagination={<CustomPagination />}
                 filters={listFilters}
                 sort={{ field: "tracking_initial_release_date", order: "DESC" }}
-                actions={false}
+                actions={<ListActions />}
                 disableSyncWithLocation={false}
                 storeKey="csaf.list"
+                empty={false}
             >
                 <Datagrid size={getSettingListSize()} rowClick="show" bulkActionButtons={false}>
                     <TextField source="product_name" label="Product" />
