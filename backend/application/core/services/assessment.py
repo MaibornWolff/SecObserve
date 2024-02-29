@@ -51,7 +51,8 @@ def save_assessment(
         log_vex_justification = observation.current_vex_justification
 
     if (
-        previous_severity != observation.current_severity
+        previous_severity  # pylint: disable=too-many-boolean-expressions
+        != observation.current_severity
         or previous_assessment_severity != observation.assessment_severity
         or previous_status != observation.current_status
         or previous_assessment_status != observation.assessment_status
