@@ -303,7 +303,10 @@ def _prepare_statement(observation: Observation) -> Optional[OpenVEXStatement]:
 
         if open_vex_status == OpenVEX_Status.OPEN_VEX_STATUS_NOT_AFFECTED:
             if observation_log:
-                open_vex_impact_statement = observation_log.comment
+                if observation_log.vex_justification:
+                    open_vex_justification = observation_log.vex_justification
+                else:
+                    open_vex_impact_statement = observation_log.comment
             else:
                 open_vex_impact_statement = "No impact statement available"
         else:

@@ -27,6 +27,7 @@ from application.vex.types import (
     CSAFDistribution,
     CSAFDocument,
     CSAFEngine,
+    CSAFFlag,
     CSAFFullProductName,
     CSAFGenerator,
     CSAFId,
@@ -531,26 +532,42 @@ def _set_flag_or_threat(vulnerability: CSAFVulnerability, observation: Observati
             ).latest("created")
         except Observation_Log.DoesNotExist:
             observation_log = None
-        category = "impact"
-        details = (
-            observation_log.comment
-            if observation_log and observation_log.comment
-            else "No justification available"
-        )
-        found = False
-        for threat in vulnerability.threats:
-            if threat.category == category and threat.details == details:
-                if product_id not in threat.product_ids:
-                    threat.product_ids.append(product_id)
-                found = True
-                break
-        if not found:
-            threat = CSAFThreat(
-                category=category,
-                details=details,
-                product_ids=[product_id],
+
+        if observation_log and observation_log.vex_justification:
+            found = False
+            for flag in vulnerability.flags:
+                if flag.label == observation_log.vex_justification:
+                    if product_id not in flag.product_ids:
+                        flag.product_ids.append(product_id)
+                    found = True
+                    break
+            if not found:
+                csaf_flag = CSAFFlag(
+                    label=observation_log.vex_justification,
+                    product_ids=[product_id],
+                )
+                vulnerability.flags.append(csaf_flag)
+        else:
+            category = "impact"
+            details = (
+                observation_log.comment
+                if observation_log and observation_log.comment
+                else "No justification available"
             )
-            vulnerability.threats.append(threat)
+            found = False
+            for threat in vulnerability.threats:
+                if threat.category == category and threat.details == details:
+                    if product_id not in threat.product_ids:
+                        threat.product_ids.append(product_id)
+                    found = True
+                    break
+            if not found:
+                threat = CSAFThreat(
+                    category=category,
+                    details=details,
+                    product_ids=[product_id],
+                )
+                vulnerability.threats.append(threat)
 
 
 def _map_status(secobserve_status: str) -> Optional[str]:
