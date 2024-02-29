@@ -15,8 +15,14 @@ import {
 } from "react-admin";
 
 import { validate_255, validate_513, validate_2048, validate_required_255 } from "../../commons/custom_validators";
+import { justificationIsEnabledForStatus } from "../../commons/functions";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
-import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../../core/types";
+import {
+    OBSERVATION_SEVERITY_CHOICES,
+    OBSERVATION_STATUS_CHOICES,
+    OBSERVATION_STATUS_OPEN,
+    OBSERVATION_VEX_JUSTIFICATION_CHOICES,
+} from "../../core/types";
 import { validateRuleForm } from "../functions";
 
 export type ProductRuleCreateProps = {
@@ -28,6 +34,9 @@ const ProductRuleCreate = ({ id }: ProductRuleCreateProps) => {
     const refresh = useRefresh();
     const notify = useNotify();
     const [create] = useCreate();
+    const [status, setStatus] = useState(OBSERVATION_STATUS_OPEN);
+    const justificationEnabled = justificationIsEnabledForStatus(status);
+
     const handleOpen = () => setOpen(true);
     const handleCancel = () => setOpen(false);
     const handleClose = (event: object, reason: string) => {
@@ -98,6 +107,9 @@ const ProductRuleCreate = ({ id }: ProductRuleCreateProps) => {
         if (data.new_status == null) {
             data.new_status = "";
         }
+        if (!justificationEnabled || !data.new_vex_justification) {
+            data.new_vex_justification = "";
+        }
 
         create(
             "product_rules",
@@ -138,7 +150,17 @@ const ProductRuleCreate = ({ id }: ProductRuleCreateProps) => {
                             <TextInputWide autoFocus source="name" validate={validate_required_255} />
                             <TextInputWide source="description" multiline minRows={3} validate={validate_2048} />
                             <AutocompleteInputMedium source="new_severity" choices={OBSERVATION_SEVERITY_CHOICES} />
-                            <AutocompleteInputMedium source="new_status" choices={OBSERVATION_STATUS_CHOICES} />
+                            <AutocompleteInputMedium
+                                source="new_status"
+                                choices={OBSERVATION_STATUS_CHOICES}
+                                onChange={(e) => setStatus(e)}
+                            />
+                            {justificationEnabled && (
+                                <AutocompleteInputMedium
+                                    source="new_vex_justification"
+                                    choices={OBSERVATION_VEX_JUSTIFICATION_CHOICES}
+                                />
+                            )}
                             <BooleanInput source="enabled" defaultValue={true} />
 
                             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />

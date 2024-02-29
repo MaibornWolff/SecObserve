@@ -23,7 +23,12 @@ import LabeledTextField from "../../commons/custom_fields/LabeledTextField";
 import MarkdownField from "../../commons/custom_fields/MarkdownField";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
-import { get_component_purl_url, get_cwe_url, get_vulnerability_url } from "../../commons/functions";
+import {
+    feature_vex_enabled,
+    get_component_purl_url,
+    get_cwe_url,
+    get_vulnerability_url,
+} from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
 import { OBSERVATION_STATUS_OPEN } from "../types";
 import ObservationAssessment from "./ObservationAssessment";
@@ -421,6 +426,9 @@ const ObservationShowComponent = () => {
                                 </ReferenceField>
                                 <TextField source="severity" emptyText="---" />
                                 <TextField source="status" emptyText="---" />
+                                {feature_vex_enabled() && (
+                                    <TextField label="VEX justification" source="vex_justification" emptyText="---" />
+                                )}
                                 <TextField source="comment" />
                                 <DateField source="created" showTime />
                             </Datagrid>

@@ -6,6 +6,9 @@ import {
     OBSERVATION_SEVERITY_MEDIUM,
     OBSERVATION_SEVERITY_NONE,
     OBSERVATION_SEVERITY_UNKOWN,
+    OBSERVATION_STATUS_FALSE_POSITIVE,
+    OBSERVATION_STATUS_NOT_AFFECTED,
+    OBSERVATION_STATUS_NOT_SECURITY,
 } from "../core/types";
 import { getSettingTheme } from "./settings/functions";
 
@@ -121,4 +124,13 @@ export const feature_vex_enabled = () => {
     const features = settings.features || [];
     const feature_vex_position = features.indexOf("feature_vex");
     return feature_vex_position !== -1;
+};
+
+export const justificationIsEnabledForStatus = (status: string) => {
+    const vex_enabled = feature_vex_enabled();
+    const justification_recommended_for_status =
+        [OBSERVATION_STATUS_NOT_AFFECTED, OBSERVATION_STATUS_NOT_SECURITY, OBSERVATION_STATUS_FALSE_POSITIVE].indexOf(
+            status
+        ) >= 0;
+    return vex_enabled && justification_recommended_for_status;
 };

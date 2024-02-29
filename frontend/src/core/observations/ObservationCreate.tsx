@@ -22,8 +22,14 @@ import {
     validate_required,
     validate_required_255,
 } from "../../commons/custom_validators";
+import { justificationIsEnabledForStatus } from "../../commons/functions";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
-import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES, OBSERVATION_STATUS_OPEN } from "../../core/types";
+import {
+    OBSERVATION_SEVERITY_CHOICES,
+    OBSERVATION_STATUS_CHOICES,
+    OBSERVATION_STATUS_OPEN,
+    OBSERVATION_VEX_JUSTIFICATION_CHOICES,
+} from "../../core/types";
 
 export type ObservationCreateProps = {
     id: any;
@@ -31,6 +37,8 @@ export type ObservationCreateProps = {
 
 const ObservationCreate = ({ id }: ObservationCreateProps) => {
     const [open, setOpen] = useState(false);
+    const [status, setStatus] = useState(OBSERVATION_STATUS_OPEN);
+    const justificationEnabled = justificationIsEnabledForStatus(status);
     const refresh = useRefresh();
     const notify = useNotify();
     const [create] = useCreate();
@@ -67,6 +75,9 @@ const ObservationCreate = ({ id }: ObservationCreateProps) => {
 
     const create_observation = (data: any) => {
         data.product = id;
+        if (!justificationEnabled) {
+            data.parser_vex_justification = "";
+        }
 
         create(
             "observations",
@@ -114,8 +125,16 @@ const ObservationCreate = ({ id }: ObservationCreateProps) => {
                                         label="Status"
                                         choices={OBSERVATION_STATUS_CHOICES}
                                         defaultValue={OBSERVATION_STATUS_OPEN}
+                                        onChange={(e) => setStatus(e)}
                                         validate={validate_required}
                                     />
+                                    {justificationEnabled && (
+                                        <AutocompleteInputMedium
+                                            source="parser_vex_justification"
+                                            label="VEX Justification"
+                                            choices={OBSERVATION_VEX_JUSTIFICATION_CHOICES}
+                                        />
+                                    )}
                                 </Stack>
                                 <TextInputWide
                                     source="description"

@@ -3,7 +3,11 @@ from application.core.models import Observation, Observation_Log
 
 
 def create_observation_log(
-    observation: Observation, severity: str, status: str, comment: str
+    observation: Observation,
+    severity: str,
+    status: str,
+    comment: str,
+    vex_justification: str,
 ) -> Observation_Log:
     observation_log = Observation_Log(
         observation=observation,
@@ -11,6 +15,7 @@ def create_observation_log(
         severity=severity,
         status=status,
         comment=comment,
+        vex_justification=vex_justification,
     )
     observation_log.save()
     observation.last_observation_log = observation_log.created

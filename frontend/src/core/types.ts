@@ -139,6 +139,10 @@ export interface Observation extends RaRecord {
     issue_tracker_issue_id: string;
     issue_tracker_issue_url: string;
     has_potential_duplicates: boolean;
+    current_vex_justification: string;
+    parser_vex_justification: string;
+    assessment_vex_justification: string;
+    rule_vex_justification: string;
 }
 
 export const OBSERVATION_SEVERITY_CRITICAL = "Critical";
@@ -195,4 +199,34 @@ export const AGE_CHOICES = [
     { id: "Past 30 days", name: "Past 30 days" },
     { id: "Past 90 days", name: "Past 90 days" },
     { id: "Past 365 days", name: "Past 365 days" },
+];
+
+export const OBSERVATION_VEX_JUSTIFICATION_COMPONENT_NOT_PRESENT = "component_not_present";
+export const OBSERVATION_VEX_JUSTIFICATION_VULNERABLE_CODE_NOT_PRESENT = "vulnerable_code_not_present";
+export const OBSERVATION_VEX_JUSTIFICATION_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY =
+    "vulnerable_code_cannot_be_controlled_by_adversary";
+export const OBSERVATION_VEX_JUSTIFICATION_VULNERABLE_CODE_NOT_IN_EXECUTE_PATH = "vulnerable_code_not_in_execute_path";
+export const OBSERVATION_VEX_JUSTIFICATION_INLINE_MITIGATIONS_ALREADY_EXIST = "inline_mitigations_already_exist";
+
+export const OBSERVATION_VEX_JUSTIFICATION_CHOICES = [
+    {
+        id: OBSERVATION_VEX_JUSTIFICATION_COMPONENT_NOT_PRESENT,
+        name: "Component not present",
+    },
+    {
+        id: OBSERVATION_VEX_JUSTIFICATION_VULNERABLE_CODE_NOT_PRESENT,
+        name: "Vulnerable code not present",
+    },
+    {
+        id: OBSERVATION_VEX_JUSTIFICATION_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,
+        name: "Vulnerable code cannot be controlled by adversary",
+    },
+    {
+        id: OBSERVATION_VEX_JUSTIFICATION_VULNERABLE_CODE_NOT_IN_EXECUTE_PATH,
+        name: "Vulnerable code not in execute path",
+    },
+    {
+        id: OBSERVATION_VEX_JUSTIFICATION_INLINE_MITIGATIONS_ALREADY_EXIST,
+        name: "Inline mitigations already exist",
+    },
 ];
