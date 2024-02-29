@@ -65,6 +65,10 @@ def get_observations_for_product(
 
 
 def get_product_id(product: Product) -> str:
+    if product.purl:
+        return product.purl
+    if product.cpe23:
+        return product.cpe23
     return product.name
 
 

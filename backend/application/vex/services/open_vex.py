@@ -26,6 +26,7 @@ from application.vex.types import (
     OpenVEX_Status,
     OpenVEXDocument,
     OpenVEXProduct,
+    OpenVEXProductIdentifiers,
     OpenVEXStatement,
     OpenVEXSubcomponent,
     OpenVEXVulnerability,
@@ -198,19 +199,13 @@ def _get_statements_for_vulnerabilities(
                 if existing_product:
                     _add_subcomponent(observation, existing_product)
                 else:
-                    open_vex_product = OpenVEXProduct(
-                        id=get_product_id(observation.product), subcomponents=[]
-                    )
-                    _add_subcomponent(observation, open_vex_product)
+                    open_vex_product = _create_product(observation)
                     existing_statement.products.append(open_vex_product)
             else:
                 if observation.description:
                     open_vex_vulnerability.description = observation.description
                 prepared_statement.vulnerability = open_vex_vulnerability
-                open_vex_product = OpenVEXProduct(
-                    id=get_product_id(observation.product), subcomponents=[]
-                )
-                _add_subcomponent(observation, open_vex_product)
+                open_vex_product = _create_product(observation)
                 prepared_statement.products.append(open_vex_product)
                 statements[hashed_string] = prepared_statement
 
@@ -266,10 +261,7 @@ def _get_statements_for_product(
                 )
         else:
             prepared_statement.vulnerability = open_vex_vulnerability
-            open_vex_product = OpenVEXProduct(
-                id=get_product_id(product), subcomponents=[]
-            )
-            _add_subcomponent(observation, open_vex_product)
+            open_vex_product = _create_product(observation)
             prepared_statement.products.append(open_vex_product)
             statements[hashed_string] = prepared_statement
 
@@ -363,3 +355,21 @@ def _add_subcomponent(observation: Observation, existing_product: OpenVEXProduct
             existing_product.subcomponents.append(
                 OpenVEXSubcomponent(id=get_component_id(observation))
             )
+
+
+def _create_product(observation: Observation) -> OpenVEXProduct:
+    open_vex_product_identifiers = None
+    if observation.product.purl or observation.product.cpe23:
+        purl = observation.product.purl if observation.product.purl else None
+        cpe23 = observation.product.cpe23 if observation.product.cpe23 else None
+        open_vex_product_identifiers = OpenVEXProductIdentifiers(cpe23=cpe23, purl=purl)
+
+    open_vex_product = OpenVEXProduct(
+        id=get_product_id(observation.product),
+        subcomponents=[],
+        identifiers=open_vex_product_identifiers,
+    )
+
+    _add_subcomponent(observation, open_vex_product)
+
+    return open_vex_product

@@ -54,10 +54,16 @@ class CSAF_Status:
 
 
 @dataclass(frozen=True)
+class CSAFProductIdentificationHelper:
+    cpe: Optional[str]
+    purl: Optional[str]
+
+
+@dataclass(frozen=True)
 class CSAFFullProductName:
     name: str
     product_id: str
-    # product_identification_helper is still missing
+    product_identification_helper: Optional[CSAFProductIdentificationHelper]
 
 
 @dataclass()
@@ -205,8 +211,15 @@ class OpenVEXSubcomponent:
 
 
 @dataclass(frozen=True)
+class OpenVEXProductIdentifiers:
+    cpe23: Optional[str]
+    purl: Optional[str]
+
+
+@dataclass(frozen=True)
 class OpenVEXProduct:
     id: str
+    identifiers: Optional[OpenVEXProductIdentifiers]
     subcomponents: list[OpenVEXSubcomponent]
 
 

@@ -32,6 +32,7 @@ from application.vex.types import (
     CSAFGenerator,
     CSAFId,
     CSAFNote,
+    CSAFProductIdentificationHelper,
     CSAFProductStatus,
     CSAFProductTree,
     CSAFPublisher,
@@ -308,9 +309,18 @@ def _get_data_for_product(product: Product, vulnerability_names: list[str]) -> t
     vulnerabilities: dict[str, CSAFVulnerability] = {}
     product_tree = CSAFProductTree(full_product_names=[])
 
+    product_identification_helper = None
+    if product.purl or product.cpe23:
+        purl = product.purl if product.purl else None
+        cpe = product.cpe23 if product.cpe23 else None
+        product_identification_helper = CSAFProductIdentificationHelper(
+            purl=purl, cpe=cpe
+        )
+
     full_product_name = CSAFFullProductName(
         name=product.name,
         product_id=_get_product_id(product),
+        product_identification_helper=product_identification_helper,
     )
     product_tree.full_product_names.append(full_product_name)
 

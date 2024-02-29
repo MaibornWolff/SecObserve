@@ -281,7 +281,8 @@ def _object_to_json(object_to_encode: Any, vex_type: str) -> str:
     json_dict = json.loads(json_string)
     json_dict = _remove_empty_elements(json_dict)
     if vex_type == VEX_TYPE_OPENVEX:
-        json_dict = _change_keys(json_dict)
+        json_dict = _change_keys_context(json_dict)
+        json_dict = _change_keys_id(json_dict)
 
     return json.dumps(json_dict, indent=4, sort_keys=True, ensure_ascii=False)
 
@@ -306,14 +307,28 @@ def _remove_empty_elements(d: dict) -> dict:
 
 # Change all keys with the value 'id' to '@id' and
 # all keys with the value 'context' to '@context' in a dictionary recursively
-def _change_keys(d: dict) -> dict:
+def _change_keys_context(d: dict) -> dict:
     if not isinstance(d, (dict, list)):
         return d
     if isinstance(d, list):
-        return [_change_keys(v) for v in d]
+        return [_change_keys_context(v) for v in d]
 
     return {
-        k.replace("id", "@id").replace("context", "@context"): _change_keys(v)
+        k.replace("context", "@context"): _change_keys_context(v)
+        for k, v in d.items()
+    }
+
+
+# Change all keys with the value 'id' to '@id' and
+# all keys with the value 'context' to '@context' in a dictionary recursively
+def _change_keys_id(d: dict) -> dict:
+    if not isinstance(d, (dict, list)):
+        return d
+    if isinstance(d, list):
+        return [_change_keys_id(v) for v in d]
+
+    return {
+        re.sub('^id$', '@id', k): _change_keys_id(v)
         for k, v in d.items()
     }
 

@@ -35,6 +35,8 @@ class Product(Model):
     product_group = ForeignKey(
         "self", on_delete=PROTECT, related_name="products", null=True, blank=True
     )
+    purl = CharField(max_length=255, blank=True)
+    cpe23 = CharField(max_length=255, blank=True)
 
     repository_prefix = CharField(max_length=255, blank=True)
     repository_default_branch = ForeignKey(

@@ -12,6 +12,7 @@ import products from "../../core/products";
 import general_rules from "../../rules/general_rules";
 import csaf from "../../vex/csaf";
 import openvex from "../../vex/openvex";
+import { feature_vex_enabled } from "../functions";
 import notifications from "../notifications";
 import SubMenu from "./SubMenu";
 
@@ -67,28 +68,30 @@ const Menu = ({ dense = false }: MenuProps) => {
                     leftIcon={<notifications.icon />}
                     dense={dense}
                 />
-                <SubMenu
-                    handleToggle={() => handleToggle("menuVEX")}
-                    isOpen={state.menuVEX}
-                    name="VEX"
-                    icon={<SecurityIcon />}
-                    dense={dense}
-                >
-                    <MenuItemLink
-                        to="/vex/csaf"
-                        state={{ _scrollToTop: true }}
-                        primaryText="CSAF"
-                        leftIcon={<csaf.icon />}
+                {feature_vex_enabled() && (
+                    <SubMenu
+                        handleToggle={() => handleToggle("menuVEX")}
+                        isOpen={state.menuVEX}
+                        name="VEX"
+                        icon={<SecurityIcon />}
                         dense={dense}
-                    />
-                    <MenuItemLink
-                        to="/vex/openvex"
-                        state={{ _scrollToTop: true }}
-                        primaryText="OpenVEX"
-                        leftIcon={<openvex.icon />}
-                        dense={dense}
-                    />
-                </SubMenu>
+                    >
+                        <MenuItemLink
+                            to="/vex/csaf"
+                            state={{ _scrollToTop: true }}
+                            primaryText="CSAF"
+                            leftIcon={<csaf.icon />}
+                            dense={dense}
+                        />
+                        <MenuItemLink
+                            to="/vex/openvex"
+                            state={{ _scrollToTop: true }}
+                            primaryText="OpenVEX"
+                            leftIcon={<openvex.icon />}
+                            dense={dense}
+                        />
+                    </SubMenu>
+                )}
                 <SubMenu
                     handleToggle={() => handleToggle("menuSettings")}
                     isOpen={state.menuSettings}

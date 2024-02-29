@@ -1,4 +1,5 @@
 from decimal import Decimal
+import re
 from typing import Optional
 from urllib.parse import urlparse
 
@@ -277,6 +278,25 @@ class ProductSerializer(ProductCoreSerializer):
 
     def validate_notification_slack_webhook(self, repository_prefix: str) -> str:
         return _validate_url(repository_prefix)
+
+    def validate_purl(self, purl: str) -> str:
+        if purl:
+            try:
+                PackageURL.from_string(purl)
+            except ValueError as e:
+                raise ValidationError(str(e))
+
+        return purl
+
+    def validate_cpe23(self, cpe23: str) -> str:
+        if cpe23:
+            # Regex taken from https://csrc.nist.gov/schema/cpe/2.3/cpe-naming_2.3.xsd
+            if not re.match(
+                r"""cpe:2\.3:[aho\*\-](:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&'\(\)\+,/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){5}(:(([a-zA-Z]{2,3}(-([a-zA-Z]{2}|[0-9]{3}))?)|[\*\-]))(:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&'\(\)\+,/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){4}""",  # noqa: E501
+                cpe23,
+            ):
+                raise ValidationError("Not a valid CPE 2.3")
+        return cpe23
 
 
 class NestedProductSerializer(ModelSerializer):
