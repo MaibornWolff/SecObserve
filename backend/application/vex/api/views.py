@@ -314,8 +314,7 @@ def _change_keys_context(d: dict) -> dict:
         return [_change_keys_context(v) for v in d]
 
     return {
-        k.replace("context", "@context"): _change_keys_context(v)
-        for k, v in d.items()
+        k.replace("context", "@context"): _change_keys_context(v) for k, v in d.items()
     }
 
 
@@ -327,10 +326,7 @@ def _change_keys_id(d: dict) -> dict:
     if isinstance(d, list):
         return [_change_keys_id(v) for v in d]
 
-    return {
-        re.sub('^id$', '@id', k): _change_keys_id(v)
-        for k, v in d.items()
-    }
+    return {re.sub("^id$", "@id", k): _change_keys_id(v) for k, v in d.items()}
 
 
 # remove duplicates from a list and keep the order

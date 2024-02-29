@@ -290,10 +290,7 @@ def _get_data_for_vulnerabilities(vulnerability_names: list[str]) -> tuple:
                 vulnerability, observation, current_vulnerability_description
             )
 
-            full_product_name = CSAFFullProductName(
-                name=observation.product.name,
-                product_id=_get_product_id(observation.product),
-            )
+            full_product_name = _create_product(observation.product)
             if full_product_name not in product_tree.full_product_names:
                 product_tree.full_product_names.append(full_product_name)
 
@@ -309,19 +306,7 @@ def _get_data_for_product(product: Product, vulnerability_names: list[str]) -> t
     vulnerabilities: dict[str, CSAFVulnerability] = {}
     product_tree = CSAFProductTree(full_product_names=[])
 
-    product_identification_helper = None
-    if product.purl or product.cpe23:
-        purl = product.purl if product.purl else None
-        cpe = product.cpe23 if product.cpe23 else None
-        product_identification_helper = CSAFProductIdentificationHelper(
-            purl=purl, cpe=cpe
-        )
-
-    full_product_name = CSAFFullProductName(
-        name=product.name,
-        product_id=_get_product_id(product),
-        product_identification_helper=product_identification_helper,
-    )
+    full_product_name = _create_product(product)
     product_tree.full_product_names.append(full_product_name)
 
     observations = get_observations_for_product(product, vulnerability_names)
@@ -337,6 +322,24 @@ def _get_data_for_product(product: Product, vulnerability_names: list[str]) -> t
         _set_flag_or_threat(vulnerability, observation)
 
     return list(vulnerabilities.values()), product_tree
+
+
+def _create_product(product: Product) -> CSAFFullProductName:
+    product_identification_helper = None
+    if product.purl or product.cpe23:
+        purl = product.purl if product.purl else None
+        cpe = product.cpe23 if product.cpe23 else None
+        product_identification_helper = CSAFProductIdentificationHelper(
+            purl=purl, cpe=cpe
+        )
+
+    full_product_name = CSAFFullProductName(
+        name=product.name,
+        product_id=_get_product_id(product),
+        product_identification_helper=product_identification_helper,
+    )
+
+    return full_product_name
 
 
 def _create_vulnerability(vulnerability_name) -> CSAFVulnerability:
