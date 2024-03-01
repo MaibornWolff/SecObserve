@@ -1,17 +1,17 @@
 import { Divider, Stack, Typography } from "@mui/material";
 import {
+    ChipField,
     DateField,
     DeleteWithConfirmButton,
     PrevNextButtons,
     ReferenceField,
+    ReferenceManyField,
     Show,
     SimpleShowLayout,
+    SingleFieldList,
     TextField,
     TopToolbar,
     WithRecord,
-    ReferenceManyField,
-    SingleFieldList,
-    ChipField,
 } from "react-admin";
 
 import CSAFUpdate from "./CSAFUpdate";
@@ -43,16 +43,16 @@ const CSAFShow = () => {
                             <ReferenceField source="product" reference="products" link="show" />
                         )}
                         {csaf && csaf.vulnerability_names && (
-                    <ReferenceManyField
-                    reference="vex/csaf_vulnerabilities"
-                    target="csaf"
-                    label="Vulnerabilities"
-                >
-                    <SingleFieldList linkType={false}>
-                        <ChipField source="name" />
-                    </SingleFieldList>
-                </ReferenceManyField>
-                    )}
+                            <ReferenceManyField
+                                reference="vex/csaf_vulnerabilities"
+                                target="csaf"
+                                label="Vulnerabilities"
+                            >
+                                <SingleFieldList linkType={false}>
+                                    <ChipField source="name" />
+                                </SingleFieldList>
+                            </ReferenceManyField>
+                        )}
                         <TextField source="user_full_name" label="User" />
                         <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
                         <Typography variant="h6">Document</Typography>{" "}

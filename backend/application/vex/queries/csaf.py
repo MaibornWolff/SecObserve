@@ -35,6 +35,7 @@ def get_csaf_by_document_base_id(document_base_id: str) -> Optional[CSAF]:
     except CSAF.DoesNotExist:
         return None
 
+
 def get_csaf_vulnerabilities() -> QuerySet[CSAF_Vulnerability]:
     user = get_current_user()
 

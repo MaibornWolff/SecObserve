@@ -1,16 +1,16 @@
 import { Fragment } from "react";
 import {
+    ChipField,
     Datagrid,
     FunctionField,
     List,
     NumberField,
     ReferenceInput,
+    ReferenceManyField,
+    SingleFieldList,
     TextField,
     TextInput,
     TopToolbar,
-    ReferenceManyField,
-    SingleFieldList,
-    ChipField,
 } from "react-admin";
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
@@ -51,11 +51,7 @@ const CSAFList = () => {
             >
                 <Datagrid size={getSettingListSize()} rowClick="show" bulkActionButtons={false}>
                     <TextField source="product_name" label="Product" />
-                    <ReferenceManyField
-                        reference="vex/csaf_vulnerabilities"
-                        target="csaf"
-                        label="Vulnerabilities"
-                    >
+                    <ReferenceManyField reference="vex/csaf_vulnerabilities" target="csaf" label="Vulnerabilities">
                         <SingleFieldList linkType={false}>
                             <ChipField source="name" />
                         </SingleFieldList>

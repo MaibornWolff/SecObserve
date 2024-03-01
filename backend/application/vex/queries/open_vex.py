@@ -35,6 +35,7 @@ def get_open_vex_by_document_base_id(document_base_id: str) -> Optional[OpenVEX]
     except OpenVEX.DoesNotExist:
         return None
 
+
 def get_open_vex_vulnerabilities() -> QuerySet[OpenVEX_Vulnerability]:
     user = get_current_user()
 
@@ -44,4 +45,6 @@ def get_open_vex_vulnerabilities() -> QuerySet[OpenVEX_Vulnerability]:
     if user.is_superuser:
         return OpenVEX_Vulnerability.objects.all()
 
-    return OpenVEX_Vulnerability.objects.filter(openvex__in=get_open_vex_s()).order_by("name")
+    return OpenVEX_Vulnerability.objects.filter(openvex__in=get_open_vex_s()).order_by(
+        "name"
+    )

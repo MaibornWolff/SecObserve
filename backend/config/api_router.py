@@ -19,7 +19,12 @@ from application.import_observations.api.views import (
     VulnerabilityCheckViewSet,
 )
 from application.rules.api.views import GeneralRuleViewSet, ProductRuleViewSet
-from application.vex.api.views import CSAFViewSet, OpenVEXViewSet, OpenVEXVulnerabilityViewSet, CSAFVulnerabilityViewSet
+from application.vex.api.views import (
+    CSAFViewSet,
+    CSAFVulnerabilityViewSet,
+    OpenVEXViewSet,
+    OpenVEXVulnerabilityViewSet,
+)
 
 router = SimpleRouter()
 

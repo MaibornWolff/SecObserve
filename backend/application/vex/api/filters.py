@@ -1,6 +1,11 @@
 from django_filters import CharFilter, FilterSet, OrderingFilter
 
-from application.vex.models import CSAF, OpenVEX, OpenVEX_Vulnerability, CSAF_Vulnerability
+from application.vex.models import (
+    CSAF,
+    CSAF_Vulnerability,
+    OpenVEX,
+    OpenVEX_Vulnerability,
+)
 
 
 class CSAFFilter(FilterSet):
@@ -38,6 +43,7 @@ class CSAFFilter(FilterSet):
             "title",
             "publisher_name",
         ]
+
 
 class CSAFVulnerabilityFilter(FilterSet):
     class Meta:
@@ -78,6 +84,7 @@ class OpenVEXFilter(FilterSet):
             "document_id_prefix",
             "author",
         ]
+
 
 class OpenVEXVulnerabilityFilter(FilterSet):
     class Meta:
