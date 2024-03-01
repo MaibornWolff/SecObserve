@@ -9,6 +9,9 @@ import {
     TextField,
     TopToolbar,
     WithRecord,
+    ReferenceManyField,
+    SingleFieldList,
+    ChipField,
 } from "react-admin";
 
 import CSAFUpdate from "./CSAFUpdate";
@@ -40,9 +43,17 @@ const CSAFShow = () => {
                             <ReferenceField source="product" reference="products" link="show" />
                         )}
                         {csaf && csaf.vulnerability_names && (
-                            <TextField source="vulnerability_names" label="Vulnerabilities" />
-                        )}
-                        <TextField source="user_full_name" />
+                    <ReferenceManyField
+                    reference="vex/csaf_vulnerabilities"
+                    target="csaf"
+                    label="Vulnerabilities"
+                >
+                    <SingleFieldList linkType={false}>
+                        <ChipField source="name" />
+                    </SingleFieldList>
+                </ReferenceManyField>
+                    )}
+                        <TextField source="user_full_name" label="User" />
                         <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
                         <Typography variant="h6">Document</Typography>{" "}
                         <TextField source="document_id_prefix" label="ID prefix" />

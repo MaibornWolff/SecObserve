@@ -76,7 +76,7 @@ class CSAFRevisionSerializer(ModelSerializer):
 class CSAFVulnerabilitySerializer(ModelSerializer):
     class Meta:
         model = CSAF_Vulnerability
-        fields = ["name"]
+        fields = "__all__"
 
 
 class CSAFSerializer(ModelSerializer):
@@ -128,7 +128,7 @@ class OpenVEXDocumentUpdateSerializer(Serializer):
 class OpenVEXVulnerabilitySerializer(ModelSerializer):
     class Meta:
         model = OpenVEX_Vulnerability
-        fields = ["name"]
+        fields = "__all__"
 
 
 class OpenVEXSerializer(ModelSerializer):

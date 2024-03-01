@@ -1,10 +1,13 @@
 import { Fragment } from "react";
 import {
+    ChipField,
     Datagrid,
     FunctionField,
     List,
     NumberField,
     ReferenceInput,
+    ReferenceManyField,
+    SingleFieldList,
     TextField,
     TextInput,
     TopToolbar,
@@ -48,7 +51,15 @@ const OpenVEXList = () => {
             >
                 <Datagrid size={getSettingListSize()} rowClick="show" bulkActionButtons={false}>
                     <TextField source="product_name" label="Product" />
-                    <TextField source="vulnerability_names" label="Vulnerabilities" sortable={false} />
+                    <ReferenceManyField
+                        reference="vex/openvex_vulnerabilities"
+                        target="openvex"
+                        label="Vulnerabilities"
+                    >
+                        <SingleFieldList linkType={false}>
+                            <ChipField source="name" />
+                        </SingleFieldList>
+                    </ReferenceManyField>
                     <TextField source="document_id_prefix" label="ID prefix" />
                     <TextField source="document_base_id" label="Base ID" />
                     <NumberField source="version" label="Version" />

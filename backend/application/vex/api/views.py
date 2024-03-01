@@ -19,7 +19,7 @@ from rest_framework.status import (
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
-from application.vex.api.filters import CSAFFilter, OpenVEXFilter
+from application.vex.api.filters import CSAFFilter, OpenVEXFilter, OpenVEXVulnerabilityFilter, CSAFVulnerabilityFilter
 from application.vex.api.serializers import (
     CSAFDocumentCreateSerializer,
     CSAFDocumentUpdateSerializer,
@@ -27,10 +27,12 @@ from application.vex.api.serializers import (
     OpenVEXDocumentCreateSerializer,
     OpenVEXDocumentUpdateSerializer,
     OpenVEXSerializer,
+    OpenVEXVulnerabilitySerializer,
+    CSAFVulnerabilitySerializer,
 )
-from application.vex.models import CSAF, OpenVEX
-from application.vex.queries.csaf import get_csafs
-from application.vex.queries.open_vex import get_open_vex_s
+from application.vex.models import CSAF, OpenVEX, OpenVEX_Vulnerability, CSAF_Vulnerability
+from application.vex.queries.csaf import get_csafs, get_csaf_vulnerabilities
+from application.vex.queries.open_vex import get_open_vex_s, get_open_vex_vulnerabilities
 from application.vex.services.csaf import (
     CSAFCreateParameters,
     CSAFUpdateParameters,
@@ -161,6 +163,28 @@ class CSAFViewSet(
         return super().retrieve(request, *args, **kwargs)
 
 
+class CSAFVulnerabilityViewSet(
+    GenericViewSet, ListModelMixin, RetrieveModelMixin
+):
+    serializer_class = CSAFVulnerabilitySerializer
+    queryset = CSAF_Vulnerability.objects.none()
+    filterset_class = CSAFVulnerabilityFilter
+    filter_backends = [DjangoFilterBackend]
+
+    def get_queryset(self):
+        return get_csaf_vulnerabilities()
+
+    def list(self, request, *args, **kwargs):
+        if not config.FEATURE_VEX:
+            return Response(status=HTTP_501_NOT_IMPLEMENTED)
+        return super().list(request, *args, **kwargs)
+
+    def retrieve(self, request, *args, **kwargs):
+        if not config.FEATURE_VEX:
+            return Response(status=HTTP_501_NOT_IMPLEMENTED)
+        return super().retrieve(request, *args, **kwargs)
+
+
 class OpenVEXDocumentCreateView(APIView):
     @extend_schema(
         methods=["POST"],
@@ -262,6 +286,28 @@ class OpenVEXViewSet(
         if not config.FEATURE_VEX:
             return Response(status=HTTP_501_NOT_IMPLEMENTED)
         return super().destroy(request, *args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        if not config.FEATURE_VEX:
+            return Response(status=HTTP_501_NOT_IMPLEMENTED)
+        return super().list(request, *args, **kwargs)
+
+    def retrieve(self, request, *args, **kwargs):
+        if not config.FEATURE_VEX:
+            return Response(status=HTTP_501_NOT_IMPLEMENTED)
+        return super().retrieve(request, *args, **kwargs)
+
+
+class OpenVEXVulnerabilityViewSet(
+    GenericViewSet, ListModelMixin, RetrieveModelMixin
+):
+    serializer_class = OpenVEXVulnerabilitySerializer
+    queryset = OpenVEX_Vulnerability.objects.none()
+    filterset_class = OpenVEXVulnerabilityFilter
+    filter_backends = [DjangoFilterBackend]
+
+    def get_queryset(self):
+        return get_open_vex_vulnerabilities()
 
     def list(self, request, *args, **kwargs):
         if not config.FEATURE_VEX:

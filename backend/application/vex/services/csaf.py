@@ -607,4 +607,8 @@ def _map_status(secobserve_status: str) -> Optional[str]:
 
 
 def _get_product_id(product: Product) -> str:
+    if product.purl:
+        return product.purl
+    if product.cpe23:
+        return product.cpe23
     return product.name

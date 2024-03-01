@@ -526,7 +526,7 @@ CONSTANCE_CONFIG = {
     ),
     "FEATURE_VEX": (
         False,
-        "Only for development - no meaningful functionality yet.",
+        "[EXPERIMENTAL] Generate VEX documents in OpenVEX and CSAF format",
         bool,
     ),
 }

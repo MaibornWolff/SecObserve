@@ -8,6 +8,9 @@ import {
     TextField,
     TextInput,
     TopToolbar,
+    ReferenceManyField,
+    SingleFieldList,
+    ChipField,
 } from "react-admin";
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
@@ -48,7 +51,15 @@ const CSAFList = () => {
             >
                 <Datagrid size={getSettingListSize()} rowClick="show" bulkActionButtons={false}>
                     <TextField source="product_name" label="Product" />
-                    <TextField source="vulnerability_names" label="Vulnerabilities" sortable={false} />
+                    <ReferenceManyField
+                        reference="vex/csaf_vulnerabilities"
+                        target="csaf"
+                        label="Vulnerabilities"
+                    >
+                        <SingleFieldList linkType={false}>
+                            <ChipField source="name" />
+                        </SingleFieldList>
+                    </ReferenceManyField>
                     <TextField source="document_id_prefix" label="ID prefix" />
                     <TextField source="document_base_id" label="Base ID" />
                     <NumberField source="version" label="Version" />

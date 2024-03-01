@@ -3,7 +3,7 @@ from typing import Optional
 from django.db.models.query import QuerySet
 
 from application.commons.services.global_request import get_current_user
-from application.vex.models import CSAF
+from application.vex.models import CSAF, CSAF_Vulnerability
 
 
 def get_csafs() -> QuerySet[CSAF]:
@@ -34,3 +34,14 @@ def get_csaf_by_document_base_id(document_base_id: str) -> Optional[CSAF]:
         return CSAF.objects.get(document_base_id=document_base_id, user=user)
     except CSAF.DoesNotExist:
         return None
+
+def get_csaf_vulnerabilities() -> QuerySet[CSAF_Vulnerability]:
+    user = get_current_user()
+
+    if user is None:
+        return CSAF_Vulnerability.objects.none()
+
+    if user.is_superuser:
+        return CSAF_Vulnerability.objects.all()
+
+    return CSAF_Vulnerability.objects.filter(csaf__in=get_csafs()).order_by("name")

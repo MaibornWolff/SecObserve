@@ -61,7 +61,7 @@ const OpenVEXUpdate = () => {
                     link.click();
 
                     refresh();
-                    notify("CASF document created", {
+                    notify("CASF document updated", {
                         type: "success",
                     });
                 }
