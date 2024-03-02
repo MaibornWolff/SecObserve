@@ -23,15 +23,21 @@ jobs:
           ref: 'v${{ github.event.inputs.release }}'
       - 
         name: Install programs
+        env:
+          CYCLONE_DX_BOM_VERSION: 4.1.2
+          CYCLONE_DX_NPM_VERSION: 1.16.1
+          SBOM_UTILITY_VERSION: 0.15.0
+          PARLAY_VERSION: 0.3.0
+          TRIVY_VERSION: 0.49.1
         run: |
           sudo apt-get update
           sudo apt-get install -y python3-pip npm
-          python -m pip install --upgrade cyclonedx-bom==4.1.1
-          npm install -g @cyclonedx/cyclonedx-npm@1.16.1
+          python -m pip install --upgrade cyclonedx-bom=="$CYCLONE_DX_BOM_VERSION"
+          npm install -g @cyclonedx/cyclonedx-npm@"$CYCLONE_DX_NPM_VERSION"
           cd /usr/local/bin
-          wget --no-verbose https://github.com/CycloneDX/sbom-utility/releases/download/v0.15.0/sbom-utility-v0.15.0-linux-amd64.tar.gz -O - | tar -zxf -
-          wget --no-verbose https://github.com/snyk/parlay/releases/download/v0.2.2/parlay_Linux_x86_64.tar.gz -O - | tar -zxf -
-          wget --no-verbose https://github.com/aquasecurity/trivy/releases/download/v0.49.1/trivy_0.49.1_Linux-64bit.tar.gz -O - | tar -zxf -
+          wget --no-verbose https://github.com/CycloneDX/sbom-utility/releases/download/v"$SBOM_UTILITY_VERSION"/sbom-utility-v"$SBOM_UTILITY_VERSION"-linux-amd64.tar.gz -O - | tar -zxf -
+          wget --no-verbose https://github.com/snyk/parlay/releases/download/v"$PARLAY_VERSION"/parlay_Linux_x86_64.tar.gz -O - | tar -zxf -
+          wget --no-verbose https://github.com/aquasecurity/trivy/releases/download/v"$TRIVY_VERSION"/trivy_"$TRIVY_VERSION"_Linux-64bit.tar.gz -O - | tar -zxf -
       - 
         name: Generate SBOM for backend application
         env:
@@ -40,9 +46,7 @@ jobs:
         run: |
           sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_backend_application.json
           cyclonedx-py poetry --only main,prod --output-format json ../backend \
-            | sbom-utility patch --patch-file ./configuration/patch_1.4.json --quiet --input-file - \
             | parlay ecosystems enrich - \
-            | sbom-utility patch --patch-file ./configuration/patch_1.5.json --quiet --input-file - \
             | sbom-utility trim --keys=externalReferences,properties,vulnerabilities --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_backend_application.json --quiet --input-file - --output-file sbom_backend_application_"$VERSION".json
@@ -55,9 +59,7 @@ jobs:
         run: |
           sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_frontend_application.json
           cyclonedx-npm --omit dev --package-lock-only --output-format JSON ../frontend/package-lock.json \
-            | sbom-utility patch --patch-file ./configuration/patch_1.4.json --quiet --input-file - \
             | parlay ecosystems enrich - \
-            | sbom-utility patch --patch-file ./configuration/patch_1.5.json --quiet --input-file - \
             | sbom-utility trim --keys=externalReferences,properties,vulnerabilities --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_frontend_application.json --quiet --input-file - --output-file sbom_frontend_application_"$VERSION".json
