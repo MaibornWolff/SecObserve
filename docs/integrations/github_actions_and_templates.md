@@ -18,6 +18,7 @@ Most of the actions and templates use the same set of variables:
 | `RUN_DIRECTORY` | *optional* | The directory where to run the scanner, only to be used when the `TARGET` is a path. |
 | `FURTHER_PARAMETERS` | *optional* | Further parameters to be given to the scanner. |
 | `CONFIGURATION` | *mandatory, only for Semgrep* | Configuration to be used with Semgrep. |
+| `OUTPUT_PATH` | *optional, only for KICS* | Path to the output file, default is `.`. |
 | `RULES` | *optional, only for DrHeader* | Custom rules to be used with DrHeader. |
 | `SCRIPT` | *optional, only for ZAP* | Script to be executed, default is `zap-baseline.py`. |
 | **Importing** |
