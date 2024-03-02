@@ -98,7 +98,7 @@ const ProductGroupShow = () => {
                                                 <Labeled label="Keep inactive">
                                                     <NumberField source="repository_branch_housekeeping_keep_inactive_days" />
                                                 </Labeled>
-                                                <Labeled label="Exempt branches">
+                                                <Labeled label="Exempt branches / versions">
                                                     <TextField source="repository_branch_housekeeping_exempt_branches" />
                                                 </Labeled>
                                             </Stack>

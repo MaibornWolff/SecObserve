@@ -151,7 +151,12 @@ const ProductShow = () => {
                             >
                                 <VulnerabilityCheckEmbeddedList product={product} long_list={true} />
                             </Tab>
-                            <Tab label="Branches" path="branches" icon={<AccountTreeIcon />} onClick={hideSettingsTabs}>
+                            <Tab
+                                label="Branches / Versions"
+                                path="branches"
+                                icon={<AccountTreeIcon />}
+                                onClick={hideSettingsTabs}
+                            >
                                 {product && product.permissions.includes(PERMISSION_BRANCH_CREATE) && (
                                     <BranchCreate id={product.id} />
                                 )}

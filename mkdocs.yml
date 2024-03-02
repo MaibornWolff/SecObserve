@@ -67,7 +67,7 @@ nav:
     - Supported scanners: usage/supported_scanners.md
     - Assess observations: usage/assess_observations.md
     - Product groups: usage/product_groups.md
-    - Branches: usage/branches.md
+    - Branches and Versions: usage/branches.md
     - Rule engine: usage/rule_engine.md
     - Security gates: usage/security_gates.md
     - Duplicates: usage/duplicates.md

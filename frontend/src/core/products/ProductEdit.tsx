@@ -162,7 +162,7 @@ const ProductEdit = () => {
                 <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
                 <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                    Source code repository
+                    Source code repository and housekeeping
                 </Typography>
                 <TextInputWide source="repository_prefix" />
                 <WithRecord
@@ -170,11 +170,10 @@ const ProductEdit = () => {
                         <ReferenceInput
                             source="repository_default_branch"
                             reference="branches"
-                            label="Default branch"
                             sort={{ field: "name", order: "ASC" }}
                             filter={{ product: product.id }}
                         >
-                            <AutocompleteInputWide optionText="name" />
+                            <AutocompleteInputWide optionText="name" label="Default branch / version" />
                         </ReferenceInput>
                     )}
                 />
@@ -185,7 +184,7 @@ const ProductEdit = () => {
                     nullLabel="Standard"
                     falseLabel="Disabled"
                     trueLabel="Product specific"
-                    helperText="Delete inactive branches"
+                    helperText="Delete inactive branches / versions"
                     sx={{ marginBottom: 2 }}
                 />
                 <FormDataConsumer>
@@ -195,7 +194,7 @@ const ProductEdit = () => {
                                 <NumberInput
                                     source="repository_branch_housekeeping_keep_inactive_days"
                                     label="Keep inactive"
-                                    helperText="Days before incative branches and their observations are deleted"
+                                    helperText="Days before inactive branches / versions and their observations are deleted"
                                     defaultValue={30}
                                     min={1}
                                     max={999999}
@@ -204,8 +203,8 @@ const ProductEdit = () => {
                                 />
                                 <TextInputWide
                                     source="repository_branch_housekeeping_exempt_branches"
-                                    label="Exempt branches"
-                                    helperText="Regular expression which branches to exempt from deletion"
+                                    label="Exempt branches / versions"
+                                    helperText="Regular expression which branches / version to exempt from deletion"
                                     validate={validate_255}
                                 />
                             </Stack>

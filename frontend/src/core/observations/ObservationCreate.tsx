@@ -169,7 +169,7 @@ const ObservationCreate = ({ id }: ObservationCreateProps) => {
                                     sort={{ field: "name", order: "ASC" }}
                                     filter={{ product: id }}
                                 >
-                                    <AutocompleteInputWide optionText="name" />
+                                    <AutocompleteInputWide optionText="name" label="Branch / Version" />
                                 </ReferenceInput>
                             </Stack>
 

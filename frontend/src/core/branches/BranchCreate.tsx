@@ -63,7 +63,7 @@ const BranchCreate = ({ id }: BranchCreateProps) => {
             {
                 onSuccess: () => {
                     refresh();
-                    notify("Branch added", { type: "success" });
+                    notify("Branch / version added", { type: "success" });
                 },
                 onError: (error: any) => {
                     notify(error.message, { type: "warning" });
@@ -81,10 +81,10 @@ const BranchCreate = ({ id }: BranchCreateProps) => {
                 sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem" }}
                 startIcon={<AddIcon />}
             >
-                Add branch
+                Add branch / version
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Add branch</DialogTitle>
+                <DialogTitle>Add branch / version</DialogTitle>
                 <DialogContent>
                     <CreateBase resource="branches">
                         <SimpleForm onSubmit={create_branch} toolbar={<CustomToolbar />}>

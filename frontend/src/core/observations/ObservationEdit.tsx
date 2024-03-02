@@ -109,7 +109,7 @@ const ObservationEditForm = () => {
                             sort={{ field: "name", order: "ASC" }}
                             filter={{ product: branch.product_data.id }}
                         >
-                            <AutocompleteInputWide optionText="name" />
+                            <AutocompleteInputWide optionText="name" label="Branch / Version" />
                         </ReferenceInput>
                     )}
                 />
