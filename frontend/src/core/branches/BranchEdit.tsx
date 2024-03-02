@@ -33,7 +33,7 @@ const BranchEdit = () => {
             {
                 onSuccess: () => {
                     refresh();
-                    notify("Branch updated", {
+                    notify("Branch / version updated", {
                         type: "success",
                     });
                 },
@@ -81,7 +81,7 @@ const BranchEdit = () => {
                 Edit
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Edit branch</DialogTitle>
+                <DialogTitle>Edit branch / version</DialogTitle>
                 <DialogContent>
                     <SimpleForm onSubmit={branch_update} toolbar={<CustomToolbar />}>
                         <TextInputWide source="name" validate={validate_required_255} />

@@ -14,20 +14,20 @@ Alternatively observations can be imported via the user interface. When showing 
 
 ![Upload of files](../assets/images/screenshot_import_2.png){ width="50%" style="display: block; margin: 0 auto" }
 
-A file and a respective parser for the file format need to be selected. Optional are attributes for the branch, the origin as service, docker image and endpoint URL.
+A file and a respective parser for the file format need to be selected. Optional are attributes for the branch / version, the origin as service, docker image and endpoint URL.
 
 #### API import
 
 ![API import](../assets/images/screenshot_import_3.png){ width="50%" style="display: block; margin: 0 auto" }
 
-Before importing observations from an API, an API configuration needs to be created for the product. This API configuration specifies how to access the API (URL, API key, ...). Optional for the import are attributes for the branch, the origin as service, docker image and endpoint URL.
+Before importing observations from an API, an API configuration needs to be created for the product. This API configuration specifies how to access the API (URL, API key, ...). Optional for the import are attributes for the branch / version, the origin as service, docker image and endpoint URL.
 
 ## Import algorithm
 
 The import algorithm has to decide, if an observation already exists and needs to be updated or it is new and needs to be created. But how does the import algorithm identifies an observation to make this decision? Two terms help to understand how that works:
 
 * **Identity hash**: The `identity hash` is a SHA256 hash code of the concatenation of the observation's title and all its origins ^[1]^. Two observations with the same `identity hash` are defined as identical.
-* **Vulnerability check**: An import for one product, one branch and one file name resp. one API configuration is a so-called vulnerability check.
+* **Vulnerability check**: An import for one product, one branch / version and one file name resp. one API configuration is a so-called vulnerability check.
 
 A flowchart visualizes the import algorithm:
 

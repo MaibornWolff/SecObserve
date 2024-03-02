@@ -54,7 +54,11 @@ const ProductEmbeddedList = ({ product_group }: ProductEmbeddedListProps) => {
                 <FilterForm filters={listFilters()} />
                 <Datagrid size={getSettingListSize()} rowClick={ShowProducts} bulkActionButtons={false}>
                     <TextField source="name" />
-                    <TextField source="repository_default_branch_name" label="Default branch" sortable={false} />
+                    <TextField
+                        source="repository_default_branch_name"
+                        label="Default branch / version"
+                        sortable={false}
+                    />
                     <SecurityGateTextField />
                     <ObservationsCountField withLabel={false} />
                     <FunctionField<Product>

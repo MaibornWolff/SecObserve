@@ -52,7 +52,7 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                         )}
                         {product.repository_default_branch && (
                             <ReferenceField source="repository_default_branch" reference="branches" link={false}>
-                                <Labeled label="Default branch">
+                                <Labeled label="Default branch / version">
                                     <TextField source="name" />
                                 </Labeled>
                             </ReferenceField>
@@ -75,7 +75,7 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                                     <Labeled label="Keep inactive">
                                         <NumberField source="repository_branch_housekeeping_keep_inactive_days" />
                                     </Labeled>
-                                    <Labeled label="Exempt branches">
+                                    <Labeled label="Exempt branches / versions">
                                         <TextField source="repository_branch_housekeeping_exempt_branches" />
                                     </Labeled>
                                 </Stack>

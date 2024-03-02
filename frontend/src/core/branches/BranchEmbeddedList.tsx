@@ -45,7 +45,7 @@ const BranchEmbeddedList = ({ product }: BranchEmbeddedListProps) => {
                             <TextUrlField text={branch.name} url={get_observations_url(product.id, branch.id)} />
                         )}
                     />
-                    <BooleanField source="is_default_branch" label="Default branch" sortable={false} />
+                    <BooleanField source="is_default_branch" label="Default branch / version" sortable={false} />
                     <ObservationsCountField withLabel={false} />
                     <DateField source="last_import" showTime />
                     <WithRecord

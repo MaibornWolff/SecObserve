@@ -158,7 +158,7 @@ const ProductCreate = () => {
                         nullLabel="Standard"
                         falseLabel="Disabled"
                         trueLabel="Product specific"
-                        helperText="Delete inactive branches"
+                        helperText="Delete inactive branches / versions"
                     />
                 </Stack>
                 <FormDataConsumer>
@@ -168,7 +168,7 @@ const ProductCreate = () => {
                                 <NumberInput
                                     source="repository_branch_housekeeping_keep_inactive_days"
                                     label="Keep inactive"
-                                    helperText="Days before incative branches and their observations are deleted"
+                                    helperText="Days before inactive branches / versions and their observations are deleted"
                                     defaultValue={30}
                                     min={1}
                                     max={999999}
@@ -176,8 +176,8 @@ const ProductCreate = () => {
                                 />
                                 <TextInputWide
                                     source="repository_branch_housekeeping_exempt_branches"
-                                    label="Exempt branches"
-                                    helperText="Regular expression which branches to exempt from deletion"
+                                    label="Exempt branches / versions"
+                                    helperText="Regular expression which branches / versions to exempt from deletion"
                                     validate={validate_255}
                                 />
                             </Stack>

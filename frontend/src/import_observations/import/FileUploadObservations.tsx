@@ -151,7 +151,7 @@ const FileUploadObservations = () => {
                                     filter={{ product: product.id }}
                                     alwaysOn
                                 >
-                                    <AutocompleteInputWide optionText="name" />
+                                    <AutocompleteInputWide optionText="name" label="Branch / Version" />
                                 </ReferenceInput>
                             )}
                         />
