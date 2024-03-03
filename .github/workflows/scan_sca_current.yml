@@ -17,14 +17,8 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-        # with:
-          # ref: 'v1.7.0'
-      # -
-      #   name: Login to Docker Hub
-      #   uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
-      #   with:
-      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
-      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+        with:
+          ref: 'v1.8.0'
       -
         name: Run SCA vulnerability scanners
         uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@cd1288ce6cb16c1b41bea98f60c275c0fc103166 # main
