@@ -66,7 +66,7 @@ jobs:
         name: Run vulnerability scanners for images
         uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@cd1288ce6cb16c1b41bea98f60c275c0fc103166 # main
         with:
-          so_configuration: 'so_configuration_images.yml'
+          so_configuration: 'so_configuration_sca_current.yml'
           SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
       - 
         name: Run vulnerability scanners for endpoints
