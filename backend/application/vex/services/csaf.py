@@ -33,6 +33,7 @@ from application.vex.types import (
     CSAFGenerator,
     CSAFId,
     CSAFNote,
+    CSAFProductBranch,
     CSAFProductIdentificationHelper,
     CSAFProductStatus,
     CSAFProductTree,
@@ -44,6 +45,7 @@ from application.vex.types import (
     CSAFThreat,
     CSAFTracking,
     CSAFVulnerability,
+    CSF_Branch_Category,
 )
 
 
@@ -121,14 +123,14 @@ def create_csaf_document(parameters: CSAFCreateParameters) -> Optional[CSAFRoot]
     csaf_root = _create_csaf_root(csaf)
 
     vulnerabilities = []
-    product_tree = CSAFProductTree(full_product_names=[])
+    product_tree = CSAFProductTree(branches=[])
 
     if product:
-        vulnerabilities, product_tree = _get_data_for_product(
+        vulnerabilities, product_tree = _get_content_for_product(
             product, parameters.vulnerability_names, branches
         )
     else:
-        vulnerabilities, product_tree = _get_data_for_vulnerabilities(
+        vulnerabilities, product_tree = _get_content_for_vulnerabilities(
             parameters.vulnerability_names
         )
 
@@ -168,14 +170,14 @@ def update_csaf_document(parameters: CSAFUpdateParameters) -> Optional[CSAFRoot]
     csaf_branches = list(Branch.objects.filter(id__in=csaf_branch_ids))
 
     vulnerabilities = []
-    product_tree = CSAFProductTree(full_product_names=[])
+    product_tree = CSAFProductTree(branches=[])
 
     if csaf.product:
-        vulnerabilities, product_tree = _get_data_for_product(
+        vulnerabilities, product_tree = _get_content_for_product(
             csaf.product, csaf_vulnerability_names, csaf_branches
         )
     else:
-        vulnerabilities, product_tree = _get_data_for_vulnerabilities(
+        vulnerabilities, product_tree = _get_content_for_vulnerabilities(
             csaf_vulnerability_names
         )
 
@@ -287,9 +289,9 @@ def _create_csaf_root(csaf: CSAF) -> CSAFRoot:
     return csaf_root
 
 
-def _get_data_for_vulnerabilities(vulnerability_names: list[str]) -> tuple:
+def _get_content_for_vulnerabilities(vulnerability_names: list[str]) -> tuple:
     vulnerabilities = []
-    product_tree = CSAFProductTree(full_product_names=[])
+    product_tree = CSAFProductTree(branches=[])
     for vulnerability_name in vulnerability_names:
         vulnerability = _create_vulnerability(vulnerability_name)
         vulnerabilities.append(vulnerability)
@@ -300,10 +302,9 @@ def _get_data_for_vulnerabilities(vulnerability_names: list[str]) -> tuple:
             current_vulnerability_description = _set_vulnerability_description(
                 vulnerability, observation, current_vulnerability_description
             )
-
-            full_product_name = _create_product(observation.product, observation.branch)
-            if full_product_name not in product_tree.full_product_names:
-                product_tree.full_product_names.append(full_product_name)
+            _append_to_product_tree(
+                product_tree, observation.product, observation.branch
+            )
 
             _set_product_status(vulnerability, observation)
             _remove_conflicting_product_status(vulnerability)
@@ -313,20 +314,24 @@ def _get_data_for_vulnerabilities(vulnerability_names: list[str]) -> tuple:
     return vulnerabilities, product_tree
 
 
-def _get_data_for_product(
+def _get_content_for_product(
     product: Product, vulnerability_names: list[str], branches: list[Branch]
 ) -> tuple:
     vulnerabilities: dict[str, CSAFVulnerability] = {}
-    product_tree = CSAFProductTree(full_product_names=[])
+    product_tree = CSAFProductTree(branches=[])
 
+    product_has_branches = False
     if branches:
         for branch in branches:
-            full_product_name = _create_product(product, branch)
-            product_tree.full_product_names.append(full_product_name)
+            product_has_branches = True
+            _append_to_product_tree(product_tree, product, branch)
     else:
         for branch in Branch.objects.filter(product=product):
-            full_product_name = _create_product(product, branch)
-            product_tree.full_product_names.append(full_product_name)
+            product_has_branches = True
+            _append_to_product_tree(product_tree, product, branch)
+
+    if not product_has_branches:
+        _append_to_product_tree(product_tree, product, None)
 
     observations = get_observations_for_product(product, vulnerability_names, branches)
     for observation in observations:
@@ -648,3 +653,52 @@ def _get_product_id(product: Product, branch: Optional[Branch]) -> str:
     if product.cpe23:
         return product.cpe23
     return product.name
+
+
+def _append_to_product_tree(
+    product_tree: CSAFProductTree,
+    product: Product,
+    branch: Optional[Branch],
+) -> None:
+
+    found = False
+    for product_family_branch in product_tree.branches:
+        if product_family_branch.name == product.name:
+            found = True
+            break
+    if not found:
+        product_family_branch = CSAFProductBranch(
+            name=product.name,
+            category=CSF_Branch_Category.CSAF_BRANCH_CATEGORY_PRODUCT_FAMILY,
+            branches=[],
+        )
+        product_tree.branches.append(product_family_branch)
+
+    if not branch:
+        if product_family_branch.branches is None:
+            raise ValueError("Product family branches should not be None")
+        for product_name_branch in product_family_branch.branches:
+            if product_name_branch.name == product.name:
+                return
+
+        new_product_full_name = _create_product(product, branch)
+        new_product_branch = CSAFProductBranch(
+            name=product.name,
+            category=CSF_Branch_Category.CSAF_BRANCH_CATEGORY_PRODUCT_NAME,
+            product=new_product_full_name,
+        )
+        product_family_branch.branches.append(new_product_branch)
+    else:
+        if product_family_branch.branches is None:
+            raise ValueError("Product family branches should not be None")
+        for version_branch in product_family_branch.branches:
+            if version_branch.name == f"{product.name}:{branch.name}":
+                return
+
+        new_product_full_name = _create_product(product, branch)
+        new_product_branch = CSAFProductBranch(
+            name=f"{product.name}:{branch.name}",
+            category=CSF_Branch_Category.CSAF_BRANCH_CATEGORY_PRODUCT_VERSION,
+            product=new_product_full_name,
+        )
+        product_family_branch.branches.append(new_product_branch)

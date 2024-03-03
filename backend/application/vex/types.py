@@ -53,6 +53,21 @@ class CSAF_Status:
     CSAF_STATUS_UNDER_INVESTIGATION = "under_investigation"
 
 
+class CSF_Branch_Category:
+    CSAF_BRANCH_CATEGORY_ARCHITECTURE = "architecture"
+    CSAF_BRANCH_CATEGORY_HOST_NAME = "host_name"
+    CSAF_BRANCH_CATEGORY_LANGUAGE = "language"
+    CSAF_BRANCH_CATEGORY_LEGACY = "legacy"
+    CSAF_BRANCH_CATEGORY_PATCH_LEVEL = "patch_level"
+    CSAF_BRANCH_CATEGORY_PRODUCT_FAMILY = "product_family"
+    CSAF_BRANCH_CATEGORY_PRODUCT_NAME = "product_name"
+    CSAF_BRANCH_CATEGORY_PRODUCT_VERSION = "product_version"
+    CSAF_BRANCH_CATEGORY_PRODUCT_VERSION_RANGE = "product_version_range"
+    CSAF_BRANCH_CATEGORY_SERVICE_PACK = "service_pack"
+    CSAF_BRANCH_CATEGORY_SPECIFICATION = "specification"
+    CSAF_BRANCH_CATEGORY_VENDOR = "vendor"
+
+
 @dataclass(frozen=True)
 class CSAFProductIdentificationHelper:
     cpe: Optional[str]
@@ -67,8 +82,16 @@ class CSAFFullProductName:
 
 
 @dataclass()
+class CSAFProductBranch:
+    name: str
+    category: str
+    product: Optional[CSAFFullProductName] = None
+    branches: Optional[list["CSAFProductBranch"]] = None
+
+
+@dataclass()
 class CSAFProductTree:
-    full_product_names: list[CSAFFullProductName]
+    branches: list[CSAFProductBranch]
 
 
 @dataclass(frozen=True)
