@@ -3,7 +3,7 @@ cryptolyzer_backend_main:
   TARGET: "secobserve-backend.maibornwolff.de"
   REPORT_NAME: "cryptolyzer_backend_main.json"
   SO_ORIGIN_SERVICE: "backend"
-  SO_BRANCH_NAME: "main"
+  SO_BRANCH_NAME: "maks_public"
 
 drheader_backend_main:
   SCANNER: drheader
@@ -11,14 +11,14 @@ drheader_backend_main:
   REPORT_NAME: "drheader_backend_main.json"
   SO_ORIGIN_SERVICE: "backend"
   SO_ORIGIN_ENDPOINT_URL: "https://secobserve-backend.maibornwolff.de"
-  SO_BRANCH_NAME: "main"
+  SO_BRANCH_NAME: "maks_public"
 
 cryptolyzer_frontend_main:
   SCANNER: cryptolyzer
   TARGET: "secobserve.maibornwolff.de"
   REPORT_NAME: "cryptolyzer_frontend_main.json"
   SO_ORIGIN_SERVICE: "frontend"
-  SO_BRANCH_NAME: "main"
+  SO_BRANCH_NAME: "maks_public"
 
 drheader_frontend_main:
   SCANNER: drheader
@@ -26,7 +26,7 @@ drheader_frontend_main:
   REPORT_NAME: "drheader_frontend_main.json"
   SO_ORIGIN_SERVICE: "frontend"
   SO_ORIGIN_ENDPOINT_URL: "https://secobserve.maibornwolff.de"
-  SO_BRANCH_NAME: "main"
+  SO_BRANCH_NAME: "maks_public"
 
 importer:
   SO_UPLOAD: "true"
