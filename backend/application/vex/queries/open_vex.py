@@ -3,7 +3,7 @@ from typing import Optional
 from django.db.models.query import QuerySet
 
 from application.commons.services.global_request import get_current_user
-from application.vex.models import OpenVEX, OpenVEX_Vulnerability
+from application.vex.models import OpenVEX, OpenVEX_Branch, OpenVEX_Vulnerability
 
 
 def get_open_vex_s() -> QuerySet[OpenVEX]:
@@ -47,4 +47,18 @@ def get_open_vex_vulnerabilities() -> QuerySet[OpenVEX_Vulnerability]:
 
     return OpenVEX_Vulnerability.objects.filter(openvex__in=get_open_vex_s()).order_by(
         "name"
+    )
+
+
+def get_open_vex_branches() -> QuerySet[OpenVEX_Branch]:
+    user = get_current_user()
+
+    if user is None:
+        return OpenVEX_Branch.objects.none()
+
+    if user.is_superuser:
+        return OpenVEX_Branch.objects.all()
+
+    return OpenVEX_Branch.objects.filter(openvex__in=get_open_vex_s()).order_by(
+        "branch__name"
     )

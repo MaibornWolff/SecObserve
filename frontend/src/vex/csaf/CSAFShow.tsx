@@ -53,6 +53,13 @@ const CSAFShow = () => {
                                 </SingleFieldList>
                             </ReferenceManyField>
                         )}
+                        {csaf && csaf.branch_names && (
+                            <ReferenceManyField reference="vex/csaf_branches" target="csaf" label="Branches / Versions">
+                                <SingleFieldList linkType={false}>
+                                    <ChipField source="name" />
+                                </SingleFieldList>
+                            </ReferenceManyField>
+                        )}
                         <TextField source="user_full_name" label="User" />
                         <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
                         <Typography variant="h6">Document</Typography>{" "}

@@ -8,15 +8,16 @@ from rest_framework.exceptions import NotFound
 
 from application.__init__ import __version__
 from application.commons.services.global_request import get_current_user
-from application.core.models import Observation, Observation_Log, Product
+from application.core.models import Branch, Observation, Observation_Log, Product
 from application.core.types import Status
-from application.vex.models import CSAF, CSAF_Revision, CSAF_Vulnerability
+from application.vex.models import CSAF, CSAF_Branch, CSAF_Revision, CSAF_Vulnerability
 from application.vex.queries.csaf import get_csaf_by_document_base_id
 from application.vex.services.csaf_helpers import get_vulnerability_ecosystem
 from application.vex.services.vex_base import (
     check_and_get_product,
+    check_branch_names,
     check_product_or_vulnerabilities,
-    check_vulnerabilities,
+    check_vulnerability_names,
     get_observations_for_product,
     get_observations_for_vulnerability,
     get_vulnerability_url,
@@ -50,6 +51,7 @@ from application.vex.types import (
 class CSAFCreateParameters:
     product_id: int
     vulnerability_names: list[str]
+    branch_names: list[str]
     document_id_prefix: str
     title: str
     publisher_name: str
@@ -80,7 +82,8 @@ def create_csaf_document(parameters: CSAFCreateParameters) -> Optional[CSAFRoot]
         parameters.product_id, parameters.vulnerability_names
     )
     product = check_and_get_product(parameters.product_id)
-    check_vulnerabilities(parameters.vulnerability_names)
+    check_vulnerability_names(parameters.vulnerability_names)
+    branches = check_branch_names(parameters.branch_names, product)
     document_base_id = str(uuid.uuid4())
 
     user = get_current_user()
@@ -112,6 +115,9 @@ def create_csaf_document(parameters: CSAFCreateParameters) -> Optional[CSAFRoot]
             vulnerability_name = ""
         CSAF_Vulnerability.objects.create(csaf=csaf, name=vulnerability_name)
 
+    for branch in branches:
+        CSAF_Branch.objects.create(csaf=csaf, branch=branch)
+
     csaf_root = _create_csaf_root(csaf)
 
     vulnerabilities = []
@@ -119,7 +125,7 @@ def create_csaf_document(parameters: CSAFCreateParameters) -> Optional[CSAFRoot]
 
     if product:
         vulnerabilities, product_tree = _get_data_for_product(
-            product, parameters.vulnerability_names
+            product, parameters.vulnerability_names, branches
         )
     else:
         vulnerabilities, product_tree = _get_data_for_vulnerabilities(
@@ -156,12 +162,17 @@ def update_csaf_document(parameters: CSAFUpdateParameters) -> Optional[CSAFRoot]
         CSAF_Vulnerability.objects.filter(csaf=csaf).values_list("name", flat=True)
     )
 
+    csaf_branch_ids = CSAF_Branch.objects.filter(csaf=csaf).values_list(
+        "branch", flat=True
+    )
+    csaf_branches = list(Branch.objects.filter(id__in=csaf_branch_ids))
+
     vulnerabilities = []
     product_tree = CSAFProductTree(full_product_names=[])
 
     if csaf.product:
         vulnerabilities, product_tree = _get_data_for_product(
-            csaf.product, csaf_vulnerability_names
+            csaf.product, csaf_vulnerability_names, csaf_branches
         )
     else:
         vulnerabilities, product_tree = _get_data_for_vulnerabilities(
@@ -290,7 +301,7 @@ def _get_data_for_vulnerabilities(vulnerability_names: list[str]) -> tuple:
                 vulnerability, observation, current_vulnerability_description
             )
 
-            full_product_name = _create_product(observation.product)
+            full_product_name = _create_product(observation.product, observation.branch)
             if full_product_name not in product_tree.full_product_names:
                 product_tree.full_product_names.append(full_product_name)
 
@@ -302,14 +313,22 @@ def _get_data_for_vulnerabilities(vulnerability_names: list[str]) -> tuple:
     return vulnerabilities, product_tree
 
 
-def _get_data_for_product(product: Product, vulnerability_names: list[str]) -> tuple:
+def _get_data_for_product(
+    product: Product, vulnerability_names: list[str], branches: list[Branch]
+) -> tuple:
     vulnerabilities: dict[str, CSAFVulnerability] = {}
     product_tree = CSAFProductTree(full_product_names=[])
 
-    full_product_name = _create_product(product)
-    product_tree.full_product_names.append(full_product_name)
+    if branches:
+        for branch in branches:
+            full_product_name = _create_product(product, branch)
+            product_tree.full_product_names.append(full_product_name)
+    else:
+        for branch in Branch.objects.filter(product=product):
+            full_product_name = _create_product(product, branch)
+            product_tree.full_product_names.append(full_product_name)
 
-    observations = get_observations_for_product(product, vulnerability_names)
+    observations = get_observations_for_product(product, vulnerability_names, branches)
     for observation in observations:
         vulnerability = vulnerabilities.get(observation.vulnerability_id)
         if not vulnerability:
@@ -324,18 +343,28 @@ def _get_data_for_product(product: Product, vulnerability_names: list[str]) -> t
     return list(vulnerabilities.values()), product_tree
 
 
-def _create_product(product: Product) -> CSAFFullProductName:
+def _create_product(product: Product, branch: Optional[Branch]) -> CSAFFullProductName:
     product_identification_helper = None
-    if product.purl or product.cpe23:
-        purl = product.purl if product.purl else None
-        cpe = product.cpe23 if product.cpe23 else None
-        product_identification_helper = CSAFProductIdentificationHelper(
-            purl=purl, cpe=cpe
-        )
+    if branch:
+        if branch.purl or branch.cpe23:
+            purl = branch.purl if branch.purl else None
+            cpe = branch.cpe23 if branch.cpe23 else None
+            product_identification_helper = CSAFProductIdentificationHelper(
+                purl=purl, cpe=cpe
+            )
+    else:
+        if product.purl or product.cpe23:
+            purl = product.purl if product.purl else None
+            cpe = product.cpe23 if product.cpe23 else None
+            product_identification_helper = CSAFProductIdentificationHelper(
+                purl=purl, cpe=cpe
+            )
+
+    product_name = f"{product.name}:{branch.name}" if branch else product.name
 
     full_product_name = CSAFFullProductName(
-        name=product.name,
-        product_id=_get_product_id(product),
+        name=product_name,
+        product_id=_get_product_id(product, branch),
         product_identification_helper=product_identification_helper,
     )
 
@@ -408,7 +437,7 @@ def _set_vulnerability_description(
 
 def _set_product_status(vulnerability: CSAFVulnerability, observation: Observation):
     csaf_status = _map_status(observation.current_status)
-    product_id = _get_product_id(observation.product)
+    product_id = _get_product_id(observation.product, observation.branch)
     if csaf_status == CSAF_Status.CSAF_STATUS_NOT_AFFECTED:
         if product_id not in vulnerability.product_status.known_not_affected:
             vulnerability.product_status.known_not_affected.append(product_id)
@@ -454,7 +483,7 @@ def _remove_conflicting_product_status(vulnerability: CSAFVulnerability):
 def _set_remediation(vulnerability: CSAFVulnerability, observation: Observation):
     csaf_status = _map_status(observation.current_status)
     if csaf_status == CSAF_Status.CSAF_STATUS_AFFECTED:
-        product_id = _get_product_id(observation.product)
+        product_id = _get_product_id(observation.product, observation.branch)
         category = "mitigation" if observation.recommendation else "none_available"
         details = (
             observation.recommendation
@@ -538,7 +567,7 @@ def _check_and_append_mitigation(
 def _set_flag_or_threat(vulnerability: CSAFVulnerability, observation: Observation):
     csaf_status = _map_status(observation.current_status)
     if csaf_status == CSAF_Status.CSAF_STATUS_NOT_AFFECTED:
-        product_id = _get_product_id(observation.product)
+        product_id = _get_product_id(observation.product, observation.branch)
         try:
             observation_log = Observation_Log.objects.filter(
                 observation=observation
@@ -606,7 +635,14 @@ def _map_status(secobserve_status: str) -> Optional[str]:
     raise ValueError(f"Invalid status {secobserve_status}")
 
 
-def _get_product_id(product: Product) -> str:
+def _get_product_id(product: Product, branch: Optional[Branch]) -> str:
+    if branch:
+        if branch.purl:
+            return branch.purl
+        if branch.cpe23:
+            return branch.cpe23
+        return f"{product.name}:{branch.name}"
+
     if product.purl:
         return product.purl
     if product.cpe23:

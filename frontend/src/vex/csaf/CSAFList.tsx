@@ -56,6 +56,11 @@ const CSAFList = () => {
                             <ChipField source="name" />
                         </SingleFieldList>
                     </ReferenceManyField>
+                    <ReferenceManyField reference="vex/csaf_branches" target="csaf" label="Branches / Versions">
+                        <SingleFieldList linkType={false}>
+                            <ChipField source="name" />
+                        </SingleFieldList>
+                    </ReferenceManyField>
                     <TextField source="document_id_prefix" label="ID prefix" />
                     <TextField source="document_base_id" label="Base ID" />
                     <NumberField source="version" label="Version" />

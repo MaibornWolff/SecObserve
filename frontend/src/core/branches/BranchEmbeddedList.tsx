@@ -1,5 +1,13 @@
 import { Stack } from "@mui/material";
-import { BooleanField, Datagrid, DateField, ListContextProvider, WithRecord, useListController } from "react-admin";
+import {
+    BooleanField,
+    Datagrid,
+    DateField,
+    ListContextProvider,
+    TextField,
+    WithRecord,
+    useListController,
+} from "react-admin";
 
 import { PERMISSION_BRANCH_DELETE, PERMISSION_BRANCH_EDIT } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
@@ -46,6 +54,8 @@ const BranchEmbeddedList = ({ product }: BranchEmbeddedListProps) => {
                         )}
                     />
                     <BooleanField source="is_default_branch" label="Default branch / version" sortable={false} />
+                    <TextField source="purl" label="PURL" />
+                    <TextField source="cpe23" label="CPE 2.3" />
                     <ObservationsCountField withLabel={false} />
                     <DateField source="last_import" showTime />
                     <WithRecord

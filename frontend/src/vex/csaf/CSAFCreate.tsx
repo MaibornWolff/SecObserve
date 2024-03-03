@@ -5,6 +5,7 @@ import { Fragment, useState } from "react";
 import {
     ArrayInput,
     CreateBase,
+    FormDataConsumer,
     ReferenceInput,
     SaveButton,
     SimpleForm,
@@ -62,6 +63,11 @@ const CSAFCreate = () => {
     const create_csaf = async (data: any) => {
         data.vulnerability_names = data.vulnerability_names.map((v: any) => v.name);
         data.vulnerability_names = data.vulnerability_names.filter((v: any) => v != null);
+
+        if (data.branch_names) {
+            data.branch_names = data.branch_names.map((v: any) => v.name);
+            data.branch_names = data.branch_names.filter((v: any) => v != null);
+        }
 
         const url = "vex/csaf_document/create/";
         axios_instance
@@ -122,6 +128,26 @@ const CSAFCreate = () => {
                                     <TextInputWide source="name" validate={validate_255} />
                                 </SimpleFormIterator>
                             </ArrayInput>
+                            <FormDataConsumer>
+                                {({ formData }) =>
+                                    formData.product && (
+                                        <ArrayInput source="branch_names" defaultValue={""} label="Branches / Versions">
+                                            <SimpleFormIterator disableReordering inline>
+                                                <TextInputWide source="name" validate={validate_255} />
+                                                {/* <ReferenceInput
+                                                    source="branch"
+                                                    reference="branches"
+                                                    sort={{ field: "name", order: "ASC" }}
+                                                    filter={{ product: formData.product }}
+                                                    alwaysOn
+                                                >
+                                                    <AutocompleteInputWide optionText="name" label="Name" />
+                                                </ReferenceInput> */}
+                                            </SimpleFormIterator>
+                                        </ArrayInput>
+                                    )
+                                }
+                            </FormDataConsumer>
                             <Divider flexItem sx={{ marginBottom: 2 }} />
                             <Typography variant="h6">Document</Typography>
                             <TextInputWide

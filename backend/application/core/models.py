@@ -204,6 +204,8 @@ class Branch(Model):
     name = CharField(max_length=255)
     last_import = DateTimeField(null=True)
     housekeeping_protect = BooleanField(default=False)
+    purl = CharField(max_length=255, blank=True)
+    cpe23 = CharField(max_length=255, blank=True)
 
     class Meta:
         unique_together = (

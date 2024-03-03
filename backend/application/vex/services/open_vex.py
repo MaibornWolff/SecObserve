@@ -7,15 +7,16 @@ from rest_framework.exceptions import NotFound
 
 from application.__init__ import __version__
 from application.commons.services.global_request import get_current_user
-from application.core.models import Observation, Observation_Log, Product
+from application.core.models import Branch, Observation, Observation_Log, Product
 from application.core.types import Status
-from application.vex.models import OpenVEX, OpenVEX_Vulnerability
+from application.vex.models import OpenVEX, OpenVEX_Branch, OpenVEX_Vulnerability
 from application.vex.queries.open_vex import get_open_vex_by_document_base_id
 from application.vex.services.open_vex_helpers import OpenVEXVulnerabilityCache
 from application.vex.services.vex_base import (
     check_and_get_product,
+    check_branch_names,
     check_product_or_vulnerabilities,
-    check_vulnerabilities,
+    check_vulnerability_names,
     get_component_id,
     get_observations_for_product,
     get_observations_for_vulnerability,
@@ -36,6 +37,7 @@ from application.vex.types import (
 def create_open_vex_document(
     product_id: int,
     vulnerability_names: list[str],
+    branch_names: list[str],
     document_id_prefix: str,
     author: str,
     role: str,
@@ -43,7 +45,8 @@ def create_open_vex_document(
     check_product_or_vulnerabilities(product_id, vulnerability_names)
 
     product = check_and_get_product(product_id)
-    check_vulnerabilities(vulnerability_names)
+    check_vulnerability_names(vulnerability_names)
+    branches = check_branch_names(branch_names, product)
     document_base_id = str(uuid.uuid4())
     document_id = _get_document_id(document_id_prefix, document_base_id)
 
@@ -66,6 +69,9 @@ def create_open_vex_document(
             vulnerability_name = ""
         OpenVEX_Vulnerability.objects.create(openvex=open_vex, name=vulnerability_name)
 
+    for branch in branches:
+        OpenVEX_Branch.objects.create(openvex=open_vex, branch=branch)
+
     open_vex_document = OpenVEXDocument(
         context="https://openvex.dev/ns/v0.2.0",
         id=open_vex.document_id,
@@ -80,7 +86,7 @@ def create_open_vex_document(
 
     statements = []
     if product:
-        statements = _get_statements_for_product(product, vulnerability_names)
+        statements = _get_statements_for_product(product, vulnerability_names, branches)
     else:
         statements = _get_statements_for_vulnerabilities(vulnerability_names)
 
@@ -114,10 +120,15 @@ def update_open_vex_document(
         )
     )
 
+    open_vex_branch_ids = OpenVEX_Branch.objects.filter(openvex=open_vex).values_list(
+        "branch", flat=True
+    )
+    open_vex_branches = list(Branch.objects.filter(id__in=open_vex_branch_ids))
+
     statements = []
     if open_vex.product:
         statements = _get_statements_for_product(
-            open_vex.product, open_vex_vulnerability_names
+            open_vex.product, open_vex_vulnerability_names, open_vex_branches
         )
     else:
         statements = _get_statements_for_vulnerabilities(open_vex_vulnerability_names)
@@ -194,7 +205,7 @@ def _get_statements_for_vulnerabilities(
             existing_statement = statements.get(hashed_string)
             if existing_statement:
                 existing_product = get_open_vex_product_by_id(
-                    existing_statement.products, get_product_id(observation.product)
+                    existing_statement.products, get_product_id(observation)
                 )
                 if existing_product:
                     _add_subcomponent(observation, existing_product)
@@ -213,13 +224,13 @@ def _get_statements_for_vulnerabilities(
 
 
 def _get_statements_for_product(
-    product: Product, vulnerability_names: list[str]
+    product: Product, vulnerability_names: list[str], branches: list[Branch]
 ) -> list[OpenVEXStatement]:
     statements: dict[str, OpenVEXStatement] = {}
 
     vulnerability_cache = OpenVEXVulnerabilityCache()
 
-    observations = get_observations_for_product(product, vulnerability_names)
+    observations = get_observations_for_product(product, vulnerability_names, branches)
     for observation in observations:
         prepared_statement = _prepare_statement(observation)
         if not prepared_statement:
@@ -251,7 +262,7 @@ def _get_statements_for_product(
         existing_statement = statements.get(hashed_string)
         if existing_statement:
             existing_product = get_open_vex_product_by_id(
-                existing_statement.products, get_product_id(product)
+                existing_statement.products, get_product_id(observation)
             )
             if existing_product:
                 _add_subcomponent(observation, existing_product)
@@ -359,13 +370,23 @@ def _add_subcomponent(observation: Observation, existing_product: OpenVEXProduct
 
 def _create_product(observation: Observation) -> OpenVEXProduct:
     open_vex_product_identifiers = None
-    if observation.product.purl or observation.product.cpe23:
-        purl = observation.product.purl if observation.product.purl else None
-        cpe23 = observation.product.cpe23 if observation.product.cpe23 else None
-        open_vex_product_identifiers = OpenVEXProductIdentifiers(cpe23=cpe23, purl=purl)
+    if observation.branch:
+        if observation.branch.purl or observation.branch.cpe23:
+            purl = observation.branch.purl if observation.branch.purl else None
+            cpe23 = observation.branch.cpe23 if observation.branch.cpe23 else None
+            open_vex_product_identifiers = OpenVEXProductIdentifiers(
+                cpe23=cpe23, purl=purl
+            )
+    else:
+        if observation.product.purl or observation.product.cpe23:
+            purl = observation.product.purl if observation.product.purl else None
+            cpe23 = observation.product.cpe23 if observation.product.cpe23 else None
+            open_vex_product_identifiers = OpenVEXProductIdentifiers(
+                cpe23=cpe23, purl=purl
+            )
 
     open_vex_product = OpenVEXProduct(
-        id=get_product_id(observation.product),
+        id=get_product_id(observation),
         subcomponents=[],
         identifiers=open_vex_product_identifiers,
     )

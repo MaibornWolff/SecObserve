@@ -10,7 +10,7 @@ from django.db.models import (
 )
 
 from application.access_control.models import User
-from application.core.models import Product
+from application.core.models import Branch, Product
 from application.vex.types import (
     CSAF_Publisher_Category,
     CSAF_TLP_Label,
@@ -38,6 +38,11 @@ class OpenVEX(VEX_Base):
     last_updated = DateTimeField(auto_now=True)
 
 
+class OpenVEX_Branch(Model):
+    openvex = ForeignKey(OpenVEX, related_name="branches", on_delete=CASCADE)
+    branch = ForeignKey(Branch, related_name="openvexes", on_delete=CASCADE)
+
+
 class OpenVEX_Vulnerability(Model):
     openvex = ForeignKey(OpenVEX, related_name="vulnerability_names", on_delete=CASCADE)
     name = CharField(max_length=255)
@@ -61,6 +66,11 @@ class CSAF(VEX_Base):
 class CSAF_Vulnerability(Model):
     csaf = ForeignKey(CSAF, related_name="vulnerability_names", on_delete=CASCADE)
     name = CharField(max_length=255)
+
+
+class CSAF_Branch(Model):
+    csaf = ForeignKey(CSAF, related_name="branches", on_delete=CASCADE)
+    branch = ForeignKey(Branch, related_name="csafs", on_delete=CASCADE)
 
 
 class CSAF_Revision(Model):

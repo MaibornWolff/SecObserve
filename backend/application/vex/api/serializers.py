@@ -15,9 +15,11 @@ from rest_framework.serializers import (
 
 from application.vex.models import (
     CSAF,
+    CSAF_Branch,
     CSAF_Revision,
     CSAF_Vulnerability,
     OpenVEX,
+    OpenVEX_Branch,
     OpenVEX_Vulnerability,
 )
 from application.vex.types import (
@@ -30,6 +32,9 @@ from application.vex.types import (
 class CSAFDocumentCreateSerializer(Serializer):
     product = IntegerField(validators=[MinValueValidator(0)], required=False)
     vulnerability_names = ListField(
+        child=CharField(max_length=255), min_length=0, max_length=20, required=False
+    )
+    branch_names = ListField(
         child=CharField(max_length=255), min_length=0, max_length=20, required=False
     )
     document_id_prefix = CharField(max_length=200, required=True)
@@ -73,16 +78,11 @@ class CSAFRevisionSerializer(ModelSerializer):
         fields = ["date", "version", "summary"]
 
 
-class CSAFVulnerabilitySerializer(ModelSerializer):
-    class Meta:
-        model = CSAF_Vulnerability
-        fields = "__all__"
-
-
 class CSAFSerializer(ModelSerializer):
     product_name = SerializerMethodField()
     revisions = CSAFRevisionSerializer(many=True)
     vulnerability_names = SerializerMethodField()
+    branch_names = SerializerMethodField()
     user_full_name = SerializerMethodField()
 
     class Meta:
@@ -100,6 +100,12 @@ class CSAFSerializer(ModelSerializer):
             return ", ".join(vulnerabilities)
         return None
 
+    def get_branch_names(self, obj: CSAF) -> Optional[str]:
+        branches = [b.branch.name for b in obj.branches.all()]
+        if branches:
+            return ", ".join(branches)
+        return None
+
     def get_user_full_name(self, obj: CSAF) -> Optional[str]:
         if obj.user:
             return obj.user.full_name
@@ -107,9 +113,29 @@ class CSAFSerializer(ModelSerializer):
         return None
 
 
+class CSAFVulnerabilitySerializer(ModelSerializer):
+    class Meta:
+        model = CSAF_Vulnerability
+        fields = "__all__"
+
+
+class CSAFBranchSerializer(ModelSerializer):
+    name = SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = CSAF_Branch
+        fields = "__all__"
+
+    def get_name(self, obj: CSAF_Branch) -> str:
+        return obj.branch.name
+
+
 class OpenVEXDocumentCreateSerializer(Serializer):
     product = IntegerField(validators=[MinValueValidator(0)], required=False)
     vulnerability_names = ListField(
+        child=CharField(max_length=255), min_length=0, max_length=20, required=False
+    )
+    branch_names = ListField(
         child=CharField(max_length=255), min_length=0, max_length=20, required=False
     )
     document_id_prefix = CharField(max_length=200, required=True)
@@ -125,15 +151,10 @@ class OpenVEXDocumentUpdateSerializer(Serializer):
     role = CharField(max_length=255, required=False)
 
 
-class OpenVEXVulnerabilitySerializer(ModelSerializer):
-    class Meta:
-        model = OpenVEX_Vulnerability
-        fields = "__all__"
-
-
 class OpenVEXSerializer(ModelSerializer):
     product_name = SerializerMethodField()
     vulnerability_names = SerializerMethodField()
+    branch_names = SerializerMethodField()
     user_full_name = SerializerMethodField()
 
     class Meta:
@@ -151,11 +172,34 @@ class OpenVEXSerializer(ModelSerializer):
             return ", ".join(vulnerabilities)
         return None
 
+    def get_branch_names(self, obj: OpenVEX) -> Optional[str]:
+        branches = [b.branch.name for b in obj.branches.all()]
+        if branches:
+            return ", ".join(branches)
+        return None
+
     def get_user_full_name(self, obj: OpenVEX) -> Optional[str]:
         if obj.user:
             return obj.user.full_name
 
         return None
+
+
+class OpenVEXVulnerabilitySerializer(ModelSerializer):
+    class Meta:
+        model = OpenVEX_Vulnerability
+        fields = "__all__"
+
+
+class OpenVEXBranchSerializer(ModelSerializer):
+    name = SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = OpenVEX_Branch
+        fields = "__all__"
+
+    def get_name(self, obj: OpenVEX_Branch) -> str:
+        return obj.branch.name
 
 
 def _validate_url(url: str) -> str:

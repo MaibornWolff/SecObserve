@@ -4,7 +4,7 @@ from rest_framework.exceptions import ValidationError
 
 from application.access_control.services.authorization import user_has_permission_or_403
 from application.access_control.services.roles_permissions import Permissions
-from application.core.models import Observation, Product
+from application.core.models import Branch, Observation, Product
 from application.core.queries.observation import get_observations
 from application.core.queries.product import get_product_by_id
 
@@ -26,7 +26,7 @@ def check_and_get_product(product_id: int) -> Optional[Product]:
     return product
 
 
-def check_vulnerabilities(vulnerability_names: list[str]) -> None:
+def check_vulnerability_names(vulnerability_names: list[str]) -> None:
     if not vulnerability_names:
         return
 
@@ -35,6 +35,22 @@ def check_vulnerabilities(vulnerability_names: list[str]) -> None:
             raise ValidationError(
                 f"Vulnerability with name {vulnerability_name} does not exist"
             )
+
+
+def check_branch_names(
+    branch_names: list[str], product: Optional[Product]
+) -> list[Branch]:
+    if not branch_names:
+        return []
+
+    if not product:
+        raise ValidationError("Product must be set when using branch_names")
+
+    branches = Branch.objects.filter(name__in=branch_names, product=product)
+    if len(branch_names) != len(branches):
+        raise ValidationError("Some of the branch names do not exist")
+
+    return list(branches)
 
 
 def get_observations_for_vulnerability(
@@ -51,25 +67,36 @@ def get_observations_for_vulnerability(
 
 
 def get_observations_for_product(
-    product: Product, vulnerability_names: list[str]
+    product: Product, vulnerability_names: list[str], branches: list[Branch]
 ) -> list[Observation]:
     observations = (
         get_observations()
-        .filter(product_id=product.pk, branch=product.repository_default_branch)
+        .filter(product_id=product.pk)
         .exclude(vulnerability_id="")
         .order_by("id")
     )
     if vulnerability_names:
         observations = observations.filter(vulnerability_id__in=vulnerability_names)
+
+    if branches:
+        observations = observations.filter(branch__in=branches)
+
     return list(observations)
 
 
-def get_product_id(product: Product) -> str:
-    if product.purl:
-        return product.purl
-    if product.cpe23:
-        return product.cpe23
-    return product.name
+def get_product_id(observation: Observation) -> str:
+    if observation.branch:
+        if observation.branch.purl:
+            return observation.branch.purl
+        if observation.branch.cpe23:
+            return observation.branch.cpe23
+        return f"{observation.product.name}:{observation.branch.name}"
+
+    if observation.product.purl:
+        return observation.product.purl
+    if observation.product.cpe23:
+        return observation.product.cpe23
+    return observation.product.name
 
 
 def get_component_id(observation: Observation) -> str:

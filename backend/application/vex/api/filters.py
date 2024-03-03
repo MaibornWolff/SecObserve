@@ -2,8 +2,10 @@ from django_filters import CharFilter, FilterSet, OrderingFilter
 
 from application.vex.models import (
     CSAF,
+    CSAF_Branch,
     CSAF_Vulnerability,
     OpenVEX,
+    OpenVEX_Branch,
     OpenVEX_Vulnerability,
 )
 
@@ -54,6 +56,15 @@ class CSAFVulnerabilityFilter(FilterSet):
         ]
 
 
+class CSAFBranchFilter(FilterSet):
+    class Meta:
+        model = CSAF_Branch
+        fields = [
+            "csaf",
+            "branch__name",
+        ]
+
+
 class OpenVEXFilter(FilterSet):
     vulnerability_names__name = CharFilter(
         field_name="vulnerability_names__name", lookup_expr="icontains", distinct=True
@@ -92,4 +103,13 @@ class OpenVEXVulnerabilityFilter(FilterSet):
         fields = [
             "openvex",
             "name",
+        ]
+
+
+class OpenVEXBranchFilter(FilterSet):
+    class Meta:
+        model = OpenVEX_Branch
+        fields = [
+            "openvex",
+            "branch__name",
         ]

@@ -60,6 +60,11 @@ const OpenVEXList = () => {
                             <ChipField source="name" />
                         </SingleFieldList>
                     </ReferenceManyField>
+                    <ReferenceManyField reference="vex/openvex_branches" target="openvex" label="Branches / Versions">
+                        <SingleFieldList linkType={false}>
+                            <ChipField source="name" />
+                        </SingleFieldList>
+                    </ReferenceManyField>
                     <TextField source="document_id_prefix" label="ID prefix" />
                     <TextField source="document_base_id" label="Base ID" />
                     <NumberField source="version" label="Version" />
