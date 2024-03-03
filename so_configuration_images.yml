@@ -28,31 +28,31 @@ trivy_image_frontend_dev:
 
 grype_image_backend_main:
   SCANNER: grype_image
-  TARGET: "maibornwolff/secobserve-backend:latest"
+  TARGET: "maibornwolff/secobserve-backend:1.7.0"
   REPORT_NAME: "grype_backend_image_prod.json"
   SO_ORIGIN_SERVICE: "backend"
-  SO_BRANCH_NAME: "main"
+  SO_BRANCH_NAME: "1.7.0"
 
 grype_image_frontend_main:
   SCANNER: grype_image
-  TARGET: "maibornwolff/secobserve-frontend:latest"
+  TARGET: "maibornwolff/secobserve-frontend:1.7.0"
   REPORT_NAME: "grype_frontend_image_prod.json"
   SO_ORIGIN_SERVICE: "frontend"
-  SO_BRANCH_NAME: "main"
+  SO_BRANCH_NAME: "1.7.0"
 
 trivy_image_backend_main:
   SCANNER: trivy_image
-  TARGET: "maibornwolff/secobserve-backend:latest"
+  TARGET: "maibornwolff/secobserve-backend:1.7.0"
   REPORT_NAME: "trivy_backend_image_prod.json"
   SO_ORIGIN_SERVICE: "backend"
-  SO_BRANCH_NAME: "main"
+  SO_BRANCH_NAME: "1.7.0"
 
 trivy_image_frontend_main:
   SCANNER: trivy_image
-  TARGET: "maibornwolff/secobserve-frontend:latest"
+  TARGET: "maibornwolff/secobserve-frontend:1.7.0"
   REPORT_NAME: "trivy_frontend_image_prod.json"
   SO_ORIGIN_SERVICE: "frontend"
-  SO_BRANCH_NAME: "main"
+  SO_BRANCH_NAME: "1.7.0"
 
 importer:
   SO_UPLOAD: "true"
