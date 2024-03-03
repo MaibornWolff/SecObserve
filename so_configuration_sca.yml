@@ -19,7 +19,7 @@ trivy_filesystem_current:
   RUN_DIRECTORY: "."
   TARGET: "backend/poetry.lock"
   REPORT_NAME: "trivy_backend_poetry.json"
-  SO_ORIGIN_SERVICE: "frontend"
+  SO_ORIGIN_SERVICE: "backend"
   SO_BRANCH_NAME: "1.7.0"
 
 trivy_filesystem_frontend_current:
