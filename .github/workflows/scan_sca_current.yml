@@ -4,6 +4,9 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '30 2 * * *'
+  push:
+    branches:
+      - chore/sca_scan
 
 permissions: read-all
 
