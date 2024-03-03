@@ -17,8 +17,8 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-        with:
-          ref: 'v1.7.0'
+        # with:
+          # ref: 'v1.7.0'
       # -
       #   name: Login to Docker Hub
       #   uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
