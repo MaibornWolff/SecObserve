@@ -38,7 +38,7 @@ const ListActions = () => (
 const OpenVEXList = () => {
     return (
         <Fragment>
-            <ListHeader icon={openvex.icon} title="VEX / OpenVEX" />
+            <ListHeader icon={openvex.icon} title="VEX / OpenVEX (Experimental)" />
             <List
                 perPage={25}
                 pagination={<CustomPagination />}

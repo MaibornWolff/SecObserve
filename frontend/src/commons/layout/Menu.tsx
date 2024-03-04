@@ -29,7 +29,7 @@ const Menu = ({ dense = false }: MenuProps) => {
         <Fragment>
             <Box
                 sx={{
-                    width: open ? 200 : 50,
+                    width: open ? 220 : 50,
                     marginTop: 1,
                     marginBottom: 1,
                     transition: (theme) =>
@@ -72,7 +72,7 @@ const Menu = ({ dense = false }: MenuProps) => {
                     <SubMenu
                         handleToggle={() => handleToggle("menuVEX")}
                         isOpen={state.menuVEX}
-                        name="VEX"
+                        name="VEX (Experimental)"
                         icon={<SecurityIcon />}
                         dense={dense}
                     >
