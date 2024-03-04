@@ -48,7 +48,7 @@ jobs:
           sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_backend_application.json
           cyclonedx-py poetry --only main,prod --output-format json ../backend \
             | parlay ecosystems enrich - \
-            | sbom-utility trim --keys=properties,vulnerabilities --quiet --input-file - \
+            | sbom-utility trim --keys=externalReferences,properties,vulnerabilities --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_backend_application.json --quiet --input-file - --output-file sbom_backend_application_"$VERSION".json
           cat sbom_backend_application_"$VERSION".json
@@ -62,7 +62,7 @@ jobs:
           sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_frontend_application.json
           cyclonedx-npm --omit dev --package-lock-only --output-format JSON ../frontend/package-lock.json \
             | parlay ecosystems enrich - \
-            | sbom-utility trim --keys=properties,vulnerabilities --quiet --input-file - \
+            | sbom-utility trim --keys=externalReferences,properties,vulnerabilities --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_frontend_application.json --quiet --input-file - --output-file sbom_frontend_application_"$VERSION".json
           sbom-utility validate --input-file sbom_frontend_application_"$VERSION".json
@@ -75,7 +75,7 @@ jobs:
           sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_backend_container.json
           trivy image --vuln-type os --scanners license --format cyclonedx --quiet maibornwolff/secobserve-backend:"$VERSION" \
             | parlay ecosystems enrich - \
-            | sbom-utility trim --keys=properties,vulnerabilities --quiet --input-file - \
+            | sbom-utility trim --keys=externalReferences,properties,vulnerabilities --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_backend_container.json --quiet --input-file - --output-file sbom_backend_container_"$VERSION".json
           sbom-utility validate --input-file sbom_backend_container_"$VERSION".json
@@ -88,7 +88,7 @@ jobs:
           sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_frontend_container.json
           trivy image --vuln-type os --scanners license --format cyclonedx --quiet maibornwolff/secobserve-frontend:"$VERSION" \
             | parlay ecosystems enrich - \
-            | sbom-utility trim --keys=properties,vulnerabilities --quiet --input-file - \
+            | sbom-utility trim --keys=externalReferences,properties,vulnerabilities --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_frontend_container.json --quiet --input-file - --output-file sbom_frontend_container_"$VERSION".json
           sbom-utility validate --input-file sbom_frontend_container_"$VERSION".json
