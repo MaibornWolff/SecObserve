@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("core", "0031_observation_issue_tracker_issue_closed_and_more"),
     ]

@@ -208,9 +208,9 @@ def _process_data(import_parameters: ImportParameters) -> Tuple[int, int, int, s
         import_parameters.filename,
         import_parameters.api_configuration_name,
     ):
-        observations_before[observation_before_for_dict.identity_hash] = (
-            observation_before_for_dict
-        )
+        observations_before[
+            observation_before_for_dict.identity_hash
+        ] = observation_before_for_dict
         scanner = observation_before_for_dict.scanner
 
     observations_this_run: set[str] = set()

@@ -328,9 +328,9 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                     self._get_bom_ref_name_version(dependency, components)
                 )
             translated_component_dependencies_inner.sort()
-            translated_component_dependency["dependsOn"] = (
-                translated_component_dependencies_inner
-            )
+            translated_component_dependency[
+                "dependsOn"
+            ] = translated_component_dependencies_inner
 
             translated_component_dependencies.append(translated_component_dependency)
 

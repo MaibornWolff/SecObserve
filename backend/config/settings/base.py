@@ -61,9 +61,7 @@ else:
     DATABASES = {
         "default": {
             "ATOMIC_REQUESTS": True,
-            "OPTIONS": {
-               "options": "-c search_path=secobserve"
-            },
+            "OPTIONS": {"options": "-c search_path=secobserve"},
             "ENGINE": env("DATABASE_ENGINE"),
             "HOST": env("DATABASE_HOST"),
             "PORT": env("DATABASE_PORT"),

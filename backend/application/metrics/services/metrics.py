@@ -297,9 +297,9 @@ def get_codecharta_metrics(product: Product) -> list[dict]:
                 file_severities_value[
                     f"Vulnerabilities_{Severity.SEVERITY_LOW}_and_above".lower()
                 ] = 0
-                file_severities_dict[observation.origin_source_file] = (
-                    file_severities_value
-                )
+                file_severities_dict[
+                    observation.origin_source_file
+                ] = file_severities_value
 
             file_severities_value["Vulnerabilities_Total".lower()] += 1
             file_severities_value[
