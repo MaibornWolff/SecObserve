@@ -72,6 +72,7 @@ jobs:
         run: |
           sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_backend_container.json
           trivy image --vuln-type os --scanners license --format cyclonedx --quiet maibornwolff/secobserve-backend:"$VERSION" \
+            | parlay ecosystems enrich - \
             | sbom-utility trim --keys=externalReferences,properties,vulnerabilities --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_backend_container.json --quiet --input-file - --output-file sbom_backend_container_"$VERSION".json
@@ -84,11 +85,11 @@ jobs:
         run: |
           sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_frontend_container.json
           trivy image --vuln-type os --scanners license --format cyclonedx --quiet maibornwolff/secobserve-frontend:"$VERSION" \
+            | parlay ecosystems enrich - \
             | sbom-utility trim --keys=externalReferences,properties,vulnerabilities --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_frontend_container.json --quiet --input-file - --output-file sbom_frontend_container_"$VERSION".json
-          # Disabled until https://github.com/aquasecurity/trivy/issues/6128 is fixed
-          # sbom-utility validate --input-file sbom_frontend_container_"$VERSION".json
+          sbom-utility validate --input-file sbom_frontend_container_"$VERSION".json
       - 
         name: Commit SBOMs
         uses: stefanzweifel/git-auto-commit-action@8756aa072ef5b4a080af5dc8fef36c5d586e521d # v5
