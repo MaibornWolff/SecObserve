@@ -51,7 +51,6 @@ jobs:
             | sbom-utility trim --keys=externalReferences,properties,vulnerabilities --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_backend_application.json --quiet --input-file - --output-file sbom_backend_application_"$VERSION".json
-          cat sbom_backend_application_"$VERSION".json
           sbom-utility validate --input-file sbom_backend_application_"$VERSION".json
       - 
         name: Generate SBOM for frontend application
