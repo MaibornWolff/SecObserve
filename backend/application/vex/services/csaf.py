@@ -1,5 +1,4 @@
 import hashlib
-import uuid
 from dataclasses import dataclass
 from typing import Optional
 
@@ -18,6 +17,7 @@ from application.vex.services.vex_base import (
     check_branch_names,
     check_product_or_vulnerabilities,
     check_vulnerability_names,
+    create_document_base_id,
     get_observations_for_product,
     get_observations_for_vulnerability,
     get_vulnerability_url,
@@ -86,11 +86,12 @@ def create_csaf_document(parameters: CSAFCreateParameters) -> Optional[CSAFRoot]
     product = check_and_get_product(parameters.product_id)
     check_vulnerability_names(parameters.vulnerability_names)
     branches = check_branch_names(parameters.branch_names, product)
-    document_base_id = str(uuid.uuid4())
 
     user = get_current_user()
     if not user:
         raise ValueError("No user in request")
+
+    document_base_id = create_document_base_id(parameters.document_id_prefix)
 
     csaf = CSAF.objects.create(
         product=product,

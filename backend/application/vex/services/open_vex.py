@@ -1,5 +1,4 @@
 import hashlib
-import uuid
 from typing import Optional
 
 import jsonpickle
@@ -17,6 +16,7 @@ from application.vex.services.vex_base import (
     check_branch_names,
     check_product_or_vulnerabilities,
     check_vulnerability_names,
+    create_document_base_id,
     get_component_id,
     get_observations_for_product,
     get_observations_for_vulnerability,
@@ -47,12 +47,13 @@ def create_open_vex_document(
     product = check_and_get_product(product_id)
     check_vulnerability_names(vulnerability_names)
     branches = check_branch_names(branch_names, product)
-    document_base_id = str(uuid.uuid4())
-    document_id = _get_document_id(document_id_prefix, document_base_id)
 
     user = get_current_user()
     if not user:
         raise ValueError("No user in request")
+
+    document_base_id = create_document_base_id(document_id_prefix)
+    document_id = _get_document_id(document_id_prefix, document_base_id)
 
     open_vex = OpenVEX.objects.create(
         product=product,

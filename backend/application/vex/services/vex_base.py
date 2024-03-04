@@ -1,3 +1,4 @@
+import datetime
 from typing import Optional
 
 from rest_framework.exceptions import ValidationError
@@ -7,6 +8,17 @@ from application.access_control.services.roles_permissions import Permissions
 from application.core.models import Branch, Observation, Product
 from application.core.queries.observation import get_observations
 from application.core.queries.product import get_product_by_id
+from application.vex.models import VEX_Counter
+
+
+def create_document_base_id(document_id_prefix: str) -> str:
+    year = datetime.date.today().year
+    counter = VEX_Counter.objects.get_or_create(
+        document_id_prefix=document_id_prefix, year=year
+    )[0]
+    counter.counter += 1
+    counter.save()
+    return f"{counter.year}_{counter.counter:04d}"
 
 
 def check_product_or_vulnerabilities(product_id, vulnerability_names):

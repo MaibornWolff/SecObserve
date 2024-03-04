@@ -18,12 +18,24 @@ from application.vex.types import (
 )
 
 
+class VEX_Counter(Model):
+    document_id_prefix = CharField(max_length=200)
+    year = IntegerField(validators=[MinValueValidator(2000), MaxValueValidator(9999)])
+    counter = IntegerField(default=0)
+
+    class Meta:
+        unique_together = (
+            "document_id_prefix",
+            "year",
+        )
+
+
 class VEX_Base(Model):
     user = ForeignKey(User, on_delete=CASCADE)
     product = ForeignKey(Product, on_delete=CASCADE, null=True)
     document_id_prefix = CharField(max_length=200)
-    document_base_id = CharField(max_length=36, unique=True)
-    document_id = CharField(max_length=255)
+    document_base_id = CharField(max_length=36)
+    document_id = CharField(max_length=255, unique=True)
     version = IntegerField(validators=[MinValueValidator(0), MaxValueValidator(999999)])
     content_hash = CharField(max_length=256, blank=True)
 
