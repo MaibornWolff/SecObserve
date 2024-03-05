@@ -7,7 +7,7 @@ export default ({ children }: LayoutProps) => {
     return (
         <Layout appBar={AppBar} menu={Menu}>
             {children}
-            <CheckForApplicationUpdate interval={5*60*1000} />
+            <CheckForApplicationUpdate interval={5 * 60 * 1000} />
         </Layout>
     );
 };
