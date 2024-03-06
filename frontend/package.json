@@ -5,8 +5,8 @@
     "description": "SecObserve is an open source vulnerability management system for software development teams.",
     "private": true,
     "dependencies": {
-        "@mui/icons-material": "5.15.11",
-        "@mui/material": "5.15.11",
+        "@mui/icons-material": "5.15.12",
+        "@mui/material": "5.15.12",
         "@types/inflection": "1.13.2",
         "@types/recharts": "1.8.29",
         "prop-types": "15.8.1",
