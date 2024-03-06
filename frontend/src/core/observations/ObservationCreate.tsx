@@ -86,13 +86,13 @@ const ObservationCreate = ({ id }: ObservationCreateProps) => {
                 onSuccess: () => {
                     refresh();
                     notify("Observation added", { type: "success" });
+                    setOpen(false);
                 },
                 onError: (error: any) => {
                     notify(error.message, { type: "warning" });
                 },
             }
         );
-        setOpen(false);
     };
 
     return (
@@ -171,6 +171,39 @@ const ObservationCreate = ({ id }: ObservationCreateProps) => {
                                 >
                                     <AutocompleteInputWide optionText="name" label="Branch / Version" />
                                 </ReferenceInput>
+                            </Stack>
+
+                            <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+
+                            <Typography variant="h6">Vulnerability</Typography>
+                            <Stack>
+                                <TextInputWide
+                                    source="vulnerability_id" label="Vulnerability ID"
+                                    validate={validate_255}
+                                />
+                                <Stack direction="row" spacing={2}>
+                                <NumberInput
+                                        source="cvss3_score"
+                                        label="CVSS3 score"
+                                        min={0}
+                                        step={0.1}
+                                        validate={validate_min_0_999999}
+                                        sx={{ width: "10em"}}
+                                    />
+                                    <TextInputWide
+                                        source="cvss3_vector"
+                                        label="CVSS3 vector"
+                                        validate={validate_255}
+                                    />
+                                </Stack>
+                                <NumberInput
+                                        source="cwe"
+                                        label="CWE"
+                                        min={0}
+                                        step={1}
+                                        validate={validate_min_0_999999}
+                                        sx={{ width: "10em"}}
+                                    />
                             </Stack>
 
                             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />

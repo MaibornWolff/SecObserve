@@ -15,6 +15,7 @@ from rest_framework.serializers import (
     SerializerMethodField,
     ValidationError,
 )
+from cvss import CVSS3, CVSSError
 
 from application.access_control.api.serializers import UserSerializer
 from application.access_control.services.roles_permissions import (
@@ -695,7 +696,24 @@ class ObservationCreateSerializer(ModelSerializer):
                     "Branch does not belong to the same product as the observation"
                 )
 
+        if attrs.get("cvss3_vector"):
+            cvss3 = CVSS3(attrs.get("cvss3_vector"))
+            print("------------------------------------")
+            print(cvss3.scores())
+            print("------------------------------------")
+
         return super().validate(attrs)
+
+    def validate_cvss3_vector(self, cvss3_vector: str) -> str:
+        if cvss3_vector:
+            try:
+                cvss3 = CVSS3(cvss3_vector)
+                cvss3_vector = cvss3.clean_vector()
+            except CVSSError as e:
+                raise ValidationError(str(e))
+
+        return cvss3_vector
+
 
     def create(self, validated_data):
         observation: Observation = super().create(validated_data)
@@ -746,6 +764,10 @@ class ObservationCreateSerializer(ModelSerializer):
             "origin_cloud_account_subscription_project",
             "origin_cloud_resource",
             "origin_cloud_resource_type",
+            "vulnerability_id",
+            "cvss3_score",
+            "cvss3_vector",
+            "cwe",
         ]
 
 
