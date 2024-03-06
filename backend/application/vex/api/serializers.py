@@ -1,4 +1,5 @@
 from typing import Optional
+from urllib.parse import urlparse
 
 import validators
 from django.core.validators import MinValueValidator
@@ -138,12 +139,13 @@ class OpenVEXDocumentCreateSerializer(Serializer):
     branch_names = ListField(
         child=CharField(max_length=255), min_length=0, max_length=20, required=False
     )
-    document_id_prefix = CharField(max_length=200, required=True)
+    id_namespace = CharField(max_length=255, required=True)
+    document_id_prefix = CharField(max_length=255, required=True)
     author = CharField(max_length=255, required=True)
     role = CharField(max_length=255, required=False)
 
-    def validate_document_id_prefix(self, document_id_prefix: str) -> str:
-        return _validate_url(document_id_prefix)
+    def validate_id_namespace(self, id_namespace: str) -> str:
+        return _validate_url(id_namespace, has_path=True)
 
 
 class OpenVEXDocumentUpdateSerializer(Serializer):
@@ -202,8 +204,11 @@ class OpenVEXBranchSerializer(ModelSerializer):
         return obj.branch.name
 
 
-def _validate_url(url: str) -> str:
+def _validate_url(url: str, has_path: Optional[bool] = False) -> str:
     if url and not validators.url(url):
         raise ValidationError("Not a valid URL")
+
+    if has_path and not urlparse(url).path:
+        raise ValidationError("URL must have a path")
 
     return url

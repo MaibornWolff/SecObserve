@@ -44,7 +44,7 @@ const OpenVEXUpdate = () => {
     );
 
     const update_openvex = async (data: any) => {
-        const url = "vex/openvex_document/update/" + data.document_base_id + "/";
+        const url = "vex/openvex_document/update/" + data.document_id_prefix + "/" + data.document_base_id + "/";
         axios_instance
             .post(url, data, { responseType: "blob" })
             .then(function (response) {

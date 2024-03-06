@@ -1,6 +1,7 @@
 import json
 import re
 from typing import Any
+from urllib.parse import urlparse
 
 import jsonpickle
 from django.http import HttpResponse
@@ -59,6 +60,8 @@ from application.vex.services.csaf import (
     update_csaf_document,
 )
 from application.vex.services.open_vex import (
+    OpenVEXCreateParameters,
+    OpenVEXUpdateParameters,
     create_open_vex_document,
     update_open_vex_document,
 )
@@ -126,12 +129,13 @@ class CSAFDocumentUpdateView(APIView):
         request=CSAFDocumentUpdateSerializer,
         responses={HTTP_200_OK: bytes},
     )
-    def post(self, request, document_base_id=None):
+    def post(self, request, document_id_prefix: str, document_base_id: str):
         serializer = CSAFDocumentUpdateSerializer(data=request.data)
         if not serializer.is_valid():
             raise ValidationError(serializer.errors)
 
         csaf_update_parameters = CSAFUpdateParameters(
+            document_id_prefix=document_id_prefix,
             document_base_id=document_base_id,
             publisher_name=serializer.validated_data.get("publisher_name"),
             publisher_category=serializer.validated_data.get("publisher_category"),
@@ -214,14 +218,17 @@ class OpenVEXDocumentCreateView(APIView):
             else []
         )
 
-        open_vex_document = create_open_vex_document(
+        parameters = OpenVEXCreateParameters(
             product_id=serializer.validated_data.get("product"),
             vulnerability_names=unique_vulnerability_names,
             branch_names=unique_branch_names,
+            id_namespace=serializer.validated_data.get("id_namespace"),
             document_id_prefix=serializer.validated_data.get("document_id_prefix"),
             author=serializer.validated_data.get("author"),
             role=serializer.validated_data.get("role"),
         )
+
+        open_vex_document = create_open_vex_document(parameters)
 
         if not open_vex_document:
             return Response(status=HTTP_204_NO_CONTENT)
@@ -232,11 +239,8 @@ class OpenVEXDocumentCreateView(APIView):
             content_type="application/json",
         )
         response["Content-Disposition"] = (
-            "attachment; filename=openvex_"
-            + open_vex_document.get_base_id()
-            + "_"
-            + f"{open_vex_document.version:04d}"
-            + ".json"
+            "attachment; filename="
+            + _get_open_vex_filename(open_vex_document.id, open_vex_document.version)
         )
         return response
 
@@ -248,16 +252,19 @@ class OpenVEXDocumentUpdateView(APIView):
         responses={HTTP_200_OK: bytes},
     )
     @action(detail=True, methods=["post"])
-    def post(self, request, document_base_id=None):
+    def post(self, request, document_id_prefix: str, document_base_id: str):
         serializer = OpenVEXDocumentUpdateSerializer(data=request.data)
         if not serializer.is_valid():
             raise ValidationError(serializer.errors)
 
-        open_vex_document = update_open_vex_document(
-            document_base_id,
+        parameters = OpenVEXUpdateParameters(
+            document_id_prefix=document_id_prefix,
+            document_base_id=document_base_id,
             author=serializer.validated_data.get("author"),
             role=serializer.validated_data.get("role"),
         )
+
+        open_vex_document = update_open_vex_document(parameters)
 
         if not open_vex_document:
             return Response(status=HTTP_204_NO_CONTENT)
@@ -268,11 +275,8 @@ class OpenVEXDocumentUpdateView(APIView):
             content_type="application/json",
         )
         response["Content-Disposition"] = (
-            "attachment; filename=openvex_"
-            + open_vex_document.get_base_id()
-            + "_"
-            + f"{open_vex_document.version:04d}"
-            + ".json"
+            "attachment; filename="
+            + _get_open_vex_filename(open_vex_document.id, open_vex_document.version)
         )
         return response
 
@@ -378,3 +382,12 @@ def _get_csaf_filename(document_id: str) -> str:
     # remove multiple underscores
     filename = re.sub(r"__+", "_", filename)
     return filename
+
+
+def _get_open_vex_filename(document_id: str, version: int) -> str:
+    parse_result = urlparse(document_id)
+    path = parse_result.path
+    # get last part of the path
+    path = path.split("/")[-1]
+
+    return f"{path}_{version:04d}.json"

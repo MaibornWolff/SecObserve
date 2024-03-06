@@ -65,6 +65,7 @@ const OpenVEXList = () => {
                             <ChipField source="name" />
                         </SingleFieldList>
                     </ReferenceManyField>
+                    <TextField source="id_namespace" label="ID namespace" />
                     <TextField source="document_id_prefix" label="ID prefix" />
                     <TextField source="document_base_id" label="Base ID" />
                     <NumberField source="version" label="Version" />

@@ -10,7 +10,7 @@ from application.commons.services.global_request import get_current_user
 from application.core.models import Branch, Observation, Observation_Log, Product
 from application.core.types import Status
 from application.vex.models import CSAF, CSAF_Branch, CSAF_Revision, CSAF_Vulnerability
-from application.vex.queries.csaf import get_csaf_by_document_base_id
+from application.vex.queries.csaf import get_csaf_by_document_id
 from application.vex.services.csaf_helpers import get_vulnerability_ecosystem
 from application.vex.services.vex_base import (
     check_and_get_product,
@@ -65,6 +65,7 @@ class CSAFCreateParameters:
 
 @dataclass()
 class CSAFUpdateParameters:
+    document_id_prefix: str
     document_base_id: str
     publisher_name: str
     publisher_category: str
@@ -97,7 +98,6 @@ def create_csaf_document(parameters: CSAFCreateParameters) -> Optional[CSAFRoot]
         product=product,
         document_id_prefix=parameters.document_id_prefix,
         document_base_id=document_base_id,
-        document_id="to be done",
         version=1,
         title=parameters.title,
         publisher_name=parameters.publisher_name,
@@ -145,7 +145,6 @@ def create_csaf_document(parameters: CSAFCreateParameters) -> Optional[CSAFRoot]
         content_json.casefold().encode("utf-8").strip()
     ).hexdigest()
     csaf.content_hash = content_hash
-    csaf.document_id = csaf_root.document.tracking.id
     csaf.save()
 
     csaf_root.product_tree = product_tree
@@ -155,10 +154,12 @@ def create_csaf_document(parameters: CSAFCreateParameters) -> Optional[CSAFRoot]
 
 
 def update_csaf_document(parameters: CSAFUpdateParameters) -> Optional[CSAFRoot]:
-    csaf = get_csaf_by_document_base_id(parameters.document_base_id)
+    csaf = get_csaf_by_document_id(
+        parameters.document_id_prefix, parameters.document_base_id
+    )
     if not csaf:
         raise NotFound(
-            f"CSAF document with id {parameters.document_base_id} does not exist"
+            f"CSAF document with ids {parameters.document_id_prefix} and {parameters.document_base_id} does not exist"
         )
 
     csaf_vulnerability_names = list(
@@ -214,9 +215,6 @@ def update_csaf_document(parameters: CSAFUpdateParameters) -> Optional[CSAFRoot]
 
     csaf_root = _create_csaf_root(csaf)
 
-    csaf.document_id = csaf_root.document.tracking.id
-    csaf.save()
-
     csaf_root.product_tree = product_tree
     csaf_root.vulnerabilities = vulnerabilities
 
@@ -255,12 +253,12 @@ def _create_csaf_root(csaf: CSAF) -> CSAFRoot:
         )
         csaf_revision_history_list.append(csaf_revision_history)
 
-    document_id = _get_document_id(
+    tracking_id = _get_document_id(
         csaf.document_id_prefix, csaf.document_base_id, csaf.version
     )
 
     csaf_tracking = CSAFTracking(
-        id=document_id,
+        id=tracking_id,
         initial_release_date=csaf.tracking_initial_release_date.isoformat(),
         current_release_date=csaf.tracking_current_release_date.isoformat(),
         version=str(csaf.version),

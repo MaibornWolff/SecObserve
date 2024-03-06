@@ -45,7 +45,7 @@ const CSAFUpdate = () => {
     );
 
     const update_csaf = async (data: any) => {
-        const url = "vex/csaf_document/update/" + data.document_base_id + "/";
+        const url = "vex/csaf_document/update/" + data.document_id_prefix + "/" + data.document_base_id + "/";
         axios_instance
             .post(url, data, { responseType: "blob" })
             .then(function (response) {

@@ -7,7 +7,6 @@ export interface CSAF extends RaRecord {
     vulnerablity_names: string;
     document_id_prefix: string;
     document_base_id: string;
-    document_id: string;
     version: number;
     content_hash: string;
     title: string;
@@ -49,7 +48,6 @@ export interface OpenVEX extends RaRecord {
     vulnerablity_names: string;
     document_id_prefix: string;
     document_base_id: string;
-    document_id: string;
     version: number;
     content_hash: string;
     author: string;

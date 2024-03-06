@@ -1,7 +1,6 @@
 import { maxLength, maxValue, minValue, required } from "react-admin";
 
 export const validate_required = [required()];
-export const validate_required_200 = [required(), maxLength(200)];
 export const validate_required_255 = [required(), maxLength(255)];
 export const validate_255 = [maxLength(255)];
 export const validate_513 = [maxLength(513)];

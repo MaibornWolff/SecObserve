@@ -66,7 +66,6 @@ const CSAFShow = () => {
                         <TextField source="document_id_prefix" label="ID prefix" />
                         <TextField source="document_base_id" label="Base ID" />
                         <TextField source="version" />
-                        <TextField source="document_id" label="Document ID" />
                         <TextField source="title" />
                         <TextField source="tlp_label" label="TLP label" />
                         <Divider sx={{ marginTop: 2, marginBottom: 2 }} />

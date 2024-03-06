@@ -1,4 +1,5 @@
 import hashlib
+from dataclasses import dataclass
 from typing import Optional
 
 import jsonpickle
@@ -9,7 +10,7 @@ from application.commons.services.global_request import get_current_user
 from application.core.models import Branch, Observation, Observation_Log, Product
 from application.core.types import Status
 from application.vex.models import OpenVEX, OpenVEX_Branch, OpenVEX_Vulnerability
-from application.vex.queries.open_vex import get_open_vex_by_document_base_id
+from application.vex.queries.open_vex import get_open_vex_by_document_id
 from application.vex.services.open_vex_helpers import OpenVEXVulnerabilityCache
 from application.vex.services.vex_base import (
     check_and_get_product,
@@ -34,38 +35,53 @@ from application.vex.types import (
 )
 
 
-def create_open_vex_document(
-    product_id: int,
-    vulnerability_names: list[str],
-    branch_names: list[str],
-    document_id_prefix: str,
-    author: str,
-    role: str,
-) -> Optional[OpenVEXDocument]:
-    check_product_or_vulnerabilities(product_id, vulnerability_names)
+@dataclass()
+class OpenVEXCreateParameters:
+    product_id: int
+    vulnerability_names: list[str]
+    branch_names: list[str]
+    id_namespace: str
+    document_id_prefix: str
+    author: str
+    role: str
 
-    product = check_and_get_product(product_id)
-    check_vulnerability_names(vulnerability_names)
-    branches = check_branch_names(branch_names, product)
+
+@dataclass()
+class OpenVEXUpdateParameters:
+    document_id_prefix: str
+    document_base_id: str
+    author: str
+    role: str
+
+
+def create_open_vex_document(
+    parameters: OpenVEXCreateParameters,
+) -> Optional[OpenVEXDocument]:
+    check_product_or_vulnerabilities(
+        parameters.product_id, parameters.vulnerability_names
+    )
+
+    product = check_and_get_product(parameters.product_id)
+    check_vulnerability_names(parameters.vulnerability_names)
+    branches = check_branch_names(parameters.branch_names, product)
 
     user = get_current_user()
     if not user:
         raise ValueError("No user in request")
 
-    document_base_id = create_document_base_id(document_id_prefix)
-    document_id = _get_document_id(document_id_prefix, document_base_id)
+    document_base_id = create_document_base_id(parameters.document_id_prefix)
 
     open_vex = OpenVEX.objects.create(
         product=product,
-        document_id_prefix=document_id_prefix,
+        id_namespace=parameters.id_namespace,
+        document_id_prefix=parameters.document_id_prefix,
         document_base_id=document_base_id,
-        document_id=document_id,
-        author=author,
-        role=role,
+        author=parameters.author,
+        role=parameters.role,
         version=1,
         user=user,
     )
-    for vulnerability_name in vulnerability_names:
+    for vulnerability_name in parameters.vulnerability_names:
         if vulnerability_name is None:
             vulnerability_name = ""
         OpenVEX_Vulnerability.objects.create(openvex=open_vex, name=vulnerability_name)
@@ -73,9 +89,12 @@ def create_open_vex_document(
     for branch in branches:
         OpenVEX_Branch.objects.create(openvex=open_vex, branch=branch)
 
+    document_id = _get_document_id(
+        parameters.id_namespace, parameters.document_id_prefix, document_base_id
+    )
     open_vex_document = OpenVEXDocument(
         context="https://openvex.dev/ns/v0.2.0",
-        id=open_vex.document_id,
+        id=document_id,
         version=open_vex.version,
         author=open_vex.author,
         role=open_vex.role,
@@ -87,9 +106,11 @@ def create_open_vex_document(
 
     statements = []
     if product:
-        statements = _get_statements_for_product(product, vulnerability_names, branches)
+        statements = _get_statements_for_product(
+            product, parameters.vulnerability_names, branches
+        )
     else:
-        statements = _get_statements_for_vulnerabilities(vulnerability_names)
+        statements = _get_statements_for_vulnerabilities(parameters.vulnerability_names)
 
     if not statements:
         open_vex.delete()
@@ -109,11 +130,16 @@ def create_open_vex_document(
 
 
 def update_open_vex_document(
-    document_base_id: str, author: str, role: str
+    parameters: OpenVEXUpdateParameters,
 ) -> Optional[OpenVEXDocument]:
-    open_vex = get_open_vex_by_document_base_id(document_base_id)
+    open_vex = get_open_vex_by_document_id(
+        parameters.document_id_prefix, parameters.document_base_id
+    )
     if not open_vex:
-        raise NotFound(f"OpenVEX document with id {document_base_id} does not exist")
+        raise NotFound(
+            f"OpenVEX document with ids {parameters.document_id_prefix}"
+            + f" and {parameters.document_base_id} does not exist"
+        )
 
     open_vex_vulnerability_names = list(
         OpenVEX_Vulnerability.objects.filter(openvex=open_vex).values_list(
@@ -142,17 +168,20 @@ def update_open_vex_document(
     if statements_hash == open_vex.content_hash:
         return None
 
-    if author:
-        open_vex.author = author
-    if role:
-        open_vex.role = role
+    if parameters.author:
+        open_vex.author = parameters.author
+    if parameters.role:
+        open_vex.role = parameters.role
     open_vex.version += 1
     open_vex.content_hash = statements_hash
     open_vex.save()
 
+    document_id = _get_document_id(
+        open_vex.id_namespace, open_vex.document_id_prefix, parameters.document_base_id
+    )
     open_vex_document = OpenVEXDocument(
         context="https://openvex.dev/ns/v0.2.0",
-        id=open_vex.document_id,
+        id=document_id,
         version=open_vex.version,
         author=open_vex.author,
         role=open_vex.role,
@@ -168,11 +197,13 @@ def update_open_vex_document(
     return open_vex_document
 
 
-def _get_document_id(document_id_prefix: str, document_base_id: str) -> str:
-    if not document_id_prefix.endswith("/"):
-        document_id_prefix += "/"
+def _get_document_id(
+    id_namespace: str, document_id_prefix: str, document_base_id: str
+) -> str:
+    if not id_namespace.endswith("/"):
+        id_namespace += "/"
 
-    return document_id_prefix + "OpenVEX-" + document_base_id
+    return f"{id_namespace}{document_id_prefix}_{document_base_id}"
 
 
 def _get_statements_for_vulnerabilities(

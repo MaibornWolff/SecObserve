@@ -63,10 +63,10 @@ const OpenVEXShow = () => {
                         <TextField source="user_full_name" label="User" />
                         <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
                         <Typography variant="h6">Document</Typography>{" "}
+                        <TextField source="id_namespace" label="ID namespace" />
                         <TextField source="document_id_prefix" label="ID prefix" />
                         <TextField source="document_base_id" label="Base ID" />
                         <TextField source="version" />
-                        <TextField source="document_id" label="Document ID" />
                         <TextField source="author" />
                         <TextField source="role" />
                         <Divider sx={{ marginTop: 2, marginBottom: 2 }} />

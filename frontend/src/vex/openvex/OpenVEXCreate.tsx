@@ -16,7 +16,7 @@ import {
 } from "react-admin";
 
 import axios_instance from "../../access_control/axios_instance";
-import { validate_255, validate_required_200, validate_required_255 } from "../../commons/custom_validators";
+import { validate_255, validate_required_255 } from "../../commons/custom_validators";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 
 const OpenVEXCreate = () => {
@@ -145,9 +145,14 @@ const OpenVEXCreate = () => {
                             <Divider flexItem sx={{ marginBottom: 2 }} />
                             <Typography variant="h6">Document</Typography>
                             <TextInputWide
+                                source="id_namespace"
+                                label="ID namespace"
+                                validate={validate_required_255}
+                            />
+                            <TextInputWide
                                 source="document_id_prefix"
                                 label="ID prefix"
-                                validate={validate_required_200}
+                                validate={validate_required_255}
                             />
                             <TextInputWide source="author" validate={validate_required_255} />
                             <TextInputWide source="role" validate={validate_required_255} />
