@@ -17,7 +17,7 @@ import { PERMISSION_OBSERVATION_DELETE } from "../../access_control/types";
 import {
     validate_255,
     validate_2048,
-    validate_min_0_999999,
+    validate_0_999999,
     validate_required,
     validate_required_255,
 } from "../../commons/custom_validators";
@@ -138,14 +138,14 @@ const ObservationEditForm = () => {
                         label="Source line start"
                         min={0}
                         step={1}
-                        validate={validate_min_0_999999}
+                        validate={validate_0_999999}
                     />
                     <NumberInput
                         source="origin_source_line_end"
                         label="Source line end"
                         min={0}
                         step={1}
-                        validate={validate_min_0_999999}
+                        validate={validate_0_999999}
                     />
                 </Stack>
                 <Stack direction="row" spacing={2}>

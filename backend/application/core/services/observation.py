@@ -64,10 +64,10 @@ def get_current_severity(observation) -> str:
     if observation.parser_severity:
         return observation.parser_severity
 
-    return _get_cvss3_severity(observation.cvss3_score)
+    return get_cvss3_severity(observation.cvss3_score)
 
 
-def _get_cvss3_severity(cvss3_score: int):
+def get_cvss3_severity(cvss3_score: int):
     if cvss3_score is None:
         return Severity.SEVERITY_UNKOWN
 

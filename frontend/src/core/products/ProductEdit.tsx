@@ -19,7 +19,7 @@ import { PERMISSION_PRODUCT_DELETE } from "../../access_control/types";
 import {
     validate_255,
     validate_2048,
-    validate_min_0_999999,
+    validate_0_999999,
     validate_required_255,
 } from "../../commons/custom_validators";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
@@ -199,7 +199,7 @@ const ProductEdit = () => {
                                     min={1}
                                     max={999999}
                                     sx={{ width: "10em" }}
-                                    validate={validate_min_0_999999}
+                                    validate={validate_0_999999}
                                 />
                                 <TextInputWide
                                     source="repository_branch_housekeeping_exempt_branches"
@@ -261,7 +261,7 @@ const ProductEdit = () => {
                                     min={0}
                                     max={999999}
                                     sx={{ width: "12em" }}
-                                    validate={validate_min_0_999999}
+                                    validate={validate_0_999999}
                                 />
                                 <NumberInput
                                     label="Threshold high"
@@ -269,7 +269,7 @@ const ProductEdit = () => {
                                     min={0}
                                     max={999999}
                                     sx={{ width: "12em" }}
-                                    validate={validate_min_0_999999}
+                                    validate={validate_0_999999}
                                 />
                                 <NumberInput
                                     label="Threshold medium"
@@ -277,7 +277,7 @@ const ProductEdit = () => {
                                     min={0}
                                     max={999999}
                                     sx={{ width: "12em" }}
-                                    validate={validate_min_0_999999}
+                                    validate={validate_0_999999}
                                 />
                                 <NumberInput
                                     label="Threshold low"
@@ -285,7 +285,7 @@ const ProductEdit = () => {
                                     min={0}
                                     max={999999}
                                     sx={{ width: "12em" }}
-                                    validate={validate_min_0_999999}
+                                    validate={validate_0_999999}
                                 />
                                 <NumberInput
                                     label="Threshold none"
@@ -293,7 +293,7 @@ const ProductEdit = () => {
                                     min={0}
                                     max={999999}
                                     sx={{ width: "12em" }}
-                                    validate={validate_min_0_999999}
+                                    validate={validate_0_999999}
                                 />
                                 <NumberInput
                                     label="Threshold unkown"
@@ -301,7 +301,7 @@ const ProductEdit = () => {
                                     min={0}
                                     max={999999}
                                     sx={{ width: "12em" }}
-                                    validate={validate_min_0_999999}
+                                    validate={validate_0_999999}
                                 />
                             </Stack>
                         )

@@ -2,6 +2,7 @@ from typing import Optional
 from urllib.parse import urlparse
 
 import validators
+from cvss import CVSS3, CVSSError
 from django.utils import timezone
 from packageurl import PackageURL
 from rest_framework.exceptions import PermissionDenied
@@ -15,7 +16,6 @@ from rest_framework.serializers import (
     SerializerMethodField,
     ValidationError,
 )
-from cvss import CVSS3, CVSSError
 
 from application.access_control.api.serializers import UserSerializer
 from application.access_control.services.roles_permissions import (
@@ -37,6 +37,7 @@ from application.core.models import (
     Service,
 )
 from application.core.queries.product_member import get_product_member
+from application.core.services.observation import get_cvss3_severity
 from application.core.services.observation_log import create_observation_log
 from application.core.services.security_gate import check_security_gate
 from application.core.types import Severity, Status, VexJustification
@@ -596,6 +597,9 @@ class ObservationUpdateSerializer(ModelSerializer):
             raise ValidationError("Only manual observations can be updated")
 
         attrs["import_last_seen"] = timezone.now()
+
+        _validate_cvss_and_severity(attrs)
+
         return super().validate(attrs)
 
     def validate_branch(self, branch: Branch) -> Branch:
@@ -605,6 +609,9 @@ class ObservationUpdateSerializer(ModelSerializer):
             )
 
         return branch
+
+    def validate_cvss3_vector(self, cvss3_vector: str) -> str:
+        return _validate_cvss3_vector(cvss3_vector)
 
     def update(self, instance: Observation, validated_data: dict):
         actual_severity = instance.current_severity
@@ -681,6 +688,10 @@ class ObservationUpdateSerializer(ModelSerializer):
             "origin_cloud_account_subscription_project",
             "origin_cloud_resource",
             "origin_cloud_resource_type",
+            "vulnerability_id",
+            "cvss3_score",
+            "cvss3_vector",
+            "cwe",
         ]
 
 
@@ -696,24 +707,12 @@ class ObservationCreateSerializer(ModelSerializer):
                     "Branch does not belong to the same product as the observation"
                 )
 
-        if attrs.get("cvss3_vector"):
-            cvss3 = CVSS3(attrs.get("cvss3_vector"))
-            print("------------------------------------")
-            print(cvss3.scores())
-            print("------------------------------------")
+        _validate_cvss_and_severity(attrs)
 
         return super().validate(attrs)
 
     def validate_cvss3_vector(self, cvss3_vector: str) -> str:
-        if cvss3_vector:
-            try:
-                cvss3 = CVSS3(cvss3_vector)
-                cvss3_vector = cvss3.clean_vector()
-            except CVSSError as e:
-                raise ValidationError(str(e))
-
-        return cvss3_vector
-
+        return _validate_cvss3_vector(cvss3_vector)
 
     def create(self, validated_data):
         observation: Observation = super().create(validated_data)
@@ -869,3 +868,47 @@ def _validate_url(url: str) -> str:
         raise ValidationError("Not a valid URL")
 
     return url
+
+
+def _validate_cvss3_vector(cvss3_vector):
+    if cvss3_vector:
+        try:
+            cvss3 = CVSS3(cvss3_vector)
+            cvss3_vector = cvss3.clean_vector()
+        except CVSSError as e:
+            raise ValidationError(str(e))
+
+    return cvss3_vector
+
+
+def _validate_cvss_and_severity(attrs):
+    base_score = None
+    if attrs.get("cvss3_vector"):
+        cvss3 = CVSS3(attrs.get("cvss3_vector"))
+        base_score = cvss3.scores()[0]
+
+    cvss3_score = attrs.get("cvss3_score")
+    if cvss3_score != None:
+        if base_score != cvss3_score:
+            raise ValidationError(
+                f"Score from CVSS3 vector ({base_score}) is different than CVSS3 score ({cvss3_score})"
+            )
+    else:
+        attrs["cvss3_score"] = base_score
+
+    cvss3_score = attrs.get("cvss3_score")
+    cvss3_severity = get_cvss3_severity(cvss3_score) if cvss3_score != None else None
+    parser_severity = attrs.get("parser_severity")
+
+    if parser_severity:
+        if parser_severity != cvss3_severity:
+            raise ValidationError(
+                f"Severity ({parser_severity}) is different than severity from CVSS3 score ({cvss3_severity})"
+            )
+    else:
+        if cvss3_severity:
+            attrs["parser_severity"] = cvss3_severity
+        else:
+            raise ValidationError(
+                "Either Severity, CVSS3 score or CVSS3 vector has to be set"
+            )
