@@ -4,18 +4,20 @@ volumes:
   dev_huey_data:
   dev_mysql_data:
   dev_postgres_data:
-  dev_keycloak_data:
 
 services:
   frontend:
     build:
       context: .
-      dockerfile: ./docker/frontend/Dockerfile
+      dockerfile: ./docker/frontend/dev.Dockerfile
     image: secobserve_frontend
+    command: ["/bin/sh", "-c", "NODE_ENV=development runtime-env-cra --env-file=./.env.example && vite --host 0.0.0.0"]
     profiles:
       - frontend
     ports:
       - "3000:3000"
+    volumes:
+      - ./frontend:/app
     environment:
       API_BASE_URL: ${SO_API_BASE_URL:-http://localhost:8000/api}
       OIDC_ENABLE: ${SO_OIDC_ENABLE:-true}
@@ -31,7 +33,6 @@ services:
     image: secobserve_backend_dev
     depends_on:
       - postgres
-      - keycloak
     environment:
       # --- Admin user ---
       ADMIN_USER: ${SO_ADMIN_USER:-admin}
@@ -77,22 +78,3 @@ services:
     ports:
       - "5432:5432"
 
-  mailhog:
-    image: mailhog/mailhog:v1.0.1
-    entrypoint: ["/bin/sh", "-c", "MailHog &>/dev/null"]
-    ports:
-      - "1025:1025"
-      - "8025:8025"
-
-  keycloak:
-    image: keycloak/keycloak:23.0.7
-    environment:
-      - KEYCLOAK_ADMIN=admin
-      - KEYCLOAK_ADMIN_PASSWORD=admin
-      - KC_HTTPS_ENABLED=false
-      - KC_HOSTNAME_STRICT_HTTPS=false
-    volumes:
-      - ./keycloak:/opt/keycloak/data/
-    ports:
-      - 8080:8080
-    command: start-dev
