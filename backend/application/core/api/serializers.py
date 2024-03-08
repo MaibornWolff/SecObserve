@@ -1,5 +1,5 @@
-from decimal import Decimal
 import re
+from decimal import Decimal
 from typing import Optional
 from urllib.parse import urlparse
 
@@ -927,6 +927,8 @@ def _validate_cvss_and_severity(attrs):
             raise ValidationError(
                 "Either Severity, CVSS3 score or CVSS3 vector has to be set"
             )
+
+
 def _validate_purl(purl: str) -> str:
     if purl:
         try:
