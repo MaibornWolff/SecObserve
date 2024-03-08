@@ -119,7 +119,12 @@ class BranchFilter(FilterSet):
 
     ordering = OrderingFilter(
         # tuple-mapping retains order
-        fields=(("name", "name"), ("last_import", "last_import")),
+        fields=(
+            ("name", "name"),
+            ("last_import", "last_import"),
+            ("purl", "purl"),
+            ("cpe23", "cpe23"),
+        ),
     )
 
     class Meta:

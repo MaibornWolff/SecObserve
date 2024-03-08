@@ -13,7 +13,7 @@ import {
     useRefresh,
 } from "react-admin";
 
-import { validate_required_255 } from "../../commons/custom_validators";
+import { validate_255, validate_required_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 
 export type BranchCreateProps = {
@@ -89,6 +89,8 @@ const BranchCreate = ({ id }: BranchCreateProps) => {
                     <CreateBase resource="branches">
                         <SimpleForm onSubmit={create_branch} toolbar={<CustomToolbar />}>
                             <TextInputWide source="name" validate={validate_required_255} />
+                            <TextInputWide source="purl" label="PURL" validate={validate_255} />
+                            <TextInputWide source="cpe23" label="CPE 2.3" validate={validate_255} />
                             <BooleanInput
                                 source="housekeeping_protect"
                                 label="Protect from housekeeping"

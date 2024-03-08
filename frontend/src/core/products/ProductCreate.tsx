@@ -19,6 +19,12 @@ const ProductCreate = () => {
         if (!data.description) {
             data.description = "";
         }
+        if (!data.purl) {
+            data.purl = "";
+        }
+        if (!data.cpe23) {
+            data.cpe23 = "";
+        }
         if (!data.repository_prefix) {
             data.repository_prefix = "";
         }
@@ -127,6 +133,8 @@ const ProductCreate = () => {
                 >
                     <AutocompleteInputWide optionText="name" />
                 </ReferenceInput>
+                <TextInputWide source="purl" validate={validate_255} label="PURL" />
+                <TextInputWide source="cpe23" validate={validate_255} label="CPE 2.3" />
 
                 <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 

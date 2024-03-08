@@ -4,7 +4,7 @@ import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import { BooleanInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh, useUpdate } from "react-admin";
 
-import { validate_required_255 } from "../../commons/custom_validators";
+import { validate_255, validate_required_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 
 const BranchEdit = () => {
@@ -22,6 +22,8 @@ const BranchEdit = () => {
         const patch = {
             name: data.name,
             housekeeping_protect: data.housekeeping_protect,
+            purl: data.purl,
+            cpe23: data.cpe23,
         };
 
         update(
@@ -85,6 +87,8 @@ const BranchEdit = () => {
                 <DialogContent>
                     <SimpleForm onSubmit={branch_update} toolbar={<CustomToolbar />}>
                         <TextInputWide source="name" validate={validate_required_255} />
+                        <TextInputWide source="purl" label="PURL" validate={validate_255} />
+                        <TextInputWide source="cpe23" label="CPE 2.3" validate={validate_255} />
                         <BooleanInput source="housekeeping_protect" label="Protect from housekeeping" />
                     </SimpleForm>
                 </DialogContent>

@@ -29,6 +29,16 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                         </ReferenceField>
                     </Labeled>
                 )}
+                {product.purl && (
+                    <Labeled label="PURL">
+                        <TextField source="purl" />
+                    </Labeled>
+                )}
+                {product.cpe23 && (
+                    <Labeled label="CPE 2.3">
+                        <TextField source="cpe23" />
+                    </Labeled>
+                )}
             </Stack>
 
             <Divider sx={{ marginTop: 2, marginBottom: 2 }} />

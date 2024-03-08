@@ -1,3 +1,4 @@
+import re
 from decimal import Decimal
 from typing import Optional
 from urllib.parse import urlparse
@@ -278,6 +279,12 @@ class ProductSerializer(ProductCoreSerializer):
     def validate_notification_slack_webhook(self, repository_prefix: str) -> str:
         return _validate_url(repository_prefix)
 
+    def validate_purl(self, purl: str) -> str:
+        return _validate_purl(purl)
+
+    def validate_cpe23(self, cpe23: str) -> str:
+        return _validate_cpe23(cpe23)
+
 
 class NestedProductSerializer(ModelSerializer):
     permissions = SerializerMethodField()
@@ -367,6 +374,12 @@ class BranchSerializer(ModelSerializer):
     class Meta:
         model = Branch
         fields = "__all__"
+
+    def validate_purl(self, purl: str) -> str:
+        return _validate_purl(purl)
+
+    def validate_cpe23(self, cpe23: str) -> str:
+        return _validate_cpe23(cpe23)
 
     def get_name_with_product(self, obj: Service) -> str:
         return f"{obj.name} ({obj.product.name})"
@@ -914,3 +927,25 @@ def _validate_cvss_and_severity(attrs):
             raise ValidationError(
                 "Either Severity, CVSS3 score or CVSS3 vector has to be set"
             )
+
+
+def _validate_purl(purl: str) -> str:
+    if purl:
+        try:
+            PackageURL.from_string(purl)
+        except ValueError as e:
+            raise ValidationError(str(e))  # pylint: disable=raise-missing-from
+            # The initial exception is not really relevant, we only need its message
+
+    return purl
+
+
+def _validate_cpe23(cpe23: str) -> str:
+    if cpe23:
+        # Regex taken from https://csrc.nist.gov/schema/cpe/2.3/cpe-naming_2.3.xsd
+        if not re.match(
+            r"""cpe:2\.3:[aho\*\-](:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&'\(\)\+,/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){5}(:(([a-zA-Z]{2,3}(-([a-zA-Z]{2}|[0-9]{3}))?)|[\*\-]))(:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&'\(\)\+,/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){4}""",  # noqa: E501 pylint: disable=line-too-long
+            cpe23,
+        ):
+            raise ValidationError("Not a valid CPE 2.3")
+    return cpe23
