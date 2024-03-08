@@ -16,10 +16,10 @@ import {
 } from "react-admin";
 
 import {
+    validate_0_10,
+    validate_0_999999,
     validate_255,
     validate_2048,
-    validate_0_999999,
-    validate_0_10,
     validate_required,
     validate_required_255,
 } from "../../commons/custom_validators";
@@ -179,32 +179,29 @@ const ObservationCreate = ({ id }: ObservationCreateProps) => {
                             <Typography variant="h6">Vulnerability</Typography>
                             <Stack>
                                 <TextInputWide
-                                    source="vulnerability_id" label="Vulnerability ID"
+                                    source="vulnerability_id"
+                                    label="Vulnerability ID"
                                     validate={validate_255}
                                 />
                                 <Stack direction="row" spacing={2}>
-                                <NumberInput
+                                    <NumberInput
                                         source="cvss3_score"
                                         label="CVSS3 score"
                                         min={0}
                                         step={0.1}
                                         validate={validate_0_10}
-                                        sx={{ width: "10em"}}
+                                        sx={{ width: "10em" }}
                                     />
-                                    <TextInputWide
-                                        source="cvss3_vector"
-                                        label="CVSS3 vector"
-                                        validate={validate_255}
-                                    />
+                                    <TextInputWide source="cvss3_vector" label="CVSS3 vector" validate={validate_255} />
                                 </Stack>
                                 <NumberInput
-                                        source="cwe"
-                                        label="CWE"
-                                        min={0}
-                                        step={1}
-                                        validate={validate_0_999999}
-                                        sx={{ width: "10em"}}
-                                    />
+                                    source="cwe"
+                                    label="CWE"
+                                    min={0}
+                                    step={1}
+                                    validate={validate_0_999999}
+                                    sx={{ width: "10em" }}
+                                />
                             </Stack>
 
                             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />

@@ -2,12 +2,7 @@ import { Divider, Stack, Typography } from "@mui/material";
 import { RichTextInput } from "ra-input-rich-text";
 import { Create, FormDataConsumer, NullableBooleanInput, NumberInput, SimpleForm } from "react-admin";
 
-import {
-    validate_255,
-    validate_2048,
-    validate_0_999999,
-    validate_required_255,
-} from "../../commons/custom_validators";
+import { validate_0_999999, validate_255, validate_2048, validate_required_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 
 const ProductGroupCreate = () => {

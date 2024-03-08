@@ -1,3 +1,4 @@
+from decimal import Decimal
 from typing import Optional
 from urllib.parse import urlparse
 
@@ -885,11 +886,11 @@ def _validate_cvss_and_severity(attrs):
     base_score = None
     if attrs.get("cvss3_vector"):
         cvss3 = CVSS3(attrs.get("cvss3_vector"))
-        base_score = cvss3.scores()[0]
+        base_score = Decimal(cvss3.scores()[0]).quantize(Decimal('.0'))
 
     cvss3_score = attrs.get("cvss3_score")
     if cvss3_score != None:
-        if base_score != cvss3_score:
+        if base_score != None and base_score != cvss3_score:
             raise ValidationError(
                 f"Score from CVSS3 vector ({base_score}) is different than CVSS3 score ({cvss3_score})"
             )
@@ -906,9 +907,7 @@ def _validate_cvss_and_severity(attrs):
                 f"Severity ({parser_severity}) is different than severity from CVSS3 score ({cvss3_severity})"
             )
     else:
-        if cvss3_severity:
-            attrs["parser_severity"] = cvss3_severity
-        else:
+        if not cvss3_severity:
             raise ValidationError(
                 "Either Severity, CVSS3 score or CVSS3 vector has to be set"
             )
