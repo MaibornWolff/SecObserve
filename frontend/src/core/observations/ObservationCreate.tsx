@@ -16,9 +16,10 @@ import {
 } from "react-admin";
 
 import {
+    validate_0_10,
+    validate_0_999999,
     validate_255,
     validate_2048,
-    validate_min_0_999999,
     validate_required,
     validate_required_255,
 } from "../../commons/custom_validators";
@@ -86,13 +87,13 @@ const ObservationCreate = ({ id }: ObservationCreateProps) => {
                 onSuccess: () => {
                     refresh();
                     notify("Observation added", { type: "success" });
+                    setOpen(false);
                 },
                 onError: (error: any) => {
                     notify(error.message, { type: "warning" });
                 },
             }
         );
-        setOpen(false);
     };
 
     return (
@@ -118,7 +119,6 @@ const ObservationCreate = ({ id }: ObservationCreateProps) => {
                                         source="parser_severity"
                                         label="Severity"
                                         choices={OBSERVATION_SEVERITY_CHOICES}
-                                        validate={validate_required}
                                     />
                                     <AutocompleteInputMedium
                                         source="parser_status"
@@ -175,6 +175,36 @@ const ObservationCreate = ({ id }: ObservationCreateProps) => {
 
                             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
+                            <Typography variant="h6">Vulnerability</Typography>
+                            <Stack>
+                                <TextInputWide
+                                    source="vulnerability_id"
+                                    label="Vulnerability ID"
+                                    validate={validate_255}
+                                />
+                                <Stack direction="row" spacing={2}>
+                                    <NumberInput
+                                        source="cvss3_score"
+                                        label="CVSS3 score"
+                                        min={0}
+                                        step={0.1}
+                                        validate={validate_0_10}
+                                        sx={{ width: "10em" }}
+                                    />
+                                    <TextInputWide source="cvss3_vector" label="CVSS3 vector" validate={validate_255} />
+                                </Stack>
+                                <NumberInput
+                                    source="cwe"
+                                    label="CWE"
+                                    min={0}
+                                    step={1}
+                                    validate={validate_0_999999}
+                                    sx={{ width: "10em" }}
+                                />
+                            </Stack>
+
+                            <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+
                             <Typography variant="h6">Origins</Typography>
                             <Stack>
                                 <TextInputWide
@@ -222,14 +252,14 @@ const ObservationCreate = ({ id }: ObservationCreateProps) => {
                                         label="Source line start"
                                         min={0}
                                         step={1}
-                                        validate={validate_min_0_999999}
+                                        validate={validate_0_999999}
                                     />
                                     <NumberInput
                                         source="origin_source_line_end"
                                         label="Source line end"
                                         min={0}
                                         step={1}
-                                        validate={validate_min_0_999999}
+                                        validate={validate_0_999999}
                                     />
                                 </Stack>
                             </Stack>

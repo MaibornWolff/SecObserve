@@ -10,12 +10,7 @@ import {
     SimpleForm,
 } from "react-admin";
 
-import {
-    validate_255,
-    validate_2048,
-    validate_min_0_999999,
-    validate_required_255,
-} from "../../commons/custom_validators";
+import { validate_0_999999, validate_255, validate_2048, validate_required_255 } from "../../commons/custom_validators";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { ISSUE_TRACKER_TYPE_CHOICES, OBSERVATION_SEVERITY_CHOICES } from "../types";
 
@@ -172,7 +167,7 @@ const ProductCreate = () => {
                                     defaultValue={30}
                                     min={1}
                                     max={999999}
-                                    validate={validate_min_0_999999}
+                                    validate={validate_0_999999}
                                 />
                                 <TextInputWide
                                     source="repository_branch_housekeeping_exempt_branches"
@@ -235,7 +230,7 @@ const ProductCreate = () => {
                                     min={0}
                                     max={999999}
                                     sx={{ width: "12em" }}
-                                    validate={validate_min_0_999999}
+                                    validate={validate_0_999999}
                                 />
                                 <NumberInput
                                     label="Threshold high"
@@ -243,7 +238,7 @@ const ProductCreate = () => {
                                     min={0}
                                     max={999999}
                                     sx={{ width: "12em" }}
-                                    validate={validate_min_0_999999}
+                                    validate={validate_0_999999}
                                 />
                                 <NumberInput
                                     label="Threshold medium"
@@ -251,7 +246,7 @@ const ProductCreate = () => {
                                     min={0}
                                     max={999999}
                                     sx={{ width: "12em" }}
-                                    validate={validate_min_0_999999}
+                                    validate={validate_0_999999}
                                 />
                                 <NumberInput
                                     label="Threshold low"
@@ -259,7 +254,7 @@ const ProductCreate = () => {
                                     min={0}
                                     max={999999}
                                     sx={{ width: "12em" }}
-                                    validate={validate_min_0_999999}
+                                    validate={validate_0_999999}
                                 />
                                 <NumberInput
                                     label="Threshold none"
@@ -267,7 +262,7 @@ const ProductCreate = () => {
                                     min={0}
                                     max={999999}
                                     sx={{ width: "12em" }}
-                                    validate={validate_min_0_999999}
+                                    validate={validate_0_999999}
                                 />
                                 <NumberInput
                                     label="Threshold unkown"
@@ -275,7 +270,7 @@ const ProductCreate = () => {
                                     min={0}
                                     max={999999}
                                     sx={{ width: "12em" }}
-                                    validate={validate_min_0_999999}
+                                    validate={validate_0_999999}
                                 />
                             </Stack>
                         )

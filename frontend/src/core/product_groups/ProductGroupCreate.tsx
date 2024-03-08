@@ -2,12 +2,7 @@ import { Divider, Stack, Typography } from "@mui/material";
 import { RichTextInput } from "ra-input-rich-text";
 import { Create, FormDataConsumer, NullableBooleanInput, NumberInput, SimpleForm } from "react-admin";
 
-import {
-    validate_255,
-    validate_2048,
-    validate_min_0_999999,
-    validate_required_255,
-} from "../../commons/custom_validators";
+import { validate_0_999999, validate_255, validate_2048, validate_required_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 
 const ProductGroupCreate = () => {
@@ -113,7 +108,7 @@ const ProductGroupCreate = () => {
                                     defaultValue={30}
                                     min={1}
                                     max={999999}
-                                    validate={validate_min_0_999999}
+                                    validate={validate_0_999999}
                                 />
                                 <TextInputWide
                                     source="repository_branch_housekeeping_exempt_branches"
@@ -175,42 +170,42 @@ const ProductGroupCreate = () => {
                                     source="security_gate_threshold_critical"
                                     min={0}
                                     max={999999}
-                                    validate={validate_min_0_999999}
+                                    validate={validate_0_999999}
                                 />
                                 <NumberInput
                                     label="Threshold high"
                                     source="security_gate_threshold_high"
                                     min={0}
                                     max={999999}
-                                    validate={validate_min_0_999999}
+                                    validate={validate_0_999999}
                                 />
                                 <NumberInput
                                     label="Threshold medium"
                                     source="security_gate_threshold_medium"
                                     min={0}
                                     max={999999}
-                                    validate={validate_min_0_999999}
+                                    validate={validate_0_999999}
                                 />
                                 <NumberInput
                                     label="Threshold low"
                                     source="security_gate_threshold_low"
                                     min={0}
                                     max={999999}
-                                    validate={validate_min_0_999999}
+                                    validate={validate_0_999999}
                                 />
                                 <NumberInput
                                     label="Threshold none"
                                     source="security_gate_threshold_none"
                                     min={0}
                                     max={999999}
-                                    validate={validate_min_0_999999}
+                                    validate={validate_0_999999}
                                 />
                                 <NumberInput
                                     label="Threshold unkown"
                                     source="security_gate_threshold_unkown"
                                     min={0}
                                     max={999999}
-                                    validate={validate_min_0_999999}
+                                    validate={validate_0_999999}
                                 />
                             </Stack>
                         )
