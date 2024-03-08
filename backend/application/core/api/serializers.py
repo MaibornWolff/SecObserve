@@ -877,7 +877,8 @@ def _validate_cvss3_vector(cvss3_vector):
             cvss3 = CVSS3(cvss3_vector)
             cvss3_vector = cvss3.clean_vector()
         except CVSSError as e:
-            raise ValidationError(str(e))
+            raise ValidationError(str(e))  # pylint: disable=raise-missing-from
+        # The CVSSError itself is not relevant and must not be re-raised
 
     return cvss3_vector
 
@@ -886,11 +887,11 @@ def _validate_cvss_and_severity(attrs):
     base_score = None
     if attrs.get("cvss3_vector"):
         cvss3 = CVSS3(attrs.get("cvss3_vector"))
-        base_score = Decimal(cvss3.scores()[0]).quantize(Decimal('.0'))
+        base_score = Decimal(cvss3.scores()[0]).quantize(Decimal(".0"))
 
     cvss3_score = attrs.get("cvss3_score")
-    if cvss3_score != None:
-        if base_score != None and base_score != cvss3_score:
+    if cvss3_score is not None:
+        if base_score is not None and base_score != cvss3_score:
             raise ValidationError(
                 f"Score from CVSS3 vector ({base_score}) is different than CVSS3 score ({cvss3_score})"
             )
@@ -898,7 +899,9 @@ def _validate_cvss_and_severity(attrs):
         attrs["cvss3_score"] = base_score
 
     cvss3_score = attrs.get("cvss3_score")
-    cvss3_severity = get_cvss3_severity(cvss3_score) if cvss3_score != None else None
+    cvss3_severity = (
+        get_cvss3_severity(cvss3_score) if cvss3_score is not None else None
+    )
     parser_severity = attrs.get("parser_severity")
 
     if parser_severity:
