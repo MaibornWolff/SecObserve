@@ -119,7 +119,6 @@ const ObservationCreate = ({ id }: ObservationCreateProps) => {
                                         source="parser_severity"
                                         label="Severity"
                                         choices={OBSERVATION_SEVERITY_CHOICES}
-                                        // validate={validate_required}
                                     />
                                     <AutocompleteInputMedium
                                         source="parser_status"
