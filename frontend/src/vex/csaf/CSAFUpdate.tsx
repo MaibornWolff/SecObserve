@@ -66,14 +66,13 @@ const CSAFUpdate = () => {
                         type: "success",
                     });
                 }
+                setOpen(false);
             })
             .catch(async function (error) {
                 notify(await error.response.data.text(), {
                     type: "warning",
                 });
             });
-
-        setOpen(false);
     };
 
     return (
