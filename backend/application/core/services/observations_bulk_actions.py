@@ -81,6 +81,7 @@ def observations_bulk_mark_duplicates(
 
     for duplicate in duplicates:
         duplicate.has_potential_duplicates = False
+        duplicate.duplicate_of = observation
         save_assessment(duplicate, None, Status.STATUS_DUPLICATE, comment, "")
 
     set_potential_duplicate(observation)

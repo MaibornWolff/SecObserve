@@ -460,6 +460,12 @@ class EvidenceSerializer(ModelSerializer):
         return evidence.observation.product.pk
 
 
+class NestedObservationIdSerializer(ModelSerializer):
+
+    class Meta:
+        model = Observation
+        fields = ["id"]
+
 class ObservationSerializer(ModelSerializer):
     product_data = NestedProductSerializer(source="product")
     branch_name = SerializerMethodField()
@@ -470,6 +476,7 @@ class ObservationSerializer(ModelSerializer):
     origin_source_file_url = SerializerMethodField()
     origin_component_purl_type = SerializerMethodField()
     issue_tracker_issue_url = SerializerMethodField()
+    duplicates = NestedObservationIdSerializer(many=True)
 
     class Meta:
         model = Observation

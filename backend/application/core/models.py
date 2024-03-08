@@ -480,6 +480,9 @@ class Observation(Model):
     assessment_vex_justification = CharField(
         max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True
     )
+    duplicate_of = ForeignKey(
+        "self", related_name="duplicates", on_delete=PROTECT, null=True
+    )
 
     class Meta:
         indexes = [

@@ -124,7 +124,13 @@ const ObservationShowComponent = () => {
                                 )}
                                 {observation.assessment_status != "" && (
                                     <Labeled>
-                                        <TextField source="assessment_status" />
+                                        {observation.assessment_status == 'Duplicate' && observation.duplicate_of ? (
+                                        <TextUrlField
+                                            label="Assessment status"
+                                            text={'Duplicate of '+observation.duplicate_of}
+                                            url={'#/observations/'+observation.duplicate_of+'/show'}
+                                        />
+                                        ) : (<TextField source="assessment_status" />)}
                                     </Labeled>
                                 )}
                             </Stack>
@@ -146,6 +152,19 @@ const ObservationShowComponent = () => {
                             {observation.recommendation != "" && (
                                 <Labeled label="Recommendation">
                                     <MarkdownField content={observation.recommendation} />
+                                </Labeled>
+                            )}
+                            {observation.duplicates && observation.duplicates.length && (
+                                <Labeled label="Duplicates">
+                                    <Stack direction="row" spacing={2}>
+                                        {observation.duplicates.map((duplicate: any) => (
+                                            <TextUrlField
+                                                text={duplicate.id}
+                                                url={"#/observations/" + duplicate.id + "/show"}
+                                                key={duplicate.id}
+                                            />
+                                        ))}
+                                    </Stack>
                                 </Labeled>
                             )}
                         </Stack>
