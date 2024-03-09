@@ -5,6 +5,15 @@ A VEX (Vulnerability Exploitability eXchange) document is a form of a security a
 * The [Common Security Advisory Framework](https://docs.oasis-open.org/csaf/csaf/v2.0/os/csaf-v2.0-os.html) (CSAF) format is an [OASIS](https://www.oasis-open.org/) standard 
 * [OpenVEX](https://github.com/openvex/spec/blob/main/OPENVEX-SPEC.md) is a community-driven format, maintained by an [OpenSSF](https://openssf.org/) special interest group
 
+## Feature flag
+
+The VEX feature is currently in an experimental state and can be enabled by setting the feature flag `FEATURE_VEX` in the admin interface:
+
+![VEX feature flag](../assets/images/screenshot_vex_feature_flag.png)
+
+Enabling the feature flag will make the VEX functionality available in the main navigation bar and enable the "VEX justification" field in several places.
+
+
 ## Create a new VEX document
 
 To create a VEX document, the user has to define a set of attributes in a dialog. Some of them are different for either a CSAF or OpenVEX document. Other attributes are common to both formats:
@@ -19,6 +28,7 @@ To create a VEX document, the user has to define a set of attributes in a dialog
 Either a product or at least one vulnerability has to be selected.
 
 After pushing the **Create** button in the dialog, the VEX document with the version 1 will be created and ready for download. Additionally a database entry with all attributes is created, which can be selected later to create an updated version of the VEX document
+
 
 ## Update a VEX document
 

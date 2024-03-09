@@ -104,19 +104,18 @@ urlpatterns += [
     ),
 ]
 
-if config.FEATURE_VEX:
-    urlpatterns += [
-        path("api/vex/csaf_document/create/", CSAFDocumentCreateView.as_view()),
-        path(
-            "api/vex/csaf_document/update/<str:document_id_prefix>/<str:document_base_id>/",
-            CSAFDocumentUpdateView.as_view(),
-        ),
-        path("api/vex/openvex_document/create/", OpenVEXDocumentCreateView.as_view()),
-        path(
-            "api/vex/openvex_document/update/<str:document_id_prefix>/<str:document_base_id>/",
-            OpenVEXDocumentUpdateView.as_view(),
-        ),
-    ]
+urlpatterns += [
+    path("api/vex/csaf_document/create/", CSAFDocumentCreateView.as_view()),
+    path(
+        "api/vex/csaf_document/update/<str:document_id_prefix>/<str:document_base_id>/",
+        CSAFDocumentUpdateView.as_view(),
+    ),
+    path("api/vex/openvex_document/create/", OpenVEXDocumentCreateView.as_view()),
+    path(
+        "api/vex/openvex_document/update/<str:document_id_prefix>/<str:document_base_id>/",
+        OpenVEXDocumentUpdateView.as_view(),
+    ),
+]
 
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit
