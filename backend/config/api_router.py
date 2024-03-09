@@ -1,4 +1,3 @@
-from constance import config
 from rest_framework.routers import SimpleRouter
 
 from application.access_control.api.views import ProductApiTokenViewset, UserViewSet
@@ -48,13 +47,12 @@ router.register("evidences", EvidenceViewSet)
 router.register("notifications", NotificationViewSet)
 router.register("vulnerability_checks", VulnerabilityCheckViewSet)
 router.register("potential_duplicates", PotentialDuplicateViewSet)
-if config.FEATURE_VEX:
-    router.register("vex/csaf", CSAFViewSet)
-    router.register("vex/csaf_vulnerabilities", CSAFVulnerabilityViewSet)
-    router.register("vex/csaf_branches", CSAFBranchViewSet)
-    router.register("vex/openvex", OpenVEXViewSet)
-    router.register("vex/openvex_vulnerabilities", OpenVEXVulnerabilityViewSet)
-    router.register("vex/openvex_branches", OpenVEXBranchViewSet)
+router.register("vex/csaf", CSAFViewSet)
+router.register("vex/csaf_vulnerabilities", CSAFVulnerabilityViewSet)
+router.register("vex/csaf_branches", CSAFBranchViewSet)
+router.register("vex/openvex", OpenVEXViewSet)
+router.register("vex/openvex_vulnerabilities", OpenVEXVulnerabilityViewSet)
+router.register("vex/openvex_branches", OpenVEXBranchViewSet)
 
 app_name = "api"
 urlpatterns = router.urls
