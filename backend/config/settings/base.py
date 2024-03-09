@@ -122,6 +122,7 @@ LOCAL_APPS = [
     "application.issue_tracker",
     "application.metrics",
     "application.rules",
+    "application.vex",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -391,7 +392,7 @@ REST_FRAMEWORK = {
 }
 
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
-# CORS_URLS_REGEX = r"^/api/.*$"
+CORS_EXPOSE_HEADERS = ("content-disposition",)
 
 # Your stuff...
 # ------------------------------------------------------------------------------
@@ -523,6 +524,11 @@ CONSTANCE_CONFIG = {
         "Regular expression which branches to exempt from deletion",
         str,
     ),
+    "FEATURE_VEX": (
+        False,
+        "[EXPERIMENTAL] Generate VEX documents in OpenVEX and CSAF format",
+        bool,
+    ),
 }
 
 CONSTANCE_CONFIG_FIELDSETS = {
@@ -559,6 +565,7 @@ CONSTANCE_CONFIG_FIELDSETS = {
         "BRANCH_HOUSEKEEPING_KEEP_INACTIVE_DAYS",
         "BRANCH_HOUSEKEEPING_EXEMPT_BRANCHES",
     ),
+    "Features": ("FEATURE_VEX",),
 }
 
 FIELD_ENCRYPTION_KEY = env("FIELD_ENCRYPTION_KEY")

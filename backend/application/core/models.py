@@ -22,7 +22,7 @@ from application.core.services.observation import (
     get_identity_hash,
     normalize_observation_fields,
 )
-from application.core.types import Severity, Status
+from application.core.types import Severity, Status, VexJustification
 from application.import_observations.types import Parser_Source, Parser_Type
 from application.issue_tracker.types import Issue_Tracker
 
@@ -35,6 +35,8 @@ class Product(Model):
     product_group = ForeignKey(
         "self", on_delete=PROTECT, related_name="products", null=True, blank=True
     )
+    purl = CharField(max_length=255, blank=True)
+    cpe23 = CharField(max_length=255, blank=True)
 
     repository_prefix = CharField(max_length=255, blank=True)
     repository_default_branch = ForeignKey(
@@ -202,6 +204,8 @@ class Branch(Model):
     name = CharField(max_length=255)
     last_import = DateTimeField(null=True)
     housekeeping_protect = BooleanField(default=False)
+    purl = CharField(max_length=255, blank=True)
+    cpe23 = CharField(max_length=255, blank=True)
 
     class Meta:
         unique_together = (
@@ -468,6 +472,18 @@ class Observation(Model):
     issue_tracker_issue_closed = BooleanField(default=False)
     issue_tracker_jira_initial_status = CharField(max_length=255, blank=True)
     has_potential_duplicates = BooleanField(default=False)
+    current_vex_justification = CharField(
+        max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True
+    )
+    parser_vex_justification = CharField(
+        max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True
+    )
+    rule_vex_justification = CharField(
+        max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True
+    )
+    assessment_vex_justification = CharField(
+        max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True
+    )
 
     class Meta:
         indexes = [
@@ -515,6 +531,9 @@ class Observation_Log(Model):
     status = CharField(max_length=16, choices=Status.STATUS_CHOICES, blank=True)
     comment = CharField(max_length=255)
     created = DateTimeField(auto_now_add=True)
+    vex_justification = CharField(
+        max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True
+    )
 
     class Meta:
         indexes = [

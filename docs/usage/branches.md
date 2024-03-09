@@ -1,40 +1,40 @@
-# Branches
+# Branches and Versions
 
-Branches are an optional feature of the product. They can be used to separate the observations for different branches of a product. If only one branch is used to develop a product, the branch feature can be ignored.
+Branches and versions are an optional feature of the product. They can be used to separate the observations for different branches or versions of a product. If only one branch or version is used to develop a product, this feature can be ignored.
 
-## List of branches
+## List of branches and versions
 
-A product has a list of branches. They can either be created manually from the **Branches** tab of the product or will be created automatically, when observations are imported using a branch name that didn't exist before for that product.
+A product has a list of branches / versions. They can either be created manually from the **Branches / Versions** tab of the product or will be created automatically, when observations are imported using a branch / version name that didn't exist before for that product.
 
-![Branches in the product](../assets/images/screenshot_product_branches_list.png)
+![Branches / versions in the product](../assets/images/screenshot_product_branches_list.png)
 
-The list of branches shows the severities of open observations for each branch.
+The list of branches / versions shows the severities of open observations for each branch / version.
 
-Clicking on the name of a branch brings up the list of open observations for that branch.
+Clicking on the name of a branch / version brings up the list of open observations for that branch / version.
 
 !!! warning
-    When a branch is deleted, all observations for that branch will be deleted as well.
+    When a branch / version is deleted, all observations for that branch will be deleted as well.
 
-## Repository default branch
+## Default branch / version
 
-The **Repository default branch** should always be set, when branches are used in the observations.
+The **Default branch / version** should always be set, when branches / versions are used for the observations.
 
-* The metrics on the dashboard and on the **Metrics** tab are calculated using the observations where the default branch is set.
-* The number of severities in the header when showing a product are for the observations where the default branch is set as well.
-* [Issues in GitHub, GitLab or Jira](../integrations/issue_trackers.md) are created only for the default branch.
-* The default branch cannot be deleted and is exempt from the [housekeeping](#housekeeping).
+* The metrics on the dashboard and on the **Metrics** tab are calculated using the observations where the default branch / version is set.
+* The number of severities in the header when showing a product are for the observations where the default branch / version is set as well.
+* [Issues in GitHub, GitLab or Jira](../integrations/issue_trackers.md) are created only for the default branch / version.
+* The default branch / version cannot be deleted and is exempt from the [housekeeping](#housekeeping).
 
-The repository default branch can be set manually while editing a product. If it is not set manually, it will be set automatically with the first branch that is created, either after importing observations with a branch name or by manually creating a branch.
+The default branch / version can be set manually while editing a product. If it is not set manually, it will be set automatically with the first branch / version that is created, either after importing observations with a branch / version name or by manually creating a branch / version.
 
-![Branches in the product](../assets/images/screenshot_product_default_branch.png)
+![Branches / versions in the product](../assets/images/screenshot_product_default_branch.png)
 
-The Observations tab shows a button to show all open observations for the default branch.
+The Observations tab shows a button to show all open observations for the default branch / version.
 
-![Observations default branch button](../assets/images/screenshot_observations_default_branch.png)
+![Observations default branch / version button](../assets/images/screenshot_observations_default_branch.png)
 
 ## Housekeeping
 
-Inactive branches will be deleted automatically after a certain time. Inactivity is defined as the number of days since the last import of observations for a branch.
+Inactive branches / versions will be deleted automatically after a certain time. Inactivity is defined as the number of days since the last import of observations for a branch / version.
 
 #### Parameters
 
@@ -42,13 +42,13 @@ The parameters are set globally in the [admin user interface](../getting_started
 
 | Parameter global | Description |
 |------------------|-------------|
-| **BRANCH_HOUSEKEEPING_CRONTAB_MINUTES** | Minutes crontab expression for branch housekeeping | 
-| **BRANCH_HOUSEKEEPING_CRONTAB_HOURS** | Hours crontab expression for branch housekeeping (UTC) |
-| **BRANCH_HOUSEKEEPING_ACTIVE** | If this parameter is set, inactive branches will be deleted automatically. |
-| **BRANCH_HOUSEKEEPING_KEEP_INACTIVE_DAYS** | Days before incative branches and their observations are deleted |
-| **BRANCH_HOUSEKEEPING_EXEMPT_BRANCHES** | Regular expression which branches to exempt from deletion |
+| **BRANCH_HOUSEKEEPING_CRONTAB_MINUTES** | Minutes crontab expression for branch / version housekeeping | 
+| **BRANCH_HOUSEKEEPING_CRONTAB_HOURS** | Hours crontab expression for branch / version housekeeping (UTC) |
+| **BRANCH_HOUSEKEEPING_ACTIVE** | If this parameter is set, inactive branches / versions will be deleted automatically. |
+| **BRANCH_HOUSEKEEPING_KEEP_INACTIVE_DAYS** | Days before incative branches / versions and their observations are deleted |
+| **BRANCH_HOUSEKEEPING_EXEMPT_BRANCHES** | Regular expression which branches / versions to exempt from deletion |
 
-Per default the task to delete inactive branches including their observations is scheduled to run every night at 02:00 UTC time. This default can be changed by administrators via the [admin user interface](../getting_started/configuration.md#admin-user-interface). The expressions for `BRANCH_HOUSEKEEPING_CRONTAB_MINUTES` and `BRANCH_HOUSEKEEPING_CRONTAB_HOURS` have to be valid values according to [https://huey.readthedocs.io/en/latest/api.html#crontab](https://huey.readthedocs.io/en/latest/api.html#crontab):
+Per default the task to delete inactive branches / version including their observations is scheduled to run every night at 02:00 UTC time. This default can be changed by administrators via the [admin user interface](../getting_started/configuration.md#admin-user-interface). The expressions for `BRANCH_HOUSEKEEPING_CRONTAB_MINUTES` and `BRANCH_HOUSEKEEPING_CRONTAB_HOURS` have to be valid values according to [https://huey.readthedocs.io/en/latest/api.html#crontab](https://huey.readthedocs.io/en/latest/api.html#crontab):
 
 * `*` = every distinct value (every minute, every hour)
 * `*/n` = run every `n` times, i.e. hours=’*/4’ == 0, 4, 8, 12, 16, 20

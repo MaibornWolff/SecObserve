@@ -137,7 +137,7 @@ const ApiImportObservations = (product: any) => {
                             filter={{ product: product.product.id }}
                             alwaysOn
                         >
-                            <AutocompleteInputWide optionText="name" />
+                            <AutocompleteInputWide optionText="name" label="Branch / Version" />
                         </ReferenceInput>
                         <TextInputWide source="service" validate={validate_255} />
                         <TextInputWide

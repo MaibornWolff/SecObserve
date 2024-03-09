@@ -14,6 +14,7 @@ import {
     WithRecord,
 } from "react-admin";
 
+import { feature_vex_enabled } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
 
 const ShowActions = () => {
@@ -37,7 +38,7 @@ const GeneralRuleComponent = () => {
                 <SimpleShowLayout>
                     <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
                         <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                            Rule
+                            General Rule
                         </Typography>
                         <Stack spacing={1}>
                             <Labeled label="Name">
@@ -57,6 +58,11 @@ const GeneralRuleComponent = () => {
                             {rule.new_status && (
                                 <Labeled label="New status">
                                     <TextField source="new_status" />
+                                </Labeled>
+                            )}
+                            {feature_vex_enabled() && rule.new_vex_justification && (
+                                <Labeled label="New VEX justification">
+                                    <TextField source="new_vex_justification" />
                                 </Labeled>
                             )}
                             <Labeled label="Enabled">

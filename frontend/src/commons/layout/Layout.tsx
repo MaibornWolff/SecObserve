@@ -1,9 +1,13 @@
-import { Layout, LayoutProps } from "react-admin";
+import { CheckForApplicationUpdate, Layout, LayoutProps } from "react-admin";
 
 import AppBar from "./AppBar";
 import Menu from "./Menu";
 
-export default (props: LayoutProps) => {
-    return <Layout {...props} appBar={AppBar} menu={Menu} />; // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
-    // no idea how to solve it, we accept the risk
+export default ({ children }: LayoutProps) => {
+    return (
+        <Layout appBar={AppBar} menu={Menu}>
+            {children}
+            <CheckForApplicationUpdate interval={5 * 60 * 1000} />
+        </Layout>
+    );
 };

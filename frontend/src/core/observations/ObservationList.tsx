@@ -1,4 +1,5 @@
 import { Stack } from "@mui/material";
+import { Fragment } from "react";
 import {
     AutocompleteInput,
     BooleanField,
@@ -15,9 +16,11 @@ import {
     TopToolbar,
 } from "react-admin";
 
+import observations from ".";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { humanReadableDate } from "../../commons/functions";
+import ListHeader from "../../commons/layout/ListHeader";
 import { AutocompleteInputMedium, AutocompleteInputWide } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/settings/functions";
 import {
@@ -36,7 +39,7 @@ const listFilters = [
         <AutocompleteInputMedium optionText="name" />
     </ReferenceInput>,
     <ReferenceInput source="branch" reference="branches" sort={{ field: "name", order: "ASC" }} alwaysOn>
-        <AutocompleteInputWide optionText="name_with_product" />
+        <AutocompleteInputWide optionText="name_with_product" label="Branch / Version" />
     </ReferenceInput>,
     <TextInput source="title" alwaysOn />,
     <AutocompleteInput source="current_severity" label="Severity" choices={OBSERVATION_SEVERITY_CHOICES} alwaysOn />,
@@ -67,39 +70,43 @@ const ObservationList = () => {
     localStorage.removeItem("observationdashboardlist");
 
     return (
-        <List
-            perPage={25}
-            pagination={<CustomPagination />}
-            filters={listFilters}
-            sort={{ field: "current_severity", order: "ASC" }}
-            filterDefaultValues={{ current_status: OBSERVATION_STATUS_OPEN }}
-            disableSyncWithLocation={false}
-            storeKey="observations.list"
-            actions={<ListActions />}
-        >
-            <Datagrid size={getSettingListSize()} rowClick="show" bulkActionButtons={false}>
-                <TextField source="product_data.name" label="Product" />
-                <TextField source="product_data.product_group_name" label="Group" />
-                <TextField source="branch_name" label="Branch" />
-                <TextField source="title" />
-                <SeverityField source="current_severity" />
-                <ChipField source="current_status" label="Status" />
-                <NumberField source="epss_score" label="EPSS" />
-                <TextField source="origin_service_name" label="Service" />
-                <TextField source="origin_component_name_version" label="Component" />
-                <TextField source="origin_docker_image_name_tag_short" label="Container" />
-                <TextField source="origin_endpoint_hostname" label="Host" />
-                <TextField source="origin_source_file" label="Source" />
-                <TextField source="origin_cloud_qualified_resource" label="Resource" />,
-                <TextField source="scanner_name" label="Scanner" />
-                <FunctionField<Observation>
-                    label="Age"
-                    sortBy="last_observation_log"
-                    render={(record) => (record ? humanReadableDate(record.last_observation_log) : "")}
-                />
-                <BooleanField source="has_potential_duplicates" label="Dupl." />
-            </Datagrid>
-        </List>
+        <Fragment>
+            <ListHeader icon={observations.icon} title="Observations" />
+            <List
+                perPage={25}
+                pagination={<CustomPagination />}
+                filters={listFilters}
+                sort={{ field: "current_severity", order: "ASC" }}
+                filterDefaultValues={{ current_status: OBSERVATION_STATUS_OPEN }}
+                disableSyncWithLocation={false}
+                storeKey="observations.list"
+                actions={<ListActions />}
+                sx={{ marginTop: 1 }}
+            >
+                <Datagrid size={getSettingListSize()} rowClick="show" bulkActionButtons={false}>
+                    <TextField source="product_data.name" label="Product" />
+                    <TextField source="product_data.product_group_name" label="Group" />
+                    <TextField source="branch_name" label="Branch / Version" />
+                    <TextField source="title" />
+                    <SeverityField source="current_severity" />
+                    <ChipField source="current_status" label="Status" />
+                    <NumberField source="epss_score" label="EPSS" />
+                    <TextField source="origin_service_name" label="Service" />
+                    <TextField source="origin_component_name_version" label="Component" />
+                    <TextField source="origin_docker_image_name_tag_short" label="Container" />
+                    <TextField source="origin_endpoint_hostname" label="Host" />
+                    <TextField source="origin_source_file" label="Source" />
+                    <TextField source="origin_cloud_qualified_resource" label="Resource" />,
+                    <TextField source="scanner_name" label="Scanner" />
+                    <FunctionField<Observation>
+                        label="Age"
+                        sortBy="last_observation_log"
+                        render={(record) => (record ? humanReadableDate(record.last_observation_log) : "")}
+                    />
+                    <BooleanField source="has_potential_duplicates" label="Dupl." />
+                </Datagrid>
+            </List>
+        </Fragment>
     );
 };
 

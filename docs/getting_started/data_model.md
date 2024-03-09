@@ -4,14 +4,14 @@
 erDiagram
     Product_Group |o--o{ Product : has
     Product ||--o{ Observation : has
-    Product ||--o{ Branch : has
+    Product ||--o{ Branch_Version : has
     Product ||--o{ Service : has
     Product ||--o{ Vulnerability_Check : has
     Product ||--o{ Product_Rule : has
     Product ||--o{ API_Configuration : has
     Product ||--o{ Product_Member : has
     Parser ||--o{ Observation: discovered_by
-    Observation }o--o| Branch: found_in
+    Observation }o--o| Branch_Version: found_in
     Observation ||--|{ Observation_Log : has
     Observation ||--|{ Reference : has
     Observation ||--|{ Evidence : has
@@ -32,9 +32,9 @@ An `Observation` is something that has been discovered by a vulnerability scanne
 
 Every `Observation` belongs to exactly one product.
 
-## Branch
+## Branch / Version
 
-Software development often uses branches in the source code repository. Vulnerability scanners can run for multiple branches of a product and observations can be viewed and managed by branch. See more in [Working with branches](../usage/branches.md).
+Software development often uses branches in the source code repository and software is often available in multiple versions. Vulnerability scanners can run for different branches / versions of a product and observations can be viewed and managed by branch / version. See more in [branches and Versions](../usage/branches.md).
 
 ## Service
 
@@ -42,7 +42,7 @@ A `Service` is a self-contained piece of functionality of a product. Can be some
 
 ## Vulnerability Check
 
-An import for one product, one branch and one file name resp. one API configuration is a so-called vulnerability check. See more in [Import algorithm](../usage/import_observations.md#import-algorithm).
+An import for one product, one branch / version and one file name resp. one API configuration is a so-called vulnerability check. See more in [Import algorithm](../usage/import_observations.md#import-algorithm).
 
 ## Parser
 

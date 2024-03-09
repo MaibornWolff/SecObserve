@@ -29,7 +29,7 @@ const ShowDefaultBranchObservationsButton = ({ product }: ShowDefaultBranchObser
                 sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem" }}
                 startIcon={<observations.icon />}
             >
-                Show default branch observations
+                Show default branch / version observations
             </Button>
         </Fragment>
     );

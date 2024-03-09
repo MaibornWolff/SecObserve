@@ -378,7 +378,7 @@ def _process_current_observation(
             severity = ""
 
         create_observation_log(
-            observation_before, severity, status, "Updated by parser"
+            observation_before, severity, status, "Updated by parser", ""
         )
 
 
@@ -417,6 +417,7 @@ def _process_new_observation(imported_observation: Observation) -> None:
         imported_observation.current_severity,
         imported_observation.current_status,
         "Set by parser",
+        "",
     )
 
 
@@ -443,6 +444,7 @@ def _resolve_unimported_observations(
                 "",
                 observation.current_status,
                 "Observation not found in latest scan",
+                "",
             )
 
     return observations_resolved

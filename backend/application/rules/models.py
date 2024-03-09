@@ -9,7 +9,7 @@ from django.db.models import (
 )
 
 from application.core.models import Parser, Product
-from application.core.types import Severity, Status
+from application.core.types import Severity, Status, VexJustification
 
 
 class Rule(Model):
@@ -30,6 +30,9 @@ class Rule(Model):
         max_length=12, choices=Severity.SEVERITY_CHOICES, blank=True
     )
     new_status = CharField(max_length=16, choices=Status.STATUS_CHOICES, blank=True)
+    new_vex_justification = CharField(
+        max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True
+    )
     enabled = BooleanField(default=True)
 
     class Meta:

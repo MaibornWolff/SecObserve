@@ -15,6 +15,10 @@ class VersionSerializer(Serializer):
     version = CharField(max_length=200)
 
 
+class SettingsSerializer(Serializer):
+    features = ListField(child=CharField(), min_length=0, max_length=200, required=True)
+
+
 class NotificationSerializer(ModelSerializer):
     message = SerializerMethodField()
     product_name = SerializerMethodField()

@@ -27,12 +27,12 @@ const BranchDelete = (props: BranchDeleteProps) => {
     if (error && !error_shown) {
         setErrorShown(true);
         setDeleted(false);
-        notify("Branch could not be deleted: " + error, {
+        notify("Branch / version could not be deleted: " + error, {
             type: "warning",
         });
     } else if (deleted) {
         setDeleted(false);
-        notify("Branch deleted");
+        notify("Branch / version deleted");
     }
 
     return (
@@ -40,9 +40,11 @@ const BranchDelete = (props: BranchDeleteProps) => {
             <Button label="Delete" onClick={handleClick} startIcon={<DeleteIcon />} sx={{ color: "#d32f2f" }} />
             <Confirm
                 isOpen={open}
-                title="Delete branch"
+                title="Delete branch / version"
                 content={
-                    "Are you sure you want to delete the branch " + props.branch.name + " and all of its observations?"
+                    "Are you sure you want to delete the branch / version " +
+                    props.branch.name +
+                    " and all of its observations?"
                 }
                 onConfirm={handleConfirm}
                 onClose={handleDialogClose}

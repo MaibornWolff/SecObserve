@@ -18,6 +18,7 @@ Most of the actions and templates use the same set of variables:
 | `RUN_DIRECTORY` | *optional* | The directory where to run the scanner, only to be used when the `TARGET` is a path. |
 | `FURTHER_PARAMETERS` | *optional* | Further parameters to be given to the scanner. |
 | `CONFIGURATION` | *mandatory, only for Semgrep* | Configuration to be used with Semgrep. |
+| `OUTPUT_PATH` | *optional, only for KICS* | Path to the output file, default is `.`. |
 | `RULES` | *optional, only for DrHeader* | Custom rules to be used with DrHeader. |
 | `SCRIPT` | *optional, only for ZAP* | Script to be executed, default is `zap-baseline.py`. |
 | **Importing** |
@@ -391,5 +392,5 @@ importer:
 Some real life examples can be found in the SecObserve GitHub repository:
 
 * [so_configuration_code.yml](https://github.com/MaibornWolff/SecObserve/blob/main/so_configuration_code.yml) used in pipeline [check_vulnerabilities.yml](https://github.com/MaibornWolff/SecObserve/blob/main/.github/workflows/check_vulnerabilities.yml)
-* [so_configuration_images.yml](https://github.com/MaibornWolff/SecObserve/blob/main/so_configuration_images.yml) used in pipeline [build_push_dev.yml](https://github.com/MaibornWolff/SecObserve/blob/main/.github/workflows/build_push_dev.yml#L53-L58)
+* [so_configuration_sca_dev.yml](https://github.com/MaibornWolff/SecObserve/blob/main/so_configuration_sca_dev.yml) used in pipeline [build_push_dev.yml](https://github.com/MaibornWolff/SecObserve/blob/main/.github/workflows/build_push_dev.yml#L53-L58)
 * [so_configuration_endpoints.yml](https://github.com/MaibornWolff/SecObserve/blob/main/so_configuration_endpoints.yml) used in pipeline [build_push_release.yml](https://github.com/MaibornWolff/SecObserve/blob/main/.github/workflows/build_push_release.yml#L71-L76)

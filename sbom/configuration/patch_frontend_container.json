@@ -1,0 +1,17 @@
+[
+    {
+        "op": "replace",
+        "path": "/metadata/component/name",
+        "value": "SecObserve Frontend Container"
+    },
+    {
+        "op": "add",
+        "path": "/metadata/component/description",
+        "value": "Frontend container of SecObserve, the open source vulnerability management system for software development teams"
+    },
+    {
+        "op": "add",
+        "path": "/metadata/component/version",
+        "value": "REPLACE_VERSION"
+    }
+]

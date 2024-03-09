@@ -13,7 +13,7 @@ import {
     useRefresh,
 } from "react-admin";
 
-import { validate_required_255 } from "../../commons/custom_validators";
+import { validate_255, validate_required_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 
 export type BranchCreateProps = {
@@ -63,7 +63,7 @@ const BranchCreate = ({ id }: BranchCreateProps) => {
             {
                 onSuccess: () => {
                     refresh();
-                    notify("Branch added", { type: "success" });
+                    notify("Branch / version added", { type: "success" });
                 },
                 onError: (error: any) => {
                     notify(error.message, { type: "warning" });
@@ -81,14 +81,16 @@ const BranchCreate = ({ id }: BranchCreateProps) => {
                 sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem" }}
                 startIcon={<AddIcon />}
             >
-                Add branch
+                Add branch / version
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Add branch</DialogTitle>
+                <DialogTitle>Add branch / version</DialogTitle>
                 <DialogContent>
                     <CreateBase resource="branches">
                         <SimpleForm onSubmit={create_branch} toolbar={<CustomToolbar />}>
                             <TextInputWide source="name" validate={validate_required_255} />
+                            <TextInputWide source="purl" label="PURL" validate={validate_255} />
+                            <TextInputWide source="cpe23" label="CPE 2.3" validate={validate_255} />
                             <BooleanInput
                                 source="housekeeping_protect"
                                 label="Protect from housekeeping"

@@ -1,3 +1,4 @@
+from constance import config
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import action
@@ -15,6 +16,7 @@ from application.commons.api.permissions import UserHasNotificationPermission
 from application.commons.api.serializers import (
     NotificationBulkSerializer,
     NotificationSerializer,
+    SettingsSerializer,
     VersionSerializer,
 )
 from application.commons.models import Notification
@@ -44,6 +46,18 @@ class HealthView(APIView):
         response["Cache-Control"] = "no-cache, no-store, must-revalidate"
 
         return response
+
+
+class SettingsView(APIView):
+    serializer_class = SettingsSerializer
+
+    @action(detail=True, methods=["get"], url_name="settings")
+    def get(self, request):
+        features = []
+        if config.FEATURE_VEX:
+            features.append("feature_vex")
+        content = {"features": features}
+        return Response(content)
 
 
 class NotificationViewSet(

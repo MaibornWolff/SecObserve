@@ -47,7 +47,7 @@ function listFilters(product: Product) {
             filter={{ product: product.id }}
             alwaysOn
         >
-            <AutocompleteInputMedium optionText="name" />
+            <AutocompleteInputMedium optionText="name" label="Branch / Version" />
         </ReferenceInput>,
         <TextInput source="title" alwaysOn />,
         <AutocompleteInput
@@ -157,7 +157,7 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
                     }
                     preferenceKey="observations.embedded"
                 >
-                    <TextField source="branch_name" label="Branch" />
+                    <TextField source="branch_name" label="Branch / Version" />
                     <TextField source="title" />
                     <SeverityField source="current_severity" />
                     <ChipField source="current_status" label="Status" />

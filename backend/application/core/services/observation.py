@@ -64,10 +64,10 @@ def get_current_severity(observation) -> str:
     if observation.parser_severity:
         return observation.parser_severity
 
-    return _get_cvss3_severity(observation.cvss3_score)
+    return get_cvss3_severity(observation.cvss3_score)
 
 
-def _get_cvss3_severity(cvss3_score: int):
+def get_cvss3_severity(cvss3_score: int):
     if cvss3_score is None:
         return Severity.SEVERITY_UNKOWN
 
@@ -102,6 +102,19 @@ def get_current_status(observation) -> str:
     return Status.STATUS_OPEN
 
 
+def get_current_vex_justification(observation) -> str:
+    if observation.assessment_vex_justification:
+        return observation.assessment_vex_justification
+
+    if observation.rule_vex_justification:
+        return observation.rule_vex_justification
+
+    if observation.parser_vex_justification:
+        return observation.parser_vex_justification
+
+    return ""
+
+
 def normalize_observation_fields(observation) -> None:
     normalize_origin_component(observation)
     normalize_origin_docker(observation)
@@ -110,6 +123,7 @@ def normalize_observation_fields(observation) -> None:
 
     normalize_severity(observation)
     normalize_status(observation)
+    normalize_vex_justification(observation)
 
     normalize_description(observation)
 
@@ -341,6 +355,19 @@ def normalize_status(observation):
         observation.parser_status = ""
 
     observation.current_status = get_current_status(observation)
+
+
+def normalize_vex_justification(observation):
+    if observation.current_vex_justification is None:
+        observation.current_vex_justification = ""
+    if observation.assessment_vex_justification is None:
+        observation.assessment_vex_justification = ""
+    if observation.rule_vex_justification is None:
+        observation.rule_vex_justification = ""
+    if observation.parser_vex_justification is None:
+        observation.parser_vex_justification = ""
+
+    observation.current_vex_justification = get_current_vex_justification(observation)
 
 
 def clip_fields(model: str, my_object) -> None:

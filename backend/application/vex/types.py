@@ -1,0 +1,282 @@
+from dataclasses import dataclass
+from typing import Optional
+
+
+class CSAF_Tracking_Status:
+    CSAF_TRACKING_STATUS_DRAFT = "draft"
+    CSAF_TRACKING_STATUS_FINAL = "final"
+    CSAF_TRACKING_STATUS_INTERIM = "interim"
+
+    CSAF_TRACKING_STATUS_CHOICES = [
+        (CSAF_TRACKING_STATUS_DRAFT, CSAF_TRACKING_STATUS_DRAFT),
+        (CSAF_TRACKING_STATUS_FINAL, CSAF_TRACKING_STATUS_FINAL),
+        (CSAF_TRACKING_STATUS_INTERIM, CSAF_TRACKING_STATUS_INTERIM),
+    ]
+
+
+class CSAF_TLP_Label:
+    CSAF_TLP_LABEL_AMBER = "AMBER"
+    CSAF_TLP_LABEL_GREEN = "GREEN"
+    CSAF_TLP_LABEL_RED = "RED"
+    CSAF_TLP_LABEL_WHITE = "WHITE"
+
+    CSAF_TLP_LABEL_CHOICES = [
+        (CSAF_TLP_LABEL_AMBER, CSAF_TLP_LABEL_AMBER),
+        (CSAF_TLP_LABEL_GREEN, CSAF_TLP_LABEL_GREEN),
+        (CSAF_TLP_LABEL_RED, CSAF_TLP_LABEL_RED),
+        (CSAF_TLP_LABEL_WHITE, CSAF_TLP_LABEL_WHITE),
+    ]
+
+
+class CSAF_Publisher_Category:
+    CSAF_PUBLISHER_CATEGORY_COORDINATOR = "coordinator"
+    CSAF_PUBLISHER_CATEGORY_DISCOVERER = "discoverer"
+    CSAF_PUBLISHER_CATEGORY_OTHER = "other"
+    CSAF_PUBLISHER_CATEGORY_TRANSLATOR = "translator"
+    CSAF_PUBLISHER_CATEGORY_USER = "user"
+    CSAF_PUBLISHER_CATEGORY_VENDOR = "vendor"
+
+    CSAF_PUBLISHER_CATEGORY_CHOICES = [
+        (CSAF_PUBLISHER_CATEGORY_COORDINATOR, CSAF_PUBLISHER_CATEGORY_COORDINATOR),
+        (CSAF_PUBLISHER_CATEGORY_DISCOVERER, CSAF_PUBLISHER_CATEGORY_DISCOVERER),
+        (CSAF_PUBLISHER_CATEGORY_OTHER, CSAF_PUBLISHER_CATEGORY_OTHER),
+        (CSAF_PUBLISHER_CATEGORY_TRANSLATOR, CSAF_PUBLISHER_CATEGORY_TRANSLATOR),
+        (CSAF_PUBLISHER_CATEGORY_USER, CSAF_PUBLISHER_CATEGORY_USER),
+        (CSAF_PUBLISHER_CATEGORY_VENDOR, CSAF_PUBLISHER_CATEGORY_VENDOR),
+    ]
+
+
+class CSAF_Status:
+    CSAF_STATUS_NOT_AFFECTED = "known_not_affected"
+    CSAF_STATUS_AFFECTED = "known_affected"
+    CSAF_STATUS_FIXED = "fixed"
+    CSAF_STATUS_UNDER_INVESTIGATION = "under_investigation"
+
+
+class CSF_Branch_Category:
+    CSAF_BRANCH_CATEGORY_ARCHITECTURE = "architecture"
+    CSAF_BRANCH_CATEGORY_HOST_NAME = "host_name"
+    CSAF_BRANCH_CATEGORY_LANGUAGE = "language"
+    CSAF_BRANCH_CATEGORY_LEGACY = "legacy"
+    CSAF_BRANCH_CATEGORY_PATCH_LEVEL = "patch_level"
+    CSAF_BRANCH_CATEGORY_PRODUCT_FAMILY = "product_family"
+    CSAF_BRANCH_CATEGORY_PRODUCT_NAME = "product_name"
+    CSAF_BRANCH_CATEGORY_PRODUCT_VERSION = "product_version"
+    CSAF_BRANCH_CATEGORY_PRODUCT_VERSION_RANGE = "product_version_range"
+    CSAF_BRANCH_CATEGORY_SERVICE_PACK = "service_pack"
+    CSAF_BRANCH_CATEGORY_SPECIFICATION = "specification"
+    CSAF_BRANCH_CATEGORY_VENDOR = "vendor"
+
+
+@dataclass(frozen=True)
+class CSAFProductIdentificationHelper:
+    cpe: Optional[str]
+    purl: Optional[str]
+
+
+@dataclass(frozen=True)
+class CSAFFullProductName:
+    name: str
+    product_id: str
+    product_identification_helper: Optional[CSAFProductIdentificationHelper]
+
+
+@dataclass()
+class CSAFProductBranch:
+    name: str
+    category: str
+    product: Optional[CSAFFullProductName] = None
+    branches: Optional[list["CSAFProductBranch"]] = None
+
+
+@dataclass()
+class CSAFProductTree:
+    branches: list[CSAFProductBranch]
+
+
+@dataclass(frozen=True)
+class CSAFNote:
+    category: str
+    text: str
+
+
+@dataclass(frozen=True)
+class CSAFFlag:
+    label: str
+    product_ids: list[str]
+
+
+@dataclass(frozen=True)
+class CSAFId:
+    system_name: str
+    text: str
+
+
+@dataclass()
+class CSAFProductStatus:
+    fixed: list[str]
+    known_affected: list[str]
+    known_not_affected: list[str]
+    under_investigation: list[str]
+
+
+@dataclass()
+class CSAFReference:
+    category: str
+    url: str
+    summary: str
+
+
+@dataclass()
+class CSAFRemediation:
+    category: str
+    details: str
+    product_ids: list[str]
+
+
+@dataclass()
+class CSAFThreat:
+    category: str
+    details: str
+    product_ids: list[str]
+
+
+@dataclass()
+class CSAFVulnerability:
+    cve: Optional[str]
+    notes: list[CSAFNote]
+    flags: list[CSAFFlag]
+    ids: list[CSAFId]
+    product_status: CSAFProductStatus
+    references: list[CSAFReference]
+    remediations: list[CSAFRemediation]
+    threats: list[CSAFThreat]
+
+
+@dataclass()
+class CSAFPublisher:
+    name: str
+    category: str
+    namespace: str
+
+
+@dataclass()
+class CSAFEngine:
+    name: str
+    version: str
+
+
+@dataclass()
+class CSAFGenerator:
+    engine: CSAFEngine
+
+
+@dataclass(frozen=True)
+class CSAFRevisionHistory:
+    date: str
+    number: str
+    summary: str
+
+
+@dataclass()
+class CSAFTracking:
+    id: str
+    initial_release_date: str
+    current_release_date: str
+    version: str
+    status: str
+    generator: CSAFGenerator
+    revision_history: list[CSAFRevisionHistory]
+
+
+@dataclass()
+class CSAFTLP:
+    label: str
+
+
+@dataclass()
+class CSAFDistribution:
+    tlp: CSAFTLP
+
+
+@dataclass()
+class CSAFDocument:
+    category: str
+    csaf_version: str
+    title: str
+    publisher: CSAFPublisher
+    tracking: CSAFTracking
+    distribution: CSAFDistribution
+
+
+@dataclass()
+class CSAFRoot:
+    document: CSAFDocument
+    product_tree: Optional[CSAFProductTree]
+    vulnerabilities: list[CSAFVulnerability]
+
+    def get_base_id(self) -> str:
+        if len(self.document.tracking.id) > 36:
+            return self.document.tracking.id[-36:]
+        return ""
+
+
+class OpenVEX_Status:
+    OPEN_VEX_STATUS_NOT_AFFECTED = "not_affected"
+    OPEN_VEX_STATUS_AFFECTED = "affected"
+    OPEN_VEX_STATUS_FIXED = "fixed"
+    OPEN_VEX_STATUS_UNDER_INVESTIGATION = "under_investigation"
+
+
+@dataclass(frozen=True)
+class OpenVEXSubcomponent:
+    id: str
+
+
+@dataclass(frozen=True)
+class OpenVEXProductIdentifiers:
+    cpe23: Optional[str]
+    purl: Optional[str]
+
+
+@dataclass(frozen=True)
+class OpenVEXProduct:
+    id: str
+    identifiers: Optional[OpenVEXProductIdentifiers]
+    subcomponents: list[OpenVEXSubcomponent]
+
+
+@dataclass()
+class OpenVEXVulnerability:
+    id: Optional[str]
+    name: str
+    description: Optional[str] = None
+
+
+@dataclass
+class OpenVEXStatement:
+    status: str
+    status_notes: Optional[str]
+    justification: Optional[str]
+    action_statement: Optional[str]
+    impact_statement: Optional[str]
+    vulnerability: Optional[OpenVEXVulnerability]
+    products: list[OpenVEXProduct]
+
+
+@dataclass
+class OpenVEXDocument:
+    context: str
+    id: str
+    version: int
+    author: str
+    role: str
+    timestamp: str
+    last_updated: str
+    tooling: str
+    statements: list[OpenVEXStatement]
+
+    def get_base_id(self) -> str:
+        if len(self.id) > 36:
+            return self.id[-36:]
+        return ""

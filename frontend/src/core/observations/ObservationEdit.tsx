@@ -1,4 +1,5 @@
 import { Divider, Stack, Typography } from "@mui/material";
+import { useState } from "react";
 import {
     DeleteButton,
     Edit,
@@ -14,14 +15,20 @@ import {
 
 import { PERMISSION_OBSERVATION_DELETE } from "../../access_control/types";
 import {
+    validate_0_10,
+    validate_0_999999,
     validate_255,
     validate_2048,
-    validate_min_0_999999,
     validate_required,
     validate_required_255,
 } from "../../commons/custom_validators";
+import { justificationIsEnabledForStatus } from "../../commons/functions";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
-import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../../core/types";
+import {
+    OBSERVATION_SEVERITY_CHOICES,
+    OBSERVATION_STATUS_CHOICES,
+    OBSERVATION_VEX_JUSTIFICATION_CHOICES,
+} from "../../core/types";
 
 const CustomToolbar = () => {
     const observation = useRecordContext();
@@ -36,8 +43,159 @@ const CustomToolbar = () => {
     );
 };
 
+const ObservationEditForm = () => {
+    const observation = useRecordContext();
+    const [status, setStatus] = useState(observation.parser_status);
+    const justificationEnabled = justificationIsEnabledForStatus(status);
+
+    return (
+        <SimpleForm warnWhenUnsavedChanges toolbar={<CustomToolbar />}>
+            <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                Observation
+            </Typography>
+            <Stack>
+                <TextInputWide autoFocus source="title" validate={validate_required_255} />
+                <Stack direction="row" spacing={2}>
+                    <AutocompleteInputMedium
+                        source="parser_severity"
+                        label="Severity"
+                        choices={OBSERVATION_SEVERITY_CHOICES}
+                    />
+                    <AutocompleteInputMedium
+                        source="parser_status"
+                        label="Status"
+                        choices={OBSERVATION_STATUS_CHOICES}
+                        validate={validate_required}
+                        onChange={(e) => setStatus(e)}
+                    />
+                    {justificationEnabled && (
+                        <AutocompleteInputMedium
+                            source="parser_vex_justification"
+                            label="VEX justification"
+                            choices={OBSERVATION_VEX_JUSTIFICATION_CHOICES}
+                        />
+                    )}
+                </Stack>
+                <TextInputWide
+                    source="description"
+                    multiline
+                    minRows={3}
+                    helperText="Markdown is supported when showing the observation"
+                    validate={validate_2048}
+                />
+                <TextInputWide
+                    source="recommendation"
+                    multiline
+                    minRows={3}
+                    helperText="Markdown is supported when showing the observation"
+                    validate={validate_2048}
+                />
+            </Stack>
+
+            <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+
+            <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                Product
+            </Typography>
+            <Stack>
+                <ReferenceInput source="product" reference="products" sort={{ field: "name", order: "ASC" }}>
+                    <AutocompleteInputWide optionText="name" disabled={true} />
+                </ReferenceInput>
+                <WithRecord
+                    render={(branch) => (
+                        <ReferenceInput
+                            source="branch"
+                            reference="branches"
+                            sort={{ field: "name", order: "ASC" }}
+                            filter={{ product: branch.product_data.id }}
+                        >
+                            <AutocompleteInputWide optionText="name" label="Branch / Version" />
+                        </ReferenceInput>
+                    )}
+                />
+            </Stack>
+
+            <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+
+            <Typography variant="h6">Vulnerability</Typography>
+            <Stack>
+                <TextInputWide source="vulnerability_id" label="Vulnerability ID" validate={validate_255} />
+                <Stack direction="row" spacing={2}>
+                    <NumberInput
+                        source="cvss3_score"
+                        label="CVSS3 score"
+                        min={0}
+                        step={0.1}
+                        validate={validate_0_10}
+                        sx={{ width: "10em" }}
+                    />
+                    <TextInputWide source="cvss3_vector" label="CVSS3 vector" validate={validate_255} />
+                </Stack>
+                <NumberInput
+                    source="cwe"
+                    label="CWE"
+                    min={0}
+                    step={1}
+                    validate={validate_0_999999}
+                    sx={{ width: "10em" }}
+                />
+            </Stack>
+
+            <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+
+            <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                Origins
+            </Typography>
+            <Stack>
+                <TextInputWide source="origin_service_name" label="Service name" validate={validate_255} />
+                <Stack direction="row" spacing={2}>
+                    <TextInputWide source="origin_component_name" label="Component name" validate={validate_255} />
+                    <TextInput source="origin_component_version" label="Component version" validate={validate_255} />
+                </Stack>
+                <Stack direction="row" spacing={2}>
+                    <TextInputWide source="origin_docker_image_name" label="Container name" validate={validate_255} />
+                    <TextInput source="origin_docker_image_tag" label="Container tag" validate={validate_255} />
+                </Stack>
+                <TextInputWide source="origin_endpoint_url" label="Endpoint URL" validate={validate_2048} />
+                <Stack direction="row" spacing={2}>
+                    <TextInputWide source="origin_source_file" label="Source file" validate={validate_255} />
+                    <NumberInput
+                        source="origin_source_line_start"
+                        label="Source line start"
+                        min={0}
+                        step={1}
+                        validate={validate_0_999999}
+                    />
+                    <NumberInput
+                        source="origin_source_line_end"
+                        label="Source line end"
+                        min={0}
+                        step={1}
+                        validate={validate_0_999999}
+                    />
+                </Stack>
+                <Stack direction="row" spacing={2}>
+                    <TextInputWide source="origin_cloud_provider" label="Cloud provider" validate={validate_255} />
+                    <TextInputWide
+                        source="origin_cloud_account_subscription_project"
+                        label="Account / Subscription / Project"
+                        validate={validate_255}
+                    />
+                </Stack>
+                <Stack direction="row" spacing={2}>
+                    <TextInputWide source="origin_cloud_resource" label="Cloud resource" validate={validate_255} />
+                    <TextInputWide source="origin_cloud_resource_type" label="Resource type" validate={validate_255} />
+                </Stack>
+            </Stack>
+        </SimpleForm>
+    );
+};
+
 const ObservationEdit = () => {
     const transform = (data: any) => {
+        if (!data.parser_severity) {
+            data.parser_severity = "";
+        }
         if (!data.description) {
             data.description = "";
         }
@@ -80,131 +238,23 @@ const ObservationEdit = () => {
         if (!data.origin_cloud_provider) {
             data.origin_cloud_provider = "";
         }
+        if (!justificationIsEnabledForStatus(data.parser_status) || !data.parser_vex_justification) {
+            data.parser_vex_justification = "";
+        }
         data.origin_component_name_version = "";
         data.origin_docker_image_name_tag = "";
+        if (!data.vulnerability_id) {
+            data.vulnerability_id = "";
+        }
+        if (!data.cvss3_vector) {
+            data.cvss3_vector = "";
+        }
         return data;
     };
 
     return (
         <Edit redirect="show" mutationMode="pessimistic" transform={transform}>
-            <SimpleForm warnWhenUnsavedChanges toolbar={<CustomToolbar />}>
-                <Typography variant="h6" sx={{ marginBottom: 2 }}>
-                    Observation
-                </Typography>
-                <Stack>
-                    <TextInputWide autoFocus source="title" validate={validate_required_255} />
-                    <Stack direction="row" spacing={2}>
-                        <AutocompleteInputMedium
-                            source="parser_severity"
-                            label="Severity"
-                            choices={OBSERVATION_SEVERITY_CHOICES}
-                            validate={validate_required}
-                        />
-                        <AutocompleteInputMedium
-                            source="parser_status"
-                            label="Status"
-                            choices={OBSERVATION_STATUS_CHOICES}
-                            validate={validate_required}
-                        />
-                    </Stack>
-                    <TextInputWide
-                        source="description"
-                        multiline
-                        minRows={3}
-                        helperText="Markdown is supported when showing the observation"
-                        validate={validate_2048}
-                    />
-                    <TextInputWide
-                        source="recommendation"
-                        multiline
-                        minRows={3}
-                        helperText="Markdown is supported when showing the observation"
-                        validate={validate_2048}
-                    />
-                </Stack>
-
-                <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
-
-                <Typography variant="h6" sx={{ marginBottom: 2 }}>
-                    Product
-                </Typography>
-                <Stack>
-                    <ReferenceInput source="product" reference="products" sort={{ field: "name", order: "ASC" }}>
-                        <AutocompleteInputWide optionText="name" disabled={true} />
-                    </ReferenceInput>
-                    <WithRecord
-                        render={(branch) => (
-                            <ReferenceInput
-                                source="branch"
-                                reference="branches"
-                                sort={{ field: "name", order: "ASC" }}
-                                filter={{ product: branch.product_data.id }}
-                            >
-                                <AutocompleteInputWide optionText="name" />
-                            </ReferenceInput>
-                        )}
-                    />
-                </Stack>
-
-                <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
-
-                <Typography variant="h6" sx={{ marginBottom: 2 }}>
-                    Origins
-                </Typography>
-                <Stack>
-                    <TextInputWide source="origin_service_name" label="Service name" validate={validate_255} />
-                    <Stack direction="row" spacing={2}>
-                        <TextInputWide source="origin_component_name" label="Component name" validate={validate_255} />
-                        <TextInput
-                            source="origin_component_version"
-                            label="Component version"
-                            validate={validate_255}
-                        />
-                    </Stack>
-                    <Stack direction="row" spacing={2}>
-                        <TextInputWide
-                            source="origin_docker_image_name"
-                            label="Container name"
-                            validate={validate_255}
-                        />
-                        <TextInput source="origin_docker_image_tag" label="Container tag" validate={validate_255} />
-                    </Stack>
-                    <TextInputWide source="origin_endpoint_url" label="Endpoint URL" validate={validate_2048} />
-                    <Stack direction="row" spacing={2}>
-                        <TextInputWide source="origin_source_file" label="Source file" validate={validate_255} />
-                        <NumberInput
-                            source="origin_source_line_start"
-                            label="Source line start"
-                            min={0}
-                            step={1}
-                            validate={validate_min_0_999999}
-                        />
-                        <NumberInput
-                            source="origin_source_line_end"
-                            label="Source line end"
-                            min={0}
-                            step={1}
-                            validate={validate_min_0_999999}
-                        />
-                    </Stack>
-                    <Stack direction="row" spacing={2}>
-                        <TextInputWide source="origin_cloud_provider" label="Cloud provider" validate={validate_255} />
-                        <TextInputWide
-                            source="origin_cloud_account_subscription_project"
-                            label="Account / Subscription / Project"
-                            validate={validate_255}
-                        />
-                    </Stack>
-                    <Stack direction="row" spacing={2}>
-                        <TextInputWide source="origin_cloud_resource" label="Cloud resource" validate={validate_255} />
-                        <TextInputWide
-                            source="origin_cloud_resource_type"
-                            label="Resource type"
-                            validate={validate_255}
-                        />
-                    </Stack>
-                </Stack>
-            </SimpleForm>
+            <ObservationEditForm />
         </Edit>
     );
 };

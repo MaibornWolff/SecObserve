@@ -6,6 +6,7 @@ from application.core.models import Observation, Product
 from application.core.services.observation import (
     get_current_severity,
     get_current_status,
+    get_current_vex_justification,
 )
 from application.core.services.observation_log import create_observation_log
 from application.issue_tracker.services.issue_tracker import (
@@ -90,6 +91,14 @@ class Rule_Engine:
                     observation.rule_status = rule.new_status
                     observation.current_status = get_current_status(observation)
 
+                previous_vex_justification = observation.current_vex_justification
+                previous_rule_vex_justification = observation.rule_vex_justification
+                if rule.new_vex_justification:
+                    observation.rule_vex_justification = rule.new_vex_justification
+                    observation.current_vex_justification = (
+                        get_current_vex_justification(observation)
+                    )
+
                 if rule.product:
                     observation.product_rule = rule
                 else:
@@ -103,9 +112,17 @@ class Rule_Engine:
                     or previous_severity != observation.current_severity
                     or previous_general_rule != observation.general_rule
                     or previous_product_rule != observation.product_rule
+                    or previous_rule_vex_justification
+                    != observation.rule_vex_justification
+                    or previous_vex_justification
+                    != observation.current_vex_justification
                 ):
                     self._write_observation_log(
-                        observation, rule, previous_severity, previous_status
+                        observation,
+                        rule,
+                        previous_severity,
+                        previous_status,
+                        previous_vex_justification,
                     )
                     push_observation_to_issue_tracker(observation, get_current_user())
                 rule_found = True
@@ -146,6 +163,7 @@ class Rule_Engine:
         rule: Rule,
         previous_severity: str,
         previous_status: str,
+        previous_vex_justification: str,
     ) -> None:
         if previous_status != observation.current_status:
             status = observation.current_status
@@ -155,13 +173,19 @@ class Rule_Engine:
             severity = observation.current_severity
         else:
             severity = ""
+        if previous_vex_justification != observation.current_vex_justification:
+            vex_justification = observation.current_vex_justification
+        else:
+            vex_justification = ""
 
         if rule.product:
             comment = f"Updated by product rule {rule.name}"
         else:
             comment = f"Updated by general rule {rule.name}"
 
-        create_observation_log(observation, severity, status, comment)
+        create_observation_log(
+            observation, severity, status, comment, vex_justification
+        )
 
     # Write observation and observation log if status or severity has been changed
     def _write_observation_log_no_rule(
@@ -176,6 +200,11 @@ class Rule_Engine:
         observation.rule_status = ""
         previous_status = observation.current_status
         observation.current_status = get_current_status(observation)
+        observation.rule_vex_justification = ""
+        previous_vex_justification = observation.current_vex_justification
+        observation.current_vex_justification = get_current_vex_justification(
+            observation
+        )
 
         if previous_status != observation.current_status:
             status = observation.current_status
@@ -185,6 +214,10 @@ class Rule_Engine:
             severity = observation.current_severity
         else:
             severity = ""
+        if previous_vex_justification != observation.current_vex_justification:
+            vex_justification = observation.current_vex_justification
+        else:
+            vex_justification = ""
 
         if previous_product_rule:
             comment = f"Removed product rule {previous_product_rule.name}"
@@ -193,4 +226,6 @@ class Rule_Engine:
         else:
             comment = "Removed unkown rule"
 
-        create_observation_log(observation, severity, status, comment)
+        create_observation_log(
+            observation, severity, status, comment, vex_justification
+        )

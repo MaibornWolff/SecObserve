@@ -19,6 +19,8 @@ import product_groups from "./core/product_groups";
 import products from "./core/products";
 import { Dashboard } from "./dashboard";
 import general_rules from "./rules/general_rules";
+import csaf from "./vex/csaf";
+import openvex from "./vex/openvex";
 
 const i18nProvider = polyglotI18nProvider(() => {
     return englishMessages;
@@ -88,6 +90,16 @@ const App = () => {
                     {...notifications} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
                     // nosemgrep because the props are well defined in the import
                     recordRepresentation={(record) => `${trim_string(record.name)}`}
+                />
+                <Resource
+                    name="vex/csaf"
+                    {...csaf} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                    // nosemgrep because the props are well defined in the import
+                />
+                <Resource
+                    name="vex/openvex"
+                    {...openvex} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                    // nosemgrep because the props are well defined in the import
                 />
             </Admin>
         </AuthProvider>

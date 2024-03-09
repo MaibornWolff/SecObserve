@@ -12,7 +12,7 @@ from application.access_control.api.views import (
     CreateUserAPITokenView,
     RevokeUserAPITokenView,
 )
-from application.commons.api.views import HealthView, VersionView
+from application.commons.api.views import HealthView, SettingsView, VersionView
 from application.commons.views import empty_view
 from application.import_observations.api.views import (
     ApiImportObservationsById,
@@ -27,6 +27,12 @@ from application.metrics.api.views import (
     ProductMetricsExportExcelView,
     ProductMetricsStatusView,
     ProductMetricsTimelineView,
+)
+from application.vex.api.views import (
+    CSAFDocumentCreateView,
+    CSAFDocumentUpdateView,
+    OpenVEXDocumentCreateView,
+    OpenVEXDocumentUpdateView,
 )
 
 urlpatterns = [
@@ -49,6 +55,7 @@ urlpatterns += [
     path("api/", include("config.api_router")),
     path("api/status/version/", VersionView.as_view()),
     path("api/status/health/", HealthView.as_view()),
+    path("api/status/settings/", SettingsView.as_view()),
     path(
         "api/authentication/authenticate/",
         AuthenticateView.as_view(),
@@ -93,6 +100,19 @@ urlpatterns += [
         "api/oa3/swagger-ui",
         SpectacularSwaggerSplitView.as_view(url="/api/oa3/schema/?format=json"),
         name="swagger-ui_oa3",
+    ),
+]
+
+urlpatterns += [
+    path("api/vex/csaf_document/create/", CSAFDocumentCreateView.as_view()),
+    path(
+        "api/vex/csaf_document/update/<str:document_id_prefix>/<str:document_base_id>/",
+        CSAFDocumentUpdateView.as_view(),
+    ),
+    path("api/vex/openvex_document/create/", OpenVEXDocumentCreateView.as_view()),
+    path(
+        "api/vex/openvex_document/update/<str:document_id_prefix>/<str:document_base_id>/",
+        OpenVEXDocumentUpdateView.as_view(),
     ),
 ]
 
