@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "SecObserve"
-version = "1.7.0"
+version = "1.8.0"
 description = "SecObserve is an open source vulnerability management system for software development teams."
 license = "BSD-3-Clause"
 authors = [
