@@ -1,0 +1,1741 @@
+{
+    "bomFormat": "CycloneDX",
+    "specVersion": "1.5",
+    "serialNumber": "urn:uuid:5307bbd9-fd46-4516-b593-2926d9fa3b7d",
+    "version": 1,
+    "metadata": {
+        "timestamp": "2024-03-09T15:04:05+00:00",
+        "tools": {
+            "components": [
+                {
+                    "group": "aquasecurity",
+                    "name": "trivy",
+                    "type": "application",
+                    "version": "0.49.1"
+                }
+            ]
+        },
+        "component": {
+            "type": "container",
+            "bom-ref": "pkg:oci/secobserve-backend@sha256%3A64881be78cda3e6ffcff7db42f21021d25cf3fbb0344cb5374bab3d662b0aefd?arch=amd64&repository_url=index.docker.io%2Fmaibornwolff%2Fsecobserve-backend",
+            "supplier": {
+                "name": "MaibornwWolff Open Source Community and contributors",
+                "url": [
+                    "https://github.com/MaibornWolff/SecObserve"
+                ]
+            },
+            "name": "SecObserve Backend Container",
+            "version": "1.8.0",
+            "description": "Backend container of SecObserve, the open source vulnerability management system for software development teams",
+            "purl": "pkg:oci/secobserve-backend@sha256%3A64881be78cda3e6ffcff7db42f21021d25cf3fbb0344cb5374bab3d662b0aefd?arch=amd64&repository_url=index.docker.io%2Fmaibornwolff%2Fsecobserve-backend"
+        }
+    },
+    "components": [
+        {
+            "type": "operating-system",
+            "bom-ref": "e6f472d5-04c0-40a7-98a7-afae989bdd1e",
+            "name": "alpine",
+            "version": "3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/.python-rundeps@20240127.063954?arch=noarch&distro=3.19.1",
+            "name": ".python-rundeps",
+            "version": "20240127.063954",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "01f803c72857b73d9ae8ea76c51975d8bb85ac38"
+                }
+            ],
+            "purl": "pkg:apk/alpine/.python-rundeps@20240127.063954?arch=noarch&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/alpine-baselayout-data@3.4.3-r2?arch=x86_64&distro=3.19.1",
+            "name": "alpine-baselayout-data",
+            "version": "3.4.3-r2",
+            "description": "Alpine base dir structure and init scripts",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "6c2d1ccef1091fb5a62b9f174226a198c758a988"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "GPL-2.0-only"
+                }
+            ],
+            "purl": "pkg:apk/alpine/alpine-baselayout-data@3.4.3-r2?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/alpine-baselayout@3.4.3-r2?arch=x86_64&distro=3.19.1",
+            "name": "alpine-baselayout",
+            "version": "3.4.3-r2",
+            "description": "Alpine base dir structure and init scripts",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "eaf1cb459a0fd8d67694b8f7ade2fca7e97f604e"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "GPL-2.0-only"
+                }
+            ],
+            "purl": "pkg:apk/alpine/alpine-baselayout@3.4.3-r2?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/alpine-keys@2.4-r1?arch=x86_64&distro=3.19.1",
+            "name": "alpine-keys",
+            "version": "2.4-r1",
+            "description": "Public keys for Alpine Linux packages",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "b4be3dd5c7ff854a8b422edf6783214fd4268bd5"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "MIT"
+                }
+            ],
+            "purl": "pkg:apk/alpine/alpine-keys@2.4-r1?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/apk-tools@2.14.0-r5?arch=x86_64&distro=3.19.1",
+            "name": "apk-tools",
+            "version": "2.14.0-r5",
+            "description": "Alpine Package Keeper - package manager for alpine",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "5dedee3e812aa4c183c3448cf3f05a4d27e1d4e5"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "GPL-2.0-only"
+                }
+            ],
+            "purl": "pkg:apk/alpine/apk-tools@2.14.0-r5?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/bash@5.2.21-r0?arch=x86_64&distro=3.19.1",
+            "name": "bash",
+            "version": "5.2.21-r0",
+            "description": "The GNU Bourne Again shell",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "a8c75df187daa4eaf682191ba9e7e44ff96aa9f6"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "CNRI-Python-GPL-Compatible"
+                }
+            ],
+            "purl": "pkg:apk/alpine/bash@5.2.21-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/busybox-binsh@1.36.1-r15?arch=x86_64&distro=3.19.1",
+            "name": "busybox-binsh",
+            "version": "1.36.1-r15",
+            "description": "busybox ash /bin/sh",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "a0b8ac7d918c08f50ac957e44472b1b07589fc58"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "GPL-2.0-only"
+                }
+            ],
+            "purl": "pkg:apk/alpine/busybox-binsh@1.36.1-r15?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/busybox@1.36.1-r15?arch=x86_64&distro=3.19.1",
+            "name": "busybox",
+            "version": "1.36.1-r15",
+            "description": "Size optimized toolbox of many common UNIX utilities",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "018371da92ce00745865082fde733c4cdb6f4566"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "GPL-2.0-only"
+                }
+            ],
+            "purl": "pkg:apk/alpine/busybox@1.36.1-r15?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/ca-certificates-bundle@20230506-r0?arch=x86_64&distro=3.19.1",
+            "name": "ca-certificates-bundle",
+            "version": "20230506-r0",
+            "description": "Pre generated bundle of Mozilla certificates",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "0137bd2b86a2bd6d3ca7c6fe65f9584c8070d42b"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "MPL-2.0"
+                }
+            ],
+            "purl": "pkg:apk/alpine/ca-certificates-bundle@20230506-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/ca-certificates@20230506-r0?arch=x86_64&distro=3.19.1",
+            "name": "ca-certificates",
+            "version": "20230506-r0",
+            "description": "Common CA certificates PEM files from Mozilla",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "6bc8674dfcf42541bf27afd13d0e07c88fc18d6b"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "MPL-2.0"
+                }
+            ],
+            "purl": "pkg:apk/alpine/ca-certificates@20230506-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/fmt-dev@10.1.1-r0?arch=x86_64&distro=3.19.1",
+            "name": "fmt-dev",
+            "version": "10.1.1-r0",
+            "description": "Open-source formatting library for C++ (development files)",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "e3e4e8c697071f956423c7856c451c78d15e432d"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "MIT"
+                }
+            ],
+            "purl": "pkg:apk/alpine/fmt-dev@10.1.1-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/fmt@10.1.1-r0?arch=x86_64&distro=3.19.1",
+            "name": "fmt",
+            "version": "10.1.1-r0",
+            "description": "Open-source formatting library for C++",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "4c9b18eeab8608646b0887dfe804e61874e2ff3a"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "MIT"
+                }
+            ],
+            "purl": "pkg:apk/alpine/fmt@10.1.1-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/gdbm@1.23-r1?arch=x86_64&distro=3.19.1",
+            "name": "gdbm",
+            "version": "1.23-r1",
+            "description": "GNU dbm is a set of database routines that use extensible hashing",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "4a45ec06e96a7f0ce2453a1337f81e69a300aa80"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "CNRI-Python-GPL-Compatible"
+                }
+            ],
+            "purl": "pkg:apk/alpine/gdbm@1.23-r1?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/keyutils-libs@1.6.3-r3?arch=x86_64&distro=3.19.1",
+            "name": "keyutils-libs",
+            "version": "1.6.3-r3",
+            "description": "Key utilities library",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "bbb34ddcfbc732f87b90cce4fcb5c0f8ae79cdb2"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "CNRI-Python-GPL-Compatible"
+                }
+            ],
+            "purl": "pkg:apk/alpine/keyutils-libs@1.6.3-r3?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/krb5-conf@1.0-r2?arch=x86_64&distro=3.19.1",
+            "name": "krb5-conf",
+            "version": "1.0-r2",
+            "description": "Shared krb5.conf for both MIT krb5 and heimdal",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "75859086e875ebcbba20d50ac10a8ee96b716429"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "MIT"
+                }
+            ],
+            "purl": "pkg:apk/alpine/krb5-conf@1.0-r2?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/krb5-libs@1.21.2-r0?arch=x86_64&distro=3.19.1",
+            "name": "krb5-libs",
+            "version": "1.21.2-r0",
+            "description": "The shared libraries used by Kerberos 5",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "12841d8c6e190021140f5eb5acf7f3cf37f65412"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "MIT"
+                }
+            ],
+            "purl": "pkg:apk/alpine/krb5-libs@1.21.2-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/libaio@0.3.113-r2?arch=x86_64&distro=3.19.1",
+            "name": "libaio",
+            "version": "0.3.113-r2",
+            "description": "Asynchronous input/output library",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "8d8048464ffa2124c36616f58a7039077456f4c9"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "SSPL-1.0"
+                }
+            ],
+            "purl": "pkg:apk/alpine/libaio@0.3.113-r2?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/libbz2@1.0.8-r6?arch=x86_64&distro=3.19.1",
+            "name": "libbz2",
+            "version": "1.0.8-r6",
+            "description": "Shared library for bz2",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "3ce24de01cc5acf3011cdf0bb15a9e5ce1b7de56"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "bzip2-1.0.6"
+                }
+            ],
+            "purl": "pkg:apk/alpine/libbz2@1.0.8-r6?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/libc-utils@0.7.2-r5?arch=x86_64&distro=3.19.1",
+            "name": "libc-utils",
+            "version": "0.7.2-r5",
+            "description": "Meta package to pull in correct libc",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "9498d48e06bd376f93fb0238938b1edc18538483"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "BSD-2-Clause"
+                }
+            ],
+            "purl": "pkg:apk/alpine/libc-utils@0.7.2-r5?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/libcom_err@1.47.0-r5?arch=x86_64&distro=3.19.1",
+            "name": "libcom_err",
+            "version": "1.47.0-r5",
+            "description": "Common error description library",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "7dd9879373705476d347cb5d2fd14b5b0a9d2c25"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "CNRI-Python-GPL-Compatible"
+                }
+            ],
+            "purl": "pkg:apk/alpine/libcom_err@1.47.0-r5?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/libcrypto3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+            "name": "libcrypto3",
+            "version": "3.1.4-r5",
+            "description": "Crypto library from openssl",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "fae00a06dc8e5454608c976fb2036d830c06f273"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "Apache-2.0"
+                }
+            ],
+            "purl": "pkg:apk/alpine/libcrypto3@3.1.4-r5?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/libexpat@2.5.0-r2?arch=x86_64&distro=3.19.1",
+            "name": "libexpat",
+            "version": "2.5.0-r2",
+            "description": "XML Parser library written in C (libraries)",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "c57ce06f5bfd6c18df3fffe774377542edea8b66"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "MIT"
+                }
+            ],
+            "purl": "pkg:apk/alpine/libexpat@2.5.0-r2?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/libffi@3.4.4-r3?arch=x86_64&distro=3.19.1",
+            "name": "libffi",
+            "version": "3.4.4-r3",
+            "description": "portable, high level programming interface to various calling conventions.",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "d61cd1a834d02d55b75f415b84fdfc3c131d8341"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "MIT"
+                }
+            ],
+            "purl": "pkg:apk/alpine/libffi@3.4.4-r3?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/libgcc@13.2.1_git20231014-r0?arch=x86_64&distro=3.19.1",
+            "name": "libgcc",
+            "version": "13.2.1_git20231014-r0",
+            "description": "GNU C compiler runtime libraries",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "eddcdc3f28b3b7802c14cc083aa197a900cd3a6f"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "CNRI-Python-GPL-Compatible"
+                }
+            ],
+            "purl": "pkg:apk/alpine/libgcc@13.2.1_git20231014-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/libintl@0.22.3-r0?arch=x86_64&distro=3.19.1",
+            "name": "libintl",
+            "version": "0.22.3-r0",
+            "description": "GNU gettext runtime library",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "4978e92cdf95dd72584d8185756ce2e040a521a1"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "SSPL-1.0"
+                }
+            ],
+            "purl": "pkg:apk/alpine/libintl@0.22.3-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/libncursesw@6.4_p20231125-r0?arch=x86_64&distro=3.19.1",
+            "name": "libncursesw",
+            "version": "6.4_p20231125-r0",
+            "description": "Console display library (libncursesw)",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "19d0e374adce7f0781d7a1a7d66d933a51ec782d"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "X11"
+                }
+            ],
+            "purl": "pkg:apk/alpine/libncursesw@6.4_p20231125-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/libnsl@2.0.1-r0?arch=x86_64&distro=3.19.1",
+            "supplier": {
+                "name": "Thorsten Kukuk"
+            },
+            "author": "Thorsten Kukuk",
+            "name": "libnsl",
+            "version": "2.0.1-r0",
+            "description": "Public client interface for NIS(YP) and NIS+ in a IPv6 ready version",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "b31ecc836f66124c4182e1c636a1335e56d0b57e"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "MulanPSL-2.0"
+                }
+            ],
+            "purl": "pkg:apk/alpine/libnsl@2.0.1-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/libpanelw@6.4_p20231125-r0?arch=x86_64&distro=3.19.1",
+            "name": "libpanelw",
+            "version": "6.4_p20231125-r0",
+            "description": "Console display library (libpanelw)",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "ac791a48da4f0d2c391f3164fe69d0e2e07f40e6"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "X11"
+                }
+            ],
+            "purl": "pkg:apk/alpine/libpanelw@6.4_p20231125-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/libpq@16.2-r0?arch=x86_64&distro=3.19.1",
+            "name": "libpq",
+            "version": "16.2-r0",
+            "description": "PostgreSQL client library",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "586fdc450957ca5e1b128666ac7e098d7375f87a"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "PostgreSQL"
+                }
+            ],
+            "purl": "pkg:apk/alpine/libpq@16.2-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/libssl3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+            "name": "libssl3",
+            "version": "3.1.4-r5",
+            "description": "SSL shared libraries",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "3770bf8f8517449b26843c33d1bea9bcb29a8727"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "Apache-2.0"
+                }
+            ],
+            "purl": "pkg:apk/alpine/libssl3@3.1.4-r5?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/libstdc%2B%2B@13.2.1_git20231014-r0?arch=x86_64&distro=3.19.1",
+            "name": "libstdc++",
+            "version": "13.2.1_git20231014-r0",
+            "description": "GNU C++ standard runtime library",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "e2363a67ea60e435d862d9ac42491abb46584cea"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "CNRI-Python-GPL-Compatible"
+                }
+            ],
+            "purl": "pkg:apk/alpine/libstdc%2B%2B@13.2.1_git20231014-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/libtirpc-conf@1.3.4-r0?arch=x86_64&distro=3.19.1",
+            "name": "libtirpc-conf",
+            "version": "1.3.4-r0",
+            "description": "Configuration files for TI-RPC",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "3c3c75cb3cc65ad81c5bf9ab077a1015e3575606"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "BSD-3-Clause"
+                }
+            ],
+            "purl": "pkg:apk/alpine/libtirpc-conf@1.3.4-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/libtirpc@1.3.4-r0?arch=x86_64&distro=3.19.1",
+            "name": "libtirpc",
+            "version": "1.3.4-r0",
+            "description": "Transport Independent RPC library (SunRPC replacement)",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "5507cb6a8404cdfc6d4edaa29a96db8a73f6a7be"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "BSD-3-Clause"
+                }
+            ],
+            "purl": "pkg:apk/alpine/libtirpc@1.3.4-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/libuuid@2.39.3-r0?arch=x86_64&distro=3.19.1",
+            "name": "libuuid",
+            "version": "2.39.3-r0",
+            "description": "DCE compatible Universally Unique Identifier library",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "7bb44179da21aff12430809fc616148a9b60eca8"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "BSD-3-Clause"
+                }
+            ],
+            "purl": "pkg:apk/alpine/libuuid@2.39.3-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/libverto@0.3.2-r2?arch=x86_64&distro=3.19.1",
+            "supplier": {
+                "name": "latchset"
+            },
+            "author": "latchset",
+            "name": "libverto",
+            "version": "0.3.2-r2",
+            "description": "Main loop abstraction library",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "e196b7997d6e532990bd94d704170c6018d648fe"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "MIT"
+                }
+            ],
+            "purl": "pkg:apk/alpine/libverto@0.3.2-r2?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/lz4-libs@1.9.4-r5?arch=x86_64&distro=3.19.1",
+            "supplier": {
+                "name": "lz4"
+            },
+            "author": "lz4",
+            "name": "lz4-libs",
+            "version": "1.9.4-r5",
+            "description": "LZ4 is lossless compression algorithm with fast decoder @ multiple GB/s per core. (libraries)",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "cf8ce8aec4098e35f96f51f3a94dd4b2401edaa1"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "BSD-2-Clause"
+                }
+            ],
+            "purl": "pkg:apk/alpine/lz4-libs@1.9.4-r5?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/mariadb-client@10.11.6-r0?arch=x86_64&distro=3.19.1",
+            "name": "mariadb-client",
+            "version": "10.11.6-r0",
+            "description": "Client for the MariaDB database",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "80d1aa6322ec61b40c83596a5443672c128174a9"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "CNRI-Python-GPL-Compatible"
+                }
+            ],
+            "purl": "pkg:apk/alpine/mariadb-client@10.11.6-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/mariadb-common@10.11.6-r0?arch=x86_64&distro=3.19.1",
+            "name": "mariadb-common",
+            "version": "10.11.6-r0",
+            "description": "MariaDB common files for both server and client",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "b6ab92fcd34f4b4a6e20c4277adabcfe9f74cdfe"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "CNRI-Python-GPL-Compatible"
+                }
+            ],
+            "purl": "pkg:apk/alpine/mariadb-common@10.11.6-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/mariadb-connector-c-dev@3.3.8-r0?arch=x86_64&distro=3.19.1",
+            "name": "mariadb-connector-c-dev",
+            "version": "3.3.8-r0",
+            "description": "The MariaDB Native Client library (C driver) (development files)",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "760a2cf3e5fa2d45a6079dc238e12f1d7eeaf8c0"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "SSPL-1.0"
+                }
+            ],
+            "purl": "pkg:apk/alpine/mariadb-connector-c-dev@3.3.8-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/mariadb-connector-c@3.3.8-r0?arch=x86_64&distro=3.19.1",
+            "name": "mariadb-connector-c",
+            "version": "3.3.8-r0",
+            "description": "The MariaDB Native Client library (C driver)",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "4bf31f4ee2a962b58ba2596e41553ae323460f38"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "SSPL-1.0"
+                }
+            ],
+            "purl": "pkg:apk/alpine/mariadb-connector-c@3.3.8-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/mariadb-dev@10.11.6-r0?arch=x86_64&distro=3.19.1",
+            "name": "mariadb-dev",
+            "version": "10.11.6-r0",
+            "description": "A fast SQL database server (development files)",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "458ed475ab6cd32ed8896883c63687b5d388f645"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "CNRI-Python-GPL-Compatible"
+                }
+            ],
+            "purl": "pkg:apk/alpine/mariadb-dev@10.11.6-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/mariadb-embedded@10.11.6-r0?arch=x86_64&distro=3.19.1",
+            "name": "mariadb-embedded",
+            "version": "10.11.6-r0",
+            "description": "MariaDB as an embeddable library",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "72717939e4afe6c41dc777e3124c1dc34e692026"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "CNRI-Python-GPL-Compatible"
+                }
+            ],
+            "purl": "pkg:apk/alpine/mariadb-embedded@10.11.6-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/musl-utils@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1",
+            "name": "musl-utils",
+            "version": "1.2.4_git20230717-r4",
+            "description": "the musl c library (libc) implementation",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "543dfcfaeb3d82ab0c575f58ba22202316745cb1"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "MIT"
+                }
+            ],
+            "purl": "pkg:apk/alpine/musl-utils@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1",
+            "name": "musl",
+            "version": "1.2.4_git20230717-r4",
+            "description": "the musl c library (libc) implementation",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "92a1501d21b35c6ab793b8104ea6fe1b16e69cec"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "MIT"
+                }
+            ],
+            "purl": "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/mysql-client@10.11.6-r0?arch=x86_64&distro=3.19.1",
+            "name": "mysql-client",
+            "version": "10.11.6-r0",
+            "description": "Dummy package for mysql-client migration",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "e2633651312dc7f6db869cee960c43c967c9f2ad"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "CNRI-Python-GPL-Compatible"
+                }
+            ],
+            "purl": "pkg:apk/alpine/mysql-client@10.11.6-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/ncurses-terminfo-base@6.4_p20231125-r0?arch=x86_64&distro=3.19.1",
+            "name": "ncurses-terminfo-base",
+            "version": "6.4_p20231125-r0",
+            "description": "Descriptions of common terminals",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "dd1661c52635b3fa5edf8145cfb384dd60195d80"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "X11"
+                }
+            ],
+            "purl": "pkg:apk/alpine/ncurses-terminfo-base@6.4_p20231125-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/openssl-dev@3.1.4-r5?arch=x86_64&distro=3.19.1",
+            "name": "openssl-dev",
+            "version": "3.1.4-r5",
+            "description": "Toolkit for Transport Layer Security (TLS) (development files)",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "091fcb462b72fe6674772dc4c573baaeca9a5cbd"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "Apache-2.0"
+                }
+            ],
+            "purl": "pkg:apk/alpine/openssl-dev@3.1.4-r5?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/pcre2@10.42-r2?arch=x86_64&distro=3.19.1",
+            "name": "pcre2",
+            "version": "10.42-r2",
+            "description": "Perl-compatible regular expression library",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "bce09a736379bf66b33f946eea9ad3ac69edbcce"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "BSD-3-Clause"
+                }
+            ],
+            "purl": "pkg:apk/alpine/pcre2@10.42-r2?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/perl@5.38.2-r0?arch=x86_64&distro=3.19.1",
+            "name": "perl",
+            "version": "5.38.2-r0",
+            "description": "Larry Wall's Practical Extraction and Report Language",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "02d91524d47d86f4529123b2d5609ea06d6a6b91"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "Artistic-1.0-Perl"
+                }
+            ],
+            "purl": "pkg:apk/alpine/perl@5.38.2-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/pkgconf@2.1.0-r0?arch=x86_64&distro=3.19.1",
+            "name": "pkgconf",
+            "version": "2.1.0-r0",
+            "description": "development framework configuration tools",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "e074c17eedd930519f385d38803c1cb9b54aacb1"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "ISC"
+                }
+            ],
+            "purl": "pkg:apk/alpine/pkgconf@2.1.0-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/postgresql-common@1.2-r0?arch=x86_64&distro=3.19.1",
+            "name": "postgresql-common",
+            "version": "1.2-r0",
+            "description": "Common files for PostgreSQL",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "19552e4f2b190b64f160fa271a76f6177e5d3c50"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "MIT"
+                }
+            ],
+            "purl": "pkg:apk/alpine/postgresql-common@1.2-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/postgresql-libs@20240309.150024?arch=noarch&distro=3.19.1",
+            "name": "postgresql-libs",
+            "version": "20240309.150024",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "96aaff62e6d8d1abe5385611ddaff7503db3456a"
+                }
+            ],
+            "purl": "pkg:apk/alpine/postgresql-libs@20240309.150024?arch=noarch&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/postgresql16-client@16.2-r0?arch=x86_64&distro=3.19.1",
+            "name": "postgresql16-client",
+            "version": "16.2-r0",
+            "description": "PostgreSQL client",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "96078495633128702d83fbaa1e53af7ce253fd69"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "PostgreSQL"
+                }
+            ],
+            "purl": "pkg:apk/alpine/postgresql16-client@16.2-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/readline@8.2.1-r2?arch=x86_64&distro=3.19.1",
+            "name": "readline",
+            "version": "8.2.1-r2",
+            "description": "GNU readline library",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "99c02c24eeae905cbb4a21f24c8441cebdfe3b82"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "CNRI-Python-GPL-Compatible"
+                }
+            ],
+            "purl": "pkg:apk/alpine/readline@8.2.1-r2?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/scanelf@1.3.7-r2?arch=x86_64&distro=3.19.1",
+            "name": "scanelf",
+            "version": "1.3.7-r2",
+            "description": "Scan ELF binaries for stuff",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "f18d432650d29dad5ead912c5b089184ba66bfdd"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "GPL-2.0-only"
+                }
+            ],
+            "purl": "pkg:apk/alpine/scanelf@1.3.7-r2?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/sqlite-libs@3.44.2-r0?arch=x86_64&distro=3.19.1",
+            "name": "sqlite-libs",
+            "version": "3.44.2-r0",
+            "description": "C library that implements an SQL database engine (libraries)",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "c88133825e17f439e2cdedd12f6c73bad4c7f84f"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "blessing"
+                }
+            ],
+            "purl": "pkg:apk/alpine/sqlite-libs@3.44.2-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/ssl_client@1.36.1-r15?arch=x86_64&distro=3.19.1",
+            "name": "ssl_client",
+            "version": "1.36.1-r15",
+            "description": "EXternal ssl_client for busybox wget",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "821a58fae819b9a3433c32a26e6fd4bb0d541abf"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "GPL-2.0-only"
+                }
+            ],
+            "purl": "pkg:apk/alpine/ssl_client@1.36.1-r15?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/tzdata@2023d-r0?arch=x86_64&distro=3.19.1",
+            "name": "tzdata",
+            "version": "2023d-r0",
+            "description": "Timezone data",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "c8b097a2a481730c7dcf77954bb93c22bd8db7db"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "Other"
+                }
+            ],
+            "purl": "pkg:apk/alpine/tzdata@2023d-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/xz-libs@5.4.5-r0?arch=x86_64&distro=3.19.1",
+            "name": "xz-libs",
+            "version": "5.4.5-r0",
+            "description": "Library and CLI tools for XZ and LZMA compressed files (libraries)",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "6eae3a0211304ee23e31c6491e4bcefdb7cc76f1"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "CNRI-Python-GPL-Compatible"
+                }
+            ],
+            "purl": "pkg:apk/alpine/xz-libs@5.4.5-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/zlib-dev@1.3.1-r0?arch=x86_64&distro=3.19.1",
+            "name": "zlib-dev",
+            "version": "1.3.1-r0",
+            "description": "A compression/decompression Library (development files)",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "8e8f0e2d882b8c237538bd18b6519079b4a0fc45"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "Zlib"
+                }
+            ],
+            "purl": "pkg:apk/alpine/zlib-dev@1.3.1-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/zlib@1.3.1-r0?arch=x86_64&distro=3.19.1",
+            "name": "zlib",
+            "version": "1.3.1-r0",
+            "description": "A compression/decompression Library",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "d66579f98ab958792158824fdbbac1ae0ee2cca8"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "Zlib"
+                }
+            ],
+            "purl": "pkg:apk/alpine/zlib@1.3.1-r0?arch=x86_64&distro=3.19.1"
+        },
+        {
+            "type": "library",
+            "bom-ref": "pkg:apk/alpine/zstd-libs@1.5.5-r8?arch=x86_64&distro=3.19.1",
+            "name": "zstd-libs",
+            "version": "1.5.5-r8",
+            "description": "Zstandard - Fast real-time compression algorithm (libraries)",
+            "hashes": [
+                {
+                    "alg": "SHA-1",
+                    "content": "aec57bb6759763743e4b08ece1d8253083a22fb4"
+                }
+            ],
+            "licenses": [
+                {
+                    "expression": "BSD-3-Clause"
+                }
+            ],
+            "purl": "pkg:apk/alpine/zstd-libs@1.5.5-r8?arch=x86_64&distro=3.19.1"
+        }
+    ],
+    "dependencies": [
+        {
+            "ref": "e6f472d5-04c0-40a7-98a7-afae989bdd1e",
+            "dependsOn": [
+                "pkg:apk/alpine/.python-rundeps@20240127.063954?arch=noarch&distro=3.19.1",
+                "pkg:apk/alpine/alpine-baselayout-data@3.4.3-r2?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/alpine-baselayout@3.4.3-r2?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/alpine-keys@2.4-r1?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/apk-tools@2.14.0-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/bash@5.2.21-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/busybox-binsh@1.36.1-r15?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/busybox@1.36.1-r15?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/ca-certificates-bundle@20230506-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/ca-certificates@20230506-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/fmt-dev@10.1.1-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/fmt@10.1.1-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/gdbm@1.23-r1?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/keyutils-libs@1.6.3-r3?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/krb5-conf@1.0-r2?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/krb5-libs@1.21.2-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libaio@0.3.113-r2?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libbz2@1.0.8-r6?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libc-utils@0.7.2-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libcom_err@1.47.0-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libcrypto3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libexpat@2.5.0-r2?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libffi@3.4.4-r3?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libgcc@13.2.1_git20231014-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libintl@0.22.3-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libncursesw@6.4_p20231125-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libnsl@2.0.1-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libpanelw@6.4_p20231125-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libpq@16.2-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libssl3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libstdc%2B%2B@13.2.1_git20231014-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libtirpc-conf@1.3.4-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libtirpc@1.3.4-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libuuid@2.39.3-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libverto@0.3.2-r2?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/lz4-libs@1.9.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/mariadb-client@10.11.6-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/mariadb-common@10.11.6-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/mariadb-connector-c-dev@3.3.8-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/mariadb-connector-c@3.3.8-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/mariadb-dev@10.11.6-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/mariadb-embedded@10.11.6-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/musl-utils@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/mysql-client@10.11.6-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/ncurses-terminfo-base@6.4_p20231125-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/openssl-dev@3.1.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/pcre2@10.42-r2?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/perl@5.38.2-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/pkgconf@2.1.0-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/postgresql-common@1.2-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/postgresql-libs@20240309.150024?arch=noarch&distro=3.19.1",
+                "pkg:apk/alpine/postgresql16-client@16.2-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/readline@8.2.1-r2?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/scanelf@1.3.7-r2?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/sqlite-libs@3.44.2-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/ssl_client@1.36.1-r15?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/tzdata@2023d-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/xz-libs@5.4.5-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/zlib-dev@1.3.1-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/zlib@1.3.1-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/zstd-libs@1.5.5-r8?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/.python-rundeps@20240127.063954?arch=noarch&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/gdbm@1.23-r1?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libbz2@1.0.8-r6?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libcrypto3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libexpat@2.5.0-r2?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libffi@3.4.4-r3?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libncursesw@6.4_p20231125-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libnsl@2.0.1-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libpanelw@6.4_p20231125-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libssl3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libtirpc@1.3.4-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libuuid@2.39.3-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/readline@8.2.1-r2?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/sqlite-libs@3.44.2-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/xz-libs@5.4.5-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/zlib@1.3.1-r0?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/alpine-baselayout-data@3.4.3-r2?arch=x86_64&distro=3.19.1",
+            "dependsOn": []
+        },
+        {
+            "ref": "pkg:apk/alpine/alpine-baselayout@3.4.3-r2?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/alpine-baselayout-data@3.4.3-r2?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/busybox-binsh@1.36.1-r15?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/alpine-keys@2.4-r1?arch=x86_64&distro=3.19.1",
+            "dependsOn": []
+        },
+        {
+            "ref": "pkg:apk/alpine/apk-tools@2.14.0-r5?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/ca-certificates-bundle@20230506-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libcrypto3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libssl3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/zlib@1.3.1-r0?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/bash@5.2.21-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/busybox-binsh@1.36.1-r15?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/readline@8.2.1-r2?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/busybox-binsh@1.36.1-r15?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/busybox@1.36.1-r15?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/busybox@1.36.1-r15?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/ca-certificates-bundle@20230506-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": []
+        },
+        {
+            "ref": "pkg:apk/alpine/ca-certificates@20230506-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/busybox-binsh@1.36.1-r15?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libcrypto3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/fmt-dev@10.1.1-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/fmt@10.1.1-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/pkgconf@2.1.0-r0?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/fmt@10.1.1-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/libgcc@13.2.1_git20231014-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libstdc%2B%2B@13.2.1_git20231014-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/gdbm@1.23-r1?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/keyutils-libs@1.6.3-r3?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/krb5-conf@1.0-r2?arch=x86_64&distro=3.19.1",
+            "dependsOn": []
+        },
+        {
+            "ref": "pkg:apk/alpine/krb5-libs@1.21.2-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/keyutils-libs@1.6.3-r3?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/krb5-conf@1.0-r2?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libcom_err@1.47.0-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libcrypto3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libssl3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libverto@0.3.2-r2?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/libaio@0.3.113-r2?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/libbz2@1.0.8-r6?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/libc-utils@0.7.2-r5?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/musl-utils@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/libcom_err@1.47.0-r5?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/libcrypto3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/libexpat@2.5.0-r2?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/libffi@3.4.4-r3?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/libgcc@13.2.1_git20231014-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/libintl@0.22.3-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/libncursesw@6.4_p20231125-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/ncurses-terminfo-base@6.4_p20231125-r0?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/libnsl@2.0.1-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/libintl@0.22.3-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libtirpc@1.3.4-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/libpanelw@6.4_p20231125-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/libncursesw@6.4_p20231125-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/ncurses-terminfo-base@6.4_p20231125-r0?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/libpq@16.2-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/libcrypto3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libssl3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/libssl3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/libcrypto3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/libstdc%2B%2B@13.2.1_git20231014-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/libgcc@13.2.1_git20231014-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/libtirpc-conf@1.3.4-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": []
+        },
+        {
+            "ref": "pkg:apk/alpine/libtirpc@1.3.4-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/krb5-libs@1.21.2-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libtirpc-conf@1.3.4-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/libuuid@2.39.3-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/libverto@0.3.2-r2?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/lz4-libs@1.9.4-r5?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/mariadb-client@10.11.6-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/libcrypto3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libgcc@13.2.1_git20231014-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libncursesw@6.4_p20231125-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libssl3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libstdc%2B%2B@13.2.1_git20231014-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/mariadb-common@10.11.6-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/perl@5.38.2-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/zlib@1.3.1-r0?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/mariadb-common@10.11.6-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/busybox-binsh@1.36.1-r15?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/mariadb-connector-c-dev@3.3.8-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/mariadb-connector-c@3.3.8-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/openssl-dev@3.1.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/pkgconf@2.1.0-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/zlib-dev@1.3.1-r0?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/mariadb-connector-c@3.3.8-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/libcrypto3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libssl3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/zlib@1.3.1-r0?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/mariadb-dev@10.11.6-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/fmt-dev@10.1.1-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/mariadb-connector-c-dev@3.3.8-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/mariadb-embedded@10.11.6-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/openssl-dev@3.1.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/pkgconf@2.1.0-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/zlib-dev@1.3.1-r0?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/mariadb-embedded@10.11.6-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/libaio@0.3.113-r2?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libcrypto3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libgcc@13.2.1_git20231014-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libssl3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libstdc%2B%2B@13.2.1_git20231014-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/mariadb-common@10.11.6-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/pcre2@10.42-r2?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/zlib@1.3.1-r0?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/musl-utils@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/scanelf@1.3.7-r2?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1",
+            "dependsOn": []
+        },
+        {
+            "ref": "pkg:apk/alpine/mysql-client@10.11.6-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/mariadb-client@10.11.6-r0?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/ncurses-terminfo-base@6.4_p20231125-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": []
+        },
+        {
+            "ref": "pkg:apk/alpine/openssl-dev@3.1.4-r5?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/libcrypto3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libssl3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/pkgconf@2.1.0-r0?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/pcre2@10.42-r2?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/perl@5.38.2-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/libbz2@1.0.8-r6?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/zlib@1.3.1-r0?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/pkgconf@2.1.0-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/postgresql-common@1.2-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/busybox-binsh@1.36.1-r15?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/postgresql-libs@20240309.150024?arch=noarch&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/bash@5.2.21-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/mariadb-dev@10.11.6-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/mysql-client@10.11.6-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/postgresql16-client@16.2-r0?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/postgresql16-client@16.2-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/libcrypto3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libpq@16.2-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/lz4-libs@1.9.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/postgresql-common@1.2-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/readline@8.2.1-r2?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/zlib@1.3.1-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/zstd-libs@1.5.5-r8?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/readline@8.2.1-r2?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/libncursesw@6.4_p20231125-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/scanelf@1.3.7-r2?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/sqlite-libs@3.44.2-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/ssl_client@1.36.1-r15?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/libcrypto3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/libssl3@3.1.4-r5?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/tzdata@2023d-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": []
+        },
+        {
+            "ref": "pkg:apk/alpine/xz-libs@5.4.5-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/zlib-dev@1.3.1-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/pkgconf@2.1.0-r0?arch=x86_64&distro=3.19.1",
+                "pkg:apk/alpine/zlib@1.3.1-r0?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/zlib@1.3.1-r0?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:apk/alpine/zstd-libs@1.5.5-r8?arch=x86_64&distro=3.19.1",
+            "dependsOn": [
+                "pkg:apk/alpine/musl@1.2.4_git20230717-r4?arch=x86_64&distro=3.19.1"
+            ]
+        },
+        {
+            "ref": "pkg:oci/secobserve-backend@sha256%3A64881be78cda3e6ffcff7db42f21021d25cf3fbb0344cb5374bab3d662b0aefd?arch=amd64&repository_url=index.docker.io%2Fmaibornwolff%2Fsecobserve-backend",
+            "dependsOn": [
+                "e6f472d5-04c0-40a7-98a7-afae989bdd1e"
+            ]
+        }
+    ]
+}
