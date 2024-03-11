@@ -6,6 +6,7 @@ This directory contains the CycloneDX SBOMs for the project of the last 3 releas
 * `sbom_frontend_application_RELEASE.json` - NPM libraries of the frontend application, derived from [../frontend/package-lock.json](../frontend/package-lock.json)
 * `sbom_backend_container_RELEASE.json` - Operating system components of the backend container, derived from [backend container image of the release](https://hub.docker.com/repository/docker/maibornwolff/secobserve-backend/general)
 * `sbom_frontend_container_RELEASE.json` - Operating system components of the frontend container, derived from [frontend container image of the release](https://hub.docker.com/repository/docker/maibornwolff/secobserve-frontend/general)
+* `sbom_RELEASE.json` - Combined SBOM of the backend and frontend applications and containers
 
 
 ## Minimum requirements for content
@@ -34,6 +35,8 @@ This directory contains the CycloneDX SBOMs for the project of the last 3 releas
     * Backend and frontend could be installed without using the docker images
     * Backend container does not contain hierarchy of Python libraries
     * Frontend container does not contain identifiable NPM libraries, because of the `vite` build process
+* **Merge into combined SBOM**
+    * For a complete overview of the applications and containers
 * **Automated generation by GitHub workflow [generate_sboms.yml](../.github/workflows/generate_sboms.yml)**
     * Tracebility of SBOM content to the source files
 
