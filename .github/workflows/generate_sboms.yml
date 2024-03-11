@@ -69,32 +69,32 @@ jobs:
             | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_frontend_application.json --quiet --input-file - --output-file sbom_frontend_application_"$VERSION".json
           sbom-utility validate --input-file sbom_frontend_application_"$VERSION".json
-      # - 
-      #   name: Generate SBOM for backend container
-      #   env:
-      #     VERSION: ${{ github.event.inputs.release }}
-      #   working-directory: ./sbom
-      #   run: |
-      #     sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_backend_container.json
-      #     trivy image --vuln-type os --scanners license --format cyclonedx --quiet maibornwolff/secobserve-backend:"$VERSION" \
-      #       | parlay ecosystems enrich - \
-      #       | sbom-utility trim --keys=externalReferences,properties,vulnerabilities --quiet --input-file - \
-      #       | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
-      #       | sbom-utility patch --patch-file ./configuration/patch_backend_container.json --quiet --input-file - --output-file sbom_backend_container_"$VERSION".json
-      #     sbom-utility validate --input-file sbom_backend_container_"$VERSION".json
-      # - 
-      #   name: Generate SBOM for frontend container
-      #   env:
-      #     VERSION: ${{ github.event.inputs.release }}
-      #   working-directory: ./sbom
-      #   run: |
-      #     sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_frontend_container.json
-      #     trivy image --vuln-type os --scanners license --format cyclonedx --quiet maibornwolff/secobserve-frontend:"$VERSION" \
-      #       | parlay ecosystems enrich - \
-      #       | sbom-utility trim --keys=externalReferences,properties,vulnerabilities --quiet --input-file - \
-      #       | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
-      #       | sbom-utility patch --patch-file ./configuration/patch_frontend_container.json --quiet --input-file - --output-file sbom_frontend_container_"$VERSION".json
-      #     sbom-utility validate --input-file sbom_frontend_container_"$VERSION".json
+      - 
+        name: Generate SBOM for backend container
+        env:
+          VERSION: ${{ github.event.inputs.release }}
+        working-directory: ./sbom
+        run: |
+          sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_backend_container.json
+          trivy image --vuln-type os --scanners license --format cyclonedx --quiet maibornwolff/secobserve-backend:"$VERSION" \
+            | parlay ecosystems enrich - \
+            | sbom-utility trim --keys=externalReferences,properties,vulnerabilities --quiet --input-file - \
+            | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
+            | sbom-utility patch --patch-file ./configuration/patch_backend_container.json --quiet --input-file - --output-file sbom_backend_container_"$VERSION".json
+          sbom-utility validate --input-file sbom_backend_container_"$VERSION".json
+      - 
+        name: Generate SBOM for frontend container
+        env:
+          VERSION: ${{ github.event.inputs.release }}
+        working-directory: ./sbom
+        run: |
+          sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_frontend_container.json
+          trivy image --vuln-type os --scanners license --format cyclonedx --quiet maibornwolff/secobserve-frontend:"$VERSION" \
+            | parlay ecosystems enrich - \
+            | sbom-utility trim --keys=externalReferences,properties,vulnerabilities --quiet --input-file - \
+            | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
+            | sbom-utility patch --patch-file ./configuration/patch_frontend_container.json --quiet --input-file - --output-file sbom_frontend_container_"$VERSION".json
+          sbom-utility validate --input-file sbom_frontend_container_"$VERSION".json
       - 
         name: Merge SBOMs
         env:
