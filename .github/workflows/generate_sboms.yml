@@ -41,6 +41,8 @@ jobs:
           wget --no-verbose https://github.com/snyk/parlay/releases/download/v"$PARLAY_VERSION"/parlay_Linux_x86_64.tar.gz -O - | tar -zxf -
           wget --no-verbose https://github.com/aquasecurity/trivy/releases/download/v"$TRIVY_VERSION"/trivy_"$TRIVY_VERSION"_Linux-64bit.tar.gz -O - | tar -zxf -
           wget --no-verbose https://github.com/CycloneDX/cyclonedx-cli/releases/download/v"$CYCLONE_DX_CLI_VERSION"/cyclonedx-linux-x64
+          cp cyclonedx-linux-x64 /usr/local/bin/cyclonedx
+          chmod +x /usr/local/bin/cyclonedx
       - 
         name: Generate SBOM for backend application
         env:
