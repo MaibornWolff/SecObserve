@@ -10,12 +10,8 @@ backend/dummy
 backend/huey.db
 backend/huey.db-shm
 backend/huey.db-wal
-frontend/.env.keycloak
 frontend/.env.microsoft
 keycloak/h2/keycloakdb.trace.db
 keycloak/h2/keycloakdb.lock.db
 keycloak/h2/keycloakdb.mv.db
-sbom/sbom_backend_application_1.7.0.json
-sbom/sbom_backend_container_1.7.0.json
-sbom/sbom_frontend_application_1.7.0.json
-sbom/sbom_frontend_container_1.7.0.json
+sbom/sbom_*.json
