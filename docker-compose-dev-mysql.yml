@@ -8,19 +8,14 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: ./docker/frontend/Dockerfile
-    image: secobserve_frontend
-    profiles:
-      - frontend
+      dockerfile: ./docker/frontend/dev/Dockerfile
+    image: secobserve_frontend_dev
     ports:
       - "3000:3000"
-    environment:
-      API_BASE_URL: ${SO_API_BASE_URL:-http://localhost:8000/api}
-      OIDC_ENABLE: ${SO_OIDC_ENABLE:-false}
-      OIDC_AUTHORITY: ${SO_OIDC_AUTHORITY:-dummy}
-      OIDC_CLIENT_ID: ${SO_OIDC_CLIENT_ID:-dummy}
-      OIDC_REDIRECT_URI: ${SO_OIDC_REDIRECT_URI:-dummy}
-      OIDC_POST_LOGOUT_REDIRECT_URI: ${SO_OIDC_POST_LOGOUT_REDIRECT_URI:-dummy}
+    volumes:
+      - ./frontend/:/app
+      - /app/node_modules
+    command : sh -c "npm run start -- --host"
 
   backend:
     build:

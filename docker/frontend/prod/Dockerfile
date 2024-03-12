@@ -29,7 +29,7 @@ RUN apk del curl && \
         npm i -g runtime-env-cra@0.2.4
 
 COPY --from=build /app/build /usr/share/nginx/html
-COPY ./frontend/.env.example /usr/share/nginx/html/.env
+COPY ./frontend/.env.no_oidc /usr/share/nginx/html/.env
 COPY ./frontend/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 ARG user=nginx

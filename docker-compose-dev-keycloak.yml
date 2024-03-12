@@ -10,8 +10,8 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: ./docker/frontend/Dockerfile
-    image: secobserve_frontend
+      dockerfile: ./docker/frontend/prod/Dockerfile
+    image: secobserve_frontend_keycloak
     profiles:
       - frontend
     ports:
