@@ -356,7 +356,7 @@ LOGGING = {
 # -------------------------------------------------------------------------------
 # AUTHENTICATION
 # ------------------------------------------------------------------------------
-if env("OIDC_AUTHORITY"):
+if env.get_value("OIDC_AUTHORITY", default=None):
     DEFAULT_AUTHENTICATION_CLASSES = [
         "application.access_control.services.oidc_authentication.OIDCAuthentication",
         "application.access_control.services.api_token_authentication.APITokenAuthentication",
