@@ -86,5 +86,5 @@ nav:
     - CodeCharta: integrations/codecharta.md
     - Links to additional information: integrations/links.md
     - REST API: integrations/rest_api.md
-  # - Development:
-  #   - Overview: development/overview.md
+  - Development:
+    - Docker Compose: development/docker_compose.md
