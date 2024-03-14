@@ -1,6 +1,15 @@
 import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { Button, Dialog, DialogContent, DialogTitle, Divider, Typography } from "@mui/material";
+import {
+    Backdrop,
+    Button,
+    CircularProgress,
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    Divider,
+    Typography,
+} from "@mui/material";
 import { Fragment, useState } from "react";
 import {
     ArrayInput,
@@ -22,13 +31,18 @@ import { CSAF_PUBLISHER_CATEGORY_CHOICES, CSAF_TLP_LABEL_CHOICES, CSAF_TRACKING_
 
 const CSAFCreate = () => {
     const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
     const refresh = useRefresh();
     const notify = useNotify();
     const handleOpen = () => setOpen(true);
-    const handleCancel = () => setOpen(false);
+    const handleCancel = () => {
+        setOpen(false);
+        setLoading(false);
+    };
     const handleClose = (event: object, reason: string) => {
         if (reason && reason == "backdropClick") return;
         setOpen(false);
+        setLoading(false);
     };
 
     const CancelButton = () => (
@@ -56,6 +70,8 @@ const CSAFCreate = () => {
     );
 
     const create_csaf = async (data: any) => {
+        setLoading(true);
+
         data.vulnerability_names = data.vulnerability_names.map((v: any) => v.name);
         data.vulnerability_names = data.vulnerability_names.filter((v: any) => v != null);
 
@@ -69,6 +85,7 @@ const CSAFCreate = () => {
             .post(url, data, { responseType: "blob" })
             .then(function (response) {
                 if (response.status == 204) {
+                    setLoading(false);
                     notify("No vulnerabilities found to create CSAF document", {
                         type: "warning",
                     });
@@ -81,6 +98,7 @@ const CSAFCreate = () => {
                     link.click();
 
                     refresh();
+                    setLoading(false);
                     notify("CASF document created", {
                         type: "success",
                     });
@@ -88,6 +106,7 @@ const CSAFCreate = () => {
                 setOpen(false);
             })
             .catch(async function (error) {
+                setLoading(false);
                 notify(await error.response.data.text(), {
                     type: "warning",
                 });
@@ -104,7 +123,7 @@ const CSAFCreate = () => {
             >
                 Create CSAF document
             </Button>
-            <Dialog open={open} onClose={handleClose} maxWidth={"lg"}>
+            <Dialog open={open && !loading} onClose={handleClose} maxWidth={"lg"}>
                 <DialogTitle>Create CSAF document</DialogTitle>
                 <DialogContent>
                     <CreateBase resource="csaf">
@@ -174,6 +193,11 @@ const CSAFCreate = () => {
                     </CreateBase>
                 </DialogContent>
             </Dialog>
+            {loading ? (
+                <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={open}>
+                    <CircularProgress color="primary" />
+                </Backdrop>
+            ) : null}
         </Fragment>
     );
 };
