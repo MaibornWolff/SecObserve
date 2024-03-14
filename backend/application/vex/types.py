@@ -53,7 +53,7 @@ class CSAF_Status:
     CSAF_STATUS_UNDER_INVESTIGATION = "under_investigation"
 
 
-class CSF_Branch_Category:
+class CSAF_Branch_Category:
     CSAF_BRANCH_CATEGORY_ARCHITECTURE = "architecture"
     CSAF_BRANCH_CATEGORY_HOST_NAME = "host_name"
     CSAF_BRANCH_CATEGORY_LANGUAGE = "language"
@@ -68,6 +68,14 @@ class CSF_Branch_Category:
     CSAF_BRANCH_CATEGORY_VENDOR = "vendor"
 
 
+class CSAF_Relationship_Category:
+    CSAF_RELATIONSHIP_CATEGORY_DEFAULT_COMPONENT = "default_component_of"
+    CSAF_RELATIONSHIP_CATEGORY_EXTERNAL_COMPONENT = "external_component_of"
+    CSAF_RELATIONSHIP_CATEGORY_INSTALLED_ON = "installed_on"
+    CSAF_RELATIONSHIP_CATEGORY_INSTALLED_WITH = "installed_with"
+    CSAF_RELATIONSHIP_CATEGORY_OPTIONAL_COMPONENT = "optional_component_of"
+
+
 @dataclass(frozen=True)
 class CSAFProductIdentificationHelper:
     cpe: Optional[str]
@@ -78,7 +86,7 @@ class CSAFProductIdentificationHelper:
 class CSAFFullProductName:
     name: str
     product_id: str
-    product_identification_helper: Optional[CSAFProductIdentificationHelper]
+    product_identification_helper: Optional[CSAFProductIdentificationHelper] = None
 
 
 @dataclass()
@@ -90,8 +98,17 @@ class CSAFProductBranch:
 
 
 @dataclass()
+class CSAFProductRelationship:
+    category: str
+    product_reference: str
+    relates_to_product_reference: str
+    full_product_name: CSAFFullProductName
+
+
+@dataclass()
 class CSAFProductTree:
     branches: list[CSAFProductBranch]
+    relationships: list[CSAFProductRelationship]
 
 
 @dataclass(frozen=True)
@@ -214,11 +231,6 @@ class CSAFRoot:
     document: CSAFDocument
     product_tree: Optional[CSAFProductTree]
     vulnerabilities: list[CSAFVulnerability]
-
-    def get_base_id(self) -> str:
-        if len(self.document.tracking.id) > 36:
-            return self.document.tracking.id[-36:]
-        return ""
 
 
 class OpenVEX_Status:
