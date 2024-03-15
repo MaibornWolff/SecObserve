@@ -68,14 +68,9 @@ def check_branch_names(
 def get_observations_for_vulnerability(
     vulnerability_name: str,
 ) -> list[Observation]:
-    observations = (
+    return list(
         get_observations().filter(vulnerability_id=vulnerability_name).order_by("id")
     )
-    observations_list = []
-    for observation in observations:
-        if observation.branch == observation.product.repository_default_branch:
-            observations_list.append(observation)
-    return observations_list
 
 
 def get_observations_for_product(
