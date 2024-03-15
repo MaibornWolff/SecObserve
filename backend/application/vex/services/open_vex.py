@@ -100,7 +100,7 @@ def create_open_vex_document(
         role=open_vex.role,
         timestamp=open_vex.timestamp.isoformat(),
         last_updated=open_vex.last_updated.isoformat(),
-        tooling="SecOberserve / " + __version__,
+        tooling="SecObserve / " + __version__,
         statements=[],
     )
 
@@ -187,7 +187,7 @@ def update_open_vex_document(
         role=open_vex.role,
         timestamp=open_vex.timestamp.isoformat(),
         last_updated=open_vex.last_updated.isoformat(),
-        tooling="SecOberserve / " + __version__,
+        tooling="SecObserve / " + __version__,
         statements=[],
     )
 

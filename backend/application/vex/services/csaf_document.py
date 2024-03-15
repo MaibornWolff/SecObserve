@@ -21,7 +21,7 @@ def create_csaf_root(csaf: CSAF) -> CSAFRoot:
     )
 
     csaf_engine = CSAFEngine(
-        name="SecOberserve",
+        name="SecObserve",
         version=__version__,
     )
 
