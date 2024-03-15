@@ -7,7 +7,7 @@
     {
         "op": "add",
         "path": "/metadata/component/description",
-        "value": "Frontend container of SecObserve, the open source vulnerability management system for software development teams"
+        "value": "Frontend container of SecObserve, the open source vulnerability management system for software development and cloud environments."
     },
     {
         "op": "add",
