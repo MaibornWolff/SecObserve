@@ -212,7 +212,6 @@ def _get_statements_for_vulnerabilities(
     statements: dict[str, OpenVEXStatement] = {}
 
     for vulnerability_name in vulnerability_names:
-
         open_vex_vulnerability = OpenVEXVulnerability(
             name=vulnerability_name, id=get_vulnerability_url(vulnerability_name)
         )
@@ -229,6 +228,7 @@ def _get_statements_for_vulnerabilities(
                 + str(prepared_statement.justification)
                 + str(prepared_statement.status_notes)
                 + str(prepared_statement.action_statement)
+                + str(prepared_statement.impact_statement)
             )
             hashed_string = hashlib.sha256(
                 string_to_hash.casefold().encode("utf-8").strip()
