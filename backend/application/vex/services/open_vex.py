@@ -340,8 +340,7 @@ def _prepare_statement(observation: Observation) -> Optional[OpenVEXStatement]:
             if observation_log:
                 if observation_log.vex_justification:
                     open_vex_justification = observation_log.vex_justification
-                else:
-                    open_vex_impact_statement = observation_log.comment
+                open_vex_impact_statement = observation_log.comment
             else:
                 open_vex_impact_statement = "No impact statement available"
         else:
