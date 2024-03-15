@@ -2,7 +2,7 @@
     {
         "op": "add",
         "path": "/metadata/component/description",
-        "value": "SecObserve, the open source vulnerability management system for software development teams"
+        "value": "SecObserve, the open source vulnerability management system for software development and cloud environments."
     },
     {
         "op": "add",
