@@ -918,7 +918,7 @@ def _validate_cvss_and_severity(attrs):
     parser_severity = attrs.get("parser_severity")
 
     if parser_severity:
-        if parser_severity != cvss3_severity:
+        if cvss3_severity and parser_severity != cvss3_severity:
             raise ValidationError(
                 f"Severity ({parser_severity}) is different than severity from CVSS3 score ({cvss3_severity})"
             )
