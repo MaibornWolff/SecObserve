@@ -12,11 +12,14 @@ import {
     TextField,
     TopToolbar,
     WithRecord,
+    useRecordContext,
 } from "react-admin";
 
+import { PERMISSION_VEX_DELETE, PERMISSION_VEX_EDIT } from "../../access_control/types";
 import CSAFUpdate from "./CSAFUpdate";
 
 const ShowActions = () => {
+    const csaf = useRecordContext();
     return (
         <TopToolbar>
             <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -25,8 +28,12 @@ const ShowActions = () => {
                     sort={{ field: "tracking_initial_release_date", order: "DESC" }}
                     storeKey="csaf.list"
                 />
-                <CSAFUpdate />
-                <DeleteWithConfirmButton />
+                {csaf &&
+                    csaf.product_data.permissions &&
+                    csaf.product_data.permissions.includes(PERMISSION_VEX_EDIT) && <CSAFUpdate />}
+                {csaf &&
+                    csaf.product_data.permissions &&
+                    csaf.product_data.permissions.includes(PERMISSION_VEX_DELETE) && <DeleteWithConfirmButton />}
             </Stack>
         </TopToolbar>
     );
@@ -39,7 +46,7 @@ const CSAFShow = () => {
                 render={(csaf) => (
                     <SimpleShowLayout>
                         <Typography variant="h6">CSAF</Typography>
-                        {csaf && csaf.product_name && (
+                        {csaf && csaf.product_data.name && (
                             <ReferenceField source="product" reference="products" link="show" />
                         )}
                         {csaf && csaf.vulnerability_names && (

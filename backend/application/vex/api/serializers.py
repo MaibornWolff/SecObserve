@@ -13,6 +13,7 @@ from rest_framework.serializers import (
     SerializerMethodField,
 )
 
+from application.core.api.serializers import NestedProductSerializer
 from application.vex.models import (
     CSAF,
     CSAF_Branch,
@@ -79,7 +80,7 @@ class CSAFRevisionSerializer(ModelSerializer):
 
 
 class CSAFSerializer(ModelSerializer):
-    product_name = SerializerMethodField()
+    product_data = NestedProductSerializer(source="product")
     revisions = CSAFRevisionSerializer(many=True)
     vulnerability_names = SerializerMethodField()
     branch_names = SerializerMethodField()
@@ -88,11 +89,6 @@ class CSAFSerializer(ModelSerializer):
     class Meta:
         model = CSAF
         fields = "__all__"
-
-    def get_product_name(self, obj: CSAF) -> Optional[str]:
-        if obj.product:
-            return obj.product.name
-        return None
 
     def get_vulnerability_names(self, obj: CSAF) -> Optional[str]:
         vulnerabilities = [v.name for v in obj.vulnerability_names.all()]
@@ -153,7 +149,7 @@ class OpenVEXDocumentUpdateSerializer(Serializer):
 
 
 class OpenVEXSerializer(ModelSerializer):
-    product_name = SerializerMethodField()
+    product_data = NestedProductSerializer(source="product")
     vulnerability_names = SerializerMethodField()
     branch_names = SerializerMethodField()
     user_full_name = SerializerMethodField()
@@ -161,11 +157,6 @@ class OpenVEXSerializer(ModelSerializer):
     class Meta:
         model = OpenVEX
         fields = "__all__"
-
-    def get_product_name(self, obj: OpenVEX) -> Optional[str]:
-        if obj.product:
-            return obj.product.name
-        return None
 
     def get_vulnerability_names(self, obj: OpenVEX) -> Optional[str]:
         vulnerabilities = [v.name for v in obj.vulnerability_names.all()]

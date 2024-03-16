@@ -10,6 +10,7 @@ from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.mixins import DestroyModelMixin, ListModelMixin, RetrieveModelMixin
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_204_NO_CONTENT
 from rest_framework.views import APIView
@@ -23,6 +24,7 @@ from application.vex.api.filters import (
     OpenVEXFilter,
     OpenVEXVulnerabilityFilter,
 )
+from application.vex.api.permissions import UserHasVEXPermission
 from application.vex.api.serializers import (
     CSAFBranchSerializer,
     CSAFDocumentCreateSerializer,
@@ -167,6 +169,7 @@ class CSAFViewSet(
     queryset = CSAF.objects.none()
     filterset_class = CSAFFilter
     filter_backends = [DjangoFilterBackend]
+    permission_classes = (IsAuthenticated, UserHasVEXPermission)
 
     def get_queryset(self):
         return get_csafs()
@@ -288,6 +291,7 @@ class OpenVEXViewSet(
     queryset = OpenVEX.objects.none()
     filterset_class = OpenVEXFilter
     filter_backends = [DjangoFilterBackend]
+    permission_classes = (IsAuthenticated, UserHasVEXPermission)
 
     def get_queryset(self):
         return get_open_vex_s()

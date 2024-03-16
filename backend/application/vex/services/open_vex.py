@@ -6,6 +6,8 @@ import jsonpickle
 from rest_framework.exceptions import NotFound
 
 from application.__init__ import __version__
+from application.access_control.services.authorization import user_has_permission_or_403
+from application.access_control.services.roles_permissions import Permissions
 from application.commons.services.global_request import get_current_user
 from application.core.models import Branch, Observation, Observation_Log, Product
 from application.core.types import Status
@@ -60,8 +62,9 @@ def create_open_vex_document(
     check_product_or_vulnerabilities(
         parameters.product_id, parameters.vulnerability_names
     )
-
     product = check_and_get_product(parameters.product_id)
+    user_has_permission_or_403(product, Permissions.VEX_Create)
+
     check_vulnerability_names(parameters.vulnerability_names)
     branches = check_branch_names(parameters.branch_names, product)
 
@@ -140,6 +143,8 @@ def update_open_vex_document(
             f"OpenVEX document with ids {parameters.document_id_prefix}"
             + f" and {parameters.document_base_id} does not exist"
         )
+
+    user_has_permission_or_403(open_vex, Permissions.VEX_Edit)
 
     open_vex_vulnerability_names = list(
         OpenVEX_Vulnerability.objects.filter(openvex=open_vex).values_list(

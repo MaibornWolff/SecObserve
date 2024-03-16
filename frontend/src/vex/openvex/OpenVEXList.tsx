@@ -50,7 +50,7 @@ const OpenVEXList = () => {
                 empty={false}
             >
                 <Datagrid size={getSettingListSize()} rowClick="show" bulkActionButtons={false}>
-                    <TextField source="product_name" label="Product" />
+                    <TextField source="product_data.name" label="Product" />
                     <ReferenceManyField
                         reference="vex/openvex_vulnerabilities"
                         target="openvex"
