@@ -28,7 +28,6 @@ class Permissions(IntEnum):
     Product_Delete = 1103
     Product_Create = 1104
     Product_Import_Observations = 1105
-    Product_VEX = 1106
 
     Product_Member_View = 1201
     Product_Member_Edit = 1202
@@ -62,6 +61,11 @@ class Permissions(IntEnum):
 
     Product_Api_Token_Revoke = 4003
     Product_Api_Token_Create = 4004
+
+    VEX_View = 5001
+    VEX_Edit = 5002
+    VEX_Delete = 5003
+    VEX_Create = 5004
 
     @classmethod
     def has_value(cls, value):
@@ -134,6 +138,15 @@ class Permissions(IntEnum):
         }
 
     @classmethod
+    def get_vex_permissions(cls):
+        return {
+            Permissions.VEX_View,
+            Permissions.VEX_Edit,
+            Permissions.VEX_Delete,
+            Permissions.VEX_Create,
+        }
+
+    @classmethod
     def get_vulnerability_check_permissions(cls):
         return {
             Permissions.Product_View,
@@ -151,6 +164,7 @@ def get_roles_with_permissions():
             Permissions.Service_View,
             Permissions.Observation_View,
             Permissions.Api_Configuration_View,
+            Permissions.VEX_View,
         },
         Roles.Upload: {
             Permissions.Product_Import_Observations,
@@ -159,7 +173,6 @@ def get_roles_with_permissions():
             Permissions.Product_Group_View,
             Permissions.Product_View,
             Permissions.Product_Import_Observations,
-            Permissions.Product_VEX,
             Permissions.Product_Member_View,
             Permissions.Product_Rule_View,
             Permissions.Branch_View,
@@ -169,6 +182,7 @@ def get_roles_with_permissions():
             Permissions.Observation_Create,
             Permissions.Observation_Assessment,
             Permissions.Api_Configuration_View,
+            Permissions.VEX_View,
         },
         Roles.Maintainer: {
             Permissions.Product_Group_View,
@@ -176,7 +190,6 @@ def get_roles_with_permissions():
             Permissions.Product_View,
             Permissions.Product_Edit,
             Permissions.Product_Import_Observations,
-            Permissions.Product_VEX,
             Permissions.Product_Member_View,
             Permissions.Product_Member_Edit,
             Permissions.Product_Member_Delete,
@@ -200,6 +213,9 @@ def get_roles_with_permissions():
             Permissions.Api_Configuration_Edit,
             Permissions.Api_Configuration_Delete,
             Permissions.Api_Configuration_Create,
+            Permissions.VEX_View,
+            Permissions.VEX_Edit,
+            Permissions.VEX_Create,
         },
         Roles.Owner: {
             Permissions.Product_Group_View,
@@ -209,7 +225,6 @@ def get_roles_with_permissions():
             Permissions.Product_Edit,
             Permissions.Product_Delete,
             Permissions.Product_Import_Observations,
-            Permissions.Product_VEX,
             Permissions.Product_Member_View,
             Permissions.Product_Member_Edit,
             Permissions.Product_Member_Delete,
@@ -236,6 +251,10 @@ def get_roles_with_permissions():
             Permissions.Api_Configuration_Create,
             Permissions.Product_Api_Token_Revoke,
             Permissions.Product_Api_Token_Create,
+            Permissions.VEX_View,
+            Permissions.VEX_Edit,
+            Permissions.VEX_Create,
+            Permissions.VEX_Delete,
         },
     }
 

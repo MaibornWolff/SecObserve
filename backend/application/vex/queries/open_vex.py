@@ -1,8 +1,10 @@
 from typing import Optional
 
+from django.db.models import Exists, OuterRef, Q
 from django.db.models.query import QuerySet
 
 from application.commons.services.global_request import get_current_user
+from application.core.models import Product_Member
 from application.vex.models import OpenVEX, OpenVEX_Branch, OpenVEX_Vulnerability
 
 
@@ -12,10 +14,28 @@ def get_open_vex_s() -> QuerySet[OpenVEX]:
     if user is None:
         return OpenVEX.objects.none()
 
-    if user.is_superuser:
-        return OpenVEX.objects.all()
+    open_vex_s = OpenVEX.objects.all()
 
-    return OpenVEX.objects.filter(user=user)
+    if not user.is_superuser:
+        product_members = Product_Member.objects.filter(
+            product=OuterRef("product_id"), user=user
+        )
+        product_group_members = Product_Member.objects.filter(
+            product=OuterRef("product__product_group"), user=user
+        )
+
+        open_vex_s = open_vex_s.annotate(
+            product__member=Exists(product_members),
+            product__product_group__member=Exists(product_group_members),
+        )
+
+        open_vex_s = open_vex_s.filter(
+            Q(product__member=True)
+            | Q(product__product_group__member=True)
+            | (Q(product__isnull=True) & Q(user=user))
+        )
+
+    return open_vex_s
 
 
 def get_open_vex_by_document_id(
@@ -26,20 +46,14 @@ def get_open_vex_by_document_id(
     if user is None:
         return None
 
-    if user.is_superuser:
-        try:
-            return OpenVEX.objects.get(
-                document_id_prefix=document_id_prefix, document_base_id=document_base_id
-            )
-        except OpenVEX.DoesNotExist:
-            return None
-
     try:
-        return OpenVEX.objects.get(
+        open_vex = OpenVEX.objects.get(
             document_id_prefix=document_id_prefix,
             document_base_id=document_base_id,
-            user=user,
         )
+        if not user.is_superuser and open_vex not in get_open_vex_s():
+            return None
+        return open_vex
     except OpenVEX.DoesNotExist:
         return None
 

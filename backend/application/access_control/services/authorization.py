@@ -20,6 +20,7 @@ from application.import_observations.models import (
     Vulnerability_Check,
 )
 from application.rules.models import Rule
+from application.vex.models import VEX_Base
 
 
 def user_has_permission(  # pylint: disable=too-many-return-statements,too-many-branches
@@ -92,6 +93,13 @@ def user_has_permission(  # pylint: disable=too-many-return-statements,too-many-
         and permission in Permissions.get_api_configuration_permissions()
     ):
         return user_has_permission(obj.product, permission, user)
+
+    if isinstance(obj, VEX_Base) and permission in Permissions.get_vex_permissions():
+        if user == obj.user:
+            return True
+        if obj.product:
+            return user_has_permission(obj.product, permission, user)
+        return False
 
     if (
         isinstance(obj, Vulnerability_Check)

@@ -67,6 +67,11 @@ While superusers have permission to view and edit all data, internal and externa
 | Edit API Configuration   | -      | -      | X          | X     | -      |
 | Delete API Configuration | -      | -      | X          | X     | -      |
 |                          |        |        |            |       |        |
+| View VEX                 | X      | X      | X          | X     | -      |
+| Create VEX ^3)^          | -      | -      | X          | X     | -      |
+| Edit VEX ^3)^            | -      | -      | X          | X     | -      |
+| Delete VEX^3)^           | -      | -      | X          | X     | -      |
+|                          |        |        |            |       |        |
 | View Product Member      | X      | X      | X          | X     | -      |
 | Create Product Member    | -      | -      | X ^2)^     | X     | -      |
 | Edit Product Member      | -      | -      | X ^2)^     | X     | -      |
@@ -75,3 +80,5 @@ While superusers have permission to view and edit all data, internal and externa
 **^1)^** Only manually created observations can be edited
 
 **^2)^** Maintainers are not allowed to manipulate Owners of that product
+
+**^3)^** Only for VEX documents (CSAF or OpenVEX) linked to a product. For VEX documents without a product, the user who created the VEX document is the owner of the document and can perform all actions on it.

@@ -1,8 +1,10 @@
 from typing import Optional
 
+from django.db.models import Exists, OuterRef, Q
 from django.db.models.query import QuerySet
 
 from application.commons.services.global_request import get_current_user
+from application.core.models import Product_Member
 from application.vex.models import CSAF, CSAF_Branch, CSAF_Vulnerability
 
 
@@ -12,10 +14,28 @@ def get_csafs() -> QuerySet[CSAF]:
     if user is None:
         return CSAF.objects.none()
 
-    if user.is_superuser:
-        return CSAF.objects.all()
+    csafs = CSAF.objects.all()
 
-    return CSAF.objects.filter(user=user)
+    if not user.is_superuser:
+        product_members = Product_Member.objects.filter(
+            product=OuterRef("product_id"), user=user
+        )
+        product_group_members = Product_Member.objects.filter(
+            product=OuterRef("product__product_group"), user=user
+        )
+
+        csafs = csafs.annotate(
+            product__member=Exists(product_members),
+            product__product_group__member=Exists(product_group_members),
+        )
+
+        csafs = csafs.filter(
+            Q(product__member=True)
+            | Q(product__product_group__member=True)
+            | (Q(product__isnull=True) & Q(user=user))
+        )
+
+    return csafs
 
 
 def get_csaf_by_document_id(
@@ -26,20 +46,13 @@ def get_csaf_by_document_id(
     if user is None:
         return None
 
-    if user.is_superuser:
-        try:
-            return CSAF.objects.get(
-                document_id_prefix=document_id_prefix, document_base_id=document_base_id
-            )
-        except CSAF.DoesNotExist:
-            return None
-
     try:
-        return CSAF.objects.get(
-            document_id_prefix=document_id_prefix,
-            document_base_id=document_base_id,
-            user=user,
+        csaf = CSAF.objects.get(
+            document_id_prefix=document_id_prefix, document_base_id=document_base_id
         )
+        if not user.is_superuser and csaf not in get_csafs():
+            return None
+        return csaf
     except CSAF.DoesNotExist:
         return None
 
