@@ -22,6 +22,7 @@ from application.vex.models import (
     OpenVEX,
     OpenVEX_Branch,
     OpenVEX_Vulnerability,
+    VEX_Counter,
 )
 from application.vex.types import (
     CSAF_Publisher_Category,
@@ -192,6 +193,12 @@ class OpenVEXBranchSerializer(ModelSerializer):
 
     def get_name(self, obj: OpenVEX_Branch) -> str:
         return obj.branch.name
+
+
+class VEXCounterSerializer(ModelSerializer):
+    class Meta:
+        model = VEX_Counter
+        fields = "__all__"
 
 
 def _validate_url(url: str) -> str:

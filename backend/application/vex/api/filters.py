@@ -7,6 +7,7 @@ from application.vex.models import (
     OpenVEX,
     OpenVEX_Branch,
     OpenVEX_Vulnerability,
+    VEX_Counter,
 )
 
 
@@ -110,4 +111,21 @@ class OpenVEXBranchFilter(FilterSet):
         fields = [
             "openvex",
             "branch__name",
+        ]
+
+
+class VEXCounterFilter(FilterSet):
+    ordering = OrderingFilter(
+        # tuple-mapping retains order
+        fields=(
+            ("document_id_prefix", "document_id_prefix"),
+            ("year", "year"),
+        ),
+    )
+
+    class Meta:
+        model = VEX_Counter
+        fields = [
+            "document_id_prefix",
+            "year",
         ]
