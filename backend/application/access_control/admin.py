@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth import admin as auth_admin
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.utils.translation import gettext_lazy as _
 
 from application.access_control.forms import UserAdminChangeForm, UserAdminCreationForm
@@ -58,6 +59,10 @@ class JWTSecretAdmin(admin.ModelAdmin):
 @admin.register(API_Token)
 class API_TokenAdmin(admin.ModelAdmin):
     list_display = ["user"]
+    ordering = ["user"]
 
     def has_add_permission(self, request):
         return False
+
+
+admin.site.unregister(Group)

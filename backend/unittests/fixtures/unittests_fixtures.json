@@ -977,5 +977,14 @@
             "openvex": 1,
             "name": "CVE_vulnerability_1"
         }
+    },
+    {
+        "model": "vex.vex_counter",
+        "pk": 1,
+        "fields": {
+            "document_id_prefix": "prefix",
+            "year": 2024,
+            "counter": 2
+        }
     }
 ]

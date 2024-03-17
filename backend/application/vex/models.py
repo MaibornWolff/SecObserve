@@ -24,6 +24,8 @@ class VEX_Counter(Model):
     counter = IntegerField(default=0)
 
     class Meta:
+        verbose_name = "VEX Counter"
+        verbose_name_plural = "VEX Counters"
         unique_together = (
             "document_id_prefix",
             "year",

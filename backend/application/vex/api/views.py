@@ -14,7 +14,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_204_NO_CONTENT
 from rest_framework.views import APIView
-from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from application.vex.api.filters import (
     CSAFBranchFilter,
@@ -23,8 +23,12 @@ from application.vex.api.filters import (
     OpenVEXBranchFilter,
     OpenVEXFilter,
     OpenVEXVulnerabilityFilter,
+    VEXCounterFilter,
 )
-from application.vex.api.permissions import UserHasVEXPermission
+from application.vex.api.permissions import (
+    UserHasVEXCounterPermission,
+    UserHasVEXPermission,
+)
 from application.vex.api.serializers import (
     CSAFBranchSerializer,
     CSAFDocumentCreateSerializer,
@@ -36,6 +40,7 @@ from application.vex.api.serializers import (
     OpenVEXDocumentUpdateSerializer,
     OpenVEXSerializer,
     OpenVEXVulnerabilitySerializer,
+    VEXCounterSerializer,
 )
 from application.vex.models import (
     CSAF,
@@ -44,6 +49,7 @@ from application.vex.models import (
     OpenVEX,
     OpenVEX_Branch,
     OpenVEX_Vulnerability,
+    VEX_Counter,
 )
 from application.vex.queries.csaf import (
     get_csaf_branches,
@@ -315,6 +321,14 @@ class OpenVEXBranchViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
 
     def get_queryset(self):
         return get_openvex_branches()
+
+
+class VEXCounterViewSet(ModelViewSet):
+    serializer_class = VEXCounterSerializer
+    queryset = VEX_Counter.objects.all()
+    filterset_class = VEXCounterFilter
+    filter_backends = [DjangoFilterBackend]
+    permission_classes = (IsAuthenticated, UserHasVEXCounterPermission)
 
 
 def _object_to_json(object_to_encode: Any, vex_type: str) -> str:
