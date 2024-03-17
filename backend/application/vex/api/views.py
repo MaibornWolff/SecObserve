@@ -50,10 +50,10 @@ from application.vex.queries.csaf import (
     get_csaf_vulnerabilities,
     get_csafs,
 )
-from application.vex.queries.open_vex import (
-    get_open_vex_branches,
-    get_open_vex_s,
-    get_open_vex_vulnerabilities,
+from application.vex.queries.openvex import (
+    get_openvex_branches,
+    get_openvex_s,
+    get_openvex_vulnerabilities,
 )
 from application.vex.services.csaf import (
     CSAFCreateParameters,
@@ -61,11 +61,11 @@ from application.vex.services.csaf import (
     create_csaf_document,
     update_csaf_document,
 )
-from application.vex.services.open_vex import (
+from application.vex.services.openvex import (
     OpenVEXCreateParameters,
     OpenVEXUpdateParameters,
-    create_open_vex_document,
-    update_open_vex_document,
+    create_openvex_document,
+    update_openvex_document,
 )
 
 VEX_TYPE_CSAF = "csaf"
@@ -231,19 +231,19 @@ class OpenVEXDocumentCreateView(APIView):
             role=serializer.validated_data.get("role"),
         )
 
-        open_vex_document = create_open_vex_document(parameters)
+        openvex_document = create_openvex_document(parameters)
 
-        if not open_vex_document:
+        if not openvex_document:
             return Response(status=HTTP_204_NO_CONTENT)
 
         response = HttpResponse(  # pylint: disable=http-response-with-content-type-json
             # HTTPResponse gives more control about JSON serialization
-            content=_object_to_json(open_vex_document, VEX_TYPE_OPENVEX),
+            content=_object_to_json(openvex_document, VEX_TYPE_OPENVEX),
             content_type="application/json",
         )
         response["Content-Disposition"] = (
             "attachment; filename="
-            + _get_open_vex_filename(open_vex_document.id, open_vex_document.version)
+            + _get_openvex_filename(openvex_document.id, openvex_document.version)
         )
         return response
 
@@ -267,19 +267,19 @@ class OpenVEXDocumentUpdateView(APIView):
             role=serializer.validated_data.get("role"),
         )
 
-        open_vex_document = update_open_vex_document(parameters)
+        openvex_document = update_openvex_document(parameters)
 
-        if not open_vex_document:
+        if not openvex_document:
             return Response(status=HTTP_204_NO_CONTENT)
 
         response = HttpResponse(  # pylint: disable=http-response-with-content-type-json
             # HTTPResponse gives more control about JSON serialization
-            content=_object_to_json(open_vex_document, VEX_TYPE_OPENVEX),
+            content=_object_to_json(openvex_document, VEX_TYPE_OPENVEX),
             content_type="application/json",
         )
         response["Content-Disposition"] = (
             "attachment; filename="
-            + _get_open_vex_filename(open_vex_document.id, open_vex_document.version)
+            + _get_openvex_filename(openvex_document.id, openvex_document.version)
         )
         return response
 
@@ -294,7 +294,7 @@ class OpenVEXViewSet(
     permission_classes = (IsAuthenticated, UserHasVEXPermission)
 
     def get_queryset(self):
-        return get_open_vex_s()
+        return get_openvex_s()
 
 
 class OpenVEXVulnerabilityViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
@@ -304,7 +304,7 @@ class OpenVEXVulnerabilityViewSet(GenericViewSet, ListModelMixin, RetrieveModelM
     filter_backends = [DjangoFilterBackend]
 
     def get_queryset(self):
-        return get_open_vex_vulnerabilities()
+        return get_openvex_vulnerabilities()
 
 
 class OpenVEXBranchViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
@@ -314,7 +314,7 @@ class OpenVEXBranchViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     filter_backends = [DjangoFilterBackend]
 
     def get_queryset(self):
-        return get_open_vex_branches()
+        return get_openvex_branches()
 
 
 def _object_to_json(object_to_encode: Any, vex_type: str) -> str:
@@ -388,7 +388,7 @@ def _get_csaf_filename(document_id: str) -> str:
     return filename
 
 
-def _get_open_vex_filename(document_id: str, version: int) -> str:
+def _get_openvex_filename(document_id: str, version: int) -> str:
     parse_result = urlparse(document_id)
     path = parse_result.path
     # get last part of the path

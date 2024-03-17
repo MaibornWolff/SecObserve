@@ -234,10 +234,10 @@ class CSAFRoot:
 
 
 class OpenVEX_Status:
-    OPEN_VEX_STATUS_NOT_AFFECTED = "not_affected"
-    OPEN_VEX_STATUS_AFFECTED = "affected"
-    OPEN_VEX_STATUS_FIXED = "fixed"
-    OPEN_VEX_STATUS_UNDER_INVESTIGATION = "under_investigation"
+    OPENVEX_STATUS_NOT_AFFECTED = "not_affected"
+    OPENVEX_STATUS_AFFECTED = "affected"
+    OPENVEX_STATUS_FIXED = "fixed"
+    OPENVEX_STATUS_UNDER_INVESTIGATION = "under_investigation"
 
 
 @dataclass(frozen=True)

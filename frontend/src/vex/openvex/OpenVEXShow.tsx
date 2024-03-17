@@ -15,21 +15,17 @@ import {
     useRecordContext,
 } from "react-admin";
 
-import { PERMISSION_VEX_DELETE, PERMISSION_VEX_EDIT } from "../../access_control/types";
+import { delete_permission, update_permission } from "../functions";
 import OpenVEXUpdate from "./OpenVEXUpdate";
 
 const ShowActions = () => {
-    const open_vex = useRecordContext();
+    const openvex = useRecordContext();
     return (
         <TopToolbar>
             <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <PrevNextButtons linkType="show" sort={{ field: "timestamp", order: "DESC" }} storeKey="openvex.list" />
-                {open_vex &&
-                    open_vex.product_data.permissions &&
-                    open_vex.product_data.permissions.includes(PERMISSION_VEX_EDIT) && <OpenVEXUpdate />}
-                {open_vex &&
-                    open_vex.product_data.permissions &&
-                    open_vex.product_data.permissions.includes(PERMISSION_VEX_DELETE) && <DeleteWithConfirmButton />}
+                {update_permission(openvex) && <OpenVEXUpdate />}
+                {delete_permission(openvex) && <DeleteWithConfirmButton />}
             </Stack>
         </TopToolbar>
     );
@@ -42,7 +38,7 @@ const OpenVEXShow = () => {
                 render={(openvex) => (
                     <SimpleShowLayout>
                         <Typography variant="h6">OpenVEX</Typography>
-                        {openvex && openvex.product_data.name && (
+                        {openvex && openvex.product_data && openvex.product_data.name && (
                             <ReferenceField source="product" reference="products" link="show" />
                         )}
                         {openvex && openvex.vulnerability_names && (
