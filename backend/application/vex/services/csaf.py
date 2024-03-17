@@ -70,7 +70,8 @@ def create_csaf_document(parameters: CSAFCreateParameters) -> Optional[CSAFRoot]
         parameters.product_id, parameters.vulnerability_names
     )
     product = check_and_get_product(parameters.product_id)
-    user_has_permission_or_403(product, Permissions.VEX_Create)
+    if product:
+        user_has_permission_or_403(product, Permissions.VEX_Create)
 
     check_vulnerability_names(parameters.vulnerability_names)
     branches = check_branch_names(parameters.branch_names, product)

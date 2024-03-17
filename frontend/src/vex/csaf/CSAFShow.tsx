@@ -15,7 +15,7 @@ import {
     useRecordContext,
 } from "react-admin";
 
-import { PERMISSION_VEX_DELETE, PERMISSION_VEX_EDIT } from "../../access_control/types";
+import { delete_permission, update_permission } from "../functions";
 import CSAFUpdate from "./CSAFUpdate";
 
 const ShowActions = () => {
@@ -28,12 +28,8 @@ const ShowActions = () => {
                     sort={{ field: "tracking_initial_release_date", order: "DESC" }}
                     storeKey="csaf.list"
                 />
-                {csaf &&
-                    csaf.product_data.permissions &&
-                    csaf.product_data.permissions.includes(PERMISSION_VEX_EDIT) && <CSAFUpdate />}
-                {csaf &&
-                    csaf.product_data.permissions &&
-                    csaf.product_data.permissions.includes(PERMISSION_VEX_DELETE) && <DeleteWithConfirmButton />}
+                {update_permission(csaf) && <CSAFUpdate />}
+                {delete_permission(csaf) && <DeleteWithConfirmButton />}
             </Stack>
         </TopToolbar>
     );
@@ -46,7 +42,7 @@ const CSAFShow = () => {
                 render={(csaf) => (
                     <SimpleShowLayout>
                         <Typography variant="h6">CSAF</Typography>
-                        {csaf && csaf.product_data.name && (
+                        {csaf && csaf.product_data && csaf.product_data.name && (
                             <ReferenceField source="product" reference="products" link="show" />
                         )}
                         {csaf && csaf.vulnerability_names && (
