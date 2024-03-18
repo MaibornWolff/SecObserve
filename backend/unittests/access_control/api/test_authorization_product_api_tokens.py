@@ -6,9 +6,7 @@ from unittests.access_control.api.test_authorization import (
 
 class TestAuthorizationProductApiTokens(TestAuthorizationBase):
     def test_authorization_product_api_tokens(self):
-        expected_data = (
-            "{'results': [OrderedDict({'id': 2, 'role': <Roles.Upload: 2>})]}"
-        )
+        expected_data = "{'results': [{'id': 2, 'role': <Roles.Upload: 2>}]}"
         self._test_api(
             APITest(
                 "db_admin",
@@ -56,9 +54,7 @@ class TestAuthorizationProductApiTokens(TestAuthorizationBase):
             )
         )
 
-        expected_data = (
-            "{'results': [OrderedDict({'id': 1, 'role': <Roles.Upload: 2>})]}"
-        )
+        expected_data = "{'results': [{'id': 1, 'role': <Roles.Upload: 2>}]}"
         self._test_api(
             APITest(
                 "db_internal_write",
