@@ -8,7 +8,7 @@ class TestAuthorizationGeneralRules(TestAuthorizationBase):
     def test_authorization_general_rules(self):
         # --- general_rules ---
 
-        expected_data = "OrderedDict({'count': 1, 'next': None, 'previous': None, 'results': [OrderedDict({'id': 3, 'name': 'db_general_rule', 'description': '', 'scanner_prefix': '', 'title': '', 'description_observation': '', 'origin_component_name_version': '', 'origin_docker_image_name_tag': '', 'origin_endpoint_url': '', 'origin_service_name': '', 'origin_source_file': '', 'origin_cloud_qualified_resource': '', 'new_severity': '', 'new_status': '', 'new_vex_justification': '', 'enabled': True, 'parser': 1})]})"
+        expected_data = "{'count': 1, 'next': None, 'previous': None, 'results': [{'id': 3, 'name': 'db_general_rule', 'description': '', 'scanner_prefix': '', 'title': '', 'description_observation': '', 'origin_component_name_version': '', 'origin_docker_image_name_tag': '', 'origin_endpoint_url': '', 'origin_service_name': '', 'origin_source_file': '', 'origin_cloud_qualified_resource': '', 'new_severity': '', 'new_status': '', 'new_vex_justification': '', 'enabled': True, 'parser': 1}]}"
         self._test_api(
             APITest(
                 "db_internal_write",

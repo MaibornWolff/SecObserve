@@ -30,31 +30,47 @@ from application.vex.api.views import (
 
 router = SimpleRouter()
 
-router.register("users", UserViewSet)
+router.register("users", UserViewSet, basename="users")
 router.register(
     "product_api_tokens", ProductApiTokenViewset, basename="product_api_tokens"
 )
-router.register("products", ProductViewSet)
-router.register("product_groups", ProductGroupViewSet)
-router.register("product_members", ProductMemberViewSet)
-router.register("branches", BranchViewSet)
-router.register("services", ServiceViewSet)
-router.register("parsers", ParserViewSet)
-router.register("observations", ObservationViewSet)
-router.register("general_rules", GeneralRuleViewSet)
-router.register("api_configurations", ApiConfigurationViewSet)
-router.register("product_rules", ProductRuleViewSet)
-router.register("evidences", EvidenceViewSet)
-router.register("notifications", NotificationViewSet)
-router.register("vulnerability_checks", VulnerabilityCheckViewSet)
-router.register("potential_duplicates", PotentialDuplicateViewSet)
-router.register("vex/csaf", CSAFViewSet)
-router.register("vex/csaf_vulnerabilities", CSAFVulnerabilityViewSet)
-router.register("vex/csaf_branches", CSAFBranchViewSet)
-router.register("vex/openvex", OpenVEXViewSet)
-router.register("vex/openvex_vulnerabilities", OpenVEXVulnerabilityViewSet)
-router.register("vex/openvex_branches", OpenVEXBranchViewSet)
-router.register("vex/vex_counters", VEXCounterViewSet)
+router.register("products", ProductViewSet, basename="products")
+router.register("product_groups", ProductGroupViewSet, basename="product_groups")
+router.register("product_members", ProductMemberViewSet, basename="product_members")
+router.register("branches", BranchViewSet, basename="branches")
+router.register("services", ServiceViewSet, basename="services")
+router.register("parsers", ParserViewSet, basename="parsers")
+router.register("observations", ObservationViewSet, basename="observations")
+router.register("general_rules", GeneralRuleViewSet, basename="general_rules")
+router.register(
+    "api_configurations", ApiConfigurationViewSet, basename="api_configurations"
+)
+router.register("product_rules", ProductRuleViewSet, basename="product_rules")
+router.register("evidences", EvidenceViewSet, basename="evidences")
+router.register("notifications", NotificationViewSet, basename="notifications")
+router.register(
+    "vulnerability_checks", VulnerabilityCheckViewSet, basename="vulnerability_checks"
+)
+router.register(
+    "potential_duplicates", PotentialDuplicateViewSet, basename="potential_duplicates"
+)
+router.register("vex/csaf", CSAFViewSet, basename="csaf")
+router.register(
+    "vex/csaf_vulnerabilities",
+    CSAFVulnerabilityViewSet,
+    basename="csaf_vulnerabilities",
+)
+router.register("vex/csaf_branches", CSAFBranchViewSet, basename="csaf_branches")
+router.register("vex/openvex", OpenVEXViewSet, basename="openvex")
+router.register(
+    "vex/openvex_vulnerabilities",
+    OpenVEXVulnerabilityViewSet,
+    basename="openvex_vulnerabilities",
+)
+router.register(
+    "vex/openvex_branches", OpenVEXBranchViewSet, basename="openvex_branches"
+)
+router.register("vex/vex_counters", VEXCounterViewSet, basename="vex_counters")
 
 app_name = "api"
 urlpatterns = router.urls

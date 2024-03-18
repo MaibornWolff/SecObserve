@@ -6,7 +6,7 @@ from unittests.access_control.api.test_authorization import (
 
 class TestAuthorizationVEXCounters(TestAuthorizationBase):
     def test_authorization_vex_counters(self):
-        expected_data = "OrderedDict({'count': 1, 'next': None, 'previous': None, 'results': [OrderedDict({'id': 1, 'document_id_prefix': 'prefix', 'year': 2024, 'counter': 2})]})"
+        expected_data = "{'count': 1, 'next': None, 'previous': None, 'results': [{'id': 1, 'document_id_prefix': 'prefix', 'year': 2024, 'counter': 2}]}"
         self._test_api(
             APITest(
                 "db_internal_write",
