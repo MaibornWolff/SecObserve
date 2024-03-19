@@ -531,7 +531,9 @@ class ObservationSerializer(ModelSerializer):
             return purl.type
         return ""
 
-    def get_origin_component_purl_namespace(self, observation: Observation) -> Optional[str]:
+    def get_origin_component_purl_namespace(
+        self, observation: Observation
+    ) -> Optional[str]:
         if observation.origin_component_purl:
             purl = PackageURL.from_string(observation.origin_component_purl)
             return purl.namespace
