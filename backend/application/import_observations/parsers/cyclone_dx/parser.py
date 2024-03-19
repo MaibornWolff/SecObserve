@@ -10,18 +10,11 @@ from application.import_observations.parsers.base_parser import (
     BaseFileParser,
     BaseParser,
 )
+from application.import_observations.parsers.cyclone_dx.dependencies import (
+    get_component_dependencies,
+)
+from application.import_observations.parsers.cyclone_dx.types import Component
 from application.import_observations.types import Parser_Type
-
-
-@dataclass
-class Component:
-    bom_ref: str
-    name: str
-    version: str
-    type: str
-    purl: str
-    cpe: str
-    json: dict[str, str]
 
 
 @dataclass
@@ -124,9 +117,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                         (
                             observation_component_dependencies,
                             translated_component_dependencies,
-                        ) = self._get_component_dependencies(
-                            data, components, component
-                        )
+                        ) = get_component_dependencies(data, components, component)
 
                         observation = Observation(
                             title=title,
@@ -161,28 +152,6 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                         observations.append(observation)
 
         return observations
-
-    def _get_component_dependencies(self, data, components, component):
-        component_dependencies: list[dict[str, str | list[str]]] = []
-        self._filter_component_dependencies(
-            component.bom_ref,
-            data.get("dependencies", []),
-            component_dependencies,
-        )
-        observation_component_dependencies = ""
-        translated_component_dependencies = []
-        if component_dependencies:
-            translated_component_dependencies = self._translate_component_dependencies(
-                component_dependencies, components
-            )
-
-            observation_component_dependencies = self._get_dependencies(
-                "",
-                f"{component.name}:{component.version}",
-                translated_component_dependencies,
-            )
-
-        return observation_component_dependencies, translated_component_dependencies
 
     def _get_metadata(self, data: dict) -> Metadata:
         scanner = ""
@@ -291,125 +260,3 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             evidence.append("Dependencies")
             evidence.append(dumps(translated_component_dependencies))
             observation.unsaved_evidences.append(evidence)
-
-    def _filter_component_dependencies(
-        self,
-        bom_ref: str,
-        dependencies: list[dict[str, str | list[str]]],
-        component_dependencies: list[dict[str, str | list[str]]],
-    ) -> None:
-        for dependency in dependencies:
-            if dependency in component_dependencies:
-                continue
-            depends_on = dependency.get("dependsOn", [])
-            if bom_ref in depends_on:
-                component_dependencies.append(dependency)
-                self._filter_component_dependencies(
-                    str(dependency.get("ref")), dependencies, component_dependencies
-                )
-
-    def _translate_component_dependencies(
-        self,
-        component_dependencies: list[dict[str, str | list[str]]],
-        components: dict[str, Component],
-    ) -> list[dict]:
-        translated_component_dependencies = []
-
-        for component_dependency in component_dependencies:
-            translated_component_dependency: dict[str, str | list[str]] = {}
-
-            translated_component_dependency["ref"] = self._get_bom_ref_name_version(
-                str(component_dependency.get("ref")), components
-            )
-
-            translated_component_dependencies_inner: list[str] = []
-            for dependency in component_dependency.get("dependsOn", []):
-                translated_component_dependencies_inner.append(
-                    self._get_bom_ref_name_version(dependency, components)
-                )
-            translated_component_dependencies_inner.sort()
-            translated_component_dependency["dependsOn"] = (
-                translated_component_dependencies_inner
-            )
-
-            translated_component_dependencies.append(translated_component_dependency)
-
-        return translated_component_dependencies
-
-    def _get_bom_ref_name_version(
-        self, bom_ref: str, components: dict[str, Component]
-    ) -> str:
-        component = components.get(bom_ref, None)
-        if not component:
-            return ""
-
-        if component.version:
-            component_name_version = f"{component.name}:{component.version}"
-        else:
-            component_name_version = component.name
-
-        return component_name_version
-
-    def _get_dependencies(
-        self,
-        dependencies: str,
-        component_version: str,
-        translated_component_dependencies: list[dict],
-    ) -> str:
-        for dependency in translated_component_dependencies:
-            ref = dependency.get("ref")
-            depends_on = dependency.get("dependsOn", [])
-            if (
-                ref
-                and ref != component_version
-                and component_version in depends_on
-                and (not dependencies or ref not in dependencies)
-            ):
-                if not dependencies:
-                    dependencies = f"{ref} --> {component_version}"
-                else:
-                    dependencies = f"{ref} --> {dependencies}"
-
-                dependencies = self._get_dependencies(
-                    dependencies, ref, translated_component_dependencies
-                )
-                break
-
-        return dependencies
-
-    # def _get_dependencies(
-    #     self,
-    #     dependencies: list[str],
-    #     list_pointer: int,
-    #     component_version: str,
-    #     translated_component_dependencies: dict,
-    # ) -> None:
-    #     i = -1
-    #     current_dependency = None
-    #     if dependencies:
-    #         current_dependency = dependencies[list_pointer]
-    #     for dependency in translated_component_dependencies:
-    #         ref = dependency.get("ref")
-    #         depends_on = dependency.get("dependsOn", [])
-    #         if (
-    #             ref
-    #             and ref != component_version
-    #             and component_version in depends_on
-    #             and (not dependencies or not ref in dependencies[list_pointer])
-    #         ):
-    #             i += 1
-
-    #             if len(dependencies) <= i:
-    #                 if not dependencies or not current_dependency:
-    #                     dependencies.append(f"{ref} --> {component_version}")
-    #                 else:
-    #                     dependencies.append(f"{ref} --> {current_dependency}")
-    #                 list_pointer = i
-    #             else:
-    #                 dependencies[
-    #                     list_pointer
-    #                 ] = f"{ref} --> {dependencies[list_pointer]}"
-
-    #             self._get_dependencies(
-    #                 dependencies, list_pointer, ref, translated_component_dependencies
-    #             )
