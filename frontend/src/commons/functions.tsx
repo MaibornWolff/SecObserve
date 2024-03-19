@@ -76,7 +76,8 @@ export function get_vulnerability_url(vulnerability_id: string): string | null {
 export function get_component_purl_url(
     component_name: string,
     component_version: string | null,
-    purl_type: string | null
+    purl_type: string | null,
+    purl_namespace: string | null
 ): string | null {
     if (purl_type === null) {
         return null;
@@ -87,7 +88,11 @@ export function get_component_purl_url(
         return null;
     }
 
-    let component_purl_url = "https://deps.dev/" + purl_type + "/" + component_name;
+    let component_purl_url = "https://deps.dev/" + purl_type + "/";
+    if (!component_name.includes(":") && purl_namespace !== null) {
+        component_purl_url = component_purl_url + purl_namespace + "%3A";
+    }
+    component_purl_url = component_purl_url + component_name;
     if (component_version !== null) {
         component_purl_url = component_purl_url + "/" + component_version;
     }
