@@ -92,7 +92,7 @@ const Menu = ({ dense = false }: MenuProps) => {
                             dense={dense}
                             onPointerEnterCapture={undefined}
                             onPointerLeaveCapture={undefined}
-                                />
+                        />
                         <MenuItemLink
                             to="/vex/openvex"
                             state={{ _scrollToTop: true }}
@@ -101,7 +101,7 @@ const Menu = ({ dense = false }: MenuProps) => {
                             dense={dense}
                             onPointerEnterCapture={undefined}
                             onPointerLeaveCapture={undefined}
-        />
+                        />
                     </SubMenu>
                 )}
                 <SubMenu
@@ -119,7 +119,7 @@ const Menu = ({ dense = false }: MenuProps) => {
                         dense={dense}
                         onPointerEnterCapture={undefined}
                         onPointerLeaveCapture={undefined}
-                        />
+                    />
                     <MenuItemLink
                         to="/general_rules"
                         state={{ _scrollToTop: true }}
@@ -128,7 +128,7 @@ const Menu = ({ dense = false }: MenuProps) => {
                         dense={dense}
                         onPointerEnterCapture={undefined}
                         onPointerLeaveCapture={undefined}
-                        />
+                    />
                 </SubMenu>
             </Box>
             <Box
