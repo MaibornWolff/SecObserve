@@ -248,7 +248,8 @@ const ObservationShowComponent = () => {
                                             get_component_purl_url(
                                                 observation.origin_component_name,
                                                 observation.origin_component_version,
-                                                observation.origin_component_purl_type
+                                                observation.origin_component_purl_type,
+                                                observation.origin_component_purl_namespace
                                             ) == null && (
                                                 <Labeled>
                                                     <TextField source="origin_component_purl" label="Component PURL" />
@@ -258,7 +259,8 @@ const ObservationShowComponent = () => {
                                             get_component_purl_url(
                                                 observation.origin_component_name,
                                                 observation.origin_component_version,
-                                                observation.origin_component_purl_type
+                                                observation.origin_component_purl_type,
+                                                observation.origin_component_purl_namespace
                                             ) != null && (
                                                 <Labeled label="Component PURL">
                                                     <TextUrlField
@@ -268,7 +270,8 @@ const ObservationShowComponent = () => {
                                                             get_component_purl_url(
                                                                 observation.origin_component_name,
                                                                 observation.origin_component_version,
-                                                                observation.origin_component_purl_type
+                                                                observation.origin_component_purl_type,
+                                                                observation.origin_component_purl_namespace
                                                             )
                                                         }
                                                     />
