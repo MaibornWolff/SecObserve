@@ -46,6 +46,8 @@ const Menu = ({ dense = false }: MenuProps) => {
                     primaryText="Product Groups"
                     leftIcon={<product_groups.icon />}
                     dense={dense}
+                    onPointerEnterCapture={undefined}
+                    onPointerLeaveCapture={undefined}
                 />
                 <MenuItemLink
                     to="/products"
@@ -53,6 +55,8 @@ const Menu = ({ dense = false }: MenuProps) => {
                     primaryText="Products"
                     leftIcon={<products.icon />}
                     dense={dense}
+                    onPointerEnterCapture={undefined}
+                    onPointerLeaveCapture={undefined}
                 />
                 <MenuItemLink
                     to="/observations"
@@ -60,6 +64,8 @@ const Menu = ({ dense = false }: MenuProps) => {
                     primaryText="Observations"
                     leftIcon={<observations.icon />}
                     dense={dense}
+                    onPointerEnterCapture={undefined}
+                    onPointerLeaveCapture={undefined}
                 />
                 <MenuItemLink
                     to="/notifications"
@@ -67,6 +73,8 @@ const Menu = ({ dense = false }: MenuProps) => {
                     primaryText="Notifications"
                     leftIcon={<notifications.icon />}
                     dense={dense}
+                    onPointerEnterCapture={undefined}
+                    onPointerLeaveCapture={undefined}
                 />
                 {feature_vex_enabled() && (
                     <SubMenu
@@ -82,6 +90,8 @@ const Menu = ({ dense = false }: MenuProps) => {
                             primaryText="CSAF"
                             leftIcon={<csaf.icon />}
                             dense={dense}
+                            onPointerEnterCapture={undefined}
+                            onPointerLeaveCapture={undefined}
                         />
                         <MenuItemLink
                             to="/vex/openvex"
@@ -89,6 +99,8 @@ const Menu = ({ dense = false }: MenuProps) => {
                             primaryText="OpenVEX"
                             leftIcon={<openvex.icon />}
                             dense={dense}
+                            onPointerEnterCapture={undefined}
+                            onPointerLeaveCapture={undefined}
                         />
                     </SubMenu>
                 )}
@@ -105,6 +117,8 @@ const Menu = ({ dense = false }: MenuProps) => {
                         primaryText="Parsers"
                         leftIcon={<parsers.icon />}
                         dense={dense}
+                        onPointerEnterCapture={undefined}
+                        onPointerLeaveCapture={undefined}
                     />
                     <MenuItemLink
                         to="/general_rules"
@@ -112,6 +126,8 @@ const Menu = ({ dense = false }: MenuProps) => {
                         primaryText="General Rules"
                         leftIcon={<general_rules.icon />}
                         dense={dense}
+                        onPointerEnterCapture={undefined}
+                        onPointerLeaveCapture={undefined}
                     />
                 </SubMenu>
             </Box>
