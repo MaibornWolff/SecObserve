@@ -216,6 +216,7 @@ def get_roles_with_permissions():
             Permissions.VEX_View,
             Permissions.VEX_Edit,
             Permissions.VEX_Create,
+            Permissions.VEX_Delete,
         },
         Roles.Owner: {
             Permissions.Product_Group_View,
