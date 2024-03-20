@@ -8,10 +8,10 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: ./docker/frontend/Dockerfile
+      dockerfile: ./docker/frontend/prod/Dockerfile
       args:
         VERSION: prod_test
-    image: secobserve_frontend
+    image: secobserve_frontend_prod
     environment:
       API_BASE_URL: ${SO_API_BASE_URL:-http://localhost:5000/api}
       OIDC_ENABLE: ${SO_OIDC_ENABLE:-false}

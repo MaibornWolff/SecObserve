@@ -1,0 +1,98 @@
+version: "3"
+
+volumes:
+  dev_huey_data:
+  dev_mysql_data:
+  dev_postgres_data:
+  dev_keycloak_data:
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: ./docker/frontend/prod/Dockerfile
+    image: secobserve_frontend_keycloak
+    profiles:
+      - frontend
+    ports:
+      - "3000:3000"
+    environment:
+      API_BASE_URL: ${SO_API_BASE_URL:-http://localhost:8000/api}
+      OIDC_ENABLE: ${SO_OIDC_ENABLE:-true}
+      OIDC_AUTHORITY: ${SO_OIDC_AUTHORITY:-http://localhost:8080/realms/secobserve}
+      OIDC_CLIENT_ID: ${SO_OIDC_CLIENT_ID:-secobserve}
+      OIDC_REDIRECT_URI: ${SO_OIDC_REDIRECT_URI:-http://localhost:3000}
+      OIDC_POST_LOGOUT_REDIRECT_URI: ${SO_OIDC_POST_LOGOUT_REDIRECT_URI:-http://localhost:3000}
+
+  backend:
+    build:
+      context: .
+      dockerfile: ./docker/backend/dev/django/Dockerfile
+    image: secobserve_backend_dev
+    depends_on:
+      - postgres
+      - keycloak
+    environment:
+      # --- Admin user ---
+      ADMIN_USER: ${SO_ADMIN_USER:-admin}
+      ADMIN_PASSWORD: ${SO_ADMIN_PASSWORD:-admin}
+      ADMIN_EMAIL: ${SO_ADMIN_EMAIL:-admin@example.com}
+      # --- Database ---
+      DATABASE_ENGINE: ${SO_DATABASE_ENGINE:-django.db.backends.postgresql}
+      DATABASE_HOST: ${SO_DATABASE_HOST:-postgres}
+      DATABASE_PORT: ${SO_DATABASE_PORT:-5432}
+      DATABASE_DB: ${SO_DATABASE_DB:-secobserve}
+      DATABASE_USER: ${SO_DATABASE_USER:-secobserve}
+      DATABASE_PASSWORD: ${SO_DATABASE_PASSWORD:-secobserve}
+      # --- Security ---
+      ALLOWED_HOSTS: ${SO_ALLOWED_HOSTS:-localhost}
+      CORS_ALLOWED_ORIGINS: ${SO_CORS_ALLOWED_ORIGINS:-http://localhost:3000}
+      DJANGO_SECRET_KEY: ${SO_DJANGO_SECRET_KEY:-NxYPEF5lNGgk3yonndjSbwP77uNJxOvfKTjF5aVBqsHktNlf1wfJHHvJ8iifk32r}
+      FIELD_ENCRYPTION_KEY: ${SO_FIELD_ENCRYPTION_KEY:-DtlkqVb3wlaVdJK_BU-3mB4wwuuf8xx8YNInajiJ7GU=}
+      # --- OpenID Connect ---
+      OIDC_AUTHORITY: ${SO_OIDC_AUTHORITY:-http://keycloak:8080/realms/secobserve}
+      OIDC_CLIENT_ID: ${SO_OIDC_CLIENT_ID:-secobserve}
+      OIDC_USERNAME: ${SO_OIDC_USERNAME:-preferred_username}
+      OIDC_FIRST_NAME: ${SO_OIDC_FIRST_NAME:-given_name}
+      OIDC_LAST_NAME: ${SO_OIDC_LAST_NAME:-family_name}
+      OIDC_FULL_NAME: ${SO_OIDC_FULL_NAME:-}
+      OIDC_EMAIL: ${SO_OIDC_EMAIL:-email}
+      # --- Development ---
+      USE_DOCKER: yes
+    volumes:
+      - ./backend:/app
+      - dev_huey_data:/var/lib/huey
+    ports:
+      - "8000:8000"
+    command: /start
+
+  postgres:
+    image: postgres:15.6-alpine
+    volumes:
+      - dev_postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${SO_POSTGRES_DB:-secobserve}
+      POSTGRES_USER: ${SO_POSTGRES_USER:-secobserve}
+      POSTGRES_PASSWORD: ${SO_POSTGRES_PASSWORD:-secobserve}
+    ports:
+      - "5432:5432"
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    entrypoint: ["/bin/sh", "-c", "MailHog &>/dev/null"]
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+  keycloak:
+    image: keycloak/keycloak:24.0.1
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_HTTPS_ENABLED=false
+      - KC_HOSTNAME_STRICT_HTTPS=false
+    volumes:
+      - ./keycloak:/opt/keycloak/data/
+    ports:
+      - 8080:8080
+    command: start-dev

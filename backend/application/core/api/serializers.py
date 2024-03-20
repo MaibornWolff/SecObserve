@@ -485,6 +485,7 @@ class ObservationSerializer(ModelSerializer):
     evidences = NestedEvidenceSerializer(many=True)
     origin_source_file_url = SerializerMethodField()
     origin_component_purl_type = SerializerMethodField()
+    origin_component_purl_namespace = SerializerMethodField()
     issue_tracker_issue_url = SerializerMethodField()
 
     class Meta:
@@ -528,6 +529,14 @@ class ObservationSerializer(ModelSerializer):
         if observation.origin_component_purl:
             purl = PackageURL.from_string(observation.origin_component_purl)
             return purl.type
+        return ""
+
+    def get_origin_component_purl_namespace(
+        self, observation: Observation
+    ) -> Optional[str]:
+        if observation.origin_component_purl:
+            purl = PackageURL.from_string(observation.origin_component_purl)
+            return purl.namespace
         return ""
 
     def _create_azure_devops_url(
@@ -918,7 +927,7 @@ def _validate_cvss_and_severity(attrs):
     parser_severity = attrs.get("parser_severity")
 
     if parser_severity:
-        if parser_severity != cvss3_severity:
+        if cvss3_severity and parser_severity != cvss3_severity:
             raise ValidationError(
                 f"Severity ({parser_severity}) is different than severity from CVSS3 score ({cvss3_severity})"
             )

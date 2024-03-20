@@ -7,7 +7,7 @@
     {
         "op": "replace",
         "path": "/metadata/component/description",
-        "value": "Frontend application of SecObserve, the open source vulnerability management system for software development teams"
+        "value": "Frontend application of SecObserve, the open source vulnerability management system for software development and cloud environments."
     },
     {
         "op": "replace",

@@ -3,8 +3,6 @@ from typing import Optional
 
 from rest_framework.exceptions import ValidationError
 
-from application.access_control.services.authorization import user_has_permission_or_403
-from application.access_control.services.roles_permissions import Permissions
 from application.core.models import Branch, Observation, Product
 from application.core.queries.observation import get_observations
 from application.core.queries.product import get_product_by_id
@@ -34,7 +32,6 @@ def check_and_get_product(product_id: int) -> Optional[Product]:
     if not product:
         raise ValidationError(f"Product with id {product_id} does not exist")
 
-    user_has_permission_or_403(product, Permissions.Product_VEX)
     return product
 
 
@@ -68,14 +65,9 @@ def check_branch_names(
 def get_observations_for_vulnerability(
     vulnerability_name: str,
 ) -> list[Observation]:
-    observations = (
+    return list(
         get_observations().filter(vulnerability_id=vulnerability_name).order_by("id")
     )
-    observations_list = []
-    for observation in observations:
-        if observation.branch == observation.product.repository_default_branch:
-            observations_list.append(observation)
-    return observations_list
 
 
 def get_observations_for_product(

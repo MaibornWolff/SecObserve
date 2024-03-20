@@ -1,0 +1,23 @@
+[
+    {
+        "op": "add",
+        "path": "/metadata/component/description",
+        "value": "SecObserve, the open source vulnerability management system for software development and cloud environments."
+    },
+    {
+        "op": "add",
+        "path": "/metadata/component/purl",
+        "value": "pkg:github/MaibornWolff/SecObserve@vREPLACE_VERSION"
+    },
+    {
+        "op": "add",
+        "path": "/metadata/component/licenses",
+        "value": [
+            {
+                "license": {
+                    "id": "BSD-3-Clause"
+                }
+            }
+        ]
+    }
+]

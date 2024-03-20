@@ -29,6 +29,7 @@ jobs:
           SBOM_UTILITY_VERSION: 0.15.0
           PARLAY_VERSION: 0.3.0
           TRIVY_VERSION: 0.49.1
+          CYCLONE_DX_CLI_VERSION: 0.25.0
         run: |
           sudo apt-get update
           sudo apt-get install -y python3-pip npm
@@ -38,6 +39,9 @@ jobs:
           wget --no-verbose https://github.com/CycloneDX/sbom-utility/releases/download/v"$SBOM_UTILITY_VERSION"/sbom-utility-v"$SBOM_UTILITY_VERSION"-linux-amd64.tar.gz -O - | tar -zxf -
           wget --no-verbose https://github.com/snyk/parlay/releases/download/v"$PARLAY_VERSION"/parlay_Linux_x86_64.tar.gz -O - | tar -zxf -
           wget --no-verbose https://github.com/aquasecurity/trivy/releases/download/v"$TRIVY_VERSION"/trivy_"$TRIVY_VERSION"_Linux-64bit.tar.gz -O - | tar -zxf -
+          wget --no-verbose https://github.com/CycloneDX/cyclonedx-cli/releases/download/v"$CYCLONE_DX_CLI_VERSION"/cyclonedx-linux-x64
+          cp cyclonedx-linux-x64 /usr/local/bin/cyclonedx
+          chmod +x /usr/local/bin/cyclonedx
       - 
         name: Generate SBOM for backend application
         env:
@@ -58,7 +62,7 @@ jobs:
         working-directory: ./sbom
         run: |
           sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_frontend_application.json
-          cyclonedx-npm --omit dev --package-lock-only --output-format JSON ../frontend/package-lock.json \
+          cyclonedx-npm --omit dev --package-lock-only --spec-version 1.5 --output-format JSON ../frontend/package-lock.json \
             | parlay ecosystems enrich - \
             | sbom-utility trim --keys=externalReferences,properties,vulnerabilities --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
@@ -90,6 +94,17 @@ jobs:
             | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_frontend_container.json --quiet --input-file - --output-file sbom_frontend_container_"$VERSION".json
           sbom-utility validate --input-file sbom_frontend_container_"$VERSION".json
+      - 
+        name: Merge SBOMs
+        env:
+          VERSION: ${{ github.event.inputs.release }}
+        working-directory: ./sbom
+        run: |
+          sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_complete.json
+          cyclonedx merge --hierarchical --name "SecObserve" --version "$VERSION" --input-files sbom_backend_application_"$VERSION".json sbom_frontend_application_"$VERSION".json sbom_backend_container_"$VERSION".json sbom_frontend_container_"$VERSION".json --output-format json \
+            | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
+            | sbom-utility patch --patch-file ./configuration/patch_complete.json --quiet --input-file - --output-file sbom_"$VERSION".json
+          sbom-utility validate --input-file sbom_"$VERSION".json
       - 
         name: Commit SBOMs
         uses: stefanzweifel/git-auto-commit-action@8756aa072ef5b4a080af5dc8fef36c5d586e521d # v5

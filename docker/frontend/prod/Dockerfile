@@ -1,5 +1,5 @@
 # build environment
-FROM node:20.11.1-alpine3.19@sha256:c0a3badbd8a0a760de903e00cedbca94588e609299820557e72cba2a53dbaa2c as build
+FROM node:20.11.1-alpine3.19@sha256:bf77dc26e48ea95fca9d1aceb5acfa69d2e546b765ec2abfb502975f1a2d4def as build
 
 ARG VERSION=unkown
 
@@ -18,7 +18,7 @@ RUN sed -i 's/version_unkown/'"${VERSION}"'/g' ./src/commons/about/About.tsx
 RUN npm run build
 
 # production environment
-FROM nginxinc/nginx-unprivileged:stable-alpine3.18@sha256:76d13e4fd794c0bd09b55aed82a6632aee2b489b0df3988ae30e0e49ba70cebb
+FROM nginxinc/nginx-unprivileged:stable-alpine3.18@sha256:aeebf00dc1ac90d7b15cb06baf35daf4b3b9a4653cbf2c971672a77b99812028
 
 USER root
 
@@ -29,7 +29,7 @@ RUN apk del curl && \
         npm i -g runtime-env-cra@0.2.4
 
 COPY --from=build /app/build /usr/share/nginx/html
-COPY ./frontend/.env.example /usr/share/nginx/html/.env
+COPY ./frontend/.env.no_oidc /usr/share/nginx/html/.env
 COPY ./frontend/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 ARG user=nginx
@@ -43,7 +43,7 @@ LABEL maintainer="stefan.fleckenstein@maibornwolff.de"
 
 LABEL org.opencontainers.image.authors="stefan.fleckenstein@maibornwolff.de"
 LABEL org.opencontainers.image.created=${CREATED}
-LABEL org.opencontainers.image.description="SecObserve is an open source vulnerability management system for software development teams."
+LABEL org.opencontainers.image.description="SecObserve is an open source vulnerability management system for software development and cloud environments."
 LABEL org.opencontainers.image.documentation="https://maibornwolff.github.io/SecObserve"
 LABEL org.opencontainers.image.licenses="BSD3-Clause"
 LABEL org.opencontainers.image.revision=${REVISION}

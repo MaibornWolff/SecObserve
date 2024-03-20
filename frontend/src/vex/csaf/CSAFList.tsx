@@ -50,7 +50,7 @@ const CSAFList = () => {
                 empty={false}
             >
                 <Datagrid size={getSettingListSize()} rowClick="show" bulkActionButtons={false}>
-                    <TextField source="product_name" label="Product" />
+                    <TextField source="product_data.name" label="Product" />
                     <ReferenceManyField reference="vex/csaf_vulnerabilities" target="csaf" label="Vulnerabilities">
                         <SingleFieldList linkType={false}>
                             <ChipField source="name" />

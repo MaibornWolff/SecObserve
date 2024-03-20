@@ -7,7 +7,7 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: ./docker/frontend/Dockerfile
+      dockerfile: ./docker/frontend/prod/Dockerfile
     image: secobserve_frontend_playwright
     depends_on:
       - backend

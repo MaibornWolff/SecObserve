@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import (
     CASCADE,
@@ -398,7 +400,7 @@ class Observation(Model):
     origin_component_name_version = CharField(max_length=513, blank=True)
     origin_component_purl = CharField(max_length=255, blank=True)
     origin_component_cpe = CharField(max_length=255, blank=True)
-    origin_component_dependencies = TextField(max_length=2048, blank=True)
+    origin_component_dependencies = TextField(max_length=4096, blank=True)
     origin_docker_image_name = CharField(max_length=255, blank=True)
     origin_docker_image_tag = CharField(max_length=255, blank=True)
     origin_docker_image_name_tag = CharField(max_length=513, blank=True)
@@ -437,13 +439,13 @@ class Observation(Model):
         max_digits=6,
         decimal_places=3,
         null=True,
-        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        validators=[MinValueValidator(Decimal(0)), MaxValueValidator(Decimal(100))],
     )
     epss_percentile = DecimalField(
         max_digits=6,
         decimal_places=3,
         null=True,
-        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        validators=[MinValueValidator(Decimal(0)), MaxValueValidator(Decimal(100))],
     )
     found = DateField(null=True)
     scanner = CharField(max_length=255, blank=True)

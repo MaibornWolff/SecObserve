@@ -1,4 +1,5 @@
 from datetime import date
+from decimal import Decimal
 
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import CharField, DateField, DecimalField, Model
@@ -10,13 +11,13 @@ class EPSS_Score(Model):
         max_digits=6,
         decimal_places=5,
         null=True,
-        validators=[MinValueValidator(0), MaxValueValidator(1)],
+        validators=[MinValueValidator(Decimal(0)), MaxValueValidator(Decimal(1))],
     )
     epss_percentile = DecimalField(
         max_digits=6,
         decimal_places=5,
         null=True,
-        validators=[MinValueValidator(0), MaxValueValidator(1)],
+        validators=[MinValueValidator(Decimal(0)), MaxValueValidator(Decimal(1))],
     )
 
 

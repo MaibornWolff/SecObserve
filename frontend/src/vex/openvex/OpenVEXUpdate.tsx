@@ -1,6 +1,6 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import EditIcon from "@mui/icons-material/Edit";
-import { Button, Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
+import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
 import { Fragment, useState } from "react";
 import { SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
 
@@ -10,13 +10,18 @@ import { TextInputWide } from "../../commons/layout/themes";
 
 const OpenVEXUpdate = () => {
     const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
     const refresh = useRefresh();
     const notify = useNotify();
     const handleOpen = () => setOpen(true);
-    const handleCancel = () => setOpen(false);
+    const handleCancel = () => {
+        setOpen(false);
+        setLoading(false);
+    };
     const handleClose = (event: object, reason: string) => {
         if (reason && reason == "backdropClick") return;
         setOpen(false);
+        setLoading(false);
     };
 
     const CancelButton = () => (
@@ -44,11 +49,14 @@ const OpenVEXUpdate = () => {
     );
 
     const update_openvex = async (data: any) => {
+        setLoading(true);
+
         const url = "vex/openvex_document/update/" + data.document_id_prefix + "/" + data.document_base_id + "/";
         axios_instance
             .post(url, data, { responseType: "blob" })
             .then(function (response) {
                 if (response.status == 204) {
+                    setLoading(false);
                     notify("No changes in OpenVEX document", {
                         type: "warning",
                     });
@@ -61,6 +69,7 @@ const OpenVEXUpdate = () => {
                     link.click();
 
                     refresh();
+                    setLoading(false);
                     notify("CASF document updated", {
                         type: "success",
                     });
@@ -68,6 +77,7 @@ const OpenVEXUpdate = () => {
                 setOpen(false);
             })
             .catch(async function (error) {
+                setLoading(false);
                 notify(await error.response.data.text(), {
                     type: "warning",
                 });
@@ -84,7 +94,7 @@ const OpenVEXUpdate = () => {
             >
                 Update OpenVEX document
             </Button>
-            <Dialog open={open} onClose={handleClose} maxWidth={"lg"}>
+            <Dialog open={open && !loading} onClose={handleClose} maxWidth={"lg"}>
                 <DialogTitle>Update OpenVEX document</DialogTitle>
                 <DialogContent>
                     <SimpleForm onSubmit={update_openvex} toolbar={<CustomToolbar />}>
@@ -94,6 +104,11 @@ const OpenVEXUpdate = () => {
                     </SimpleForm>
                 </DialogContent>
             </Dialog>
+            {loading ? (
+                <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={open}>
+                    <CircularProgress color="primary" />
+                </Backdrop>
+            ) : null}
         </Fragment>
     );
 };
