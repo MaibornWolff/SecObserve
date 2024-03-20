@@ -14,4 +14,3 @@ frontend/.env.microsoft
 keycloak/h2/keycloakdb.trace.db
 keycloak/h2/keycloakdb.lock.db
 keycloak/h2/keycloakdb.mv.db
-sbom/sbom_*.json
