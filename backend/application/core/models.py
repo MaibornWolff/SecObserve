@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import (
     CASCADE,
@@ -437,13 +439,13 @@ class Observation(Model):
         max_digits=6,
         decimal_places=3,
         null=True,
-        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        validators=[MinValueValidator(Decimal(0)), MaxValueValidator(Decimal(100))],
     )
     epss_percentile = DecimalField(
         max_digits=6,
         decimal_places=3,
         null=True,
-        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        validators=[MinValueValidator(Decimal(0)), MaxValueValidator(Decimal(100))],
     )
     found = DateField(null=True)
     scanner = CharField(max_length=255, blank=True)
