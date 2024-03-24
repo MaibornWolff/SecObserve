@@ -30,6 +30,7 @@ import {
     OBSERVATION_STATUS_OPEN,
     Observation,
 } from "../types";
+import { IDENTIFIER_OBSERVATION_LIST, setListIdentifier } from "./functions";
 
 const listFilters = [
     <ReferenceInput source="product" reference="products" sort={{ field: "name", order: "ASC" }} alwaysOn>
@@ -66,8 +67,7 @@ const ListActions = () => (
 );
 
 const ObservationList = () => {
-    localStorage.removeItem("observationembeddedlist.product");
-    localStorage.removeItem("observationdashboardlist");
+    setListIdentifier(IDENTIFIER_OBSERVATION_LIST);
 
     return (
         <Fragment>

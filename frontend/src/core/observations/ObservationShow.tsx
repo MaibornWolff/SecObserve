@@ -21,32 +21,54 @@ import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import { get_component_purl_url, get_cwe_url, get_vulnerability_url } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
 import ObservationLogEmbeddedList from "../observation_logs/ObservationLogEmbeddedList";
-import { OBSERVATION_STATUS_OPEN } from "../types";
+import { OBSERVATION_STATUS_IN_REVIEW, OBSERVATION_STATUS_OPEN } from "../types";
 import ObservationAssessment from "./ObservationAssessment";
 import ObservationRemoveAssessment from "./ObservationRemoveAssessment";
 import ObservationsShowAside from "./ObservationShowAside";
 import PotentialDuplicatesList from "./PotentialDuplicatesList";
+import {
+    IDENTIFIER_OBSERVATION_DASHBOARD_LIST,
+    IDENTIFIER_OBSERVATION_EMBEDDED_LIST,
+    IDENTIFIER_OBSERVATION_LIST,
+    IDENTIFIER_OBSERVATION_REVIEW_LIST,
+} from "./functions";
 
-type ShowActionsProps = {
-    filter: any;
-    storeKey: string;
-};
-
-const ShowActions = (props: ShowActionsProps) => {
+const ShowActions = () => {
     const observation = useRecordContext();
-    if (observation) {
-        localStorage.setItem("observationshow.id", observation.id.toString());
+    let filter = null;
+    let storeKey = null;
+    let filterDefaultValues = {};
+
+    if (localStorage.getItem(IDENTIFIER_OBSERVATION_LIST) === "true") {
+        filter = {};
+        filterDefaultValues = { current_status: OBSERVATION_STATUS_OPEN };
+        storeKey = "observations.list";
+    } else if (observation && localStorage.getItem(IDENTIFIER_OBSERVATION_EMBEDDED_LIST) === "true") {
+        filter = { product: observation.product };
+        storeKey = "observations.embedded";
+    } else if (localStorage.getItem(IDENTIFIER_OBSERVATION_DASHBOARD_LIST) === "true") {
+        filter = {
+            age: "Past 7 days",
+            current_status: OBSERVATION_STATUS_OPEN,
+        };
+        storeKey = "observations.dashboard";
+    } else if (observation && localStorage.getItem(IDENTIFIER_OBSERVATION_REVIEW_LIST) === "true") {
+        filter = { product: observation.product, current_status: OBSERVATION_STATUS_IN_REVIEW };
+        storeKey = "observations.review";
     }
+
     return (
         <TopToolbar>
             <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <PrevNextButtons
-                    filter={props.filter}
-                    filterDefaultValues={{ current_status: OBSERVATION_STATUS_OPEN }}
-                    linkType="show"
-                    sort={{ field: "current_severity", order: "ASC" }}
-                    storeKey={props.storeKey}
-                />
+                {filter && storeKey && (
+                    <PrevNextButtons
+                        filter={filter}
+                        filterDefaultValues={filterDefaultValues}
+                        linkType="show"
+                        sort={{ field: "current_severity", order: "ASC" }}
+                        storeKey={storeKey}
+                    />
+                )}
                 {observation &&
                     observation.product_data.permissions &&
                     observation.product_data.permissions.includes(PERMISSION_OBSERVATION_ASSESSMENT) && (
@@ -435,23 +457,8 @@ const ObservationShowComponent = () => {
 };
 
 const ObservationShow = () => {
-    let filter = {};
-    let storeKey = "observations.list";
-    const product_id = localStorage.getItem("observationembeddedlist.product");
-    if (product_id !== null) {
-        filter = { product: Number(product_id) };
-        storeKey = "observations.embedded";
-    } else if (localStorage.getItem("observationdashboardlist") === "true") {
-        filter = { age: "Past 7 days", current_status: "Open" };
-        storeKey = "observations.dashboard";
-    }
-
     return (
-        <Show
-            actions={<ShowActions filter={filter} storeKey={storeKey} />}
-            component={ObservationShowComponent}
-            aside={<ObservationsShowAside />}
-        >
+        <Show actions={<ShowActions />} component={ObservationShowComponent} aside={<ObservationsShowAside />}>
             <Fragment />
         </Show>
     );

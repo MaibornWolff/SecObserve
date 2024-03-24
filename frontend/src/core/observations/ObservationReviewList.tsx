@@ -1,5 +1,5 @@
 import { Stack } from "@mui/material";
-import { Fragment, useEffect } from "react";
+import { Fragment } from "react";
 import {
     AutocompleteInput,
     BooleanField,
@@ -7,7 +7,6 @@ import {
     DatagridConfigurable,
     FilterForm,
     FunctionField,
-    Identifier,
     ListContextProvider,
     NullableBooleanInput,
     NumberField,
@@ -18,7 +17,6 @@ import {
     TopToolbar,
     useListController,
 } from "react-admin";
-import { useNavigate } from "react-router";
 
 import { PERMISSION_OBSERVATION_ASSESSMENT } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
@@ -35,6 +33,7 @@ import {
     Product,
 } from "../types";
 import ObservationBulkAssessment from "./ObservationBulkAssessment";
+import { IDENTIFIER_OBSERVATION_REVIEW_LIST, setListIdentifier } from "./functions";
 
 function listFilters(product: Product) {
     return [
@@ -99,19 +98,7 @@ const ListActions = () => (
 );
 
 const ObservationsReviewList = ({ product }: ObservationsReviewListProps) => {
-    const navigate = useNavigate();
-    function get_observations_url(branch_id: Identifier): string {
-        return `?displayedFilters=%7B%7D&filter=%7B%22current_status%22%3A%22Open%22%2C%22branch%22%3A${branch_id}%7D&order=ASC&sort=current_severity`;
-    }
-
-    useEffect(() => {
-        const current_product_id = localStorage.getItem("observationembeddedlist.product");
-        if (current_product_id == null || Number(current_product_id) !== product.id) {
-            localStorage.removeItem("RaStore.observations.embedded");
-            localStorage.setItem("observationembeddedlist.product", product.id);
-            navigate(get_observations_url(product.repository_default_branch));
-        }
-    }, [product, navigate]);
+    setListIdentifier(IDENTIFIER_OBSERVATION_REVIEW_LIST);
 
     const listContext = useListController({
         filter: { product: Number(product.id), current_status: OBSERVATION_STATUS_IN_REVIEW },
@@ -120,7 +107,7 @@ const ObservationsReviewList = ({ product }: ObservationsReviewListProps) => {
         sort: { field: "current_severity", order: "ASC" },
         filterDefaultValues: { current_status: OBSERVATION_STATUS_OPEN, branch: product.repository_default_branch },
         disableSyncWithLocation: false,
-        storeKey: "observations.embedded",
+        storeKey: "observations.review",
     });
 
     if (listContext.isLoading) {

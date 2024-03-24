@@ -33,7 +33,10 @@ def save_assessment(
         else Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED
     )
 
-    if assessment_status == Assessment_Status.ASSESSMENT_STATUS_APPROVED:
+    if assessment_status in (
+        Assessment_Status.ASSESSMENT_STATUS_APPROVED,
+        Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
+    ):
         (
             previous_severity,
             log_severity,
@@ -187,7 +190,10 @@ def assessment_approval(
     if observation_log.user == approval_user:
         raise ValidationError("Users cannot approve their own assessment")
 
-    if assessment_status == Assessment_Status.ASSESSMENT_STATUS_APPROVED:
+    if assessment_status in (
+        Assessment_Status.ASSESSMENT_STATUS_APPROVED,
+        Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
+    ):
         _update_observation(
             observation_log.observation,
             observation_log.severity,
