@@ -20,7 +20,7 @@ import {
 } from "react-admin";
 import { useNavigate } from "react-router";
 
-import { PERMISSION_OBSERVATION_ASSESSMENT, PERMISSION_OBSERVATION_DELETE } from "../../access_control/types";
+import { PERMISSION_OBSERVATION_ASSESSMENT } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { humanReadableDate } from "../../commons/functions";
