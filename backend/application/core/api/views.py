@@ -22,6 +22,7 @@ from application.core.api.filters import (
     BranchFilter,
     EvidenceFilter,
     ObservationFilter,
+    ObservationLogFilter,
     ParserFilter,
     PotentialDuplicateFilter,
     ProductFilter,
@@ -45,6 +46,8 @@ from application.core.api.serializers import (
     ObservationBulkMarkDuplicatesSerializer,
     ObservationCreateSerializer,
     ObservationListSerializer,
+    ObservationLogApprovalSerializer,
+    ObservationLogSerializer,
     ObservationRemoveAssessmentSerializer,
     ObservationSerializer,
     ObservationUpdateSerializer,
@@ -59,6 +62,7 @@ from application.core.models import (
     Branch,
     Evidence,
     Observation,
+    Observation_Log,
     Parser,
     Potential_Duplicate,
     Product,
@@ -67,15 +71,22 @@ from application.core.models import (
 )
 from application.core.queries.branch import get_branches
 from application.core.queries.observation import (
+    get_current_observation_log,
     get_evidences,
     get_observation_by_id,
+    get_observation_log_by_id,
+    get_observation_logs,
     get_observations,
     get_potential_duplicates,
 )
 from application.core.queries.product import get_product_by_id, get_products
 from application.core.queries.product_member import get_product_members
 from application.core.queries.service import get_services
-from application.core.services.assessment import remove_assessment, save_assessment
+from application.core.services.assessment import (
+    assessment_approval,
+    remove_assessment,
+    save_assessment,
+)
 from application.core.services.export_observations import (
     export_observations_csv,
     export_observations_excel,
@@ -89,7 +100,7 @@ from application.core.services.potential_duplicates import (
     set_potential_duplicate_both_ways,
 )
 from application.core.services.security_gate import check_security_gate
-from application.core.types import Status
+from application.core.types import Assessment_Status, Status
 from application.issue_tracker.services.issue_tracker import (
     push_deleted_observation_to_issue_tracker,
     push_observations_to_issue_tracker,
@@ -393,6 +404,16 @@ class ObservationViewSet(ModelViewSet):
 
         user_has_permission_or_403(observation, Permissions.Observation_Assessment)
 
+        current_observation_log = get_current_observation_log(observation)
+        if (
+            current_observation_log
+            and current_observation_log.assessment_status
+            == Assessment_Status.ASSESSMENT_STATUS_NEEDS_APPROVAL
+        ):
+            raise ValidationError(
+                "Cannot create new assessment while last assessment still needs approval"
+            )
+
         new_severity = request_serializer.validated_data.get("severity")
         new_status = request_serializer.validated_data.get("status")
         comment = request_serializer.validated_data.get("comment")
@@ -424,10 +445,57 @@ class ObservationViewSet(ModelViewSet):
 
         user_has_permission_or_403(observation, Permissions.Observation_Assessment)
 
+        current_observation_log = get_current_observation_log(observation)
+        if (
+            current_observation_log
+            and current_observation_log.assessment_status
+            == Assessment_Status.ASSESSMENT_STATUS_NEEDS_APPROVAL
+        ):
+            raise ValidationError(
+                "Cannot remove assessment while last assessment still needs approval"
+            )
+
         comment = request_serializer.validated_data.get("comment")
 
         remove_assessment(observation, comment)
         set_potential_duplicate_both_ways(observation)
+
+        return Response()
+
+
+class ObservationLogViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
+    serializer_class = ObservationLogSerializer
+    filterset_class = ObservationLogFilter
+    queryset = Observation_Log.objects.all()
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+
+    def get_queryset(self):
+        return get_observation_logs()
+
+    @extend_schema(
+        methods=["PATCH"],
+        request=ObservationLogApprovalSerializer,
+        responses={200: None},
+    )
+    @action(detail=True, methods=["patch"])
+    def approval(self, request, pk=None):
+        request_serializer = ObservationLogApprovalSerializer(data=request.data)
+        if not request_serializer.is_valid():
+            raise ValidationError(request_serializer.errors)
+
+        observation_log = get_observation_log_by_id(pk)
+        if not observation_log:
+            raise NotFound(f"Observation Log {pk} not found")
+
+        user_has_permission_or_403(
+            observation_log, Permissions.Observation_Log_Approval
+        )
+
+        assessment_status = request_serializer.validated_data.get("assessment_status")
+        approval_remark = request_serializer.validated_data.get("approval_remark")
+        assessment_approval(observation_log, assessment_status, approval_remark)
+
+        set_potential_duplicate_both_ways(observation_log.observation)
 
         return Response()
 

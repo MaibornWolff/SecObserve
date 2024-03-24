@@ -47,7 +47,7 @@ export const darkTheme = {
             main: "#6ed2f0",
         },
         secondary: {
-            main: "#FBBA72",
+            main: "#ff008c",
         },
         background: {
             default: "#313131",
@@ -92,7 +92,7 @@ export const lightTheme = {
         },
         secondary: {
             light: "#5f5fc4",
-            main: "#283593",
+            main: "#ff008c",
             dark: "#001064",
             contrastText: "#fff",
         },

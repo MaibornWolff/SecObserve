@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import { JsonViewer, JsonViewerTheme } from "@textea/json-viewer";
 import {
     Labeled,
@@ -35,6 +36,7 @@ const EvidenceShow = () => {
     return (
         <Show actions={<ShowActions />}>
             <SimpleShowLayout>
+                <Typography variant="h6">Evidence</Typography>
                 <ReferenceField source="product" reference="products" link="show">
                     <TextField source="name" />
                 </ReferenceField>

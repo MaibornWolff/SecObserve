@@ -1,16 +1,12 @@
-import { Stack, Typography } from "@mui/material";
-import { Box, Paper } from "@mui/material";
+import { Box, Paper, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
 import {
-    ArrayField,
     ChipField,
-    Datagrid,
     DateField,
     EditButton,
     Labeled,
     NumberField,
     PrevNextButtons,
-    ReferenceField,
     Show,
     TextField,
     TopToolbar,
@@ -22,13 +18,9 @@ import { PERMISSION_OBSERVATION_ASSESSMENT, PERMISSION_OBSERVATION_EDIT } from "
 import MarkdownField from "../../commons/custom_fields/MarkdownField";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
-import {
-    feature_vex_enabled,
-    get_component_purl_url,
-    get_cwe_url,
-    get_vulnerability_url,
-} from "../../commons/functions";
+import { get_component_purl_url, get_cwe_url, get_vulnerability_url } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
+import ObservationLogEmbeddedList from "../observation_logs/ObservationLogEmbeddedList";
 import { OBSERVATION_STATUS_OPEN } from "../types";
 import ObservationAssessment from "./ObservationAssessment";
 import ObservationRemoveAssessment from "./ObservationRemoveAssessment";
@@ -81,7 +73,7 @@ const ObservationShowComponent = () => {
     return (
         <WithRecord
             render={(observation) => (
-                <Box width={"100%"} ml={2}>
+                <Box width={"100%"}>
                     <Paper sx={{ marginBottom: 2, padding: 2 }}>
                         <Typography variant="h6">Observation</Typography>
                         <Stack direction="row" spacing={4}>
@@ -425,20 +417,7 @@ const ObservationShowComponent = () => {
                         <Typography variant="h6" sx={{ paddingBottom: 1 }}>
                             Log
                         </Typography>
-                        <ArrayField label={false} source="observation_logs">
-                            <Datagrid bulkActionButtons={false}>
-                                <ReferenceField source="user" reference="users">
-                                    <TextField source="full_name" />
-                                </ReferenceField>
-                                <TextField source="severity" emptyText="---" />
-                                <TextField source="status" emptyText="---" />
-                                {feature_vex_enabled() && (
-                                    <TextField label="VEX justification" source="vex_justification" emptyText="---" />
-                                )}
-                                <TextField source="comment" />
-                                <DateField source="created" showTime />
-                            </Datagrid>
-                        </ArrayField>
+                        <ObservationLogEmbeddedList observation={observation} />
                     </Paper>
 
                     {observation && observation.has_potential_duplicates && (

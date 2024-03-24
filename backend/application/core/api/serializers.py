@@ -42,7 +42,7 @@ from application.core.queries.product_member import get_product_member
 from application.core.services.observation import get_cvss3_severity
 from application.core.services.observation_log import create_observation_log
 from application.core.services.security_gate import check_security_gate
-from application.core.types import Severity, Status, VexJustification
+from application.core.types import Assessment_Status, Severity, Status, VexJustification
 from application.import_observations.types import Parser_Type
 from application.issue_tracker.services.issue_tracker import (
     issue_tracker_factory,
@@ -179,6 +179,9 @@ class ProductSerializer(ProductCoreSerializer):
     product_group_repository_branch_housekeeping_active = SerializerMethodField()
     product_group_security_gate_active = SerializerMethodField()
     repository_default_branch_name = SerializerMethodField()
+    observation_reviews = SerializerMethodField()
+    observation_log_approvals = SerializerMethodField()
+    has_services = SerializerMethodField()
 
     class Meta:
         model = Product
@@ -205,6 +208,20 @@ class ProductSerializer(ProductCoreSerializer):
         if not obj.repository_default_branch:
             return ""
         return obj.repository_default_branch.name
+
+    def get_observation_reviews(self, obj: Product) -> int:
+        return Observation.objects.filter(
+            product=obj, current_status=Status.STATUS_IN_REVIEW
+        ).count()
+
+    def get_observation_log_approvals(self, obj: Product) -> int:
+        return Observation_Log.objects.filter(
+            observation__product=obj,
+            assessment_status=Assessment_Status.ASSESSMENT_STATUS_NEEDS_APPROVAL,
+        ).count()
+
+    def get_has_services(self, obj: Product) -> bool:
+        return Service.objects.filter(product=obj).exists()
 
     def validate(self, attrs: dict):  # pylint: disable=too-many-branches
         # There are quite a lot of branches, but at least they are not nested too much
@@ -447,12 +464,6 @@ class ParserSerializer(ModelSerializer):
         fields = "__all__"
 
 
-class NestedObservationLogSerializer(ModelSerializer):
-    class Meta:
-        model = Observation_Log
-        exclude = ["observation"]
-
-
 class NestedReferenceSerializer(ModelSerializer):
     class Meta:
         model = Reference
@@ -480,7 +491,6 @@ class ObservationSerializer(ModelSerializer):
     product_data = NestedProductSerializer(source="product")
     branch_name = SerializerMethodField()
     parser_data = ParserSerializer(source="parser")
-    observation_logs = NestedObservationLogSerializer(many=True)
     references = NestedReferenceSerializer(many=True)
     evidences = NestedEvidenceSerializer(many=True)
     origin_source_file_url = SerializerMethodField()
@@ -672,6 +682,7 @@ class ObservationUpdateSerializer(ModelSerializer):
                 actual_status,
                 "Observation changed manually",
                 actual_vex_justification,
+                Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
             )
 
         check_security_gate(observation.product)
@@ -746,6 +757,7 @@ class ObservationCreateSerializer(ModelSerializer):
             observation.current_status,
             "Observation created manually",
             observation.current_vex_justification,
+            Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
         )
 
         check_security_gate(observation.product)
@@ -848,6 +860,35 @@ class NestedObservationSerializer(ModelSerializer):
 
     def get_origin_component_name_version(self, observation: Observation) -> str:
         return _get_origin_component_name_version(observation)
+
+
+class ObservationLogSerializer(ModelSerializer):
+    observation_data = ObservationSerializer(source="observation")
+    user_full_name = SerializerMethodField()
+    approval_user_full_name = SerializerMethodField()
+
+    def get_user_full_name(self, obj: Observation_Log) -> Optional[str]:
+        if obj.user:
+            return obj.user.full_name
+
+        return None
+
+    def get_approval_user_full_name(self, obj: Observation_Log) -> Optional[str]:
+        if obj.approval_user:
+            return obj.approval_user.full_name
+
+        return None
+
+    class Meta:
+        model = Observation_Log
+        fields = "__all__"
+
+
+class ObservationLogApprovalSerializer(Serializer):
+    assessment_status = ChoiceField(
+        choices=Assessment_Status.ASSESSMENT_STATUS_CHOICES_APPROVAL, required=False
+    )
+    approval_remark = CharField(max_length=255, required=True)
 
 
 class PotentialDuplicateSerializer(ModelSerializer):

@@ -18,6 +18,8 @@ function get_current_severity(record: any) {
         return record.potential_duplicate_observation.current_severity;
     } else if (record.issue_tracker_minimum_severity !== undefined) {
         return record.issue_tracker_minimum_severity;
+    } else if (record.severity !== undefined) {
+        return record.severity;
     } else {
         return null;
     }

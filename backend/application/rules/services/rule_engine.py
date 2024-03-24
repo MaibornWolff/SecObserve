@@ -9,6 +9,7 @@ from application.core.services.observation import (
     get_current_vex_justification,
 )
 from application.core.services.observation_log import create_observation_log
+from application.core.types import Assessment_Status
 from application.issue_tracker.services.issue_tracker import (
     push_observation_to_issue_tracker,
 )
@@ -184,7 +185,12 @@ class Rule_Engine:
             comment = f"Updated by general rule {rule.name}"
 
         create_observation_log(
-            observation, severity, status, comment, vex_justification
+            observation,
+            severity,
+            status,
+            comment,
+            vex_justification,
+            Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
         )
 
     # Write observation and observation log if status or severity has been changed
@@ -227,5 +233,10 @@ class Rule_Engine:
             comment = "Removed unkown rule"
 
         create_observation_log(
-            observation, severity, status, comment, vex_justification
+            observation,
+            severity,
+            status,
+            comment,
+            vex_justification,
+            Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
         )

@@ -10,6 +10,7 @@ from application.commons.services.global_request import get_current_user
 from application.core.models import (
     Branch,
     Observation,
+    Observation_Log,
     Product,
     Product_Member,
     Service,
@@ -87,6 +88,12 @@ def user_has_permission(  # pylint: disable=too-many-return-statements,too-many-
         and permission in Permissions.get_observation_permissions()
     ):
         return user_has_permission(obj.product, permission, user)
+
+    if (
+        isinstance(obj, Observation_Log)
+        and permission in Permissions.get_observation_log_permissions()
+    ):
+        return user_has_permission(obj.observation.product, permission, user)
 
     if (
         isinstance(obj, Api_Configuration)

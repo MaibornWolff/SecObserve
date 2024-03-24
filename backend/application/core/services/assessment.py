@@ -1,7 +1,10 @@
 from typing import Optional
 
+from django.utils import timezone
+from rest_framework.exceptions import ValidationError
+
 from application.commons.services.global_request import get_current_user
-from application.core.models import Observation
+from application.core.models import Observation, Observation_Log
 from application.core.services.observation import (
     get_current_severity,
     get_current_status,
@@ -9,6 +12,7 @@ from application.core.services.observation import (
 )
 from application.core.services.observation_log import create_observation_log
 from application.core.services.security_gate import check_security_gate
+from application.core.types import Assessment_Status, Status
 from application.issue_tracker.services.issue_tracker import (
     push_observation_to_issue_tracker,
 )
@@ -21,6 +25,75 @@ def save_assessment(
     comment: str,
     new_vex_justification: Optional[str],
 ) -> None:
+
+    assessment_status = (
+        Assessment_Status.ASSESSMENT_STATUS_NEEDS_APPROVAL
+        if observation.product.assessments_need_approval
+        and new_status != Status.STATUS_IN_REVIEW
+        else Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED
+    )
+
+    if assessment_status == Assessment_Status.ASSESSMENT_STATUS_APPROVED:
+        (
+            previous_severity,
+            log_severity,
+            previous_status,
+            log_status,
+            previous_vex_justification,
+            log_vex_justification,
+        ) = _update_observation(
+            observation, new_severity, new_status, new_vex_justification
+        )
+
+        if (
+            previous_severity != observation.current_severity
+            or previous_status != observation.current_status
+            or previous_vex_justification != observation.current_vex_justification
+        ):
+            create_observation_log(
+                observation,
+                log_severity,
+                log_status,
+                comment,
+                log_vex_justification,
+                assessment_status,
+            )
+
+        check_security_gate(observation.product)
+        push_observation_to_issue_tracker(observation, get_current_user())
+    else:
+        log_severity = (
+            new_severity
+            if new_severity and new_severity != observation.current_severity
+            else ""
+        )
+        log_status = (
+            new_status
+            if new_status and new_status != observation.current_status
+            else ""
+        )
+        log_vex_justification = (
+            new_vex_justification
+            if new_vex_justification != observation.current_vex_justification
+            else ""
+        )
+        if log_severity or log_status or log_vex_justification:
+            create_observation_log(
+                observation,
+                log_severity,
+                log_status,
+                comment,
+                log_vex_justification,
+                assessment_status,
+            )
+
+
+def _update_observation(
+    observation: Observation,
+    new_severity: Optional[str],
+    new_status: Optional[str],
+    new_vex_justification: Optional[str],
+):
     previous_severity = observation.current_severity
     previous_assessment_severity = observation.assessment_severity
     log_severity = ""
@@ -61,18 +134,14 @@ def save_assessment(
         != observation.assessment_vex_justification
     ):
         observation.save()
-
-    if (
-        previous_severity != observation.current_severity
-        or previous_status != observation.current_status
-        or previous_vex_justification != observation.current_vex_justification
-    ):
-        create_observation_log(
-            observation, log_severity, log_status, comment, log_vex_justification
-        )
-
-    check_security_gate(observation.product)
-    push_observation_to_issue_tracker(observation, get_current_user())
+    return (
+        previous_severity,
+        log_severity,
+        previous_status,
+        log_status,
+        previous_vex_justification,
+        log_vex_justification,
+    )
 
 
 def remove_assessment(observation: Observation, comment: str) -> None:
@@ -86,7 +155,47 @@ def remove_assessment(observation: Observation, comment: str) -> None:
             observation
         )
 
-        create_observation_log(observation, "", "", comment, "")
+        create_observation_log(
+            observation,
+            "",
+            "",
+            comment,
+            "",
+            Assessment_Status.ASSESSMENT_STATUS_REMOVED,
+        )
 
         check_security_gate(observation.product)
         push_observation_to_issue_tracker(observation, get_current_user())
+
+
+def assessment_approval(
+    observation_log: Observation_Log, assessment_status: str, approval_remark: str
+) -> None:
+    if (
+        observation_log.assessment_status
+        != Assessment_Status.ASSESSMENT_STATUS_NEEDS_APPROVAL
+    ):
+        raise ValidationError("Observation log does not need approval")
+
+    approval_user = get_current_user()
+    if observation_log.user == approval_user:
+        raise ValidationError("Users cannot approve their own assessment")
+
+    if assessment_status == Assessment_Status.ASSESSMENT_STATUS_APPROVED:
+        _update_observation(
+            observation_log.observation,
+            observation_log.severity,
+            observation_log.status,
+            observation_log.vex_justification,
+        )
+
+        check_security_gate(observation_log.observation.product)
+        push_observation_to_issue_tracker(
+            observation_log.observation, get_current_user()
+        )
+
+    observation_log.approval_user = approval_user
+    observation_log.approval_remark = approval_remark
+    observation_log.approval_date = timezone.now()
+    observation_log.assessment_status = assessment_status
+    observation_log.save()

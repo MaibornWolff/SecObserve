@@ -4,10 +4,11 @@ from rest_framework.exceptions import ValidationError
 
 from application.commons.services.global_request import get_current_user
 from application.core.models import Observation, Potential_Duplicate, Product
+from application.core.queries.observation import get_current_observation_log
 from application.core.services.assessment import save_assessment
 from application.core.services.potential_duplicates import set_potential_duplicate
 from application.core.services.security_gate import check_security_gate
-from application.core.types import Status
+from application.core.types import Assessment_Status, Status
 from application.issue_tracker.services.issue_tracker import (
     push_deleted_observation_to_issue_tracker,
 )
@@ -97,6 +98,15 @@ def _check_observations(
         if observation.product != product:
             raise ValidationError(
                 f"Observation {observation.pk} does not belong to product {product.pk}"
+            )
+        current_observation_log = get_current_observation_log(observation)
+        if (
+            current_observation_log
+            and current_observation_log.assessment_status
+            == Assessment_Status.ASSESSMENT_STATUS_NEEDS_APPROVAL
+        ):
+            raise ValidationError(
+                "Cannot create new assessment while last assessment still needs approval"
             )
 
     return observations

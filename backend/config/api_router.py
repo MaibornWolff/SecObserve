@@ -5,6 +5,7 @@ from application.commons.api.views import NotificationViewSet
 from application.core.api.views import (
     BranchViewSet,
     EvidenceViewSet,
+    ObservationLogViewSet,
     ObservationViewSet,
     ParserViewSet,
     PotentialDuplicateViewSet,
@@ -41,6 +42,7 @@ router.register("branches", BranchViewSet, basename="branches")
 router.register("services", ServiceViewSet, basename="services")
 router.register("parsers", ParserViewSet, basename="parsers")
 router.register("observations", ObservationViewSet, basename="observations")
+router.register("observation_logs", ObservationLogViewSet, basename="observation_logs")
 router.register("general_rules", GeneralRuleViewSet, basename="general_rules")
 router.register(
     "api_configurations", ApiConfigurationViewSet, basename="api_configurations"

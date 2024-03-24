@@ -1,14 +1,14 @@
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import BarChartIcon from "@mui/icons-material/BarChart";
+import ChecklistIcon from "@mui/icons-material/Checklist";
 import UploadIcon from "@mui/icons-material/CloudUpload";
 import ConstructionIcon from "@mui/icons-material/Construction";
 import GradingIcon from "@mui/icons-material/Grading";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import SettingsIcon from "@mui/icons-material/Settings";
 import TokenIcon from "@mui/icons-material/Token";
-import { Stack } from "@mui/material";
-import { Fragment } from "react";
-import { useState } from "react";
+import { Badge, Stack } from "@mui/material";
+import { Fragment, useState } from "react";
 import {
     EditButton,
     PrevNextButtons,
@@ -56,6 +56,7 @@ import ProductMemberEmbeddedList from "../product_members/ProductMemberEmbeddedL
 import ServiceEmbeddedList from "../services/ServiceEmbeddedList";
 import ExportMenu from "./ExportMenu";
 import ProductHeader from "./ProductHeader";
+import ProductReviews from "./ProductReviews";
 import ProductShowProduct from "./ProductShowProduct";
 
 type ShowActionsProps = {
@@ -143,6 +144,25 @@ const ProductShow = () => {
                                     <MetricsStatusCurrent product_id={product.id} />
                                 </Stack>
                             </Tab>
+                            {product.observation_reviews + product.observation_log_approvals > 0 && (
+                                <Tab
+                                    label="Reviews"
+                                    path="reviews"
+                                    icon={
+                                        <Badge
+                                            badgeContent={
+                                                product.observation_reviews + product.observation_log_approvals
+                                            }
+                                            color="secondary"
+                                        >
+                                            <ChecklistIcon />
+                                        </Badge>
+                                    }
+                                    onClick={hideSettingsTabs}
+                                >
+                                    <ProductReviews product={product} />
+                                </Tab>
+                            )}
                             <Tab
                                 label="Vulnerability Checks"
                                 path="vulnerability_checks"
@@ -162,14 +182,16 @@ const ProductShow = () => {
                                 )}
                                 <BranchEmbeddedList product={product} />
                             </Tab>
-                            <Tab
-                                label="Services"
-                                path="services"
-                                icon={<ConstructionIcon />}
-                                onClick={hideSettingsTabs}
-                            >
-                                <ServiceEmbeddedList product={product} />
-                            </Tab>
+                            {product.has_services && (
+                                <Tab
+                                    label="Services"
+                                    path="services"
+                                    icon={<ConstructionIcon />}
+                                    onClick={hideSettingsTabs}
+                                >
+                                    <ServiceEmbeddedList product={product} />
+                                </Tab>
+                            )}
                             <Tab
                                 label={settingsLabel}
                                 path="settings"

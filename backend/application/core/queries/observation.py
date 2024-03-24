@@ -8,6 +8,7 @@ from application.core.models import (
     Branch,
     Evidence,
     Observation,
+    Observation_Log,
     Potential_Duplicate,
     Product,
     Product_Member,
@@ -119,3 +120,46 @@ def get_potential_duplicates() -> QuerySet[Potential_Duplicate]:
         )
 
     return potential_duplicates
+
+
+def get_observation_log_by_id(observation_log_id: int) -> Optional[Observation_Log]:
+    try:
+        return Observation_Log.objects.get(id=observation_log_id)
+    except Observation_Log.DoesNotExist:
+        return None
+
+
+def get_observation_logs() -> QuerySet[Observation_Log]:
+    user = get_current_user()
+
+    if user is None:
+        return Observation_Log.objects.none()
+
+    observation_logs = Observation_Log.objects.all()
+
+    if not user.is_superuser:
+        product_members = Product_Member.objects.filter(
+            product=OuterRef("observation__product_id"), user=user
+        )
+        product_group_members = Product_Member.objects.filter(
+            product=OuterRef("observation__product__product_group"), user=user
+        )
+
+        observation_logs = observation_logs.annotate(
+            observation__product__member=Exists(product_members),
+            observation__product__product_group__member=Exists(product_group_members),
+        )
+
+        observation_logs = observation_logs.filter(
+            Q(observation__product__member=True)
+            | Q(observation__product__product_group__member=True)
+        )
+
+    return observation_logs
+
+
+def get_current_observation_log(observation: Observation):
+    try:
+        return Observation_Log.objects.filter(observation=observation).latest("created")
+    except Observation_Log.DoesNotExist:
+        return None

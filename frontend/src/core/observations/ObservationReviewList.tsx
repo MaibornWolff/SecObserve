@@ -29,13 +29,12 @@ import { getSettingListSize } from "../../commons/settings/functions";
 import {
     AGE_CHOICES,
     OBSERVATION_SEVERITY_CHOICES,
-    OBSERVATION_STATUS_CHOICES,
+    OBSERVATION_STATUS_IN_REVIEW,
     OBSERVATION_STATUS_OPEN,
     Observation,
     Product,
 } from "../types";
 import ObservationBulkAssessment from "./ObservationBulkAssessment";
-import ObservationBulkDeleteButton from "./ObservationBulkDeleteButton";
 
 function listFilters(product: Product) {
     return [
@@ -55,7 +54,6 @@ function listFilters(product: Product) {
             choices={OBSERVATION_SEVERITY_CHOICES}
             alwaysOn
         />,
-        <AutocompleteInput source="current_status" label="Status" choices={OBSERVATION_STATUS_CHOICES} alwaysOn />,
         <ReferenceInput
             source="origin_service"
             reference="services"
@@ -82,7 +80,7 @@ const ShowObservations = (id: any) => {
     return "../../../../observations/" + id + "/show";
 };
 
-type ObservationsEmbeddedListProps = {
+type ObservationsReviewListProps = {
     product: any;
 };
 
@@ -90,9 +88,6 @@ const BulkActionButtons = (product: any) => (
     <Fragment>
         {product.product.permissions.includes(PERMISSION_OBSERVATION_ASSESSMENT) && (
             <ObservationBulkAssessment product={product.product} />
-        )}
-        {product.product.permissions.includes(PERMISSION_OBSERVATION_DELETE) && (
-            <ObservationBulkDeleteButton product={product.product} />
         )}
     </Fragment>
 );
@@ -103,7 +98,7 @@ const ListActions = () => (
     </TopToolbar>
 );
 
-const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) => {
+const ObservationsReviewList = ({ product }: ObservationsReviewListProps) => {
     const navigate = useNavigate();
     function get_observations_url(branch_id: Identifier): string {
         return `?displayedFilters=%7B%7D&filter=%7B%22current_status%22%3A%22Open%22%2C%22branch%22%3A${branch_id}%7D&order=ASC&sort=current_severity`;
@@ -119,7 +114,7 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
     }, [product, navigate]);
 
     const listContext = useListController({
-        filter: { product: Number(product.id) },
+        filter: { product: Number(product.id), current_status: OBSERVATION_STATUS_IN_REVIEW},
         perPage: 25,
         resource: "observations",
         sort: { field: "current_severity", order: "ASC" },
@@ -140,7 +135,7 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
                 <Stack direction="row" spacing={2} justifyContent="center" alignItems="flex-end">
-                    <FilterForm filters={listFilters(product)} />
+                <FilterForm filters={listFilters(product)} />
                     <ListActions />
                 </Stack>
                 <DatagridConfigurable
@@ -149,8 +144,7 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
                     rowClick={ShowObservations}
                     bulkActionButtons={
                         product &&
-                        (product.permissions.includes(PERMISSION_OBSERVATION_ASSESSMENT) ||
-                            product.permissions.includes(PERMISSION_OBSERVATION_DELETE)) && (
+                        product.permissions.includes(PERMISSION_OBSERVATION_ASSESSMENT) && (
                             <BulkActionButtons product={product} />
                         )
                     }
@@ -159,8 +153,8 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
                     <TextField source="branch_name" label="Branch / Version" />
                     <TextField source="title" />
                     <SeverityField source="current_severity" />
-                    <ChipField source="current_status" label="Status" />
                     <NumberField source="epss_score" label="EPSS" />
+                    <ChipField source="current_status" label="Status" />
                     <TextField source="origin_service_name" label="Service" />
                     <TextField source="origin_component_name_version" label="Component" />
                     <TextField source="origin_docker_image_name_tag_short" label="Container" />
@@ -181,4 +175,4 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
     );
 };
 
-export default ObservationsEmbeddedList;
+export default ObservationsReviewList;
