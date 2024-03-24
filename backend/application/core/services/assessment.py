@@ -4,7 +4,7 @@ from django.utils import timezone
 from rest_framework.exceptions import ValidationError
 
 from application.commons.services.global_request import get_current_user
-from application.core.models import Observation, Observation_Log
+from application.core.models import Observation, Observation_Log, Product
 from application.core.services.observation import (
     get_current_severity,
     get_current_status,
@@ -28,7 +28,7 @@ def save_assessment(
 
     assessment_status = (
         Assessment_Status.ASSESSMENT_STATUS_NEEDS_APPROVAL
-        if observation.product.assessments_need_approval
+        if _get_assessments_need_approval(observation.product)
         and new_status != Status.STATUS_IN_REVIEW
         else Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED
     )
@@ -142,6 +142,12 @@ def _update_observation(
         previous_vex_justification,
         log_vex_justification,
     )
+
+
+def _get_assessments_need_approval(product: Product) -> bool:
+    if product.product_group and product.product_group.assessments_need_approval:
+        return True
+    return product.assessments_need_approval
 
 
 def remove_assessment(observation: Observation, comment: str) -> None:

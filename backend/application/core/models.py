@@ -540,7 +540,7 @@ class Observation_Log(Model):
     assessment_status = CharField(
         max_length=16,
         choices=Assessment_Status.ASSESSMENT_STATUS_CHOICES,
-        default=Assessment_Status.ASSESSMENT_STATUS_APPROVED,
+        default=Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
     )
     approval_remark = TextField(max_length=255, blank=True)
     approval_date = DateTimeField(null=True)

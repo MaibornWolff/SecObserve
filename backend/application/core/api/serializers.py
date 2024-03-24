@@ -161,6 +161,7 @@ class ProductGroupSerializer(ProductCoreSerializer):
             "security_gate_threshold_low",
             "security_gate_threshold_none",
             "security_gate_threshold_unkown",
+            "assessments_need_approval",
         ]
 
     def get_products_count(self, obj: Product) -> int:
@@ -184,6 +185,7 @@ class ProductSerializer(ProductCoreSerializer):
     product_group_name = SerializerMethodField()
     product_group_repository_branch_housekeeping_active = SerializerMethodField()
     product_group_security_gate_active = SerializerMethodField()
+    product_group_assessments_need_approval = SerializerMethodField()
     repository_default_branch_name = SerializerMethodField()
     observation_reviews = SerializerMethodField()
     observation_log_approvals = SerializerMethodField()
@@ -191,7 +193,7 @@ class ProductSerializer(ProductCoreSerializer):
 
     class Meta:
         model = Product
-        exclude = ["is_product_group"]
+        exclude = ["is_product_group", "new_observations_in_review"]
 
     def get_product_group_name(self, obj: Product) -> str:
         if not obj.product_group:
@@ -209,6 +211,11 @@ class ProductSerializer(ProductCoreSerializer):
         if not obj.product_group:
             return None
         return obj.product_group.security_gate_active
+
+    def get_product_group_assessments_need_approval(self, obj: Product) -> bool:
+        if not obj.product_group:
+            return False
+        return obj.product_group.assessments_need_approval
 
     def get_repository_default_branch_name(self, obj: Product) -> str:
         if not obj.repository_default_branch:
@@ -311,6 +318,12 @@ class ProductSerializer(ProductCoreSerializer):
 
 class NestedProductSerializer(ModelSerializer):
     permissions = SerializerMethodField()
+    product_group_assessments_need_approval = SerializerMethodField()
+
+    def get_product_group_assessments_need_approval(self, obj: Product) -> bool:
+        if not obj.product_group:
+            return False
+        return obj.product_group.assessments_need_approval
 
     class Meta:
         model = Product

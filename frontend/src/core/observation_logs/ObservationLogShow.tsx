@@ -22,8 +22,6 @@ import AssessmentApproval from "./AssessmentApproval";
 const ShowActions = () => {
     const observation_log = useRecordContext();
 
-    console.log(observation_log);
-
     let filter = null;
     let sort = null;
     let storeKey = null;
@@ -32,7 +30,7 @@ const ShowActions = () => {
         sort = { field: "created", order: "DESC" };
         storeKey = "observation_logs.embedded";
     }
-    if (observation_log && localStorage.getItem("observationlogapprovallist")) {
+    if (observation_log && observation_log.observation_data && localStorage.getItem("observationlogapprovallist")) {
         filter = {
             product: observation_log.observation_data.product,
             assessment_status: ASSESSMENT_STATUS_NEEDS_APPROVAL,
@@ -47,7 +45,7 @@ const ShowActions = () => {
                 {observation_log && filter && sort && storeKey && (
                     <PrevNextButtons filter={filter} linkType="show" sort={sort} storeKey={storeKey} />
                 )}
-                {observation_log &&
+                {observation_log && observation_log.observation_data &&
                     observation_log.assessment_status == ASSESSMENT_STATUS_NEEDS_APPROVAL &&
                     observation_log.observation_data.product_data.permissions.includes(
                         PERMISSION_OBSERVATION_LOG_APPROVAL
@@ -107,36 +105,39 @@ const ObservationLogComponent = () => {
                         </Stack>
                     </Paper>
 
-                    {observation_log.observation_data.product_data.assessments_need_approval && (
-                        <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
-                            <Stack spacing={1}>
-                                <Typography variant="h6">Approval</Typography>
-                                <Labeled label="Assessment status">
-                                    <ChipField
-                                        source="assessment_status"
-                                        sx={{
-                                            width: "fit-content",
-                                        }}
-                                    />
-                                </Labeled>
-                                {observation_log.approval_user_full_name && (
-                                    <Labeled label="Approved/rejected by">
-                                        <TextField source="approval_user_full_name" />
+                    {observation_log &&
+                        observation_log.observation_data &&
+                        (observation_log.observation_data.product_data.assessments_need_approval ||
+                            observation_log.observation_data.product_data.product_group_assessments_need_approval) && (
+                            <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
+                                <Stack spacing={1}>
+                                    <Typography variant="h6">Approval</Typography>
+                                    <Labeled label="Assessment status">
+                                        <ChipField
+                                            source="assessment_status"
+                                            sx={{
+                                                width: "fit-content",
+                                            }}
+                                        />
                                     </Labeled>
-                                )}
-                                {observation_log.approval_remark && (
-                                    <Labeled label="Approval/rejection remark">
-                                        <TextField source="approval_remark" />
-                                    </Labeled>
-                                )}
-                                {observation_log.approval_date && (
-                                    <Labeled label="Approval/rejection date">
-                                        <DateField source="approval_date" showTime />
-                                    </Labeled>
-                                )}
-                            </Stack>
-                        </Paper>
-                    )}
+                                    {observation_log.approval_user_full_name && (
+                                        <Labeled label="Approved/rejected by">
+                                            <TextField source="approval_user_full_name" />
+                                        </Labeled>
+                                    )}
+                                    {observation_log.approval_remark && (
+                                        <Labeled label="Approval/rejection remark">
+                                            <TextField source="approval_remark" />
+                                        </Labeled>
+                                    )}
+                                    {observation_log.approval_date && (
+                                        <Labeled label="Approval/rejection date">
+                                            <DateField source="approval_date" showTime />
+                                        </Labeled>
+                                    )}
+                                </Stack>
+                            </Paper>
+                        )}
                 </SimpleShowLayout>
             )}
         />

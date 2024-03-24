@@ -41,7 +41,8 @@ const ObservationLogEmbeddedList = ({ observation }: ObservationLogEmbeddedListP
                     bulkActionButtons={false}
                     rowClick={ShowObservationLogs}
                 >
-                    {observation.product_data.assessments_need_approval && (
+                    {(observation.product_data.assessments_need_approval ||
+                        observation.product_data.product_group_assessments_need_approval) && (
                         <ChipField source="assessment_status" sortable={false} />
                     )}
                     <TextField source="user_full_name" label="User" sortable={false} />
@@ -49,7 +50,8 @@ const ObservationLogEmbeddedList = ({ observation }: ObservationLogEmbeddedListP
                     <TextField source="status" emptyText="---" sortable={false} />
                     <TextField source="comment" sortable={false} />
                     <DateField source="created" showTime sortable={false} />
-                    {observation.product_data.assessments_need_approval && (
+                    {(observation.product_data.assessments_need_approval ||
+                        observation.product_data.product_group_assessments_need_approval) && (
                         <TextField source="approval_user_full_name" label="Approved/rejected by" sortable={false} />
                     )}
                 </Datagrid>

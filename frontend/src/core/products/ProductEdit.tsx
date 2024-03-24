@@ -380,11 +380,11 @@ const ProductEdit = () => {
                     label="Assessments need approval"
                     defaultValue={false}
                 />
-                <BooleanInput
+                {/* <BooleanInput
                     source="new_observations_in_review"
                     label="New observations have status 'In review'"
                     defaultValue={false}
-                />
+                /> */}
             </SimpleForm>
         </Edit>
     );
