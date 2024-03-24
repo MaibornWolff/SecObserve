@@ -69,7 +69,7 @@ const ObservationLogApprovalList = ({ product }: ObservationLogApprovalListProps
                     rowClick={ShowObservationLogs}
                 >
                     <ChipField source="assessment_status" sortable={false} />
-                    <TextField source="observation_data.title" label="Observation" />
+                    <TextField source="observation_title" label="Observation" />
                     <TextField source="user_full_name" label="User" />
                     <TextField source="severity" emptyText="---" />
                     <TextField source="status" emptyText="---" />

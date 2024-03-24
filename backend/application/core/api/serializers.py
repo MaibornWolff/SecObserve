@@ -890,6 +890,31 @@ class ObservationLogSerializer(ModelSerializer):
         fields = "__all__"
 
 
+class ObservationLogListSerializer(ModelSerializer):
+    observation_title = SerializerMethodField()
+    user_full_name = SerializerMethodField()
+    approval_user_full_name = SerializerMethodField()
+
+    def get_user_full_name(self, obj: Observation_Log) -> Optional[str]:
+        if obj.user:
+            return obj.user.full_name
+
+        return None
+
+    def get_observation_title(self, obj: Observation_Log) -> str:
+        return obj.observation.title
+
+    def get_approval_user_full_name(self, obj: Observation_Log) -> Optional[str]:
+        if obj.approval_user:
+            return obj.approval_user.full_name
+
+        return None
+
+    class Meta:
+        model = Observation_Log
+        fields = "__all__"
+
+
 class ObservationLogApprovalSerializer(Serializer):
     assessment_status = ChoiceField(
         choices=Assessment_Status.ASSESSMENT_STATUS_CHOICES_APPROVAL, required=False

@@ -47,6 +47,7 @@ from application.core.api.serializers import (
     ObservationCreateSerializer,
     ObservationListSerializer,
     ObservationLogApprovalSerializer,
+    ObservationLogListSerializer,
     ObservationLogSerializer,
     ObservationRemoveAssessmentSerializer,
     ObservationSerializer,
@@ -468,6 +469,12 @@ class ObservationLogViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     filterset_class = ObservationLogFilter
     queryset = Observation_Log.objects.all()
     filter_backends = [SearchFilter, DjangoFilterBackend]
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return ObservationLogListSerializer
+
+        return super().get_serializer_class()
 
     def get_queryset(self):
         return get_observation_logs()

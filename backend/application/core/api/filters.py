@@ -259,7 +259,7 @@ class ObservationLogFilter(FilterSet):
         fields=(
             ("id", "id"),
             ("user__full_name", "user_full_name"),
-            ("observation__title", "observation_data.title"),
+            ("observation__title", "observation_title"),
             ("severity", "severity"),
             ("status", "status"),
             ("comment", "comment"),
