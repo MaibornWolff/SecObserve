@@ -20,9 +20,12 @@ const get_chip_color = (value: number) => {
 const ProductReviews = ({ product }: ProductReviewsProps) => {
     return (
         <Fragment>
-            <Accordion elevation={getElevation()} defaultExpanded={product.observation_reviews > 0 && product.observation_log_approvals==0}>
+            <Accordion
+                elevation={getElevation()}
+                defaultExpanded={product.observation_reviews > 0 && product.observation_log_approvals == 0}
+            >
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Stack direction="row" sx={{ display: "flex", alignItems: "center"}}>
+                    <Stack direction="row" sx={{ display: "flex", alignItems: "center" }}>
                         Observations to be reviewed:&nbsp;&nbsp;&nbsp;
                         <Chip label={product.observation_reviews} color={get_chip_color(product.observation_reviews)} />
                     </Stack>
@@ -31,20 +34,26 @@ const ProductReviews = ({ product }: ProductReviewsProps) => {
                     <ObservationsReviewList product={product} />
                 </AccordionDetails>
             </Accordion>
-            {product.assessments_need_approval && <Accordion elevation={getElevation()} sx={{ marginTop: 2 }} defaultExpanded={product.observation_log_approvals > 0 && product.observation_reviews==0}>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Stack direction="row" sx={{ display: "flex", alignItems: "center" }}>
-                        Assessments to be approved:&nbsp;&nbsp;&nbsp;
-                        <Chip
-                            label={product.observation_log_approvals}
-                            color={get_chip_color(product.observation_log_approvals)}
-                        />
-                    </Stack>
-                </AccordionSummary>
-                <AccordionDetails>
-                    <ObservationLogApprovalList product={product} />
-                </AccordionDetails>
-            </Accordion>}
+            {product.assessments_need_approval && (
+                <Accordion
+                    elevation={getElevation()}
+                    sx={{ marginTop: 2 }}
+                    defaultExpanded={product.observation_log_approvals > 0 && product.observation_reviews == 0}
+                >
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                        <Stack direction="row" sx={{ display: "flex", alignItems: "center" }}>
+                            Assessments to be approved:&nbsp;&nbsp;&nbsp;
+                            <Chip
+                                label={product.observation_log_approvals}
+                                color={get_chip_color(product.observation_log_approvals)}
+                            />
+                        </Stack>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <ObservationLogApprovalList product={product} />
+                    </AccordionDetails>
+                </Accordion>
+            )}
         </Fragment>
     );
 };

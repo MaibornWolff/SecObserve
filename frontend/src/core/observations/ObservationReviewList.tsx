@@ -114,7 +114,7 @@ const ObservationsReviewList = ({ product }: ObservationsReviewListProps) => {
     }, [product, navigate]);
 
     const listContext = useListController({
-        filter: { product: Number(product.id), current_status: OBSERVATION_STATUS_IN_REVIEW},
+        filter: { product: Number(product.id), current_status: OBSERVATION_STATUS_IN_REVIEW },
         perPage: 25,
         resource: "observations",
         sort: { field: "current_severity", order: "ASC" },
@@ -135,7 +135,7 @@ const ObservationsReviewList = ({ product }: ObservationsReviewListProps) => {
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
                 <Stack direction="row" spacing={2} justifyContent="center" alignItems="flex-end">
-                <FilterForm filters={listFilters(product)} />
+                    <FilterForm filters={listFilters(product)} />
                     <ListActions />
                 </Stack>
                 <DatagridConfigurable

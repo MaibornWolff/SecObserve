@@ -1,20 +1,31 @@
-import { Datagrid, DateField, ListContextProvider, TextField, ChipField, useListController, TextInput, ReferenceInput, FilterForm, AutocompleteInput } from "react-admin";
+import {
+    AutocompleteInput,
+    ChipField,
+    Datagrid,
+    DateField,
+    FilterForm,
+    ListContextProvider,
+    ReferenceInput,
+    TextField,
+    TextInput,
+    useListController,
+} from "react-admin";
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { feature_vex_enabled } from "../../commons/functions";
+import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/settings/functions";
 import { ASSESSMENT_STATUS_NEEDS_APPROVAL } from "../types";
-import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../types";
 
 function listFilters() {
     return [
-        <TextInput source="observation_title" label= "Observation title" alwaysOn />,
+        <TextInput source="observation_title" label="Observation title" alwaysOn />,
         <ReferenceInput source="user" reference="users" sort={{ field: "full_name", order: "ASC" }} alwaysOn>
-        <AutocompleteInputMedium optionText="full_name" />
+            <AutocompleteInputMedium optionText="full_name" />
         </ReferenceInput>,
         <AutocompleteInput source="severity" label="Severity" choices={OBSERVATION_SEVERITY_CHOICES} alwaysOn />,
-    <AutocompleteInput source="status" label="Status" choices={OBSERVATION_STATUS_CHOICES} alwaysOn />,
+        <AutocompleteInput source="status" label="Status" choices={OBSERVATION_STATUS_CHOICES} alwaysOn />,
     ];
 }
 
@@ -50,7 +61,7 @@ const ObservationLogApprovalList = ({ product }: ObservationLogApprovalListProps
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
-            <FilterForm filters={listFilters()} />
+                <FilterForm filters={listFilters()} />
                 <Datagrid
                     size={getSettingListSize()}
                     sx={{ width: "100%" }}
