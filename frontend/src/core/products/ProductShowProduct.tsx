@@ -231,9 +231,11 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                 <Labeled label="Assessments need approval">
                     <BooleanField source="assessments_need_approval" />
                 </Labeled>
-                {product.product_group_assessments_need_approval && <Labeled label="Assessments need approval (from product group)">
-                    <BooleanField source="product_group_assessments_need_approval" />
-                </Labeled>}
+                {product.product_group_assessments_need_approval && (
+                    <Labeled label="Assessments need approval (from product group)">
+                        <BooleanField source="product_group_assessments_need_approval" />
+                    </Labeled>
+                )}
                 {/* <Labeled label="New observations have status 'In review'">
                     <BooleanField source="new_observations_in_review" />
                 </Labeled> */}

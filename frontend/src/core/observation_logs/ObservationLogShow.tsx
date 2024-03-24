@@ -45,7 +45,8 @@ const ShowActions = () => {
                 {observation_log && filter && sort && storeKey && (
                     <PrevNextButtons filter={filter} linkType="show" sort={sort} storeKey={storeKey} />
                 )}
-                {observation_log && observation_log.observation_data &&
+                {observation_log &&
+                    observation_log.observation_data &&
                     observation_log.assessment_status == ASSESSMENT_STATUS_NEEDS_APPROVAL &&
                     observation_log.observation_data.product_data.permissions.includes(
                         PERMISSION_OBSERVATION_LOG_APPROVAL
