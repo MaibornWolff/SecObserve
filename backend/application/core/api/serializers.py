@@ -1,10 +1,7 @@
-import re
-from decimal import Decimal
 from typing import Optional
 from urllib.parse import urlparse
 
 import validators
-from cvss import CVSS3, CVSSError
 from django.utils import timezone
 from packageurl import PackageURL
 from rest_framework.exceptions import PermissionDenied
@@ -26,6 +23,16 @@ from application.access_control.services.roles_permissions import (
     get_permissions_for_role,
 )
 from application.commons.services.global_request import get_current_user
+from application.core.api.serializers_helpers import (
+    get_branch_name,
+    get_origin_component_name_version,
+    get_scanner_name,
+    validate_cpe23,
+    validate_cvss3_vector,
+    validate_cvss_and_severity,
+    validate_purl,
+    validate_url,
+)
 from application.core.models import (
     Branch,
     Evidence,
@@ -39,7 +46,6 @@ from application.core.models import (
     Service,
 )
 from application.core.queries.product_member import get_product_member
-from application.core.services.observation import get_cvss3_severity
 from application.core.services.observation_log import create_observation_log
 from application.core.services.security_gate import check_security_gate
 from application.core.types import Assessment_Status, Severity, Status, VexJustification
@@ -288,19 +294,19 @@ class ProductSerializer(ProductCoreSerializer):
         return product
 
     def validate_repository_prefix(self, repository_prefix: str) -> str:
-        return _validate_url(repository_prefix)
+        return validate_url(repository_prefix)
 
     def validate_notification_ms_teams_webhook(self, repository_prefix: str) -> str:
-        return _validate_url(repository_prefix)
+        return validate_url(repository_prefix)
 
     def validate_notification_slack_webhook(self, repository_prefix: str) -> str:
-        return _validate_url(repository_prefix)
+        return validate_url(repository_prefix)
 
     def validate_purl(self, purl: str) -> str:
-        return _validate_purl(purl)
+        return validate_purl(purl)
 
     def validate_cpe23(self, cpe23: str) -> str:
-        return _validate_cpe23(cpe23)
+        return validate_cpe23(cpe23)
 
 
 class NestedProductSerializer(ModelSerializer):
@@ -393,10 +399,10 @@ class BranchSerializer(ModelSerializer):
         fields = "__all__"
 
     def validate_purl(self, purl: str) -> str:
-        return _validate_purl(purl)
+        return validate_purl(purl)
 
     def validate_cpe23(self, cpe23: str) -> str:
-        return _validate_cpe23(cpe23)
+        return validate_cpe23(cpe23)
 
     def get_name_with_product(self, obj: Service) -> str:
         return f"{obj.name} ({obj.product.name})"
@@ -508,7 +514,7 @@ class ObservationSerializer(ModelSerializer):
         return response
 
     def get_branch_name(self, observation: Observation) -> str:
-        return _get_branch_name(observation)
+        return get_branch_name(observation)
 
     def get_origin_source_file_url(self, observation: Observation) -> Optional[str]:
         origin_source_file_url = None
@@ -614,13 +620,13 @@ class ObservationListSerializer(ModelSerializer):
         exclude = ["numerical_severity", "issue_tracker_jira_initial_status"]
 
     def get_branch_name(self, observation: Observation) -> str:
-        return _get_branch_name(observation)
+        return get_branch_name(observation)
 
     def get_scanner_name(self, observation: Observation) -> str:
-        return _get_scanner_name(observation)
+        return get_scanner_name(observation)
 
     def get_origin_component_name_version(self, observation: Observation) -> str:
-        return _get_origin_component_name_version(observation)
+        return get_origin_component_name_version(observation)
 
 
 class ObservationUpdateSerializer(ModelSerializer):
@@ -631,7 +637,7 @@ class ObservationUpdateSerializer(ModelSerializer):
 
         attrs["import_last_seen"] = timezone.now()
 
-        _validate_cvss_and_severity(attrs)
+        validate_cvss_and_severity(attrs)
 
         return super().validate(attrs)
 
@@ -644,7 +650,7 @@ class ObservationUpdateSerializer(ModelSerializer):
         return branch
 
     def validate_cvss3_vector(self, cvss3_vector: str) -> str:
-        return _validate_cvss3_vector(cvss3_vector)
+        return validate_cvss3_vector(cvss3_vector)
 
     def update(self, instance: Observation, validated_data: dict):
         actual_severity = instance.current_severity
@@ -741,12 +747,12 @@ class ObservationCreateSerializer(ModelSerializer):
                     "Branch does not belong to the same product as the observation"
                 )
 
-        _validate_cvss_and_severity(attrs)
+        validate_cvss_and_severity(attrs)
 
         return super().validate(attrs)
 
     def validate_cvss3_vector(self, cvss3_vector: str) -> str:
-        return _validate_cvss3_vector(cvss3_vector)
+        return validate_cvss3_vector(cvss3_vector)
 
     def create(self, validated_data):
         observation: Observation = super().create(validated_data)
@@ -856,10 +862,10 @@ class NestedObservationSerializer(ModelSerializer):
         exclude = ["numerical_severity", "issue_tracker_jira_initial_status"]
 
     def get_scanner_name(self, observation: Observation) -> str:
-        return _get_scanner_name(observation)
+        return get_scanner_name(observation)
 
     def get_origin_component_name_version(self, observation: Observation) -> str:
-        return _get_origin_component_name_version(observation)
+        return get_origin_component_name_version(observation)
 
 
 class ObservationLogSerializer(ModelSerializer):
@@ -897,105 +903,3 @@ class PotentialDuplicateSerializer(ModelSerializer):
     class Meta:
         model = Potential_Duplicate
         fields = "__all__"
-
-
-def _get_branch_name(observation: Observation) -> str:
-    if not observation.branch:
-        return ""
-
-    return observation.branch.name
-
-
-def _get_scanner_name(observation: Observation) -> str:
-    if not observation.scanner:
-        return ""
-
-    scanner_parts = observation.scanner.split("/")
-    return scanner_parts[0].strip()
-
-
-def _get_origin_component_name_version(observation: Observation) -> str:
-    if not observation.origin_component_name:
-        return ""
-
-    origin_component_name_version_with_type = observation.origin_component_name_version
-    if observation.origin_component_purl:
-        purl = PackageURL.from_string(observation.origin_component_purl)
-        if purl.type:
-            origin_component_name_version_with_type += f" ({purl.type})"
-
-    return origin_component_name_version_with_type
-
-
-def _validate_url(url: str) -> str:
-    if url and not validators.url(url):
-        raise ValidationError("Not a valid URL")
-
-    return url
-
-
-def _validate_cvss3_vector(cvss3_vector):
-    if cvss3_vector:
-        try:
-            cvss3 = CVSS3(cvss3_vector)
-            cvss3_vector = cvss3.clean_vector()
-        except CVSSError as e:
-            raise ValidationError(str(e))  # pylint: disable=raise-missing-from
-        # The CVSSError itself is not relevant and must not be re-raised
-
-    return cvss3_vector
-
-
-def _validate_cvss_and_severity(attrs):
-    base_score = None
-    if attrs.get("cvss3_vector"):
-        cvss3 = CVSS3(attrs.get("cvss3_vector"))
-        base_score = Decimal(cvss3.scores()[0]).quantize(Decimal(".0"))
-
-    cvss3_score = attrs.get("cvss3_score")
-    if cvss3_score is not None:
-        if base_score is not None and base_score != cvss3_score:
-            raise ValidationError(
-                f"Score from CVSS3 vector ({base_score}) is different than CVSS3 score ({cvss3_score})"
-            )
-    else:
-        attrs["cvss3_score"] = base_score
-
-    cvss3_score = attrs.get("cvss3_score")
-    cvss3_severity = (
-        get_cvss3_severity(cvss3_score) if cvss3_score is not None else None
-    )
-    parser_severity = attrs.get("parser_severity")
-
-    if parser_severity:
-        if cvss3_severity and parser_severity != cvss3_severity:
-            raise ValidationError(
-                f"Severity ({parser_severity}) is different than severity from CVSS3 score ({cvss3_severity})"
-            )
-    else:
-        if not cvss3_severity:
-            raise ValidationError(
-                "Either Severity, CVSS3 score or CVSS3 vector has to be set"
-            )
-
-
-def _validate_purl(purl: str) -> str:
-    if purl:
-        try:
-            PackageURL.from_string(purl)
-        except ValueError as e:
-            raise ValidationError(str(e))  # pylint: disable=raise-missing-from
-            # The initial exception is not really relevant, we only need its message
-
-    return purl
-
-
-def _validate_cpe23(cpe23: str) -> str:
-    if cpe23:
-        # Regex taken from https://csrc.nist.gov/schema/cpe/2.3/cpe-naming_2.3.xsd
-        if not re.match(
-            r"""cpe:2\.3:[aho\*\-](:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&'\(\)\+,/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){5}(:(([a-zA-Z]{2,3}(-([a-zA-Z]{2}|[0-9]{3}))?)|[\*\-]))(:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&'\(\)\+,/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){4}""",  # noqa: E501 pylint: disable=line-too-long
-            cpe23,
-        ):
-            raise ValidationError("Not a valid CPE 2.3")
-    return cpe23
