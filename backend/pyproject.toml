@@ -49,7 +49,7 @@ packageurl-python = "0.15.0"  # https://github.com/package-url/packageurl-python
 huey = "2.5.0"  # https://github.com/coleifer/huey
 # Issue tracker
 # ------------------------------------------------------------------------------
-jira = "3.6.0"  # https://github.com/pycontribs/jira
+jira = "3.8.0"  # https://github.com/pycontribs/jira
 # Others
 # ------------------------------------------------------------------------------
 inflect = "7.0.0"  # https://github.com/jaraco/inflect
