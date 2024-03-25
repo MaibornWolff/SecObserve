@@ -8,11 +8,11 @@ import {
     ReferenceField,
     Show,
     SimpleShowLayout,
+    SortPayload,
     TextField,
     TopToolbar,
     WithRecord,
     useRecordContext,
-    SortPayload,
 } from "react-admin";
 
 import { PERMISSION_OBSERVATION_LOG_APPROVAL } from "../../access_control/types";
