@@ -12,6 +12,7 @@ import {
     TopToolbar,
     WithRecord,
     useRecordContext,
+    SortPayload,
 } from "react-admin";
 
 import { PERMISSION_OBSERVATION_LOG_APPROVAL } from "../../access_control/types";
@@ -23,7 +24,7 @@ const ShowActions = () => {
     const observation_log = useRecordContext();
 
     let filter = null;
-    let sort = null;
+    let sort: SortPayload | null = null;
     let storeKey = null;
     if (observation_log && localStorage.getItem("observationlogembeddedlist")) {
         filter = { observation: observation_log.observation };
