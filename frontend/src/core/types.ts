@@ -230,3 +230,12 @@ export const OBSERVATION_VEX_JUSTIFICATION_CHOICES = [
         name: "Inline mitigations already exist",
     },
 ];
+
+export const ASSESSMENT_STATUS_APPROVED = "Approved";
+export const ASSESSMENT_STATUS_NEEDS_APPROVAL = "Needs approval";
+export const ASSESSMENT_STATUS_REJECTED = "Rejected";
+
+export const ASSESSMENT_STATUS_CHOICES = [
+    { id: ASSESSMENT_STATUS_APPROVED, name: ASSESSMENT_STATUS_APPROVED },
+    { id: ASSESSMENT_STATUS_REJECTED, name: ASSESSMENT_STATUS_REJECTED },
+];

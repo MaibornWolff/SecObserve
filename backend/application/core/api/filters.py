@@ -14,6 +14,7 @@ from application.core.models import (
     Branch,
     Evidence,
     Observation,
+    Observation_Log,
     Parser,
     Potential_Duplicate,
     Product,
@@ -188,6 +189,7 @@ class ObservationFilter(FilterSet):
     ordering = OrderingFilter(
         # tuple-mapping retains order
         fields=(
+            ("id", "id"),
             ("product__name", "product_data.name"),
             ("product__product_group__name", "product_data.product_group_name"),
             ("branch__name", "branch_name"),
@@ -239,6 +241,51 @@ class ObservationFilter(FilterSet):
         today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
         time_threshold = today - timedelta(days=int(days))
         return queryset.filter(last_observation_log__gte=time_threshold)
+
+
+class ObservationLogFilter(FilterSet):
+    age = ChoiceFilter(field_name="age", method="get_age", choices=AGE_CHOICES)
+    product = ModelChoiceFilter(
+        field_name="observation__product",
+        queryset=Product.objects.all(),
+    )
+    observation_title = CharFilter(
+        field_name="observation__title",
+        lookup_expr="icontains",
+    )
+
+    ordering = OrderingFilter(
+        # tuple-mapping retains order
+        fields=(
+            ("id", "id"),
+            ("user__full_name", "user_full_name"),
+            ("observation__title", "observation_title"),
+            ("severity", "severity"),
+            ("status", "status"),
+            ("comment", "comment"),
+            ("created", "created"),
+            ("assessment_status", "assessment_status"),
+            ("approval_date", "approval_date"),
+            ("approval_user__full_name", "approval_user_full_name"),
+            ("vex_justification", "vex_justification"),
+        ),
+    )
+
+    class Meta:
+        model = Observation_Log
+        fields = ["observation", "user", "assessment_status", "status", "severity"]
+
+    def get_age(self, queryset, field_name, value):  # pylint: disable=unused-argument
+        # field_name is used as a positional argument
+
+        days = _get_days_from_age(value)
+
+        if days is None:
+            return queryset
+
+        today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        time_threshold = today - timedelta(days=int(days))
+        return queryset.filter(created__gte=time_threshold)
 
 
 class EvidenceFilter(FilterSet):

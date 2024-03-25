@@ -165,6 +165,17 @@ const ProductGroupShow = () => {
                                         )}
                                     </Fragment>
                                 )}
+
+                                <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+                                <Typography variant="h6">Review</Typography>
+                                <Stack spacing={1}>
+                                    <Labeled label="Assessments need approval">
+                                        <BooleanField source="assessments_need_approval" />
+                                    </Labeled>
+                                    {/* <Labeled label="New observations have status 'In review'">
+                    <BooleanField source="new_observations_in_review" />
+                </Labeled> */}
+                                </Stack>
                             </Tab>
                             <Tab label="Products" path="products" icon={<product.icon />}>
                                 <ProductEmbeddedList product_group={product_group} />

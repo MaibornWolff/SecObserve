@@ -54,6 +54,8 @@ class Permissions(IntEnum):
     Observation_Create = 2004
     Observation_Assessment = 2005
 
+    Observation_Log_Approval = 2101
+
     Api_Configuration_View = 3001
     Api_Configuration_Edit = 3002
     Api_Configuration_Delete = 3003
@@ -92,6 +94,12 @@ class Permissions(IntEnum):
             Permissions.Observation_Delete,
             Permissions.Observation_Create,
             Permissions.Observation_Assessment,
+        }
+
+    @classmethod
+    def get_observation_log_permissions(cls):
+        return {
+            Permissions.Observation_Log_Approval,
         }
 
     @classmethod
@@ -180,6 +188,7 @@ def get_roles_with_permissions():
             Permissions.Observation_View,
             Permissions.Observation_Edit,
             Permissions.Observation_Create,
+            Permissions.Observation_Log_Approval,
             Permissions.Observation_Assessment,
             Permissions.Api_Configuration_View,
             Permissions.VEX_View,
@@ -209,6 +218,7 @@ def get_roles_with_permissions():
             Permissions.Observation_Edit,
             Permissions.Observation_Create,
             Permissions.Observation_Assessment,
+            Permissions.Observation_Log_Approval,
             Permissions.Api_Configuration_View,
             Permissions.Api_Configuration_Edit,
             Permissions.Api_Configuration_Delete,
@@ -246,6 +256,7 @@ def get_roles_with_permissions():
             Permissions.Observation_Create,
             Permissions.Observation_Delete,
             Permissions.Observation_Assessment,
+            Permissions.Observation_Log_Approval,
             Permissions.Api_Configuration_View,
             Permissions.Api_Configuration_Edit,
             Permissions.Api_Configuration_Delete,
