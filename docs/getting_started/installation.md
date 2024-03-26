@@ -95,6 +95,7 @@ services:
       OIDC_LAST_NAME: ${SO_OIDC_LAST_NAME:-}
       OIDC_FULL_NAME: ${SO_OIDC_FULL_NAME:-}
       OIDC_EMAIL: ${SO_OIDC_EMAIL:-}
+      OIDC_GROUPS: ${SO_OIDC_GROUPS:-}
     command: /start
     networks:
       - traefik

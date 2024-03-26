@@ -25,6 +25,7 @@ export OIDC_FIRST_NAME=dummy
 export OIDC_LAST_NAME=dummy
 export OIDC_FULL_NAME=dummy
 export OIDC_EMAIL=dummy
+export OIDC_GROUPS=dummy
 # --- Huey ---
 export HUEY_FILENAME=./huey.db
 
