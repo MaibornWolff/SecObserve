@@ -23,6 +23,7 @@ OIDC_FIRST_NAME=given_name
 OIDC_LAST_NAME=family_name
 OIDC_FULL_NAME=name
 OIDC_EMAIL=email
+OIDC_GROUPS=groups
 
 # --- Django ---
 DJANGO_DEBUG=True

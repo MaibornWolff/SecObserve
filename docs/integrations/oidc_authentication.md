@@ -20,6 +20,7 @@ Backend
 | `OIDC_FIRST_NAME`    | `given_name`                                        |
 | `OIDC_LAST_NAME`     | `family_name`                                       |
 | `OIDC_EMAIL`         | `email`                                             |
+| `OIDC_GROUPS`        | `groups`                                            |
 
 
 Frontend
@@ -48,6 +49,7 @@ Backend
 | `OIDC_USERNAME`      | `preferred_username`                               |
 | `OIDC_FULL_NAME`     | `name`                                             |
 | `OIDC_EMAIL`         | `email`                                            |
+| `OIDC_GROUPS`        | `groups`                                           |
 
 
 Frontend
