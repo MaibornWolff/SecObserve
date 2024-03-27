@@ -301,6 +301,7 @@ class TestOIDCAuthentication(BaseTestCase):
             last_name="test_last_name",
             full_name="test_full_name",
             email="test_email",
+            oidc_groups_hash="",
         )
         oidc_authentication = OIDCAuthentication()
         new_user = oidc_authentication._check_user_change(
@@ -311,6 +312,7 @@ class TestOIDCAuthentication(BaseTestCase):
                 "family_name": "test_last_name",
                 "name": "test_full_name",
                 "email": "test_email",
+                "groups": [],
             },
         )
 
