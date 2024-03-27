@@ -57,6 +57,6 @@ def branch_post_delete(  # pylint: disable=unused-argument
 
 
 def _invalidate_oidc_groups_hashes():
-    for user in User.objects.filter(oidc_groups_hash__isnull=False):
+    for user in User.objects.exclude(oidc_groups_hash=""):
         user.oidc_groups_hash = ""
         user.save()

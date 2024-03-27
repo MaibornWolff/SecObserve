@@ -158,11 +158,16 @@ class OIDCAuthentication(BaseAuthentication):
 
     def _get_groups_hash(self, payload: dict) -> str:
         groups = self._get_groups_from_token(payload)
-        return hashlib.sha256("".join(groups).encode("UTF-8")).hexdigest()
+        if groups:
+            return hashlib.sha256("".join(groups).encode("UTF-8")).hexdigest()
+        return ""
 
     def _synchronize_groups(self, user: User, payload: dict):
+        groups = Group.objects.exclude(oidc_group="")
+        for group in groups:
+            group.users.remove(user)
+
         oidc_groups = self._get_groups_from_token(payload)
-        user.so_groups.clear()
         so_groups = Group.objects.filter(oidc_group__in=oidc_groups)
         for so_group in so_groups:
             user.so_groups.add(so_group)

@@ -53,7 +53,7 @@ class User(AbstractUser):
 
 class Group(Model):
     name = CharField(max_length=255, unique=True)
-    oidc_group = CharField(max_length=255, blank=True, null=True)
+    oidc_group = CharField(max_length=255, blank=True)
     users = ManyToManyField(User, related_name="so_groups", blank=True)
 
     class Meta:
