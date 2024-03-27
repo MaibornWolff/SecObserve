@@ -5,7 +5,7 @@ from django.contrib.auth.models import Group as Django_Group
 from django.utils.translation import gettext_lazy as _
 
 from application.access_control.forms import UserAdminChangeForm, UserAdminCreationForm
-from application.access_control.models import API_Token, Group, JWT_Secret
+from application.access_control.models import API_Token, Authorization_Group, JWT_Secret
 
 User = get_user_model()
 
@@ -50,8 +50,8 @@ class UserAdmin(auth_admin.UserAdmin):
     search_fields = ["username", "first_name", "last_name"]
 
 
-@admin.register(Group)
-class GroupAdmin(admin.ModelAdmin):
+@admin.register(Authorization_Group)
+class AuthorizationGroupAdmin(admin.ModelAdmin):
     search_fields = ["name", "oidc_group"]
     list_display = ["name", "oidc_group"]
     ordering = ["name", "oidc_group"]

@@ -467,7 +467,7 @@ class TestOIDCAuthentication(BaseTestCase):
 
         oidc_authentication._synchronize_groups(user, payload)
 
-        groups = user.so_groups.all().order_by("name")
+        groups = user.authorization_groups.all().order_by("name")
         self.assertEqual(2, len(groups))
         self.assertEqual("non_oidc_group", groups[0].name)
         self.assertEqual("oidc_group_1", groups[1].name)
@@ -476,7 +476,7 @@ class TestOIDCAuthentication(BaseTestCase):
 
         oidc_authentication._synchronize_groups(user, payload)
 
-        groups = user.so_groups.all().order_by("name")
+        groups = user.authorization_groups.all().order_by("name")
         self.assertEqual(2, len(groups))
         self.assertEqual("non_oidc_group", groups[0].name)
         self.assertEqual("oidc_group_2", groups[1].name)

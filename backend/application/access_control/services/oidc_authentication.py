@@ -8,7 +8,7 @@ from django.db import IntegrityError, transaction
 from rest_framework.authentication import BaseAuthentication, get_authorization_header
 from rest_framework.exceptions import AuthenticationFailed
 
-from application.access_control.models import Group, User
+from application.access_control.models import Authorization_Group, User
 from application.access_control.queries.user import get_user_by_username
 
 OIDC_PREFIX = "Bearer"
@@ -163,11 +163,13 @@ class OIDCAuthentication(BaseAuthentication):
         return ""
 
     def _synchronize_groups(self, user: User, payload: dict):
-        groups = Group.objects.exclude(oidc_group="")
+        groups = Authorization_Group.objects.exclude(oidc_group="")
         for group in groups:
             group.users.remove(user)
 
         oidc_groups = self._get_groups_from_token(payload)
-        so_groups = Group.objects.filter(oidc_group__in=oidc_groups)
-        for so_group in so_groups:
-            user.so_groups.add(so_group)
+        authorization_groups = Authorization_Group.objects.filter(
+            oidc_group__in=oidc_groups
+        )
+        for authorization_group in authorization_groups:
+            user.authorization_groups.add(authorization_group)

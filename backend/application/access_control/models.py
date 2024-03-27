@@ -51,14 +51,14 @@ class User(AbstractUser):
         super().save(*args, **kwargs)
 
 
-class Group(Model):
+class Authorization_Group(Model):
     name = CharField(max_length=255, unique=True)
     oidc_group = CharField(max_length=255, blank=True)
-    users = ManyToManyField(User, related_name="so_groups", blank=True)
+    users = ManyToManyField(User, related_name="authorization_groups", blank=True)
 
     class Meta:
-        verbose_name = "Group"
-        verbose_name_plural = "Groups"
+        verbose_name = "Authorization Group"
+        verbose_name_plural = "Authorization Groups"
         indexes = [
             Index(fields=["oidc_group"]),
         ]

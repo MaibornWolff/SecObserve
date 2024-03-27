@@ -128,7 +128,7 @@
         }
     },
     {
-        "model": "access_control.group",
+        "model": "access_control.authorization_group",
         "pk": 1,
         "fields": {
             "name": "oidc_group_1",
@@ -137,7 +137,7 @@
         }
     },
     {
-        "model": "access_control.group",
+        "model": "access_control.authorization_group",
         "pk": 2,
         "fields": {
             "name": "oidc_group_2",
@@ -146,7 +146,7 @@
         }
     },
     {
-        "model": "access_control.group",
+        "model": "access_control.authorization_group",
         "pk": 3,
         "fields": {
             "name": "non_oidc_group",
