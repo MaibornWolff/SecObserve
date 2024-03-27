@@ -45,6 +45,7 @@ from application.core.models import (
     Reference,
     Service,
 )
+from application.core.queries.observation import get_current_observation_log
 from application.core.queries.product_member import get_product_member
 from application.core.services.observation_log import create_observation_log
 from application.core.services.security_gate import check_security_gate
@@ -516,6 +517,7 @@ class ObservationSerializer(ModelSerializer):
     origin_component_purl_type = SerializerMethodField()
     origin_component_purl_namespace = SerializerMethodField()
     issue_tracker_issue_url = SerializerMethodField()
+    assessment_needs_approval = SerializerMethodField()
 
     class Meta:
         model = Observation
@@ -613,6 +615,16 @@ class ObservationSerializer(ModelSerializer):
             )
 
         return issue_url
+
+    def get_assessment_needs_approval(self, observation: Observation) -> Optional[int]:
+        current_observation_log = get_current_observation_log(observation)
+        if (
+            current_observation_log
+            and current_observation_log.assessment_status
+            == Assessment_Status.ASSESSMENT_STATUS_NEEDS_APPROVAL
+        ):
+            return current_observation_log.pk
+        return None
 
     def validate_product(self, product: Product) -> Product:
         if product and product.is_product_group:

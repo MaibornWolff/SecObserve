@@ -9,7 +9,11 @@ import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/the
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 import { ASSESSMENT_STATUS_CHOICES } from "../types";
 
-const AssessmentApproval = () => {
+type AssessmentApprovalProps = {
+    observation_log_id: string | number;
+};
+
+const AssessmentApproval = (props: AssessmentApprovalProps) => {
     const [open, setOpen] = useState(false);
     const refresh = useRefresh();
     const notify = useNotify();
@@ -20,10 +24,13 @@ const AssessmentApproval = () => {
             approval_remark: data.approval_remark,
         };
 
-        httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/observation_logs/" + data.id + "/approval/", {
-            method: "PATCH",
-            body: JSON.stringify(patch),
-        })
+        httpClient(
+            window.__RUNTIME_CONFIG__.API_BASE_URL + "/observation_logs/" + props.observation_log_id + "/approval/",
+            {
+                method: "PATCH",
+                body: JSON.stringify(patch),
+            }
+        )
             .then(() => {
                 refresh();
                 notify("Observation Log updated", {
