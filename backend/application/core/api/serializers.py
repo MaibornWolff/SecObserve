@@ -45,6 +45,7 @@ from application.core.models import (
     Reference,
     Service,
 )
+from application.core.queries.observation import get_current_observation_log
 from application.core.queries.product_member import get_product_member
 from application.core.services.observation_log import create_observation_log
 from application.core.services.security_gate import check_security_gate
@@ -55,7 +56,7 @@ from application.issue_tracker.services.issue_tracker import (
     push_observation_to_issue_tracker,
 )
 from application.issue_tracker.types import Issue_Tracker
-from application.core.queries.observation import get_current_observation_log
+
 
 class ProductCoreSerializer(ModelSerializer):
     open_critical_observation_count = SerializerMethodField()
@@ -617,7 +618,11 @@ class ObservationSerializer(ModelSerializer):
 
     def get_assessment_needs_approval(self, observation: Observation) -> Optional[int]:
         current_observation_log = get_current_observation_log(observation)
-        if current_observation_log and current_observation_log.assessment_status == Assessment_Status.ASSESSMENT_STATUS_NEEDS_APPROVAL:
+        if (
+            current_observation_log
+            and current_observation_log.assessment_status
+            == Assessment_Status.ASSESSMENT_STATUS_NEEDS_APPROVAL
+        ):
             return current_observation_log.pk
         return None
 
