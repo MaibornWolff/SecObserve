@@ -14,12 +14,17 @@ import {
     useRecordContext,
 } from "react-admin";
 
-import { PERMISSION_OBSERVATION_ASSESSMENT, PERMISSION_OBSERVATION_EDIT } from "../../access_control/types";
+import {
+    PERMISSION_OBSERVATION_ASSESSMENT,
+    PERMISSION_OBSERVATION_EDIT,
+    PERMISSION_OBSERVATION_LOG_APPROVAL,
+} from "../../access_control/types";
 import MarkdownField from "../../commons/custom_fields/MarkdownField";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import { get_component_purl_url, get_cwe_url, get_vulnerability_url } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
+import AssessmentApproval from "../observation_logs/AssessmentApproval";
 import ObservationLogEmbeddedList from "../observation_logs/ObservationLogEmbeddedList";
 import { OBSERVATION_STATUS_IN_REVIEW, OBSERVATION_STATUS_OPEN } from "../types";
 import ObservationAssessment from "./ObservationAssessment";
@@ -84,6 +89,11 @@ const ShowActions = () => {
                     observation.product_data.permissions &&
                     observation.parser_data.type == "Manual" &&
                     observation.product_data.permissions.includes(PERMISSION_OBSERVATION_EDIT) && <EditButton />}
+                {observation &&
+                    observation.assessment_needs_approval &&
+                    observation.product_data.permissions.includes(PERMISSION_OBSERVATION_LOG_APPROVAL) && (
+                        <AssessmentApproval observation_log_id={observation.assessment_needs_approval} />
+                    )}
             </Stack>
         </TopToolbar>
     );
