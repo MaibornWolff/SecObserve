@@ -52,7 +52,7 @@
         "@types/jest": "29.5.12",
         "@types/node": "20.11.30",
         "@types/prop-types": "15.7.12",
-        "@types/react": "18.2.72",
+        "@types/react": "18.2.73",
         "@types/react-dom": "18.2.22",
         "rewire": "7.0.0",
         "typescript": "5.4.3",
