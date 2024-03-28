@@ -17,11 +17,11 @@ import { ROLE_CHOICES } from "../../access_control/types";
 import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
 
-export type ProductMemberCreateProps = {
+export type ProductAuthorizationGroupMemberCreateProps = {
     id: any;
 };
 
-const ProductMemberCreate = ({ id }: ProductMemberCreateProps) => {
+const ProductAuthorizationGroupMemberCreate = ({ id }: ProductAuthorizationGroupMemberCreateProps) => {
     const [open, setOpen] = useState(false);
     const refresh = useRefresh();
     const notify = useNotify();
@@ -56,15 +56,15 @@ const ProductMemberCreate = ({ id }: ProductMemberCreateProps) => {
         </Toolbar>
     );
 
-    const create_product_member = (data: any) => {
+    const create_product_authorization_group_member = (data: any) => {
         data.product = id;
         create(
-            "product_members",
+            "product_authorization_group_members",
             { data: data },
             {
                 onSuccess: () => {
                     refresh();
-                    notify("User member added", { type: "success" });
+                    notify("Authorization group member added", { type: "success" });
                 },
                 onError: (error: any) => {
                     notify(error.message, { type: "warning" });
@@ -82,20 +82,20 @@ const ProductMemberCreate = ({ id }: ProductMemberCreateProps) => {
                 sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem", marginBottom: 1 }}
                 startIcon={<AddIcon />}
             >
-                Add user member
+                Add authorization group member
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Add user member</DialogTitle>
+                <DialogTitle>Add authorization group member</DialogTitle>
                 <DialogContent>
-                    <CreateBase resource="product_members">
-                        <SimpleForm onSubmit={create_product_member} toolbar={<CustomToolbar />}>
+                    <CreateBase resource="product_authorization_group_members">
+                        <SimpleForm onSubmit={create_product_authorization_group_member} toolbar={<CustomToolbar />}>
                             <ReferenceInput
-                                source="user"
-                                reference="users"
-                                label="User"
-                                sort={{ field: "full_name", order: "ASC" }}
+                                source="authorization_group"
+                                reference="authorization_groups"
+                                label="Authorization group"
+                                sort={{ field: "name", order: "ASC" }}
                             >
-                                <AutocompleteInputWide optionText="full_name" validate={validate_required} />
+                                <AutocompleteInputWide optionText="name" validate={validate_required} />
                             </ReferenceInput>
                             <AutocompleteInputWide source="role" choices={ROLE_CHOICES} validate={validate_required} />
                         </SimpleForm>
@@ -106,4 +106,4 @@ const ProductMemberCreate = ({ id }: ProductMemberCreateProps) => {
     );
 };
 
-export default ProductMemberCreate;
+export default ProductAuthorizationGroupMemberCreate;

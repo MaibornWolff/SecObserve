@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer, ValidationError
 
-from application.core.api.serializers import NestedProductSerializer
+from application.core.api.serializers_product import NestedProductSerializer
 from application.rules.models import Rule
 
 

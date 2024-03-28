@@ -18,6 +18,7 @@ from application.core.models import (
     Parser,
     Potential_Duplicate,
     Product,
+    Product_Authorization_Group_Member,
     Product_Member,
     Service,
 )
@@ -113,6 +114,22 @@ class ProductMemberFilter(FilterSet):
     class Meta:
         model = Product_Member
         fields = ["product", "user", "role"]
+
+
+class ProductAuthorizationGroupMemberFilter(FilterSet):
+    product = NumberFilter(field_name="product")
+
+    ordering = OrderingFilter(
+        # tuple-mapping retains order
+        fields=(
+            ("authorization_group__name", "authorization_group_name"),
+            ("role", "role"),
+        ),
+    )
+
+    class Meta:
+        model = Product_Authorization_Group_Member
+        fields = ["product", "authorization_group", "role"]
 
 
 class BranchFilter(FilterSet):

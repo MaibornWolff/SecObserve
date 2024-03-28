@@ -19,7 +19,7 @@ from django.db.models import (
 )
 from django.utils import timezone
 
-from application.access_control.models import User
+from application.access_control.models import Authorization_Group, User
 from application.core.services.observation import (
     get_identity_hash,
     normalize_observation_fields,
@@ -351,6 +351,18 @@ class Product_Member(Model):
         unique_together = (
             "product",
             "user",
+        )
+
+
+class Product_Authorization_Group_Member(Model):
+    product = ForeignKey(Product, on_delete=CASCADE)
+    authorization_group = ForeignKey(Authorization_Group, on_delete=CASCADE)
+    role = IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+
+    class Meta:
+        unique_together = (
+            "product",
+            "authorization_group",
         )
 
 

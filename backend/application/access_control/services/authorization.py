@@ -12,6 +12,7 @@ from application.core.models import (
     Observation,
     Observation_Log,
     Product,
+    Product_Authorization_Group_Member,
     Product_Member,
     Service,
 )
@@ -63,6 +64,13 @@ def user_has_permission(  # pylint: disable=too-many-return-statements,too-many-
     if (
         isinstance(obj, Product_Member)
         and permission in Permissions.get_product_member_permissions()
+    ):
+        return user_has_permission(obj.product, permission, user)
+
+    if (
+        isinstance(obj, Product_Authorization_Group_Member)
+        and permission
+        in Permissions.get_product_authorization_group_member_permissions()
     ):
         return user_has_permission(obj.product, permission, user)
 

@@ -1,3 +1,4 @@
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import BasePermission
 
 from application.access_control.api.permissions import (
@@ -6,7 +7,10 @@ from application.access_control.api.permissions import (
 )
 from application.access_control.services.roles_permissions import Permissions, Roles
 from application.core.models import Product
-from application.core.queries.product_member import get_product_member
+from application.core.queries.product_member import (
+    get_highest_role_of_product_authorization_group_members_for_user,
+    get_product_member,
+)
 
 
 class UserHasProductPermission(BasePermission):
@@ -38,10 +42,7 @@ class UserHasProductMemberPermission(BasePermission):
             and obj.role == Roles.Owner
             and not request.user.is_superuser
         ):
-            # Only superusers and Owners are allowed to delete Owners
-            own_product_member = get_product_member(obj.product, request.user)
-            if not own_product_member or not own_product_member.role == Roles.Owner:
-                return False
+            _check_delete_owner(request, obj)
 
         return check_object_permission(
             request,
@@ -50,6 +51,48 @@ class UserHasProductMemberPermission(BasePermission):
             Permissions.Product_Member_Edit,
             Permissions.Product_Member_Delete,
         )
+
+
+class UserHasProductAuthorizationGroupMemberPermission(BasePermission):
+    def has_permission(self, request, view):
+        return check_post_permission(
+            request,
+            Product,
+            "product",
+            Permissions.Product_Authorization_Group_Member_Create,
+        )
+
+    def has_object_permission(self, request, view, obj):
+        if (
+            request.method == "DELETE"
+            and obj.role == Roles.Owner
+            and not request.user.is_superuser
+        ):
+            _check_delete_owner(request, obj)
+
+        return check_object_permission(
+            request,
+            obj,
+            Permissions.Product_Authorization_Group_Member_View,
+            Permissions.Product_Authorization_Group_Member_Edit,
+            Permissions.Product_Authorization_Group_Member_Delete,
+        )
+
+
+def _check_delete_owner(request, obj) -> bool:
+    own_product_member = get_product_member(obj.product, request.user)
+    highest_role_of_product_authorization_group_members = (
+        get_highest_role_of_product_authorization_group_members_for_user(
+            obj.product, request.user
+        )
+    )
+
+    if (
+        own_product_member and own_product_member.role == Roles.Owner
+    ) or highest_role_of_product_authorization_group_members == Roles.Owner:
+        return True
+
+    raise ValidationError("You are not permitted to delete an Owner")
 
 
 class UserHasBranchPermission(BasePermission):

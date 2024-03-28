@@ -1,5 +1,5 @@
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Accordion, AccordionDetails, AccordionSummary, Chip, Stack } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Chip, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
 
 import { getElevation } from "../../metrics/functions";
@@ -26,7 +26,7 @@ const ProductReviews = ({ product }: ProductReviewsProps) => {
             >
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     <Stack direction="row" sx={{ display: "flex", alignItems: "center" }}>
-                        Observations to be reviewed:&nbsp;&nbsp;&nbsp;
+                        <Typography variant="h6">Observations to be reviewed:</Typography>&nbsp;&nbsp;&nbsp;
                         <Chip label={product.observation_reviews} color={get_chip_color(product.observation_reviews)} />
                     </Stack>
                 </AccordionSummary>
@@ -42,7 +42,7 @@ const ProductReviews = ({ product }: ProductReviewsProps) => {
                 >
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Stack direction="row" sx={{ display: "flex", alignItems: "center" }}>
-                            Assessments to be approved:&nbsp;&nbsp;&nbsp;
+                            <Typography variant="h6">Assessments to be approved:</Typography>&nbsp;&nbsp;&nbsp;
                             <Chip
                                 label={product.observation_log_approvals}
                                 color={get_chip_color(product.observation_log_approvals)}
