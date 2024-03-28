@@ -48,6 +48,11 @@ class Permissions(IntEnum):
     Service_View = 1501
     Service_Delete = 1503
 
+    Product_Authorization_Group_Member_View = 1601
+    Product_Authorization_Group_Member_Edit = 1602
+    Product_Authorization_Group_Member_Delete = 1603
+    Product_Authorization_Group_Member_Create = 1604
+
     Observation_View = 2001
     Observation_Edit = 2002
     Observation_Delete = 2003
@@ -111,6 +116,14 @@ class Permissions(IntEnum):
         }
 
     @classmethod
+    def get_product_authorization_group_member_permissions(cls):
+        return {
+            Permissions.Product_Authorization_Group_Member_View,
+            Permissions.Product_Authorization_Group_Member_Edit,
+            Permissions.Product_Authorization_Group_Member_Delete,
+        }
+
+    @classmethod
     def get_product_rule_permissions(cls):
         return {
             Permissions.Product_Rule_View,
@@ -167,6 +180,7 @@ def get_roles_with_permissions():
             Permissions.Product_Group_View,
             Permissions.Product_View,
             Permissions.Product_Member_View,
+            Permissions.Product_Authorization_Group_Member_View,
             Permissions.Product_Rule_View,
             Permissions.Branch_View,
             Permissions.Service_View,
@@ -182,6 +196,7 @@ def get_roles_with_permissions():
             Permissions.Product_View,
             Permissions.Product_Import_Observations,
             Permissions.Product_Member_View,
+            Permissions.Product_Authorization_Group_Member_View,
             Permissions.Product_Rule_View,
             Permissions.Branch_View,
             Permissions.Service_View,
@@ -203,6 +218,10 @@ def get_roles_with_permissions():
             Permissions.Product_Member_Edit,
             Permissions.Product_Member_Delete,
             Permissions.Product_Member_Create,
+            Permissions.Product_Authorization_Group_Member_View,
+            Permissions.Product_Authorization_Group_Member_Edit,
+            Permissions.Product_Authorization_Group_Member_Delete,
+            Permissions.Product_Authorization_Group_Member_Create,
             Permissions.Product_Rule_View,
             Permissions.Product_Rule_Edit,
             Permissions.Product_Rule_Delete,
@@ -240,6 +259,10 @@ def get_roles_with_permissions():
             Permissions.Product_Member_Edit,
             Permissions.Product_Member_Delete,
             Permissions.Product_Member_Create,
+            Permissions.Product_Authorization_Group_Member_View,
+            Permissions.Product_Authorization_Group_Member_Edit,
+            Permissions.Product_Authorization_Group_Member_Delete,
+            Permissions.Product_Authorization_Group_Member_Create,
             Permissions.Product_Rule_View,
             Permissions.Product_Rule_Edit,
             Permissions.Product_Rule_Delete,

@@ -25,6 +25,7 @@ from application.core.api.filters import (
     ObservationLogFilter,
     ParserFilter,
     PotentialDuplicateFilter,
+    ProductAuthorizationGroupMemberFilter,
     ProductFilter,
     ProductGroupFilter,
     ProductMemberFilter,
@@ -33,12 +34,12 @@ from application.core.api.filters import (
 from application.core.api.permissions import (
     UserHasBranchPermission,
     UserHasObservationPermission,
+    UserHasProductAuthorizationGroupMemberPermission,
     UserHasProductMemberPermission,
     UserHasProductPermission,
     UserHasServicePermission,
 )
-from application.core.api.serializers import (
-    BranchSerializer,
+from application.core.api.serializers_observation import (
     EvidenceSerializer,
     ObservationAssessmentSerializer,
     ObservationBulkAssessmentSerializer,
@@ -54,6 +55,10 @@ from application.core.api.serializers import (
     ObservationUpdateSerializer,
     ParserSerializer,
     PotentialDuplicateSerializer,
+)
+from application.core.api.serializers_product import (
+    BranchSerializer,
+    ProductAuthorizationGroupMemberSerializer,
     ProductGroupSerializer,
     ProductMemberSerializer,
     ProductSerializer,
@@ -67,6 +72,7 @@ from application.core.models import (
     Parser,
     Potential_Duplicate,
     Product,
+    Product_Authorization_Group_Member,
     Product_Member,
     Service,
 )
@@ -81,7 +87,10 @@ from application.core.queries.observation import (
     get_potential_duplicates,
 )
 from application.core.queries.product import get_product_by_id, get_products
-from application.core.queries.product_member import get_product_members
+from application.core.queries.product_member import (
+    get_product_authorization_group_members,
+    get_product_members,
+)
 from application.core.queries.service import get_services
 from application.core.services.assessment import (
     assessment_approval,
@@ -307,6 +316,20 @@ class ProductMemberViewSet(ModelViewSet):
 
     def get_queryset(self):
         return get_product_members().select_related("user")
+
+
+class ProductAuthorizationGroupMemberViewSet(ModelViewSet):
+    serializer_class = ProductAuthorizationGroupMemberSerializer
+    filterset_class = ProductAuthorizationGroupMemberFilter
+    permission_classes = (
+        IsAuthenticated,
+        UserHasProductAuthorizationGroupMemberPermission,
+    )
+    queryset = Product_Authorization_Group_Member.objects.none()
+    filter_backends = [DjangoFilterBackend]
+
+    def get_queryset(self):
+        return get_product_authorization_group_members()
 
 
 class BranchViewSet(ModelViewSet):
