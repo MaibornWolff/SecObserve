@@ -35,6 +35,7 @@ from application.core.api.permissions import (
     UserHasBranchPermission,
     UserHasObservationPermission,
     UserHasProductAuthorizationGroupMemberPermission,
+    UserHasProductGroupPermission,
     UserHasProductMemberPermission,
     UserHasProductPermission,
     UserHasServicePermission,
@@ -121,7 +122,7 @@ from application.rules.services.rule_engine import Rule_Engine
 class ProductGroupViewSet(ModelViewSet):
     serializer_class = ProductGroupSerializer
     filterset_class = ProductGroupFilter
-    permission_classes = (IsAuthenticated, UserHasProductPermission)
+    permission_classes = (IsAuthenticated, UserHasProductGroupPermission)
     queryset = Product.objects.none()
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["name"]

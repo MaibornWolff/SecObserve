@@ -1,4 +1,5 @@
 from enum import IntEnum
+from typing import Optional
 
 
 class Roles(IntEnum):
@@ -294,5 +295,7 @@ def get_roles_with_permissions():
     }
 
 
-def get_permissions_for_role(role: int) -> list[Permissions]:
+def get_permissions_for_role(role: Optional[int]) -> list[Permissions]:
+    if not role:
+        return []
     return get_roles_with_permissions().get(role)

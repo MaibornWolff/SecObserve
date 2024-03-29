@@ -30,6 +30,23 @@ class UserHasProductPermission(BasePermission):
         )
 
 
+class UserHasProductGroupPermission(BasePermission):
+    def has_permission(self, request, view):
+        if request.method == "POST":
+            return not request.user.is_external
+
+        return True
+
+    def has_object_permission(self, request, view, obj):
+        return check_object_permission(
+            request,
+            obj,
+            Permissions.Product_Group_View,
+            Permissions.Product_Group_Edit,
+            Permissions.Product_Group_Delete,
+        )
+
+
 class UserHasProductMemberPermission(BasePermission):
     def has_permission(self, request, view):
         return check_post_permission(

@@ -7,6 +7,7 @@ from rest_framework.serializers import (
 )
 
 from application.access_control.api.serializers import UserSerializer
+from application.access_control.services.authorization import get_highest_user_role
 from application.access_control.services.roles_permissions import (
     Permissions,
     Roles,
@@ -68,15 +69,7 @@ class ProductCoreSerializer(ModelSerializer):
         return obj.open_unkown_observation_count
 
     def get_permissions(self, obj: Product) -> list[Permissions]:
-        user = get_current_user()
-        if user and user.is_superuser:
-            return get_permissions_for_role(Roles.Owner)
-
-        product_member = get_product_member(obj)
-        if product_member:
-            return get_permissions_for_role(product_member.role)
-
-        return []
+        return get_permissions_for_role(get_highest_user_role(obj))
 
     def validate(self, attrs: dict):
         if attrs.get("repository_branch_housekeeping_active"):
@@ -309,15 +302,7 @@ class NestedProductSerializer(ModelSerializer):
         exclude = ["is_product_group"]
 
     def get_permissions(self, product: Product) -> list[Permissions]:
-        user = get_current_user()
-        if user and user.is_superuser:
-            return get_permissions_for_role(Roles.Owner)
-
-        product_member = get_product_member(product)
-        if product_member:
-            return get_permissions_for_role(product_member.role)
-
-        return []
+        return get_permissions_for_role(get_highest_user_role(product))
 
 
 class NestedProductListSerializer(ModelSerializer):

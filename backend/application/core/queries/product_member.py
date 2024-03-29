@@ -78,48 +78,22 @@ def get_product_authorization_group_members() -> (
 
 def get_highest_role_of_product_authorization_group_members_for_user(
     product: Product, user: User = None
-) -> Optional[int]:
+) -> int:
     if not user:
         user = get_current_user()
 
     highest_product_role = Product_Authorization_Group_Member.objects.filter(
         product=product,
         authorization_group__users=user,
-    ).aggregate(Max("role"))["role__max"]
+    ).aggregate(Max("role", default=0))["role__max"]
 
     if product.product_group:
         highest_product_group_role = Product_Authorization_Group_Member.objects.filter(
             product=product.product_group,
             authorization_group__users=user,
-        ).aggregate(Max("role"))["role__max"]
+        ).aggregate(Max("role", default=0))["role__max"]
 
         if highest_product_group_role:
             highest_product_role = max(highest_product_role, highest_product_group_role)
 
     return highest_product_role
-
-
-# def get_product_authorization_group_members_for_user(
-#     product: Product, user: User = None
-# ) -> set[Product_Authorization_Group_Member]:
-#     if not user:
-#         user = get_current_user()
-
-#     authorization_groups = Authorization_Group.objects.filter(users=user)
-#     product_authorization_group_members = set(
-#         Product_Authorization_Group_Member.objects.filter(
-#             product=product, authorization_group__in=authorization_groups
-#         )
-#     )
-#     if product.product_group:
-#         product_group_authorization_group_members = set(
-#             Product_Authorization_Group_Member.objects.filter(
-#                 product=product.product_group,
-#                 authorization_group__in=authorization_groups,
-#             )
-#         )
-#         product_authorization_group_members.update(
-#             product_group_authorization_group_members
-#         )
-
-#     return product_authorization_group_members
