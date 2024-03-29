@@ -30,7 +30,7 @@
         "axios": "1.6.8",
         "@textea/json-viewer": "3.4.0",
         "@emotion/react": "11.11.4",
-        "@emotion/styled": "11.11.0",
+        "@emotion/styled": "11.11.5",
         "runtime-env-cra": "0.2.4",
         "oidc-client-ts": "3.0.1",
         "react-oidc-context": "3.0.0"
