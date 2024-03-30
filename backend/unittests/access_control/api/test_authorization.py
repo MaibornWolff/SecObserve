@@ -7,7 +7,12 @@ from django.core.management import call_command
 from django.utils import timezone
 from rest_framework.test import APIClient
 
-from application.access_control.models import User
+from application.access_control.models import Authorization_Group, User
+from application.core.models import (
+    Product,
+    Product_Authorization_Group_Member,
+    Product_Member,
+)
 from application.metrics.models import Product_Metrics
 from unittests.base_test_case import BaseTestCase
 
@@ -110,3 +115,36 @@ class TestAuthorizationBase(BaseTestCase):
             self.assertEqual(data.expected_status_code, response.status_code)
             if data.expected_data:
                 self.assertEqual(data.expected_data, str(response.data))
+
+    def _prepare_authorization_groups(self):
+        call_command("loaddata", "unittests/fixtures/unittests_fixtures.json")
+
+        Product_Member.objects.all().delete()
+        Authorization_Group.objects.all().delete()
+        Product_Authorization_Group_Member.objects.all().delete()
+
+        product_internal = Product.objects.get(name="db_product_internal")
+        product_group = Product.objects.get(name="db_product_group")
+
+        user_internal_write = User.objects.get(username="db_internal_write")
+        group_internal_write = Authorization_Group.objects.create(
+            name="db_group_internal_write"
+        )
+        group_internal_write.users.add(user_internal_write)
+        Product_Authorization_Group_Member.objects.create(
+            product=product_internal, authorization_group=group_internal_write, role=5
+        )
+
+        group_3 = Authorization_Group.objects.create(name="db_group_internal_read")
+        group_3.users.add(User.objects.get(id=3))
+        Product_Authorization_Group_Member.objects.create(
+            product=product_internal, authorization_group=group_3, role=1
+        )
+
+        group_product_group = Authorization_Group.objects.create(
+            name="db_group_product_group"
+        )
+        group_product_group.users.add(User.objects.get(id=6))
+        Product_Authorization_Group_Member.objects.create(
+            product=product_group, authorization_group=group_product_group, role=5
+        )
