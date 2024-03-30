@@ -22,6 +22,6 @@ def get_authorization_groups() -> QuerySet[Authorization_Group]:
 
     return authorization_groups.filter(
         id__in=[
-            member.authorization_group for member in product_authorization_group_members
+            member.authorization_group_id for member in product_authorization_group_members
         ]
     )
