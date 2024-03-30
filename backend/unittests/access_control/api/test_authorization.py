@@ -136,7 +136,9 @@ class TestAuthorizationBase(BaseTestCase):
             product=product_internal, authorization_group=group_internal_write, role=5
         )
 
-        group_internal_read = Authorization_Group.objects.create(name="db_group_internal_read")
+        group_internal_read = Authorization_Group.objects.create(
+            name="db_group_internal_read"
+        )
         group_internal_read.users.add(User.objects.get(id=3))
         Product_Authorization_Group_Member.objects.create(
             product=product_internal, authorization_group=group_internal_read, role=1
@@ -156,6 +158,4 @@ class TestAuthorizationBase(BaseTestCase):
             product=product_group, authorization_group=group_product_group, role=5
         )
 
-        group_product_group = Authorization_Group.objects.create(
-            name="db_group_unused"
-        )
+        group_product_group = Authorization_Group.objects.create(name="db_group_unused")

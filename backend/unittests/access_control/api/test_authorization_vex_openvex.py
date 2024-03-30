@@ -7,6 +7,7 @@ from unittests.access_control.api.test_authorization import (
 class TestAuthorizationOpenVEX_Product(TestAuthorizationBase):
     def test_authorization_openvex_product_member(self):
         self._test_authorization_openvex()
+
     def test_authorization_openvex_product_authorization_group_member(self):
         self._prepare_authorization_groups()
         self._test_authorization_openvex()
