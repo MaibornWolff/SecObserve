@@ -31,6 +31,7 @@ RUN apk del curl && \
 COPY --from=build /app/build /usr/share/nginx/html
 COPY ./frontend/.env.no_oidc /usr/share/nginx/html/.env
 COPY ./frontend/nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./frontend/robots.txt /usr/share/nginx/html/robots.txt
 
 ARG user=nginx
 ARG group=nginx
