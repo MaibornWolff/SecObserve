@@ -38,7 +38,7 @@ Inactive branches / versions will be deleted automatically after a certain time.
 
 #### Parameters
 
-The parameters are set globally in the [admin user interface](../getting_started/configuration.md#admin-user-interface) and can be partially overridden per product.
+The parameters are set globally in the [Django Admin user interface](../getting_started/configuration.md#admin-user-interface) and can be partially overridden per product.
 
 | Parameter global | Description |
 |------------------|-------------|
@@ -48,7 +48,7 @@ The parameters are set globally in the [admin user interface](../getting_started
 | **BRANCH_HOUSEKEEPING_KEEP_INACTIVE_DAYS** | Days before incative branches / versions and their observations are deleted |
 | **BRANCH_HOUSEKEEPING_EXEMPT_BRANCHES** | Regular expression which branches / versions to exempt from deletion |
 
-Per default the task to delete inactive branches / version including their observations is scheduled to run every night at 02:00 UTC time. This default can be changed by administrators via the [admin user interface](../getting_started/configuration.md#admin-user-interface). The expressions for `BRANCH_HOUSEKEEPING_CRONTAB_MINUTES` and `BRANCH_HOUSEKEEPING_CRONTAB_HOURS` have to be valid values according to [https://huey.readthedocs.io/en/latest/api.html#crontab](https://huey.readthedocs.io/en/latest/api.html#crontab):
+Per default the task to delete inactive branches / version including their observations is scheduled to run every night at 02:00 UTC time. This default can be changed by administrators via the [Django Admin user interface](../getting_started/configuration.md#admin-user-interface). The expressions for `BRANCH_HOUSEKEEPING_CRONTAB_MINUTES` and `BRANCH_HOUSEKEEPING_CRONTAB_HOURS` have to be valid values according to [https://huey.readthedocs.io/en/latest/api.html#crontab](https://huey.readthedocs.io/en/latest/api.html#crontab):
 
 * `*` = every distinct value (every minute, every hour)
 * `*/n` = run every `n` times, i.e. hours=’*/4’ == 0, 4, 8, 12, 16, 20
