@@ -2,11 +2,14 @@ from unittests.access_control.api.test_authorization import (
     APITest,
     TestAuthorizationBase,
 )
+from unittests.access_control.services.test_authorization import (
+    prepare_authorization_groups,
+)
 
 
 class TestAuthorizationAuthorizationGroups(TestAuthorizationBase):
     def test_authorization_authorization_groups(self):
-        self._prepare_authorization_groups()
+        prepare_authorization_groups()
 
         expected_data = "{'count': 5, 'next': None, 'previous': None, 'results': [{'id': 4, 'name': 'db_group_internal_write', 'oidc_group': '', 'users': [2]}, {'id': 5, 'name': 'db_group_internal_read', 'oidc_group': '', 'users': [3]}, {'id': 6, 'name': 'db_group_external', 'oidc_group': '', 'users': [4]}, {'id': 7, 'name': 'db_group_product_group', 'oidc_group': '', 'users': [6]}, {'id': 8, 'name': 'db_group_unused', 'oidc_group': '', 'users': []}]}"
         self._test_api(

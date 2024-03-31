@@ -2,6 +2,9 @@ from unittests.access_control.api.test_authorization import (
     APITest,
     TestAuthorizationBase,
 )
+from unittests.access_control.services.test_authorization import (
+    prepare_authorization_groups,
+)
 
 
 class TestAuthorizationObservations(TestAuthorizationBase):
@@ -9,7 +12,7 @@ class TestAuthorizationObservations(TestAuthorizationBase):
         self._test_authorization_observations()
 
     def test_authorization_observations_product_authorization_group_member(self):
-        self._prepare_authorization_groups()
+        prepare_authorization_groups()
         self._test_authorization_observations()
 
     def _test_authorization_observations(self):

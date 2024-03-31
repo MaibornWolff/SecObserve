@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from application.access_control.models import User
+from application.access_control.models import Authorization_Group, User
 from application.access_control.services.roles_permissions import Roles
 from application.core.models import (
     Branch,
@@ -8,11 +8,17 @@ from application.core.models import (
     Observation_Log,
     Parser,
     Product,
+    Product_Authorization_Group_Member,
     Product_Member,
+    Service,
 )
 from application.core.types import Severity, Status
-from application.import_observations.models import Api_Configuration
+from application.import_observations.models import (
+    Api_Configuration,
+    Vulnerability_Check,
+)
 from application.rules.models import Rule
+from application.vex.models import OpenVEX
 
 
 class BaseTestCase(TestCase):
@@ -46,8 +52,23 @@ class BaseTestCase(TestCase):
         self.observation_1.branch = self.branch_1
         self.branch_2 = Branch(name="branch_2", product=self.product_1)
 
+        self.service_1 = Service(name="service_1", product=self.product_1)
+
         self.product_member_1 = Product_Member(
             product=self.product_1, user=self.user_internal, role=Roles.Writer
         )
 
+        authorization_group_1 = Authorization_Group(name="authorization_group_1")
+        self.product_authorization_group_member_1 = Product_Authorization_Group_Member(
+            product=self.product_1,
+            authorization_group=authorization_group_1,
+            role=Roles.Writer,
+        )
+
+        self.openvex_1 = OpenVEX(
+            user=self.user_external,
+            product=self.product_1,
+        )
+
+        self.vulnerability_check_1 = Vulnerability_Check(product=self.product_1)
         self.general_rule = Rule(name="general_rule")

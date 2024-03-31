@@ -153,14 +153,21 @@ def get_highest_user_role(product: Product, user: User = None) -> Optional[int]:
         return Roles.Owner
 
     user_member = get_product_member(product, user)
-    user_member_role = user_member.role if user_member else 0
+    user_product_role = user_member.role if user_member else 0
+
+    user_product_group_role = 0
+    if product.product_group:
+        user_product_group_member = get_product_member(product.product_group, user)
+        user_product_group_role = (
+            user_product_group_member.role if user_product_group_member else 0
+        )
+
     authorization_group_role = (
         get_highest_role_of_product_authorization_group_members_for_user(product, user)
     )
-    highest_role = max(user_member_role, authorization_group_role)
-
-    if not highest_role and product.product_group:
-        return get_highest_user_role(product.product_group, user)
+    highest_role = max(
+        user_product_role, user_product_group_role, authorization_group_role
+    )
 
     if highest_role:
         return highest_role

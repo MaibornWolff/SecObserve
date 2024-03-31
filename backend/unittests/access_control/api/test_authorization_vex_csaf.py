@@ -2,6 +2,9 @@ from unittests.access_control.api.test_authorization import (
     APITest,
     TestAuthorizationBase,
 )
+from unittests.access_control.services.test_authorization import (
+    prepare_authorization_groups,
+)
 
 
 class TestAuthorizationCSAF_Product(TestAuthorizationBase):
@@ -9,7 +12,7 @@ class TestAuthorizationCSAF_Product(TestAuthorizationBase):
         self._test_authorization_csaf()
 
     def test_authorization_csaf_product_authorization_group_member(self):
-        self._prepare_authorization_groups()
+        prepare_authorization_groups()
         self._test_authorization_csaf()
 
     def _test_authorization_csaf(self):

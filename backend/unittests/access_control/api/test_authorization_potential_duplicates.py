@@ -5,6 +5,9 @@ from unittests.access_control.api.test_authorization import (
     APITest,
     TestAuthorizationBase,
 )
+from unittests.access_control.services.test_authorization import (
+    prepare_authorization_groups,
+)
 
 
 class TestAuthorizationPotentialDuplicates(TestAuthorizationBase):
@@ -14,7 +17,7 @@ class TestAuthorizationPotentialDuplicates(TestAuthorizationBase):
     def test_authorization_potential_duplicates_product_authorization_group_member(
         self,
     ):
-        self._prepare_authorization_groups()
+        prepare_authorization_groups()
         self._test_authorization_potential_duplicates()
 
     def _test_authorization_potential_duplicates(self):

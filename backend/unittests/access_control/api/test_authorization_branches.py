@@ -2,6 +2,9 @@ from unittests.access_control.api.test_authorization import (
     APITest,
     TestAuthorizationBase,
 )
+from unittests.access_control.services.test_authorization import (
+    prepare_authorization_groups,
+)
 
 
 class TestAuthorizationBranches(TestAuthorizationBase):
@@ -9,7 +12,7 @@ class TestAuthorizationBranches(TestAuthorizationBase):
         self._test_authorization_branches()
 
     def _test_authorization_branches_product_authorization_group_member(self):
-        self._prepare_authorization_groups()
+        prepare_authorization_groups()
         self._test_authorization_branches()
 
     def _test_authorization_branches(self):
