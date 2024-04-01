@@ -13,7 +13,7 @@ from rest_framework.serializers import (
     SerializerMethodField,
 )
 
-from application.core.api.serializers import NestedProductSerializer
+from application.core.api.serializers_product import NestedProductSerializer
 from application.vex.models import (
     CSAF,
     CSAF_Branch,

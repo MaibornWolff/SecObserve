@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import { JsonViewer, JsonViewerTheme } from "@textea/json-viewer";
 import {
     Labeled,
@@ -8,26 +9,25 @@ import {
     TextField,
     TopToolbar,
     WithRecord,
+    useRecordContext,
 } from "react-admin";
 
 import { useStyles } from "../../commons/layout/themes";
 import { getSettingTheme } from "../../commons/settings/functions";
 
 const ShowActions = () => {
-    const observation_id = localStorage.getItem("observationshow.id");
-    if (observation_id) {
-        return (
-            <TopToolbar>
+    const evidence = useRecordContext();
+    return (
+        <TopToolbar>
+            {evidence && (
                 <PrevNextButtons
-                    filter={{ observation: observation_id }}
+                    filter={{ observation: evidence.observation }}
                     linkType="show"
                     sort={{ field: "name", order: "ASC" }}
                 />
-            </TopToolbar>
-        );
-    } else {
-        return null;
-    }
+            )}
+        </TopToolbar>
+    );
 };
 
 const EvidenceShow = () => {
@@ -35,6 +35,7 @@ const EvidenceShow = () => {
     return (
         <Show actions={<ShowActions />}>
             <SimpleShowLayout>
+                <Typography variant="h6">Evidence</Typography>
                 <ReferenceField source="product" reference="products" link="show">
                     <TextField source="name" />
                 </ReferenceField>

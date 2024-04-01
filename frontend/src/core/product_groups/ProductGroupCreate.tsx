@@ -1,6 +1,6 @@
 import { Divider, Stack, Typography } from "@mui/material";
 import { RichTextInput } from "ra-input-rich-text";
-import { Create, FormDataConsumer, NullableBooleanInput, NumberInput, SimpleForm } from "react-admin";
+import { BooleanInput, Create, FormDataConsumer, NullableBooleanInput, NumberInput, SimpleForm } from "react-admin";
 
 import { validate_0_999999, validate_255, validate_2048, validate_required_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
@@ -211,6 +211,21 @@ const ProductGroupCreate = () => {
                         )
                     }
                 </FormDataConsumer>
+
+                <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+                <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                    Review
+                </Typography>
+                <BooleanInput
+                    source="assessments_need_approval"
+                    label="Assessments need approval"
+                    defaultValue={false}
+                />
+                {/* <BooleanInput
+                    source="new_observations_in_review"
+                    label="New observations have status 'In review'"
+                    defaultValue={false}
+                /> */}
             </SimpleForm>
         </Create>
     );

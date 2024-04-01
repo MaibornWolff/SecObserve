@@ -128,6 +128,33 @@
         }
     },
     {
+        "model": "access_control.authorization_group",
+        "pk": 1,
+        "fields": {
+            "name": "oidc_group_1",
+            "oidc_group": "oidc_1",
+            "users": []
+        }
+    },
+    {
+        "model": "access_control.authorization_group",
+        "pk": 2,
+        "fields": {
+            "name": "oidc_group_2",
+            "oidc_group": "oidc_2",
+            "users": []
+        }
+    },
+    {
+        "model": "access_control.authorization_group",
+        "pk": 3,
+        "fields": {
+            "name": "non_oidc_group",
+            "oidc_group": "",
+            "users": [2, 3]
+        }
+    },
+    {
         "model": "core.product",
         "pk": 1,
         "fields": {

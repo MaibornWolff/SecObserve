@@ -4,7 +4,11 @@ from django.db.models import Exists, OuterRef, Q
 from django.db.models.query import QuerySet
 
 from application.commons.services.global_request import get_current_user
-from application.core.models import Product, Product_Member
+from application.core.models import (
+    Product,
+    Product_Authorization_Group_Member,
+    Product_Member,
+)
 
 
 def get_product_by_id(
@@ -43,11 +47,34 @@ def get_products(is_product_group: bool = None) -> QuerySet[Product]:
             product=OuterRef("product_group"), user=user
         )
 
+        product_authorization_group_members = (
+            Product_Authorization_Group_Member.objects.filter(
+                product=OuterRef("pk"),
+                authorization_group__users=user,
+            )
+        )
+
+        product_group_authorization_group_members = (
+            Product_Authorization_Group_Member.objects.filter(
+                product=OuterRef("product_group"),
+                authorization_group__users=user,
+            )
+        )
+
         products = products.annotate(
             member=Exists(product_members),
             product_group_member=Exists(product_group_members),
+            authorization_group_member=Exists(product_authorization_group_members),
+            product_group_authorization_group_member=Exists(
+                product_group_authorization_group_members
+            ),
         )
-        products = products.filter(Q(member=True) | Q(product_group_member=True))
+        products = products.filter(
+            Q(member=True)
+            | Q(product_group_member=True)
+            | Q(authorization_group_member=True)
+            | Q(product_group_authorization_group_member=True)
+        )
 
     if is_product_group is not None:
         products = products.filter(is_product_group=is_product_group)

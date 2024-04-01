@@ -1,16 +1,12 @@
-import { Stack, Typography } from "@mui/material";
-import { Box, Paper } from "@mui/material";
+import { Box, Paper, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
 import {
-    ArrayField,
     ChipField,
-    Datagrid,
     DateField,
     EditButton,
     Labeled,
     NumberField,
     PrevNextButtons,
-    ReferenceField,
     Show,
     TextField,
     TopToolbar,
@@ -18,43 +14,66 @@ import {
     useRecordContext,
 } from "react-admin";
 
-import { PERMISSION_OBSERVATION_ASSESSMENT, PERMISSION_OBSERVATION_EDIT } from "../../access_control/types";
+import {
+    PERMISSION_OBSERVATION_ASSESSMENT,
+    PERMISSION_OBSERVATION_EDIT,
+    PERMISSION_OBSERVATION_LOG_APPROVAL,
+} from "../../access_control/types";
 import MarkdownField from "../../commons/custom_fields/MarkdownField";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
-import {
-    feature_vex_enabled,
-    get_component_purl_url,
-    get_cwe_url,
-    get_vulnerability_url,
-} from "../../commons/functions";
+import { get_component_purl_url, get_cwe_url, get_vulnerability_url } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
-import { OBSERVATION_STATUS_OPEN } from "../types";
+import AssessmentApproval from "../observation_logs/AssessmentApproval";
+import ObservationLogEmbeddedList from "../observation_logs/ObservationLogEmbeddedList";
+import { OBSERVATION_STATUS_IN_REVIEW, OBSERVATION_STATUS_OPEN } from "../types";
 import ObservationAssessment from "./ObservationAssessment";
 import ObservationRemoveAssessment from "./ObservationRemoveAssessment";
 import ObservationsShowAside from "./ObservationShowAside";
 import PotentialDuplicatesList from "./PotentialDuplicatesList";
+import {
+    IDENTIFIER_OBSERVATION_DASHBOARD_LIST,
+    IDENTIFIER_OBSERVATION_EMBEDDED_LIST,
+    IDENTIFIER_OBSERVATION_LIST,
+    IDENTIFIER_OBSERVATION_REVIEW_LIST,
+} from "./functions";
 
-type ShowActionsProps = {
-    filter: any;
-    storeKey: string;
-};
-
-const ShowActions = (props: ShowActionsProps) => {
+const ShowActions = () => {
     const observation = useRecordContext();
-    if (observation) {
-        localStorage.setItem("observationshow.id", observation.id.toString());
+    let filter = null;
+    let storeKey = null;
+    let filterDefaultValues = {};
+
+    if (localStorage.getItem(IDENTIFIER_OBSERVATION_LIST) === "true") {
+        filter = {};
+        filterDefaultValues = { current_status: OBSERVATION_STATUS_OPEN };
+        storeKey = "observations.list";
+    } else if (observation && localStorage.getItem(IDENTIFIER_OBSERVATION_EMBEDDED_LIST) === "true") {
+        filter = { product: observation.product };
+        storeKey = "observations.embedded";
+    } else if (localStorage.getItem(IDENTIFIER_OBSERVATION_DASHBOARD_LIST) === "true") {
+        filter = {
+            age: "Past 7 days",
+            current_status: OBSERVATION_STATUS_OPEN,
+        };
+        storeKey = "observations.dashboard";
+    } else if (observation && localStorage.getItem(IDENTIFIER_OBSERVATION_REVIEW_LIST) === "true") {
+        filter = { product: observation.product, current_status: OBSERVATION_STATUS_IN_REVIEW };
+        storeKey = "observations.review";
     }
+
     return (
         <TopToolbar>
             <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <PrevNextButtons
-                    filter={props.filter}
-                    filterDefaultValues={{ current_status: OBSERVATION_STATUS_OPEN }}
-                    linkType="show"
-                    sort={{ field: "current_severity", order: "ASC" }}
-                    storeKey={props.storeKey}
-                />
+                {filter && storeKey && (
+                    <PrevNextButtons
+                        filter={filter}
+                        filterDefaultValues={filterDefaultValues}
+                        linkType="show"
+                        sort={{ field: "current_severity", order: "ASC" }}
+                        storeKey={storeKey}
+                    />
+                )}
                 {observation &&
                     observation.product_data.permissions &&
                     observation.product_data.permissions.includes(PERMISSION_OBSERVATION_ASSESSMENT) && (
@@ -70,6 +89,11 @@ const ShowActions = (props: ShowActionsProps) => {
                     observation.product_data.permissions &&
                     observation.parser_data.type == "Manual" &&
                     observation.product_data.permissions.includes(PERMISSION_OBSERVATION_EDIT) && <EditButton />}
+                {observation &&
+                    observation.assessment_needs_approval &&
+                    observation.product_data.permissions.includes(PERMISSION_OBSERVATION_LOG_APPROVAL) && (
+                        <AssessmentApproval observation_log_id={observation.assessment_needs_approval} />
+                    )}
             </Stack>
         </TopToolbar>
     );
@@ -81,7 +105,7 @@ const ObservationShowComponent = () => {
     return (
         <WithRecord
             render={(observation) => (
-                <Box width={"100%"} ml={2}>
+                <Box width={"100%"}>
                     <Paper sx={{ marginBottom: 2, padding: 2 }}>
                         <Typography variant="h6">Observation</Typography>
                         <Stack direction="row" spacing={4}>
@@ -425,20 +449,7 @@ const ObservationShowComponent = () => {
                         <Typography variant="h6" sx={{ paddingBottom: 1 }}>
                             Log
                         </Typography>
-                        <ArrayField label={false} source="observation_logs">
-                            <Datagrid bulkActionButtons={false}>
-                                <ReferenceField source="user" reference="users">
-                                    <TextField source="full_name" />
-                                </ReferenceField>
-                                <TextField source="severity" emptyText="---" />
-                                <TextField source="status" emptyText="---" />
-                                {feature_vex_enabled() && (
-                                    <TextField label="VEX justification" source="vex_justification" emptyText="---" />
-                                )}
-                                <TextField source="comment" />
-                                <DateField source="created" showTime />
-                            </Datagrid>
-                        </ArrayField>
+                        <ObservationLogEmbeddedList observation={observation} />
                     </Paper>
 
                     {observation && observation.has_potential_duplicates && (
@@ -456,23 +467,8 @@ const ObservationShowComponent = () => {
 };
 
 const ObservationShow = () => {
-    let filter = {};
-    let storeKey = "observations.list";
-    const product_id = localStorage.getItem("observationembeddedlist.product");
-    if (product_id !== null) {
-        filter = { product: Number(product_id) };
-        storeKey = "observations.embedded";
-    } else if (localStorage.getItem("observationdashboardlist") === "true") {
-        filter = { age: "Past 7 days", current_status: "Open" };
-        storeKey = "observations.dashboard";
-    }
-
     return (
-        <Show
-            actions={<ShowActions filter={filter} storeKey={storeKey} />}
-            component={ObservationShowComponent}
-            aside={<ObservationsShowAside />}
-        >
+        <Show actions={<ShowActions />} component={ObservationShowComponent} aside={<ObservationsShowAside />}>
             <Fragment />
         </Show>
     );

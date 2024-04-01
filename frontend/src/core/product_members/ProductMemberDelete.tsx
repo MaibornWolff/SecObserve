@@ -8,43 +8,41 @@ type ProductMemberDeleteProps = {
 
 const ProductMemberDelete = (props: ProductMemberDeleteProps) => {
     const [open, setOpen] = useState(false);
-    const [deleted, setDeleted] = useState(false);
-    const [error_shown, setErrorShown] = useState(false);
-    const [deleteOne, { isLoading, error }] = useDelete(); // eslint-disable-line @typescript-eslint/no-unused-vars
-    // isLoading is not needed but easier to let it there
+    const [deleteOne] = useDelete();
     const refresh = useRefresh();
     const notify = useNotify();
     const handleClick = () => setOpen(true);
     const handleDialogClose = () => setOpen(false);
 
     const handleConfirm = async () => {
-        deleteOne("product_members", { id: props.product_member.id });
-        setDeleted(true);
+        deleteOne(
+            "product_members",
+            { id: props.product_member.id },
+            {
+                onSuccess: () => {
+                    notify("User member deleted", {
+                        type: "success",
+                    });
+                },
+                onError: (error: any) => {
+                    notify("User member could not be deleted: " + error.message, {
+                        type: "warning",
+                    });
+                },
+            }
+        );
         refresh();
         setOpen(false);
     };
-
-    if (error && !error_shown) {
-        setErrorShown(true);
-        setDeleted(false);
-        notify("Product member could not be deleted: " + error, {
-            type: "warning",
-        });
-    } else if (deleted) {
-        setDeleted(false);
-        notify("Product member deleted");
-    }
 
     return (
         <>
             <Button label="Delete" onClick={handleClick} startIcon={<DeleteIcon />} sx={{ color: "#d32f2f" }} />
             <Confirm
                 isOpen={open}
-                title="Delete product member"
+                title="Delete user member"
                 content={
-                    "Are you sure you want to delete the product member " +
-                    props.product_member.user_data.full_name +
-                    "?"
+                    "Are you sure you want to delete the user member " + props.product_member.user_data.full_name + "?"
                 }
                 onConfirm={handleConfirm}
                 onClose={handleDialogClose}

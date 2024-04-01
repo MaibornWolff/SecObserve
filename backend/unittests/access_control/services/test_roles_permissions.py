@@ -15,6 +15,7 @@ class TestRolesPermissions(BaseTestCase):
             Permissions.Product_Group_View,
             Permissions.Product_View,
             Permissions.Product_Member_View,
+            Permissions.Product_Authorization_Group_Member_View,
             Permissions.Branch_View,
             Permissions.Product_Rule_View,
             Permissions.Observation_View,

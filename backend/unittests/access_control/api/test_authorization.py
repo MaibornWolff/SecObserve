@@ -7,7 +7,12 @@ from django.core.management import call_command
 from django.utils import timezone
 from rest_framework.test import APIClient
 
-from application.access_control.models import User
+from application.access_control.models import Authorization_Group, User
+from application.core.models import (
+    Product,
+    Product_Authorization_Group_Member,
+    Product_Member,
+)
 from application.metrics.models import Product_Metrics
 from unittests.base_test_case import BaseTestCase
 

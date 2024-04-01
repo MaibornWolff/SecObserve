@@ -19,12 +19,12 @@ from django.db.models import (
 )
 from django.utils import timezone
 
-from application.access_control.models import User
+from application.access_control.models import Authorization_Group, User
 from application.core.services.observation import (
     get_identity_hash,
     normalize_observation_fields,
 )
-from application.core.types import Severity, Status, VexJustification
+from application.core.types import Assessment_Status, Severity, Status, VexJustification
 from application.import_observations.types import Parser_Source, Parser_Type
 from application.issue_tracker.types import Issue_Tracker
 
@@ -99,8 +99,9 @@ class Product(Model):
     issue_tracker_minimum_severity = CharField(
         max_length=12, choices=Severity.SEVERITY_CHOICES, blank=True
     )
-
     last_observation_change = DateTimeField(default=timezone.now)
+    assessments_need_approval = BooleanField(default=False)
+    new_observations_in_review = BooleanField(default=False)
 
     class Meta:
         indexes = [
@@ -353,6 +354,18 @@ class Product_Member(Model):
         )
 
 
+class Product_Authorization_Group_Member(Model):
+    product = ForeignKey(Product, on_delete=CASCADE)
+    authorization_group = ForeignKey(Authorization_Group, on_delete=CASCADE)
+    role = IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+
+    class Meta:
+        unique_together = (
+            "product",
+            "authorization_group",
+        )
+
+
 class Parser(Model):
     name = CharField(max_length=255, unique=True)
     type = CharField(max_length=16, choices=Parser_Type.TYPE_CHOICES)
@@ -535,6 +548,19 @@ class Observation_Log(Model):
     created = DateTimeField(auto_now_add=True)
     vex_justification = CharField(
         max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True
+    )
+    assessment_status = CharField(
+        max_length=16,
+        choices=Assessment_Status.ASSESSMENT_STATUS_CHOICES,
+        default=Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
+    )
+    approval_remark = TextField(max_length=255, blank=True)
+    approval_date = DateTimeField(null=True)
+    approval_user = ForeignKey(
+        "access_control.User",
+        related_name="observation_logs_approver",
+        on_delete=PROTECT,
+        null=True,
     )
 
     class Meta:

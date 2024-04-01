@@ -13,6 +13,7 @@ import drfProvider from "./commons/ra-data-django-rest-framework";
 import Settings from "./commons/settings/Settings";
 import { getTheme } from "./commons/settings/functions";
 import evidences from "./core/evidences";
+import observation_logs from "./core/observation_logs";
 import observations from "./core/observations";
 import parsers from "./core/parsers";
 import product_groups from "./core/product_groups";
@@ -63,6 +64,11 @@ const App = () => {
                     {...observations} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
                     // nosemgrep because the props are well defined in the import
                     recordRepresentation={(record) => `${trim_string(record.title)}`}
+                />
+                <Resource
+                    name="observation_logs"
+                    {...observation_logs} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                    // nosemgrep because the props are well defined in the import
                 />
                 <Resource
                     name="parsers"

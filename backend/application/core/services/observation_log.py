@@ -8,6 +8,7 @@ def create_observation_log(
     status: str,
     comment: str,
     vex_justification: str,
+    assessment_status: str,
 ) -> Observation_Log:
     observation_log = Observation_Log(
         observation=observation,
@@ -16,6 +17,7 @@ def create_observation_log(
         status=status,
         comment=comment,
         vex_justification=vex_justification,
+        assessment_status=assessment_status,
     )
     observation_log.save()
     observation.last_observation_log = observation_log.created

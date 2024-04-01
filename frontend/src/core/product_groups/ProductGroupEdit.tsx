@@ -1,6 +1,7 @@
 import { Divider, Stack, Typography } from "@mui/material";
 import { RichTextInput } from "ra-input-rich-text";
 import {
+    BooleanInput,
     DeleteButton,
     Edit,
     FormDataConsumer,
@@ -105,9 +106,7 @@ const ProductGroupEdit = () => {
                 </Typography>
                 <TextInputWide autoFocus source="name" validate={validate_required_255} />
                 <RichTextInput source="description" validate={validate_2048} />
-
                 <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
-
                 <Typography variant="h6" sx={{ marginBottom: 1 }}>
                     Housekeeping (for products)
                 </Typography>
@@ -143,9 +142,7 @@ const ProductGroupEdit = () => {
                         )
                     }
                 </FormDataConsumer>
-
                 <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
-
                 <Typography variant="h6" sx={{ marginBottom: 2 }}>
                     Notifications (for products)
                 </Typography>
@@ -169,9 +166,7 @@ const ProductGroupEdit = () => {
                         validate={validate_255}
                     />
                 </Stack>
-
                 <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
-
                 <Typography variant="h6" sx={{ marginBottom: 1 }}>
                     Security Gate (for products)
                 </Typography>
@@ -234,6 +229,20 @@ const ProductGroupEdit = () => {
                         )
                     }
                 </FormDataConsumer>
+                <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+                <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                    Review
+                </Typography>
+                <BooleanInput
+                    source="assessments_need_approval"
+                    label="Assessments need approval"
+                    defaultValue={false}
+                />
+                {/* <BooleanInput
+                    source="new_observations_in_review"
+                    label="New observations have status 'In review'"
+                    defaultValue={false}
+                /> */}{" "}
             </SimpleForm>
         </Edit>
     );

@@ -189,7 +189,6 @@ const ProductCreate = () => {
                 </FormDataConsumer>
 
                 <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
-
                 <Typography variant="h6" sx={{ marginBottom: 2 }}>
                     Notifications
                 </Typography>
@@ -215,7 +214,6 @@ const ProductCreate = () => {
                 </Stack>
 
                 <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
-
                 <Typography variant="h6" sx={{ marginBottom: 1 }}>
                     Security Gate
                 </Typography>
@@ -286,7 +284,6 @@ const ProductCreate = () => {
                 </FormDataConsumer>
 
                 <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
-
                 <Typography variant="h6" sx={{ marginBottom: 2 }}>
                     Issue Tracker
                 </Typography>
@@ -350,6 +347,21 @@ const ProductCreate = () => {
                         )
                     }
                 </FormDataConsumer>
+
+                <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+                <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                    Review
+                </Typography>
+                <BooleanInput
+                    source="assessments_need_approval"
+                    label="Assessments need approval"
+                    defaultValue={false}
+                />
+                {/* <BooleanInput
+                    source="new_observations_in_review"
+                    label="New observations have status 'In review'"
+                    defaultValue={false}
+                /> */}
             </SimpleForm>
         </Create>
     );

@@ -72,7 +72,7 @@ nav:
     - Security gates: usage/security_gates.md
     - Duplicates: usage/duplicates.md
     - Metrics: usage/metrics.md
-    - Users and permissions: usage/users_permissions.md
+    - Users, groups and permissions: usage/users_permissions.md
   - Integrations:
     - Overview: integrations/overview.md
     - GitHub actions and GitLab CI templates: integrations/github_actions_and_templates.md

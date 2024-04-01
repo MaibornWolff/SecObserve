@@ -1,6 +1,5 @@
 import { Stack } from "@mui/material";
-import { Fragment } from "react";
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import {
     AutocompleteInput,
     BooleanField,
@@ -37,6 +36,7 @@ import {
 } from "../types";
 import ObservationBulkAssessment from "./ObservationBulkAssessment";
 import ObservationBulkDeleteButton from "./ObservationBulkDeleteButton";
+import { IDENTIFIER_OBSERVATION_EMBEDDED_LIST, setListIdentifier } from "./functions";
 
 function listFilters(product: Product) {
     return [
@@ -105,11 +105,12 @@ const ListActions = () => (
 );
 
 const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) => {
+    setListIdentifier(IDENTIFIER_OBSERVATION_EMBEDDED_LIST);
+
     const navigate = useNavigate();
     function get_observations_url(branch_id: Identifier): string {
         return `?displayedFilters=%7B%7D&filter=%7B%22current_status%22%3A%22Open%22%2C%22branch%22%3A${branch_id}%7D&order=ASC&sort=current_severity`;
     }
-
     useEffect(() => {
         const current_product_id = localStorage.getItem("observationembeddedlist.product");
         if (current_product_id == null || Number(current_product_id) !== product.id) {

@@ -1,14 +1,14 @@
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import BarChartIcon from "@mui/icons-material/BarChart";
+import ChecklistIcon from "@mui/icons-material/Checklist";
 import UploadIcon from "@mui/icons-material/CloudUpload";
 import ConstructionIcon from "@mui/icons-material/Construction";
 import GradingIcon from "@mui/icons-material/Grading";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import SettingsIcon from "@mui/icons-material/Settings";
 import TokenIcon from "@mui/icons-material/Token";
-import { Stack } from "@mui/material";
-import { Fragment } from "react";
-import { useState } from "react";
+import { Badge, Divider, Stack, Typography } from "@mui/material";
+import { Fragment, useState } from "react";
 import {
     EditButton,
     PrevNextButtons,
@@ -27,6 +27,7 @@ import {
     PERMISSION_BRANCH_CREATE,
     PERMISSION_OBSERVATION_CREATE,
     PERMISSION_PRODUCT_API_TOKEN_CREATE,
+    PERMISSION_PRODUCT_AUTHORIZATION_GROUP_MEMBER_CREATE,
     PERMISSION_PRODUCT_EDIT,
     PERMISSION_PRODUCT_IMPORT_OBSERVATIONS,
     PERMISSION_PRODUCT_MEMBER_CREATE,
@@ -51,11 +52,14 @@ import BranchEmbeddedList from "../branches/BranchEmbeddedList";
 import ShowDefaultBranchObservationsButton from "../branches/ShowDefaultBranchObservationsButton";
 import ObservationCreate from "../observations/ObservationCreate";
 import ObservationsEmbeddedList from "../observations/ObservationEmbeddedList";
+import ProductAuthorizationGroupMemberCreate from "../product_authorization_group_members/ProductAuthorizationGroupMemberCreate";
+import ProductAuthorizationGroupMemberEmbeddedList from "../product_authorization_group_members/ProductAuthorizationGroupMemberEmbeddedList";
 import ProductMemberCreate from "../product_members/ProductMemberCreate";
 import ProductMemberEmbeddedList from "../product_members/ProductMemberEmbeddedList";
 import ServiceEmbeddedList from "../services/ServiceEmbeddedList";
 import ExportMenu from "./ExportMenu";
 import ProductHeader from "./ProductHeader";
+import ProductReviews from "./ProductReviews";
 import ProductShowProduct from "./ProductShowProduct";
 
 type ShowActionsProps = {
@@ -143,6 +147,25 @@ const ProductShow = () => {
                                     <MetricsStatusCurrent product_id={product.id} />
                                 </Stack>
                             </Tab>
+                            {product.observation_reviews + product.observation_log_approvals > 0 && (
+                                <Tab
+                                    label="Reviews"
+                                    path="reviews"
+                                    icon={
+                                        <Badge
+                                            badgeContent={
+                                                product.observation_reviews + product.observation_log_approvals
+                                            }
+                                            color="secondary"
+                                        >
+                                            <ChecklistIcon />
+                                        </Badge>
+                                    }
+                                    onClick={hideSettingsTabs}
+                                >
+                                    <ProductReviews product={product} />
+                                </Tab>
+                            )}
                             <Tab
                                 label="Vulnerability Checks"
                                 path="vulnerability_checks"
@@ -162,14 +185,16 @@ const ProductShow = () => {
                                 )}
                                 <BranchEmbeddedList product={product} />
                             </Tab>
-                            <Tab
-                                label="Services"
-                                path="services"
-                                icon={<ConstructionIcon />}
-                                onClick={hideSettingsTabs}
-                            >
-                                <ServiceEmbeddedList product={product} />
-                            </Tab>
+                            {product.has_services && (
+                                <Tab
+                                    label="Services"
+                                    path="services"
+                                    icon={<ConstructionIcon />}
+                                    onClick={hideSettingsTabs}
+                                >
+                                    <ServiceEmbeddedList product={product} />
+                                </Tab>
+                            )}
                             <Tab
                                 label={settingsLabel}
                                 path="settings"
@@ -207,10 +232,19 @@ const ProductShow = () => {
                             )}
                             {settingsTabsShow && (
                                 <Tab label="Members" path="members" icon={<PeopleAltIcon />}>
+                                    <Typography variant="h6">User members</Typography>
                                     {product && product.permissions.includes(PERMISSION_PRODUCT_MEMBER_CREATE) && (
                                         <ProductMemberCreate id={product.id} />
                                     )}
                                     <ProductMemberEmbeddedList product={product} />
+
+                                    <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+                                    <Typography variant="h6">Authorization group members</Typography>
+                                    {product &&
+                                        product.permissions.includes(
+                                            PERMISSION_PRODUCT_AUTHORIZATION_GROUP_MEMBER_CREATE
+                                        ) && <ProductAuthorizationGroupMemberCreate id={product.id} />}
+                                    <ProductAuthorizationGroupMemberEmbeddedList product={product} />
                                 </Tab>
                             )}
                             {settingsTabsShow && (

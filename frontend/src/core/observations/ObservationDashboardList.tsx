@@ -7,12 +7,15 @@ import { humanReadableDate } from "../../commons/functions";
 import { getSettingListSize } from "../../commons/settings/functions";
 import { OBSERVATION_STATUS_OPEN } from "../types";
 import { Observation } from "../types";
+import { IDENTIFIER_OBSERVATION_DASHBOARD_LIST, setListIdentifier } from "./functions";
 
 const ShowObservations = (id: any) => {
     return "../../../../observations/" + id + "/show";
 };
 
 const ObservationDashboardList = () => {
+    setListIdentifier(IDENTIFIER_OBSERVATION_DASHBOARD_LIST);
+
     const listContext = useListController({
         filter: {
             age: "Past 7 days",
@@ -33,8 +36,6 @@ const ObservationDashboardList = () => {
     if (listContext.data === undefined) {
         listContext.data = [];
     }
-
-    localStorage.setItem("observationdashboardlist", "true");
 
     return (
         <Paper sx={{ marginTop: 2, marginBottom: 2, padding: 2 }}>

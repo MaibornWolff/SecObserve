@@ -34,7 +34,7 @@ const ProductMemberEdit = () => {
             {
                 onSuccess: () => {
                     refresh();
-                    notify("Product member updated", {
+                    notify("User member updated", {
                         type: "success",
                     });
                 },
@@ -82,7 +82,7 @@ const ProductMemberEdit = () => {
                 Edit
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Edit product member</DialogTitle>
+                <DialogTitle>Edit user member</DialogTitle>
                 <DialogContent>
                     <SimpleForm onSubmit={product_member_update} toolbar={<CustomToolbar />}>
                         <ReferenceInput source="user" reference="users" sort={{ field: "full_name", order: "ASC" }}>

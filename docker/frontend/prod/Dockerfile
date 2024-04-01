@@ -1,5 +1,5 @@
 # build environment
-FROM node:20.11.1-alpine3.19@sha256:bf77dc26e48ea95fca9d1aceb5acfa69d2e546b765ec2abfb502975f1a2d4def as build
+FROM node:20.12.0-alpine3.19@sha256:ef3f47741e161900ddd07addcaca7e76534a9205e4cd73b2ed091ba339004a75 as build
 
 ARG VERSION=unkown
 
@@ -18,7 +18,7 @@ RUN sed -i 's/version_unkown/'"${VERSION}"'/g' ./src/commons/about/About.tsx
 RUN npm run build
 
 # production environment
-FROM nginxinc/nginx-unprivileged:stable-alpine3.18@sha256:aeebf00dc1ac90d7b15cb06baf35daf4b3b9a4653cbf2c971672a77b99812028
+FROM nginxinc/nginx-unprivileged:stable-alpine3.18@sha256:2c203600ca6257c503caa61c1e08d05a67f75e7d0c85b1be9c10d8c1d0780d91
 
 USER root
 
@@ -31,6 +31,7 @@ RUN apk del curl && \
 COPY --from=build /app/build /usr/share/nginx/html
 COPY ./frontend/.env.no_oidc /usr/share/nginx/html/.env
 COPY ./frontend/nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./frontend/robots.txt /usr/share/nginx/html/robots.txt
 
 ARG user=nginx
 ARG group=nginx

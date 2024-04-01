@@ -224,6 +224,22 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                     )}
                 </Stack>
             )}
+
+            <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+            <Typography variant="h6">Review</Typography>
+            <Stack spacing={1}>
+                <Labeled label="Assessments need approval">
+                    <BooleanField source="assessments_need_approval" />
+                </Labeled>
+                {product.product_group_assessments_need_approval && (
+                    <Labeled label="Assessments need approval (from product group)">
+                        <BooleanField source="product_group_assessments_need_approval" />
+                    </Labeled>
+                )}
+                {/* <Labeled label="New observations have status 'In review'">
+                    <BooleanField source="new_observations_in_review" />
+                </Labeled> */}
+            </Stack>
         </Fragment>
     );
 };

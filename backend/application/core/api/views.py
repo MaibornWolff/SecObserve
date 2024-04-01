@@ -22,8 +22,10 @@ from application.core.api.filters import (
     BranchFilter,
     EvidenceFilter,
     ObservationFilter,
+    ObservationLogFilter,
     ParserFilter,
     PotentialDuplicateFilter,
+    ProductAuthorizationGroupMemberFilter,
     ProductFilter,
     ProductGroupFilter,
     ProductMemberFilter,
@@ -32,12 +34,13 @@ from application.core.api.filters import (
 from application.core.api.permissions import (
     UserHasBranchPermission,
     UserHasObservationPermission,
+    UserHasProductAuthorizationGroupMemberPermission,
+    UserHasProductGroupPermission,
     UserHasProductMemberPermission,
     UserHasProductPermission,
     UserHasServicePermission,
 )
-from application.core.api.serializers import (
-    BranchSerializer,
+from application.core.api.serializers_observation import (
     EvidenceSerializer,
     ObservationAssessmentSerializer,
     ObservationBulkAssessmentSerializer,
@@ -45,11 +48,18 @@ from application.core.api.serializers import (
     ObservationBulkMarkDuplicatesSerializer,
     ObservationCreateSerializer,
     ObservationListSerializer,
+    ObservationLogApprovalSerializer,
+    ObservationLogListSerializer,
+    ObservationLogSerializer,
     ObservationRemoveAssessmentSerializer,
     ObservationSerializer,
     ObservationUpdateSerializer,
     ParserSerializer,
     PotentialDuplicateSerializer,
+)
+from application.core.api.serializers_product import (
+    BranchSerializer,
+    ProductAuthorizationGroupMemberSerializer,
     ProductGroupSerializer,
     ProductMemberSerializer,
     ProductSerializer,
@@ -59,23 +69,35 @@ from application.core.models import (
     Branch,
     Evidence,
     Observation,
+    Observation_Log,
     Parser,
     Potential_Duplicate,
     Product,
+    Product_Authorization_Group_Member,
     Product_Member,
     Service,
 )
 from application.core.queries.branch import get_branches
 from application.core.queries.observation import (
+    get_current_observation_log,
     get_evidences,
     get_observation_by_id,
+    get_observation_log_by_id,
+    get_observation_logs,
     get_observations,
     get_potential_duplicates,
 )
 from application.core.queries.product import get_product_by_id, get_products
-from application.core.queries.product_member import get_product_members
+from application.core.queries.product_member import (
+    get_product_authorization_group_members,
+    get_product_members,
+)
 from application.core.queries.service import get_services
-from application.core.services.assessment import remove_assessment, save_assessment
+from application.core.services.assessment import (
+    assessment_approval,
+    remove_assessment,
+    save_assessment,
+)
 from application.core.services.export_observations import (
     export_observations_csv,
     export_observations_excel,
@@ -89,7 +111,7 @@ from application.core.services.potential_duplicates import (
     set_potential_duplicate_both_ways,
 )
 from application.core.services.security_gate import check_security_gate
-from application.core.types import Status
+from application.core.types import Assessment_Status, Status
 from application.issue_tracker.services.issue_tracker import (
     push_deleted_observation_to_issue_tracker,
     push_observations_to_issue_tracker,
@@ -100,7 +122,7 @@ from application.rules.services.rule_engine import Rule_Engine
 class ProductGroupViewSet(ModelViewSet):
     serializer_class = ProductGroupSerializer
     filterset_class = ProductGroupFilter
-    permission_classes = (IsAuthenticated, UserHasProductPermission)
+    permission_classes = (IsAuthenticated, UserHasProductGroupPermission)
     queryset = Product.objects.none()
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["name"]
@@ -297,6 +319,20 @@ class ProductMemberViewSet(ModelViewSet):
         return get_product_members().select_related("user")
 
 
+class ProductAuthorizationGroupMemberViewSet(ModelViewSet):
+    serializer_class = ProductAuthorizationGroupMemberSerializer
+    filterset_class = ProductAuthorizationGroupMemberFilter
+    permission_classes = (
+        IsAuthenticated,
+        UserHasProductAuthorizationGroupMemberPermission,
+    )
+    queryset = Product_Authorization_Group_Member.objects.none()
+    filter_backends = [DjangoFilterBackend]
+
+    def get_queryset(self):
+        return get_product_authorization_group_members()
+
+
 class BranchViewSet(ModelViewSet):
     serializer_class = BranchSerializer
     filterset_class = BranchFilter
@@ -393,6 +429,16 @@ class ObservationViewSet(ModelViewSet):
 
         user_has_permission_or_403(observation, Permissions.Observation_Assessment)
 
+        current_observation_log = get_current_observation_log(observation)
+        if (
+            current_observation_log
+            and current_observation_log.assessment_status
+            == Assessment_Status.ASSESSMENT_STATUS_NEEDS_APPROVAL
+        ):
+            raise ValidationError(
+                "Cannot create new assessment while last assessment still needs approval"
+            )
+
         new_severity = request_serializer.validated_data.get("severity")
         new_status = request_serializer.validated_data.get("status")
         comment = request_serializer.validated_data.get("comment")
@@ -424,10 +470,63 @@ class ObservationViewSet(ModelViewSet):
 
         user_has_permission_or_403(observation, Permissions.Observation_Assessment)
 
+        current_observation_log = get_current_observation_log(observation)
+        if (
+            current_observation_log
+            and current_observation_log.assessment_status
+            == Assessment_Status.ASSESSMENT_STATUS_NEEDS_APPROVAL
+        ):
+            raise ValidationError(
+                "Cannot remove assessment while last assessment still needs approval"
+            )
+
         comment = request_serializer.validated_data.get("comment")
 
         remove_assessment(observation, comment)
         set_potential_duplicate_both_ways(observation)
+
+        return Response()
+
+
+class ObservationLogViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
+    serializer_class = ObservationLogSerializer
+    filterset_class = ObservationLogFilter
+    queryset = Observation_Log.objects.all()
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return ObservationLogListSerializer
+
+        return super().get_serializer_class()
+
+    def get_queryset(self):
+        return get_observation_logs()
+
+    @extend_schema(
+        methods=["PATCH"],
+        request=ObservationLogApprovalSerializer,
+        responses={200: None},
+    )
+    @action(detail=True, methods=["patch"])
+    def approval(self, request, pk=None):
+        request_serializer = ObservationLogApprovalSerializer(data=request.data)
+        if not request_serializer.is_valid():
+            raise ValidationError(request_serializer.errors)
+
+        observation_log = get_observation_log_by_id(pk)
+        if not observation_log:
+            raise NotFound(f"Observation Log {pk} not found")
+
+        user_has_permission_or_403(
+            observation_log, Permissions.Observation_Log_Approval
+        )
+
+        assessment_status = request_serializer.validated_data.get("assessment_status")
+        approval_remark = request_serializer.validated_data.get("approval_remark")
+        assessment_approval(observation_log, assessment_status, approval_remark)
+
+        set_potential_duplicate_both_ways(observation_log.observation)
 
         return Response()
 

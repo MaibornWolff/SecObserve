@@ -10,16 +10,20 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ViewSet
 
-from application.access_control.api.filters import UserFilter
+from application.access_control.api.filters import AuthorizationGroupFilter, UserFilter
 from application.access_control.api.serializers import (
     AuthenticationRequestSerializer,
     AuthenticationResponseSerializer,
+    AuthorizationGroupSerializer,
     CreateApiTokenResponseSerializer,
     ProductApiTokenSerializer,
     UserSerializer,
     UserSettingsSerializer,
 )
-from application.access_control.models import User
+from application.access_control.models import Authorization_Group, User
+from application.access_control.queries.authorization_group import (
+    get_authorization_groups,
+)
 from application.access_control.queries.user import (
     get_users,
     get_users_without_api_tokens,
@@ -87,6 +91,15 @@ class UserViewSet(RetrieveModelMixin, ListModelMixin, GenericViewSet):
 
         response_serializer = UserSerializer(request.user)
         return Response(response_serializer.data, status=status.HTTP_200_OK)
+
+
+class AuthorizationGroupViewSet(RetrieveModelMixin, ListModelMixin, GenericViewSet):
+    serializer_class = AuthorizationGroupSerializer
+    filterset_class = AuthorizationGroupFilter
+    queryset = Authorization_Group.objects.none()
+
+    def get_queryset(self):
+        return get_authorization_groups()
 
 
 class CreateUserAPITokenView(APIView):

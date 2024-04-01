@@ -64,7 +64,7 @@ const ProductMemberCreate = ({ id }: ProductMemberCreateProps) => {
             {
                 onSuccess: () => {
                     refresh();
-                    notify("Product member added", { type: "success" });
+                    notify("User member added", { type: "success" });
                 },
                 onError: (error: any) => {
                     notify(error.message, { type: "warning" });
@@ -79,20 +79,20 @@ const ProductMemberCreate = ({ id }: ProductMemberCreateProps) => {
             <Button
                 variant="contained"
                 onClick={handleOpen}
-                sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem" }}
+                sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem", marginBottom: 1 }}
                 startIcon={<AddIcon />}
             >
-                Add product member
+                Add user member
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Add product member</DialogTitle>
+                <DialogTitle>Add user member</DialogTitle>
                 <DialogContent>
                     <CreateBase resource="product_members">
                         <SimpleForm onSubmit={create_product_member} toolbar={<CustomToolbar />}>
                             <ReferenceInput
                                 source="user"
                                 reference="users"
-                                label="User Category"
+                                label="User"
                                 sort={{ field: "full_name", order: "ASC" }}
                             >
                                 <AutocompleteInputWide optionText="full_name" validate={validate_required} />

@@ -370,6 +370,21 @@ const ProductEdit = () => {
                         )
                     }
                 </FormDataConsumer>
+
+                <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+                <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                    Review
+                </Typography>
+                <BooleanInput
+                    source="assessments_need_approval"
+                    label="Assessments need approval"
+                    defaultValue={false}
+                />
+                {/* <BooleanInput
+                    source="new_observations_in_review"
+                    label="New observations have status 'In review'"
+                    defaultValue={false}
+                /> */}
             </SimpleForm>
         </Edit>
     );
