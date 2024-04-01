@@ -23,6 +23,7 @@ import CreateProductApiToken from "../../access_control/product_api_token/Produc
 import ProductApiTokenEmbeddedList from "../../access_control/product_api_token/ProductApiTokenEmbeddedList";
 import {
     PERMISSION_PRODUCT_API_TOKEN_CREATE,
+    PERMISSION_PRODUCT_AUTHORIZATION_GROUP_MEMBER_CREATE,
     PERMISSION_PRODUCT_GROUP_EDIT,
     PERMISSION_PRODUCT_MEMBER_CREATE,
     PERMISSION_PRODUCT_RULE_APPLY,
@@ -37,6 +38,8 @@ import general_rules from "../../rules/general_rules";
 import ProductRuleApply from "../../rules/product_rules/ProductRuleApply";
 import ProductRuleCreate from "../../rules/product_rules/ProductRuleCreate";
 import ProductRuleEmbeddedList from "../../rules/product_rules/ProductRuleEmbeddedList";
+import ProductAuthorizationGroupMemberCreate from "../product_authorization_group_members/ProductAuthorizationGroupMemberCreate";
+import ProductAuthorizationGroupMemberEmbeddedList from "../product_authorization_group_members/ProductAuthorizationGroupMemberEmbeddedList";
 import ProductMemberCreate from "../product_members/ProductMemberCreate";
 import ProductMemberEmbeddedList from "../product_members/ProductMemberEmbeddedList";
 import product from "../products";
@@ -216,11 +219,20 @@ const ProductGroupShow = () => {
                                 <ProductRuleEmbeddedList product={product_group} />
                             </Tab>
                             <Tab label="Members" path="members" icon={<PeopleAltIcon />}>
+                                <Typography variant="h6">User members</Typography>
                                 {product_group &&
                                     product_group.permissions.includes(PERMISSION_PRODUCT_MEMBER_CREATE) && (
                                         <ProductMemberCreate id={product_group.id} />
                                     )}
                                 <ProductMemberEmbeddedList product={product_group} />
+
+                                <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+                                <Typography variant="h6">Authorization group members</Typography>
+                                {product_group &&
+                                    product_group.permissions.includes(
+                                        PERMISSION_PRODUCT_AUTHORIZATION_GROUP_MEMBER_CREATE
+                                    ) && <ProductAuthorizationGroupMemberCreate id={product_group.id} />}
+                                <ProductAuthorizationGroupMemberEmbeddedList product={product_group} />
                             </Tab>
                             <Tab label="API Token" path="api_token" icon={<TokenIcon />}>
                                 {product_group &&

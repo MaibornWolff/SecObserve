@@ -6,7 +6,7 @@ SecObserve imports the EPSS data and updates all observations with a CVE value w
 
 ## Configuration
 
-Per default the task to import the EPSS data and update the observations is scheduled to run every night at 03:00 UTC time. This default can be changed by administrators via the [admin user interface](../getting_started/configuration.md#admin-user-interface). The expressions for `BACKGROUND_EPSS_IMPORT_CRONTAB_MINUTES` and `BACKGROUND_EPSS_IMPORT_CRONTAB_HOURS` have to be valid values according to [https://huey.readthedocs.io/en/latest/api.html#crontab](https://huey.readthedocs.io/en/latest/api.html#crontab):
+Per default the task to import the EPSS data and update the observations is scheduled to run every night at 03:00 UTC time. This default can be changed by administrators via the [Django Admin user interface](../getting_started/configuration.md#admin-user-interface). The expressions for `BACKGROUND_EPSS_IMPORT_CRONTAB_MINUTES` and `BACKGROUND_EPSS_IMPORT_CRONTAB_HOURS` have to be valid values according to [https://huey.readthedocs.io/en/latest/api.html#crontab](https://huey.readthedocs.io/en/latest/api.html#crontab):
 
 * `*` = every distinct value (every minute, every hour)
 * `*/n` = run every `n` times, i.e. hours=’*/4’ == 0, 4, 8, 12, 16, 20

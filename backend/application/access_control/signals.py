@@ -5,9 +5,10 @@ from django.contrib.auth.signals import (
     user_logged_out,
     user_login_failed,
 )
+from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
-from application.access_control.models import User
+from application.access_control.models import Authorization_Group, User
 from application.commons.services.log_message import format_log_message
 
 logger = logging.getLogger("secobserve.access_control")
@@ -37,3 +38,25 @@ def signal_user_login_failed(  # pylint: disable=unused-argument
     # sender is needed according to Django documentation
 
     logger.info(format_log_message(message="User login failed: ", data=credentials))
+
+
+@receiver(post_save, sender=Authorization_Group)
+def branch_post_save(  # pylint: disable=unused-argument
+    sender, instance: Authorization_Group, created: bool, **kwargs
+) -> None:
+    # sender is needed according to Django documentation
+    _invalidate_oidc_groups_hashes()
+
+
+@receiver(post_delete, sender=Authorization_Group)
+def branch_post_delete(  # pylint: disable=unused-argument
+    sender, instance: Authorization_Group, **kwargs
+) -> None:
+    # sender is needed according to Django documentation
+    _invalidate_oidc_groups_hashes()
+
+
+def _invalidate_oidc_groups_hashes():
+    for user in User.objects.exclude(oidc_groups_hash=""):
+        user.oidc_groups_hash = ""
+        user.save()

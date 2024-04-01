@@ -7,7 +7,7 @@ import GradingIcon from "@mui/icons-material/Grading";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import SettingsIcon from "@mui/icons-material/Settings";
 import TokenIcon from "@mui/icons-material/Token";
-import { Badge, Stack } from "@mui/material";
+import { Badge, Divider, Stack, Typography } from "@mui/material";
 import { Fragment, useState } from "react";
 import {
     EditButton,
@@ -27,6 +27,7 @@ import {
     PERMISSION_BRANCH_CREATE,
     PERMISSION_OBSERVATION_CREATE,
     PERMISSION_PRODUCT_API_TOKEN_CREATE,
+    PERMISSION_PRODUCT_AUTHORIZATION_GROUP_MEMBER_CREATE,
     PERMISSION_PRODUCT_EDIT,
     PERMISSION_PRODUCT_IMPORT_OBSERVATIONS,
     PERMISSION_PRODUCT_MEMBER_CREATE,
@@ -51,6 +52,8 @@ import BranchEmbeddedList from "../branches/BranchEmbeddedList";
 import ShowDefaultBranchObservationsButton from "../branches/ShowDefaultBranchObservationsButton";
 import ObservationCreate from "../observations/ObservationCreate";
 import ObservationsEmbeddedList from "../observations/ObservationEmbeddedList";
+import ProductAuthorizationGroupMemberCreate from "../product_authorization_group_members/ProductAuthorizationGroupMemberCreate";
+import ProductAuthorizationGroupMemberEmbeddedList from "../product_authorization_group_members/ProductAuthorizationGroupMemberEmbeddedList";
 import ProductMemberCreate from "../product_members/ProductMemberCreate";
 import ProductMemberEmbeddedList from "../product_members/ProductMemberEmbeddedList";
 import ServiceEmbeddedList from "../services/ServiceEmbeddedList";
@@ -229,10 +232,19 @@ const ProductShow = () => {
                             )}
                             {settingsTabsShow && (
                                 <Tab label="Members" path="members" icon={<PeopleAltIcon />}>
+                                    <Typography variant="h6">User members</Typography>
                                     {product && product.permissions.includes(PERMISSION_PRODUCT_MEMBER_CREATE) && (
                                         <ProductMemberCreate id={product.id} />
                                     )}
                                     <ProductMemberEmbeddedList product={product} />
+
+                                    <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+                                    <Typography variant="h6">Authorization group members</Typography>
+                                    {product &&
+                                        product.permissions.includes(
+                                            PERMISSION_PRODUCT_AUTHORIZATION_GROUP_MEMBER_CREATE
+                                        ) && <ProductAuthorizationGroupMemberCreate id={product.id} />}
+                                    <ProductAuthorizationGroupMemberEmbeddedList product={product} />
                                 </Tab>
                             )}
                             {settingsTabsShow && (

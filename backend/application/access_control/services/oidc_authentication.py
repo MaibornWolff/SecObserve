@@ -1,3 +1,4 @@
+import hashlib
 import os
 from typing import Optional
 
@@ -7,7 +8,7 @@ from django.db import IntegrityError, transaction
 from rest_framework.authentication import BaseAuthentication, get_authorization_header
 from rest_framework.exceptions import AuthenticationFailed
 
-from application.access_control.models import User
+from application.access_control.models import Authorization_Group, User
 from application.access_control.queries.user import get_user_by_username
 
 OIDC_PREFIX = "Bearer"
@@ -96,8 +97,10 @@ class OIDCAuthentication(BaseAuthentication):
             user.first_name = payload[os.environ["OIDC_FIRST_NAME"]]
         if os.environ.get("OIDC_LAST_NAME"):
             user.last_name = payload[os.environ["OIDC_LAST_NAME"]]
+        user.oidc_groups_hash = self._get_groups_hash(payload)
         try:
             with transaction.atomic():
+                self._synchronize_groups(user, payload)
                 user.save()
             return user
         except IntegrityError as e:
@@ -133,6 +136,40 @@ class OIDCAuthentication(BaseAuthentication):
         ):
             user.last_name = payload[os.environ["OIDC_LAST_NAME"]]
             user_changed = True
+        groups_hash = self._get_groups_hash(payload)
+        if user.oidc_groups_hash != groups_hash:
+            user.oidc_groups_hash = groups_hash
+            self._synchronize_groups(user, payload)
+            user_changed = True
+
         if user_changed:
             user.save()
         return user
+
+    def _get_groups_from_token(self, payload: dict) -> list:
+        if not os.environ.get("OIDC_GROUPS"):
+            return []
+
+        groups = payload.get(os.environ["OIDC_GROUPS"])
+        if not groups or not isinstance(groups, list):
+            return []
+
+        return sorted(groups)
+
+    def _get_groups_hash(self, payload: dict) -> str:
+        groups = self._get_groups_from_token(payload)
+        if groups:
+            return hashlib.sha256("".join(groups).encode("UTF-8")).hexdigest()
+        return ""
+
+    def _synchronize_groups(self, user: User, payload: dict):
+        groups = Authorization_Group.objects.exclude(oidc_group="")
+        for group in groups:
+            group.users.remove(user)
+
+        oidc_groups = self._get_groups_from_token(payload)
+        authorization_groups = Authorization_Group.objects.filter(
+            oidc_group__in=oidc_groups
+        )
+        for authorization_group in authorization_groups:
+            user.authorization_groups.add(authorization_group)

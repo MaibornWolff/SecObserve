@@ -8,7 +8,7 @@ from rest_framework.serializers import (
     SerializerMethodField,
 )
 
-from application.access_control.models import User
+from application.access_control.models import Authorization_Group, User
 from application.access_control.services.authorization import get_user_permissions
 from application.access_control.services.roles_permissions import Permissions, Roles
 
@@ -36,6 +36,12 @@ class UserSerializer(ModelSerializer):
 
     def get_permissions(self, obj) -> list[Permissions]:
         return get_user_permissions(obj)
+
+
+class AuthorizationGroupSerializer(ModelSerializer):
+    class Meta:
+        model = Authorization_Group
+        fields = "__all__"
 
 
 class UserSettingsSerializer(ModelSerializer):

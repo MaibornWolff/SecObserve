@@ -1,4 +1,4 @@
-# Users and permissions
+# Users, groups and permissions
 
 ## Users
 
@@ -33,11 +33,23 @@ There are some general permissions based on the user's type:
 |                       |          |          |           |
 | Access Admin UI       | -        | -        | X         |
 
+
+## Authorization groups
+
+Authorization groups can be used to manage permissions for multiple users at once. Users can be added to authorization groups and the groups can be assigned to products. This way, permissions can be managed centrally for multiple users.
+
+Currently authorization groups can only be managed by superusers using the [Django Admin user interface](../getting_started/configuration.md#admin-user-interface):
+
+![Authorization Groups](../assets/images/screenshot_authorization_groups.png)
+
+Authorization groups can be mapped to OIDC group claims. If the OICD token includes a group claim (see [OpenID Connect authentication](../integrations/oidc_authentication.md)), the user will be automatically added to the authorization group, where an entry of the group claim matches the attribute `oidc_group`. If the users will be removed from the group in the user directory, the user will be removed from the authorization group automatically as well.
+
+
 ## Roles and permissions
 
 ![Product Members](../assets/images/screenshot_product_members.png)
 
-While superusers have permission to view and edit all data, internal and external users must be a product member with a specific role to access the product and its data. Product members of a product group have access to all products of that group with their respective role.
+While superusers have permission to view and edit all data, internal and external users must be either a user member or member of an authorization group with a specific role to access the product and its data. User members and authorization group members of a product group have access to all products of that group with their respective role.
 
 |                          | Reader | Writer | Maintainer | Owner | Upload |
 |--------------------------|:------:|:------:|:----------:|:-----:|:------:|
@@ -67,15 +79,20 @@ While superusers have permission to view and edit all data, internal and externa
 | Edit API Configuration   | -      | -      | X          | X     | -      |
 | Delete API Configuration | -      | -      | X          | X     | -      |
 |                          |        |        |            |       |        |
+| View User Member         | X      | X      | X          | X     | -      |
+| Create User Member       | -      | -      | X ^2)^     | X     | -      |
+| Edit User Member         | -      | -      | X ^2)^     | X     | -      |
+| Delete User Member       | -      | -      | X ^2)^     | X     | -      |
+|                          |        |        |            |       |        |
+| View Authorization Group Member   | X      | X      | X          | X     | -      |
+| Create Authorization Group Member | -      | -      | X ^2)^     | X     | -      |
+| Edit Authorization Group Member   | -      | -      | X ^2)^     | X     | -      |
+| Delete Authorization Group Member | -      | -      | X ^2)^     | X     | -      |
+|                          |        |        |            |       |        |
 | View VEX                 | X      | X      | X          | X     | -      |
 | Create VEX ^3)^          | -      | -      | X          | X     | -      |
 | Edit VEX ^3)^            | -      | -      | X          | X     | -      |
 | Delete VEX^3)^           | -      | -      | X          | X     | -      |
-|                          |        |        |            |       |        |
-| View Product Member      | X      | X      | X          | X     | -      |
-| Create Product Member    | -      | -      | X ^2)^     | X     | -      |
-| Edit Product Member      | -      | -      | X ^2)^     | X     | -      |
-| Delete Product Member    | -      | -      | X ^2)^     | X     | -      |
 
 **^1)^** Only manually created observations can be edited
 

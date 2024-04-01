@@ -11,7 +11,7 @@ from rest_framework.serializers import (
 )
 
 from application.access_control.services.roles_permissions import Permissions
-from application.core.api.serializers import NestedProductSerializer
+from application.core.api.serializers_product import NestedProductSerializer
 from application.import_observations.models import (
     Api_Configuration,
     Vulnerability_Check,

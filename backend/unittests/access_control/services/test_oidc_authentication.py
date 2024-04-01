@@ -1,9 +1,8 @@
-from datetime import timedelta
 from unittest.mock import patch
 
 import jwt
+from django.core.management import call_command
 from django.http import HttpRequest
-from django.utils import timezone
 from rest_framework.exceptions import AuthenticationFailed
 
 from application.access_control.models import User
@@ -273,34 +272,84 @@ class TestOIDCAuthentication(BaseTestCase):
         )
 
     @patch("application.access_control.services.oidc_authentication.User.save")
-    def test_create_user(self, user_save_mock):
+    @patch(
+        "application.access_control.services.oidc_authentication.OIDCAuthentication._synchronize_groups"
+    )
+    def test_create_user(self, synchronize_groups_mock, user_save_mock):
         oidc_authentication = OIDCAuthentication()
-        user = oidc_authentication._create_user(
-            "test_username",
-            {
-                "preferred_username": "test_username",
-                "given_name": "test_first_name",
-                "family_name": "test_last_name",
-                "name": "test_full_name",
-                "email": "test_email",
-            },
-        )
+        payload = {
+            "preferred_username": "test_username",
+            "given_name": "test_first_name",
+            "family_name": "test_last_name",
+            "name": "test_full_name",
+            "email": "test_email",
+            "groups": ["test_group_1", "test_group_2"],
+        }
+
+        user = oidc_authentication._create_user("test_username", payload)
 
         self.assertEqual("test_username", user.username)
         self.assertEqual("test_first_name", user.first_name)
         self.assertEqual("test_last_name", user.last_name)
         self.assertEqual("test_full_name", user.full_name)
         self.assertEqual("test_email", user.email)
+        self.assertEqual(
+            "27cbb2858ce86012e498c8102d24d066837d67beec8c180f5e85e652df700c9f",
+            user.oidc_groups_hash,
+        )
         user_save_mock.assert_called_once()
+        synchronize_groups_mock.assert_called_with(user, payload)
 
     @patch("application.access_control.services.oidc_authentication.User.save")
-    def test_check_user_change_no_change(self, user_save_mock):
+    @patch(
+        "application.access_control.services.oidc_authentication.OIDCAuthentication._synchronize_groups"
+    )
+    def test_create_user_no_claim_mappings(
+        self, synchronize_groups_mock, user_save_mock
+    ):
+        oidc_authentication = OIDCAuthentication()
+        payload = {
+            "preferred_username": "test_username",
+            "given_name": "test_first_name",
+            "family_name": "test_last_name",
+            "name": "test_full_name",
+            "email": "test_email",
+            "groups": ["test_group_1", "test_group_2"],
+        }
+
+        with patch.dict(
+            "os.environ",
+            {
+                "OIDC_FIRST_NAME": "",
+                "OIDC_LAST_NAME": "",
+                "OIDC_FULL_NAME": "",
+                "OIDC_EMAIL": "",
+                "OIDC_GROUPS": "",
+            },
+        ):
+            user = oidc_authentication._create_user("test_username", payload)
+
+            self.assertEqual("test_username", user.username)
+            self.assertEqual("", user.first_name)
+            self.assertEqual("", user.last_name)
+            self.assertEqual("", user.full_name)
+            self.assertEqual("", user.email)
+            self.assertEqual("", user.oidc_groups_hash)
+            user_save_mock.assert_called_once()
+            synchronize_groups_mock.assert_called_with(user, payload)
+
+    @patch("application.access_control.services.oidc_authentication.User.save")
+    @patch(
+        "application.access_control.services.oidc_authentication.OIDCAuthentication._synchronize_groups"
+    )
+    def test_check_user_change_no_change(self, synchronize_groups_mock, user_save_mock):
         old_user = User(
             username="test_username",
             first_name="test_first_name",
             last_name="test_last_name",
             full_name="test_full_name",
             email="test_email",
+            oidc_groups_hash="",
         )
         oidc_authentication = OIDCAuthentication()
         new_user = oidc_authentication._check_user_change(
@@ -311,6 +360,7 @@ class TestOIDCAuthentication(BaseTestCase):
                 "family_name": "test_last_name",
                 "name": "test_full_name",
                 "email": "test_email",
+                "groups": [],
             },
         )
 
@@ -320,34 +370,116 @@ class TestOIDCAuthentication(BaseTestCase):
         self.assertEqual("test_full_name", new_user.full_name)
         self.assertEqual("test_email", new_user.email)
         user_save_mock.assert_not_called()
+        synchronize_groups_mock.assert_not_called()
 
     @patch("application.access_control.services.oidc_authentication.User.save")
-    def test_check_user_change_with_changes(self, user_save_mock):
+    @patch(
+        "application.access_control.services.oidc_authentication.OIDCAuthentication._synchronize_groups"
+    )
+    def test_check_user_change_no_claim_mappings(
+        self, synchronize_groups_mock, user_save_mock
+    ):
         old_user = User(
             username="test_username",
             first_name="test_first_name",
             last_name="test_last_name",
             full_name="test_full_name",
             email="test_email",
+            oidc_groups_hash="",
         )
         oidc_authentication = OIDCAuthentication()
-        new_user = oidc_authentication._check_user_change(
-            old_user,
+
+        with patch.dict(
+            "os.environ",
             {
-                "preferred_username": "test_username",
-                "given_name": "test_first_name_new",
-                "family_name": "test_last_name_new",
-                "name": "test_full_name_new",
-                "email": "test_email_new",
+                "OIDC_FIRST_NAME": "",
+                "OIDC_LAST_NAME": "",
+                "OIDC_FULL_NAME": "",
+                "OIDC_EMAIL": "",
+                "OIDC_GROUPS": "",
             },
+        ):
+            new_user = oidc_authentication._check_user_change(
+                old_user,
+                {
+                    "preferred_username": "username",
+                    "given_name": "first_name",
+                    "family_name": "last_name",
+                    "name": "full_name",
+                    "email": "email",
+                    "groups": ["group_1", "group_2"],
+                },
+            )
+
+            self.assertEqual("test_username", new_user.username)
+            self.assertEqual("test_first_name", new_user.first_name)
+            self.assertEqual("test_last_name", new_user.last_name)
+            self.assertEqual("test_full_name", new_user.full_name)
+            self.assertEqual("test_email", new_user.email)
+            self.assertEqual("", new_user.oidc_groups_hash)
+            user_save_mock.assert_not_called()
+            synchronize_groups_mock.assert_not_called()
+
+    @patch("application.access_control.services.oidc_authentication.User.save")
+    @patch(
+        "application.access_control.services.oidc_authentication.OIDCAuthentication._synchronize_groups"
+    )
+    def test_check_user_change_with_changes(
+        self, synchronize_groups_mock, user_save_mock
+    ):
+        old_user = User(
+            username="test_username",
+            first_name="test_first_name",
+            last_name="test_last_name",
+            full_name="test_full_name",
+            email="test_email",
+            oidc_groups_hash="",
         )
+        oidc_authentication = OIDCAuthentication()
+        payload = {
+            "preferred_username": "test_username",
+            "given_name": "test_first_name_new",
+            "family_name": "test_last_name_new",
+            "name": "test_full_name_new",
+            "email": "test_email_new",
+            "groups": ["test_group_1", "test_group_2"],
+        }
+        new_user = oidc_authentication._check_user_change(old_user, payload)
 
         self.assertEqual("test_username", new_user.username)
         self.assertEqual("test_first_name_new", new_user.first_name)
         self.assertEqual("test_last_name_new", new_user.last_name)
         self.assertEqual("test_full_name_new", new_user.full_name)
         self.assertEqual("test_email_new", new_user.email)
+        self.assertEqual(
+            "27cbb2858ce86012e498c8102d24d066837d67beec8c180f5e85e652df700c9f",
+            new_user.oidc_groups_hash,
+        )
         user_save_mock.assert_called_once()
+        synchronize_groups_mock.assert_called_with(new_user, payload)
+
+    def test_synchronize_groups(self):
+        call_command("loaddata", "unittests/fixtures/unittests_fixtures.json")
+
+        oidc_authentication = OIDCAuthentication()
+        user = User.objects.get(username="db_internal_write")
+        payload = {"groups": ["oidc_1"]}
+
+        oidc_authentication._synchronize_groups(user, payload)
+
+        groups = user.authorization_groups.all().order_by("name")
+        self.assertEqual(2, len(groups))
+        self.assertEqual("non_oidc_group", groups[0].name)
+        self.assertEqual("oidc_group_1", groups[1].name)
+
+        payload = {"groups": ["oidc_2"]}
+
+        oidc_authentication._synchronize_groups(user, payload)
+
+        groups = user.authorization_groups.all().order_by("name")
+        self.assertEqual(2, len(groups))
+        self.assertEqual("non_oidc_group", groups[0].name)
+        self.assertEqual("oidc_group_2", groups[1].name)
 
 
 class MockPyJWK:

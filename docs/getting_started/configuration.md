@@ -32,6 +32,7 @@ was registered. |
 | `OIDC_LAST_NAME`       | mandatory   | The claim that contains the last name of the user. |
 | `OIDC_FULL_NAME`       | mandatory   | The claim that contains the full name of the user. |
 | `OIDC_EMAIL`           | mandatory   | The claim that contains the email address of the user. |
+| `OIDC_GROUPS`          | optional    | The claim that contains the groups of the user. |
 
 
 #### Frontend

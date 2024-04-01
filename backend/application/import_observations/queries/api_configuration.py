@@ -4,7 +4,11 @@ from django.db.models import Exists, OuterRef, Q
 from django.db.models.query import QuerySet
 
 from application.commons.services.global_request import get_current_user
-from application.core.models import Product, Product_Member
+from application.core.models import (
+    Product,
+    Product_Authorization_Group_Member,
+    Product_Member,
+)
 from application.import_observations.models import Api_Configuration
 
 
@@ -42,13 +46,34 @@ def get_api_configurations() -> QuerySet[Api_Configuration]:
             product=OuterRef("product__product_group"), user=user
         )
 
+        product_authorization_group_members = (
+            Product_Authorization_Group_Member.objects.filter(
+                product=OuterRef("product_id"),
+                authorization_group__users=user,
+            )
+        )
+
+        product_group_authorization_group_members = (
+            Product_Authorization_Group_Member.objects.filter(
+                product=OuterRef("product__product_group"),
+                authorization_group__users=user,
+            )
+        )
+
         api_configurations = api_configurations.annotate(
             product__member=Exists(product_members),
             product__product_group__member=Exists(product_group_members),
+            authorization_group_member=Exists(product_authorization_group_members),
+            product_group_authorization_group_member=Exists(
+                product_group_authorization_group_members
+            ),
         )
 
         api_configurations = api_configurations.filter(
-            Q(product__member=True) | Q(product__product_group__member=True)
+            Q(product__member=True)
+            | Q(product__product_group__member=True)
+            | Q(authorization_group_member=True)
+            | Q(product_group_authorization_group_member=True)
         )
 
     return api_configurations

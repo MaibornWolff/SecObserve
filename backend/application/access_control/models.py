@@ -3,6 +3,8 @@ from django.db.models import (
     CASCADE,
     BooleanField,
     CharField,
+    Index,
+    ManyToManyField,
     Model,
     OneToOneField,
     TextField,
@@ -34,6 +36,7 @@ class User(AbstractUser):
         max_length=6, choices=LIST_SIZE_CHOICES, default=LIST_SIZE_MEDIUM
     )
     setting_list_properties = TextField(max_length=2048, blank=True)
+    oidc_groups_hash = CharField(max_length=64, blank=True)
 
     def save(self, *args, **kwargs):
         if self.first_name and self.last_name:
@@ -46,6 +49,22 @@ class User(AbstractUser):
             self.full_name = self.username
 
         super().save(*args, **kwargs)
+
+
+class Authorization_Group(Model):
+    name = CharField(max_length=255, unique=True)
+    oidc_group = CharField(max_length=255, blank=True)
+    users = ManyToManyField(User, related_name="authorization_groups", blank=True)
+
+    class Meta:
+        verbose_name = "Authorization Group"
+        verbose_name_plural = "Authorization Groups"
+        indexes = [
+            Index(fields=["oidc_group"]),
+        ]
+
+    def __str__(self):
+        return self.name
 
 
 class JWT_Secret(Model):

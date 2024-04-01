@@ -1,3 +1,5 @@
+from typing import Optional
+
 from rest_framework.exceptions import PermissionDenied
 
 from application.access_control.models import User
@@ -12,10 +14,14 @@ from application.core.models import (
     Observation,
     Observation_Log,
     Product,
+    Product_Authorization_Group_Member,
     Product_Member,
     Service,
 )
-from application.core.queries.product_member import get_product_member
+from application.core.queries.product_member import (
+    get_highest_role_of_product_authorization_group_members_for_user,
+    get_product_member,
+)
 from application.import_observations.models import (
     Api_Configuration,
     Vulnerability_Check,
@@ -44,25 +50,23 @@ def user_has_permission(  # pylint: disable=too-many-return-statements,too-many-
         and not obj.is_product_group
         and permission not in Permissions.get_product_group_permissions()
     ):
-        # Check if the user has a role for the product with the requested permissions
-        member = get_product_member(obj, user)
-        authorized = bool(
-            member is not None and role_has_permission(member.role, permission)
-        )
-
-        if not authorized and obj.product_group:
-            authorized = user_has_permission(obj.product_group, permission, user)
-
-        return authorized
+        role = get_highest_user_role(obj, user)
+        return bool(role and role_has_permission(role, permission))
 
     if isinstance(obj, Product) and obj.is_product_group:
-        # Check if the user has a role for the product with the requested permissions
-        member = get_product_member(obj, user)
-        return bool(member is not None and role_has_permission(member.role, permission))
+        role = get_highest_user_role(obj, user)
+        return bool(role and role_has_permission(role, permission))
 
     if (
         isinstance(obj, Product_Member)
         and permission in Permissions.get_product_member_permissions()
+    ):
+        return user_has_permission(obj.product, permission, user)
+
+    if (
+        isinstance(obj, Product_Authorization_Group_Member)
+        and permission
+        in Permissions.get_product_authorization_group_member_permissions()
     ):
         return user_has_permission(obj.product, permission, user)
 
@@ -136,6 +140,39 @@ def role_has_permission(role: int, permission: int) -> bool:
     if not permissions:
         return False
     return permission in permissions
+
+
+def get_highest_user_role(product: Product, user: User = None) -> Optional[int]:
+    if user is None:
+        user = get_current_user()
+
+    if not user:
+        return None
+
+    if user.is_superuser:
+        return Roles.Owner
+
+    user_member = get_product_member(product, user)
+    user_product_role = user_member.role if user_member else 0
+
+    user_product_group_role = 0
+    if product.product_group:
+        user_product_group_member = get_product_member(product.product_group, user)
+        user_product_group_role = (
+            user_product_group_member.role if user_product_group_member else 0
+        )
+
+    authorization_group_role = (
+        get_highest_role_of_product_authorization_group_members_for_user(product, user)
+    )
+    highest_role = max(
+        user_product_role, user_product_group_role, authorization_group_role
+    )
+
+    if highest_role:
+        return highest_role
+
+    return None
 
 
 def get_user_permissions(user: User = None) -> list[Permissions]:

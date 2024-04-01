@@ -8,7 +8,7 @@ import { ROLE_CHOICES } from "../../access_control/types";
 import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
 
-const ProductMemberEdit = () => {
+const ProductAuthorizationGroupMemberEdit = () => {
     const [open, setOpen] = useState(false);
     const [update] = useUpdate();
     const refresh = useRefresh();
@@ -19,13 +19,13 @@ const ProductMemberEdit = () => {
         if (reason && reason == "backdropClick") return;
         setOpen(false);
     };
-    const product_member_update = async (data: any) => {
+    const product_authorization_group_member_update = async (data: any) => {
         const patch = {
             role: data.role,
         };
 
         update(
-            "product_members",
+            "product_authorization_group_members",
 
             {
                 id: data.id,
@@ -34,7 +34,7 @@ const ProductMemberEdit = () => {
             {
                 onSuccess: () => {
                     refresh();
-                    notify("User member updated", {
+                    notify("Authorization group member updated", {
                         type: "success",
                     });
                 },
@@ -82,11 +82,15 @@ const ProductMemberEdit = () => {
                 Edit
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Edit user member</DialogTitle>
+                <DialogTitle>Edit authorization group member</DialogTitle>
                 <DialogContent>
-                    <SimpleForm onSubmit={product_member_update} toolbar={<CustomToolbar />}>
-                        <ReferenceInput source="user" reference="users" sort={{ field: "full_name", order: "ASC" }}>
-                            <AutocompleteInputWide optionText="full_name" disabled />
+                    <SimpleForm onSubmit={product_authorization_group_member_update} toolbar={<CustomToolbar />}>
+                        <ReferenceInput
+                            source="authorization_group"
+                            reference="authorization_groups"
+                            sort={{ field: "name", order: "ASC" }}
+                        >
+                            <AutocompleteInputWide optionText="name" disabled />
                         </ReferenceInput>
                         <AutocompleteInputWide source="role" choices={ROLE_CHOICES} validate={validate_required} />
                     </SimpleForm>
@@ -96,4 +100,4 @@ const ProductMemberEdit = () => {
     );
 };
 
-export default ProductMemberEdit;
+export default ProductAuthorizationGroupMemberEdit;
