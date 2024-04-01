@@ -40,7 +40,7 @@ Authorization groups can be used to manage permissions for multiple users at onc
 
 Currently authorization groups can only be managed by superusers using the [Django Admin user interface](../getting_started/configuration.md#admin-user-interface):
 
-*placeholder for screenshot*
+![Authorization Groups](../assets/images/screenshot_authorization_groups.png)
 
 Authorization groups can be mapped to OIDC group claims. If the OICD token includes a group claim (see [OpenID Connect authentication](../integrations/oidc_authentication.md)), the user will be automatically added to the authorization group, where an entry of the group claim matches the attribute `oidc_group`. If the users will be removed from the group in the user directory, the user will be removed from the authorization group automatically as well.
 
