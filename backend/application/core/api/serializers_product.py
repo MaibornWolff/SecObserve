@@ -29,7 +29,6 @@ from application.core.models import (
     Service,
 )
 from application.core.queries.product_member import (
-    get_highest_role_of_product_authorization_group_members_for_user,
     get_product_authorization_group_member,
     get_product_member,
 )
@@ -341,21 +340,21 @@ class ProductMemberSerializer(ModelSerializer):
             if product_member:
                 raise ValidationError(f"Product member {data_user} already exists")
 
-        if self.instance is not None:
-            own_product_member = get_product_member(
-                self.instance.product, get_current_user()
-            )
-        else:
-            own_product_member = get_product_member(data_product, get_current_user())
-
         current_user = get_current_user()
-        if attrs.get("role") == Roles.Owner and (
-            not current_user
-            or not own_product_member
-            or (
-                not current_user.is_superuser and own_product_member.role != Roles.Owner
-            )
+        if self.instance is not None:
+            role = get_highest_user_role(self.instance.product, current_user)
+        else:
+            role = get_highest_user_role(data_product, current_user)
+
+        if (
+            attrs.get("role")  # pylint: disable=too-many-boolean-expressions
+            != Roles.Owner
+            or (current_user and current_user.is_superuser)
+            or role == Roles.Owner
         ):
+            # if statement is still structured and readable
+            pass
+        else:
             raise ValidationError("You are not permitted to add a member as Owner")
 
         return attrs
@@ -398,26 +397,15 @@ class ProductAuthorizationGroupMemberSerializer(ModelSerializer):
 
         current_user = get_current_user()
         if self.instance is not None:
-            own_product_member = get_product_member(self.instance.product, current_user)
-            highest_role_of_product_authorization_group_members = (
-                get_highest_role_of_product_authorization_group_members_for_user(
-                    self.instance.product, current_user
-                )
-            )
+            role = get_highest_user_role(self.instance.product, current_user)
         else:
-            own_product_member = get_product_member(data_product, current_user)
-            highest_role_of_product_authorization_group_members = (
-                get_highest_role_of_product_authorization_group_members_for_user(
-                    data_product, current_user
-                )
-            )
+            role = get_highest_user_role(data_product, current_user)
 
         if (
             attrs.get("role")  # pylint: disable=too-many-boolean-expressions
             != Roles.Owner
             or (current_user and current_user.is_superuser)
-            or (own_product_member and own_product_member.role == Roles.Owner)
-            or highest_role_of_product_authorization_group_members == Roles.Owner
+            or role == Roles.Owner
         ):
             # if statement is still structured and readable
             pass

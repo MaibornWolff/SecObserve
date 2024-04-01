@@ -20,8 +20,6 @@ def get_product_member(product: Product, user: User = None) -> Optional[Product_
     try:
         return Product_Member.objects.get(product=product, user=user)
     except Product_Member.DoesNotExist:
-        if product.product_group:
-            return get_product_member(product.product_group, user)
         return None
 
 
@@ -50,10 +48,6 @@ def get_product_authorization_group_member(
             product=product, authorization_group=authorization_group
         )
     except Product_Authorization_Group_Member.DoesNotExist:
-        if product.product_group:
-            return get_product_authorization_group_member(
-                product.product_group, authorization_group
-            )
         return None
 
 

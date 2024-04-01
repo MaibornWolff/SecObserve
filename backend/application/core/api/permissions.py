@@ -5,12 +5,9 @@ from application.access_control.api.permissions import (
     check_object_permission,
     check_post_permission,
 )
+from application.access_control.services.authorization import get_highest_user_role
 from application.access_control.services.roles_permissions import Permissions, Roles
 from application.core.models import Product
-from application.core.queries.product_member import (
-    get_highest_role_of_product_authorization_group_members_for_user,
-    get_product_member,
-)
 
 
 class UserHasProductPermission(BasePermission):
@@ -97,16 +94,7 @@ class UserHasProductAuthorizationGroupMemberPermission(BasePermission):
 
 
 def _check_delete_owner(request, obj) -> bool:
-    own_product_member = get_product_member(obj.product, request.user)
-    highest_role_of_product_authorization_group_members = (
-        get_highest_role_of_product_authorization_group_members_for_user(
-            obj.product, request.user
-        )
-    )
-
-    if (
-        own_product_member and own_product_member.role == Roles.Owner
-    ) or highest_role_of_product_authorization_group_members == Roles.Owner:
+    if get_highest_user_role(obj.product, request.user) == Roles.Owner:
         return True
 
     raise ValidationError("You are not permitted to delete an Owner")
