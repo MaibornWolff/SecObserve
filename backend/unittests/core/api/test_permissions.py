@@ -35,7 +35,9 @@ class TestPermissions(BaseTestCase):
             "[ErrorDetail(string='You are not permitted to delete an Owner', code='invalid')]",
             str(e.exception),
         )
-        mock_get_highest_user_role.assert_called_with(self.product_1, self.user_internal)
+        mock_get_highest_user_role.assert_called_with(
+            self.product_1, self.user_internal
+        )
 
     @patch("application.core.api.permissions.get_highest_user_role")
     def test_has_object_permission_delete_owner_not_owner(
@@ -62,7 +64,9 @@ class TestPermissions(BaseTestCase):
             "[ErrorDetail(string='You are not permitted to delete an Owner', code='invalid')]",
             str(e.exception),
         )
-        mock_get_highest_user_role.assert_called_with(self.product_1, self.user_internal)
+        mock_get_highest_user_role.assert_called_with(
+            self.product_1, self.user_internal
+        )
 
     @patch("application.core.api.permissions.get_highest_user_role")
     @patch("application.core.api.permissions.check_object_permission")
@@ -87,5 +91,7 @@ class TestPermissions(BaseTestCase):
                 request=request, view=None, obj=product_member
             )
         )
-        mock_get_highest_user_role.assert_called_with(self.product_1, self.user_internal)
+        mock_get_highest_user_role.assert_called_with(
+            self.product_1, self.user_internal
+        )
         mock_check.assert_called_once()
