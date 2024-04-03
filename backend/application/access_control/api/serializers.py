@@ -11,6 +11,7 @@ from rest_framework.serializers import (
 from application.access_control.models import Authorization_Group, User
 from application.access_control.services.authorization import get_user_permissions
 from application.access_control.services.roles_permissions import Permissions, Roles
+from application.commons.services.global_request import get_current_user
 
 
 class UserSerializer(ModelSerializer):
@@ -32,7 +33,29 @@ class UserSerializer(ModelSerializer):
             "setting_list_size",
             "permissions",
             "setting_list_properties",
+            "oidc_groups_hash",
+            "date_joined",
         ]
+
+    def to_representation(self, instance: User):
+        data = super().to_representation(instance)
+
+        user = get_current_user()
+        if user and not user.is_superuser and not user.pk == instance.pk:
+            data.pop("email")
+            data.pop("first_name")
+            data.pop("last_name")
+            data.pop("is_active")
+            data.pop("is_superuser")
+            data.pop("is_external")
+            data.pop("setting_theme")
+            data.pop("setting_list_size")
+            data.pop("setting_list_properties")
+            data.pop("permissions")
+            data.pop("oidc_groups_hash")
+            data.pop("date_joined")
+
+        return data
 
     def get_permissions(self, obj) -> list[Permissions]:
         return get_user_permissions(obj)

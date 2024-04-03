@@ -12,6 +12,7 @@ import products from "../../core/products";
 import general_rules from "../../rules/general_rules";
 import csaf from "../../vex/csaf";
 import openvex from "../../vex/openvex";
+import administration from "../administration";
 import { feature_vex_enabled } from "../functions";
 import notifications from "../notifications";
 import SubMenu from "./SubMenu";
@@ -125,6 +126,15 @@ const Menu = ({ dense = false }: MenuProps) => {
                         state={{ _scrollToTop: true }}
                         primaryText="General Rules"
                         leftIcon={<general_rules.icon />}
+                        dense={dense}
+                        onPointerEnterCapture={undefined}
+                        onPointerLeaveCapture={undefined}
+                    />
+                    <MenuItemLink
+                        to="/administration"
+                        state={{ _scrollToTop: true }}
+                        primaryText="Administration"
+                        leftIcon={<administration.icon />}
                         dense={dense}
                         onPointerEnterCapture={undefined}
                         onPointerLeaveCapture={undefined}

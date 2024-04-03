@@ -13,6 +13,7 @@ import {
     Show,
     Tab,
     TabbedShowLayout,
+    TabbedShowLayoutTabs,
     TextField,
     TopToolbar,
     WithRecord,
@@ -71,7 +72,7 @@ const ProductGroupShow = () => {
             <Show actions={<ShowActions />}>
                 <WithRecord
                     render={(product_group) => (
-                        <TabbedShowLayout>
+                        <TabbedShowLayout tabs={<TabbedShowLayoutTabs variant="scrollable" scrollButtons="auto" />}>
                             <Tab label="Overview" icon={<product_groups.icon />}>
                                 <Typography variant="h6">Product Group</Typography>
                                 <Stack spacing={1}>

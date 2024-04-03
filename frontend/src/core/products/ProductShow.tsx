@@ -15,6 +15,7 @@ import {
     Show,
     Tab,
     TabbedShowLayout,
+    TabbedShowLayoutTabs,
     TopToolbar,
     WithRecord,
     useRecordContext,
@@ -115,7 +116,7 @@ const ProductShow = () => {
             <Show actions={<ShowActions filter={filter} storeKey={storeKey} />}>
                 <WithRecord
                     render={(product) => (
-                        <TabbedShowLayout>
+                        <TabbedShowLayout tabs={<TabbedShowLayoutTabs variant="scrollable" scrollButtons="auto" />}>
                             <Tab label="Observations" icon={<observations.icon />} onClick={hideSettingsTabs}>
                                 <Stack
                                     direction="row"
