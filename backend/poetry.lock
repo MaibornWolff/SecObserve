@@ -2338,13 +2338,13 @@ zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
 name = "validators"
-version = "0.26.0"
+version = "0.27.0"
 description = "Python Data Validation for Humans™"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "validators-0.26.0-py3-none-any.whl", hash = "sha256:61234f9303c54b30bacdb566c57b176aee510ad7f168301f67c28158af46208c"},
-    {file = "validators-0.26.0.tar.gz", hash = "sha256:004e15ed83145454e8db90d66dcee063f1084b81e447310b52c5f91022823150"},
+    {file = "validators-0.27.0-py3-none-any.whl", hash = "sha256:bc0d93d874a363bde9e61b7e31dd274fef168ec057ecb8118edc96c161a89285"},
+    {file = "validators-0.27.0.tar.gz", hash = "sha256:4a70757730619a2c0788aa3c60ba1680372173237c445571586cdef02e37223b"},
 ]
 
 [[package]]
@@ -2468,4 +2468,4 @@ brotli = ["Brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">= 3.10, < 3.13"
-content-hash = "f919a260918fcdfabde87122388463a9817bda75b651923b2a3ecfe14e3cfc8a"
+content-hash = "24d4dcb00a1297376ad5b9d3e672ab139195d3e53786a2ad79b535a5f3cb28e1"
