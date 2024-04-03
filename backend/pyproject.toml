@@ -53,7 +53,7 @@ jira = "3.8.0"  # https://github.com/pycontribs/jira
 # Others
 # ------------------------------------------------------------------------------
 inflect = "7.2.0"  # https://github.com/jaraco/inflect
-validators = "0.24.0"  # https://github.com/python-validators/validators
+validators = "0.26.0"  # https://github.com/python-validators/validators
 cvss = "3.0"  # https://github.com/RedHatProductSecurity/cvss
 jsonpickle = "3.0.3"  # https://github.com/jsonpickle/jsonpickle
 
