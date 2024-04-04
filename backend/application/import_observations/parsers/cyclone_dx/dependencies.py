@@ -113,7 +113,7 @@ def _get_dependencies(
                 components,
             )
     except RecursionError as e:
-        logger.warning(f"%s:%s -> %s", metadata.container_name, metadata.container_tag, str(e))
+        logger.warning("%s:%s -> %s", metadata.container_name, metadata.container_tag, str(e))
         return []
 
     return_dependencies = []
