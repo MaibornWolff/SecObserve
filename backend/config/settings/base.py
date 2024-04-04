@@ -583,7 +583,7 @@ HUEY = {
         "filename": HUEY_FILENAME,  # Filename for sqlite.
     },
     "consumer": {
-        "workers": 2,
+        "workers": 3,  # Number of worker threads/processes.
         "worker_type": "thread",
         "initial_delay": 0.1,  # Smallest polling interval, same as -d.
         "backoff": 1.15,  # Exponential backoff using this rate, -b.

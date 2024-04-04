@@ -56,7 +56,7 @@ class TestEPSS(BaseTestCase):
 
     @patch("application.epss.models.EPSS_Score.objects.get")
     @patch("application.core.models.Observation.save")
-    def test_epss_apply_observation_cve(
+    def test_epss_apply_observation_cve_different(
         self, mock_observation_save, mock_epss_score_get
     ):
         mock_epss_score_get.return_value = EPSS_Score(
@@ -70,3 +70,22 @@ class TestEPSS(BaseTestCase):
         self.assertEqual(cve_observation.epss_percentile, 100)
         mock_epss_score_get.assert_called_with(cve="CVE-2020-1234")
         mock_observation_save.assert_called_once()
+
+    @patch("application.epss.models.EPSS_Score.objects.get")
+    @patch("application.core.models.Observation.save")
+    def test_epss_apply_observation_cve_same(
+        self, mock_observation_save, mock_epss_score_get
+    ):
+        mock_epss_score_get.return_value = EPSS_Score(
+            cve="CVE-2020-1234", epss_score=0.00383, epss_percentile=0.72606
+        )
+        cve_observation = Observation(
+            vulnerability_id="CVE-2020-1234", epss_score=0.383, epss_percentile=72.606
+        )
+
+        epss_apply_observation(cve_observation)
+
+        self.assertEqual(cve_observation.epss_score, 0.383)
+        self.assertEqual(cve_observation.epss_percentile, 72.606)
+        mock_epss_score_get.assert_called_with(cve="CVE-2020-1234")
+        mock_observation_save.assert_not_called()

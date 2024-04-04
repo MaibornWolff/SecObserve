@@ -5,6 +5,7 @@ from datetime import datetime
 import requests
 
 from application.core.models import Observation
+from application.core.types import Status
 from application.epss.models import EPSS_Score, EPSS_Status
 
 
@@ -53,7 +54,9 @@ def import_epss() -> None:
 
 
 def epss_apply_observations() -> None:
-    observations = Observation.objects.filter(vulnerability_id__startswith="CVE-")
+    observations = Observation.objects.filter(
+        vulnerability_id__startswith="CVE-"
+    ).exclude(current_status=Status.STATUS_RESOLVED)
     for observation in observations:
         epss_apply_observation(observation)
 
@@ -65,8 +68,18 @@ def epss_apply_observation(observation: Observation) -> None:
         except EPSS_Score.DoesNotExist:
             return
 
-        if epss_score.epss_score:
-            observation.epss_score = epss_score.epss_score * 100
-        if epss_score.epss_percentile:
-            observation.epss_percentile = epss_score.epss_percentile * 100
-        observation.save()
+        new_epss_score = (
+            round(epss_score.epss_score * 100, 3) if epss_score.epss_score else None
+        )
+        new_epss_percentile = (
+            round(epss_score.epss_percentile * 100, 3)
+            if epss_score.epss_percentile
+            else None
+        )
+        if (
+            observation.epss_score != new_epss_score
+            or observation.epss_percentile != new_epss_percentile
+        ):
+            observation.epss_score = new_epss_score
+            observation.epss_percentile = new_epss_percentile
+            observation.save()
