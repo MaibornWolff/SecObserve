@@ -29,7 +29,7 @@ class TestEPSS(BaseTestCase):
         epss_apply_observations()
         mock_observations.assert_called_with(vulnerability_id__startswith="CVE-")
         mock_epss_apply_observation.assert_has_calls(
-            [call(Observation.objects.all()[0]), call(Observation.objects.all()[1])]
+            [call(Observation.objects.all()[0]), call().__bool__(),  call(Observation.objects.all()[1]), call().__bool__()]
         )
 
     @patch("application.epss.models.EPSS_Score.objects.filter")
