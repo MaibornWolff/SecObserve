@@ -53,20 +53,24 @@ def import_epss() -> None:
         EPSS_Score.objects.bulk_create(scores)
 
 
-def epss_apply_observations() -> None:
+def epss_apply_observations() -> int:
+    counter = 0
+
     observations = Observation.objects.filter(
         vulnerability_id__startswith="CVE-"
     ).exclude(current_status=Status.STATUS_RESOLVED)
     for observation in observations:
-        epss_apply_observation(observation)
+        counter = counter + 1 if epss_apply_observation(observation) else counter
+
+    return counter
 
 
-def epss_apply_observation(observation: Observation) -> None:
+def epss_apply_observation(observation: Observation) -> bool:
     if observation.vulnerability_id.startswith("CVE-"):
         try:
             epss_score = EPSS_Score.objects.get(cve=observation.vulnerability_id)
         except EPSS_Score.DoesNotExist:
-            return
+            return False
 
         new_epss_score = (
             round(epss_score.epss_score * 100, 3) if epss_score.epss_score else None
@@ -83,3 +87,6 @@ def epss_apply_observation(observation: Observation) -> None:
             observation.epss_score = new_epss_score
             observation.epss_percentile = new_epss_percentile
             observation.save()
+            return True
+
+    return False
