@@ -6,12 +6,18 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ViewSet
 
-from application.access_control.api.filters import AuthorizationGroupFilter, UserFilter
+from application.access_control.api.filters import (
+    ApiTokenFilter,
+    AuthorizationGroupFilter,
+    UserFilter,
+)
 from application.access_control.api.serializers import (
+    ApiTokenSerializer,
     AuthenticationRequestSerializer,
     AuthenticationResponseSerializer,
     AuthorizationGroupSerializer,
@@ -20,7 +26,7 @@ from application.access_control.api.serializers import (
     UserSerializer,
     UserSettingsSerializer,
 )
-from application.access_control.models import Authorization_Group, User
+from application.access_control.models import API_Token, Authorization_Group, User
 from application.access_control.queries.authorization_group import (
     get_authorization_groups,
 )
@@ -100,6 +106,13 @@ class AuthorizationGroupViewSet(RetrieveModelMixin, ListModelMixin, GenericViewS
 
     def get_queryset(self):
         return get_authorization_groups()
+
+
+class ApiTokenViewSet(ListModelMixin, GenericViewSet):
+    serializer_class = ApiTokenSerializer
+    filterset_class = ApiTokenFilter
+    permission_classes = (IsAuthenticated, IsAdminUser)
+    queryset = API_Token.objects.all()
 
 
 class CreateUserAPITokenView(APIView):

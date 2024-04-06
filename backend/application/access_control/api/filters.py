@@ -1,6 +1,6 @@
 from django_filters import CharFilter, FilterSet, NumberFilter, OrderingFilter
 
-from application.access_control.models import Authorization_Group, User
+from application.access_control.models import API_Token, Authorization_Group, User
 
 
 class UserFilter(FilterSet):
@@ -49,3 +49,16 @@ class AuthorizationGroupFilter(FilterSet):
     class Meta:
         model = Authorization_Group
         fields = ["name", "oidc_group", "search"]
+
+
+class ApiTokenFilter(FilterSet):
+    name = CharFilter(field_name="user__username", lookup_expr="icontains")
+
+    ordering = OrderingFilter(
+        # tuple-mapping retains order
+        fields=(("user__username", "name"),),
+    )
+
+    class Meta:
+        model = API_Token
+        fields = ["name"]

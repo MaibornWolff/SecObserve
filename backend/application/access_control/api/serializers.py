@@ -8,7 +8,7 @@ from rest_framework.serializers import (
     SerializerMethodField,
 )
 
-from application.access_control.models import Authorization_Group, User
+from application.access_control.models import API_Token, Authorization_Group, User
 from application.access_control.services.authorization import get_user_permissions
 from application.access_control.services.roles_permissions import Permissions, Roles
 from application.commons.services.global_request import get_current_user
@@ -90,6 +90,21 @@ class AuthenticationResponseSerializer(Serializer):
 class ProductApiTokenSerializer(Serializer):
     id = IntegerField(validators=[MinValueValidator(0)])
     role = ChoiceField(choices=Roles)
+
+
+class ApiTokenSerializer(ModelSerializer):
+    id = SerializerMethodField()
+    name = SerializerMethodField()
+
+    class Meta:
+        model = API_Token
+        fields = ["id", "name"]
+
+    def get_id(self, obj: API_Token) -> int:
+        return obj.pk
+
+    def get_name(self, obj: API_Token) -> str:
+        return obj.user.username
 
 
 class CreateApiTokenResponseSerializer(Serializer):

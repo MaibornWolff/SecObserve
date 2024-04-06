@@ -131,7 +131,7 @@ const Menu = ({ dense = false }: MenuProps) => {
                         onPointerLeaveCapture={undefined}
                     />
                     <MenuItemLink
-                        to="/administration"
+                        to="/administration/users"
                         state={{ _scrollToTop: true }}
                         primaryText="Administration"
                         leftIcon={<administration.icon />}

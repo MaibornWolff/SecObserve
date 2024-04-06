@@ -48,7 +48,9 @@ const App = () => {
                 theme={getTheme()}
             >
                 <CustomRoutes>
-                    <Route path="/administration" element={<Administration />} />
+                    <Route path="/administration/users" element={<Administration />} />
+                    <Route path="/administration/authorization_groups" element={<Administration />} />
+                    <Route path="/administration/api_tokens" element={<Administration />} />
                     <Route path="/settings" element={<Settings />} />
                 </CustomRoutes>
                 <Resource
