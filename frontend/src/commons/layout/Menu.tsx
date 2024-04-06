@@ -5,6 +5,7 @@ import { Fragment } from "react";
 import { useState } from "react";
 import { DashboardMenuItem, MenuItemLink, MenuProps, useSidebarState } from "react-admin";
 
+import administration from "../../access_control/access_control_administration";
 import observations from "../../core/observations";
 import parsers from "../../core/parsers";
 import product_groups from "../../core/product_groups";
@@ -12,7 +13,6 @@ import products from "../../core/products";
 import general_rules from "../../rules/general_rules";
 import csaf from "../../vex/csaf";
 import openvex from "../../vex/openvex";
-import administration from "../administration";
 import { feature_vex_enabled } from "../functions";
 import notifications from "../notifications";
 import SubMenu from "./SubMenu";
@@ -131,9 +131,9 @@ const Menu = ({ dense = false }: MenuProps) => {
                         onPointerLeaveCapture={undefined}
                     />
                     <MenuItemLink
-                        to="/administration/users"
+                        to="/access_control/users"
                         state={{ _scrollToTop: true }}
-                        primaryText="Administration"
+                        primaryText="Access Control"
                         leftIcon={<administration.icon />}
                         dense={dense}
                         onPointerEnterCapture={undefined}

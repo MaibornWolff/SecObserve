@@ -4,11 +4,11 @@ import { AuthProvider } from "react-oidc-context";
 import { Route } from "react-router";
 
 import { Login } from "./access_control";
+import AccessControlAdministration from "./access_control/access_control_administration/AccessControlAdministration";
 import authProvider from "./access_control/authProvider";
 import { oidcConfig } from "./access_control/authProvider";
 import authorization_groups from "./access_control/authorization_groups";
 import users from "./access_control/users";
-import Administration from "./commons/administration/Administration";
 import englishMessages from "./commons/i18n/en";
 import { Layout } from "./commons/layout";
 import notifications from "./commons/notifications";
@@ -48,9 +48,9 @@ const App = () => {
                 theme={getTheme()}
             >
                 <CustomRoutes>
-                    <Route path="/administration/users" element={<Administration />} />
-                    <Route path="/administration/authorization_groups" element={<Administration />} />
-                    <Route path="/administration/api_tokens" element={<Administration />} />
+                    <Route path="/access_control/users" element={<AccessControlAdministration />} />
+                    <Route path="/access_control/authorization_groups" element={<AccessControlAdministration />} />
+                    <Route path="/access_control/api_tokens" element={<AccessControlAdministration />} />
                     <Route path="/settings" element={<Settings />} />
                 </CustomRoutes>
                 <Resource
