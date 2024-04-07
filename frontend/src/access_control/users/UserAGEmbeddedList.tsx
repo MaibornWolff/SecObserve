@@ -6,15 +6,14 @@ import {
     NullableBooleanInput,
     TextField,
     TextInput,
+    WithRecord,
     useListController,
 } from "react-admin";
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { getSettingListSize } from "../../commons/settings/functions";
-
-const ShowUsers = (id: any) => {
-    return "../../../../users/" + id + "/show";
-};
+import AuthorizationGroupUserAdd from "../authorization_groups/AuthorizationGroupUserAdd";
+import AuthorizationGroupUserRemove from "../authorization_groups/AuthorizationGroupUserRemove";
 
 function listFilters() {
     return [
@@ -53,16 +52,24 @@ const UserAGEmbeddedList = ({ authorization_group }: UserAGEmbeddedListProps) =>
     localStorage.removeItem("userembeddedlist");
     localStorage.setItem("useragembeddedlist.authorization_group", authorization_group.id);
 
+    const user = localStorage.getItem("user");
+
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
+                {user && JSON.parse(user).is_superuser && <AuthorizationGroupUserAdd id={authorization_group.id} />}
                 <FilterForm filters={listFilters()} />
-                <Datagrid size={getSettingListSize()} rowClick={ShowUsers} bulkActionButtons={false}>
+                <Datagrid size={getSettingListSize()} rowClick={false} bulkActionButtons={false}>
                     <TextField source="username" />
                     <TextField source="full_name" />
                     <BooleanField source="is_active" label="Active" />
                     <BooleanField source="is_external" label="External" />
                     <BooleanField source="is_superuser" label="Superuser" />
+                    {user && JSON.parse(user).is_superuser && (
+                        <WithRecord
+                            render={(user) => <AuthorizationGroupUserRemove id={authorization_group.id} user={user} />}
+                        />
+                    )}
                 </Datagrid>
                 <CustomPagination />
             </div>

@@ -1,11 +1,21 @@
 import { Paper, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
-import { Labeled, PrevNextButtons, Show, SimpleShowLayout, TextField, TopToolbar, WithRecord } from "react-admin";
+import {
+    EditButton,
+    Labeled,
+    PrevNextButtons,
+    Show,
+    SimpleShowLayout,
+    TextField,
+    TopToolbar,
+    WithRecord,
+} from "react-admin";
 
 import { useStyles } from "../../commons/layout/themes";
 import UserAGEmbeddedList from "../users/UserAGEmbeddedList";
 
 const ShowActions = () => {
+    const user = localStorage.getItem("user");
     return (
         <TopToolbar>
             <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -15,6 +25,7 @@ const ShowActions = () => {
                     filterDefaultValues={{ is_active: true }}
                     storeKey="authorization_groups.embedded"
                 />
+                {user && JSON.parse(user).is_superuser && <EditButton />}
             </Stack>
         </TopToolbar>
     );

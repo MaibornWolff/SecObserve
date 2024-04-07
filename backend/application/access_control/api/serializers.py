@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.core.validators import MinValueValidator
 from rest_framework.serializers import (
     CharField,
@@ -12,6 +14,7 @@ from application.access_control.models import API_Token, Authorization_Group, Us
 from application.access_control.services.authorization import get_user_permissions
 from application.access_control.services.roles_permissions import Permissions, Roles
 from application.commons.services.global_request import get_current_user
+from application.core.models import Product_Member
 
 
 class UserSerializer(ModelSerializer):
@@ -67,6 +70,10 @@ class AuthorizationGroupSerializer(ModelSerializer):
         fields = "__all__"
 
 
+class AuthorizationGroupUserSerializer(Serializer):
+    user = IntegerField(validators=[MinValueValidator(0)])
+
+
 class UserSettingsSerializer(ModelSerializer):
     class Meta:
         model = User
@@ -95,16 +102,34 @@ class ProductApiTokenSerializer(Serializer):
 class ApiTokenSerializer(ModelSerializer):
     id = SerializerMethodField()
     name = SerializerMethodField()
+    product = SerializerMethodField()
+    product_group = SerializerMethodField()
 
     class Meta:
         model = API_Token
-        fields = ["id", "name"]
+        fields = ["id", "name", "product", "product_group"]
 
     def get_id(self, obj: API_Token) -> int:
         return obj.pk
 
     def get_name(self, obj: API_Token) -> str:
         return obj.user.username
+
+    def get_product(self, obj: API_Token) -> Optional[int]:
+        product_member = Product_Member.objects.filter(
+            user=obj.user, product__is_product_group=False
+        ).first()
+        if product_member:
+            return product_member.product.pk
+        return None
+
+    def get_product_group(self, obj: API_Token) -> Optional[int]:
+        product_member = Product_Member.objects.filter(
+            user=obj.user, product__is_product_group=True
+        ).first()
+        if product_member:
+            return product_member.product.pk
+        return None
 
 
 class CreateApiTokenResponseSerializer(Serializer):

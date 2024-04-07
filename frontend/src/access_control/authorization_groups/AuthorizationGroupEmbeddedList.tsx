@@ -2,6 +2,7 @@ import { Datagrid, FilterForm, ListContextProvider, TextField, TextInput, useLis
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { getSettingListSize } from "../../commons/settings/functions";
+import AuthorizationGroupCreateButton from "./AuthorizationGroupCreateButton";
 
 const ShowAuthorizationGroups = (id: any) => {
     return "../../../../authorization_groups/" + id + "/show";
@@ -33,6 +34,7 @@ const AuthorizationGroupEmbeddedList = () => {
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
+                <AuthorizationGroupCreateButton />
                 <FilterForm filters={listFilters()} />
                 <Datagrid size={getSettingListSize()} rowClick={ShowAuthorizationGroups} bulkActionButtons={false}>
                     <TextField source="name" />

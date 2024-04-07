@@ -6,7 +6,7 @@ from unittests.access_control.api.test_authorization import (
 
 class TestAuthorizationApiTokens(TestAuthorizationBase):
     def test_authorization_api_tokens(self):
-        expected_data = "{'count': 1, 'next': None, 'previous': None, 'results': [{'id': 5, 'name': '-product-2-api_token-'}]}"
+        expected_data = "{'count': 1, 'next': None, 'previous': None, 'results': [{'id': 5, 'name': '-product-2-api_token-', 'product': 2, 'product_group': None}]}"
         self._test_api(
             APITest(
                 "db_admin",

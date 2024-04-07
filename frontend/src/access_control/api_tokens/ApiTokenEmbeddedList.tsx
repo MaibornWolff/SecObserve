@@ -1,4 +1,14 @@
-import { Datagrid, FilterForm, ListContextProvider, TextField, TextInput, useListController } from "react-admin";
+import {
+    Datagrid,
+    FilterForm,
+    ListContextProvider,
+    ReferenceField,
+    TextField,
+    TextInput,
+    WithRecord,
+    useListController,
+} from "react-admin";
+import { Fragment } from "react/jsx-runtime";
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { getSettingListSize } from "../../commons/settings/functions";
@@ -32,6 +42,38 @@ const ApiTokenEmbeddedList = () => {
                 <FilterForm filters={listFilters()} />
                 <Datagrid size={getSettingListSize()} rowClick={false} bulkActionButtons={false}>
                     <TextField source="name" />
+                    <WithRecord
+                        label="Product"
+                        render={(api_token) => (
+                            <Fragment>
+                                {api_token.product && (
+                                    <ReferenceField
+                                        source="product"
+                                        reference="products"
+                                        link={(record: any, reference: any) =>
+                                            `../../${reference}/${record.id}/show/api_token`
+                                        }
+                                    />
+                                )}
+                            </Fragment>
+                        )}
+                    />
+                    <WithRecord
+                        label="Product Group"
+                        render={(api_token) => (
+                            <Fragment>
+                                {api_token.product_group && (
+                                    <ReferenceField
+                                        source="product_group"
+                                        reference="product_groups"
+                                        link={(record: any, reference: any) =>
+                                            `../../${reference}/${record.id}/show/api_token`
+                                        }
+                                    />
+                                )}
+                            </Fragment>
+                        )}
+                    />
                 </Datagrid>
                 <CustomPagination />
             </div>

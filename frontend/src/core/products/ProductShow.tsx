@@ -20,6 +20,7 @@ import {
     WithRecord,
     useRecordContext,
 } from "react-admin";
+import { useLocation } from "react-router";
 
 import CreateProductApiToken from "../../access_control/product_api_token/ProductApiTokenCreate";
 import ProductApiTokenEmbeddedList from "../../access_control/product_api_token/ProductApiTokenEmbeddedList";
@@ -91,14 +92,27 @@ const ShowActions = (props: ShowActionsProps) => {
 
 const ProductShow = () => {
     const [settingsTabsShow, setSettingsTabsShow] = useState(false);
+    const [tabs_changed, setTabsChanged] = useState(false);
     function showSettingsTabs() {
         setSettingsTabsShow(true);
+        setTabsChanged(true);
     }
 
     function hideSettingsTabs() {
         setSettingsTabsShow(false);
+        setTabsChanged(true);
     }
 
+    const location = useLocation();
+    if (!tabs_changed) {
+        setTabsChanged(true);
+        setSettingsTabsShow(
+            location.pathname.endsWith("api_token") ||
+                location.pathname.endsWith("members") ||
+                location.pathname.endsWith("rules") ||
+                location.pathname.endsWith("api_configurations")
+        );
+    }
     const settingsLabel = settingsTabsShow ? "Settings" : "Settings >>>";
 
     let filter = {};

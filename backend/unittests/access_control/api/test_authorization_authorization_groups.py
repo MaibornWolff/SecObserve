@@ -92,3 +92,141 @@ class TestAuthorizationAuthorizationGroups(TestAuthorizationBase):
                 expected_data,
             )
         )
+
+        expected_data = "{'id': 9, 'name': 'string', 'oidc_group': 'oidc', 'users': []}"
+        self._test_api(
+            APITest(
+                "db_admin",
+                "post",
+                "/api/authorization_groups/",
+                {
+                    "name": "string",
+                    "oidc_group": "oidc",
+                },
+                201,
+                expected_data,
+                no_second_user=True,
+            )
+        )
+
+        expected_data = (
+            "{'message': 'You do not have permission to perform this action.'}"
+        )
+        self._test_api(
+            APITest(
+                "db_internal_write",
+                "post",
+                "/api/authorization_groups/",
+                {
+                    "name": "string",
+                    "oidc_group": "oidc",
+                },
+                403,
+                expected_data,
+                no_second_user=True,
+            )
+        )
+
+        expected_data = (
+            "{'id': 9, 'name': 'changed_string', 'oidc_group': 'oidc', 'users': []}"
+        )
+        self._test_api(
+            APITest(
+                "db_admin",
+                "patch",
+                "/api/authorization_groups/9/",
+                {"name": "changed_string"},
+                200,
+                expected_data,
+                no_second_user=True,
+            )
+        )
+
+        expected_data = (
+            "{'message': 'You do not have permission to perform this action.'}"
+        )
+        self._test_api(
+            APITest(
+                "db_internal_write",
+                "patch",
+                "/api/authorization_groups/9/",
+                {"name": "changed_string"},
+                403,
+                expected_data,
+                no_second_user=True,
+            )
+        )
+
+        self._test_api(
+            APITest(
+                "db_internal_write",
+                "delete",
+                "/api/authorization_groups/9/",
+                None,
+                403,
+                expected_data,
+                no_second_user=True,
+            )
+        )
+
+        post_data = {"user": 2}
+
+        self._test_api(
+            APITest(
+                "db_internal_write",
+                "post",
+                "/api/authorization_groups/9/add_user/",
+                post_data,
+                403,
+                None,
+                no_second_user=True,
+            )
+        )
+
+        self._test_api(
+            APITest(
+                "db_admin",
+                "post",
+                "/api/authorization_groups/9/add_user/",
+                post_data,
+                204,
+                None,
+                no_second_user=True,
+            )
+        )
+
+        self._test_api(
+            APITest(
+                "db_internal_write",
+                "post",
+                "/api/authorization_groups/9/remove_user/",
+                post_data,
+                403,
+                None,
+                no_second_user=True,
+            )
+        )
+
+        self._test_api(
+            APITest(
+                "db_admin",
+                "post",
+                "/api/authorization_groups/9/remove_user/",
+                post_data,
+                204,
+                None,
+                no_second_user=True,
+            )
+        )
+
+        self._test_api(
+            APITest(
+                "db_admin",
+                "delete",
+                "/api/authorization_groups/9/",
+                None,
+                204,
+                None,
+                no_second_user=True,
+            )
+        )

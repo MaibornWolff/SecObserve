@@ -9,18 +9,22 @@ from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.viewsets import GenericViewSet, ViewSet
+from rest_framework.viewsets import GenericViewSet, ModelViewSet, ViewSet
 
 from application.access_control.api.filters import (
     ApiTokenFilter,
     AuthorizationGroupFilter,
     UserFilter,
 )
+from application.access_control.api.permissions import (
+    UserHasAuthorizationGroupPermission,
+)
 from application.access_control.api.serializers import (
     ApiTokenSerializer,
     AuthenticationRequestSerializer,
     AuthenticationResponseSerializer,
     AuthorizationGroupSerializer,
+    AuthorizationGroupUserSerializer,
     CreateApiTokenResponseSerializer,
     ProductApiTokenSerializer,
     UserSerializer,
@@ -28,9 +32,11 @@ from application.access_control.api.serializers import (
 )
 from application.access_control.models import API_Token, Authorization_Group, User
 from application.access_control.queries.authorization_group import (
+    get_authorization_group_by_id,
     get_authorization_groups,
 )
 from application.access_control.queries.user import (
+    get_user_by_id,
     get_users,
     get_users_without_api_tokens,
 )
@@ -99,13 +105,62 @@ class UserViewSet(RetrieveModelMixin, ListModelMixin, GenericViewSet):
         return Response(response_serializer.data, status=status.HTTP_200_OK)
 
 
-class AuthorizationGroupViewSet(RetrieveModelMixin, ListModelMixin, GenericViewSet):
+class AuthorizationGroupViewSet(ModelViewSet):
     serializer_class = AuthorizationGroupSerializer
     filterset_class = AuthorizationGroupFilter
     queryset = Authorization_Group.objects.none()
+    permission_classes = (IsAuthenticated, UserHasAuthorizationGroupPermission)
 
     def get_queryset(self):
         return get_authorization_groups()
+
+    @extend_schema(
+        methods=["POST"],
+        request=AuthorizationGroupUserSerializer,
+        responses={status.HTTP_204_NO_CONTENT: None},
+    )
+    @action(detail=True, methods=["post"])
+    def add_user(self, request, pk=None):
+        request_serializer = AuthorizationGroupUserSerializer(data=request.data)
+        if not request_serializer.is_valid():
+            raise ValidationError(request_serializer.errors)
+
+        user_id = request_serializer.validated_data.get("user")
+
+        authorization_group = get_authorization_group_by_id(pk)
+        if not authorization_group:
+            raise ValidationError(f"Authorization group {pk} does not exist")
+        user = get_user_by_id(user_id)
+        if not user:
+            raise ValidationError(f"User {user_id} does not exist")
+
+        authorization_group.users.add(user)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @extend_schema(
+        methods=["POST"],
+        request=AuthorizationGroupUserSerializer,
+        responses={status.HTTP_204_NO_CONTENT: None},
+    )
+    @action(detail=True, methods=["post"])
+    def remove_user(self, request, pk=None):
+        request_serializer = AuthorizationGroupUserSerializer(data=request.data)
+        if not request_serializer.is_valid():
+            raise ValidationError(request_serializer.errors)
+
+        user_id = request_serializer.validated_data.get("user")
+
+        authorization_group = get_authorization_group_by_id(pk)
+        if not authorization_group:
+            raise ValidationError(f"Authorization group {pk} does not exist")
+        user = get_user_by_id(user_id)
+        if not user:
+            raise ValidationError(f"User {user_id} does not exist")
+
+        authorization_group.users.remove(user)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ApiTokenViewSet(ListModelMixin, GenericViewSet):
