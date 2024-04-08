@@ -1,6 +1,7 @@
 import { Datagrid, FilterForm, ListContextProvider, TextField, TextInput, useListController } from "react-admin";
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
+import { is_superuser } from "../../commons/functions";
 import { getSettingListSize } from "../../commons/settings/functions";
 import AuthorizationGroupCreateButton from "./AuthorizationGroupCreateButton";
 
@@ -34,7 +35,7 @@ const AuthorizationGroupEmbeddedList = () => {
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
-                <AuthorizationGroupCreateButton />
+                {is_superuser() && <AuthorizationGroupCreateButton />}
                 <FilterForm filters={listFilters()} />
                 <Datagrid size={getSettingListSize()} rowClick={ShowAuthorizationGroups} bulkActionButtons={false}>
                     <TextField source="name" />

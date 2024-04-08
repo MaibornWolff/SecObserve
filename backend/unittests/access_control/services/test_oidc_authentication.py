@@ -350,6 +350,7 @@ class TestOIDCAuthentication(BaseTestCase):
             full_name="test_full_name",
             email="test_email",
             oidc_groups_hash="",
+            is_oidc_user=True,
         )
         oidc_authentication = OIDCAuthentication()
         new_user = oidc_authentication._check_user_change(
@@ -386,6 +387,7 @@ class TestOIDCAuthentication(BaseTestCase):
             full_name="test_full_name",
             email="test_email",
             oidc_groups_hash="",
+            is_oidc_user=True,
         )
         oidc_authentication = OIDCAuthentication()
 

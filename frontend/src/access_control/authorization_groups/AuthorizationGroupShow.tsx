@@ -11,11 +11,11 @@ import {
     WithRecord,
 } from "react-admin";
 
+import { is_superuser } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
 import UserAGEmbeddedList from "../users/UserAGEmbeddedList";
 
 const ShowActions = () => {
-    const user = localStorage.getItem("user");
     return (
         <TopToolbar>
             <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -25,7 +25,7 @@ const ShowActions = () => {
                     filterDefaultValues={{ is_active: true }}
                     storeKey="authorization_groups.embedded"
                 />
-                {user && JSON.parse(user).is_superuser && <EditButton />}
+                {is_superuser() && <EditButton />}
             </Stack>
         </TopToolbar>
     );

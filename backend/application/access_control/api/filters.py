@@ -16,6 +16,7 @@ class UserFilter(FilterSet):
         fields=(
             ("username", "username"),
             ("full_name", "full_name"),
+            ("is_oidc_user", "is_oidc_user"),
             ("is_active", "is_active"),
             ("is_superuser", "is_superuser"),
             ("is_external", "is_external"),
@@ -27,11 +28,26 @@ class UserFilter(FilterSet):
         fields = [
             "username",
             "full_name",
+            "is_oidc_user",
             "is_active",
             "is_superuser",
             "is_external",
             "search",
         ]
+
+    def __init__(self, data=None, queryset=None, *, request=None, prefix=None):
+        super().__init__(data, queryset, request=request, prefix=prefix)
+        if not request.user.is_superuser:
+            self.filters.pop("is_oidc_user")
+            self.filters.pop("is_active")
+            self.filters.pop("is_superuser")
+            self.filters.pop("is_external")
+            self.filters["ordering"] = OrderingFilter(
+                fields=(
+                    ("username", "username"),
+                    ("full_name", "full_name"),
+                ),
+            )
 
 
 class AuthorizationGroupFilter(FilterSet):

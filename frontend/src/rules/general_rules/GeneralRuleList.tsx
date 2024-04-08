@@ -14,6 +14,7 @@ import {
 
 import general_rules from ".";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
+import { is_superuser } from "../../commons/functions";
 import ListHeader from "../../commons/layout/ListHeader";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/settings/functions";
@@ -26,19 +27,14 @@ const listFilters = [
 ];
 
 const BulkActionButtons = () => {
-    const user = localStorage.getItem("user");
-    return (
-        <Fragment>{user && JSON.parse(user).is_superuser && <BulkDeleteButton mutationMode="pessimistic" />}</Fragment>
-    );
+    return <Fragment>{is_superuser() && <BulkDeleteButton mutationMode="pessimistic" />}</Fragment>;
 };
 
 const ListActions = () => {
-    const user = localStorage.getItem("user");
-    return <TopToolbar>{user && JSON.parse(user).is_superuser && <CreateButton />}</TopToolbar>;
+    return <TopToolbar>{is_superuser() && <CreateButton />}</TopToolbar>;
 };
 
 const GeneralRuleList = () => {
-    const user = localStorage.getItem("user");
     return (
         <Fragment>
             <ListHeader icon={general_rules.icon} title="General Rules" />
@@ -54,7 +50,7 @@ const GeneralRuleList = () => {
                 <Datagrid
                     size={getSettingListSize()}
                     rowClick="show"
-                    bulkActionButtons={user && JSON.parse(user).is_superuser && <BulkActionButtons />}
+                    bulkActionButtons={is_superuser() && <BulkActionButtons />}
                 >
                     <TextField source="name" />
                     <TextField source="new_severity" />

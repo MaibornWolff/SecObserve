@@ -3,6 +3,7 @@ import { Fragment } from "react";
 import { Link, matchPath, useLocation } from "react-router-dom";
 
 import administration from ".";
+import { is_superuser } from "../../commons/functions";
 import ListHeader from "../../commons/layout/ListHeader";
 import api_tokens from "../api_tokens";
 import ApiTokenEmbeddedList from "../api_tokens/ApiTokenEmbeddedList";
@@ -52,8 +53,6 @@ function a11yProps(index: number) {
 }
 
 export default function AccessControlAdministration() {
-    const user = localStorage.getItem("user");
-
     const routeMatch = useRouteMatch([
         "/access_control/users",
         "/access_control/authorization_groups",
@@ -95,7 +94,7 @@ export default function AccessControlAdministration() {
                         component={Link}
                         {...a11yProps(1)}
                     />
-                    {user && JSON.parse(user).is_superuser && (
+                    {is_superuser() && (
                         <Tab
                             label="API Tokens"
                             icon={<api_tokens.icon />}

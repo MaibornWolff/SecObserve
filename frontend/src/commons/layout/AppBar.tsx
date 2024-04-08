@@ -1,4 +1,5 @@
 import ArticleIcon from "@mui/icons-material/Article";
+import PersonIcon from "@mui/icons-material/Person";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { Box, Divider, ListItemIcon, ListItemText, MenuItem, Theme, Typography, useMediaQuery } from "@mui/material";
 import { forwardRef } from "react";
@@ -29,6 +30,29 @@ const DocumentationMenu = forwardRef(() => {
     );
 });
 
+const ProfileMenu = forwardRef(() => {
+    const { onClose } = useUserMenu();
+    const user = localStorage.getItem("user");
+    const user_id = user ? JSON.parse(user).id : null;
+
+    return (
+        <MenuItem
+            component={Link}
+            to={"/users/" + user_id + "/show"}
+            onClick={() => {
+                localStorage.removeItem("userembeddedlist");
+                localStorage.removeItem("useragembeddedlist");
+                onClose();
+            }}
+        >
+            <ListItemIcon>
+                <PersonIcon />
+            </ListItemIcon>
+            <ListItemText>Profile</ListItemText>
+        </MenuItem>
+    );
+});
+
 const SettingsMenu = forwardRef(() => {
     const { onClose } = useUserMenu();
 
@@ -51,6 +75,7 @@ const SettingsMenu = forwardRef(() => {
 const CustomUserMenu = () => {
     return (
         <UserMenu>
+            <ProfileMenu />
             <SettingsMenu />
             <Divider />
             <DocumentationMenu />

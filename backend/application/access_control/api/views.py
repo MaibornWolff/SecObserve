@@ -5,7 +5,7 @@ from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied, ValidationError
-from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
+from rest_framework.mixins import ListModelMixin
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -16,9 +16,7 @@ from application.access_control.api.filters import (
     AuthorizationGroupFilter,
     UserFilter,
 )
-from application.access_control.api.permissions import (
-    UserHasAuthorizationGroupPermission,
-)
+from application.access_control.api.permissions import UserHasSuperuserPermission
 from application.access_control.api.serializers import (
     ApiTokenSerializer,
     AuthenticationRequestSerializer,
@@ -29,6 +27,7 @@ from application.access_control.api.serializers import (
     ProductApiTokenSerializer,
     UserSerializer,
     UserSettingsSerializer,
+    UserUpdateSerializer,
 )
 from application.access_control.models import API_Token, Authorization_Group, User
 from application.access_control.queries.authorization_group import (
@@ -59,16 +58,30 @@ from application.core.queries.product import get_product_by_id
 logger = logging.getLogger("secobserve.access_control")
 
 
-class UserViewSet(RetrieveModelMixin, ListModelMixin, GenericViewSet):
+class UserViewSet(ModelViewSet):
     serializer_class = UserSerializer
     filterset_class = UserFilter
     queryset = User.objects.none()
+    permission_classes = (IsAuthenticated, UserHasSuperuserPermission)
 
     def get_queryset(self):
         if self.action == "list":
             return get_users_without_api_tokens()
 
         return get_users()
+
+    def get_serializer_class(self):
+        if self.action in ["create", "update", "partial_update"]:
+            return UserUpdateSerializer
+
+        return super().get_serializer_class()
+
+    def destroy(self, request, *args, **kwargs) -> Response:
+        instance: User = self.get_object()
+        if instance == request.user:
+            raise ValidationError("You cannot delete yourself")
+
+        return super().destroy(request, *args, **kwargs)
 
     @extend_schema(methods=["GET"], responses={status.HTTP_200_OK: UserSerializer})
     @action(detail=False, methods=["get"])
@@ -109,7 +122,7 @@ class AuthorizationGroupViewSet(ModelViewSet):
     serializer_class = AuthorizationGroupSerializer
     filterset_class = AuthorizationGroupFilter
     queryset = Authorization_Group.objects.none()
-    permission_classes = (IsAuthenticated, UserHasAuthorizationGroupPermission)
+    permission_classes = (IsAuthenticated, UserHasSuperuserPermission)
 
     def get_queryset(self):
         return get_authorization_groups()

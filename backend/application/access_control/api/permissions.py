@@ -1,9 +1,9 @@
 from rest_framework.permissions import BasePermission
 
 
-class UserHasAuthorizationGroupPermission(BasePermission):
+class UserHasSuperuserPermission(BasePermission):
     def has_permission(self, request, view):
-        if request.method != "GET":
+        if request.method != "GET" and request.path != "/api/users/my_settings/":
             return request.user.is_superuser
 
         return True

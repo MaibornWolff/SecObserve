@@ -10,20 +10,27 @@ import {
 } from "react-admin";
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
+import { is_superuser } from "../../commons/functions";
 import { getSettingListSize } from "../../commons/settings/functions";
+import UserCreateButton from "./UserCreateButton";
 
 const ShowUsers = (id: any) => {
     return "../../../../users/" + id + "/show";
 };
 
 function listFilters() {
-    return [
-        <TextInput source="username" alwaysOn />,
-        <TextInput source="full_name" alwaysOn />,
-        <NullableBooleanInput source="is_active" label="Active" alwaysOn />,
-        <NullableBooleanInput source="is_external" label="External" alwaysOn />,
-        <NullableBooleanInput source="is_superuser" label="Superuser" alwaysOn />,
-    ];
+    if (is_superuser()) {
+        return [
+            <TextInput source="username" alwaysOn />,
+            <TextInput source="full_name" alwaysOn />,
+            <NullableBooleanInput source="is_active" label="Active" alwaysOn />,
+            <NullableBooleanInput source="is_oidc_user" label="OIDC user" alwaysOn />,
+            <NullableBooleanInput source="is_external" label="External" alwaysOn />,
+            <NullableBooleanInput source="is_superuser" label="Superuser" alwaysOn />,
+        ];
+    } else {
+        return [<TextInput source="username" alwaysOn />, <TextInput source="full_name" alwaysOn />];
+    }
 }
 
 const UserEmbeddedList = () => {
@@ -52,13 +59,15 @@ const UserEmbeddedList = () => {
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
+                {is_superuser() && <UserCreateButton />}
                 <FilterForm filters={listFilters()} />
                 <Datagrid size={getSettingListSize()} rowClick={ShowUsers} bulkActionButtons={false}>
                     <TextField source="username" />
                     <TextField source="full_name" />
-                    <BooleanField source="is_active" label="Active" />
-                    <BooleanField source="is_external" label="External" />
-                    <BooleanField source="is_superuser" label="Superuser" />
+                    {is_superuser() && <BooleanField source="is_active" label="Active" />}
+                    {is_superuser() && <BooleanField source="is_oidc_user" label="OIDC user" />}
+                    {is_superuser() && <BooleanField source="is_external" label="External" />}
+                    {is_superuser() && <BooleanField source="is_superuser" label="Superuser" />}
                 </Datagrid>
                 <CustomPagination />
             </div>

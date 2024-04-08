@@ -19,6 +19,7 @@ from application.core.models import Product_Member
 
 class UserSerializer(ModelSerializer):
     permissions = SerializerMethodField()
+    has_password = SerializerMethodField()
 
     class Meta:
         model = User
@@ -37,7 +38,9 @@ class UserSerializer(ModelSerializer):
             "permissions",
             "setting_list_properties",
             "oidc_groups_hash",
+            "is_oidc_user",
             "date_joined",
+            "has_password",
         ]
 
     def to_representation(self, instance: User):
@@ -56,12 +59,33 @@ class UserSerializer(ModelSerializer):
             data.pop("setting_list_properties")
             data.pop("permissions")
             data.pop("oidc_groups_hash")
+            data.pop("is_oidc_user")
             data.pop("date_joined")
+            data.pop("has_password")
 
         return data
 
-    def get_permissions(self, obj) -> list[Permissions]:
+    def get_permissions(self, obj: User) -> list[Permissions]:
         return get_user_permissions(obj)
+
+    def get_has_password(self, obj: User) -> bool:
+        return bool(obj.password and obj.password != "")
+
+
+class UserUpdateSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "full_name",
+            "email",
+            "is_active",
+            "is_superuser",
+            "is_external",
+        ]
 
 
 class AuthorizationGroupSerializer(ModelSerializer):

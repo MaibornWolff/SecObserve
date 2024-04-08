@@ -3,6 +3,7 @@ import { Fragment } from "react";
 import {
     BooleanField,
     DateField,
+    EditButton,
     Labeled,
     PrevNextButtons,
     Show,
@@ -12,6 +13,7 @@ import {
     WithRecord,
 } from "react-admin";
 
+import { is_superuser } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
 
 const ShowActions = () => {
@@ -39,6 +41,7 @@ const ShowActions = () => {
                         storeKey={storeKey}
                     />
                 )}
+                {is_superuser() && <EditButton />}
             </Stack>
         </TopToolbar>
     );
@@ -46,6 +49,7 @@ const ShowActions = () => {
 
 const UserComponent = () => {
     const { classes } = useStyles();
+    const current_user = localStorage.getItem("user");
 
     return (
         <WithRecord
@@ -82,51 +86,55 @@ const UserComponent = () => {
                                     <DateField source="date_joined" showTime />
                                 </Labeled>
                             )}
-                        </Stack>
-                    </Paper>
-                    <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
-                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                            Permissions
-                        </Typography>
-                        <Stack spacing={1}>
-                            <Labeled label="Active">
-                                <BooleanField source="is_active" />
-                            </Labeled>
-                            <Labeled label="External">
-                                <BooleanField source="is_external" />
-                            </Labeled>
-                            <Labeled label="Superuser">
-                                <BooleanField source="is_superuser" />
-                            </Labeled>
-                        </Stack>
-                    </Paper>
-                    <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
-                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                            Settings
-                        </Typography>
-                        <Stack spacing={1}>
-                            {user.setting_theme && (
-                                <Labeled label="Theme">
-                                    <TextField source="setting_theme" />
+                            {user.has_password != undefined && (
+                                <Labeled label="Has password">
+                                    <BooleanField source="has_password" />
                                 </Labeled>
                             )}
-                            {user.setting_list_size && (
-                                <Labeled label="List size">
-                                    <TextField source="setting_list_size" />
-                                </Labeled>
-                            )}
-                            {user.setting_list_properties && (
-                                <Labeled label="List properties">
-                                    <TextField source="setting_list_properties" />
-                                </Labeled>
-                            )}
-                            {user.oidc_groups_hash && (
-                                <Labeled label="OIDC groups hash">
-                                    <TextField source="oidc_groups_hash" />
+                            {user.is_oidc_user != undefined && (
+                                <Labeled label="OIDC user">
+                                    <BooleanField source="is_oidc_user" />
                                 </Labeled>
                             )}
                         </Stack>
                     </Paper>
+                    {(is_superuser() || (current_user && JSON.parse(current_user).id == user.id)) && (
+                        <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Permissions
+                            </Typography>
+                            <Stack spacing={1}>
+                                <Labeled label="Active">
+                                    <BooleanField source="is_active" />
+                                </Labeled>
+                                <Labeled label="External">
+                                    <BooleanField source="is_external" />
+                                </Labeled>
+                                <Labeled label="Superuser">
+                                    <BooleanField source="is_superuser" />
+                                </Labeled>
+                            </Stack>
+                        </Paper>
+                    )}
+                    {(is_superuser() || (current_user && JSON.parse(current_user).id == user.id)) && (
+                        <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Settings
+                            </Typography>
+                            <Stack spacing={1}>
+                                {user.setting_theme && (
+                                    <Labeled label="Theme">
+                                        <TextField source="setting_theme" />
+                                    </Labeled>
+                                )}
+                                {user.setting_list_size && (
+                                    <Labeled label="List size">
+                                        <TextField source="setting_list_size" />
+                                    </Labeled>
+                                )}
+                            </Stack>
+                        </Paper>
+                    )}
                 </SimpleShowLayout>
             )}
         />
