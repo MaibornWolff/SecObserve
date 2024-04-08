@@ -63,7 +63,7 @@ RUN chown -R ${user}:${group} /usr/share/nginx/html && \
         chown -R ${user}:${group} /var/run/nginx.pid
 
 HEALTHCHECK --interval=30s --timeout=30s --start-period=10s --retries=3 \
-    CMD wget -nv -t1 --spider 'http://localhost:3000/#/login' || exit 1
+    CMD wget -nv -t1 --spider 'http://127.0.0.1:3000/#/login' || exit 1
 
 EXPOSE 3000
 
