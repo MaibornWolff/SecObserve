@@ -54,7 +54,7 @@ jira = "3.8.0"  # https://github.com/pycontribs/jira
 # ------------------------------------------------------------------------------
 inflect = "7.2.0"  # https://github.com/jaraco/inflect
 validators = "0.28.0"  # https://github.com/python-validators/validators
-cvss = "3.0"  # https://github.com/RedHatProductSecurity/cvss
+cvss = "3.1"  # https://github.com/RedHatProductSecurity/cvss
 jsonpickle = "3.0.3"  # https://github.com/jsonpickle/jsonpickle
 
 [tool.poetry.group.dev.dependencies]
