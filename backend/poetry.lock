@@ -522,12 +522,13 @@ test-randomorder = ["pytest-randomly"]
 
 [[package]]
 name = "cvss"
-version = "3.0"
+version = "3.1"
 description = "CVSS2/3/4 library with interactive calculator for Python 2 and Python 3"
 optional = false
 python-versions = "*"
 files = [
-    {file = "cvss-3.0-py2.py3-none-any.whl", hash = "sha256:705995aa6f99efdd600f83997c78b625bc81be0603ec00a91465ad2eb613cd7b"},
+    {file = "cvss-3.1-py2.py3-none-any.whl", hash = "sha256:092dafc14f9f1c1ac09e25d0d38410e178cf0009479faecff7f585c968f21688"},
+    {file = "cvss-3.1.tar.gz", hash = "sha256:54789edd255d1bc26cc04919f5795e250e9ce2da33b2fc0e8e709f22cb88c5fc"},
 ]
 
 [[package]]
@@ -2468,4 +2469,4 @@ brotli = ["Brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">= 3.10, < 3.13"
-content-hash = "465866340bb2ad05908ad6d8fe3771655fc527164806a1f9f27e49be74a78d6d"
+content-hash = "197e06be70b8f18dab83bee1bb80d49ff88c85e96a706f6c2578a0ff63fdb9a6"
