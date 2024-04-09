@@ -69,7 +69,7 @@ class UserSerializer(ModelSerializer):
         return get_user_permissions(obj)
 
     def get_has_password(self, obj: User) -> bool:
-        return bool(obj.password and obj.password != "")
+        return bool(obj.password and obj.password != "" and obj.has_usable_password())
 
 
 class UserUpdateSerializer(ModelSerializer):

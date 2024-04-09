@@ -19,6 +19,7 @@ def create_product_api_token(product: Product, role: Roles) -> str:
     api_token, api_token_hash = generate_api_token_hash()
 
     user = User(username=product_user_name, is_active=True)
+    user.set_unusable_password()
     user.save()
     Product_Member(product=product, user=user, role=role).save()
     API_Token(user=user, api_token_hash=api_token_hash).save()

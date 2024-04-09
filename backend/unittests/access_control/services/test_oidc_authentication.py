@@ -352,6 +352,7 @@ class TestOIDCAuthentication(BaseTestCase):
             oidc_groups_hash="",
             is_oidc_user=True,
         )
+        old_user.set_unusable_password()
         oidc_authentication = OIDCAuthentication()
         new_user = oidc_authentication._check_user_change(
             old_user,
@@ -389,6 +390,7 @@ class TestOIDCAuthentication(BaseTestCase):
             oidc_groups_hash="",
             is_oidc_user=True,
         )
+        old_user.set_unusable_password()
         oidc_authentication = OIDCAuthentication()
 
         with patch.dict(
@@ -457,6 +459,7 @@ class TestOIDCAuthentication(BaseTestCase):
             "27cbb2858ce86012e498c8102d24d066837d67beec8c180f5e85e652df700c9f",
             new_user.oidc_groups_hash,
         )
+        self.assertFalse(new_user.has_usable_password())
         user_save_mock.assert_called_once()
         synchronize_groups_mock.assert_called_with(new_user, payload)
 

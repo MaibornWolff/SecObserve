@@ -145,6 +145,9 @@ class OIDCAuthentication(BaseAuthentication):
         if not user.is_oidc_user:
             user.is_oidc_user = True
             user_changed = True
+        if user.has_usable_password():
+            user.set_unusable_password()
+            user_changed = True
 
         if user_changed:
             user.save()
