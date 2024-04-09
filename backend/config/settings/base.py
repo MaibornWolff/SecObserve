@@ -25,7 +25,7 @@ DEBUG = env.bool("DJANGO_DEBUG", False)
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["localhost", env("ALLOWED_HOSTS")]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", env("ALLOWED_HOSTS")]
 
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -583,7 +583,7 @@ HUEY = {
         "filename": HUEY_FILENAME,  # Filename for sqlite.
     },
     "consumer": {
-        "workers": 2,
+        "workers": 3,  # Number of worker threads/processes.
         "worker_type": "thread",
         "initial_delay": 0.1,  # Smallest polling interval, same as -d.
         "backoff": 1.15,  # Exponential backoff using this rate, -b.

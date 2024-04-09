@@ -1,12 +1,15 @@
 import logging
 
-from application.import_observations.parsers.cyclone_dx.types import Component
+from application.import_observations.parsers.cyclone_dx.types import Component, Metadata
 
 logger = logging.getLogger("secobserve.import_observations.cyclone_dx.dependencies")
 
 
 def get_component_dependencies(
-    data: dict, components: dict[str, Component], component: Component
+    data: dict,
+    components: dict[str, Component],
+    component: Component,
+    metadata: Metadata,
 ):
     component_dependencies: list[dict[str, str | list[str]]] = []
     _filter_component_dependencies(
@@ -26,6 +29,7 @@ def get_component_dependencies(
                 component.bom_ref,
                 component_dependencies,
                 components,
+                metadata,
             )
         )
 
@@ -94,6 +98,7 @@ def _get_dependencies(
     component_bom_ref: str,
     component_dependencies: list[dict],
     components: dict[str, Component],
+    metadata: Metadata,
 ) -> list[str]:
     roots = _get_roots(component_dependencies)
 
@@ -108,7 +113,9 @@ def _get_dependencies(
                 components,
             )
     except RecursionError as e:
-        logger.warning(e)
+        logger.warning(
+            "%s:%s -> %s", metadata.container_name, metadata.container_tag, str(e)
+        )
         return []
 
     return_dependencies = []
