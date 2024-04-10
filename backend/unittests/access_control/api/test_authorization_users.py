@@ -79,6 +79,141 @@ class TestAuthorizationUsers(TestAuthorizationBase):
             APITest("db_external", "get", "/api/users/2/", None, 404, expected_data)
         )
 
+        expected_data = "{'id': 7, 'username': 'test_user', 'first_name': '', 'last_name': '', 'full_name': 'string', 'email': '', 'is_active': True, 'is_superuser': False, 'is_external': False}"
+        self._test_api(
+            APITest(
+                "db_admin",
+                "post",
+                "/api/users/",
+                {
+                    "username": "test_user",
+                    "full_name": "string",
+                },
+                201,
+                expected_data,
+                no_second_user=True,
+            )
+        )
+
+        expected_data = (
+            "{'message': 'You do not have permission to perform this action.'}"
+        )
+        self._test_api(
+            APITest(
+                "db_internal_write",
+                "post",
+                "/api/users/",
+                {
+                    "username": "test_user",
+                    "full_name": "string",
+                },
+                403,
+                expected_data,
+                no_second_user=True,
+            )
+        )
+
+        expected_data = "{'id': 7, 'username': 'test_user', 'first_name': '', 'last_name': '', 'full_name': 'changed_string', 'email': '', 'is_active': True, 'is_superuser': False, 'is_external': False}"
+        self._test_api(
+            APITest(
+                "db_admin",
+                "patch",
+                "/api/users/7/",
+                {"full_name": "changed_string"},
+                200,
+                expected_data,
+                no_second_user=True,
+            )
+        )
+
+        expected_data = (
+            "{'message': 'You do not have permission to perform this action.'}"
+        )
+        self._test_api(
+            APITest(
+                "db_internal_write",
+                "patch",
+                "/api/users/7/",
+                {"full_name": "changed_string"},
+                403,
+                expected_data,
+                no_second_user=True,
+            )
+        )
+
+        self._test_api(
+            APITest(
+                "db_internal_write",
+                "delete",
+                "/api/users/7/",
+                None,
+                403,
+                None,
+                no_second_user=True,
+            )
+        )
+
+        self._test_api(
+            APITest(
+                "db_admin",
+                "delete",
+                "/api/users/7/",
+                None,
+                204,
+                None,
+                no_second_user=True,
+            )
+        )
+
+        expected_data = "{'message': 'You cannot delete yourself'}"
+        self._test_api(
+            APITest(
+                "db_admin",
+                "delete",
+                "/api/users/1/",
+                None,
+                400,
+                expected_data,
+                no_second_user=True,
+            )
+        )
+
+        expected_data = (
+            "{'message': \"You are not allowed to change other users' passwords\"}"
+        )
+        self._test_api(
+            APITest(
+                "db_internal_write",
+                "patch",
+                "/api/users/1/change_password/",
+                {
+                    "current_password": "current",
+                    "new_password_1": "new",
+                    "new_password_2": "new",
+                },
+                403,
+                expected_data,
+                no_second_user=True,
+            )
+        )
+
+        expected_data = "{'message': 'Current password is incorrect'}"
+        self._test_api(
+            APITest(
+                "db_admin",
+                "patch",
+                "/api/users/1/change_password/",
+                {
+                    "current_password": "current",
+                    "new_password_1": "new",
+                    "new_password_2": "new",
+                },
+                400,
+                expected_data,
+                no_second_user=True,
+            )
+        )
+
         expected_data = "{'id': 2, 'username': 'db_internal_write', 'first_name': '', 'last_name': '', 'full_name': 'db_internal_write', 'email': '', 'is_active': True, 'is_superuser': False, 'is_external': False, 'setting_theme': 'light', 'setting_list_size': 'medium', 'permissions': [<Permissions.Product_Create: 1104>, <Permissions.Product_Group_Create: 1004>], 'setting_list_properties': '', 'oidc_groups_hash': '', 'is_oidc_user': False, 'date_joined': '2022-12-07T20:24:53+01:00', 'has_password': False}"
         self._test_api(
             APITest(

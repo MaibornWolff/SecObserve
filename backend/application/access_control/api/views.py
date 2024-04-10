@@ -147,7 +147,7 @@ class UserViewSet(ModelViewSet):
                 "You are not allowed to change other users' passwords"
             )
 
-        if not instance.has_usable_password():
+        if not instance.has_usable_password() or instance.is_oidc_user:
             raise ValidationError("User's password cannot be changed")
 
         if new_password_1 != new_password_2:
