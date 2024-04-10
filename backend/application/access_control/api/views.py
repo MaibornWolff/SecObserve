@@ -131,7 +131,7 @@ class UserViewSet(ModelViewSet):
         responses={status.HTTP_204_NO_CONTENT: None},
     )
     @action(detail=True, methods=["patch"])
-    def change_password(self, request, pk=None):  #pylint: disable=unused-argument
+    def change_password(self, request, pk=None):  # pylint: disable=unused-argument
         # pk is not used, but it is required to match the action signature
         request_serializer = UserPasswordSerializer(data=request.data)
         if not request_serializer.is_valid():
