@@ -11,12 +11,17 @@ import {
     TextField,
     TopToolbar,
     WithRecord,
+    useRecordContext,
 } from "react-admin";
 
 import { is_superuser } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
+import UserChangePassword from "./UserChangePassword";
 
 const ShowActions = () => {
+    const current_user = localStorage.getItem("user");
+    const user = useRecordContext();
+
     let filter = null;
     let storeKey = null;
 
@@ -40,6 +45,9 @@ const ShowActions = () => {
                         filterDefaultValues={{ is_active: true }}
                         storeKey={storeKey}
                     />
+                )}
+                {(is_superuser() || (current_user && user && JSON.parse(current_user).id == user.id)) && (
+                    <UserChangePassword />
                 )}
                 {is_superuser() && <EditButton />}
             </Stack>

@@ -88,6 +88,16 @@ class UserUpdateSerializer(ModelSerializer):
         ]
 
 
+class UserPasswordSerializer(Serializer):
+    current_password = CharField(max_length=255, required=False)
+    new_password_1 = CharField(max_length=255, required=True)
+    new_password_2 = CharField(max_length=255, required=True)
+
+
+class UserPasswortRulesSerializer(Serializer):
+    password_rules = CharField()
+
+
 class AuthorizationGroupSerializer(ModelSerializer):
     class Meta:
         model = Authorization_Group

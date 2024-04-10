@@ -29,7 +29,12 @@ class TestProductApiToken(BaseTestCase):
     @patch("application.core.models.Product_Member.save")
     @patch("application.access_control.models.User.set_unusable_password")
     def test_create_product_api_token_new(
-        self, set_unusable_password_mock, product_member_save_mock, user_save_mock, api_token_save_mock, user_mock
+        self,
+        set_unusable_password_mock,
+        product_member_save_mock,
+        user_save_mock,
+        api_token_save_mock,
+        user_mock,
     ):
         user_mock.return_value = None
 
