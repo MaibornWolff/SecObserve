@@ -1,6 +1,6 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import PasswordIcon from "@mui/icons-material/Password";
-import { Box, Button, Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
+import { Button, Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
 import { Fragment, useState } from "react";
 import { SaveButton, SimpleForm, Toolbar, WithRecord, useNotify, useRefresh } from "react-admin";
 
@@ -16,7 +16,6 @@ const getPasswordRules = async () => {
 const password_rules = await getPasswordRules();
 
 const UserChangePassword = () => {
-    const my_user = localStorage.getItem("user");
     const refresh = useRefresh();
     const [open, setOpen] = useState(false);
     const notify = useNotify();
