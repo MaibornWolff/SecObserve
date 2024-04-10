@@ -4,8 +4,11 @@ import { AuthProvider } from "react-oidc-context";
 import { Route } from "react-router";
 
 import { Login } from "./access_control";
+import AccessControlAdministration from "./access_control/access_control_administration/AccessControlAdministration";
 import authProvider from "./access_control/authProvider";
 import { oidcConfig } from "./access_control/authProvider";
+import authorization_groups from "./access_control/authorization_groups";
+import users from "./access_control/users";
 import englishMessages from "./commons/i18n/en";
 import { Layout } from "./commons/layout";
 import notifications from "./commons/notifications";
@@ -45,6 +48,9 @@ const App = () => {
                 theme={getTheme()}
             >
                 <CustomRoutes>
+                    <Route path="/access_control/users" element={<AccessControlAdministration />} />
+                    <Route path="/access_control/authorization_groups" element={<AccessControlAdministration />} />
+                    <Route path="/access_control/api_tokens" element={<AccessControlAdministration />} />
                     <Route path="/settings" element={<Settings />} />
                 </CustomRoutes>
                 <Resource
@@ -90,7 +96,18 @@ const App = () => {
                     recordRepresentation={(record) => `${trim_string(record.name)}`}
                 />
                 <Resource name="branches" recordRepresentation={(record) => `${trim_string(record.name)}`} />
-                <Resource name="users" recordRepresentation={(record) => `${trim_string(record.full_name)}`} />
+                <Resource
+                    name="users"
+                    {...users} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                    // nosemgrep because the props are well defined in the import
+                    recordRepresentation={(record) => `${trim_string(record.full_name)}`}
+                />
+                <Resource
+                    name="authorization_groups"
+                    {...authorization_groups} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                    // nosemgrep because the props are well defined in the import
+                    recordRepresentation={(record) => `${trim_string(record.name)}`}
+                />
                 <Resource
                     name="notifications"
                     {...notifications} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading

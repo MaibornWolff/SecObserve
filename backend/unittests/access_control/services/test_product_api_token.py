@@ -27,8 +27,14 @@ class TestProductApiToken(BaseTestCase):
     @patch("application.access_control.models.API_Token.save")
     @patch("application.access_control.models.User.save")
     @patch("application.core.models.Product_Member.save")
+    @patch("application.access_control.models.User.set_unusable_password")
     def test_create_product_api_token_new(
-        self, product_member_save_mock, user_save_mock, api_token_save_mock, user_mock
+        self,
+        set_unusable_password_mock,
+        product_member_save_mock,
+        user_save_mock,
+        api_token_save_mock,
+        user_mock,
     ):
         user_mock.return_value = None
 
@@ -40,6 +46,7 @@ class TestProductApiToken(BaseTestCase):
         api_token_save_mock.assert_called()
         user_save_mock.assert_called()
         product_member_save_mock.assert_called()
+        set_unusable_password_mock.assert_called()
 
     @patch("application.access_control.services.product_api_token.get_user_by_username")
     @patch("application.access_control.models.API_Token.objects.filter")

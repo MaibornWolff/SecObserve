@@ -1,6 +1,6 @@
 from rest_framework.permissions import BasePermission
 
-from application.access_control.api.permissions import (
+from application.access_control.api.permissions_base import (
     check_object_permission,
     check_post_permission,
 )

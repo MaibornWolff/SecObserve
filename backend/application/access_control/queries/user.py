@@ -7,6 +7,13 @@ from application.commons.services.global_request import get_current_user
 from application.core.queries.product_member import get_product_members
 
 
+def get_user_by_id(pk: int) -> Optional[User]:
+    try:
+        return User.objects.get(pk=pk)
+    except User.DoesNotExist:
+        return None
+
+
 def get_user_by_username(username: str) -> Optional[User]:
     try:
         return User.objects.get(username=username)
