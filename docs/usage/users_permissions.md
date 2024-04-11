@@ -21,28 +21,29 @@ The user type can be set by flags in the user administration:
 
 There are some general permissions based on the user's type:
 
-|                       | Internal | External | Superuser |
-|-----------------------|:--------:|:--------:|:---------:|
-| Create Product Groups | X        | -        | X         |
-| Create Product        | X        | -        | X         |
-|                       |          |          |           |
-| View General Rules    | X        | X        | X         |
-| Create General Rules  | -        | -        | X         |
-| Edit General Rules    | -        | -        | X         |
-| Delete General Rules  | -        | -        | X         |
-|                       |          |          |           |
-| Access Admin UI       | -        | -        | X         |
+|                             | Internal | External | Superuser |
+|-----------------------------|:--------:|:--------:|:---------:|
+| Create Product Groups       | X        | -        | X         |
+| Create Product              | X        | -        | X         |
+|                             |          |          |           |
+| View General Rules          | X        | X        | X         |
+| Create General Rules        | -        | -        | X         |
+| Edit General Rules          | -        | -        | X         |
+| Delete General Rules        | -        | -        | X         |
+|                             |          |          |           |
+| Change own password         | X        | X        | X         |
+| Change all passwords        | -        | -        | X         |
+| Manage users                | -        | -        | X         |
+| Manage authorization groups | -        | -        | X         |
+|                             |          |          |           |
+| Access Admin UI             | -        | -        | X         |
 
 
 ## Authorization groups
 
-Authorization groups can be used to manage permissions for multiple users at once. Users can be added to authorization groups and the groups can be assigned to products. This way, permissions can be managed centrally for multiple users.
+Authorization groups are used to manage permissions for multiple users at once. Users can be added to authorization groups and the groups can be assigned to products. This way, permissions can be managed centrally for multiple users.
 
-Currently authorization groups can only be managed by superusers using the [Django Admin user interface](../getting_started/configuration.md#admin-user-interface):
-
-![Authorization Groups](../assets/images/screenshot_authorization_groups.png)
-
-Authorization groups can be mapped to OIDC group claims. If the OICD token includes a group claim (see [OpenID Connect authentication](../integrations/oidc_authentication.md)), the user will be automatically added to the authorization group, where an entry of the group claim matches the attribute `oidc_group`. If the users will be removed from the group in the user directory, the user will be removed from the authorization group automatically as well.
+Authorization groups can be mapped to OIDC group claims. If the OICD token includes a group claim (see [OpenID Connect authentication](../integrations/oidc_authentication.md)), the user will automatically be added to the authorization group, where an entry of the group claim matches the attribute `oidc_group`. If the users will be removed from the group in the user directory, the user will be removed from the authorization group automatically as well.
 
 
 ## Roles and permissions
@@ -99,3 +100,10 @@ While superusers have permission to view and edit all data, internal and externa
 **^2)^** Maintainers are not allowed to manipulate Owners of that product
 
 **^3)^** Only for VEX documents (CSAF or OpenVEX) linked to a product. For VEX documents without a product, the user who created the VEX document is the owner of the document and can perform all actions on it.
+
+
+## Management of users and authorization groups
+
+Users and authorization groups can be managed by superusers in the Access Control administration:
+
+![Settings / Access Control](../assets/images/screenshot_settings_access_control.png)
