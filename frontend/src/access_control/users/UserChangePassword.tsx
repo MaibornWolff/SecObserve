@@ -8,17 +8,26 @@ import { validate_required_255 } from "../../commons/custom_validators";
 import { PasswordInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
-const getPasswordRules = async () => {
-    return httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/users/password_rules/").then((response) => {
-        return response.json.password_rules;
-    });
-};
-const password_rules = await getPasswordRules();
-
 const UserChangePassword = () => {
     const refresh = useRefresh();
     const [open, setOpen] = useState(false);
     const notify = useNotify();
+    const [loaded, setLoaded] = useState(false);
+    const [password_rules, setPasswordRules] = useState("");
+
+    function get_password_rules() {
+        httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/users/password_rules/", {
+            method: "GET",
+        }).then((result) => {
+            setPasswordRules(result.json.password_rules);
+        });
+        setLoaded(true);
+    }
+
+    if (!loaded) {
+        get_password_rules();
+    }
+
     const changePassword = async (data: any) => {
         const patch = {
             current_password: data.current_password,
