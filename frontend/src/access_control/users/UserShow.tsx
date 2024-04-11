@@ -46,9 +46,11 @@ const ShowActions = () => {
                         storeKey={storeKey}
                     />
                 )}
-                {(is_superuser() || (current_user && user && JSON.parse(current_user).id == user.id)) && (
-                    <UserChangePassword />
-                )}
+                {user &&
+                    !user.is_oidc_user &&
+                    (is_superuser() || (current_user && user && JSON.parse(current_user).id == user.id)) && (
+                        <UserChangePassword />
+                    )}
                 {is_superuser() && <EditButton />}
             </Stack>
         </TopToolbar>
