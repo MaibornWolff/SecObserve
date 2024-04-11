@@ -38,7 +38,8 @@ function CustomTabPanel(props: TabPanelProps) {
             hidden={value !== index}
             id={`simple-tabpanel-${index}`}
             aria-labelledby={`simple-tab-${index}`}
-            {...other}
+            {...other} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+            // nosemgrep because the props are well defined in the import
         >
             {value === index && <Box sx={{ p: 2 }}>{children}</Box>}
         </div>
@@ -85,14 +86,16 @@ export default function AccessControlAdministration() {
                         icon={<users.icon />}
                         to="/access_control/users"
                         component={Link}
-                        {...a11yProps(0)}
+                        {...a11yProps(0)} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                        // nosemgrep because the props are well defined in the import
                     />
                     <Tab
                         label="Authorization Groups"
                         icon={<authorization_groups.icon />}
                         to="/access_control/authorization_groups"
                         component={Link}
-                        {...a11yProps(1)}
+                        {...a11yProps(1)} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                        // nosemgrep because the props are well defined in the import
                     />
                     {is_superuser() && (
                         <Tab
@@ -100,7 +103,8 @@ export default function AccessControlAdministration() {
                             icon={<api_tokens.icon />}
                             to="/access_control/api_tokens"
                             component={Link}
-                            {...a11yProps(2)}
+                            {...a11yProps(2)} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                            // nosemgrep because the props are well defined in the import
                         />
                     )}
                 </Tabs>

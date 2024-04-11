@@ -69,7 +69,10 @@ class UserSerializer(ModelSerializer):
         return get_user_permissions(obj)
 
     def get_has_password(self, obj: User) -> bool:
-        return bool(obj.password and obj.password != "" and obj.has_usable_password())
+        return bool(
+            obj.password and obj.password != "" and obj.has_usable_password()  # nosec B105
+        )
+        # eliminate false positive, password is not hardcoded
 
 
 class UserUpdateSerializer(ModelSerializer):
