@@ -1,4 +1,4 @@
-FROM node:20.12.1-alpine3.19@sha256:7e227295e96f5b00aa79555ae166f50610940d888fc2e321cf36304cbd17d7d6
+FROM node:20.12.2-alpine3.19@sha256:3321ad83759c5bb1a18575b40606dee561bbdb6b2b008327c17d85adeb3939d1
 
 WORKDIR /app
 COPY ./frontend/package*.json /app/.
