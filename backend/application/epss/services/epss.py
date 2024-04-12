@@ -3,6 +3,7 @@ import re
 from datetime import datetime
 
 import requests
+from django.core.paginator import Paginator
 
 from application.core.models import Observation
 from application.core.types import Status
@@ -53,19 +54,27 @@ def import_epss() -> None:
         EPSS_Score.objects.bulk_create(scores)
 
 
-def epss_apply_observations() -> int:
-    counter = 0
+def epss_apply_observations() -> None:
+    observations = (
+        Observation.objects.filter(vulnerability_id__startswith="CVE-")
+        .exclude(current_status=Status.STATUS_RESOLVED)
+        .order_by("id")
+    )
 
-    observations = Observation.objects.filter(
-        vulnerability_id__startswith="CVE-"
-    ).exclude(current_status=Status.STATUS_RESOLVED)
-    for observation in observations:
-        counter = counter + 1 if epss_apply_observation(observation) else counter
+    paginator = Paginator(observations, 1000)
 
-    return counter
+    for page_number in paginator.page_range:
+        page = paginator.page(page_number)
+        updates = []
+
+        for observation in page.object_list:
+            if _epss_apply_score(observation):
+                updates.append(observation)
+
+        Observation.objects.bulk_update(updates, ["epss_score", "epss_percentile"])
 
 
-def epss_apply_observation(observation: Observation) -> bool:
+def _epss_apply_score(observation: Observation) -> bool:
     if observation.vulnerability_id.startswith("CVE-"):
         try:
             epss_score = EPSS_Score.objects.get(cve=observation.vulnerability_id)
@@ -86,7 +95,11 @@ def epss_apply_observation(observation: Observation) -> bool:
         ):
             observation.epss_score = new_epss_score
             observation.epss_percentile = new_epss_percentile
-            observation.save()
             return True
 
     return False
+
+
+def epss_apply_observation(observation: Observation) -> None:
+    if _epss_apply_score(observation):
+        observation.save()

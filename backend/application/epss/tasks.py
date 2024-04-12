@@ -22,8 +22,7 @@ def task_import_epss() -> None:
 
     try:
         import_epss()
-        num_updated = epss_apply_observations()
-        logger.info("Updated %d observations with EPSS scores", num_updated)
+        epss_apply_observations()
     except Exception as e:
         handle_task_exception(e)
 
