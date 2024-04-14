@@ -1,8 +1,8 @@
 from os import path
 from unittest.mock import patch
-from django.test import TestCase
 
 from django.core.management import call_command
+from django.test import TestCase
 from django.utils import dateparse
 from rest_framework.test import APIClient
 
@@ -70,7 +70,9 @@ class TestOpenVEX(TestCase):
         ) as testfile:
             self.assertEqual(testfile.read(), response._container[0].decode("utf-8"))
 
-        openvex = OpenVEX.objects.get(document_id_prefix="OpenVEX", document_base_id="2024_0001")
+        openvex = OpenVEX.objects.get(
+            document_id_prefix="OpenVEX", document_base_id="2024_0001"
+        )
         self.assertEqual(vex_user, openvex.user)
         self.assertEqual(Product.objects.get(id=1), openvex.product)
         self.assertEqual(1, openvex.version)
@@ -105,7 +107,9 @@ class TestOpenVEX(TestCase):
 
         api_client = APIClient()
         response = api_client.post(
-            "/api/vex/openvex_document/update/OpenVEX/2024_0001/", parameters, format="json"
+            "/api/vex/openvex_document/update/OpenVEX/2024_0001/",
+            parameters,
+            format="json",
         )
 
         self.assertEqual(204, response.status_code)
@@ -130,7 +134,9 @@ class TestOpenVEX(TestCase):
 
         api_client = APIClient()
         response = api_client.post(
-            "/api/vex/openvex_document/update/OpenVEX/2024_0001/", parameters, format="json"
+            "/api/vex/openvex_document/update/OpenVEX/2024_0001/",
+            parameters,
+            format="json",
         )
 
         self.assertEqual(200, response.status_code)
@@ -144,7 +150,9 @@ class TestOpenVEX(TestCase):
         ) as testfile:
             self.assertEqual(testfile.read(), response._container[0].decode("utf-8"))
 
-        openvex = OpenVEX.objects.get(document_id_prefix="OpenVEX", document_base_id="2024_0001")
+        openvex = OpenVEX.objects.get(
+            document_id_prefix="OpenVEX", document_base_id="2024_0001"
+        )
         self.assertEqual(vex_user, openvex.user)
         self.assertEqual(Product.objects.get(id=1), openvex.product)
         self.assertEqual(2, openvex.version)
@@ -169,7 +177,6 @@ class TestOpenVEX(TestCase):
 
         openvex_vulnerabilities = OpenVEX_Vulnerability.objects.filter(openvex=openvex)
         self.assertEqual(0, len(openvex_vulnerabilities))
-
 
     @patch("django.utils.timezone.now")
     @patch(
@@ -216,7 +223,9 @@ class TestOpenVEX(TestCase):
         ) as testfile:
             self.assertEqual(testfile.read(), response._container[0].decode("utf-8"))
 
-        openvex = OpenVEX.objects.get(document_id_prefix="OpenVEX", document_base_id="2024_0001")
+        openvex = OpenVEX.objects.get(
+            document_id_prefix="OpenVEX", document_base_id="2024_0001"
+        )
         self.assertEqual(vex_user, openvex.user)
         self.assertEqual(Product.objects.get(id=2), openvex.product)
         self.assertEqual(1, openvex.version)
@@ -241,8 +250,6 @@ class TestOpenVEX(TestCase):
 
         openvex_vulnerabilities = OpenVEX_Vulnerability.objects.filter(openvex=openvex)
         self.assertEqual(0, len(openvex_vulnerabilities))
-
-
 
     @patch("django.utils.timezone.now")
     @patch(
@@ -290,7 +297,9 @@ class TestOpenVEX(TestCase):
         ) as testfile:
             self.assertEqual(testfile.read(), response._container[0].decode("utf-8"))
 
-        openvex = OpenVEX.objects.get(document_id_prefix="OpenVEX", document_base_id="2024_0001")
+        openvex = OpenVEX.objects.get(
+            document_id_prefix="OpenVEX", document_base_id="2024_0001"
+        )
         self.assertEqual(vex_user, openvex.user)
         self.assertEqual(Product.objects.get(id=2), openvex.product)
         self.assertEqual(1, openvex.version)
@@ -316,7 +325,6 @@ class TestOpenVEX(TestCase):
 
         openvex_vulnerabilities = OpenVEX_Vulnerability.objects.filter(openvex=openvex)
         self.assertEqual(0, len(openvex_vulnerabilities))
-
 
     @patch("django.utils.timezone.now")
     @patch(
@@ -363,7 +371,9 @@ class TestOpenVEX(TestCase):
         ) as testfile:
             self.assertEqual(testfile.read(), response._container[0].decode("utf-8"))
 
-        openvex = OpenVEX.objects.get(document_id_prefix="OpenVEX", document_base_id="2024_0001")
+        openvex = OpenVEX.objects.get(
+            document_id_prefix="OpenVEX", document_base_id="2024_0001"
+        )
         self.assertEqual(vex_user, openvex.user)
         self.assertEqual(None, openvex.product)
         self.assertEqual(1, openvex.version)
@@ -399,7 +409,9 @@ class TestOpenVEX(TestCase):
 
         api_client = APIClient()
         response = api_client.post(
-            "/api/vex/openvex_document/update/OpenVEX/2024_0001/", parameters, format="json"
+            "/api/vex/openvex_document/update/OpenVEX/2024_0001/",
+            parameters,
+            format="json",
         )
 
         self.assertEqual(204, response.status_code)
@@ -420,7 +432,9 @@ class TestOpenVEX(TestCase):
 
         api_client = APIClient()
         response = api_client.post(
-            "/api/vex/openvex_document/update/OpenVEX/2024_0001/", parameters, format="json"
+            "/api/vex/openvex_document/update/OpenVEX/2024_0001/",
+            parameters,
+            format="json",
         )
 
         self.assertEqual(200, response.status_code)
@@ -430,11 +444,14 @@ class TestOpenVEX(TestCase):
             response.headers["Content-Disposition"],
         )
         with open(
-            path.dirname(__file__) + "/files/openvex_given_vulnerability_update.json", "r"
+            path.dirname(__file__) + "/files/openvex_given_vulnerability_update.json",
+            "r",
         ) as testfile:
             self.assertEqual(testfile.read(), response._container[0].decode("utf-8"))
 
-        openvex = OpenVEX.objects.get(document_id_prefix="OpenVEX", document_base_id="2024_0001")
+        openvex = OpenVEX.objects.get(
+            document_id_prefix="OpenVEX", document_base_id="2024_0001"
+        )
         self.assertEqual(vex_user, openvex.user)
         self.assertEqual(None, openvex.product)
         self.assertEqual(2, openvex.version)

@@ -1,8 +1,8 @@
 from os import path
 from unittest.mock import patch
-from django.test import TestCase
 
 from django.core.management import call_command
+from django.test import TestCase
 from django.utils import dateparse
 from rest_framework.test import APIClient
 
@@ -96,7 +96,10 @@ class TestCSAF(TestCase):
         self.assertEqual(
             CSAF_Tracking_Status.CSAF_TRACKING_STATUS_FINAL, csaf.tracking_status
         )
-        self.assertEqual(CSAF_TLP_Label.CSAF_TLP_LABEL_WHITE, csaf.tlp_label, )
+        self.assertEqual(
+            CSAF_TLP_Label.CSAF_TLP_LABEL_WHITE,
+            csaf.tlp_label,
+        )
         self.assertEqual(
             dateparse.parse_datetime("2020-01-01T04:30:00Z"),
             csaf.tracking_initial_release_date,
@@ -192,7 +195,10 @@ class TestCSAF(TestCase):
         self.assertEqual(
             CSAF_Tracking_Status.CSAF_TRACKING_STATUS_DRAFT, csaf.tracking_status
         )
-        self.assertEqual(CSAF_TLP_Label.CSAF_TLP_LABEL_AMBER, csaf.tlp_label, )
+        self.assertEqual(
+            CSAF_TLP_Label.CSAF_TLP_LABEL_AMBER,
+            csaf.tlp_label,
+        )
         self.assertEqual(
             dateparse.parse_datetime("2020-01-01T04:30:00Z"),
             csaf.tracking_initial_release_date,
@@ -215,7 +221,6 @@ class TestCSAF(TestCase):
         )
         self.assertEqual(2, csaf_revisions[1].version)
         self.assertEqual("Update", csaf_revisions[1].summary)
-
 
     @patch("django.utils.timezone.now")
     @patch(
@@ -283,7 +288,10 @@ class TestCSAF(TestCase):
         self.assertEqual(
             CSAF_Tracking_Status.CSAF_TRACKING_STATUS_FINAL, csaf.tracking_status
         )
-        self.assertEqual(CSAF_TLP_Label.CSAF_TLP_LABEL_WHITE, csaf.tlp_label, )
+        self.assertEqual(
+            CSAF_TLP_Label.CSAF_TLP_LABEL_WHITE,
+            csaf.tlp_label,
+        )
         self.assertEqual(
             dateparse.parse_datetime("2020-01-01T04:30:00Z"),
             csaf.tracking_initial_release_date,
@@ -374,7 +382,10 @@ class TestCSAF(TestCase):
         self.assertEqual(
             CSAF_Tracking_Status.CSAF_TRACKING_STATUS_FINAL, csaf.tracking_status
         )
-        self.assertEqual(CSAF_TLP_Label.CSAF_TLP_LABEL_WHITE, csaf.tlp_label, )
+        self.assertEqual(
+            CSAF_TLP_Label.CSAF_TLP_LABEL_WHITE,
+            csaf.tlp_label,
+        )
         self.assertEqual(
             dateparse.parse_datetime("2020-01-01T04:30:00Z"),
             csaf.tracking_initial_release_date,
@@ -465,7 +476,10 @@ class TestCSAF(TestCase):
         self.assertEqual(
             CSAF_Tracking_Status.CSAF_TRACKING_STATUS_FINAL, csaf.tracking_status
         )
-        self.assertEqual(CSAF_TLP_Label.CSAF_TLP_LABEL_WHITE, csaf.tlp_label, )
+        self.assertEqual(
+            CSAF_TLP_Label.CSAF_TLP_LABEL_WHITE,
+            csaf.tlp_label,
+        )
         self.assertEqual(
             dateparse.parse_datetime("2020-01-01T04:30:00Z"),
             csaf.tracking_initial_release_date,
@@ -558,7 +572,10 @@ class TestCSAF(TestCase):
         self.assertEqual(
             CSAF_Tracking_Status.CSAF_TRACKING_STATUS_DRAFT, csaf.tracking_status
         )
-        self.assertEqual(CSAF_TLP_Label.CSAF_TLP_LABEL_AMBER, csaf.tlp_label, )
+        self.assertEqual(
+            CSAF_TLP_Label.CSAF_TLP_LABEL_AMBER,
+            csaf.tlp_label,
+        )
         self.assertEqual(
             dateparse.parse_datetime("2020-01-01T04:30:00Z"),
             csaf.tracking_initial_release_date,
