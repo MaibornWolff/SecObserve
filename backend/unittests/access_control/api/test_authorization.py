@@ -62,7 +62,6 @@ class TestAuthorizationBase(BaseTestCase):
         )
         product_metrics.save()
 
-        self.maxDiff = None
         super().setUpClass()
 
     @patch(

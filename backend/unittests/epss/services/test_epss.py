@@ -17,7 +17,6 @@ class TestEPSS(BaseTestCase):
     def setUpClass(self, mock_user):
         mock_user.return_value = None
         call_command("loaddata", "unittests/fixtures/unittests_fixtures.json")
-        self.maxDiff = None
         super().setUpClass()
 
     @patch("application.core.models.Observation.objects.filter")

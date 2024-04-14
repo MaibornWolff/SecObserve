@@ -1,4 +1,4 @@
-# VEX documents [experimental]
+# VEX documents
 
 A VEX (Vulnerability Exploitability eXchange) document is a form of a security advisory that indicates whether a product or products are affected by a known vulnerability or vulnerabilities. SecObserve supports the export of VEX documents in two formats:
 
@@ -7,7 +7,7 @@ A VEX (Vulnerability Exploitability eXchange) document is a form of a security a
 
 ## Feature flag
 
-The VEX feature is currently in an experimental state and can be enabled by setting the feature flag `FEATURE_VEX` in the admin interface:
+The VEX feature is is disabled by default because not all installations will use it. It can be enabled by setting the feature flag `FEATURE_VEX` in the admin interface:
 
 ![VEX feature flag](../assets/images/screenshot_vex_feature_flag.png)
 

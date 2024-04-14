@@ -79,6 +79,7 @@ def get_observations_for_product(
         .exclude(vulnerability_id="")
         .order_by("id")
     )
+
     if vulnerability_names:
         observations = observations.filter(vulnerability_id__in=vulnerability_names)
 
