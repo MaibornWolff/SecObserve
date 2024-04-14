@@ -264,6 +264,7 @@ def _get_content_for_product(
             vulnerability = create_vulnerability(observation.vulnerability_id)
             vulnerabilities[observation.vulnerability_id] = vulnerability
             set_vulnerability_description(vulnerability, observation, None)
+
         set_product_status(vulnerability, observation)
         remove_conflicting_product_status(vulnerability)
         set_remediation(vulnerability, observation)

@@ -81,7 +81,7 @@ const Menu = ({ dense = false }: MenuProps) => {
                     <SubMenu
                         handleToggle={() => handleToggle("menuVEX")}
                         isOpen={state.menuVEX}
-                        name="VEX (Experimental)"
+                        name="VEX"
                         icon={<SecurityIcon />}
                         dense={dense}
                     >

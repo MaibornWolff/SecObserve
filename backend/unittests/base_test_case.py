@@ -23,6 +23,8 @@ from application.vex.models import OpenVEX
 
 class BaseTestCase(TestCase):
     def setUp(self) -> None:
+        self.maxDiff = None
+
         self.user_internal = User(
             username="user_internal@example.com", is_external=False
         )

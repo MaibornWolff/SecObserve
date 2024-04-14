@@ -18,7 +18,7 @@ def get_vulnerability_ecosystem(vulnerability_name: str) -> str:
     for key, value in VULNERABILITY_ECOSYSTEM.items():
         if vulnerability_name.startswith(key):
             return value
-    return "Unkonwn ecosystem"
+    return "Unkown ecosystem"
 
 
 def map_status(secobserve_status: str) -> Optional[str]:
