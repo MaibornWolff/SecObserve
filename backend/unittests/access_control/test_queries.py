@@ -17,7 +17,6 @@ class TestQueries(BaseTestCase):
     def setUpClass(self, mock_user):
         mock_user.return_value = None
         call_command("loaddata", "unittests/fixtures/unittests_fixtures.json")
-        self.maxDiff = None
         super().setUpClass()
 
     def test_get_user_by_username_not_found(self):

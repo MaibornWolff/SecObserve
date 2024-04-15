@@ -37,6 +37,7 @@ class User(AbstractUser):
     )
     setting_list_properties = TextField(max_length=2048, blank=True)
     oidc_groups_hash = CharField(max_length=64, blank=True)
+    is_oidc_user = BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if self.first_name and self.last_name:

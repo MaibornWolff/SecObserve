@@ -3,7 +3,7 @@ from unittest.mock import patch
 from django.http import Http404, HttpRequest
 from rest_framework.exceptions import ParseError
 
-from application.access_control.api.permissions import (
+from application.access_control.api.permissions_base import (
     check_object_permission,
     check_post_permission,
 )
@@ -32,7 +32,7 @@ class TestPermissions(BaseTestCase):
             str(e.exception),
         )
 
-    @patch("application.access_control.api.permissions.get_object_or_404")
+    @patch("application.access_control.api.permissions_base.get_object_or_404")
     def test_check_post_permission_foreign_key_not_found(self, mock):
         mock.side_effect = Http404()
         request = HttpRequest()
@@ -43,8 +43,8 @@ class TestPermissions(BaseTestCase):
 
         mock.assert_called_with(Product, pk=1)
 
-    @patch("application.access_control.api.permissions.get_object_or_404")
-    @patch("application.access_control.api.permissions.user_has_permission")
+    @patch("application.access_control.api.permissions_base.get_object_or_404")
+    @patch("application.access_control.api.permissions_base.user_has_permission")
     def test_check_post_permission_successful(self, permission_mock, get_mock):
         get_mock.return_value = self.product_1
         permission_mock.return_value = True
@@ -64,7 +64,7 @@ class TestPermissions(BaseTestCase):
 
     # --- check_object_permission ---
 
-    @patch("application.access_control.api.permissions.user_has_permission")
+    @patch("application.access_control.api.permissions_base.user_has_permission")
     def test_check_object_permission_get(self, mock):
         mock.return_value = True
         request = HttpRequest()
@@ -82,7 +82,7 @@ class TestPermissions(BaseTestCase):
         )
         mock.assert_called_with(self.product_1, Permissions.Product_View)
 
-    @patch("application.access_control.api.permissions.user_has_permission")
+    @patch("application.access_control.api.permissions_base.user_has_permission")
     def test_check_object_permission_put(self, mock):
         mock.return_value = True
         request = HttpRequest()
@@ -100,7 +100,7 @@ class TestPermissions(BaseTestCase):
         )
         mock.assert_called_with(self.product_1, Permissions.Product_Edit)
 
-    @patch("application.access_control.api.permissions.user_has_permission")
+    @patch("application.access_control.api.permissions_base.user_has_permission")
     def test_check_object_permission_patch(self, mock):
         mock.return_value = True
         request = HttpRequest()
@@ -118,7 +118,7 @@ class TestPermissions(BaseTestCase):
         )
         mock.assert_called_with(self.product_1, Permissions.Product_Edit)
 
-    @patch("application.access_control.api.permissions.user_has_permission")
+    @patch("application.access_control.api.permissions_base.user_has_permission")
     def test_check_object_permission_delete(self, mock):
         mock.return_value = True
         request = HttpRequest()
@@ -136,7 +136,7 @@ class TestPermissions(BaseTestCase):
         )
         mock.assert_called_with(self.product_1, Permissions.Product_Delete)
 
-    @patch("application.access_control.api.permissions.user_has_permission")
+    @patch("application.access_control.api.permissions_base.user_has_permission")
     def test_check_object_permission_post(self, mock):
         mock.return_value = True
         request = HttpRequest()

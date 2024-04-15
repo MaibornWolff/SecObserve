@@ -1,0 +1,69 @@
+{
+    "@context": "https://openvex.dev/ns/v0.2.0",
+    "@id": "https://vex.example.com/OpenVEX_2024_0001",
+    "author": "New Author",
+    "last_updated": "2020-02-01T04:30:00+00:00",
+    "role": "New Role",
+    "statements": [
+        {
+            "action_statement": "Upgrade to release 1.1.0",
+            "products": [
+                {
+                    "@id": "vex_product_1",
+                    "subcomponents": [
+                        {
+                            "@id": "pkg:so/vex_comp_1@1.0.0"
+                        }
+                    ]
+                }
+            ],
+            "status": "affected",
+            "vulnerability": {
+                "@id": "https://github.com/advisories/GHSA-vulnerability_1",
+                "description": "new description",
+                "name": "GHSA-vulnerability_1"
+            }
+        },
+        {
+            "action_statement": "Upgrade to release 2.1.0",
+            "products": [
+                {
+                    "@id": "vex_product_1",
+                    "subcomponents": [
+                        {
+                            "@id": "pkg:so/vex_comp_2@2.0.0"
+                        }
+                    ]
+                }
+            ],
+            "status": "affected",
+            "vulnerability": {
+                "@id": "https://nvd.nist.gov/vuln/detail/CVE-vulnerability_2",
+                "description": "description 2",
+                "name": "CVE-vulnerability_2"
+            }
+        },
+        {
+            "impact_statement": "Should be no problem",
+            "justification": "vulnerable_code_not_in_execute_path",
+            "products": [
+                {
+                    "@id": "vex_product_1",
+                    "subcomponents": [
+                        {
+                            "@id": "pkg:so/vex_comp_3@3.0.0"
+                        }
+                    ]
+                }
+            ],
+            "status": "not_affected",
+            "vulnerability": {
+                "description": "description 3",
+                "name": "vex_vulnerability_3"
+            }
+        }
+    ],
+    "timestamp": "2020-01-01T04:30:00+00:00",
+    "tooling": "SecObserve / 1.11.0",
+    "version": 2
+}

@@ -26,6 +26,7 @@ class APITest:
     expected_status_code: int
     expected_data: str
     no_second_user: Optional[bool] = False
+    expected_data_product_group: Optional[str] = None
 
 
 class TestAuthorizationBase(BaseTestCase):
@@ -61,7 +62,6 @@ class TestAuthorizationBase(BaseTestCase):
         )
         product_metrics.save()
 
-        self.maxDiff = None
         super().setUpClass()
 
     @patch(
@@ -113,5 +113,7 @@ class TestAuthorizationBase(BaseTestCase):
                 raise Exception(f"Unkown method: {data.method}")
 
             self.assertEqual(data.expected_status_code, response.status_code)
-            if data.expected_data:
+            if data.expected_data_product_group:
+                self.assertEqual(data.expected_data_product_group, str(response.data))
+            elif data.expected_data:
                 self.assertEqual(data.expected_data, str(response.data))

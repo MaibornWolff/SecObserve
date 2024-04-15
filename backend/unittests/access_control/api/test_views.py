@@ -1,5 +1,6 @@
 from unittest.mock import patch
 
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.urls import reverse
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.test import APIClient
@@ -153,3 +154,207 @@ class TestGetAuthenticatedUser(BaseTestCase):
         data = {"username": "user@example.com", "password": "not_so_secret"}
         self.assertEqual(self.user_internal, _get_authenticated_user(data))
         mock.assert_called_with(username="user@example.com", password="not_so_secret")
+
+
+class TestChangePassword(BaseTestCase):
+    @patch(
+        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
+    )
+    @patch("application.access_control.api.views.UserViewSet.get_object")
+    @patch("application.access_control.models.User.set_password")
+    @patch("application.access_control.models.User.save")
+    def test_change_password_unusable_password(
+        self, save_mock, set_password_mock, get_object_mock, authentication_mock
+    ):
+        self.user_internal.set_unusable_password()
+        get_object_mock.return_value = self.user_internal
+        authentication_mock.return_value = self.user_admin, None
+
+        api_client = APIClient()
+        request_data = {
+            "current_password": "current",
+            "new_password_1": "new",
+            "new_password_2": "new",
+        }
+        response = api_client.patch(
+            "/api/users/123/change_password/", request_data, "json"
+        )
+
+        self.assertEqual(400, response.status_code)
+        self.assertEqual("User's password cannot be changed", response.data["message"])
+        save_mock.assert_not_called()
+        set_password_mock.assert_not_called()
+
+    @patch(
+        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
+    )
+    @patch("application.access_control.api.views.UserViewSet.get_object")
+    @patch("application.access_control.models.User.set_password")
+    @patch("application.access_control.models.User.save")
+    def test_change_password_oidc_user(
+        self, save_mock, set_password_mock, get_object_mock, authentication_mock
+    ):
+        self.user_internal.is_oidc_user = True
+        get_object_mock.return_value = self.user_internal
+        authentication_mock.return_value = self.user_admin, None
+
+        api_client = APIClient()
+        request_data = {
+            "current_password": "current",
+            "new_password_1": "new",
+            "new_password_2": "new",
+        }
+        response = api_client.patch(
+            "/api/users/123/change_password/", request_data, "json"
+        )
+
+        self.assertEqual(400, response.status_code)
+        self.assertEqual("User's password cannot be changed", response.data["message"])
+        save_mock.assert_not_called()
+        set_password_mock.assert_not_called()
+
+    @patch(
+        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
+    )
+    @patch("application.access_control.api.views.UserViewSet.get_object")
+    @patch("application.access_control.models.User.set_password")
+    @patch("application.access_control.models.User.save")
+    def test_change_password_do_not_match(
+        self, save_mock, set_password_mock, get_object_mock, authentication_mock
+    ):
+        get_object_mock.return_value = self.user_internal
+        authentication_mock.return_value = self.user_admin, None
+
+        api_client = APIClient()
+        request_data = {
+            "current_password": "current",
+            "new_password_1": "new_1",
+            "new_password_2": "new_2",
+        }
+        response = api_client.patch(
+            "/api/users/123/change_password/", request_data, "json"
+        )
+
+        self.assertEqual(400, response.status_code)
+        self.assertEqual("The new passwords do not match", response.data["message"])
+        save_mock.assert_not_called()
+        set_password_mock.assert_not_called()
+
+    @patch(
+        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
+    )
+    @patch("application.access_control.api.views.UserViewSet.get_object")
+    @patch("application.access_control.models.User.set_password")
+    @patch("application.access_control.models.User.save")
+    @patch("application.access_control.api.views.django_authenticate")
+    def test_change_password_current_password_incorrect(
+        self,
+        django_authenticate_mock,
+        save_mock,
+        set_password_mock,
+        get_object_mock,
+        authentication_mock,
+    ):
+        get_object_mock.return_value = self.user_internal
+        authentication_mock.return_value = self.user_admin, None
+        django_authenticate_mock.return_value = None
+
+        api_client = APIClient()
+        request_data = {
+            "current_password": "current",
+            "new_password_1": "new",
+            "new_password_2": "new",
+        }
+        response = api_client.patch(
+            "/api/users/123/change_password/", request_data, "json"
+        )
+
+        self.assertEqual(400, response.status_code)
+        self.assertEqual("Current password is incorrect", response.data["message"])
+        django_authenticate_mock.assert_called_with(
+            username="user_admin@example.com", password="current"
+        )
+        save_mock.assert_not_called()
+        set_password_mock.assert_not_called()
+
+    @patch(
+        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
+    )
+    @patch("application.access_control.api.views.UserViewSet.get_object")
+    @patch("application.access_control.models.User.set_password")
+    @patch("application.access_control.models.User.save")
+    @patch("application.access_control.api.views.django_authenticate")
+    @patch("application.access_control.api.views.validate_password")
+    def test_change_password_not_valid(
+        self,
+        validate_password_mock,
+        django_authenticate_mock,
+        save_mock,
+        set_password_mock,
+        get_object_mock,
+        authentication_mock,
+    ):
+        get_object_mock.return_value = self.user_internal
+        authentication_mock.return_value = self.user_admin, None
+        django_authenticate_mock.return_value = self.user_admin
+        validate_password_mock.side_effect = DjangoValidationError(
+            ["too_short", "too_common"]
+        )
+
+        api_client = APIClient()
+        request_data = {
+            "current_password": "current",
+            "new_password_1": "new",
+            "new_password_2": "new",
+        }
+        response = api_client.patch(
+            "/api/users/123/change_password/", request_data, "json"
+        )
+
+        self.assertEqual(400, response.status_code)
+        self.assertEqual("too_short / too_common", response.data["message"])
+        django_authenticate_mock.assert_called_with(
+            username="user_admin@example.com", password="current"
+        )
+        save_mock.assert_not_called()
+        set_password_mock.assert_not_called()
+
+    @patch(
+        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
+    )
+    @patch("application.access_control.api.views.UserViewSet.get_object")
+    @patch("application.access_control.models.User.set_password")
+    @patch("application.access_control.models.User.save")
+    @patch("application.access_control.api.views.django_authenticate")
+    @patch("application.access_control.api.views.validate_password")
+    def test_change_password_successful(
+        self,
+        validate_password_mock,
+        django_authenticate_mock,
+        save_mock,
+        set_password_mock,
+        get_object_mock,
+        authentication_mock,
+    ):
+        get_object_mock.return_value = self.user_internal
+        authentication_mock.return_value = self.user_admin, None
+        django_authenticate_mock.return_value = self.user_admin
+        validate_password_mock.return_value = None
+
+        api_client = APIClient()
+        request_data = {
+            "current_password": "current",
+            "new_password_1": "new",
+            "new_password_2": "new",
+        }
+        response = api_client.patch(
+            "/api/users/123/change_password/", request_data, "json"
+        )
+
+        self.assertEqual(204, response.status_code)
+        self.assertEqual(None, response.data)
+        django_authenticate_mock.assert_called_with(
+            username="user_admin@example.com", password="current"
+        )
+        save_mock.assert_called()
+        set_password_mock.assert_called_with("new")

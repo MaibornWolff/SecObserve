@@ -81,7 +81,7 @@ nav:
     - Source code repositories: integrations/source_code_repositories.md
     - Issue trackers: integrations/issue_trackers.md
     - Notifications: integrations/notifications.md
-    - VEX documents [experimental]: integrations/vex.md
+    - VEX documents: integrations/vex.md
     - Export of observations: integrations/observations_export.md
     - CodeCharta: integrations/codecharta.md
     - Links to additional information: integrations/links.md

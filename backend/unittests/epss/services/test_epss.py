@@ -17,24 +17,29 @@ class TestEPSS(BaseTestCase):
     def setUpClass(self, mock_user):
         mock_user.return_value = None
         call_command("loaddata", "unittests/fixtures/unittests_fixtures.json")
-        self.maxDiff = None
         super().setUpClass()
 
     @patch("application.core.models.Observation.objects.filter")
-    @patch("application.epss.services.epss.epss_apply_observation")
-    def test_epss_apply_observations(
-        self, mock_epss_apply_observation, mock_observations
-    ):
-        mock_observations.return_value = Observation.objects.all()
+    @patch("application.core.models.Observation.objects.bulk_update")
+    def test_epss_apply_observations(self, mock_bulk_update, mock_filter):
+        observation_1 = Observation.objects.get(id=1)
+        observation_1.vulnerability_id = "CVE-1"
+        observation_1.save()
+        observation_2 = Observation.objects.get(id=2)
+        observation_2.vulnerability_id = "CVE-2"
+        observation_2.save()
+
+        EPSS_Score.objects.create(
+            cve="CVE-1", epss_score=0.00383, epss_percentile=0.72606
+        )
+
+        mock_filter.return_value = Observation.objects.all()
+
         epss_apply_observations()
-        mock_observations.assert_called_with(vulnerability_id__startswith="CVE-")
-        mock_epss_apply_observation.assert_has_calls(
-            [
-                call(Observation.objects.all()[0]),
-                call().__bool__(),
-                call(Observation.objects.all()[1]),
-                call().__bool__(),
-            ]
+
+        mock_filter.assert_called_with(vulnerability_id__startswith="CVE-")
+        mock_bulk_update.assert_has_calls(
+            [call([observation_1], ["epss_score", "epss_percentile"])]
         )
 
     @patch("application.epss.models.EPSS_Score.objects.filter")

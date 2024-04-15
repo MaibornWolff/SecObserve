@@ -5,6 +5,7 @@ import { Fragment } from "react";
 import { useState } from "react";
 import { DashboardMenuItem, MenuItemLink, MenuProps, useSidebarState } from "react-admin";
 
+import administration from "../../access_control/access_control_administration";
 import observations from "../../core/observations";
 import parsers from "../../core/parsers";
 import product_groups from "../../core/product_groups";
@@ -80,7 +81,7 @@ const Menu = ({ dense = false }: MenuProps) => {
                     <SubMenu
                         handleToggle={() => handleToggle("menuVEX")}
                         isOpen={state.menuVEX}
-                        name="VEX (Experimental)"
+                        name="VEX"
                         icon={<SecurityIcon />}
                         dense={dense}
                     >
@@ -125,6 +126,15 @@ const Menu = ({ dense = false }: MenuProps) => {
                         state={{ _scrollToTop: true }}
                         primaryText="General Rules"
                         leftIcon={<general_rules.icon />}
+                        dense={dense}
+                        onPointerEnterCapture={undefined}
+                        onPointerLeaveCapture={undefined}
+                    />
+                    <MenuItemLink
+                        to="/access_control/users"
+                        state={{ _scrollToTop: true }}
+                        primaryText="Access Control"
+                        leftIcon={<administration.icon />}
                         dense={dense}
                         onPointerEnterCapture={undefined}
                         onPointerLeaveCapture={undefined}

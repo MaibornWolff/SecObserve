@@ -1,0 +1,33 @@
+{
+    "@context": "https://openvex.dev/ns/v0.2.0",
+    "@id": "https://vex.example.com/OpenVEX_2024_0001",
+    "author": "Author",
+    "last_updated": "2020-01-01T04:30:00+00:00",
+    "role": "Role",
+    "statements": [
+        {
+            "impact_statement": "Should be no problem",
+            "products": [
+                {
+                    "@id": "pkg:so/vex_product_2@main",
+                    "identifiers": {
+                        "purl": "pkg:so/vex_product_2@main"
+                    },
+                    "subcomponents": [
+                        {
+                            "@id": "pkg:so/vex_comp_5@5.0.0"
+                        }
+                    ]
+                }
+            ],
+            "status": "not_affected",
+            "vulnerability": {
+                "description": "description 4",
+                "name": "vex_vulnerability_4"
+            }
+        }
+    ],
+    "timestamp": "2020-01-01T04:30:00+00:00",
+    "tooling": "SecObserve / 1.11.0",
+    "version": 1
+}

@@ -1,0 +1,117 @@
+{
+    "document": {
+        "category": "csaf_vex",
+        "csaf_version": "2.0",
+        "distribution": {
+            "tlp": {
+                "label": "WHITE"
+            }
+        },
+        "publisher": {
+            "category": "vendor",
+            "name": "Publisher",
+            "namespace": "https://vex.example.com"
+        },
+        "title": "Title",
+        "tracking": {
+            "current_release_date": "2020-01-01T04:30:00+00:00",
+            "generator": {
+                "engine": {
+                    "name": "SecObserve",
+                    "version": "1.11.0"
+                }
+            },
+            "id": "CSAF_2024_0001_0001",
+            "initial_release_date": "2020-01-01T04:30:00+00:00",
+            "revision_history": [
+                {
+                    "date": "2020-01-01T04:30:00+00:00",
+                    "number": "1",
+                    "summary": "Initial release"
+                }
+            ],
+            "status": "final",
+            "version": "1"
+        }
+    },
+    "product_tree": {
+        "branches": [
+            {
+                "branches": [
+                    {
+                        "category": "product_version",
+                        "name": "vex_product_2:main",
+                        "product": {
+                            "name": "vex_product_2:main",
+                            "product_id": "pkg:so/vex_product_2@main",
+                            "product_identification_helper": {
+                                "purl": "pkg:so/vex_product_2@main"
+                            }
+                        }
+                    }
+                ],
+                "category": "product_family",
+                "name": "vex_product_2"
+            },
+            {
+                "branches": [
+                    {
+                        "category": "product_version",
+                        "name": "vex_comp_5:5.0.0",
+                        "product": {
+                            "name": "vex_comp_5:5.0.0",
+                            "product_id": "pkg:so/vex_comp_5@5.0.0",
+                            "product_identification_helper": {
+                                "cpe": "cpe:2.3:a:so:vex_comp_5:5.0.0:*:*:*:*:*:*:*",
+                                "purl": "pkg:so/vex_comp_5@5.0.0"
+                            }
+                        }
+                    }
+                ],
+                "category": "product_family",
+                "name": "_components_"
+            }
+        ],
+        "relationships": [
+            {
+                "category": "default_component_of",
+                "full_product_name": {
+                    "name": "vex_comp_5:5.0.0@vex_product_2:main",
+                    "product_id": "vex_comp_5:5.0.0@vex_product_2:main"
+                },
+                "product_reference": "pkg:so/vex_comp_5@5.0.0",
+                "relates_to_product_reference": "pkg:so/vex_product_2@main"
+            }
+        ]
+    },
+    "vulnerabilities": [
+        {
+            "ids": [
+                {
+                    "system_name": "Unkown ecosystem",
+                    "text": "vex_vulnerability_4"
+                }
+            ],
+            "notes": [
+                {
+                    "category": "description",
+                    "text": "description 4"
+                }
+            ],
+            "product_status": {
+                "known_not_affected": [
+                    "vex_comp_5:5.0.0@vex_product_2:main"
+                ]
+            },
+            "threats": [
+                {
+                    "category": "impact",
+                    "details": "Should be no problem",
+                    "product_ids": [
+                        "vex_comp_5:5.0.0@vex_product_2:main"
+                    ]
+                }
+            ]
+        }
+    ]
+}

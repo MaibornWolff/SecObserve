@@ -1,30 +1,49 @@
 import logging
+from dataclasses import dataclass
 
 from django.contrib.auth import authenticate as django_authenticate
+from django.contrib.auth.password_validation import (
+    password_validators_help_texts,
+    validate_password,
+)
+from django.core.exceptions import ValidationError as DjangoValidationError
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied, ValidationError
-from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
+from rest_framework.mixins import ListModelMixin
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.viewsets import GenericViewSet, ViewSet
+from rest_framework.viewsets import GenericViewSet, ModelViewSet, ViewSet
 
-from application.access_control.api.filters import AuthorizationGroupFilter, UserFilter
+from application.access_control.api.filters import (
+    ApiTokenFilter,
+    AuthorizationGroupFilter,
+    UserFilter,
+)
+from application.access_control.api.permissions import UserHasSuperuserPermission
 from application.access_control.api.serializers import (
+    ApiTokenSerializer,
     AuthenticationRequestSerializer,
     AuthenticationResponseSerializer,
     AuthorizationGroupSerializer,
+    AuthorizationGroupUserSerializer,
     CreateApiTokenResponseSerializer,
     ProductApiTokenSerializer,
+    UserPasswordSerializer,
+    UserPasswortRulesSerializer,
     UserSerializer,
     UserSettingsSerializer,
+    UserUpdateSerializer,
 )
-from application.access_control.models import Authorization_Group, User
+from application.access_control.models import API_Token, Authorization_Group, User
 from application.access_control.queries.authorization_group import (
+    get_authorization_group_by_id,
     get_authorization_groups,
 )
 from application.access_control.queries.user import (
+    get_user_by_id,
     get_users,
     get_users_without_api_tokens,
 )
@@ -47,16 +66,30 @@ from application.core.queries.product import get_product_by_id
 logger = logging.getLogger("secobserve.access_control")
 
 
-class UserViewSet(RetrieveModelMixin, ListModelMixin, GenericViewSet):
+class UserViewSet(ModelViewSet):
     serializer_class = UserSerializer
     filterset_class = UserFilter
     queryset = User.objects.none()
+    permission_classes = (IsAuthenticated, UserHasSuperuserPermission)
 
     def get_queryset(self):
         if self.action == "list":
             return get_users_without_api_tokens()
 
         return get_users()
+
+    def get_serializer_class(self):
+        if self.action in ["create", "update", "partial_update"]:
+            return UserUpdateSerializer
+
+        return super().get_serializer_class()
+
+    def destroy(self, request, *args, **kwargs) -> Response:
+        instance: User = self.get_object()
+        if instance == request.user:
+            raise ValidationError("You cannot delete yourself")
+
+        return super().destroy(request, *args, **kwargs)
 
     @extend_schema(methods=["GET"], responses={status.HTTP_200_OK: UserSerializer})
     @action(detail=False, methods=["get"])
@@ -92,14 +125,132 @@ class UserViewSet(RetrieveModelMixin, ListModelMixin, GenericViewSet):
         response_serializer = UserSerializer(request.user)
         return Response(response_serializer.data, status=status.HTTP_200_OK)
 
+    @extend_schema(
+        methods=["PATCH"],
+        request=UserPasswordSerializer,
+        responses={status.HTTP_204_NO_CONTENT: None},
+    )
+    @action(detail=True, methods=["patch"])
+    def change_password(self, request, pk=None):  # pylint: disable=unused-argument
+        # pk is not used, but it is required to match the action signature
+        request_serializer = UserPasswordSerializer(data=request.data)
+        if not request_serializer.is_valid():
+            raise ValidationError(request_serializer.errors)
 
-class AuthorizationGroupViewSet(RetrieveModelMixin, ListModelMixin, GenericViewSet):
+        instance: User = self.get_object()
+        current_password = request_serializer.validated_data.get("current_password")
+        new_password_1 = request_serializer.validated_data.get("new_password_1")
+        new_password_2 = request_serializer.validated_data.get("new_password_2")
+
+        if not request.user.is_superuser and request.user.pk != instance.pk:
+            raise PermissionDenied(
+                "You are not allowed to change other users' passwords"
+            )
+
+        if not instance.has_usable_password() or instance.is_oidc_user:
+            raise ValidationError("User's password cannot be changed")
+
+        if new_password_1 != new_password_2:
+            raise ValidationError("The new passwords do not match")
+
+        if not django_authenticate(
+            username=request.user.username,
+            password=current_password,
+        ):
+            raise ValidationError("Current password is incorrect")
+
+        try:
+            validate_password(new_password_1, instance)
+        except DjangoValidationError as e:
+            raise ValidationError(e.messages)  # pylint: disable=raise-missing-from
+            # The DjangoValidationError itself is not relevant and must not be re-raised
+
+        instance.set_password(new_password_1)
+        instance.save()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @extend_schema(
+        methods=["GET"],
+        request=None,
+        responses={status.HTTP_200_OK: UserPasswortRulesSerializer},
+    )
+    @action(detail=False, methods=["get"])
+    def password_rules(self, request):
+
+        @dataclass
+        class PasswordRules:
+            password_rules: str
+
+        password_rules_text = password_validators_help_texts()
+        password_rules = PasswordRules("- " + "\n- ".join(password_rules_text))
+        response_serializer = UserPasswortRulesSerializer(password_rules)
+        return Response(response_serializer.data, status=status.HTTP_200_OK)
+
+
+class AuthorizationGroupViewSet(ModelViewSet):
     serializer_class = AuthorizationGroupSerializer
     filterset_class = AuthorizationGroupFilter
     queryset = Authorization_Group.objects.none()
+    permission_classes = (IsAuthenticated, UserHasSuperuserPermission)
 
     def get_queryset(self):
         return get_authorization_groups()
+
+    @extend_schema(
+        methods=["POST"],
+        request=AuthorizationGroupUserSerializer,
+        responses={status.HTTP_204_NO_CONTENT: None},
+    )
+    @action(detail=True, methods=["post"])
+    def add_user(self, request, pk=None):
+        request_serializer = AuthorizationGroupUserSerializer(data=request.data)
+        if not request_serializer.is_valid():
+            raise ValidationError(request_serializer.errors)
+
+        user_id = request_serializer.validated_data.get("user")
+
+        authorization_group = get_authorization_group_by_id(pk)
+        if not authorization_group:
+            raise ValidationError(f"Authorization group {pk} does not exist")
+        user = get_user_by_id(user_id)
+        if not user:
+            raise ValidationError(f"User {user_id} does not exist")
+
+        authorization_group.users.add(user)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @extend_schema(
+        methods=["POST"],
+        request=AuthorizationGroupUserSerializer,
+        responses={status.HTTP_204_NO_CONTENT: None},
+    )
+    @action(detail=True, methods=["post"])
+    def remove_user(self, request, pk=None):
+        request_serializer = AuthorizationGroupUserSerializer(data=request.data)
+        if not request_serializer.is_valid():
+            raise ValidationError(request_serializer.errors)
+
+        user_id = request_serializer.validated_data.get("user")
+
+        authorization_group = get_authorization_group_by_id(pk)
+        if not authorization_group:
+            raise ValidationError(f"Authorization group {pk} does not exist")
+        user = get_user_by_id(user_id)
+        if not user:
+            raise ValidationError(f"User {user_id} does not exist")
+
+        authorization_group.users.remove(user)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ApiTokenViewSet(ListModelMixin, GenericViewSet):
+    serializer_class = ApiTokenSerializer
+    filterset_class = ApiTokenFilter
+    permission_classes = (IsAuthenticated, IsAdminUser)
+    queryset = API_Token.objects.all()
 
 
 class CreateUserAPITokenView(APIView):

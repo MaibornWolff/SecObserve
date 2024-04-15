@@ -15,15 +15,15 @@ import {
 } from "react-admin";
 
 import { feature_vex_enabled } from "../../commons/functions";
+import { is_superuser } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
 
 const ShowActions = () => {
-    const user = localStorage.getItem("user");
     return (
         <TopToolbar>
             <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <PrevNextButtons linkType="show" sort={{ field: "name", order: "ASC" }} storeKey="general_rules.list" />
-                {user && JSON.parse(user).is_superuser && <EditButton />}
+                {is_superuser() && <EditButton />}
             </Stack>
         </TopToolbar>
     );

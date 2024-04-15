@@ -98,6 +98,7 @@ class OIDCAuthentication(BaseAuthentication):
         if os.environ.get("OIDC_LAST_NAME"):
             user.last_name = payload[os.environ["OIDC_LAST_NAME"]]
         user.oidc_groups_hash = self._get_groups_hash(payload)
+        user.is_oidc_user = True
         try:
             with transaction.atomic():
                 self._synchronize_groups(user, payload)
@@ -140,6 +141,12 @@ class OIDCAuthentication(BaseAuthentication):
         if user.oidc_groups_hash != groups_hash:
             user.oidc_groups_hash = groups_hash
             self._synchronize_groups(user, payload)
+            user_changed = True
+        if not user.is_oidc_user:
+            user.is_oidc_user = True
+            user_changed = True
+        if user.has_usable_password():
+            user.set_unusable_password()
             user_changed = True
 
         if user_changed:
