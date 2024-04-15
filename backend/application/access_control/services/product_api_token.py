@@ -15,7 +15,8 @@ def create_product_api_token(product: Product, role: Roles) -> str:
     user = get_user_by_username(product_user_name)
     if user:
         try:
-            user.api_token
+            user.api_token  # pylint: disable=pointless-statement
+            # This statement raises an exception if the user has no API token.
             raise ValidationError("Only one API token per product is allowed.")
         except API_Token.DoesNotExist:
             pass

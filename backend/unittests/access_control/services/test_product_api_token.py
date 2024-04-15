@@ -21,9 +21,10 @@ class TestProductApiToken(BaseTestCase):
         api_token = API_Token(user=user, api_token_hash="hash")
         mock.return_value = user
 
-        with self.assertRaises(ValidationError):
+        with self.assertRaises(ValidationError) as e:
             create_product_api_token(self.product_1, Roles.Upload)
             mock.assert_called_with("-product-None-api_token-")
+            self.assertEqual("Only one API token per product is allowed.", str(e))
 
     @patch("application.access_control.services.product_api_token.get_user_by_username")
     @patch("application.access_control.models.API_Token.save")
