@@ -31,8 +31,16 @@ const ObservationBulkAssessment = (props: ObservationBulkAssessmentButtonProps) 
 
     const observationUpdate = async (data: any) => {
         setLoading(true);
-        const url =
-            window.__RUNTIME_CONFIG__.API_BASE_URL + "/products/" + props.product.id + "/observations_bulk_assessment/";
+        let url = "";
+        if (props.product) {
+            url =
+                window.__RUNTIME_CONFIG__.API_BASE_URL +
+                "/products/" +
+                props.product.id +
+                "/observations_bulk_assessment/";
+        } else {
+            url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/observations/bulk_assessment/";
+        }
         const assessment_data = {
             severity: data.current_severity,
             status: data.current_status,

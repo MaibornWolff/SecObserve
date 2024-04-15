@@ -110,10 +110,31 @@ class TestObservationsBulkActions(BaseTestCase):
             "[ErrorDetail(string='Observation 1 does not belong to product 2', code='invalid')]",
         )
 
-    def test_check_observation_success(self):
+    def test_check_observation_product_success(self):
         product_1 = Product.objects.get(pk=1)
 
         observations = _check_observations(product_1, [1])
+
+        self.assertEqual(len(observations), 1)
+        self.assertEqual(observations[0], Observation.objects.get(pk=1))
+
+    @patch("application.core.services.observations_bulk_actions.user_has_permission")
+    def test_check_observation_no_product_no_permission(self, mock_user_has_permission):
+        mock_user_has_permission.return_value = False
+
+        with self.assertRaises(ValidationError) as e:
+            _check_observations(None, [1])
+
+        self.assertEqual(
+            str(e.exception),
+            "[ErrorDetail(string='First observation without assessment permission: db_product_internal / db_observation_internal', code='invalid')]",
+        )
+
+    @patch("application.core.services.observations_bulk_actions.user_has_permission")
+    def test_check_observation_no_product_success(self, mock_user_has_permission):
+        mock_user_has_permission.return_value = True
+
+        observations = _check_observations(None, [1])
 
         self.assertEqual(len(observations), 1)
         self.assertEqual(observations[0], Observation.objects.get(pk=1))
