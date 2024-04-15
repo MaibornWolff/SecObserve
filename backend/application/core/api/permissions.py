@@ -131,10 +131,10 @@ class UserHasObservationPermission(BasePermission):
     def has_permission(self, request, view):
         if request.path.endswith("/bulk_assessment/"):
             return True
-        else:
-            return check_post_permission(
-                request, Product, "product", Permissions.Observation_Create
-            )
+
+        return check_post_permission(
+            request, Product, "product", Permissions.Observation_Create
+        )
 
     def has_object_permission(self, request, view, obj):
         return check_object_permission(
