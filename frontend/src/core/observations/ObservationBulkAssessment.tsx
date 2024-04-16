@@ -4,7 +4,7 @@ import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle 
 import { Fragment, useState } from "react";
 import { SaveButton, SimpleForm, Toolbar, useListContext, useNotify, useRefresh, useUnselectAll } from "react-admin";
 
-import { validate_required_255 } from "../../commons/custom_validators";
+import { validate_required } from "../../commons/custom_validators";
 import { justificationIsEnabledForStatus } from "../../commons/functions";
 import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
@@ -137,7 +137,7 @@ const ObservationBulkAssessment = (props: ObservationBulkAssessmentButtonProps) 
                                 choices={OBSERVATION_VEX_JUSTIFICATION_CHOICES}
                             />
                         )}
-                        <TextInputWide source="comment" validate={validate_required_255} />
+                        <TextInputWide source="comment" validate={validate_required} />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>

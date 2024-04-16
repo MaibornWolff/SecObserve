@@ -16,6 +16,7 @@ import {
 } from "react-admin";
 
 import { PERMISSION_OBSERVATION_LOG_APPROVAL } from "../../access_control/types";
+import MarkdownField from "../../commons/custom_fields/MarkdownField";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { ASSESSMENT_STATUS_NEEDS_APPROVAL } from "../types";
 import AssessmentApproval from "./AssessmentApproval";
@@ -99,7 +100,7 @@ const ObservationLogComponent = () => {
                                 </Labeled>
                             )}
                             <Labeled label="Comment">
-                                <TextField source="comment" />
+                                <MarkdownField content={observation_log.comment} />
                             </Labeled>
                             <Labeled label="Created">
                                 <DateField source="created" showTime />
