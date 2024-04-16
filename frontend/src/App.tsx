@@ -11,10 +11,10 @@ import authorization_groups from "./access_control/authorization_groups";
 import users from "./access_control/users";
 import englishMessages from "./commons/i18n/en";
 import { Layout } from "./commons/layout";
+import { darkTheme, lightTheme } from "./commons/layout/themes";
 import notifications from "./commons/notifications";
 import drfProvider from "./commons/ra-data-django-rest-framework";
 import Settings from "./commons/settings/Settings";
-import { getTheme } from "./commons/settings/functions";
 import evidences from "./core/evidences";
 import observation_logs from "./core/observation_logs";
 import observations from "./core/observations";
@@ -45,7 +45,8 @@ const App = () => {
                 layout={Layout}
                 i18nProvider={i18nProvider}
                 disableTelemetry
-                theme={getTheme()}
+                theme={lightTheme}
+                darkTheme={darkTheme}
             >
                 <CustomRoutes>
                     <Route path="/access_control/users" element={<AccessControlAdministration />} />
