@@ -1,7 +1,11 @@
+from typing import Optional
+
 from django.db.models.query import QuerySet
 from django.utils import timezone
 from rest_framework.exceptions import ValidationError
 
+from application.access_control.services.authorization import user_has_permission
+from application.access_control.services.roles_permissions import Permissions
 from application.commons.services.global_request import get_current_user
 from application.core.models import Observation, Potential_Duplicate, Product
 from application.core.queries.observation import get_current_observation_log
@@ -15,7 +19,7 @@ from application.issue_tracker.services.issue_tracker import (
 
 
 def observations_bulk_assessment(
-    product: Product,
+    product: Optional[Product],
     new_severity: str,
     new_status: str,
     comment: str,
@@ -88,17 +92,24 @@ def observations_bulk_mark_duplicates(
 
 
 def _check_observations(
-    product: Product, observation_ids: list[int]
+    product: Optional[Product], observation_ids: list[int]
 ) -> QuerySet[Observation]:
     observations = Observation.objects.filter(id__in=observation_ids)
     if len(observations) != len(observation_ids):
         raise ValidationError("Some observations do not exist")
 
     for observation in observations:
-        if observation.product != product:
-            raise ValidationError(
-                f"Observation {observation.pk} does not belong to product {product.pk}"
-            )
+        if product:
+            if observation.product != product:
+                raise ValidationError(
+                    f"Observation {observation.pk} does not belong to product {product.pk}"
+                )
+        else:
+            if not user_has_permission(observation, Permissions.Observation_Assessment):
+                raise ValidationError(
+                    f"First observation without assessment permission: {observation}"
+                )
+
         current_observation_log = get_current_observation_log(observation)
         if (
             current_observation_log

@@ -487,6 +487,27 @@ class ObservationViewSet(ModelViewSet):
 
         return Response()
 
+    @extend_schema(
+        methods=["POST"],
+        request=ObservationBulkAssessmentSerializer,
+        responses={HTTP_204_NO_CONTENT: None},
+    )
+    @action(detail=False, methods=["post"])
+    def bulk_assessment(self, request):
+        request_serializer = ObservationBulkAssessmentSerializer(data=request.data)
+        if not request_serializer.is_valid():
+            raise ValidationError(request_serializer.errors)
+
+        observations_bulk_assessment(
+            None,
+            request_serializer.validated_data.get("severity"),
+            request_serializer.validated_data.get("status"),
+            request_serializer.validated_data.get("comment"),
+            request_serializer.validated_data.get("observations"),
+            request_serializer.validated_data.get("vex_justification"),
+        )
+        return Response(status=HTTP_204_NO_CONTENT)
+
 
 class ObservationLogViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     serializer_class = ObservationLogSerializer

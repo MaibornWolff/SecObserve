@@ -3,7 +3,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { Box, Divider, ListItemIcon, ListItemText, MenuItem, Theme, Typography, useMediaQuery } from "@mui/material";
 import { forwardRef } from "react";
-import { AppBar, Logout, UserMenu, useUserMenu } from "react-admin";
+import { AppBar, LoadingIndicator, Logout, UserMenu, useUserMenu } from "react-admin";
 import { Link } from "react-router-dom";
 
 import About from "../about/About";
@@ -89,7 +89,16 @@ const CustomUserMenu = () => {
 const CustomAppBar = () => {
     const isLargeEnough = useMediaQuery<Theme>((theme) => theme.breakpoints.up("sm"));
     return (
-        <AppBar color="secondary" elevation={1} userMenu={<CustomUserMenu />}>
+        <AppBar
+            color="secondary"
+            elevation={1}
+            userMenu={<CustomUserMenu />}
+            toolbar={
+                <>
+                    <LoadingIndicator />
+                </>
+            }
+        >
             <Typography
                 variant="h6"
                 color="inherit"
