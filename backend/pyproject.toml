@@ -78,7 +78,7 @@ types-PyMySQL = "1.1.0.1"  # https://github.com/python/typeshed
 django-extensions = "3.2.3"  # https://github.com/django-extensions/django-extensions
 
 [tool.poetry.group.prod.dependencies]
-gunicorn = "21.2.0"  # https://github.com/benoitc/gunicorn
+gunicorn = "22.0.0"  # https://github.com/benoitc/gunicorn
 
 [tool.poetry.group.unittests.dependencies]
 coverage = "7.4.4"  # https://github.com/nedbat/coveragepy
