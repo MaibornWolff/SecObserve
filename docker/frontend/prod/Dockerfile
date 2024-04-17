@@ -18,14 +18,13 @@ RUN sed -i 's/version_unkown/'"${VERSION}"'/g' ./src/commons/about/About.tsx
 RUN npm run build
 
 # production environment
-FROM nginxinc/nginx-unprivileged:stable-alpine3.18@sha256:a3750906c42187288338731393229e7c81d68935d57bd794855b24ed200d71eb
+FROM nginx:stable-alpine-slim@sha256:0a8c5686d40beca3cf231e223668cf77c91344d731e7d6d34984e91a938e10f6
 
 USER root
 
 # kics-scan ignore-block
 # versions of dependencies from distribution are ok
-RUN apk del curl && \
-        apk add --no-cache --virtual --update npm && \
+RUN apk add --no-cache --virtual --update npm && \
         npm i -g runtime-env-cra@0.2.4
 
 COPY --from=build /app/build /usr/share/nginx/html
@@ -60,7 +59,8 @@ RUN chown -R ${user}:${group} /usr/share/nginx/html && \
         chown -R ${user}:${group} /var/log/nginx && \
         chown -R ${user}:${group} /etc/nginx/conf.d && \
         touch /var/run/nginx.pid && \
-        chown -R ${user}:${group} /var/run/nginx.pid
+        chown -R ${user}:${group} /var/run/nginx.pid && \
+        sed -i 's/user  nginx;/''/g' /etc/nginx/nginx.conf
 
 HEALTHCHECK --interval=30s --timeout=30s --start-period=10s --retries=3 \
     CMD wget -nv -t1 --spider 'http://127.0.0.1:3000/#/login' || exit 1
