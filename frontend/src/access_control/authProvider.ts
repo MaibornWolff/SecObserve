@@ -4,7 +4,7 @@ import { AuthProvider } from "react-admin";
 
 import { set_settings_in_local_storage } from "../commons/functions";
 import { httpClient } from "../commons/ra-data-django-rest-framework";
-import { getSettingTheme, saveSettingListProperties, setListProperties } from "../commons/settings/functions";
+import { saveSettingListProperties, setListProperties } from "../commons/settings/functions";
 
 const authProvider: AuthProvider = {
     login: ({ username, password }) => {
@@ -85,7 +85,7 @@ const authProvider: AuthProvider = {
             fullName = user_json.full_name;
         } else {
             const userinfo = await getUserInfo();
-            const { id: id, full_name: fullName, username: avatar } = userinfo;
+            const { id: id, full_name: fullName, null: avatar } = userinfo;
             return Promise.resolve({ id, fullName, avatar });
         }
 
@@ -97,14 +97,9 @@ const authProvider: AuthProvider = {
 
 const getUserInfo = async () => {
     return httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/users/me/").then((response) => {
-        const before_theme = getSettingTheme();
         setListProperties(response.json.setting_list_properties);
         delete response.json.setting_list_properties;
         localStorage.setItem("user", JSON.stringify(response.json));
-        const after_theme = getSettingTheme();
-        if (before_theme != after_theme) {
-            window.location.reload();
-        }
         return response.json;
     });
 };
