@@ -57,7 +57,7 @@ LABEL org.opencontainers.image.version=${VERSION}
 RUN chown -R ${user}:${group} /usr/share/nginx/html && \
         chmod -R 777 /usr/share/nginx/html && \
         chown -R ${user}:${group} /var/log/nginx && \
-        chown -R ${user}:${group} /etc/nginx/conf.d && \
+        chown -R ${user}:${group} /etc/nginx/conf.d
 
 HEALTHCHECK --interval=30s --timeout=30s --start-period=10s --retries=3 \
     CMD wget -nv -t1 --spider 'http://127.0.0.1:3000/#/login' || exit 1
