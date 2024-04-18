@@ -35,6 +35,7 @@ export const useStyles = makeStyles()({
         ":visited": {
             color: getLinkColor(),
         },
+        wordBreak: "break-word",
     },
     displayFontSize: {
         fontSize: "0.875rem",
