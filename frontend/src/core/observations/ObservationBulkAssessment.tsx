@@ -137,7 +137,12 @@ const ObservationBulkAssessment = (props: ObservationBulkAssessmentButtonProps) 
                                 choices={OBSERVATION_VEX_JUSTIFICATION_CHOICES}
                             />
                         )}
-                        <TextInputWide source="comment" validate={validate_required_4096} minRows={3} />
+                        <TextInputWide
+                            source="comment"
+                            validate={validate_required_4096}
+                            multiline={true}
+                            minRows={3}
+                        />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>

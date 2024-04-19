@@ -84,7 +84,12 @@ const ObservationRemoveAssessment = () => {
                 <DialogTitle>Observation Remove Assessment</DialogTitle>
                 <DialogContent>
                     <SimpleForm onSubmit={observationUpdate} toolbar={<CustomToolbar />}>
-                        <TextInputWide source="comment" validate={validate_required_4096} minRows={3} />
+                        <TextInputWide
+                            source="comment"
+                            validate={validate_required_4096}
+                            multiline={true}
+                            minRows={3}
+                        />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>
