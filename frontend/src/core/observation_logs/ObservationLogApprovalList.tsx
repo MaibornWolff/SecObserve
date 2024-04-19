@@ -52,6 +52,14 @@ const ObservationLogApprovalList = ({ product }: ObservationLogApprovalListProps
         listContext.data = [];
     }
 
+    listContext.data.forEach((element: any) => {
+        if (element.comment.length > 255) {
+            element.comment_shortened = element.comment.substring(0, 255) + "...";
+        } else {
+            element.comment_shortened = element.comment;
+        }
+    });
+
     const ShowObservationLogs = (id: any) => {
         return "../../../../observation_logs/" + id + "/show";
     };
@@ -79,7 +87,7 @@ const ObservationLogApprovalList = ({ product }: ObservationLogApprovalListProps
                     {feature_vex_enabled() && (
                         <TextField label="VEX justification" source="vex_justification" emptyText="---" />
                     )}
-                    <TextField source="comment" />
+                    <TextField source="comment_shortened" sortable={false} label="Comment" />
                     <DateField source="created" showTime />
                 </Datagrid>
                 <CustomPagination />

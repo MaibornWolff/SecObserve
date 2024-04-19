@@ -4,7 +4,7 @@ import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import { SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
 
-import { validate_required_255 } from "../../commons/custom_validators";
+import { validate_required_4096 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
@@ -84,7 +84,12 @@ const ObservationRemoveAssessment = () => {
                 <DialogTitle>Observation Remove Assessment</DialogTitle>
                 <DialogContent>
                     <SimpleForm onSubmit={observationUpdate} toolbar={<CustomToolbar />}>
-                        <TextInputWide source="comment" validate={validate_required_255} />
+                        <TextInputWide
+                            source="comment"
+                            validate={validate_required_4096}
+                            multiline={true}
+                            minRows={3}
+                        />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>
