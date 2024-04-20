@@ -13,6 +13,7 @@ import products from "../../core/products";
 import general_rules from "../../rules/general_rules";
 import csaf from "../../vex/csaf";
 import openvex from "../../vex/openvex";
+import vex_counters from "../../vex/vex_counters";
 import { feature_vex_enabled } from "../functions";
 import { is_superuser } from "../functions";
 import notifications from "../notifications";
@@ -101,6 +102,15 @@ const Menu = ({ dense = false }: MenuProps) => {
                             state={{ _scrollToTop: true }}
                             primaryText="OpenVEX"
                             leftIcon={<openvex.icon />}
+                            dense={dense}
+                            onPointerEnterCapture={undefined}
+                            onPointerLeaveCapture={undefined}
+                        />
+                        <MenuItemLink
+                            to="/vex/vex_counters"
+                            state={{ _scrollToTop: true }}
+                            primaryText="VEX Counter"
+                            leftIcon={<vex_counters.icon />}
                             dense={dense}
                             onPointerEnterCapture={undefined}
                             onPointerLeaveCapture={undefined}

@@ -26,6 +26,7 @@ import { Dashboard } from "./dashboard";
 import general_rules from "./rules/general_rules";
 import csaf from "./vex/csaf";
 import openvex from "./vex/openvex";
+import vex_counters from "./vex/vex_counters";
 
 const i18nProvider = polyglotI18nProvider(() => {
     return englishMessages;
@@ -130,6 +131,12 @@ const App = () => {
                     name="vex/openvex"
                     {...openvex} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
                     // nosemgrep because the props are well defined in the import
+                />
+                <Resource
+                    name="vex/vex_counters"
+                    {...vex_counters} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                    // nosemgrep because the props are well defined in the import
+                    recordRepresentation={(record) => `${trim_string(record.document_id_prefix + "_" + record.year)}`}
                 />
             </Admin>
         </AuthProvider>
