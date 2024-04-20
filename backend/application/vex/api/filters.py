@@ -115,6 +115,10 @@ class OpenVEXBranchFilter(FilterSet):
 
 
 class VEXCounterFilter(FilterSet):
+    document_id_prefix = CharFilter(
+        field_name="document_id_prefix", lookup_expr="icontains", distinct=True
+    )
+
     ordering = OrderingFilter(
         # tuple-mapping retains order
         fields=(
