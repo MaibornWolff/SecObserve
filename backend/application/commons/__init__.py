@@ -5,7 +5,11 @@ from django.utils.functional import LazyObject
 
 class LazyConfig(LazyObject):
     def _setup(self):
-        from application.commons.models import Settings
+        from application.commons.models import (  # pylint: disable=import-outside-toplevel
+            Settings,
+        )
+
+        # Can't be imported because module wouldn't be ready
 
         self._wrapped = Settings.load()
 

@@ -26,7 +26,9 @@ class SettingsSerializer(ModelSerializer):
         model = Settings
         fields = "__all__"
 
-    def get_id(self, obj: Settings):
+    def get_id(self, obj: Settings):  # pylint: disable=unused-argument
+        # obj is needed for the signature but we don't need it
+        # The id is hardcoded to 1 because there is only one instance of the Settings model
         return 1
 
 

@@ -310,3 +310,6 @@ class TestAuthentication(BaseTestCase):
         self._check_authentication(["get"], "/api/users/")
         self._check_authentication(["get"], "/api/users/1/")
         self._check_authentication(["patch"], "/api/users/my_settings/")
+
+    def test_settings(self):
+        self._check_authentication(["get", "patch"], "/api/settings/1/")

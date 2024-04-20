@@ -26,18 +26,10 @@ def check_security_gate(product: Product) -> None:
     elif settings.security_gate_active:
         new_security_gate_passed = _calculate_active_config_security_gate(product)
 
-    print("---------------------------------------------")
-    print(f"initial_security_gate_passed: {initial_security_gate_passed}")
-    print(f"new_security_gate_passed: {new_security_gate_passed}")
-    print(security_gate_active)
-
     if initial_security_gate_passed != new_security_gate_passed:
-        print("Security gate changed")
         product.security_gate_passed = new_security_gate_passed
         product.save()
         send_product_security_gate_notification(product)
-
-    print("---------------------------------------------")
 
 
 def _calculate_active_product_security_gate(product: Product) -> bool:
