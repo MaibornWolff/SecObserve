@@ -15,8 +15,8 @@ import notifications from ".";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import ListHeader from "../../commons/layout/ListHeader";
 import { AutocompleteInputMedium } from "../layout/themes";
-import { getSettingListSize } from "../settings/functions";
 import { TYPE_CHOICES } from "../types";
+import { getSettingListSize } from "../user_settings/functions";
 import NotificationBulkDeleteButton from "./NotificationBulkDeleteButton";
 
 const listFilters = [

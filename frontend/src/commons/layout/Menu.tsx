@@ -14,7 +14,9 @@ import general_rules from "../../rules/general_rules";
 import csaf from "../../vex/csaf";
 import openvex from "../../vex/openvex";
 import { feature_vex_enabled } from "../functions";
+import { is_superuser } from "../functions";
 import notifications from "../notifications";
+import settings from "../settings";
 import SubMenu from "./SubMenu";
 
 type MenuName = "menuSettings" | "menuVEX";
@@ -108,7 +110,7 @@ const Menu = ({ dense = false }: MenuProps) => {
                 <SubMenu
                     handleToggle={() => handleToggle("menuSettings")}
                     isOpen={state.menuSettings}
-                    name="Settings"
+                    name="Administration"
                     icon={<SettingsIcon />}
                     dense={dense}
                 >
@@ -139,6 +141,17 @@ const Menu = ({ dense = false }: MenuProps) => {
                         onPointerEnterCapture={undefined}
                         onPointerLeaveCapture={undefined}
                     />
+                    {is_superuser() && (
+                        <MenuItemLink
+                            to="/settings/1/show"
+                            state={{ _scrollToTop: true }}
+                            primaryText="Settings"
+                            leftIcon={<settings.icon />}
+                            dense={dense}
+                            onPointerEnterCapture={undefined}
+                            onPointerLeaveCapture={undefined}
+                        />
+                    )}
                 </SubMenu>
             </Box>
             <Box

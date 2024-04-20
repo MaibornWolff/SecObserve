@@ -11,3 +11,5 @@ export const validate_2048 = [maxLength(2048)];
 
 export const validate_0_10 = [minValue(0), maxValue(10)];
 export const validate_0_999999 = [minValue(0), maxValue(999999)];
+export const validate_0_23 = [minValue(0), maxValue(23)];
+export const validate_0_59 = [minValue(0), maxValue(59)];

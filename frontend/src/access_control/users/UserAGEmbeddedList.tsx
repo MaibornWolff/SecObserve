@@ -12,7 +12,7 @@ import {
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { is_superuser } from "../../commons/functions";
-import { getSettingListSize } from "../../commons/settings/functions";
+import { getSettingListSize } from "../../commons/user_settings/functions";
 import AuthorizationGroupUserAdd from "../authorization_groups/AuthorizationGroupUserAdd";
 import AuthorizationGroupUserRemove from "../authorization_groups/AuthorizationGroupUserRemove";
 

@@ -1,7 +1,7 @@
 import { Datagrid, ListContextProvider, SelectField, useListController } from "react-admin";
 
 import { PERMISSION_PRODUCT_API_TOKEN_REVOKE, ROLE_CHOICES } from "../../access_control/types";
-import { getSettingListSize } from "../../commons/settings/functions";
+import { getSettingListSize } from "../../commons/user_settings/functions";
 import RevokeProductApiToken from "./ProductApiTokenRevoke";
 
 type ProductApiTokenEmbeddedListProps = {

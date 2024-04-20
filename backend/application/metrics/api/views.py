@@ -1,7 +1,6 @@
 import csv
 from tempfile import NamedTemporaryFile
 
-from constance import config
 from django.http import HttpResponse
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
@@ -10,6 +9,7 @@ from rest_framework.views import APIView
 
 from application.access_control.services.authorization import user_has_permission_or_403
 from application.access_control.services.roles_permissions import Permissions
+from application.commons.models import Settings
 from application.core.queries.product import get_product_by_id
 from application.core.types import Severity
 from application.metrics.models import Product_Metrics_Status
@@ -114,11 +114,13 @@ class ProductMetricsExportCodeChartaView(APIView):
 class ProductMetricsStatusView(APIView):
     @action(detail=False, methods=["get"])
     def get(self, request):
+        settings = Settings.load()
+
         status = Product_Metrics_Status.load()
         return Response(
             {
                 "last_calculated": status.last_calculated,
-                "calculation_interval": config.BACKGROUND_PRODUCT_METRICS_INTERVAL_MINUTES,
+                "calculation_interval": settings.background_product_metrics_interval_minutes,
             }
         )
 

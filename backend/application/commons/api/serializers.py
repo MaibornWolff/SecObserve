@@ -7,7 +7,7 @@ from rest_framework.serializers import (
     SerializerMethodField,
 )
 
-from application.commons.models import Notification
+from application.commons.models import Notification, Settings
 from application.commons.services.global_request import get_current_user
 
 
@@ -15,8 +15,19 @@ class VersionSerializer(Serializer):
     version = CharField(max_length=200)
 
 
-class SettingsSerializer(Serializer):
+class StatusSettingsSerializer(Serializer):
     features = ListField(child=CharField(), min_length=0, max_length=200, required=True)
+
+
+class SettingsSerializer(ModelSerializer):
+    id = SerializerMethodField()
+
+    class Meta:
+        model = Settings
+        fields = "__all__"
+
+    def get_id(self, obj: Settings):
+        return 1
 
 
 class NotificationSerializer(ModelSerializer):

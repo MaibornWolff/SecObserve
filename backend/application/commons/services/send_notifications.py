@@ -4,13 +4,12 @@ from datetime import datetime, timedelta
 from typing import Optional
 
 import requests
-from constance import config
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 from application.access_control.models import User
 from application.access_control.queries.user import get_user_by_email
-from application.commons.models import Notification
+from application.commons.models import Notification, Settings
 from application.commons.services.functions import get_base_url_frontend, get_classname
 from application.commons.services.global_request import get_current_user
 from application.commons.services.log_message import format_log_message
@@ -22,6 +21,8 @@ LAST_EXCEPTIONS: dict[str, datetime] = {}
 
 
 def send_product_security_gate_notification(product: Product) -> None:
+    settings = Settings.load()
+
     if product.security_gate_passed is None:
         security_gate_status = "None"
     elif product.security_gate_passed:
@@ -31,7 +32,7 @@ def send_product_security_gate_notification(product: Product) -> None:
 
     notification_email_to = _get_notification_email_to(product)
     email_to_addresses = _get_email_to_addresses(notification_email_to)
-    if email_to_addresses and config.EMAIL_FROM:
+    if email_to_addresses and settings.email_from:
         for email_to_address in email_to_addresses:
             first_name = _get_first_name(email_to_address)
             _send_email_notification(
@@ -73,9 +74,11 @@ def send_product_security_gate_notification(product: Product) -> None:
 
 
 def send_exception_notification(exception: Exception) -> None:
+    settings = Settings.load()
+
     if _ratelimit_exception(exception):
-        email_to_adresses = _get_email_to_addresses(config.EXCEPTION_EMAIL_TO)
-        if email_to_adresses and config.EMAIL_FROM:
+        email_to_adresses = _get_email_to_addresses(settings.exception_email_to)
+        if email_to_adresses and settings.email_from:
             for notification_email_to in email_to_adresses:
                 first_name = _get_first_name(notification_email_to)
                 _send_email_notification(
@@ -89,9 +92,9 @@ def send_exception_notification(exception: Exception) -> None:
                     first_name=first_name,
                 )
 
-        if config.EXCEPTION_MS_TEAMS_WEBHOOK:
+        if settings.exception_ms_teams_webhook:
             _send_msteams_notification(
-                config.EXCEPTION_MS_TEAMS_WEBHOOK,
+                settings.exception_ms_teams_webhook,
                 "msteams_exception.tpl",
                 exception_class=get_classname(exception),
                 exception_message=str(exception),
@@ -99,9 +102,9 @@ def send_exception_notification(exception: Exception) -> None:
                 date_time=datetime.now(),
             )
 
-        if config.EXCEPTION_SLACK_WEBHOOK:
+        if settings.exception_slack_webhook:
             _send_slack_notification(
-                config.EXCEPTION_SLACK_WEBHOOK,
+                settings.exception_slack_webhook,
                 "slack_exception.tpl",
                 exception_class=get_classname(exception),
                 exception_message=str(exception),
@@ -123,9 +126,11 @@ def send_task_exception_notification(
     user: Optional[User],
     exception: Exception,
 ) -> None:
+    settings = Settings.load()
+
     if _ratelimit_exception(exception, function, arguments):
-        email_to_adresses = _get_email_to_addresses(config.EXCEPTION_EMAIL_TO)
-        if email_to_adresses and config.EMAIL_FROM:
+        email_to_adresses = _get_email_to_addresses(settings.exception_email_to)
+        if email_to_adresses and settings.email_from:
             for notification_email_to in email_to_adresses:
                 first_name = _get_first_name(notification_email_to)
                 _send_email_notification(
@@ -142,9 +147,9 @@ def send_task_exception_notification(
                     first_name=first_name,
                 )
 
-        if config.EXCEPTION_MS_TEAMS_WEBHOOK:
+        if settings.exception_ms_teams_webhook:
             _send_msteams_notification(
-                config.EXCEPTION_MS_TEAMS_WEBHOOK,
+                settings.exception_ms_teams_webhook,
                 "msteams_task_exception.tpl",
                 function=function,
                 arguments=str(arguments),
@@ -155,9 +160,9 @@ def send_task_exception_notification(
                 date_time=datetime.now(),
             )
 
-        if config.EXCEPTION_SLACK_WEBHOOK:
+        if settings.exception_slack_webhook:
             _send_slack_notification(
-                config.EXCEPTION_SLACK_WEBHOOK,
+                settings.exception_slack_webhook,
                 "slack_task_exception.tpl",
                 function=function,
                 arguments=str(arguments),
@@ -190,13 +195,15 @@ def send_task_exception_notification(
 def _send_email_notification(
     notification_email_to: str, subject: str, template: str, **kwargs
 ) -> None:
+    settings = Settings.load()
+
     notification_message = _create_notification_message(template, **kwargs)
     if notification_message:
         try:
             send_mail(
                 subject=subject,
                 message=notification_message,
-                from_email=config.EMAIL_FROM,
+                from_email=settings.email_from,
                 recipient_list=[notification_email_to],
                 fail_silently=False,
             )
@@ -268,6 +275,8 @@ def _create_notification_message(template: str, **kwargs) -> Optional[str]:
 def _ratelimit_exception(
     exception: Exception, function: str = None, arguments: dict = None
 ) -> bool:
+    settings = Settings.load()
+
     key = (
         get_classname(exception)
         + "/"
@@ -282,7 +291,7 @@ def _ratelimit_exception(
     if key in LAST_EXCEPTIONS:
         last_datetime = LAST_EXCEPTIONS[key]
         difference: timedelta = now - last_datetime
-        if difference.seconds >= config.EXCEPTION_RATELIMIT:
+        if difference.seconds >= settings.exception_rate_limit:
             LAST_EXCEPTIONS[key] = now
             return True
 

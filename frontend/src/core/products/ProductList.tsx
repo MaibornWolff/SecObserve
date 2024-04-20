@@ -20,7 +20,7 @@ import { SecurityGateTextField } from "../../commons/custom_fields/SecurityGateT
 import { humanReadableDate } from "../../commons/functions";
 import ListHeader from "../../commons/layout/ListHeader";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
-import { getSettingListSize } from "../../commons/settings/functions";
+import { getSettingListSize } from "../../commons/user_settings/functions";
 import { Product } from "../types";
 import { AGE_CHOICES } from "../types";
 

@@ -12,5 +12,5 @@ class LazyConfig(LazyObject):
 
 if TYPE_CHECKING:
     from application.commons.models import Settings
-settings_static: "Settings" = LazyConfig()  # type: ignore [assignment]
+settings: "Settings" = LazyConfig()  # type: ignore [assignment]
 # LazyObject wraps the Settings model and returns the instance of the model when accessed.

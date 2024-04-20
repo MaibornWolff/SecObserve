@@ -4,7 +4,7 @@ import { AutocompleteInput, Datagrid, List, TextField, TextInput } from "react-a
 import parsers from ".";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import ListHeader from "../../commons/layout/ListHeader";
-import { getSettingListSize } from "../../commons/settings/functions";
+import { getSettingListSize } from "../../commons/user_settings/functions";
 import { PARSER_SOURCE_CHOICES, SCANNER_TYPE_CHOICES } from "../types";
 
 const listFilters = [

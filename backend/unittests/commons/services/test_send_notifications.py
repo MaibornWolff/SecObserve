@@ -1,10 +1,9 @@
 from datetime import datetime, timedelta
 from unittest.mock import ANY, call, patch
 
-from constance.test import override_config
 from requests import Response
 
-from application.commons.models import Notification
+from application.commons.models import Notification, Settings
 from application.commons.services.functions import get_classname
 from application.commons.services.send_notifications import (
     LAST_EXCEPTIONS,
@@ -72,7 +71,7 @@ class TestPushNotifications(BaseTestCase):
             type=Notification.TYPE_SECURITY_GATE,
         )
 
-    @override_config(EMAIL_FROM="secobserve@example.com")
+    @patch("application.commons.models.Settings.load")
     @patch("application.commons.services.send_notifications._send_slack_notification")
     @patch("application.commons.services.send_notifications._send_msteams_notification")
     @patch("application.commons.services.send_notifications._send_email_notification")
@@ -99,7 +98,11 @@ class TestPushNotifications(BaseTestCase):
         mock_send_email,
         mock_send_teams,
         mock_send_slack,
+        mock_settings_load,
     ):
+        settings = Settings()
+        settings.email_from = "secobserve@example.com"
+        mock_settings_load.return_value = settings
         mock_base_url.return_value = "https://secobserve.com/"
         mock_get_first_name.return_value = "first_name"
         mock_current_user.return_value = self.user_internal
@@ -167,7 +170,7 @@ class TestPushNotifications(BaseTestCase):
             type=Notification.TYPE_SECURITY_GATE,
         )
 
-    @override_config(EMAIL_FROM="secobserve@example.com")
+    @patch("application.commons.models.Settings.load")
     @patch("application.commons.services.send_notifications._send_slack_notification")
     @patch("application.commons.services.send_notifications._send_msteams_notification")
     @patch("application.commons.services.send_notifications._send_email_notification")
@@ -194,7 +197,11 @@ class TestPushNotifications(BaseTestCase):
         mock_send_email,
         mock_send_teams,
         mock_send_slack,
+        mock_settings_load,
     ):
+        settings = Settings()
+        settings.email_from = "secobserve@example.com"
+        mock_settings_load.return_value = settings
         mock_base_url.return_value = "https://secobserve.com/"
         mock_get_first_name.return_value = "first_name"
         mock_current_user.return_value = self.user_internal
@@ -262,7 +269,7 @@ class TestPushNotifications(BaseTestCase):
             type=Notification.TYPE_SECURITY_GATE,
         )
 
-    @override_config(EMAIL_FROM="secobserve@example.com")
+    @patch("application.commons.models.Settings.load")
     @patch("application.commons.services.send_notifications._send_slack_notification")
     @patch("application.commons.services.send_notifications._send_msteams_notification")
     @patch("application.commons.services.send_notifications._send_email_notification")
@@ -289,7 +296,11 @@ class TestPushNotifications(BaseTestCase):
         mock_send_email,
         mock_send_teams,
         mock_send_slack,
+        mock_settings_load,
     ):
+        settings = Settings()
+        settings.email_from = "secobserve@example.com"
+        mock_settings_load.return_value = settings
         mock_base_url.return_value = "https://secobserve.com/"
         mock_get_first_name.return_value = "first_name"
         mock_current_user.return_value = self.user_internal
@@ -359,9 +370,7 @@ class TestPushNotifications(BaseTestCase):
 
     # --- send_exception_notification ---
 
-    @override_config(EXCEPTION_MS_TEAMS_WEBHOOK="")
-    @override_config(EXCEPTION_SLACK_WEBHOOK="")
-    @override_config(EXCEPTION_EMAIL_TO="")
+    @patch("application.commons.models.Settings.load")
     @patch("application.commons.services.send_notifications._ratelimit_exception")
     @patch("application.commons.services.send_notifications._send_msteams_notification")
     @patch("application.commons.services.send_notifications._send_slack_notification")
@@ -376,7 +385,9 @@ class TestPushNotifications(BaseTestCase):
         mock_send_slack,
         mock_send_teams,
         mock_ratelimit,
+        mock_settings_load,
     ):
+        mock_settings_load.return_value = Settings()
         mock_ratelimit.return_value = True
         mock_current_user.return_value = self.user_internal
 
@@ -392,17 +403,25 @@ class TestPushNotifications(BaseTestCase):
             type=Notification.TYPE_EXCEPTION,
         )
 
-    @override_config(EXCEPTION_MS_TEAMS_WEBHOOK="https://msteams.microsoft.com")
-    @override_config(EXCEPTION_SLACK_WEBHOOK="https://secobserve.slack.com")
-    @override_config(EXCEPTION_EMAIL_TO="test1@example.com, test2@example.com")
-    @override_config(EMAIL_FROM="secobserve@example.com")
+    @patch("application.commons.models.Settings.load")
     @patch("application.commons.services.send_notifications._ratelimit_exception")
     @patch("application.commons.services.send_notifications._send_msteams_notification")
     @patch("application.commons.services.send_notifications._send_slack_notification")
     @patch("application.commons.services.send_notifications._send_email_notification")
     def test_send_exception_notification_no_ratelimit(
-        self, mock_send_email, mock_send_slack, mock_send_teams, mock_ratelimit
+        self,
+        mock_send_email,
+        mock_send_slack,
+        mock_send_teams,
+        mock_ratelimit,
+        mock_settings_load,
     ):
+        settings = Settings()
+        settings.email_from = "secobserve@example.com"
+        settings.exception_email_to = "test1@example.com, test2@example.com"
+        settings.exception_ms_teams_webhook = "https://msteams.microsoft.com"
+        settings.exception_slack_webhook = "https://secobserve.slack.com"
+        mock_settings_load.return_value = settings
         mock_ratelimit.return_value = False
         exception = Exception("test_exception")
         send_exception_notification(exception)
@@ -411,10 +430,7 @@ class TestPushNotifications(BaseTestCase):
         mock_send_slack.assert_not_called()
         mock_send_email.assert_not_called()
 
-    @override_config(EXCEPTION_MS_TEAMS_WEBHOOK="https://msteams.microsoft.com")
-    @override_config(EXCEPTION_SLACK_WEBHOOK="https://secobserve.slack.com")
-    @override_config(EXCEPTION_EMAIL_TO="test1@example.com, test2@example.com")
-    @override_config(EMAIL_FROM="secobserve@example.com")
+    @patch("application.commons.models.Settings.load")
     @patch("application.commons.services.send_notifications._ratelimit_exception")
     @patch("application.commons.services.send_notifications._send_msteams_notification")
     @patch("application.commons.services.send_notifications._send_slack_notification")
@@ -431,7 +447,14 @@ class TestPushNotifications(BaseTestCase):
         mock_send_slack,
         mock_send_teams,
         mock_ratelimit,
+        mock_settings_load,
     ):
+        settings = Settings()
+        settings.email_from = "secobserve@example.com"
+        settings.exception_email_to = "test1@example.com, test2@example.com"
+        settings.exception_ms_teams_webhook = "https://msteams.microsoft.com"
+        settings.exception_slack_webhook = "https://secobserve.slack.com"
+        mock_settings_load.return_value = settings
         mock_ratelimit.return_value = True
         mock_get_first_name.return_value = "first_name"
         mock_current_user.return_value = self.user_internal
@@ -493,9 +516,7 @@ class TestPushNotifications(BaseTestCase):
 
     # --- send_task_exception_notification ---
 
-    @override_config(EXCEPTION_MS_TEAMS_WEBHOOK="")
-    @override_config(EXCEPTION_SLACK_WEBHOOK="")
-    @override_config(EXCEPTION_EMAIL_TO="")
+    @patch("application.commons.models.Settings.load")
     @patch("application.commons.services.send_notifications._ratelimit_exception")
     @patch("application.commons.services.send_notifications._send_msteams_notification")
     @patch("application.commons.services.send_notifications._send_slack_notification")
@@ -508,7 +529,9 @@ class TestPushNotifications(BaseTestCase):
         mock_send_slack,
         mock_send_teams,
         mock_ratelimit,
+        mock_settings_load,
     ):
+        mock_settings_load.return_value = Settings()
         arguments = {"argument": "test_argument"}
         mock_ratelimit.return_value = True
         send_task_exception_notification(
@@ -531,17 +554,25 @@ class TestPushNotifications(BaseTestCase):
             type=Notification.TYPE_TASK,
         )
 
-    @override_config(EXCEPTION_MS_TEAMS_WEBHOOK="https://msteams.microsoft.com")
-    @override_config(EXCEPTION_SLACK_WEBHOOK="https://secobserve.slack.com")
-    @override_config(EXCEPTION_EMAIL_TO="test1@example.com, test2@example.com")
-    @override_config(EMAIL_FROM="secobserve@example.com")
+    @patch("application.commons.models.Settings.load")
     @patch("application.commons.services.send_notifications._ratelimit_exception")
     @patch("application.commons.services.send_notifications._send_msteams_notification")
     @patch("application.commons.services.send_notifications._send_slack_notification")
     @patch("application.commons.services.send_notifications._send_email_notification")
     def test_send_task_exception_notification_no_ratelimit(
-        self, mock_send_email, mock_send_slack, mock_send_teams, mock_ratelimit
+        self,
+        mock_send_email,
+        mock_send_slack,
+        mock_send_teams,
+        mock_ratelimit,
+        mock_settings_load,
     ):
+        settings = Settings()
+        settings.email_from = "secobserve@example.com"
+        settings.exception_email_to = "test1@example.com, test2@example.com"
+        settings.exception_ms_teams_webhook = "https://msteams.microsoft.com"
+        settings.exception_slack_webhook = "https://secobserve.slack.com"
+        mock_settings_load.return_value = settings
         mock_ratelimit.return_value = False
         exception = Exception("test_exception")
         send_task_exception_notification(
@@ -555,10 +586,7 @@ class TestPushNotifications(BaseTestCase):
         mock_send_slack.assert_not_called()
         mock_send_email.assert_not_called()
 
-    @override_config(EXCEPTION_MS_TEAMS_WEBHOOK="https://msteams.microsoft.com")
-    @override_config(EXCEPTION_SLACK_WEBHOOK="https://secobserve.slack.com")
-    @override_config(EXCEPTION_EMAIL_TO="test1@example.com, test2@example.com")
-    @override_config(EMAIL_FROM="secobserve@example.com")
+    @patch("application.commons.models.Settings.load")
     @patch("application.commons.services.send_notifications._ratelimit_exception")
     @patch("application.commons.services.send_notifications._send_msteams_notification")
     @patch("application.commons.services.send_notifications._send_slack_notification")
@@ -573,7 +601,14 @@ class TestPushNotifications(BaseTestCase):
         mock_send_slack,
         mock_send_teams,
         mock_ratelimit,
+        mock_settings_load,
     ):
+        settings = Settings()
+        settings.email_from = "secobserve@example.com"
+        settings.exception_email_to = "test1@example.com, test2@example.com"
+        settings.exception_ms_teams_webhook = "https://msteams.microsoft.com"
+        settings.exception_slack_webhook = "https://secobserve.slack.com"
+        mock_settings_load.return_value = settings
         mock_ratelimit.return_value = True
         mock_get_first_name.return_value = "first_name"
 
@@ -670,7 +705,7 @@ class TestPushNotifications(BaseTestCase):
         mock_create_message.assert_called_with("test_template")
         mock_send_email.assert_not_called()
 
-    @override_config(EMAIL_FROM="secobserve@example.com")
+    @patch("application.commons.models.Settings.load")
     @patch(
         "application.commons.services.send_notifications._create_notification_message"
     )
@@ -678,8 +713,16 @@ class TestPushNotifications(BaseTestCase):
     @patch("application.commons.services.send_notifications.logger.error")
     @patch("application.commons.services.send_notifications.format_log_message")
     def test_send_email_notification_exception(
-        self, mock_format, mock_logger, mock_send_email, mock_create_message
+        self,
+        mock_format,
+        mock_logger,
+        mock_send_email,
+        mock_create_message,
+        mock_settings_load,
     ):
+        settings = Settings()
+        settings.email_from = "secobserve@example.com"
+        mock_settings_load.return_value = settings
         mock_create_message.return_value = "test_message"
         mock_send_email.side_effect = Exception("test_exception")
 
@@ -696,7 +739,7 @@ class TestPushNotifications(BaseTestCase):
         mock_logger.assert_called_once()
         mock_format.assert_called_once()
 
-    @override_config(EMAIL_FROM="secobserve@example.com")
+    @patch("application.commons.models.Settings.load")
     @patch(
         "application.commons.services.send_notifications._create_notification_message"
     )
@@ -704,8 +747,16 @@ class TestPushNotifications(BaseTestCase):
     @patch("application.commons.services.send_notifications.logger.error")
     @patch("application.commons.services.send_notifications.format_log_message")
     def test_send_msteams_notification_success(
-        self, mock_format, mock_logger, mock_send_email, mock_create_message
+        self,
+        mock_format,
+        mock_logger,
+        mock_send_email,
+        mock_create_message,
+        mock_settings_load,
     ):
+        settings = Settings()
+        settings.email_from = "secobserve@example.com"
+        mock_settings_load.return_value = settings
         mock_create_message.return_value = "test_message"
 
         _send_email_notification("test@example.com", "subject", "test_template")
@@ -962,12 +1013,20 @@ class TestPushNotifications(BaseTestCase):
 
     # --- get_base_url_frontend ---
 
-    @override_config(BASE_URL_FRONTEND="https://www.example.com")
-    def testget_base_url_frontend_without_slash(self):
+    @patch("application.commons.models.Settings.load")
+    def testget_base_url_frontend_without_slash(self, mock_settings_load):
+        settings = Settings()
+        settings.base_url_frontend = "https://www.example.com"
+        mock_settings_load.return_value = settings
+
         self.assertEqual("https://www.example.com/", get_base_url_frontend())
 
-    @override_config(BASE_URL_FRONTEND="https://www.example.com/")
-    def testget_base_url_frontend_with_slash(self):
+    @patch("application.commons.models.Settings.load")
+    def testget_base_url_frontend_with_slash(self, mock_settings_load):
+        settings = Settings()
+        settings.base_url_frontend = "https://www.example.com"
+        mock_settings_load.return_value = settings
+
         self.assertEqual("https://www.example.com/", get_base_url_frontend())
 
     # --- _ratelimit_exception ---
@@ -985,8 +1044,12 @@ class TestPushNotifications(BaseTestCase):
         self.assertGreater(difference.microseconds, 0)
         self.assertLess(difference.microseconds, 999)
 
-    @override_config(EXCEPTION_RATELIMIT=10)
-    def test_ratelimit_exception_true(self):
+    @patch("application.commons.models.Settings.load")
+    def test_ratelimit_exception_true(self, mock_settings_load):
+        settings = Settings()
+        settings.exception_rate_limit = 10
+        mock_settings_load.return_value = settings
+
         LAST_EXCEPTIONS.clear()
         LAST_EXCEPTIONS[
             "builtins.Exception/test_exception/test_function/test_arguments"
@@ -998,8 +1061,12 @@ class TestPushNotifications(BaseTestCase):
         )
         self.assertEqual(1, len(LAST_EXCEPTIONS.keys()))
 
-    @override_config(EXCEPTION_RATELIMIT=10)
-    def test_ratelimit_exception_false(self):
+    @patch("application.commons.models.Settings.load")
+    def test_ratelimit_exception_false(self, mock_settings_load):
+        settings = Settings()
+        settings.exception_rate_limit = 10
+        mock_settings_load.return_value = settings
+
         LAST_EXCEPTIONS.clear()
         LAST_EXCEPTIONS[
             "builtins.Exception/test_exception/test_function/test_arguments"

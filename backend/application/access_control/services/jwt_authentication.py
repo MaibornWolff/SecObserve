@@ -2,23 +2,24 @@ from datetime import datetime, timedelta, timezone
 from typing import Optional
 
 import jwt
-from constance import config
 from rest_framework.authentication import BaseAuthentication, get_authorization_header
 from rest_framework.exceptions import AuthenticationFailed
 
 from application.access_control.models import User
 from application.access_control.queries.user import get_user_by_username
 from application.access_control.services.jwt_secret import get_secret
+from application.commons.models import Settings
 
 ALGORITHM = "HS256"
 JWT_PREFIX = "JWT"
 
 
 def create_jwt(user: User) -> str:
+    settings = Settings.load()
     if user.is_superuser:
-        jwt_validity_duration = config.JWT_VALIDITY_DURATION_SUPERUSER
+        jwt_validity_duration = settings.jwt_validity_duration_superuser
     else:
-        jwt_validity_duration = config.JWT_VALIDITY_DURATION_USER
+        jwt_validity_duration = settings.jwt_validity_duration_user
 
     payload = {
         "exp": datetime.now(tz=timezone.utc) + timedelta(hours=jwt_validity_duration),

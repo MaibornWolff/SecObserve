@@ -15,7 +15,7 @@ import {
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { feature_vex_enabled } from "../../commons/functions";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
-import { getSettingListSize } from "../../commons/settings/functions";
+import { getSettingListSize } from "../../commons/user_settings/functions";
 import { ASSESSMENT_STATUS_NEEDS_APPROVAL } from "../types";
 import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../types";
 

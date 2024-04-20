@@ -15,7 +15,7 @@ django = "4.2.11"  # https://www.djangoproject.com/
 django-environ = "0.11.2"  # https://github.com/joke2k/django-environ
 django-filter = "24.2"  # https://github.com/carltongibson/django-filter 
 django-csp = "3.8"  # https://github.com/mozilla/django-csp
-django-constance = { version = "3.1.0", extras = ["database"] }  # https://github.com/jazzband/django-constance
+django-picklefield = "3.2"  # https://github.com/gintas/django-picklefield 
 django-encrypted-model-fields = "0.6.5"  # https://gitlab.com/lansharkconsulting/django/django-encrypted-model-fields
 argon2-cffi = "23.1.0"  # https://github.com/hynek/argon2_cffi
 whitenoise = "6.6.0"  # https://github.com/evansd/whitenoise

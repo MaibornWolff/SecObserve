@@ -4,7 +4,7 @@ import { ChipField, Datagrid, FunctionField, ListContextProvider, TextField, use
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { humanReadableDate } from "../../commons/functions";
-import { getSettingListSize } from "../../commons/settings/functions";
+import { getSettingListSize } from "../../commons/user_settings/functions";
 import { OBSERVATION_STATUS_OPEN } from "../types";
 import { Observation } from "../types";
 import { IDENTIFIER_OBSERVATION_DASHBOARD_LIST, setListIdentifier } from "./functions";

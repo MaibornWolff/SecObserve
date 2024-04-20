@@ -13,7 +13,7 @@ import {
 } from "react-admin";
 
 import { useStyles } from "../../commons/layout/themes";
-import { getSettingTheme } from "../../commons/settings/functions";
+import { getSettingTheme } from "../../commons/user_settings/functions";
 
 const ShowActions = () => {
     const evidence = useRecordContext();
