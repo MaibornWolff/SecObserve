@@ -6,7 +6,7 @@ import { PERMISSION_PRODUCT_GROUP_CREATE } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
 import ListHeader from "../../commons/layout/ListHeader";
-import { getSettingListSize } from "../../commons/settings/functions";
+import { getSettingListSize } from "../../commons/user_settings/functions";
 
 const listFilters = [<TextInput source="name" alwaysOn />];
 

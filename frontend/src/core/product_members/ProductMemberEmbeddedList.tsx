@@ -7,7 +7,7 @@ import {
     ROLE_CHOICES,
 } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
-import { getSettingListSize } from "../../commons/settings/functions";
+import { getSettingListSize } from "../../commons/user_settings/functions";
 import ProductMemberDelete from "./ProductMemberDelete";
 import ProductMemberEdit from "./ProductMemberEdit";
 

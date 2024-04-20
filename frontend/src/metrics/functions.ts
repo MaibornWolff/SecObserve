@@ -1,4 +1,4 @@
-import { getSettingTheme } from "../commons/settings/functions";
+import { getSettingTheme } from "../commons/user_settings/functions";
 
 export function getGridColor() {
     if (getSettingTheme() == "dark") {

@@ -12,7 +12,12 @@ from application.access_control.api.views import (
     CreateUserAPITokenView,
     RevokeUserAPITokenView,
 )
-from application.commons.api.views import HealthView, SettingsView, VersionView
+from application.commons.api.views import (
+    HealthView,
+    SettingsView,
+    StatusSettingsView,
+    VersionView,
+)
 from application.commons.views import empty_view
 from application.import_observations.api.views import (
     ApiImportObservationsById,
@@ -59,7 +64,8 @@ urlpatterns += [
     path("api/", include("config.api_router")),
     path("api/status/version/", VersionView.as_view()),
     path("api/status/health/", HealthView.as_view()),
-    path("api/status/settings/", SettingsView.as_view()),
+    path("api/status/settings/", StatusSettingsView.as_view()),
+    path("api/settings/<int:pk>/", SettingsView.as_view(), name="settings"),
     path(
         "api/authentication/authenticate/",
         AuthenticateView.as_view(),

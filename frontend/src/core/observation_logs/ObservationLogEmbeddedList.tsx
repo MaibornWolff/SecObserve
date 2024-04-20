@@ -1,7 +1,7 @@
 import { ChipField, Datagrid, DateField, ListContextProvider, TextField, useListController } from "react-admin";
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
-import { getSettingListSize } from "../../commons/settings/functions";
+import { getSettingListSize } from "../../commons/user_settings/functions";
 
 type ObservationLogEmbeddedListProps = {
     observation: any;

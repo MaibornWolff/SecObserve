@@ -17,7 +17,7 @@ import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { humanReadableDate } from "../../commons/functions";
 import ListHeader from "../../commons/layout/ListHeader";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
-import { getSettingListSize } from "../../commons/settings/functions";
+import { getSettingListSize } from "../../commons/user_settings/functions";
 import openvex from "../../vex/openvex";
 import { OpenVEX } from "../../vex/types";
 import OpenVEXCreate from "./OpenVEXCreate";

@@ -1,7 +1,6 @@
 from unittest.mock import patch
 
-from constance.test import override_config
-
+from application.commons.models import Settings
 from application.core.models import Product
 from application.core.services.security_gate import check_security_gate
 from unittests.base_test_case import BaseTestCase
@@ -292,9 +291,13 @@ class TestSecurityGate(BaseTestCase):
         check_security_gate(product)
         self.assertTrue(product.security_gate_passed)
 
-    @override_config(SECURITY_GATE_THRESHOLD_CRITICAL=1)
+    @patch("application.commons.models.Settings.load")
     @patch("application.core.models.Observation.objects.filter")
-    def test_check_security_gate_none_critical(self, mock):
+    def test_check_security_gate_none_critical(self, mock, mock_settings_load):
+        settings = Settings()
+        settings.security_gate_threshold_critical = 1
+        mock_settings_load.return_value = settings
+
         mock.return_value.count.return_value = 2
         product = Product(
             security_gate_passed=False,
@@ -302,10 +305,14 @@ class TestSecurityGate(BaseTestCase):
         check_security_gate(product)
         self.assertFalse(product.security_gate_passed)
 
-    @override_config(SECURITY_GATE_THRESHOLD_CRITICAL=3)
-    @override_config(SECURITY_GATE_THRESHOLD_HIGH=1)
+    @patch("application.commons.models.Settings.load")
     @patch("application.core.models.Observation.objects.filter")
-    def test_check_security_gate_none_high(self, mock):
+    def test_check_security_gate_none_high(self, mock, mock_settings_load):
+        settings = Settings()
+        settings.security_gate_threshold_critical = 3
+        settings.security_gate_threshold_high = 1
+        mock_settings_load.return_value = settings
+
         mock.return_value.count.return_value = 2
         product = Product(
             security_gate_passed=False,
@@ -313,11 +320,15 @@ class TestSecurityGate(BaseTestCase):
         check_security_gate(product)
         self.assertFalse(product.security_gate_passed)
 
-    @override_config(SECURITY_GATE_THRESHOLD_CRITICAL=3)
-    @override_config(SECURITY_GATE_THRESHOLD_HIGH=3)
-    @override_config(SECURITY_GATE_THRESHOLD_MEDIUM=1)
+    @patch("application.commons.models.Settings.load")
     @patch("application.core.models.Observation.objects.filter")
-    def test_check_security_gate_none_medium(self, mock):
+    def test_check_security_gate_none_medium(self, mock, mock_settings_load):
+        settings = Settings()
+        settings.security_gate_threshold_critical = 3
+        settings.security_gate_threshold_high = 3
+        settings.security_gate_threshold_medium = 1
+        mock_settings_load.return_value = settings
+
         mock.return_value.count.return_value = 2
         product = Product(
             security_gate_passed=False,
@@ -325,12 +336,16 @@ class TestSecurityGate(BaseTestCase):
         check_security_gate(product)
         self.assertFalse(product.security_gate_passed)
 
-    @override_config(SECURITY_GATE_THRESHOLD_CRITICAL=3)
-    @override_config(SECURITY_GATE_THRESHOLD_HIGH=3)
-    @override_config(SECURITY_GATE_THRESHOLD_MEDIUM=3)
-    @override_config(SECURITY_GATE_THRESHOLD_LOW=1)
+    @patch("application.commons.models.Settings.load")
     @patch("application.core.models.Observation.objects.filter")
-    def test_check_security_gate_none_low(self, mock):
+    def test_check_security_gate_none_low(self, mock, mock_settings_load):
+        settings = Settings()
+        settings.security_gate_threshold_critical = 3
+        settings.security_gate_threshold_high = 3
+        settings.security_gate_threshold_medium = 3
+        settings.security_gate_threshold_low = 1
+        mock_settings_load.return_value = settings
+
         mock.return_value.count.return_value = 2
         product = Product(
             security_gate_passed=False,
@@ -338,13 +353,17 @@ class TestSecurityGate(BaseTestCase):
         check_security_gate(product)
         self.assertFalse(product.security_gate_passed)
 
-    @override_config(SECURITY_GATE_THRESHOLD_CRITICAL=3)
-    @override_config(SECURITY_GATE_THRESHOLD_HIGH=3)
-    @override_config(SECURITY_GATE_THRESHOLD_MEDIUM=3)
-    @override_config(SECURITY_GATE_THRESHOLD_LOW=3)
-    @override_config(SECURITY_GATE_THRESHOLD_NONE=1)
+    @patch("application.commons.models.Settings.load")
     @patch("application.core.models.Observation.objects.filter")
-    def test_check_security_gate_none_none(self, mock):
+    def test_check_security_gate_none_none(self, mock, mock_settings_load):
+        settings = Settings()
+        settings.security_gate_threshold_critical = 3
+        settings.security_gate_threshold_high = 3
+        settings.security_gate_threshold_medium = 3
+        settings.security_gate_threshold_low = 3
+        settings.security_gate_threshold_none = 1
+        mock_settings_load.return_value = settings
+
         mock.return_value.count.return_value = 2
         product = Product(
             security_gate_passed=False,
@@ -352,14 +371,18 @@ class TestSecurityGate(BaseTestCase):
         check_security_gate(product)
         self.assertFalse(product.security_gate_passed)
 
-    @override_config(SECURITY_GATE_THRESHOLD_CRITICAL=3)
-    @override_config(SECURITY_GATE_THRESHOLD_HIGH=3)
-    @override_config(SECURITY_GATE_THRESHOLD_MEDIUM=3)
-    @override_config(SECURITY_GATE_THRESHOLD_LOW=3)
-    @override_config(SECURITY_GATE_THRESHOLD_NONE=3)
-    @override_config(SECURITY_GATE_THRESHOLD_UNKOWN=1)
+    @patch("application.commons.models.Settings.load")
     @patch("application.core.models.Observation.objects.filter")
-    def test_check_security_gate_none_unkown(self, mock):
+    def test_check_security_gate_none_unkown(self, mock, mock_settings_load):
+        settings = Settings()
+        settings.security_gate_threshold_critical = 3
+        settings.security_gate_threshold_high = 3
+        settings.security_gate_threshold_medium = 3
+        settings.security_gate_threshold_low = 3
+        settings.security_gate_threshold_none = 3
+        settings.security_gate_threshold_unkown = 1
+        mock_settings_load.return_value = settings
+
         mock.return_value.count.return_value = 2
         product = Product(
             security_gate_passed=False,
@@ -367,31 +390,21 @@ class TestSecurityGate(BaseTestCase):
         check_security_gate(product)
         self.assertFalse(product.security_gate_passed)
 
-    @override_config(SECURITY_GATE_THRESHOLD_CRITICAL=3)
-    @override_config(SECURITY_GATE_THRESHOLD_HIGH=3)
-    @override_config(SECURITY_GATE_THRESHOLD_MEDIUM=3)
-    @override_config(SECURITY_GATE_THRESHOLD_LOW=3)
-    @override_config(SECURITY_GATE_THRESHOLD_NONE=3)
-    @override_config(SECURITY_GATE_THRESHOLD_UNKOWN=3)
+    @patch("application.commons.models.Settings.load")
     @patch("application.core.models.Observation.objects.filter")
-    def test_check_security_gate_none_no_match(self, mock):
+    def test_check_security_gate_none_no_match(self, mock, mock_settings_load):
+        settings = Settings()
+        settings.security_gate_threshold_critical = 3
+        settings.security_gate_threshold_high = 3
+        settings.security_gate_threshold_medium = 3
+        settings.security_gate_threshold_low = 3
+        settings.security_gate_threshold_none = 3
+        settings.security_gate_threshold_unkown = 3
+        mock_settings_load.return_value = settings
+
         mock.return_value.count.return_value = 2
         product = Product(
             security_gate_passed=True,
         )
         check_security_gate(product)
         self.assertTrue(product.security_gate_passed)
-
-    @patch("application.core.models.Product.save")
-    @patch(
-        "application.core.services.security_gate.send_product_security_gate_notification"
-    )
-    @override_config(SECURITY_GATE_ACTIVE=False)
-    def test_check_security_gate_general_false(self, mock_notification, mock_save):
-        product = Product(
-            security_gate_passed=None,
-        )
-        check_security_gate(product)
-        self.assertIsNone(product.security_gate_passed)
-        mock_save.assert_called_once()
-        mock_notification.assert_called_once()

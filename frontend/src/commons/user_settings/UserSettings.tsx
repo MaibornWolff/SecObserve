@@ -14,7 +14,7 @@ import { Title, useTheme } from "react-admin";
 import { darkTheme, lightTheme } from "../layout/themes";
 import { getSettingListSize, getSettingTheme, saveSettingListSize, saveSettingTheme } from "./functions";
 
-const Settings = () => {
+const UserSettings = () => {
     const [, setTheme] = useTheme();
 
     function setLightTheme() {
@@ -73,4 +73,4 @@ const Settings = () => {
     );
 };
 
-export default Settings;
+export default UserSettings;

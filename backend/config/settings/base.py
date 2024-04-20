@@ -108,14 +108,13 @@ THIRD_PARTY_APPS = [
     "drf_spectacular",
     "drf_spectacular_sidecar",
     "django_filters",
-    "constance",
-    "constance.backends.database",
     "huey.contrib.djhuey",
 ]
 
 LOCAL_APPS = [
     "application.access_control",
     "application.commons",
+    "application.constance",
     "application.core",
     "application.epss",
     "application.import_observations",
@@ -408,164 +407,6 @@ SPECTACULAR_SETTINGS = {
     "REDOC_DIST": "SIDECAR",
     "SWAGGER_UI_SETTINGS": {"docExpansion": "none"},
     "ENUM_GENERATE_CHOICE_DESCRIPTION": False,
-}
-
-CONSTANCE_BACKEND = "constance.backends.database.DatabaseBackend"
-
-CONSTANCE_CONFIG = {
-    "SECURITY_GATE_ACTIVE": (True, "Is the security gate activated?", bool),
-    "SECURITY_GATE_THRESHOLD_CRITICAL": (
-        0,
-        "Number of critical observations that must not be exceeded",
-        int,
-    ),
-    "SECURITY_GATE_THRESHOLD_HIGH": (
-        0,
-        "Number of high observations that must not be exceeded",
-        int,
-    ),
-    "SECURITY_GATE_THRESHOLD_MEDIUM": (
-        99999,
-        "Number of medium observations that must not be exceeded",
-        int,
-    ),
-    "SECURITY_GATE_THRESHOLD_LOW": (
-        99999,
-        "Number of low observations that must not be exceeded",
-        int,
-    ),
-    "SECURITY_GATE_THRESHOLD_NONE": (
-        99999,
-        "Number of none observations that must not be exceeded",
-        int,
-    ),
-    "SECURITY_GATE_THRESHOLD_UNKOWN": (
-        99999,
-        "Number of unkown observations that must not be exceeded",
-        int,
-    ),
-    "JWT_VALIDITY_DURATION_USER": (
-        168,
-        "Validity duration of JWT tokens for regular users in hours",
-        int,
-    ),
-    "JWT_VALIDITY_DURATION_SUPERUSER": (
-        24,
-        "Validity duration of JWT tokens for superusers in hours",
-        int,
-    ),
-    "BASE_URL_FRONTEND": (
-        "",
-        "Base URL of the frontend, used to set links in notifications correctly",
-        str,
-    ),
-    "EXCEPTION_MS_TEAMS_WEBHOOK": (
-        "",
-        "MS Teams webhook to send exception notifications",
-        str,
-    ),
-    "EXCEPTION_SLACK_WEBHOOK": (
-        "",
-        "Slack webhook to send exception notifications",
-        str,
-    ),
-    "EXCEPTION_RATELIMIT": (
-        3600,
-        "Timedelta in seconds when to send the same exception the next time",
-        int,
-    ),
-    "EMAIL_FROM": (
-        "",
-        "From address for sending email notifications",
-        str,
-    ),
-    "EXCEPTION_EMAIL_TO": (
-        "",
-        "Comma separated email addresses to send exception notifications",
-        str,
-    ),
-    "BACKGROUND_PRODUCT_METRICS_INTERVAL_MINUTES": (
-        5,
-        "Calculate product metrics every x minutes",
-        int,
-    ),
-    "BACKGROUND_EPSS_IMPORT_CRONTAB_MINUTES": (
-        "0",
-        "Minutes crontab expression for EPSS import",
-        str,
-    ),
-    "BACKGROUND_EPSS_IMPORT_CRONTAB_HOURS": (
-        "3",
-        "Hours crontab expression for EPSS import (UTC)",
-        str,
-    ),
-    "BRANCH_HOUSEKEEPING_CRONTAB_MINUTES": (
-        "0",
-        "Minutes crontab expression for branch housekeeping",
-        str,
-    ),
-    "BRANCH_HOUSEKEEPING_CRONTAB_HOURS": (
-        "2",
-        "Hours crontab expression for branch housekeeping (UTC)",
-        str,
-    ),
-    "BRANCH_HOUSEKEEPING_ACTIVE": (
-        True,
-        "Delete inactive branches",
-        bool,
-    ),
-    "BRANCH_HOUSEKEEPING_KEEP_INACTIVE_DAYS": (
-        30,
-        "Days before incative branches and their observations are deleted",
-        int,
-    ),
-    "BRANCH_HOUSEKEEPING_EXEMPT_BRANCHES": (
-        "",
-        "Regular expression which branches to exempt from deletion",
-        str,
-    ),
-    "FEATURE_VEX": (
-        False,
-        "Generate VEX documents in OpenVEX and CSAF format",
-        bool,
-    ),
-}
-
-CONSTANCE_CONFIG_FIELDSETS = {
-    "Security Gate": (
-        "SECURITY_GATE_ACTIVE",
-        "SECURITY_GATE_THRESHOLD_CRITICAL",
-        "SECURITY_GATE_THRESHOLD_HIGH",
-        "SECURITY_GATE_THRESHOLD_MEDIUM",
-        "SECURITY_GATE_THRESHOLD_LOW",
-        "SECURITY_GATE_THRESHOLD_NONE",
-        "SECURITY_GATE_THRESHOLD_UNKOWN",
-    ),
-    "Authentication": (
-        "JWT_VALIDITY_DURATION_USER",
-        "JWT_VALIDITY_DURATION_SUPERUSER",
-    ),
-    "Integrations": (
-        "BASE_URL_FRONTEND",
-        "EMAIL_FROM",
-        "EXCEPTION_EMAIL_TO",
-        "EXCEPTION_MS_TEAMS_WEBHOOK",
-        "EXCEPTION_SLACK_WEBHOOK",
-        "EXCEPTION_RATELIMIT",
-    ),
-    "Background tasks (restart needed)": (
-        "BACKGROUND_PRODUCT_METRICS_INTERVAL_MINUTES",
-        "BACKGROUND_EPSS_IMPORT_CRONTAB_MINUTES",
-        "BACKGROUND_EPSS_IMPORT_CRONTAB_HOURS",
-    ),
-    "Housekeeping for branches": (
-        "BRANCH_HOUSEKEEPING_CRONTAB_MINUTES",
-        "BRANCH_HOUSEKEEPING_CRONTAB_HOURS",
-        "BRANCH_HOUSEKEEPING_ACTIVE",
-        "BRANCH_HOUSEKEEPING_KEEP_INACTIVE_DAYS",
-        "BRANCH_HOUSEKEEPING_EXEMPT_BRANCHES",
-    ),
-    "Features": ("FEATURE_VEX",),
 }
 
 FIELD_ENCRYPTION_KEY = env("FIELD_ENCRYPTION_KEY")

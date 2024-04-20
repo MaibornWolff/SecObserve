@@ -1,4 +1,3 @@
-from constance import config
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import action
@@ -12,14 +11,18 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
 from application.commons.api.filters import NotificationFilter
-from application.commons.api.permissions import UserHasNotificationPermission
+from application.commons.api.permissions import (
+    UserHasNotificationPermission,
+    UserHasSuperuserPermission,
+)
 from application.commons.api.serializers import (
     NotificationBulkSerializer,
     NotificationSerializer,
     SettingsSerializer,
+    StatusSettingsSerializer,
     VersionSerializer,
 )
-from application.commons.models import Notification
+from application.commons.models import Notification, Settings
 from application.commons.queries.notification import get_notifications
 from application.commons.services.notification import bulk_delete
 
@@ -48,16 +51,42 @@ class HealthView(APIView):
         return response
 
 
-class SettingsView(APIView):
-    serializer_class = SettingsSerializer
+class StatusSettingsView(APIView):
+    serializer_class = StatusSettingsSerializer
 
     @action(detail=True, methods=["get"], url_name="settings")
     def get(self, request):
         features = []
-        if config.FEATURE_VEX:
+        settings = Settings.load()
+        if settings.feature_vex:
             features.append("feature_vex")
         content = {"features": features}
         return Response(content)
+
+
+class SettingsView(APIView):
+    serializer_class = SettingsSerializer
+    permission_classes = (IsAuthenticated, UserHasSuperuserPermission)
+
+    @action(detail=True, methods=["get"], url_name="settings")
+    def get(self, request, pk=None):  # pylint: disable=unused-argument
+        # pk is needed for the API signature but we don't need it
+        settings = Settings.load()
+        response_serializer = SettingsSerializer(settings)
+        return Response(response_serializer.data)
+
+    @action(detail=True, methods=["patch"], url_name="settings")
+    def patch(self, request, pk=None):  # pylint: disable=unused-argument
+        # pk is needed for the API signature but we don't need it
+        request_serializer = SettingsSerializer(data=request.data)
+        if not request_serializer.is_valid():
+            raise ValidationError(request_serializer.errors)
+
+        settings = request_serializer.create(request_serializer.validated_data)
+        settings.save()
+
+        response_serializer = SettingsSerializer(settings)
+        return Response(response_serializer.data)
 
 
 class NotificationViewSet(
