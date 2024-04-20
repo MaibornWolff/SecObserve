@@ -1,15 +1,6 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
-import {
-    BooleanField,
-    DateField,
-    Labeled,
-    NumberField,
-    ReferenceField,
-    Show,
-    TextField,
-    WithRecord,
-} from "react-admin";
+import { BooleanField, Labeled, NumberField, Show, TextField } from "react-admin";
 
 import settings from ".";
 import ListHeader from "../../commons/layout/ListHeader";

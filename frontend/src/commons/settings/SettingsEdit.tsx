@@ -3,12 +3,7 @@ import { Fragment } from "react";
 import { BooleanInput, Edit, NumberInput, SaveButton, SimpleForm, Toolbar } from "react-admin";
 
 import settings from ".";
-import {
-    validate_0_23,
-    validate_0_59,
-    validate_0_999999,
-    validate_255,
-} from "../../commons/custom_validators";
+import { validate_0_23, validate_0_59, validate_0_999999, validate_255 } from "../../commons/custom_validators";
 import ListHeader from "../../commons/layout/ListHeader";
 import { TextInputWide } from "../../commons/layout/themes";
 
