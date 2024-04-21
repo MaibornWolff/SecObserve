@@ -1,9 +1,21 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
-import { BooleanField, Labeled, NumberField, Show, TextField } from "react-admin";
+import { BooleanField, EditButton, Labeled, NumberField, Show, TextField, TopToolbar } from "react-admin";
 
 import settings from ".";
 import ListHeader from "../../commons/layout/ListHeader";
+import JWTSecretReset from "./JWTSecretReset";
+
+const ShowActions = () => {
+    return (
+        <TopToolbar>
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <JWTSecretReset />
+                <EditButton />
+            </Stack>
+        </TopToolbar>
+    );
+};
 
 const SettingsShowComponent = () => {
     return (
@@ -122,7 +134,7 @@ const SettingsShow = () => {
     return (
         <Fragment>
             <ListHeader icon={settings.icon} title="Settings" />
-            <Show component={SettingsShowComponent}>
+            <Show component={SettingsShowComponent} actions={<ShowActions />}>
                 <Fragment />
             </Show>
         </Fragment>
