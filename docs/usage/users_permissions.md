@@ -36,7 +36,9 @@ There are some general permissions based on the user's type:
 | Manage users                | -        | -        | X         |
 | Manage authorization groups | -        | -        | X         |
 |                             |          |          |           |
-| Access Admin UI             | -        | -        | X         |
+| Manage Settings             | -        | -        | X         |
+| Reset JWT secret            | -        | -        | X         |
+| Manage VEX Counters         | -        | -        | X         |
 
 
 ## Authorization groups

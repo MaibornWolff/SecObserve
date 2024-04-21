@@ -17,6 +17,13 @@ SecObserve is build with an API first approach, every functionality needed to us
 
  ^1)^ Values can be changed by the administrators.
 
+ A secret is stored in the database that is used to generate the JWT token. The secret can be reset to a new value with a button in the settings:
+ 
+ ![Reset JWT secret](../assets/images/screenshot_settings_jwt_secret.png)
+ 
+ After a confirmation dialog, this will invalidate all existing tokens and users have to log in again.
+
+
 #### API token
 
 API tokens are used for other integration scenarios, e.g. to call the REST API from a CI/CD pipeline to import observations.

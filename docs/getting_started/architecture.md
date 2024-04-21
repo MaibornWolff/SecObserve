@@ -8,15 +8,7 @@ The frontend is a single page application (SPA), implemented with TypeScript, Re
 
 ## Backend
 
-The backend is implemented with Python and [Django](https://www.djangoproject.com) / [Django Rest Framework](https://www.django-rest-framework.org). A Gunicorn server delivers 2 major components:
-
-#### REST API
-
-The REST API is used by the frontend to serve and manipulate data and by CI/CD pipelines to upload scan results.
-
-#### Django Admin
-
-The Django Admin interface is used by administrators to manage users and some system-wide configurations.
+The backend is implemented with Python and [Django](https://www.djangoproject.com) / [Django Rest Framework](https://www.django-rest-framework.org). A Gunicorn server delivers the REST API that is used by the frontend to show and manipulate data and by CI/CD pipelines to upload scan results.
 
 ## Database
 
