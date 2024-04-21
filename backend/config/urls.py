@@ -10,6 +10,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerSplitVie
 from application.access_control.api.views import (
     AuthenticateView,
     CreateUserAPITokenView,
+    JWTSecretResetView,
     RevokeUserAPITokenView,
 )
 from application.commons.api.views import (
@@ -66,6 +67,7 @@ urlpatterns += [
     path("api/status/health/", HealthView.as_view()),
     path("api/status/settings/", StatusSettingsView.as_view()),
     path("api/settings/<int:pk>/", SettingsView.as_view(), name="settings"),
+    path("api/jwt_secret/reset/", JWTSecretResetView.as_view()),
     path(
         "api/authentication/authenticate/",
         AuthenticateView.as_view(),
