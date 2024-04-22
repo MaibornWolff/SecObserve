@@ -14,7 +14,7 @@ trivy_image_frontend_current:
   SO_ORIGIN_SERVICE: "frontend"
   SO_BRANCH_NAME: "dev"
 
-trivy_filesystem_current:
+trivy_filesystem_backend_current:
   SCANNER: trivy_filesystem
   RUN_DIRECTORY: "."
   TARGET: "backend/poetry.lock"
