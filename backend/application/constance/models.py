@@ -1,5 +1,7 @@
 from django.db.models import CharField, Model
-from picklefield import PickledObjectField
+from picklefield import PickledObjectField  # nosec B403
+
+# nosec B403: picklefield is used to store python objects in the database
 
 
 class Constance(Model):
