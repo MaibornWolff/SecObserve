@@ -152,9 +152,7 @@ def _get_dependencies_recursive(
                 new_translated_dependency = (
                     f"{translated_initial_dependency} --> {translated_dependant}"
                 )
-                new_dependency = (
-                    f"{initial_dependency} --> {dependant}"
-                )
+                new_dependency = f"{initial_dependency} --> {dependant}"
                 if dependant == component_bom_ref:
                     dependencies.append(new_translated_dependency)
                 else:
