@@ -153,15 +153,15 @@ const Menu = ({ dense = false }: MenuProps) => {
                             onPointerLeaveCapture={undefined}
                         />
                     )}
-                        <MenuItemLink
-                            to="/vex/vex_counters"
-                            state={{ _scrollToTop: true }}
-                            primaryText="VEX Counters"
-                            leftIcon={<vex_counters.icon />}
-                            dense={dense}
-                            onPointerEnterCapture={undefined}
-                            onPointerLeaveCapture={undefined}
-                        />
+                    <MenuItemLink
+                        to="/vex/vex_counters"
+                        state={{ _scrollToTop: true }}
+                        primaryText="VEX Counters"
+                        leftIcon={<vex_counters.icon />}
+                        dense={dense}
+                        onPointerEnterCapture={undefined}
+                        onPointerLeaveCapture={undefined}
+                    />
                 </SubMenu>
             </Box>
             <Box
