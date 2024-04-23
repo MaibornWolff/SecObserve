@@ -120,12 +120,14 @@ def _get_dependencies(
 
     return_dependencies = []
     for dependency in dependencies:
-        if dependency and dependency.endswith(
-            _translate_component(component_bom_ref, components)
+        if (
+            dependency
+            and dependency.endswith(_translate_component(component_bom_ref, components))
+            or dependency.startswith("Circular dependency for")
         ):
             return_dependencies.append(dependency)
 
-    return return_dependencies
+    return sorted(return_dependencies)
 
 
 def _get_dependencies_recursive(
@@ -141,7 +143,13 @@ def _get_dependencies_recursive(
         ref = dependency.get("ref")
         if ref == root:
             for dependant in dependency.get("dependsOn", []):
-                new_dependency = f"{translated_initial_dependency} --> {_translate_component(dependant, components)}"
+                translated_dependant = _translate_component(dependant, components)
+                if translated_dependant in translated_initial_dependency:
+                    return [f"Circular dependency for {translated_dependant}"]
+
+                new_dependency = (
+                    f"{translated_initial_dependency} --> {translated_dependant}"
+                )
                 if dependant == component_bom_ref:
                     dependencies.append(new_dependency)
                 else:
