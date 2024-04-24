@@ -108,6 +108,7 @@ def _get_dependencies(
             dependencies += _get_dependencies_recursive(
                 root,
                 _translate_component(root, components),
+                root,
                 component_bom_ref,
                 component_dependencies,
                 components,
@@ -120,17 +121,20 @@ def _get_dependencies(
 
     return_dependencies = []
     for dependency in dependencies:
-        if dependency and dependency.endswith(
-            _translate_component(component_bom_ref, components)
+        if (
+            dependency
+            and dependency.endswith(_translate_component(component_bom_ref, components))
+            or dependency.startswith("Circular dependency for")
         ):
             return_dependencies.append(dependency)
 
-    return return_dependencies
+    return sorted(return_dependencies)
 
 
 def _get_dependencies_recursive(
     root: str,
     translated_initial_dependency: str,
+    initial_dependency: str,
     component_bom_ref: str,
     component_dependencies: list[dict],
     components: dict[str, Component],
@@ -141,12 +145,20 @@ def _get_dependencies_recursive(
         ref = dependency.get("ref")
         if ref == root:
             for dependant in dependency.get("dependsOn", []):
-                new_dependency = f"{translated_initial_dependency} --> {_translate_component(dependant, components)}"
+                translated_dependant = _translate_component(dependant, components)
+                if dependant in initial_dependency:
+                    return [f"Circular dependency for {translated_dependant}"]
+
+                new_translated_dependency = (
+                    f"{translated_initial_dependency} --> {translated_dependant}"
+                )
+                new_dependency = f"{initial_dependency} --> {dependant}"
                 if dependant == component_bom_ref:
-                    dependencies.append(new_dependency)
+                    dependencies.append(new_translated_dependency)
                 else:
                     new_dependencies = _get_dependencies_recursive(
                         dependant,
+                        new_translated_dependency,
                         new_dependency,
                         component_bom_ref,
                         component_dependencies,

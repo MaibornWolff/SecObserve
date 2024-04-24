@@ -10,7 +10,7 @@ import {
     OBSERVATION_STATUS_NOT_AFFECTED,
     OBSERVATION_STATUS_NOT_SECURITY,
 } from "../core/types";
-import { getSettingTheme } from "./settings/functions";
+import { getSettingTheme } from "./user_settings/functions";
 
 export function getIconAndFontColor() {
     if (getSettingTheme() == "dark") {

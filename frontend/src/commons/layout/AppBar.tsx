@@ -59,7 +59,7 @@ const SettingsMenu = forwardRef(() => {
     return (
         <MenuItem
             component={Link}
-            to="/settings"
+            to="/user_settings"
             onClick={() => {
                 onClose();
             }}

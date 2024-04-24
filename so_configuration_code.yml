@@ -52,6 +52,14 @@ semgrep_frontend:
   SO_ORIGIN_SERVICE: "frontend"
   SO_BRANCH_NAME: $GITHUB_REF_NAME
 
+trivy_filesystem_backend:
+  SCANNER: trivy_filesystem
+  RUN_DIRECTORY: "."
+  TARGET: "backend/poetry.lock"
+  REPORT_NAME: "trivy_backend_poetry.json"
+  SO_ORIGIN_SERVICE: "backend"
+  SO_BRANCH_NAME: $GITHUB_REF_NAME
+
 trivy_filesystem_frontend:
   SCANNER: trivy_filesystem
   RUN_DIRECTORY: "."

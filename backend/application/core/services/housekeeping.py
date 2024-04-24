@@ -2,9 +2,9 @@ import logging
 import re
 from datetime import timedelta
 
-from constance import config
 from django.utils import timezone
 
+from application.commons.models import Settings
 from application.core.models import Branch, Product
 
 logger = logging.getLogger("secobserve.core")
@@ -45,13 +45,15 @@ def delete_inactive_branches_for_product(product: Product) -> None:
             )
             exempt_branches = product.repository_branch_housekeeping_exempt_branches
         else:
+            settings = Settings.load()
+
             # Branch housekeeping is standard
-            if not config.BRANCH_HOUSEKEEPING_ACTIVE:
+            if not settings.branch_housekeeping_active:
                 # Branch housekeeping is disabled
                 return
 
-            keep_inactive_days = config.BRANCH_HOUSEKEEPING_KEEP_INACTIVE_DAYS
-            exempt_branches = config.BRANCH_HOUSEKEEPING_EXEMPT_BRANCHES
+            keep_inactive_days = settings.branch_housekeeping_keep_inactive_days
+            exempt_branches = settings.branch_housekeeping_exempt_branches
 
     if not keep_inactive_days:
         # Branch housekeeping has no inactive days configured

@@ -1,26 +1,26 @@
 trivy_image_backend_current:
   SCANNER: trivy_image
-  TARGET: "maibornwolff/secobserve-backend:1.11.1"
+  TARGET: "maibornwolff/secobserve-backend:1.12.0"
   FURTHER_PARAMETERS: "--vuln-type os" 
   REPORT_NAME: "trivy_backend_image.json"
   SO_ORIGIN_SERVICE: "backend"
-  SO_BRANCH_NAME: "1.11.1"
+  SO_BRANCH_NAME: "1.12.0"
 
 trivy_image_frontend_current:
   SCANNER: trivy_image
-  TARGET: "maibornwolff/secobserve-frontend:1.11.1"
+  TARGET: "maibornwolff/secobserve-frontend:1.12.0"
   FURTHER_PARAMETERS: "--vuln-type os" 
   REPORT_NAME: "trivy_frontend_image.json"
   SO_ORIGIN_SERVICE: "frontend"
-  SO_BRANCH_NAME: "1.11.1"
+  SO_BRANCH_NAME: "1.12.0"
 
-trivy_filesystem_current:
+trivy_filesystem_backend_current:
   SCANNER: trivy_filesystem
   RUN_DIRECTORY: "."
   TARGET: "backend/poetry.lock"
   REPORT_NAME: "trivy_backend_poetry.json"
   SO_ORIGIN_SERVICE: "backend"
-  SO_BRANCH_NAME: "1.11.1"
+  SO_BRANCH_NAME: "1.12.0"
 
 trivy_filesystem_frontend_current:
   SCANNER: trivy_filesystem
@@ -28,7 +28,7 @@ trivy_filesystem_frontend_current:
   TARGET: "frontend/package-lock.json"
   REPORT_NAME: "trivy_frontend_npm.json"
   SO_ORIGIN_SERVICE: "frontend"
-  SO_BRANCH_NAME: "1.11.1"
+  SO_BRANCH_NAME: "1.12.0"
 
 importer:
   SO_UPLOAD: "true"

@@ -1,4 +1,3 @@
-from constance.signals import config_updated
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
@@ -40,10 +39,3 @@ def branch_post_delete(  # pylint: disable=unused-argument
 ) -> None:
     # sender is needed according to Django documentation
     set_repository_default_branch(instance.product)
-
-
-@receiver(config_updated)
-def constance_updated(key, **kwargs):
-    if key.startswith("SECURITY_GATE"):
-        for product in Product.objects.filter(is_product_group=False):
-            check_security_gate(product)

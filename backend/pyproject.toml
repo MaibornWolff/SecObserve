@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "SecObserve"
-version = "1.11.1"
+version = "1.12.0"
 description = "SecObserve is an open source vulnerability management system for software development and cloud environments."
 license = "BSD-3-Clause"
 authors = [
@@ -15,7 +15,7 @@ django = "4.2.11"  # https://www.djangoproject.com/
 django-environ = "0.11.2"  # https://github.com/joke2k/django-environ
 django-filter = "24.2"  # https://github.com/carltongibson/django-filter 
 django-csp = "3.8"  # https://github.com/mozilla/django-csp
-django-constance = { version = "3.1.0", extras = ["database"] }  # https://github.com/jazzband/django-constance
+django-picklefield = "3.2"  # https://github.com/gintas/django-picklefield 
 django-encrypted-model-fields = "0.6.5"  # https://gitlab.com/lansharkconsulting/django/django-encrypted-model-fields
 argon2-cffi = "23.1.0"  # https://github.com/hynek/argon2_cffi
 whitenoise = "6.6.0"  # https://github.com/evansd/whitenoise
@@ -52,8 +52,8 @@ huey = "2.5.0"  # https://github.com/coleifer/huey
 jira = "3.8.0"  # https://github.com/pycontribs/jira
 # Others
 # ------------------------------------------------------------------------------
-inflect = "7.2.0"  # https://github.com/jaraco/inflect
-validators = "0.28.0"  # https://github.com/python-validators/validators
+inflect = "7.2.1"  # https://github.com/jaraco/inflect
+validators = "0.28.1"  # https://github.com/python-validators/validators
 cvss = "3.1"  # https://github.com/RedHatProductSecurity/cvss
 jsonpickle = "3.0.4"  # https://github.com/jsonpickle/jsonpickle
 
@@ -65,10 +65,10 @@ watchgod = "0.8.2"  # https://github.com/samuelcolvin/watchgod
 # ------------------------------------------------------------------------------
 flake8 = "7.0.0"  # https://github.com/PyCQA/flake8
 flake8-isort = "6.1.1"  # https://github.com/gforcada/flake8-isort
-black = "24.4.0"  # https://github.com/psf/black
+black = "24.4.1"  # https://github.com/psf/black
 pylint-django = "2.5.5"  # https://github.com/PyCQA/pylint-django
 pre-commit = "3.7.0"  # https://github.com/pre-commit/pre-commit
-mypy = "1.9.0"  # https://github.com/python/mypy
+mypy = "1.10.0"  # https://github.com/python/mypy
 django-stubs = "4.2.7"  # https://github.com/typeddjango/django-stubs
 djangorestframework-stubs = "3.14.5"  # https://github.com/typeddjango/djangorestframework-stubs
 types-PyMySQL = "1.1.0.1"  # https://github.com/python/typeshed
@@ -81,6 +81,6 @@ django-extensions = "3.2.3"  # https://github.com/django-extensions/django-exten
 gunicorn = "22.0.0"  # https://github.com/benoitc/gunicorn
 
 [tool.poetry.group.unittests.dependencies]
-coverage = "7.4.4"  # https://github.com/nedbat/coveragepy
+coverage = "7.5.0"  # https://github.com/nedbat/coveragepy
 django-extensions = "3.2.3"  # https://github.com/django-extensions/django-extensions
 django-coverage-plugin = "3.1.0"  # https://github.com/nedbat/django_coverage_plugin

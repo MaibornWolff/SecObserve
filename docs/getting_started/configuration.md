@@ -2,7 +2,7 @@
 
 ## Deployment
 
-A part of the configuation is done with environment variables, which need to be set when deploying SecObserve. How this is done depends on the deployment method, see [Installation](installation.md).
+A part of the configuration is done with environment variables, which need to be set when deploying SecObserve. How this is done depends on the deployment method, see [Installation](installation.md).
 
 #### Backend
 
@@ -25,8 +25,7 @@ A part of the configuation is done with environment variables, which need to be 
 | `GUNICORN_WORKERS`     | optional   | Number of worker processes for the Gunicorn web server, see [Gunicorn documentation](https://docs.gunicorn.org/en/stable/design.html#how-many-workers). Default is 3. |
 | `GUNICORN_THREADS`     | optional   | Number of worker threads for the Gunicorn web server, default is 10. |
 | `OIDC_AUTHORITY`       | mandatory   | The authority is a URL that hosts the OpenID configuration well-known endpoint.  |
-| `OIDC_CLIENT_ID`       | mandatory   | The client ID is the unique *Application (client) ID* assigned to your app by the OpenID Connect provider when the app
-was registered. |
+| `OIDC_CLIENT_ID`       | mandatory   | The client ID is the unique *Application (client) ID* assigned to your app by the OpenID Connect provider when the app was registered. |
 | `OIDC_USERNAME`        | mandatory   | The claim that contains the username to find or create the user. |
 | `OIDC_FIRST_NAME`      | mandatory   | The claim that contains the first name of the user. |
 | `OIDC_LAST_NAME`       | mandatory   | The claim that contains the last name of the user. |
@@ -37,9 +36,9 @@ was registered. |
 
 #### Frontend
 
-| Environment variable              | Optionality | Description |
-|-----------------------------------|:-----------:|-------------|
-| `API_BASE_URL`                    | mandatory   | URL where to find the backend API, e.g. `https:\\secobserve-backend.example.com/api`. |
+| Environment variable            | Optionality | Description |
+|---------------------------------|:-----------:|-------------|
+| `API_BASE_URL`                  | mandatory   | URL where to find the backend API, e.g. `https:\\secobserve-backend.example.com/api`. |
 | `OIDC_ENABLE`                   | mandatory   | `true`: OpenID Connect authentication is active, `false`: otherwise. |
 | `OIDC_AUTHORITY`                | mandatory   | The authority is a URL that hosts the OpenID Connect configuration well-known endpoint. |
 | `OIDC_CLIENT_ID`                | mandatory   | The client ID is the unique *Application (client) ID* assigned to your app by the OpenID Connect provider when the app was registered. |
@@ -50,8 +49,10 @@ All the `OIDC_*` environment variables are needed for technical reasons. If `OID
 
 More about the configuration for different OpenID Connect providers can be found in [OpenID Connect authentication](../integrations/oidc_authentication.md).
 
-## Admin user interface
+## Admininistration in SecObserve
 
-SecObserve provides an administration user interface to manage users and some system-wide configurations. It can be accessed via `<BACKEND_URL>/admin` by users where the flag `Superuser status` is set. 
+Other parts of the configuration are done in the administration interface of SecObserve under `Settings`, which can only be accessed by users with the role `Superuser`.
 
-The entries in section *CONSTANCE / Config* should be checked and adjusted if necessary after installing SecObserve.
+![Settings](../assets/images/screenshot_settings.png)
+
+The entries shall be checked and adjusted if necessary after installing SecObserve.

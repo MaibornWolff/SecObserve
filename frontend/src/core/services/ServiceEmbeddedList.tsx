@@ -5,7 +5,7 @@ import { PERMISSION_SERVICE_DELETE } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
-import { getSettingListSize } from "../../commons/settings/functions";
+import { getSettingListSize } from "../../commons/user_settings/functions";
 import ServiceDelete from "./ServiceDelete";
 
 type ServiceEmbeddedListProps = {

@@ -15,7 +15,7 @@ import {
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { feature_vex_enabled } from "../../commons/functions";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
-import { getSettingListSize } from "../../commons/settings/functions";
+import { getSettingListSize } from "../../commons/user_settings/functions";
 import { ASSESSMENT_STATUS_NEEDS_APPROVAL } from "../types";
 import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../types";
 
@@ -52,6 +52,14 @@ const ObservationLogApprovalList = ({ product }: ObservationLogApprovalListProps
         listContext.data = [];
     }
 
+    listContext.data.forEach((element: any) => {
+        if (element.comment.length > 255) {
+            element.comment_shortened = element.comment.substring(0, 255) + "...";
+        } else {
+            element.comment_shortened = element.comment;
+        }
+    });
+
     const ShowObservationLogs = (id: any) => {
         return "../../../../observation_logs/" + id + "/show";
     };
@@ -79,7 +87,7 @@ const ObservationLogApprovalList = ({ product }: ObservationLogApprovalListProps
                     {feature_vex_enabled() && (
                         <TextField label="VEX justification" source="vex_justification" emptyText="---" />
                     )}
-                    <TextField source="comment" />
+                    <TextField source="comment_shortened" sortable={false} label="Comment" />
                     <DateField source="created" showTime />
                 </Datagrid>
                 <CustomPagination />

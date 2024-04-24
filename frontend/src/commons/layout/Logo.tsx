@@ -1,4 +1,4 @@
-import { getSettingTheme } from "../settings/functions";
+import { getSettingTheme } from "../user_settings/functions";
 
 const Logo = () => {
     if (getSettingTheme() == "dark") {

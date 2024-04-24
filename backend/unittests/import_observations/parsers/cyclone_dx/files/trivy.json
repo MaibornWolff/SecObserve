@@ -3085,6 +3085,30 @@
       ]
     },
     {
+      "ref": "pkg:apk/alpine/icu-data-en@72.1-r1?distro=3.17.3",
+      "dependsOn": [
+        "pkg:apk/alpine/geoip@1.6.12-r3?distro=3.17.3"
+      ]
+    },
+    {
+      "ref": "pkg:apk/alpine/geoip@1.6.12-r3?distro=3.17.3",
+      "dependsOn": [
+        "pkg:apk/alpine/icu-data-en@72.1-r1?distro=3.17.3"
+      ]
+    },
+    {
+      "ref": "pkg:apk/alpine/busybox@1.35.0-r29?distro=3.17.3",
+      "dependsOn": [
+        "pkg:apk/alpine/icu-libs@72.1-r1?distro=3.17.3"
+      ]
+    },
+    {
+      "ref": "pkg:apk/alpine/icu-data-en@72.1-r1?distro=3.17.3",
+      "dependsOn": [
+        "pkg:apk/alpine/icu-libs@72.1-r1?distro=3.17.3"
+      ]
+    },
+    {
       "ref": "pkg:oci/example-frontend@sha256:73d3494bb53ebe41f806c08fc356c000c21fe4a5eddf23907646c4eab784ea19?repository_url=index.docker.io%2Fexample%2Fexample-frontend\u0026arch=amd64",
       "dependsOn": [
         "94bc98ed-6ec6-4e79-baff-47c2e8e2c816",
@@ -3169,7 +3193,7 @@
         }
       ],
       "description": "No description is available for this CVE.",
-      "recommendation": "Upgrade libxml2 to version 2.10.4-r0",
+      "recommendation": "Upgrade icu-libs to version 72.2.0",
       "advisories": [
         {
           "url": "https://access.redhat.com/security/cve/CVE-2023-28484"
@@ -3183,10 +3207,10 @@
       ],
       "affects": [
         {
-          "ref": "pkg:apk/alpine/libxml2@2.10.3-r1?distro=3.17.3",
+          "ref": "pkg:apk/alpine/icu-libs@72.1-r1?distro=3.17.3",
           "versions": [
             {
-              "version": "2.10.3-r1",
+              "version": "72.1-r1",
               "status": "affected"
             }
           ]

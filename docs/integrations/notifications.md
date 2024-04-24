@@ -6,13 +6,13 @@ SecObserve can send notifications to email addresses, Microsoft Teams or Slack f
 * When an exception occurs while processing a request.
 * When an exception occurs in a background task.
 
-There is a ratelimiting active to prevent flooding of notifications, if a series of exceptions occurs. The same exception is sent only once during a specified timedelta, which can be configured in the Django Admin user interface. The default for this timedelta is 1 hour.
+There is a ratelimiting active to prevent flooding of notifications, if a series of exceptions occurs. The same exception is sent only once during a specified timedelta, which can be configured in the [Settings](../getting_started/configuration.md#admininistration-in-secobserve). The default for this timedelta is 1 hour.
 
 ##  Notifications to email addresses
 
 #### Settings in SecObserve
 
-The field `EMAIL_FROM` needs to be set in the Django Admin user interface to be able to send notifications to email addresses for both events. 
+The field `EMAIL_FROM` needs to be set in the [Settings](../getting_started/configuration.md#admininistration-in-secobserve) to be able to send notifications to email addresses for both events. 
 
 #### Notifications for security gates
 
@@ -22,7 +22,7 @@ When creating or editing a product, the field `Email` can be set in the *Notific
 
 #### Notifications for exceptions
 
-An admistrator can configure the field `EXCEPTION_EMAIL_TO` in the Django Admin user interface. If an exception occurs while processing a request and this field is filled with a comma separated list of email addresses, a notifications is sent each of the email addresses before returning the HTTP code 500 via the REST API.
+An admistrator can configure the field `EXCEPTION_EMAIL_TO` in the [Settings](../getting_started/configuration.md#admininistration-in-secobserve). If an exception occurs while processing a request and this field is filled with a comma separated list of email addresses, a notifications is sent each of the email addresses before returning the HTTP code 500 via the REST API.
 
 ##  Notifications to Microsoft Teams and Slack
 
@@ -44,7 +44,7 @@ When creating or editing a product, the fields `MS Teams` and/or `Slack` can be 
 
 #### Notifications for exceptions
 
-An admistrator can configure the fields `EXCEPTION_MS_TEAMS_WEBHOOK` and/or `EXCEPTION_SLACK_WEBHOOK` in the Django Admin user interface. If an exception occurs while processing a request and this field is filled with the copied webhook URL, a notifications is sent to Microsoft Teams and/or Slack before returning the HTTP code 500 via the REST API.
+An admistrator can configure the fields `EXCEPTION_MS_TEAMS_WEBHOOK` and/or `EXCEPTION_SLACK_WEBHOOK` in the [Settings](../getting_started/configuration.md#admininistration-in-secobserve). If an exception occurs while processing a request and this field is filled with the copied webhook URL, a notifications is sent to Microsoft Teams and/or Slack before returning the HTTP code 500 via the REST API.
 
 ## Notifications in the user interface
 

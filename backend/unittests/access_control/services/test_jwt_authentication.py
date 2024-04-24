@@ -6,6 +6,7 @@ from django.http import HttpRequest
 from django.utils import timezone
 from rest_framework.exceptions import AuthenticationFailed
 
+from application.access_control.models import JWT_Secret
 from application.access_control.services.jwt_authentication import (
     JWTAuthentication,
     create_jwt,
@@ -19,9 +20,10 @@ class TestFunctions(BaseTestCase):
 
         self.secret = "secret"
 
-    @patch("application.access_control.services.jwt_authentication.get_secret")
+    @patch("application.access_control.models.JWT_Secret.load")
     def test_create_jwt_superuser(self, mock):
-        mock.return_value = self.secret
+        jwt_secret = JWT_Secret(secret=self.secret)
+        mock.return_value = jwt_secret
 
         token = create_jwt(self.user_admin)
         payload = jwt.decode(token, self.secret, algorithms="HS256")
@@ -36,9 +38,10 @@ class TestFunctions(BaseTestCase):
         exp_delta = current_timestamp - payload["exp"]
         self.assertTrue(0 <= exp_delta <= 2)
 
-    @patch("application.access_control.services.jwt_authentication.get_secret")
+    @patch("application.access_control.models.JWT_Secret.load")
     def test_create_jwt_normal_user(self, mock):
-        mock.return_value = self.secret
+        jwt_secret = JWT_Secret(secret=self.secret)
+        mock.return_value = jwt_secret
 
         token = create_jwt(self.user_external)
         payload = jwt.decode(token, self.secret, algorithms="HS256")
@@ -154,9 +157,10 @@ class TestJWTAuthentication(BaseTestCase):
     @patch(
         "application.access_control.services.jwt_authentication.get_user_by_username"
     )
-    @patch("application.access_control.services.jwt_authentication.get_secret")
+    @patch("application.access_control.models.JWT_Secret.load")
     def test_validate_jwt_user(self, secret_mock, get_user_mock, jwt_mock):
-        secret_mock.return_value = "secret"
+        jwt_secret = JWT_Secret(secret="secret")
+        secret_mock.return_value = jwt_secret
         get_user_mock.return_value = self.user_internal
         jwt_mock.return_value = {"username": self.user_internal.username}
 
@@ -169,9 +173,10 @@ class TestJWTAuthentication(BaseTestCase):
         jwt_mock.assert_called_with("token", "secret", algorithms=["HS256"])
 
     @patch("jwt.decode")
-    @patch("application.access_control.services.jwt_authentication.get_secret")
+    @patch("application.access_control.models.JWT_Secret.load")
     def test_validate_jwt_message(self, secret_mock, jwt_mock):
-        secret_mock.return_value = "secret"
+        jwt_secret = JWT_Secret(secret="secret")
+        secret_mock.return_value = jwt_secret
         jwt_mock.side_effect = jwt.ExpiredSignatureError("Signature expired")
 
         with self.assertRaises(AuthenticationFailed) as e:

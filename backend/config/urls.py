@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib import admin
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.urls import include, path
 from django.views import defaults as default_views
@@ -10,9 +9,15 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerSplitVie
 from application.access_control.api.views import (
     AuthenticateView,
     CreateUserAPITokenView,
+    JWTSecretResetView,
     RevokeUserAPITokenView,
 )
-from application.commons.api.views import HealthView, SettingsView, VersionView
+from application.commons.api.views import (
+    HealthView,
+    SettingsView,
+    StatusSettingsView,
+    VersionView,
+)
 from application.commons.views import empty_view
 from application.import_observations.api.views import (
     ApiImportObservationsById,
@@ -44,8 +49,6 @@ urlpatterns = [
         ),
         name="favicon",
     ),
-    # Django Admin, use {% url 'admin:index' %}
-    path(settings.ADMIN_URL, admin.site.urls),
     # Your stuff: custom urls includes go here
     path(
         "robots.txt",
@@ -59,7 +62,9 @@ urlpatterns += [
     path("api/", include("config.api_router")),
     path("api/status/version/", VersionView.as_view()),
     path("api/status/health/", HealthView.as_view()),
-    path("api/status/settings/", SettingsView.as_view()),
+    path("api/status/settings/", StatusSettingsView.as_view()),
+    path("api/settings/<int:pk>/", SettingsView.as_view(), name="settings"),
+    path("api/jwt_secret/reset/", JWTSecretResetView.as_view()),
     path(
         "api/authentication/authenticate/",
         AuthenticateView.as_view(),

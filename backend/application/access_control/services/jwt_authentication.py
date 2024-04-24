@@ -2,23 +2,23 @@ from datetime import datetime, timedelta, timezone
 from typing import Optional
 
 import jwt
-from constance import config
 from rest_framework.authentication import BaseAuthentication, get_authorization_header
 from rest_framework.exceptions import AuthenticationFailed
 
-from application.access_control.models import User
+from application.access_control.models import JWT_Secret, User
 from application.access_control.queries.user import get_user_by_username
-from application.access_control.services.jwt_secret import get_secret
+from application.commons.models import Settings
 
 ALGORITHM = "HS256"
 JWT_PREFIX = "JWT"
 
 
 def create_jwt(user: User) -> str:
+    settings = Settings.load()
     if user.is_superuser:
-        jwt_validity_duration = config.JWT_VALIDITY_DURATION_SUPERUSER
+        jwt_validity_duration = settings.jwt_validity_duration_superuser
     else:
-        jwt_validity_duration = config.JWT_VALIDITY_DURATION_USER
+        jwt_validity_duration = settings.jwt_validity_duration_user
 
     payload = {
         "exp": datetime.now(tz=timezone.utc) + timedelta(hours=jwt_validity_duration),
@@ -27,7 +27,7 @@ def create_jwt(user: User) -> str:
         "last_name": user.last_name,
         "full_name": user.full_name,
     }
-    token = jwt.encode(payload, get_secret(), algorithm=ALGORITHM)
+    token = jwt.encode(payload, JWT_Secret.load().secret, algorithm=ALGORITHM)
     return token
 
 
@@ -67,7 +67,9 @@ class JWTAuthentication(BaseAuthentication):
 
     def _validate_jwt(self, token: str) -> Optional[User]:
         try:
-            payload = jwt.decode(token, get_secret(), algorithms=[ALGORITHM])
+            payload = jwt.decode(
+                token, JWT_Secret.load().secret, algorithms=[ALGORITHM]
+            )
             username = payload.get("username")
             if not username:
                 raise AuthenticationFailed("No username in JWT")

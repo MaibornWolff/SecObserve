@@ -37,7 +37,12 @@ from application.access_control.api.serializers import (
     UserSettingsSerializer,
     UserUpdateSerializer,
 )
-from application.access_control.models import API_Token, Authorization_Group, User
+from application.access_control.models import (
+    API_Token,
+    Authorization_Group,
+    JWT_Secret,
+    User,
+)
 from application.access_control.queries.authorization_group import (
     get_authorization_group_by_id,
     get_authorization_groups,
@@ -49,6 +54,7 @@ from application.access_control.queries.user import (
 )
 from application.access_control.services.authorization import user_has_permission_or_403
 from application.access_control.services.jwt_authentication import create_jwt
+from application.access_control.services.jwt_secret import create_secret
 from application.access_control.services.product_api_token import (
     create_product_api_token,
     get_product_api_tokens,
@@ -379,6 +385,19 @@ class AuthenticateView(APIView):
             )
         )
         return response
+
+
+class JWTSecretResetView(APIView):
+    permission_classes = [IsAuthenticated, UserHasSuperuserPermission]
+
+    @extend_schema(
+        request=None,
+        responses={status.HTTP_204_NO_CONTENT: None},
+    )
+    def post(self, request):
+        jwt_secret = JWT_Secret(secret=create_secret())
+        jwt_secret.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 def _get_authenticated_user(data: dict) -> User:

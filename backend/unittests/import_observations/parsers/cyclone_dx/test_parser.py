@@ -220,3 +220,14 @@ class TestCycloneDXParser(TestCase):
                 '"bom-ref": "pkg:apk/alpine/libxml2@2.10.3-r1?distro=3.17.3"',
                 observation.unsaved_evidences[1][1],
             )
+
+            observation = observations[1]
+            expected_dependencies = """Circular dependency for geoip:1.6.12-r3
+Circular dependency for icu-data-en:72.1-r1
+example/example-frontend:dev --> alpine:3.17.3 --> busybox:1.35.0-r29 --> icu-libs:72.1-r1
+example/example-frontend:dev --> alpine:3.17.3 --> icu-data-en:72.1-r1 --> icu-libs:72.1-r1
+example/example-frontend:dev --> alpine:3.17.3 --> icu-libs:72.1-r1"""
+            self.assertEqual(
+                expected_dependencies,
+                observation.origin_component_dependencies,
+            )

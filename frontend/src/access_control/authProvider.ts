@@ -4,7 +4,7 @@ import { AuthProvider } from "react-admin";
 
 import { set_settings_in_local_storage } from "../commons/functions";
 import { httpClient } from "../commons/ra-data-django-rest-framework";
-import { saveSettingListProperties, setListProperties } from "../commons/settings/functions";
+import { saveSettingListProperties, setListProperties } from "../commons/user_settings/functions";
 
 const authProvider: AuthProvider = {
     login: ({ username, password }) => {

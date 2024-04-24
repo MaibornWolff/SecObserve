@@ -15,7 +15,7 @@ import {
 import { PERMISSION_PRODUCT_RULE_DELETE, PERMISSION_PRODUCT_RULE_EDIT } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
-import { getSettingListSize } from "../../commons/settings/functions";
+import { getSettingListSize } from "../../commons/user_settings/functions";
 import ProductRuleDelete from "./ProductRuleDelete";
 import ProductRuleEdit from "./ProductRuleEdit";
 

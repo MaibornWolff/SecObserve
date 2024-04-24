@@ -4,7 +4,7 @@ import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import { SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
 
-import { validate_required, validate_required_255 } from "../../commons/custom_validators";
+import { validate_required, validate_required_4096 } from "../../commons/custom_validators";
 import { justificationIsEnabledForStatus } from "../../commons/functions";
 import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
@@ -114,7 +114,12 @@ const ObservationAssessment = () => {
                                 choices={OBSERVATION_VEX_JUSTIFICATION_CHOICES}
                             />
                         )}
-                        <TextInputWide source="comment" validate={validate_required_255} />
+                        <TextInputWide
+                            multiline={true}
+                            source="comment"
+                            validate={validate_required_4096}
+                            minRows={3}
+                        />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>

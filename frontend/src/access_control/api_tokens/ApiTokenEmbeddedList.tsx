@@ -11,7 +11,7 @@ import {
 import { Fragment } from "react/jsx-runtime";
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
-import { getSettingListSize } from "../../commons/settings/functions";
+import { getSettingListSize } from "../../commons/user_settings/functions";
 
 function listFilters() {
     return [<TextInput source="name" id="api_token_name" alwaysOn />];

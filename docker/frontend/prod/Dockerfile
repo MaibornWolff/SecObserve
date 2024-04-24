@@ -1,5 +1,5 @@
 # build environment
-FROM node:20.12.2-alpine3.19@sha256:ec0c413b1d84f3f7f67ec986ba885930c57b5318d2eb3abc6960ee05d4f2eb28 as build
+FROM node:20.12.2-alpine3.19@sha256:7a91aa397f2e2dfbfcdad2e2d72599f374e0b0172be1d86eeb73f1d33f36a4b2 as build
 
 ARG VERSION=unkown
 
@@ -18,19 +18,19 @@ RUN sed -i 's/version_unkown/'"${VERSION}"'/g' ./src/commons/about/About.tsx
 RUN npm run build
 
 # production environment
-FROM nginxinc/nginx-unprivileged:stable-alpine3.18@sha256:a3750906c42187288338731393229e7c81d68935d57bd794855b24ed200d71eb
+FROM nginx:stable-alpine-slim@sha256:8545de7d520d684e2683e05447696dcaeab9d9776a9562682f70944966043666
 
 USER root
 
 # kics-scan ignore-block
 # versions of dependencies from distribution are ok
-RUN apk del curl && \
-        apk add --no-cache --virtual --update npm && \
+RUN apk add --no-cache --virtual --update npm && \
         npm i -g runtime-env-cra@0.2.4
 
 COPY --from=build /app/build /usr/share/nginx/html
 COPY ./frontend/.env.no_oidc /usr/share/nginx/html/.env
-COPY ./frontend/nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./frontend/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY ./frontend/nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY ./frontend/robots.txt /usr/share/nginx/html/robots.txt
 
 ARG user=nginx
@@ -56,11 +56,8 @@ LABEL org.opencontainers.image.version=${VERSION}
 
 RUN chown -R ${user}:${group} /usr/share/nginx/html && \
         chmod -R 777 /usr/share/nginx/html && \
-        chown -R ${user}:${group} /var/cache/nginx && \
         chown -R ${user}:${group} /var/log/nginx && \
-        chown -R ${user}:${group} /etc/nginx/conf.d && \
-        touch /var/run/nginx.pid && \
-        chown -R ${user}:${group} /var/run/nginx.pid
+        chown -R ${user}:${group} /etc/nginx/conf.d
 
 HEALTHCHECK --interval=30s --timeout=30s --start-period=10s --retries=3 \
     CMD wget -nv -t1 --spider 'http://127.0.0.1:3000/#/login' || exit 1

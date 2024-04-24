@@ -2,7 +2,7 @@ import { Datagrid, FilterForm, ListContextProvider, TextField, TextInput, useLis
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { is_superuser } from "../../commons/functions";
-import { getSettingListSize } from "../../commons/settings/functions";
+import { getSettingListSize } from "../../commons/user_settings/functions";
 import AuthorizationGroupCreateButton from "./AuthorizationGroupCreateButton";
 
 const ShowAuthorizationGroups = (id: any) => {

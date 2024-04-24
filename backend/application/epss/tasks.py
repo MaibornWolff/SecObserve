@@ -1,9 +1,9 @@
 import logging
 
-from constance import config
 from huey import crontab
 from huey.contrib.djhuey import db_periodic_task, lock_task
 
+from application.commons import settings_static
 from application.commons.services.tasks import handle_task_exception
 from application.epss.services.epss import epss_apply_observations, import_epss
 
@@ -12,8 +12,8 @@ logger = logging.getLogger("secobserve.epss")
 
 @db_periodic_task(
     crontab(
-        minute=config.BACKGROUND_EPSS_IMPORT_CRONTAB_MINUTES,
-        hour=config.BACKGROUND_EPSS_IMPORT_CRONTAB_HOURS,
+        minute=settings_static.background_epss_import_crontab_minutes,
+        hour=settings_static.background_epss_import_crontab_hours,
     )
 )
 @lock_task("import_epss")

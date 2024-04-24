@@ -144,7 +144,7 @@ class TestAuthentication(BaseTestCase):
             else:
                 raise Exception(f"Unkown method: {method}")
 
-            self.assertTrue(response.status_code in [200, 400, 404])
+            self.assertTrue(response.status_code in [200, 204, 400, 404])
             mock_authentication.assert_called_once()
             mock_authentication.reset_mock()
 
@@ -205,7 +205,7 @@ class TestAuthentication(BaseTestCase):
             else:
                 raise Exception(f"Unkown method: {method}")
 
-            self.assertTrue(response.status_code in [200, 400, 404])
+            self.assertTrue(response.status_code in [200, 204, 400, 404])
             mock_authentication.assert_called_once()
             mock_authentication.reset_mock()
 
@@ -310,3 +310,9 @@ class TestAuthentication(BaseTestCase):
         self._check_authentication(["get"], "/api/users/")
         self._check_authentication(["get"], "/api/users/1/")
         self._check_authentication(["patch"], "/api/users/my_settings/")
+
+    def test_settings(self):
+        self._check_authentication(["get", "patch"], "/api/settings/1/")
+
+    def test_jwt_secret(self):
+        self._check_authentication(["post"], "/api/jwt_secret/reset/")

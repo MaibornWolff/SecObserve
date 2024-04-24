@@ -14,7 +14,8 @@ import { Layout } from "./commons/layout";
 import { darkTheme, lightTheme } from "./commons/layout/themes";
 import notifications from "./commons/notifications";
 import drfProvider from "./commons/ra-data-django-rest-framework";
-import Settings from "./commons/settings/Settings";
+import settings from "./commons/settings";
+import UserSettings from "./commons/user_settings/UserSettings";
 import evidences from "./core/evidences";
 import observation_logs from "./core/observation_logs";
 import observations from "./core/observations";
@@ -25,6 +26,7 @@ import { Dashboard } from "./dashboard";
 import general_rules from "./rules/general_rules";
 import csaf from "./vex/csaf";
 import openvex from "./vex/openvex";
+import vex_counters from "./vex/vex_counters";
 
 const i18nProvider = polyglotI18nProvider(() => {
     return englishMessages;
@@ -52,7 +54,7 @@ const App = () => {
                     <Route path="/access_control/users" element={<AccessControlAdministration />} />
                     <Route path="/access_control/authorization_groups" element={<AccessControlAdministration />} />
                     <Route path="/access_control/api_tokens" element={<AccessControlAdministration />} />
-                    <Route path="/settings" element={<Settings />} />
+                    <Route path="/user_settings" element={<UserSettings />} />
                 </CustomRoutes>
                 <Resource
                     name="product_groups"
@@ -110,6 +112,11 @@ const App = () => {
                     recordRepresentation={(record) => `${trim_string(record.name)}`}
                 />
                 <Resource
+                    name="settings"
+                    {...settings} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                    // nosemgrep because the props are well defined in the import
+                />
+                <Resource
                     name="notifications"
                     {...notifications} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
                     // nosemgrep because the props are well defined in the import
@@ -124,6 +131,12 @@ const App = () => {
                     name="vex/openvex"
                     {...openvex} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
                     // nosemgrep because the props are well defined in the import
+                />
+                <Resource
+                    name="vex/vex_counters"
+                    {...vex_counters} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                    // nosemgrep because the props are well defined in the import
+                    recordRepresentation={(record) => `${trim_string(record.document_id_prefix + "_" + record.year)}`}
                 />
             </Admin>
         </AuthProvider>

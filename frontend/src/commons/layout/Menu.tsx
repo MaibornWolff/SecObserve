@@ -13,8 +13,11 @@ import products from "../../core/products";
 import general_rules from "../../rules/general_rules";
 import csaf from "../../vex/csaf";
 import openvex from "../../vex/openvex";
+import vex_counters from "../../vex/vex_counters";
 import { feature_vex_enabled } from "../functions";
+import { is_superuser } from "../functions";
 import notifications from "../notifications";
+import settings from "../settings";
 import SubMenu from "./SubMenu";
 
 type MenuName = "menuSettings" | "menuVEX";
@@ -108,7 +111,7 @@ const Menu = ({ dense = false }: MenuProps) => {
                 <SubMenu
                     handleToggle={() => handleToggle("menuSettings")}
                     isOpen={state.menuSettings}
-                    name="Settings"
+                    name="Administration"
                     icon={<SettingsIcon />}
                     dense={dense}
                 >
@@ -135,6 +138,26 @@ const Menu = ({ dense = false }: MenuProps) => {
                         state={{ _scrollToTop: true }}
                         primaryText="Access Control"
                         leftIcon={<administration.icon />}
+                        dense={dense}
+                        onPointerEnterCapture={undefined}
+                        onPointerLeaveCapture={undefined}
+                    />
+                    {is_superuser() && (
+                        <MenuItemLink
+                            to="/settings/1/show"
+                            state={{ _scrollToTop: true }}
+                            primaryText="Settings"
+                            leftIcon={<settings.icon />}
+                            dense={dense}
+                            onPointerEnterCapture={undefined}
+                            onPointerLeaveCapture={undefined}
+                        />
+                    )}
+                    <MenuItemLink
+                        to="/vex/vex_counters"
+                        state={{ _scrollToTop: true }}
+                        primaryText="VEX Counters"
+                        leftIcon={<vex_counters.icon />}
                         dense={dense}
                         onPointerEnterCapture={undefined}
                         onPointerLeaveCapture={undefined}
