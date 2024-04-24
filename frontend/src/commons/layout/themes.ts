@@ -1,8 +1,6 @@
 import { styled } from "@mui/system";
 import { AutocompleteInput, PasswordInput, TextInput, defaultTheme } from "react-admin";
-import { makeStyles } from "tss-react/mui";
-
-import { getSettingTheme } from "../../commons/user_settings/functions";
+import { tss } from "tss-react";
 
 export const AutocompleteInputWide = styled(AutocompleteInput)({
     width: "30em",
@@ -20,23 +18,26 @@ export const PasswordInputWide = styled(PasswordInput)({
     width: "30em",
 });
 
-export function getLinkColor() {
-    if (getSettingTheme() == "dark") {
+export function getLinkColor(setting_theme: string) {
+    if (setting_theme == "dark") {
         return "#6ed2f0";
     } else {
         return "#00B3F0";
     }
 }
 
-export const useStyles = makeStyles()({
+export const useLinkStyles = tss.withParams<{ setting_theme: string }>().create(({ setting_theme }) => ({
     link: {
-        color: getLinkColor(),
+        color: getLinkColor(setting_theme),
         textDecoration: "none",
         ":visited": {
-            color: getLinkColor(),
+            color: getLinkColor(setting_theme),
         },
         wordBreak: "break-word",
     },
+}));
+
+export const useStyles = tss.create({
     displayFontSize: {
         fontSize: "0.875rem",
     },

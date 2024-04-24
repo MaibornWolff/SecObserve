@@ -1,7 +1,8 @@
 import LaunchIcon from "@mui/icons-material/Launch";
 import { Fragment } from "react";
 
-import { useStyles } from "../../commons/layout/themes";
+import { useLinkStyles } from "../../commons/layout/themes";
+import { getSettingTheme } from "../../commons/user_settings/functions";
 
 interface TextUrlFieldProps {
     text: string | number;
@@ -34,7 +35,7 @@ function is_invalid_url(urlString: string): boolean {
 }
 
 const TextUrlField = (props: TextUrlFieldProps) => {
-    const { classes } = useStyles();
+    const { classes } = useLinkStyles({ setting_theme: getSettingTheme() });
 
     return (
         <Fragment>
