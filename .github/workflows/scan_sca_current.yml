@@ -15,7 +15,7 @@ jobs:
         name: Checkout
         uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4.1.3
         with:
-          ref: 'v1.11.1'
+          ref: 'v1.12.0'
       -
         name: Run SCA vulnerability scanners
         uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@b681a7b2089d9be0a0d84179b6fdfd9540e77680 # main
