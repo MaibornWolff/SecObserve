@@ -18,7 +18,7 @@ RUN sed -i 's/version_unkown/'"${VERSION}"'/g' ./src/commons/about/About.tsx
 RUN npm run build
 
 # production environment
-FROM nginx:stable-alpine-slim@sha256:5893dc08a2cb01e21592ff469346ebaacf49167fbc949f45e1c29111981b0427
+FROM nginx:stable-alpine-slim@sha256:caaa51cbb24b1d2e9a0cb41e4f38c28b15f83ba7e396438f5353589606d4aa9a
 
 USER root
 
