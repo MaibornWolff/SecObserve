@@ -2227,13 +2227,13 @@ test = ["coverage[toml] (>=7)", "mypy (>=1.2.0)", "pytest (>=7)"]
 
 [[package]]
 name = "types-pymysql"
-version = "1.1.0.1"
+version = "1.1.0.20240425"
 description = "Typing stubs for PyMySQL"
 optional = false
-python-versions = "*"
+python-versions = ">=3.8"
 files = [
-    {file = "types-PyMySQL-1.1.0.1.tar.gz", hash = "sha256:72bdaecb88de4a30bc3e1842e1d4522ceb3c4b2e883a6a2a7a7162775dd27b93"},
-    {file = "types_PyMySQL-1.1.0.1-py3-none-any.whl", hash = "sha256:9aec9ee0453314d477ef26e5832b4a992bc4cc3557358d62b0fe4af760a7728f"},
+    {file = "types-PyMySQL-1.1.0.20240425.tar.gz", hash = "sha256:afe24e8eba5f4851b729835530a1698b1b1645a93f9f9c83ae45228866ed31fc"},
+    {file = "types_PyMySQL-1.1.0.20240425-py3-none-any.whl", hash = "sha256:32a472233de53b913e934695530a2d083146b81ed6de1669ecb845f76b6ddc15"},
 ]
 
 [[package]]
@@ -2454,4 +2454,4 @@ brotli = ["Brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">= 3.10, < 3.13"
-content-hash = "e9fee87f3bcf0029b3ffef2bd0e8db8b021c47eaff751e561f998c90e7846621"
+content-hash = "535a5c4a9cc78582e36eb6219c98ef2a864ee53943aeafb756ad0ea9014fd927"
