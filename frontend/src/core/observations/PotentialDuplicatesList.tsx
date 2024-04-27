@@ -35,7 +35,7 @@ const PotentialDuplicatesList = ({ observation }: PotentialDuplicatesListProps) 
         filter: { observation: Number(observation.id), status: OBSERVATION_STATUS_OPEN },
         perPage: 25,
         resource: "potential_duplicates",
-        sort: { field: "current_severity", order: "ASC" },
+        sort: { field: "potential_duplicate_observation.current_severity", order: "ASC" },
         disableSyncWithLocation: false,
         storeKey: "potential_duplicates",
     });
@@ -71,7 +71,7 @@ const PotentialDuplicatesList = ({ observation }: PotentialDuplicatesListProps) 
                 <TextField source="potential_duplicate_observation.scanner_name" label="Scanner" />
                 <FunctionField<Observation>
                     label="Age"
-                    sortBy="last_observation_log"
+                    sortBy="potential_duplicate_observation.last_observation_log"
                     render={(record) =>
                         record ? humanReadableDate(record.potential_duplicate_observation.last_observation_log) : ""
                     }
