@@ -18,6 +18,8 @@ def create_observation_log(
         comment=comment,
         vex_justification=vex_justification,
         assessment_status=assessment_status,
+        general_rule=observation.general_rule,
+        product_rule=observation.product_rule,
     )
     observation_log.save()
     observation.last_observation_log = observation_log.created

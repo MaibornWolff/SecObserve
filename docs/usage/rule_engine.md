@@ -23,4 +23,4 @@ These fields are used to decide if a rule shall be applied for an observation:
 * **Origin source file** *(optional)*: Regular expression to match the source file
 * **Origin cloud qualified resource** *(optional)*: Regular expression to match the cloud qualified resource, which is the concatenation of account (AWS) or subscription (Azure) or project (GCP) with the resource
 
-If an observation matches all fields containing a value, than the new severity and/or new status is set in the observation and a comment is stored in the `Observation Log`.
+If an observation matches all fields containing a value, than the new severity and/or new status is set in the observation and the rule's description is stored as a comment in the `Observation Log`.
