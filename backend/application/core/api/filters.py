@@ -324,6 +324,56 @@ class PotentialDuplicateFilter(FilterSet):
         choices=Status.STATUS_CHOICES,
     )
 
+    ordering = OrderingFilter(
+        # tuple-mapping retains order
+        fields=(
+            (
+                "potential_duplicate_observation__title",
+                "potential_duplicate_observation.title",
+            ),
+            (
+                "potential_duplicate_observation__numerical_severity",
+                "potential_duplicate_observation.current_severity",
+            ),
+            (
+                "potential_duplicate_observation__current_status",
+                "potential_duplicate_observation.current_status",
+            ),
+            (
+                "potential_duplicate_observation__origin_service_name",
+                "potential_duplicate_observation.origin_service_name",
+            ),
+            (
+                "potential_duplicate_observation__origin_component_name_version",
+                "potential_duplicate_observation.origin_component_name_version",
+            ),
+            (
+                "potential_duplicate_observation__origin_docker_image_name_tag_short",
+                "potential_duplicate_observation.origin_docker_image_name_tag_short",
+            ),
+            (
+                "potential_duplicate_observation__origin_endpoint_hostname",
+                "potential_duplicate_observation.origin_endpoint_hostname",
+            ),
+            (
+                "potential_duplicate_observation__origin_source_file",
+                "potential_duplicate_observation.origin_source_file",
+            ),
+            (
+                "potential_duplicate_observation__origin_cloud_qualified_resource",
+                "potential_duplicate_observation.origin_cloud_qualified_resource",
+            ),
+            (
+                "potential_duplicate_observation__scanner",
+                "potential_duplicate_observation.scanner_name",
+            ),
+            (
+                "potential_duplicate_observation__last_observation_log",
+                "potential_duplicate_observation.last_observation_log",
+            ),
+        ),
+    )
+
     class Meta:
         model = Potential_Duplicate
         fields = ["observation"]
