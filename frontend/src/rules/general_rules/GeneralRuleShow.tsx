@@ -6,7 +6,6 @@ import {
     Labeled,
     PrevNextButtons,
     ReferenceField,
-    RichTextField,
     Show,
     SimpleShowLayout,
     TextField,
@@ -14,6 +13,7 @@ import {
     WithRecord,
 } from "react-admin";
 
+import MarkdownField from "../../commons/custom_fields/MarkdownField";
 import { feature_vex_enabled } from "../../commons/functions";
 import { is_superuser } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
@@ -46,7 +46,7 @@ const GeneralRuleComponent = () => {
                             </Labeled>
                             {rule.description && (
                                 <Labeled label="Description">
-                                    <RichTextField source="description" />
+                                    <MarkdownField content={rule.description} />
                                 </Labeled>
                             )}
 

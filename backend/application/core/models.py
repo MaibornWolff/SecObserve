@@ -562,6 +562,20 @@ class Observation_Log(Model):
         on_delete=PROTECT,
         null=True,
     )
+    general_rule = ForeignKey(
+        "rules.Rule",
+        related_name="observation_log_general_rules",
+        blank=True,
+        null=True,
+        on_delete=SET_NULL,
+    )
+    product_rule = ForeignKey(
+        "rules.Rule",
+        related_name="observation_log_product_rules",
+        blank=True,
+        null=True,
+        on_delete=SET_NULL,
+    )
 
     class Meta:
         indexes = [

@@ -99,6 +99,26 @@ const ObservationLogComponent = () => {
                                     <TextField source="vex_justification" />
                                 </Labeled>
                             )}
+                            {observation_log.general_rule != null && (
+                                <Labeled label="General rule">
+                                    <ReferenceField
+                                        source="general_rule"
+                                        reference="general_rules"
+                                        label="General rule name"
+                                        link="show"
+                                    />
+                                </Labeled>
+                            )}
+                            {observation_log.product_rule != null && (
+                                <Labeled label="Product rule">
+                                    <ReferenceField
+                                        source="product_rule"
+                                        reference="product_rules"
+                                        label="Product rule name"
+                                        link="show"
+                                    />
+                                </Labeled>
+                            )}
                             <Labeled label="Comment">
                                 <MarkdownField content={observation_log.comment} />
                             </Labeled>

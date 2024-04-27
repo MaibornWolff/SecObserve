@@ -1,6 +1,14 @@
 export const validateRuleForm = (values: any) => {
     const errors: any = {};
 
+    if (!values.name) {
+        errors.name = "Title is required";
+    }
+
+    if (!values.description) {
+        errors.description = "Description is required";
+    }
+
     if (!values.new_severity && !values.new_status) {
         errors.new_severity = "Either New severity or New status must be set";
         errors.new_status = "Either New severity or New status must be set";

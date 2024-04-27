@@ -179,10 +179,13 @@ class Rule_Engine:
         else:
             vex_justification = ""
 
-        if rule.product:
-            comment = f"Updated by product rule {rule.name}"
+        if rule.description:
+            comment = rule.description
         else:
-            comment = f"Updated by general rule {rule.name}"
+            if rule.product:
+                comment = f"Updated by product rule {rule.name}"
+            else:
+                comment = f"Updated by general rule {rule.name}"
 
         create_observation_log(
             observation,
