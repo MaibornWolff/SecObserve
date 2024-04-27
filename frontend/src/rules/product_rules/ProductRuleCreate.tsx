@@ -158,10 +158,7 @@ const ProductRuleCreate = ({ id }: ProductRuleCreateProps) => {
                                 validate={validate_required_2048}
                                 helperText="Markdown supported. Description will be copied into the Observation Log."
                             />
-                            <AutocompleteInputMedium
-                                source="new_severity"
-                                choices={OBSERVATION_SEVERITY_CHOICES}
-                            />
+                            <AutocompleteInputMedium source="new_severity" choices={OBSERVATION_SEVERITY_CHOICES} />
                             <AutocompleteInputMedium
                                 source="new_status"
                                 choices={OBSERVATION_STATUS_CHOICES}
