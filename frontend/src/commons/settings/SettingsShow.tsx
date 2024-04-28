@@ -53,6 +53,9 @@ const SettingsShowComponent = () => {
                     <Labeled label="VEX">
                         <BooleanField source="feature_vex" />
                     </Labeled>
+                    <Labeled label="Disable user login">
+                        <BooleanField source="feature_disable_user_login" />
+                    </Labeled>
                 </Stack>
             </Paper>
 

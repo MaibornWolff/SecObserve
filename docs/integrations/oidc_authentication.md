@@ -61,3 +61,16 @@ Frontend
 | `OIDC_CLIENT_ID`                | `CLIENT_ID`                                        |
 | `OIDC_REDIRECT_URI`             | `https://secobserve.example.com`                   |
 | `OIDC_POST_LOGOUT_REDIRECT_URI` | `https://secobserve.example.com`                   |
+
+
+## Customize the login dialog
+
+If users should only be able to sign in with OpenID Connect, the login dialog can be customized to hide user and password fields. This can be done by setting the `Disable user login` option in the `Settings` dialog:
+
+![Disable user login](../assets/images/screenshot_settings_disable_user_login.png)
+
+Then the login dialog will only show the `Enterprise sign in` button:
+
+![Enterprise sign in](../assets/images/screenshot_login_enterprise.png)
+
+If the user and password is needed to login, e.g. for a local admin user, `#force_user_login` can be added to the URL (like `https://secobserve.example.com/#/login#force_user_login`) to force the user and password fields to be shown.
