@@ -71,6 +71,6 @@ If users should only be able to sign in with OpenID Connect, the login dialog ca
 
 Then the login dialog will only show the `Enterprise sign in` button:
 
-![Enterprise sign in](../assets/images/screenshog_login_enterprise.png)
+![Enterprise sign in](../assets/images/screenshot_login_enterprise.png)
 
 If the user and password is needed to login, e.g. for a local admin user, `#force_user_login` can be added to the URL (like `https://secobserve.example.com/#/login#force_user_login`) to force the user and password fields to be shown.
