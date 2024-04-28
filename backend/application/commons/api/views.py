@@ -60,6 +60,8 @@ class StatusSettingsView(APIView):
         settings = Settings.load()
         if settings.feature_vex:
             features.append("feature_vex")
+        if settings.feature_disable_user_login:
+            features.append("feature_disable_user_login")
         content = {"features": features}
         return Response(content)
 

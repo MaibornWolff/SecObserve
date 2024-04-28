@@ -131,6 +131,13 @@ export const feature_vex_enabled = () => {
     return feature_vex_position !== -1;
 };
 
+export const feature_disable_user_login_enabled = () => {
+    const settings = JSON.parse(localStorage.getItem("settings") || "{}");
+    const features = settings.features || [];
+    const feature_disable_user_login_position = features.indexOf("feature_disable_user_login");
+    return feature_disable_user_login_position !== -1;
+};
+
 export const justificationIsEnabledForStatus = (status: string) => {
     const vex_enabled = feature_vex_enabled();
     const justification_recommended_for_status =

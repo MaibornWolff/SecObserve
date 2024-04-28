@@ -9,6 +9,7 @@ import { Form, TextInput, required, useLogin, useNotify, useTheme } from "react-
 import { useAuth } from "react-oidc-context";
 import { Navigate, useLocation } from "react-router-dom";
 
+import { feature_disable_user_login_enabled } from "../commons/functions";
 import { getTheme } from "../commons/user_settings/functions";
 import { OIDCSignInButton } from "./OIDCSignInButton";
 import { jwt_signed_in } from "./authProvider";
@@ -47,6 +48,11 @@ const Login = () => {
             });
     };
 
+    const show_user_login =
+        window.__RUNTIME_CONFIG__.OIDC_ENABLE == "false" ||
+        !feature_disable_user_login_enabled() ||
+        location.hash == "#force_user_login";
+
     return (
         <Fragment>
             {isAuthenticated && <Navigate to="/" replace={true} />}
@@ -76,41 +82,45 @@ const Login = () => {
                                     <LockIcon />
                                 </Avatar>
                             </Box>
-                            <Box sx={{ padding: "0 1em 1em 1em" }}>
-                                <Box sx={{ marginTop: "1em" }}>
-                                    <TextInput
-                                        autoFocus
-                                        source="username"
-                                        label="Username"
-                                        disabled={loading}
-                                        validate={required()}
-                                        fullWidth
-                                    />
+                            {show_user_login && (
+                                <Box sx={{ padding: "0 1em 1em 1em" }}>
+                                    <Box sx={{ marginTop: "1em" }}>
+                                        <TextInput
+                                            autoFocus
+                                            source="username"
+                                            label="Username"
+                                            disabled={loading}
+                                            validate={required()}
+                                            fullWidth
+                                        />
+                                    </Box>
+                                    <Box sx={{ marginTop: "1em" }}>
+                                        <TextInput
+                                            source="password"
+                                            label="Password"
+                                            type="password"
+                                            disabled={loading}
+                                            validate={required()}
+                                            fullWidth
+                                        />
+                                    </Box>
                                 </Box>
-                                <Box sx={{ marginTop: "1em" }}>
-                                    <TextInput
-                                        source="password"
-                                        label="Password"
-                                        type="password"
-                                        disabled={loading}
-                                        validate={required()}
-                                        fullWidth
-                                    />
-                                </Box>
-                            </Box>
+                            )}
                             <CardActions sx={{ padding: "0 1em 1em 1em" }}>
                                 <Stack spacing={2} sx={{ width: "100%" }}>
-                                    <Button
-                                        variant="contained"
-                                        type="submit"
-                                        color="primary"
-                                        disabled={loading}
-                                        fullWidth
-                                        startIcon={<PersonIcon />}
-                                    >
-                                        {loading && <CircularProgress size={25} thickness={2} />}
-                                        Sign in with user
-                                    </Button>
+                                    {show_user_login && (
+                                        <Button
+                                            variant="contained"
+                                            type="submit"
+                                            color="primary"
+                                            disabled={loading}
+                                            fullWidth
+                                            startIcon={<PersonIcon />}
+                                        >
+                                            {loading && <CircularProgress size={25} thickness={2} />}
+                                            Sign in with user
+                                        </Button>
+                                    )}
                                     {window.__RUNTIME_CONFIG__.OIDC_ENABLE == "true" && <OIDCSignInButton />}
                                 </Stack>
                             </CardActions>

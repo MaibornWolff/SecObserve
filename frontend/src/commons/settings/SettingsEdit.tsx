@@ -106,6 +106,10 @@ const SettingsEdit = () => {
                         source="feature_vex"
                         label="VEX"
                         helperText="Generate VEX documents in OpenVEX and CSAF format"
+                    />
+                    <BooleanInput
+                        source="feature_disable_user_login"
+                        label="Disable user login"
                         sx={{ marginBottom: 2 }}
                     />
 
