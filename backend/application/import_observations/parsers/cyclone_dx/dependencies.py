@@ -10,7 +10,7 @@ def get_component_dependencies(
     components: dict[str, Component],
     component: Component,
     metadata: Metadata,
-):
+) -> tuple[str, list[dict]]:
     component_dependencies: list[dict[str, str | list[str]]] = []
     _filter_component_dependencies(
         component.bom_ref,
@@ -31,6 +31,11 @@ def get_component_dependencies(
                 components,
                 metadata,
             )
+        )
+
+    if len(observation_component_dependencies) > 4096:
+        observation_component_dependencies = (
+            observation_component_dependencies[:4092] + " ..."
         )
 
     return observation_component_dependencies, translated_component_dependencies
