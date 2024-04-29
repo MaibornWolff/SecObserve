@@ -110,6 +110,7 @@ const SettingsEdit = () => {
                     <BooleanInput
                         source="feature_disable_user_login"
                         label="Disable user login"
+                        helperText="Do not show user and password fields if OIDC login is enabled"
                         sx={{ marginBottom: 2 }}
                     />
 
