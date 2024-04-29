@@ -125,17 +125,14 @@ export async function set_settings_in_local_storage() {
 }
 
 export const feature_vex_enabled = () => {
-    const settings = JSON.parse(localStorage.getItem("settings") || "{}");
-    const features = settings.features || [];
-    const feature_vex_position = features.indexOf("feature_vex");
-    return feature_vex_position !== -1;
-};
-
-export const feature_disable_user_login_enabled = () => {
-    const settings = JSON.parse(localStorage.getItem("settings") || "{}");
-    const features = settings.features || [];
-    const feature_disable_user_login_position = features.indexOf("feature_disable_user_login");
-    return feature_disable_user_login_position !== -1;
+    try {
+        const settings = JSON.parse(localStorage.getItem("settings") || "{}");
+        const features = settings.features || [];
+        const feature_vex_position = features.indexOf("feature_vex");
+        return feature_vex_position !== -1;
+    } catch (e) {
+        return false;
+    }
 };
 
 export const justificationIsEnabledForStatus = (status: string) => {
