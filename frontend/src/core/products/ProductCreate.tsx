@@ -357,6 +357,7 @@ const ProductCreate = () => {
                     label="Assessments need approval"
                     defaultValue={false}
                 />
+                <BooleanInput source="product_rules_need_approval" label="Rules need approval" defaultValue={false} />
                 {/* <BooleanInput
                     source="new_observations_in_review"
                     label="New observations have status 'In review'"

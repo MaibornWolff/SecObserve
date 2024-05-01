@@ -22,43 +22,31 @@ import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/user_settings/functions";
 import RuleApproval from "../RuleApproval";
-import { RULE_STATUS_CHOICES } from "../types";
 import { RULE_STATUS_NEEDS_APPROVAL } from "../types";
 import ProductRuleDelete from "./ProductRuleDelete";
 import ProductRuleEdit from "./ProductRuleEdit";
 
-function listFilters(product: any) {
-    const filters = [
+function listFilters() {
+    return [
         <TextInput source="name" alwaysOn />,
         <ReferenceInput source="parser" reference="parsers" sort={{ field: "name", order: "ASC" }} alwaysOn>
             <AutocompleteInputMedium optionText="name" />
         </ReferenceInput>,
     ];
-    if (product && (product.product_rules_need_approval || product.product_group_product_rules_need_approval)) {
-        filters.push(
-            <AutocompleteInputMedium
-                source="approval_status"
-                choices={RULE_STATUS_CHOICES}
-                label="Approval status"
-                alwaysOn
-            />
-        );
-    }
-    return filters;
 }
 
-type ProductRuleEmbeddedListProps = {
+type ProductRuleApprovalListProps = {
     product: any;
 };
 
-const ProductRuleEmbeddedList = ({ product }: ProductRuleEmbeddedListProps) => {
+const ProductRuleApprovalList = ({ product }: ProductRuleApprovalListProps) => {
     const listContext = useListController({
-        filter: { product: Number(product.id) },
+        filter: { product: Number(product.id), approval_status: RULE_STATUS_NEEDS_APPROVAL },
         perPage: 25,
         resource: "product_rules",
         sort: { field: "name", order: "ASC" },
         disableSyncWithLocation: true,
-        storeKey: "product_rules.embedded",
+        storeKey: "product_rules.approval",
     });
 
     if (listContext.isLoading) {
@@ -72,7 +60,7 @@ const ProductRuleEmbeddedList = ({ product }: ProductRuleEmbeddedListProps) => {
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
-                <FilterForm filters={listFilters(product)} />
+                <FilterForm filters={listFilters()} />
                 <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false}>
                     <TextField source="name" />
                     <TextField source="new_severity" />
@@ -112,4 +100,4 @@ const ProductRuleEmbeddedList = ({ product }: ProductRuleEmbeddedListProps) => {
     );
 };
 
-export default ProductRuleEmbeddedList;
+export default ProductRuleApprovalList;

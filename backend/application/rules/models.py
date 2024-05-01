@@ -1,15 +1,21 @@
 from django.db.models import (
     CASCADE,
+    PROTECT,
     BooleanField,
     CharField,
+    DateTimeField,
     ForeignKey,
     Index,
     Model,
     TextField,
 )
 
+from application.access_control.models import User
+from application.commons.models import Settings
+from application.commons.services.global_request import get_current_user
 from application.core.models import Parser, Product
 from application.core.types import Severity, Status, VexJustification
+from application.rules.types import Rule_Status
 
 
 class Rule(Model):
@@ -34,6 +40,21 @@ class Rule(Model):
         max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True
     )
     enabled = BooleanField(default=True)
+    user = ForeignKey(
+        User,
+        related_name="rule",
+        on_delete=PROTECT,
+        null=True,
+    )
+    approval_status = CharField(max_length=16, choices=Rule_Status.RULE_STATUS_CHOICES)
+    approval_remark = TextField(max_length=255, blank=True)
+    approval_date = DateTimeField(null=True)
+    approval_user = ForeignKey(
+        User,
+        related_name="rule_approver",
+        on_delete=PROTECT,
+        null=True,
+    )
 
     class Meta:
         unique_together = (
@@ -43,6 +64,37 @@ class Rule(Model):
         indexes = [
             Index(fields=["name"]),
         ]
+
+    def save(self, *args, **kwargs) -> None:
+        if not self.approval_status:
+            self.user = get_current_user()
+
+            self.approval_remark = ""
+            self.approval_date = None
+            self.approval_user = None
+
+            needs_approval = False
+            if not self.product:
+                settings = Settings.load()
+                needs_approval = settings.feature_general_rules_need_approval
+            else:
+                if self.product.product_group:
+                    product_group_product_rules_needs_approval = (
+                        self.product.product_group.product_rules_need_approval
+                    )
+                    needs_approval = (
+                        self.product.product_rules_need_approval
+                        or product_group_product_rules_needs_approval
+                    )
+                else:
+                    needs_approval = self.product.product_rules_need_approval
+
+            if needs_approval:
+                self.approval_status = Rule_Status.RULE_STATUS_NEEDS_APPROVAL
+            else:
+                self.approval_status = Rule_Status.RULE_STATUS_AUTO_APPROVED
+
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name

@@ -36,3 +36,20 @@ export interface ProductRule extends RaRecord {
     new_status: string;
     enabled: boolean;
 }
+
+export const RULE_STATUS_APPROVED = "Approved";
+export const RULE_STATUS_NEEDS_APPROVAL = "Needs approval";
+export const RULE_STATUS_REJECTED = "Rejected";
+export const RULE_STATUS_AUTO_APPROVED = "Auto approved";
+
+export const RULE_STATUS_CHOICES = [
+    { id: RULE_STATUS_APPROVED, name: RULE_STATUS_APPROVED },
+    { id: RULE_STATUS_REJECTED, name: RULE_STATUS_REJECTED },
+    { id: RULE_STATUS_NEEDS_APPROVAL, name: RULE_STATUS_NEEDS_APPROVAL },
+    { id: RULE_STATUS_AUTO_APPROVED, name: RULE_STATUS_AUTO_APPROVED },
+];
+
+export const RULE_STATUS_CHOICES_APPROVAL = [
+    { id: RULE_STATUS_APPROVED, name: RULE_STATUS_APPROVED },
+    { id: RULE_STATUS_REJECTED, name: RULE_STATUS_REJECTED },
+];

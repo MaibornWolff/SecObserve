@@ -160,6 +160,9 @@ class Settings(Model):
     feature_disable_user_login = BooleanField(
         default=False, help_text="Disable user login"
     )
+    feature_general_rules_need_approval = BooleanField(
+        default=False, help_text="General rules need approval"
+    )
 
     def save(self, *args, **kwargs):
         """
