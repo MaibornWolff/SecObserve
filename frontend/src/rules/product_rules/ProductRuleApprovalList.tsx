@@ -1,4 +1,3 @@
-import { Stack } from "@mui/material";
 import {
     BooleanField,
     ChipField,
@@ -9,22 +8,13 @@ import {
     ReferenceInput,
     TextField,
     TextInput,
-    WithRecord,
     useListController,
 } from "react-admin";
 
-import {
-    PERMISSION_PRODUCT_RULE_APPROVAL,
-    PERMISSION_PRODUCT_RULE_DELETE,
-    PERMISSION_PRODUCT_RULE_EDIT,
-} from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/user_settings/functions";
-import RuleApproval from "../RuleApproval";
 import { RULE_STATUS_NEEDS_APPROVAL } from "../types";
-import ProductRuleDelete from "./ProductRuleDelete";
-import ProductRuleEdit from "./ProductRuleEdit";
 
 function listFilters() {
     return [
@@ -57,11 +47,23 @@ const ProductRuleApprovalList = ({ product }: ProductRuleApprovalListProps) => {
         listContext.data = [];
     }
 
+    const ShowProductRule = (id: any) => {
+        return "../../../../product_rules/" + id + "/show";
+    };
+
+    localStorage.setItem("productruleapprovallist", "true");
+    localStorage.removeItem("productruleembeddedlist");
+
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
                 <FilterForm filters={listFilters()} />
-                <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false}>
+                <Datagrid
+                    size={getSettingListSize()}
+                    sx={{ width: "100%" }}
+                    bulkActionButtons={false}
+                    rowClick={ShowProductRule}
+                >
                     <TextField source="name" />
                     <TextField source="new_severity" />
                     <TextField source="new_status" />
@@ -73,26 +75,6 @@ const ProductRuleApprovalList = ({ product }: ProductRuleApprovalListProps) => {
                     <ReferenceField source="parser" reference="parsers" link={false} />
                     <TextField source="scanner_prefix" />
                     <TextField source="title" label="Observation title" />
-                    <WithRecord
-                        render={(product_rule) => (
-                            <Stack direction="row" spacing={4}>
-                                {product &&
-                                    (product.product_rules_need_approval ||
-                                        product.product_group_product_rules_need_approval) &&
-                                    product_rule &&
-                                    product_rule.approval_status == RULE_STATUS_NEEDS_APPROVAL &&
-                                    product_rule.product_data.permissions.includes(
-                                        PERMISSION_PRODUCT_RULE_APPROVAL
-                                    ) && <RuleApproval rule_id={product_rule.id} class="product_rules" />}
-                                {product && product.permissions.includes(PERMISSION_PRODUCT_RULE_EDIT) && (
-                                    <ProductRuleEdit />
-                                )}
-                                {product && product.permissions.includes(PERMISSION_PRODUCT_RULE_DELETE) && (
-                                    <ProductRuleDelete product_rule={product_rule} />
-                                )}
-                            </Stack>
-                        )}
-                    />
                 </Datagrid>
                 <CustomPagination />
             </div>
