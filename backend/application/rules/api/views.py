@@ -85,9 +85,7 @@ class ProductRuleViewSet(ModelViewSet):
         if not product_rule:
             raise NotFound(f"Product rule {pk} not found")
 
-        user_has_permission_or_403(
-            product_rule, Permissions.Product_Rule_Approval
-        )
+        user_has_permission_or_403(product_rule, Permissions.Product_Rule_Approval)
 
         rule_approval(
             product_rule,

@@ -34,8 +34,9 @@ from application.core.queries.product_member import (
 )
 from application.core.types import Assessment_Status, Status
 from application.issue_tracker.types import Issue_Tracker
-from application.rules.types import Rule_Status
 from application.rules.models import Rule
+from application.rules.types import Rule_Status
+
 
 class ProductCoreSerializer(ModelSerializer):
     open_critical_observation_count = SerializerMethodField()
@@ -204,7 +205,10 @@ class ProductSerializer(ProductCoreSerializer):
 
     def get_observation_log_approvals(self, obj: Product) -> int:
         if obj.product_group:
-            if not obj.product_group.assessments_need_approval and not obj.assessments_need_approval:
+            if (
+                not obj.product_group.assessments_need_approval
+                and not obj.assessments_need_approval
+            ):
                 return 0
         else:
             if not obj.assessments_need_approval:
@@ -225,17 +229,19 @@ class ProductSerializer(ProductCoreSerializer):
 
     def get_product_rule_approvals(self, obj: Product) -> int:
         if obj.product_group:
-            if not obj.product_group.product_rules_need_approval and not obj.product_rules_need_approval:
+            if (
+                not obj.product_group.product_rules_need_approval
+                and not obj.product_rules_need_approval
+            ):
                 return 0
         else:
             if not obj.product_rules_need_approval:
                 return 0
 
         return Rule.objects.filter(
-            product=obj,
-            approval_status=Rule_Status.RULE_STATUS_NEEDS_APPROVAL
+            product=obj, approval_status=Rule_Status.RULE_STATUS_NEEDS_APPROVAL
         ).count()
-    
+
     def validate(self, attrs: dict):  # pylint: disable=too-many-branches
         # There are quite a lot of branches, but at least they are not nested too much
         if attrs.get("issue_tracker_type") == Issue_Tracker.ISSUE_TRACKER_GITHUB:

@@ -68,7 +68,7 @@ class Rule(Model):
     def save(self, *args, **kwargs) -> None:
         if not self.approval_status:
             self.user = get_current_user()
-    
+
             self.approval_remark = ""
             self.approval_date = None
             self.approval_user = None
