@@ -4,6 +4,7 @@ from typing import Optional
 
 import jwt
 import requests
+from django.core.cache import cache
 from django.db import IntegrityError, transaction
 from rest_framework.authentication import BaseAuthentication, get_authorization_header
 from rest_framework.exceptions import AuthenticationFailed
@@ -79,13 +80,18 @@ class OIDCAuthentication(BaseAuthentication):
             raise AuthenticationFailed(str(e)) from e
 
     def _get_jwks_uri(self):
-        response = requests.request(
-            method="GET",
-            url=f"{os.environ['OIDC_AUTHORITY']}/.well-known/openid-configuration",
-            timeout=60,
-        )
-        response.raise_for_status()
-        return response.json()["jwks_uri"]
+        jwks_uri = cache.get("jwks_uri")
+        if not jwks_uri:
+            response = requests.request(
+                method="GET",
+                url=f"{os.environ['OIDC_AUTHORITY']}/.well-known/openid-configuration",
+                timeout=60,
+            )
+            response.raise_for_status()
+            jwks_uri = response.json()["jwks_uri"]
+            cache.set("jwks_uri", jwks_uri, timeout=5 * 60)
+
+        return jwks_uri
 
     def _create_user(self, username: str, payload: dict) -> User:
         user = User(username=username, first_name="", last_name="", email="")
