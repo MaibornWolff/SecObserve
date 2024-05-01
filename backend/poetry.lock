@@ -832,13 +832,13 @@ sidecar = ["drf-spectacular-sidecar"]
 
 [[package]]
 name = "drf-spectacular-sidecar"
-version = "2024.4.1"
+version = "2024.5.1"
 description = "Serve self-contained distribution builds of Swagger UI and Redoc with Django"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "drf-spectacular-sidecar-2024.4.1.tar.gz", hash = "sha256:68532dd094714f79c1775c00848f22c10f004826abc856442ff30c3bc9c40bb4"},
-    {file = "drf_spectacular_sidecar-2024.4.1-py3-none-any.whl", hash = "sha256:8359befe69a8953fea86be01c1ff37038854a62546225551de16c47c07dccd4e"},
+    {file = "drf_spectacular_sidecar-2024.5.1-py3-none-any.whl", hash = "sha256:089fdef46b520b7b1c8a497a398cde9336c3f20b115835baeb158dc4138d743d"},
+    {file = "drf_spectacular_sidecar-2024.5.1.tar.gz", hash = "sha256:1ecfbe86174461e3cf78a9cd49f69aa8d9e0710cb5e8b35107d3f8cc0f380c21"},
 ]
 
 [package.dependencies]
@@ -2454,4 +2454,4 @@ brotli = ["Brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">= 3.10, < 3.13"
-content-hash = "256e28626861069090140f6d2f58c9b4e4a498cc7a1a886d9b75013c29ee3670"
+content-hash = "191b87399600ea22f4470319b4d569b671988c33d7f508cd86e7e0efa8f6aaa4"
