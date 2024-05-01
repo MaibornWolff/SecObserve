@@ -65,6 +65,8 @@ class StatusSettingsView(APIView):
         if request.user.is_authenticated:
             if settings.feature_vex:
                 features.append("feature_vex")
+            if settings.feature_general_rules_need_approval:
+                features.append("feature_general_rules_need_approval")
 
         content = {"features": features}
         return Response(content)

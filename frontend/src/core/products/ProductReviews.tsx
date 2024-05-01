@@ -3,6 +3,7 @@ import { Accordion, AccordionDetails, AccordionSummary, Chip, Stack, Typography 
 import { Fragment } from "react";
 
 import { getElevation } from "../../metrics/functions";
+import ProductRuleApprovalList from "../../rules/product_rules/ProductRuleApprovalList";
 import ObservationLogApprovalList from "../observation_logs/ObservationLogApprovalList";
 import ObservationsReviewList from "../observations/ObservationReviewList";
 
@@ -22,7 +23,11 @@ const ProductReviews = ({ product }: ProductReviewsProps) => {
         <Fragment>
             <Accordion
                 elevation={getElevation()}
-                defaultExpanded={product.observation_reviews > 0 && product.observation_log_approvals == 0}
+                defaultExpanded={
+                    product.observation_reviews > 0 &&
+                    product.observation_log_approvals == 0 &&
+                    product.product_rule_approvals == 0
+                }
             >
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     <Stack direction="row" sx={{ display: "flex", alignItems: "center" }}>
@@ -38,7 +43,11 @@ const ProductReviews = ({ product }: ProductReviewsProps) => {
                 <Accordion
                     elevation={getElevation()}
                     sx={{ marginTop: 2 }}
-                    defaultExpanded={product.observation_log_approvals > 0 && product.observation_reviews == 0}
+                    defaultExpanded={
+                        product.observation_log_approvals > 0 &&
+                        product.observation_reviews == 0 &&
+                        product.product_rule_approvals == 0
+                    }
                 >
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Stack direction="row" sx={{ display: "flex", alignItems: "center" }}>
@@ -51,6 +60,30 @@ const ProductReviews = ({ product }: ProductReviewsProps) => {
                     </AccordionSummary>
                     <AccordionDetails>
                         <ObservationLogApprovalList product={product} />
+                    </AccordionDetails>
+                </Accordion>
+            )}
+            {(product.product_rules_need_approval || product.product_group_product_rules_need_approval) && (
+                <Accordion
+                    elevation={getElevation()}
+                    sx={{ marginTop: 2 }}
+                    defaultExpanded={
+                        product.product_rule_approvals > 0 &&
+                        product.observation_log_approvals == 0 &&
+                        product.observation_reviews == 0
+                    }
+                >
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                        <Stack direction="row" sx={{ display: "flex", alignItems: "center" }}>
+                            <Typography variant="h6">Product rules to be approved:</Typography>&nbsp;&nbsp;&nbsp;
+                            <Chip
+                                label={product.product_rule_approvals}
+                                color={get_chip_color(product.product_rule_approvals)}
+                            />
+                        </Stack>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <ProductRuleApprovalList product={product} />
                     </AccordionDetails>
                 </Accordion>
             )}

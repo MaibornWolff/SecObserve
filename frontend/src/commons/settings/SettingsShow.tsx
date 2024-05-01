@@ -56,6 +56,9 @@ const SettingsShowComponent = () => {
                     <Labeled label="Disable user login">
                         <BooleanField source="feature_disable_user_login" />
                     </Labeled>
+                    <Labeled label="General rules need approval">
+                        <BooleanField source="feature_general_rules_need_approval" />
+                    </Labeled>
                 </Stack>
             </Paper>
 

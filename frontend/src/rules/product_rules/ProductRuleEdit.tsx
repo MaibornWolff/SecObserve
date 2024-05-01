@@ -4,10 +4,15 @@ import { Button, Dialog, DialogContent, DialogTitle, Divider, Typography } from 
 import { Fragment, useState } from "react";
 import {
     BooleanInput,
+    ChipField,
+    DateField,
+    Labeled,
     ReferenceInput,
     SaveButton,
     SimpleForm,
+    TextField,
     Toolbar,
+    WithRecord,
     useNotify,
     useRecordContext,
     useRefresh,
@@ -244,6 +249,48 @@ const ProductRuleEdit = () => {
                             label="Cloud qualified resource"
                             helperText="Regular expression to match the qualified resource name"
                             validate={validate_255}
+                        />
+                        <WithRecord
+                            render={(rule) => (
+                                <Fragment>
+                                    {rule &&
+                                        (rule.product_data.product_rules_need_approval ||
+                                            rule.product_data.product_group_product_rules_need_approval) && (
+                                            <Fragment>
+                                                <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+                                                <Typography variant="h6">Approval</Typography>
+                                                {rule.user_full_name && (
+                                                    <Labeled label="Last changed by">
+                                                        <TextField source="user_full_name" />
+                                                    </Labeled>
+                                                )}
+                                                <Labeled label="Status">
+                                                    <ChipField
+                                                        source="approval_status"
+                                                        sx={{
+                                                            width: "fit-content",
+                                                        }}
+                                                    />
+                                                </Labeled>
+                                                {rule.approval_user_full_name && (
+                                                    <Labeled label="Approved/rejected by">
+                                                        <TextField source="approval_user_full_name" />
+                                                    </Labeled>
+                                                )}
+                                                {rule.approval_remark && (
+                                                    <Labeled label="Approval/rejection remark">
+                                                        <TextField source="approval_remark" />
+                                                    </Labeled>
+                                                )}
+                                                {rule.approval_date && (
+                                                    <Labeled label="Approval/rejection date">
+                                                        <DateField source="approval_date" showTime />
+                                                    </Labeled>
+                                                )}
+                                            </Fragment>
+                                        )}
+                                </Fragment>
+                            )}
                         />
                     </SimpleForm>
                 </DialogContent>

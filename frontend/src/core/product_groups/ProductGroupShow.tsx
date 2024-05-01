@@ -176,6 +176,9 @@ const ProductGroupShow = () => {
                                     <Labeled label="Assessments need approval">
                                         <BooleanField source="assessments_need_approval" />
                                     </Labeled>
+                                    <Labeled label="Rules need approval">
+                                        <BooleanField source="product_rules_need_approval" />
+                                    </Labeled>
                                     {/* <Labeled label="New observations have status 'In review'">
                     <BooleanField source="new_observations_in_review" />
                 </Labeled> */}

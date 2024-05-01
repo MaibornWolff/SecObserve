@@ -19,12 +19,21 @@ class GeneralRuleFilter(FilterSet):
             ("new_severity", "new_severity"),
             ("new_status", "new_status"),
             ("enabled", "enabled"),
+            ("approval_status", "approval_status"),
         ),
     )
 
     class Meta:
         model = Rule
-        fields = ["name", "search", "parser", "scanner_prefix", "title", "enabled"]
+        fields = [
+            "name",
+            "search",
+            "parser",
+            "scanner_prefix",
+            "title",
+            "enabled",
+            "approval_status",
+        ]
 
 
 class ProductRuleFilter(FilterSet):
@@ -44,6 +53,7 @@ class ProductRuleFilter(FilterSet):
             ("new_severity", "new_severity"),
             ("new_status", "new_status"),
             ("enabled", "enabled"),
+            ("approval_status", "approval_status"),
         ),
     )
 
@@ -57,4 +67,5 @@ class ProductRuleFilter(FilterSet):
             "scanner_prefix",
             "title",
             "enabled",
+            "approval_status",
         ]

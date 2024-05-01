@@ -102,6 +102,7 @@ class Product(Model):
     last_observation_change = DateTimeField(default=timezone.now)
     assessments_need_approval = BooleanField(default=False)
     new_observations_in_review = BooleanField(default=False)
+    product_rules_need_approval = BooleanField(default=False)
 
     class Meta:
         indexes = [

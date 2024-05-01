@@ -2,6 +2,7 @@ import { Fragment } from "react";
 import {
     BooleanField,
     BulkDeleteButton,
+    ChipField,
     CreateButton,
     Datagrid,
     List,
@@ -15,9 +16,11 @@ import {
 import general_rules from ".";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { is_superuser } from "../../commons/functions";
+import { feature_general_rules_need_approval_enabled } from "../../commons/functions";
 import ListHeader from "../../commons/layout/ListHeader";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/user_settings/functions";
+import { RULE_STATUS_CHOICES } from "../types";
 
 const listFilters = [
     <TextInput source="name" alwaysOn />,
@@ -25,6 +28,16 @@ const listFilters = [
         <AutocompleteInputMedium optionText="name" />
     </ReferenceInput>,
 ];
+if (feature_general_rules_need_approval_enabled()) {
+    listFilters.push(
+        <AutocompleteInputMedium
+            source="approval_status"
+            choices={RULE_STATUS_CHOICES}
+            label="Approval status"
+            alwaysOn
+        />
+    );
+}
 
 const BulkActionButtons = () => {
     return <Fragment>{is_superuser() && <BulkDeleteButton mutationMode="pessimistic" />}</Fragment>;
@@ -55,6 +68,7 @@ const GeneralRuleList = () => {
                     <TextField source="name" />
                     <TextField source="new_severity" />
                     <TextField source="new_status" />
+                    {feature_general_rules_need_approval_enabled() && <ChipField source="approval_status" />}
                     <BooleanField source="enabled" />
                     <ReferenceField source="parser" reference="parsers" link={false} />
                     <TextField source="scanner_prefix" />

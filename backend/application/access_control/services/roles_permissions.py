@@ -40,6 +40,7 @@ class Permissions(IntEnum):
     Product_Rule_Delete = 1303
     Product_Rule_Create = 1304
     Product_Rule_Apply = 1305
+    Product_Rule_Approval = 1306
 
     Branch_View = 1401
     Branch_Edit = 1402
@@ -132,6 +133,7 @@ class Permissions(IntEnum):
             Permissions.Product_Rule_Delete,
             Permissions.Product_Rule_Create,
             Permissions.Product_Rule_Apply,
+            Permissions.Product_Rule_Approval,
         }
 
     @classmethod
@@ -228,6 +230,7 @@ def get_roles_with_permissions():
             Permissions.Product_Rule_Delete,
             Permissions.Product_Rule_Create,
             Permissions.Product_Rule_Apply,
+            Permissions.Product_Rule_Approval,
             Permissions.Branch_View,
             Permissions.Branch_Edit,
             Permissions.Branch_Delete,
@@ -269,6 +272,7 @@ def get_roles_with_permissions():
             Permissions.Product_Rule_Delete,
             Permissions.Product_Rule_Create,
             Permissions.Product_Rule_Apply,
+            Permissions.Product_Rule_Approval,
             Permissions.Branch_View,
             Permissions.Branch_Edit,
             Permissions.Branch_Delete,
