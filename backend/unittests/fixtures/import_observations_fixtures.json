@@ -92,7 +92,29 @@
             "origin_source_file": ".*dev.*",
             "new_severity": "",
             "new_status": "Not affected",
-            "enabled": true
+            "enabled": true,
+            "approval_status": "Approved"
+        }
+    },
+    {
+        "model": "rules.rule",
+        "pk": 2,
+        "fields": {
+            "name": "db_product_rule_import_rejected",
+            "description": "",
+            "product": 1,
+            "parser": 1,
+            "scanner_prefix": "",
+            "title": "",
+            "origin_component_name_version": "",
+            "origin_docker_image_name_tag": "",
+            "origin_endpoint_url": "",
+            "origin_service_name": "",
+            "origin_source_file": "",
+            "new_severity": "",
+            "new_status": "Not affected",
+            "enabled": true,
+            "approval_status": "Needs approval"
         }
     }
 ]

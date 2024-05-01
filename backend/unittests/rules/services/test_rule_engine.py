@@ -25,7 +25,11 @@ class TestRuleEngine(BaseTestCase):
 
         self.assertEqual(rule_engine.rules, [self.product_rule_1])
         mock_rule.assert_called_once()
-        mock_rule.assert_called_with(product=self.product_1, enabled=True)
+        mock_rule.assert_called_with(
+            product=self.product_1,
+            enabled=True,
+            approval_status__in=["Approved", "Auto approved"],
+        )
 
     @patch("application.rules.models.Rule.objects.filter")
     def test_init_apply_general_rules(self, mock_rule):
@@ -37,8 +41,16 @@ class TestRuleEngine(BaseTestCase):
         self.assertEqual(rule_engine.rules, [self.product_rule_1, self.general_rule])
         mock_rule.assert_has_calls(
             [
-                call(product=self.product_1, enabled=True),
-                call(product__isnull=True, enabled=True),
+                call(
+                    product=self.product_1,
+                    enabled=True,
+                    approval_status__in=["Approved", "Auto approved"],
+                ),
+                call(
+                    product__isnull=True,
+                    enabled=True,
+                    approval_status__in=["Approved", "Auto approved"],
+                ),
             ]
         )
 
