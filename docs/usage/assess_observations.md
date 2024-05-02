@@ -27,7 +27,7 @@ A new entry with the changed values is stored in the `Observation Log` after the
 
 With the default settings of the product, the assessment is activated right away. If more control is needed, the product can be configured to require an approval before the assessment is activated. This can be done while creating or editing a product:
 
-![Assessments need approval](../assets/images/screenshot_assessments_need_approval.png)
+![Assessments need approval](../assets/images/screenshot_assessments_need_approval.png){ width="60%" style="display: block; margin: 0 auto" }
 
 The setting is also available for product groups. If it is set for a product group, it will be inherited by all products in that group.
 
@@ -37,7 +37,7 @@ If the approval is required, the dialog showing the observation or and the dialo
 
 Be aware, that the user who has created the assessment is not allowed to approve or reject it. The approval must be done by another user.
 
-![Assessment approval](../assets/images/screenshot_assessment_approval.png)
+![Assessment approval](../assets/images/screenshot_assessment_approval.png){ width="60%" style="display: block; margin: 0 auto" }
 
 ## Reviews
 
