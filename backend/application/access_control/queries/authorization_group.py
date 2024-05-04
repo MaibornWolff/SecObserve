@@ -24,14 +24,7 @@ def get_authorization_groups() -> QuerySet[Authorization_Group]:
 
     authorization_groups = Authorization_Group.objects.all()
 
-    if user.is_superuser or not user.is_external:
+    if user.is_superuser:
         return authorization_groups
 
-    product_authorization_group_members = get_product_authorization_group_members()
-
-    return authorization_groups.filter(
-        id__in=[
-            member.authorization_group_id
-            for member in product_authorization_group_members
-        ]
-    )
+    return authorization_groups.filter(users=user)
