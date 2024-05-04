@@ -46,7 +46,7 @@ const ProductRuleEmbeddedList = ({ product }: ProductRuleEmbeddedListProps) => {
         perPage: 25,
         resource: "product_rules",
         sort: { field: "name", order: "ASC" },
-        disableSyncWithLocation: false,
+        disableSyncWithLocation: true,
         storeKey: "product_rules.embedded",
     });
 
