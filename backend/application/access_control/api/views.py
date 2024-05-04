@@ -31,6 +31,7 @@ from application.access_control.api.serializers import (
     AuthorizationGroupUserSerializer,
     CreateApiTokenResponseSerializer,
     ProductApiTokenSerializer,
+    UserListSerializer,
     UserPasswordSerializer,
     UserPasswortRulesSerializer,
     UserSerializer,
@@ -85,6 +86,8 @@ class UserViewSet(ModelViewSet):
         return get_users()
 
     def get_serializer_class(self):
+        if self.action == "list":
+            return UserListSerializer
         if self.action in ["create", "update", "partial_update"]:
             return UserUpdateSerializer
 

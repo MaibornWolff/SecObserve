@@ -17,7 +17,13 @@ from application.commons.services.global_request import get_current_user
 from application.core.models import Product_Member
 
 
-class UserSerializer(ModelSerializer):
+class NestedAuthorizationGroupSerializer(ModelSerializer):
+    class Meta:
+        model = Authorization_Group
+        exclude = ["users"]
+
+
+class UserListSerializer(ModelSerializer):
     permissions = SerializerMethodField()
     has_password = SerializerMethodField()
 
@@ -75,6 +81,42 @@ class UserSerializer(ModelSerializer):
             and obj.has_usable_password()
         )
         # eliminate false positive, password is not hardcoded
+
+
+class UserSerializer(UserListSerializer):
+    authorization_groups = NestedAuthorizationGroupSerializer(many=True)
+
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "full_name",
+            "email",
+            "is_active",
+            "is_superuser",
+            "is_external",
+            "setting_theme",
+            "setting_list_size",
+            "permissions",
+            "setting_list_properties",
+            "oidc_groups_hash",
+            "is_oidc_user",
+            "date_joined",
+            "has_password",
+            "authorization_groups",
+        ]
+
+    def to_representation(self, instance: User):
+        data = super().to_representation(instance)
+
+        user = get_current_user()
+        if user and not user.is_superuser and not user.pk == instance.pk:
+            data.pop("authorization_groups")
+
+        return data
 
 
 class UserUpdateSerializer(ModelSerializer):

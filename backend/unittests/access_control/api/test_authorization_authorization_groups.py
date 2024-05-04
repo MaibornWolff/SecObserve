@@ -23,7 +23,8 @@ class TestAuthorizationAuthorizationGroups(TestAuthorizationBase):
             )
         )
 
-        expected_data = "{'count': 5, 'next': None, 'previous': None, 'results': [{'id': 4, 'name': 'db_group_internal_write', 'oidc_group': '', 'users': [2]}, {'id': 5, 'name': 'db_group_internal_read', 'oidc_group': '', 'users': [3]}, {'id': 6, 'name': 'db_group_external', 'oidc_group': '', 'users': [4]}, {'id': 7, 'name': 'db_group_product_group', 'oidc_group': '', 'users': [6]}, {'id': 8, 'name': 'db_group_unused', 'oidc_group': '', 'users': []}]}"
+        expected_data = "{'count': 1, 'next': None, 'previous': None, 'results': [{'id': 4, 'name': 'db_group_internal_write', 'oidc_group': '', 'users': [2]}]}"
+        expected_data_product_group = "{'count': 1, 'next': None, 'previous': None, 'results': [{'id': 7, 'name': 'db_group_product_group', 'oidc_group': '', 'users': [6]}]}"
         self._test_api(
             APITest(
                 "db_internal_write",
@@ -32,6 +33,7 @@ class TestAuthorizationAuthorizationGroups(TestAuthorizationBase):
                 None,
                 200,
                 expected_data,
+                expected_data_product_group=expected_data_product_group,
             )
         )
         expected_data = "{'id': 4, 'name': 'db_group_internal_write', 'oidc_group': '', 'users': [2]}"
@@ -43,6 +45,7 @@ class TestAuthorizationAuthorizationGroups(TestAuthorizationBase):
                 None,
                 200,
                 expected_data,
+                no_second_user=True,
             )
         )
         expected_data = "{'message': 'No Authorization_Group matches the given query.'}"

@@ -54,7 +54,12 @@ def get_users_without_api_tokens() -> QuerySet[User]:
 
     users = User.objects.exclude(username__startswith="-product-")
 
-    if user.is_superuser or not user.is_external:
+    if user.is_superuser:
+        return users
+
+    users = users.filter(is_active=True)
+
+    if not user.is_external:
         return users
 
     product_members = get_product_members()

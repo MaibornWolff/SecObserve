@@ -1,7 +1,9 @@
 import { Paper, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
 import {
+    ArrayField,
     BooleanField,
+    Datagrid,
     DateField,
     EditButton,
     Labeled,
@@ -55,6 +57,10 @@ const ShowActions = () => {
             </Stack>
         </TopToolbar>
     );
+};
+
+const ShowAuthorizationGroup = (id: any) => {
+    return "../../../../authorization_groups/" + id + "/show";
 };
 
 const UserComponent = () => {
@@ -143,6 +149,19 @@ const UserComponent = () => {
                                     </Labeled>
                                 )}
                             </Stack>
+                        </Paper>
+                    )}
+                    {(is_superuser() || (current_user && JSON.parse(current_user).id == user.id)) && (
+                        <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Groups
+                            </Typography>
+                            <ArrayField source="authorization_groups">
+                                <Datagrid bulkActionButtons={false} rowClick={ShowAuthorizationGroup}>
+                                    <TextField source="name" />
+                                    <TextField source="oidc_group" label="OIDC group" />
+                                </Datagrid>{" "}
+                            </ArrayField>
                         </Paper>
                     )}
                 </SimpleShowLayout>
