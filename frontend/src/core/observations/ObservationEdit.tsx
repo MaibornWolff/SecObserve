@@ -98,9 +98,7 @@ const ObservationEditForm = () => {
                 Product
             </Typography>
             <Stack>
-                <ReferenceInput source="product" reference="products" sort={{ field: "name", order: "ASC" }}>
-                    <AutocompleteInputWide optionText="name" disabled={true} />
-                </ReferenceInput>
+                <TextInputWide source="product_data.name" label="Product" disabled />
                 <WithRecord
                     render={(branch) => (
                         <ReferenceInput
