@@ -109,6 +109,15 @@ class UserSerializer(UserListSerializer):
             "authorization_groups",
         ]
 
+    def to_representation(self, instance: User):
+        data = super().to_representation(instance)
+
+        user = get_current_user()
+        if user and not user.is_superuser and not user.pk == instance.pk:
+            data.pop("authorization_groups")
+
+        return data
+
 
 class UserUpdateSerializer(ModelSerializer):
     class Meta:

@@ -6,7 +6,7 @@ from rest_framework.serializers import (
     ValidationError,
 )
 
-from application.access_control.api.serializers import UserSerializer
+from application.access_control.api.serializers import UserListSerializer
 from application.access_control.services.authorization import get_highest_user_role
 from application.access_control.services.roles_permissions import (
     Permissions,
@@ -359,7 +359,7 @@ class NestedProductListSerializer(ModelSerializer):
 
 
 class ProductMemberSerializer(ModelSerializer):
-    user_data = UserSerializer(source="user", read_only=True)
+    user_data = UserListSerializer(source="user", read_only=True)
 
     class Meta:
         model = Product_Member

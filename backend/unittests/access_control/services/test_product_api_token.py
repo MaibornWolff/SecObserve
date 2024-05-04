@@ -80,7 +80,7 @@ class TestProductApiToken(BaseTestCase):
     @patch("application.access_control.models.API_Token.objects.filter")
     def test_revoke_product_api_token_not_exists(self, filter_mock, user_mock):
         user_mock.return_value = None
-        revoke_product_api_token(self.user_internal)
+        revoke_product_api_token(self.product_1)
 
         user_mock.assert_called_with("-product-None-api_token-")
         filter_mock.assert_not_called()
