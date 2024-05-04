@@ -3,6 +3,7 @@ import { Fragment } from "react";
 import {
     ArrayField,
     BooleanField,
+    Datagrid,
     DateField,
     EditButton,
     Labeled,
@@ -13,7 +14,6 @@ import {
     TopToolbar,
     WithRecord,
     useRecordContext,
-    Datagrid,
 } from "react-admin";
 
 import { is_superuser } from "../../commons/functions";
@@ -157,10 +157,11 @@ const UserComponent = () => {
                                 Groups
                             </Typography>
                             <ArrayField source="authorization_groups">
-                            <Datagrid bulkActionButtons={false} rowClick={ShowAuthorizationGroup}>
-                    <TextField source="name" />
-                    <TextField source="oidc_group" label="OIDC group" />
-                </Datagrid>                                </ArrayField>
+                                <Datagrid bulkActionButtons={false} rowClick={ShowAuthorizationGroup}>
+                                    <TextField source="name" />
+                                    <TextField source="oidc_group" label="OIDC group" />
+                                </Datagrid>{" "}
+                            </ArrayField>
                         </Paper>
                     )}
                 </SimpleShowLayout>
