@@ -31,12 +31,12 @@ from application.access_control.api.serializers import (
     AuthorizationGroupUserSerializer,
     CreateApiTokenResponseSerializer,
     ProductApiTokenSerializer,
+    UserListSerializer,
     UserPasswordSerializer,
     UserPasswortRulesSerializer,
     UserSerializer,
     UserSettingsSerializer,
     UserUpdateSerializer,
-    UserListSerializer,
 )
 from application.access_control.models import (
     API_Token,

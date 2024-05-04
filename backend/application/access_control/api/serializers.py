@@ -23,7 +23,6 @@ class NestedAuthorizationGroupSerializer(ModelSerializer):
         exclude = ["users"]
 
 
-
 class UserListSerializer(ModelSerializer):
     permissions = SerializerMethodField()
     has_password = SerializerMethodField()
@@ -109,6 +108,7 @@ class UserSerializer(UserListSerializer):
             "has_password",
             "authorization_groups",
         ]
+
 
 class UserUpdateSerializer(ModelSerializer):
     class Meta:
