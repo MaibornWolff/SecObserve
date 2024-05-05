@@ -1,0 +1,85 @@
+import {
+    BooleanField,
+    ChipField,
+    Datagrid,
+    FilterForm,
+    ListContextProvider,
+    ReferenceField,
+    ReferenceInput,
+    TextField,
+    TextInput,
+    useListController,
+} from "react-admin";
+
+import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
+import { AutocompleteInputMedium } from "../../commons/layout/themes";
+import { getSettingListSize } from "../../commons/user_settings/functions";
+import { RULE_STATUS_NEEDS_APPROVAL } from "../types";
+
+function listFilters() {
+    return [
+        <TextInput source="name" alwaysOn />,
+        <ReferenceInput source="parser" reference="parsers" sort={{ field: "name", order: "ASC" }} alwaysOn>
+            <AutocompleteInputMedium optionText="name" />
+        </ReferenceInput>,
+    ];
+}
+
+type ProductRuleApprovalListProps = {
+    product: any;
+};
+
+const ProductRuleApprovalList = ({ product }: ProductRuleApprovalListProps) => {
+    const listContext = useListController({
+        filter: { product: Number(product.id), approval_status: RULE_STATUS_NEEDS_APPROVAL },
+        perPage: 25,
+        resource: "product_rules",
+        sort: { field: "name", order: "ASC" },
+        disableSyncWithLocation: true,
+        storeKey: "product_rules.approval",
+    });
+
+    if (listContext.isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (listContext.data === undefined) {
+        listContext.data = [];
+    }
+
+    const ShowProductRule = (id: any) => {
+        return "../../../../product_rules/" + id + "/show";
+    };
+
+    localStorage.setItem("productruleapprovallist", "true");
+    localStorage.removeItem("productruleembeddedlist");
+
+    return (
+        <ListContextProvider value={listContext}>
+            <div style={{ width: "100%" }}>
+                <FilterForm filters={listFilters()} />
+                <Datagrid
+                    size={getSettingListSize()}
+                    sx={{ width: "100%" }}
+                    bulkActionButtons={false}
+                    rowClick={ShowProductRule}
+                >
+                    <TextField source="name" />
+                    <TextField source="new_severity" />
+                    <TextField source="new_status" />
+                    {product &&
+                        (product.product_rules_need_approval || product.product_group_product_rules_need_approval) && (
+                            <ChipField source="approval_status" />
+                        )}
+                    <BooleanField source="enabled" />
+                    <ReferenceField source="parser" reference="parsers" link={false} />
+                    <TextField source="scanner_prefix" />
+                    <TextField source="title" label="Observation title" />
+                </Datagrid>
+                <CustomPagination />
+            </div>
+        </ListContextProvider>
+    );
+};
+
+export default ProductRuleApprovalList;

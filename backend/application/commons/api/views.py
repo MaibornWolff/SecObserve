@@ -53,13 +53,21 @@ class HealthView(APIView):
 
 class StatusSettingsView(APIView):
     serializer_class = StatusSettingsSerializer
+    permission_classes = []
 
     @action(detail=True, methods=["get"], url_name="settings")
     def get(self, request):
         features = []
+
         settings = Settings.load()
-        if settings.feature_vex:
-            features.append("feature_vex")
+        if settings.feature_disable_user_login:
+            features.append("feature_disable_user_login")
+        if request.user.is_authenticated:
+            if settings.feature_vex:
+                features.append("feature_vex")
+            if settings.feature_general_rules_need_approval:
+                features.append("feature_general_rules_need_approval")
+
         content = {"features": features}
         return Response(content)
 

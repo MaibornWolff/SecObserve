@@ -45,9 +45,7 @@ const NotificationShow = () => {
                         {notification && notification.observation && (
                             <ReferenceField source="observation" reference="observations" link="show" />
                         )}
-                        {notification && notification.user && (
-                            <ReferenceField source="user" reference="users" link={false} />
-                        )}
+                        <TextField source="user_full_name" label="User" />
                     </SimpleShowLayout>
                 )}
             />

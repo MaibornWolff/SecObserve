@@ -6,7 +6,7 @@ from rest_framework.serializers import (
     ValidationError,
 )
 
-from application.access_control.api.serializers import UserSerializer
+from application.access_control.api.serializers import UserListSerializer
 from application.access_control.services.authorization import get_highest_user_role
 from application.access_control.services.roles_permissions import (
     Permissions,
@@ -34,6 +34,8 @@ from application.core.queries.product_member import (
 )
 from application.core.types import Assessment_Status, Status
 from application.issue_tracker.types import Issue_Tracker
+from application.rules.models import Rule
+from application.rules.types import Rule_Status
 
 
 class ProductCoreSerializer(ModelSerializer):
@@ -133,6 +135,7 @@ class ProductGroupSerializer(ProductCoreSerializer):
             "security_gate_threshold_none",
             "security_gate_threshold_unkown",
             "assessments_need_approval",
+            "product_rules_need_approval",
         ]
 
     def get_products_count(self, obj: Product) -> int:
@@ -161,6 +164,8 @@ class ProductSerializer(ProductCoreSerializer):
     observation_reviews = SerializerMethodField()
     observation_log_approvals = SerializerMethodField()
     has_services = SerializerMethodField()
+    product_group_product_rules_need_approval = SerializerMethodField()
+    product_rule_approvals = SerializerMethodField()
 
     class Meta:
         model = Product
@@ -199,6 +204,16 @@ class ProductSerializer(ProductCoreSerializer):
         ).count()
 
     def get_observation_log_approvals(self, obj: Product) -> int:
+        if obj.product_group:
+            if (
+                not obj.product_group.assessments_need_approval
+                and not obj.assessments_need_approval
+            ):
+                return 0
+        else:
+            if not obj.assessments_need_approval:
+                return 0
+
         return Observation_Log.objects.filter(
             observation__product=obj,
             assessment_status=Assessment_Status.ASSESSMENT_STATUS_NEEDS_APPROVAL,
@@ -206,6 +221,26 @@ class ProductSerializer(ProductCoreSerializer):
 
     def get_has_services(self, obj: Product) -> bool:
         return Service.objects.filter(product=obj).exists()
+
+    def get_product_group_product_rules_need_approval(self, obj: Product) -> bool:
+        if not obj.product_group:
+            return False
+        return obj.product_group.product_rules_need_approval
+
+    def get_product_rule_approvals(self, obj: Product) -> int:
+        if obj.product_group:
+            if (
+                not obj.product_group.product_rules_need_approval
+                and not obj.product_rules_need_approval
+            ):
+                return 0
+        else:
+            if not obj.product_rules_need_approval:
+                return 0
+
+        return Rule.objects.filter(
+            product=obj, approval_status=Rule_Status.RULE_STATUS_NEEDS_APPROVAL
+        ).count()
 
     def validate(self, attrs: dict):  # pylint: disable=too-many-branches
         # There are quite a lot of branches, but at least they are not nested too much
@@ -290,11 +325,7 @@ class ProductSerializer(ProductCoreSerializer):
 class NestedProductSerializer(ModelSerializer):
     permissions = SerializerMethodField()
     product_group_assessments_need_approval = SerializerMethodField()
-
-    def get_product_group_assessments_need_approval(self, obj: Product) -> bool:
-        if not obj.product_group:
-            return False
-        return obj.product_group.assessments_need_approval
+    product_group_product_rules_need_approval = SerializerMethodField()
 
     class Meta:
         model = Product
@@ -302,6 +333,16 @@ class NestedProductSerializer(ModelSerializer):
 
     def get_permissions(self, product: Product) -> list[Permissions]:
         return get_permissions_for_role(get_highest_user_role(product))
+
+    def get_product_group_assessments_need_approval(self, obj: Product) -> bool:
+        if not obj.product_group:
+            return False
+        return obj.product_group.assessments_need_approval
+
+    def get_product_group_product_rules_need_approval(self, obj: Product) -> bool:
+        if not obj.product_group:
+            return False
+        return obj.product_group.product_rules_need_approval
 
 
 class NestedProductListSerializer(ModelSerializer):
@@ -318,7 +359,7 @@ class NestedProductListSerializer(ModelSerializer):
 
 
 class ProductMemberSerializer(ModelSerializer):
-    user_data = UserSerializer(source="user", read_only=True)
+    user_data = UserListSerializer(source="user", read_only=True)
 
     class Meta:
         model = Product_Member

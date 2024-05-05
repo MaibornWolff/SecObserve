@@ -3,8 +3,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import { Avatar, Button, Card, CardActions, CircularProgress, Stack } from "@mui/material";
 import Box from "@mui/material/Box";
 import PropTypes from "prop-types";
-import { Fragment } from "react";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Form, TextInput, required, useLogin, useNotify, useTheme } from "react-admin";
 import { useAuth } from "react-oidc-context";
 import { Navigate, useLocation } from "react-router-dom";
@@ -18,10 +17,42 @@ const Login = () => {
     const [, setTheme] = useTheme();
     const auth = useAuth();
 
+    const [feature_loaded, setFeatureLoaded] = useState(false);
+    const [feature_disable_user_login, setFeatureDisableUserLogin] = useState(false);
+
     const notify = useNotify();
     const login = useLogin();
     const location = useLocation();
     const isAuthenticated = jwt_signed_in() || auth.isAuthenticated;
+
+    function get_disable_login_feature() {
+        const request = new Request(window.__RUNTIME_CONFIG__.API_BASE_URL + "/status/settings/", {
+            method: "GET",
+            headers: new Headers({
+                "Content-Type": "application/json",
+            }),
+        });
+        return fetch(request)
+            .then((response) => {
+                if (response.status < 200 || response.status >= 300) {
+                    throw new Error(response.statusText);
+                }
+                return response.json();
+            })
+            .then((data) => {
+                const features = data.features || [];
+                const feature_disable_user_login_position = features.indexOf("feature_disable_user_login");
+                return setFeatureDisableUserLogin(feature_disable_user_login_position !== -1);
+            })
+            .catch(() => {});
+    }
+
+    if (!feature_loaded) {
+        if (window.__RUNTIME_CONFIG__.OIDC_ENABLE == "true") {
+            get_disable_login_feature();
+        }
+        setFeatureLoaded(true);
+    }
 
     const handleSubmit = (auth: FormValues) => {
         setLoading(true);
@@ -46,6 +77,14 @@ const Login = () => {
                 );
             });
     };
+
+    function show_user_login() {
+        return (
+            window.__RUNTIME_CONFIG__.OIDC_ENABLE == "false" ||
+            !feature_disable_user_login ||
+            location.hash == "#force_user_login"
+        );
+    }
 
     return (
         <Fragment>
@@ -76,41 +115,45 @@ const Login = () => {
                                     <LockIcon />
                                 </Avatar>
                             </Box>
-                            <Box sx={{ padding: "0 1em 1em 1em" }}>
-                                <Box sx={{ marginTop: "1em" }}>
-                                    <TextInput
-                                        autoFocus
-                                        source="username"
-                                        label="Username"
-                                        disabled={loading}
-                                        validate={required()}
-                                        fullWidth
-                                    />
+                            {show_user_login() && (
+                                <Box sx={{ padding: "0 1em 1em 1em" }}>
+                                    <Box sx={{ marginTop: "1em" }}>
+                                        <TextInput
+                                            autoFocus
+                                            source="username"
+                                            label="Username"
+                                            disabled={loading}
+                                            validate={required()}
+                                            fullWidth
+                                        />
+                                    </Box>
+                                    <Box sx={{ marginTop: "1em" }}>
+                                        <TextInput
+                                            source="password"
+                                            label="Password"
+                                            type="password"
+                                            disabled={loading}
+                                            validate={required()}
+                                            fullWidth
+                                        />
+                                    </Box>
                                 </Box>
-                                <Box sx={{ marginTop: "1em" }}>
-                                    <TextInput
-                                        source="password"
-                                        label="Password"
-                                        type="password"
-                                        disabled={loading}
-                                        validate={required()}
-                                        fullWidth
-                                    />
-                                </Box>
-                            </Box>
+                            )}
                             <CardActions sx={{ padding: "0 1em 1em 1em" }}>
                                 <Stack spacing={2} sx={{ width: "100%" }}>
-                                    <Button
-                                        variant="contained"
-                                        type="submit"
-                                        color="primary"
-                                        disabled={loading}
-                                        fullWidth
-                                        startIcon={<PersonIcon />}
-                                    >
-                                        {loading && <CircularProgress size={25} thickness={2} />}
-                                        Sign in with user
-                                    </Button>
+                                    {show_user_login() && (
+                                        <Button
+                                            variant="contained"
+                                            type="submit"
+                                            color="primary"
+                                            disabled={loading}
+                                            fullWidth
+                                            startIcon={<PersonIcon />}
+                                        >
+                                            {loading && <CircularProgress size={25} thickness={2} />}
+                                            Sign in with user
+                                        </Button>
+                                    )}
                                     {window.__RUNTIME_CONFIG__.OIDC_ENABLE == "true" && <OIDCSignInButton />}
                                 </Stack>
                             </CardActions>

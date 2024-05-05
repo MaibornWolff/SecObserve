@@ -162,14 +162,19 @@ const ProductShow = () => {
                                     <MetricsStatusCurrent product_id={product.id} />
                                 </Stack>
                             </Tab>
-                            {product.observation_reviews + product.observation_log_approvals > 0 && (
+                            {product.observation_reviews +
+                                product.observation_log_approvals +
+                                product.product_rule_approvals >
+                                0 && (
                                 <Tab
                                     label="Reviews"
                                     path="reviews"
                                     icon={
                                         <Badge
                                             badgeContent={
-                                                product.observation_reviews + product.observation_log_approvals
+                                                product.observation_reviews +
+                                                product.observation_log_approvals +
+                                                product.product_rule_approvals
                                             }
                                             color="secondary"
                                         >

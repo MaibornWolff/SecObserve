@@ -14,11 +14,19 @@ from application.issue_tracker.services.issue_tracker import (
     push_observation_to_issue_tracker,
 )
 from application.rules.models import Rule
+from application.rules.types import Rule_Status
 
 
 class Rule_Engine:
     def __init__(self, product: Product):
-        product_parser_rules = Rule.objects.filter(product=product, enabled=True)
+        product_parser_rules = Rule.objects.filter(
+            product=product,
+            enabled=True,
+            approval_status__in=[
+                Rule_Status.RULE_STATUS_APPROVED,
+                Rule_Status.RULE_STATUS_AUTO_APPROVED,
+            ],
+        )
         self.rules: list[Rule] = list(product_parser_rules)
 
         if product.product_group:
@@ -29,7 +37,14 @@ class Rule_Engine:
             self.rules += list(product_group_parser_rules)
 
         if product.apply_general_rules:
-            general_rules = Rule.objects.filter(product__isnull=True, enabled=True)
+            general_rules = Rule.objects.filter(
+                product__isnull=True,
+                enabled=True,
+                approval_status__in=[
+                    Rule_Status.RULE_STATUS_APPROVED,
+                    Rule_Status.RULE_STATUS_AUTO_APPROVED,
+                ],
+            )
             self.rules += list(general_rules)
 
         self.product = product
@@ -179,10 +194,13 @@ class Rule_Engine:
         else:
             vex_justification = ""
 
-        if rule.product:
-            comment = f"Updated by product rule {rule.name}"
+        if rule.description:
+            comment = rule.description
         else:
-            comment = f"Updated by general rule {rule.name}"
+            if rule.product:
+                comment = f"Updated by product rule {rule.name}"
+            else:
+                comment = f"Updated by general rule {rule.name}"
 
         create_observation_log(
             observation,

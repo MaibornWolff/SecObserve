@@ -26,12 +26,14 @@ class BaseTestCase(TestCase):
         self.maxDiff = None
 
         self.user_internal = User(
-            username="user_internal@example.com", is_external=False
+            id=1, username="user_internal@example.com", is_external=False
         )
         self.user_external = User(
             username="user_external@example.com", is_external=True
         )
-        self.user_admin = User(username="user_admin@example.com", is_superuser=True)
+        self.user_admin = User(
+            id=2, username="user_admin@example.com", is_superuser=True
+        )
 
         self.parser_1 = Parser(name="parser_1")
         self.product_group_1 = Product(name="product_group_1")

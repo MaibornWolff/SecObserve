@@ -14,7 +14,13 @@ import {
     useRefresh,
 } from "react-admin";
 
-import { validate_255, validate_513, validate_2048, validate_required_255 } from "../../commons/custom_validators";
+import {
+    validate_255,
+    validate_513,
+    validate_2048,
+    validate_required_255,
+    validate_required_2048,
+} from "../../commons/custom_validators";
 import { justificationIsEnabledForStatus } from "../../commons/functions";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import {
@@ -76,9 +82,6 @@ const ProductRuleCreate = ({ id }: ProductRuleCreateProps) => {
         }
         if (data.title == null) {
             data.title = "";
-        }
-        if (data.description == null) {
-            data.description = "";
         }
         if (data.description_observation == null) {
             data.description_observation = "";
@@ -148,7 +151,13 @@ const ProductRuleCreate = ({ id }: ProductRuleCreateProps) => {
                         >
                             <Typography variant="h6">Rule</Typography>
                             <TextInputWide autoFocus source="name" validate={validate_required_255} />
-                            <TextInputWide source="description" multiline minRows={3} validate={validate_2048} />
+                            <TextInputWide
+                                source="description"
+                                multiline
+                                minRows={3}
+                                validate={validate_required_2048}
+                                helperText="Markdown supported. Description will be copied into the Observation Log."
+                            />
                             <AutocompleteInputMedium source="new_severity" choices={OBSERVATION_SEVERITY_CHOICES} />
                             <AutocompleteInputMedium
                                 source="new_status"

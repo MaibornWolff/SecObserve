@@ -106,6 +106,15 @@ const SettingsEdit = () => {
                         source="feature_vex"
                         label="VEX"
                         helperText="Generate VEX documents in OpenVEX and CSAF format"
+                    />
+                    <BooleanInput
+                        source="feature_disable_user_login"
+                        label="Disable user login"
+                        helperText="Do not show user and password fields if OIDC login is enabled"
+                    />
+                    <BooleanInput
+                        source="feature_general_rules_need_approval"
+                        label="General rules need approval"
                         sx={{ marginBottom: 2 }}
                     />
 

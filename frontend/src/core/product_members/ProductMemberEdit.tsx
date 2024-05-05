@@ -2,11 +2,11 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import EditIcon from "@mui/icons-material/Edit";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh, useUpdate } from "react-admin";
+import { SaveButton, SimpleForm, Toolbar, useNotify, useRefresh, useUpdate } from "react-admin";
 
 import { ROLE_CHOICES } from "../../access_control/types";
 import { validate_required } from "../../commons/custom_validators";
-import { AutocompleteInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 
 const ProductMemberEdit = () => {
     const [open, setOpen] = useState(false);
@@ -85,9 +85,7 @@ const ProductMemberEdit = () => {
                 <DialogTitle>Edit user member</DialogTitle>
                 <DialogContent>
                     <SimpleForm onSubmit={product_member_update} toolbar={<CustomToolbar />}>
-                        <ReferenceInput source="user" reference="users" sort={{ field: "full_name", order: "ASC" }}>
-                            <AutocompleteInputWide optionText="full_name" disabled />
-                        </ReferenceInput>
+                        <TextInputWide source="user_data.full_name" label="User" disabled />
                         <AutocompleteInputWide source="role" choices={ROLE_CHOICES} validate={validate_required} />
                     </SimpleForm>
                 </DialogContent>

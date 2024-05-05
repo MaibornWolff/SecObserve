@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.db.models import Exists, OuterRef, Q
 from django.db.models.query import QuerySet
 
@@ -8,6 +10,13 @@ from application.rules.models import Rule
 
 def get_general_rules() -> QuerySet[Rule]:
     return Rule.objects.filter(product__isnull=True)
+
+
+def get_general_rule_by_id(general_rule_id: int) -> Optional[Rule]:
+    try:
+        return Rule.objects.get(id=general_rule_id, product__isnull=True)
+    except Rule.DoesNotExist:
+        return None
 
 
 def get_product_rules() -> QuerySet[Rule]:
@@ -57,3 +66,10 @@ def get_product_rules() -> QuerySet[Rule]:
         )
 
     return product_rules
+
+
+def get_product_rule_by_id(product_rule_id: int) -> Optional[Rule]:
+    try:
+        return Rule.objects.get(id=product_rule_id, product__isnull=False)
+    except Rule.DoesNotExist:
+        return None

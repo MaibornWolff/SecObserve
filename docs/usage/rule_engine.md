@@ -4,12 +4,14 @@ Sometimes the result of a scanner doesn't fit to the product's needs. Either the
 
 This can remove a lot of noise, for example by setting observations to `False positive`, in case the ruleset of the scanner can not be adjusted appropriately. 
 
+## Rules
+
 ![Rules](../assets/images/screenshot_rules.png)
 
 Rules can be managed in two ways:
 
 * **General rules** will be applied for all products. A product can be excluded from general rules in its settings.
-* **Product Rules** are only valid for one product.
+* **Product rules** are only valid for one product or for all products of a product group.
 
 These fields are used to decide if a rule shall be applied for an observation:
 
@@ -23,4 +25,20 @@ These fields are used to decide if a rule shall be applied for an observation:
 * **Origin source file** *(optional)*: Regular expression to match the source file
 * **Origin cloud qualified resource** *(optional)*: Regular expression to match the cloud qualified resource, which is the concatenation of account (AWS) or subscription (Azure) or project (GCP) with the resource
 
-If an observation matches all fields containing a value, than the new severity and/or new status is set in the observation and a comment is stored in the `Observation Log`.
+If an observation matches all fields containing a value, than the new severity and/or new status is set in the observation and the rule's description is stored as a comment in the `Observation Log`.
+
+
+## Approvals
+
+With the default settings of the product, the rule will be activated right away if enabled. If more control is needed, an approval can be configured:
+
+* For **General rules** the feature `General rules need approval` can be set in the [Settings](../getting_started/configuration.md#admininistration-in-secobserve).
+* For **Product rules** the setting `Rules need approval` can be set while creating or editing a product. The setting is also available for product groups. If it is set for a product group, it will be inherited by all products in that group.
+
+If the approval is required, the dialog showing the rule  will show a button to either approve or reject the assessment:
+
+![Show rule](../assets/images/screenshot_rule_show.png)
+
+Be aware, that the user who has created or edited the rule is not allowed to approve or reject it. The approval must be done by another user.
+
+![Rule approval](../assets/images/screenshot_rule_approval.png){ width="60%" style="display: block; margin: 0 auto" }

@@ -24,6 +24,7 @@ import product_groups from "./core/product_groups";
 import products from "./core/products";
 import { Dashboard } from "./dashboard";
 import general_rules from "./rules/general_rules";
+import product_rules from "./rules/product_rules";
 import csaf from "./vex/csaf";
 import openvex from "./vex/openvex";
 import vex_counters from "./vex/vex_counters";
@@ -91,7 +92,12 @@ const App = () => {
                     // nosemgrep because the props are well defined in the import
                     recordRepresentation={(record) => `${trim_string(record.name)}`}
                 />
-                <Resource name="product_rules" recordRepresentation={(record) => `${trim_string(record.name)}`} />
+                <Resource
+                    name="product_rules"
+                    {...product_rules} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                    // nosemgrep because the props are well defined in the import
+                    recordRepresentation={(record) => `${trim_string(record.name)}`}
+                />
                 <Resource
                     name="evidences"
                     {...evidences} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading

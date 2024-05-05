@@ -2,27 +2,38 @@ import { Paper, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
 import {
     BooleanField,
+    ChipField,
+    DateField,
     EditButton,
     Labeled,
     PrevNextButtons,
     ReferenceField,
-    RichTextField,
     Show,
     SimpleShowLayout,
     TextField,
     TopToolbar,
     WithRecord,
+    useRecordContext,
 } from "react-admin";
 
+import MarkdownField from "../../commons/custom_fields/MarkdownField";
 import { feature_vex_enabled } from "../../commons/functions";
 import { is_superuser } from "../../commons/functions";
+import { feature_general_rules_need_approval_enabled } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
+import RuleApproval from "../RuleApproval";
+import { RULE_STATUS_NEEDS_APPROVAL } from "../types";
 
 const ShowActions = () => {
+    const rule = useRecordContext();
     return (
         <TopToolbar>
             <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <PrevNextButtons linkType="show" sort={{ field: "name", order: "ASC" }} storeKey="general_rules.list" />
+                {rule &&
+                    rule.approval_status == RULE_STATUS_NEEDS_APPROVAL &&
+                    feature_general_rules_need_approval_enabled() &&
+                    is_superuser() && <RuleApproval rule_id={rule.id} class="general_rules" />}
                 {is_superuser() && <EditButton />}
             </Stack>
         </TopToolbar>
@@ -46,7 +57,7 @@ const GeneralRuleComponent = () => {
                             </Labeled>
                             {rule.description && (
                                 <Labeled label="Description">
-                                    <RichTextField source="description" />
+                                    <MarkdownField content={rule.description} />
                                 </Labeled>
                             )}
 
@@ -68,6 +79,11 @@ const GeneralRuleComponent = () => {
                             <Labeled label="Enabled">
                                 <BooleanField source="enabled" />
                             </Labeled>
+                            {rule.user_full_name && (
+                                <Labeled label="Last changed by">
+                                    <TextField source="user_full_name" />
+                                </Labeled>
+                            )}
                         </Stack>
                     </Paper>
 
@@ -142,6 +158,39 @@ const GeneralRuleComponent = () => {
                                 </Stack>
                             </Paper>
                         )}
+
+                    {feature_general_rules_need_approval_enabled() && (
+                        <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Approval
+                            </Typography>
+                            <Stack spacing={1}>
+                                <Labeled label="Status">
+                                    <ChipField
+                                        source="approval_status"
+                                        sx={{
+                                            width: "fit-content",
+                                        }}
+                                    />
+                                </Labeled>
+                                {rule.approval_user_full_name && (
+                                    <Labeled label="Approved/rejected by">
+                                        <TextField source="approval_user_full_name" />
+                                    </Labeled>
+                                )}
+                                {rule.approval_remark && (
+                                    <Labeled label="Approval/rejection remark">
+                                        <TextField source="approval_remark" />
+                                    </Labeled>
+                                )}
+                                {rule.approval_date && (
+                                    <Labeled label="Approval/rejection date">
+                                        <DateField source="approval_date" showTime />
+                                    </Labeled>
+                                )}
+                            </Stack>
+                        </Paper>
+                    )}
                 </SimpleShowLayout>
             )}
         />

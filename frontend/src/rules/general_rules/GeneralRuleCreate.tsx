@@ -1,9 +1,14 @@
 import { Divider, Stack, Typography } from "@mui/material";
-import { RichTextInput } from "ra-input-rich-text";
 import { useState } from "react";
 import { BooleanInput, Create, ReferenceInput, SimpleForm } from "react-admin";
 
-import { validate_255, validate_513, validate_2048, validate_required_255 } from "../../commons/custom_validators";
+import {
+    validate_255,
+    validate_513,
+    validate_2048,
+    validate_required_255,
+    validate_required_2048,
+} from "../../commons/custom_validators";
 import { justificationIsEnabledForStatus } from "../../commons/functions";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import {
@@ -19,9 +24,6 @@ const GeneralRuleCreate = () => {
     const justificationEnabled = justificationIsEnabledForStatus(status);
 
     const transform = (data: any) => {
-        if (data.description == null) {
-            data.description = "";
-        }
         if (data.scanner_prefix == null) {
             data.scanner_prefix = "";
         }
@@ -69,7 +71,13 @@ const GeneralRuleCreate = () => {
                 </Typography>
                 <Stack>
                     <TextInputWide autoFocus source="name" validate={validate_required_255} />
-                    <RichTextInput source="description" validate={validate_2048} />
+                    <TextInputWide
+                        source="description"
+                        multiline
+                        minRows={3}
+                        helperText="Markdown supported. Description will be copied into the Observation Log."
+                        validate={validate_required_2048}
+                    />
                     <AutocompleteInputMedium source="new_severity" choices={OBSERVATION_SEVERITY_CHOICES} />
                     <AutocompleteInputMedium
                         source="new_status"
