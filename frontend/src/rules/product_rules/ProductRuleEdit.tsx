@@ -101,9 +101,7 @@ const ProductRuleEditForm = () => {
                 Product Rule
             </Typography>
             <Stack>
-                <ReferenceInput source="product" reference="products" sort={{ field: "name", order: "ASC" }}>
-                    <AutocompleteInputWide optionText="name" disabled={true} />
-                </ReferenceInput>
+                <TextInputWide source="product_data.name" disabled />
                 <TextInputWide autoFocus source="name" validate={validate_required_255} />
                 <TextInputWide
                     source="description"
