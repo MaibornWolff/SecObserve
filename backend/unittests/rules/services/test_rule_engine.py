@@ -59,17 +59,25 @@ class TestRuleEngine(BaseTestCase):
     # --- _check_regex ---
 
     def test_check_regex_no_pattern(self):
-        rule_engine = Rule_Engine(Product())
+        product = Product()
+        product.save()
+        rule_engine = Rule_Engine(product)
         self.assertTrue(rule_engine._check_regex(None, "value"))
 
     def test_check_regex_no_value(self):
-        rule_engine = Rule_Engine(Product())
+        product = Product()
+        product.save()
+        rule_engine = Rule_Engine(product)
         self.assertFalse(rule_engine._check_regex("pattern", None))
 
     def test_check_regex_no_match(self):
-        rule_engine = Rule_Engine(Product())
+        product = Product()
+        product.save()
+        rule_engine = Rule_Engine(product)
         self.assertFalse(rule_engine._check_regex("pattern", "value"))
 
     def test_check_regex_match(self):
-        rule_engine = Rule_Engine(Product())
+        product = Product()
+        product.save()
+        rule_engine = Rule_Engine(product)
         self.assertTrue(rule_engine._check_regex("v.+lue", "VALUE"))
