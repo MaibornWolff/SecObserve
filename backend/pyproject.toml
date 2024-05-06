@@ -58,7 +58,7 @@ cvss = "3.1"  # https://github.com/RedHatProductSecurity/cvss
 jsonpickle = "3.0.4"  # https://github.com/jsonpickle/jsonpickle
 
 [tool.poetry.group.dev.dependencies]
-Werkzeug = { version = "3.0.2", extras = ["watchdog"] }  # https://github.com/pallets/werkzeug
+Werkzeug = { version = "3.0.3", extras = ["watchdog"] }  # https://github.com/pallets/werkzeug
 ipdb = "0.13.13"  # https://github.com/gotcha/ipdb
 watchgod = "0.8.2"  # https://github.com/samuelcolvin/watchgod
 # Code quality
