@@ -72,7 +72,9 @@
         "fields": {
             "name": "SARIF",
             "type": "SAST",
-            "source": "File"
+            "source": "File",
+            "module_name": "sarif",
+            "class_name": "SARIFParser"
         }
     },
     {

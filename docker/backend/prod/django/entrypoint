@@ -48,6 +48,8 @@ python /app/manage.py collectstatic --noinput
 
 python manage.py run_huey --flush-locks &
 
+python manage.py register_parsers
+
 if [ -z "$GUNICORN_WORKERS" ]; then
     echo "GUNICORN_WORKERS is not set, defaulting to 3"
     export GUNICORN_WORKERS=3

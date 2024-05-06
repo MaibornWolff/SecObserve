@@ -1,7 +1,7 @@
+import importlib
 import logging
 from typing import Optional, Type
 
-from application.commons.services.log_message import format_log_message
 from application.core.models import Parser
 from application.core.queries.parser import get_parser_by_name
 from application.import_observations.parsers.base_parser import (
@@ -13,22 +13,12 @@ from application.import_observations.types import Parser_Source, Parser_Type
 
 logger = logging.getLogger("secobserve.import_observations")
 
-SCANNERS = {}
 
-
-def register_parser(parser_class: Type[BaseParser]) -> None:
-    if not issubclass(parser_class, BaseParser):
-        logger.warning(
-            format_log_message(
-                message=f'Class {parser_class.__name__} is not a subclass of BaseParser"'
-            )
-        )
-        return
+def register_parser(module_name: str, class_name: str) -> None:
+    parser_class = get_parser_class_from_module_class_names(module_name, class_name)
 
     name = parser_class.get_name()
     my_type = parser_class.get_type()
-
-    SCANNERS[name] = parser_class
 
     source = Parser_Source.SOURCE_UNKOWN
     for base in parser_class.__bases__:
@@ -41,17 +31,32 @@ def register_parser(parser_class: Type[BaseParser]) -> None:
 
     parser = get_parser_by_name(name)
     if parser:
+        changed = False
         if parser.name != name:
             parser.name = name
-            parser.save()
+            changed = True
         if parser.type != my_type:
             parser.type = my_type
-            parser.save()
+            changed = True
         if parser.source != source:
             parser.source = source
+            changed = True
+        if parser.module_name != module_name:
+            parser.module_name = module_name
+            changed = True
+        if parser.class_name != class_name:
+            parser.class_name = class_name
+            changed = True
+        if changed:
             parser.save()
     else:
-        Parser(name=name, type=my_type, source=source).save()
+        Parser(
+            name=name,
+            type=my_type,
+            source=source,
+            module_name=module_name,
+            class_name=parser_class.__name__,
+        ).save()
 
 
 def create_manual_parser() -> None:
@@ -73,5 +78,24 @@ def create_manual_parser() -> None:
                 parser.delete()
 
 
-def get_parser_class(name: str) -> Optional[Type[BaseParser]]:
-    return SCANNERS.get(name)
+def get_parser_class_from_parser_name(name: str) -> Optional[Type[BaseParser]]:
+    parser = Parser.objects.get(name=name)
+    return get_parser_class_from_module_class_names(
+        parser.module_name, parser.class_name
+    )
+
+
+def get_parser_class_from_module_class_names(
+    module_name: str, class_name: str
+) -> Type[BaseParser]:
+    module = importlib.import_module(
+        f"application.import_observations.parsers.{module_name}.parser"
+    )
+    parser_class = getattr(module, class_name)
+
+    if not issubclass(parser_class, BaseParser):
+        raise Exception(  # pylint: disable=broad-exception-raised
+            f"{class_name} is not a subclass of BaseParser"
+        )
+
+    return parser_class

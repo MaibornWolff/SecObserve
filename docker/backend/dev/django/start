@@ -33,4 +33,6 @@ fi
 
 python manage.py run_huey --flush-locks &
 
+python manage.py register_parsers
+
 python manage.py runserver_plus 0.0.0.0:8000

@@ -14,7 +14,8 @@ from application.core.models import (
     Reference,
 )
 from application.core.types import Severity, Status
-from application.import_observations.apps import _register_parser
+
+# from application.import_observations.apps import _register_parser
 from application.import_observations.models import Vulnerability_Check
 from application.import_observations.services.import_observations import (
     FileUploadParameters,
@@ -31,7 +32,6 @@ class TestImportObservations(BaseTestCase):
         Rule.objects.all().delete()
         Vulnerability_Check.objects.all().delete()
         call_command("loaddata", "unittests/fixtures/import_observations_fixtures.json")
-        _register_parser("sarif")
         super().setUp()
 
     @patch("application.commons.services.global_request.get_current_request")
@@ -122,7 +122,7 @@ class TestImportObservations(BaseTestCase):
         file_upload_parameters = FileUploadParameters(
             product=Product.objects.get(id=1),
             branch=branch,
-            parser=Parser.objects.get(id=1),
+            parser=Parser.objects.get(name="SARIF"),
             file=File(open("unittests/fixtures/data_1/bandit.sarif", "r")),
             service=service,
             docker_image_name_tag=docker_image_name_tag,
