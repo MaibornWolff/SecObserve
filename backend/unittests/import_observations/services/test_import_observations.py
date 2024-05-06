@@ -32,7 +32,6 @@ class TestImportObservations(BaseTestCase):
         Rule.objects.all().delete()
         Vulnerability_Check.objects.all().delete()
         call_command("loaddata", "unittests/fixtures/import_observations_fixtures.json")
-        # _register_parser("sarif")
         super().setUp()
 
     @patch("application.commons.services.global_request.get_current_request")
