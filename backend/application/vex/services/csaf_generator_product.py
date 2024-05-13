@@ -1,7 +1,7 @@
 from typing import Optional
 
 from application.core.models import Branch, Product
-from application.vex.services.csaf_helpers import get_product_id
+from application.vex.services.csaf_generator_helpers import get_product_id
 from application.vex.types import (
     CSAF_Branch_Category,
     CSAFFullProductName,

@@ -33,6 +33,8 @@ from application.vex.api.views import (
     OpenVEXViewSet,
     OpenVEXVulnerabilityViewSet,
     VEXCounterViewSet,
+    VEXDocumentViewSet,
+    VEXStatementViewSet,
 )
 
 router = SimpleRouter()
@@ -88,6 +90,8 @@ router.register(
     "vex/openvex_branches", OpenVEXBranchViewSet, basename="openvex_branches"
 )
 router.register("vex/vex_counters", VEXCounterViewSet, basename="vex_counters")
+router.register("vex/vex_documents", VEXDocumentViewSet, basename="vex_documents")
+router.register("vex/vex_statements", VEXStatementViewSet, basename="vex_statements")
 
 app_name = "api"
 urlpatterns = router.urls

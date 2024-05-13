@@ -1,7 +1,10 @@
 from typing import Optional
 
 from application.core.models import Observation
-from application.vex.services.csaf_helpers import get_product_id, get_relationship_name
+from application.vex.services.csaf_generator_helpers import (
+    get_product_id,
+    get_relationship_name,
+)
 from application.vex.types import (
     CSAF_Branch_Category,
     CSAF_Relationship_Category,

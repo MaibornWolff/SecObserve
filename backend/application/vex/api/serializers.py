@@ -6,6 +6,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import (
     CharField,
     ChoiceField,
+    FileField,
     IntegerField,
     ListField,
     ModelSerializer,
@@ -23,6 +24,8 @@ from application.vex.models import (
     OpenVEX_Branch,
     OpenVEX_Vulnerability,
     VEX_Counter,
+    VEX_Document,
+    VEX_Statement,
 )
 from application.vex.types import (
     CSAF_Publisher_Category,
@@ -199,6 +202,22 @@ class VEXCounterSerializer(ModelSerializer):
     class Meta:
         model = VEX_Counter
         fields = "__all__"
+
+
+class VEXDocumentSerializer(ModelSerializer):
+    class Meta:
+        model = VEX_Document
+        fields = "__all__"
+
+
+class VEXStatementSerializer(ModelSerializer):
+    class Meta:
+        model = VEX_Statement
+        fields = "__all__"
+
+
+class VEXImportSerializer(Serializer):
+    file = FileField(max_length=255)
 
 
 def _validate_url(url: str) -> str:

@@ -10,6 +10,7 @@ from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.mixins import DestroyModelMixin, ListModelMixin, RetrieveModelMixin
+from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_204_NO_CONTENT
@@ -24,6 +25,8 @@ from application.vex.api.filters import (
     OpenVEXFilter,
     OpenVEXVulnerabilityFilter,
     VEXCounterFilter,
+    VEXDocumentFilter,
+    VEXStatementFilter,
 )
 from application.vex.api.permissions import (
     UserHasVEXCounterPermission,
@@ -41,6 +44,9 @@ from application.vex.api.serializers import (
     OpenVEXSerializer,
     OpenVEXVulnerabilitySerializer,
     VEXCounterSerializer,
+    VEXDocumentSerializer,
+    VEXImportSerializer,
+    VEXStatementSerializer,
 )
 from application.vex.models import (
     CSAF,
@@ -50,6 +56,8 @@ from application.vex.models import (
     OpenVEX_Branch,
     OpenVEX_Vulnerability,
     VEX_Counter,
+    VEX_Document,
+    VEX_Statement,
 )
 from application.vex.queries.csaf import (
     get_csaf_branches,
@@ -61,18 +69,19 @@ from application.vex.queries.openvex import (
     get_openvex_s,
     get_openvex_vulnerabilities,
 )
-from application.vex.services.csaf import (
+from application.vex.services.csaf_generator import (
     CSAFCreateParameters,
     CSAFUpdateParameters,
     create_csaf_document,
     update_csaf_document,
 )
-from application.vex.services.openvex import (
+from application.vex.services.openvex_generator import (
     OpenVEXCreateParameters,
     OpenVEXUpdateParameters,
     create_openvex_document,
     update_openvex_document,
 )
+from application.vex.services.vex_import import import_vex
 
 VEX_TYPE_CSAF = "csaf"
 VEX_TYPE_OPENVEX = "openvex"
@@ -329,6 +338,43 @@ class VEXCounterViewSet(ModelViewSet):
     filterset_class = VEXCounterFilter
     filter_backends = [DjangoFilterBackend]
     permission_classes = (IsAuthenticated, UserHasVEXCounterPermission)
+
+
+class VEXDocumentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
+    serializer_class = VEXDocumentSerializer
+    queryset = VEX_Document.objects.all()
+    filterset_class = VEXDocumentFilter
+    filter_backends = [DjangoFilterBackend]
+    authentication_classes = []
+    permission_classes = []
+
+
+class VEXStatementViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
+    serializer_class = VEXStatementSerializer
+    queryset = VEX_Statement.objects.all()
+    filterset_class = VEXStatementFilter
+    filter_backends = [DjangoFilterBackend]
+    authentication_classes = []
+    permission_classes = []
+
+
+class VEXImportView(APIView):
+    authentication_classes = []
+    permission_classes = []
+    parser_classes = [MultiPartParser]
+
+    @extend_schema(
+        request=VEXImportSerializer,
+        responses={HTTP_204_NO_CONTENT: None},
+    )
+    def post(self, request):
+        request_serializer = VEXImportSerializer(data=request.data)
+        if not request_serializer.is_valid():
+            raise ValidationError(request_serializer.errors)
+
+        import_vex(request_serializer.validated_data.get("file"))
+
+        return Response(status=HTTP_204_NO_CONTENT)
 
 
 def _object_to_json(object_to_encode: Any, vex_type: str) -> str:
