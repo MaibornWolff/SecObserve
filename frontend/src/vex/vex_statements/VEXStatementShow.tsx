@@ -11,6 +11,8 @@ import {
     useRecordContext,
 } from "react-admin";
 
+import { useStyles } from "../../commons/layout/themes";
+
 const ShowActions = () => {
     const vex_statement = useRecordContext();
 
@@ -31,6 +33,8 @@ const ShowActions = () => {
 };
 
 const VEXStatementShow = () => {
+    const { classes } = useStyles();
+
     return (
         <Show actions={<ShowActions />}>
             <WithRecord
@@ -40,17 +44,16 @@ const VEXStatementShow = () => {
                         <ReferenceField source="document" reference="vex/vex_documents" link="show">
                             <TextField source="document_id" />
                         </ReferenceField>
-                        <TextField source="vulnerability_id" label="Vulnerability ID" />
+                        <TextField source="vulnerability_id" label="Vulnerability ID" className={classes.fontBigBold} />
+                        {vex_statement.description && (
+                            <TextField source="description" sx={{ whiteSpace: "pre-line" }} />
+                        )}
                         <ChipField source="status" />
                         {vex_statement.justification && <TextField source="justification" />}
                         {vex_statement.impact && <TextField source="impact" />}
                         {vex_statement.remediation && <TextField source="remediation" />}
-                        {vex_statement.product_id && <TextField source="product_id" label="Product ID" />}
-                        {vex_statement.product_purl && <TextField source="product_purl" label="Product PURL" />}
-                        {vex_statement.product_cpe23 && <TextField source="product_cpe23" label="Product CPE" />}
-                        {vex_statement.component_id && <TextField source="component_id" label="Component ID" />}
-                        {vex_statement.component_purl && <TextField source="component_purl" label="Component PURL" />}
-                        {vex_statement.component_cpe23 && <TextField source="component_cpe23" label="Component CPE" />}
+                        {vex_statement.product_purl && <TextField source="product_purl" label="Product" />}
+                        {vex_statement.component_purl && <TextField source="component_purl" label="Component" />}
                     </SimpleShowLayout>
                 )}
             />

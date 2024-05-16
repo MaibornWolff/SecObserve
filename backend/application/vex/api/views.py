@@ -17,6 +17,7 @@ from rest_framework.status import HTTP_200_OK, HTTP_204_NO_CONTENT
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
+from application.commons.api.permissions import UserHasSuperuserPermission
 from application.vex.api.filters import (
     CSAFBranchFilter,
     CSAFFilter,
@@ -69,6 +70,7 @@ from application.vex.queries.openvex import (
     get_openvex_s,
     get_openvex_vulnerabilities,
 )
+from application.vex.queries.vex_document import get_vex_documents, get_vex_statements
 from application.vex.services.csaf_generator import (
     CSAFCreateParameters,
     CSAFUpdateParameters,
@@ -340,22 +342,28 @@ class VEXCounterViewSet(ModelViewSet):
     permission_classes = (IsAuthenticated, UserHasVEXCounterPermission)
 
 
-class VEXDocumentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
+class VEXDocumentViewSet(
+    GenericViewSet, ListModelMixin, RetrieveModelMixin, DestroyModelMixin
+):
     serializer_class = VEXDocumentSerializer
-    queryset = VEX_Document.objects.all()
+    queryset = VEX_Document.objects.none()
     filterset_class = VEXDocumentFilter
     filter_backends = [DjangoFilterBackend]
-    authentication_classes = []
-    permission_classes = []
+    permission_classes = (IsAuthenticated, UserHasSuperuserPermission)
+
+    def get_queryset(self):
+        return get_vex_documents()
 
 
 class VEXStatementViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     serializer_class = VEXStatementSerializer
-    queryset = VEX_Statement.objects.all()
+    queryset = VEX_Statement.objects.none()
     filterset_class = VEXStatementFilter
     filter_backends = [DjangoFilterBackend]
-    authentication_classes = []
-    permission_classes = []
+    permission_classes = (IsAuthenticated, UserHasSuperuserPermission)
+
+    def get_queryset(self):
+        return get_vex_statements()
 
 
 class VEXImportView(APIView):

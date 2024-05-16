@@ -17,6 +17,7 @@ from application.vex.types import (
     CSAF_Tracking_Status,
     VEX_Document_Type,
     VEX_Justification,
+    VEX_Status,
 )
 
 
@@ -119,15 +120,12 @@ class VEX_Document(Model):
 class VEX_Statement(Model):
     document = ForeignKey(VEX_Document, related_name="statements", on_delete=CASCADE)
     vulnerability_id = CharField(max_length=255)
-    status = CharField(max_length=24)
+    description = TextField(max_length=2048, blank=True)
+    status = CharField(max_length=24, choices=VEX_Status.VEX_STATUS_CHOICES)
     justification = CharField(
         max_length=64, choices=VEX_Justification.VEX_JUSTIFICATION_CHOICES, blank=True
     )
     impact = CharField(max_length=255, blank=True)
     remediation = CharField(max_length=255, blank=True)
-    product_id = CharField(max_length=255)
     product_purl = CharField(max_length=255, blank=True)
-    product_cpe23 = CharField(max_length=255, blank=True)
-    component_id = CharField(max_length=255, blank=True)
     component_purl = CharField(max_length=255, blank=True)
-    component_cpe23 = CharField(max_length=255, blank=True)

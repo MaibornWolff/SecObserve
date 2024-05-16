@@ -93,8 +93,8 @@ def get_parser_class_from_module_class_names(
     )
     # nosemgrep because of rule python.lang.security.audit.non-literal-import.non-literal-import
     # This is the price you pay for a dynamic parser registry. We accept the risk.
-    parser_class = getattr(module, class_name)
 
+    parser_class = getattr(module, class_name)
     if not issubclass(parser_class, BaseParser):
         raise Exception(  # pylint: disable=broad-exception-raised
             f"{class_name} is not a subclass of BaseParser"

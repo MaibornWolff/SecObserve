@@ -1,17 +1,8 @@
-import { Paper, Stack, Typography } from "@mui/material";
+import { Box, Paper, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
-import {
-    ChipField,
-    DateField,
-    Labeled,
-    PrevNextButtons,
-    Show,
-    SimpleShowLayout,
-    TextField,
-    TopToolbar,
-    WithRecord,
-} from "react-admin";
+import { ChipField, DateField, Labeled, PrevNextButtons, Show, TextField, TopToolbar, WithRecord } from "react-admin";
 
+import { useStyles } from "../../commons/layout/themes";
 import VEXStatementEmbeddedList from "../vex_statements/VEXStatementEmbeddedList";
 
 const ShowActions = () => {
@@ -29,11 +20,13 @@ const ShowActions = () => {
 };
 
 const VEXDocumentComponent = () => {
+    const { classes } = useStyles();
+
     return (
         <WithRecord
             render={(vex_document) => (
-                <SimpleShowLayout>
-                    <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
+                <Box width={"100%"}>
+                    <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
                         <Typography variant="h6">Imported VEX Document</Typography>
                         <Stack spacing={1}>
                             <Labeled label="Type">
@@ -45,7 +38,7 @@ const VEXDocumentComponent = () => {
                                 />
                             </Labeled>
                             <Labeled label="Document ID">
-                                <TextField source="document_id" label="Document ID" />
+                                <TextField source="document_id" label="Document ID" className={classes.fontBigBold} />
                             </Labeled>
                             <Labeled label="Version">
                                 <TextField source="version" />
@@ -66,13 +59,13 @@ const VEXDocumentComponent = () => {
                             )}
                         </Stack>
                     </Paper>
-                    <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
+                    <Paper sx={{ padding: 2, width: "100%" }}>
                         <Typography variant="h6" sx={{ marginBottom: 1 }}>
                             Statements
                         </Typography>
                         <VEXStatementEmbeddedList vex_document={vex_document} />
                     </Paper>
-                </SimpleShowLayout>
+                </Box>
             )}
         />
     );

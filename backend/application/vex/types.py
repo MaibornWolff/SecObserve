@@ -89,13 +89,6 @@ class CSAF_Status:
     CSAF_STATUS_FIXED = "fixed"
     CSAF_STATUS_UNDER_INVESTIGATION = "under_investigation"
 
-    CSAF_STATUS_LIST = [
-        CSAF_STATUS_NOT_AFFECTED,
-        CSAF_STATUS_AFFECTED,
-        CSAF_STATUS_FIXED,
-        CSAF_STATUS_UNDER_INVESTIGATION,
-    ]
-
 
 class CSAF_Branch_Category:
     CSAF_BRANCH_CATEGORY_ARCHITECTURE = "architecture"
@@ -283,13 +276,6 @@ class OpenVEX_Status:
     OPENVEX_STATUS_FIXED = "fixed"
     OPENVEX_STATUS_UNDER_INVESTIGATION = "under_investigation"
 
-    OPENVEX_STATUS_LIST = [
-        OPENVEX_STATUS_NOT_AFFECTED,
-        OPENVEX_STATUS_AFFECTED,
-        OPENVEX_STATUS_FIXED,
-        OPENVEX_STATUS_UNDER_INVESTIGATION,
-    ]
-
 
 @dataclass(frozen=True)
 class OpenVEXSubcomponent:
@@ -343,3 +329,24 @@ class OpenVEXDocument:
         if len(self.id) > 36:
             return self.id[-36:]
         return ""
+
+
+class VEX_Status:
+    VEX_STATUS_NOT_AFFECTED = "not_affected"
+    VEX_STATUS_AFFECTED = "affected"
+    VEX_STATUS_FIXED = "fixed"
+    VEX_STATUS_UNDER_INVESTIGATION = "under_investigation"
+
+    VEX_STATUS_LIST = [
+        VEX_STATUS_NOT_AFFECTED,
+        VEX_STATUS_AFFECTED,
+        VEX_STATUS_FIXED,
+        VEX_STATUS_UNDER_INVESTIGATION,
+    ]
+
+    VEX_STATUS_CHOICES = [
+        (VEX_STATUS_NOT_AFFECTED, VEX_STATUS_NOT_AFFECTED),
+        (VEX_STATUS_AFFECTED, VEX_STATUS_AFFECTED),
+        (VEX_STATUS_FIXED, VEX_STATUS_FIXED),
+        (VEX_STATUS_UNDER_INVESTIGATION, VEX_STATUS_UNDER_INVESTIGATION),
+    ]
