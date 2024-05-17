@@ -13,7 +13,7 @@ import {
     useUpdate,
 } from "react-admin";
 
-import { validate_required, validate_required_255 } from "../../commons/custom_validators";
+import { validate_required, validate_required_255, validate_255 } from "../../commons/custom_validators";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 
 const ApiConfigurationEdit = () => {
@@ -35,6 +35,7 @@ const ApiConfigurationEdit = () => {
             project_key: data.project_key,
             api_key: data.api_key,
             test_connection: data.test_connection,
+            query: data.query,
         };
 
         update(
@@ -108,8 +109,9 @@ const ApiConfigurationEdit = () => {
                             <AutocompleteInputWide optionText="name" validate={validate_required} />
                         </ReferenceInput>
                         <TextInputWide source="base_url" label="Base URL" validate={validate_required_255} />
-                        <TextInputWide source="project_key" validate={validate_required_255} />
-                        <TextInputWide source="api_key" label="API key" validate={validate_required_255} />
+                        <TextInputWide source="project_key" validate={validate_255} />
+                        <TextInputWide source="api_key" label="API key" validate={validate_255} />
+                        <TextInputWide source="query" label="Query" validate={validate_255} />
                         <BooleanInput source="test_connection" defaultValue={true} />
                     </SimpleForm>
                 </DialogContent>

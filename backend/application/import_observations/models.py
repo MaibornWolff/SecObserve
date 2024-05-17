@@ -18,8 +18,9 @@ class Api_Configuration(Model):
     name = CharField(max_length=255)
     parser = ForeignKey(Parser, on_delete=PROTECT)
     base_url = CharField(max_length=255)
-    project_key = CharField(max_length=255)
-    api_key = EncryptedCharField(max_length=255)
+    project_key = CharField(max_length=255, blank=True)
+    api_key = EncryptedCharField(max_length=255, blank=True, null=True)
+    query = CharField(max_length=255, blank=True)
 
     class Meta:
         unique_together = (

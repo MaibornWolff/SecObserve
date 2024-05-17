@@ -14,7 +14,7 @@ import {
     useRefresh,
 } from "react-admin";
 
-import { validate_required, validate_required_255 } from "../../commons/custom_validators";
+import { validate_required, validate_required_255, validate_255 } from "../../commons/custom_validators";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 
 export type ApiConfigurationCreateProps = {
@@ -75,6 +75,11 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
         setOpen(false);
     };
 
+
+    const onChange = (e: react.FormEvent<HTMLInputElement>) => {
+        const newValue = e.currentTarget.value;
+    }
+
     return (
         <Fragment>
             <Button
@@ -100,8 +105,9 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
                                 <AutocompleteInputWide optionText="name" validate={validate_required} />
                             </ReferenceInput>
                             <TextInputWide source="base_url" label="Base URL" validate={validate_required_255} />
-                            <TextInputWide source="project_key" validate={validate_required_255} />
-                            <TextInputWide source="api_key" label="API key" validate={validate_required_255} />
+                            <TextInputWide source="project_key" validate={validate_255} />
+                            <TextInputWide source="api_key" label="API key" validate={validate_255} />
+                            <TextInputWide source="query" label="Query" validate={validate_255} />
                             <BooleanInput source="test_connection" defaultValue={true} />
                         </SimpleForm>
                     </CreateBase>

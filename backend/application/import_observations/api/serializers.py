@@ -91,6 +91,8 @@ class ApiConfigurationSerializer(ModelSerializer):
                 base_url = attrs.get("base_url", self.instance.base_url)
                 project_key = attrs.get("project_key", self.instance.project_key)
                 api_key = attrs.get("api_key", self.instance.api_key)
+                query = attrs.get("query", self.instance.query)
+
             else:
                 product = attrs.get("product")
                 name = attrs.get("name")
@@ -98,6 +100,8 @@ class ApiConfigurationSerializer(ModelSerializer):
                 base_url = attrs.get("base_url")
                 project_key = attrs.get("project_key")
                 api_key = attrs.get("api_key")
+                query = attrs.get("query")
+
 
             api_configuration = Api_Configuration(
                 product=product,
@@ -106,6 +110,8 @@ class ApiConfigurationSerializer(ModelSerializer):
                 base_url=base_url,
                 project_key=project_key,
                 api_key=api_key,
+                query=query,
+
             )
             valid, errors = api_check_connection(api_configuration)
             if not valid:
