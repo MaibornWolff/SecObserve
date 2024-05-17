@@ -27,8 +27,9 @@ class Migration(migrations.Migration):
                 ),
                 ("name", models.CharField(max_length=255)),
                 ("base_url", models.CharField(max_length=255)),
-                ("project_key", models.CharField(max_length=255)),
-                ("api_key", encrypted_model_fields.fields.EncryptedCharField()),
+                ("project_key", models.CharField(max_length=255, blank=True)),
+                ("api_key", encrypted_model_fields.fields.EncryptedCharField(blank=True, null=True)),
+                ("query", models.CharField(max_length=255, blank=True)),
                 (
                     "parser",
                     models.ForeignKey(
