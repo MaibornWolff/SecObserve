@@ -32,7 +32,7 @@ class PrometheusTrivy(BaseParser, BaseAPIParser):
 
     @classmethod
     def get_type(cls) -> str:
-        return Parser_Type.TYPE_SCA
+        return Parser_Type.TYPE_OTHER
 
     def check_connection(
         self, api_configuration: Api_Configuration
