@@ -55,6 +55,7 @@ const ApiConfigurationEmbeddedList = ({ product }: ApiConfigurationEmbeddedListP
                     <TextField source="name" />
                     <ReferenceField source="parser" reference="parsers" link={false} />
                     <TextField source="base_url" label="Base URL" />
+                    <TextField source="query" label="Query" />
                     <TextField source="project_key" />
                     <WithRecord
                         render={(api_configuration) => (
