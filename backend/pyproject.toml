@@ -71,7 +71,7 @@ pre-commit = "3.7.1"  # https://github.com/pre-commit/pre-commit
 mypy = "1.10.0"  # https://github.com/python/mypy
 django-stubs = "5.0.0"  # https://github.com/typeddjango/django-stubs
 djangorestframework-stubs = "3.15.0"  # https://github.com/typeddjango/djangorestframework-stubs
-types-PyMySQL = "1.1.0.20240425"  # https://github.com/python/typeshed
+types-PyMySQL = "1.1.0.20240524"  # https://github.com/python/typeshed
 # import-linter = "2.0"  # https://github.com/seddonym/import-linter --> Cannot be build with Docker
 # Django
 # ------------------------------------------------------------------------------
