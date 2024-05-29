@@ -48,6 +48,7 @@ from application.core.api.serializers_observation import (
     ObservationCreateSerializer,
     ObservationListSerializer,
     ObservationLogApprovalSerializer,
+    ObservationLogBulkApprovalSerializer,
     ObservationLogListSerializer,
     ObservationLogSerializer,
     ObservationRemoveAssessmentSerializer,
@@ -103,6 +104,7 @@ from application.core.services.export_observations import (
     export_observations_excel,
 )
 from application.core.services.observations_bulk_actions import (
+    observation_logs_bulk_approval,
     observations_bulk_assessment,
     observations_bulk_delete,
     observations_bulk_mark_duplicates,
@@ -680,6 +682,24 @@ class ObservationLogViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
         set_potential_duplicate_both_ways(observation_log.observation)
 
         return Response()
+
+    @extend_schema(
+        methods=["PATCH"],
+        request=ObservationLogBulkApprovalSerializer,
+        responses={HTTP_204_NO_CONTENT: None},
+    )
+    @action(detail=False, methods=["patch"])
+    def bulk_approval(self, request):
+        request_serializer = ObservationLogBulkApprovalSerializer(data=request.data)
+        if not request_serializer.is_valid():
+            raise ValidationError(request_serializer.errors)
+
+        observation_logs_bulk_approval(
+            request_serializer.validated_data.get("assessment_status"),
+            request_serializer.validated_data.get("approval_remark"),
+            request_serializer.validated_data.get("observation_logs"),
+        )
+        return Response(status=HTTP_204_NO_CONTENT)
 
 
 class EvidenceViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):

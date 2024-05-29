@@ -1,6 +1,6 @@
+import ChecklistIcon from "@mui/icons-material/Checklist";
 import {
     AutocompleteInput,
-    ChipField,
     Datagrid,
     DateField,
     FilterForm,
@@ -12,24 +12,55 @@ import {
     TextInput,
     useListController,
 } from "react-admin";
+import { Fragment } from "react/jsx-runtime";
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { feature_vex_enabled } from "../../commons/functions";
-import { AutocompleteInputMedium } from "../../commons/layout/themes";
+import ListHeader from "../../commons/layout/ListHeader";
+import { AutocompleteInputMedium, AutocompleteInputWide } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/user_settings/functions";
 import { ASSESSMENT_STATUS_NEEDS_APPROVAL } from "../types";
 import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../types";
+import AssessmentBulkApproval from "./AssessmentBulkApproval";
 
-function listFilters() {
-    return [
+const BulkActionButtons = () => (
+    <Fragment>
+        <AssessmentBulkApproval />
+    </Fragment>
+);
+
+function listFilters(product_is_set: boolean) {
+    const filters = [];
+    if (!product_is_set) {
+        filters.push(
+            <ReferenceInput source="product" reference="products" sort={{ field: "name", order: "ASC" }} alwaysOn>
+                <AutocompleteInputMedium optionText="name" />
+            </ReferenceInput>,
+            <ReferenceInput
+                source="product_group"
+                reference="product_groups"
+                sort={{ field: "name", order: "ASC" }}
+                alwaysOn
+            >
+                <AutocompleteInputMedium optionText="name" />
+            </ReferenceInput>,
+            <ReferenceInput source="branch" reference="branches" sort={{ field: "name", order: "ASC" }} alwaysOn>
+                <AutocompleteInputWide optionText="name_with_product" label="Branch / Version" />
+            </ReferenceInput>
+        );
+    }
+    filters.push(
         <TextInput source="observation_title" label="Observation title" alwaysOn />,
         <ReferenceInput source="user" reference="users" sort={{ field: "full_name", order: "ASC" }} alwaysOn>
             <AutocompleteInputMedium optionText="full_name" />
         </ReferenceInput>,
         <AutocompleteInput source="severity" label="Severity" choices={OBSERVATION_SEVERITY_CHOICES} alwaysOn />,
         <AutocompleteInput source="status" label="Status" choices={OBSERVATION_STATUS_CHOICES} alwaysOn />,
-    ];
+        <TextInput source="origin_component_name_version" label="Component" alwaysOn />,
+    );
+    return filters;
 }
+
 
 type ObservationLogApprovalListProps = {
     product: any;
@@ -37,7 +68,7 @@ type ObservationLogApprovalListProps = {
 
 const ObservationLogApprovalList = ({ product }: ObservationLogApprovalListProps) => {
     const listContext = useListController({
-        filter: { product: Number(product.id), assessment_status: ASSESSMENT_STATUS_NEEDS_APPROVAL },
+        filter: { product: (product ? Number(product.id) : null), assessment_status: ASSESSMENT_STATUS_NEEDS_APPROVAL },
         perPage: 25,
         resource: "observation_logs",
         sort: { field: "created", order: "ASC" },
@@ -65,20 +96,28 @@ const ObservationLogApprovalList = ({ product }: ObservationLogApprovalListProps
 
     localStorage.setItem("observationlogapprovallist", "true");
     localStorage.removeItem("observationlogembeddedlist");
-
     return (
         <ResourceContextProvider value="observation_logs">
+            <ListHeader icon={ChecklistIcon} title="Reviews" />
             <ListContextProvider value={listContext}>
                 <div style={{ width: "100%" }}>
-                    <FilterForm filters={listFilters()} />
+                    <FilterForm filters={listFilters(typeof product !== 'undefined')} />
                     <Datagrid
                         size={getSettingListSize()}
                         sx={{ width: "100%" }}
-                        bulkActionButtons={false}
+                        bulkActionButtons={<BulkActionButtons />}
                         rowClick={ShowObservationLogs}
                         resource="observation_logs"
                     >
-                        <ChipField source="assessment_status" sortable={false} />
+                        {!product && (
+                            <TextField source="product_name" label="Product" />
+                        )}
+                        {!product && (
+                            <TextField source="branch_name" label="Branch / Version" />
+                        )}
+                        {product && (
+                            <TextField source="origin_component_name_version" label="Component" />
+                        )}
                         <ReferenceField
                             source="observation"
                             reference="observations"

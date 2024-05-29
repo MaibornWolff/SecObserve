@@ -267,9 +267,22 @@ class ObservationLogFilter(FilterSet):
         field_name="observation__product",
         queryset=Product.objects.all(),
     )
+    product_group = ModelChoiceFilter(
+        field_name="observation__product__product_group",
+        queryset=Product.objects.filter(is_product_group=True),
+    )
     observation_title = CharFilter(
         field_name="observation__title",
         lookup_expr="icontains",
+    )
+    branch_name = CharFilter(
+        field_name="observation__branch__name", lookup_expr="icontains"
+    )
+    branch = ModelChoiceFilter(
+        field_name="observation__branch", queryset=Branch.objects.all()
+    )
+    origin_component_name_version = CharFilter(
+        field_name="observation__origin_component_name_version", lookup_expr="icontains"
     )
 
     ordering = OrderingFilter(
@@ -277,6 +290,9 @@ class ObservationLogFilter(FilterSet):
         fields=(
             ("id", "id"),
             ("user__full_name", "user_full_name"),
+            ("product__name", "product_name"),
+            ("product__product_group__name", "product.product_group_name"),
+            ("branch__name", "branch_name"),
             ("observation__title", "observation_title"),
             ("severity", "severity"),
             ("status", "status"),
