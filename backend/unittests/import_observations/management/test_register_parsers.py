@@ -41,9 +41,9 @@ class TestRegisterParsers(TestCase):
         self.assertEqual("", parser.module_name)
         self.assertEqual("", parser.class_name)
 
-        parser = parsers[6]
-        self.assertEqual("Prometheus Trivy", parser.name)
+        parser = parsers[9]
+        self.assertEqual("Trivy Prometheus", parser.name)
         self.assertEqual("Other", parser.type)
         self.assertEqual("API", parser.source)
-        self.assertEqual("prometheus_trivy", parser.module_name)
-        self.assertEqual("PrometheusTrivy", parser.class_name)
+        self.assertEqual("trivy_prometheus", parser.module_name)
+        self.assertEqual("TrivyPrometheus", parser.class_name)
