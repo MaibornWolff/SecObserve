@@ -22,13 +22,13 @@ STATUS_MAPPING = {
 }
 
 
-class PrometheusTrivy(BaseParser, BaseAPIParser):
+class TrivyPrometheus(BaseParser, BaseAPIParser):
     def __init__(self):
         self.api_configuration: Optional[Api_Configuration] = None
 
     @classmethod
     def get_name(cls) -> str:
-        return "Prometheus Trivy"
+        return "Trivy Prometheus"
 
     @classmethod
     def get_type(cls) -> str:
@@ -39,18 +39,18 @@ class PrometheusTrivy(BaseParser, BaseAPIParser):
     ) -> tuple[bool, list[str], dict]:
         self.api_configuration = api_configuration
 
-        prometheus_trivy_base_url = api_configuration.base_url
-        prometheus_trivy_query = api_configuration.query
+        trivy_prometheus_base_url = api_configuration.base_url
+        trivy_prometheus_query = api_configuration.query
 
-        if not prometheus_trivy_base_url.endswith("/"):
-            prometheus_trivy_base_url += "/"
+        if not trivy_prometheus_base_url.endswith("/"):
+            trivy_prometheus_base_url += "/"
 
-        prometheus_trivy_url = prometheus_trivy_base_url + "api/v1/query?query=" + prometheus_trivy_query
+        trivy_prometheus_url = trivy_prometheus_base_url + "api/v1/query?query=" + trivy_prometheus_query
 
         try:
-            print(prometheus_trivy_base_url)
+            print(trivy_prometheus_base_url)
             response = requests.get(
-                prometheus_trivy_url, timeout=60, verify=False
+                trivy_prometheus_url, timeout=60, verify=False
             )
             response.raise_for_status()
         except Exception as e:
@@ -149,19 +149,19 @@ class PrometheusTrivy(BaseParser, BaseAPIParser):
 
     def get_about(self) -> tuple[str, Optional[str]]:
         if not self.api_configuration:
-            return "Prometheus-Trivy", None
+            return "Trivy-Prometheus", None
 
-        prometheus_trivy_base_url = self.api_configuration.base_url
-        if not prometheus_trivy_base_url.endswith("/"):
-            prometheus_trivy_base_url += "/"
+        trivy_prometheus_base_url = self.api_configuration.base_url
+        if not trivy_prometheus_base_url.endswith("/"):
+            trivy_prometheus_base_url += "/"
 
         try:
-            response = requests.get(prometheus_trivy_base_url, timeout=60)
+            response = requests.get(trivy_prometheus_base_url, timeout=60)
             response.raise_for_status()
         except Exception:
-            return "Prometheus-Trivy", None
+            return "Trivy-Prometheus", None
 
-        application = "Prometheus-Trivy"
+        application = "Trivy-Prometheus"
         version = 1
 
         return application, version
