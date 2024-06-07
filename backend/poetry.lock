@@ -958,12 +958,12 @@ tornado = ["tornado (>=0.2)"]
 
 [[package]]
 name = "huey"
-version = "2.5.0"
+version = "2.5.1"
 description = "huey, a little task queue"
 optional = false
 python-versions = "*"
 files = [
-    {file = "huey-2.5.0.tar.gz", hash = "sha256:2ffb52fb5c46a1b0d53c79d59df3622312b27e2ab68d81a580985a8ea4ca3480"},
+    {file = "huey-2.5.1.tar.gz", hash = "sha256:8a323783ab434a095a4e72b8c48c5b8f957f9031fa860474a390a0927e957112"},
 ]
 
 [package.extras]
@@ -2442,4 +2442,4 @@ brotli = ["Brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">= 3.10, < 3.13"
-content-hash = "de85164ae7c8e9f7336a24ea5c8b74179c13b1766ed0711e373c91454c634061"
+content-hash = "53d12e28a117bb2962848b37fe47888868ac10b24f5b1f5b884a5d94d6825679"

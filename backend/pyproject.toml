@@ -46,7 +46,7 @@ openpyxl = "3.1.3"  # https://foss.heptapod.net/openpyxl/openpyxl
 packageurl-python = "0.15.0"  # https://github.com/package-url/packageurl-python
 # Task queue
 # ------------------------------------------------------------------------------
-huey = "2.5.0"  # https://github.com/coleifer/huey
+huey = "2.5.1"  # https://github.com/coleifer/huey
 # Issue tracker
 # ------------------------------------------------------------------------------
 jira = "3.8.0"  # https://github.com/pycontribs/jira
