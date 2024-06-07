@@ -26,9 +26,32 @@ def save_assessment(
     new_vex_justification: Optional[str],
 ) -> None:
 
+    log_severity = (
+        new_severity
+        if new_severity and new_severity != observation.current_severity
+        else ""
+    )
+    log_status = (
+        new_status if new_status and new_status != observation.current_status else ""
+    )
+    log_vex_justification = (
+        new_vex_justification
+        if new_vex_justification
+        and new_vex_justification != observation.current_vex_justification
+        else ""
+    )
+
     assessment_status = (
         Assessment_Status.ASSESSMENT_STATUS_NEEDS_APPROVAL
         if _get_assessments_need_approval(observation.product)
+        and (
+            (log_severity and log_severity != observation.current_severity)
+            or (log_status and log_status != observation.current_status)
+            or (
+                log_vex_justification
+                and log_vex_justification != observation.current_vex_justification
+            )
+        )
         and new_status != Status.STATUS_IN_REVIEW
         else Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED
     )
@@ -37,58 +60,30 @@ def save_assessment(
         Assessment_Status.ASSESSMENT_STATUS_APPROVED,
         Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
     ):
-        (
-            previous_severity,
-            log_severity,
-            previous_status,
-            log_status,
-            previous_vex_justification,
-            log_vex_justification,
-        ) = _update_observation(
+        _update_observation(
             observation, new_severity, new_status, new_vex_justification
         )
 
-        if (
-            previous_severity != observation.current_severity
-            or previous_status != observation.current_status
-            or previous_vex_justification != observation.current_vex_justification
-        ):
-            create_observation_log(
-                observation,
-                log_severity,
-                log_status,
-                comment,
-                log_vex_justification,
-                assessment_status,
-            )
+        create_observation_log(
+            observation,
+            log_severity,
+            log_status,
+            comment,
+            log_vex_justification,
+            assessment_status,
+        )
 
         check_security_gate(observation.product)
         push_observation_to_issue_tracker(observation, get_current_user())
     else:
-        log_severity = (
-            new_severity
-            if new_severity and new_severity != observation.current_severity
-            else ""
+        create_observation_log(
+            observation,
+            log_severity,
+            log_status,
+            comment,
+            log_vex_justification,
+            assessment_status,
         )
-        log_status = (
-            new_status
-            if new_status and new_status != observation.current_status
-            else ""
-        )
-        log_vex_justification = (
-            new_vex_justification
-            if new_vex_justification != observation.current_vex_justification
-            else ""
-        )
-        if log_severity or log_status or log_vex_justification:
-            create_observation_log(
-                observation,
-                log_severity,
-                log_status,
-                comment,
-                log_vex_justification,
-                assessment_status,
-            )
 
 
 def _update_observation(
@@ -96,26 +91,21 @@ def _update_observation(
     new_severity: Optional[str],
     new_status: Optional[str],
     new_vex_justification: Optional[str],
-):
-    previous_severity = observation.current_severity
+) -> None:
+    previous_current_severity = observation.current_severity
     previous_assessment_severity = observation.assessment_severity
-    log_severity = ""
     if new_severity and new_severity != observation.current_severity:
         observation.assessment_severity = new_severity
         observation.current_severity = get_current_severity(observation)
-        log_severity = observation.current_severity
 
-    previous_status = observation.current_status
+    previous_current_status = observation.current_status
     previous_assessment_status = observation.assessment_status
-    log_status = ""
     if new_status and new_status != observation.current_status:
         observation.assessment_status = new_status
         observation.current_status = get_current_status(observation)
-        log_status = observation.current_status
 
-    previous_vex_justification = observation.current_vex_justification
+    previous_current_vex_justification = observation.current_vex_justification
     previous_assessment_vex_justification = observation.assessment_vex_justification
-    log_vex_justification = ""
     if (
         new_vex_justification
         and new_vex_justification != observation.current_vex_justification
@@ -124,27 +114,18 @@ def _update_observation(
         observation.current_vex_justification = get_current_vex_justification(
             observation
         )
-        log_vex_justification = observation.current_vex_justification
 
     if (
-        previous_severity  # pylint: disable=too-many-boolean-expressions
+        previous_current_severity  # pylint: disable=too-many-boolean-expressions
         != observation.current_severity
         or previous_assessment_severity != observation.assessment_severity
-        or previous_status != observation.current_status
+        or previous_current_status != observation.current_status
         or previous_assessment_status != observation.assessment_status
-        or previous_vex_justification != observation.current_vex_justification
+        or previous_current_vex_justification != observation.current_vex_justification
         or previous_assessment_vex_justification
         != observation.assessment_vex_justification
     ):
         observation.save()
-    return (
-        previous_severity,
-        log_severity,
-        previous_status,
-        log_status,
-        previous_vex_justification,
-        log_vex_justification,
-    )
 
 
 def _get_assessments_need_approval(product: Product) -> bool:
