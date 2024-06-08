@@ -88,9 +88,11 @@ def get_parser_class_from_parser_name(name: str) -> Optional[Type[BaseParser]]:
 def get_parser_class_from_module_class_names(
     module_name: str, class_name: str
 ) -> Type[BaseParser]:
-    module = importlib.import_module(
+    module = importlib.import_module(  # nosemgrep
         f"application.import_observations.parsers.{module_name}.parser"
     )
+    # nosemgrep because of rule python.lang.security.audit.non-literal-import.non-literal-import
+    # This is the price you pay for a dynamic parser registry. We accept the risk.
     parser_class = getattr(module, class_name)
 
     if not issubclass(parser_class, BaseParser):
