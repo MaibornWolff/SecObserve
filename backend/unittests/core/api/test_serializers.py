@@ -4,7 +4,7 @@ from rest_framework.serializers import ValidationError
 
 from application.access_control.services.roles_permissions import Permissions, Roles
 from application.core.api.serializers_product import BranchSerializer, ProductSerializer
-from application.core.models import Product_Member
+from application.core.models import Product
 from application.core.types import Severity, Status
 from unittests.base_test_case import BaseTestCase
 
@@ -203,15 +203,17 @@ class TestProductSerializer(BaseTestCase):
 
     @patch("application.core.api.serializers_product.get_product_member")
     def test_validate_security_gate_active_empty(self, mock_product_member):
-        self.product_1.security_gate_active = True
-        self.product_1.security_gate_threshold_critical = None
-        self.product_1.security_gate_threshold_high = None
-        self.product_1.security_gate_threshold_medium = None
-        self.product_1.security_gate_threshold_low = None
-        self.product_1.security_gate_threshold_none = None
-        self.product_1.security_gate_threshold_unkown = None
-        product_serializer = ProductSerializer(self.product_1)
+        product = Product()
+        product.security_gate_active = True
+        product.security_gate_threshold_critical = None
+        product.security_gate_threshold_high = None
+        product.security_gate_threshold_medium = None
+        product.security_gate_threshold_low = None
+        product.security_gate_threshold_none = None
+        product.security_gate_threshold_unkown = None
+        product.save()
 
+        product_serializer = ProductSerializer(product)
         data = product_serializer.validate(product_serializer.data)
 
         self.assertEqual(0, data["security_gate_threshold_critical"])
@@ -223,15 +225,17 @@ class TestProductSerializer(BaseTestCase):
 
     @patch("application.core.api.serializers_product.get_product_member")
     def test_validate_security_gate_active_full(self, mock_product_member):
-        self.product_1.security_gate_active = True
-        self.product_1.security_gate_threshold_critical = 1
-        self.product_1.security_gate_threshold_high = 2
-        self.product_1.security_gate_threshold_medium = 3
-        self.product_1.security_gate_threshold_low = 4
-        self.product_1.security_gate_threshold_none = 5
-        self.product_1.security_gate_threshold_unkown = 6
-        product_serializer = ProductSerializer(self.product_1)
+        product = Product()
+        product.security_gate_active = True
+        product.security_gate_threshold_critical = 1
+        product.security_gate_threshold_high = 2
+        product.security_gate_threshold_medium = 3
+        product.security_gate_threshold_low = 4
+        product.security_gate_threshold_none = 5
+        product.security_gate_threshold_unkown = 6
+        product.save()
 
+        product_serializer = ProductSerializer(product)
         data = product_serializer.validate(product_serializer.data)
 
         self.assertEqual(1, data["security_gate_threshold_critical"])
@@ -242,17 +246,23 @@ class TestProductSerializer(BaseTestCase):
         self.assertEqual(6, data["security_gate_threshold_unkown"])
 
     def test_validate_repository_prefix_empty(self):
-        self.product_1.repository_prefix = ""
-        product_serializer = ProductSerializer(self.product_1)
+        product = Product()
+        product.name = "Test Product"
+        product.repository_prefix = ""
+        product.save()
 
+        product_serializer = ProductSerializer(product)
         validated_data = product_serializer.run_validation(product_serializer.data)
 
         self.assertEqual("", validated_data["repository_prefix"])
 
     def test_validate_repository_prefix_invalid(self):
-        self.product_1.repository_prefix = "invalid_url"
-        product_serializer = ProductSerializer(self.product_1)
+        product = Product()
+        product.name = "Test Product"
+        product.repository_prefix = "invalid_url"
+        product.save()
 
+        product_serializer = ProductSerializer(product)
         with self.assertRaises(ValidationError) as e:
             product_serializer.run_validation(product_serializer.data)
 
@@ -262,18 +272,24 @@ class TestProductSerializer(BaseTestCase):
         )
 
     def test_validate_repository_prefix_valid(self):
-        self.product_1.repository_prefix = "https://example.com"
-        product_serializer = ProductSerializer(self.product_1)
+        product = Product()
+        product.name = "Test Product"
+        product.repository_prefix = "https://example.com"
+        product.save()
 
+        product_serializer = ProductSerializer(product)
         validated_data = product_serializer.run_validation(product_serializer.data)
 
         self.assertEqual("https://example.com", validated_data["repository_prefix"])
 
     def test_validate_notification_msteams_slack_invalid(self):
-        self.product_1.notification_ms_teams_webhook = "invalid_url"
-        self.product_1.notification_slack_webhook = "invalid_url"
-        product_serializer = ProductSerializer(self.product_1)
+        product = Product()
+        product.name = "Test Product"
+        product.notification_ms_teams_webhook = "invalid_url"
+        product.notification_slack_webhook = "invalid_url"
+        product.save()
 
+        product_serializer = ProductSerializer(product)
         with self.assertRaises(ValidationError) as e:
             product_serializer.run_validation(product_serializer.data)
 

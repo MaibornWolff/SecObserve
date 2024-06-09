@@ -68,7 +68,7 @@ services:
     command: /start
 
   postgres:
-    image: postgres:15.6-alpine
+    image: postgres:15.7-alpine
     volumes:
       - dev_postgres_data:/var/lib/postgresql/data
     environment:
@@ -86,7 +86,7 @@ services:
       - "8025:8025"
 
   keycloak:
-    image: keycloak/keycloak:24.0.3
+    image: keycloak/keycloak:24.0.5
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin

@@ -11,7 +11,7 @@ jobs:
     steps:
       - 
         name: Checkout code
-        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       -
         name: Run vulnerability scanners for code
         uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@b681a7b2089d9be0a0d84179b6fdfd9540e77680 # main

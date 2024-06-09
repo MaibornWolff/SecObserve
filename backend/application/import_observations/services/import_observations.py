@@ -40,7 +40,9 @@ from application.import_observations.parsers.base_parser import (
     BaseFileParser,
     BaseParser,
 )
-from application.import_observations.services.parser_registry import get_parser_class
+from application.import_observations.services.parser_registry import (
+    get_parser_class_from_parser_name,
+)
 from application.issue_tracker.services.issue_tracker import (
     push_observations_to_issue_tracker,
 )
@@ -185,7 +187,7 @@ def api_check_connection(
 
 
 def _instanciate_parser(parser: Parser) -> BaseParser:
-    parser_class = get_parser_class(parser.name)
+    parser_class = get_parser_class_from_parser_name(parser.name)
     if not parser_class:
         raise ParserError(f"Parser {parser.name} not found in parser registry")
     parser_instance: BaseParser = parser_class()
