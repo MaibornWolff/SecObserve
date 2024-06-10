@@ -21,15 +21,17 @@ import { getSettingListSize } from "../../commons/user_settings/functions";
 import { ASSESSMENT_STATUS_NEEDS_APPROVAL } from "../types";
 import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../types";
 import AssessmentBulkApproval from "./AssessmentBulkApproval";
+import AssessmentDeleteApproval from "./AssessmentDeleteApproval";
 import { commentShortened } from "./functions";
 
 const BulkActionButtons = ({ product }: any) => {
     return (
-        <Fragment>
-            {(!product || (product && product.permissions.includes(PERMISSION_OBSERVATION_LOG_APPROVAL))) && (
+        (!product || (product && product.permissions.includes(PERMISSION_OBSERVATION_LOG_APPROVAL))) && (
+            <Fragment>
                 <AssessmentBulkApproval />
-            )}
-        </Fragment>
+                <AssessmentDeleteApproval />
+            </Fragment>
+        )
     );
 };
 
@@ -170,9 +172,11 @@ const ObservationLogApprovalList = ({ product }: ObservationLogApprovalListProps
                         size={getSettingListSize()}
                         sx={{ width: "100%" }}
                         bulkActionButtons={
-                            (!product ||
-                                (product && product.permissions.includes(PERMISSION_OBSERVATION_LOG_APPROVAL))) && (
+                            !product ||
+                            (product && product.permissions.includes(PERMISSION_OBSERVATION_LOG_APPROVAL)) ? (
                                 <BulkActionButtons product={product} />
+                            ) : (
+                                false
                             )
                         }
                         rowClick={ShowObservationLogs}
