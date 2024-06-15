@@ -119,6 +119,16 @@ const ObservationLogComponent = () => {
                                     />
                                 </Labeled>
                             )}
+                            {observation_log.vex_statement != null && (
+                                <Labeled label="VEX statement">
+                                    <ReferenceField
+                                        source="vex_statement"
+                                        reference="vex/vex_statements"
+                                        label="VEX statement"
+                                        link="show"
+                                    />
+                                </Labeled>
+                            )}
                             <Labeled label="Comment">
                                 <MarkdownField content={observation_log.comment} />
                             </Labeled>

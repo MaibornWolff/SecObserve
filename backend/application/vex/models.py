@@ -4,6 +4,7 @@ from django.db.models import (
     CharField,
     DateTimeField,
     ForeignKey,
+    Index,
     IntegerField,
     Model,
     TextField,
@@ -129,3 +130,8 @@ class VEX_Statement(Model):
     remediation = CharField(max_length=255, blank=True)
     product_purl = CharField(max_length=255, blank=True)
     component_purl = CharField(max_length=255, blank=True)
+
+    class Meta:
+        indexes = [
+            Index(fields=["product_purl"]),
+        ]

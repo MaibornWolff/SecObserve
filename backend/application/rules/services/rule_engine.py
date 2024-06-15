@@ -211,7 +211,6 @@ class Rule_Engine:
             Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
         )
 
-    # Write observation and observation log if status or severity has been changed
     def _write_observation_log_no_rule(
         self,
         observation: Observation,

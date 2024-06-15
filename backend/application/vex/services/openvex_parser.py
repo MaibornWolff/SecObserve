@@ -1,7 +1,10 @@
+from packageurl import PackageURL
 from rest_framework.exceptions import ValidationError
 
 from application.core.api.serializers_helpers import validate_purl
+from application.core.models import Branch, Observation, Product
 from application.vex.models import VEX_Document, VEX_Statement
+from application.vex.services.vex_engine import apply_vex_statement_for_observation
 from application.vex.types import OpenVEX_Status, VEX_Document_Type, VEX_Status
 
 
@@ -45,6 +48,9 @@ def parse_openvex_data(data: dict) -> None:
         raise ValidationError("OpenVEX document doesn't contain any statements")
     if not isinstance(statements, list):
         raise ValidationError("statements is not a list")
+
+    product_purls = set()
+    vex_statements = set()
 
     statement_counter = 0
     for statement in statements:
@@ -96,7 +102,7 @@ def parse_openvex_data(data: dict) -> None:
 
             components = product.get("subcomponents", [])
             if not components:
-                VEX_Statement.objects.create(
+                vex_statement = VEX_Statement(
                     document=openvex_document,
                     vulnerability_id=vulnerability_id,
                     description=description,
@@ -106,6 +112,9 @@ def parse_openvex_data(data: dict) -> None:
                     remediation=remediation,
                     product_purl=product_purl,
                 )
+                vex_statement.save()
+                vex_statements.add(vex_statement)
+                product_purls.add(product_purl)
             elif not isinstance(components, list):
                 raise ValidationError(
                     f"subcomponents[{statement_counter}][{product_counter}] is not a list"
@@ -113,7 +122,7 @@ def parse_openvex_data(data: dict) -> None:
 
             component_counter = 0
             for component in components:
-                if not isinstance(product, dict):
+                if not isinstance(component, dict):
                     raise ValidationError(
                         f"subcomponent[{statement_counter}][{product_counter}][{component_counter}] is not a dictionary"
                     )
@@ -121,10 +130,10 @@ def parse_openvex_data(data: dict) -> None:
                 if component_purl:
                     validate_purl(component_purl)
                 else:
-                    component_purl = product.get("@id", "")
+                    component_purl = component.get("@id", "")
                     validate_purl(component_purl)
 
-                VEX_Statement.objects.create(
+                vex_statement = VEX_Statement(
                     document=openvex_document,
                     vulnerability_id=vulnerability_id,
                     description=description,
@@ -135,7 +144,32 @@ def parse_openvex_data(data: dict) -> None:
                     product_purl=product_purl,
                     component_purl=component_purl,
                 )
+                vex_statement.save()
+                vex_statements.add(vex_statement)
+                product_purls.add(product_purl)
 
                 component_counter += 1
             product_counter += 1
         statement_counter += 1
+
+    for product_purl in product_purls:
+        try:
+            purl = PackageURL.from_string(product_purl)
+        except ValueError:
+            continue
+
+        search_purl = PackageURL(
+            type=purl.type, namespace=purl.namespace, name=purl.name
+        ).to_string()
+
+        products = set(Product.objects.filter(purl__startswith=search_purl))
+        branches = Branch.objects.filter(purl__startswith=search_purl)
+        for branch in branches:
+            products.add(branch.product)
+
+        for product in products:
+            observations = Observation.objects.filter(product=product)
+            for observation in observations:
+                apply_vex_statement_for_observation(
+                    vex_statement, observation, observation.vex_statement
+                )

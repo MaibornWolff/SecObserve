@@ -47,6 +47,7 @@ from application.issue_tracker.services.issue_tracker import (
     push_observations_to_issue_tracker,
 )
 from application.rules.services.rule_engine import Rule_Engine
+from application.vex.services.vex_engine import VEX_Engine
 
 
 @dataclass
@@ -201,6 +202,7 @@ def _process_data(import_parameters: ImportParameters) -> Tuple[int, int, int, s
     scanner = ""
 
     rule_engine = Rule_Engine(product=import_parameters.product)
+    vex_engine = VEX_Engine(import_parameters.product, import_parameters.branch)
 
     # Read current observations for the same vulnerability check, to find updated and resolved observations
     observations_before: dict[str, Observation] = {}
@@ -238,6 +240,7 @@ def _process_data(import_parameters: ImportParameters) -> Tuple[int, int, int, s
                 _process_current_observation(imported_observation, observation_before)
 
                 rule_engine.apply_rules_for_observation(observation_before)
+                vex_engine.apply_vex_statements_for_observation(observation_before)
 
                 if observation_before.current_status == Status.STATUS_OPEN:
                     observations_updated += 1
@@ -251,6 +254,7 @@ def _process_data(import_parameters: ImportParameters) -> Tuple[int, int, int, s
                 _process_new_observation(imported_observation)
 
                 rule_engine.apply_rules_for_observation(imported_observation)
+                vex_engine.apply_vex_statements_for_observation(imported_observation)
 
                 if imported_observation.current_status == Status.STATUS_OPEN:
                     observations_new += 1

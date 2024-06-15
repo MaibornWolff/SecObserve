@@ -75,6 +75,14 @@ const MetaData = () => {
                                 link="show"
                             />
                         )}
+                        {observation.vex_statement != null && (
+                            <ReferenceField
+                                source="vex_statement"
+                                reference="vex/vex_statements"
+                                label="VEX statement"
+                                link="show"
+                            />
+                        )}
                         {observation.issue_tracker_issue_id != "" && (
                             <Labeled label="Issue">
                                 <TextUrlField

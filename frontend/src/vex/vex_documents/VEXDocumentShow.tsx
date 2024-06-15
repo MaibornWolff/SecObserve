@@ -1,6 +1,6 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
-import { ChipField, DateField, Labeled, PrevNextButtons, Show, TextField, TopToolbar, WithRecord } from "react-admin";
+import { ChipField, DateField, Labeled, PrevNextButtons, Show, TextField, TopToolbar, WithRecord, DeleteButton } from "react-admin";
 
 import { useStyles } from "../../commons/layout/themes";
 import VEXStatementEmbeddedList from "../vex_statements/VEXStatementEmbeddedList";
@@ -14,7 +14,8 @@ const ShowActions = () => {
                     sort={{ field: "document_id", order: "ASC" }}
                     storeKey="vex_documents.list"
                 />
-            </Stack>
+                <DeleteButton mutationMode="pessimistic" />
+                </Stack>
         </TopToolbar>
     );
 };
