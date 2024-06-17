@@ -94,15 +94,17 @@ const Menu = ({ dense = false }: MenuProps) => {
                             leftIcon={<openvex.icon />}
                             dense={dense}
                         />
-                        {is_superuser() && (<MenuItemLink
-                            to="/vex/vex_documents"
-                            state={{ _scrollToTop: true }}
-                            primaryText="VEX Documents"
-                            leftIcon={<vex_documents.icon />}
-                            dense={dense}
-                            onPointerEnterCapture={undefined}
-                            onPointerLeaveCapture={undefined}
-                        />)}
+                        {is_superuser() && (
+                            <MenuItemLink
+                                to="/vex/vex_documents"
+                                state={{ _scrollToTop: true }}
+                                primaryText="VEX Documents"
+                                leftIcon={<vex_documents.icon />}
+                                dense={dense}
+                                onPointerEnterCapture={undefined}
+                                onPointerLeaveCapture={undefined}
+                            />
+                        )}
                     </SubMenu>
                 )}
                 <SubMenu

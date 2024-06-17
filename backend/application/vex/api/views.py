@@ -12,14 +12,12 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.mixins import DestroyModelMixin, ListModelMixin, RetrieveModelMixin
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_204_NO_CONTENT
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from application.commons.api.permissions import UserHasSuperuserPermission
-from application.core.models import Observation
 from application.vex.api.filters import (
     CSAFBranchFilter,
     CSAFFilter,
@@ -85,7 +83,6 @@ from application.vex.services.openvex_generator import (
     create_openvex_document,
     update_openvex_document,
 )
-from application.vex.services.vex_engine import write_observation_log_no_vex_statement
 from application.vex.services.vex_import import import_vex
 
 VEX_TYPE_CSAF = "csaf"
@@ -356,16 +353,6 @@ class VEXDocumentViewSet(
 
     def get_queryset(self):
         return get_vex_documents()
-
-    def destroy(self, request: Request, *args: Any, **kwargs: Any) -> Response:
-        instance: VEX_Document = self.get_object()
-        vex_statements = VEX_Statement.objects.filter(document=instance)
-        for vex_statement in vex_statements:
-            observations = Observation.objects.filter(vex_statement=vex_statement)
-            for observation in observations:
-                write_observation_log_no_vex_statement(observation, vex_statement)
-
-        return super().destroy(request, *args, **kwargs)
 
 
 class VEXStatementViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):

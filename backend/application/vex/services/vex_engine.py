@@ -65,7 +65,7 @@ class VEX_Engine:
 def apply_vex_statement_for_observation(
     vex_statement: VEX_Statement,
     observation: Observation,
-    previous_vex_statement: VEX_Statement,
+    previous_vex_statement: Optional[VEX_Statement],
 ) -> bool:
     if vex_statement.vulnerability_id == observation.vulnerability_id and _match_purls(
         vex_statement, observation
@@ -138,33 +138,52 @@ def _match_purl(
     except ValueError:
         return False
 
-    if (
+    if (  # pylint: disable=too-many-boolean-expressions
         vex_purl.type != observation_purl.type
         or vex_purl.namespace != observation_purl.namespace
         or vex_purl.name != observation_purl.name
-    ):
-        return False
-
-    if (
-        (
+        or (
             vex_purl.version
             and observation_purl.version
             and vex_purl.version != observation_purl.version
-        )
-        or (
-            vex_purl.qualifiers
-            and observation_purl.qualifiers
-            and vex_purl.qualifiers != observation_purl.qualifiers
         )
         or (
             vex_purl.subpath
             and observation_purl.subpath
             and vex_purl.subpath != observation_purl.subpath
         )
+        or not _check_qualifiers(vex_purl.qualifiers, observation_purl.qualifiers)
     ):
         return False
 
     return True
+
+
+def _check_qualifiers(
+    vex_qualifiers: Optional[str | dict], observation_qualifiers: Optional[str | dict]
+) -> bool:
+    if not vex_qualifiers and not observation_qualifiers:
+        return True
+
+    if not vex_qualifiers or not observation_qualifiers:
+        return True
+
+    if isinstance(vex_qualifiers, str) and isinstance(observation_qualifiers, str):
+        return vex_qualifiers == observation_qualifiers
+
+    if isinstance(vex_qualifiers, dict) and isinstance(observation_qualifiers, dict):
+        for key, value in vex_qualifiers.items():
+            if (
+                observation_qualifiers.get(key) is not None
+                and observation_qualifiers.get(key) != value
+            ):
+                return False
+        for key, value in observation_qualifiers.items():
+            if vex_qualifiers.get(key) is not None and vex_qualifiers.get(key) != value:
+                return False
+        return True
+
+    return False
 
 
 def _get_secobserve_status(vex_status: str) -> str:

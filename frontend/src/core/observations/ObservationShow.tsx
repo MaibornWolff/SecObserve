@@ -135,7 +135,9 @@ const ObservationShowComponent = () => {
                                     <ChipField source="current_status" label="Status" />
                                 </Labeled>
                                 {observation.parser_status != "" &&
-                                    (observation.rule_status != "" || observation.assessment_status != "" || observation.vex_status != "") && (
+                                    (observation.rule_status != "" ||
+                                        observation.assessment_status != "" ||
+                                        observation.vex_status != "") && (
                                         <Labeled>
                                             <TextField source="parser_status" />
                                         </Labeled>

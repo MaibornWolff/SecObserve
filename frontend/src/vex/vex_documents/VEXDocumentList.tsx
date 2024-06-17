@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { Datagrid, DateField, List, TextField, TextInput, TopToolbar, BulkDeleteButton } from "react-admin";
+import { BulkDeleteButton, Datagrid, DateField, List, TextField, TextInput, TopToolbar } from "react-admin";
 
 import vex_documents from ".";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
@@ -38,7 +38,7 @@ const VEXDocumentList = () => {
                 storeKey="vex_documents.list"
                 empty={false}
             >
-                <Datagrid size={getSettingListSize()} rowClick="show"bulkActionButtons={<BulkActionButtons />}>
+                <Datagrid size={getSettingListSize()} rowClick="show" bulkActionButtons={<BulkActionButtons />}>
                     <TextField source="type" />
                     <TextField source="document_id" label="Document ID" />
                     <TextField source="version" />
