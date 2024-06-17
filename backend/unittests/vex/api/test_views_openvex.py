@@ -27,8 +27,8 @@ class TestOpenVEX(TestCase):
     @patch(
         "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
     )
-    @patch("application.vex.services.openvex.user_has_permission_or_403")
-    @patch("application.vex.services.openvex.get_current_user")
+    @patch("application.vex.services.openvex_generator.user_has_permission_or_403")
+    @patch("application.vex.services.openvex_generator.get_current_user")
     @patch("application.core.queries.observation.get_current_user")
     def test_openvex_document_product_no_branch(
         self,
@@ -182,8 +182,8 @@ class TestOpenVEX(TestCase):
     @patch(
         "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
     )
-    @patch("application.vex.services.openvex.user_has_permission_or_403")
-    @patch("application.vex.services.openvex.get_current_user")
+    @patch("application.vex.services.openvex_generator.user_has_permission_or_403")
+    @patch("application.vex.services.openvex_generator.get_current_user")
     @patch("application.core.queries.observation.get_current_user")
     def test_openvex_document_product_branches(
         self,
@@ -255,8 +255,8 @@ class TestOpenVEX(TestCase):
     @patch(
         "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
     )
-    @patch("application.vex.services.openvex.user_has_permission_or_403")
-    @patch("application.vex.services.openvex.get_current_user")
+    @patch("application.vex.services.openvex_generator.user_has_permission_or_403")
+    @patch("application.vex.services.openvex_generator.get_current_user")
     @patch("application.core.queries.observation.get_current_user")
     def test_openvex_document_product_given_branch(
         self,
@@ -330,8 +330,8 @@ class TestOpenVEX(TestCase):
     @patch(
         "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
     )
-    @patch("application.vex.services.openvex.user_has_permission_or_403")
-    @patch("application.vex.services.openvex.get_current_user")
+    @patch("application.vex.services.openvex_generator.user_has_permission_or_403")
+    @patch("application.vex.services.openvex_generator.get_current_user")
     @patch("application.core.queries.observation.get_current_user")
     def test_openvex_document_given_vulnerability(
         self,
