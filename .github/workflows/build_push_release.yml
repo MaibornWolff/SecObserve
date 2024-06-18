@@ -36,7 +36,7 @@ jobs:
         run: echo "CREATED=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
       -
         name: Build and push backend
-        uses: docker/build-push-action@c382f710d39a5bb4e430307530a720f50c2d3318 # v6.0.0
+        uses: docker/build-push-action@94f8f8c2eec4bc3f1d78c1755580779804cb87b2 # v6.0.1
         with:
           context: .
           file: ./docker/backend/prod/django/Dockerfile
@@ -50,7 +50,7 @@ jobs:
             VERSION=${{ github.event.inputs.release }}
       -
         name: Build and push frontend
-        uses: docker/build-push-action@c382f710d39a5bb4e430307530a720f50c2d3318 # v6.0.0
+        uses: docker/build-push-action@94f8f8c2eec4bc3f1d78c1755580779804cb87b2 # v6.0.1
         with:
           context: .
           file: ./docker/frontend/prod/Dockerfile
