@@ -98,7 +98,7 @@ const Menu = ({ dense = false }: MenuProps) => {
                             <MenuItemLink
                                 to="/vex/vex_documents"
                                 state={{ _scrollToTop: true }}
-                                primaryText="VEX Documents"
+                                primaryText="VEX documents"
                                 leftIcon={<vex_documents.icon />}
                                 dense={dense}
                                 onPointerEnterCapture={undefined}

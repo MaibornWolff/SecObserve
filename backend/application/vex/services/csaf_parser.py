@@ -20,13 +20,15 @@ class Product_Component:
     component_purl: str = ""
 
 
-def parse_csaf_data(data: dict) -> None:  # pylint: disable=unused-argument
+def parse_csaf_data(data: dict) -> None:
     csaf_document = _create_csaf_document(data)
 
     products: dict[str, str] = {}
     product_tree: dict = data.get("product_tree", {})
-    branches = product_tree.get("branches", [])
-    _find_products_in_branches(branches, products)
+    _find_products_in_branches(product_tree.get("branches", []), products)
+    _find_products_in_full_product_names(
+        product_tree.get("full_product_names", []), products
+    )
 
     relationships: dict[str, Relationship] = _process_relationships(product_tree)
 
@@ -41,10 +43,10 @@ def _create_csaf_document(data: dict) -> VEX_Document:
     namespace = data.get("document", {}).get("publisher", {}).get("namespace")
     if not namespace:
         raise ValidationError("document/publisher/namespace is missing")
-    id = data.get("document", {}).get("tracking", {}).get("id")
-    if not id:
+    tracking_id = data.get("document", {}).get("tracking", {}).get("id")
+    if not tracking_id:
         raise ValidationError("document/tracking/id is missing")
-    document_id = f"{namespace}/{id}"
+    document_id = f"{namespace}/{tracking_id}"
     version = data.get("document", {}).get("tracking", {}).get("version")
     if not version:
         raise ValidationError("document/tracking/version is missing")
@@ -82,17 +84,28 @@ def _create_csaf_document(data: dict) -> VEX_Document:
 
 
 def _find_products_in_branches(branches: list, products: dict[str, str]) -> None:
-    for element in branches:
-        branches = element.get("branches")
+    for branch in branches:
+        branches = branch.get("branches")
         if branches:
             _find_products_in_branches(branches, products)
-        product = element.get("product")
+        product = branch.get("product")
         if product:
-            id = product.get("product_id")
-            purl = product.get("product_identification_helper", {}).get("purl")
-            if id and purl:
-                validate_purl(purl)
-                products[id] = purl
+            _process_product(product, products)
+
+
+def _find_products_in_full_product_names(
+    full_product_names: list, products: dict[str, str]
+) -> None:
+    for product in full_product_names:
+        _process_product(product, products)
+
+
+def _process_product(product: dict, products: dict[str, str]) -> None:
+    product_id = product.get("product_id")
+    purl = product.get("product_identification_helper", {}).get("purl")
+    if product_id and purl:
+        validate_purl(purl)
+        products[product_id] = purl
 
 
 def _process_relationships(product_tree: dict) -> dict[str, Relationship]:
