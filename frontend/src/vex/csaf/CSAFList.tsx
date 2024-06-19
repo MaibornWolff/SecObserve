@@ -38,7 +38,7 @@ const ListActions = () => (
 const CSAFList = () => {
     return (
         <Fragment>
-            <ListHeader icon={csaf.icon} title="VEX / CSAF" />
+            <ListHeader icon={csaf.icon} title="Exported CSAF documents" />
             <List
                 perPage={25}
                 pagination={<CustomPagination />}

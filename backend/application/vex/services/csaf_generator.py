@@ -11,11 +11,15 @@ from application.commons.services.global_request import get_current_user
 from application.core.models import Branch, Product
 from application.vex.models import CSAF, CSAF_Branch, CSAF_Revision, CSAF_Vulnerability
 from application.vex.queries.csaf import get_csaf_by_document_id
-from application.vex.services.csaf_component import append_component_to_product_tree
-from application.vex.services.csaf_document import create_csaf_root
-from application.vex.services.csaf_product import append_product_to_product_tree
-from application.vex.services.csaf_remediation import set_remediation
-from application.vex.services.csaf_vulnerability import (
+from application.vex.services.csaf_generator_component import (
+    append_component_to_product_tree,
+)
+from application.vex.services.csaf_generator_document import create_csaf_root
+from application.vex.services.csaf_generator_product import (
+    append_product_to_product_tree,
+)
+from application.vex.services.csaf_generator_remediation import set_remediation
+from application.vex.services.csaf_generator_vulnerability import (
     create_vulnerability,
     remove_conflicting_product_status,
     set_flag_or_threat,

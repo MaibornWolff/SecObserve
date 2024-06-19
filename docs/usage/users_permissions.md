@@ -31,14 +31,18 @@ There are some general permissions based on the user's type:
 | Edit General Rules          | -        | -        | X         |
 | Delete General Rules        | -        | -        | X         |
 |                             |          |          |           |
-| Change own password         | X        | X        | X         |
-| Change all passwords        | -        | -        | X         |
+| Change own password ^1)^    | X        | X        | X         |
+| Change all passwords  ^1)^  | -        | -        | X         |
 | Manage users                | -        | -        | X         |
 | Manage authorization groups | -        | -        | X         |
 |                             |          |          |           |
+| Import VEX documents        | -        | -        | X         |
+| Manage VEX counters         | -        | -        | X         |
+|                             |          |          |           |
 | Manage Settings             | -        | -        | X         |
 | Reset JWT secret            | -        | -        | X         |
-| Manage VEX Counters         | -        | -        | X         |
+
+**^1)^** Not for OIDC users
 
 
 ## Authorization groups

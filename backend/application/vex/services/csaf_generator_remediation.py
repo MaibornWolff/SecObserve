@@ -1,5 +1,5 @@
 from application.core.models import Observation
-from application.vex.services.csaf_helpers import (
+from application.vex.services.csaf_generator_helpers import (
     get_product_or_relationship_id,
     map_status,
 )
@@ -7,8 +7,8 @@ from application.vex.types import CSAF_Status, CSAFRemediation, CSAFVulnerabilit
 
 
 def set_remediation(vulnerability: CSAFVulnerability, observation: Observation):
-    csaf_status = map_status(observation.current_status)
-    if csaf_status == CSAF_Status.CSAF_STATUS_AFFECTED:
+    vex_status = map_status(observation.current_status)
+    if vex_status == CSAF_Status.CSAF_STATUS_AFFECTED:
         product_or_relationship_id = get_product_or_relationship_id(observation)
         category = "mitigation" if observation.recommendation else "none_available"
         details = (

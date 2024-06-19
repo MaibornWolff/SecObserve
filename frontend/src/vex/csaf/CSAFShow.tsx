@@ -41,7 +41,7 @@ const CSAFShow = () => {
             <WithRecord
                 render={(csaf) => (
                     <SimpleShowLayout>
-                        <Typography variant="h6">CSAF</Typography>
+                        <Typography variant="h6">Exported CSAF document</Typography>
                         {csaf && csaf.product_data && csaf.product_data.name && (
                             <ReferenceField source="product" reference="products" link="show" />
                         )}

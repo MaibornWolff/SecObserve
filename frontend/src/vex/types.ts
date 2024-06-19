@@ -55,3 +55,10 @@ export interface OpenVEX extends RaRecord {
     timestamp: string;
     last_updated: string;
 }
+
+export const VEX_STATUS_CHOICES = [
+    { id: "not_affected", name: "not_affected" },
+    { id: "affected", name: "affected" },
+    { id: "fixed", name: "fixed" },
+    { id: "under_investigation", name: "under_investigation" },
+];
