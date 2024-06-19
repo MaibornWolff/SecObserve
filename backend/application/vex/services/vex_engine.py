@@ -265,3 +265,30 @@ def write_observation_log_no_vex_statement(
         log_vex_justification,
         Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
     )
+
+
+def apply_vex_statements_after_import(
+    product_purls: set[str], vex_statements: set[VEX_Statement]
+) -> None:
+    for product_purl in product_purls:
+        try:
+            purl = PackageURL.from_string(product_purl)
+        except ValueError:
+            continue
+
+        search_purl = PackageURL(
+            type=purl.type, namespace=purl.namespace, name=purl.name
+        ).to_string()
+
+        products = set(Product.objects.filter(purl__startswith=search_purl))
+        branches = Branch.objects.filter(purl__startswith=search_purl)
+        for branch in branches:
+            products.add(branch.product)
+
+        for product in products:
+            observations = Observation.objects.filter(product=product)
+            for observation in observations:
+                for vex_statement in vex_statements:
+                    apply_vex_statement_for_observation(
+                        vex_statement, observation, observation.vex_statement
+                    )

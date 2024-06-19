@@ -1,12 +1,10 @@
 from dataclasses import dataclass
 
-from packageurl import PackageURL
 from rest_framework.exceptions import ValidationError
 
 from application.core.api.serializers_helpers import validate_purl
-from application.core.models import Branch, Observation, Product
 from application.vex.models import VEX_Document, VEX_Statement
-from application.vex.services.vex_engine import apply_vex_statement_for_observation
+from application.vex.services.vex_engine import apply_vex_statements_after_import
 from application.vex.types import OpenVEX_Status, VEX_Document_Type, VEX_Status
 
 
@@ -25,7 +23,7 @@ def parse_openvex_data(data: dict) -> None:
 
     product_purls, vex_statements = _process_vex_statements(data, openvex_document)
 
-    _apply_vex_statements(product_purls, vex_statements)
+    apply_vex_statements_after_import(product_purls, vex_statements)
 
 
 def _create_openvex_document(data: dict) -> VEX_Document:
@@ -131,6 +129,7 @@ def _process_vex_statements(
         )
 
         statement_counter += 1
+
     return product_purls, vex_statements
 
 
@@ -213,30 +212,3 @@ def _process_products(
 
             component_counter += 1
         product_counter += 1
-
-
-def _apply_vex_statements(
-    product_purls: set[str], vex_statements: set[VEX_Statement]
-) -> None:
-    for product_purl in product_purls:
-        try:
-            purl = PackageURL.from_string(product_purl)
-        except ValueError:
-            continue
-
-        search_purl = PackageURL(
-            type=purl.type, namespace=purl.namespace, name=purl.name
-        ).to_string()
-
-        products = set(Product.objects.filter(purl__startswith=search_purl))
-        branches = Branch.objects.filter(purl__startswith=search_purl)
-        for branch in branches:
-            products.add(branch.product)
-
-        for product in products:
-            observations = Observation.objects.filter(product=product)
-            for observation in observations:
-                for vex_statement in vex_statements:
-                    apply_vex_statement_for_observation(
-                        vex_statement, observation, observation.vex_statement
-                    )
