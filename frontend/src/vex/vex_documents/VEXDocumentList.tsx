@@ -27,7 +27,7 @@ const BulkActionButtons = () => (
 const VEXDocumentList = () => {
     return (
         <Fragment>
-            <ListHeader icon={vex_documents.icon} title="Imported VEX documents" />
+            <ListHeader icon={vex_documents.icon} title="Imported VEX documents (experimental)" />
             <List
                 perPage={25}
                 pagination={<CustomPagination />}
