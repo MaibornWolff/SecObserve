@@ -40,7 +40,7 @@ After selecting the entry of either a CSAF or OpenVEX document from the respecti
 !!! note "Experimental feature"
     Importing VEX documents is currently marked as experimental, because although a good amount of manual testing has been done, there is not a set of comprehensive, automated tests yet.
 
-VEX documents can be imported in CSAF or OpenVEX format. After importing the file, the document will be parsed and the VEX statements will be applied to the referenced observations.
+VEX documents can be imported in CSAF or OpenVEX format. After importing the file, the document will be parsed and the VEX statements will be applied to the referenced observations. A user needs to be `superuser` to import VEX documents. 
 
 When observations are imported, the VEX statements will be applied to the referenced observations as well.
 
