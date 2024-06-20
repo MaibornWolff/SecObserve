@@ -1142,13 +1142,13 @@ test = ["MarkupSafe (>=0.23)", "PyYAML (>=5.1)", "docutils (>=0.12)", "flaky", "
 
 [[package]]
 name = "jsonpickle"
-version = "3.2.1"
+version = "3.2.2"
 description = "Python library for serializing arbitrary object graphs into JSON"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "jsonpickle-3.2.1-py3-none-any.whl", hash = "sha256:ec291e4719674dd35d390fbdb521ac6517fbe9f541d361c8bffc8131133b1661"},
-    {file = "jsonpickle-3.2.1.tar.gz", hash = "sha256:4b6d7640974199f7acf9035295365b5a1a71a91109effa15ba170fbb48cf871c"},
+    {file = "jsonpickle-3.2.2-py3-none-any.whl", hash = "sha256:87cd82d237fd72c5a34970e7222dddc0accc13fddf49af84111887ed9a9445aa"},
+    {file = "jsonpickle-3.2.2.tar.gz", hash = "sha256:d425fd2b8afe9f5d7d57205153403fbf897782204437882a477e8eed60930f8c"},
 ]
 
 [package.extras]
@@ -2426,4 +2426,4 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">= 3.10, < 3.13"
-content-hash = "c824a12c0cc760315408b6cae6ca0b33906c8797e6bcfd51ce287b1d0cc055b2"
+content-hash = "86cfb6058a6ca080c59aeb61bbf9ade984696f1affdf1dd59a39bc67dbb5a931"
