@@ -101,8 +101,6 @@ const Menu = ({ dense = false }: MenuProps) => {
                                 primaryText="VEX documents"
                                 leftIcon={<vex_documents.icon />}
                                 dense={dense}
-                                onPointerEnterCapture={undefined}
-                                onPointerLeaveCapture={undefined}
                             />
                         )}
                     </SubMenu>
