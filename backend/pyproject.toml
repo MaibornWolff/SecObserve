@@ -55,7 +55,7 @@ jira = "3.8.0"  # https://github.com/pycontribs/jira
 inflect = "7.2.1"  # https://github.com/jaraco/inflect
 validators = "0.28.3"  # https://github.com/python-validators/validators
 cvss = "3.1"  # https://github.com/RedHatProductSecurity/cvss
-jsonpickle = "3.2.1"  # https://github.com/jsonpickle/jsonpickle
+jsonpickle = "3.2.2"  # https://github.com/jsonpickle/jsonpickle
 
 [tool.poetry.group.dev.dependencies]
 Werkzeug = { version = "3.0.3", extras = ["watchdog"] }  # https://github.com/pallets/werkzeug
