@@ -100,6 +100,7 @@ def format_exception_message(exc):
 def _format_protected_foreign_keys(message: str) -> str:
     results = re.findall(r"'[a-zA-Z\.\_]*'", message)
     if len(results) >= 2:
+        first_result = ""
         second_results = []
         p = inflect.engine()
         for i, result in enumerate(results):

@@ -18,6 +18,8 @@ def delete_inactive_branches() -> None:
 
 def delete_inactive_branches_for_product(product: Product) -> None:
     product_group_specific = False
+    keep_inactive_days = None
+    exempt_branches = None
     if product.product_group:
         product_group: Product = product.product_group
         if product_group.repository_branch_housekeeping_active is False:
