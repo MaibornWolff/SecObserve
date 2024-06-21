@@ -997,23 +997,22 @@ files = [
 
 [[package]]
 name = "inflect"
-version = "7.2.1"
+version = "7.3.0"
 description = "Correctly generate plurals, singular nouns, ordinals, indefinite articles"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "inflect-7.2.1-py3-none-any.whl", hash = "sha256:f4ecaffaeccbc746251d973c0674c47d63b262fdad63f651fb98e878eee1f449"},
-    {file = "inflect-7.2.1.tar.gz", hash = "sha256:a7ce5e23d6798734f256c1ad9ed52186b8ec276f10b18ce3d3ecb19c21eb6cb6"},
+    {file = "inflect-7.3.0-py3-none-any.whl", hash = "sha256:91f689dae31f9a0c28e6275f6161a0d39c7316524b71c5b6978920c7d362ce97"},
+    {file = "inflect-7.3.0.tar.gz", hash = "sha256:27264bb8992cab2be3c50772ecf7a79492c6f95e16e15002e6023001d2d639c2"},
 ]
 
 [package.dependencies]
 more-itertools = "*"
 typeguard = ">=4.0.1"
-typing-extensions = "*"
 
 [package.extras]
-docs = ["furo", "jaraco.packaging (>=9.3)", "jaraco.tidelift (>=1.4)", "rst.linker (>=1.9)", "sphinx (>=3.5)", "sphinx-lint"]
-testing = ["pygments", "pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=2.2)", "pytest-mypy", "pytest-ruff (>=0.2.1)"]
+doc = ["furo", "jaraco.packaging (>=9.3)", "jaraco.tidelift (>=1.4)", "rst.linker (>=1.9)", "sphinx (>=3.5)", "sphinx-lint"]
+test = ["pygments", "pytest (>=6,!=8.1.*)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=2.2)", "pytest-mypy", "pytest-ruff (>=0.2.1)"]
 
 [[package]]
 name = "inflection"
@@ -2426,4 +2425,4 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">= 3.10, < 3.13"
-content-hash = "86cfb6058a6ca080c59aeb61bbf9ade984696f1affdf1dd59a39bc67dbb5a931"
+content-hash = "f107ed299b97a22f633a139f36eebbb771bbe05375df3d60bcc5e0dc040b438d"
