@@ -37,7 +37,7 @@ const OpenVEXShow = () => {
             <WithRecord
                 render={(openvex) => (
                     <SimpleShowLayout>
-                        <Typography variant="h6">OpenVEX</Typography>
+                        <Typography variant="h6">Exported OpenVEX document</Typography>
                         {openvex && openvex.product_data && openvex.product_data.name && (
                             <ReferenceField source="product" reference="products" link="show" />
                         )}

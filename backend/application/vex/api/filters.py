@@ -8,6 +8,8 @@ from application.vex.models import (
     OpenVEX_Branch,
     OpenVEX_Vulnerability,
     VEX_Counter,
+    VEX_Document,
+    VEX_Statement,
 )
 
 
@@ -133,3 +135,47 @@ class VEXCounterFilter(FilterSet):
             "document_id_prefix",
             "year",
         ]
+
+
+class VEXDocumentFilter(FilterSet):
+    document_id = CharFilter(
+        field_name="document_id", lookup_expr="icontains", distinct=True
+    )
+    author = CharFilter(field_name="author", lookup_expr="icontains", distinct=True)
+    ordering = OrderingFilter(
+        # tuple-mapping retains order
+        fields=(
+            ("type", "type"),
+            ("document_id", "document_id"),
+            ("version", "version"),
+            ("current_release_date", "current_release_date"),
+            ("initial_release_date", "initial_release_date"),
+            ("author", "author"),
+            ("role", "role"),
+        )
+    )
+
+    class Meta:
+        model = VEX_Document
+        fields = "__all__"
+
+
+class VEXStatementFilter(FilterSet):
+    vulnerability_id = CharFilter(
+        field_name="vulnerability_id", lookup_expr="icontains", distinct=True
+    )
+
+    ordering = OrderingFilter(
+        # tuple-mapping retains order
+        fields=(
+            ("vulnerability_id", "vulnerability_id"),
+            ("status", "status"),
+            ("justification", "justification"),
+            ("impact", "impact"),
+            ("remediation", "remediation"),
+        )
+    )
+
+    class Meta:
+        model = VEX_Statement
+        fields = "__all__"

@@ -96,6 +96,9 @@ def get_current_status(observation) -> str:
     if observation.rule_status:
         return observation.rule_status
 
+    if observation.vex_status:
+        return observation.vex_status
+
     if observation.parser_status:
         return observation.parser_status
 
@@ -108,6 +111,9 @@ def get_current_vex_justification(observation) -> str:
 
     if observation.rule_vex_justification:
         return observation.rule_vex_justification
+
+    if observation.vex_vex_justification:
+        return observation.vex_vex_justification
 
     if observation.parser_vex_justification:
         return observation.parser_vex_justification
@@ -353,6 +359,8 @@ def normalize_status(observation):
         observation.rule_status = ""
     if observation.parser_status is None:
         observation.parser_status = ""
+    if observation.vex_status is None:
+        observation.vex_status = ""
 
     observation.current_status = get_current_status(observation)
 
@@ -366,6 +374,8 @@ def normalize_vex_justification(observation):
         observation.rule_vex_justification = ""
     if observation.parser_vex_justification is None:
         observation.parser_vex_justification = ""
+    if observation.vex_vex_justification is None:
+        observation.vex_vex_justification = ""
 
     observation.current_vex_justification = get_current_vex_justification(observation)
 

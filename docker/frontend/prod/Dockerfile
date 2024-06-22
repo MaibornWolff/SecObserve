@@ -1,5 +1,5 @@
 # build environment
-FROM node:20.14.0-alpine3.19@sha256:eb17a0816c6475000def8bf0dd0a85bc59340235eb9fbb0aff158b4c9a3c7d6f as build
+FROM node:20.14.0-alpine3.19@sha256:acedb9b82ab6964a04329bf543c1d4692fbc75d255048c1665db90ab5026f753 as build
 
 ARG VERSION=unkown
 
@@ -18,7 +18,7 @@ RUN sed -i 's/version_unkown/'"${VERSION}"'/g' ./src/commons/about/About.tsx
 RUN npm run build
 
 # production environment
-FROM nginx:stable-alpine-slim@sha256:3df0d85b2e46d4195e7436c22694ef65944c48624282292cadfbf58ee0ad34ce
+FROM nginx:stable-alpine-slim@sha256:ce01dacf330fdcbc3c93926291ab027396e7e9680a4180318b06e86525d1aa9f
 
 USER root
 

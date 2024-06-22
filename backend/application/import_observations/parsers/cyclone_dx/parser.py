@@ -195,6 +195,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         ratings = vulnerability.get("ratings", [])
         if ratings:
             cvss3_score = 0
+            cvss3_vector = None
             for rating in ratings:
                 method = rating.get("method")
                 if method and method.lower().startswith("cvssv3"):

@@ -16,7 +16,7 @@ jobs:
     steps:
       -
         name: Checkout
-        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           ref: 'v${{ github.event.inputs.release }}'
       -
@@ -36,7 +36,7 @@ jobs:
         run: echo "CREATED=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
       -
         name: Build and push backend
-        uses: docker/build-push-action@2cdde995de11925a030ce8070c3d77a52ffcf1c0 # v5.3.0
+        uses: docker/build-push-action@31159d49c0d4756269a0940a750801a1ea5d7003 # v6.1.0
         with:
           context: .
           file: ./docker/backend/prod/django/Dockerfile
@@ -50,7 +50,7 @@ jobs:
             VERSION=${{ github.event.inputs.release }}
       -
         name: Build and push frontend
-        uses: docker/build-push-action@2cdde995de11925a030ce8070c3d77a52ffcf1c0 # v5.3.0
+        uses: docker/build-push-action@31159d49c0d4756269a0940a750801a1ea5d7003 # v6.1.0
         with:
           context: .
           file: ./docker/frontend/prod/Dockerfile
@@ -64,13 +64,13 @@ jobs:
             VERSION=${{ github.event.inputs.release }}
       - 
         name: Run vulnerability scanners for images
-        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@b681a7b2089d9be0a0d84179b6fdfd9540e77680 # main
+        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@b5a60f29e16156ade4d49a2929268361e95e55ff # main
         with:
           so_configuration: 'so_configuration_sca_current.yml'
           SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
       - 
         name: Run vulnerability scanners for endpoints
-        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@b681a7b2089d9be0a0d84179b6fdfd9540e77680 # main
+        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@b5a60f29e16156ade4d49a2929268361e95e55ff # main
         with:
           so_configuration: 'so_configuration_endpoints.yml'
           SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}

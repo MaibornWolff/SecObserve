@@ -33,3 +33,30 @@ After pushing the **Create** button in the dialog, the VEX document with the ver
 ## Update a VEX document
 
 After selecting the entry of either a CSAF or OpenVEX document from the respective list, a form shows the details of its attributes and a button to update a document. Some of the attributes can be changed for a new version of the document. If there have been no changes to the included vulnerabilities, no new document will be created. Otherwise a new version of the document will be created and ready for download.
+
+
+## Import VEX documents (experimental)
+
+!!! note "Experimental feature"
+    Importing VEX documents is currently marked as experimental, because although a good amount of manual testing has been done, there is not a set of comprehensive, automated tests yet.
+
+VEX documents can be imported in CSAF or OpenVEX format. After importing the file, the document will be parsed and the VEX statements will be applied to the referenced observations. A user needs to be `superuser` to import VEX documents. 
+
+When observations are imported, the VEX statements will be applied to the referenced observations as well.
+
+**How are the referened observations determined?**
+
+First, the relevant products are determined by the product PURL. The PURL of the product or the PURL of a branch must match the product PURL in the VEX statements.  
+
+Second, the relevant observations are determined by their Vulnerability ID and optionally the component PURL. The Vulnerability ID of the observation must be the same as the Vulnerability ID of the VEX statements. If the VEX statement contains a component PURL, this must match the vulnerability PURL in the component PURL of the observation.
+
+**When do PURLs match?**
+
+Two PURLs match if:
+
+* The `type` is the same in both PURLs.
+* Both PURLs have the same `namespace` or there is no `namespace` in both PURLs.
+* The `name` is the same in both PURLs.
+* Either both PURLs have the same `version`, there is no `version` in both PURLs or there is a `version` in one PURL but not in the other one.
+* When both PURLs have `qualifiers`, then all key/value pairs that exist in both PURLs must be the same. When both PURLs do not have `qualifiers` or some of the keys in one set of `qualifiers` do not exist in the other PURL, then the PURLs match as well.
+* Either both PURLs have the same `subpath`, there is no `subpath` in both PURLs or there is a `subpath` in one PURL but not in the other one.

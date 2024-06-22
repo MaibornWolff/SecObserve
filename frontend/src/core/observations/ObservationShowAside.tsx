@@ -15,6 +15,7 @@ import {
 import { Link } from "react-router-dom";
 
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
+import { is_superuser } from "../../commons/functions";
 import { useLinkStyles } from "../../commons/layout/themes";
 import { getSettingTheme } from "../../commons/user_settings/functions";
 
@@ -72,6 +73,14 @@ const MetaData = () => {
                                 source="product_rule"
                                 reference="product_rules"
                                 label="Product rule name"
+                                link="show"
+                            />
+                        )}
+                        {is_superuser() && observation.vex_statement != null && (
+                            <ReferenceField
+                                source="vex_statement"
+                                reference="vex/vex_statements"
+                                label="VEX statement"
                                 link="show"
                             />
                         )}

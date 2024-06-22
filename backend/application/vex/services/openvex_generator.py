@@ -14,7 +14,7 @@ from application.core.queries.observation import get_current_observation_log
 from application.core.types import Status
 from application.vex.models import OpenVEX, OpenVEX_Branch, OpenVEX_Vulnerability
 from application.vex.queries.openvex import get_openvex_by_document_id
-from application.vex.services.openvex_helpers import OpenVEXVulnerabilityCache
+from application.vex.services.openvex_generator_helpers import OpenVEXVulnerabilityCache
 from application.vex.services.vex_base import (
     check_and_get_product,
     check_branch_names,

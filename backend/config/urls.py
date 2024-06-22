@@ -38,6 +38,7 @@ from application.vex.api.views import (
     CSAFDocumentUpdateView,
     OpenVEXDocumentCreateView,
     OpenVEXDocumentUpdateView,
+    VEXImportView,
 )
 
 urlpatterns = [
@@ -123,6 +124,7 @@ urlpatterns += [
         "api/vex/openvex_document/update/<str:document_id_prefix>/<str:document_base_id>/",
         OpenVEXDocumentUpdateView.as_view(),
     ),
+    path("api/vex/vex_import/", VEXImportView.as_view()),
 ]
 
 if settings.DEBUG:
