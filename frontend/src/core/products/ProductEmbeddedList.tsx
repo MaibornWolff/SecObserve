@@ -42,9 +42,9 @@ const ProductEmbeddedList = ({ product_group }: ProductEmbeddedListProps) => {
         return <div>Loading...</div>;
     }
 
-    if (listContext.data === undefined) {
-        listContext.data = [];
-    }
+    // if (listContext.data === undefined) {
+    //     listContext.data = [];
+    // }
 
     localStorage.setItem("productembeddedlist.product_group", product_group.id);
 

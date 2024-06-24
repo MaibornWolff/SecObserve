@@ -26,9 +26,9 @@ const ServiceEmbeddedList = ({ product }: ServiceEmbeddedListProps) => {
         return <div>Loading...</div>;
     }
 
-    if (listContext.data === undefined) {
-        listContext.data = [];
-    }
+    // if (listContext.data === undefined) {
+    //     listContext.data = [];
+    // }
 
     function get_observations_url(
         product_id: number,

@@ -54,9 +54,9 @@ const ProductRuleEmbeddedList = ({ product }: ProductRuleEmbeddedListProps) => {
         return <div>Loading...</div>;
     }
 
-    if (listContext.data === undefined) {
-        listContext.data = [];
-    }
+    // if (listContext.data === undefined) {
+    //     listContext.data = [];
+    // }
 
     const ShowProductRule = (id: any) => {
         return "../../../../product_rules/" + id + "/show";

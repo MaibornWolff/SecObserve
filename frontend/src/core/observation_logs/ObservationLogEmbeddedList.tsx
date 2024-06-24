@@ -21,17 +21,19 @@ const ObservationLogEmbeddedList = ({ observation }: ObservationLogEmbeddedListP
         return <div>Loading...</div>;
     }
 
-    if (listContext.data === undefined) {
-        listContext.data = [];
-    }
+    // if (listContext.data === undefined) {
+    //     listContext.data = [];
+    // }
 
-    listContext.data.forEach((element: any) => {
-        if (element.comment.length > 255) {
-            element.comment_shortened = element.comment.substring(0, 255) + "...";
-        } else {
-            element.comment_shortened = element.comment;
-        }
-    });
+    if (listContext.data) {
+        listContext.data.forEach((element: any) => {
+            if (element.comment.length > 255) {
+                element.comment_shortened = element.comment.substring(0, 255) + "...";
+            } else {
+                element.comment_shortened = element.comment;
+            }
+        });
+    }
 
     const ShowObservationLogs = (id: any) => {
         return "../../../../observation_logs/" + id + "/show";

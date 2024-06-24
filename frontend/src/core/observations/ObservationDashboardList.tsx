@@ -33,9 +33,9 @@ const ObservationDashboardList = () => {
         return <div>Loading...</div>;
     }
 
-    if (listContext.data === undefined) {
-        listContext.data = [];
-    }
+    // if (listContext.data === undefined) {
+    //     listContext.data = [];
+    // }
 
     return (
         <Paper sx={{ marginTop: 2, marginBottom: 2, padding: 2 }}>

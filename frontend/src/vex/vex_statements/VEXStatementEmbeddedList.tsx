@@ -3,6 +3,7 @@ import {
     Datagrid,
     FilterForm,
     ListContextProvider,
+    ListControllerResult,
     TextField,
     TextInput,
     useListController,
@@ -42,9 +43,9 @@ const VEXStatementEmbeddedList = ({ vex_document }: VEXStatementEmbeddedListProp
         return <div>Loading...</div>;
     }
 
-    if (listContext.data === undefined) {
-        listContext.data = [];
-    }
+    // if (listContext.data === undefined) {
+    //     listContext.data = [];
+    // }
 
     return (
         <ListContextProvider value={listContext}>

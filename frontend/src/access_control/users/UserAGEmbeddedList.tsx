@@ -50,9 +50,9 @@ const UserAGEmbeddedList = ({ authorization_group }: UserAGEmbeddedListProps) =>
         return <div>Loading...</div>;
     }
 
-    if (listContext.data === undefined) {
-        listContext.data = [];
-    }
+    // if (listContext.data === undefined) {
+    //     listContext.data = [];
+    // }
 
     localStorage.setItem("useragembeddedlist", "true");
     localStorage.removeItem("userembeddedlist");

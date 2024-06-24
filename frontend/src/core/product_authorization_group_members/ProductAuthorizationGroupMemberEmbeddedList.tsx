@@ -29,9 +29,9 @@ const ProductAuthorizationGroupMemberEmbeddedList = ({ product }: ProductAuthori
         return <div>Loading...</div>;
     }
 
-    if (listContext.data === undefined) {
-        listContext.data = [];
-    }
+    // if (listContext.data === undefined) {
+    //     listContext.data = [];
+    // }
 
     return (
         <ListContextProvider value={listContext}>

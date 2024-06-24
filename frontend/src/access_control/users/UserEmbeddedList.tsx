@@ -48,9 +48,9 @@ const UserEmbeddedList = () => {
         return <div>Loading...</div>;
     }
 
-    if (listContext.data === undefined) {
-        listContext.data = [];
-    }
+    // if (listContext.data === undefined) {
+    //     listContext.data = [];
+    // }
 
     localStorage.setItem("userembeddedlist", "true");
     localStorage.removeItem("useragembeddedlist");
