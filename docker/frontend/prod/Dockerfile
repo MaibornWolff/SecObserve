@@ -1,5 +1,5 @@
 # build environment
-FROM node:20.14.0-alpine3.19@sha256:acedb9b82ab6964a04329bf543c1d4692fbc75d255048c1665db90ab5026f753 as build
+FROM node:20.15.0-alpine3.19@sha256:c39be8a03811d866e0f5e18fcd2065a914931a3c0830b29403017db3def59d91 as build
 
 ARG VERSION=unkown
 
