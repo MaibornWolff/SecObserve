@@ -18,12 +18,12 @@ const UserSettings = () => {
     const [, setTheme] = useTheme();
 
     function setLightTheme() {
-        setTheme(lightTheme);
+        setTheme("light");
         saveSettingTheme("light");
     }
 
     function setDarkTheme() {
-        setTheme(darkTheme);
+        setTheme("dark");
         saveSettingTheme("dark");
     }
 
