@@ -121,9 +121,11 @@ const ProductRuleComponent = () => {
                             Observation
                         </Typography>
                         <Stack spacing={1}>
-                            <Labeled label="Parser">
-                                <ReferenceField source="parser" reference="parsers" link="show" />
-                            </Labeled>
+                            {rule.parser && (
+                                <Labeled label="Parser">
+                                    <ReferenceField source="parser" reference="parsers" link="show" />
+                                </Labeled>
+                            )}
                             {rule.scanner_prefix && (
                                 <Labeled label="Scanner prefix">
                                     <TextField source="scanner_prefix" />
