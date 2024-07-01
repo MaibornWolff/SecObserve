@@ -7,6 +7,7 @@ from packageurl import PackageURL
 from rest_framework.serializers import (
     CharField,
     ChoiceField,
+    DateField,
     IntegerField,
     ListField,
     ModelSerializer,
@@ -284,6 +285,7 @@ class ObservationUpdateSerializer(ModelSerializer):
                 "Observation changed manually",
                 actual_vex_justification,
                 Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
+                observation.risk_acceptance_expiry_date,
             )
 
         check_security_gate(observation.product)
@@ -327,6 +329,7 @@ class ObservationUpdateSerializer(ModelSerializer):
             "cvss3_score",
             "cvss3_vector",
             "cwe",
+            "risk_acceptance_expiry_date",
         ]
 
 
@@ -359,6 +362,7 @@ class ObservationCreateSerializer(ModelSerializer):
             "Observation created manually",
             observation.current_vex_justification,
             Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
+            observation.risk_acceptance_expiry_date,
         )
 
         check_security_gate(observation.product)
@@ -403,6 +407,7 @@ class ObservationCreateSerializer(ModelSerializer):
             "cvss3_score",
             "cvss3_vector",
             "cwe",
+            "risk_acceptance_expiry_date",
         ]
 
 
@@ -414,6 +419,7 @@ class ObservationAssessmentSerializer(Serializer):
         required=False,
         allow_blank=True,
     )
+    risk_acceptance_expiry_date = DateField(required=False)
     comment = CharField(max_length=4096, required=True)
 
 
@@ -439,6 +445,7 @@ class ObservationBulkAssessmentSerializer(Serializer):
         required=False,
         allow_blank=True,
     )
+    risk_acceptance_expiry_date = DateField(required=False)
 
 
 class ObservationBulkMarkDuplicatesSerializer(Serializer):

@@ -103,6 +103,12 @@ class Product(Model):
     assessments_need_approval = BooleanField(default=False)
     new_observations_in_review = BooleanField(default=False)
     product_rules_need_approval = BooleanField(default=False)
+    risk_acceptance_expiry_active = BooleanField(null=True)
+    risk_acceptance_expiry_days = IntegerField(
+        default=30,
+        validators=[MinValueValidator(0), MaxValueValidator(999999)],
+        help_text="Days before risk acceptance expires, 0 means no expiry",
+    )
 
     class Meta:
         indexes = [
@@ -513,6 +519,7 @@ class Observation(Model):
         null=True,
         on_delete=SET_NULL,
     )
+    risk_acceptance_expiry_date = DateField(null=True)
 
     class Meta:
         indexes = [
@@ -597,6 +604,7 @@ class Observation_Log(Model):
         null=True,
         on_delete=SET_NULL,
     )
+    risk_acceptance_expiry_date = DateField(null=True)
 
     class Meta:
         indexes = [

@@ -179,10 +179,28 @@ const ProductGroupShow = () => {
                                     <Labeled label="Rules need approval">
                                         <BooleanField source="product_rules_need_approval" />
                                     </Labeled>
-                                    {/* <Labeled label="New observations have status 'In review'">
-                    <BooleanField source="new_observations_in_review" />
-                </Labeled> */}
                                 </Stack>
+                                {product_group.risk_acceptance_expiry_active != null && (
+                                    <Fragment>
+                                        <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+                                        <Typography variant="h6">Risk acceptance expiry</Typography>
+
+                                        <Labeled label="Risk acceptance expiry">
+                                            <BooleanField
+                                                source="risk_acceptance_expiry_active"
+                                                valueLabelFalse="Disabled"
+                                                valueLabelTrue="Product group specific"
+                                            />
+                                        </Labeled>
+                                        {product_group.risk_acceptance_expiry_active == true && (
+                                            <Stack spacing={1}>
+                                                <Labeled label="Risk acceptance expiry (days)">
+                                                    <NumberField source="risk_acceptance_expiry_days" />
+                                                </Labeled>
+                                            </Stack>
+                                        )}
+                                    </Fragment>
+                                )}
                             </Tab>
                             <Tab label="Products" path="products" icon={<product.icon />}>
                                 <ProductEmbeddedList product_group={product_group} />

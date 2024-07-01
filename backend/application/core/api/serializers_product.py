@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Optional
 
 from rest_framework.serializers import (
@@ -32,6 +33,7 @@ from application.core.queries.product_member import (
     get_product_authorization_group_member,
     get_product_member,
 )
+from application.core.services.product import calculate_risk_acceptance_expiry_date
 from application.core.types import Assessment_Status, Status
 from application.issue_tracker.types import Issue_Tracker
 from application.rules.models import Rule
@@ -136,6 +138,8 @@ class ProductGroupSerializer(ProductCoreSerializer):
             "security_gate_threshold_unkown",
             "assessments_need_approval",
             "product_rules_need_approval",
+            "risk_acceptance_expiry_active",
+            "risk_acceptance_expiry_days",
         ]
 
     def get_products_count(self, obj: Product) -> int:
@@ -166,6 +170,7 @@ class ProductSerializer(ProductCoreSerializer):
     has_services = SerializerMethodField()
     product_group_product_rules_need_approval = SerializerMethodField()
     product_rule_approvals = SerializerMethodField()
+    risk_acceptance_expiry_date_calculated = SerializerMethodField()
 
     class Meta:
         model = Product
@@ -241,6 +246,11 @@ class ProductSerializer(ProductCoreSerializer):
         return Rule.objects.filter(
             product=obj, approval_status=Rule_Status.RULE_STATUS_NEEDS_APPROVAL
         ).count()
+
+    def get_risk_acceptance_expiry_date_calculated(
+        self, obj: Product
+    ) -> Optional[date]:
+        return calculate_risk_acceptance_expiry_date(obj)
 
     def validate(self, attrs: dict):  # pylint: disable=too-many-branches
         # There are quite a lot of branches, but at least they are not nested too much
@@ -326,6 +336,7 @@ class NestedProductSerializer(ModelSerializer):
     permissions = SerializerMethodField()
     product_group_assessments_need_approval = SerializerMethodField()
     product_group_product_rules_need_approval = SerializerMethodField()
+    risk_acceptance_expiry_date_calculated = SerializerMethodField()
 
     class Meta:
         model = Product
@@ -343,6 +354,11 @@ class NestedProductSerializer(ModelSerializer):
         if not obj.product_group:
             return False
         return obj.product_group.product_rules_need_approval
+
+    def get_risk_acceptance_expiry_date_calculated(
+        self, obj: Product
+    ) -> Optional[date]:
+        return calculate_risk_acceptance_expiry_date(obj)
 
 
 class NestedProductListSerializer(ModelSerializer):

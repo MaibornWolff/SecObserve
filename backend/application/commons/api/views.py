@@ -68,7 +68,10 @@ class StatusSettingsView(APIView):
             if settings.feature_general_rules_need_approval:
                 features.append("feature_general_rules_need_approval")
 
-        content = {"features": features}
+        content = {
+            "features": features,
+            "risk_acceptance_expiry_days": settings.risk_acceptance_expiry_days,
+        }
         return Response(content)
 
 

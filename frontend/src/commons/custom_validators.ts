@@ -17,3 +17,9 @@ export const validate_0_999999 = [minValue(0), maxValue(999999)];
 export const validate_0_23 = [minValue(0), maxValue(23)];
 export const validate_0_59 = [minValue(0), maxValue(59)];
 export const validate_2000_9999 = [minValue(2000), maxValue(9999)];
+
+export function validate_required_after_today() {
+    let tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return [required(), minValue(tomorrow.toISOString().split("T")[0])];
+}

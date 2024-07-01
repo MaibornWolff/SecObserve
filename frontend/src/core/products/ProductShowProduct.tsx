@@ -244,10 +244,29 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                         <BooleanField source="product_group_product_rules_need_approval" />
                     </Labeled>
                 )}
-                {/* <Labeled label="New observations have status 'In review'">
-                    <BooleanField source="new_observations_in_review" />
-                </Labeled> */}
             </Stack>
+
+            {product.risk_acceptance_expiry_active != null && (
+                <Fragment>
+                    <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+                    <Typography variant="h6">Risk acceptance expiry</Typography>
+
+                    <Labeled label="Risk acceptance expiry">
+                        <BooleanField
+                            source="risk_acceptance_expiry_active"
+                            valueLabelFalse="Disabled"
+                            valueLabelTrue="Product specific"
+                        />
+                    </Labeled>
+                    {product.risk_acceptance_expiry_active == true && (
+                        <Stack spacing={1}>
+                            <Labeled label="Risk acceptance expiry (days)">
+                                <NumberField source="risk_acceptance_expiry_days" />
+                            </Labeled>
+                        </Stack>
+                    )}
+                </Fragment>
+            )}
         </Fragment>
     );
 };
