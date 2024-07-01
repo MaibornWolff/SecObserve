@@ -142,7 +142,7 @@ export function settings_risk_acceptance_expiry_date(): string | null {
         if (risk_acceptance_expiry_days === null) {
             return null;
         }
-        var date = new Date();
+        const date = new Date();
         date.setDate(date.getDate() + risk_acceptance_expiry_days);
         return date.toISOString().split("T")[0];
     } catch (e) {

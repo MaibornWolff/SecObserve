@@ -58,7 +58,7 @@ const ObservationBulkAssessment = (props: ObservationBulkAssessmentButtonProps) 
             comment: data.comment,
             vex_justification: justificationEnabled ? data.current_vex_justification : "",
             observations: selectedIds,
-            risk_acceptance_expiry_date: data.risk_acceptance_expiry_date
+            risk_acceptance_expiry_date: data.risk_acceptance_expiry_date,
         };
 
         httpClient(url, {
