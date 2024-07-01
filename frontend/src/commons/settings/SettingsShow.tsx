@@ -152,6 +152,21 @@ const SettingsShowComponent = () => {
                             </Labeled>
                         </Stack>
                     </Paper>
+
+                    <Paper sx={{ marginBottom: 2, padding: 2 }}>
+                        <Typography variant="h6">Risk acceptance expiry</Typography>
+                        <Stack spacing={2}>
+                            <Labeled label="Risk acceptance expiry (days)">
+                                <NumberField source="risk_acceptance_expiry_days" />
+                            </Labeled>
+                            <Labeled label="Risk acceptance expiry crontab (hours/UTC)">
+                                <NumberField source="risk_acceptance_expiry_crontab_hours" />
+                            </Labeled>
+                            <Labeled label="Risk acceptance expiry crontab (minutes)">
+                                <NumberField source="risk_acceptance_expiry_crontab_minutes" />
+                            </Labeled>
+                        </Stack>
+                    </Paper>
                 </Box>
             )}
         />

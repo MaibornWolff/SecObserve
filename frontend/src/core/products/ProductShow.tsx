@@ -141,7 +141,12 @@ const ProductShow = () => {
                                 >
                                     <ShowDefaultBranchObservationsButton product={product} />
                                     {product && product.permissions.includes(PERMISSION_OBSERVATION_CREATE) && (
-                                        <ObservationCreate id={product.id} />
+                                        <ObservationCreate
+                                            id={product.id}
+                                            risk_acceptance_expiry_date_calculated={
+                                                product.risk_acceptance_expiry_date_calculated
+                                            }
+                                        />
                                     )}
                                 </Stack>
                                 <ObservationsEmbeddedList product={product} />

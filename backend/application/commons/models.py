@@ -169,6 +169,22 @@ class Settings(Model):
         default=False, help_text="General rules need approval"
     )
 
+    risk_acceptance_expiry_days = IntegerField(
+        default=30,
+        validators=[MinValueValidator(0), MaxValueValidator(999999)],
+        help_text="Days before risk acceptance expires, 0 means no expiry",
+    )
+    risk_acceptance_expiry_crontab_minutes = IntegerField(
+        default=0,
+        validators=[MinValueValidator(0), MaxValueValidator(59)],
+        help_text="Minutes crontab expression for checking risk acceptance expiry",
+    )
+    risk_acceptance_expiry_crontab_hours = IntegerField(
+        default=1,
+        validators=[MinValueValidator(0), MaxValueValidator(23)],
+        help_text="Hours crontab expression for checking risk acceptance expiry (UTC)",
+    )
+
     def save(self, *args, **kwargs):
         """
         Save object to the database. Removes all other entries if there
