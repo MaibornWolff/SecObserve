@@ -997,17 +997,17 @@ files = [
 
 [[package]]
 name = "inflect"
-version = "7.3.0"
+version = "7.3.1"
 description = "Correctly generate plurals, singular nouns, ordinals, indefinite articles"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "inflect-7.3.0-py3-none-any.whl", hash = "sha256:91f689dae31f9a0c28e6275f6161a0d39c7316524b71c5b6978920c7d362ce97"},
-    {file = "inflect-7.3.0.tar.gz", hash = "sha256:27264bb8992cab2be3c50772ecf7a79492c6f95e16e15002e6023001d2d639c2"},
+    {file = "inflect-7.3.1-py3-none-any.whl", hash = "sha256:bedbae76877b054ecf0597153725677ab618fdd69abf189cc82e0f7a6720669d"},
+    {file = "inflect-7.3.1.tar.gz", hash = "sha256:edd785148a673b0c6dfef1a7d80cc1bcb2dd6d041cdb313b60032e464fd4e808"},
 ]
 
 [package.dependencies]
-more-itertools = "*"
+more-itertools = ">=8.5.0"
 typeguard = ">=4.0.1"
 
 [package.extras]
@@ -2418,4 +2418,4 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">= 3.10, < 3.13"
-content-hash = "83cfe2d7fd429dfbc418707981d8442dfc8a838a0b261bc0a0a0c9fa49179636"
+content-hash = "35fcf11d37a528390244c291ed31295b69bd6449519bb3083335959bc9ab6551"
