@@ -105,7 +105,7 @@ class Product(Model):
     product_rules_need_approval = BooleanField(default=False)
     risk_acceptance_expiry_active = BooleanField(null=True)
     risk_acceptance_expiry_days = IntegerField(
-        default=30,
+        null=True,
         validators=[MinValueValidator(0), MaxValueValidator(999999)],
         help_text="Days before risk acceptance expires, 0 means no expiry",
     )
