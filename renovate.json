@@ -47,6 +47,12 @@
                 "postgres"
             ],
             "allowedVersions": "<16"
+        },
+        {
+            "matchPackageNames": [
+                "mysql"
+            ],
+            "allowedVersions": "<9"
         }
     ],
     "prHourlyLimit": 10
