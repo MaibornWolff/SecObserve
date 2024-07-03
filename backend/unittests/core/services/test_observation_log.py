@@ -1,5 +1,5 @@
-from unittest.mock import patch
 from datetime import date
+from unittest.mock import patch
 
 from application.core.services.observation_log import create_observation_log
 from application.core.types import Assessment_Status
@@ -27,7 +27,7 @@ class TestObservationLog(BaseTestCase):
             "comment",
             "vex_justification",
             Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
-            date(2024, 7, 1)
+            date(2024, 7, 1),
         )
 
         self.assertEqual(self.observation_1, observation_log.observation)

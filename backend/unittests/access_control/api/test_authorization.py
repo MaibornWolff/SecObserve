@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from datetime import timedelta, date
+from datetime import date, timedelta
 from typing import Optional
 from unittest.mock import patch
 
@@ -69,7 +69,7 @@ class TestAuthorizationBase(BaseTestCase):
         user = User.objects.get(username=data.username)
         mock_authentication.return_value = user, None
 
-        mock_product_expiry_date.return_value = date(2024,7,1)
+        mock_product_expiry_date.return_value = date(2024, 7, 1)
 
         api_client = APIClient()
         if data.method.lower() == "delete":
