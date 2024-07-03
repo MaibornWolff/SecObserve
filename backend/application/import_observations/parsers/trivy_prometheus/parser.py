@@ -66,17 +66,15 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
             scanner += " / " + version
 
         for finding in data:
-            component = finding.get("metric", {}).get("resource", "")
-            image = finding.get("metric", {}).get("image_repository", "")
-            component_name = component + ": " + image
-            component_version = finding.get("metric", {}).get("image_tag", "")
+            origin_component_name = finding.get("metric", {}).get("resource", "")
             vuln_title = finding.get("metric", {}).get("vuln_title", "")
             vulnerability_id = finding.get("metric", {}).get("vuln_id", "")
-            cvss_v3_base_score = finding.get("metric", {}).get("vuln_score")
+            cvss3_score = finding.get("metric", {}).get("vuln_score")
             severity = finding.get("metric", {}).get("severity", Severity.SEVERITY_UNKOWN)
-            description = self.get_description(
-                component_version, vulnerability_id, cvss_v3_base_score, vuln_title, image, component
-            )
+            origin_docker_image_name = finding.get("metric", {}).get("image_registry", "") + "/" + finding.get("metric", {}).get("image_repository", "")
+            origin_docker_image_tag = finding.get("metric", {}).get("image_tag", "")
+            fixed_version = finding.get("metric", {}).get("fixed_version", "")
+            installed_version = finding.get("metric", {}).get("installed_version", "")
 
             state = ""
             reference_url = ""
@@ -84,15 +82,18 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
 
             observation = Observation(
                 title=vulnerability_id,
-                description=description,
                 parser_severity=self.get_severity(severity),
+                numerical_severity=cvss3_score,
                 parser_status=self.get_status(state),
                 vulnerability_id=vulnerability_id,
-                origin_component_name=component_name,
-                origin_component_version=component_version,
-                cvss3_score=cvss_v3_base_score,
+                origin_docker_image_name=origin_docker_image_name,
+                origin_docker_image_tag=origin_docker_image_tag,
+                cvss3_score=cvss3_score,
+                origin_component_name=origin_component_name,
                 cwe=self.get_cwe(cwes),
                 scanner=scanner,
+                recommendation=self.get_recommendation(fixed_version,installed_version),
+                description=self.get_description(origin_component_name, vuln_title),
             )
 
             evidence = []
@@ -109,22 +110,24 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
     
     def get_description(  # pylint: disable=too-many-branches
         self,
-        component_version: str,
-        vulnerability_id: str,
-        cvss_v3_base_score: str,
-        vuln_title: str,
-        image: str,
-        component: str,
+        origin_component_name,
+        vuln_title,
     ) -> str:
         description = ""
-
-        description += f"**Component**: {component}\n\n"
-        description += f"**Rule full description**: {vuln_title}\n\n"
-        description += f"**Security-Severity**: {cvss_v3_base_score}\n\n"
-        description += f"**CVE**: [{vulnerability_id}](https://nvd.nist.gov/vuln/detail/{vulnerability_id})\n\n"
-        description += f"**Image**: {image}:{component_version}\n\n"
-
+        description +=  f"**Component:** {origin_component_name}\n\n"
+        description +=  f"**Title:** {vuln_title}\n\n"
         return description
+
+    def get_recommendation(  # pylint: disable=too-many-branches
+        self,
+        fixed_version,
+        installed_version,
+    ) -> str:
+        recommendation = ""
+        if fixed_version:
+            recommendation +=  f"Upgrade from **{installed_version}** to: **{fixed_version}**\n\n"
+
+        return recommendation
 
     def get_status(self, state: str) -> str:
         if not state:
