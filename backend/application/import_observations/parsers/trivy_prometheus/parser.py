@@ -93,7 +93,7 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
                 cwe=self.get_cwe(cwes),
                 scanner=scanner,
                 recommendation=self.get_recommendation(fixed_version,installed_version),
-                description=self.get_description(origin_component_name, vuln_title),
+                description=self.get_description(vuln_title),
             )
 
             evidence = []
@@ -110,11 +110,9 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
     
     def get_description(  # pylint: disable=too-many-branches
         self,
-        origin_component_name,
         vuln_title,
     ) -> str:
         description = ""
-        description +=  f"**Component:** {origin_component_name}\n\n"
         description +=  f"**Title:** {vuln_title}\n\n"
         return description
 
