@@ -64,7 +64,7 @@ services:
       - "5000:5000"
 
   mysql:
-    image: mysql:8.4.1
+    image: mysql:9.0.0
     profiles:
       - mysql
     environment:
