@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='Api_Configuration',
             name='basic_auth_enabled',
-            field=models.BooleanField(null=True),
+            field=models.BooleanField(),
         ),
         migrations.AddField(
             model_name='Api_Configuration',
