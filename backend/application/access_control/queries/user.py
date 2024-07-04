@@ -1,5 +1,6 @@
 from typing import Optional
 
+from django.db.models import Q
 from django.db.models.query import QuerySet
 
 from application.access_control.models import User
@@ -43,7 +44,9 @@ def get_users() -> QuerySet[User]:
 
     product_members = get_product_members()
 
-    return users.filter(id__in=[member.user_id for member in product_members])
+    return users.filter(
+        Q(id__in=[member.user_id for member in product_members]) | Q(id=user.pk)
+    )
 
 
 def get_users_without_api_tokens() -> QuerySet[User]:
@@ -64,4 +67,6 @@ def get_users_without_api_tokens() -> QuerySet[User]:
 
     product_members = get_product_members()
 
-    return users.filter(id__in=[member.user_id for member in product_members])
+    return users.filter(
+        Q(id__in=[member.user_id for member in product_members]) | Q(id=user.pk)
+    )

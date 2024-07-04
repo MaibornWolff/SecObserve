@@ -17,6 +17,9 @@ const CustomToolbar = () => {
 
 const SettingsEdit = () => {
     const transform = (data: any) => {
+        if (!data.internal_users) {
+            data.internal_users = "";
+        }
         if (!data.branch_housekeeping_exempt_branches) {
             data.branch_housekeeping_exempt_branches = "";
         }
@@ -63,6 +66,13 @@ const SettingsEdit = () => {
                         step={1}
                         validate={validate_0_999999}
                         helperText="Validity duration of JWT tokens for superusers in hours"
+                        sx={{ marginBottom: 2 }}
+                    />
+                    <TextInputWide
+                        source="internal_users"
+                        label="Internal users"
+                        validate={validate_255}
+                        helperText="Comma separated list of email regular expressions to identify internal users"
                         sx={{ marginBottom: 2 }}
                     />
 
