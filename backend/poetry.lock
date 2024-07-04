@@ -1396,13 +1396,13 @@ et-xmlfile = "*"
 
 [[package]]
 name = "packageurl-python"
-version = "0.15.1"
+version = "0.15.2"
 description = "A purl aka. Package URL parser and builder"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "packageurl_python-0.15.1-py3-none-any.whl", hash = "sha256:f7a44ddb9caaf6197b3b62b890ed0be5cb15e962accab2a51db36846d5174562"},
-    {file = "packageurl_python-0.15.1.tar.gz", hash = "sha256:9a37b9a7cad9a2872b4612151ba3749fd9dec90485577c14d374b6e66b7edf03"},
+    {file = "packageurl_python-0.15.2-py3-none-any.whl", hash = "sha256:6b81641aeedf0a73377d88a8a640e45a2a0848ffdf5447d24eeef8526c41ac92"},
+    {file = "packageurl_python-0.15.2.tar.gz", hash = "sha256:9cd10eeedbc6680728c10a1585c6dd7bbad4ef4b389d80cd0ac223205e9c87df"},
 ]
 
 [package.extras]
@@ -2418,4 +2418,4 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">= 3.10, < 3.13"
-content-hash = "0d51e6efac78c3ccf8b530f669fcf2592d6959b80237c3813e7d4fff520cf2a2"
+content-hash = "a9dd9d624d35ab3ca46ca5d58f8f7919c0b7cab27b4c8028724ee3b960b5aa9c"
