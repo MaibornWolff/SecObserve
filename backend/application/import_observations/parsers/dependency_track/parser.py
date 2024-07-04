@@ -42,6 +42,8 @@ class DependencyTrack(BaseParser, BaseAPIParser):
         dependency_track_base_url = api_configuration.base_url
         dependency_track_api_key = api_configuration.api_key
         dependency_track_project_key = api_configuration.project_key
+        trivy_prometheus_verify_ssl = api_configuration.verify_ssl
+
 
         if not dependency_track_base_url.endswith("/"):
             dependency_track_base_url += "/"
@@ -55,7 +57,7 @@ class DependencyTrack(BaseParser, BaseAPIParser):
         }
         try:
             response = requests.get(
-                dependency_track_base_url, headers=headers, timeout=60
+                dependency_track_base_url, headers=headers, timeout=60, verify=trivy_prometheus_verify_ssl
             )
             response.raise_for_status()
         except Exception as e:
