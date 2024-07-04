@@ -3,6 +3,7 @@
 import django.db.models.deletion
 import encrypted_model_fields.fields
 from django.db import migrations, models
+from encrypted_model_fields.fields import EncryptedCharField
 
 
 class Migration(migrations.Migration):
@@ -21,7 +22,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="Api_Configuration",
             name="api_key",
-            field=encrypted_model_fields.fields.EncryptedCharField(
+            field=EncryptedCharField(
                 blank=True, null=True
             ),
         ),
@@ -32,4 +33,28 @@ class Migration(migrations.Migration):
                 max_length=255, blank=True, null=True
             ),
         ),
+        migrations.AddField(
+            model_name='Api_Configuration',
+            name='basic_auth_enabled',
+            field=models.BooleanField(null=True),
+        ),
+        migrations.AddField(
+            model_name='Api_Configuration',
+            name='verify_ssl',
+            field=models.BooleanField()
+        ),
+        migrations.AddField(
+            model_name='Api_Configuration',
+            name='basic_auth_username',
+            field=models.CharField(
+                max_length=255, blank=True, null=True
+            ),
+        ),
+        migrations.AddField(
+            model_name='Api_Configuration',
+            name='basic_auth_password',
+            field=EncryptedCharField(
+                max_length=255, blank=True, null=True
+            ),
+        ),       
     ]

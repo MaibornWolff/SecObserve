@@ -2,6 +2,7 @@ import json
 from typing import Optional
 
 import requests
+from requests.auth import HTTPBasicAuth
 
 from application.core.models import Observation
 from application.core.types import Severity, Status
@@ -41,16 +42,23 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
 
         trivy_prometheus_base_url = api_configuration.base_url
         trivy_prometheus_query = api_configuration.query
-
+        trivy_prometheus_verify_ssl = api_configuration.verify_ssl
+        trivy_prometheus_basic_auth = api_configuration.basic_auth_enabled
+        trivy_prometheus_basic_auth_username = api_configuration.basic_auth_username
+        trivy_prometheus_basic_auth_password = api_configuration.basic_auth_password
+        
         if not trivy_prometheus_base_url.endswith("/"):
             trivy_prometheus_base_url += "/"
 
         trivy_prometheus_url = trivy_prometheus_base_url + "api/v1/query?query=" + trivy_prometheus_query
 
+        trivy_basic_auth_param = None
+        if trivy_prometheus_basic_auth:
+            trivy_basic_auth_param = (trivy_prometheus_basic_auth_username,trivy_prometheus_basic_auth_password)
+
         try:
-            print(trivy_prometheus_base_url)
             response = requests.get(
-                trivy_prometheus_url, timeout=60, verify=False
+                trivy_prometheus_url, timeout=60, verify=trivy_prometheus_verify_ssl, auth=trivy_basic_auth_param
             )
             response.raise_for_status()
         except Exception as e:

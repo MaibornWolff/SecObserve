@@ -92,6 +92,10 @@ class ApiConfigurationSerializer(ModelSerializer):
                 project_key = attrs.get("project_key", self.instance.project_key)
                 api_key = attrs.get("api_key", self.instance.api_key)
                 query = attrs.get("query", self.instance.query)
+                basic_auth_enabled = attrs.get("basic_auth_enabled", self.instance.basic_auth_enabled)
+                basic_auth_username = attrs.get("basic_auth_username", self.instance.basic_auth_username)
+                basic_auth_password = attrs.get("basic_auth_password", self.instance.basic_auth_password)
+                verify_ssl = attrs.get("verify_ssl", self.instance.verify_ssl)
 
             else:
                 product = attrs.get("product")
@@ -101,6 +105,10 @@ class ApiConfigurationSerializer(ModelSerializer):
                 project_key = attrs.get("project_key")
                 api_key = attrs.get("api_key")
                 query = attrs.get("query")
+                basic_auth_enabled = attrs.get("basic_auth_enabled")
+                basic_auth_username = attrs.get("basic_auth_username")
+                basic_auth_password = attrs.get("basic_auth_password")
+                verify_ssl = attrs.get("verify_ssl")
 
 
             api_configuration = Api_Configuration(
@@ -111,6 +119,11 @@ class ApiConfigurationSerializer(ModelSerializer):
                 project_key=project_key,
                 api_key=api_key,
                 query=query,
+                basic_auth_enabled=basic_auth_enabled,
+                basic_auth_username=basic_auth_username,
+                basic_auth_password=basic_auth_password,
+                verify_ssl=verify_ssl,
+
 
             )
             valid, errors = api_check_connection(api_configuration)
