@@ -17,7 +17,7 @@ import {
 import { useWatch } from 'react-hook-form';
 
 import { validate_required, validate_required_255, validate_255 } from "../../commons/custom_validators";
-import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputWide, TextInputWide, PasswordInputWide } from "../../commons/layout/themes";
 
 export type ApiConfigurationCreateProps = {
     id: any;
@@ -93,7 +93,7 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
         setOpen(false);
     };
 
-    const ApiKeyInput = () => {
+    const ParserInput = () => {
         const parserId = useWatch({ name: 'parser' });
         const selectedParser = parsers.find(parser => parser.id === parserId);
         if (selectedParser){
@@ -106,8 +106,23 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
                 case "Trivy Prometheus":
                     return <>
                     <TextInputWide source="query" label="Query" validate={validate_required_255} />
+                    <BooleanInput source="basic_auth_enabled" label="Basic Auth" defaultValue={false} />
+                    <BasicAuthInput/>
                     </>;
             }
+        } else {
+            return null
+        }
+    };
+
+    const BasicAuthInput = () => {
+        const basic_auth_enabledId = useWatch({ name: 'basic_auth_enabled' });
+        if (basic_auth_enabledId){
+                    return <>
+                    <TextInputWide source="basic_auth_username" validate={validate_required_255} />
+                    <PasswordInputWide source="basic_auth_password" validate={validate_required_255} />
+                    </>;
+ 
         } else {
             return null
         }
@@ -138,7 +153,8 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
                                 <AutocompleteInputWide optionText="name" validate={validate_required} />
                             </ReferenceInput>
                             <TextInputWide source="base_url" label="Base URL" validate={validate_required_255} />
-                            <ApiKeyInput />
+                            <ParserInput />
+                            <BooleanInput source="verify_ssl" label="Verify SSL" defaultValue={true} />
                             <BooleanInput source="test_connection" defaultValue={true} />
                         </SimpleForm>
                     </CreateBase>

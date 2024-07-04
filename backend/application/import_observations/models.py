@@ -5,6 +5,7 @@ from django.db.models import (
     CharField,
     DateTimeField,
     ForeignKey,
+    BooleanField,
     IntegerField,
     Model,
 )
@@ -21,6 +22,11 @@ class Api_Configuration(Model):
     project_key = CharField(max_length=255, blank=True)
     api_key = EncryptedCharField(max_length=255, blank=True, null=True)
     query = CharField(max_length=255, blank=True)
+    basic_auth_enabled = BooleanField(null=True)
+    basic_auth_username = CharField(max_length=255, blank=True)
+    basic_auth_password = EncryptedCharField(max_length=255, blank=True)
+    verify_ssl = BooleanField()
+
 
     class Meta:
         unique_together = (
