@@ -7,6 +7,7 @@ from rest_framework.exceptions import AuthenticationFailed
 
 from application.access_control.models import User
 from application.access_control.services.oidc_authentication import OIDCAuthentication
+from application.commons.models import Settings
 from unittests.base_test_case import BaseTestCase
 
 
@@ -297,8 +298,86 @@ class TestOIDCAuthentication(BaseTestCase):
             "27cbb2858ce86012e498c8102d24d066837d67beec8c180f5e85e652df700c9f",
             user.oidc_groups_hash,
         )
+        self.assertFalse(user.is_external)
+
         user_save_mock.assert_called_once()
         synchronize_groups_mock.assert_called_with(user, payload)
+
+    @patch("application.access_control.services.oidc_authentication.User.save")
+    @patch(
+        "application.access_control.services.oidc_authentication.OIDCAuthentication._synchronize_groups"
+    )
+    def test_create_user_internal(self, synchronize_groups_mock, user_save_mock):
+        settings = Settings.load()
+        settings.internal_users = ".*@example.com, .*@test.com"
+        settings.save()
+
+        oidc_authentication = OIDCAuthentication()
+        payload = {
+            "preferred_username": "test_username",
+            "given_name": "test_first_name",
+            "family_name": "test_last_name",
+            "name": "test_full_name",
+            "email": "test_email@test.com",
+            "groups": ["test_group_1", "test_group_2"],
+        }
+
+        user = oidc_authentication._create_user("test_username", payload)
+
+        self.assertEqual("test_username", user.username)
+        self.assertEqual("test_first_name", user.first_name)
+        self.assertEqual("test_last_name", user.last_name)
+        self.assertEqual("test_full_name", user.full_name)
+        self.assertEqual("test_email@test.com", user.email)
+        self.assertEqual(
+            "27cbb2858ce86012e498c8102d24d066837d67beec8c180f5e85e652df700c9f",
+            user.oidc_groups_hash,
+        )
+        self.assertFalse(user.is_external)
+
+        user_save_mock.assert_called_once()
+        synchronize_groups_mock.assert_called_with(user, payload)
+
+        settings.internal_users = ""
+        settings.save()
+
+    @patch("application.access_control.services.oidc_authentication.User.save")
+    @patch(
+        "application.access_control.services.oidc_authentication.OIDCAuthentication._synchronize_groups"
+    )
+    def test_create_user_external(self, synchronize_groups_mock, user_save_mock):
+        settings = Settings.load()
+        settings.internal_users = ".*@example.com, .*@test.com"
+        settings.save()
+
+        oidc_authentication = OIDCAuthentication()
+        payload = {
+            "preferred_username": "test_username",
+            "given_name": "test_first_name",
+            "family_name": "test_last_name",
+            "name": "test_full_name",
+            "email": "test_email@test.net",
+            "groups": ["test_group_1", "test_group_2"],
+        }
+
+        user = oidc_authentication._create_user("test_username", payload)
+
+        self.assertEqual("test_username", user.username)
+        self.assertEqual("test_first_name", user.first_name)
+        self.assertEqual("test_last_name", user.last_name)
+        self.assertEqual("test_full_name", user.full_name)
+        self.assertEqual("test_email@test.net", user.email)
+        self.assertEqual(
+            "27cbb2858ce86012e498c8102d24d066837d67beec8c180f5e85e652df700c9f",
+            user.oidc_groups_hash,
+        )
+        self.assertTrue(user.is_external)
+
+        user_save_mock.assert_called_once()
+        synchronize_groups_mock.assert_called_with(user, payload)
+
+        settings.internal_users = ""
+        settings.save()
 
     @patch("application.access_control.services.oidc_authentication.User.save")
     @patch(

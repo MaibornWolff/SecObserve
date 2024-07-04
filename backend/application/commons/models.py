@@ -81,6 +81,11 @@ class Settings(Model):
         validators=[MinValueValidator(0), MaxValueValidator(999999)],
         help_text="Validity duration of JWT tokens for superusers in hours",
     )
+    internal_users = CharField(
+        max_length=255,
+        blank=True,
+        help_text="Comma separated list of email regular expressions to identify internal users",
+    )
 
     base_url_frontend = CharField(
         max_length=255,
