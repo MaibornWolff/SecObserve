@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("commons", "0005_settings_feature_general_rules_need_approval"),
+        ("commons", "0006_settings_internal_users"),
     ]
 
     operations = [
