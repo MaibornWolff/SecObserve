@@ -1,6 +1,7 @@
 from datetime import date
 from typing import Optional
 
+from application.access_control.models import User
 from application.commons.services.global_request import get_current_user
 from application.core.models import Observation, Observation_Log
 
@@ -17,7 +18,7 @@ def create_observation_log(  # pylint: disable=too-many-arguments
 ) -> Observation_Log:
     observation_log = Observation_Log(
         observation=observation,
-        user=get_current_user(),
+        user=_get_user(),
         severity=severity,
         status=status,
         comment=comment,
@@ -35,3 +36,11 @@ def create_observation_log(  # pylint: disable=too-many-arguments
     observation.product.save()
 
     return observation_log
+
+
+# Needed because create_observation_log is called from a background task
+def _get_user() -> Optional[User]:
+    user = get_current_user()
+    if not user:
+        user = User.objects.filter(is_superuser=True).first()
+    return user

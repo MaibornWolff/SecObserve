@@ -107,6 +107,11 @@ class Rule_Engine:
                 if rule.new_status:
                     observation.rule_status = rule.new_status
                     observation.current_status = get_current_status(observation)
+                    observation.risk_acceptance_expiry_date = (
+                        calculate_risk_acceptance_expiry_date(observation.product)
+                        if observation.current_status == Status.STATUS_RISK_ACCEPTED
+                        else None
+                    )
 
                 previous_vex_justification = observation.current_vex_justification
                 previous_rule_vex_justification = observation.rule_vex_justification
@@ -228,9 +233,16 @@ class Rule_Engine:
         observation.rule_severity = ""
         previous_severity = observation.current_severity
         observation.current_severity = get_current_severity(observation)
+
         observation.rule_status = ""
         previous_status = observation.current_status
         observation.current_status = get_current_status(observation)
+        observation.risk_acceptance_expiry_date = (
+            calculate_risk_acceptance_expiry_date(observation.product)
+            if observation.current_status == Status.STATUS_RISK_ACCEPTED
+            else None
+        )
+
         observation.rule_vex_justification = ""
         previous_vex_justification = observation.current_vex_justification
         observation.current_vex_justification = get_current_vex_justification(

@@ -132,8 +132,7 @@ def _update_observation(
         )
 
     previous_risk_acceptance_expiry_date = observation.risk_acceptance_expiry_date
-    if new_risk_acceptance_expiry_date:
-        observation.risk_acceptance_expiry_date = new_risk_acceptance_expiry_date
+    observation.risk_acceptance_expiry_date = new_risk_acceptance_expiry_date
 
     if (
         previous_current_severity  # pylint: disable=too-many-boolean-expressions
@@ -156,7 +155,7 @@ def _get_assessments_need_approval(product: Product) -> bool:
     return product.assessments_need_approval
 
 
-def remove_assessment(observation: Observation, comment: str) -> None:
+def remove_assessment(observation: Observation, comment: str) -> bool:
     if observation.assessment_severity or observation.assessment_status:
         observation.assessment_severity = ""
         observation.assessment_status = ""
@@ -185,6 +184,10 @@ def remove_assessment(observation: Observation, comment: str) -> None:
 
         check_security_gate(observation.product)
         push_observation_to_issue_tracker(observation, get_current_user())
+
+        return True
+
+    return False
 
 
 def assessment_approval(
