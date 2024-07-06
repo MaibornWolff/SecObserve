@@ -27,9 +27,9 @@ from application.core.services.observation import (
 )
 from application.core.services.observation_log import create_observation_log
 from application.core.services.potential_duplicates import find_potential_duplicates
-from application.core.services.product import (
+from application.core.services.product import set_repository_default_branch
+from application.core.services.risk_acceptance_expiry import (
     calculate_risk_acceptance_expiry_date,
-    set_repository_default_branch,
 )
 from application.core.services.security_gate import check_security_gate
 from application.core.types import Assessment_Status, Status

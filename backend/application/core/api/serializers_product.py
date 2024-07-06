@@ -33,7 +33,9 @@ from application.core.queries.product_member import (
     get_product_authorization_group_member,
     get_product_member,
 )
-from application.core.services.product import calculate_risk_acceptance_expiry_date
+from application.core.services.risk_acceptance_expiry import (
+    calculate_risk_acceptance_expiry_date,
+)
 from application.core.types import Assessment_Status, Status
 from application.issue_tracker.types import Issue_Tracker
 from application.rules.models import Rule
