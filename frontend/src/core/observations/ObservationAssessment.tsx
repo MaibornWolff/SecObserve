@@ -4,11 +4,7 @@ import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import { DateInput, FormDataConsumer, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
 
-import {
-    validate_required,
-    validate_required_4096,
-    validate_required_after_today,
-} from "../../commons/custom_validators";
+import { validate_after_today, validate_required, validate_required_4096 } from "../../commons/custom_validators";
 import { justificationIsEnabledForStatus } from "../../commons/functions";
 import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
@@ -129,7 +125,7 @@ const ObservationAssessment = () => {
                                         source="risk_acceptance_expiry_date"
                                         label="Risk acceptance expiry date"
                                         defaultValue={formData.product_data.risk_acceptance_expiry_date_calculated}
-                                        validate={validate_required_after_today()}
+                                        validate={validate_after_today()}
                                     />
                                 )
                             }

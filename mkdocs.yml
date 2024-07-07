@@ -71,6 +71,7 @@ nav:
     - Rule engine: usage/rule_engine.md
     - Security gates: usage/security_gates.md
     - Duplicates: usage/duplicates.md
+    - Risk acceptance expiry: usage/risk_acceptance_expiry.md
     - Metrics: usage/metrics.md
     - Users, groups and permissions: usage/users_permissions.md
   - Integrations:

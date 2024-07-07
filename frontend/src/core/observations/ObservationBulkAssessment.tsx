@@ -14,7 +14,7 @@ import {
     useUnselectAll,
 } from "react-admin";
 
-import { validate_required_4096, validate_required_after_today } from "../../commons/custom_validators";
+import { validate_after_today, validate_required_4096 } from "../../commons/custom_validators";
 import { justificationIsEnabledForStatus, settings_risk_acceptance_expiry_date } from "../../commons/functions";
 import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
@@ -163,7 +163,7 @@ const ObservationBulkAssessment = (props: ObservationBulkAssessmentButtonProps) 
                                                 ? formData.risk_acceptance_expiry_date_calculated
                                                 : settings_risk_acceptance_expiry_date()
                                         }
-                                        validate={validate_required_after_today()}
+                                        validate={validate_after_today()}
                                     />
                                 )
                             }

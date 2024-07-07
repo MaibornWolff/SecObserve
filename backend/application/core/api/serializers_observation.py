@@ -419,7 +419,7 @@ class ObservationAssessmentSerializer(Serializer):
         required=False,
         allow_blank=True,
     )
-    risk_acceptance_expiry_date = DateField(required=False)
+    risk_acceptance_expiry_date = DateField(required=False, allow_null=True)
     comment = CharField(max_length=4096, required=True)
 
 
@@ -445,7 +445,7 @@ class ObservationBulkAssessmentSerializer(Serializer):
         required=False,
         allow_blank=True,
     )
-    risk_acceptance_expiry_date = DateField(required=False)
+    risk_acceptance_expiry_date = DateField(required=False, allow_null=True)
 
 
 class ObservationBulkMarkDuplicatesSerializer(Serializer):

@@ -22,9 +22,9 @@ import {
     validate_0_999999,
     validate_255,
     validate_2048,
+    validate_after_today,
     validate_required,
     validate_required_255,
-    validate_required_after_today,
 } from "../../commons/custom_validators";
 import { justificationIsEnabledForStatus } from "../../commons/functions";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
@@ -145,7 +145,7 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
                                                     source="risk_acceptance_expiry_date"
                                                     label="Risk acceptance expiry date"
                                                     defaultValue={risk_acceptance_expiry_date_calculated}
-                                                    validate={validate_required_after_today()}
+                                                    validate={validate_after_today()}
                                                 />
                                             )
                                         }
