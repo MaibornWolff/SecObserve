@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from datetime import timedelta
+from datetime import date, timedelta
 from typing import Optional
 from unittest.mock import patch
 
@@ -7,12 +7,7 @@ from django.core.management import call_command
 from django.utils import timezone
 from rest_framework.test import APIClient
 
-from application.access_control.models import Authorization_Group, User
-from application.core.models import (
-    Product,
-    Product_Authorization_Group_Member,
-    Product_Member,
-)
+from application.access_control.models import User
 from application.metrics.models import Product_Metrics
 from unittests.base_test_case import BaseTestCase
 
@@ -67,9 +62,14 @@ class TestAuthorizationBase(BaseTestCase):
     @patch(
         "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
     )
-    def _test_api(self, data: APITest, mock_authentication):
+    @patch(
+        "application.core.api.serializers_product.calculate_risk_acceptance_expiry_date"
+    )
+    def _test_api(self, data: APITest, mock_product_expiry_date, mock_authentication):
         user = User.objects.get(username=data.username)
         mock_authentication.return_value = user, None
+
+        mock_product_expiry_date.return_value = date(2024, 7, 1)
 
         api_client = APIClient()
         if data.method.lower() == "delete":

@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Optional
 
 from django.utils import timezone
@@ -11,6 +12,9 @@ from application.core.services.observation import (
     get_current_vex_justification,
 )
 from application.core.services.observation_log import create_observation_log
+from application.core.services.risk_acceptance_expiry import (
+    calculate_risk_acceptance_expiry_date,
+)
 from application.core.services.security_gate import check_security_gate
 from application.core.types import Assessment_Status, Status
 from application.issue_tracker.services.issue_tracker import (
@@ -24,6 +28,7 @@ def save_assessment(
     new_status: Optional[str],
     comment: str,
     new_vex_justification: Optional[str],
+    new_risk_acceptance_expiry_date: Optional[date],
 ) -> None:
 
     log_severity = (
@@ -39,6 +44,12 @@ def save_assessment(
         if new_vex_justification
         and new_vex_justification != observation.current_vex_justification
         else ""
+    )
+    log_risk_acceptance_expiry_date = (
+        new_risk_acceptance_expiry_date
+        if new_risk_acceptance_expiry_date
+        and new_risk_acceptance_expiry_date != observation.risk_acceptance_expiry_date
+        else None
     )
 
     assessment_status = (
@@ -61,7 +72,11 @@ def save_assessment(
         Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
     ):
         _update_observation(
-            observation, new_severity, new_status, new_vex_justification
+            observation,
+            new_severity,
+            new_status,
+            new_vex_justification,
+            new_risk_acceptance_expiry_date,
         )
 
         create_observation_log(
@@ -71,6 +86,7 @@ def save_assessment(
             comment,
             log_vex_justification,
             assessment_status,
+            log_risk_acceptance_expiry_date,
         )
 
         check_security_gate(observation.product)
@@ -83,6 +99,7 @@ def save_assessment(
             comment,
             log_vex_justification,
             assessment_status,
+            log_risk_acceptance_expiry_date,
         )
 
 
@@ -91,6 +108,7 @@ def _update_observation(
     new_severity: Optional[str],
     new_status: Optional[str],
     new_vex_justification: Optional[str],
+    new_risk_acceptance_expiry_date: Optional[date],
 ) -> None:
     previous_current_severity = observation.current_severity
     previous_assessment_severity = observation.assessment_severity
@@ -115,6 +133,9 @@ def _update_observation(
             observation
         )
 
+    previous_risk_acceptance_expiry_date = observation.risk_acceptance_expiry_date
+    observation.risk_acceptance_expiry_date = new_risk_acceptance_expiry_date
+
     if (
         previous_current_severity  # pylint: disable=too-many-boolean-expressions
         != observation.current_severity
@@ -124,6 +145,8 @@ def _update_observation(
         or previous_current_vex_justification != observation.current_vex_justification
         or previous_assessment_vex_justification
         != observation.assessment_vex_justification
+        or previous_risk_acceptance_expiry_date
+        != observation.risk_acceptance_expiry_date
     ):
         observation.save()
 
@@ -134,7 +157,7 @@ def _get_assessments_need_approval(product: Product) -> bool:
     return product.assessments_need_approval
 
 
-def remove_assessment(observation: Observation, comment: str) -> None:
+def remove_assessment(observation: Observation, comment: str) -> bool:
     if observation.assessment_severity or observation.assessment_status:
         observation.assessment_severity = ""
         observation.assessment_status = ""
@@ -144,6 +167,12 @@ def remove_assessment(observation: Observation, comment: str) -> None:
         observation.current_vex_justification = get_current_vex_justification(
             observation
         )
+        risk_acceptance_expiry_date = (
+            calculate_risk_acceptance_expiry_date(observation.product)
+            if observation.current_status == Status.STATUS_RISK_ACCEPTED
+            else None
+        )
+        observation.risk_acceptance_expiry_date = risk_acceptance_expiry_date
 
         create_observation_log(
             observation,
@@ -152,10 +181,15 @@ def remove_assessment(observation: Observation, comment: str) -> None:
             comment,
             "",
             Assessment_Status.ASSESSMENT_STATUS_REMOVED,
+            risk_acceptance_expiry_date,
         )
 
         check_security_gate(observation.product)
         push_observation_to_issue_tracker(observation, get_current_user())
+
+        return True
+
+    return False
 
 
 def assessment_approval(
@@ -180,6 +214,7 @@ def assessment_approval(
             observation_log.severity,
             observation_log.status,
             observation_log.vex_justification,
+            observation_log.risk_acceptance_expiry_date,
         )
 
         check_security_gate(observation_log.observation.product)

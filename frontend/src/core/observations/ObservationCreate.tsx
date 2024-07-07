@@ -4,6 +4,8 @@ import { Button, Dialog, DialogContent, DialogTitle, Divider, Stack, Typography 
 import { Fragment, useState } from "react";
 import {
     CreateBase,
+    DateInput,
+    FormDataConsumer,
     NumberInput,
     ReferenceInput,
     SaveButton,
@@ -20,6 +22,7 @@ import {
     validate_0_999999,
     validate_255,
     validate_2048,
+    validate_after_today,
     validate_required,
     validate_required_255,
 } from "../../commons/custom_validators";
@@ -29,14 +32,16 @@ import {
     OBSERVATION_SEVERITY_CHOICES,
     OBSERVATION_STATUS_CHOICES,
     OBSERVATION_STATUS_OPEN,
+    OBSERVATION_STATUS_RISK_ACCEPTED,
     OBSERVATION_VEX_JUSTIFICATION_CHOICES,
 } from "../../core/types";
 
 export type ObservationCreateProps = {
     id: any;
+    risk_acceptance_expiry_date_calculated: any;
 };
 
-const ObservationCreate = ({ id }: ObservationCreateProps) => {
+const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: ObservationCreateProps) => {
     const [open, setOpen] = useState(false);
     const [status, setStatus] = useState(OBSERVATION_STATUS_OPEN);
     const justificationEnabled = justificationIsEnabledForStatus(status);
@@ -79,6 +84,9 @@ const ObservationCreate = ({ id }: ObservationCreateProps) => {
         if (!justificationEnabled) {
             data.parser_vex_justification = "";
         }
+        if (data.parser_status != OBSERVATION_STATUS_RISK_ACCEPTED) {
+            data.risk_acceptance_expiry_date = null;
+        }
 
         create(
             "observations",
@@ -114,7 +122,7 @@ const ObservationCreate = ({ id }: ObservationCreateProps) => {
                             <Typography variant="h6">Observation</Typography>
                             <Stack>
                                 <TextInputWide autoFocus source="title" validate={validate_required_255} />
-                                <Stack direction="row" spacing={2}>
+                                <Stack direction="row" spacing={2} alignItems="center">
                                     <AutocompleteInputMedium
                                         source="parser_severity"
                                         label="Severity"
@@ -128,6 +136,20 @@ const ObservationCreate = ({ id }: ObservationCreateProps) => {
                                         onChange={(e) => setStatus(e)}
                                         validate={validate_required}
                                     />
+                                    <FormDataConsumer>
+                                        {({ formData }) =>
+                                            formData.parser_status &&
+                                            formData.parser_status == OBSERVATION_STATUS_RISK_ACCEPTED &&
+                                            risk_acceptance_expiry_date_calculated && (
+                                                <DateInput
+                                                    source="risk_acceptance_expiry_date"
+                                                    label="Risk acceptance expiry date"
+                                                    defaultValue={risk_acceptance_expiry_date_calculated}
+                                                    validate={validate_after_today()}
+                                                />
+                                            )
+                                        }
+                                    </FormDataConsumer>
                                     {justificationEnabled && (
                                         <AutocompleteInputMedium
                                             source="parser_vex_justification"

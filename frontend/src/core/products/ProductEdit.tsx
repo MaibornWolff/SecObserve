@@ -134,6 +134,15 @@ const ProductEdit = () => {
         if (!data.issue_tracker_minimum_severity) {
             data.issue_tracker_minimum_severity = "";
         }
+        if (data.risk_acceptance_expiry_active) {
+            if (data.risk_acceptance_expiry_days == "") {
+                data.risk_acceptance_expiry_days = 30;
+            }
+        } else {
+            if (data.risk_acceptance_expiry_days == "") {
+                data.risk_acceptance_expiry_days = null;
+            }
+        }
         return data;
     };
 
@@ -381,11 +390,39 @@ const ProductEdit = () => {
                     defaultValue={false}
                 />
                 <BooleanInput source="product_rules_need_approval" label="Rules need approval" defaultValue={false} />
-                {/* <BooleanInput
-                    source="new_observations_in_review"
-                    label="New observations have status 'In review'"
-                    defaultValue={false}
-                /> */}
+
+                <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+
+                <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                    Risk acceptance expiry
+                </Typography>
+                <NullableBooleanInput
+                    source="risk_acceptance_expiry_active"
+                    label="Risk acceptance expiry"
+                    defaultValue={null}
+                    nullLabel="Standard"
+                    falseLabel="Disabled"
+                    trueLabel="Product specific"
+                    helperText="Set date for expiry or risk acceptance"
+                    sx={{ width: "15em", marginBottom: 2 }}
+                />
+                <FormDataConsumer>
+                    {({ formData }) =>
+                        formData.risk_acceptance_expiry_active && (
+                            <Stack spacing={2}>
+                                <NumberInput
+                                    source="risk_acceptance_expiry_days"
+                                    label="Risk acceptance expiry (days)"
+                                    helperText="Days after which the risk acceptance expires"
+                                    defaultValue={30}
+                                    min={1}
+                                    max={999999}
+                                    validate={validate_0_999999}
+                                />
+                            </Stack>
+                        )
+                    }
+                </FormDataConsumer>
             </SimpleForm>
         </Edit>
     );

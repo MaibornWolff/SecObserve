@@ -163,6 +163,11 @@ const ObservationShowComponent = () => {
                                     <DateField source="found" />
                                 </Labeled>
                             )}
+                            {observation.risk_acceptance_expiry_date != null && (
+                                <Labeled label="Risk acceptance expiry">
+                                    <DateField source="risk_acceptance_expiry_date" />
+                                </Labeled>
+                            )}
                             <Labeled>
                                 <TextField source="title" className={classes.fontBigBold} />
                             </Labeled>

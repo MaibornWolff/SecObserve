@@ -1,4 +1,5 @@
-from unittest.mock import Mock, call, patch
+from datetime import date
+from unittest.mock import call, patch
 
 from django.core.management import call_command
 from rest_framework.exceptions import ValidationError
@@ -31,6 +32,7 @@ class TestObservationsBulkActions(BaseTestCase):
             "comment",
             [1, 2],
             VexJustification.STATUS_COMPONENT_NOT_PRESENT,
+            date(2024, 7, 1),
         )
 
         check_mock.assert_called_with(self.product_1, [1, 2])
@@ -41,6 +43,7 @@ class TestObservationsBulkActions(BaseTestCase):
                 Status.STATUS_OPEN,
                 "comment",
                 VexJustification.STATUS_COMPONENT_NOT_PRESENT,
+                date(2024, 7, 1),
             ),
             call(
                 observation_2,
@@ -48,6 +51,7 @@ class TestObservationsBulkActions(BaseTestCase):
                 Status.STATUS_OPEN,
                 "comment",
                 VexJustification.STATUS_COMPONENT_NOT_PRESENT,
+                date(2024, 7, 1),
             ),
         ]
         save_mock.assert_has_calls(expected_calls, any_order=False)
