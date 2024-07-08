@@ -36,12 +36,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='Api_Configuration',
             name='basic_auth_enabled',
-            field=models.BooleanField(),
+            field=models.BooleanField(null=True),
         ),
         migrations.AddField(
             model_name='Api_Configuration',
             name='verify_ssl',
-            field=models.BooleanField()
+            field=models.BooleanField(null=True)
         ),
         migrations.AddField(
             model_name='Api_Configuration',
