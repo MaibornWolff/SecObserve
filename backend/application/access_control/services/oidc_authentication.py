@@ -1,5 +1,6 @@
 import hashlib
 import os
+import re
 from typing import Optional
 
 import jwt
@@ -11,6 +12,7 @@ from rest_framework.exceptions import AuthenticationFailed
 
 from application.access_control.models import Authorization_Group, User
 from application.access_control.queries.user import get_user_by_username
+from application.commons.models import Settings
 
 OIDC_PREFIX = "Bearer"
 ALGORITHMS = ["RS256", "RS384", "RS512", "ES256 ", "ES384", "ES512", "EdDSA"]
@@ -105,10 +107,23 @@ class OIDCAuthentication(BaseAuthentication):
             user.last_name = payload[os.environ["OIDC_LAST_NAME"]]
         user.oidc_groups_hash = self._get_groups_hash(payload)
         user.is_oidc_user = True
+        user.is_active = True
+
+        settings = Settings.load()
+        if settings.internal_users and user.email:
+            user.is_external = True
+            for internal_user in settings.internal_users.split(","):
+                internal_user = internal_user.strip()
+                if re.match(internal_user, user.email):
+                    user.is_external = False
+                    break
+        else:
+            user.is_external = False
+
         try:
             with transaction.atomic():
-                self._synchronize_groups(user, payload)
                 user.save()
+                self._synchronize_groups(user, payload)
             return user
         except IntegrityError as e:
             # User was most likely created by another request

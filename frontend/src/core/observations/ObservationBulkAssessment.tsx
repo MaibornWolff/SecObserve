@@ -2,16 +2,27 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { SaveButton, SimpleForm, Toolbar, useListContext, useNotify, useRefresh, useUnselectAll } from "react-admin";
+import {
+    DateInput,
+    FormDataConsumer,
+    SaveButton,
+    SimpleForm,
+    Toolbar,
+    useListContext,
+    useNotify,
+    useRefresh,
+    useUnselectAll,
+} from "react-admin";
 
-import { validate_required_4096 } from "../../commons/custom_validators";
-import { justificationIsEnabledForStatus } from "../../commons/functions";
+import { validate_after_today, validate_required_4096 } from "../../commons/custom_validators";
+import { justificationIsEnabledForStatus, settings_risk_acceptance_expiry_date } from "../../commons/functions";
 import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 import {
     OBSERVATION_SEVERITY_CHOICES,
     OBSERVATION_STATUS_CHOICES,
     OBSERVATION_STATUS_OPEN,
+    OBSERVATION_STATUS_RISK_ACCEPTED,
     OBSERVATION_VEX_JUSTIFICATION_CHOICES,
 } from "../types";
 
@@ -47,6 +58,7 @@ const ObservationBulkAssessment = (props: ObservationBulkAssessmentButtonProps) 
             comment: data.comment,
             vex_justification: justificationEnabled ? data.current_vex_justification : "",
             observations: selectedIds,
+            risk_acceptance_expiry_date: data.risk_acceptance_expiry_date,
         };
 
         httpClient(url, {
@@ -137,6 +149,25 @@ const ObservationBulkAssessment = (props: ObservationBulkAssessmentButtonProps) 
                                 choices={OBSERVATION_VEX_JUSTIFICATION_CHOICES}
                             />
                         )}
+                        <FormDataConsumer>
+                            {({ formData }) =>
+                                formData.current_status &&
+                                formData.current_status == OBSERVATION_STATUS_RISK_ACCEPTED &&
+                                (formData.risk_acceptance_expiry_date_calculated ||
+                                    settings_risk_acceptance_expiry_date()) && (
+                                    <DateInput
+                                        source="risk_acceptance_expiry_date"
+                                        label="Risk acceptance expiry date"
+                                        defaultValue={
+                                            formData.risk_acceptance_expiry_date_calculated
+                                                ? formData.risk_acceptance_expiry_date_calculated
+                                                : settings_risk_acceptance_expiry_date()
+                                        }
+                                        validate={validate_after_today()}
+                                    />
+                                )
+                            }
+                        </FormDataConsumer>
                         <TextInputWide
                             source="comment"
                             validate={validate_required_4096}

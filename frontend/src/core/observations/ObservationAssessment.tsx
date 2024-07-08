@@ -2,9 +2,9 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
+import { DateInput, FormDataConsumer, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
 
-import { validate_required, validate_required_4096 } from "../../commons/custom_validators";
+import { validate_after_today, validate_required, validate_required_4096 } from "../../commons/custom_validators";
 import { justificationIsEnabledForStatus } from "../../commons/functions";
 import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
@@ -12,6 +12,7 @@ import {
     OBSERVATION_SEVERITY_CHOICES,
     OBSERVATION_STATUS_CHOICES,
     OBSERVATION_STATUS_OPEN,
+    OBSERVATION_STATUS_RISK_ACCEPTED,
     OBSERVATION_VEX_JUSTIFICATION_CHOICES,
 } from "../types";
 
@@ -27,6 +28,7 @@ const ObservationAssessment = () => {
             status: data.current_status,
             vex_justification: justificationEnabled ? data.current_vex_justification : "",
             comment: data.comment,
+            risk_acceptance_expiry_date: data.risk_acceptance_expiry_date,
         };
 
         httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/observations/" + data.id + "/assessment/", {
@@ -114,6 +116,20 @@ const ObservationAssessment = () => {
                                 choices={OBSERVATION_VEX_JUSTIFICATION_CHOICES}
                             />
                         )}
+                        <FormDataConsumer>
+                            {({ formData }) =>
+                                formData.current_status &&
+                                formData.current_status == OBSERVATION_STATUS_RISK_ACCEPTED &&
+                                formData.product_data.risk_acceptance_expiry_date_calculated && (
+                                    <DateInput
+                                        source="risk_acceptance_expiry_date"
+                                        label="Risk acceptance expiry date"
+                                        defaultValue={formData.product_data.risk_acceptance_expiry_date_calculated}
+                                        validate={validate_after_today()}
+                                    />
+                                )
+                            }
+                        </FormDataConsumer>
                         <TextInputWide
                             multiline={true}
                             source="comment"

@@ -81,6 +81,11 @@ class Settings(Model):
         validators=[MinValueValidator(0), MaxValueValidator(999999)],
         help_text="Validity duration of JWT tokens for superusers in hours",
     )
+    internal_users = CharField(
+        max_length=255,
+        blank=True,
+        help_text="Comma separated list of email regular expressions to identify internal users",
+    )
 
     base_url_frontend = CharField(
         max_length=255,
@@ -162,6 +167,22 @@ class Settings(Model):
     )
     feature_general_rules_need_approval = BooleanField(
         default=False, help_text="General rules need approval"
+    )
+
+    risk_acceptance_expiry_days = IntegerField(
+        default=30,
+        validators=[MinValueValidator(0), MaxValueValidator(999999)],
+        help_text="Days before risk acceptance expires, 0 means no expiry",
+    )
+    risk_acceptance_expiry_crontab_minutes = IntegerField(
+        default=0,
+        validators=[MinValueValidator(0), MaxValueValidator(59)],
+        help_text="Minutes crontab expression for checking risk acceptance expiry",
+    )
+    risk_acceptance_expiry_crontab_hours = IntegerField(
+        default=1,
+        validators=[MinValueValidator(0), MaxValueValidator(23)],
+        help_text="Hours crontab expression for checking risk acceptance expiry (UTC)",
     )
 
     def save(self, *args, **kwargs):

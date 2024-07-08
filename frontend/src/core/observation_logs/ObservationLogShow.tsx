@@ -95,6 +95,11 @@ const ObservationLogComponent = () => {
                                     />
                                 </Labeled>
                             )}
+                            {observation_log.risk_acceptance_expiry_date != null && (
+                                <Labeled label="Risk acceptance expiry">
+                                    <DateField source="risk_acceptance_expiry_date" />
+                                </Labeled>
+                            )}
                             {observation_log.vex_justification && (
                                 <Labeled label="VEX justification">
                                     <TextField source="vex_justification" />
