@@ -61,7 +61,7 @@ const UserEmbeddedList = () => {
             <div style={{ width: "100%" }}>
                 {is_superuser() && <UserCreateButton />}
                 <FilterForm filters={listFilters()} />
-                <Datagrid size={getSettingListSize()} rowClick={ShowUsers} bulkActionButtons={false}>
+                <Datagrid size={getSettingListSize()} rowClick={ShowUsers} bulkActionButtons={false} resource="users">
                     <TextField source="username" />
                     <TextField source="full_name" />
                     {is_superuser() && <BooleanField source="is_active" label="Active" />}

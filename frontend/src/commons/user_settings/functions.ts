@@ -38,7 +38,7 @@ export function getSettingListSize(): "small" | "medium" | undefined {
 export function getTheme() {
     const setting_theme = getSettingTheme();
     if (setting_theme == "dark") {
-        return "dark"
+        return "dark";
     } else {
         return "light";
     }

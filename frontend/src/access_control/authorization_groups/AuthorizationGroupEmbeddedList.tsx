@@ -37,7 +37,12 @@ const AuthorizationGroupEmbeddedList = () => {
             <div style={{ width: "100%" }}>
                 {is_superuser() && <AuthorizationGroupCreateButton />}
                 <FilterForm filters={listFilters()} />
-                <Datagrid size={getSettingListSize()} rowClick={ShowAuthorizationGroups} bulkActionButtons={false}>
+                <Datagrid
+                    size={getSettingListSize()}
+                    rowClick={ShowAuthorizationGroups}
+                    bulkActionButtons={false}
+                    resource="authorization_groups"
+                >
                     <TextField source="name" />
                     <TextField source="oidc_group" label="OIDC group" />
                 </Datagrid>

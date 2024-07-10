@@ -49,6 +49,7 @@ const ObservationDashboardList = () => {
                         sx={{ width: "100%" }}
                         rowClick={ShowObservations}
                         bulkActionButtons={false}
+                        resource="observations"
                     >
                         <TextField source="product_data.name" label="Product" />
                         <TextField source="title" />
