@@ -54,10 +54,6 @@ const ProductRuleEmbeddedList = ({ product }: ProductRuleEmbeddedListProps) => {
         return <div>Loading...</div>;
     }
 
-    if (listContext.data === undefined) {
-        listContext.data = [];
-    }
-
     const ShowProductRule = (id: any) => {
         return "../../../../product_rules/" + id + "/show";
     };
@@ -74,6 +70,7 @@ const ProductRuleEmbeddedList = ({ product }: ProductRuleEmbeddedListProps) => {
                     sx={{ width: "100%" }}
                     bulkActionButtons={false}
                     rowClick={ShowProductRule}
+                    resource="product_rules"
                 >
                     <TextField source="name" />
                     <TextField source="new_severity" />
@@ -83,7 +80,12 @@ const ProductRuleEmbeddedList = ({ product }: ProductRuleEmbeddedListProps) => {
                             <ChipField source="approval_status" />
                         )}
                     <BooleanField source="enabled" />
-                    <ReferenceField source="parser" reference="parsers" link={false} />
+                    <ReferenceField
+                        source="parser"
+                        reference="parsers"
+                        link={false}
+                        sx={{ "& a": { textDecoration: "none" } }}
+                    />
                     <TextField source="scanner_prefix" />
                     <TextField source="title" label="Observation title" />
                 </Datagrid>

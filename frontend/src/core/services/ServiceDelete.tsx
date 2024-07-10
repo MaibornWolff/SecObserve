@@ -10,7 +10,7 @@ const ServiceDelete = (props: ServiceDeleteProps) => {
     const [open, setOpen] = useState(false);
     const [deleted, setDeleted] = useState(false);
     const [error_shown, setErrorShown] = useState(false);
-    const [deleteOne, { isLoading, error }] = useDelete(); // eslint-disable-line @typescript-eslint/no-unused-vars
+    const [deleteOne, { error }] = useDelete(); // eslint-disable-line @typescript-eslint/no-unused-vars
     // isLoading is not needed but easier to let it there
     const refresh = useRefresh();
     const notify = useNotify();

@@ -68,12 +68,22 @@ const ObservationLogComponent = () => {
                         <Stack spacing={1}>
                             <Typography variant="h6">Observation Log</Typography>
                             <Labeled label="Product">
-                                <ReferenceField source="observation_data.product" reference="products" link="show">
+                                <ReferenceField
+                                    source="observation_data.product"
+                                    reference="products"
+                                    link="show"
+                                    sx={{ "& a": { textDecoration: "none" } }}
+                                >
                                     <TextField source="name" />
                                 </ReferenceField>
                             </Labeled>
                             <Labeled label="Observation">
-                                <ReferenceField source="observation" reference="observations" link="show">
+                                <ReferenceField
+                                    source="observation"
+                                    reference="observations"
+                                    link="show"
+                                    sx={{ "& a": { textDecoration: "none" } }}
+                                >
                                     <TextField source="title" />
                                 </ReferenceField>
                             </Labeled>
@@ -112,6 +122,7 @@ const ObservationLogComponent = () => {
                                         reference="general_rules"
                                         label="General rule name"
                                         link="show"
+                                        sx={{ "& a": { textDecoration: "none" } }}
                                     />
                                 </Labeled>
                             )}
@@ -122,6 +133,7 @@ const ObservationLogComponent = () => {
                                         reference="product_rules"
                                         label="Product rule name"
                                         link="show"
+                                        sx={{ "& a": { textDecoration: "none" } }}
                                     />
                                 </Labeled>
                             )}
@@ -132,6 +144,7 @@ const ObservationLogComponent = () => {
                                         reference="vex/vex_statements"
                                         label="VEX statement"
                                         link="show"
+                                        sx={{ "& a": { textDecoration: "none" } }}
                                     />
                                 </Labeled>
                             )}

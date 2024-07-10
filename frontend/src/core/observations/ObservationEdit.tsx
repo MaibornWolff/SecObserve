@@ -49,7 +49,7 @@ const CustomToolbar = () => {
 
 const ObservationEditForm = () => {
     const observation = useRecordContext();
-    const [status, setStatus] = useState(observation.parser_status);
+    const [status, setStatus] = useState(observation ? observation.parser_status : "");
     const justificationEnabled = justificationIsEnabledForStatus(status);
 
     return (

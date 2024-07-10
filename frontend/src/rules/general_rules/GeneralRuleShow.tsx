@@ -94,7 +94,12 @@ const GeneralRuleComponent = () => {
                         <Stack spacing={1}>
                             {rule.parser && (
                                 <Labeled label="Parser">
-                                    <ReferenceField source="parser" reference="parsers" link="show" />
+                                    <ReferenceField
+                                        source="parser"
+                                        reference="parsers"
+                                        link="show"
+                                        sx={{ "& a": { textDecoration: "none" } }}
+                                    />
                                 </Labeled>
                             )}
                             {rule.scanner_prefix && (

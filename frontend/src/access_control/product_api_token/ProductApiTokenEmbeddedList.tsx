@@ -22,14 +22,10 @@ const ProductApiTokenEmbeddedList = ({ product }: ProductApiTokenEmbeddedListPro
         return <div>Loading...</div>;
     }
 
-    if (listContext.data === undefined) {
-        listContext.data = [];
-    }
-
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
-                <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false}>
+                <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false} rowClick={false}>
                     <SelectField source="role" choices={ROLE_CHOICES} />
                     {product && product.permissions.includes(PERMISSION_PRODUCT_API_TOKEN_REVOKE) && (
                         <RevokeProductApiToken product={product} />

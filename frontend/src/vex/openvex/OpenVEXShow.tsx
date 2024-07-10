@@ -39,7 +39,12 @@ const OpenVEXShow = () => {
                     <SimpleShowLayout>
                         <Typography variant="h6">Exported OpenVEX document</Typography>
                         {openvex && openvex.product_data && openvex.product_data.name && (
-                            <ReferenceField source="product" reference="products" link="show" />
+                            <ReferenceField
+                                source="product"
+                                reference="products"
+                                link="show"
+                                sx={{ "& a": { textDecoration: "none" } }}
+                            />
                         )}
                         {openvex && openvex.vulnerability_names && (
                             <ReferenceManyField

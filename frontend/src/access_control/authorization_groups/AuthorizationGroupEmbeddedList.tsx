@@ -28,16 +28,17 @@ const AuthorizationGroupEmbeddedList = () => {
         return <div>Loading...</div>;
     }
 
-    if (listContext.data === undefined) {
-        listContext.data = [];
-    }
-
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
                 {is_superuser() && <AuthorizationGroupCreateButton />}
                 <FilterForm filters={listFilters()} />
-                <Datagrid size={getSettingListSize()} rowClick={ShowAuthorizationGroups} bulkActionButtons={false}>
+                <Datagrid
+                    size={getSettingListSize()}
+                    rowClick={ShowAuthorizationGroups}
+                    bulkActionButtons={false}
+                    resource="authorization_groups"
+                >
                     <TextField source="name" />
                     <TextField source="oidc_group" label="OIDC group" />
                 </Datagrid>

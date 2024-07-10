@@ -36,10 +36,20 @@ const EvidenceShow = () => {
         <Show actions={<ShowActions />}>
             <SimpleShowLayout>
                 <Typography variant="h6">Evidence</Typography>
-                <ReferenceField source="product" reference="products" link="show">
+                <ReferenceField
+                    source="product"
+                    reference="products"
+                    link="show"
+                    sx={{ "& a": { textDecoration: "none" } }}
+                >
                     <TextField source="name" />
                 </ReferenceField>
-                <ReferenceField source="observation" reference="observations" link="show">
+                <ReferenceField
+                    source="observation"
+                    reference="observations"
+                    link="show"
+                    sx={{ "& a": { textDecoration: "none" } }}
+                >
                     <TextField source="title" />
                 </ReferenceField>
                 <TextField source="name" />

@@ -44,16 +44,13 @@ const PotentialDuplicatesList = ({ observation }: PotentialDuplicatesListProps) 
         return <div>Loading...</div>;
     }
 
-    if (listContext.data === undefined) {
-        listContext.data = [];
-    }
-
     return (
         <ListContextProvider value={listContext}>
             <Datagrid
                 size={getSettingListSize()}
                 rowClick={ShowObservations}
                 bulkActionButtons={<BulkActionButtons observation={observation} />}
+                resource="potential_duplicates"
             >
                 <TextField source="potential_duplicate_observation.title" label="Title" />
                 <SeverityField source="potential_duplicate_observation.current_severity" />
