@@ -24,7 +24,12 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                 )}
                 {product.product_group && (
                     <Labeled label="Product group">
-                        <ReferenceField source="product_group" reference="product_groups" link="show">
+                        <ReferenceField
+                            source="product_group"
+                            reference="product_groups"
+                            link="show"
+                            sx={{ "& a": { textDecoration: "none" } }}
+                        >
                             <TextField source="name" />
                         </ReferenceField>
                     </Labeled>
@@ -61,7 +66,12 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                             </Labeled>
                         )}
                         {product.repository_default_branch && (
-                            <ReferenceField source="repository_default_branch" reference="branches" link={false}>
+                            <ReferenceField
+                                source="repository_default_branch"
+                                reference="branches"
+                                link={false}
+                                sx={{ "& a": { textDecoration: "none" } }}
+                            >
                                 <Labeled label="Default branch / version">
                                     <TextField source="name" />
                                 </Labeled>

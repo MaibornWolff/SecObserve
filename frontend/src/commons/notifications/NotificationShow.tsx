@@ -40,10 +40,20 @@ const NotificationShow = () => {
                         {notification && notification.function && <TextField source="function" />}
                         {notification && notification.arguments && <TextField source="arguments" />}
                         {notification && notification.product && (
-                            <ReferenceField source="product" reference="products" link="show" />
+                            <ReferenceField
+                                source="product"
+                                reference="products"
+                                link="show"
+                                sx={{ "& a": { textDecoration: "none" } }}
+                            />
                         )}
                         {notification && notification.observation && (
-                            <ReferenceField source="observation" reference="observations" link="show" />
+                            <ReferenceField
+                                source="observation"
+                                reference="observations"
+                                link="show"
+                                sx={{ "& a": { textDecoration: "none" } }}
+                            />
                         )}
                         <TextField source="user_full_name" label="User" />
                     </SimpleShowLayout>

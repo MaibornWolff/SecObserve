@@ -43,7 +43,12 @@ const CSAFShow = () => {
                     <SimpleShowLayout>
                         <Typography variant="h6">Exported CSAF document</Typography>
                         {csaf && csaf.product_data && csaf.product_data.name && (
-                            <ReferenceField source="product" reference="products" link="show" />
+                            <ReferenceField
+                                source="product"
+                                reference="products"
+                                link="show"
+                                sx={{ "& a": { textDecoration: "none" } }}
+                            />
                         )}
                         {csaf && csaf.vulnerability_names && (
                             <ReferenceManyField
