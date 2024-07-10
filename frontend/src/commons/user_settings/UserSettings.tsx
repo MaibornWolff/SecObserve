@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import { Title, useTheme } from "react-admin";
 
-import { darkTheme, lightTheme } from "../layout/themes";
 import { getSettingListSize, getSettingTheme, saveSettingListSize, saveSettingTheme } from "./functions";
 
 const UserSettings = () => {

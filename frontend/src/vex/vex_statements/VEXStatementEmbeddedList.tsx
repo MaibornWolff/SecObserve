@@ -3,7 +3,6 @@ import {
     Datagrid,
     FilterForm,
     ListContextProvider,
-    ListControllerResult,
     TextField,
     TextInput,
     useListController,
