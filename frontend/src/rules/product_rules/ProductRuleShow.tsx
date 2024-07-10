@@ -63,6 +63,13 @@ const ShowActions = () => {
     );
 };
 
+function generateProductURL(product_id: number, is_product_group: boolean): string {
+    if (is_product_group) {
+        return "#/product_groups/" + product_id + "/show/rules";
+    }
+    return "#/products/" + product_id + "/show/rules";
+}
+
 const ProductRuleComponent = () => {
     const { classes } = useStyles();
 
@@ -78,7 +85,7 @@ const ProductRuleComponent = () => {
                             <Labeled label="Product">
                                 <TextUrlField
                                     text={rule.product_data.name}
-                                    url={"#/products/" + rule.product_data.id + "/show/rules"}
+                                    url={generateProductURL(rule.product_data.id, rule.product_data.is_product_group)}
                                 />
                             </Labeled>
                             <Labeled label="Name">

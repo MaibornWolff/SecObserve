@@ -342,7 +342,7 @@ class NestedProductSerializer(ModelSerializer):
 
     class Meta:
         model = Product
-        exclude = ["is_product_group", "new_observations_in_review", "members"]
+        exclude = ["new_observations_in_review", "members"]
 
     def get_permissions(self, product: Product) -> list[Permissions]:
         return get_permissions_for_role(get_highest_user_role(product))
