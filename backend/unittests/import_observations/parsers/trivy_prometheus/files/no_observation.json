@@ -1,4 +1,8 @@
 {
-    "format": "SecObserve",
-    "observations": []
+    "status": "success",
+    "data": {
+        "resultType": "vector",
+        "result": [
+        ]
+    }
 }
