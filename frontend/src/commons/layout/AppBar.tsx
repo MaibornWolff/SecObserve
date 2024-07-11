@@ -10,7 +10,11 @@ import About from "../about/About";
 import Logo from "./Logo";
 
 const DocumentationMenu = forwardRef(() => {
-    const { onClose } = useUserMenu();
+    const userMenuContext = useUserMenu();
+    if (!userMenuContext) {
+        return null;
+    }
+    const { onClose } = userMenuContext;
 
     return (
         <MenuItem
@@ -31,7 +35,12 @@ const DocumentationMenu = forwardRef(() => {
 });
 
 const ProfileMenu = forwardRef(() => {
-    const { onClose } = useUserMenu();
+    const userMenuContext = useUserMenu();
+    if (!userMenuContext) {
+        return null;
+    }
+    const { onClose } = userMenuContext;
+
     const user = localStorage.getItem("user");
     const user_id = user ? JSON.parse(user).id : null;
 
@@ -54,7 +63,11 @@ const ProfileMenu = forwardRef(() => {
 });
 
 const SettingsMenu = forwardRef(() => {
-    const { onClose } = useUserMenu();
+    const userMenuContext = useUserMenu();
+    if (!userMenuContext) {
+        return null;
+    }
+    const { onClose } = userMenuContext;
 
     return (
         <MenuItem
