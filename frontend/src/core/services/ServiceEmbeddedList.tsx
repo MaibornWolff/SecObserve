@@ -26,10 +26,6 @@ const ServiceEmbeddedList = ({ product }: ServiceEmbeddedListProps) => {
         return <div>Loading...</div>;
     }
 
-    if (listContext.data === undefined) {
-        listContext.data = [];
-    }
-
     function get_observations_url(
         product_id: number,
         service_id: number,
@@ -45,7 +41,7 @@ const ServiceEmbeddedList = ({ product }: ServiceEmbeddedListProps) => {
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
-                <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false}>
+                <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false} rowClick={false}>
                     <WithRecord
                         label="Name"
                         render={(service) => (

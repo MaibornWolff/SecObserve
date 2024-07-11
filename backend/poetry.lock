@@ -592,13 +592,13 @@ files = [
 
 [[package]]
 name = "django"
-version = "5.0.6"
+version = "5.0.7"
 description = "A high-level Python web framework that encourages rapid development and clean, pragmatic design."
 optional = false
 python-versions = ">=3.10"
 files = [
-    {file = "Django-5.0.6-py3-none-any.whl", hash = "sha256:8363ac062bb4ef7c3f12d078f6fa5d154031d129a15170a1066412af49d30905"},
-    {file = "Django-5.0.6.tar.gz", hash = "sha256:ff1b61005004e476e0aeea47c7f79b85864c70124030e95146315396f1e7951f"},
+    {file = "Django-5.0.7-py3-none-any.whl", hash = "sha256:f216510ace3de5de01329463a315a629f33480e893a9024fc93d8c32c22913da"},
+    {file = "Django-5.0.7.tar.gz", hash = "sha256:bd4505cae0b9bd642313e8fb71810893df5dc2ffcacaa67a33af2d5cd61888f2"},
 ]
 
 [package.dependencies]
@@ -1396,13 +1396,13 @@ et-xmlfile = "*"
 
 [[package]]
 name = "packageurl-python"
-version = "0.15.2"
+version = "0.15.3"
 description = "A purl aka. Package URL parser and builder"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "packageurl_python-0.15.2-py3-none-any.whl", hash = "sha256:6b81641aeedf0a73377d88a8a640e45a2a0848ffdf5447d24eeef8526c41ac92"},
-    {file = "packageurl_python-0.15.2.tar.gz", hash = "sha256:9cd10eeedbc6680728c10a1585c6dd7bbad4ef4b389d80cd0ac223205e9c87df"},
+    {file = "packageurl_python-0.15.3-py3-none-any.whl", hash = "sha256:96624702032239e70e61b950e14460a5b5f87ac21fc68f119414047b94f0de27"},
+    {file = "packageurl_python-0.15.3.tar.gz", hash = "sha256:82e1150f1fc228e25e7b3be1c641ef96b6a0811526c0b4e4f7882a181e862607"},
 ]
 
 [package.extras]
@@ -2293,13 +2293,13 @@ zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
 name = "validators"
-version = "0.30.0"
+version = "0.32.0"
 description = "Python Data Validation for Humans™"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "validators-0.30.0-py3-none-any.whl", hash = "sha256:0f2387a9fe76d26c151ab716de18e34467413800abced256fd3a506f4f51cbdc"},
-    {file = "validators-0.30.0.tar.gz", hash = "sha256:c2dc5ffef052040bc11b62677429a904f9e04abaf35e0196ac509237cd3c9961"},
+    {file = "validators-0.32.0-py3-none-any.whl", hash = "sha256:e9ce1703afb0adf7724b0f98e4081d9d10e88fa5d37254d21e41f27774c020cd"},
+    {file = "validators-0.32.0.tar.gz", hash = "sha256:9ee6e6d7ac9292b9b755a3155d7c361d76bb2dce23def4f0627662da1e300676"},
 ]
 
 [package.extras]
@@ -2429,4 +2429,4 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">= 3.10, < 3.13"
-content-hash = "a9dd9d624d35ab3ca46ca5d58f8f7919c0b7cab27b4c8028724ee3b960b5aa9c"
+content-hash = "341ce012b2347fb4c9ba89dbcf75a2bd66843622d24cc620ddacbd19fd6a63cf"

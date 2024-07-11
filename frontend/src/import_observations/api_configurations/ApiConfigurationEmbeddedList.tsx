@@ -43,17 +43,18 @@ const ApiConfigurationEmbeddedList = ({ product }: ApiConfigurationEmbeddedListP
         return <div>Loading...</div>;
     }
 
-    if (listContext.data === undefined) {
-        listContext.data = [];
-    }
-
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
                 <FilterForm filters={listFilters} />
-                <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false}>
+                <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false} rowClick={false}>
                     <TextField source="name" />
-                    <ReferenceField source="parser" reference="parsers" link={false} />
+                    <ReferenceField
+                        source="parser"
+                        reference="parsers"
+                        link={false}
+                        sx={{ "& a": { textDecoration: "none" } }}
+                    />
                     <TextField source="base_url" label="Base URL" />
                     <TextField source="project_key" />
                     <WithRecord

@@ -41,7 +41,12 @@ const VEXStatementShow = () => {
                 render={(vex_statement) => (
                     <SimpleShowLayout>
                         <Typography variant="h6">Imported VEX Statement</Typography>
-                        <ReferenceField source="document" reference="vex/vex_documents" link="show">
+                        <ReferenceField
+                            source="document"
+                            reference="vex/vex_documents"
+                            link="show"
+                            sx={{ "& a": { textDecoration: "none" } }}
+                        >
                             <TextField source="document_id" />
                         </ReferenceField>
                         <TextField source="vulnerability_id" label="Vulnerability ID" className={classes.fontBigBold} />

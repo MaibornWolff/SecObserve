@@ -42,17 +42,18 @@ const ProductEmbeddedList = ({ product_group }: ProductEmbeddedListProps) => {
         return <div>Loading...</div>;
     }
 
-    if (listContext.data === undefined) {
-        listContext.data = [];
-    }
-
     localStorage.setItem("productembeddedlist.product_group", product_group.id);
 
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
                 <FilterForm filters={listFilters()} />
-                <Datagrid size={getSettingListSize()} rowClick={ShowProducts} bulkActionButtons={false}>
+                <Datagrid
+                    size={getSettingListSize()}
+                    rowClick={ShowProducts}
+                    bulkActionButtons={false}
+                    resource="products"
+                >
                     <TextField source="name" />
                     <TextField
                         source="repository_default_branch_name"

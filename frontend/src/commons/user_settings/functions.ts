@@ -1,5 +1,4 @@
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
-import { darkTheme, lightTheme } from "../layout/themes";
 
 export async function saveSettingTheme(theme: string) {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -39,9 +38,9 @@ export function getSettingListSize(): "small" | "medium" | undefined {
 export function getTheme() {
     const setting_theme = getSettingTheme();
     if (setting_theme == "dark") {
-        return darkTheme;
+        return "dark";
     } else {
-        return lightTheme;
+        return "light";
     }
 }
 

@@ -29,14 +29,16 @@ const ProductMemberEmbeddedList = ({ product }: ProductMemberEmbeddedListProps) 
         return <div>Loading...</div>;
     }
 
-    if (listContext.data === undefined) {
-        listContext.data = [];
-    }
-
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
-                <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false}>
+                <Datagrid
+                    size={getSettingListSize()}
+                    sx={{ width: "100%" }}
+                    bulkActionButtons={false}
+                    rowClick={false}
+                    resource="product_members"
+                >
                     <TextField source="user_data.full_name" label="User" />
                     <SelectField source="role" choices={ROLE_CHOICES} />
                     <WithRecord

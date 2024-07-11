@@ -42,15 +42,16 @@ const VEXStatementEmbeddedList = ({ vex_document }: VEXStatementEmbeddedListProp
         return <div>Loading...</div>;
     }
 
-    if (listContext.data === undefined) {
-        listContext.data = [];
-    }
-
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
                 <FilterForm filters={listFilters()} />
-                <Datagrid size={getSettingListSize()} rowClick={ShowVEXStatement} bulkActionButtons={false}>
+                <Datagrid
+                    size={getSettingListSize()}
+                    rowClick={ShowVEXStatement}
+                    bulkActionButtons={false}
+                    resource="vex/vex_statements"
+                >
                     <TextField source="vulnerability_id" label="Vulnerability ID" />
                     <ChipField source="status" />
                     <TextField source="product_purl" label="Product" />

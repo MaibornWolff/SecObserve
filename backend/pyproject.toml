@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "SecObserve"
-version = "1.16.0"
+version = "1.16.1"
 description = "SecObserve is an open source vulnerability management system for software development and cloud environments."
 license = "BSD-3-Clause"
 authors = [
@@ -11,7 +11,7 @@ authors = [
 python = ">= 3.10, < 3.13"
 # Django
 # ------------------------------------------------------------------------------
-django = "5.0.6"  # https://www.djangoproject.com/
+django = "5.0.7"  # https://www.djangoproject.com/
 django-environ = "0.11.2"  # https://github.com/joke2k/django-environ
 django-filter = "24.2"  # https://github.com/carltongibson/django-filter 
 django-csp = "3.8"  # https://github.com/mozilla/django-csp
@@ -43,7 +43,7 @@ defusedcsv = "2.0.0"  # https://github.com/raphaelm/defusedcsv
 openpyxl = "3.1.5"  # https://foss.heptapod.net/openpyxl/openpyxl
 # Package URL
 # ------------------------------------------------------------------------------
-packageurl-python = "0.15.2"  # https://github.com/package-url/packageurl-python
+packageurl-python = "0.15.3"  # https://github.com/package-url/packageurl-python
 # Task queue
 # ------------------------------------------------------------------------------
 huey = "2.5.1"  # https://github.com/coleifer/huey
@@ -53,7 +53,7 @@ jira = "3.8.0"  # https://github.com/pycontribs/jira
 # Others
 # ------------------------------------------------------------------------------
 inflect = "7.3.1"  # https://github.com/jaraco/inflect
-validators = "0.30.0"  # https://github.com/python-validators/validators
+validators = "0.32.0"  # https://github.com/python-validators/validators
 cvss = "3.1"  # https://github.com/RedHatProductSecurity/cvss
 jsonpickle = "3.2.2"  # https://github.com/jsonpickle/jsonpickle
 

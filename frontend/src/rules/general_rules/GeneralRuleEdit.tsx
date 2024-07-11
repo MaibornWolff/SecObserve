@@ -84,7 +84,7 @@ const GeneralRuleEdit = () => {
 };
 const GeneralRuleEditForm = () => {
     const generalRule = useRecordContext();
-    const [status, setStatus] = useState(generalRule.new_status);
+    const [status, setStatus] = useState(generalRule ? generalRule.new_status : "");
     const justificationEnabled = justificationIsEnabledForStatus(status);
 
     return (

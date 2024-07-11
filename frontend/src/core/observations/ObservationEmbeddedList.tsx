@@ -134,10 +134,6 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
         return <div>Loading...</div>;
     }
 
-    if (listContext.data === undefined) {
-        listContext.data = [];
-    }
-
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
@@ -156,6 +152,7 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
                             <BulkActionButtons product={product} />
                         )
                     }
+                    resource="observations"
                     preferenceKey="observations.embedded"
                 >
                     <TextField source="branch_name" label="Branch / Version" />

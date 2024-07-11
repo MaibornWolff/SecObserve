@@ -32,15 +32,11 @@ const ApiTokenEmbeddedList = () => {
         return <div>Loading...</div>;
     }
 
-    if (listContext.data === undefined) {
-        listContext.data = [];
-    }
-
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
                 <FilterForm filters={listFilters()} />
-                <Datagrid size={getSettingListSize()} rowClick={false} bulkActionButtons={false}>
+                <Datagrid size={getSettingListSize()} rowClick={false} bulkActionButtons={false} resource="api_tokens">
                     <TextField source="name" />
                     <WithRecord
                         label="Product"
@@ -53,6 +49,7 @@ const ApiTokenEmbeddedList = () => {
                                         link={(record: any, reference: any) =>
                                             `../../${reference}/${record.id}/show/api_token`
                                         }
+                                        sx={{ "& a": { textDecoration: "none" } }}
                                     />
                                 )}
                             </Fragment>
@@ -69,6 +66,7 @@ const ApiTokenEmbeddedList = () => {
                                         link={(record: any, reference: any) =>
                                             `../../${reference}/${record.id}/show/api_token`
                                         }
+                                        sx={{ "& a": { textDecoration: "none" } }}
                                     />
                                 )}
                             </Fragment>

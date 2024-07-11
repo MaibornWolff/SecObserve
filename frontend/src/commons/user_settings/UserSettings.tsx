@@ -11,19 +11,18 @@ import {
 } from "@mui/material";
 import { Title, useTheme } from "react-admin";
 
-import { darkTheme, lightTheme } from "../layout/themes";
 import { getSettingListSize, getSettingTheme, saveSettingListSize, saveSettingTheme } from "./functions";
 
 const UserSettings = () => {
     const [, setTheme] = useTheme();
 
     function setLightTheme() {
-        setTheme(lightTheme);
+        setTheme("light");
         saveSettingTheme("light");
     }
 
     function setDarkTheme() {
-        setTheme(darkTheme);
+        setTheme("dark");
         saveSettingTheme("dark");
     }
 

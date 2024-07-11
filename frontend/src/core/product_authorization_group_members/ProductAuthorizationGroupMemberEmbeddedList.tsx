@@ -29,14 +29,16 @@ const ProductAuthorizationGroupMemberEmbeddedList = ({ product }: ProductAuthori
         return <div>Loading...</div>;
     }
 
-    if (listContext.data === undefined) {
-        listContext.data = [];
-    }
-
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
-                <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false}>
+                <Datagrid
+                    size={getSettingListSize()}
+                    sx={{ width: "100%" }}
+                    bulkActionButtons={false}
+                    rowClick={false}
+                    resource="product_authorization_group_members"
+                >
                     <TextField source="authorization_group_name" label="Authorization Group" />
                     <SelectField source="role" choices={ROLE_CHOICES} />
                     <WithRecord

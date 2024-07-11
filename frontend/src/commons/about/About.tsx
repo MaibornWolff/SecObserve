@@ -101,7 +101,12 @@ const About = () => {
                             <Typography>Copyright:</Typography>
                         </Grid>
                         <Grid item xs={8}>
-                            <Link href="https://www.maibornwolff.de" target="_blank" rel="noreferrer">
+                            <Link
+                                href="https://www.maibornwolff.de"
+                                target="_blank"
+                                rel="noreferrer"
+                                sx={{ textDecoration: "none" }}
+                            >
                                 MaibornWolff GmbH
                             </Link>
                         </Grid>
@@ -113,6 +118,7 @@ const About = () => {
                                 href="https://github.com/MaibornWolff/SecObserve/blob/dev/LICENSE.txt"
                                 target="_blank"
                                 rel="noreferrer"
+                                sx={{ textDecoration: "none" }}
                             >
                                 BSD 3-Clause
                             </Link>
@@ -121,7 +127,12 @@ const About = () => {
                             <Typography>Source code: </Typography>
                         </Grid>
                         <Grid item xs={8}>
-                            <Link href="https://github.com/MaibornWolff/SecObserve" target="_blank" rel="noreferrer">
+                            <Link
+                                href="https://github.com/MaibornWolff/SecObserve"
+                                target="_blank"
+                                rel="noreferrer"
+                                sx={{ textDecoration: "none" }}
+                            >
                                 https://github.com/MaibornWolff/SecObserve
                             </Link>
                         </Grid>

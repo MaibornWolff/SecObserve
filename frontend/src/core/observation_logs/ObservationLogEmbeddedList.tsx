@@ -21,17 +21,15 @@ const ObservationLogEmbeddedList = ({ observation }: ObservationLogEmbeddedListP
         return <div>Loading...</div>;
     }
 
-    if (listContext.data === undefined) {
-        listContext.data = [];
+    if (listContext.data) {
+        listContext.data.forEach((element: any) => {
+            if (element.comment.length > 255) {
+                element.comment_shortened = element.comment.substring(0, 255) + "...";
+            } else {
+                element.comment_shortened = element.comment;
+            }
+        });
     }
-
-    listContext.data.forEach((element: any) => {
-        if (element.comment.length > 255) {
-            element.comment_shortened = element.comment.substring(0, 255) + "...";
-        } else {
-            element.comment_shortened = element.comment;
-        }
-    });
 
     const ShowObservationLogs = (id: any) => {
         return "../../../../observation_logs/" + id + "/show";
@@ -48,6 +46,7 @@ const ObservationLogEmbeddedList = ({ observation }: ObservationLogEmbeddedListP
                     sx={{ width: "100%" }}
                     bulkActionButtons={false}
                     rowClick={ShowObservationLogs}
+                    resource="observation_logs"
                 >
                     {(observation.product_data.assessments_need_approval ||
                         observation.product_data.product_group_assessments_need_approval) && (
