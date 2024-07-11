@@ -2,7 +2,6 @@ import json
 from typing import Optional
 
 import requests
-from requests.auth import HTTPBasicAuth
 
 from application.core.models import Observation
 from application.core.types import Severity, Status
@@ -64,16 +63,30 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
         except Exception as e:
             return False, [f"Cannot access Prometheus: {str(e)}"], {}
 
-        return True, [], response.json().get("data").get("result")
+        return True, [], response.json()
+    
+    def check_format(self, import_data) -> tuple[bool, list[str], dict]:
+        try:
+            data = json.load(import_data)
+        except Exception:
+            return False, ["Data is not valid JSON"], {}
 
-    def get_observations(self, data: list[dict]) -> list[Observation]:
+        if not data.get("status") == "success":
+            return False, ["Data is not a Prometheus API-Endpoint"], {}
+
+        if not isinstance(data.get("data"), dict) or not isinstance(data.get("data").get("result"), list):
+            return False, ["Data not in valid Prometheus-Metric Format"], {}
+
+        return True, [], data
+
+    def get_observations(self, data) -> list[Observation]:
         observations = []
 
         scanner, version = self.get_about()
         if version:
             scanner += " / " + version
 
-        for finding in data:
+        for finding in data.get("data").get("result"):
             origin_component_name = finding.get("metric", {}).get("resource", "")
             vuln_title = finding.get("metric", {}).get("vuln_title", "")
             vulnerability_id = finding.get("metric", {}).get("vuln_id", "")

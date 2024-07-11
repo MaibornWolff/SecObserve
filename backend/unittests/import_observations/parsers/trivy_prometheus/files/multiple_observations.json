@@ -1,34 +1,70 @@
 {
-    "format": "SecObserve",
-    "observations": [
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": [
         {
-            "title": "title_1",
-            "description": "description_1",
-            "recommendation": "recommendation_1",
-            "parser_severity": "Critical",
-            "scanner_observation_id": "scanner_observation_id_1",
-            "vulnerability_id": "vulnerability_id_1",
-            "origin_component_name": "origin_component_name_1",
-            "origin_component_version": "origin_component_version_1",
-            "origin_component_name_version": "origin_component_name_version_1",
-            "origin_component_purl": "origin_component_purl_1",
-            "origin_component_cpe": "origin_component_cpe_1",
-            "origin_docker_image_name": "origin_docker_image_name_1",
-            "origin_docker_image_tag": "origin_docker_image_tag_1",
-            "origin_docker_image_name_tag": "origin_docker_image_name_tag_1",
-            "origin_endpoint_url": "origin_endpoint_url_1",
-            "origin_service_name": "origin_service_name_1",
-            "origin_source_file": "origin_source_file_1",
-            "origin_source_line_start": 10,
-            "origin_source_line_end": 11,
-            "cvss3_score": 1.1,
-            "cvss3_vector": "cvss3_vector_1",
-            "cwe": 1,
-            "scanner": "scanner_1"
+          "metric": {
+            "__name__": "trivy_vulnerability_id",
+            "container": "trivy-operator",
+            "container_name": "container1",
+            "endpoint": "metrics",
+            "fixed_version": "0.1.0",
+            "image_digest": "sha256:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "image_registry": "registry.io",
+            "image_repository": "namespace/image",
+            "image_tag": "v0.26.0",
+            "installed_version": "v0.10.0",
+            "instance": "192.168.0.1:80",
+            "job": "trivy-operator",
+            "last_modified_date": "2024-01-01T00:00:00Z",
+            "name": "statefulset-5d9699c585",
+            "namespace": "default",
+            "pod": "pod-123456789-xxxxx",
+            "published_date": "2024-01-01T00:00:00Z",
+            "resource": "recoure.org/x/net",
+            "resource_kind": "StatefulSet",
+            "resource_name": "recource_name",
+            "service": "trivy-operator",
+            "severity": "Medium",
+            "vuln_id": "CVE-2023-1111",
+            "vuln_score": "6.1",
+            "vuln_title": "very vulnerable"
+          },
+          "value": [123456789.123, "1"
+          ]
         },
         {
-            "title": "title_2",
-            "reference": "https://example.com"
+          "metric": {
+            "__name__": "trivy_vulnerability_id",
+            "container": "trivy-operator",
+            "container_name": "container2",
+            "endpoint": "metrics",
+            "fixed_version": "0.2.0",
+            "image_digest": "sha256:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "image_registry": "registry.io",
+            "image_repository": "namespace/image",
+            "image_tag": "v0.74.0",
+            "installed_version": "v0.17.0",
+            "instance": "192.168.0.2:80",
+            "job": "trivy-operator",
+            "last_modified_date": "2024-01-01T00:00:00Z",
+            "name": "statefulset-5d9699c585",
+            "namespace": "default",
+            "pod": "pod-123456789-xxxxx",
+            "published_date": "2024-01-01T00:00:00Z",
+            "resource": "recoure.org/x/net",
+            "resource_kind": "StatefulSet",
+            "resource_name": "recource_name",
+            "service": "trivy-operator",
+            "severity": "High",
+            "vuln_id": "CVE-2023-2222",
+            "vuln_score": "7.5",
+            "vuln_title": "very vulnerable"
+          },
+          "value": [123456789.123, "1"
+          ]
         }
-    ]
+      ]
+    }
 }
