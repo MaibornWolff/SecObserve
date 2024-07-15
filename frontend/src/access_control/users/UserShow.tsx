@@ -1,4 +1,4 @@
-import { Paper, Stack, Typography } from "@mui/material";
+import { Box, Paper, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
 import {
     ArrayField,
@@ -9,7 +9,6 @@ import {
     Labeled,
     PrevNextButtons,
     Show,
-    SimpleShowLayout,
     TextField,
     TopToolbar,
     WithRecord,
@@ -70,7 +69,7 @@ const UserComponent = () => {
     return (
         <WithRecord
             render={(user) => (
-                <SimpleShowLayout>
+                <Box width={"100%"}>
                     <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
                         <Typography variant="h6" sx={{ marginBottom: 1 }}>
                             User
@@ -164,7 +163,7 @@ const UserComponent = () => {
                             </ArrayField>
                         </Paper>
                     )}
-                </SimpleShowLayout>
+                </Box>
             )}
         />
     );

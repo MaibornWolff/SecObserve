@@ -52,14 +52,24 @@ const ObservationLogEmbeddedList = ({ observation }: ObservationLogEmbeddedListP
                         observation.product_data.product_group_assessments_need_approval) && (
                         <ChipField source="assessment_status" sortable={false} />
                     )}
-                    <TextField source="user_full_name" label="User" sortable={false} />
+                    <TextField source="user_full_name" label="User" sortable={false} sx={{ wordBreak: "break-word" }} />
                     <TextField source="severity" emptyText="---" sortable={false} />
                     <TextField source="status" emptyText="---" sortable={false} />
-                    <TextField source="comment_shortened" sortable={false} label="Comment" />
+                    <TextField
+                        source="comment_shortened"
+                        sortable={false}
+                        label="Comment"
+                        sx={{ wordBreak: "break-word" }}
+                    />
                     <DateField source="created" showTime sortable={false} />
                     {(observation.product_data.assessments_need_approval ||
                         observation.product_data.product_group_assessments_need_approval) && (
-                        <TextField source="approval_user_full_name" label="Approved/rejected by" sortable={false} />
+                        <TextField
+                            source="approval_user_full_name"
+                            label="Approved/rejected by"
+                            sortable={false}
+                            sx={{ wordBreak: "break-word" }}
+                        />
                     )}
                 </Datagrid>
                 <CustomPagination />

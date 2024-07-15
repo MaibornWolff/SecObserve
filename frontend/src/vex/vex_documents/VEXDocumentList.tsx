@@ -40,11 +40,11 @@ const VEXDocumentList = () => {
             >
                 <Datagrid size={getSettingListSize()} rowClick="show" bulkActionButtons={<BulkActionButtons />}>
                     <TextField source="type" />
-                    <TextField source="document_id" label="Document ID" />
-                    <TextField source="version" />
+                    <TextField source="document_id" label="Document ID" sx={{ wordBreak: "break-word" }} />
+                    <TextField source="version" sx={{ wordBreak: "break-word" }} />
                     <DateField source="current_release_date" label="Current release" />
-                    <TextField source="author" />
-                    <TextField source="role" />
+                    <TextField source="author" sx={{ wordBreak: "break-word" }} />
+                    <TextField source="role" sx={{ wordBreak: "break-word" }} />
                 </Datagrid>
             </List>
         </Fragment>

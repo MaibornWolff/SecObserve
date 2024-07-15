@@ -50,7 +50,7 @@ const OpenVEXList = () => {
                 empty={false}
             >
                 <Datagrid size={getSettingListSize()} rowClick="show" bulkActionButtons={false}>
-                    <TextField source="product_data.name" label="Product" />
+                    <TextField source="product_data.name" label="Product" sx={{ wordBreak: "break-word" }} />
                     <ReferenceManyField
                         reference="vex/openvex_vulnerabilities"
                         target="openvex"
@@ -65,11 +65,11 @@ const OpenVEXList = () => {
                             <ChipField source="name" />
                         </SingleFieldList>
                     </ReferenceManyField>
-                    <TextField source="id_namespace" label="ID namespace" />
-                    <TextField source="document_id_prefix" label="ID prefix" />
-                    <TextField source="document_base_id" label="Base ID" />
+                    <TextField source="id_namespace" label="ID namespace" sx={{ wordBreak: "break-word" }} />
+                    <TextField source="document_id_prefix" label="ID prefix" sx={{ wordBreak: "break-word" }} />
+                    <TextField source="document_base_id" label="Base ID" sx={{ wordBreak: "break-word" }} />
                     <NumberField source="version" label="Version" />
-                    <TextField source="author" label="Author" />
+                    <TextField source="author" label="Author" sx={{ wordBreak: "break-word" }} />
                     <FunctionField<OpenVEX>
                         label="Created"
                         sortBy="timestamp"
@@ -80,7 +80,7 @@ const OpenVEXList = () => {
                         sortBy="last_updated"
                         render={(record) => (record ? humanReadableDate(record.last_updated) : "")}
                     />
-                    <TextField source="user_full_name" label="User" />
+                    <TextField source="user_full_name" label="User" sx={{ wordBreak: "break-word" }} />
                 </Datagrid>
             </List>
         </Fragment>
