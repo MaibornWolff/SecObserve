@@ -10,7 +10,7 @@ networks:
 services:
 
   traefik:
-    image: "traefik:v3.0.4"
+    image: "traefik:v3.1.0"
     container_name: "prod_traefik"
     command:
       - "--log.level=INFO"
