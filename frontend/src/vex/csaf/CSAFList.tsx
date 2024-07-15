@@ -50,7 +50,7 @@ const CSAFList = () => {
                 empty={false}
             >
                 <Datagrid size={getSettingListSize()} rowClick="show" bulkActionButtons={false}>
-                    <TextField source="product_data.name" label="Product" />
+                    <TextField source="product_data.name" label="Product" sx={{ wordBreak: "break-word" }} />
                     <ReferenceManyField reference="vex/csaf_vulnerabilities" target="csaf" label="Vulnerabilities">
                         <SingleFieldList linkType={false}>
                             <ChipField source="name" />
@@ -61,11 +61,11 @@ const CSAFList = () => {
                             <ChipField source="name" />
                         </SingleFieldList>
                     </ReferenceManyField>
-                    <TextField source="document_id_prefix" label="ID prefix" />
-                    <TextField source="document_base_id" label="Base ID" />
+                    <TextField source="document_id_prefix" label="ID prefix" sx={{ wordBreak: "break-word" }} />
+                    <TextField source="document_base_id" label="Base ID" sx={{ wordBreak: "break-word" }} />
                     <NumberField source="version" label="Version" />
-                    <TextField source="title" />
-                    <TextField source="publisher_name" label="Pub. name" />
+                    <TextField source="title" sx={{ wordBreak: "break-word" }} />
+                    <TextField source="publisher_name" label="Pub. name" sx={{ wordBreak: "break-word" }} />
                     <FunctionField<CSAF>
                         label="Created"
                         sortBy="tracking_initial_release_date"
@@ -76,7 +76,7 @@ const CSAFList = () => {
                         sortBy="tracking_current_release_date"
                         render={(record) => (record ? humanReadableDate(record.tracking_current_release_date) : "")}
                     />
-                    <TextField source="user_full_name" label="User" />
+                    <TextField source="user_full_name" label="User" sx={{ wordBreak: "break-word" }} />
                 </Datagrid>
             </List>
         </Fragment>

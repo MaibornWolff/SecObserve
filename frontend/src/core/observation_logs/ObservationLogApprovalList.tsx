@@ -85,13 +85,23 @@ const ObservationLogApprovalList = ({ product }: ObservationLogApprovalListProps
                     >
                         <TextField source="title" />
                     </ReferenceField>
-                    <TextField source="user_full_name" label="User" />
+                    <TextField source="user_full_name" label="User" sx={{ wordBreak: "break-word" }} />
                     <TextField source="severity" emptyText="---" />
                     <TextField source="status" emptyText="---" />
                     {feature_vex_enabled() && (
-                        <TextField label="VEX justification" source="vex_justification" emptyText="---" />
+                        <TextField
+                            label="VEX justification"
+                            source="vex_justification"
+                            emptyText="---"
+                            sx={{ wordBreak: "break-word" }}
+                        />
                     )}
-                    <TextField source="comment_shortened" sortable={false} label="Comment" />
+                    <TextField
+                        source="comment_shortened"
+                        sortable={false}
+                        label="Comment"
+                        sx={{ wordBreak: "break-word" }}
+                    />
                     <DateField source="created" showTime />
                 </Datagrid>
                 <CustomPagination />

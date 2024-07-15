@@ -61,7 +61,7 @@ const ProductRuleApprovalList = ({ product }: ProductRuleApprovalListProps) => {
                     rowClick={ShowProductRule}
                     resource="product_rules"
                 >
-                    <TextField source="name" />
+                    <TextField source="name" sx={{ wordBreak: "break-word" }} />
                     <TextField source="new_severity" />
                     <TextField source="new_status" />
                     {product &&
@@ -75,8 +75,8 @@ const ProductRuleApprovalList = ({ product }: ProductRuleApprovalListProps) => {
                         link={false}
                         sx={{ "& a": { textDecoration: "none" } }}
                     />
-                    <TextField source="scanner_prefix" />
-                    <TextField source="title" label="Observation title" />
+                    <TextField source="scanner_prefix" sx={{ wordBreak: "break-word" }} />
+                    <TextField source="title" label="Observation title" sx={{ wordBreak: "break-word" }} />
                 </Datagrid>
                 <CustomPagination />
             </div>
