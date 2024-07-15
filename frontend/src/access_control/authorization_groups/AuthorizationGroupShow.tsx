@@ -1,15 +1,6 @@
-import { Paper, Stack, Typography } from "@mui/material";
+import { Box, Paper, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
-import {
-    EditButton,
-    Labeled,
-    PrevNextButtons,
-    Show,
-    SimpleShowLayout,
-    TextField,
-    TopToolbar,
-    WithRecord,
-} from "react-admin";
+import { EditButton, Labeled, PrevNextButtons, Show, TextField, TopToolbar, WithRecord } from "react-admin";
 
 import { is_superuser } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
@@ -37,7 +28,7 @@ const AuthorizationGroupComponent = () => {
     return (
         <WithRecord
             render={(authorization_group) => (
-                <SimpleShowLayout>
+                <Box width={"100%"}>
                     <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
                         <Typography variant="h6" sx={{ marginBottom: 1 }}>
                             Authorization Group
@@ -59,7 +50,7 @@ const AuthorizationGroupComponent = () => {
                         </Typography>
                         <UserAGEmbeddedList authorization_group={authorization_group} />
                     </Paper>
-                </SimpleShowLayout>
+                </Box>
             )}
         />
     );

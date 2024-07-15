@@ -155,18 +155,30 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
                     resource="observations"
                     preferenceKey="observations.embedded"
                 >
-                    <TextField source="branch_name" label="Branch / Version" />
-                    <TextField source="title" />
+                    <TextField source="branch_name" label="Branch / Version" sx={{ wordBreak: "break-word" }} />
+                    <TextField source="title" sx={{ wordBreak: "break-word" }} />
                     <SeverityField source="current_severity" />
                     <ChipField source="current_status" label="Status" />
-                    <NumberField source="epss_score" label="EPSS" />
-                    <TextField source="origin_service_name" label="Service" />
-                    <TextField source="origin_component_name_version" label="Component" />
-                    <TextField source="origin_docker_image_name_tag_short" label="Container" />
-                    <TextField source="origin_endpoint_hostname" label="Host" />
-                    <TextField source="origin_source_file" label="Source" />
-                    <TextField source="origin_cloud_qualified_resource" label="Resource" />
-                    <TextField source="scanner_name" label="Scanner" />
+                    <NumberField source="epss_score" label="EPSS" sx={{ wordBreak: "break-word" }} />
+                    <TextField source="origin_service_name" label="Service" sx={{ wordBreak: "break-word" }} />
+                    <TextField
+                        source="origin_component_name_version"
+                        label="Component"
+                        sx={{ wordBreak: "break-word" }}
+                    />
+                    <TextField
+                        source="origin_docker_image_name_tag_short"
+                        label="Container"
+                        sx={{ wordBreak: "break-word" }}
+                    />
+                    <TextField source="origin_endpoint_hostname" label="Host" sx={{ wordBreak: "break-word" }} />
+                    <TextField source="origin_source_file" label="Source" sx={{ wordBreak: "break-word" }} />
+                    <TextField
+                        source="origin_cloud_qualified_resource"
+                        label="Resource"
+                        sx={{ wordBreak: "break-word" }}
+                    />
+                    <TextField source="scanner_name" label="Scanner" sx={{ wordBreak: "break-word" }} />
                     <FunctionField<Observation>
                         label="Age"
                         sortBy="last_observation_log"

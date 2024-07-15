@@ -52,20 +52,48 @@ const PotentialDuplicatesList = ({ observation }: PotentialDuplicatesListProps) 
                 bulkActionButtons={<BulkActionButtons observation={observation} />}
                 resource="potential_duplicates"
             >
-                <TextField source="potential_duplicate_observation.title" label="Title" />
+                <TextField
+                    source="potential_duplicate_observation.title"
+                    label="Title"
+                    sx={{ wordBreak: "break-word" }}
+                />
                 <SeverityField source="potential_duplicate_observation.current_severity" />
                 <ChipField source="potential_duplicate_observation.current_status" label="Status" />
-                <TextField source="potential_duplicate_observation.origin_service_name" label="Service" />
-                <TextField source="potential_duplicate_observation.origin_component_name_version" label="Component" />
+                <TextField
+                    source="potential_duplicate_observation.origin_service_name"
+                    label="Service"
+                    sx={{ wordBreak: "break-word" }}
+                />
+                <TextField
+                    source="potential_duplicate_observation.origin_component_name_version"
+                    label="Component"
+                    sx={{ wordBreak: "break-word" }}
+                />
                 <TextField
                     source="potential_duplicate_observation.origin_docker_image_name_tag_short"
                     label="Container"
+                    sx={{ wordBreak: "break-word" }}
                 />
-                <TextField source="potential_duplicate_observation.origin_endpoint_hostname" label="Host" />
-                <TextField source="potential_duplicate_observation.origin_source_file" label="Source" />
-                <TextField source="potential_duplicate_observation.origin_cloud_qualified_resource" label="Resource" />
-                ,
-                <TextField source="potential_duplicate_observation.scanner_name" label="Scanner" />
+                <TextField
+                    source="potential_duplicate_observation.origin_endpoint_hostname"
+                    label="Host"
+                    sx={{ wordBreak: "break-word" }}
+                />
+                <TextField
+                    source="potential_duplicate_observation.origin_source_file"
+                    label="Source"
+                    sx={{ wordBreak: "break-word" }}
+                />
+                <TextField
+                    source="potential_duplicate_observation.origin_cloud_qualified_resource"
+                    label="Resource"
+                    sx={{ wordBreak: "break-word" }}
+                />
+                <TextField
+                    source="potential_duplicate_observation.scanner_name"
+                    label="Scanner"
+                    sx={{ wordBreak: "break-word" }}
+                />
                 <FunctionField<Observation>
                     label="Age"
                     sortBy="potential_duplicate_observation.last_observation_log"

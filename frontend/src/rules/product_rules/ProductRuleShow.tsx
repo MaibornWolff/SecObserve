@@ -1,4 +1,4 @@
-import { Paper, Stack, Typography } from "@mui/material";
+import { Box, Paper, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
 import {
     BooleanField,
@@ -9,7 +9,6 @@ import {
     PrevNextButtons,
     ReferenceField,
     Show,
-    SimpleShowLayout,
     SortPayload,
     TextField,
     TopToolbar,
@@ -76,7 +75,7 @@ const ProductRuleComponent = () => {
     return (
         <WithRecord
             render={(rule) => (
-                <SimpleShowLayout>
+                <Box width={"100%"}>
                     <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
                         <Typography variant="h6" sx={{ marginBottom: 1 }}>
                             Product Rule
@@ -236,7 +235,7 @@ const ProductRuleComponent = () => {
                                 </Stack>
                             </Paper>
                         )}
-                </SimpleShowLayout>
+                </Box>
             )}
         />
     );
