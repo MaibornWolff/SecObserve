@@ -12,8 +12,6 @@ Without any changes to the Docker Compose file, 3 URL's are available:
 
 
 ``` yaml title="docker-compose-prod-postgres.yml"
-version: "3"
-
 volumes:
   prod_postgres_data:
 

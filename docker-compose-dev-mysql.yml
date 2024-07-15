@@ -1,5 +1,3 @@
-version: "3"
-
 volumes:
   dev_huey_data:
   dev_mysql_data:

@@ -1,10 +1,10 @@
 # build environment
-FROM node:20.15.1-alpine3.19@sha256:97f02cbb1c8ef6eefcfb1b1f958c012362758972cf125a99c09bd18b26a716c9 as build
+FROM node:20.15.1-alpine3.19@sha256:97f02cbb1c8ef6eefcfb1b1f958c012362758972cf125a99c09bd18b26a716c9 AS build
 
 ARG VERSION=unkown
 
 WORKDIR /app
-ENV PATH /app/node_modules/.bin:$PATH
+ENV PATH=/app/node_modules/.bin:$PATH
 COPY frontend/package.json ./
 COPY frontend/package-lock.json ./
 COPY frontend/.npmrc ./
