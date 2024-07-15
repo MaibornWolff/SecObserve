@@ -75,8 +75,8 @@ const ProductRuleApprovalList = ({ product }: ProductRuleApprovalListProps) => {
                         link={false}
                         sx={{ "& a": { textDecoration: "none" } }}
                     />
-                    <TextField source="scanner_prefix" sx={{ wordBreak: "break-word" }} />
-                    <TextField source="title" label="Observation title" sx={{ wordBreak: "break-word" }} />
+                    <TextField source="scanner_prefix" />
+                    <TextField source="title" label="Observation title" />
                 </Datagrid>
                 <CustomPagination />
             </div>

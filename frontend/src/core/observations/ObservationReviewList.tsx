@@ -134,12 +134,12 @@ const ObservationsReviewList = ({ product }: ObservationsReviewListProps) => {
                     resource="observations"
                     preferenceKey="observations.embedded"
                 >
-                    <TextField source="branch_name" label="Branch / Version" sx={{ wordBreak: "break-word" }} />
-                    <TextField source="title" sx={{ wordBreak: "break-word" }} />
+                    <TextField source="branch_name" label="Branch / Version" />
+                    <TextField source="title" />
                     <SeverityField source="current_severity" />
                     <NumberField source="epss_score" label="EPSS" />
                     <ChipField source="current_status" label="Status" />
-                    <TextField source="origin_service_name" label="Service" sx={{ wordBreak: "break-word" }} />
+                    <TextField source="origin_service_name" label="Service" />
                     <TextField
                         source="origin_component_name_version"
                         label="Component"
@@ -157,7 +157,7 @@ const ObservationsReviewList = ({ product }: ObservationsReviewListProps) => {
                         label="Resource"
                         sx={{ wordBreak: "break-word" }}
                     />
-                    <TextField source="scanner_name" label="Scanner" sx={{ wordBreak: "break-word" }} />
+                    <TextField source="scanner_name" label="Scanner" />
                     <FunctionField<Observation>
                         label="Age"
                         sortBy="last_observation_log"
