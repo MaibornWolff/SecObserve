@@ -52,18 +52,10 @@ const PotentialDuplicatesList = ({ observation }: PotentialDuplicatesListProps) 
                 bulkActionButtons={<BulkActionButtons observation={observation} />}
                 resource="potential_duplicates"
             >
-                <TextField
-                    source="potential_duplicate_observation.title"
-                    label="Title"
-                    sx={{ wordBreak: "break-word" }}
-                />
+                <TextField source="potential_duplicate_observation.title" label="Title" />
                 <SeverityField source="potential_duplicate_observation.current_severity" />
                 <ChipField source="potential_duplicate_observation.current_status" label="Status" />
-                <TextField
-                    source="potential_duplicate_observation.origin_service_name"
-                    label="Service"
-                    sx={{ wordBreak: "break-word" }}
-                />
+                <TextField source="potential_duplicate_observation.origin_service_name" label="Service" />
                 <TextField
                     source="potential_duplicate_observation.origin_component_name_version"
                     label="Component"
@@ -89,11 +81,7 @@ const PotentialDuplicatesList = ({ observation }: PotentialDuplicatesListProps) 
                     label="Resource"
                     sx={{ wordBreak: "break-word" }}
                 />
-                <TextField
-                    source="potential_duplicate_observation.scanner_name"
-                    label="Scanner"
-                    sx={{ wordBreak: "break-word" }}
-                />
+                <TextField source="potential_duplicate_observation.scanner_name" label="Scanner" />
                 <FunctionField<Observation>
                     label="Age"
                     sortBy="potential_duplicate_observation.last_observation_log"

@@ -85,7 +85,7 @@ const ObservationLogApprovalList = ({ product }: ObservationLogApprovalListProps
                     >
                         <TextField source="title" />
                     </ReferenceField>
-                    <TextField source="user_full_name" label="User" sx={{ wordBreak: "break-word" }} />
+                    <TextField source="user_full_name" label="User" />
                     <TextField source="severity" emptyText="---" />
                     <TextField source="status" emptyText="---" />
                     {feature_vex_enabled() && (

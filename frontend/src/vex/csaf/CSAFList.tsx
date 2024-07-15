@@ -50,7 +50,7 @@ const CSAFList = () => {
                 empty={false}
             >
                 <Datagrid size={getSettingListSize()} rowClick="show" bulkActionButtons={false}>
-                    <TextField source="product_data.name" label="Product" sx={{ wordBreak: "break-word" }} />
+                    <TextField source="product_data.name" label="Product" />
                     <ReferenceManyField reference="vex/csaf_vulnerabilities" target="csaf" label="Vulnerabilities">
                         <SingleFieldList linkType={false}>
                             <ChipField source="name" />
@@ -62,9 +62,9 @@ const CSAFList = () => {
                         </SingleFieldList>
                     </ReferenceManyField>
                     <TextField source="document_id_prefix" label="ID prefix" sx={{ wordBreak: "break-word" }} />
-                    <TextField source="document_base_id" label="Base ID" sx={{ wordBreak: "break-word" }} />
+                    <TextField source="document_base_id" label="Base ID" />
                     <NumberField source="version" label="Version" />
-                    <TextField source="title" sx={{ wordBreak: "break-word" }} />
+                    <TextField source="title" />
                     <TextField source="publisher_name" label="Pub. name" sx={{ wordBreak: "break-word" }} />
                     <FunctionField<CSAF>
                         label="Created"
@@ -76,7 +76,7 @@ const CSAFList = () => {
                         sortBy="tracking_current_release_date"
                         render={(record) => (record ? humanReadableDate(record.tracking_current_release_date) : "")}
                     />
-                    <TextField source="user_full_name" label="User" sx={{ wordBreak: "break-word" }} />
+                    <TextField source="user_full_name" label="User" />
                 </Datagrid>
             </List>
         </Fragment>

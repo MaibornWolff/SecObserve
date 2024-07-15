@@ -58,7 +58,7 @@ const UserEmbeddedList = () => {
                 {is_superuser() && <UserCreateButton />}
                 <FilterForm filters={listFilters()} />
                 <Datagrid size={getSettingListSize()} rowClick={ShowUsers} bulkActionButtons={false} resource="users">
-                    <TextField source="username" sx={{ wordBreak: "break-word" }} />
+                    <TextField source="username" />
                     <TextField source="full_name" sx={{ wordBreak: "break-word" }} />
                     {is_superuser() && <BooleanField source="is_active" label="Active" />}
                     {is_superuser() && <BooleanField source="is_oidc_user" label="OIDC user" />}

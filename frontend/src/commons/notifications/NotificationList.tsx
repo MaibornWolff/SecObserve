@@ -62,14 +62,14 @@ const NotificationList = () => {
                     rowClick="show"
                     bulkActionButtons={<BulkActionButtons />}
                 >
-                    <TextField source="type" sx={{ wordBreak: "break-word" }} />
-                    <TextField source="name" sx={{ wordBreak: "break-word" }} />
+                    <TextField source="type" />
+                    <TextField source="name" />
                     <DateField source="created" showTime={true} />
                     <TextField source="message" sx={{ wordBreak: "break-word" }} />
-                    <TextField source="function" sx={{ wordBreak: "break-word" }} />
-                    <TextField source="product_name" label="Product" sx={{ wordBreak: "break-word" }} />
-                    <TextField source="observation_title" label="Observation" sx={{ wordBreak: "break-word" }} />
-                    <TextField source="user_full_name" label="User" sx={{ wordBreak: "break-word" }} />
+                    <TextField source="function" />
+                    <TextField source="product_name" label="Product" />
+                    <TextField source="observation_title" label="Observation" />
+                    <TextField source="user_full_name" label="User" />
                 </DatagridConfigurable>
             </List>
         </Fragment>
