@@ -14,8 +14,6 @@ from application.core.models import (
     Reference,
 )
 from application.core.types import Severity, Status
-
-# from application.import_observations.apps import _register_parser
 from application.import_observations.models import Vulnerability_Check
 from application.import_observations.services.import_observations import (
     FileUploadParameters,
