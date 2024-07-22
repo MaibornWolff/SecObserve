@@ -8,7 +8,7 @@
   "keywords": [],
   "author": "",
   "devDependencies": {
-    "@playwright/test": "1.45.2",
+    "@playwright/test": "1.45.3",
     "@types/node": "20.14.11"
   }
 }
