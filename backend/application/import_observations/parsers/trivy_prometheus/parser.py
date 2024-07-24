@@ -53,7 +53,7 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
 
         trivy_basic_auth_param = None
         if trivy_prometheus_basic_auth:
-            trivy_basic_auth_param = (trivy_prometheus_basic_auth_username,trivy_prometheus_basic_auth_password)
+            trivy_basic_auth_param = (trivy_prometheus_basic_auth_username, trivy_prometheus_basic_auth_password)
 
         try:
             response = requests.get(
@@ -64,7 +64,7 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
             return False, [f"Cannot access Prometheus: {str(e)}"], {}
 
         return True, [], response.json()
-    
+
     def check_format(self, import_data) -> tuple[bool, list[str], dict]:
         try:
             data = json.load(import_data)
@@ -92,7 +92,8 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
             vulnerability_id = finding.get("metric", {}).get("vuln_id", "")
             cvss3_score = finding.get("metric", {}).get("vuln_score")
             severity = finding.get("metric", {}).get("severity", Severity.SEVERITY_UNKOWN)
-            origin_docker_image_name = finding.get("metric", {}).get("image_registry", "") + "/" + finding.get("metric", {}).get("image_repository", "")
+            origin_docker_image_name = finding.get("metric", {}).get("image_registry", "") + "/" + finding.get(
+                "metric", {}).get("image_repository", "")
             origin_docker_image_tag = finding.get("metric", {}).get("image_tag", "")
             fixed_version = finding.get("metric", {}).get("fixed_version", "")
             installed_version = finding.get("metric", {}).get("installed_version", "")
@@ -113,7 +114,7 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
                 origin_component_name=origin_component_name,
                 cwe=self.get_cwe(cwes),
                 scanner=scanner,
-                recommendation=self.get_recommendation(fixed_version,installed_version),
+                recommendation=self.get_recommendation(fixed_version, installed_version),
                 description=self.get_description(vuln_title),
             )
 
@@ -134,7 +135,7 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
         vuln_title,
     ) -> str:
         description = ""
-        description +=  f"**Title:** {vuln_title}\n\n"
+        description += f"**Title:** {vuln_title}\n\n"
         return description
 
     def get_recommendation(  # pylint: disable=too-many-branches
@@ -144,7 +145,7 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
     ) -> str:
         recommendation = ""
         if fixed_version:
-            recommendation +=  f"Upgrade from **{installed_version}** to: **{fixed_version}**\n\n"
+            recommendation += f"Upgrade from **{installed_version}** to: **{fixed_version}**\n\n"
 
         return recommendation
 

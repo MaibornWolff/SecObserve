@@ -44,7 +44,6 @@ class DependencyTrack(BaseParser, BaseAPIParser):
         dependency_track_project_key = api_configuration.project_key
         trivy_prometheus_verify_ssl = api_configuration.verify_ssl
 
-
         if not dependency_track_base_url.endswith("/"):
             dependency_track_base_url += "/"
 
