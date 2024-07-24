@@ -56,7 +56,10 @@ class DependencyTrack(BaseParser, BaseAPIParser):
         }
         try:
             response = requests.get(
-                dependency_track_base_url, headers=headers, timeout=60, verify=trivy_prometheus_verify_ssl
+                dependency_track_base_url,
+                headers=headers,
+                timeout=60,
+                verify=trivy_prometheus_verify_ssl,
             )
             response.raise_for_status()
         except Exception as e:

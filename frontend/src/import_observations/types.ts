@@ -9,7 +9,6 @@ export interface ApiConfiguration extends RaRecord {
     project_key: string;
     api_key: string;
     query: string;
-
 }
 
 export interface VulnerabilityCheck extends RaRecord {

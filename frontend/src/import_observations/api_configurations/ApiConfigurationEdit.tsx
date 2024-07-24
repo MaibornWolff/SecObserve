@@ -8,16 +8,15 @@ import {
     SaveButton,
     SimpleForm,
     Toolbar,
+    useDataProvider,
     useNotify,
     useRefresh,
     useUpdate,
-    useDataProvider,
 } from "react-admin";
-import { useWatch } from 'react-hook-form';
+import { useWatch } from "react-hook-form";
 
-
-import { validate_required, validate_required_255, validate_255 } from "../../commons/custom_validators";
-import { AutocompleteInputWide, TextInputWide, PasswordInputWide } from "../../commons/layout/themes";
+import { validate_required, validate_required_255 } from "../../commons/custom_validators";
+import { AutocompleteInputWide, PasswordInputWide, TextInputWide } from "../../commons/layout/themes";
 
 const ApiConfigurationEdit = () => {
     const [open, setOpen] = useState(false);
@@ -29,15 +28,18 @@ const ApiConfigurationEdit = () => {
 
     useEffect(() => {
         // Fetch the list of parsers from the backend
-        dataProvider.getList('parsers', {
-            pagination: { page: 1, perPage: 100 },
-            sort: { field: 'name', order: 'ASC' },
-            filter: { source: 'API' }
-        }).then(({ data }) => {
-            setParsers(data);
-        }).catch(error => {
-            notify(`Error fetching parsers: ${error.message}`, { type: 'warning' });
-        });
+        dataProvider
+            .getList("parsers", {
+                pagination: { page: 1, perPage: 100 },
+                sort: { field: "name", order: "ASC" },
+                filter: { source: "API" },
+            })
+            .then(({ data }) => {
+                setParsers(data);
+            })
+            .catch((error) => {
+                notify(`Error fetching parsers: ${error.message}`, { type: "warning" });
+            });
     }, [dataProvider, notify]);
 
     const handleOpen = () => setOpen(true);
@@ -59,7 +61,7 @@ const ApiConfigurationEdit = () => {
             basic_auth_enabled: data.basic_auth_enabled,
             basic_auth_username: data.basic_auth_username,
             basic_auth_password: data.basic_auth_password,
-            verify_ssl: data.verify_ssl
+            verify_ssl: data.verify_ssl,
         };
 
         update(
@@ -110,37 +112,42 @@ const ApiConfigurationEdit = () => {
     );
 
     const ParserInput = () => {
-        const parserId = useWatch({ name: 'parser' });
-        const selectedParser = parsers.find(parser => parser.id === parserId);
-        if (selectedParser){
-            switch(selectedParser.name){
+        const parserId = useWatch({ name: "parser" });
+        const selectedParser = parsers.find((parser) => parser.id === parserId);
+        if (selectedParser) {
+            switch (selectedParser.name) {
                 case "Dependency Track":
-                    return <>
-                    <TextInputWide source="api_key" label="API key" validate={validate_required_255} />
-                    <TextInputWide source="project_key" validate={validate_required_255} />
-                    </>;
+                    return (
+                        <>
+                            <TextInputWide source="api_key" label="API key" validate={validate_required_255} />
+                            <TextInputWide source="project_key" validate={validate_required_255} />
+                        </>
+                    );
                 case "Trivy Prometheus":
-                    return <>
-                    <TextInputWide source="query" label="Query" validate={validate_required_255} />
-                    <BooleanInput source="basic_auth_enabled" label="Basic Auth" defaultValue={false}/>
-                    <BasicAuthInput/>
-                    </>;
+                    return (
+                        <>
+                            <TextInputWide source="query" label="Query" validate={validate_required_255} />
+                            <BooleanInput source="basic_auth_enabled" label="Basic Auth" defaultValue={false} />
+                            <BasicAuthInput />
+                        </>
+                    );
             }
         } else {
-            return null
+            return null;
         }
     };
 
     const BasicAuthInput = () => {
-        const basic_auth_enabledId = useWatch({ name: 'basic_auth_enabled' });
-        if (basic_auth_enabledId){
-                    return <>
+        const basic_auth_enabledId = useWatch({ name: "basic_auth_enabled" });
+        if (basic_auth_enabledId) {
+            return (
+                <>
                     <TextInputWide source="basic_auth_username" label="Username" validate={validate_required_255} />
                     <PasswordInputWide source="basic_auth_password" label="Password" validate={validate_required_255} />
-                    </>;
- 
+                </>
+            );
         } else {
-            return null
+            return null;
         }
     };
 
@@ -177,7 +184,5 @@ const ApiConfigurationEdit = () => {
         </Fragment>
     );
 };
-
-
 
 export default ApiConfigurationEdit;

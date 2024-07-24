@@ -2,16 +2,17 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import (
     CASCADE,
     PROTECT,
+    BooleanField,
     CharField,
     DateTimeField,
     ForeignKey,
-    BooleanField,
     IntegerField,
     Model,
 )
 from encrypted_model_fields.fields import EncryptedCharField
 
 from application.core.models import Branch, Parser, Product
+
 
 class Api_Configuration(Model):
     product = ForeignKey(Product, on_delete=CASCADE)
@@ -26,12 +27,12 @@ class Api_Configuration(Model):
     basic_auth_password = EncryptedCharField(max_length=255, blank=True)
     verify_ssl = BooleanField(null=True)
 
-
     class Meta:
         unique_together = (
             "product",
             "name",
         )
+
 
 class Vulnerability_Check(Model):
     product = ForeignKey(Product, on_delete=CASCADE)
