@@ -110,7 +110,6 @@ class ApiConfigurationSerializer(ModelSerializer):
                 basic_auth_password = attrs.get("basic_auth_password")
                 verify_ssl = attrs.get("verify_ssl")
 
-
             api_configuration = Api_Configuration(
                 product=product,
                 name=name,
@@ -139,7 +138,6 @@ class ApiConfigurationSerializer(ModelSerializer):
             raise ValidationError("Product cannot be changed")
 
         return attrs
-
 
 class VulnerabilityCheckSerializer(ModelSerializer):
     branch_name = SerializerMethodField()

@@ -13,7 +13,6 @@ from encrypted_model_fields.fields import EncryptedCharField
 
 from application.core.models import Branch, Parser, Product
 
-
 class Api_Configuration(Model):
     product = ForeignKey(Product, on_delete=CASCADE)
     name = CharField(max_length=255)
@@ -33,7 +32,6 @@ class Api_Configuration(Model):
             "product",
             "name",
         )
-
 
 class Vulnerability_Check(Model):
     product = ForeignKey(Product, on_delete=CASCADE)
