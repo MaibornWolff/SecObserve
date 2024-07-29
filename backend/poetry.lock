@@ -735,19 +735,19 @@ tests = ["tox"]
 
 [[package]]
 name = "django-stubs"
-version = "5.0.3"
+version = "5.0.4"
 description = "Mypy stubs for Django"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "django_stubs-5.0.3-py3-none-any.whl", hash = "sha256:323edab16884d58612e4aaf8664513e4eaa14ec76bb30a77e3affd48ccb1e832"},
-    {file = "django_stubs-5.0.3.tar.gz", hash = "sha256:f12d26a8f60d07398d4f160daef153cdb5f6e30b31ad3a6a15d04fbda86f10dc"},
+    {file = "django_stubs-5.0.4-py3-none-any.whl", hash = "sha256:c2502f5ecbae50c68f9a86d52b5b2447d8648fd205036dad0ccb41e19a445927"},
+    {file = "django_stubs-5.0.4.tar.gz", hash = "sha256:78e3764488fdfd2695f12502136548ec22f8d4b1780541a835042b8238d11514"},
 ]
 
 [package.dependencies]
 asgiref = "*"
 django = "*"
-django-stubs-ext = ">=5.0.3"
+django-stubs-ext = ">=5.0.4"
 tomli = {version = "*", markers = "python_version < \"3.11\""}
 types-PyYAML = "*"
 typing-extensions = ">=4.11.0"
@@ -759,13 +759,13 @@ redis = ["redis"]
 
 [[package]]
 name = "django-stubs-ext"
-version = "5.0.3"
+version = "5.0.4"
 description = "Monkey-patching and extensions for django-stubs"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "django_stubs_ext-5.0.3-py3-none-any.whl", hash = "sha256:cc7a0026367baa5cdfc72cf8855e2e14d75dd5a35bd11e7d3086dc9d7f94d169"},
-    {file = "django_stubs_ext-5.0.3.tar.gz", hash = "sha256:cd361f5b951c6abdf867c55d247541f0609d1e8334ccb09c7a12910111425234"},
+    {file = "django_stubs_ext-5.0.4-py3-none-any.whl", hash = "sha256:910cbaff3d1e8e806a5c27d5ddd4088535aae8371ea921b7fd680fdfa5f14e30"},
+    {file = "django_stubs_ext-5.0.4.tar.gz", hash = "sha256:85da065224204774208be29c7d02b4482d5a69218a728465c2fbe41725fdc819"},
 ]
 
 [package.dependencies]
@@ -2429,4 +2429,4 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">= 3.10, < 3.13"
-content-hash = "49365702d1af547eecca8d6327cae10665de96fb52ab996ba5e39e39ee997e32"
+content-hash = "83ccf1899c43f26f477452d667a3e058817f7ea8ae2a932aa3b05a761a7d7ba5"
