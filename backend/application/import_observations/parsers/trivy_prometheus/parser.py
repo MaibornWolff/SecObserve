@@ -84,6 +84,8 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
 
 
         for finding in data.get("data").get("result"):
+            if not finding.get("metric", {}).get("vuln_id", ""):
+                continue
             origin_component_name = finding.get("metric", {}).get("resource", "")
             vuln_title = finding.get("metric", {}).get("vuln_title", "")
             vulnerability_id = finding.get("metric", {}).get("vuln_id", "")
@@ -124,7 +126,6 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
                 ),
                 description=self.get_description(vuln_title, namespace, resource_kind, resource_name, container_name),
             )
-
             observations.append(observation)
 
         return observations
