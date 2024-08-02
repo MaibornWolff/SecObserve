@@ -102,7 +102,6 @@ class ApiConfigurationSerializer(ModelSerializer):
                     "basic_auth_password", self.instance.basic_auth_password
                 )
                 verify_ssl = attrs.get("verify_ssl", self.instance.verify_ssl)
-
             else:
                 product = attrs.get("product")
                 name = attrs.get("name")
