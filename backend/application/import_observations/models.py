@@ -20,7 +20,7 @@ class Api_Configuration(Model):
     parser = ForeignKey(Parser, on_delete=PROTECT)
     base_url = CharField(max_length=255)
     project_key = CharField(max_length=255, blank=True)
-    api_key = EncryptedCharField(max_length=255, blank=True, null=True)
+    api_key = EncryptedCharField(max_length=255, blank=True)
     query = CharField(max_length=255, blank=True)
     basic_auth_enabled = BooleanField(null=True)
     basic_auth_username = CharField(max_length=255, blank=True)
