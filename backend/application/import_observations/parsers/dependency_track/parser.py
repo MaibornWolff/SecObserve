@@ -145,13 +145,15 @@ class DependencyTrack(BaseParser, BaseAPIParser):
         if not self.api_configuration:
             return "Dependency-Track", None
 
+        dependency_track_verify_ssl = self.api_configuration.verify_ssl
         dependency_track_base_url = self.api_configuration.base_url
+
         if not dependency_track_base_url.endswith("/"):
             dependency_track_base_url += "/"
         dependency_track_base_url += "api/version"
 
         try:
-            response = requests.get(dependency_track_base_url, timeout=60)
+            response = requests.get(dependency_track_base_url, timeout=60, verify=dependency_track_verify_ssl)
             response.raise_for_status()
         except Exception:
             return "Dependency-Track", None
