@@ -100,11 +100,12 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
             )
             origin_docker_image_tag = finding.get("metric", {}).get("image_tag", "")
             fixed_version = finding.get("metric", {}).get("fixed_version", "")
-            installed_version = finding.get("metric", {}).get("installed_version", "")
+            origin_component_version = finding.get("metric", {}).get("installed_version", "")
             namespace = finding.get("metric", {}).get("namespace", "")
             resource_kind = finding.get("metric", {}).get("resource_kind", "")
             resource_name = finding.get("metric", {}).get("resource_name", "")
             container_name = finding.get("metric", {}).get("container_name", "")
+            origin_endpoint_url = self.api_configuration.base_url
 
             observation = Observation(
                 title=vulnerability_id,
@@ -115,11 +116,11 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
                 origin_docker_image_tag=origin_docker_image_tag,
                 cvss3_score=cvss3_score,
                 origin_component_name=origin_component_name,
-                origin_source_file=self.api_configuration.base_url,
+                origin_endpoint_url=origin_endpoint_url,
                 scanner="Trivy-Prometheus",
                 origin_cloud_resource_type=resource_kind,
                 recommendation=self.get_recommendation(
-                    fixed_version, installed_version
+                    fixed_version, origin_component_version
                 ),
                 description=self.get_description(vuln_title, namespace, resource_kind, resource_name, container_name),
             )
@@ -147,12 +148,12 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
     def get_recommendation(
         self,
         fixed_version,
-        installed_version,
+        origin_component_version,
     ) -> str:
         recommendation = ""
         if fixed_version:
             recommendation += (
-                f"Upgrade from **{installed_version}** to: **{fixed_version}**\n\n"
+                f"Upgrade from **{origin_component_version}** to: **{fixed_version}**\n\n"
             )
 
         return recommendation
