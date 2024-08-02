@@ -4,23 +4,13 @@ from typing import Optional
 import requests
 
 from application.core.models import Observation
-from application.core.types import Severity, Status
+from application.core.types import Severity
 from application.import_observations.models import Api_Configuration
 from application.import_observations.parsers.base_parser import (
     BaseAPIParser,
     BaseParser,
 )
 from application.import_observations.types import Parser_Type
-
-STATUS_MAPPING = {
-    "NOT_SET": "",
-    "EXPLOITABLE": Status.STATUS_OPEN,
-    "IN_TRIAGE": Status.STATUS_IN_REVIEW,
-    "RESOLVED": Status.STATUS_RESOLVED,
-    "FALSE_POSITIVE": Status.STATUS_FALSE_POSITIVE,
-    "NOT_AFFECTED": Status.STATUS_NOT_AFFECTED,
-}
-
 
 class TrivyPrometheus(BaseParser, BaseAPIParser):
     def __init__(self):
@@ -109,14 +99,10 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
             fixed_version = finding.get("metric", {}).get("fixed_version", "")
             installed_version = finding.get("metric", {}).get("installed_version", "")
 
-            state = ""
-            reference_url = ""
-
             observation = Observation(
                 title=vulnerability_id,
                 parser_severity=self.get_severity(severity),
                 numerical_severity=cvss3_score,
-                parser_status=self.get_status(state),
                 vulnerability_id=vulnerability_id,
                 origin_docker_image_name=origin_docker_image_name,
                 origin_docker_image_tag=origin_docker_image_tag,
@@ -129,19 +115,11 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
                 description=self.get_description(vuln_title),
             )
 
-            evidence = []
-            evidence.append("Vulnerability")
-            evidence.append(json.dumps(finding))
-            observation.unsaved_evidences.append(evidence)
-
-            if reference_url:
-                observation.unsaved_references = [reference_url]
-
             observations.append(observation)
 
         return observations
 
-    def get_description(  # pylint: disable=too-many-branches
+    def get_description(
         self,
         vuln_title,
     ) -> str:
@@ -149,7 +127,7 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
         description += f"**Title:** {vuln_title}\n\n"
         return description
 
-    def get_recommendation(  # pylint: disable=too-many-branches
+    def get_recommendation(
         self,
         fixed_version,
         installed_version,
@@ -162,11 +140,6 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
 
         return recommendation
 
-    def get_status(self, state: str) -> str:
-        if not state:
-            return ""
-
-        return STATUS_MAPPING.get(state, "")
 
     def get_severity(self, severity: str) -> str:
         if (
