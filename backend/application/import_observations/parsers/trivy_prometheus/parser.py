@@ -101,6 +101,10 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
             origin_docker_image_tag = finding.get("metric", {}).get("image_tag", "")
             fixed_version = finding.get("metric", {}).get("fixed_version", "")
             installed_version = finding.get("metric", {}).get("installed_version", "")
+            namespace = finding.get("metric", {}).get("namespace", "")
+            resource_kind = finding.get("metric", {}).get("resource_kind", "")
+            resource_name = finding.get("metric", {}).get("resource_name", "")
+            container_name = finding.get("metric", {}).get("container_name", "")
 
             observation = Observation(
                 title=vulnerability_id,
@@ -113,10 +117,11 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
                 origin_component_name=origin_component_name,
                 origin_source_file=self.api_configuration.base_url,
                 scanner="Trivy-Prometheus",
+                origin_cloud_resource_type=resource_kind,
                 recommendation=self.get_recommendation(
                     fixed_version, installed_version
                 ),
-                description=self.get_description(vuln_title),
+                description=self.get_description(vuln_title, namespace, resource_kind, resource_name, container_name),
             )
 
             observations.append(observation)
@@ -126,9 +131,17 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
     def get_description(
         self,
         vuln_title,
+        namespace,
+        resource_kind,
+        resource_name,
+        container_name,
     ) -> str:
         description = ""
         description += f"**Title:** {vuln_title}\n\n"
+        description += f"**Namespace:** {namespace}\n\n"
+        description += f"**Resource-Type:** {resource_kind}, **Resource-Name:** {resource_name}\n\n"
+        description += f"**Container:** {container_name}"
+
         return description
 
     def get_recommendation(
