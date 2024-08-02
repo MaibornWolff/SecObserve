@@ -26,7 +26,10 @@ Before importing observations from an API, an API configuration needs to be crea
 
 ##### Trivy Prometheus API Configuration Example
 
-![Upload of files](../assets/images/screenshot_add_api_trivy_prometheus.png){ width="50%" style="display: block; margin: 0 auto" }
+![Upload of files](../assets/images/screenshot_add_api_trivy_prometheus.png)
+
+Currently only the parsing of vulnerabilities is supported. Which means, the time series with the "trivy_vulnerability_id" metric is required to be used.  
+Details about the querying can be found at the [Prometheus-Doc](https://prometheus.io/docs/prometheus/latest/querying/basics/).
 
 ## Import algorithm
 
