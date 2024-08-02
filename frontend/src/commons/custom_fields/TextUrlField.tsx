@@ -15,7 +15,7 @@ function is_valid_url(urlString: string): boolean {
 
     try {
         return Boolean(new URL(urlString) && urlString.match(SAFE_URL_PATTERN));
-    } catch (e) {
+    } catch {
         return false;
     }
 }
@@ -25,7 +25,7 @@ function is_valid_relative_url(urlString: string): boolean {
 
     try {
         return Boolean(urlString.match(RELATIVE_PATTERN));
-    } catch (e) {
+    } catch {
         return false;
     }
 }
