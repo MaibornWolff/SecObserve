@@ -82,6 +82,7 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
     def get_observations(self, data) -> list[Observation]:
         observations = []
 
+
         for finding in data.get("data").get("result"):
             origin_component_name = finding.get("metric", {}).get("resource", "")
             vuln_title = finding.get("metric", {}).get("vuln_title", "")
@@ -90,10 +91,12 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
             severity = finding.get("metric", {}).get(
                 "severity", Severity.SEVERITY_UNKOWN
             )
+            origin_docker_image_registry = finding.get("metric", {}).get("image_registry", "")
+            origin_docker_image_repository = finding.get("metric", {}).get("image_repository", "")
             origin_docker_image_name = (
-                finding.get("metric", {}).get("image_registry", "")
+                origin_docker_image_registry
                 + "/"
-                + finding.get("metric", {}).get("image_repository", "")
+                + origin_docker_image_repository
             )
             origin_docker_image_tag = finding.get("metric", {}).get("image_tag", "")
             fixed_version = finding.get("metric", {}).get("fixed_version", "")
@@ -108,6 +111,7 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
                 origin_docker_image_tag=origin_docker_image_tag,
                 cvss3_score=cvss3_score,
                 origin_component_name=origin_component_name,
+                origin_source_file=self.api_configuration.base_url,
                 scanner="Trivy-Prometheus",
                 recommendation=self.get_recommendation(
                     fixed_version, installed_version
