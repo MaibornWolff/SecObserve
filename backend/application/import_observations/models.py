@@ -24,15 +24,13 @@ class Parser(Model):
     class_name = CharField(max_length=255, blank=True)
 
     class Meta:
+        db_table = "core_parser"
         indexes = [
             Index(fields=["name"]),
         ]
 
     def __str__(self):
         return self.name
-
-    class Meta:
-        db_table = "core_parser"
 
 
 class Api_Configuration(Model):

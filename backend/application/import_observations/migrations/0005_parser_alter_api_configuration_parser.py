@@ -66,6 +66,17 @@ class Migration(migrations.Migration):
         ),
         migrations.SeparateDatabaseAndState(
             state_operations=[
+                migrations.AddIndex(
+                    model_name="parser",
+                    index=models.Index(
+                        fields=["name"], name="core_parser_name_d48b0a_idx"
+                    ),
+                ),
+            ],
+            database_operations=[],
+        ),
+        migrations.SeparateDatabaseAndState(
+            state_operations=[
                 migrations.AlterField(
                     model_name="api_configuration",
                     name="parser",
