@@ -51,35 +51,13 @@ const MetaData = () => {
                                 sx={{ "& a": { textDecoration: "none" } }}
                             />
                         )}
-                        <ReferenceField
-                            source="parser"
-                            reference="parsers"
-                            label="Parser name"
-                            link="show"
-                            sx={{ "& a": { textDecoration: "none" } }}
-                        />
-                        <ReferenceField
-                            source="parser"
-                            reference="parsers"
-                            label="Parser type"
-                            link={false}
-                            sx={{ "& a": { textDecoration: "none" } }}
-                        >
-                            <TextField source="type" />
-                        </ReferenceField>
-                        <ReferenceField
-                            source="parser"
-                            reference="parsers"
-                            label="Parser source"
-                            link={false}
-                            sx={{ "& a": { textDecoration: "none" } }}
-                        >
-                            <TextField source="source" />
-                        </ReferenceField>
+                        {observation.scanner != "" && <TextField source="scanner" />}
+                        <TextField source="parser_data.name" label="Parser name" />
+                        <TextField source="parser_data.type" label="Parser type" />
+                        <TextField source="parser_data.source" label="Parser source" />
                         {observation.scanner_observation_id != "" && (
                             <TextField source="scanner_observation_id" label="Scanner observation id" />
                         )}
-                        {observation.scanner != "" && <TextField source="scanner" />}
                         {observation.upload_filename != "" && <TextField source="upload_filename" />}
                         {observation.api_configuration_name != "" && (
                             <TextField source="api_configuration_name" label="API configuration" />

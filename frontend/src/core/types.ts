@@ -1,5 +1,7 @@
 import { Identifier, RaRecord } from "react-admin";
 
+import { Parser } from "../import_observations/types";
+
 export interface Product extends RaRecord {
     id: Identifier;
     name: string;
@@ -51,31 +53,6 @@ export interface ProductGroup extends RaRecord {
     notification_slack_webhook: string;
     notification_email_to: string;
 }
-
-export interface Parser extends RaRecord {
-    id: Identifier;
-    name: string;
-    type: string;
-    source: string;
-}
-
-export const SCANNER_TYPE_CHOICES = [
-    { id: "SCA", name: "SCA" },
-    { id: "SAST", name: "SAST" },
-    { id: "DAST", name: "DAST" },
-    { id: "IAST", name: "IAST" },
-    { id: "Secrets", name: "Secrets" },
-    { id: "Infrastructure", name: "Infrastructure" },
-    { id: "Other", name: "Other" },
-    { id: "Manual", name: "Manual" },
-];
-
-export const PARSER_SOURCE_CHOICES = [
-    { id: "API", name: "API" },
-    { id: "File", name: "File" },
-    { id: "Manual", name: "Manual" },
-    { id: "Unkown", name: "Unkown" },
-];
 
 export interface Observation extends RaRecord {
     id: Identifier;

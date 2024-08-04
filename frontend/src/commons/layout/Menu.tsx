@@ -6,9 +6,9 @@ import { DashboardMenuItem, MenuItemLink, MenuProps, useSidebarState } from "rea
 
 import administration from "../../access_control/access_control_administration";
 import observations from "../../core/observations";
-import parsers from "../../core/parsers";
 import product_groups from "../../core/product_groups";
 import products from "../../core/products";
+import parsers from "../../import_observations/parsers";
 import general_rules from "../../rules/general_rules";
 import csaf from "../../vex/csaf";
 import openvex from "../../vex/openvex";
