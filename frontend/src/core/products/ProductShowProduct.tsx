@@ -258,9 +258,9 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                     <BooleanField source="new_observations_in_review" />
                 </Labeled>
                 {product.product_group_new_observations_in_review && (
-                <Labeled label='Status "In review" for new observations (from product group)'>
-                    <BooleanField source="product_group_new_observations_in_review" />
-                </Labeled>
+                    <Labeled label='Status "In review" for new observations (from product group)'>
+                        <BooleanField source="product_group_new_observations_in_review" />
+                    </Labeled>
                 )}
             </Stack>
 
