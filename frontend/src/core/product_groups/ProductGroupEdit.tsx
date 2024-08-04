@@ -248,6 +248,11 @@ const ProductGroupEdit = () => {
                     defaultValue={false}
                 />
                 <BooleanInput source="product_rules_need_approval" label="Rules need approval" defaultValue={false} />
+                <BooleanInput
+                    source="new_observations_in_review"
+                    label='Status "In review" for new observations'
+                    defaultValue={false}
+                />
 
                 <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
