@@ -25,7 +25,6 @@ from application.core.services.observation import (
     normalize_observation_fields,
 )
 from application.core.types import Assessment_Status, Severity, Status, VexJustification
-from application.import_observations.types import Parser_Source, Parser_Type
 from application.issue_tracker.types import Issue_Tracker
 
 
@@ -373,26 +372,10 @@ class Product_Authorization_Group_Member(Model):
         )
 
 
-class Parser(Model):
-    name = CharField(max_length=255, unique=True)
-    type = CharField(max_length=16, choices=Parser_Type.TYPE_CHOICES)
-    source = CharField(max_length=16, choices=Parser_Source.SOURCE_CHOICES)
-    module_name = CharField(max_length=255, blank=True)
-    class_name = CharField(max_length=255, blank=True)
-
-    class Meta:
-        indexes = [
-            Index(fields=["name"]),
-        ]
-
-    def __str__(self):
-        return self.name
-
-
 class Observation(Model):
     product = ForeignKey(Product, on_delete=PROTECT)
     branch = ForeignKey(Branch, on_delete=CASCADE, null=True)
-    parser = ForeignKey(Parser, on_delete=PROTECT)
+    parser = ForeignKey("import_observations.Parser", on_delete=PROTECT)
     title = CharField(max_length=255)
     description = TextField(max_length=2048, blank=True)
     recommendation = TextField(max_length=2048, blank=True)

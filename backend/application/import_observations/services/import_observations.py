@@ -10,7 +10,6 @@ from application.core.models import (
     Branch,
     Evidence,
     Observation,
-    Parser,
     Product,
     Reference,
     Service,
@@ -36,6 +35,7 @@ from application.core.types import Assessment_Status, Status
 from application.epss.services.epss import epss_apply_observation
 from application.import_observations.models import (
     Api_Configuration,
+    Parser,
     Vulnerability_Check,
 )
 from application.import_observations.parsers.base_parser import (

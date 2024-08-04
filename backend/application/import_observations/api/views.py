@@ -14,10 +14,10 @@ from application.access_control.services.authorization import user_has_permissio
 from application.access_control.services.roles_permissions import Permissions
 from application.core.models import Branch
 from application.core.queries.branch import get_branch_by_id, get_branch_by_name
-from application.core.queries.parser import get_parser_by_id, get_parser_by_name
 from application.core.queries.product import get_product_by_id, get_product_by_name
 from application.import_observations.api.filters import (
     ApiConfigurationFilter,
+    ParserFilter,
     VulnerabilityCheckFilter,
 )
 from application.import_observations.api.permissions import (
@@ -31,16 +31,22 @@ from application.import_observations.api.serializers import (
     FileUploadObservationsByIdRequestSerializer,
     FileUploadObservationsByNameRequestSerializer,
     ImportObservationsResponseSerializer,
+    ParserSerializer,
     VulnerabilityCheckSerializer,
 )
 from application.import_observations.models import (
     Api_Configuration,
+    Parser,
     Vulnerability_Check,
 )
 from application.import_observations.queries.api_configuration import (
     get_api_configuration_by_id,
     get_api_configuration_by_name,
     get_api_configurations,
+)
+from application.import_observations.queries.parser import (
+    get_parser_by_id,
+    get_parser_by_name,
 )
 from application.import_observations.queries.vulnerability_check import (
     get_vulnerability_checks,
@@ -318,3 +324,11 @@ class VulnerabilityCheckViewSet(GenericViewSet, ListModelMixin, RetrieveModelMix
 
     def get_queryset(self):
         return get_vulnerability_checks()
+
+
+class ParserViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
+    serializer_class = ParserSerializer
+    filterset_class = ParserFilter
+    queryset = Parser.objects.all()
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ["name"]

@@ -15,7 +15,6 @@ from application.core.models import (
     Evidence,
     Observation,
     Observation_Log,
-    Parser,
     Potential_Duplicate,
     Product,
     Product_Authorization_Group_Member,
@@ -23,7 +22,6 @@ from application.core.models import (
     Service,
 )
 from application.core.types import Status
-from application.import_observations.types import Parser_Source, Parser_Type
 
 AGE_DAY = "Today"
 AGE_WEEK = "Past 7 days"
@@ -159,21 +157,6 @@ class ServiceFilter(FilterSet):
     class Meta:
         model = Service
         fields = ["product", "name"]
-
-
-class ParserFilter(FilterSet):
-    name = CharFilter(field_name="name", lookup_expr="icontains")
-    type = ChoiceFilter(field_name="type", choices=Parser_Type.TYPE_CHOICES)
-    source = ChoiceFilter(field_name="source", choices=Parser_Source.SOURCE_CHOICES)
-
-    ordering = OrderingFilter(
-        # tuple-mapping retains order
-        fields=(("name", "name"), ("type", "type"), ("source", "source")),
-    )
-
-    class Meta:
-        model = Parser
-        fields = ["name", "type", "source"]
 
 
 class ObservationFilter(FilterSet):

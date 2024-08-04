@@ -14,6 +14,7 @@ from application.access_control.services.roles_permissions import Permissions
 from application.core.api.serializers_product import NestedProductSerializer
 from application.import_observations.models import (
     Api_Configuration,
+    Parser,
     Vulnerability_Check,
 )
 from application.import_observations.services.import_observations import (
@@ -162,4 +163,10 @@ class VulnerabilityCheckSerializer(ModelSerializer):
 
     class Meta:
         model = Vulnerability_Check
+        fields = "__all__"
+
+
+class ParserSerializer(ModelSerializer):
+    class Meta:
+        model = Parser
         fields = "__all__"
