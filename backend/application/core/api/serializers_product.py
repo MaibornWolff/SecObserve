@@ -142,6 +142,7 @@ class ProductGroupSerializer(ProductCoreSerializer):
             "product_rules_need_approval",
             "risk_acceptance_expiry_active",
             "risk_acceptance_expiry_days",
+            "new_observations_in_review",
         ]
 
     def get_products_count(self, obj: Product) -> int:
@@ -173,10 +174,11 @@ class ProductSerializer(ProductCoreSerializer):
     product_group_product_rules_need_approval = SerializerMethodField()
     product_rule_approvals = SerializerMethodField()
     risk_acceptance_expiry_date_calculated = SerializerMethodField()
+    product_group_new_observations_in_review = SerializerMethodField()
 
     class Meta:
         model = Product
-        exclude = ["is_product_group", "new_observations_in_review", "members"]
+        exclude = ["is_product_group", "members"]
 
     def get_product_group_name(self, obj: Product) -> str:
         if not obj.product_group:
@@ -253,6 +255,11 @@ class ProductSerializer(ProductCoreSerializer):
         self, obj: Product
     ) -> Optional[date]:
         return calculate_risk_acceptance_expiry_date(obj)
+
+    def get_product_group_new_observations_in_review(self, obj: Product) -> bool:
+        if not obj.product_group:
+            return False
+        return obj.product_group.new_observations_in_review
 
     def validate(self, attrs: dict):  # pylint: disable=too-many-branches
         # There are quite a lot of branches, but at least they are not nested too much
@@ -342,7 +349,7 @@ class NestedProductSerializer(ModelSerializer):
 
     class Meta:
         model = Product
-        exclude = ["new_observations_in_review", "members"]
+        exclude = ["members"]
 
     def get_permissions(self, product: Product) -> list[Permissions]:
         return get_permissions_for_role(get_highest_user_role(product))

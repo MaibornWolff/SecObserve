@@ -179,6 +179,9 @@ const ProductGroupShow = () => {
                                     <Labeled label="Rules need approval">
                                         <BooleanField source="product_rules_need_approval" />
                                     </Labeled>
+                                    <Labeled label='Status "In review" for new observations'>
+                                        <BooleanField source="new_observations_in_review" />
+                                    </Labeled>
                                 </Stack>
                                 {product_group.risk_acceptance_expiry_active != null && (
                                     <Fragment>
