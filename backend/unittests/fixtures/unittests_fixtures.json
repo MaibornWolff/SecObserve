@@ -343,7 +343,7 @@
         }
     },
     {
-        "model": "core.parser",
+        "model": "import_observations.parser",
         "pk": 1,
         "fields": {
             "name": "db_parser_file",
@@ -352,7 +352,7 @@
         }
     },
     {
-        "model": "core.parser",
+        "model": "import_observations.parser",
         "pk": 2,
         "fields": {
             "name": "db_parser_api",
@@ -361,7 +361,7 @@
         }
     },
     {
-        "model": "core.parser",
+        "model": "import_observations.parser",
         "pk": 3,
         "fields": {
             "name": "Manual",

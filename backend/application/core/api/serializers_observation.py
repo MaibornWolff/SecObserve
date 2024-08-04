@@ -33,7 +33,6 @@ from application.core.models import (
     Evidence,
     Observation,
     Observation_Log,
-    Parser,
     Potential_Duplicate,
     Product,
     Reference,
@@ -42,17 +41,13 @@ from application.core.queries.observation import get_current_observation_log
 from application.core.services.observation_log import create_observation_log
 from application.core.services.security_gate import check_security_gate
 from application.core.types import Assessment_Status, Severity, Status, VexJustification
+from application.import_observations.api.serializers import ParserSerializer
+from application.import_observations.models import Parser
 from application.import_observations.types import Parser_Type
 from application.issue_tracker.services.issue_tracker import (
     issue_tracker_factory,
     push_observation_to_issue_tracker,
 )
-
-
-class ParserSerializer(ModelSerializer):
-    class Meta:
-        model = Parser
-        fields = "__all__"
 
 
 class NestedReferenceSerializer(ModelSerializer):

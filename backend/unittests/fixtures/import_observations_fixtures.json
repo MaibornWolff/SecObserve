@@ -67,7 +67,7 @@
         }
     },
     {
-        "model": "core.parser",
+        "model": "import_observations.parser",
         "pk": 1,
         "fields": {
             "name": "SARIF",

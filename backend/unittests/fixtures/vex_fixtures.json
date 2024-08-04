@@ -78,7 +78,7 @@
         }
     },
     {
-        "model": "core.parser",
+        "model": "import_observations.parser",
         "pk": 1,
         "fields": {
             "name": "vex_parser",

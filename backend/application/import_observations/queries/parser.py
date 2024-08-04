@@ -1,6 +1,6 @@
 from typing import Optional
 
-from application.core.models import Parser
+from application.import_observations.models import Parser
 
 
 def get_parser_by_id(parser_id: int) -> Optional[Parser]:
