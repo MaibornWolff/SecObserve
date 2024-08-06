@@ -58,7 +58,7 @@ services:
 
 
   playwright:
-    image: mcr.microsoft.com/playwright:v1.45.3
+    image: mcr.microsoft.com/playwright:v1.46.0
     depends_on:
       - frontend
     environment:
