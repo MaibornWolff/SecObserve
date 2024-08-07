@@ -72,7 +72,7 @@ const ProductRuleEmbeddedList = ({ product }: ProductRuleEmbeddedListProps) => {
                     rowClick={ShowProductRule}
                     resource="product_rules"
                 >
-                    <TextField source="name" />
+                    <TextField source="name" sx={{ wordBreak: "break-word" }} />
                     <TextField source="new_severity" />
                     <TextField source="new_status" />
                     {product &&

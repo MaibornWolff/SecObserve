@@ -55,7 +55,12 @@ const ObservationLogEmbeddedList = ({ observation }: ObservationLogEmbeddedListP
                     <TextField source="user_full_name" label="User" sortable={false} />
                     <TextField source="severity" emptyText="---" sortable={false} />
                     <TextField source="status" emptyText="---" sortable={false} />
-                    <TextField source="comment_shortened" sortable={false} label="Comment" />
+                    <TextField
+                        source="comment_shortened"
+                        sortable={false}
+                        label="Comment"
+                        sx={{ wordBreak: "break-word" }}
+                    />
                     <DateField source="created" showTime sortable={false} />
                     {(observation.product_data.assessments_need_approval ||
                         observation.product_data.product_group_assessments_need_approval) && (

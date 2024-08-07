@@ -44,3 +44,7 @@ A flowchart visualizes the import algorithm:
 ```
 
 *[1]: The tag of the docker image is not part of the `identity hash` to allow updates of the docker image without creating a new observation.*
+
+## Initial status of observations
+
+The initial status of imported observations is `Open` by default. If the attribute **Status "In review" for new observations** in a Product or a Product Group is set to `true`, the initial status of new observations will be `In review` for the respective Product or all Products of the Product Group.

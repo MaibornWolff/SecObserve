@@ -12,8 +12,6 @@ Without any changes to the Docker Compose file, 3 URL's are available:
 
 
 ``` yaml title="docker-compose-prod-postgres.yml"
-version: "3"
-
 volumes:
   prod_postgres_data:
 
@@ -47,7 +45,7 @@ services:
       - default
 
   frontend:
-    image: maibornwolff/secobserve-frontend:1.16.1
+    image: maibornwolff/secobserve-frontend:1.16.2
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=Host(`secobserve.localhost`)"
@@ -63,7 +61,7 @@ services:
       - traefik
 
   backend:
-    image: maibornwolff/secobserve-backend:1.16.1
+    image: maibornwolff/secobserve-backend:1.16.2
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend.rule=Host(`secobserve-backend.localhost`)"

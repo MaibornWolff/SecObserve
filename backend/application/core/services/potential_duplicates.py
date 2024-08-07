@@ -60,10 +60,10 @@ def _handle_observation(observation: Observation, observations: QuerySet[Observa
                         Potential_Duplicate.POTENTIAL_DUPLICATE_TYPE_SOURCE
                     )
                 if potential_duplicate_type:
-                    Potential_Duplicate.objects.create(
+                    Potential_Duplicate.objects.update_or_create(
                         observation=observation,
                         potential_duplicate_observation=potential_duplicate_observation,
-                        type=potential_duplicate_type,
+                        defaults={"type": potential_duplicate_type},
                     )
                     observation.has_potential_duplicates = True
     if observation.has_potential_duplicates != initial_has_potential_duplicates:

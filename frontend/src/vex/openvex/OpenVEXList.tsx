@@ -66,10 +66,10 @@ const OpenVEXList = () => {
                         </SingleFieldList>
                     </ReferenceManyField>
                     <TextField source="id_namespace" label="ID namespace" />
-                    <TextField source="document_id_prefix" label="ID prefix" />
+                    <TextField source="document_id_prefix" label="ID prefix" sx={{ wordBreak: "break-word" }} />
                     <TextField source="document_base_id" label="Base ID" />
                     <NumberField source="version" label="Version" />
-                    <TextField source="author" label="Author" />
+                    <TextField source="author" label="Author" sx={{ wordBreak: "break-word" }} />
                     <FunctionField<OpenVEX>
                         label="Created"
                         sortBy="timestamp"

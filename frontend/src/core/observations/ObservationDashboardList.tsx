@@ -48,7 +48,7 @@ const ObservationDashboardList = () => {
                         resource="observations"
                     >
                         <TextField source="product_data.name" label="Product" />
-                        <TextField source="title" />
+                        <TextField source="title" sx={{ wordBreak: "break-word" }} />
                         <SeverityField source="current_severity" />
                         <ChipField source="current_status" label="Status" />
                         <TextField source="scanner_name" label="Scanner" />

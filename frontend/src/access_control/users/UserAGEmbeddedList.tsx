@@ -61,7 +61,7 @@ const UserAGEmbeddedList = ({ authorization_group }: UserAGEmbeddedListProps) =>
                 <FilterForm filters={listFilters()} />
                 <Datagrid size={getSettingListSize()} rowClick={false} bulkActionButtons={false} resource="users">
                     <TextField source="username" />
-                    <TextField source="full_name" />
+                    <TextField source="full_name" sx={{ wordBreak: "break-word" }} />
                     {is_superuser() && <BooleanField source="is_active" label="Active" />}
                     {is_superuser() && <BooleanField source="is_oidc_user" label="OIDC user" />}
                     {is_superuser() && <BooleanField source="is_external" label="External" />}

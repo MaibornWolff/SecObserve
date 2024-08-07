@@ -245,7 +245,9 @@ def _process_data(import_parameters: ImportParameters) -> Tuple[int, int, int, s
                 rule_engine.apply_rules_for_observation(observation_before)
                 vex_engine.apply_vex_statements_for_observation(observation_before)
 
-                if observation_before.current_status == Status.STATUS_OPEN:
+                if observation_before.current_status == _get_initial_status(
+                    observation_before.product
+                ):
                     observations_updated += 1
 
                 # Remove observation from list of current observations because it is still part of the check
@@ -259,7 +261,9 @@ def _process_data(import_parameters: ImportParameters) -> Tuple[int, int, int, s
                 rule_engine.apply_rules_for_observation(imported_observation)
                 vex_engine.apply_vex_statements_for_observation(imported_observation)
 
-                if imported_observation.current_status == Status.STATUS_OPEN:
+                if imported_observation.current_status == _get_initial_status(
+                    imported_observation.product
+                ):
                     observations_new += 1
 
                 # Add identity_hash to set of observations in this run to detect duplicates in this run
@@ -344,7 +348,9 @@ def _process_current_observation(
         # Reopen the current observation if it is resolved,
         # leave the status as is otherwise.
         if observation_before.parser_status == Status.STATUS_RESOLVED:
-            observation_before.parser_status = Status.STATUS_OPEN
+            observation_before.parser_status = _get_initial_status(
+                observation_before.product
+            )
     observation_before.current_status = get_current_status(observation_before)
     observation_before.risk_acceptance_expiry_date = (
         calculate_risk_acceptance_expiry_date(observation_before.product)
@@ -406,7 +412,10 @@ def _process_new_observation(imported_observation: Observation) -> None:
     imported_observation.current_severity = get_current_severity(imported_observation)
 
     if not imported_observation.parser_status:
-        imported_observation.parser_status = Status.STATUS_OPEN
+        imported_observation.parser_status = _get_initial_status(
+            imported_observation.product
+        )
+
     imported_observation.current_status = get_current_status(imported_observation)
     imported_observation.risk_acceptance_expiry_date = (
         calculate_risk_acceptance_expiry_date(imported_observation.product)
@@ -477,6 +486,18 @@ def _resolve_unimported_observations(
             )
 
     return observations_resolved
+
+
+def _get_new_observations_in_review(product: Product) -> bool:
+    if product.product_group and product.product_group.new_observations_in_review:
+        return True
+    return product.new_observations_in_review
+
+
+def _get_initial_status(product: Product) -> str:
+    if _get_new_observations_in_review(product):
+        return Status.STATUS_IN_REVIEW
+    return Status.STATUS_OPEN
 
 
 class ParserError(Exception):

@@ -61,11 +61,11 @@ const CSAFList = () => {
                             <ChipField source="name" />
                         </SingleFieldList>
                     </ReferenceManyField>
-                    <TextField source="document_id_prefix" label="ID prefix" />
+                    <TextField source="document_id_prefix" label="ID prefix" sx={{ wordBreak: "break-word" }} />
                     <TextField source="document_base_id" label="Base ID" />
                     <NumberField source="version" label="Version" />
                     <TextField source="title" />
-                    <TextField source="publisher_name" label="Pub. name" />
+                    <TextField source="publisher_name" label="Pub. name" sx={{ wordBreak: "break-word" }} />
                     <FunctionField<CSAF>
                         label="Created"
                         sortBy="tracking_initial_release_date"

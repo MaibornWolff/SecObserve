@@ -65,7 +65,7 @@ const GeneralRuleList = () => {
                     rowClick="show"
                     bulkActionButtons={is_superuser() && <BulkActionButtons />}
                 >
-                    <TextField source="name" />
+                    <TextField source="name" sx={{ wordBreak: "break-word" }} />
                     <TextField source="new_severity" />
                     <TextField source="new_status" />
                     {feature_general_rules_need_approval_enabled() && <ChipField source="approval_status" />}

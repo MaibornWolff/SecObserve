@@ -1,5 +1,3 @@
-version: "3"
-
 name: "secobserve_prod"
 
 volumes:
@@ -12,7 +10,7 @@ networks:
 services:
 
   traefik:
-    image: "traefik:v3.0.4"
+    image: "traefik:v3.1.2"
     container_name: "prod_traefik"
     command:
       - "--log.level=INFO"
@@ -37,7 +35,7 @@ services:
       - traefik
 
   frontend:
-    image: maibornwolff/secobserve-frontend:1.16.1
+    image: maibornwolff/secobserve-frontend:1.16.2
     container_name: "prod_secobserve_frontend"
     labels:
       - "traefik.enable=true"
@@ -55,7 +53,7 @@ services:
       - traefik
 
   backend:
-    image: maibornwolff/secobserve-backend:1.16.1
+    image: maibornwolff/secobserve-backend:1.16.2
     container_name: "prod_secobserve_backend"
     labels:
       - "traefik.enable=true"

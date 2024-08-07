@@ -41,8 +41,6 @@ export function get_severity_color(severity: string): string {
         case OBSERVATION_SEVERITY_CRITICAL:
             backgroundColor = "#cc0500";
             break;
-        default:
-            null;
     }
     return backgroundColor;
 }
@@ -130,7 +128,7 @@ export const feature_vex_enabled = () => {
         const features = settings.features || [];
         const feature_vex_position = features.indexOf("feature_vex");
         return feature_vex_position !== -1;
-    } catch (e) {
+    } catch {
         return false;
     }
 };
@@ -145,7 +143,7 @@ export function settings_risk_acceptance_expiry_date(): string | null {
         const date = new Date();
         date.setDate(date.getDate() + risk_acceptance_expiry_days);
         return date.toISOString().split("T")[0];
-    } catch (e) {
+    } catch {
         return null;
     }
 }
@@ -156,7 +154,7 @@ export const feature_general_rules_need_approval_enabled = () => {
         const features = settings.features || [];
         const feature_general_rules_need_approval = features.indexOf("feature_general_rules_need_approval");
         return feature_general_rules_need_approval !== -1;
-    } catch (e) {
+    } catch {
         return false;
     }
 };

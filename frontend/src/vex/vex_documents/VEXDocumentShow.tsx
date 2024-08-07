@@ -38,7 +38,7 @@ const VEXDocumentComponent = () => {
             render={(vex_document) => (
                 <Box width={"100%"}>
                     <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
-                        <Typography variant="h6">Imported VEX document (experimental)</Typography>
+                        <Typography variant="h6">Imported VEX document</Typography>
                         <Stack spacing={1}>
                             <Labeled label="Type">
                                 <ChipField

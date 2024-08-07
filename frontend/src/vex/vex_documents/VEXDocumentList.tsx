@@ -27,7 +27,7 @@ const BulkActionButtons = () => (
 const VEXDocumentList = () => {
     return (
         <Fragment>
-            <ListHeader icon={vex_documents.icon} title="Imported VEX documents (experimental)" />
+            <ListHeader icon={vex_documents.icon} title="Imported VEX documents" />
             <List
                 perPage={25}
                 pagination={<CustomPagination />}
@@ -43,7 +43,7 @@ const VEXDocumentList = () => {
                     <TextField source="document_id" label="Document ID" />
                     <TextField source="version" />
                     <DateField source="current_release_date" label="Current release" />
-                    <TextField source="author" />
+                    <TextField source="author" sx={{ wordBreak: "break-word" }} />
                     <TextField source="role" />
                 </Datagrid>
             </List>

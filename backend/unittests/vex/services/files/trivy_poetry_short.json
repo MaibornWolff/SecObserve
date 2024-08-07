@@ -1,0 +1,4121 @@
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.5.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:aebccdfe-fab4-4210-acce-bac771d4842d",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2024-06-24T10:51:16+00:00",
+    "tools": {
+      "components": [
+        {
+          "type": "application",
+          "group": "aquasecurity",
+          "name": "trivy",
+          "version": "0.52.0"
+        }
+      ]
+    },
+    "component": {
+      "bom-ref": "3571d0ee-db53-4127-bcc2-c37446ca40d5",
+      "type": "application",
+      "name": "backend/poetry.lock",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:SchemaVersion",
+          "value": "2"
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "bom-ref": "2437df08-8135-4498-88f8-ecf2af4cfa1a",
+      "type": "application",
+      "name": "poetry.lock",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:Class",
+          "value": "lang-pkgs"
+        },
+        {
+          "name": "aquasecurity:trivy:Type",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/anyio@3.7.1",
+      "type": "library",
+      "name": "anyio",
+      "version": "3.7.1",
+      "purl": "pkg:pypi/anyio@3.7.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "anyio@3.7.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/argon2-cffi-bindings@21.2.0",
+      "type": "library",
+      "name": "argon2-cffi-bindings",
+      "version": "21.2.0",
+      "purl": "pkg:pypi/argon2-cffi-bindings@21.2.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "argon2-cffi-bindings@21.2.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/argon2-cffi@23.1.0",
+      "type": "library",
+      "name": "argon2-cffi",
+      "version": "23.1.0",
+      "purl": "pkg:pypi/argon2-cffi@23.1.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "argon2-cffi@23.1.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/asgiref@3.7.2",
+      "type": "library",
+      "name": "asgiref",
+      "version": "3.7.2",
+      "purl": "pkg:pypi/asgiref@3.7.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "asgiref@3.7.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/astroid@3.0.1",
+      "type": "library",
+      "name": "astroid",
+      "version": "3.0.1",
+      "purl": "pkg:pypi/astroid@3.0.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "astroid@3.0.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/asttokens@2.4.1",
+      "type": "library",
+      "name": "asttokens",
+      "version": "2.4.1",
+      "purl": "pkg:pypi/asttokens@2.4.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "asttokens@2.4.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/attrs@23.1.0",
+      "type": "library",
+      "name": "attrs",
+      "version": "23.1.0",
+      "purl": "pkg:pypi/attrs@23.1.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "attrs@23.1.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/black@23.11.0",
+      "type": "library",
+      "name": "black",
+      "version": "23.11.0",
+      "purl": "pkg:pypi/black@23.11.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "black@23.11.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/certifi@2023.11.17",
+      "type": "library",
+      "name": "certifi",
+      "version": "2023.11.17",
+      "purl": "pkg:pypi/certifi@2023.11.17",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "certifi@2023.11.17"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/cffi@1.16.0",
+      "type": "library",
+      "name": "cffi",
+      "version": "1.16.0",
+      "purl": "pkg:pypi/cffi@1.16.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "cffi@1.16.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/cfgv@3.4.0",
+      "type": "library",
+      "name": "cfgv",
+      "version": "3.4.0",
+      "purl": "pkg:pypi/cfgv@3.4.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "cfgv@3.4.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/charset-normalizer@3.3.2",
+      "type": "library",
+      "name": "charset-normalizer",
+      "version": "3.3.2",
+      "purl": "pkg:pypi/charset-normalizer@3.3.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "charset-normalizer@3.3.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/click@8.1.7",
+      "type": "library",
+      "name": "click",
+      "version": "8.1.7",
+      "purl": "pkg:pypi/click@8.1.7",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "click@8.1.7"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/colorama@0.4.6",
+      "type": "library",
+      "name": "colorama",
+      "version": "0.4.6",
+      "purl": "pkg:pypi/colorama@0.4.6",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "colorama@0.4.6"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/coverage@7.3.2",
+      "type": "library",
+      "name": "coverage",
+      "version": "7.3.2",
+      "purl": "pkg:pypi/coverage@7.3.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "coverage@7.3.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/cryptography",
+      "type": "library",
+      "name": "cryptography",
+      "version": "41.0.5",
+      "purl": "pkg:pypi/cryptography",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "cryptography@41.0.5"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/decorator@5.1.1",
+      "type": "library",
+      "name": "decorator",
+      "version": "5.1.1",
+      "purl": "pkg:pypi/decorator@5.1.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "decorator@5.1.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/defusedcsv@2.0.0",
+      "type": "library",
+      "name": "defusedcsv",
+      "version": "2.0.0",
+      "purl": "pkg:pypi/defusedcsv@2.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "defusedcsv@2.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/defusedxml@0.7.1",
+      "type": "library",
+      "name": "defusedxml",
+      "version": "0.7.1",
+      "purl": "pkg:pypi/defusedxml@0.7.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "defusedxml@0.7.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/dill@0.3.7",
+      "type": "library",
+      "name": "dill",
+      "version": "0.3.7",
+      "purl": "pkg:pypi/dill@0.3.7",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "dill@0.3.7"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/distlib@0.3.7",
+      "type": "library",
+      "name": "distlib",
+      "version": "0.3.7",
+      "purl": "pkg:pypi/distlib@0.3.7",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "distlib@0.3.7"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/django-constance@3.1.0",
+      "type": "library",
+      "name": "django-constance",
+      "version": "3.1.0",
+      "purl": "pkg:pypi/django-constance@3.1.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "django-constance@3.1.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/django-cors-headers@4.3.1",
+      "type": "library",
+      "name": "django-cors-headers",
+      "version": "4.3.1",
+      "purl": "pkg:pypi/django-cors-headers@4.3.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "django-cors-headers@4.3.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/django-coverage-plugin@3.1.0",
+      "type": "library",
+      "name": "django-coverage-plugin",
+      "version": "3.1.0",
+      "purl": "pkg:pypi/django-coverage-plugin@3.1.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "django-coverage-plugin@3.1.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/django-csp@3.7",
+      "type": "library",
+      "name": "django-csp",
+      "version": "3.7",
+      "purl": "pkg:pypi/django-csp@3.7",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "django-csp@3.7"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/django-encrypted-model-fields@0.6.5",
+      "type": "library",
+      "name": "django-encrypted-model-fields",
+      "version": "0.6.5",
+      "purl": "pkg:pypi/django-encrypted-model-fields@0.6.5",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "django-encrypted-model-fields@0.6.5"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/django-environ@0.11.2",
+      "type": "library",
+      "name": "django-environ",
+      "version": "0.11.2",
+      "purl": "pkg:pypi/django-environ@0.11.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "django-environ@0.11.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/django-extensions@3.2.3",
+      "type": "library",
+      "name": "django-extensions",
+      "version": "3.2.3",
+      "purl": "pkg:pypi/django-extensions@3.2.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "django-extensions@3.2.3"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/django-filter@23.5",
+      "type": "library",
+      "name": "django-filter",
+      "version": "23.5",
+      "purl": "pkg:pypi/django-filter@23.5",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "django-filter@23.5"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/django-model-utils@4.3.1",
+      "type": "library",
+      "name": "django-model-utils",
+      "version": "4.3.1",
+      "purl": "pkg:pypi/django-model-utils@4.3.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "django-model-utils@4.3.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/django-picklefield@3.1",
+      "type": "library",
+      "name": "django-picklefield",
+      "version": "3.1",
+      "purl": "pkg:pypi/django-picklefield@3.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "django-picklefield@3.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/django-stubs-ext@4.2.7",
+      "type": "library",
+      "name": "django-stubs-ext",
+      "version": "4.2.7",
+      "purl": "pkg:pypi/django-stubs-ext@4.2.7",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "django-stubs-ext@4.2.7"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/django-stubs@4.2.7",
+      "type": "library",
+      "name": "django-stubs",
+      "version": "4.2.7",
+      "purl": "pkg:pypi/django-stubs@4.2.7",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "django-stubs@4.2.7"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/django@4.2.8",
+      "type": "library",
+      "name": "django",
+      "version": "4.2.8",
+      "purl": "pkg:pypi/django@4.2.8",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "django@4.2.8"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/djangorestframework-stubs@3.14.5",
+      "type": "library",
+      "name": "djangorestframework-stubs",
+      "version": "3.14.5",
+      "purl": "pkg:pypi/djangorestframework-stubs@3.14.5",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "djangorestframework-stubs@3.14.5"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/djangorestframework@3.14.0",
+      "type": "library",
+      "name": "djangorestframework",
+      "version": "3.14.0",
+      "purl": "pkg:pypi/djangorestframework@3.14.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "djangorestframework@3.14.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/drf-spectacular-sidecar@2023.12.1",
+      "type": "library",
+      "name": "drf-spectacular-sidecar",
+      "version": "2023.12.1",
+      "purl": "pkg:pypi/drf-spectacular-sidecar@2023.12.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "drf-spectacular-sidecar@2023.12.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/drf-spectacular@0.26.5",
+      "type": "library",
+      "name": "drf-spectacular",
+      "version": "0.26.5",
+      "purl": "pkg:pypi/drf-spectacular@0.26.5",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "drf-spectacular@0.26.5"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/et-xmlfile@1.1.0",
+      "type": "library",
+      "name": "et-xmlfile",
+      "version": "1.1.0",
+      "purl": "pkg:pypi/et-xmlfile@1.1.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "et-xmlfile@1.1.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/exceptiongroup@1.2.0",
+      "type": "library",
+      "name": "exceptiongroup",
+      "version": "1.2.0",
+      "purl": "pkg:pypi/exceptiongroup@1.2.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "exceptiongroup@1.2.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/executing@2.0.1",
+      "type": "library",
+      "name": "executing",
+      "version": "2.0.1",
+      "purl": "pkg:pypi/executing@2.0.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "executing@2.0.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/filelock@3.13.1",
+      "type": "library",
+      "name": "filelock",
+      "version": "3.13.1",
+      "purl": "pkg:pypi/filelock@3.13.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "filelock@3.13.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/flake8-isort@6.1.1",
+      "type": "library",
+      "name": "flake8-isort",
+      "version": "6.1.1",
+      "purl": "pkg:pypi/flake8-isort@6.1.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "flake8-isort@6.1.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/flake8@6.1.0",
+      "type": "library",
+      "name": "flake8",
+      "version": "6.1.0",
+      "purl": "pkg:pypi/flake8@6.1.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "flake8@6.1.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/gunicorn@21.2.0",
+      "type": "library",
+      "name": "gunicorn",
+      "version": "21.2.0",
+      "purl": "pkg:pypi/gunicorn@21.2.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "gunicorn@21.2.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/huey@2.5.0",
+      "type": "library",
+      "name": "huey",
+      "version": "2.5.0",
+      "purl": "pkg:pypi/huey@2.5.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "huey@2.5.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/identify@2.5.32",
+      "type": "library",
+      "name": "identify",
+      "version": "2.5.32",
+      "purl": "pkg:pypi/identify@2.5.32",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "identify@2.5.32"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/idna@3.6",
+      "type": "library",
+      "name": "idna",
+      "version": "3.6",
+      "purl": "pkg:pypi/idna@3.6",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "idna@3.6"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/inflection@0.5.1",
+      "type": "library",
+      "name": "inflection",
+      "version": "0.5.1",
+      "purl": "pkg:pypi/inflection@0.5.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "inflection@0.5.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/ipdb@0.13.13",
+      "type": "library",
+      "name": "ipdb",
+      "version": "0.13.13",
+      "purl": "pkg:pypi/ipdb@0.13.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "ipdb@0.13.13"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/ipython@8.18.0",
+      "type": "library",
+      "name": "ipython",
+      "version": "8.18.0",
+      "purl": "pkg:pypi/ipython@8.18.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "ipython@8.18.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/isort@5.12.0",
+      "type": "library",
+      "name": "isort",
+      "version": "5.12.0",
+      "purl": "pkg:pypi/isort@5.12.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "isort@5.12.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/jedi@0.19.1",
+      "type": "library",
+      "name": "jedi",
+      "version": "0.19.1",
+      "purl": "pkg:pypi/jedi@0.19.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "jedi@0.19.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/jira@3.5.2",
+      "type": "library",
+      "name": "jira",
+      "version": "3.5.2",
+      "purl": "pkg:pypi/jira@3.5.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "jira@3.5.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/jsonschema-specifications@2023.11.1",
+      "type": "library",
+      "name": "jsonschema-specifications",
+      "version": "2023.11.1",
+      "purl": "pkg:pypi/jsonschema-specifications@2023.11.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "jsonschema-specifications@2023.11.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/jsonschema@4.20.0",
+      "type": "library",
+      "name": "jsonschema",
+      "version": "4.20.0",
+      "purl": "pkg:pypi/jsonschema@4.20.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "jsonschema@4.20.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/markupsafe@2.1.3",
+      "type": "library",
+      "name": "markupsafe",
+      "version": "2.1.3",
+      "purl": "pkg:pypi/markupsafe@2.1.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "markupsafe@2.1.3"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/matplotlib-inline@0.1.6",
+      "type": "library",
+      "name": "matplotlib-inline",
+      "version": "0.1.6",
+      "purl": "pkg:pypi/matplotlib-inline@0.1.6",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "matplotlib-inline@0.1.6"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/mccabe@0.7.0",
+      "type": "library",
+      "name": "mccabe",
+      "version": "0.7.0",
+      "purl": "pkg:pypi/mccabe@0.7.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "mccabe@0.7.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/mypy-extensions@1.0.0",
+      "type": "library",
+      "name": "mypy-extensions",
+      "version": "1.0.0",
+      "purl": "pkg:pypi/mypy-extensions@1.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "mypy-extensions@1.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/mypy@1.7.1",
+      "type": "library",
+      "name": "mypy",
+      "version": "1.7.1",
+      "purl": "pkg:pypi/mypy@1.7.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "mypy@1.7.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/mysqlclient@2.2.0",
+      "type": "library",
+      "name": "mysqlclient",
+      "version": "2.2.0",
+      "purl": "pkg:pypi/mysqlclient@2.2.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "mysqlclient@2.2.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/nodeenv@1.8.0",
+      "type": "library",
+      "name": "nodeenv",
+      "version": "1.8.0",
+      "purl": "pkg:pypi/nodeenv@1.8.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "nodeenv@1.8.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/oauthlib@3.2.2",
+      "type": "library",
+      "name": "oauthlib",
+      "version": "3.2.2",
+      "purl": "pkg:pypi/oauthlib@3.2.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "oauthlib@3.2.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/openpyxl@3.1.2",
+      "type": "library",
+      "name": "openpyxl",
+      "version": "3.1.2",
+      "purl": "pkg:pypi/openpyxl@3.1.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "openpyxl@3.1.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/packageurl-python@0.11.2",
+      "type": "library",
+      "name": "packageurl-python",
+      "version": "0.11.2",
+      "purl": "pkg:pypi/packageurl-python@0.11.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "packageurl-python@0.11.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/packaging@23.2",
+      "type": "library",
+      "name": "packaging",
+      "version": "23.2",
+      "purl": "pkg:pypi/packaging@23.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "packaging@23.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/parso@0.8.3",
+      "type": "library",
+      "name": "parso",
+      "version": "0.8.3",
+      "purl": "pkg:pypi/parso@0.8.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "parso@0.8.3"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/pathspec@0.11.2",
+      "type": "library",
+      "name": "pathspec",
+      "version": "0.11.2",
+      "purl": "pkg:pypi/pathspec@0.11.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "pathspec@0.11.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/pexpect@4.9.0",
+      "type": "library",
+      "name": "pexpect",
+      "version": "4.9.0",
+      "purl": "pkg:pypi/pexpect@4.9.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "pexpect@4.9.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/platformdirs@4.0.0",
+      "type": "library",
+      "name": "platformdirs",
+      "version": "4.0.0",
+      "purl": "pkg:pypi/platformdirs@4.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "platformdirs@4.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/pre-commit@3.5.0",
+      "type": "library",
+      "name": "pre-commit",
+      "version": "3.5.0",
+      "purl": "pkg:pypi/pre-commit@3.5.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "pre-commit@3.5.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/prompt-toolkit@3.0.41",
+      "type": "library",
+      "name": "prompt-toolkit",
+      "version": "3.0.41",
+      "purl": "pkg:pypi/prompt-toolkit@3.0.41",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "prompt-toolkit@3.0.41"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/psycopg-binary@3.1.14",
+      "type": "library",
+      "name": "psycopg-binary",
+      "version": "3.1.14",
+      "purl": "pkg:pypi/psycopg-binary@3.1.14",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "psycopg-binary@3.1.14"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/psycopg@3.1.14",
+      "type": "library",
+      "name": "psycopg",
+      "version": "3.1.14",
+      "purl": "pkg:pypi/psycopg@3.1.14",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "psycopg@3.1.14"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/ptyprocess@0.7.0",
+      "type": "library",
+      "name": "ptyprocess",
+      "version": "0.7.0",
+      "purl": "pkg:pypi/ptyprocess@0.7.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "ptyprocess@0.7.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/pure-eval@0.2.2",
+      "type": "library",
+      "name": "pure-eval",
+      "version": "0.2.2",
+      "purl": "pkg:pypi/pure-eval@0.2.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "pure-eval@0.2.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/pycodestyle@2.11.1",
+      "type": "library",
+      "name": "pycodestyle",
+      "version": "2.11.1",
+      "purl": "pkg:pypi/pycodestyle@2.11.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "pycodestyle@2.11.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/pycparser@2.21",
+      "type": "library",
+      "name": "pycparser",
+      "version": "2.21",
+      "purl": "pkg:pypi/pycparser@2.21",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "pycparser@2.21"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/pyflakes@3.1.0",
+      "type": "library",
+      "name": "pyflakes",
+      "version": "3.1.0",
+      "purl": "pkg:pypi/pyflakes@3.1.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "pyflakes@3.1.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/pygments@2.17.2",
+      "type": "library",
+      "name": "pygments",
+      "version": "2.17.2",
+      "purl": "pkg:pypi/pygments@2.17.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "pygments@2.17.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/pyjwt@2.8.0",
+      "type": "library",
+      "name": "pyjwt",
+      "version": "2.8.0",
+      "purl": "pkg:pypi/pyjwt@2.8.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "pyjwt@2.8.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/pylint-django@2.5.5",
+      "type": "library",
+      "name": "pylint-django",
+      "version": "2.5.5",
+      "purl": "pkg:pypi/pylint-django@2.5.5",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "pylint-django@2.5.5"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/pylint-plugin-utils@0.8.2",
+      "type": "library",
+      "name": "pylint-plugin-utils",
+      "version": "0.8.2",
+      "purl": "pkg:pypi/pylint-plugin-utils@0.8.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "pylint-plugin-utils@0.8.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/pylint@3.0.2",
+      "type": "library",
+      "name": "pylint",
+      "version": "3.0.2",
+      "purl": "pkg:pypi/pylint@3.0.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "pylint@3.0.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/pytz@2023.3.post1",
+      "type": "library",
+      "name": "pytz",
+      "version": "2023.3.post1",
+      "purl": "pkg:pypi/pytz@2023.3.post1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "pytz@2023.3.post1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/pyyaml@6.0.1",
+      "type": "library",
+      "name": "pyyaml",
+      "version": "6.0.1",
+      "purl": "pkg:pypi/pyyaml@6.0.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "pyyaml@6.0.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/referencing@0.31.0",
+      "type": "library",
+      "name": "referencing",
+      "version": "0.31.0",
+      "purl": "pkg:pypi/referencing@0.31.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "referencing@0.31.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/requests-oauthlib@1.3.1",
+      "type": "library",
+      "name": "requests-oauthlib",
+      "version": "1.3.1",
+      "purl": "pkg:pypi/requests-oauthlib@1.3.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "requests-oauthlib@1.3.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/requests-toolbelt@1.0.0",
+      "type": "library",
+      "name": "requests-toolbelt",
+      "version": "1.0.0",
+      "purl": "pkg:pypi/requests-toolbelt@1.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "requests-toolbelt@1.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/requests@2.31.0",
+      "type": "library",
+      "name": "requests",
+      "version": "2.31.0",
+      "purl": "pkg:pypi/requests@2.31.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "requests@2.31.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/rpds-py@0.13.1",
+      "type": "library",
+      "name": "rpds-py",
+      "version": "0.13.1",
+      "purl": "pkg:pypi/rpds-py@0.13.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "rpds-py@0.13.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/setuptools@69.0.2",
+      "type": "library",
+      "name": "setuptools",
+      "version": "69.0.2",
+      "purl": "pkg:pypi/setuptools@69.0.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "setuptools@69.0.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/six@1.16.0",
+      "type": "library",
+      "name": "six",
+      "version": "1.16.0",
+      "purl": "pkg:pypi/six@1.16.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "six@1.16.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/sniffio@1.3.0",
+      "type": "library",
+      "name": "sniffio",
+      "version": "1.3.0",
+      "purl": "pkg:pypi/sniffio@1.3.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "sniffio@1.3.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/sqlparse",
+      "type": "library",
+      "name": "sqlparse",
+      "version": "0.4.4",
+      "purl": "pkg:pypi/sqlparse",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "sqlparse@0.4.4"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/stack-data@0.6.3",
+      "type": "library",
+      "name": "stack-data",
+      "version": "0.6.3",
+      "purl": "pkg:pypi/stack-data@0.6.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "stack-data@0.6.3"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/tomli@2.0.1",
+      "type": "library",
+      "name": "tomli",
+      "version": "2.0.1",
+      "purl": "pkg:pypi/tomli@2.0.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "tomli@2.0.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/tomlkit@0.12.3",
+      "type": "library",
+      "name": "tomlkit",
+      "version": "0.12.3",
+      "purl": "pkg:pypi/tomlkit@0.12.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "tomlkit@0.12.3"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/traitlets@5.13.0",
+      "type": "library",
+      "name": "traitlets",
+      "version": "5.13.0",
+      "purl": "pkg:pypi/traitlets@5.13.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "traitlets@5.13.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/types-pytz@2023.3.1.1",
+      "type": "library",
+      "name": "types-pytz",
+      "version": "2023.3.1.1",
+      "purl": "pkg:pypi/types-pytz@2023.3.1.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "types-pytz@2023.3.1.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/types-pyyaml@6.0.12.12",
+      "type": "library",
+      "name": "types-pyyaml",
+      "version": "6.0.12.12",
+      "purl": "pkg:pypi/types-pyyaml@6.0.12.12",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "types-pyyaml@6.0.12.12"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/types-requests@2.31.0.10",
+      "type": "library",
+      "name": "types-requests",
+      "version": "2.31.0.10",
+      "purl": "pkg:pypi/types-requests@2.31.0.10",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "types-requests@2.31.0.10"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/typing-extensions@4.8.0",
+      "type": "library",
+      "name": "typing-extensions",
+      "version": "4.8.0",
+      "purl": "pkg:pypi/typing-extensions@4.8.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "typing-extensions@4.8.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/tzdata@2023.3",
+      "type": "library",
+      "name": "tzdata",
+      "version": "2023.3",
+      "purl": "pkg:pypi/tzdata@2023.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "tzdata@2023.3"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/uritemplate@4.1.1",
+      "type": "library",
+      "name": "uritemplate",
+      "version": "4.1.1",
+      "purl": "pkg:pypi/uritemplate@4.1.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "uritemplate@4.1.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/urllib3@2.1.0",
+      "type": "library",
+      "name": "urllib3",
+      "version": "2.1.0",
+      "purl": "pkg:pypi/urllib3@2.1.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "urllib3@2.1.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/virtualenv@20.24.7",
+      "type": "library",
+      "name": "virtualenv",
+      "version": "20.24.7",
+      "purl": "pkg:pypi/virtualenv@20.24.7",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "virtualenv@20.24.7"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/watchdog@3.0.0",
+      "type": "library",
+      "name": "watchdog",
+      "version": "3.0.0",
+      "purl": "pkg:pypi/watchdog@3.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "watchdog@3.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/watchgod@0.8.2",
+      "type": "library",
+      "name": "watchgod",
+      "version": "0.8.2",
+      "purl": "pkg:pypi/watchgod@0.8.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "watchgod@0.8.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/wcwidth@0.2.12",
+      "type": "library",
+      "name": "wcwidth",
+      "version": "0.2.12",
+      "purl": "pkg:pypi/wcwidth@0.2.12",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "wcwidth@0.2.12"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/werkzeug@3.0.1",
+      "type": "library",
+      "name": "werkzeug",
+      "version": "3.0.1",
+      "purl": "pkg:pypi/werkzeug@3.0.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "werkzeug@3.0.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/whitenoise@6.6.0",
+      "type": "library",
+      "name": "whitenoise",
+      "version": "6.6.0",
+      "purl": "pkg:pypi/whitenoise@6.6.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "whitenoise@6.6.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "poetry"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "2437df08-8135-4498-88f8-ecf2af4cfa1a",
+      "dependsOn": [
+        "pkg:pypi/anyio@3.7.1",
+        "pkg:pypi/argon2-cffi-bindings@21.2.0",
+        "pkg:pypi/argon2-cffi@23.1.0",
+        "pkg:pypi/asgiref@3.7.2",
+        "pkg:pypi/astroid@3.0.1",
+        "pkg:pypi/asttokens@2.4.1",
+        "pkg:pypi/attrs@23.1.0",
+        "pkg:pypi/black@23.11.0",
+        "pkg:pypi/certifi@2023.11.17",
+        "pkg:pypi/cffi@1.16.0",
+        "pkg:pypi/cfgv@3.4.0",
+        "pkg:pypi/charset-normalizer@3.3.2",
+        "pkg:pypi/click@8.1.7",
+        "pkg:pypi/colorama@0.4.6",
+        "pkg:pypi/coverage@7.3.2",
+        "pkg:pypi/cryptography",
+        "pkg:pypi/decorator@5.1.1",
+        "pkg:pypi/defusedcsv@2.0.0",
+        "pkg:pypi/defusedxml@0.7.1",
+        "pkg:pypi/dill@0.3.7",
+        "pkg:pypi/distlib@0.3.7",
+        "pkg:pypi/django-constance@3.1.0",
+        "pkg:pypi/django-cors-headers@4.3.1",
+        "pkg:pypi/django-coverage-plugin@3.1.0",
+        "pkg:pypi/django-csp@3.7",
+        "pkg:pypi/django-encrypted-model-fields@0.6.5",
+        "pkg:pypi/django-environ@0.11.2",
+        "pkg:pypi/django-extensions@3.2.3",
+        "pkg:pypi/django-filter@23.5",
+        "pkg:pypi/django-model-utils@4.3.1",
+        "pkg:pypi/django-picklefield@3.1",
+        "pkg:pypi/django-stubs-ext@4.2.7",
+        "pkg:pypi/django-stubs@4.2.7",
+        "pkg:pypi/django@4.2.8",
+        "pkg:pypi/djangorestframework-stubs@3.14.5",
+        "pkg:pypi/djangorestframework@3.14.0",
+        "pkg:pypi/drf-spectacular-sidecar@2023.12.1",
+        "pkg:pypi/drf-spectacular@0.26.5",
+        "pkg:pypi/et-xmlfile@1.1.0",
+        "pkg:pypi/exceptiongroup@1.2.0",
+        "pkg:pypi/executing@2.0.1",
+        "pkg:pypi/filelock@3.13.1",
+        "pkg:pypi/flake8-isort@6.1.1",
+        "pkg:pypi/flake8@6.1.0",
+        "pkg:pypi/gunicorn@21.2.0",
+        "pkg:pypi/huey@2.5.0",
+        "pkg:pypi/identify@2.5.32",
+        "pkg:pypi/idna@3.6",
+        "pkg:pypi/inflection@0.5.1",
+        "pkg:pypi/ipdb@0.13.13",
+        "pkg:pypi/ipython@8.18.0",
+        "pkg:pypi/isort@5.12.0",
+        "pkg:pypi/jedi@0.19.1",
+        "pkg:pypi/jira@3.5.2",
+        "pkg:pypi/jsonschema-specifications@2023.11.1",
+        "pkg:pypi/jsonschema@4.20.0",
+        "pkg:pypi/markupsafe@2.1.3",
+        "pkg:pypi/matplotlib-inline@0.1.6",
+        "pkg:pypi/mccabe@0.7.0",
+        "pkg:pypi/mypy-extensions@1.0.0",
+        "pkg:pypi/mypy@1.7.1",
+        "pkg:pypi/mysqlclient@2.2.0",
+        "pkg:pypi/nodeenv@1.8.0",
+        "pkg:pypi/oauthlib@3.2.2",
+        "pkg:pypi/openpyxl@3.1.2",
+        "pkg:pypi/packageurl-python@0.11.2",
+        "pkg:pypi/packaging@23.2",
+        "pkg:pypi/parso@0.8.3",
+        "pkg:pypi/pathspec@0.11.2",
+        "pkg:pypi/pexpect@4.9.0",
+        "pkg:pypi/platformdirs@4.0.0",
+        "pkg:pypi/pre-commit@3.5.0",
+        "pkg:pypi/prompt-toolkit@3.0.41",
+        "pkg:pypi/psycopg-binary@3.1.14",
+        "pkg:pypi/psycopg@3.1.14",
+        "pkg:pypi/ptyprocess@0.7.0",
+        "pkg:pypi/pure-eval@0.2.2",
+        "pkg:pypi/pycodestyle@2.11.1",
+        "pkg:pypi/pycparser@2.21",
+        "pkg:pypi/pyflakes@3.1.0",
+        "pkg:pypi/pygments@2.17.2",
+        "pkg:pypi/pyjwt@2.8.0",
+        "pkg:pypi/pylint-django@2.5.5",
+        "pkg:pypi/pylint-plugin-utils@0.8.2",
+        "pkg:pypi/pylint@3.0.2",
+        "pkg:pypi/pytz@2023.3.post1",
+        "pkg:pypi/pyyaml@6.0.1",
+        "pkg:pypi/referencing@0.31.0",
+        "pkg:pypi/requests-oauthlib@1.3.1",
+        "pkg:pypi/requests-toolbelt@1.0.0",
+        "pkg:pypi/requests@2.31.0",
+        "pkg:pypi/rpds-py@0.13.1",
+        "pkg:pypi/setuptools@69.0.2",
+        "pkg:pypi/six@1.16.0",
+        "pkg:pypi/sniffio@1.3.0",
+        "pkg:pypi/sqlparse",
+        "pkg:pypi/stack-data@0.6.3",
+        "pkg:pypi/tomli@2.0.1",
+        "pkg:pypi/tomlkit@0.12.3",
+        "pkg:pypi/traitlets@5.13.0",
+        "pkg:pypi/types-pytz@2023.3.1.1",
+        "pkg:pypi/types-pyyaml@6.0.12.12",
+        "pkg:pypi/types-requests@2.31.0.10",
+        "pkg:pypi/typing-extensions@4.8.0",
+        "pkg:pypi/tzdata@2023.3",
+        "pkg:pypi/uritemplate@4.1.1",
+        "pkg:pypi/urllib3@2.1.0",
+        "pkg:pypi/virtualenv@20.24.7",
+        "pkg:pypi/watchdog@3.0.0",
+        "pkg:pypi/watchgod@0.8.2",
+        "pkg:pypi/wcwidth@0.2.12",
+        "pkg:pypi/werkzeug@3.0.1",
+        "pkg:pypi/whitenoise@6.6.0"
+      ]
+    },
+    {
+      "ref": "3571d0ee-db53-4127-bcc2-c37446ca40d5",
+      "dependsOn": [
+        "2437df08-8135-4498-88f8-ecf2af4cfa1a"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/anyio@3.7.1",
+      "dependsOn": [
+        "pkg:pypi/exceptiongroup@1.2.0",
+        "pkg:pypi/idna@3.6",
+        "pkg:pypi/sniffio@1.3.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/argon2-cffi-bindings@21.2.0",
+      "dependsOn": [
+        "pkg:pypi/cffi@1.16.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/argon2-cffi@23.1.0",
+      "dependsOn": [
+        "pkg:pypi/argon2-cffi-bindings@21.2.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/asgiref@3.7.2",
+      "dependsOn": [
+        "pkg:pypi/typing-extensions@4.8.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/astroid@3.0.1",
+      "dependsOn": [
+        "pkg:pypi/typing-extensions@4.8.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/asttokens@2.4.1",
+      "dependsOn": [
+        "pkg:pypi/six@1.16.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/attrs@23.1.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/black@23.11.0",
+      "dependsOn": [
+        "pkg:pypi/click@8.1.7",
+        "pkg:pypi/mypy-extensions@1.0.0",
+        "pkg:pypi/packaging@23.2",
+        "pkg:pypi/pathspec@0.11.2",
+        "pkg:pypi/platformdirs@4.0.0",
+        "pkg:pypi/tomli@2.0.1",
+        "pkg:pypi/typing-extensions@4.8.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/certifi@2023.11.17",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/cffi@1.16.0",
+      "dependsOn": [
+        "pkg:pypi/pycparser@2.21"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/cfgv@3.4.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/charset-normalizer@3.3.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/click@8.1.7",
+      "dependsOn": [
+        "pkg:pypi/colorama@0.4.6"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/colorama@0.4.6",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/coverage@7.3.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/cryptography",
+      "dependsOn": [
+        "pkg:pypi/cffi@1.16.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/decorator@5.1.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/defusedcsv@2.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/defusedxml@0.7.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/dill@0.3.7",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/distlib@0.3.7",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/django-constance@3.1.0",
+      "dependsOn": [
+        "pkg:pypi/django-picklefield@3.1"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/django-cors-headers@4.3.1",
+      "dependsOn": [
+        "pkg:pypi/asgiref@3.7.2",
+        "pkg:pypi/django@4.2.8"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/django-coverage-plugin@3.1.0",
+      "dependsOn": [
+        "pkg:pypi/coverage@7.3.2"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/django-csp@3.7",
+      "dependsOn": [
+        "pkg:pypi/django@4.2.8"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/django-encrypted-model-fields@0.6.5",
+      "dependsOn": [
+        "pkg:pypi/cryptography",
+        "pkg:pypi/django@4.2.8"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/django-environ@0.11.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/django-extensions@3.2.3",
+      "dependsOn": [
+        "pkg:pypi/django@4.2.8"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/django-filter@23.5",
+      "dependsOn": [
+        "pkg:pypi/django@4.2.8"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/django-model-utils@4.3.1",
+      "dependsOn": [
+        "pkg:pypi/django@4.2.8"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/django-picklefield@3.1",
+      "dependsOn": [
+        "pkg:pypi/django@4.2.8"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/django-stubs-ext@4.2.7",
+      "dependsOn": [
+        "pkg:pypi/django@4.2.8",
+        "pkg:pypi/typing-extensions@4.8.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/django-stubs@4.2.7",
+      "dependsOn": [
+        "pkg:pypi/django-stubs-ext@4.2.7",
+        "pkg:pypi/django@4.2.8",
+        "pkg:pypi/tomli@2.0.1",
+        "pkg:pypi/types-pytz@2023.3.1.1",
+        "pkg:pypi/types-pyyaml@6.0.12.12",
+        "pkg:pypi/typing-extensions@4.8.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/django@4.2.8",
+      "dependsOn": [
+        "pkg:pypi/asgiref@3.7.2",
+        "pkg:pypi/sqlparse",
+        "pkg:pypi/tzdata@2023.3"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/djangorestframework-stubs@3.14.5",
+      "dependsOn": [
+        "pkg:pypi/django-stubs@4.2.7",
+        "pkg:pypi/requests@2.31.0",
+        "pkg:pypi/types-pyyaml@6.0.12.12",
+        "pkg:pypi/types-requests@2.31.0.10",
+        "pkg:pypi/typing-extensions@4.8.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/djangorestframework@3.14.0",
+      "dependsOn": [
+        "pkg:pypi/django@4.2.8",
+        "pkg:pypi/pytz@2023.3.post1"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/drf-spectacular-sidecar@2023.12.1",
+      "dependsOn": [
+        "pkg:pypi/django@4.2.8"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/drf-spectacular@0.26.5",
+      "dependsOn": [
+        "pkg:pypi/django@4.2.8",
+        "pkg:pypi/djangorestframework@3.14.0",
+        "pkg:pypi/inflection@0.5.1",
+        "pkg:pypi/jsonschema@4.20.0",
+        "pkg:pypi/pyyaml@6.0.1",
+        "pkg:pypi/uritemplate@4.1.1"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/et-xmlfile@1.1.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/exceptiongroup@1.2.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/executing@2.0.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/filelock@3.13.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/flake8-isort@6.1.1",
+      "dependsOn": [
+        "pkg:pypi/flake8@6.1.0",
+        "pkg:pypi/isort@5.12.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/flake8@6.1.0",
+      "dependsOn": [
+        "pkg:pypi/mccabe@0.7.0",
+        "pkg:pypi/pycodestyle@2.11.1",
+        "pkg:pypi/pyflakes@3.1.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/gunicorn@21.2.0",
+      "dependsOn": [
+        "pkg:pypi/packaging@23.2"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/huey@2.5.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/identify@2.5.32",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/idna@3.6",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/inflection@0.5.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/ipdb@0.13.13",
+      "dependsOn": [
+        "pkg:pypi/decorator@5.1.1",
+        "pkg:pypi/ipython@8.18.0",
+        "pkg:pypi/tomli@2.0.1"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/ipython@8.18.0",
+      "dependsOn": [
+        "pkg:pypi/colorama@0.4.6",
+        "pkg:pypi/decorator@5.1.1",
+        "pkg:pypi/exceptiongroup@1.2.0",
+        "pkg:pypi/jedi@0.19.1",
+        "pkg:pypi/matplotlib-inline@0.1.6",
+        "pkg:pypi/pexpect@4.9.0",
+        "pkg:pypi/prompt-toolkit@3.0.41",
+        "pkg:pypi/pygments@2.17.2",
+        "pkg:pypi/stack-data@0.6.3",
+        "pkg:pypi/traitlets@5.13.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/isort@5.12.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/jedi@0.19.1",
+      "dependsOn": [
+        "pkg:pypi/parso@0.8.3"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/jira@3.5.2",
+      "dependsOn": [
+        "pkg:pypi/defusedxml@0.7.1",
+        "pkg:pypi/packaging@23.2",
+        "pkg:pypi/requests-oauthlib@1.3.1",
+        "pkg:pypi/requests-toolbelt@1.0.0",
+        "pkg:pypi/requests@2.31.0",
+        "pkg:pypi/typing-extensions@4.8.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/jsonschema-specifications@2023.11.1",
+      "dependsOn": [
+        "pkg:pypi/referencing@0.31.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/jsonschema@4.20.0",
+      "dependsOn": [
+        "pkg:pypi/attrs@23.1.0",
+        "pkg:pypi/jsonschema-specifications@2023.11.1",
+        "pkg:pypi/referencing@0.31.0",
+        "pkg:pypi/rpds-py@0.13.1"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/markupsafe@2.1.3",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/matplotlib-inline@0.1.6",
+      "dependsOn": [
+        "pkg:pypi/traitlets@5.13.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/mccabe@0.7.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/mypy-extensions@1.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/mypy@1.7.1",
+      "dependsOn": [
+        "pkg:pypi/mypy-extensions@1.0.0",
+        "pkg:pypi/tomli@2.0.1",
+        "pkg:pypi/typing-extensions@4.8.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/mysqlclient@2.2.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/nodeenv@1.8.0",
+      "dependsOn": [
+        "pkg:pypi/setuptools@69.0.2"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/oauthlib@3.2.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/openpyxl@3.1.2",
+      "dependsOn": [
+        "pkg:pypi/et-xmlfile@1.1.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/packageurl-python@0.11.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/packaging@23.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/parso@0.8.3",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/pathspec@0.11.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/pexpect@4.9.0",
+      "dependsOn": [
+        "pkg:pypi/ptyprocess@0.7.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/platformdirs@4.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/pre-commit@3.5.0",
+      "dependsOn": [
+        "pkg:pypi/cfgv@3.4.0",
+        "pkg:pypi/identify@2.5.32",
+        "pkg:pypi/nodeenv@1.8.0",
+        "pkg:pypi/pyyaml@6.0.1",
+        "pkg:pypi/virtualenv@20.24.7"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/prompt-toolkit@3.0.41",
+      "dependsOn": [
+        "pkg:pypi/wcwidth@0.2.12"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/psycopg-binary@3.1.14",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/psycopg@3.1.14",
+      "dependsOn": [
+        "pkg:pypi/psycopg-binary@3.1.14",
+        "pkg:pypi/typing-extensions@4.8.0",
+        "pkg:pypi/tzdata@2023.3"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/ptyprocess@0.7.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/pure-eval@0.2.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/pycodestyle@2.11.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/pycparser@2.21",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/pyflakes@3.1.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/pygments@2.17.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/pyjwt@2.8.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/pylint-django@2.5.5",
+      "dependsOn": [
+        "pkg:pypi/pylint-plugin-utils@0.8.2",
+        "pkg:pypi/pylint@3.0.2"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/pylint-plugin-utils@0.8.2",
+      "dependsOn": [
+        "pkg:pypi/pylint@3.0.2"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/pylint@3.0.2",
+      "dependsOn": [
+        "pkg:pypi/astroid@3.0.1",
+        "pkg:pypi/colorama@0.4.6",
+        "pkg:pypi/isort@5.12.0",
+        "pkg:pypi/mccabe@0.7.0",
+        "pkg:pypi/platformdirs@4.0.0",
+        "pkg:pypi/tomli@2.0.1",
+        "pkg:pypi/tomlkit@0.12.3"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/pytz@2023.3.post1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/pyyaml@6.0.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/referencing@0.31.0",
+      "dependsOn": [
+        "pkg:pypi/attrs@23.1.0",
+        "pkg:pypi/rpds-py@0.13.1"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/requests-oauthlib@1.3.1",
+      "dependsOn": [
+        "pkg:pypi/oauthlib@3.2.2",
+        "pkg:pypi/requests@2.31.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/requests-toolbelt@1.0.0",
+      "dependsOn": [
+        "pkg:pypi/requests@2.31.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/requests@2.31.0",
+      "dependsOn": [
+        "pkg:pypi/certifi@2023.11.17",
+        "pkg:pypi/charset-normalizer@3.3.2",
+        "pkg:pypi/idna@3.6",
+        "pkg:pypi/urllib3@2.1.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/rpds-py@0.13.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/setuptools@69.0.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/six@1.16.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/sniffio@1.3.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/sqlparse",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/stack-data@0.6.3",
+      "dependsOn": [
+        "pkg:pypi/asttokens@2.4.1",
+        "pkg:pypi/executing@2.0.1",
+        "pkg:pypi/pure-eval@0.2.2"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/tomli@2.0.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/tomlkit@0.12.3",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/traitlets@5.13.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/types-pytz@2023.3.1.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/types-pyyaml@6.0.12.12",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/types-requests@2.31.0.10",
+      "dependsOn": [
+        "pkg:pypi/urllib3@2.1.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/typing-extensions@4.8.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/tzdata@2023.3",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/uritemplate@4.1.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/urllib3@2.1.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/virtualenv@20.24.7",
+      "dependsOn": [
+        "pkg:pypi/distlib@0.3.7",
+        "pkg:pypi/filelock@3.13.1",
+        "pkg:pypi/platformdirs@4.0.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/watchdog@3.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/watchgod@0.8.2",
+      "dependsOn": [
+        "pkg:pypi/anyio@3.7.1"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/wcwidth@0.2.12",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/werkzeug@3.0.1",
+      "dependsOn": [
+        "pkg:pypi/markupsafe@2.1.3",
+        "pkg:pypi/watchdog@3.0.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/whitenoise@6.6.0",
+      "dependsOn": []
+    }
+  ],
+  "vulnerabilities": [
+    {
+      "id": "CVE-2023-49083",
+      "source": {
+        "name": "ghsa",
+        "url": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "alma"
+          },
+          "severity": "medium"
+        },
+        {
+          "source": {
+            "name": "amazon"
+          },
+          "severity": "medium"
+        },
+        {
+          "source": {
+            "name": "cbl-mariner"
+          },
+          "severity": "high"
+        },
+        {
+          "source": {
+            "name": "ghsa"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "nvd"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "oracle-oval"
+          },
+          "severity": "medium"
+        },
+        {
+          "source": {
+            "name": "photon"
+          },
+          "severity": "high"
+        },
+        {
+          "source": {
+            "name": "redhat"
+          },
+          "score": 7.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "rocky"
+          },
+          "severity": "medium"
+        },
+        {
+          "source": {
+            "name": "ubuntu"
+          },
+          "severity": "medium"
+        }
+      ],
+      "cwes": [
+        476
+      ],
+      "description": "cryptography is a package designed to expose cryptographic primitives and recipes to Python developers. Calling `load_pem_pkcs7_certificates` or `load_der_pkcs7_certificates` could lead to a NULL-pointer dereference and segfault. Exploitation of this vulnerability poses a serious risk of Denial of Service (DoS) for any application attempting to deserialize a PKCS7 blob/certificate. The consequences extend to potential disruptions in system availability and stability. This vulnerability has been patched in version 41.0.6.",
+      "recommendation": "Upgrade cryptography to version 41.0.6",
+      "advisories": [
+        {
+          "url": "https://avd.aquasec.com/nvd/cve-2023-49083"
+        },
+        {
+          "url": "http://www.openwall.com/lists/oss-security/2023/11/29/2"
+        },
+        {
+          "url": "https://access.redhat.com/errata/RHSA-2024:2337"
+        },
+        {
+          "url": "https://access.redhat.com/security/cve/CVE-2023-49083"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/2255331"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2255331"
+        },
+        {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-49083"
+        },
+        {
+          "url": "https://errata.almalinux.org/9/ALSA-2024-2337.html"
+        },
+        {
+          "url": "https://errata.rockylinux.org/RLSA-2024:2337"
+        },
+        {
+          "url": "https://github.com/pyca/cryptography"
+        },
+        {
+          "url": "https://github.com/pyca/cryptography/commit/f09c261ca10a31fe41b1262306db7f8f1da0e48a"
+        },
+        {
+          "url": "https://github.com/pyca/cryptography/pull/9926"
+        },
+        {
+          "url": "https://github.com/pyca/cryptography/security/advisories/GHSA-jfhm-5ghh-2f97"
+        },
+        {
+          "url": "https://github.com/pypa/advisory-database/tree/main/vulns/cryptography/PYSEC-2023-254.yaml"
+        },
+        {
+          "url": "https://linux.oracle.com/cve/CVE-2023-49083.html"
+        },
+        {
+          "url": "https://linux.oracle.com/errata/ELSA-2024-3105.html"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/QMNTYMUGFJSDBYBU22FUYBHFRZODRKXV"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/QMNTYMUGFJSDBYBU22FUYBHFRZODRKXV/"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-49083"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-6539-1"
+        },
+        {
+          "url": "https://www.cve.org/CVERecord?id=CVE-2023-49083"
+        }
+      ],
+      "published": "2023-11-29T19:15:07+00:00",
+      "updated": "2024-02-17T02:15:45+00:00",
+      "affects": [
+        {
+          "ref": "pkg:pypi/cryptography",
+          "versions": [
+            {
+              "version": "41.0.5",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2023-50782",
+      "source": {
+        "name": "ghsa",
+        "url": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "ghsa"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "nvd"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "photon"
+          },
+          "severity": "high"
+        },
+        {
+          "source": {
+            "name": "redhat"
+          },
+          "score": 7.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "ubuntu"
+          },
+          "severity": "medium"
+        }
+      ],
+      "cwes": [
+        203,
+        208
+      ],
+      "description": "A flaw was found in the python-cryptography package. This issue may allow a remote attacker to decrypt captured messages in TLS servers that use RSA key exchanges, which may lead to exposure of confidential or sensitive data.",
+      "recommendation": "Upgrade cryptography to version 42.0.0",
+      "advisories": [
+        {
+          "url": "https://avd.aquasec.com/nvd/cve-2023-50782"
+        },
+        {
+          "url": "https://access.redhat.com/security/cve/CVE-2023-50782"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2254432"
+        },
+        {
+          "url": "https://github.com/openssl/openssl/pull/13817"
+        },
+        {
+          "url": "https://github.com/pyca/cryptography"
+        },
+        {
+          "url": "https://github.com/pyca/cryptography/issues/9785"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-50782"
+        },
+        {
+          "url": "https://people.redhat.com/~hkario/marvin/"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-6663-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-6673-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-6673-2"
+        },
+        {
+          "url": "https://www.cve.org/CVERecord?id=CVE-2023-50782"
+        }
+      ],
+      "published": "2024-02-05T21:15:11+00:00",
+      "updated": "2024-02-26T16:27:48+00:00",
+      "affects": [
+        {
+          "ref": "pkg:pypi/cryptography",
+          "versions": [
+            {
+              "version": "41.0.5",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-0727",
+      "source": {
+        "name": "ghsa",
+        "url": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "alma"
+          },
+          "severity": "low"
+        },
+        {
+          "source": {
+            "name": "amazon"
+          },
+          "severity": "high"
+        },
+        {
+          "source": {
+            "name": "cbl-mariner"
+          },
+          "severity": "medium"
+        },
+        {
+          "source": {
+            "name": "ghsa"
+          },
+          "score": 5.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "nvd"
+          },
+          "score": 5.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "oracle-oval"
+          },
+          "severity": "low"
+        },
+        {
+          "source": {
+            "name": "photon"
+          },
+          "severity": "medium"
+        },
+        {
+          "source": {
+            "name": "redhat"
+          },
+          "score": 5.5,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "ubuntu"
+          },
+          "severity": "low"
+        }
+      ],
+      "description": "Issue summary: Processing a maliciously formatted PKCS12 file may lead OpenSSL\nto crash leading to a potential Denial of Service attack\n\nImpact summary: Applications loading files in the PKCS12 format from untrusted\nsources might terminate abruptly.\n\nA file in PKCS12 format can contain certificates and keys and may come from an\nuntrusted source. The PKCS12 specification allows certain fields to be NULL, but\nOpenSSL does not correctly check for this case. This can lead to a NULL pointer\ndereference that results in OpenSSL crashing. If an application processes PKCS12\nfiles from an untrusted source using the OpenSSL APIs then that application will\nbe vulnerable to this issue.\n\nOpenSSL APIs that are vulnerable to this are: PKCS12_parse(),\nPKCS12_unpack_p7data(), PKCS12_unpack_p7encdata(), PKCS12_unpack_authsafes()\nand PKCS12_newpass().\n\nWe have also fixed a similar issue in SMIME_write_PKCS7(). However since this\nfunction is related to writing data we do not consider it security significant.\n\nThe FIPS modules in 3.2, 3.1 and 3.0 are not affected by this issue.",
+      "recommendation": "Upgrade cryptography to version 42.0.2",
+      "advisories": [
+        {
+          "url": "https://avd.aquasec.com/nvd/cve-2024-0727"
+        },
+        {
+          "url": "http://www.openwall.com/lists/oss-security/2024/03/11/1"
+        },
+        {
+          "url": "https://access.redhat.com/errata/RHSA-2024:2447"
+        },
+        {
+          "url": "https://access.redhat.com/security/cve/CVE-2024-0727"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/2223016"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/2224962"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/2227852"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/2248616"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/2257571"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/2258502"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/2259944"
+        },
+        {
+          "url": "https://errata.almalinux.org/9/ALSA-2024-2447.html"
+        },
+        {
+          "url": "https://github.com/alexcrichton/openssl-src-rs/commit/add20f73b6b42be7451af2e1044d4e0e778992b2"
+        },
+        {
+          "url": "https://github.com/github/advisory-database/pull/3472"
+        },
+        {
+          "url": "https://github.com/openssl/openssl/commit/09df4395b5071217b76dc7d3d2e630eb8c5a79c2"
+        },
+        {
+          "url": "https://github.com/openssl/openssl/commit/775acfdbd0c6af9ac855f34969cdab0c0c90844a"
+        },
+        {
+          "url": "https://github.com/openssl/openssl/commit/d135eeab8a5dbf72b3da5240bab9ddb7678dbd2c"
+        },
+        {
+          "url": "https://github.com/openssl/openssl/pull/23362"
+        },
+        {
+          "url": "https://github.com/pyca/cryptography/commit/3519591d255d4506fbcd0d04037d45271903c64d"
+        },
+        {
+          "url": "https://github.openssl.org/openssl/extended-releases/commit/03b3941d60c4bce58fab69a0c22377ab439bc0e8"
+        },
+        {
+          "url": "https://github.openssl.org/openssl/extended-releases/commit/aebaa5883e31122b404e450732dc833dc9dee539"
+        },
+        {
+          "url": "https://linux.oracle.com/cve/CVE-2024-0727.html"
+        },
+        {
+          "url": "https://linux.oracle.com/errata/ELSA-2024-2447.html"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-0727"
+        },
+        {
+          "url": "https://security.netapp.com/advisory/ntap-20240208-0006"
+        },
+        {
+          "url": "https://security.netapp.com/advisory/ntap-20240208-0006/"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-6622-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-6632-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-6709-1"
+        },
+        {
+          "url": "https://www.cve.org/CVERecord?id=CVE-2024-0727"
+        },
+        {
+          "url": "https://www.openssl.org/news/secadv/20240125.txt"
+        }
+      ],
+      "published": "2024-01-26T09:15:07+00:00",
+      "updated": "2024-05-01T18:15:13+00:00",
+      "affects": [
+        {
+          "ref": "pkg:pypi/cryptography",
+          "versions": [
+            {
+              "version": "41.0.5",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-1135",
+      "source": {
+        "name": "ghsa",
+        "url": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "ghsa"
+          },
+          "score": 8.2,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "redhat"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv3",
+          "vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        }
+      ],
+      "cwes": [
+        444
+      ],
+      "description": "Gunicorn fails to properly validate Transfer-Encoding headers, leading to HTTP Request Smuggling (HRS) vulnerabilities. By crafting requests with conflicting Transfer-Encoding headers, attackers can bypass security restrictions and access restricted endpoints. This issue is due to Gunicorn's handling of Transfer-Encoding headers, where it incorrectly processes requests with multiple, conflicting Transfer-Encoding headers, treating them as chunked regardless of the final encoding specified. This vulnerability allows for a range of attacks including cache poisoning, session manipulation, and data exposure.",
+      "recommendation": "Upgrade gunicorn to version 22.0.0",
+      "advisories": [
+        {
+          "url": "https://avd.aquasec.com/nvd/cve-2024-1135"
+        },
+        {
+          "url": "https://access.redhat.com/security/cve/CVE-2024-1135"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-w3h3-4rj7-4ph4"
+        },
+        {
+          "url": "https://github.com/benoitc/gunicorn"
+        },
+        {
+          "url": "https://github.com/benoitc/gunicorn/commit/ac29c9b0a758d21f1e0fb3b3457239e523fa9f1d"
+        },
+        {
+          "url": "https://github.com/benoitc/gunicorn/releases/tag/22.0.0"
+        },
+        {
+          "url": "https://huntr.com/bounties/22158e34-cfd5-41ad-97e0-a780773d96c1"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-1135"
+        },
+        {
+          "url": "https://www.cve.org/CVERecord?id=CVE-2024-1135"
+        }
+      ],
+      "published": "2024-04-16T00:15:07+00:00",
+      "updated": "2024-04-16T13:24:07+00:00",
+      "affects": [
+        {
+          "ref": "pkg:pypi/gunicorn@21.2.0",
+          "versions": [
+            {
+              "version": "21.2.0",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-21503",
+      "source": {
+        "name": "ghsa",
+        "url": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "ghsa"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "redhat"
+          },
+          "score": 5.3,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        }
+      ],
+      "cwes": [
+        1333
+      ],
+      "description": "Versions of the package black before 24.3.0 are vulnerable to Regular Expression Denial of Service (ReDoS) via the lines_with_leading_tabs_expanded function in the strings.py file. An attacker could exploit this vulnerability by crafting a malicious input that causes a denial of service.\r\rExploiting this vulnerability is possible when running Black on untrusted input, or if you habitually put thousands of leading tab characters in your docstrings.",
+      "recommendation": "Upgrade black to version 24.3.0",
+      "advisories": [
+        {
+          "url": "https://avd.aquasec.com/nvd/cve-2024-21503"
+        },
+        {
+          "url": "https://access.redhat.com/security/cve/CVE-2024-21503"
+        },
+        {
+          "url": "https://github.com/psf/black"
+        },
+        {
+          "url": "https://github.com/psf/black/commit/f00093672628d212b8965a8993cee8bedf5fe9b8"
+        },
+        {
+          "url": "https://github.com/psf/black/releases/tag/24.3.0"
+        },
+        {
+          "url": "https://github.com/pypa/advisory-database/tree/main/vulns/black/PYSEC-2024-48.yaml"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-21503"
+        },
+        {
+          "url": "https://security.snyk.io/vuln/SNYK-PYTHON-BLACK-6256273"
+        },
+        {
+          "url": "https://www.cve.org/CVERecord?id=CVE-2024-21503"
+        }
+      ],
+      "published": "2024-03-19T05:15:09+00:00",
+      "updated": "2024-03-19T13:26:46+00:00",
+      "affects": [
+        {
+          "ref": "pkg:pypi/black@23.11.0",
+          "versions": [
+            {
+              "version": "23.11.0",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-24680",
+      "source": {
+        "name": "ghsa",
+        "url": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "bitnami"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "ghsa"
+          },
+          "score": 5.9,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "nvd"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "redhat"
+          },
+          "score": 7.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "ubuntu"
+          },
+          "severity": "medium"
+        }
+      ],
+      "description": "An issue was discovered in Django 3.2 before 3.2.24, 4.2 before 4.2.10, and Django 5.0 before 5.0.2. The intcomma template filter was subject to a potential denial-of-service attack when used with very long strings.",
+      "recommendation": "Upgrade django to version 3.2.24, 4.2.10, 5.0.2",
+      "advisories": [
+        {
+          "url": "https://avd.aquasec.com/nvd/cve-2024-24680"
+        },
+        {
+          "url": "https://access.redhat.com/security/cve/CVE-2024-24680"
+        },
+        {
+          "url": "https://docs.djangoproject.com/en/5.0/releases/security"
+        },
+        {
+          "url": "https://docs.djangoproject.com/en/5.0/releases/security/"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-xxj9-f6rv-m3x4"
+        },
+        {
+          "url": "https://github.com/django/django"
+        },
+        {
+          "url": "https://github.com/django/django/commit/16a8fe18a3b81250f4fa57e3f93f0599dc4895bc"
+        },
+        {
+          "url": "https://github.com/django/django/commit/55519d6cf8998fe4c8f5c8abffc2b10a7c3d14e9"
+        },
+        {
+          "url": "https://github.com/django/django/commit/572ea07e84b38ea8de0551f4b4eda685d91d09d2"
+        },
+        {
+          "url": "https://github.com/django/django/commit/c1171ffbd570db90ca206c30f8e2b9f691243820"
+        },
+        {
+          "url": "https://github.com/pypa/advisory-database/tree/main/vulns/django/PYSEC-2024-28.yaml"
+        },
+        {
+          "url": "https://groups.google.com/forum/#%21forum/django-announce"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/D2JIRXEDP4ZET5KFMAPPYSK663Q52NEX"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/D2JIRXEDP4ZET5KFMAPPYSK663Q52NEX/"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/SN2PLJGYSAAG5KUVIUFJYKD3BLQ4OSN6"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/SN2PLJGYSAAG5KUVIUFJYKD3BLQ4OSN6/"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/ZQJOMNRMVPCN5WMIZ7YSX5LQ7IR2NY4D"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/ZQJOMNRMVPCN5WMIZ7YSX5LQ7IR2NY4D/"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-24680"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-6623-1"
+        },
+        {
+          "url": "https://www.cve.org/CVERecord?id=CVE-2024-24680"
+        },
+        {
+          "url": "https://www.djangoproject.com/weblog/2024/feb/06/security-releases"
+        },
+        {
+          "url": "https://www.djangoproject.com/weblog/2024/feb/06/security-releases/"
+        }
+      ],
+      "published": "2024-02-06T22:16:15+00:00",
+      "updated": "2024-04-20T03:15:06+00:00",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@4.2.8",
+          "versions": [
+            {
+              "version": "4.2.8",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-26130",
+      "source": {
+        "name": "ghsa",
+        "url": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "ghsa"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "photon"
+          },
+          "severity": "high"
+        },
+        {
+          "source": {
+            "name": "redhat"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "ubuntu"
+          },
+          "severity": "medium"
+        }
+      ],
+      "cwes": [
+        476
+      ],
+      "description": "cryptography is a package designed to expose cryptographic primitives and recipes to Python developers. Starting in version 38.0.0 and prior to version 42.0.4, if `pkcs12.serialize_key_and_certificates` is called with both a certificate whose public key did not match the provided private key and an `encryption_algorithm` with `hmac_hash` set (via `PrivateFormat.PKCS12.encryption_builder().hmac_hash(...)`, then a NULL pointer dereference would occur, crashing the Python process. This has been resolved in version 42.0.4, the first version in which a `ValueError` is properly raised.",
+      "recommendation": "Upgrade cryptography to version 42.0.4",
+      "advisories": [
+        {
+          "url": "https://avd.aquasec.com/nvd/cve-2024-26130"
+        },
+        {
+          "url": "https://access.redhat.com/security/cve/CVE-2024-26130"
+        },
+        {
+          "url": "https://github.com/pyca/cryptography"
+        },
+        {
+          "url": "https://github.com/pyca/cryptography/commit/97d231672763cdb5959a3b191e692a362f1b9e55"
+        },
+        {
+          "url": "https://github.com/pyca/cryptography/pull/10423"
+        },
+        {
+          "url": "https://github.com/pyca/cryptography/security/advisories/GHSA-6vqw-3v5j-54x4"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-26130"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-6673-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-6673-3"
+        },
+        {
+          "url": "https://www.cve.org/CVERecord?id=CVE-2024-26130"
+        }
+      ],
+      "published": "2024-02-21T17:15:09+00:00",
+      "updated": "2024-02-22T19:07:27+00:00",
+      "affects": [
+        {
+          "ref": "pkg:pypi/cryptography",
+          "versions": [
+            {
+              "version": "41.0.5",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-27351",
+      "source": {
+        "name": "ghsa",
+        "url": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "ghsa"
+          },
+          "severity": "low"
+        },
+        {
+          "source": {
+            "name": "redhat"
+          },
+          "score": 7.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "ubuntu"
+          },
+          "severity": "medium"
+        }
+      ],
+      "description": "In Django 3.2 before 3.2.25, 4.2 before 4.2.11, and 5.0 before 5.0.3, the django.utils.text.Truncator.words() method (with html=True) and the truncatewords_html template filter are subject to a potential regular expression denial-of-service attack via a crafted string. NOTE: this issue exists because of an incomplete fix for CVE-2019-14232 and CVE-2023-43665.",
+      "recommendation": "Upgrade django to version 3.2.25, 4.2.11, 5.0.3",
+      "advisories": [
+        {
+          "url": "https://avd.aquasec.com/nvd/cve-2024-27351"
+        },
+        {
+          "url": "http://www.openwall.com/lists/oss-security/2024/03/04/1"
+        },
+        {
+          "url": "https://access.redhat.com/security/cve/CVE-2024-27351"
+        },
+        {
+          "url": "https://docs.djangoproject.com/en/5.0/releases/security"
+        },
+        {
+          "url": "https://docs.djangoproject.com/en/5.0/releases/security/"
+        },
+        {
+          "url": "https://github.com/django/django"
+        },
+        {
+          "url": "https://github.com/django/django/commit/072963e4c4d0b3a7a8c5412bc0c7d27d1a9c3521"
+        },
+        {
+          "url": "https://github.com/django/django/commit/3394fc6132436eca89e997083bae9985fb7e761e"
+        },
+        {
+          "url": "https://github.com/django/django/commit/3c9a2771cc80821e041b16eb36c1c37af5349d4a"
+        },
+        {
+          "url": "https://github.com/pypa/advisory-database/tree/main/vulns/django/PYSEC-2024-47.yaml"
+        },
+        {
+          "url": "https://groups.google.com/forum/#%21forum/django-announce"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/D2JIRXEDP4ZET5KFMAPPYSK663Q52NEX"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/D2JIRXEDP4ZET5KFMAPPYSK663Q52NEX/"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/SN2PLJGYSAAG5KUVIUFJYKD3BLQ4OSN6"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/SN2PLJGYSAAG5KUVIUFJYKD3BLQ4OSN6/"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/ZQJOMNRMVPCN5WMIZ7YSX5LQ7IR2NY4D"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/ZQJOMNRMVPCN5WMIZ7YSX5LQ7IR2NY4D/"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-27351"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-6674-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-6674-2"
+        },
+        {
+          "url": "https://www.cve.org/CVERecord?id=CVE-2024-27351"
+        },
+        {
+          "url": "https://www.djangoproject.com/weblog/2024/mar/04/security-releases"
+        },
+        {
+          "url": "https://www.djangoproject.com/weblog/2024/mar/04/security-releases/"
+        }
+      ],
+      "published": "2024-03-15T20:15:09+00:00",
+      "updated": "2024-05-01T17:15:30+00:00",
+      "affects": [
+        {
+          "ref": "pkg:pypi/django@4.2.8",
+          "versions": [
+            {
+              "version": "4.2.8",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-34069",
+      "source": {
+        "name": "ghsa",
+        "url": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "cbl-mariner"
+          },
+          "severity": "high"
+        },
+        {
+          "source": {
+            "name": "ghsa"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "redhat"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "ubuntu"
+          },
+          "severity": "medium"
+        }
+      ],
+      "cwes": [
+        352
+      ],
+      "description": "Werkzeug is a comprehensive WSGI web application library. The debugger in affected versions of Werkzeug can allow an attacker to execute code on a developer's machine under some circumstances. This requires the attacker to get the developer to interact with a domain and subdomain they control, and enter the debugger PIN, but if they are successful it allows access to the debugger even if it is only running on localhost. This also requires the attacker to guess a URL in the developer's application that will trigger the debugger. This vulnerability is fixed in 3.0.3.",
+      "recommendation": "Upgrade werkzeug to version 3.0.3",
+      "advisories": [
+        {
+          "url": "https://avd.aquasec.com/nvd/cve-2024-34069"
+        },
+        {
+          "url": "https://access.redhat.com/security/cve/CVE-2024-34069"
+        },
+        {
+          "url": "https://github.com/pallets/werkzeug"
+        },
+        {
+          "url": "https://github.com/pallets/werkzeug/commit/3386395b24c7371db11a5b8eaac0c91da5362692"
+        },
+        {
+          "url": "https://github.com/pallets/werkzeug/security/advisories/GHSA-2g68-c3qc-8985"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/H4SH32AM3CTPMAAEOIDAN7VU565LO4IR"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/H4SH32AM3CTPMAAEOIDAN7VU565LO4IR/"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/HFERFN7PINV4MOGMGA3DPIXJPDCYOEJZ"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/HFERFN7PINV4MOGMGA3DPIXJPDCYOEJZ/"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-34069"
+        },
+        {
+          "url": "https://security.netapp.com/advisory/ntap-20240614-0004"
+        },
+        {
+          "url": "https://security.netapp.com/advisory/ntap-20240614-0004/"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-6799-1"
+        },
+        {
+          "url": "https://www.cve.org/CVERecord?id=CVE-2024-34069"
+        }
+      ],
+      "published": "2024-05-06T15:15:23+00:00",
+      "updated": "2024-06-14T13:15:51+00:00",
+      "affects": [
+        {
+          "ref": "pkg:pypi/werkzeug@3.0.1",
+          "versions": [
+            {
+              "version": "3.0.1",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-35195",
+      "source": {
+        "name": "ghsa",
+        "url": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "cbl-mariner"
+          },
+          "severity": "medium"
+        },
+        {
+          "source": {
+            "name": "ghsa"
+          },
+          "score": 5.6,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:H/UI:R/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "redhat"
+          },
+          "score": 5.6,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:H/UI:R/S:U/C:H/I:H/A:N"
+        },
+        {
+          "source": {
+            "name": "ubuntu"
+          },
+          "severity": "medium"
+        }
+      ],
+      "cwes": [
+        670
+      ],
+      "description": "Requests is a HTTP library. Prior to 2.32.0, when making requests through a Requests `Session`, if the first request is made with `verify=False` to disable cert verification, all subsequent requests to the same host will continue to ignore cert verification regardless of changes to the value of `verify`. This behavior will continue for the lifecycle of the connection in the connection pool. This vulnerability is fixed in 2.32.0.",
+      "recommendation": "Upgrade requests to version 2.32.0",
+      "advisories": [
+        {
+          "url": "https://avd.aquasec.com/nvd/cve-2024-35195"
+        },
+        {
+          "url": "https://access.redhat.com/security/cve/CVE-2024-35195"
+        },
+        {
+          "url": "https://github.com/psf/requests"
+        },
+        {
+          "url": "https://github.com/psf/requests/commit/a58d7f2ffb4d00b46dca2d70a3932a0b37e22fac"
+        },
+        {
+          "url": "https://github.com/psf/requests/pull/6655"
+        },
+        {
+          "url": "https://github.com/psf/requests/security/advisories/GHSA-9wx4-h78v-vm56"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/IYLSNK5TL46Q6XPRVMHVWS63MVJQOK4Q"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/IYLSNK5TL46Q6XPRVMHVWS63MVJQOK4Q/"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/N7WP6EYDSUOCOJYHDK5NX43PYZ4SNHGZ"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/N7WP6EYDSUOCOJYHDK5NX43PYZ4SNHGZ/"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-35195"
+        },
+        {
+          "url": "https://www.cve.org/CVERecord?id=CVE-2024-35195"
+        }
+      ],
+      "published": "2024-05-20T21:15:09+00:00",
+      "updated": "2024-06-10T17:16:29+00:00",
+      "affects": [
+        {
+          "ref": "pkg:pypi/requests@2.31.0",
+          "versions": [
+            {
+              "version": "2.31.0",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-3651",
+      "source": {
+        "name": "ghsa",
+        "url": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "alma"
+          },
+          "severity": "medium"
+        },
+        {
+          "source": {
+            "name": "ghsa"
+          },
+          "score": 6.2,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "oracle-oval"
+          },
+          "severity": "medium"
+        },
+        {
+          "source": {
+            "name": "redhat"
+          },
+          "score": 6.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "ubuntu"
+          },
+          "severity": "medium"
+        }
+      ],
+      "description": "A flaw was found in the python-idna library. A malicious argument was sent to the idna.encode() function can trigger an uncontrolled resource consumption, resulting in a denial of service.",
+      "recommendation": "Upgrade idna to version 3.7",
+      "advisories": [
+        {
+          "url": "https://avd.aquasec.com/nvd/cve-2024-3651"
+        },
+        {
+          "url": "https://access.redhat.com/errata/RHSA-2024:3846"
+        },
+        {
+          "url": "https://access.redhat.com/security/cve/CVE-2024-3651"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/2274779"
+        },
+        {
+          "url": "https://errata.almalinux.org/9/ALSA-2024-3846.html"
+        },
+        {
+          "url": "https://github.com/kjd/idna"
+        },
+        {
+          "url": "https://github.com/kjd/idna/security/advisories/GHSA-jjg7-2v4v-x38h"
+        },
+        {
+          "url": "https://linux.oracle.com/cve/CVE-2024-3651.html"
+        },
+        {
+          "url": "https://linux.oracle.com/errata/ELSA-2024-3846.html"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-3651"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-6780-1"
+        },
+        {
+          "url": "https://www.cve.org/CVERecord?id=CVE-2024-3651"
+        }
+      ],
+      "affects": [
+        {
+          "ref": "pkg:pypi/idna@3.6",
+          "versions": [
+            {
+              "version": "3.6",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-37891",
+      "source": {
+        "name": "ghsa",
+        "url": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "ghsa"
+          },
+          "score": 4.4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:H/I:N/A:N"
+        },
+        {
+          "source": {
+            "name": "redhat"
+          },
+          "score": 4.4,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:H/I:N/A:N"
+        }
+      ],
+      "cwes": [
+        669
+      ],
+      "description": " urllib3 is a user-friendly HTTP client library for Python. When using urllib3's proxy support with `ProxyManager`, the `Proxy-Authorization` header is only sent to the configured proxy, as expected. However, when sending HTTP requests *without* using urllib3's proxy support, it's possible to accidentally configure the `Proxy-Authorization` header even though it won't have any effect as the request is not using a forwarding proxy or a tunneling proxy. In those cases, urllib3 doesn't treat the `Proxy-Authorization` HTTP header as one carrying authentication material and thus doesn't strip the header on cross-origin redirects. Because this is a highly unlikely scenario, we believe the severity of this vulnerability is low for almost all users. Out of an abundance of caution urllib3 will automatically strip the `Proxy-Authorization` header during cross-origin redirects to avoid the small chance that users are doing this on accident. Users should use urllib3's proxy support or disable automatic redirects to achieve safe processing of the `Proxy-Authorization` header, but we still decided to strip the header by default in order to further protect users who aren't using the correct approach. We believe the number of usages affected by this advisory is low. It requires all of the following to be true to be exploited: 1. Setting the `Proxy-Authorization` header without using urllib3's built-in proxy support. 2. Not disabling HTTP redirects. 3. Either not using an HTTPS origin server or for the proxy or target origin to redirect to a malicious origin. Users are advised to update to either version 1.26.19 or version 2.2.2. Users unable to upgrade may use the `Proxy-Authorization` header with urllib3's `ProxyManager`, disable HTTP redirects using `redirects=False` when sending requests, or not user the `Proxy-Authorization` header as mitigations.",
+      "recommendation": "Upgrade urllib3 to version 1.26.19, 2.2.2",
+      "advisories": [
+        {
+          "url": "https://avd.aquasec.com/nvd/cve-2024-37891"
+        },
+        {
+          "url": "https://access.redhat.com/security/cve/CVE-2024-37891"
+        },
+        {
+          "url": "https://github.com/urllib3/urllib3"
+        },
+        {
+          "url": "https://github.com/urllib3/urllib3/commit/40b6d1605814dd1db0a46e202d6e56f2e4c9a468"
+        },
+        {
+          "url": "https://github.com/urllib3/urllib3/commit/accff72ecc2f6cf5a76d9570198a93ac7c90270e"
+        },
+        {
+          "url": "https://github.com/urllib3/urllib3/security/advisories/GHSA-34jh-p97f-mpxf"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-37891"
+        },
+        {
+          "url": "https://www.cve.org/CVERecord?id=CVE-2024-37891"
+        }
+      ],
+      "published": "2024-06-17T20:15:13+00:00",
+      "updated": "2024-06-20T12:44:22+00:00",
+      "affects": [
+        {
+          "ref": "pkg:pypi/urllib3@2.1.0",
+          "versions": [
+            {
+              "version": "2.1.0",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-4340",
+      "source": {
+        "name": "ghsa",
+        "url": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "ghsa"
+          },
+          "score": 7.5,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "redhat"
+          },
+          "score": 7.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "ubuntu"
+          },
+          "severity": "medium"
+        }
+      ],
+      "cwes": [
+        674
+      ],
+      "description": "Passing a heavily nested list to sqlparse.parse() leads to a Denial of Service due to RecursionError.\n\n",
+      "recommendation": "Upgrade sqlparse to version 0.5.0",
+      "advisories": [
+        {
+          "url": "https://avd.aquasec.com/nvd/cve-2024-4340"
+        },
+        {
+          "url": "https://access.redhat.com/security/cve/CVE-2024-4340"
+        },
+        {
+          "url": "https://github.com/advisories/GHSA-2m57-hf25-phgg"
+        },
+        {
+          "url": "https://github.com/andialbrecht/sqlparse"
+        },
+        {
+          "url": "https://github.com/andialbrecht/sqlparse/commit/b4a39d9850969b4e1d6940d32094ee0b42a2cf03"
+        },
+        {
+          "url": "https://github.com/andialbrecht/sqlparse/security/advisories/GHSA-2m57-hf25-phgg"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-4340"
+        },
+        {
+          "url": "https://research.jfrog.com/vulnerabilities/sqlparse-stack-exhaustion-dos-jfsa-2024-001031292"
+        },
+        {
+          "url": "https://research.jfrog.com/vulnerabilities/sqlparse-stack-exhaustion-dos-jfsa-2024-001031292/"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-6771-1"
+        },
+        {
+          "url": "https://www.cve.org/CVERecord?id=CVE-2024-4340"
+        }
+      ],
+      "published": "2024-04-30T15:15:53+00:00",
+      "updated": "2024-04-30T17:52:35+00:00",
+      "affects": [
+        {
+          "ref": "pkg:pypi/sqlparse",
+          "versions": [
+            {
+              "version": "0.4.4",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

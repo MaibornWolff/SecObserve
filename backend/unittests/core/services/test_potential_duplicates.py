@@ -1,11 +1,18 @@
+from os import path
 from unittest.mock import call, patch
 
-from application.core.models import Observation, Potential_Duplicate
+from application.core.models import Observation, Parser, Potential_Duplicate, Product
 from application.core.services.potential_duplicates import (
     set_potential_duplicate,
     set_potential_duplicate_both_ways,
 )
 from application.core.types import Status
+from application.import_observations.management.commands.register_parsers import Command
+from application.import_observations.models import Api_Configuration
+from application.import_observations.services.import_observations import (
+    FileUploadParameters,
+    file_upload_observations,
+)
 from unittests.base_test_case import BaseTestCase
 
 
@@ -66,3 +73,35 @@ class TestSetPotentialDuplicate(BaseTestCase):
 
         self.assertFalse(self.observation.has_potential_duplicates)
         save_mock.assert_called_once()
+
+    def test_find_potential_duplicates_components(self):
+        # Register parsers
+        command = Command()
+        command.handle()
+
+        product = Product.objects.get(id=1)
+        Observation.objects.filter(product=product).delete()
+
+        with open(path.dirname(__file__) + "/files/duplicates_cdx.json") as testfile:
+            file_upload_parameters = FileUploadParameters(
+                product=Product.objects.get(id=1),
+                branch=None,
+                parser=Parser.objects.get(name="CycloneDX"),
+                file=testfile,
+                service="",
+                docker_image_name_tag="",
+                endpoint_url="",
+            )
+            file_upload_observations(file_upload_parameters)
+
+            observations = Observation.objects.filter(product=product)
+            self.assertEqual(4, len(observations))
+            for observation in observations:
+                self.assertTrue(observation.has_potential_duplicates)
+                for potential_duplicate in Potential_Duplicate.objects.filter(
+                    observation=observation
+                ):
+                    self.assertEqual(
+                        potential_duplicate.type,
+                        Potential_Duplicate.POTENTIAL_DUPLICATE_TYPE_COMPONENT,
+                    )

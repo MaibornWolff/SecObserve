@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "SecObserve"
-version = "1.16.1"
+version = "1.16.2"
 description = "SecObserve is an open source vulnerability management system for software development and cloud environments."
 license = "BSD-3-Clause"
 authors = [
@@ -11,9 +11,9 @@ authors = [
 python = ">= 3.10, < 3.13"
 # Django
 # ------------------------------------------------------------------------------
-django = "5.0.7"  # https://www.djangoproject.com/
+django = "5.0.8"  # https://www.djangoproject.com/
 django-environ = "0.11.2"  # https://github.com/joke2k/django-environ
-django-filter = "24.2"  # https://github.com/carltongibson/django-filter 
+django-filter = "24.3"  # https://github.com/carltongibson/django-filter 
 django-csp = "3.8"  # https://github.com/mozilla/django-csp
 django-picklefield = "3.2"  # https://github.com/gintas/django-picklefield 
 django-encrypted-model-fields = "0.6.5"  # https://gitlab.com/lansharkconsulting/django/django-encrypted-model-fields
@@ -29,7 +29,7 @@ drf-spectacular = "0.27.2" # https://github.com/tfranzel/drf-spectacular
 drf-spectacular-sidecar = "2024.7.1"  # https://github.com/tfranzel/drf-spectacular-sidecar
 # Token authentication
 # ------------------------------------------------------------------------------
-PyJWT = "2.8.0"  # https://github.com/jpadilla/pyjwt
+PyJWT = "2.9.0"  # https://github.com/jpadilla/pyjwt
 # HTTP requests
 # ------------------------------------------------------------------------------
 requests = "2.32.3"  # https://github.com/psf/requests
@@ -43,7 +43,7 @@ defusedcsv = "2.0.0"  # https://github.com/raphaelm/defusedcsv
 openpyxl = "3.1.5"  # https://foss.heptapod.net/openpyxl/openpyxl
 # Package URL
 # ------------------------------------------------------------------------------
-packageurl-python = "0.15.3"  # https://github.com/package-url/packageurl-python
+packageurl-python = "0.15.6"  # https://github.com/package-url/packageurl-python
 # Task queue
 # ------------------------------------------------------------------------------
 huey = "2.5.1"  # https://github.com/coleifer/huey
@@ -53,7 +53,7 @@ jira = "3.8.0"  # https://github.com/pycontribs/jira
 # Others
 # ------------------------------------------------------------------------------
 inflect = "7.3.1"  # https://github.com/jaraco/inflect
-validators = "0.32.0"  # https://github.com/python-validators/validators
+validators = "0.33.0"  # https://github.com/python-validators/validators
 cvss = "3.1"  # https://github.com/RedHatProductSecurity/cvss
 jsonpickle = "3.2.2"  # https://github.com/jsonpickle/jsonpickle
 
@@ -63,14 +63,14 @@ ipdb = "0.13.13"  # https://github.com/gotcha/ipdb
 watchgod = "0.8.2"  # https://github.com/samuelcolvin/watchgod
 # Code quality
 # ------------------------------------------------------------------------------
-flake8 = "7.1.0"  # https://github.com/PyCQA/flake8
+flake8 = "7.1.1"  # https://github.com/PyCQA/flake8
 flake8-isort = "6.1.1"  # https://github.com/gforcada/flake8-isort
-black = "24.4.2"  # https://github.com/psf/black
-pylint = "3.2.5"  # https://github.com/pylint-dev/pylint
+black = "24.8.0"  # https://github.com/psf/black
+pylint = "3.2.6"  # https://github.com/pylint-dev/pylint
 pylint-django = "2.5.5"  # https://github.com/PyCQA/pylint-django
-pre-commit = "3.7.1"  # https://github.com/pre-commit/pre-commit
-mypy = "1.10.1"  # https://github.com/python/mypy
-django-stubs = "5.0.2"  # https://github.com/typeddjango/django-stubs
+pre-commit = "3.8.0"  # https://github.com/pre-commit/pre-commit
+mypy = "1.11.1"  # https://github.com/python/mypy
+django-stubs = "5.0.4"  # https://github.com/typeddjango/django-stubs
 djangorestframework-stubs = "3.15.0"  # https://github.com/typeddjango/djangorestframework-stubs
 types-PyMySQL = "1.1.0.20240524"  # https://github.com/python/typeshed
 # import-linter = "2.0"  # https://github.com/seddonym/import-linter --> Cannot be build with Docker
@@ -82,6 +82,6 @@ django-extensions = "3.2.3"  # https://github.com/django-extensions/django-exten
 gunicorn = "22.0.0"  # https://github.com/benoitc/gunicorn
 
 [tool.poetry.group.unittests.dependencies]
-coverage = "7.5.4"  # https://github.com/nedbat/coveragepy
+coverage = "7.6.1"  # https://github.com/nedbat/coveragepy
 django-extensions = "3.2.3"  # https://github.com/django-extensions/django-extensions
 django-coverage-plugin = "3.1.0"  # https://github.com/nedbat/django_coverage_plugin

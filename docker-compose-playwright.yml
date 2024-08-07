@@ -1,5 +1,3 @@
-version: "3"
-
 networks:
   secobserve:
 
@@ -60,7 +58,7 @@ services:
 
 
   playwright:
-    image: mcr.microsoft.com/playwright:v1.45.1
+    image: mcr.microsoft.com/playwright:v1.46.0
     depends_on:
       - frontend
     environment:

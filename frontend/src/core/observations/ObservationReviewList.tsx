@@ -140,11 +140,23 @@ const ObservationsReviewList = ({ product }: ObservationsReviewListProps) => {
                     <NumberField source="epss_score" label="EPSS" />
                     <ChipField source="current_status" label="Status" />
                     <TextField source="origin_service_name" label="Service" />
-                    <TextField source="origin_component_name_version" label="Component" />
-                    <TextField source="origin_docker_image_name_tag_short" label="Container" />
-                    <TextField source="origin_endpoint_hostname" label="Host" />
-                    <TextField source="origin_source_file" label="Source" />
-                    <TextField source="origin_cloud_qualified_resource" label="Resource" />
+                    <TextField
+                        source="origin_component_name_version"
+                        label="Component"
+                        sx={{ wordBreak: "break-word" }}
+                    />
+                    <TextField
+                        source="origin_docker_image_name_tag_short"
+                        label="Container"
+                        sx={{ wordBreak: "break-word" }}
+                    />
+                    <TextField source="origin_endpoint_hostname" label="Host" sx={{ wordBreak: "break-word" }} />
+                    <TextField source="origin_source_file" label="Source" sx={{ wordBreak: "break-word" }} />
+                    <TextField
+                        source="origin_cloud_qualified_resource"
+                        label="Resource"
+                        sx={{ wordBreak: "break-word" }}
+                    />
                     <TextField source="scanner_name" label="Scanner" />
                     <FunctionField<Observation>
                         label="Age"

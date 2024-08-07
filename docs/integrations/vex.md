@@ -35,10 +35,7 @@ After pushing the **Create** button in the dialog, the VEX document with the ver
 After selecting the entry of either a CSAF or OpenVEX document from the respective list, a form shows the details of its attributes and a button to update a document. Some of the attributes can be changed for a new version of the document. If there have been no changes to the included vulnerabilities, no new document will be created. Otherwise a new version of the document will be created and ready for download.
 
 
-## Import VEX documents (experimental)
-
-!!! note "Experimental feature"
-    Importing VEX documents is currently marked as experimental, because although a good amount of manual testing has been done, there is not a set of comprehensive, automated tests yet.
+## Import VEX documents
 
 VEX documents can be imported in CSAF or OpenVEX format. After importing the file, the document will be parsed and the VEX statements will be applied to the referenced observations. A user needs to be `superuser` to import VEX documents. 
 

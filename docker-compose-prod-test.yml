@@ -1,5 +1,3 @@
-version: "3"
-
 volumes:
   prod_mysql_data:
   prod_postgres_data:
@@ -64,7 +62,7 @@ services:
       - "5000:5000"
 
   mysql:
-    image: mysql:8.4.1
+    image: mysql:8.4.2
     profiles:
       - mysql
     environment:
