@@ -76,6 +76,7 @@ function listFilters(product: Product) {
         <TextInput source="upload_filename" label="Filename" />,
         <TextInput source="api_configuration_name" label="API configuration" />,
         <NullableBooleanInput source="has_potential_duplicates" label="Duplicates" alwaysOn />,
+        <NullableBooleanInput source="has_pending_assessment" label="Pending assessment" alwaysOn />,
     ];
 }
 
