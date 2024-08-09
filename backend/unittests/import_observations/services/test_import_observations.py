@@ -9,12 +9,11 @@ from application.core.models import (
     Evidence,
     Observation,
     Observation_Log,
-    Parser,
     Product,
     Reference,
 )
 from application.core.types import Severity, Status
-from application.import_observations.models import Vulnerability_Check
+from application.import_observations.models import Parser, Vulnerability_Check
 from application.import_observations.services.import_observations import (
     FileUploadParameters,
     file_upload_observations,

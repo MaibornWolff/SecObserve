@@ -1,8 +1,9 @@
 from os import path
 from unittest import TestCase
 
-from application.core.models import Observation, Parser, Product
+from application.core.models import Observation, Product
 from application.core.types import Status
+from application.import_observations.models import Parser
 from application.import_observations.services.import_observations import (
     FileUploadParameters,
     file_upload_observations,

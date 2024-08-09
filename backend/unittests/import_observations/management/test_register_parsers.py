@@ -1,8 +1,8 @@
 from unittest import TestCase
 
-from application.core.models import Observation, Parser
+from application.core.models import Observation
 from application.import_observations.management.commands.register_parsers import Command
-from application.import_observations.models import Api_Configuration
+from application.import_observations.models import Api_Configuration, Parser
 
 
 class TestRegisterParsers(TestCase):

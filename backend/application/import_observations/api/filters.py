@@ -1,9 +1,11 @@
-from django_filters import FilterSet, OrderingFilter
+from django_filters import CharFilter, ChoiceFilter, FilterSet, OrderingFilter
 
 from application.import_observations.models import (
     Api_Configuration,
+    Parser,
     Vulnerability_Check,
 )
+from application.import_observations.types import Parser_Source, Parser_Type
 
 
 class ApiConfigurationFilter(FilterSet):
@@ -40,3 +42,18 @@ class VulnerabilityCheckFilter(FilterSet):
     class Meta:
         model = Vulnerability_Check
         fields = ["product", "branch", "scanner", "filename", "api_configuration_name"]
+
+
+class ParserFilter(FilterSet):
+    name = CharFilter(field_name="name", lookup_expr="icontains")
+    type = ChoiceFilter(field_name="type", choices=Parser_Type.TYPE_CHOICES)
+    source = ChoiceFilter(field_name="source", choices=Parser_Source.SOURCE_CHOICES)
+
+    ordering = OrderingFilter(
+        # tuple-mapping retains order
+        fields=(("name", "name"), ("type", "type"), ("source", "source")),
+    )
+
+    class Meta:
+        model = Parser
+        fields = ["name", "type", "source"]
