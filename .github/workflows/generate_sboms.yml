@@ -79,6 +79,7 @@ jobs:
             | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_backend_container.json --quiet --input-file - --output-file sbom_backend_container_"$VERSION".json
           sbom-utility validate --input-file sbom_backend_container_"$VERSION".json
+          rm sbom_backend_container.json
       - 
         name: Generate SBOM for frontend container
         env:
@@ -92,6 +93,7 @@ jobs:
             | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_frontend_container.json --quiet --input-file - --output-file sbom_frontend_container_"$VERSION".json
           sbom-utility validate --input-file sbom_frontend_container_"$VERSION".json
+          rm sbom_frontend_container.json
       - 
         name: Merge SBOMs
         env:
