@@ -25,7 +25,7 @@ jobs:
         run: |
           python -m pip install --upgrade -r poetry_requirements.txt
           python -m pip install --upgrade import-linter
-          python -m poetry install --without prod,unittests --no-root
+          python -m poetry install --extras "code_quality dev" --no-root
 
       - name: Flake8
         working-directory: ./backend

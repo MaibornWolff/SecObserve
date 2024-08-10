@@ -23,7 +23,7 @@ ENV POETRY_NO_INTERACTION=1 \
 WORKDIR /
 
 COPY backend/pyproject.toml backend/poetry.lock ./
-RUN poetry install --without prod,unittests --no-root && rm -rf $POETRY_CACHE_DIR
+RUN poetry install --extras "dev" --no-root && rm -rf $POETRY_CACHE_DIR
 
 
 # Python 'run' stage
