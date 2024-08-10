@@ -28,7 +28,7 @@ jobs:
       - 
         name: Install programs
         env:
-          CDXGEN_VERSION: 10.9.3
+          CDXGEN_VERSION: 10.9.2
           SBOM_UTILITY_VERSION: 0.16.0
           CYCLONE_DX_CLI_VERSION: 0.25.1
         run: |
@@ -45,6 +45,7 @@ jobs:
           VERSION: 1.16.2
         working-directory: ./sbom
         run: |
+          mv ../backend/poetry_requirements.txt ../backend/poetry_requirements.sic
           sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_backend_application.json
           cdxgen ../backend --type python --required-only --profile license-compliance --no-auto-compositions --output sbom_backend_application.json
           sbom-utility trim --keys=properties,evidence,authors,lifecycles --quiet --input-file sbom_backend_application.json \
@@ -52,6 +53,7 @@ jobs:
             | sbom-utility patch --patch-file ./configuration/patch_backend_application.json --quiet --input-file - --output-file sbom_backend_application_"$VERSION".json
           sbom-utility validate --input-file sbom_backend_application_"$VERSION".json
           rm sbom_backend_application.json
+          mv ../backend/poetry_requirements.sic ../backend/poetry_requirements.txt
       - 
         name: Generate SBOM for frontend application
         env:
