@@ -1,12 +1,12 @@
 name: Generate SBOMs for a release
 
-on: [push]
-  # workflow_dispatch:
-  #   inputs:
-  #     #checkov:skip=CKV_GHA_7:This is a false positive
-  #     release:
-  #       description: 'SecObserve release (without the v)'
-  #       required: true
+on:
+  workflow_dispatch:
+    inputs:
+      #checkov:skip=CKV_GHA_7:This is a false positive
+      release:
+        description: 'SecObserve release (without the v)'
+        required: true
 
 permissions: read-all
 
@@ -20,11 +20,11 @@ jobs:
       - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
           node-version: 20
-      # -
-      #   name: Checkout
-      #   uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      #   with:
-      #     ref: 'v${{ github.event.inputs.release }}'
+      -
+        name: Checkout
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        with:
+          ref: 'v${{ github.event.inputs.release }}'
       - 
         name: Install programs
         env:
@@ -41,8 +41,7 @@ jobs:
       - 
         name: Generate SBOM for backend application
         env:
-          # VERSION: ${{ github.event.inputs.release }}
-          VERSION: 1.16.2
+          VERSION: ${{ github.event.inputs.release }}
           FETCH_LICENSE: 1
         working-directory: ./sbom
         run: |
@@ -58,8 +57,7 @@ jobs:
       - 
         name: Generate SBOM for frontend application
         env:
-          # VERSION: ${{ github.event.inputs.release }}
-          VERSION: 1.16.2
+          VERSION: ${{ github.event.inputs.release }}
         working-directory: ./sbom
         run: |
           sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_frontend_application.json
@@ -72,8 +70,7 @@ jobs:
       - 
         name: Generate SBOM for backend container
         env:
-          # VERSION: ${{ github.event.inputs.release }}
-          VERSION: 1.16.2
+          VERSION: ${{ github.event.inputs.release }}
         working-directory: ./sbom
         run: |
           sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_backend_container.json
@@ -86,8 +83,7 @@ jobs:
       - 
         name: Generate SBOM for frontend container
         env:
-          # VERSION: ${{ github.event.inputs.release }}
-          VERSION: 1.16.2
+          VERSION: ${{ github.event.inputs.release }}
         working-directory: ./sbom
         run: |
           sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_frontend_container.json
@@ -100,8 +96,7 @@ jobs:
       - 
         name: Merge SBOMs
         env:
-          # VERSION: ${{ github.event.inputs.release }}
-          VERSION: 1.16.2
+          VERSION: ${{ github.event.inputs.release }}
         working-directory: ./sbom
         run: |
           sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_complete.json
@@ -116,6 +111,5 @@ jobs:
           skip_fetch: true
           create_branch: true
           commit_message: "chore: generate SBOMs for release ${{ github.event.inputs.release }}"
-          branch: "chore/sboms_release_1.16.2"
-          # branch: "chore/sboms_release_${{ github.event.inputs.release }}"
+          branch: "chore/sboms_release_${{ github.event.inputs.release }}"
           file_pattern: "sbom/sbom*.json"
