@@ -57,6 +57,7 @@ const listFilters = [
     <TextInput source="scanner" alwaysOn />,
     <AutocompleteInputMedium source="age" choices={AGE_CHOICES} alwaysOn />,
     <NullableBooleanInput source="has_potential_duplicates" label="Duplicates" alwaysOn />,
+    <NullableBooleanInput source="has_pending_assessment" label="Pending assessment" alwaysOn />,
 ];
 
 const ListActions = () => (
