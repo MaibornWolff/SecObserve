@@ -13,5 +13,16 @@
         "op": "add",
         "path": "/metadata/component/version",
         "value": "REPLACE_VERSION"
+    },
+    {
+        "op": "add",
+        "path": "/metadata/component/licenses",
+        "value": [
+            {
+                "license": {
+                    "id": "BSD-3-Clause"
+                }
+            }
+        ]
     }
 ]

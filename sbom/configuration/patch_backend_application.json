@@ -15,8 +15,19 @@
         "value": "REPLACE_VERSION"
     },
     {
-        "op": "add",
+        "op": "replace",
         "path": "/metadata/component/purl",
         "value": "pkg:github/MaibornWolff/SecObserve@vREPLACE_VERSION#backend"
+    },
+    {
+        "op": "add",
+        "path": "/metadata/component/licenses",
+        "value": [
+            {
+                "license": {
+                    "id": "BSD-3-Clause"
+                }
+            }
+        ]
     }
 ]
