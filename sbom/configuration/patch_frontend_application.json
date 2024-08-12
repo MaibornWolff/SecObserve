@@ -29,5 +29,9 @@
                 }
             }
         ]
+    },
+    {
+        "op": "remove",
+        "path": "/metadata/component/components"
     }
 ]
