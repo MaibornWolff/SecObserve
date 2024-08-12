@@ -49,6 +49,7 @@ services:
       OIDC_CLIENT_ID: ${SO_OIDC_CLIENT_ID:-dummy}
       OIDC_REDIRECT_URI: ${SO_OIDC_REDIRECT_URI:-http://secobserve.localhost}
       OIDC_POST_LOGOUT_REDIRECT_URI: ${SO_OIDC_POST_LOGOUT_REDIRECT_URI:-http://secobserve.localhost}
+      OIDC_SCOPE: ${SO_OIDC_SCOPE:-openid profile email}
     networks:
       - traefik
 

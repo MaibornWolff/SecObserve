@@ -130,7 +130,10 @@ export const oidcConfig = {
     client_id: window.__RUNTIME_CONFIG__.OIDC_CLIENT_ID,
     redirect_uri: window.__RUNTIME_CONFIG__.OIDC_REDIRECT_URI,
     post_logout_redirect_uri: window.__RUNTIME_CONFIG__.OIDC_POST_LOGOUT_REDIRECT_URI,
-    scope: "openid profile email",
+    scope:
+        window.__RUNTIME_CONFIG__.OIDC_SCOPE && window.__RUNTIME_CONFIG__.OIDC_SCOPE !== "dummy"
+            ? window.__RUNTIME_CONFIG__.OIDC_SCOPE
+            : "openid profile email",
     automaticSilentRenew: true,
     prompt: "select_account",
     onSigninCallback: onSigninCallback,
