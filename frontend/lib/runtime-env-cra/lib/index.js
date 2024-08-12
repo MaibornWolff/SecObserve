@@ -55,7 +55,6 @@ const argv = yargs
     }
 
     console.log(`Successfully generated your runtime-env config!
-  Result: ${result}
 
   Thank you for using runtime-env-cra!
   `);
