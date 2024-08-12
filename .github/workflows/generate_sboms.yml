@@ -60,7 +60,7 @@ jobs:
         working-directory: ./sbom
         run: |
           sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_frontend_application.json
-          cdxgen ../frontend --type npm --no-babel --required-only --profile license-compliance --no-auto-compositions --output sbom_frontend_application.json
+          cdxgen ../frontend --type npm --no-babel --required-only --profile license-compliance --no-auto-compositions --project-name secobserve --output sbom_frontend_application.json
           sbom-utility trim --keys=externalReferences,properties,evidence,authors,lifecycles --quiet --input-file sbom_frontend_application.json \
             | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_frontend_application.json --quiet --input-file - --output-file sbom_frontend_application_"$VERSION".json
