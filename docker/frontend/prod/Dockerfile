@@ -14,9 +14,10 @@ RUN npm ci
 COPY ./frontend ./
 # insert version for status endpoint
 RUN sed -i 's/version_unkown/'"${VERSION}"'/g' ./src/commons/about/About.tsx && \
-        npm run build && \
-        cd ./lib/runtime-env-cra && \
-        npm ci
+        npm run build
+
+WORKDIR /app/lib/runtime-env-cra
+RUN npm ci
 
 # production environment
 FROM nginx:stable-alpine-slim@sha256:154e108059468bed12d676c3c446e4767db24d6099f09e92918d28e052960bf4
