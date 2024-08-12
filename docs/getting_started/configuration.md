@@ -44,6 +44,7 @@ A part of the configuration is done with environment variables, which need to be
 | `OIDC_CLIENT_ID`                | mandatory   | The client ID is the unique *Application (client) ID* assigned to your app by the OpenID Connect provider when the app was registered. |
 | `OIDC_REDIRECT_URI`             | mandatory   | The redirect URI is the URI the identity provider will send the security tokens back to. To be set with the URL of the frontend. |
 | `OIDC_POST_LOGOUT_REDIRECT_URI` | mandatory   | The post logout redirect URI is the URI that will be called after logout. To be set with the URL of the frontend. |
+| `OIDC_SCOPE`                    | optional    | OpenID Connect (OIDC) scopes are used by an application during authentication to authorize access to a user's details, like name or email. If the variable is not set, the standard scopes `openid profile email` will be used. |
 
 All the `OIDC_*` environment variables are needed for technical reasons. If `OIDC_ENABLE` is set to `false`, the other `OIDC_*` environment variables can be set to `dummy` or something similar.
 
