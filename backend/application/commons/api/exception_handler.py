@@ -91,7 +91,12 @@ def format_exception_message(exc):
     ):
         return " / ".join(exc.detail)
 
-    if hasattr(exc, "args") and exc.args and "protected foreign keys" in exc.args[0]:
+    if (
+        hasattr(exc, "args")
+        and exc.args
+        and isinstance(exc.args[0], str)
+        and "protected foreign keys" in exc.args[0]
+    ):
         return _format_protected_foreign_keys(exc.args[0])
 
     return str(exc)
