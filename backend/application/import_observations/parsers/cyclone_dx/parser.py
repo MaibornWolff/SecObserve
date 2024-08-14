@@ -2,7 +2,6 @@ from json import dumps, load
 from typing import Optional
 
 from django.core.files.base import File
-from packageurl import PackageURL
 
 from application.core.models import Observation
 from application.core.types import Severity
@@ -112,11 +111,6 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                             data, components, component, metadata
                         )
 
-                        purl_type = None
-                        if component.purl:
-                            purl = PackageURL.from_string(component.purl)
-                            purl_type = purl.type
-
                         observation = Observation(
                             title=title,
                             description=description,
@@ -136,7 +130,6 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                             origin_docker_image_tag=metadata.container_tag,
                             origin_docker_image_digest=metadata.container_digest,
                             origin_source_file=metadata.file,
-                            purl_type=purl_type,
                         )
 
                         self._add_references(vulnerability, observation)

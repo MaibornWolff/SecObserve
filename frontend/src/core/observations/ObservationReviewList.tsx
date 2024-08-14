@@ -73,7 +73,12 @@ function listFilters(product: Product) {
         <TextInput source="upload_filename" label="Filename" />,
         <TextInput source="api_configuration_name" label="API configuration" />,
         <NullableBooleanInput source="has_potential_duplicates" label="Duplicates" alwaysOn />,
-        <AutocompleteInput source="purl_type" label="Component type" choices={PURL_TYPE_CHOICES} alwaysOn />,
+        <AutocompleteInput
+            source="origin_component_purl_type"
+            label="Component type"
+            choices={PURL_TYPE_CHOICES}
+            alwaysOn
+        />,
     ];
 }
 

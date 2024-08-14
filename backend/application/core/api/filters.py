@@ -255,7 +255,7 @@ class ObservationFilter(FilterSet):
             ("last_observation_log", "last_observation_log"),
             ("epss_score", "epss_score"),
             ("has_potential_duplicates", "has_potential_duplicates"),
-            ("purl_type", "purl_type"),
+            ("origin_component_purl_type", "origin_component_purl_type"),
         ),
     )
 
@@ -273,7 +273,7 @@ class ObservationFilter(FilterSet):
             "api_configuration_name",
             "origin_service",
             "has_potential_duplicates",
-            "purl_type",
+            "origin_component_purl_type",
         ]
 
     def get_age(self, queryset, field_name, value):  # pylint: disable=unused-argument

@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name="observation",
-            name="purl_type",
+            name="origin_component_purl_type",
             field=models.CharField(blank=True, max_length=16, null=True),
         ),
     ]

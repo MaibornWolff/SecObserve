@@ -59,7 +59,12 @@ const listFilters = [
     <AutocompleteInputMedium source="age" choices={AGE_CHOICES} alwaysOn />,
     <NullableBooleanInput source="has_potential_duplicates" label="Duplicates" alwaysOn />,
     <NullableBooleanInput source="has_pending_assessment" label="Pending assessment" alwaysOn />,
-    <AutocompleteInput source="purl_type" label="Component type" choices={PURL_TYPE_CHOICES} alwaysOn />,
+    <AutocompleteInput
+        source="origin_component_purl_type"
+        label="Component type"
+        choices={PURL_TYPE_CHOICES}
+        alwaysOn
+    />,
 ];
 
 const ListActions = () => (

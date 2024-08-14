@@ -143,7 +143,7 @@ export interface Observation extends RaRecord {
     parser_vex_justification: string;
     assessment_vex_justification: string;
     rule_vex_justification: string;
-    purl_type: string;
+    origin_component_purl_type: string;
 }
 
 export const OBSERVATION_SEVERITY_CRITICAL = "Critical";
