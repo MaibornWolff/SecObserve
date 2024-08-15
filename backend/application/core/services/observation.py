@@ -208,12 +208,15 @@ def normalize_origin_component(observation):  # pylint: disable=too-many-branche
     if observation.origin_component_dependencies is None:
         observation.origin_component_dependencies = ""
 
-    if (
-        observation.origin_component_purl_type is None
-        and observation.origin_component_purl
-    ):
-        purl = PackageURL.from_string(observation.origin_component_purl)
-        observation.origin_component_purl_type = purl.type
+    if observation.origin_component_purl:
+        try:
+            purl = PackageURL.from_string(observation.origin_component_purl)
+            observation.origin_component_purl_type = purl.type
+        except ValueError:
+            observation.origin_component_purl_type = ""
+
+    if observation.origin_component_purl_type is None:
+        observation.origin_component_purl_type = ""
 
 
 def normalize_origin_docker(observation):
