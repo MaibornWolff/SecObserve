@@ -9,6 +9,7 @@ from django.db.models import (
     Model,
     TextField,
 )
+from django.utils import timezone
 
 from application.access_control.models import User
 from application.core.models import Branch, Product
@@ -73,8 +74,8 @@ class OpenVEX_Vulnerability(Model):
 class CSAF(VEX_Base):
     title = CharField(max_length=255)
     tlp_label = CharField(max_length=16, choices=CSAF_TLP_Label.CSAF_TLP_LABEL_CHOICES)
-    tracking_initial_release_date = DateTimeField(auto_now_add=True)
-    tracking_current_release_date = DateTimeField(auto_now=True)
+    tracking_initial_release_date = DateTimeField()
+    tracking_current_release_date = DateTimeField()
     tracking_status = CharField(
         max_length=16, choices=CSAF_Tracking_Status.CSAF_TRACKING_STATUS_CHOICES
     )
@@ -83,6 +84,15 @@ class CSAF(VEX_Base):
         max_length=16, choices=CSAF_Publisher_Category.CSAF_PUBLISHER_CATEGORY_CHOICES
     )
     publisher_namespace = CharField(max_length=255)
+
+    # Make sure that initial release date and current release date are exactly the
+    # same when creating a new CSAF record
+    def save(self, *args, **kwargs):
+        now = timezone.now()
+        if not self.tracking_initial_release_date:
+            self.tracking_initial_release_date = now
+        self.tracking_current_release_date = now
+        super().save(*args, **kwargs)
 
 
 class CSAF_Vulnerability(Model):
