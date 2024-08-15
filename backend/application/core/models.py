@@ -422,6 +422,7 @@ class Observation(Model):
     origin_component_version = CharField(max_length=255, blank=True)
     origin_component_name_version = CharField(max_length=513, blank=True)
     origin_component_purl = CharField(max_length=255, blank=True)
+    origin_component_purl_type = CharField(max_length=16, blank=True)
     origin_component_cpe = CharField(max_length=255, blank=True)
     origin_component_dependencies = TextField(max_length=4096, blank=True)
     origin_docker_image_name = CharField(max_length=255, blank=True)
@@ -520,7 +521,6 @@ class Observation(Model):
         on_delete=SET_NULL,
     )
     risk_acceptance_expiry_date = DateField(null=True)
-    origin_component_purl_type = CharField(max_length=16, blank=True)
 
     class Meta:
         indexes = [
