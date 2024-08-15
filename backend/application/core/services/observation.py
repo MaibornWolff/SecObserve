@@ -3,6 +3,7 @@ from urllib.parse import urlparse
 
 from django.apps import apps
 from django.db.models.fields import CharField, TextField
+from packageurl import PackageURL
 
 from application.core.types import Severity, Status
 
@@ -206,6 +207,16 @@ def normalize_origin_component(observation):  # pylint: disable=too-many-branche
         observation.origin_component_cpe = ""
     if observation.origin_component_dependencies is None:
         observation.origin_component_dependencies = ""
+
+    if observation.origin_component_purl:
+        try:
+            purl = PackageURL.from_string(observation.origin_component_purl)
+            observation.origin_component_purl_type = purl.type
+        except ValueError:
+            observation.origin_component_purl_type = ""
+
+    if observation.origin_component_purl_type is None:
+        observation.origin_component_purl_type = ""
 
 
 def normalize_origin_docker(observation):

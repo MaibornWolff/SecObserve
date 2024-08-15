@@ -143,6 +143,7 @@ export interface Observation extends RaRecord {
     parser_vex_justification: string;
     assessment_vex_justification: string;
     rule_vex_justification: string;
+    origin_component_purl_type: string;
 }
 
 export const OBSERVATION_SEVERITY_CRITICAL = "Critical";
@@ -238,4 +239,39 @@ export const ASSESSMENT_STATUS_REJECTED = "Rejected";
 export const ASSESSMENT_STATUS_CHOICES = [
     { id: ASSESSMENT_STATUS_APPROVED, name: ASSESSMENT_STATUS_APPROVED },
     { id: ASSESSMENT_STATUS_REJECTED, name: ASSESSMENT_STATUS_REJECTED },
+];
+
+export const PURL_TYPE_CHOICES = [
+    { id: "alpm", name: "alpm" },
+    { id: "apk", name: "APK" },
+    { id: "bitbucket", name: "Bitbucket" },
+    { id: "bitnami", name: "Bitnami" },
+    { id: "cargo", name: "Rust" },
+    { id: "cocoapods", name: "Cocoapods" },
+    { id: "composer", name: "Composer" },
+    { id: "conan", name: "Conan" },
+    { id: "conda", name: "Conda" },
+    { id: "cpan", name: "CPAN Perl" },
+    { id: "cran", name: "CRAN R" },
+    { id: "deb", name: "Debian" },
+    { id: "docker", name: "Docker" },
+    { id: "gem", name: "Ruby Gem" },
+    { id: "generic", name: "Generic" },
+    { id: "github", name: "GitHub" },
+    { id: "golang", name: "Go" },
+    { id: "hackage", name: "Hackage" },
+    { id: "hex", name: "Hex" },
+    { id: "huggingface", name: "Huggingface" },
+    { id: "luarocks", name: "Lua" },
+    { id: "maven", name: "Maven" },
+    { id: "mlflow", name: "MLflow" },
+    { id: "npm", name: "NPM" },
+    { id: "nuget", name: "NuGet" },
+    { id: "oci", name: "OCI" },
+    { id: "pub", name: "Dart" },
+    { id: "pypi", name: "PyPI" },
+    { id: "rpm", name: "RPM" },
+    { id: "qpkg", name: "QNX" },
+    { id: "swid", name: "SWID" },
+    { id: "swift", name: "Swift" },
 ];

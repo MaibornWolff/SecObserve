@@ -29,6 +29,7 @@ import {
     OBSERVATION_STATUS_CHOICES,
     OBSERVATION_STATUS_OPEN,
     Observation,
+    PURL_TYPE_CHOICES,
 } from "../types";
 import ObservationBulkAssessment from "./ObservationBulkAssessment";
 import { IDENTIFIER_OBSERVATION_LIST, setListIdentifier } from "./functions";
@@ -58,6 +59,12 @@ const listFilters = [
     <AutocompleteInputMedium source="age" choices={AGE_CHOICES} alwaysOn />,
     <NullableBooleanInput source="has_potential_duplicates" label="Duplicates" alwaysOn />,
     <NullableBooleanInput source="has_pending_assessment" label="Pending assessment" alwaysOn />,
+    <AutocompleteInput
+        source="origin_component_purl_type"
+        label="Component type"
+        choices={PURL_TYPE_CHOICES}
+        alwaysOn
+    />,
 ];
 
 const ListActions = () => (
