@@ -57,8 +57,17 @@ class OpenVEX(VEX_Base):
     id_namespace = CharField(max_length=255)
     author = CharField(max_length=255)
     role = CharField(max_length=255, blank=True)
-    timestamp = DateTimeField(auto_now_add=True)
-    last_updated = DateTimeField(auto_now=True)
+    timestamp = DateTimeField()
+    last_updated = DateTimeField()
+
+    # Make sure that timestamp and last updated date are exactly the
+    # same when creating a new CSAF record
+    def save(self, *args, **kwargs):
+        now = timezone.now()
+        if not self.timestamp:
+            self.timestamp = now
+        self.last_updated = now
+        super().save(*args, **kwargs)
 
 
 class OpenVEX_Branch(Model):
