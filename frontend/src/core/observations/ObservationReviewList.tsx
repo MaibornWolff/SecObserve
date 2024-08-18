@@ -34,6 +34,7 @@ import {
     Product,
 } from "../types";
 import ObservationBulkAssessment from "./ObservationBulkAssessment";
+import ObservationExpand from "./ObservationExpand";
 import { IDENTIFIER_OBSERVATION_REVIEW_LIST, setListIdentifier } from "./functions";
 
 function listFilters(product: Product) {
@@ -140,6 +141,8 @@ const ObservationsReviewList = ({ product }: ObservationsReviewListProps) => {
                     }
                     resource="observations"
                     preferenceKey="observations.embedded"
+                    expand={<ObservationExpand />}
+                    expandSingle
                 >
                     <TextField source="branch_name" label="Branch / Version" />
                     <TextField source="title" />

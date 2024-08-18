@@ -32,6 +32,7 @@ import {
     PURL_TYPE_CHOICES,
 } from "../types";
 import ObservationBulkAssessment from "./ObservationBulkAssessment";
+import ObservationExpand from "./ObservationExpand";
 import { IDENTIFIER_OBSERVATION_LIST, setListIdentifier } from "./functions";
 
 const listFilters = [
@@ -98,7 +99,13 @@ const ObservationList = () => {
                 actions={<ListActions />}
                 sx={{ marginTop: 1 }}
             >
-                <Datagrid size={getSettingListSize()} rowClick="show" bulkActionButtons={<BulkActionButtons />}>
+                <Datagrid
+                    size={getSettingListSize()}
+                    rowClick="show"
+                    bulkActionButtons={<BulkActionButtons />}
+                    expand={<ObservationExpand />}
+                    expandSingle
+                >
                     <TextField source="product_data.name" label="Product" />
                     <TextField source="product_data.product_group_name" label="Group" />
                     <TextField source="branch_name" label="Branch / Version" />
