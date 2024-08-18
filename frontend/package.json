@@ -18,7 +18,7 @@
         "@types/recharts": "1.8.29",
         "axios": "1.7.4",
         "chart.js": "4.4.3",
-        "markdown-to-jsx": "7.4.7",
+        "markdown-to-jsx": "7.5.0",
         "oidc-client-ts": "3.0.1",
         "prop-types": "15.8.1",
         "query-string": "9.1.0",
