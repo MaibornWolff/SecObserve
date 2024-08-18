@@ -37,6 +37,7 @@ import {
 } from "../types";
 import ObservationBulkAssessment from "./ObservationBulkAssessment";
 import ObservationBulkDeleteButton from "./ObservationBulkDeleteButton";
+import ObservationExpand from "./ObservationExpand";
 import { IDENTIFIER_OBSERVATION_EMBEDDED_LIST, setListIdentifier } from "./functions";
 
 function listFilters(product: Product) {
@@ -162,6 +163,8 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
                     }
                     resource="observations"
                     preferenceKey="observations.embedded"
+                    expand={<ObservationExpand />}
+                    expandSingle
                 >
                     <TextField source="branch_name" label="Branch / Version" />
                     <TextField source="title" />
