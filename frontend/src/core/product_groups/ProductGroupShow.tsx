@@ -1,7 +1,8 @@
 import BarChartIcon from "@mui/icons-material/BarChart";
+import ChecklistIcon from "@mui/icons-material/Checklist";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import TokenIcon from "@mui/icons-material/Token";
-import { Divider, Stack, Typography } from "@mui/material";
+import { Badge, Divider, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
 import {
     BooleanField,
@@ -47,6 +48,7 @@ import product from "../products";
 import ExportMenu from "../products/ExportMenu";
 import ProductEmbeddedList from "../products/ProductEmbeddedList";
 import ProductGroupHeader from "./ProductGroupHeader";
+import ProductGroupReviews from "./ProductGroupReviews";
 
 const ShowActions = () => {
     const product_group = useRecordContext();
@@ -224,6 +226,19 @@ const ProductGroupShow = () => {
                                     <MetricsStatusCurrent product_id={product_group.id} />
                                 </Stack>
                             </Tab>
+                            {product_group.product_rule_approvals > 0 && (
+                                <Tab
+                                    label="Reviews"
+                                    path="reviews"
+                                    icon={
+                                        <Badge badgeContent={product_group.product_rule_approvals} color="secondary">
+                                            <ChecklistIcon />
+                                        </Badge>
+                                    }
+                                >
+                                    <ProductGroupReviews product_group={product_group} />
+                                </Tab>
+                            )}
                             <Tab label="Rules" path="rules" icon={<general_rules.icon />}>
                                 <Stack
                                     direction="row"
