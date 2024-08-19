@@ -119,7 +119,7 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
                 cvss3_score=cvss3_score,
                 origin_component_name=origin_component_name,
                 scanner="Trivy Prometheus",
-                origin_component_versionb = origin_component_version,
+                origin_component_version = origin_component_version,
                 recommendation=self.get_recommendation(
                     fixed_version, origin_component_version
                 ),
