@@ -121,6 +121,7 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
                 origin_endpoint_url=origin_endpoint_url,
                 scanner="Trivy Prometheus",
                 origin_cloud_resource_type=resource_kind,
+                origin_component_versionb = origin_component_version,
                 recommendation=self.get_recommendation(
                     fixed_version, origin_component_version
                 ),
