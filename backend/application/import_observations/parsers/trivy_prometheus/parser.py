@@ -127,7 +127,14 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
                 ),
                 description=self.get_description(vuln_title, namespace, resource_kind, resource_name, container_name),
             )
+
+            evidence = []
+            evidence.append("Vulnerability")
+            evidence.append(json.dumps(finding))
+            observation.unsaved_evidences.append(evidence)
+
             observations.append(observation)
+
 
         return observations
 
