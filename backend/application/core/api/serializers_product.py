@@ -110,6 +110,7 @@ class ProductCoreSerializer(ModelSerializer):
 
 class ProductGroupSerializer(ProductCoreSerializer):
     products_count = SerializerMethodField()
+    product_rule_approvals = SerializerMethodField()
 
     class Meta:
         model = Product
@@ -143,10 +144,19 @@ class ProductGroupSerializer(ProductCoreSerializer):
             "risk_acceptance_expiry_active",
             "risk_acceptance_expiry_days",
             "new_observations_in_review",
+            "product_rule_approvals",
         ]
 
     def get_products_count(self, obj: Product) -> int:
         return obj.products.count()
+
+    def get_product_rule_approvals(self, obj: Product) -> int:
+        if not obj.product_rules_need_approval:
+            return 0
+
+        return Rule.objects.filter(
+            product=obj, approval_status=Rule_Status.RULE_STATUS_NEEDS_APPROVAL
+        ).count()
 
     def create(self, validated_data: dict) -> Product:
         product_group = super().create(validated_data)

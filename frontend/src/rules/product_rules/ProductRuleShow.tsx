@@ -69,6 +69,13 @@ function generateProductURL(product_id: number, is_product_group: boolean): stri
     return "#/products/" + product_id + "/show/rules";
 }
 
+function getProductLabel(product_data: any): string {
+    if (product_data.is_product_group) {
+        return "Product group";
+    }
+    return "Product";
+}
+
 const ProductRuleComponent = () => {
     const { classes } = useStyles();
 
@@ -81,7 +88,7 @@ const ProductRuleComponent = () => {
                             Product Rule
                         </Typography>
                         <Stack spacing={1}>
-                            <Labeled label="Product">
+                            <Labeled label={getProductLabel(rule.product_data)}>
                                 <TextUrlField
                                     text={rule.product_data.name}
                                     url={generateProductURL(rule.product_data.id, rule.product_data.is_product_group)}
