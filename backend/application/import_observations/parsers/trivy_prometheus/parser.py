@@ -85,9 +85,7 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
         vuln_title = finding.get("metric", {}).get("vuln_title", "")
         vulnerability_id = finding.get("metric", {}).get("vuln_id", "")
         cvss3_score = finding.get("metric", {}).get("vuln_score")
-        severity = finding.get("metric", {}).get(
-            "severity", Severity.SEVERITY_UNKOWN
-        )
+        severity = finding.get("metric", {}).get("severity", Severity.SEVERITY_UNKOWN)
         origin_docker_image_registry = finding.get("metric", {}).get(
             "image_registry", ""
         )
@@ -133,7 +131,7 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
                     "namespace": namespace,
                     "resource_kind": resource_kind,
                     "resource_name": resource_name,
-                    "container_name": container_name
+                    "container_name": container_name,
                 },
             ),
         )
@@ -166,8 +164,10 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
         description = ""
         description += f"**Title:** {vuln_title}\n\n"
         description += f"**Namespace:** {kubernetes_resource['namespace']}\n\n"
-        description += (f"**Resource type:** {kubernetes_resource['resource_kind']}, "
-                        f"**Resource name:** {kubernetes_resource['resource_name']}\n\n")
+        description += (
+            f"**Resource type:** {kubernetes_resource['resource_kind']}, "
+            f"**Resource name:** {kubernetes_resource['resource_name']}\n\n"
+        )
         description += f"**Container:** {kubernetes_resource['container_name']}\n\n"
         description += f"**Prometheus host:** {prometheus_endpoint_url}"
 
