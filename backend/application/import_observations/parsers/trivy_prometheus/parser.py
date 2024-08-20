@@ -12,6 +12,7 @@ from application.import_observations.parsers.base_parser import (
 )
 from application.import_observations.types import Parser_Type
 
+
 class TrivyPrometheus(BaseParser, BaseAPIParser):
     def __init__(self):
         self.api_configuration: Optional[Api_Configuration] = None
@@ -82,7 +83,6 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
     def get_observations(self, data) -> list[Observation]:
         observations = []
 
-
         for finding in data.get("data").get("result"):
             if not finding.get("metric", {}).get("vuln_id", ""):
                 continue
@@ -119,11 +119,12 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
                 cvss3_score=cvss3_score,
                 origin_component_name=origin_component_name,
                 scanner="Trivy Prometheus",
-                origin_component_version = origin_component_version,
+                origin_component_version=origin_component_version,
                 recommendation=self.get_recommendation(
                     fixed_version, origin_component_version
                 ),
-                description=self.get_description(vuln_title, namespace, resource_kind, resource_name, container_name, prometheus_endpoint_url),
+                description=self.get_description(
+                    vuln_title, namespace, resource_kind, resource_name, container_name, prometheus_endpoint_url),
             )
 
             evidence = []
@@ -132,7 +133,6 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
             observation.unsaved_evidences.append(evidence)
 
             observations.append(observation)
-
 
         return observations
 
@@ -166,7 +166,6 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
             )
 
         return recommendation
-
 
     def get_severity(self, severity: str) -> str:
         if (
