@@ -167,8 +167,7 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
         description += f"**Title:** {vuln_title}\n\n"
         description += f"**Namespace:** {kubernetes_resource['namespace']}\n\n"
         description += (f"**Resource type:** {kubernetes_resource['resource_kind']}, "
-                        f"**Resource name:** {kubernetes_resource['resource_name']}\n\n"
-                       )
+                        f"**Resource name:** {kubernetes_resource['resource_name']}\n\n")
         description += f"**Container:** {kubernetes_resource['container_name']}\n\n"
         description += f"**Prometheus host:** {prometheus_endpoint_url}"
 
