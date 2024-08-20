@@ -132,12 +132,14 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
                     fixed_version, origin_component_version
                 ),
                 description=self.get_description(
-                    vuln_title,
-                    namespace,
-                    resource_kind,
-                    resource_name,
-                    container_name,
-                    prometheus_endpoint_url,
+                    vuln_title=vuln_title,
+                    prometheus_endpoint_url=prometheus_endpoint_url,
+                    kubernetes_resource={
+                        "namespace": namespace,
+                        "resource_kind": resource_kind,
+                        "resource_name": resource_name,
+                        "container_name": container_name
+                    },
                 ),
             )
 
@@ -153,17 +155,16 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
     def get_description(
         self,
         vuln_title,
-        namespace,
-        resource_kind,
-        resource_name,
-        container_name,
         prometheus_endpoint_url,
+        kubernetes_resource,
     ) -> str:
         description = ""
         description += f"**Title:** {vuln_title}\n\n"
-        description += f"**Namespace:** {namespace}\n\n"
-        description += f"**Resource type:** {resource_kind}, **Resource name:** {resource_name}\n\n"
-        description += f"**Container:** {container_name}\n\n"
+        description += f"**Namespace:** {kubernetes_resource['namespace']}\n\n"
+        description += (f"**Resource type:** {kubernetes_resource['resource_kind']}, "
+                        f"**Resource name:** {kubernetes_resource['resource_name']}\n\n"
+                       )
+        description += f"**Container:** {kubernetes_resource['container_name']}\n\n"
         description += f"**Prometheus host:** {prometheus_endpoint_url}"
 
         return description
