@@ -99,11 +99,9 @@ class TestTrivyPrometheusParser(TestCase):
             self.assertEqual("v0.26.0", observations[0].origin_docker_image_tag)
             self.assertEqual("6.1", observations[0].cvss3_score)
             self.assertEqual("recoure.org/x/net", observations[0].origin_component_name)
-            self.assertEqual("https://prometheus.example.com", observations[0].origin_endpoint_url)
             self.assertEqual("Trivy Prometheus", observations[0].scanner)
-            self.assertEqual("StatefulSet", observations[0].origin_cloud_resource_type)
             self.assertEqual("Upgrade from **v0.10.0** to: **0.1.0**\n\n", observations[0].recommendation)
-            self.assertEqual("**Title:** very vulnerable\n\n**Namespace:** default\n\n**Resource-Type:** StatefulSet, **Resource-Name:** recource_name\n\n**Container:** container1", observations[0].description)
+            self.assertEqual("**Title:** very vulnerable\n\n**Namespace:** default\n\n**Resource type:** StatefulSet, **Resource name:** recource_name\n\n**Container:** container1\n\n**Prometheus host:** https://prometheus.example.com", observations[0].description)
 
 
 

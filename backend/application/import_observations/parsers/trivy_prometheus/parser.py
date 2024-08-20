@@ -149,7 +149,7 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
         description += f"**Title:** {vuln_title}\n\n"
         description += f"**Namespace:** {namespace}\n\n"
         description += f"**Resource type:** {resource_kind}, **Resource name:** {resource_name}\n\n"
-        description += f"**Container:** {container_name}"
+        description += f"**Container:** {container_name}\n\n"
         description += f"**Prometheus host:** {prometheus_endpoint_url}"
 
         return description
