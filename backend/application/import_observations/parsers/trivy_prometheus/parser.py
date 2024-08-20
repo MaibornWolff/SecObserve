@@ -111,7 +111,11 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
             resource_kind = finding.get("metric", {}).get("resource_kind", "")
             resource_name = finding.get("metric", {}).get("resource_name", "")
             container_name = finding.get("metric", {}).get("container_name", "")
-            prometheus_endpoint_url = self.api_configuration.base_url
+            prometheus_endpoint_url = (
+                self.api_configuration.base_url
+                if isinstance(self.api_configuration, Api_Configuration)
+                else ""
+            )
 
             observation = Observation(
                 title=vulnerability_id,
