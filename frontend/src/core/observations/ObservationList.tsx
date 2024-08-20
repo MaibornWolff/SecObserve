@@ -4,13 +4,14 @@ import {
     AutocompleteInput,
     BooleanField,
     ChipField,
-    Datagrid,
+    DatagridConfigurable,
     FilterButton,
     FunctionField,
     List,
     NullableBooleanInput,
     NumberField,
     ReferenceInput,
+    SelectColumnsButton,
     TextField,
     TextInput,
     TopToolbar,
@@ -70,7 +71,8 @@ const listFilters = [
 
 const ListActions = () => (
     <TopToolbar>
-        <Stack spacing={0.5} alignItems="flex-end">
+        <Stack spacing={0.5} alignItems="flex-start">
+            <SelectColumnsButton />
             <FilterButton />
         </Stack>
     </TopToolbar>
@@ -99,7 +101,7 @@ const ObservationList = () => {
                 actions={<ListActions />}
                 sx={{ marginTop: 1 }}
             >
-                <Datagrid
+                <DatagridConfigurable
                     size={getSettingListSize()}
                     rowClick="show"
                     bulkActionButtons={<BulkActionButtons />}
@@ -139,7 +141,7 @@ const ObservationList = () => {
                         render={(record) => (record ? humanReadableDate(record.last_observation_log) : "")}
                     />
                     <BooleanField source="has_potential_duplicates" label="Dupl." />
-                </Datagrid>
+                </DatagridConfigurable>
             </List>
         </Fragment>
     );
