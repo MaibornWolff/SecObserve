@@ -93,16 +93,20 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
             severity = finding.get("metric", {}).get(
                 "severity", Severity.SEVERITY_UNKOWN
             )
-            origin_docker_image_registry = finding.get("metric", {}).get("image_registry", "")
-            origin_docker_image_repository = finding.get("metric", {}).get("image_repository", "")
+            origin_docker_image_registry = finding.get("metric", {}).get(
+                "image_registry", ""
+            )
+            origin_docker_image_repository = finding.get("metric", {}).get(
+                "image_repository", ""
+            )
             origin_docker_image_name = (
-                origin_docker_image_registry
-                + "/"
-                + origin_docker_image_repository
+                origin_docker_image_registry + "/" + origin_docker_image_repository
             )
             origin_docker_image_tag = finding.get("metric", {}).get("image_tag", "")
             fixed_version = finding.get("metric", {}).get("fixed_version", "")
-            origin_component_version = finding.get("metric", {}).get("installed_version", "")
+            origin_component_version = finding.get("metric", {}).get(
+                "installed_version", ""
+            )
             namespace = finding.get("metric", {}).get("namespace", "")
             resource_kind = finding.get("metric", {}).get("resource_kind", "")
             resource_name = finding.get("metric", {}).get("resource_name", "")
@@ -124,7 +128,13 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
                     fixed_version, origin_component_version
                 ),
                 description=self.get_description(
-                    vuln_title, namespace, resource_kind, resource_name, container_name, prometheus_endpoint_url),
+                    vuln_title,
+                    namespace,
+                    resource_kind,
+                    resource_name,
+                    container_name,
+                    prometheus_endpoint_url,
+                ),
             )
 
             evidence = []
@@ -161,9 +171,7 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
     ) -> str:
         recommendation = ""
         if fixed_version:
-            recommendation += (
-                f"Upgrade from **{origin_component_version}** to: **{fixed_version}**\n\n"
-            )
+            recommendation += f"Upgrade from **{origin_component_version}** to: **{fixed_version}**\n\n"
 
         return recommendation
 

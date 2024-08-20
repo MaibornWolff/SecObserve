@@ -87,7 +87,9 @@ class TestTrivyPrometheusParser(TestCase):
         ) as testfile:
             parser = TrivyPrometheus()
 
-            parser.api_configuration = Api_Configuration(base_url="https://prometheus.example.com")
+            parser.api_configuration = Api_Configuration(
+                base_url="https://prometheus.example.com"
+            )
             observations = parser.get_observations(json.load(testfile))
 
             self.assertEqual(2, len(observations))
@@ -95,14 +97,18 @@ class TestTrivyPrometheusParser(TestCase):
             self.assertEqual("Medium", observations[0].parser_severity)
             self.assertEqual("6.1", observations[0].numerical_severity)
             self.assertEqual("CVE-2023-1111", observations[0].vulnerability_id)
-            self.assertEqual("registry.io/namespace/image", observations[0].origin_docker_image_name)
+            self.assertEqual(
+                "registry.io/namespace/image", observations[0].origin_docker_image_name
+            )
             self.assertEqual("v0.26.0", observations[0].origin_docker_image_tag)
             self.assertEqual("6.1", observations[0].cvss3_score)
             self.assertEqual("recoure.org/x/net", observations[0].origin_component_name)
             self.assertEqual("Trivy Prometheus", observations[0].scanner)
-            self.assertEqual("Upgrade from **v0.10.0** to: **0.1.0**\n\n", observations[0].recommendation)
-            self.assertEqual("**Title:** very vulnerable\n\n**Namespace:** default\n\n**Resource type:** StatefulSet, **Resource name:** recource_name\n\n**Container:** container1\n\n**Prometheus host:** https://prometheus.example.com", observations[0].description)
-
-
-
-
+            self.assertEqual(
+                "Upgrade from **v0.10.0** to: **0.1.0**\n\n",
+                observations[0].recommendation,
+            )
+            self.assertEqual(
+                "**Title:** very vulnerable\n\n**Namespace:** default\n\n**Resource type:** StatefulSet, **Resource name:** recource_name\n\n**Container:** container1\n\n**Prometheus host:** https://prometheus.example.com",
+                observations[0].description,
+            )

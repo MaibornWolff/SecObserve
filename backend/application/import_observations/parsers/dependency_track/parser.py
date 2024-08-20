@@ -153,7 +153,11 @@ class DependencyTrack(BaseParser, BaseAPIParser):
         dependency_track_base_url += "api/version"
 
         try:
-            response = requests.get(dependency_track_base_url, timeout=60, verify=dependency_track_verify_ssl)
+            response = requests.get(
+                dependency_track_base_url,
+                timeout=60,
+                verify=dependency_track_verify_ssl,
+            )
             response.raise_for_status()
         except Exception:
             return "Dependency-Track", None
