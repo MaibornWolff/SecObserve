@@ -108,6 +108,12 @@ class Product(Model):
         validators=[MinValueValidator(0), MaxValueValidator(999999)],
         help_text="Days before risk acceptance expires, 0 means no expiry",
     )
+    has_cloud_resource = BooleanField(default=False)
+    has_component = BooleanField(default=False)
+    has_docker_image = BooleanField(default=False)
+    has_endpoint = BooleanField(default=False)
+    has_source = BooleanField(default=False)
+    has_potential_duplicates = BooleanField(default=False)
 
     class Meta:
         indexes = [

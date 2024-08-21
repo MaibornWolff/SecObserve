@@ -255,6 +255,7 @@ def _process_data(import_parameters: ImportParameters) -> Tuple[int, int, int, s
                 # Add identity_hash to set of observations in this run to detect duplicates in this run
                 observations_this_run.add(observation_before.identity_hash)
                 vulnerability_check_observations.add(observation_before)
+                _set_product_fields(observation_before)
             else:
                 _process_new_observation(imported_observation)
 
@@ -269,6 +270,7 @@ def _process_data(import_parameters: ImportParameters) -> Tuple[int, int, int, s
                 # Add identity_hash to set of observations in this run to detect duplicates in this run
                 observations_this_run.add(imported_observation.identity_hash)
                 vulnerability_check_observations.add(imported_observation)
+                _set_product_fields(imported_observation)
 
         scanner = imported_observation.scanner
 
@@ -498,6 +500,42 @@ def _get_initial_status(product: Product) -> str:
     if _get_new_observations_in_review(product):
         return Status.STATUS_IN_REVIEW
     return Status.STATUS_OPEN
+
+
+def _set_product_fields(observation: Observation) -> None:
+    product_changed = False
+
+    if (
+        observation.origin_cloud_qualified_resource
+        and not observation.product.has_cloud_resource
+    ):
+        observation.product.has_cloud_resource = True
+        product_changed = True
+
+    if (
+        observation.origin_component_name_version
+        and not observation.product.has_component
+    ):
+        observation.product.has_component = True
+        product_changed = True
+
+    if (
+        observation.origin_docker_image_name_tag
+        and not observation.product.has_docker_image
+    ):
+        observation.product.has_docker_image = True
+        product_changed = True
+
+    if observation.origin_endpoint_url and not observation.product.has_endpoint:
+        observation.product.has_endpoint = True
+        product_changed = True
+
+    if observation.origin_source_file and not observation.product.has_source:
+        observation.product.has_source = True
+        product_changed = True
+
+    if product_changed:
+        observation.product.save()
 
 
 class ParserError(Exception):
