@@ -20,7 +20,18 @@ A file and a respective parser for the file format need to be selected. Optional
 
 ![API import](../assets/images/screenshot_import_3.png){ width="50%" style="display: block; margin: 0 auto" }
 
-Before importing observations from an API, an API configuration needs to be created for the product. This API configuration specifies how to access the API (URL, API key, ...). Optional for the import are attributes for the branch / version, the origin as service, docker image and endpoint URL.
+Before importing observations from an API, an API configuration needs to be created for the product. This API configuration specifies how to access the API (URL, API key,Query, Basic Authentication, SSL Verify, ...). Optional for the import are attributes for the branch / version, the origin as service, docker image and endpoint URL.
+
+##### Dependency Track API Configuration Example
+
+##### Trivy Operator Prometheus API Configuration Example
+
+![Upload of files](../assets/images/screenshot_add_api_trivy_operator_prometheus.png){ width="50%" style="display: block; margin: 0 auto" }
+
+The Trivy Operator exposes a "/metric" endpoint by default for Prometheus access.
+
+Currently only the parsing of vulnerabilities is supported. Which means, the time series with the "trivy_vulnerability_id" metric is required to be used.  
+Details about the querying can be found at the [Prometheus-Doc](https://prometheus.io/docs/prometheus/latest/querying/basics/).
 
 ## Import algorithm
 
