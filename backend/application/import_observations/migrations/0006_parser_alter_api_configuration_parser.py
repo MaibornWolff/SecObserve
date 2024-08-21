@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("import_observations", "0004_zap_rename"),
+        ("import_observations", "0005_api_configuration_basic_auth_enabled_and_more"),
     ]
 
     operations = [

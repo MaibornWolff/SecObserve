@@ -7,8 +7,8 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("core", "0043_observation_risk_acceptance_expiry_date_and_more"),
-        ("import_observations", "0005_parser_alter_api_configuration_parser"),
+        ("core", "0045_populate_observation_purl_type"),
+        ("import_observations", "0006_parser_alter_api_configuration_parser"),
         ("rules", "0012_alter_rule_parser"),
     ]
 

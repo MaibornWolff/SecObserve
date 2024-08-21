@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("import_observations", "0005_parser_alter_api_configuration_parser"),
+        ("import_observations", "0006_parser_alter_api_configuration_parser"),
         ("rules", "0011_rule_approval_date_rule_approval_remark_and_more"),
     ]
 
