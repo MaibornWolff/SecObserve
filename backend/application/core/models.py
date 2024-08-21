@@ -23,6 +23,7 @@ from application.access_control.models import Authorization_Group, User
 from application.core.services.observation import (
     get_identity_hash,
     normalize_observation_fields,
+    set_product_checkboxes,
 )
 from application.core.types import Assessment_Status, Severity, Status, VexJustification
 from application.issue_tracker.types import Issue_Tracker
@@ -542,6 +543,7 @@ class Observation(Model):
     def save(self, *args, **kwargs) -> None:
         normalize_observation_fields(self)
         self.identity_hash = get_identity_hash(self)
+        set_product_checkboxes(self)
 
         return super().save(*args, **kwargs)
 

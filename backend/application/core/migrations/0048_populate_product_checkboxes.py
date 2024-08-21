@@ -69,7 +69,7 @@ def populate_product_checkboxes(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("core", "0046_product_has_cloud_resource_product_has_component_and_more"),
+        ("core", "0047_product_has_cloud_resource_product_has_component_and_more"),
     ]
 
     operations = [

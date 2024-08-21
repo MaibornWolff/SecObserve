@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("core", "0045_populate_observation_purl_type"),
+        ("core", "0046_alter_observation_parser_delete_parser"),
     ]
 
     operations = [
