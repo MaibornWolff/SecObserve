@@ -13,8 +13,9 @@ from django.db.models import (
 from application.access_control.models import User
 from application.commons.models import Settings
 from application.commons.services.global_request import get_current_user
-from application.core.models import Parser, Product
+from application.core.models import Product
 from application.core.types import Severity, Status, VexJustification
+from application.import_observations.models import Parser
 from application.rules.types import Rule_Status
 
 

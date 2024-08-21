@@ -6,12 +6,31 @@ from django.db.models import (
     CharField,
     DateTimeField,
     ForeignKey,
+    Index,
     IntegerField,
     Model,
 )
 from encrypted_model_fields.fields import EncryptedCharField
 
-from application.core.models import Branch, Parser, Product
+from application.core.models import Branch, Product
+from application.import_observations.types import Parser_Source, Parser_Type
+
+
+class Parser(Model):
+    name = CharField(max_length=255, unique=True)
+    type = CharField(max_length=16, choices=Parser_Type.TYPE_CHOICES)
+    source = CharField(max_length=16, choices=Parser_Source.SOURCE_CHOICES)
+    module_name = CharField(max_length=255, blank=True)
+    class_name = CharField(max_length=255, blank=True)
+
+    class Meta:
+        db_table = "core_parser"
+        indexes = [
+            Index(fields=["name"]),
+        ]
+
+    def __str__(self):
+        return self.name
 
 
 class Api_Configuration(Model):

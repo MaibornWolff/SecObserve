@@ -1,14 +1,14 @@
 from os import path
 from unittest.mock import call, patch
 
-from application.core.models import Observation, Parser, Potential_Duplicate, Product
+from application.core.models import Observation, Potential_Duplicate, Product
 from application.core.services.potential_duplicates import (
     set_potential_duplicate,
     set_potential_duplicate_both_ways,
 )
 from application.core.types import Status
 from application.import_observations.management.commands.register_parsers import Command
-from application.import_observations.models import Api_Configuration
+from application.import_observations.models import Api_Configuration, Parser
 from application.import_observations.services.import_observations import (
     FileUploadParameters,
     file_upload_observations,
