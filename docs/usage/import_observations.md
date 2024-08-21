@@ -26,7 +26,9 @@ Before importing observations from an API, an API configuration needs to be crea
 
 ##### Trivy Operator Prometheus API Configuration Example
 
-![Upload of files](../assets/images/screenshot_add_api_trivy_operator_prometheus.png)
+![Upload of files](../assets/images/screenshot_add_api_trivy_operator_prometheus.png){ width="50%" style="display: block; margin: 0 auto" }
+
+The Trivy Operator exposes a "/metric" endpoint by default for Prometheus access.
 
 Currently only the parsing of vulnerabilities is supported. Which means, the time series with the "trivy_vulnerability_id" metric is required to be used.  
 Details about the querying can be found at the [Prometheus-Doc](https://prometheus.io/docs/prometheus/latest/querying/basics/).
