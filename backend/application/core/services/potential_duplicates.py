@@ -68,12 +68,6 @@ def _handle_observation(observation: Observation, observations: QuerySet[Observa
                     observation.has_potential_duplicates = True
     if observation.has_potential_duplicates != initial_has_potential_duplicates:
         observation.save()
-    if (
-        observation.has_potential_duplicates
-        and not observation.product.has_potential_duplicates
-    ):
-        observation.product.has_potential_duplicates = True
-        observation.product.save()
 
 
 def set_potential_duplicate_both_ways(observation: Observation) -> None:
@@ -103,10 +97,3 @@ def set_potential_duplicate(observation: Observation) -> None:
 
     if initial_has_potential_duplicates != observation.has_potential_duplicates:
         observation.save()
-
-    if (
-        observation.has_potential_duplicates
-        and not observation.product.has_potential_duplicates
-    ):
-        observation.product.has_potential_duplicates = True
-        observation.product.save()

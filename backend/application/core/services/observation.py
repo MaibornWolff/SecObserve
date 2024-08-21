@@ -443,5 +443,12 @@ def set_product_checkboxes(observation) -> None:
         observation.product.has_source = True
         product_changed = True
 
+    if (
+        observation.has_potential_duplicates
+        and not observation.product.has_potential_duplicates
+    ):
+        observation.product.has_potential_duplicates = True
+        product_changed = True
+
     if product_changed:
         observation.product.save()
