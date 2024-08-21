@@ -411,7 +411,7 @@ def clip_fields(model: str, my_object) -> None:
                         )
 
 
-def set_product_checkboxes(observation) -> None:
+def set_product_flags(observation) -> None:
     product_changed = False
 
     if (

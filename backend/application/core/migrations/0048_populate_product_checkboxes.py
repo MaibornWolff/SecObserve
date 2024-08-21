@@ -6,7 +6,7 @@ from django.db import migrations
 logger = logging.getLogger("secobserve.migration")
 
 
-def populate_product_checkboxes(apps, schema_editor):
+def populate_product_flags(apps, schema_editor):
     Product = apps.get_model("core", "Product")
     Observation = apps.get_model("core", "Observation")
 
@@ -74,6 +74,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunPython(
-            populate_product_checkboxes, reverse_code=migrations.RunPython.noop
+            populate_product_flags, reverse_code=migrations.RunPython.noop
         ),
     ]

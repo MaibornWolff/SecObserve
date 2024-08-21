@@ -10,11 +10,11 @@ from application.core.models import Branch, Observation, Product
 logger = logging.getLogger("secobserve.core")
 
 
-def delete_inactive_branches_and_set_checkboxes() -> None:
+def delete_inactive_branches_and_set_flags() -> None:
     products = Product.objects.filter(is_product_group=False)
     for product in products:
         delete_inactive_branches_for_product(product)
-        set_product_checkboxes(product)
+        set_product_flags(product)
 
 
 def delete_inactive_branches_for_product(product: Product) -> None:
@@ -84,7 +84,7 @@ def delete_inactive_branches_for_product(product: Product) -> None:
         branch.delete()
 
 
-def set_product_checkboxes(product: Product) -> None:
+def set_product_flags(product: Product) -> None:
     has_cloud_resource_before = product.has_cloud_resource
     product.has_cloud_resource = (
         Observation.objects.filter(product=product)
