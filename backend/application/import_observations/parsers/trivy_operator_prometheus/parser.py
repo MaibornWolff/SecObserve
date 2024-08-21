@@ -13,13 +13,13 @@ from application.import_observations.parsers.base_parser import (
 from application.import_observations.types import Parser_Type
 
 
-class TrivyPrometheus(BaseParser, BaseAPIParser):
+class TrivyOperatorPrometheus(BaseParser, BaseAPIParser):
     def __init__(self):
         self.api_configuration: Optional[Api_Configuration] = None
 
     @classmethod
     def get_name(cls) -> str:
-        return "Trivy Prometheus"
+        return "Trivy Operator Prometheus"
 
     @classmethod
     def get_type(cls) -> str:
@@ -30,32 +30,38 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
     ) -> tuple[bool, list[str], dict]:
         self.api_configuration = api_configuration
 
-        trivy_prometheus_base_url = api_configuration.base_url
-        trivy_prometheus_query = api_configuration.query
-        trivy_prometheus_verify_ssl = api_configuration.verify_ssl
-        trivy_prometheus_basic_auth = api_configuration.basic_auth_enabled
-        trivy_prometheus_basic_auth_username = api_configuration.basic_auth_username
-        trivy_prometheus_basic_auth_password = api_configuration.basic_auth_password
+        trivy_operator_prometheus_base_url = api_configuration.base_url
+        trivy_operator_prometheus_query = api_configuration.query
+        trivy_operator_prometheus_verify_ssl = api_configuration.verify_ssl
+        trivy_operator_prometheus_basic_auth = api_configuration.basic_auth_enabled
+        trivy_operator_prometheus_basic_auth_username = (
+            api_configuration.basic_auth_username
+        )
+        trivy_operator_prometheus_basic_auth_password = (
+            api_configuration.basic_auth_password
+        )
 
-        if not trivy_prometheus_base_url.endswith("/"):
-            trivy_prometheus_base_url += "/"
+        if not trivy_operator_prometheus_base_url.endswith("/"):
+            trivy_operator_prometheus_base_url += "/"
 
-        trivy_prometheus_url = (
-            trivy_prometheus_base_url + "api/v1/query?query=" + trivy_prometheus_query
+        trivy_operator_prometheus_url = (
+            trivy_operator_prometheus_base_url
+            + "api/v1/query?query="
+            + trivy_operator_prometheus_query
         )
 
         trivy_basic_auth_param = None
-        if trivy_prometheus_basic_auth:
+        if trivy_operator_prometheus_basic_auth:
             trivy_basic_auth_param = (
-                trivy_prometheus_basic_auth_username,
-                trivy_prometheus_basic_auth_password,
+                trivy_operator_prometheus_basic_auth_username,
+                trivy_operator_prometheus_basic_auth_password,
             )
 
         try:
             response = requests.get(
-                trivy_prometheus_url,
+                trivy_operator_prometheus_url,
                 timeout=60,
-                verify=trivy_prometheus_verify_ssl,
+                verify=trivy_operator_prometheus_verify_ssl,
                 auth=trivy_basic_auth_param,
             )
             response.raise_for_status()
@@ -119,7 +125,7 @@ class TrivyPrometheus(BaseParser, BaseAPIParser):
             origin_docker_image_tag=origin_docker_image_tag,
             cvss3_score=cvss3_score,
             origin_component_name=origin_component_name,
-            scanner="Trivy Prometheus",
+            scanner="Trivy Operator Prometheus",
             origin_component_version=origin_component_version,
             recommendation=self.get_recommendation(
                 fixed_version, origin_component_version

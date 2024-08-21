@@ -40,7 +40,7 @@ These scanners have been tested with SecObserve:
 | [tfsec](https://aquasecurity.github.io/tfsec) | SARIF | Infrastructure SAST | File |
 | [Trivy](https://aquasecurity.github.io/trivy) | SARIF | Infrastructure SAST | File |
 | [Trivy](https://aquasecurity.github.io/trivy) | SARIF | Secrets | File |
-| [Trivy Prometheus](https://github.com/aquasecurity/trivy-operator) | JSON | Cloud infrastructure | API |
+| [Trivy Operator Prometheus](https://github.com/aquasecurity/trivy-operator) | JSON | Cloud infrastructure | API |
 | [Gitleaks](https://gitleaks.io) | SARIF | Secrets | File |
 | [CryptoLyzer](https://gitlab.com/coroner/cryptolyzer) ^2)^ | CryptoLyzer | DAST | File |
 | [DrHeader](https://github.com/Santandersecurityresearch/DrHeader) | DrHeader | DAST | File |

@@ -24,9 +24,9 @@ Before importing observations from an API, an API configuration needs to be crea
 
 ##### Dependency Track API Configuration Example
 
-##### Trivy Prometheus API Configuration Example
+##### Trivy Operator Prometheus API Configuration Example
 
-![Upload of files](../assets/images/screenshot_add_api_trivy_prometheus.png)
+![Upload of files](../assets/images/screenshot_add_api_trivy_operator_prometheus.png)
 
 Currently only the parsing of vulnerabilities is supported. Which means, the time series with the "trivy_vulnerability_id" metric is required to be used.  
 Details about the querying can be found at the [Prometheus-Doc](https://prometheus.io/docs/prometheus/latest/querying/basics/).

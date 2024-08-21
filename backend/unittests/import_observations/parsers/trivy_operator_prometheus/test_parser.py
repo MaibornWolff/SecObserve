@@ -6,15 +6,17 @@ from unittest.mock import MagicMock, patch
 import requests
 
 from application.import_observations.models import Api_Configuration
-from application.import_observations.parsers.trivy_prometheus.parser import (
-    TrivyPrometheus,
+from application.import_observations.parsers.trivy_operator_prometheus.parser import (
+    TrivyOperatorPrometheus,
 )
 
 
-class TestTrivyPrometheusParser(TestCase):
-    @patch("application.import_observations.parsers.trivy_prometheus.parser.requests")
+class TestTrivyOperatorPrometheusParser(TestCase):
+    @patch(
+        "application.import_observations.parsers.trivy_operator_prometheus.parser.requests"
+    )
     def test_invalid_connection(self, mock_requests):
-        parser = TrivyPrometheus()
+        parser = TrivyOperatorPrometheus()
 
         mock_response = MagicMock()
         mock_response.status_code = 400
@@ -27,9 +29,11 @@ class TestTrivyPrometheusParser(TestCase):
         self.assertIn("Cannot access Prometheus", messages[0])
         self.assertFalse(data)
 
-    @patch("application.import_observations.parsers.trivy_prometheus.parser.requests")
+    @patch(
+        "application.import_observations.parsers.trivy_operator_prometheus.parser.requests"
+    )
     def test_valid_connection(self, mock_requests):
-        parser = TrivyPrometheus()
+        parser = TrivyOperatorPrometheus()
         with open(
             path.dirname(__file__) + "/files/multiple_observations.json"
         ) as testfile:
@@ -48,7 +52,7 @@ class TestTrivyPrometheusParser(TestCase):
 
     def test_invalid_format_json(self):
         with open(path.dirname(__file__) + "/files/invalid_format.json") as testfile:
-            parser = TrivyPrometheus()
+            parser = TrivyOperatorPrometheus()
 
             check, messages, data = parser.check_format(testfile)
 
@@ -60,7 +64,7 @@ class TestTrivyPrometheusParser(TestCase):
         with open(
             path.dirname(__file__) + "/files/no_prometheus_endpoint.json"
         ) as testfile:
-            parser = TrivyPrometheus()
+            parser = TrivyOperatorPrometheus()
 
             check, messages, data = parser.check_format(testfile)
 
@@ -72,7 +76,7 @@ class TestTrivyPrometheusParser(TestCase):
         with open(
             path.dirname(__file__) + "/files/invalid_metric_endpoint.json"
         ) as testfile:
-            parser = TrivyPrometheus()
+            parser = TrivyOperatorPrometheus()
 
             check, messages, data = parser.check_format(testfile)
 
@@ -85,7 +89,7 @@ class TestTrivyPrometheusParser(TestCase):
         with open(
             path.dirname(__file__) + "/files/multiple_observations.json"
         ) as testfile:
-            parser = TrivyPrometheus()
+            parser = TrivyOperatorPrometheus()
 
             parser.api_configuration = Api_Configuration(
                 base_url="https://prometheus.example.com"
@@ -103,7 +107,7 @@ class TestTrivyPrometheusParser(TestCase):
             self.assertEqual("v0.26.0", observations[0].origin_docker_image_tag)
             self.assertEqual("6.1", observations[0].cvss3_score)
             self.assertEqual("recoure.org/x/net", observations[0].origin_component_name)
-            self.assertEqual("Trivy Prometheus", observations[0].scanner)
+            self.assertEqual("Trivy Operator Prometheus", observations[0].scanner)
             self.assertEqual(
                 "Upgrade from **v0.10.0** to: **0.1.0**\n\n",
                 observations[0].recommendation,

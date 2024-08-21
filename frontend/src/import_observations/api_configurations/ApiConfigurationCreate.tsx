@@ -108,7 +108,7 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
                             <TextInputWide source="project_key" validate={validate_required_255} />
                         </>
                     );
-                case "Trivy Prometheus":
+                case "Trivy Operator Prometheus":
                     return (
                         <>
                             <TextInputWide source="query" label="Query" validate={validate_required_255} />
