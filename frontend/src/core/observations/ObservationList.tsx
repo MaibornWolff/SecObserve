@@ -56,7 +56,8 @@ const listFilters = [
     <TextInput source="origin_docker_image_name_tag_short" label="Container" />,
     <TextInput source="origin_endpoint_hostname" label="Host" />,
     <TextInput source="origin_source_file" label="Source" />,
-    <TextInput source="origin_cloud_qualified_resource" label="Resource" />,
+    <TextInput source="origin_cloud_qualified_resource" label="Cloud resource" />,
+    <TextInput source="origin_kubernetes_qualified_resource" label="Kubernetes resource" />,
     <TextInput source="scanner" alwaysOn />,
     <AutocompleteInputMedium source="age" choices={AGE_CHOICES} alwaysOn />,
     <NullableBooleanInput source="has_potential_duplicates" label="Duplicates" alwaysOn />,
@@ -130,10 +131,14 @@ const ObservationList = () => {
                     <TextField source="origin_source_file" label="Source" sx={{ wordBreak: "break-word" }} />
                     <TextField
                         source="origin_cloud_qualified_resource"
-                        label="Resource"
+                        label="Cloud res."
                         sx={{ wordBreak: "break-word" }}
                     />
-                    ,
+                    <TextField
+                        source="origin_kubernetes_qualified_resource"
+                        label="Kube. res."
+                        sx={{ wordBreak: "break-word" }}
+                    />
                     <TextField source="scanner_name" label="Scanner" />
                     <FunctionField<Observation>
                         label="Age"

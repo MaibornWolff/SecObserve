@@ -12,7 +12,6 @@ from application.core.types import Severity, Status
 
 def get_identity_hash(observation) -> str:
     hash_string = _get_string_to_hash(observation)
-
     return hashlib.sha256(hash_string.casefold().encode("utf-8").strip()).hexdigest()
 
 
@@ -51,6 +50,15 @@ def _get_string_to_hash(observation):  # pylint: disable=too-many-branches
         hash_string += observation.origin_cloud_account_subscription_project
     if observation.origin_cloud_resource:
         hash_string += observation.origin_cloud_resource
+
+    if observation.origin_kubernetes_cluster:
+        hash_string += observation.origin_kubernetes_cluster
+    if observation.origin_kubernetes_namespace:
+        hash_string += observation.origin_kubernetes_namespace
+    if observation.origin_kubernetes_resource_type:
+        hash_string += observation.origin_kubernetes_resource_type
+    if observation.origin_kubernetes_resource_name:
+        hash_string += observation.origin_kubernetes_resource_name
 
     return hash_string
 
@@ -127,6 +135,7 @@ def normalize_observation_fields(observation) -> None:
     normalize_origin_docker(observation)
     normalize_origin_endpoint(observation)
     normalize_origin_cloud(observation)
+    normalize_origin_kubernetes(observation)
 
     normalize_severity(observation)
     normalize_status(observation)
@@ -338,6 +347,41 @@ def normalize_origin_cloud(observation):
         )
 
 
+def normalize_origin_kubernetes(observation):
+    if observation.origin_kubernetes_cluster is None:
+        observation.origin_kubernetes_cluster = ""
+    if observation.origin_kubernetes_namespace is None:
+        observation.origin_kubernetes_namespace = ""
+    if observation.origin_kubernetes_resource_type is None:
+        observation.origin_kubernetes_resource_type = ""
+    if observation.origin_kubernetes_resource_name is None:
+        observation.origin_kubernetes_resource_name = ""
+
+    observation.origin_kubernetes_qualified_resource = ""
+    if observation.origin_kubernetes_cluster:
+        observation.origin_kubernetes_qualified_resource = (
+            (observation.origin_kubernetes_cluster[:50] + "...")
+            if len(observation.origin_kubernetes_cluster) > 53
+            else observation.origin_kubernetes_cluster
+        )
+    if observation.origin_kubernetes_namespace:
+        if observation.origin_kubernetes_qualified_resource:
+            observation.origin_kubernetes_qualified_resource += " / "
+        observation.origin_kubernetes_qualified_resource += (
+            (observation.origin_kubernetes_namespace[:50] + "...")
+            if len(observation.origin_kubernetes_namespace) > 53
+            else observation.origin_kubernetes_namespace
+        )
+    if observation.origin_kubernetes_resource_name:
+        if observation.origin_kubernetes_qualified_resource:
+            observation.origin_kubernetes_qualified_resource += " / "
+        observation.origin_kubernetes_qualified_resource += (
+            (observation.origin_kubernetes_resource_name[:140] + "...")
+            if len(observation.origin_kubernetes_resource_name) > 143
+            else observation.origin_kubernetes_resource_name
+        )
+
+
 def normalize_severity(observation):
     if observation.current_severity is None:
         observation.current_severity = ""
@@ -437,6 +481,13 @@ def set_product_flags(observation) -> None:
 
     if observation.origin_endpoint_url and not observation.product.has_endpoint:
         observation.product.has_endpoint = True
+        product_changed = True
+
+    if (
+        observation.origin_kubernetes_qualified_resource
+        and not observation.product.has_kubernetes_resource
+    ):
+        observation.product.has_kubernetes_resource = True
         product_changed = True
 
     if observation.origin_source_file and not observation.product.has_source:

@@ -94,7 +94,10 @@ function listFilters(product: Product) {
         filters.push(<TextInput source="origin_source_file" label="Source" alwaysOn />);
     }
     if (product && product.has_cloud_resource) {
-        filters.push(<TextInput source="origin_cloud_qualified_resource" label="Resource" alwaysOn />);
+        filters.push(<TextInput source="origin_cloud_qualified_resource" label="Cloud resource" alwaysOn />);
+    }
+    if (product && product.has_kubernetes_resource) {
+        filters.push(<TextInput source="origin_kubernetes_qualified_resource" label="Kubernetes resource" alwaysOn />);
     }
 
     filters.push(<TextInput source="scanner" alwaysOn />);
@@ -208,7 +211,14 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
                     {product && product.has_cloud_resource && (
                         <TextField
                             source="origin_cloud_qualified_resource"
-                            label="Resource"
+                            label="Cloud resource"
+                            sx={{ wordBreak: "break-word" }}
+                        />
+                    )}
+                    {product && product.has_kubernetes_resource && (
+                        <TextField
+                            source="origin_kubernetes_qualified_resource"
+                            label="Kubernetes resource"
                             sx={{ wordBreak: "break-word" }}
                         />
                     )}

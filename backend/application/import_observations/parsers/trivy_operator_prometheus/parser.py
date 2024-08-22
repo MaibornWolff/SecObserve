@@ -109,7 +109,6 @@ class TrivyOperatorPrometheus(BaseParser, BaseAPIParser):
         namespace = finding.get("metric", {}).get("namespace", "")
         resource_kind = finding.get("metric", {}).get("resource_kind", "")
         resource_name = finding.get("metric", {}).get("resource_name", "")
-        container_name = finding.get("metric", {}).get("container_name", "")
         prometheus_endpoint_url = (
             self.api_configuration.base_url
             if isinstance(self.api_configuration, Api_Configuration)
@@ -125,20 +124,17 @@ class TrivyOperatorPrometheus(BaseParser, BaseAPIParser):
             origin_docker_image_tag=origin_docker_image_tag,
             cvss3_score=cvss3_score,
             origin_component_name=origin_component_name,
-            scanner="Trivy Operator Prometheus",
+            scanner="Trivy Operator",
             origin_component_version=origin_component_version,
+            origin_kubernetes_namespace=namespace,
+            origin_kubernetes_resource_type=resource_kind,
+            origin_kubernetes_resource_name=resource_name,
             recommendation=self.get_recommendation(
                 fixed_version, origin_component_version
             ),
             description=self.get_description(
                 vuln_title=vuln_title,
                 prometheus_endpoint_url=prometheus_endpoint_url,
-                kubernetes_resource={
-                    "namespace": namespace,
-                    "resource_kind": resource_kind,
-                    "resource_name": resource_name,
-                    "container_name": container_name,
-                },
             ),
         )
 
@@ -165,17 +161,10 @@ class TrivyOperatorPrometheus(BaseParser, BaseAPIParser):
         self,
         vuln_title,
         prometheus_endpoint_url,
-        kubernetes_resource,
     ) -> str:
-        description = ""
-        description += f"**Title:** {vuln_title}\n\n"
-        description += f"**Namespace:** {kubernetes_resource['namespace']}\n\n"
-        description += (
-            f"**Resource type:** {kubernetes_resource['resource_kind']}, "
-            f"**Resource name:** {kubernetes_resource['resource_name']}\n\n"
-        )
-        description += f"**Container:** {kubernetes_resource['container_name']}\n\n"
-        description += f"**Prometheus host:** {prometheus_endpoint_url}"
+        description = vuln_title
+        if prometheus_endpoint_url:
+            description += f"\n\n**Prometheus host:** {prometheus_endpoint_url}"
 
         return description
 
@@ -186,7 +175,9 @@ class TrivyOperatorPrometheus(BaseParser, BaseAPIParser):
     ) -> str:
         recommendation = ""
         if fixed_version:
-            recommendation += f"Upgrade from **{origin_component_version}** to: **{fixed_version}**\n\n"
+            recommendation += (
+                f"Upgrade from **{origin_component_version}** to **{fixed_version}**"
+            )
 
         return recommendation
 

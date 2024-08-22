@@ -113,6 +113,13 @@ def set_product_flags(product: Product) -> None:
         .exists()
     )
 
+    has_kubernetes_resource_before = product.has_kubernetes_resource
+    product.has_kubernetes_resource = (
+        Observation.objects.filter(product=product)
+        .exclude(origin_kubernetes_qualified_resource="")
+        .exists()
+    )
+
     has_source_before = product.has_source
     product.has_source = (
         Observation.objects.filter(product=product)
@@ -131,6 +138,7 @@ def set_product_flags(product: Product) -> None:
         or has_component_before != product.has_component
         or has_docker_image_before != product.has_docker_image
         or has_endpoint_before != product.has_endpoint
+        or has_kubernetes_resource_before != product.has_kubernetes_resource
         or has_source_before != product.has_source
         or has_potential_duplicates_before != product.has_potential_duplicates
     ):

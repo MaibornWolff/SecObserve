@@ -210,8 +210,32 @@ const ObservationEditForm = () => {
                     />
                 </Stack>
                 <Stack direction="row" spacing={2}>
+                    <TextInputWide
+                        source="origin_cloud_resource_type"
+                        label="Cloud resource type"
+                        validate={validate_255}
+                    />
                     <TextInputWide source="origin_cloud_resource" label="Cloud resource" validate={validate_255} />
-                    <TextInputWide source="origin_cloud_resource_type" label="Resource type" validate={validate_255} />
+                </Stack>
+                <Stack direction="row" spacing={2}>
+                    <TextInputWide
+                        source="origin_kubernetes_cluster"
+                        label="Kubernetes cluster"
+                        validate={validate_255}
+                    />
+                    <TextInputWide source="origin_kubernetes_namespace" label="Namespace" validate={validate_255} />
+                </Stack>
+                <Stack direction="row" spacing={2}>
+                    <TextInputWide
+                        source="origin_kubernetes_resource_type"
+                        label="Kubernetes resource type"
+                        validate={validate_255}
+                    />
+                    <TextInputWide
+                        source="origin_kubernetes_resource_name"
+                        label="Kubernetes resource name"
+                        validate={validate_255}
+                    />
                 </Stack>
             </Stack>
         </SimpleForm>
@@ -259,8 +283,17 @@ const ObservationEdit = () => {
         if (!data.origin_cloud_resource_type) {
             data.origin_cloud_resource_type = "";
         }
-        if (!data.origin_cloud_provider) {
-            data.origin_cloud_provider = "";
+        if (!data.origin_kubernetes_cluster) {
+            data.origin_kubernetes_cluster = "";
+        }
+        if (!data.origin_kubernetes_namespace) {
+            data.origin_kubernetes_namespace = "";
+        }
+        if (!data.origin_kubernetes_resource_type) {
+            data.origin_kubernetes_resource_type = "";
+        }
+        if (!data.origin_kubernetes_resource_name) {
+            data.origin_kubernetes_resource_name = "";
         }
         if (!justificationIsEnabledForStatus(data.parser_status) || !data.parser_vex_justification) {
             data.parser_vex_justification = "";

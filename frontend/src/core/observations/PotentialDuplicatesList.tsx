@@ -56,31 +56,48 @@ const PotentialDuplicatesList = ({ observation }: PotentialDuplicatesListProps) 
                 <SeverityField source="potential_duplicate_observation.current_severity" />
                 <ChipField source="potential_duplicate_observation.current_status" label="Status" />
                 <TextField source="potential_duplicate_observation.origin_service_name" label="Service" />
-                <TextField
-                    source="potential_duplicate_observation.origin_component_name_version"
-                    label="Component"
-                    sx={{ wordBreak: "break-word" }}
-                />
-                <TextField
-                    source="potential_duplicate_observation.origin_docker_image_name_tag_short"
-                    label="Container"
-                    sx={{ wordBreak: "break-word" }}
-                />
-                <TextField
-                    source="potential_duplicate_observation.origin_endpoint_hostname"
-                    label="Host"
-                    sx={{ wordBreak: "break-word" }}
-                />
-                <TextField
-                    source="potential_duplicate_observation.origin_source_file"
-                    label="Source"
-                    sx={{ wordBreak: "break-word" }}
-                />
-                <TextField
-                    source="potential_duplicate_observation.origin_cloud_qualified_resource"
-                    label="Resource"
-                    sx={{ wordBreak: "break-word" }}
-                />
+                {observation && observation.product_data.has_component && (
+                    <TextField
+                        source="potential_duplicate_observation.origin_component_name_version"
+                        label="Component"
+                        sx={{ wordBreak: "break-word" }}
+                    />
+                )}
+                {observation && observation.product_data.has_docker_image && (
+                    <TextField
+                        source="potential_duplicate_observation.origin_docker_image_name_tag_short"
+                        label="Container"
+                        sx={{ wordBreak: "break-word" }}
+                    />
+                )}
+                {observation && observation.product_data.has_endpoint && (
+                    <TextField
+                        source="potential_duplicate_observation.origin_endpoint_hostname"
+                        label="Host"
+                        sx={{ wordBreak: "break-word" }}
+                    />
+                )}
+                {observation && observation.product_data.has_source && (
+                    <TextField
+                        source="potential_duplicate_observation.origin_source_file"
+                        label="Source"
+                        sx={{ wordBreak: "break-word" }}
+                    />
+                )}
+                {observation && observation.product_data.has_cloud_resource && (
+                    <TextField
+                        source="potential_duplicate_observation.origin_cloud_qualified_resource"
+                        label="Cloud resource"
+                        sx={{ wordBreak: "break-word" }}
+                    />
+                )}
+                {observation && observation.product_data.has_kubernetes_resource && (
+                    <TextField
+                        source="potential_duplicate_observation.origin_kubernetes_qualified_resource"
+                        label="Kubernetes resource"
+                        sx={{ wordBreak: "break-word" }}
+                    />
+                )}
                 <TextField source="potential_duplicate_observation.scanner_name" label="Scanner" />
                 <FunctionField<Observation>
                     label="Age"

@@ -63,6 +63,7 @@ class ImportParameters:
     service: str
     docker_image_name_tag: str
     endpoint_url: str
+    kubernetes_cluster: str
     imported_observations: list[Observation]
 
 
@@ -75,6 +76,7 @@ class FileUploadParameters:
     service: str
     docker_image_name_tag: str
     endpoint_url: str
+    kubernetes_cluster: str
 
 
 def file_upload_observations(
@@ -108,6 +110,7 @@ def file_upload_observations(
         service=file_upload_parameters.service,
         docker_image_name_tag=file_upload_parameters.docker_image_name_tag,
         endpoint_url=file_upload_parameters.endpoint_url,
+        kubernetes_cluster=file_upload_parameters.kubernetes_cluster,
         imported_observations=imported_observations,
     )
 
@@ -134,6 +137,7 @@ def api_import_observations(
     service: str,
     docker_image_name_tag: str,
     endpoint_url: str,
+    kubernetes_cluster: str,
 ) -> Tuple[int, int, int]:
     parser_instance = _instanciate_parser(api_configuration.parser)
 
@@ -157,6 +161,7 @@ def api_import_observations(
         service=service,
         docker_image_name_tag=docker_image_name_tag,
         endpoint_url=endpoint_url,
+        kubernetes_cluster=kubernetes_cluster,
         imported_observations=imported_observations,
     )
 
@@ -314,6 +319,10 @@ def _prepare_imported_observation(
         )
     if import_parameters.endpoint_url:
         imported_observation.origin_endpoint_url = import_parameters.endpoint_url
+    if import_parameters.kubernetes_cluster:
+        imported_observation.origin_kubernetes_cluster = (
+            import_parameters.kubernetes_cluster
+        )
 
 
 def _process_current_observation(

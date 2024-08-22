@@ -97,6 +97,10 @@ class Rule_Engine:
                     rule.origin_cloud_qualified_resource,
                     observation.origin_cloud_qualified_resource,
                 )
+                and self._check_regex(
+                    rule.origin_kubernetes_qualified_resource,
+                    observation.origin_kubernetes_qualified_resource,
+                )
             ):
                 previous_severity = observation.current_severity
                 previous_rule_severity = observation.rule_severity

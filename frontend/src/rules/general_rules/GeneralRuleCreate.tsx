@@ -51,6 +51,9 @@ const GeneralRuleCreate = () => {
         if (data.origin_cloud_qualified_resource == null) {
             data.origin_cloud_qualified_resource = "";
         }
+        if (data.origin_kubernetes_qualified_resource == null) {
+            data.origin_kubernetes_qualified_resource = "";
+        }
         if (data.new_severity == null) {
             data.new_severity = "";
         }
@@ -153,7 +156,13 @@ const GeneralRuleCreate = () => {
                     <TextInputWide
                         source="origin_cloud_qualified_resource"
                         label="Cloud qualified resource"
-                        helperText="Regular expression to match the qualified resource name"
+                        helperText="Regular expression to match the cloud qualified resource name"
+                        validate={validate_255}
+                    />
+                    <TextInputWide
+                        source="origin_kubernetes_qualified_resource"
+                        label="Kubernetes qualified resource"
+                        helperText="Regular expression to match the Kubernetes qualified resource name"
                         validate={validate_255}
                     />
                 </Stack>

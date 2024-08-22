@@ -20,7 +20,8 @@ const ObservationShowOrigins = ({ elevated }: ObservationShowOriginsProps) => {
                     observation.origin_docker_image_name != "" ||
                     observation.origin_endpoint_url != "" ||
                     observation.origin_source_file != "" ||
-                    observation.origin_cloud_provider != "") && (
+                    observation.origin_cloud_qualified_resource != "" ||
+                    observation.origin_kubernetes_qualified_resource != "") && (
                     <Paper elevation={getElevation(elevated)} sx={{ marginBottom: 2, padding: 2 }}>
                         <Typography variant="h6">Origins</Typography>
                         {observation.origin_service_name != "" && (
@@ -183,7 +184,7 @@ const ObservationShowOrigins = ({ elevated }: ObservationShowOriginsProps) => {
                                 </Stack>
                             </Fragment>
                         )}
-                        {observation.origin_cloud_provider != "" && (
+                        {observation.origin_cloud_qualified_resource != "" && (
                             <Fragment>
                                 <Typography variant="subtitle1" sx={{ paddingTop: 1 }}>
                                     Cloud
@@ -202,14 +203,43 @@ const ObservationShowOrigins = ({ elevated }: ObservationShowOriginsProps) => {
                                             />
                                         </Labeled>
                                     )}
+                                    {observation.origin_cloud_resource_type != "" && (
+                                        <Labeled>
+                                            <TextField source="origin_cloud_resource_type" label="Resource type" />
+                                        </Labeled>
+                                    )}
                                     {observation.origin_cloud_resource != "" && (
                                         <Labeled>
                                             <TextField source="origin_cloud_resource" label="Resource" />
                                         </Labeled>
                                     )}
-                                    {observation.origin_cloud_resource_type != "" && (
+                                </Stack>
+                            </Fragment>
+                        )}
+                        {observation.origin_kubernetes_qualified_resource != "" && (
+                            <Fragment>
+                                <Typography variant="subtitle1" sx={{ paddingTop: 1 }}>
+                                    Kubernetes
+                                </Typography>
+                                <Stack direction="row" spacing={4}>
+                                    {observation.origin_kubernetes_cluster != "" && (
                                         <Labeled>
-                                            <TextField source="origin_cloud_resource_type" label="Resource type" />
+                                            <TextField source="origin_kubernetes_cluster" label="Cluster" />
+                                        </Labeled>
+                                    )}
+                                    {observation.origin_kubernetes_namespace != "" && (
+                                        <Labeled>
+                                            <TextField source="origin_kubernetes_namespace" label="Namespace" />
+                                        </Labeled>
+                                    )}
+                                    {observation.origin_kubernetes_resource_type != "" && (
+                                        <Labeled>
+                                            <TextField source="origin_kubernetes_resource_type" label="Resource type" />
+                                        </Labeled>
+                                    )}
+                                    {observation.origin_kubernetes_resource_name != "" && (
+                                        <Labeled>
+                                            <TextField source="origin_kubernetes_resource_name" label="Resource name" />
                                         </Labeled>
                                     )}
                                 </Stack>

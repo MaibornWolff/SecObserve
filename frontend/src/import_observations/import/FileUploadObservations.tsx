@@ -61,6 +61,9 @@ const FileUploadObservations = () => {
             if (data.endpoint_url) {
                 formData.append("endpoint_url", data.endpoint_url);
             }
+            if (data.kubernetes_cluster) {
+                formData.append("kubernetes_cluster", data.kubernetes_cluster);
+            }
 
             httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/import/file_upload_observations_by_id/", {
                 method: "POST",
@@ -170,6 +173,7 @@ const FileUploadObservations = () => {
                             validate={validate_255}
                         />
                         <TextInputWide source="endpoint_url" validate={validate_2048} />
+                        <TextInputWide source="kubernetes_cluster" validate={validate_255} />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>

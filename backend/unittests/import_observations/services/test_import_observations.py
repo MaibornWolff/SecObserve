@@ -52,7 +52,7 @@ class TestImportObservations(BaseTestCase):
     )
     def test_file_upload_observations_with_branch(
         self,
-        mocck_apply_vex_statements_for_observation,
+        mock_apply_vex_statements_for_observation,
         mock_find_potential_duplicates,
         mock_epss_apply_observation,
         mock_push_observations_to_issue_tracker,
@@ -67,6 +67,7 @@ class TestImportObservations(BaseTestCase):
             "test_service",
             "test_docker_image_name_tag",
             "test_endpoint_url",
+            "test_kubernetes_cluster",
         )
 
         product = Product.objects.get(id=1)
@@ -77,7 +78,7 @@ class TestImportObservations(BaseTestCase):
         self.assertEqual(mock_push_observations_to_issue_tracker.call_count, 2)
         self.assertEqual(mock_epss_apply_observation.call_count, 4)
         self.assertEqual(mock_find_potential_duplicates.call_count, 2)
-        self.assertEqual(mocck_apply_vex_statements_for_observation.call_count, 4)
+        self.assertEqual(mock_apply_vex_statements_for_observation.call_count, 4)
 
     @patch("application.commons.services.global_request.get_current_request")
     @patch(
@@ -100,7 +101,7 @@ class TestImportObservations(BaseTestCase):
     )
     def test_file_upload_observations_without_branch(
         self,
-        mocck_apply_vex_statements_for_observation,
+        mock_apply_vex_statements_for_observation,
         mock_find_potential_duplicates,
         mock_epss_apply_observation,
         mock_push_observations_to_issue_tracker,
@@ -109,7 +110,7 @@ class TestImportObservations(BaseTestCase):
         mock_get_current_request,
     ):
         mock_get_current_request.return_value = RequestMock(User.objects.get(id=1))
-        self._file_upload_observations(None, None, None, None)
+        self._file_upload_observations(None, None, None, None, None)
 
         product = Product.objects.get(id=1)
         mock_check_security_gate.assert_has_calls([call(product), call(product)])
@@ -119,10 +120,10 @@ class TestImportObservations(BaseTestCase):
         self.assertEqual(mock_push_observations_to_issue_tracker.call_count, 2)
         self.assertEqual(mock_epss_apply_observation.call_count, 4)
         self.assertEqual(mock_find_potential_duplicates.call_count, 2)
-        self.assertEqual(mocck_apply_vex_statements_for_observation.call_count, 4)
+        self.assertEqual(mock_apply_vex_statements_for_observation.call_count, 4)
 
     def _file_upload_observations(
-        self, branch, service, docker_image_name_tag, endpoint_url
+        self, branch, service, docker_image_name_tag, endpoint_url, kubernetes_cluster
     ):
         # --- First import ---
 
@@ -134,6 +135,7 @@ class TestImportObservations(BaseTestCase):
             service=service,
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
+            kubernetes_cluster=kubernetes_cluster,
         )
 
         new, updated, resolved = file_upload_observations(file_upload_parameters)
@@ -163,6 +165,10 @@ class TestImportObservations(BaseTestCase):
             self.assertEqual(observations[0].origin_endpoint_url, endpoint_url)
         else:
             self.assertEqual(observations[0].origin_endpoint_url, "")
+        if kubernetes_cluster:
+            self.assertEqual(observations[0].origin_kubernetes_cluster, kubernetes_cluster)
+        else:
+            self.assertEqual(observations[0].origin_kubernetes_cluster, "")
 
         self.assertEqual(observations[0].current_status, Status.STATUS_OPEN)
         self.assertEqual(observations[1].current_status, Status.STATUS_OPEN)
@@ -225,6 +231,7 @@ class TestImportObservations(BaseTestCase):
             service=service,
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
+            kubernetes_cluster=kubernetes_cluster,
         )
 
         new, updated, resolved = file_upload_observations(file_upload_parameters)

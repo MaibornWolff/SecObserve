@@ -97,13 +97,19 @@ class ApiImportObservationsById(APIView):
             "docker_image_name_tag"
         )
         endpoint_url = request_serializer.validated_data.get("endpoint_url")
+        kubernetes_cluster = request_serializer.validated_data.get("kubernetes_cluster")
 
         (
             observations_new,
             observations_updated,
             observations_resolved,
         ) = api_import_observations(
-            api_configuration, branch, service, docker_image_name_tag, endpoint_url
+            api_configuration,
+            branch,
+            service,
+            docker_image_name_tag,
+            endpoint_url,
+            kubernetes_cluster,
         )
 
         response_data = {
@@ -156,13 +162,19 @@ class ApiImportObservationsByName(APIView):
             "docker_image_name_tag"
         )
         endpoint_url = request_serializer.validated_data.get("endpoint_url")
+        kubernetes_cluster = request_serializer.validated_data.get("kubernetes_cluster")
 
         (
             observations_new,
             observations_updated,
             observations_resolved,
         ) = api_import_observations(
-            api_configuration, branch, service, docker_image_name_tag, endpoint_url
+            api_configuration,
+            branch,
+            service,
+            docker_image_name_tag,
+            endpoint_url,
+            kubernetes_cluster,
         )
 
         response_data = {
@@ -214,6 +226,7 @@ class FileUploadObservationsById(APIView):
             "docker_image_name_tag"
         )
         endpoint_url = request_serializer.validated_data.get("endpoint_url")
+        kubernetes_cluster = request_serializer.validated_data.get("kubernetes_cluster")
 
         file_upload_parameters = FileUploadParameters(
             product=product,
@@ -223,6 +236,7 @@ class FileUploadObservationsById(APIView):
             service=service,
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
+            kubernetes_cluster=kubernetes_cluster,
         )
 
         (
@@ -278,6 +292,7 @@ class FileUploadObservationsByName(APIView):
             "docker_image_name_tag"
         )
         endpoint_url = request_serializer.validated_data.get("endpoint_url")
+        kubernetes_cluster = request_serializer.validated_data.get("kubernetes_cluster")
 
         file_upload_parameters = FileUploadParameters(
             product=product,
@@ -287,6 +302,7 @@ class FileUploadObservationsByName(APIView):
             service=service,
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
+            kubernetes_cluster=kubernetes_cluster,
         )
 
         (

@@ -93,6 +93,7 @@ class TestSetPotentialDuplicate(BaseTestCase):
                 service="",
                 docker_image_name_tag="",
                 endpoint_url="",
+                kubernetes_cluster="",
             )
             file_upload_observations(file_upload_parameters)
 

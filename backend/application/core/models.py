@@ -113,6 +113,7 @@ class Product(Model):
     has_component = BooleanField(default=False)
     has_docker_image = BooleanField(default=False)
     has_endpoint = BooleanField(default=False)
+    has_kubernetes_resource = BooleanField(default=False)
     has_source = BooleanField(default=False)
     has_potential_duplicates = BooleanField(default=False)
 
@@ -444,6 +445,11 @@ class Observation(Model):
     origin_cloud_resource = CharField(max_length=255, blank=True)
     origin_cloud_resource_type = CharField(max_length=255, blank=True)
     origin_cloud_qualified_resource = CharField(max_length=255, blank=True)
+    origin_kubernetes_cluster = CharField(max_length=255, blank=True)
+    origin_kubernetes_namespace = CharField(max_length=255, blank=True)
+    origin_kubernetes_resource_type = CharField(max_length=255, blank=True)
+    origin_kubernetes_resource_name = CharField(max_length=255, blank=True)
+    origin_kubernetes_qualified_resource = CharField(max_length=255, blank=True)
     cvss3_score = DecimalField(max_digits=3, decimal_places=1, null=True)
     cvss3_vector = CharField(max_length=255, blank=True)
     cwe = IntegerField(
@@ -526,6 +532,7 @@ class Observation(Model):
             Index(fields=["origin_endpoint_hostname"]),
             Index(fields=["origin_source_file"]),
             Index(fields=["origin_cloud_qualified_resource"]),
+            Index(fields=["origin_kubernetes_qualified_resource"]),
             Index(fields=["last_observation_log"]),
             Index(fields=["epss_score"]),
             Index(fields=["scanner"]),

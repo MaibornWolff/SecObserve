@@ -287,6 +287,42 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
                                         validate={validate_0_999999}
                                     />
                                 </Stack>
+                                <Stack direction="row" spacing={2}>
+                                    <TextInputWide
+                                        source="origin_cloud_resource_type"
+                                        label="Cloud resource type"
+                                        validate={validate_255}
+                                    />
+                                    <TextInputWide
+                                        source="origin_cloud_resource"
+                                        label="Cloud resource"
+                                        validate={validate_255}
+                                    />
+                                </Stack>
+                                <Stack direction="row" spacing={2}>
+                                    <TextInputWide
+                                        source="origin_kubernetes_cluster"
+                                        label="Kubernetes cluster"
+                                        validate={validate_255}
+                                    />
+                                    <TextInputWide
+                                        source="origin_kubernetes_namespace"
+                                        label="Namespace"
+                                        validate={validate_255}
+                                    />
+                                </Stack>
+                                <Stack direction="row" spacing={2}>
+                                    <TextInputWide
+                                        source="origin_kubernetes_resource_type"
+                                        label="Kubernetes resource type"
+                                        validate={validate_255}
+                                    />
+                                    <TextInputWide
+                                        source="origin_kubernetes_resource_name"
+                                        label="Kubernetes resource name"
+                                        validate={validate_255}
+                                    />
+                                </Stack>
                             </Stack>
                         </SimpleForm>
                     </CreateBase>
