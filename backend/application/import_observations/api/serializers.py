@@ -30,6 +30,7 @@ class FileUploadObservationsByIdRequestSerializer(Serializer):
     service = CharField(max_length=255, required=False)
     docker_image_name_tag = CharField(max_length=513, required=False)
     endpoint_url = CharField(max_length=2048, required=False)
+    kubernetes_cluster = CharField(max_length=255, required=False)
 
 
 class FileUploadObservationsByNameRequestSerializer(Serializer):
@@ -40,6 +41,7 @@ class FileUploadObservationsByNameRequestSerializer(Serializer):
     service = CharField(max_length=255, required=False)
     docker_image_name_tag = CharField(max_length=513, required=False)
     endpoint_url = CharField(max_length=2048, required=False)
+    kubernetes_cluster = CharField(max_length=255, required=False)
 
 
 class ApiImportObservationsByIdRequestSerializer(Serializer):
@@ -48,6 +50,7 @@ class ApiImportObservationsByIdRequestSerializer(Serializer):
     service = CharField(max_length=255, required=False, allow_blank=True)
     docker_image_name_tag = CharField(max_length=513, required=False, allow_blank=True)
     endpoint_url = CharField(max_length=2048, required=False, allow_blank=True)
+    kubernetes_cluster = CharField(max_length=255, required=False)
 
 
 class ApiImportObservationsByNameRequestSerializer(Serializer):
@@ -56,6 +59,7 @@ class ApiImportObservationsByNameRequestSerializer(Serializer):
     service = CharField(max_length=255, required=False)
     docker_image_name_tag = CharField(max_length=513, required=False)
     endpoint_url = CharField(max_length=2048, required=False)
+    kubernetes_cluster = CharField(max_length=255, required=False)
 
 
 class ImportObservationsResponseSerializer(Serializer):
