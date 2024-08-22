@@ -289,6 +289,18 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
                                 </Stack>
                                 <Stack direction="row" spacing={2}>
                                     <TextInputWide
+                                        source="origin_cloud_provider"
+                                        label="Cloud provider"
+                                        validate={validate_255}
+                                    />
+                                    <TextInputWide
+                                        source="origin_cloud_account_subscription_project"
+                                        label="Account / Subscription / Project"
+                                        validate={validate_255}
+                                    />
+                                </Stack>
+                                <Stack direction="row" spacing={2}>
+                                    <TextInputWide
                                         source="origin_cloud_resource_type"
                                         label="Cloud resource type"
                                         validate={validate_255}
