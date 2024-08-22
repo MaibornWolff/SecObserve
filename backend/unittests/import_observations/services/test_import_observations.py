@@ -166,7 +166,9 @@ class TestImportObservations(BaseTestCase):
         else:
             self.assertEqual(observations[0].origin_endpoint_url, "")
         if kubernetes_cluster:
-            self.assertEqual(observations[0].origin_kubernetes_cluster, kubernetes_cluster)
+            self.assertEqual(
+                observations[0].origin_kubernetes_cluster, kubernetes_cluster
+            )
         else:
             self.assertEqual(observations[0].origin_kubernetes_cluster, "")
 

@@ -117,5 +117,9 @@ class TestTrivyOperatorPrometheusParser(TestCase):
                 observations[0].description,
             )
             self.assertEqual("default", observations[0].origin_kubernetes_namespace)
-            self.assertEqual("StatefulSet", observations[0].origin_kubernetes_resource_type)
-            self.assertEqual("recource_name", observations[0].origin_kubernetes_resource_name)
+            self.assertEqual(
+                "StatefulSet", observations[0].origin_kubernetes_resource_type
+            )
+            self.assertEqual(
+                "recource_name", observations[0].origin_kubernetes_resource_name
+            )
