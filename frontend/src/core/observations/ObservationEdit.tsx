@@ -163,7 +163,18 @@ const ObservationEditForm = () => {
                 Origins
             </Typography>
             <Stack>
-                <TextInputWide source="origin_service_name" label="Service name" validate={validate_255} />
+                <WithRecord
+                    render={(service) => (
+                        <ReferenceInput
+                            source="origin_service"
+                            reference="services"
+                            sort={{ field: "name", order: "ASC" }}
+                            filter={{ product: service.product_data.id }}
+                        >
+                            <AutocompleteInputWide optionText="name" label="Service" />
+                        </ReferenceInput>
+                    )}
+                />
                 <Stack direction="row" spacing={2}>
                     <TextInputWide source="origin_component_name" label="Component name" validate={validate_255} />
                     <TextInput source="origin_component_version" label="Component version" validate={validate_255} />
@@ -217,9 +228,6 @@ const ObservationEdit = () => {
         }
         if (!data.recommendation) {
             data.recommendation = "";
-        }
-        if (!data.origin_service_name) {
-            data.origin_service_name = "";
         }
         if (!data.origin_component_name) {
             data.origin_component_name = "";

@@ -229,11 +229,14 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
 
                             <Typography variant="h6">Origins</Typography>
                             <Stack>
-                                <TextInputWide
-                                    source="origin_service_name"
-                                    label="Service name"
-                                    validate={validate_255}
-                                />
+                                <ReferenceInput
+                                    source="origin_service"
+                                    reference="services"
+                                    sort={{ field: "name", order: "ASC" }}
+                                    filter={{ product: id }}
+                                >
+                                    <AutocompleteInputWide optionText="name" label="Service" />
+                                </ReferenceInput>
                                 <Stack direction="row" spacing={2}>
                                     <TextInputWide
                                         source="origin_component_name"
