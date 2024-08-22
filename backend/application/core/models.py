@@ -23,6 +23,7 @@ from application.access_control.models import Authorization_Group, User
 from application.core.services.observation import (
     get_identity_hash,
     normalize_observation_fields,
+    set_product_flags,
 )
 from application.core.types import Assessment_Status, Severity, Status, VexJustification
 from application.issue_tracker.types import Issue_Tracker
@@ -108,6 +109,12 @@ class Product(Model):
         validators=[MinValueValidator(0), MaxValueValidator(999999)],
         help_text="Days before risk acceptance expires, 0 means no expiry",
     )
+    has_cloud_resource = BooleanField(default=False)
+    has_component = BooleanField(default=False)
+    has_docker_image = BooleanField(default=False)
+    has_endpoint = BooleanField(default=False)
+    has_source = BooleanField(default=False)
+    has_potential_duplicates = BooleanField(default=False)
 
     class Meta:
         indexes = [
@@ -536,6 +543,7 @@ class Observation(Model):
     def save(self, *args, **kwargs) -> None:
         normalize_observation_fields(self)
         self.identity_hash = get_identity_hash(self)
+        set_product_flags(self)
 
         return super().save(*args, **kwargs)
 

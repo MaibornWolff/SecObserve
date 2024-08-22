@@ -409,3 +409,46 @@ def clip_fields(model: str, my_object) -> None:
                             field.name,
                             value[: max_length - 9] + "\n```\n\n...",
                         )
+
+
+def set_product_flags(observation) -> None:
+    product_changed = False
+
+    if (
+        observation.origin_cloud_qualified_resource
+        and not observation.product.has_cloud_resource
+    ):
+        observation.product.has_cloud_resource = True
+        product_changed = True
+
+    if (
+        observation.origin_component_name_version
+        and not observation.product.has_component
+    ):
+        observation.product.has_component = True
+        product_changed = True
+
+    if (
+        observation.origin_docker_image_name_tag
+        and not observation.product.has_docker_image
+    ):
+        observation.product.has_docker_image = True
+        product_changed = True
+
+    if observation.origin_endpoint_url and not observation.product.has_endpoint:
+        observation.product.has_endpoint = True
+        product_changed = True
+
+    if observation.origin_source_file and not observation.product.has_source:
+        observation.product.has_source = True
+        product_changed = True
+
+    if (
+        observation.has_potential_duplicates
+        and not observation.product.has_potential_duplicates
+    ):
+        observation.product.has_potential_duplicates = True
+        product_changed = True
+
+    if product_changed:
+        observation.product.save()

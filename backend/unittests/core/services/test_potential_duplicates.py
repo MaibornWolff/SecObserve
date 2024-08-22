@@ -8,7 +8,7 @@ from application.core.services.potential_duplicates import (
 )
 from application.core.types import Status
 from application.import_observations.management.commands.register_parsers import Command
-from application.import_observations.models import Api_Configuration, Parser
+from application.import_observations.models import Parser
 from application.import_observations.services.import_observations import (
     FileUploadParameters,
     file_upload_observations,
@@ -18,7 +18,9 @@ from unittests.base_test_case import BaseTestCase
 
 class TestSetPotentialDuplicate(BaseTestCase):
     def setUp(self):
+
         self.observation = Observation()
+        self.observation.product = Product()
         self.observation.current_status = Status.STATUS_OPEN
         self.observation.has_potential_duplicates = True
         super().setUp()

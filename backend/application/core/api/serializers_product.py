@@ -185,6 +185,7 @@ class ProductSerializer(ProductCoreSerializer):
     product_rule_approvals = SerializerMethodField()
     risk_acceptance_expiry_date_calculated = SerializerMethodField()
     product_group_new_observations_in_review = SerializerMethodField()
+    has_branches = SerializerMethodField()
 
     class Meta:
         model = Product
@@ -270,6 +271,9 @@ class ProductSerializer(ProductCoreSerializer):
         if not obj.product_group:
             return False
         return obj.product_group.new_observations_in_review
+
+    def get_has_branches(self, obj: Product) -> bool:
+        return Branch.objects.filter(product=obj).exists()
 
     def validate(self, attrs: dict):  # pylint: disable=too-many-branches
         # There are quite a lot of branches, but at least they are not nested too much
