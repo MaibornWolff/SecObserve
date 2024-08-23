@@ -163,7 +163,18 @@ const ObservationEditForm = () => {
                 Origins
             </Typography>
             <Stack>
-                <TextInputWide source="origin_service_name" label="Service name" validate={validate_255} />
+                <WithRecord
+                    render={(service) => (
+                        <ReferenceInput
+                            source="origin_service"
+                            reference="services"
+                            sort={{ field: "name", order: "ASC" }}
+                            filter={{ product: service.product_data.id }}
+                        >
+                            <AutocompleteInputWide optionText="name" label="Service" />
+                        </ReferenceInput>
+                    )}
+                />
                 <Stack direction="row" spacing={2}>
                     <TextInputWide source="origin_component_name" label="Component name" validate={validate_255} />
                     <TextInput source="origin_component_version" label="Component version" validate={validate_255} />
@@ -199,8 +210,32 @@ const ObservationEditForm = () => {
                     />
                 </Stack>
                 <Stack direction="row" spacing={2}>
+                    <TextInputWide
+                        source="origin_cloud_resource_type"
+                        label="Cloud resource type"
+                        validate={validate_255}
+                    />
                     <TextInputWide source="origin_cloud_resource" label="Cloud resource" validate={validate_255} />
-                    <TextInputWide source="origin_cloud_resource_type" label="Resource type" validate={validate_255} />
+                </Stack>
+                <Stack direction="row" spacing={2}>
+                    <TextInputWide
+                        source="origin_kubernetes_cluster"
+                        label="Kubernetes cluster"
+                        validate={validate_255}
+                    />
+                    <TextInputWide source="origin_kubernetes_namespace" label="Namespace" validate={validate_255} />
+                </Stack>
+                <Stack direction="row" spacing={2}>
+                    <TextInputWide
+                        source="origin_kubernetes_resource_type"
+                        label="Kubernetes resource type"
+                        validate={validate_255}
+                    />
+                    <TextInputWide
+                        source="origin_kubernetes_resource_name"
+                        label="Kubernetes resource name"
+                        validate={validate_255}
+                    />
                 </Stack>
             </Stack>
         </SimpleForm>
@@ -217,9 +252,6 @@ const ObservationEdit = () => {
         }
         if (!data.recommendation) {
             data.recommendation = "";
-        }
-        if (!data.origin_service_name) {
-            data.origin_service_name = "";
         }
         if (!data.origin_component_name) {
             data.origin_component_name = "";
@@ -251,8 +283,17 @@ const ObservationEdit = () => {
         if (!data.origin_cloud_resource_type) {
             data.origin_cloud_resource_type = "";
         }
-        if (!data.origin_cloud_provider) {
-            data.origin_cloud_provider = "";
+        if (!data.origin_kubernetes_cluster) {
+            data.origin_kubernetes_cluster = "";
+        }
+        if (!data.origin_kubernetes_namespace) {
+            data.origin_kubernetes_namespace = "";
+        }
+        if (!data.origin_kubernetes_resource_type) {
+            data.origin_kubernetes_resource_type = "";
+        }
+        if (!data.origin_kubernetes_resource_name) {
+            data.origin_kubernetes_resource_name = "";
         }
         if (!justificationIsEnabledForStatus(data.parser_status) || !data.parser_vex_justification) {
             data.parser_vex_justification = "";

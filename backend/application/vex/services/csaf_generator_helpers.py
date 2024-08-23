@@ -6,6 +6,7 @@ from application.vex.types import CSAF_Status
 
 VULNERABILITY_ECOSYSTEM = {
     "GHSA": "GitHub Security Advisory",
+    "DLA": "Debian Security Bug Tracker ",
     "OSV": "Open Source Vulnerability Database",
     "PYSEC": "Python Packaging Advisory Database",
     "SNYK": "Snyk",

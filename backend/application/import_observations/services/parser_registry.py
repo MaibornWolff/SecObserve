@@ -2,13 +2,13 @@ import importlib
 import logging
 from typing import Optional, Type
 
-from application.core.models import Parser
-from application.core.queries.parser import get_parser_by_name
+from application.import_observations.models import Parser
 from application.import_observations.parsers.base_parser import (
     BaseAPIParser,
     BaseFileParser,
     BaseParser,
 )
+from application.import_observations.queries.parser import get_parser_by_name
 from application.import_observations.types import Parser_Source, Parser_Type
 
 logger = logging.getLogger("secobserve.import_observations")

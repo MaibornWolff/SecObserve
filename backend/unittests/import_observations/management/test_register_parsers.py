@@ -1,8 +1,8 @@
 from unittest import TestCase
 
-from application.core.models import Observation, Parser
+from application.core.models import Observation
 from application.import_observations.management.commands.register_parsers import Command
-from application.import_observations.models import Api_Configuration
+from application.import_observations.models import Api_Configuration, Parser
 
 
 class TestRegisterParsers(TestCase):
@@ -17,7 +17,7 @@ class TestRegisterParsers(TestCase):
         command.handle()
 
         parsers = Parser.objects.all().order_by("name")
-        self.assertEqual(10, len(parsers))
+        self.assertEqual(11, len(parsers))
 
         parser = parsers[0]
         self.assertEqual("Azure Defender", parser.name)
@@ -39,3 +39,10 @@ class TestRegisterParsers(TestCase):
         self.assertEqual("Manual", parser.source)
         self.assertEqual("", parser.module_name)
         self.assertEqual("", parser.class_name)
+
+        parser = parsers[9]
+        self.assertEqual("Trivy Operator Prometheus", parser.name)
+        self.assertEqual("Other", parser.type)
+        self.assertEqual("API", parser.source)
+        self.assertEqual("trivy_operator_prometheus", parser.module_name)
+        self.assertEqual("TrivyOperatorPrometheus", parser.class_name)

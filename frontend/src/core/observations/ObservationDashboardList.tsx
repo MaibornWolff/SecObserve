@@ -7,6 +7,7 @@ import { humanReadableDate } from "../../commons/functions";
 import { getSettingListSize } from "../../commons/user_settings/functions";
 import { OBSERVATION_STATUS_OPEN } from "../types";
 import { Observation } from "../types";
+import ObservationExpand from "./ObservationExpand";
 import { IDENTIFIER_OBSERVATION_DASHBOARD_LIST, setListIdentifier } from "./functions";
 
 const ShowObservations = (id: any) => {
@@ -46,6 +47,8 @@ const ObservationDashboardList = () => {
                         rowClick={ShowObservations}
                         bulkActionButtons={false}
                         resource="observations"
+                        expand={<ObservationExpand />}
+                        expandSingle
                     >
                         <TextField source="product_data.name" label="Product" />
                         <TextField source="title" sx={{ wordBreak: "break-word" }} />

@@ -23,9 +23,9 @@ from application.access_control.models import Authorization_Group, User
 from application.core.services.observation import (
     get_identity_hash,
     normalize_observation_fields,
+    set_product_flags,
 )
 from application.core.types import Assessment_Status, Severity, Status, VexJustification
-from application.import_observations.types import Parser_Source, Parser_Type
 from application.issue_tracker.types import Issue_Tracker
 
 
@@ -109,6 +109,13 @@ class Product(Model):
         validators=[MinValueValidator(0), MaxValueValidator(999999)],
         help_text="Days before risk acceptance expires, 0 means no expiry",
     )
+    has_cloud_resource = BooleanField(default=False)
+    has_component = BooleanField(default=False)
+    has_docker_image = BooleanField(default=False)
+    has_endpoint = BooleanField(default=False)
+    has_kubernetes_resource = BooleanField(default=False)
+    has_source = BooleanField(default=False)
+    has_potential_duplicates = BooleanField(default=False)
 
     class Meta:
         indexes = [
@@ -373,26 +380,10 @@ class Product_Authorization_Group_Member(Model):
         )
 
 
-class Parser(Model):
-    name = CharField(max_length=255, unique=True)
-    type = CharField(max_length=16, choices=Parser_Type.TYPE_CHOICES)
-    source = CharField(max_length=16, choices=Parser_Source.SOURCE_CHOICES)
-    module_name = CharField(max_length=255, blank=True)
-    class_name = CharField(max_length=255, blank=True)
-
-    class Meta:
-        indexes = [
-            Index(fields=["name"]),
-        ]
-
-    def __str__(self):
-        return self.name
-
-
 class Observation(Model):
     product = ForeignKey(Product, on_delete=PROTECT)
     branch = ForeignKey(Branch, on_delete=CASCADE, null=True)
-    parser = ForeignKey(Parser, on_delete=PROTECT)
+    parser = ForeignKey("import_observations.Parser", on_delete=PROTECT)
     title = CharField(max_length=255)
     description = TextField(max_length=2048, blank=True)
     recommendation = TextField(max_length=2048, blank=True)
@@ -422,6 +413,7 @@ class Observation(Model):
     origin_component_version = CharField(max_length=255, blank=True)
     origin_component_name_version = CharField(max_length=513, blank=True)
     origin_component_purl = CharField(max_length=255, blank=True)
+    origin_component_purl_type = CharField(max_length=16, blank=True)
     origin_component_cpe = CharField(max_length=255, blank=True)
     origin_component_dependencies = TextField(max_length=4096, blank=True)
     origin_docker_image_name = CharField(max_length=255, blank=True)
@@ -453,6 +445,11 @@ class Observation(Model):
     origin_cloud_resource = CharField(max_length=255, blank=True)
     origin_cloud_resource_type = CharField(max_length=255, blank=True)
     origin_cloud_qualified_resource = CharField(max_length=255, blank=True)
+    origin_kubernetes_cluster = CharField(max_length=255, blank=True)
+    origin_kubernetes_namespace = CharField(max_length=255, blank=True)
+    origin_kubernetes_resource_type = CharField(max_length=255, blank=True)
+    origin_kubernetes_resource_name = CharField(max_length=255, blank=True)
+    origin_kubernetes_qualified_resource = CharField(max_length=255, blank=True)
     cvss3_score = DecimalField(max_digits=3, decimal_places=1, null=True)
     cvss3_vector = CharField(max_length=255, blank=True)
     cwe = IntegerField(
@@ -535,6 +532,7 @@ class Observation(Model):
             Index(fields=["origin_endpoint_hostname"]),
             Index(fields=["origin_source_file"]),
             Index(fields=["origin_cloud_qualified_resource"]),
+            Index(fields=["origin_kubernetes_qualified_resource"]),
             Index(fields=["last_observation_log"]),
             Index(fields=["epss_score"]),
             Index(fields=["scanner"]),
@@ -552,6 +550,7 @@ class Observation(Model):
     def save(self, *args, **kwargs) -> None:
         normalize_observation_fields(self)
         self.identity_hash = get_identity_hash(self)
+        set_product_flags(self)
 
         return super().save(*args, **kwargs)
 

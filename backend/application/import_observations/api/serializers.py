@@ -14,6 +14,7 @@ from application.access_control.services.roles_permissions import Permissions
 from application.core.api.serializers_product import NestedProductSerializer
 from application.import_observations.models import (
     Api_Configuration,
+    Parser,
     Vulnerability_Check,
 )
 from application.import_observations.services.import_observations import (
@@ -29,6 +30,7 @@ class FileUploadObservationsByIdRequestSerializer(Serializer):
     service = CharField(max_length=255, required=False)
     docker_image_name_tag = CharField(max_length=513, required=False)
     endpoint_url = CharField(max_length=2048, required=False)
+    kubernetes_cluster = CharField(max_length=255, required=False)
 
 
 class FileUploadObservationsByNameRequestSerializer(Serializer):
@@ -39,6 +41,7 @@ class FileUploadObservationsByNameRequestSerializer(Serializer):
     service = CharField(max_length=255, required=False)
     docker_image_name_tag = CharField(max_length=513, required=False)
     endpoint_url = CharField(max_length=2048, required=False)
+    kubernetes_cluster = CharField(max_length=255, required=False)
 
 
 class ApiImportObservationsByIdRequestSerializer(Serializer):
@@ -47,6 +50,7 @@ class ApiImportObservationsByIdRequestSerializer(Serializer):
     service = CharField(max_length=255, required=False, allow_blank=True)
     docker_image_name_tag = CharField(max_length=513, required=False, allow_blank=True)
     endpoint_url = CharField(max_length=2048, required=False, allow_blank=True)
+    kubernetes_cluster = CharField(max_length=255, required=False)
 
 
 class ApiImportObservationsByNameRequestSerializer(Serializer):
@@ -55,6 +59,7 @@ class ApiImportObservationsByNameRequestSerializer(Serializer):
     service = CharField(max_length=255, required=False)
     docker_image_name_tag = CharField(max_length=513, required=False)
     endpoint_url = CharField(max_length=2048, required=False)
+    kubernetes_cluster = CharField(max_length=255, required=False)
 
 
 class ImportObservationsResponseSerializer(Serializer):
@@ -91,6 +96,17 @@ class ApiConfigurationSerializer(ModelSerializer):
                 base_url = attrs.get("base_url", self.instance.base_url)
                 project_key = attrs.get("project_key", self.instance.project_key)
                 api_key = attrs.get("api_key", self.instance.api_key)
+                query = attrs.get("query", self.instance.query)
+                basic_auth_enabled = attrs.get(
+                    "basic_auth_enabled", self.instance.basic_auth_enabled
+                )
+                basic_auth_username = attrs.get(
+                    "basic_auth_username", self.instance.basic_auth_username
+                )
+                basic_auth_password = attrs.get(
+                    "basic_auth_password", self.instance.basic_auth_password
+                )
+                verify_ssl = attrs.get("verify_ssl", self.instance.verify_ssl)
             else:
                 product = attrs.get("product")
                 name = attrs.get("name")
@@ -98,6 +114,11 @@ class ApiConfigurationSerializer(ModelSerializer):
                 base_url = attrs.get("base_url")
                 project_key = attrs.get("project_key")
                 api_key = attrs.get("api_key")
+                query = attrs.get("query")
+                basic_auth_enabled = attrs.get("basic_auth_enabled")
+                basic_auth_username = attrs.get("basic_auth_username")
+                basic_auth_password = attrs.get("basic_auth_password")
+                verify_ssl = attrs.get("verify_ssl")
 
             api_configuration = Api_Configuration(
                 product=product,
@@ -106,6 +127,11 @@ class ApiConfigurationSerializer(ModelSerializer):
                 base_url=base_url,
                 project_key=project_key,
                 api_key=api_key,
+                query=query,
+                basic_auth_enabled=basic_auth_enabled,
+                basic_auth_username=basic_auth_username,
+                basic_auth_password=basic_auth_password,
+                verify_ssl=verify_ssl,
             )
             valid, errors = api_check_connection(api_configuration)
             if not valid:
@@ -141,4 +167,10 @@ class VulnerabilityCheckSerializer(ModelSerializer):
 
     class Meta:
         model = Vulnerability_Check
+        fields = "__all__"
+
+
+class ParserSerializer(ModelSerializer):
+    class Meta:
+        model = Parser
         fields = "__all__"

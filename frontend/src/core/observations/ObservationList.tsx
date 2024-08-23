@@ -4,13 +4,14 @@ import {
     AutocompleteInput,
     BooleanField,
     ChipField,
-    Datagrid,
+    DatagridConfigurable,
     FilterButton,
     FunctionField,
     List,
     NullableBooleanInput,
     NumberField,
     ReferenceInput,
+    SelectColumnsButton,
     TextField,
     TextInput,
     TopToolbar,
@@ -29,8 +30,10 @@ import {
     OBSERVATION_STATUS_CHOICES,
     OBSERVATION_STATUS_OPEN,
     Observation,
+    PURL_TYPE_CHOICES,
 } from "../types";
 import ObservationBulkAssessment from "./ObservationBulkAssessment";
+import ObservationExpand from "./ObservationExpand";
 import { IDENTIFIER_OBSERVATION_LIST, setListIdentifier } from "./functions";
 
 const listFilters = [
@@ -53,15 +56,24 @@ const listFilters = [
     <TextInput source="origin_docker_image_name_tag_short" label="Container" />,
     <TextInput source="origin_endpoint_hostname" label="Host" />,
     <TextInput source="origin_source_file" label="Source" />,
-    <TextInput source="origin_cloud_qualified_resource" label="Resource" />,
+    <TextInput source="origin_cloud_qualified_resource" label="Cloud resource" />,
+    <TextInput source="origin_kubernetes_qualified_resource" label="Kubernetes resource" />,
     <TextInput source="scanner" alwaysOn />,
     <AutocompleteInputMedium source="age" choices={AGE_CHOICES} alwaysOn />,
     <NullableBooleanInput source="has_potential_duplicates" label="Duplicates" alwaysOn />,
+    <NullableBooleanInput source="has_pending_assessment" label="Pending assessment" alwaysOn />,
+    <AutocompleteInput
+        source="origin_component_purl_type"
+        label="Component type"
+        choices={PURL_TYPE_CHOICES}
+        alwaysOn
+    />,
 ];
 
 const ListActions = () => (
     <TopToolbar>
-        <Stack spacing={0.5} alignItems="flex-end">
+        <Stack spacing={0.5} alignItems="flex-start">
+            <SelectColumnsButton />
             <FilterButton />
         </Stack>
     </TopToolbar>
@@ -90,7 +102,13 @@ const ObservationList = () => {
                 actions={<ListActions />}
                 sx={{ marginTop: 1 }}
             >
-                <Datagrid size={getSettingListSize()} rowClick="show" bulkActionButtons={<BulkActionButtons />}>
+                <DatagridConfigurable
+                    size={getSettingListSize()}
+                    rowClick="show"
+                    bulkActionButtons={<BulkActionButtons />}
+                    expand={<ObservationExpand />}
+                    expandSingle
+                >
                     <TextField source="product_data.name" label="Product" />
                     <TextField source="product_data.product_group_name" label="Group" />
                     <TextField source="branch_name" label="Branch / Version" />
@@ -113,10 +131,14 @@ const ObservationList = () => {
                     <TextField source="origin_source_file" label="Source" sx={{ wordBreak: "break-word" }} />
                     <TextField
                         source="origin_cloud_qualified_resource"
-                        label="Resource"
+                        label="Cloud res."
                         sx={{ wordBreak: "break-word" }}
                     />
-                    ,
+                    <TextField
+                        source="origin_kubernetes_qualified_resource"
+                        label="Kube. res."
+                        sx={{ wordBreak: "break-word" }}
+                    />
                     <TextField source="scanner_name" label="Scanner" />
                     <FunctionField<Observation>
                         label="Age"
@@ -124,7 +146,7 @@ const ObservationList = () => {
                         render={(record) => (record ? humanReadableDate(record.last_observation_log) : "")}
                     />
                     <BooleanField source="has_potential_duplicates" label="Dupl." />
-                </Datagrid>
+                </DatagridConfigurable>
             </List>
         </Fragment>
     );

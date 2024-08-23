@@ -35,7 +35,7 @@ services:
       - traefik
 
   frontend:
-    image: maibornwolff/secobserve-frontend:1.16.2
+    image: maibornwolff/secobserve-frontend:1.17.0
     container_name: "prod_secobserve_frontend"
     labels:
       - "traefik.enable=true"
@@ -49,11 +49,12 @@ services:
       OIDC_CLIENT_ID: ${SO_OIDC_CLIENT_ID:-dummy}
       OIDC_REDIRECT_URI: ${SO_OIDC_REDIRECT_URI:-http://secobserve.localhost}
       OIDC_POST_LOGOUT_REDIRECT_URI: ${SO_OIDC_POST_LOGOUT_REDIRECT_URI:-http://secobserve.localhost}
+      OIDC_SCOPE: ${SO_OIDC_SCOPE:-openid profile email}
     networks:
       - traefik
 
   backend:
-    image: maibornwolff/secobserve-backend:1.16.2
+    image: maibornwolff/secobserve-backend:1.17.0
     container_name: "prod_secobserve_backend"
     labels:
       - "traefik.enable=true"
@@ -95,7 +96,7 @@ services:
       - database
 
   postgres:
-    image: postgres:15.7-alpine
+    image: postgres:15.8-alpine
     container_name: "prod_postgres"
     environment:
       POSTGRES_DB: ${SO_POSTGRES_DB:-secobserve}

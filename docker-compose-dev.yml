@@ -1,6 +1,7 @@
 volumes:
   dev_huey_data:
   dev_postgres_data:
+  dev_node_modules:
 
 services:
   frontend:
@@ -12,7 +13,7 @@ services:
       - "3000:3000"
     volumes:
       - ./frontend/:/app
-      - /app/node_modules
+      - dev_node_modules:/app/node_modules
     command : sh -c "npm run start -- --host"
 
   backend:
@@ -49,7 +50,7 @@ services:
     command: /start
 
   postgres:
-    image: postgres:15.7-alpine
+    image: postgres:15.8-alpine
     volumes:
       - dev_postgres_data:/var/lib/postgresql/data
     environment:

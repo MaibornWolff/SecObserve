@@ -16,6 +16,9 @@ jobs:
     permissions:
       contents: write
     steps:
+      - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
+        with:
+          node-version: 20
       -
         name: Checkout
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
@@ -24,21 +27,13 @@ jobs:
       - 
         name: Install programs
         env:
-          CYCLONE_DX_BOM_VERSION: 4.1.2
-          CYCLONE_DX_NPM_VERSION: 1.16.1
-          SBOM_UTILITY_VERSION: 0.15.0
-          PARLAY_VERSION: 0.3.0
-          TRIVY_VERSION: 0.49.1
-          CYCLONE_DX_CLI_VERSION: 0.25.0
+          CDXGEN_VERSION: 10.9.4
+          SBOM_UTILITY_VERSION: 0.16.0
+          CYCLONE_DX_CLI_VERSION: 0.25.1
         run: |
-          sudo apt-get update
-          sudo apt-get install -y python3-pip npm
-          python -m pip install --upgrade cyclonedx-bom=="$CYCLONE_DX_BOM_VERSION"
-          npm install -g @cyclonedx/cyclonedx-npm@"$CYCLONE_DX_NPM_VERSION"
+          npm install -g @cyclonedx/cdxgen@"$CDXGEN_VERSION"
           cd /usr/local/bin
           wget --no-verbose https://github.com/CycloneDX/sbom-utility/releases/download/v"$SBOM_UTILITY_VERSION"/sbom-utility-v"$SBOM_UTILITY_VERSION"-linux-amd64.tar.gz -O - | tar -zxf -
-          wget --no-verbose https://github.com/snyk/parlay/releases/download/v"$PARLAY_VERSION"/parlay_Linux_x86_64.tar.gz -O - | tar -zxf -
-          wget --no-verbose https://github.com/aquasecurity/trivy/releases/download/v"$TRIVY_VERSION"/trivy_"$TRIVY_VERSION"_Linux-64bit.tar.gz -O - | tar -zxf -
           wget --no-verbose https://github.com/CycloneDX/cyclonedx-cli/releases/download/v"$CYCLONE_DX_CLI_VERSION"/cyclonedx-linux-x64
           cp cyclonedx-linux-x64 /usr/local/bin/cyclonedx
           chmod +x /usr/local/bin/cyclonedx
@@ -46,15 +41,18 @@ jobs:
         name: Generate SBOM for backend application
         env:
           VERSION: ${{ github.event.inputs.release }}
+          FETCH_LICENSE: 1
         working-directory: ./sbom
         run: |
+          mv ../backend/poetry_requirements.txt ../backend/poetry_requirements.sic
           sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_backend_application.json
-          cyclonedx-py poetry --only main,prod --output-format json ../backend \
-            | parlay ecosystems enrich - \
-            | sbom-utility trim --keys=externalReferences,properties,vulnerabilities --quiet --input-file - \
+          cdxgen ../backend --type python --required-only --profile license-compliance --no-auto-compositions --output sbom_backend_application.json
+          sbom-utility trim --keys=externalReferences,properties,evidence,authors,lifecycles --quiet --input-file sbom_backend_application.json \
             | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_backend_application.json --quiet --input-file - --output-file sbom_backend_application_"$VERSION".json
           sbom-utility validate --input-file sbom_backend_application_"$VERSION".json
+          rm sbom_backend_application.json
+          mv ../backend/poetry_requirements.sic ../backend/poetry_requirements.txt
       - 
         name: Generate SBOM for frontend application
         env:
@@ -62,12 +60,12 @@ jobs:
         working-directory: ./sbom
         run: |
           sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_frontend_application.json
-          cyclonedx-npm --omit dev --package-lock-only --spec-version 1.5 --output-format JSON ../frontend/package-lock.json \
-            | parlay ecosystems enrich - \
-            | sbom-utility trim --keys=externalReferences,properties,vulnerabilities --quiet --input-file - \
+          cdxgen ../frontend --type npm --no-babel --required-only --profile license-compliance --no-auto-compositions --project-name secobserve --output sbom_frontend_application.json
+          sbom-utility trim --keys=externalReferences,properties,evidence,authors,lifecycles --quiet --input-file sbom_frontend_application.json \
             | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_frontend_application.json --quiet --input-file - --output-file sbom_frontend_application_"$VERSION".json
           sbom-utility validate --input-file sbom_frontend_application_"$VERSION".json
+          rm sbom_frontend_application.json
       - 
         name: Generate SBOM for backend container
         env:
@@ -75,12 +73,12 @@ jobs:
         working-directory: ./sbom
         run: |
           sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_backend_container.json
-          trivy image --vuln-type os --scanners license --format cyclonedx --quiet maibornwolff/secobserve-backend:"$VERSION" \
-            | parlay ecosystems enrich - \
-            | sbom-utility trim --keys=externalReferences,properties,vulnerabilities --quiet --input-file - \
+          cdxgen maibornwolff/secobserve-backend:$VERSION --type container --exclude-type python --exclude-type ruby --profile license-compliance --no-auto-compositions --output sbom_backend_container.json
+          sbom-utility trim --keys=externalReferences,properties,evidence,authors,lifecycles,services --quiet --input-file sbom_backend_container.json \
             | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_backend_container.json --quiet --input-file - --output-file sbom_backend_container_"$VERSION".json
           sbom-utility validate --input-file sbom_backend_container_"$VERSION".json
+          rm sbom_backend_container.json
       - 
         name: Generate SBOM for frontend container
         env:
@@ -88,12 +86,12 @@ jobs:
         working-directory: ./sbom
         run: |
           sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_frontend_container.json
-          trivy image --vuln-type os --scanners license --format cyclonedx --quiet maibornwolff/secobserve-frontend:"$VERSION" \
-            | parlay ecosystems enrich - \
-            | sbom-utility trim --keys=externalReferences,properties,vulnerabilities --quiet --input-file - \
+          cdxgen maibornwolff/secobserve-frontend:$VERSION --type container --exclude-type npm --exclude-type ruby --profile license-compliance --no-auto-compositions --output sbom_frontend_container.json
+          sbom-utility trim --keys=externalReferences,properties,evidence,authors,lifecycles,services --quiet --input-file sbom_frontend_container.json \
             | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_frontend_container.json --quiet --input-file - --output-file sbom_frontend_container_"$VERSION".json
           sbom-utility validate --input-file sbom_frontend_container_"$VERSION".json
+          rm sbom_frontend_container.json
       - 
         name: Merge SBOMs
         env:

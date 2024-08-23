@@ -114,6 +114,7 @@ def get_component_id(observation: Observation) -> str:
 
 VULNERABILITY_URLS = {
     "CVE": "https://nvd.nist.gov/vuln/detail/",
+    "DLA": "https://security-tracker.debian.org/tracker/",
     "GHSA": "https://github.com/advisories/",
     "OSV": "https://osv.dev/vulnerability/",
     "PYSEC": "https://osv.dev/vulnerability/",

@@ -33,26 +33,22 @@ from application.core.models import (
     Evidence,
     Observation,
     Observation_Log,
-    Parser,
     Potential_Duplicate,
     Product,
     Reference,
+    Service,
 )
 from application.core.queries.observation import get_current_observation_log
 from application.core.services.observation_log import create_observation_log
 from application.core.services.security_gate import check_security_gate
 from application.core.types import Assessment_Status, Severity, Status, VexJustification
+from application.import_observations.api.serializers import ParserSerializer
+from application.import_observations.models import Parser
 from application.import_observations.types import Parser_Type
 from application.issue_tracker.services.issue_tracker import (
     issue_tracker_factory,
     push_observation_to_issue_tracker,
 )
-
-
-class ParserSerializer(ModelSerializer):
-    class Meta:
-        model = Parser
-        fields = "__all__"
 
 
 class NestedReferenceSerializer(ModelSerializer):
@@ -245,6 +241,14 @@ class ObservationUpdateSerializer(ModelSerializer):
 
         return branch
 
+    def validate_origin_service(self, service: Service) -> Service:
+        if service and service.product != self.instance.product:
+            raise ValidationError(
+                "Service does not belong to the same product as the observation"
+            )
+
+        return service
+
     def validate_cvss3_vector(self, cvss3_vector: str) -> str:
         return validate_cvss3_vector(cvss3_vector)
 
@@ -259,6 +263,12 @@ class ObservationUpdateSerializer(ModelSerializer):
         instance.origin_docker_image_name = ""
         instance.origin_docker_image_tag = ""
         instance.origin_docker_image_digest = ""
+
+        if validated_data.get("origin_service"):
+            service = Service.objects.get(pk=validated_data["origin_service"].id)
+            validated_data["origin_service_name"] = service.name
+        else:
+            validated_data["origin_service_name"] = ""
 
         observation: Observation = super().update(instance, validated_data)
 
@@ -317,7 +327,7 @@ class ObservationUpdateSerializer(ModelSerializer):
             "origin_docker_image_name",
             "origin_docker_image_tag",
             "origin_endpoint_url",
-            "origin_service_name",
+            "origin_service",
             "origin_source_file",
             "origin_source_line_start",
             "origin_source_line_end",
@@ -325,6 +335,10 @@ class ObservationUpdateSerializer(ModelSerializer):
             "origin_cloud_account_subscription_project",
             "origin_cloud_resource",
             "origin_cloud_resource_type",
+            "origin_kubernetes_cluster",
+            "origin_kubernetes_namespace",
+            "origin_kubernetes_resource_type",
+            "origin_kubernetes_resource_name",
             "vulnerability_id",
             "cvss3_score",
             "cvss3_vector",
@@ -345,6 +359,12 @@ class ObservationCreateSerializer(ModelSerializer):
                     "Branch does not belong to the same product as the observation"
                 )
 
+        if attrs.get("service"):
+            if attrs["service"].product != attrs["product"]:
+                raise ValidationError(
+                    "Service does not belong to the same product as the observation"
+                )
+
         validate_cvss_and_severity(attrs)
 
         return super().validate(attrs)
@@ -353,6 +373,12 @@ class ObservationCreateSerializer(ModelSerializer):
         return validate_cvss3_vector(cvss3_vector)
 
     def create(self, validated_data):
+        if validated_data.get("origin_service"):
+            service = Service.objects.get(pk=validated_data["origin_service"].id)
+            validated_data["origin_service_name"] = service.name
+        else:
+            validated_data["origin_service_name"] = ""
+
         observation: Observation = super().create(validated_data)
 
         create_observation_log(
@@ -395,7 +421,7 @@ class ObservationCreateSerializer(ModelSerializer):
             "origin_docker_image_name",
             "origin_docker_image_tag",
             "origin_endpoint_url",
-            "origin_service_name",
+            "origin_service",
             "origin_source_file",
             "origin_source_line_start",
             "origin_source_line_end",
@@ -403,6 +429,10 @@ class ObservationCreateSerializer(ModelSerializer):
             "origin_cloud_account_subscription_project",
             "origin_cloud_resource",
             "origin_cloud_resource_type",
+            "origin_kubernetes_cluster",
+            "origin_kubernetes_namespace",
+            "origin_kubernetes_resource_type",
+            "origin_kubernetes_resource_name",
             "vulnerability_id",
             "cvss3_score",
             "cvss3_vector",

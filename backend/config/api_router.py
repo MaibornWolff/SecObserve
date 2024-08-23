@@ -12,7 +12,6 @@ from application.core.api.views import (
     EvidenceViewSet,
     ObservationLogViewSet,
     ObservationViewSet,
-    ParserViewSet,
     PotentialDuplicateViewSet,
     ProductAuthorizationGroupMemberViewSet,
     ProductGroupViewSet,
@@ -22,6 +21,7 @@ from application.core.api.views import (
 )
 from application.import_observations.api.views import (
     ApiConfigurationViewSet,
+    ParserViewSet,
     VulnerabilityCheckViewSet,
 )
 from application.rules.api.views import GeneralRuleViewSet, ProductRuleViewSet

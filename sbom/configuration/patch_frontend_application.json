@@ -5,7 +5,7 @@
         "value": "SecObserve Frontend Application"
     },
     {
-        "op": "replace",
+        "op": "add",
         "path": "/metadata/component/description",
         "value": "Frontend application of SecObserve, the open source vulnerability management system for software development and cloud environments."
     },
@@ -18,5 +18,20 @@
         "op": "replace",
         "path": "/metadata/component/purl",
         "value": "pkg:github/MaibornWolff/SecObserve@vREPLACE_VERSION#frontend"
+    },
+    {
+        "op": "add",
+        "path": "/metadata/component/licenses",
+        "value": [
+            {
+                "license": {
+                    "id": "BSD-3-Clause"
+                }
+            }
+        ]
+    },
+    {
+        "op": "remove",
+        "path": "/metadata/component/components"
     }
 ]

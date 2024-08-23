@@ -1,0 +1,70 @@
+{
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": [
+        {
+          "metric": {
+            "__name__": "trivy_vulnerability_id",
+            "container": "trivy-operator",
+            "container_name": "container1",
+            "endpoint": "metrics",
+            "fixed_version": "0.1.0",
+            "image_digest": "sha256:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "image_registry": "registry.io",
+            "image_repository": "namespace/image",
+            "image_tag": "v0.26.0",
+            "installed_version": "v0.10.0",
+            "instance": "192.168.0.1:80",
+            "job": "trivy-operator",
+            "last_modified_date": "2024-01-01T00:00:00Z",
+            "name": "statefulset-5d9699c585",
+            "namespace": "default",
+            "pod": "pod-123456789-xxxxx",
+            "published_date": "2024-01-01T00:00:00Z",
+            "resource": "recoure.org/x/net",
+            "resource_kind": "StatefulSet",
+            "resource_name": "recource_name",
+            "service": "trivy-operator",
+            "severity": "Medium",
+            "vuln_id": "CVE-2023-1111",
+            "vuln_score": "6.1",
+            "vuln_title": "very vulnerable"
+          },
+          "value": [123456789.123, "1"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "trivy_vulnerability_id",
+            "container": "trivy-operator",
+            "container_name": "container2",
+            "endpoint": "metrics",
+            "fixed_version": "0.2.0",
+            "image_digest": "sha256:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "image_registry": "registry.io",
+            "image_repository": "namespace/image",
+            "image_tag": "v0.74.0",
+            "installed_version": "v0.17.0",
+            "instance": "192.168.0.2:80",
+            "job": "trivy-operator",
+            "last_modified_date": "2024-01-01T00:00:00Z",
+            "name": "statefulset-5d9699c585",
+            "namespace": "default",
+            "pod": "pod-123456789-xxxxx",
+            "published_date": "2024-01-01T00:00:00Z",
+            "resource": "recoure.org/x/net",
+            "resource_kind": "StatefulSet",
+            "resource_name": "recource_name",
+            "service": "trivy-operator",
+            "severity": "High",
+            "vuln_id": "CVE-2023-2222",
+            "vuln_score": "7.5",
+            "vuln_title": "very vulnerable"
+          },
+          "value": [123456789.123, "1"
+          ]
+        }
+      ]
+    }
+}

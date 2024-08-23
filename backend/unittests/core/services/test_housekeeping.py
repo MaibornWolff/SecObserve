@@ -7,7 +7,7 @@ from django.utils import timezone
 from application.commons.models import Settings
 from application.core.models import Branch, Product
 from application.core.services.housekeeping import (
-    delete_inactive_branches,
+    delete_inactive_branches_and_set_flags,
     delete_inactive_branches_for_product,
 )
 from unittests.base_test_case import BaseTestCase
@@ -35,7 +35,7 @@ class TestHousekeeping(BaseTestCase):
     def test_delete_inactive_branches(
         self, mock_delete_inactive_branches_for_product: Mock
     ):
-        delete_inactive_branches()
+        delete_inactive_branches_and_set_flags()
 
         expected_calls = [
             call(Product.objects.get(name="db_product_internal")),

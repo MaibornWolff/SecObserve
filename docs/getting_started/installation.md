@@ -45,7 +45,7 @@ services:
       - default
 
   frontend:
-    image: maibornwolff/secobserve-frontend:1.16.2
+    image: maibornwolff/secobserve-frontend:1.17.0
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=Host(`secobserve.localhost`)"
@@ -57,11 +57,12 @@ services:
       OIDC_CLIENT_ID: ${SO_OIDC_CLIENT_ID:-dummy}
       OIDC_REDIRECT_URI: ${SO_OIDC_REDIRECT_URI:-http://secobserve.localhost}
       OIDC_POST_LOGOUT_REDIRECT_URI: ${SO_OIDC_POST_LOGOUT_REDIRECT_URI:-http://secobserve.localhost}
+      OIDC_SCOPE: ${SO_OIDC_SCOPE:-openid profile email}
     networks:
       - traefik
 
   backend:
-    image: maibornwolff/secobserve-backend:1.16.2
+    image: maibornwolff/secobserve-backend:1.17.0
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend.rule=Host(`secobserve-backend.localhost`)"

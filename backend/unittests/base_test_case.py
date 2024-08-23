@@ -6,7 +6,6 @@ from application.core.models import (
     Branch,
     Observation,
     Observation_Log,
-    Parser,
     Product,
     Product_Authorization_Group_Member,
     Product_Member,
@@ -15,6 +14,7 @@ from application.core.models import (
 from application.core.types import Severity, Status
 from application.import_observations.models import (
     Api_Configuration,
+    Parser,
     Vulnerability_Check,
 )
 from application.rules.models import Rule

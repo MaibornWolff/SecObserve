@@ -36,7 +36,7 @@ jobs:
         run: echo "CREATED=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
       -
         name: Build and push backend
-        uses: docker/build-push-action@5176d81f87c23d6fc96624dfdbcd9f3830bbe445 # v6.5.0
+        uses: docker/build-push-action@5cd11c3a4ced054e52742c5fd54dca954e0edd85 # v6.7.0
         with:
           context: .
           file: ./docker/backend/prod/django/Dockerfile
@@ -50,7 +50,7 @@ jobs:
             VERSION=${{ github.event.inputs.release }}
       -
         name: Build and push frontend
-        uses: docker/build-push-action@5176d81f87c23d6fc96624dfdbcd9f3830bbe445 # v6.5.0
+        uses: docker/build-push-action@5cd11c3a4ced054e52742c5fd54dca954e0edd85 # v6.7.0
         with:
           context: .
           file: ./docker/frontend/prod/Dockerfile
@@ -64,13 +64,13 @@ jobs:
             VERSION=${{ github.event.inputs.release }}
       - 
         name: Run vulnerability scanners for images
-        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@27ab715e8f0af0e65c7c61152dd51d498d964b7d # main
+        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@817460e037606bd28eabe13d3e8c43866c98b81d # main
         with:
           so_configuration: 'so_configuration_sca_current.yml'
           SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
       - 
         name: Run vulnerability scanners for endpoints
-        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@27ab715e8f0af0e65c7c61152dd51d498d964b7d # main
+        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@817460e037606bd28eabe13d3e8c43866c98b81d # main
         with:
           so_configuration: 'so_configuration_endpoints.yml'
           SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}

@@ -8,6 +8,7 @@ export interface ApiConfiguration extends RaRecord {
     base_url: string;
     project_key: string;
     api_key: string;
+    query: string;
 }
 
 export interface VulnerabilityCheck extends RaRecord {
@@ -25,3 +26,27 @@ export interface VulnerabilityCheck extends RaRecord {
     last_import_observations_updated: number;
     last_import_observations_resolved: number;
 }
+export interface Parser extends RaRecord {
+    id: Identifier;
+    name: string;
+    type: string;
+    source: string;
+}
+
+export const SCANNER_TYPE_CHOICES = [
+    { id: "SCA", name: "SCA" },
+    { id: "SAST", name: "SAST" },
+    { id: "DAST", name: "DAST" },
+    { id: "IAST", name: "IAST" },
+    { id: "Secrets", name: "Secrets" },
+    { id: "Infrastructure", name: "Infrastructure" },
+    { id: "Other", name: "Other" },
+    { id: "Manual", name: "Manual" },
+];
+
+export const PARSER_SOURCE_CHOICES = [
+    { id: "API", name: "API" },
+    { id: "File", name: "File" },
+    { id: "Manual", name: "Manual" },
+    { id: "Unkown", name: "Unkown" },
+];

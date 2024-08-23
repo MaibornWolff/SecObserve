@@ -229,11 +229,14 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
 
                             <Typography variant="h6">Origins</Typography>
                             <Stack>
-                                <TextInputWide
-                                    source="origin_service_name"
-                                    label="Service name"
-                                    validate={validate_255}
-                                />
+                                <ReferenceInput
+                                    source="origin_service"
+                                    reference="services"
+                                    sort={{ field: "name", order: "ASC" }}
+                                    filter={{ product: id }}
+                                >
+                                    <AutocompleteInputWide optionText="name" label="Service" />
+                                </ReferenceInput>
                                 <Stack direction="row" spacing={2}>
                                     <TextInputWide
                                         source="origin_component_name"
@@ -282,6 +285,54 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
                                         min={0}
                                         step={1}
                                         validate={validate_0_999999}
+                                    />
+                                </Stack>
+                                <Stack direction="row" spacing={2}>
+                                    <TextInputWide
+                                        source="origin_cloud_provider"
+                                        label="Cloud provider"
+                                        validate={validate_255}
+                                    />
+                                    <TextInputWide
+                                        source="origin_cloud_account_subscription_project"
+                                        label="Account / Subscription / Project"
+                                        validate={validate_255}
+                                    />
+                                </Stack>
+                                <Stack direction="row" spacing={2}>
+                                    <TextInputWide
+                                        source="origin_cloud_resource_type"
+                                        label="Cloud resource type"
+                                        validate={validate_255}
+                                    />
+                                    <TextInputWide
+                                        source="origin_cloud_resource"
+                                        label="Cloud resource"
+                                        validate={validate_255}
+                                    />
+                                </Stack>
+                                <Stack direction="row" spacing={2}>
+                                    <TextInputWide
+                                        source="origin_kubernetes_cluster"
+                                        label="Kubernetes cluster"
+                                        validate={validate_255}
+                                    />
+                                    <TextInputWide
+                                        source="origin_kubernetes_namespace"
+                                        label="Namespace"
+                                        validate={validate_255}
+                                    />
+                                </Stack>
+                                <Stack direction="row" spacing={2}>
+                                    <TextInputWide
+                                        source="origin_kubernetes_resource_type"
+                                        label="Kubernetes resource type"
+                                        validate={validate_255}
+                                    />
+                                    <TextInputWide
+                                        source="origin_kubernetes_resource_name"
+                                        label="Kubernetes resource name"
+                                        validate={validate_255}
                                     />
                                 </Stack>
                             </Stack>
