@@ -91,9 +91,15 @@ class TestOCSFParser(BaseTestCase):
             )
             self.assertEqual(Severity.SEVERITY_HIGH, observation.parser_severity)
             self.assertEqual("Azure", observation.origin_cloud_provider)
-            self.assertEqual("Test Subscription", observation.origin_cloud_account_subscription_project)
+            self.assertEqual(
+                "Test Subscription",
+                observation.origin_cloud_account_subscription_project,
+            )
             self.assertEqual("aks-dev", observation.origin_cloud_resource)
-            self.assertEqual("Microsoft.ContainerService/ManagedClusters", observation.origin_cloud_resource_type)
+            self.assertEqual(
+                "Microsoft.ContainerService/ManagedClusters",
+                observation.origin_cloud_resource_type,
+            )
             self.assertEqual("", observation.origin_kubernetes_cluster)
             self.assertEqual("", observation.origin_kubernetes_namespace)
             self.assertEqual("", observation.origin_kubernetes_resource_type)
@@ -138,8 +144,12 @@ class TestOCSFParser(BaseTestCase):
             self.assertEqual("", observation.origin_cloud_resource_type)
             self.assertEqual("", observation.origin_kubernetes_cluster)
             self.assertEqual("kube-system", observation.origin_kubernetes_namespace)
-            self.assertEqual("KubernetesAPIServer", observation.origin_kubernetes_resource_type)
-            self.assertEqual("kube-apiserver-minikube", observation.origin_kubernetes_resource_name)
+            self.assertEqual(
+                "KubernetesAPIServer", observation.origin_kubernetes_resource_type
+            )
+            self.assertEqual(
+                "kube-apiserver-minikube", observation.origin_kubernetes_resource_name
+            )
             self.assertEqual(3, len(observation.unsaved_references))
             self.assertEqual("OCSF Finding", observation.unsaved_evidences[0][0])
             self.assertIn(
