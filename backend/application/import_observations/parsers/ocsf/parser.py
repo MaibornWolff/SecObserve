@@ -51,7 +51,7 @@ class OCSFParser(BaseParser, BaseFileParser):
                 return (
                     False,
                     [
-                        "Data is not a OCSF format, first element doesn't have a finding_info entry"
+                        "File is not a OCSF format, first element doesn't have a finding_info entry"
                     ],
                     {},
                 )
