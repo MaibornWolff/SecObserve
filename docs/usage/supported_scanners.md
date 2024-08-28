@@ -55,4 +55,4 @@ These scanners have been tested with SecObserve:
 
  ^3)^ The results of Azure Defender for Cloud have to be exported manually in CSV format from the Azure Portal.
 
- GitHub actions and GitLab CI templates](../integrations/github_actions_and_templates.md) support running vulnerability checks and importing the results into SecObserve via GitHub workflows or GitLab CI pipelines in an efficient way.
+ [GitHub actions and GitLab CI templates](../integrations/github_actions_and_templates.md) support running vulnerability checks and importing the results into SecObserve via GitHub workflows or GitLab CI pipelines in an efficient way.
