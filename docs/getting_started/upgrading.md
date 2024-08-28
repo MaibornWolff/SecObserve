@@ -10,6 +10,12 @@
 
 * There will be specific upgrade instructions if necessary, e.g. when there are new configuration parameters.
 
+## Release 1.18.0
+
+**Breaking changes**
+
+* The `Prowler` parser has been renamed to `Prowler 3`, because it supports only Prowler up to version 3. For Prowler version 4 and above use the `OCSF (Open Cybersecurity Schema Framework)` parser.
+
 ## Release 1.5.0
 
 **Breaking changes**
