@@ -8,7 +8,9 @@ from application.import_observations.parsers.base_parser import (
     BaseFileParser,
     BaseParser,
 )
-from application.import_observations.queries.parser import get_parser_by_name
+from application.import_observations.queries.parser import (
+    get_parser_by_module_and_class,
+)
 from application.import_observations.types import Parser_Source, Parser_Type
 
 logger = logging.getLogger("secobserve.import_observations")
@@ -29,7 +31,7 @@ def register_parser(module_name: str, class_name: str) -> None:
             source = Parser_Source.SOURCE_FILE
             break
 
-    parser = get_parser_by_name(name)
+    parser = get_parser_by_module_and_class(module_name, class_name)
     if parser:
         changed = False
         if parser.name != name:
@@ -40,12 +42,6 @@ def register_parser(module_name: str, class_name: str) -> None:
             changed = True
         if parser.source != source:
             parser.source = source
-            changed = True
-        if parser.module_name != module_name:
-            parser.module_name = module_name
-            changed = True
-        if parser.class_name != class_name:
-            parser.class_name = class_name
             changed = True
         if changed:
             parser.save()
