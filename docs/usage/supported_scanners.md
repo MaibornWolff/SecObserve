@@ -46,7 +46,8 @@ These scanners have been tested with SecObserve:
 | [DrHeader](https://github.com/Santandersecurityresearch/DrHeader) | DrHeader | DAST | File |
 | [ZAP](https://www.zaproxy.org) | ZAP | DAST | File |
 | [Azure Defender for Cloud](https://learn.microsoft.com/en-us/azure/defender-for-cloud/) ^3)^ | Azure Defender | Cloud infrastructure | File |
-| [Prowler](https://github.com/prowler-cloud/prowler) | Prowler | Cloud infrastructure | File |
+| [Prowler 3](https://github.com/prowler-cloud/prowler)| Prowler 3 | Cloud infrastructure | File |
+| [Prowler 4](https://github.com/prowler-cloud/prowler)| OCSF (Open Cybersecurity Schema Framework) | Cloud infrastructure | File |
 
 ^1)^ This is the exception to the rule. Even though SARIF is more suited for static code analysis, it works for Dependency Check.
 

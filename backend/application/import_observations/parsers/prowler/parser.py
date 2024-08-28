@@ -14,7 +14,7 @@ from application.import_observations.types import Parser_Type
 class ProwlerParser(BaseParser, BaseFileParser):
     @classmethod
     def get_name(cls) -> str:
-        return "Prowler"
+        return "Prowler 3"
 
     @classmethod
     def get_type(cls) -> str:
