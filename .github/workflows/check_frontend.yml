@@ -18,7 +18,7 @@ jobs:
     - name: Install dependencies
       working-directory: ./frontend
       run: |
-        npm install
+        npm ci
 
     - name: Prettier
       working-directory: ./frontend
@@ -33,7 +33,6 @@ jobs:
     - name: Check build
       working-directory: ./frontend
       run: |
-        npm ci
         npm run build
 
     # - name: End-to-end tests
