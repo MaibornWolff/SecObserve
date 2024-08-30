@@ -53,7 +53,7 @@ const PotentialDuplicatesList = ({ observation }: PotentialDuplicatesListProps) 
                 resource="potential_duplicates"
             >
                 <TextField source="potential_duplicate_observation.title" label="Title" />
-                <SeverityField source="potential_duplicate_observation.current_severity" />
+                <SeverityField label="Severity" source="potential_duplicate_observation.current_severity" />
                 <ChipField source="potential_duplicate_observation.current_status" label="Status" />
                 <TextField source="potential_duplicate_observation.origin_service_name" label="Service" />
                 {observation && observation.product_data.has_component && (

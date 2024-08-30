@@ -33,6 +33,4 @@ const MarkdownField = (props: MarkdownProps) => {
     );
 };
 
-MarkdownField.defaultProps = { label: "" };
-
 export default MarkdownField;

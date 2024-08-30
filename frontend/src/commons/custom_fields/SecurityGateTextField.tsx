@@ -1,7 +1,6 @@
 import { ChipField, useRecordContext } from "react-admin";
 
 interface SecurityGateTextProps {
-    sortable: boolean;
     label: string;
 }
 
@@ -26,9 +25,10 @@ export const SecurityGateTextField = (props: SecurityGateTextProps) => {
 
     return record && record.security_gate_passed != null ? (
         <ChipField
+            label={props.label}
             source="text"
             record={get_text_record()}
-            sortable={props.sortable}
+            sortable={true}
             sortBy="security_gate_passed"
             sx={{
                 backgroundColor: get_severity_color(),
@@ -37,5 +37,3 @@ export const SecurityGateTextField = (props: SecurityGateTextProps) => {
         />
     ) : null;
 };
-
-SecurityGateTextField.defaultProps = { label: "Security gate", sortable: true };

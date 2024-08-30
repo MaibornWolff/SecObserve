@@ -79,18 +79,21 @@ const MetricsHeader = (props: MetricsHeaderProps) => {
             {!loading && (
                 <Fragment>
                     {props.repository_default_branch && (
-                        <Labeled label="Default branch">
-                            <LabeledTextField text={props.repository_default_branch} />
+                        <Labeled>
+                            <LabeledTextField label="Default branch" text={props.repository_default_branch} />
                         </Labeled>
                     )}
-                    <Labeled
-                        label="Metrics last calculated"
-                        sx={{ marginLeft: get_margin_left(props.repository_default_branch) }}
-                    >
-                        <LabeledTextField text={new Date(data.last_calculated).toLocaleString()} />
+                    <Labeled sx={{ marginLeft: get_margin_left(props.repository_default_branch) }}>
+                        <LabeledTextField
+                            label="Metrics last calculated"
+                            text={new Date(data.last_calculated).toLocaleString()}
+                        />
                     </Labeled>
-                    <Labeled label="Metrics calculation interval" sx={{ marginLeft: 8 }}>
-                        <LabeledTextField text={data.calculation_interval + " minutes"} />
+                    <Labeled sx={{ marginLeft: 8 }}>
+                        <LabeledTextField
+                            label="Metrics calculation interval"
+                            text={data.calculation_interval + " minutes"}
+                        />
                     </Labeled>
                 </Fragment>
             )}

@@ -112,7 +112,7 @@ const ObservationShowComponent = () => {
                         <Stack direction="row" spacing={4}>
                             <Stack spacing={2}>
                                 <Labeled>
-                                    <SeverityField source="current_severity" />
+                                    <SeverityField label="Severity" source="current_severity" />
                                 </Labeled>
                                 {observation.parser_severity != "" &&
                                     (observation.rule_severity != "" || observation.assessment_severity != "") && (
@@ -193,8 +193,9 @@ const ObservationShowComponent = () => {
                                     )}
                                 {observation.vulnerability_id != "" &&
                                     get_vulnerability_url(observation.vulnerability_id) != null && (
-                                        <Labeled label="Vulnerability ID">
+                                        <Labeled>
                                             <TextUrlField
+                                                label="Vulnerability ID"
                                                 text={observation.vulnerability_id}
                                                 url={
                                                     observation.vulnerability_id &&
@@ -214,8 +215,12 @@ const ObservationShowComponent = () => {
                                     </Labeled>
                                 )}
                                 {observation.cwe != null && (
-                                    <Labeled label="CWE">
-                                        <TextUrlField text={observation.cwe} url={get_cwe_url(observation.cwe)} />
+                                    <Labeled>
+                                        <TextUrlField
+                                            label="CWE"
+                                            text={observation.cwe}
+                                            url={get_cwe_url(observation.cwe)}
+                                        />
                                     </Labeled>
                                 )}
                                 {observation.epss_score != null && (

@@ -60,8 +60,8 @@ const ProductEmbeddedList = ({ product_group }: ProductEmbeddedListProps) => {
                         label="Default branch / version"
                         sortable={false}
                     />
-                    <SecurityGateTextField />
-                    <ObservationsCountField withLabel={false} />
+                    <SecurityGateTextField label="Security gate" />
+                    <ObservationsCountField label="Open observations" withLabel={false} />
                     <FunctionField<Product>
                         label="Last observation change"
                         sortBy="last_observation_change"

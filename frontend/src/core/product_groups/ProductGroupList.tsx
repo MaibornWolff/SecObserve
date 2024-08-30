@@ -35,7 +35,7 @@ const ProductGroupList = () => {
                 <Datagrid size={getSettingListSize()} rowClick="show" bulkActionButtons={false}>
                     <TextField source="name" />
                     <TextField source="products_count" label="Products" />
-                    <ObservationsCountField withLabel={false} />
+                    <ObservationsCountField label="Open observations" withLabel={false} />
                 </Datagrid>
             </List>
         </Fragment>

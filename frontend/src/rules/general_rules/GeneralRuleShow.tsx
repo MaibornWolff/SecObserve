@@ -55,8 +55,8 @@ const GeneralRuleComponent = () => {
                                 <TextField source="name" className={classes.fontBigBold} />
                             </Labeled>
                             {rule.description && (
-                                <Labeled label="Description">
-                                    <MarkdownField content={rule.description} />
+                                <Labeled>
+                                    <MarkdownField content={rule.description} label="Description" />
                                 </Labeled>
                             )}
 

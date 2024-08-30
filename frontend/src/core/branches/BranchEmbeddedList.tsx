@@ -46,13 +46,17 @@ const BranchEmbeddedList = ({ product }: BranchEmbeddedListProps) => {
                     <WithRecord
                         label="Name"
                         render={(branch) => (
-                            <TextUrlField text={branch.name} url={get_observations_url(product.id, branch.id)} />
+                            <TextUrlField
+                                label="Name"
+                                text={branch.name}
+                                url={get_observations_url(product.id, branch.id)}
+                            />
                         )}
                     />
                     <BooleanField source="is_default_branch" label="Default branch / version" sortable={false} />
                     <TextField source="purl" label="PURL" />
                     <TextField source="cpe23" label="CPE 2.3" />
-                    <ObservationsCountField withLabel={false} />
+                    <ObservationsCountField label="Open observations" withLabel={false} />
                     <DateField source="last_import" showTime />
                     <WithRecord
                         label="Protect"

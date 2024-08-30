@@ -68,8 +68,9 @@ const ObservationShowOrigins = ({ elevated }: ObservationShowOriginsProps) => {
                                             observation.origin_component_purl_type,
                                             observation.origin_component_purl_namespace
                                         ) != null && (
-                                            <Labeled label="Component PURL">
+                                            <Labeled>
                                                 <TextUrlField
+                                                    label="Component PURL"
                                                     text={observation.origin_component_purl}
                                                     url={
                                                         observation.origin_component_purl &&
@@ -130,8 +131,9 @@ const ObservationShowOrigins = ({ elevated }: ObservationShowOriginsProps) => {
                                     Endpoint
                                 </Typography>
                                 {observation.origin_endpoint_url != "" && (
-                                    <Labeled label="Endpoint URL">
+                                    <Labeled>
                                         <TextUrlField
+                                            label="Endpoint URL"
                                             text={observation.origin_endpoint_url}
                                             url={observation.origin_endpoint_url}
                                         />

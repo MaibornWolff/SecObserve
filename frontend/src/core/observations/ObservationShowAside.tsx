@@ -90,8 +90,9 @@ const MetaData = () => {
                             />
                         )}
                         {observation.issue_tracker_issue_id != "" && (
-                            <Labeled label="Issue">
+                            <Labeled>
                                 <TextUrlField
+                                    label="Issue"
                                     text={
                                         observation.product_data.issue_tracker_type +
                                         " #" +
