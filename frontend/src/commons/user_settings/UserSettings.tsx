@@ -18,11 +18,13 @@ const UserSettings = () => {
 
     function setLightTheme() {
         setTheme("light");
+        localStorage.setItem("theme", "light");
         saveSettingTheme("light");
     }
 
     function setDarkTheme() {
         setTheme("dark");
+        localStorage.setItem("theme", "dark");
         saveSettingTheme("dark");
     }
 
