@@ -90,8 +90,8 @@ const ObservationLogComponent = () => {
                                 <TextField source="user_full_name" />
                             </Labeled>
                             {observation_log.severity && (
-                                <Labeled label="Severity">
-                                    <SeverityField source="severity" />
+                                <Labeled>
+                                    <SeverityField label="Severity" source="severity" />
                                 </Labeled>
                             )}
                             {observation_log.status && (
@@ -147,8 +147,8 @@ const ObservationLogComponent = () => {
                                     />
                                 </Labeled>
                             )}
-                            <Labeled label="Comment">
-                                <MarkdownField content={observation_log.comment} />
+                            <Labeled>
+                                <MarkdownField content={observation_log.comment} label="Comment" />
                             </Labeled>
                             <Labeled label="Created">
                                 <DateField source="created" showTime />

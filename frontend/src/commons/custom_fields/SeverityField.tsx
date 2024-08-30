@@ -4,7 +4,6 @@ import { get_severity_color } from "../functions";
 
 interface SeverityProps {
     source: string;
-    sortable: boolean;
     label: string;
 }
 
@@ -30,7 +29,7 @@ export const SeverityField = (props: SeverityProps) => {
     return record ? (
         <ChipField
             source={props.source}
-            sortable={props.sortable}
+            sortable={true}
             sortBy={props.source}
             sx={{
                 backgroundColor: get_severity_color(get_current_severity(record)),
@@ -40,5 +39,3 @@ export const SeverityField = (props: SeverityProps) => {
         />
     ) : null;
 };
-
-SeverityField.defaultProps = { label: "Severity", sortable: true };

@@ -156,7 +156,7 @@ const ObservationsReviewList = ({ product }: ObservationsReviewListProps) => {
                 >
                     <TextField source="branch_name" label="Branch / Version" />
                     <TextField source="title" />
-                    <SeverityField source="current_severity" />
+                    <SeverityField label="Severity" source="current_severity" />
                     {product && product.has_component && <NumberField source="epss_score" label="EPSS" />}
                     <ChipField source="current_status" label="Status" />
                     {product && product.has_services && <TextField source="origin_service_name" label="Service" />}

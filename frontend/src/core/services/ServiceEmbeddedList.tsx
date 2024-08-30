@@ -43,15 +43,15 @@ const ServiceEmbeddedList = ({ product }: ServiceEmbeddedListProps) => {
             <div style={{ width: "100%" }}>
                 <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false} rowClick={false}>
                     <WithRecord
-                        label="Name"
                         render={(service) => (
                             <TextUrlField
+                                label="Name"
                                 text={service.name}
                                 url={get_observations_url(product.id, service.id, product.repository_default_branch)}
                             />
                         )}
                     />
-                    <ObservationsCountField withLabel={false} />
+                    <ObservationsCountField label="Open observations" withLabel={false} />
                     <WithRecord
                         render={(service) => (
                             <Stack direction="row" spacing={4}>
