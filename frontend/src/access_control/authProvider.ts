@@ -30,6 +30,7 @@ const authProvider: AuthProvider = {
                     setListProperties(auth.user.setting_list_properties);
                     delete auth.user.setting_list_properties;
                     localStorage.setItem("user", JSON.stringify(auth.user));
+                    localStorage.setItem("theme", auth.user.setting_theme);
                 })
                 .catch((error) => {
                     if (error.message == "Forbidden") {
@@ -101,6 +102,7 @@ const getUserInfo = async () => {
         setListProperties(response.json.setting_list_properties);
         delete response.json.setting_list_properties;
         localStorage.setItem("user", JSON.stringify(response.json));
+        localStorage.setItem("theme", response.json.setting_theme);
         return response.json;
     });
 };
