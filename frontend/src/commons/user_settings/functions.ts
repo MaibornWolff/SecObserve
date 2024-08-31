@@ -11,14 +11,11 @@ export async function saveSettingTheme(theme: string) {
 
 export function getSettingTheme(): string {
     let theme = "light";
-    const storage_theme = localStorage.getItem("theme");
 
     const user = localStorage.getItem("user");
     if (user) {
         const user_json = JSON.parse(user);
         theme = user_json.setting_theme;
-    } else if (storage_theme) {
-        theme = storage_theme;
     }
 
     return theme;
