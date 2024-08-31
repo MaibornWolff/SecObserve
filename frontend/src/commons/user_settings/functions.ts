@@ -1,3 +1,5 @@
+import { ThemeType } from "react-admin";
+
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
 export async function saveSettingTheme(theme: string) {
@@ -35,7 +37,7 @@ export function getSettingListSize(): "small" | "medium" | undefined {
     return list_size;
 }
 
-export function getTheme() {
+export function getTheme(): ThemeType {
     const setting_theme = getSettingTheme();
     if (setting_theme == "dark") {
         return "dark";

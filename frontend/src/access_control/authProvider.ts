@@ -57,8 +57,9 @@ const authProvider: AuthProvider = {
     },
     checkError: (error) => {
         if (error) {
-            if (error.status === 401 || error.status === 403) {
+            if (error.status === 401) {
                 if (oidc_signed_in()) {
+                    localStorage.setItem("last_location", location.hash);
                     const user_manager = new UserManager(oidcConfig);
                     return user_manager.signinRedirect();
                 }
@@ -121,7 +122,14 @@ export function oidc_signed_in(): boolean {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const onSigninCallback = (_user: User | void): void => {
-    window.history.replaceState({}, document.title, window.location.pathname);
+    const last_location = localStorage.getItem("last_location");
+    if (last_location) {
+        localStorage.removeItem("last_location");
+        location.hash = last_location;
+        window.history.replaceState({}, document.title, "/" + last_location);
+    } else {
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
 };
 
 export const oidcConfig = {
