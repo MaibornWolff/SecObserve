@@ -424,14 +424,22 @@ class ProductMemberSerializer(ModelSerializer):
 
         current_user = get_current_user()
         if self.instance is not None:
-            role = get_highest_user_role(self.instance.product, current_user)
+            highest_user_role = get_highest_user_role(
+                self.instance.product, current_user
+            )
         else:
-            role = get_highest_user_role(data_product, current_user)
+            highest_user_role = get_highest_user_role(data_product, current_user)
 
-        if role != Roles.Owner and not (current_user and current_user.is_superuser):
+        if highest_user_role != Roles.Owner and not (
+            current_user and current_user.is_superuser
+        ):
             if attrs.get("role") == Roles.Owner:
                 raise ValidationError("You are not permitted to add a member as Owner")
-            elif self.instance is not None and self.instance.role == Roles.Owner:
+            if (
+                attrs.get("role") != Roles.Owner
+                and self.instance is not None
+                and self.instance.role == Roles.Owner
+            ):
                 raise ValidationError("You are not permitted to change the Owner role")
 
         return attrs
@@ -474,14 +482,22 @@ class ProductAuthorizationGroupMemberSerializer(ModelSerializer):
 
         current_user = get_current_user()
         if self.instance is not None:
-            role = get_highest_user_role(self.instance.product, current_user)
+            highest_user_role = get_highest_user_role(
+                self.instance.product, current_user
+            )
         else:
-            role = get_highest_user_role(data_product, current_user)
+            highest_user_role = get_highest_user_role(data_product, current_user)
 
-        if role != Roles.Owner and not (current_user and current_user.is_superuser):
+        if highest_user_role != Roles.Owner and not (
+            current_user and current_user.is_superuser
+        ):
             if attrs.get("role") == Roles.Owner:
                 raise ValidationError("You are not permitted to add a member as Owner")
-            elif self.instance is not None and self.instance.role == Roles.Owner:
+            if (
+                attrs.get("role") != Roles.Owner
+                and self.instance is not None
+                and self.instance.role == Roles.Owner
+            ):
                 raise ValidationError("You are not permitted to change the Owner role")
 
         return attrs
