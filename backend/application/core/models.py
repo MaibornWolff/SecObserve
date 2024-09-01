@@ -367,6 +367,9 @@ class Product_Member(Model):
             "user",
         )
 
+    def __str__(self):
+        return f"{self.product} / {self.user}"
+
 
 class Product_Authorization_Group_Member(Model):
     product = ForeignKey(Product, on_delete=CASCADE)
@@ -378,6 +381,9 @@ class Product_Authorization_Group_Member(Model):
             "product",
             "authorization_group",
         )
+
+    def __str__(self):
+        return f"{self.product} / {self.authorization_group}"
 
 
 class Observation(Model):
