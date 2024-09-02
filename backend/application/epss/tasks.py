@@ -12,8 +12,8 @@ logger = logging.getLogger("secobserve.epss")
 
 @db_periodic_task(
     crontab(
-        minute=settings_static.background_epss_import_crontab_minutes,
-        hour=settings_static.background_epss_import_crontab_hours,
+        minute=settings_static.background_epss_import_crontab_minute,
+        hour=settings_static.background_epss_import_crontab_hour,
     )
 )
 @lock_task("import_epss")

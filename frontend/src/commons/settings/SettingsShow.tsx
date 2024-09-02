@@ -46,11 +46,11 @@ const SettingsShowComponent = () => {
                                 <NumberField source="background_product_metrics_interval_minutes" />
                             </Labeled>
                             <Stack direction="row" spacing={2}>
-                                <Labeled label="EPSS import crontab (hours)">
-                                    <NumberField source="background_epss_import_crontab_hours" />
+                                <Labeled label="EPSS import crontab (hour/UTC)">
+                                    <NumberField source="background_epss_import_crontab_hour" />
                                 </Labeled>
                                 <Labeled label="EPSS import crontab (minutes)">
-                                    <NumberField source="background_epss_import_crontab_minutes" />
+                                    <NumberField source="background_epss_import_crontab_minute" />
                                 </Labeled>
                             </Stack>
                         </Stack>
@@ -75,11 +75,11 @@ const SettingsShowComponent = () => {
                         <Typography variant="h6">Housekeeping for branches</Typography>
                         <Stack spacing={2}>
                             <Stack direction="row" spacing={2}>
-                                <Labeled label="Branch housekeeping crontab (hours)">
-                                    <NumberField source="branch_housekeeping_crontab_hours" />
+                                <Labeled label="Branch housekeeping crontab (hour/UTC)">
+                                    <NumberField source="branch_housekeeping_crontab_hour" />
                                 </Labeled>
-                                <Labeled label="Branch housekeeping crontab (minutes)">
-                                    <NumberField source="branch_housekeeping_crontab_minutes" />
+                                <Labeled label="Branch housekeeping crontab (minute)">
+                                    <NumberField source="branch_housekeeping_crontab_minute" />
                                 </Labeled>
                             </Stack>
                             <Labeled label="Branch housekeeping active">
@@ -164,11 +164,11 @@ const SettingsShowComponent = () => {
                                 <NumberField source="risk_acceptance_expiry_days" />
                             </Labeled>
                             <Stack direction="row" spacing={2}>
-                                <Labeled label="Risk acceptance expiry crontab (hours/UTC)">
-                                    <NumberField source="risk_acceptance_expiry_crontab_hours" />
+                                <Labeled label="Risk acceptance expiry crontab (hour/UTC)">
+                                    <NumberField source="risk_acceptance_expiry_crontab_hour" />
                                 </Labeled>
-                                <Labeled label="Risk acceptance expiry crontab (minutes)">
-                                    <NumberField source="risk_acceptance_expiry_crontab_minutes" />
+                                <Labeled label="Risk acceptance expiry crontab (minute)">
+                                    <NumberField source="risk_acceptance_expiry_crontab_minute" />
                                 </Labeled>
                             </Stack>
                         </Stack>

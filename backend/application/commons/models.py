@@ -124,26 +124,26 @@ class Settings(Model):
         validators=[MinValueValidator(0), MaxValueValidator(999999)],
         help_text="Calculate product metrics every x minutes",
     )
-    background_epss_import_crontab_minutes = IntegerField(
+    background_epss_import_crontab_minute = IntegerField(
         default=0,
         validators=[MinValueValidator(0), MaxValueValidator(59)],
-        help_text="Minutes crontab expression for EPSS import",
+        help_text="Minute crontab expression for EPSS import",
     )
-    background_epss_import_crontab_hours = IntegerField(
+    background_epss_import_crontab_hour = IntegerField(
         default=3,
         validators=[MinValueValidator(0), MaxValueValidator(23)],
-        help_text="Hours crontab expression for EPSS import (UTC)",
+        help_text="Hour crontab expression for EPSS import (UTC)",
     )
 
-    branch_housekeeping_crontab_minutes = IntegerField(
+    branch_housekeeping_crontab_minute = IntegerField(
         default=0,
         validators=[MinValueValidator(0), MaxValueValidator(59)],
-        help_text="Minutes crontab expression for branch housekeeping",
+        help_text="Minute crontab expression for branch housekeeping",
     )
-    branch_housekeeping_crontab_hours = IntegerField(
+    branch_housekeeping_crontab_hour = IntegerField(
         default=2,
         validators=[MinValueValidator(0), MaxValueValidator(23)],
-        help_text="Hours crontab expression for branch housekeeping (UTC)",
+        help_text="Hour crontab expression for branch housekeeping (UTC)",
     )
     branch_housekeeping_active = BooleanField(
         default=True, help_text="Delete inactive branches"
@@ -174,15 +174,26 @@ class Settings(Model):
         validators=[MinValueValidator(0), MaxValueValidator(999999)],
         help_text="Days before risk acceptance expires, 0 means no expiry",
     )
-    risk_acceptance_expiry_crontab_minutes = IntegerField(
+    risk_acceptance_expiry_crontab_minute = IntegerField(
         default=0,
         validators=[MinValueValidator(0), MaxValueValidator(59)],
-        help_text="Minutes crontab expression for checking risk acceptance expiry",
+        help_text="Minute crontab expression for checking risk acceptance expiry",
     )
-    risk_acceptance_expiry_crontab_hours = IntegerField(
+    risk_acceptance_expiry_crontab_hour = IntegerField(
         default=1,
         validators=[MinValueValidator(0), MaxValueValidator(23)],
-        help_text="Hours crontab expression for checking risk acceptance expiry (UTC)",
+        help_text="Hour crontab expression for checking risk acceptance expiry (UTC)",
+    )
+
+    api_import_crontab_minute = IntegerField(
+        default=0,
+        validators=[MinValueValidator(0), MaxValueValidator(59)],
+        help_text="Minute crontab expression for API imports",
+    )
+    api_import_crontab_hour = IntegerField(
+        default=4,
+        validators=[MinValueValidator(0), MaxValueValidator(23)],
+        help_text="Hour crontab expression for API imports (UTC)",
     )
 
     def save(self, *args, **kwargs):

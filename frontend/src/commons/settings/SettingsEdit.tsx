@@ -91,21 +91,21 @@ const SettingsEdit = () => {
                     />
                     <Stack direction="row" spacing={2}>
                         <NumberInput
-                            source="background_epss_import_crontab_hours"
-                            label="EPSS import crontab (hours)"
+                            source="background_epss_import_crontab_hour"
+                            label="EPSS import crontab (hour)"
                             min={0}
                             step={1}
                             validate={validate_0_23}
-                            helperText="Hours crontab expression for EPSS import (UTC)"
+                            helperText="Hour crontab expression for EPSS import (UTC)"
                             sx={{ marginBottom: 2 }}
                         />
                         <NumberInput
-                            source="background_epss_import_crontab_minutes"
-                            label="EPSS import crontab (minutes)"
+                            source="background_epss_import_crontab_minute"
+                            label="EPSS import crontab (minute)"
                             min={0}
                             step={1}
                             validate={validate_0_59}
-                            helperText="Minutes crontab expression for EPSS import"
+                            helperText="Minute crontab expression for EPSS import"
                             sx={{ marginBottom: 2 }}
                         />
                     </Stack>
@@ -136,21 +136,21 @@ const SettingsEdit = () => {
                     </Typography>
                     <Stack direction="row" spacing={2}>
                         <NumberInput
-                            source="branch_housekeeping_crontab_hours"
-                            label="Branch housekeeping crontab (hours)"
+                            source="branch_housekeeping_crontab_hour"
+                            label="Branch housekeeping crontab (hour)"
                             min={0}
                             step={1}
                             validate={validate_0_23}
-                            helperText="Hours crontab expression for branch housekeeping (UTC)"
+                            helperText="Hour crontab expression for branch housekeeping (UTC)"
                             sx={{ marginBottom: 2 }}
                         />
                         <NumberInput
-                            source="branch_housekeeping_crontab_minutes"
-                            label="Branch housekeeping crontab (minutes)"
+                            source="branch_housekeeping_crontab_minute"
+                            label="Branch housekeeping crontab (minute)"
                             min={0}
                             step={1}
                             validate={validate_0_59}
-                            helperText="Minutes crontab expression for branch housekeeping"
+                            helperText="Minute crontab expression for branch housekeeping"
                             sx={{ marginBottom: 2 }}
                         />
                     </Stack>
@@ -306,21 +306,21 @@ const SettingsEdit = () => {
                     />
                     <Stack direction="row" spacing={2}>
                         <NumberInput
-                            source="risk_acceptance_expiry_crontab_hours"
-                            label="Risk acceptance expiry crontab (hours)"
+                            source="risk_acceptance_expiry_crontab_hour"
+                            label="Risk acceptance expiry crontab (hour)"
                             min={0}
                             step={1}
                             validate={validate_0_23}
-                            helperText="Hours crontab expression for checking risk acceptance expiry (UTC)"
+                            helperText="Hour crontab expression for checking risk acceptance expiry (UTC)"
                             sx={{ marginBottom: 2 }}
                         />
                         <NumberInput
-                            source="risk_acceptance_expiry_crontab_minutes"
-                            label="Risk acceptance expiry crontab (minutes)"
+                            source="risk_acceptance_expiry_crontab_minute"
+                            label="Risk acceptance expiry crontab (minute)"
                             min={0}
                             step={1}
                             validate={validate_0_59}
-                            helperText="Minutes crontab expression for checking risk acceptance expiry"
+                            helperText="Minute crontab expression for checking risk acceptance expiry"
                             sx={{ marginBottom: 2 }}
                         />
                     </Stack>
