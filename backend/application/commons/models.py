@@ -185,6 +185,9 @@ class Settings(Model):
         help_text="Hour crontab expression for checking risk acceptance expiry (UTC)",
     )
 
+    feature_automatic_api_import = BooleanField(
+        default=True, help_text="Enable automatic API imports"
+    )
     api_import_crontab_minute = IntegerField(
         default=0,
         validators=[MinValueValidator(0), MaxValueValidator(59)],
