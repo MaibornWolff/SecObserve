@@ -34,7 +34,7 @@
         "react-router": "6.26.1",
         "react-router-dom": "6.26.1",
         "runtime-env-cra": "file:lib/runtime-env-cra",
-        "tss-react": "4.9.12"
+        "tss-react": "4.9.13"
     },
     "scripts": {
         "start": "NODE_ENV=development ./node_modules/runtime-env-cra/lib/index.js --config-name=./public/runtime-env.js && vite",
