@@ -797,24 +797,24 @@ django = ">=4.2"
 
 [[package]]
 name = "djangorestframework-stubs"
-version = "3.15.0"
+version = "3.15.1"
 description = "PEP-484 stubs for django-rest-framework"
 optional = true
 python-versions = ">=3.8"
 files = [
-    {file = "djangorestframework_stubs-3.15.0-py3-none-any.whl", hash = "sha256:6c634f16fe1f9b1654cfd921eca64cd4188ce8534ab5e3ec7e44aaa0ca969d93"},
-    {file = "djangorestframework_stubs-3.15.0.tar.gz", hash = "sha256:f60ee1c80abb01a77acc0169969e07c45c2739ae64667b9a0dd4a2e32697dcab"},
+    {file = "djangorestframework_stubs-3.15.1-py3-none-any.whl", hash = "sha256:79dc9018f5d5fa420f9981eec9f1e820ecbd04719791f144419cdc6c5b8e29bd"},
+    {file = "djangorestframework_stubs-3.15.1.tar.gz", hash = "sha256:34539871895d66d382b6ae3655d9f95c1de7733cf50bc29097638d367ed3117d"},
 ]
 
 [package.dependencies]
-django-stubs = ">=5.0.0"
+django-stubs = ">=5.0.4"
 requests = ">=2.0.0"
 types-PyYAML = ">=5.4.3"
 types-requests = ">=0.1.12"
 typing-extensions = ">=3.10.0"
 
 [package.extras]
-compatible-mypy = ["django-stubs[compatible-mypy]", "mypy (>=1.10.0,<1.11.0)"]
+compatible-mypy = ["django-stubs[compatible-mypy]", "mypy (>=1.11.0,<1.12.0)"]
 coreapi = ["coreapi (>=2.0.0)"]
 markdown = ["types-Markdown (>=0.1.5)"]
 
@@ -2485,4 +2485,4 @@ unittests = ["coverage", "django-coverage-plugin", "django-extensions"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">= 3.10, < 3.13"
-content-hash = "c2fbb6e09f747f9605e24d2af681f9972c8abdeed91297de51a98839334f06fa"
+content-hash = "c737ce03579d142ee26cb82adffe339781d3fd06670cb7759bd0e4f59e1cf3de"
