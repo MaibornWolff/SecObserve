@@ -5,7 +5,7 @@ import { ChangeEvent, Fragment, useState } from "react";
 import { ReferenceInput, SaveButton, SimpleForm, Toolbar, WithRecord, useNotify, useRefresh } from "react-admin";
 import { makeStyles } from "tss-react/mui";
 
-import { validate_255, validate_2048, validate_required } from "../../commons/custom_validators";
+import { validate_255, validate_513, validate_2048, validate_required } from "../../commons/custom_validators";
 import { getIconAndFontColor } from "../../commons/functions";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
@@ -170,9 +170,9 @@ const FileUploadObservations = () => {
                         <TextInputWide
                             source="docker_image_name_tag"
                             label="Docker image name:tag"
-                            validate={validate_255}
+                            validate={validate_513}
                         />
-                        <TextInputWide source="endpoint_url" validate={validate_2048} />
+                        <TextInputWide label="Endpoint URL" source="endpoint_url" validate={validate_2048} />
                         <TextInputWide source="kubernetes_cluster" validate={validate_255} />
                     </SimpleForm>
                 </DialogContent>
