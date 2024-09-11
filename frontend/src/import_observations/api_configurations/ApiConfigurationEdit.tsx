@@ -95,6 +95,9 @@ const ApiConfigurationEdit = () => {
         if (!patch.basic_auth_password) {
             patch.basic_auth_password = "";
         }
+        if (!patch.automatic_import_service) {
+            patch.automatic_import_service = "";
+        }
         if (!patch.automatic_import_docker_image_name_tag) {
             patch.automatic_import_docker_image_name_tag = "";
         }
@@ -208,15 +211,7 @@ const ApiConfigurationEdit = () => {
                             >
                                 <AutocompleteInputWide optionText="name" label="Branch / Version" />
                             </ReferenceInput>
-                            <ReferenceInput
-                                source="automatic_import_service"
-                                reference="services"
-                                sort={{ field: "name", order: "ASC" }}
-                                filter={{ product: api_configuration.product }}
-                                alwaysOn
-                            >
-                                <AutocompleteInputWide optionText="name" label="Service" />
-                            </ReferenceInput>
+                            <TextInputWide label="Service" source="automatic_import_service" validate={validate_255} />
                             <TextInputWide
                                 source="automatic_import_docker_image_name_tag"
                                 label="Docker image name:tag"

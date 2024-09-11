@@ -12,7 +12,7 @@ from django.db.models import (
 )
 from encrypted_model_fields.fields import EncryptedCharField
 
-from application.core.models import Branch, Product, Service
+from application.core.models import Branch, Product
 from application.import_observations.types import Parser_Source, Parser_Type
 
 
@@ -47,7 +47,7 @@ class Api_Configuration(Model):
     verify_ssl = BooleanField(default=False)
     automatic_import_enabled = BooleanField(default=False)
     automatic_import_branch = ForeignKey(Branch, on_delete=PROTECT, null=True)
-    automatic_import_service = ForeignKey(Service, on_delete=PROTECT, null=True)
+    automatic_import_service = CharField(max_length=255, blank=True)
     automatic_import_docker_image_name_tag = CharField(max_length=513, blank=True)
     automatic_import_endpoint_url = CharField(max_length=2048, blank=True)
     automatic_import_kubernetes_cluster = CharField(max_length=255, blank=True)
@@ -57,6 +57,9 @@ class Api_Configuration(Model):
             "product",
             "name",
         )
+
+    def __str__(self):
+        return f"{self.product.name} / {self.name}"
 
 
 class Vulnerability_Check(Model):

@@ -105,6 +105,9 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
         if (!data.basic_auth_password) {
             data.basic_auth_password = "";
         }
+        if (!data.automatic_import_service) {
+            data.automatic_import_service = "";
+        }
         if (!data.automatic_import_docker_image_name_tag) {
             data.automatic_import_docker_image_name_tag = "";
         }
@@ -185,15 +188,7 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
                     >
                         <AutocompleteInputWide optionText="name" label="Branch / Version" />
                     </ReferenceInput>
-                    <ReferenceInput
-                        source="automatic_import_service"
-                        reference="services"
-                        sort={{ field: "name", order: "ASC" }}
-                        filter={{ product: id }}
-                        alwaysOn
-                    >
-                        <AutocompleteInputWide optionText="name" label="Service" />
-                    </ReferenceInput>
+                    <TextInputWide label="Service" source="automatic_import_service" validate={validate_255} />
                     <TextInputWide
                         source="automatic_import_docker_image_name_tag"
                         label="Docker image name:tag"
