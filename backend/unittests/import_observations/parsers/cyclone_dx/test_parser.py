@@ -206,7 +206,9 @@ class TestCycloneDXParser(TestCase):
             self.assertEqual("", observation.origin_docker_image_digest)
             expected_dependencies = """example/example-frontend:dev --> alpine:3.17.3
 alpine:3.17.3 --> libxml2:2.10.3-r1"""
-            self.assertEqual(expected_dependencies, observation.origin_component_dependencies)
+            self.assertEqual(
+                expected_dependencies, observation.origin_component_dependencies
+            )
             self.assertEqual(
                 "https://access.redhat.com/security/cve/CVE-2023-29469",
                 observation.unsaved_references[0],
