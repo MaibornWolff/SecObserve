@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0049_observation_origin_kubernetes_cluster_and_more'),
+        ("core", "0049_observation_origin_kubernetes_cluster_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='observation',
-            name='origin_component_dependencies',
+            model_name="observation",
+            name="origin_component_dependencies",
             field=models.TextField(blank=True, max_length=32768),
         ),
     ]
