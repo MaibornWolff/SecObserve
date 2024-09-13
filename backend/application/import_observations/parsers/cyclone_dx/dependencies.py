@@ -213,6 +213,6 @@ def _parse_mermaid_graph_content(
 def _generate_dependency_list_as_text(graph: dict[str, set[str]]) -> str:
     lines = []
     for src, dests in graph.items():
-        for dest in dests:
+        for dest in sorted(dests):
             lines.append(f"{src} --> {dest}")
     return "\n".join(lines)
