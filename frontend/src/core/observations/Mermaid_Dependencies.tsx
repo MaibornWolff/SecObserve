@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogTitle, Divider, IconButton, Stack } from "
 import mermaid from "mermaid";
 import { Fragment, useEffect, useState } from "react";
 import { Labeled, WrapperField, useRecordContext } from "react-admin";
+import UAParser from "ua-parser-js";
 
 import LabeledTextField from "../../commons/custom_fields/LabeledTextField";
 import { getTheme } from "../../commons/user_settings/functions";
@@ -61,8 +62,14 @@ const createMermaidGraph = (dependencies_str: string) => {
         mermaid_content += "    " + dependencies[i] + "\n"; // eslint-disable-line security/detect-object-injection
     }
 
+    // This is needed because of https://github.com/mermaid-js/mermaid/issues/5646
+    const parser = new UAParser();
+    let max_length = 250;
+    if (parser.getBrowser().name == "Firefox") {
+        max_length = 25;
+    }
+
     let i = 1;
-    const max_length = 250;
     for (const component of components) {
         const trimmed_component =
             component.length > max_length ? component.substring(0, max_length - 3) + "..." : component;
