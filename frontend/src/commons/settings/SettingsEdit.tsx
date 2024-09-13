@@ -1,6 +1,6 @@
 import { Divider, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
-import { BooleanInput, Edit, NumberInput, SaveButton, SimpleForm, Toolbar } from "react-admin";
+import { BooleanInput, Edit, FormDataConsumer, NumberInput, SaveButton, SimpleForm, Toolbar } from "react-admin";
 
 import settings from ".";
 import { validate_0_23, validate_0_59, validate_0_999999, validate_255 } from "../../commons/custom_validators";
@@ -91,21 +91,21 @@ const SettingsEdit = () => {
                     />
                     <Stack direction="row" spacing={2}>
                         <NumberInput
-                            source="background_epss_import_crontab_hours"
-                            label="EPSS import crontab (hours)"
+                            source="background_epss_import_crontab_hour"
+                            label="EPSS import crontab (hour)"
                             min={0}
                             step={1}
                             validate={validate_0_23}
-                            helperText="Hours crontab expression for EPSS import (UTC)"
+                            helperText="Hour crontab expression for EPSS import (UTC)"
                             sx={{ marginBottom: 2 }}
                         />
                         <NumberInput
-                            source="background_epss_import_crontab_minutes"
-                            label="EPSS import crontab (minutes)"
+                            source="background_epss_import_crontab_minute"
+                            label="EPSS import crontab (minute)"
                             min={0}
                             step={1}
                             validate={validate_0_59}
-                            helperText="Minutes crontab expression for EPSS import"
+                            helperText="Minute crontab expression for EPSS import"
                             sx={{ marginBottom: 2 }}
                         />
                     </Stack>
@@ -136,21 +136,21 @@ const SettingsEdit = () => {
                     </Typography>
                     <Stack direction="row" spacing={2}>
                         <NumberInput
-                            source="branch_housekeeping_crontab_hours"
-                            label="Branch housekeeping crontab (hours)"
+                            source="branch_housekeeping_crontab_hour"
+                            label="Branch housekeeping crontab (hour)"
                             min={0}
                             step={1}
                             validate={validate_0_23}
-                            helperText="Hours crontab expression for branch housekeeping (UTC)"
+                            helperText="Hour crontab expression for branch housekeeping (UTC)"
                             sx={{ marginBottom: 2 }}
                         />
                         <NumberInput
-                            source="branch_housekeeping_crontab_minutes"
-                            label="Branch housekeeping crontab (minutes)"
+                            source="branch_housekeeping_crontab_minute"
+                            label="Branch housekeeping crontab (minute)"
                             min={0}
                             step={1}
                             validate={validate_0_59}
-                            helperText="Minutes crontab expression for branch housekeeping"
+                            helperText="Minute crontab expression for branch housekeeping"
                             sx={{ marginBottom: 2 }}
                         />
                     </Stack>
@@ -236,60 +236,68 @@ const SettingsEdit = () => {
                         helperText="Are security gates activated?"
                         sx={{ marginBottom: 2 }}
                     />
-                    <NumberInput
-                        source="security_gate_threshold_critical"
-                        label="Threshold critical"
-                        min={0}
-                        step={1}
-                        validate={validate_0_999999}
-                        helperText="Number of critical observations that must not be exceeded"
-                        sx={{ marginBottom: 2 }}
-                    />
-                    <NumberInput
-                        source="security_gate_threshold_high"
-                        label="Threshold high"
-                        min={0}
-                        step={1}
-                        validate={validate_0_999999}
-                        helperText="Number of high observations that must not be exceeded"
-                        sx={{ marginBottom: 2 }}
-                    />
-                    <NumberInput
-                        source="security_gate_threshold_medium"
-                        label="Threshold medium"
-                        min={0}
-                        step={1}
-                        validate={validate_0_999999}
-                        helperText="Number of medium observations that must not be exceeded"
-                        sx={{ marginBottom: 2 }}
-                    />
-                    <NumberInput
-                        source="security_gate_threshold_low"
-                        label="Threshold low"
-                        min={0}
-                        step={1}
-                        validate={validate_0_999999}
-                        helperText="Number of low observations that must not be exceeded"
-                        sx={{ marginBottom: 2 }}
-                    />
-                    <NumberInput
-                        source="security_gate_threshold_none"
-                        label="Threshold none"
-                        min={0}
-                        step={1}
-                        validate={validate_0_999999}
-                        helperText="Number of none observations that must not be exceeded"
-                        sx={{ marginBottom: 2 }}
-                    />
-                    <NumberInput
-                        source="security_gate_threshold_unkown"
-                        label="Threshold unknown"
-                        min={0}
-                        step={1}
-                        validate={validate_0_999999}
-                        helperText="Number of unkown observations that must not be exceeded"
-                        sx={{ marginBottom: 2 }}
-                    />
+                    <FormDataConsumer>
+                        {({ formData }) =>
+                            formData.security_gate_active && (
+                                <Fragment>
+                                    <NumberInput
+                                        source="security_gate_threshold_critical"
+                                        label="Threshold critical"
+                                        min={0}
+                                        step={1}
+                                        validate={validate_0_999999}
+                                        helperText="Number of critical observations that must not be exceeded"
+                                        sx={{ marginBottom: 2 }}
+                                    />
+                                    <NumberInput
+                                        source="security_gate_threshold_high"
+                                        label="Threshold high"
+                                        min={0}
+                                        step={1}
+                                        validate={validate_0_999999}
+                                        helperText="Number of high observations that must not be exceeded"
+                                        sx={{ marginBottom: 2 }}
+                                    />
+                                    <NumberInput
+                                        source="security_gate_threshold_medium"
+                                        label="Threshold medium"
+                                        min={0}
+                                        step={1}
+                                        validate={validate_0_999999}
+                                        helperText="Number of medium observations that must not be exceeded"
+                                        sx={{ marginBottom: 2 }}
+                                    />
+                                    <NumberInput
+                                        source="security_gate_threshold_low"
+                                        label="Threshold low"
+                                        min={0}
+                                        step={1}
+                                        validate={validate_0_999999}
+                                        helperText="Number of low observations that must not be exceeded"
+                                        sx={{ marginBottom: 2 }}
+                                    />
+                                    <NumberInput
+                                        source="security_gate_threshold_none"
+                                        label="Threshold none"
+                                        min={0}
+                                        step={1}
+                                        validate={validate_0_999999}
+                                        helperText="Number of none observations that must not be exceeded"
+                                        sx={{ marginBottom: 2 }}
+                                    />
+                                    <NumberInput
+                                        source="security_gate_threshold_unkown"
+                                        label="Threshold unknown"
+                                        min={0}
+                                        step={1}
+                                        validate={validate_0_999999}
+                                        helperText="Number of unkown observations that must not be exceeded"
+                                        sx={{ marginBottom: 2 }}
+                                    />
+                                </Fragment>
+                            )
+                        }
+                    </FormDataConsumer>
 
                     <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
                     <Typography variant="h6" sx={{ marginBottom: 2 }}>
@@ -306,24 +314,60 @@ const SettingsEdit = () => {
                     />
                     <Stack direction="row" spacing={2}>
                         <NumberInput
-                            source="risk_acceptance_expiry_crontab_hours"
-                            label="Risk acceptance expiry crontab (hours)"
+                            source="risk_acceptance_expiry_crontab_hour"
+                            label="Risk acceptance expiry crontab (hour)"
                             min={0}
                             step={1}
                             validate={validate_0_23}
-                            helperText="Hours crontab expression for checking risk acceptance expiry (UTC)"
+                            helperText="Hour crontab expression for checking risk acceptance expiry (UTC)"
                             sx={{ marginBottom: 2 }}
                         />
                         <NumberInput
-                            source="risk_acceptance_expiry_crontab_minutes"
-                            label="Risk acceptance expiry crontab (minutes)"
+                            source="risk_acceptance_expiry_crontab_minute"
+                            label="Risk acceptance expiry crontab (minute)"
                             min={0}
                             step={1}
                             validate={validate_0_59}
-                            helperText="Minutes crontab expression for checking risk acceptance expiry"
+                            helperText="Minute crontab expression for checking risk acceptance expiry"
                             sx={{ marginBottom: 2 }}
                         />
                     </Stack>
+
+                    <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+                    <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                        Automatic API import
+                    </Typography>
+                    <BooleanInput
+                        source="feature_automatic_api_import"
+                        label="Enable automatic API imports"
+                        sx={{ marginBottom: 2 }}
+                    />
+                    <FormDataConsumer>
+                        {({ formData }) =>
+                            formData.feature_automatic_api_import && (
+                                <Stack direction="row" spacing={2}>
+                                    <NumberInput
+                                        source="api_import_crontab_hour"
+                                        label="API import crontab (hour)"
+                                        min={0}
+                                        step={1}
+                                        validate={validate_0_23}
+                                        helperText="Hour crontab expression for API imports (UTC)"
+                                        sx={{ marginBottom: 2 }}
+                                    />
+                                    <NumberInput
+                                        source="api_import_crontab_minute"
+                                        label="API import crontab (minute)"
+                                        min={0}
+                                        step={1}
+                                        validate={validate_0_59}
+                                        helperText="Minute crontab expression for API imports"
+                                        sx={{ marginBottom: 2 }}
+                                    />
+                                </Stack>
+                            )
+                        }
+                    </FormDataConsumer>
                 </SimpleForm>
             </Edit>
         </Fragment>

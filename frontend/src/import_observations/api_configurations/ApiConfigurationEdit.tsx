@@ -8,6 +8,7 @@ import {
     SaveButton,
     SimpleForm,
     Toolbar,
+    WithRecord,
     useDataProvider,
     useNotify,
     useRefresh,
@@ -15,7 +16,13 @@ import {
 } from "react-admin";
 import { useWatch } from "react-hook-form";
 
-import { validate_required, validate_required_255 } from "../../commons/custom_validators";
+import {
+    validate_255,
+    validate_513,
+    validate_2048,
+    validate_required,
+    validate_required_255,
+} from "../../commons/custom_validators";
 import { AutocompleteInputWide, PasswordInputWide, TextInputWide } from "../../commons/layout/themes";
 
 const ApiConfigurationEdit = () => {
@@ -62,7 +69,44 @@ const ApiConfigurationEdit = () => {
             basic_auth_username: data.basic_auth_username,
             basic_auth_password: data.basic_auth_password,
             verify_ssl: data.verify_ssl,
+            automatic_import_enabled: data.automatic_import_enabled,
+            automatic_import_branch: data.automatic_import_branch,
+            automatic_import_service: data.automatic_import_service,
+            automatic_import_docker_image_name_tag: data.automatic_import_docker_image_name_tag,
+            automatic_import_endpoint_url: data.automatic_import_endpoint_url,
+            automatic_import_kubernetes_cluster: data.automatic_import_kubernetes_cluster,
         };
+
+        if (!patch.base_url) {
+            patch.base_url = "";
+        }
+        if (!patch.project_key) {
+            patch.project_key = "";
+        }
+        if (!patch.api_key) {
+            patch.api_key = "";
+        }
+        if (!patch.query) {
+            patch.query = "";
+        }
+        if (!patch.basic_auth_username) {
+            patch.basic_auth_username = "";
+        }
+        if (!patch.basic_auth_password) {
+            patch.basic_auth_password = "";
+        }
+        if (!patch.automatic_import_service) {
+            patch.automatic_import_service = "";
+        }
+        if (!patch.automatic_import_docker_image_name_tag) {
+            patch.automatic_import_docker_image_name_tag = "";
+        }
+        if (!patch.automatic_import_endpoint_url) {
+            patch.automatic_import_endpoint_url = "";
+        }
+        if (!patch.automatic_import_kubernetes_cluster) {
+            patch.automatic_import_kubernetes_cluster = "";
+        }
 
         update(
             "api_configurations",
@@ -151,6 +195,47 @@ const ApiConfigurationEdit = () => {
         }
     };
 
+    const AutomaticImportInput = () => {
+        const automatic_import_enabled = useWatch({ name: "automatic_import_enabled" });
+        if (automatic_import_enabled) {
+            return (
+                <WithRecord
+                    render={(api_configuration) => (
+                        <Fragment>
+                            <ReferenceInput
+                                source="automatic_import_branch"
+                                reference="branches"
+                                sort={{ field: "name", order: "ASC" }}
+                                filter={{ product: api_configuration.product }}
+                                alwaysOn
+                            >
+                                <AutocompleteInputWide optionText="name" label="Branch / Version" />
+                            </ReferenceInput>
+                            <TextInputWide label="Service" source="automatic_import_service" validate={validate_255} />
+                            <TextInputWide
+                                source="automatic_import_docker_image_name_tag"
+                                label="Docker image name:tag"
+                                validate={validate_513}
+                            />
+                            <TextInputWide
+                                label="Endpoint URL"
+                                source="automatic_import_endpoint_url"
+                                validate={validate_2048}
+                            />
+                            <TextInputWide
+                                label="Kubernetes cluster"
+                                source="automatic_import_kubernetes_cluster"
+                                validate={validate_255}
+                            />
+                        </Fragment>
+                    )}
+                />
+            );
+        } else {
+            return null;
+        }
+    };
+
     return (
         <Fragment>
             <Button
@@ -177,6 +262,8 @@ const ApiConfigurationEdit = () => {
                         <TextInputWide source="base_url" label="Base URL" validate={validate_required_255} />
                         <ParserInput />
                         <BooleanInput source="verify_ssl" label="Verify SSL" defaultValue={true} />
+                        <BooleanInput source="automatic_import_enabled" defaultValue={false} />
+                        <AutomaticImportInput />
                         <BooleanInput source="test_connection" defaultValue={true} />
                     </SimpleForm>
                 </DialogContent>

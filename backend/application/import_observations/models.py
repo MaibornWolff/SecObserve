@@ -41,16 +41,25 @@ class Api_Configuration(Model):
     project_key = CharField(max_length=255, blank=True)
     api_key = EncryptedCharField(max_length=255, blank=True)
     query = CharField(max_length=255, blank=True)
-    basic_auth_enabled = BooleanField(null=True)
+    basic_auth_enabled = BooleanField(default=False)
     basic_auth_username = CharField(max_length=255, blank=True)
     basic_auth_password = EncryptedCharField(max_length=255, blank=True)
-    verify_ssl = BooleanField(null=True)
+    verify_ssl = BooleanField(default=False)
+    automatic_import_enabled = BooleanField(default=False)
+    automatic_import_branch = ForeignKey(Branch, on_delete=PROTECT, null=True)
+    automatic_import_service = CharField(max_length=255, blank=True)
+    automatic_import_docker_image_name_tag = CharField(max_length=513, blank=True)
+    automatic_import_endpoint_url = CharField(max_length=2048, blank=True)
+    automatic_import_kubernetes_cluster = CharField(max_length=255, blank=True)
 
     class Meta:
         unique_together = (
             "product",
             "name",
         )
+
+    def __str__(self):
+        return f"{self.product.name} / {self.name}"
 
 
 class Vulnerability_Check(Model):

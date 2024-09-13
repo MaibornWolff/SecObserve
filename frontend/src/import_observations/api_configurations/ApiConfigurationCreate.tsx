@@ -16,7 +16,13 @@ import {
 } from "react-admin";
 import { useWatch } from "react-hook-form";
 
-import { validate_required, validate_required_255 } from "../../commons/custom_validators";
+import {
+    validate_255,
+    validate_513,
+    validate_2048,
+    validate_required,
+    validate_required_255,
+} from "../../commons/custom_validators";
 import { AutocompleteInputWide, PasswordInputWide, TextInputWide } from "../../commons/layout/themes";
 
 export type ApiConfigurationCreateProps = {
@@ -80,6 +86,38 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
 
     const createApiConfiguration = (data: any) => {
         data.product = id;
+
+        if (!data.base_url) {
+            data.base_url = "";
+        }
+        if (!data.project_key) {
+            data.project_key = "";
+        }
+        if (!data.api_key) {
+            data.api_key = "";
+        }
+        if (!data.query) {
+            data.query = "";
+        }
+        if (!data.basic_auth_username) {
+            data.basic_auth_username = "";
+        }
+        if (!data.basic_auth_password) {
+            data.basic_auth_password = "";
+        }
+        if (!data.automatic_import_service) {
+            data.automatic_import_service = "";
+        }
+        if (!data.automatic_import_docker_image_name_tag) {
+            data.automatic_import_docker_image_name_tag = "";
+        }
+        if (!data.automatic_import_endpoint_url) {
+            data.automatic_import_endpoint_url = "";
+        }
+        if (!data.automatic_import_kubernetes_cluster) {
+            data.automatic_import_kubernetes_cluster = "";
+        }
+
         create(
             "api_configurations",
             { data: data },
@@ -103,18 +141,18 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
             switch (selectedParser.name) {
                 case "Dependency Track":
                     return (
-                        <>
+                        <Fragment>
                             <TextInputWide source="api_key" label="API key" validate={validate_required_255} />
                             <TextInputWide source="project_key" validate={validate_required_255} />
-                        </>
+                        </Fragment>
                     );
                 case "Trivy Operator Prometheus":
                     return (
-                        <>
+                        <Fragment>
                             <TextInputWide source="query" label="Query" validate={validate_required_255} />
                             <BooleanInput source="basic_auth_enabled" label="Basic Auth" defaultValue={false} />
                             <BasicAuthInput />
-                        </>
+                        </Fragment>
                     );
             }
         } else {
@@ -126,10 +164,47 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
         const basic_auth_enabledId = useWatch({ name: "basic_auth_enabled" });
         if (basic_auth_enabledId) {
             return (
-                <>
+                <Fragment>
                     <TextInputWide source="basic_auth_username" validate={validate_required_255} />
                     <PasswordInputWide source="basic_auth_password" validate={validate_required_255} />
-                </>
+                </Fragment>
+            );
+        } else {
+            return null;
+        }
+    };
+
+    const AutomaticImportInput = () => {
+        const automatic_import_enabled = useWatch({ name: "automatic_import_enabled" });
+        if (automatic_import_enabled) {
+            return (
+                <Fragment>
+                    <ReferenceInput
+                        source="automatic_import_branch"
+                        reference="branches"
+                        sort={{ field: "name", order: "ASC" }}
+                        filter={{ product: id }}
+                        alwaysOn
+                    >
+                        <AutocompleteInputWide optionText="name" label="Branch / Version" />
+                    </ReferenceInput>
+                    <TextInputWide label="Service" source="automatic_import_service" validate={validate_255} />
+                    <TextInputWide
+                        source="automatic_import_docker_image_name_tag"
+                        label="Docker image name:tag"
+                        validate={validate_513}
+                    />
+                    <TextInputWide
+                        label="Endpoint URL"
+                        source="automatic_import_endpoint_url"
+                        validate={validate_2048}
+                    />
+                    <TextInputWide
+                        label="Kubernetes cluster"
+                        source="automatic_import_kubernetes_cluster"
+                        validate={validate_255}
+                    />
+                </Fragment>
             );
         } else {
             return null;
@@ -163,6 +238,8 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
                             <TextInputWide source="base_url" label="Base URL" validate={validate_required_255} />
                             <ParserInput />
                             <BooleanInput source="verify_ssl" label="Verify SSL" defaultValue={true} />
+                            <BooleanInput source="automatic_import_enabled" defaultValue={false} />
+                            <AutomaticImportInput />
                             <BooleanInput source="test_connection" defaultValue={true} />
                         </SimpleForm>
                     </CreateBase>
