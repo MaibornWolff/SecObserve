@@ -1,17 +1,42 @@
 import { Paper, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
-import { Labeled, TextField, useRecordContext } from "react-admin";
+import { Labeled, TextField, useRecordContext, WrapperField } from "react-admin";
 
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import { get_component_purl_url } from "../../commons/functions";
 import { getElevation } from "../../metrics/functions";
+import mermaid from "mermaid";
 
 type ObservationShowOriginsProps = {
     elevated: boolean;
 };
 
+mermaid.initialize({});
+
+const openMermaidSvgInNewTab = () => {
+    const svg = document.querySelector(".mermaid svg");
+    if (svg == null) {
+        return;
+    }
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const blob = new Blob([svgData], { type: "image/svg+xml" });
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+}
+
+const createMermaidGraph = (dependencies_str: string) => {
+    let dependencies = dependencies_str.split("\n");
+    let mermaid_content = "graph LR\n";
+    for (let i = 0; i < dependencies.length; i++) {
+        mermaid_content += '    '+dependencies[i]+"\n";
+    }
+    return mermaid_content;
+}
+
 const ObservationShowOrigins = ({ elevated }: ObservationShowOriginsProps) => {
     const observation = useRecordContext();
+    mermaid.contentLoaded();
+
     return (
         <Fragment>
             {observation &&
@@ -91,12 +116,12 @@ const ObservationShowOrigins = ({ elevated }: ObservationShowOriginsProps) => {
                                     )}
                                 </Stack>
                                 {observation.origin_component_dependencies != "" && (
-                                    <Labeled sx={{ marginTop: 2 }}>
-                                        <TextField
-                                            source="origin_component_dependencies"
-                                            label="Component dependencies"
-                                            sx={{ whiteSpace: "pre-line" }}
-                                        />
+                                    <Labeled sx={{width: "100%", marginTop: 2}}>
+                                        <WrapperField label="Component dependency graph">
+                                            <pre className="mermaid" onClick={openMermaidSvgInNewTab} style={{cursor: "pointer"}}>
+                                                {createMermaidGraph(observation.origin_component_dependencies)}
+                                            </pre>
+                                        </WrapperField>
                                     </Labeled>
                                 )}
                             </Fragment>

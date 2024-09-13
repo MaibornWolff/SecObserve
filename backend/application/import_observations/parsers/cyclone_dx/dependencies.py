@@ -1,3 +1,4 @@
+from collections import defaultdict
 import logging
 
 from application.import_observations.parsers.cyclone_dx.types import Component, Metadata
@@ -24,7 +25,7 @@ def get_component_dependencies(
             component_dependencies, components
         )
 
-        observation_component_dependencies = "\n".join(
+        observation_component_dependencies = generate_dependency_list_as_text(
             _get_dependencies(
                 component.bom_ref,
                 component_dependencies,
@@ -33,9 +34,9 @@ def get_component_dependencies(
             )
         )
 
-    if len(observation_component_dependencies) > 4096:
+    if len(observation_component_dependencies) > 32768:
         observation_component_dependencies = (
-            observation_component_dependencies[:4092] + " ..."
+            observation_component_dependencies[:32764] + " ..."
         )
 
     return observation_component_dependencies, translated_component_dependencies
@@ -110,7 +111,7 @@ def _get_dependencies(
     dependencies: list[str] = []
     try:
         for root in roots:
-            dependencies += _get_dependencies_recursive(
+            dependency = _get_dependencies_recursive(
                 root,
                 _translate_component(root, components),
                 root,
@@ -118,6 +119,8 @@ def _get_dependencies(
                 component_dependencies,
                 components,
             )
+            if dependency not in dependencies:
+                dependencies += dependency
     except RecursionError as e:
         logger.warning(
             "%s:%s -> %s", metadata.container_name, metadata.container_tag, str(e)
@@ -133,8 +136,9 @@ def _get_dependencies(
         ):
             return_dependencies.append(dependency)
 
-    return sorted(return_dependencies)
+    graph = parse_mermaid_graph_content(sorted(return_dependencies))
 
+    return graph
 
 def _get_dependencies_recursive(
     root: str,
@@ -169,7 +173,8 @@ def _get_dependencies_recursive(
                         component_dependencies,
                         components,
                     )
-                    dependencies += new_dependencies
+                    if new_dependencies not in dependencies:
+                        dependencies += new_dependencies
 
     return dependencies
 
@@ -188,3 +193,22 @@ def _get_roots(
             roots.append(ref)
 
     return roots
+
+
+def parse_mermaid_graph_content(mermaid_graph_content: list[str]) -> dict[str, set[str]]:
+    graph = defaultdict(set)
+
+    for line in mermaid_graph_content:
+        parts = line.strip().split('-->')
+        parts = [part.strip() for part in parts]
+        for i in range(len(parts) - 1):
+            graph[parts[i]].add(parts[i + 1])
+
+    return graph
+
+def generate_dependency_list_as_text(graph: dict[str, set[str]]) -> str:
+    lines = []
+    for src, dests in graph.items():
+        for dest in dests:
+            lines.append(f"{src} --> {dest}")
+    return '\n'.join(lines)
