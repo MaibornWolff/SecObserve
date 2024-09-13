@@ -168,6 +168,8 @@ class TestCycloneDXParser(TestCase):
             self.assertEqual("", observation.origin_docker_image_digest)
 
     def test_trivy(self):
+        self.maxDiff = None
+
         with open(path.dirname(__file__) + "/files/trivy.json") as testfile:
             parser = CycloneDXParser()
             check, messages, data = parser.check_format(testfile)
@@ -202,9 +204,10 @@ class TestCycloneDXParser(TestCase):
             )
             self.assertEqual("", observation.origin_docker_image_tag)
             self.assertEqual("", observation.origin_docker_image_digest)
+            expected_dependencies = """example/example-frontend:dev --> alpine:3.17.3
+alpine:3.17.3 --> libxml2:2.10.3-r1"""
             self.assertEqual(
-                "example/example-frontend:dev --> alpine:3.17.3 --> libxml2:2.10.3-r1",
-                observation.origin_component_dependencies,
+                expected_dependencies, observation.origin_component_dependencies
             )
             self.assertEqual(
                 "https://access.redhat.com/security/cve/CVE-2023-29469",
@@ -222,11 +225,12 @@ class TestCycloneDXParser(TestCase):
             )
 
             observation = observations[1]
-            expected_dependencies = """Circular dependency for geoip:1.6.12-r3
-Circular dependency for icu-data-en:72.1-r1
-example/example-frontend:dev --> alpine:3.17.3 --> busybox:1.35.0-r29 --> icu-libs:72.1-r1
-example/example-frontend:dev --> alpine:3.17.3 --> icu-data-en:72.1-r1 --> icu-libs:72.1-r1
-example/example-frontend:dev --> alpine:3.17.3 --> icu-libs:72.1-r1"""
+            expected_dependencies = """example/example-frontend:dev --> alpine:3.17.3
+alpine:3.17.3 --> busybox:1.35.0-r29
+alpine:3.17.3 --> icu-data-en:72.1-r1
+alpine:3.17.3 --> icu-libs:72.1-r1
+busybox:1.35.0-r29 --> icu-libs:72.1-r1
+icu-data-en:72.1-r1 --> icu-libs:72.1-r1"""
             self.assertEqual(
                 expected_dependencies,
                 observation.origin_component_dependencies,
