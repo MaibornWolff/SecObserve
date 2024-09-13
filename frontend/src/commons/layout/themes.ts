@@ -22,7 +22,7 @@ export function getLinkColor(setting_theme: string) {
     if (setting_theme == "dark") {
         return "#6ed2f0";
     } else {
-        return "#00B3F0";
+        return "#008BBC";
     }
 }
 
@@ -119,9 +119,9 @@ export const lightTheme = {
             styleOverrides: {
                 root: {
                     "& .RaReferenceField-link>*": {
-                        color: "#00B3F0",
+                        color: "#008BBC",
                         ":visited": {
-                            color: "#00B3F0",
+                            color: "#008BBC",
                         },
                     },
                 },
