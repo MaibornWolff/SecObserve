@@ -36,7 +36,7 @@
         "react-router-dom": "6.26.2",
         "runtime-env-cra": "file:lib/runtime-env-cra",
         "tss-react": "4.9.13",
-        "ua-parser-js": "0.7.39"
+        "ua-parser-js": "1.0.39"
     },
     "scripts": {
         "start": "NODE_ENV=development ./node_modules/runtime-env-cra/lib/index.js --config-name=./public/runtime-env.js && vite",
