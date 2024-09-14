@@ -1,7 +1,7 @@
 trivy_image_backend_current:
   SCANNER: trivy_image
   TARGET: "maibornwolff/secobserve-backend:dev"
-  FURTHER_PARAMETERS: "--vuln-type os" 
+  FURTHER_PARAMETERS: "--pkg-types os" 
   REPORT_NAME: "trivy_backend_image.json"
   SO_ORIGIN_SERVICE: "backend"
   SO_BRANCH_NAME: "dev"
@@ -9,7 +9,7 @@ trivy_image_backend_current:
 trivy_image_frontend_current:
   SCANNER: trivy_image
   TARGET: "maibornwolff/secobserve-frontend:dev"
-  FURTHER_PARAMETERS: "--vuln-type os" 
+  FURTHER_PARAMETERS: "--pkg-types os" 
   REPORT_NAME: "trivy_frontend_image.json"
   SO_ORIGIN_SERVICE: "frontend"
   SO_BRANCH_NAME: "dev"
