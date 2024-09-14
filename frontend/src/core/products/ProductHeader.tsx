@@ -37,11 +37,11 @@ const ProductHeader = () => {
                 </Labeled>
                 {product && product.security_gate_passed != undefined && (
                     <Labeled>
-                        <SecurityGateTextField />
+                        <SecurityGateTextField label="Security gate" />
                     </Labeled>
                 )}
-                <Labeled label={get_open_observation_label(product)}>
-                    <ObservationsCountField withLabel={true} />
+                <Labeled>
+                    <ObservationsCountField label={get_open_observation_label(product)} withLabel={true} />
                 </Labeled>
             </Paper>
         </RecordContextProvider>

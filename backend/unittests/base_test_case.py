@@ -62,10 +62,10 @@ class BaseTestCase(TestCase):
             product=self.product_1, user=self.user_internal, role=Roles.Writer
         )
 
-        authorization_group_1 = Authorization_Group(name="authorization_group_1")
+        self.authorization_group_1 = Authorization_Group(name="authorization_group_1")
         self.product_authorization_group_member_1 = Product_Authorization_Group_Member(
             product=self.product_1,
-            authorization_group=authorization_group_1,
+            authorization_group=self.authorization_group_1,
             role=Roles.Writer,
         )
 

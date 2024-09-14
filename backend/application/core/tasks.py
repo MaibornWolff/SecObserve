@@ -17,8 +17,8 @@ logger = logging.getLogger("secobserve.core")
 
 @db_periodic_task(
     crontab(
-        minute=settings_static.branch_housekeeping_crontab_minutes,
-        hour=settings_static.branch_housekeeping_crontab_hours,
+        minute=settings_static.branch_housekeeping_crontab_minute,
+        hour=settings_static.branch_housekeeping_crontab_hour,
     )
 )
 @lock_task("branch_housekeeping")
@@ -35,8 +35,8 @@ def task_branch_housekeeping() -> None:
 
 @db_periodic_task(
     crontab(
-        minute=settings_static.risk_acceptance_expiry_crontab_minutes,
-        hour=settings_static.risk_acceptance_expiry_crontab_hours,
+        minute=settings_static.risk_acceptance_expiry_crontab_minute,
+        hour=settings_static.risk_acceptance_expiry_crontab_hour,
     )
 )
 @lock_task("risk_acceptance_expiry")

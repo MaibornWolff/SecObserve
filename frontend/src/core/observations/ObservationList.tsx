@@ -113,7 +113,7 @@ const ObservationList = () => {
                     <TextField source="product_data.product_group_name" label="Group" />
                     <TextField source="branch_name" label="Branch / Version" />
                     <TextField source="title" />
-                    <SeverityField source="current_severity" />
+                    <SeverityField label="Severity" source="current_severity" />
                     <ChipField source="current_status" label="Status" />
                     <NumberField source="epss_score" label="EPSS" />
                     <TextField source="origin_service_name" label="Service" />

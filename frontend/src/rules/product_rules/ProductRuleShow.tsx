@@ -88,8 +88,9 @@ const ProductRuleComponent = () => {
                             Product Rule
                         </Typography>
                         <Stack spacing={1}>
-                            <Labeled label={getProductLabel(rule.product_data)}>
+                            <Labeled>
                                 <TextUrlField
+                                    label={getProductLabel(rule.product_data)}
                                     text={rule.product_data.name}
                                     url={generateProductURL(rule.product_data.id, rule.product_data.is_product_group)}
                                 />
@@ -98,8 +99,8 @@ const ProductRuleComponent = () => {
                                 <TextField source="name" className={classes.fontBigBold} />
                             </Labeled>
                             {rule.description && (
-                                <Labeled label="Description">
-                                    <MarkdownField content={rule.description} />
+                                <Labeled>
+                                    <MarkdownField content={rule.description} label="Description" />
                                 </Labeled>
                             )}
 

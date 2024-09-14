@@ -30,6 +30,7 @@ const authProvider: AuthProvider = {
                     setListProperties(auth.user.setting_list_properties);
                     delete auth.user.setting_list_properties;
                     localStorage.setItem("user", JSON.stringify(auth.user));
+                    localStorage.setItem("theme", auth.user.setting_theme);
                 })
                 .catch((error) => {
                     if (error.message == "Forbidden") {
@@ -57,8 +58,9 @@ const authProvider: AuthProvider = {
     },
     checkError: (error) => {
         if (error) {
-            if (error.status === 401 || error.status === 403) {
+            if (error.status === 401) {
                 if (oidc_signed_in()) {
+                    localStorage.setItem("last_location", location.hash);
                     const user_manager = new UserManager(oidcConfig);
                     return user_manager.signinRedirect();
                 }
@@ -100,6 +102,7 @@ const getUserInfo = async () => {
         setListProperties(response.json.setting_list_properties);
         delete response.json.setting_list_properties;
         localStorage.setItem("user", JSON.stringify(response.json));
+        localStorage.setItem("theme", response.json.setting_theme);
         return response.json;
     });
 };
@@ -121,7 +124,14 @@ export function oidc_signed_in(): boolean {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const onSigninCallback = (_user: User | void): void => {
-    window.history.replaceState({}, document.title, window.location.pathname);
+    const last_location = localStorage.getItem("last_location");
+    if (last_location) {
+        localStorage.removeItem("last_location");
+        location.hash = last_location;
+        window.history.replaceState({}, document.title, "/" + last_location);
+    } else {
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
 };
 
 export const oidcConfig = {

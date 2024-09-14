@@ -367,6 +367,9 @@ class Product_Member(Model):
             "user",
         )
 
+    def __str__(self):
+        return f"{self.product} / {self.user}"
+
 
 class Product_Authorization_Group_Member(Model):
     product = ForeignKey(Product, on_delete=CASCADE)
@@ -378,6 +381,9 @@ class Product_Authorization_Group_Member(Model):
             "product",
             "authorization_group",
         )
+
+    def __str__(self):
+        return f"{self.product} / {self.authorization_group}"
 
 
 class Observation(Model):
@@ -415,7 +421,7 @@ class Observation(Model):
     origin_component_purl = CharField(max_length=255, blank=True)
     origin_component_purl_type = CharField(max_length=16, blank=True)
     origin_component_cpe = CharField(max_length=255, blank=True)
-    origin_component_dependencies = TextField(max_length=4096, blank=True)
+    origin_component_dependencies = TextField(max_length=32768, blank=True)
     origin_docker_image_name = CharField(max_length=255, blank=True)
     origin_docker_image_tag = CharField(max_length=255, blank=True)
     origin_docker_image_name_tag = CharField(max_length=513, blank=True)

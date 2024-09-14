@@ -1,3 +1,5 @@
+import { ThemeType } from "react-admin";
+
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
 export async function saveSettingTheme(theme: string) {
@@ -9,11 +11,13 @@ export async function saveSettingTheme(theme: string) {
 
 export function getSettingTheme(): string {
     let theme = "light";
-
+    const storage_theme = localStorage.getItem("theme");
     const user = localStorage.getItem("user");
     if (user) {
         const user_json = JSON.parse(user);
         theme = user_json.setting_theme;
+    } else if (storage_theme) {
+        theme = storage_theme;
     }
 
     return theme;
@@ -35,7 +39,7 @@ export function getSettingListSize(): "small" | "medium" | undefined {
     return list_size;
 }
 
-export function getTheme() {
+export function getTheme(): ThemeType {
     const setting_theme = getSettingTheme();
     if (setting_theme == "dark") {
         return "dark";

@@ -12,6 +12,7 @@ from rest_framework.serializers import (
 
 from application.access_control.services.roles_permissions import Permissions
 from application.core.api.serializers_product import NestedProductSerializer
+from application.core.models import Branch
 from application.import_observations.models import (
     Api_Configuration,
     Parser,
@@ -146,6 +147,17 @@ class ApiConfigurationSerializer(ModelSerializer):
             raise ValidationError("Product cannot be changed")
 
         return attrs
+
+    def validate_automatic_import_branch(self, branch: Branch) -> Branch:
+        product_id = (
+            self.instance.product.pk if self.instance else self.initial_data["product"]
+        )
+        if branch and branch.product.pk != product_id:
+            raise ValidationError(
+                "Branch does not belong to the same product as the API Configuration"
+            )
+
+        return branch
 
 
 class VulnerabilityCheckSerializer(ModelSerializer):

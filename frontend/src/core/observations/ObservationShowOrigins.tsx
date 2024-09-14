@@ -5,6 +5,7 @@ import { Labeled, TextField, useRecordContext } from "react-admin";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import { get_component_purl_url } from "../../commons/functions";
 import { getElevation } from "../../metrics/functions";
+import MermaidDependencies from "./Mermaid_Dependencies";
 
 type ObservationShowOriginsProps = {
     elevated: boolean;
@@ -12,6 +13,7 @@ type ObservationShowOriginsProps = {
 
 const ObservationShowOrigins = ({ elevated }: ObservationShowOriginsProps) => {
     const observation = useRecordContext();
+
     return (
         <Fragment>
             {observation &&
@@ -68,8 +70,9 @@ const ObservationShowOrigins = ({ elevated }: ObservationShowOriginsProps) => {
                                             observation.origin_component_purl_type,
                                             observation.origin_component_purl_namespace
                                         ) != null && (
-                                            <Labeled label="Component PURL">
+                                            <Labeled>
                                                 <TextUrlField
+                                                    label="Component PURL"
                                                     text={observation.origin_component_purl}
                                                     url={
                                                         observation.origin_component_purl &&
@@ -89,15 +92,7 @@ const ObservationShowOrigins = ({ elevated }: ObservationShowOriginsProps) => {
                                         </Labeled>
                                     )}
                                 </Stack>
-                                {observation.origin_component_dependencies != "" && (
-                                    <Labeled sx={{ marginTop: 2 }}>
-                                        <TextField
-                                            source="origin_component_dependencies"
-                                            label="Component dependencies"
-                                            sx={{ whiteSpace: "pre-line" }}
-                                        />
-                                    </Labeled>
-                                )}
+                                {observation.origin_component_dependencies != "" && <MermaidDependencies />}
                             </Fragment>
                         )}
                         {observation.origin_docker_image_name != "" && (
@@ -130,8 +125,9 @@ const ObservationShowOrigins = ({ elevated }: ObservationShowOriginsProps) => {
                                     Endpoint
                                 </Typography>
                                 {observation.origin_endpoint_url != "" && (
-                                    <Labeled label="Endpoint URL">
+                                    <Labeled>
                                         <TextUrlField
+                                            label="Endpoint URL"
                                             text={observation.origin_endpoint_url}
                                             url={observation.origin_endpoint_url}
                                         />

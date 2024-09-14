@@ -86,6 +86,4 @@ const ObservationsCountField = (props: ObservationsProps) => {
     ) : null;
 };
 
-ObservationsCountField.defaultProps = { label: "Open observations" };
-
 export default ObservationsCountField;

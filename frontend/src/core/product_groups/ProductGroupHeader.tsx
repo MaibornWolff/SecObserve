@@ -27,8 +27,8 @@ const ProductGroupHeader = () => {
                 <Labeled label="Product Group name">
                     <TextField source="name" className={classes.fontBigBold} />
                 </Labeled>
-                <Labeled label="Open observations">
-                    <ObservationsCountField withLabel={true} />
+                <Labeled>
+                    <ObservationsCountField label="Open observations" withLabel={true} />
                 </Labeled>
             </Paper>
         </RecordContextProvider>

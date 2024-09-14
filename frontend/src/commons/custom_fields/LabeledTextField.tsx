@@ -17,6 +17,4 @@ const LabeledTextField = (props: LabeledTextFieldProps) => {
     );
 };
 
-LabeledTextField.defaultProps = { label: "" };
-
 export default LabeledTextField;

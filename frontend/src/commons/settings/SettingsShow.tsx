@@ -45,12 +45,14 @@ const SettingsShowComponent = () => {
                             <Labeled label="Product metrics interval (minutes)">
                                 <NumberField source="background_product_metrics_interval_minutes" />
                             </Labeled>
-                            <Labeled label="EPSS import crontab (hours)">
-                                <NumberField source="background_epss_import_crontab_hours" />
-                            </Labeled>
-                            <Labeled label="EPSS import crontab (minutes)">
-                                <NumberField source="background_epss_import_crontab_minutes" />
-                            </Labeled>
+                            <Stack direction="row" spacing={2}>
+                                <Labeled label="EPSS import crontab (hour/UTC)">
+                                    <NumberField source="background_epss_import_crontab_hour" />
+                                </Labeled>
+                                <Labeled label="EPSS import crontab (minutes)">
+                                    <NumberField source="background_epss_import_crontab_minute" />
+                                </Labeled>
+                            </Stack>
                         </Stack>
                     </Paper>
 
@@ -72,12 +74,14 @@ const SettingsShowComponent = () => {
                     <Paper sx={{ marginBottom: 2, padding: 2 }}>
                         <Typography variant="h6">Housekeeping for branches</Typography>
                         <Stack spacing={2}>
-                            <Labeled label="Branch housekeeping crontab (hours)">
-                                <NumberField source="branch_housekeeping_crontab_hours" />
-                            </Labeled>
-                            <Labeled label="Branch housekeeping crontab (minutes)">
-                                <NumberField source="branch_housekeeping_crontab_minutes" />
-                            </Labeled>
+                            <Stack direction="row" spacing={2}>
+                                <Labeled label="Branch housekeeping crontab (hour/UTC)">
+                                    <NumberField source="branch_housekeeping_crontab_hour" />
+                                </Labeled>
+                                <Labeled label="Branch housekeeping crontab (minute)">
+                                    <NumberField source="branch_housekeeping_crontab_minute" />
+                                </Labeled>
+                            </Stack>
                             <Labeled label="Branch housekeeping active">
                                 <BooleanField source="branch_housekeeping_active" />
                             </Labeled>
@@ -132,24 +136,28 @@ const SettingsShowComponent = () => {
                             <Labeled label="Security gates active">
                                 <BooleanField source="security_gate_active" />
                             </Labeled>
-                            <Labeled label="Threshold critical">
-                                <NumberField source="security_gate_threshold_critical" />
-                            </Labeled>
-                            <Labeled label="Threshold high">
-                                <NumberField source="security_gate_threshold_high" />
-                            </Labeled>
-                            <Labeled label="Threshold medium">
-                                <NumberField source="security_gate_threshold_medium" />
-                            </Labeled>
-                            <Labeled label="Threshold low">
-                                <NumberField source="security_gate_threshold_low" />
-                            </Labeled>
-                            <Labeled label="Threshold none">
-                                <NumberField source="security_gate_threshold_none" />
-                            </Labeled>
-                            <Labeled label="Threshold unkown">
-                                <NumberField source="security_gate_threshold_unkown" />
-                            </Labeled>
+                            {settings.security_gate_active && (
+                                <Fragment>
+                                    <Labeled label="Threshold critical">
+                                        <NumberField source="security_gate_threshold_critical" />
+                                    </Labeled>
+                                    <Labeled label="Threshold high">
+                                        <NumberField source="security_gate_threshold_high" />
+                                    </Labeled>
+                                    <Labeled label="Threshold medium">
+                                        <NumberField source="security_gate_threshold_medium" />
+                                    </Labeled>
+                                    <Labeled label="Threshold low">
+                                        <NumberField source="security_gate_threshold_low" />
+                                    </Labeled>
+                                    <Labeled label="Threshold none">
+                                        <NumberField source="security_gate_threshold_none" />
+                                    </Labeled>
+                                    <Labeled label="Threshold unkown">
+                                        <NumberField source="security_gate_threshold_unkown" />
+                                    </Labeled>
+                                </Fragment>
+                            )}
                         </Stack>
                     </Paper>
 
@@ -159,12 +167,33 @@ const SettingsShowComponent = () => {
                             <Labeled label="Risk acceptance expiry (days)">
                                 <NumberField source="risk_acceptance_expiry_days" />
                             </Labeled>
-                            <Labeled label="Risk acceptance expiry crontab (hours/UTC)">
-                                <NumberField source="risk_acceptance_expiry_crontab_hours" />
+                            <Stack direction="row" spacing={2}>
+                                <Labeled label="Risk acceptance expiry crontab (hour/UTC)">
+                                    <NumberField source="risk_acceptance_expiry_crontab_hour" />
+                                </Labeled>
+                                <Labeled label="Risk acceptance expiry crontab (minute)">
+                                    <NumberField source="risk_acceptance_expiry_crontab_minute" />
+                                </Labeled>
+                            </Stack>
+                        </Stack>
+                    </Paper>
+
+                    <Paper sx={{ marginBottom: 2, padding: 2 }}>
+                        <Typography variant="h6">Automatic API import</Typography>
+                        <Stack spacing={2}>
+                            <Labeled label="Enable automatic API imports">
+                                <BooleanField source="feature_automatic_api_import" />
                             </Labeled>
-                            <Labeled label="Risk acceptance expiry crontab (minutes)">
-                                <NumberField source="risk_acceptance_expiry_crontab_minutes" />
-                            </Labeled>
+                            {settings.feature_automatic_api_import && (
+                                <Stack direction="row" spacing={2}>
+                                    <Labeled label="API import crontab (hour/UTC)">
+                                        <NumberField source="api_import_crontab_hour" />
+                                    </Labeled>
+                                    <Labeled label="API import crontab (minute)">
+                                        <NumberField source="api_import_crontab_minute" />
+                                    </Labeled>
+                                </Stack>
+                            )}
                         </Stack>
                     </Paper>
                 </Box>
