@@ -92,7 +92,7 @@ const ObservationShowOrigins = ({ elevated }: ObservationShowOriginsProps) => {
                                         </Labeled>
                                     )}
                                 </Stack>
-                                {observation.origin_component_dependencies != "" && <MermaidDependencies />}
+                                {observation.origin_component_dependencies != "" && elevated && <MermaidDependencies />}
                             </Fragment>
                         )}
                         {observation.origin_docker_image_name != "" && (
