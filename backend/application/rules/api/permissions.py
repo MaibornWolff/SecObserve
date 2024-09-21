@@ -24,9 +24,9 @@ class UserHasProductRulePermission(BasePermission):
 
     def has_object_permission(self, request, view, obj):
         return check_object_permission(
-            request,
-            obj,
-            Permissions.Product_Rule_View,
-            Permissions.Product_Rule_Edit,
-            Permissions.Product_Rule_Delete,
+            request=request,
+            object_to_check=obj,
+            get_permission=Permissions.Product_Rule_View,
+            put_permission=Permissions.Product_Rule_Edit,
+            delete_permission=Permissions.Product_Rule_Delete,
         )

@@ -19,25 +19,25 @@ from application.issue_tracker.services.issue_tracker import (
 )
 
 
-def observations_bulk_assessment(  # pylint: disable=too-many-arguments
-    # All arguments are required
+def observations_bulk_assessment(
+    *,
     product: Optional[Product],
     new_severity: str,
     new_status: str,
     comment: str,
     observation_ids: list[int],
     new_vex_justification: str,
-    new_risk_acceptance_expiration_date: Optional[date],
+    new_risk_acceptance_expiry_date: Optional[date],
 ) -> None:
     observations = _check_observations(product, observation_ids)
     for observation in observations:
         save_assessment(
-            observation,
-            new_severity,
-            new_status,
-            comment,
-            new_vex_justification,
-            new_risk_acceptance_expiration_date,
+            observation=observation,
+            new_severity=new_severity,
+            new_status=new_status,
+            comment=comment,
+            new_vex_justification=new_vex_justification,
+            new_risk_acceptance_expiry_date=new_risk_acceptance_expiry_date,
         )
 
 
@@ -94,7 +94,14 @@ def observations_bulk_mark_duplicates(
 
     for duplicate in duplicates:
         duplicate.has_potential_duplicates = False
-        save_assessment(duplicate, None, Status.STATUS_DUPLICATE, comment, "", None)
+        save_assessment(
+            observation=duplicate,
+            new_severity=None,
+            new_status=Status.STATUS_DUPLICATE,
+            comment=comment,
+            new_vex_justification="",
+            new_risk_acceptance_expiry_date=None,
+        )
 
     set_potential_duplicate(observation)
 

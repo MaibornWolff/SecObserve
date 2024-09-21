@@ -72,12 +72,12 @@ class TestPermissions(BaseTestCase):
 
         self.assertTrue(
             check_object_permission(
-                request,
-                self.product_1,
-                Permissions.Product_View,
-                Permissions.Product_Edit,
-                Permissions.Product_Delete,
-                Permissions.Product_Create,
+                request=request,
+                object_to_check=self.product_1,
+                get_permission=Permissions.Product_View,
+                put_permission=Permissions.Product_Edit,
+                delete_permission=Permissions.Product_Delete,
+                post_permission=Permissions.Product_Create,
             )
         )
         mock.assert_called_with(self.product_1, Permissions.Product_View)
@@ -90,12 +90,12 @@ class TestPermissions(BaseTestCase):
 
         self.assertTrue(
             check_object_permission(
-                request,
-                self.product_1,
-                Permissions.Product_View,
-                Permissions.Product_Edit,
-                Permissions.Product_Delete,
-                Permissions.Product_Create,
+                request=request,
+                object_to_check=self.product_1,
+                get_permission=Permissions.Product_View,
+                put_permission=Permissions.Product_Edit,
+                delete_permission=Permissions.Product_Delete,
+                post_permission=Permissions.Product_Create,
             )
         )
         mock.assert_called_with(self.product_1, Permissions.Product_Edit)
@@ -108,12 +108,12 @@ class TestPermissions(BaseTestCase):
 
         self.assertTrue(
             check_object_permission(
-                request,
-                self.product_1,
-                Permissions.Product_View,
-                Permissions.Product_Edit,
-                Permissions.Product_Delete,
-                Permissions.Product_Create,
+                request=request,
+                object_to_check=self.product_1,
+                get_permission=Permissions.Product_View,
+                put_permission=Permissions.Product_Edit,
+                delete_permission=Permissions.Product_Delete,
+                post_permission=Permissions.Product_Create,
             )
         )
         mock.assert_called_with(self.product_1, Permissions.Product_Edit)
@@ -126,12 +126,12 @@ class TestPermissions(BaseTestCase):
 
         self.assertTrue(
             check_object_permission(
-                request,
-                self.product_1,
-                Permissions.Product_View,
-                Permissions.Product_Edit,
-                Permissions.Product_Delete,
-                Permissions.Product_Create,
+                request=request,
+                object_to_check=self.product_1,
+                get_permission=Permissions.Product_View,
+                put_permission=Permissions.Product_Edit,
+                delete_permission=Permissions.Product_Delete,
+                post_permission=Permissions.Product_Create,
             )
         )
         mock.assert_called_with(self.product_1, Permissions.Product_Delete)
@@ -144,12 +144,12 @@ class TestPermissions(BaseTestCase):
 
         self.assertTrue(
             check_object_permission(
-                request,
-                self.product_1,
-                Permissions.Product_View,
-                Permissions.Product_Edit,
-                Permissions.Product_Delete,
-                Permissions.Product_Create,
+                request=request,
+                object_to_check=self.product_1,
+                get_permission=Permissions.Product_View,
+                put_permission=Permissions.Product_Edit,
+                delete_permission=Permissions.Product_Delete,
+                post_permission=Permissions.Product_Create,
             )
         )
         mock.assert_called_with(self.product_1, Permissions.Product_Create)
@@ -160,11 +160,11 @@ class TestPermissions(BaseTestCase):
 
         self.assertFalse(
             check_object_permission(
-                request,
-                self.product_1,
-                Permissions.Product_View,
-                Permissions.Product_Edit,
-                Permissions.Product_Delete,
-                Permissions.Product_Create,
+                request=request,
+                object_to_check=self.product_1,
+                get_permission=Permissions.Product_View,
+                put_permission=Permissions.Product_Edit,
+                delete_permission=Permissions.Product_Delete,
+                post_permission=Permissions.Product_Create,
             )
         )

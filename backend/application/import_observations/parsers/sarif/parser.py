@@ -98,25 +98,26 @@ class SARIFParser(BaseParser, BaseFileParser):
                 if sarif_locations:
                     for sarif_location in result.get("locations", []):
                         self.create_observation(
-                            result,
-                            observations,
-                            sarif_scanner,
-                            sarif_rules,
-                            sarif_location,
+                            result=result,
+                            observations=observations,
+                            sarif_scanner=sarif_scanner,
+                            sarif_rules=sarif_rules,
+                            sarif_location=sarif_location,
                         )
                 else:
                     self.create_observation(
-                        result,
-                        observations,
-                        sarif_scanner,
-                        sarif_rules,
-                        None,
+                        result=result,
+                        observations=observations,
+                        sarif_scanner=sarif_scanner,
+                        sarif_rules=sarif_rules,
+                        sarif_location=None,
                     )
 
         return observations
 
     def create_observation(
         self,
+        *,
         result: dict,
         observations: list[Observation],
         sarif_scanner: str,
@@ -139,7 +140,11 @@ class SARIFParser(BaseParser, BaseFileParser):
         title = self.get_title(sarif_scanner, sarif_rule_id, sarif_rule)
 
         description = self.get_description(
-            sarif_scanner, location.snippet, sarif_rule, title, result
+            sarif_scanner=sarif_scanner,
+            sarif_snippet=location.snippet,
+            sarif_rule=sarif_rule,
+            title=title,
+            result=result,
         )
 
         sarif_cwe = None
@@ -261,6 +266,7 @@ class SARIFParser(BaseParser, BaseFileParser):
 
     def get_description(  # pylint: disable=too-many-branches
         self,
+        *,
         sarif_scanner: str,
         sarif_snippet: Optional[str],
         sarif_rule: Rule,

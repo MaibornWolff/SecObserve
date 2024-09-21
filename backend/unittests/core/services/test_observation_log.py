@@ -21,13 +21,13 @@ class TestObservationLog(BaseTestCase):
         mock_user.return_value = self.user_internal
 
         observation_log = create_observation_log(
-            self.observation_1,
-            "severity",
-            "status",
-            "comment",
-            "vex_justification",
-            Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
-            date(2024, 7, 1),
+            observation=self.observation_1,
+            severity="severity",
+            status="status",
+            comment="comment",
+            vex_justification="vex_justification",
+            assessment_status=Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
+            risk_acceptance_expiry_date=date(2024, 7, 1),
         )
 
         self.assertEqual(self.observation_1, observation_log.observation)

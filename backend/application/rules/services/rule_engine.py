@@ -146,11 +146,11 @@ class Rule_Engine:
                     != observation.current_vex_justification
                 ):
                     self._write_observation_log(
-                        observation,
-                        rule,
-                        previous_severity,
-                        previous_status,
-                        previous_vex_justification,
+                        observation=observation,
+                        rule=rule,
+                        previous_severity=previous_severity,
+                        previous_status=previous_status,
+                        previous_vex_justification=previous_vex_justification,
                     )
                     push_observation_to_issue_tracker(observation, get_current_user())
                 rule_found = True
@@ -187,6 +187,7 @@ class Rule_Engine:
 
     def _write_observation_log(
         self,
+        *,
         observation: Observation,
         rule: Rule,
         previous_severity: str,
@@ -221,13 +222,13 @@ class Rule_Engine:
         )
 
         create_observation_log(
-            observation,
-            severity,
-            status,
-            comment,
-            vex_justification,
-            Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
-            risk_acceptance_expiry_date,
+            observation=observation,
+            severity=severity,
+            status=status,
+            comment=comment,
+            vex_justification=vex_justification,
+            assessment_status=Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
+            risk_acceptance_expiry_date=risk_acceptance_expiry_date,
         )
 
     def _write_observation_log_no_rule(
@@ -282,11 +283,11 @@ class Rule_Engine:
         )
 
         create_observation_log(
-            observation,
-            severity,
-            status,
-            comment,
-            vex_justification,
-            Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
-            risk_acceptance_expiry_date,
+            observation=observation,
+            severity=severity,
+            status=status,
+            comment=comment,
+            vex_justification=vex_justification,
+            assessment_status=Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
+            risk_acceptance_expiry_date=risk_acceptance_expiry_date,
         )

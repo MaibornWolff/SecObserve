@@ -7,11 +7,11 @@ from application.access_control.services.roles_permissions import Permissions
 class UserHasVEXPermission(BasePermission):
     def has_object_permission(self, request, view, obj):
         return check_object_permission(
-            request,
-            obj,
-            Permissions.VEX_View,
-            Permissions.VEX_Edit,
-            Permissions.VEX_Delete,
+            request=request,
+            object_to_check=obj,
+            get_permission=Permissions.VEX_View,
+            put_permission=Permissions.VEX_Edit,
+            delete_permission=Permissions.VEX_Delete,
         )
 
 

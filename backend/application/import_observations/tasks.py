@@ -8,6 +8,7 @@ from application.commons.models import Settings
 from application.commons.services.tasks import handle_task_exception
 from application.import_observations.models import Api_Configuration
 from application.import_observations.services.import_observations import (
+    ApiImportParameters,
     api_import_observations,
 )
 
@@ -35,21 +36,25 @@ def task_api_import() -> None:
         )
         for api_configuration in api_configurations:
             try:
+                api_import_parameters = ApiImportParameters(
+                    api_configuration=api_configuration,
+                    branch=api_configuration.automatic_import_branch,
+                    service=api_configuration.automatic_import_service,
+                    docker_image_name_tag=api_configuration.automatic_import_docker_image_name_tag,
+                    endpoint_url=api_configuration.automatic_import_endpoint_url,
+                    kubernetes_cluster=api_configuration.automatic_import_kubernetes_cluster,
+                )
                 (
                     observations_new,
                     observations_updated,
                     observations_resolved,
-                ) = api_import_observations(
-                    api_configuration,
-                    api_configuration.automatic_import_branch,
-                    api_configuration.automatic_import_service,
-                    api_configuration.automatic_import_docker_image_name_tag,
-                    api_configuration.automatic_import_endpoint_url,
-                    api_configuration.automatic_import_kubernetes_cluster,
-                )
+                ) = api_import_observations(api_import_parameters)
                 logger.info(
-                    f"API import - {api_configuration}: "
-                    + f"{observations_new} new, {observations_updated} updated, {observations_resolved} resolved"
+                    "API import - %s: %s new, %s updated, %s resolved",
+                    api_configuration,
+                    observations_new,
+                    observations_updated,
+                    observations_resolved,
                 )
             except Exception as e:
                 logger.warning(

@@ -8,11 +8,11 @@ class UserHasNotificationPermission(BasePermission):
     def has_object_permission(self, request, view, obj):
         if obj.product:
             return check_object_permission(
-                request,
-                obj.product,
-                Permissions.Product_View,
-                None,
-                Permissions.Product_Delete,
+                request=request,
+                object_to_check=obj.product,
+                get_permission=Permissions.Product_View,
+                put_permission=None,
+                delete_permission=Permissions.Product_Delete,
             )
 
         if request.user and request.user.is_superuser:

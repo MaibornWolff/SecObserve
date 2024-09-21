@@ -19,6 +19,7 @@ def check_post_permission(request, post_model, post_foreign_key, post_permission
 
 
 def check_object_permission(
+    *,
     request,
     object_to_check,
     get_permission,
