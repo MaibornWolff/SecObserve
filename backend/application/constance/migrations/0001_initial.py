@@ -1,4 +1,5 @@
 import picklefield.fields  # nosec B403
+
 # picklefield is used to store python objects in the database
 from django.db import migrations, models
 
