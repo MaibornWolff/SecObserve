@@ -227,13 +227,13 @@ def _write_observation_log(
     )
 
     create_observation_log(
-        observation,
-        "",
-        status,
-        comment,
-        vex_justification,
-        Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
-        risk_acceptance_expiry_date,
+        observation=observation,
+        severity="",
+        status=status,
+        comment=comment,
+        vex_justification=vex_justification,
+        assessment_status=Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
+        risk_acceptance_expiry_date=risk_acceptance_expiry_date,
     )
 
 
@@ -274,13 +274,13 @@ def write_observation_log_no_vex_statement(
     )
 
     create_observation_log(
-        observation,
-        "",
-        log_status,
-        log_comment,
-        log_vex_justification,
-        Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
-        risk_acceptance_expiry_date,
+        observation=observation,
+        severity="",
+        status=log_status,
+        comment=log_comment,
+        vex_justification=log_vex_justification,
+        assessment_status=Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
+        risk_acceptance_expiry_date=risk_acceptance_expiry_date,
     )
 
 

@@ -52,6 +52,7 @@ from application.import_observations.queries.vulnerability_check import (
     get_vulnerability_checks,
 )
 from application.import_observations.services.import_observations import (
+    ApiImportParameters,
     FileUploadParameters,
     api_import_observations,
     file_upload_observations,
@@ -99,18 +100,20 @@ class ApiImportObservationsById(APIView):
         endpoint_url = request_serializer.validated_data.get("endpoint_url")
         kubernetes_cluster = request_serializer.validated_data.get("kubernetes_cluster")
 
+        api_import_parameters = ApiImportParameters(
+            api_configuration=api_configuration,
+            branch=branch,
+            service=service,
+            docker_image_name_tag=docker_image_name_tag,
+            endpoint_url=endpoint_url,
+            kubernetes_cluster=kubernetes_cluster,
+        )
+
         (
             observations_new,
             observations_updated,
             observations_resolved,
-        ) = api_import_observations(
-            api_configuration,
-            branch,
-            service,
-            docker_image_name_tag,
-            endpoint_url,
-            kubernetes_cluster,
-        )
+        ) = api_import_observations(api_import_parameters)
 
         response_data = {
             "observations_new": observations_new,
@@ -164,18 +167,19 @@ class ApiImportObservationsByName(APIView):
         endpoint_url = request_serializer.validated_data.get("endpoint_url")
         kubernetes_cluster = request_serializer.validated_data.get("kubernetes_cluster")
 
+        api_import_parameters = ApiImportParameters(
+            api_configuration=api_configuration,
+            branch=branch,
+            service=service,
+            docker_image_name_tag=docker_image_name_tag,
+            endpoint_url=endpoint_url,
+            kubernetes_cluster=kubernetes_cluster,
+        )
         (
             observations_new,
             observations_updated,
             observations_resolved,
-        ) = api_import_observations(
-            api_configuration,
-            branch,
-            service,
-            docker_image_name_tag,
-            endpoint_url,
-            kubernetes_cluster,
-        )
+        ) = api_import_observations(api_import_parameters)
 
         response_data = {
             "observations_new": observations_new,

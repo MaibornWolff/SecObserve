@@ -79,6 +79,16 @@ class FileUploadParameters:
     kubernetes_cluster: str
 
 
+@dataclass
+class ApiImportParameters:
+    api_configuration: Api_Configuration
+    branch: Optional[Branch]
+    service: str
+    docker_image_name_tag: str
+    endpoint_url: str
+    kubernetes_cluster: str
+
+
 def file_upload_observations(
     file_upload_parameters: FileUploadParameters,
 ) -> Tuple[int, int, int]:
@@ -132,19 +142,20 @@ def file_upload_observations(
 
 
 def api_import_observations(
-    api_configuration: Api_Configuration,
-    branch: Optional[Branch],
-    service: str,
-    docker_image_name_tag: str,
-    endpoint_url: str,
-    kubernetes_cluster: str,
+    api_import_parameters: ApiImportParameters,
 ) -> Tuple[int, int, int]:
-    parser_instance = _instanciate_parser(api_configuration.parser)
+    parser_instance = _instanciate_parser(
+        api_import_parameters.api_configuration.parser
+    )
 
     if not isinstance(parser_instance, BaseAPIParser):
-        raise ParserError(f"{api_configuration.parser.name} isn't an API parser")
+        raise ParserError(
+            f"{api_import_parameters.api_configuration.parser.name} isn't an API parser"
+        )
 
-    format_valid, errors, data = parser_instance.check_connection(api_configuration)
+    format_valid, errors, data = parser_instance.check_connection(
+        api_import_parameters.api_configuration
+    )
     if not format_valid:
         raise ValidationError(
             "Connection couldn't be established: " + " / ".join(errors)
@@ -153,15 +164,15 @@ def api_import_observations(
     imported_observations = parser_instance.get_observations(data)
 
     import_parameters = ImportParameters(
-        product=api_configuration.product,
-        branch=branch,
-        parser=api_configuration.parser,
+        product=api_import_parameters.api_configuration.product,
+        branch=api_import_parameters.branch,
+        parser=api_import_parameters.api_configuration.parser,
         filename="",
-        api_configuration_name=api_configuration.name,
-        service=service,
-        docker_image_name_tag=docker_image_name_tag,
-        endpoint_url=endpoint_url,
-        kubernetes_cluster=kubernetes_cluster,
+        api_configuration_name=api_import_parameters.api_configuration.name,
+        service=api_import_parameters.service,
+        docker_image_name_tag=api_import_parameters.docker_image_name_tag,
+        endpoint_url=api_import_parameters.endpoint_url,
+        kubernetes_cluster=api_import_parameters.kubernetes_cluster,
         imported_observations=imported_observations,
     )
 
@@ -407,13 +418,13 @@ def _process_current_observation(
             severity = ""
 
         create_observation_log(
-            observation_before,
-            severity,
-            status,
-            "Updated by parser",
-            "",
-            Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
-            observation_before.risk_acceptance_expiry_date,
+            observation=observation_before,
+            severity=severity,
+            status=status,
+            comment="Updated by parser",
+            vex_justification="",
+            assessment_status=Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
+            risk_acceptance_expiry_date=observation_before.risk_acceptance_expiry_date,
         )
 
 
@@ -456,13 +467,13 @@ def _process_new_observation(imported_observation: Observation) -> None:
             evidence.save()
 
     create_observation_log(
-        imported_observation,
-        imported_observation.current_severity,
-        imported_observation.current_status,
-        "Set by parser",
-        "",
-        Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
-        imported_observation.risk_acceptance_expiry_date,
+        observation=imported_observation,
+        severity=imported_observation.current_severity,
+        status=imported_observation.current_status,
+        comment="Set by parser",
+        vex_justification="",
+        assessment_status=Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
+        risk_acceptance_expiry_date=imported_observation.risk_acceptance_expiry_date,
     )
 
 
@@ -485,13 +496,13 @@ def _resolve_unimported_observations(
 
             observation.current_status = new_status
             create_observation_log(
-                observation,
-                "",
-                observation.current_status,
-                "Observation not found in latest scan",
-                "",
-                Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
-                None,
+                observation=observation,
+                severity="",
+                status=observation.current_status,
+                comment="Observation not found in latest scan",
+                vex_justification="",
+                assessment_status=Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
+                risk_acceptance_expiry_date=None,
             )
 
     return observations_resolved
