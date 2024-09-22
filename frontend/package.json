@@ -13,7 +13,7 @@
         "@fortawesome/react-fontawesome": "0.2.2",
         "@mui/icons-material": "5.16.7",
         "@mui/material": "5.16.7",
-        "@textea/json-viewer": "3.5.0",
+        "@textea/json-viewer": "4.0.0",
         "axios": "1.7.7",
         "chart.js": "4.4.4",
         "markdown-to-jsx": "7.5.0",
