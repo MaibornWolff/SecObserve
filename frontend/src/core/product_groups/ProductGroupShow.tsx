@@ -1,8 +1,8 @@
 import BarChartIcon from "@mui/icons-material/BarChart";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import TokenIcon from "@mui/icons-material/Token";
 import SettingsIcon from "@mui/icons-material/Settings";
+import TokenIcon from "@mui/icons-material/Token";
 import { Badge, Divider, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
 import {
@@ -108,8 +108,7 @@ const ProductGroupShow = () => {
                                     <ProductGroupReviews product_group={product_group} />
                                 </Tab>
                             )}
-                            <Tab label="Settings" icon={<SettingsIcon />}                                 path="settings"
-                            >
+                            <Tab label="Settings" icon={<SettingsIcon />} path="settings">
                                 <Typography variant="h6">Settings</Typography>
                                 <Stack spacing={1}>
                                     <Labeled>
