@@ -32,6 +32,6 @@
     },
     {
         "op": "remove",
-        "path": "/metadata/component/components"
+        "path": "/metadata/component/components/0"
     }
 ]
