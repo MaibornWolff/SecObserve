@@ -14,7 +14,9 @@ function is_valid_url(urlString: string): boolean {
     const SAFE_URL_PATTERN = /^(?:(?:https?|mailto|ftp|tel|file|sms):|[^&:/?#]*(?:[/?#]|$))/gi;
 
     try {
-        return Boolean(new URL(urlString) && urlString.match(SAFE_URL_PATTERN));
+        // constructor throws an exception if the URL is invalid
+        new URL(urlString);
+        return Boolean(urlString.match(SAFE_URL_PATTERN));
     } catch {
         return false;
     }

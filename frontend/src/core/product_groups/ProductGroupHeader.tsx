@@ -8,9 +8,7 @@ import { ProductGroup } from "../types";
 
 const ProductGroupHeader = () => {
     const { id: id } = useParams<any>();
-    // function does not work without non-null assertion
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const { data: product_group } = useGetOne<ProductGroup>("product_groups", { id: id! });
+    const { data: product_group } = useGetOne<ProductGroup>("product_groups", { id: id });
     const { classes } = useStyles();
 
     return (
