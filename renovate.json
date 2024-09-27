@@ -28,13 +28,13 @@
             "matchPackageNames": [
                 "python"
             ],
-            "allowedVersions": "<3.12"
+            "allowedVersions": "<3.13"
         },
         {
             "matchPackageNames": [
                 "django"
             ],
-            "allowedVersions": "<5.1"
+            "allowedVersions": "<5.2"
         },
         {
             "matchPackageNames": [
