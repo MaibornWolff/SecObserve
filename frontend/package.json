@@ -39,8 +39,8 @@
         "start": "NODE_ENV=development ./node_modules/runtime-env-cra/lib/index.js --config-name=./public/runtime-env.js && vite",
         "build": "tsc && vite build",
         "serve": "vite preview",
-        "lint": "eslint . --ext .tsx,.ts --ignore-pattern node_modules/",
-        "lint_sarif": "eslint . -f @microsoft/eslint-formatter-sarif -o secobserve_eslint.sarif --ext .tsx,.ts --ignore-pattern node_modules/"
+        "lint": "eslint src",
+        "lint_sarif": "eslint src -f @microsoft/eslint-formatter-sarif -o secobserve_eslint.sarif"
     },
     "browserslist": [
         ">0.2%",
@@ -49,6 +49,9 @@
         "not op_mini all"
     ],
     "devDependencies": {
+        "@eslint/compat": "1.1.1",
+        "@eslint/eslintrc": "3.1.0",
+        "@eslint/js": "9.11.1",
         "@microsoft/eslint-formatter-sarif": "3.1.0",
         "@trivago/prettier-plugin-sort-imports": "4.3.0",
         "@types/inflection": "1.13.2",
@@ -61,10 +64,11 @@
         "@typescript-eslint/eslint-plugin": "8.7.0",
         "@typescript-eslint/parser": "8.7.0",
         "@vitejs/plugin-react": "4.3.1",
-        "eslint": "8.57.1",
+        "eslint": "9.11.1",
         "eslint-plugin-react": "7.37.0",
-        "eslint-plugin-react-hooks": "4.6.2",
+        "eslint-plugin-react-hooks": "rc",
         "eslint-plugin-security": "3.0.1",
+        "globals": "15.9.0",
         "prettier": "3.3.3",
         "rewire": "7.0.0",
         "typescript": "5.6.2",

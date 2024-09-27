@@ -122,7 +122,7 @@ export function oidc_signed_in(): boolean {
     return oidcStorageUser() != null;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-invalid-void-type
 const onSigninCallback = (_user: User | void): void => {
     const last_location = localStorage.getItem("last_location");
     if (last_location) {
@@ -151,7 +151,8 @@ export const oidcConfig = {
 
 export function get_oidc_id_token(): string | null {
     if (oidcStorageUser()) {
-        const user = User.fromStorageString(oidcStorageUser()!);
+        const user = User.fromStorageString(oidcStorageUser()!); // eslint-disable-line @typescript-eslint/no-non-null-assertion
+        // We have checked before that user is not null
         if (user && user.id_token) {
             return user.id_token;
         } else {

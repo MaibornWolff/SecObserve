@@ -9,9 +9,7 @@ import { Product } from "../types";
 
 const ProductHeader = () => {
     const { id: id } = useParams<any>();
-    // function does not work without non-null assertion
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const { data: product } = useGetOne<Product>("products", { id: id! });
+    const { data: product } = useGetOne<Product>("products", { id: id });
     const { classes } = useStyles();
 
     function get_open_observation_label(product: Product | undefined) {

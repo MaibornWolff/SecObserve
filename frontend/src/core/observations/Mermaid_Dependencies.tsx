@@ -51,14 +51,14 @@ const createMermaidGraph = (dependencies_str: string) => {
         "flowchart LR\n";
 
     const components = new Set<string>();
-    for (let i = 0; i < dependencies.length; i++) {
-        const components_list = dependencies[i].split(" --> "); // eslint-disable-line security/detect-object-injection
+    for (const dependency of dependencies) {
+        const components_list = dependency.split(" --> ");
         if (components_list.length != 2) {
             continue;
         }
-        components.add(dependencies[i].split(" --> ")[0]); // eslint-disable-line security/detect-object-injection
-        components.add(dependencies[i].split(" --> ")[1]); // eslint-disable-line security/detect-object-injection
-        mermaid_content += "    " + dependencies[i] + "\n"; // eslint-disable-line security/detect-object-injection
+        components.add(dependency.split(" --> ")[0]);
+        components.add(dependency.split(" --> ")[1]);
+        mermaid_content += "    " + dependency + "\n";
     }
 
     let i = 1;
