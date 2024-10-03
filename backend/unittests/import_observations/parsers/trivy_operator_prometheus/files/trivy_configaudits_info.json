@@ -1,0 +1,58 @@
+{
+    "status": "success",
+    "data": {
+        "resultType": "vector",
+        "result": [
+            {
+                "metric": {
+                    "__name__": "trivy_configaudits_info",
+                    "config_audit_category": "Kubernetes Security Check",
+                    "config_audit_description": "A program inside the container can bypass Seccomp protection policies.",
+                    "config_audit_id": "KSV104",
+                    "config_audit_success": "false",
+                    "config_audit_title": "Seccomp policies disabled",
+                    "container": "trivy-operator",
+                    "endpoint": "metrics",
+                    "instance": "10.244.0.122:8080",
+                    "job": "trivy-operator",
+                    "name": "daemonset-kube-proxy",
+                    "namespace": "kube-system",
+                    "pod": "trivy-operator-7d986cb954-8nm7k",
+                    "resource_kind": "DaemonSet",
+                    "resource_name": "kube-proxy",
+                    "service": "trivy-operator",
+                    "severity": "Medium"
+                },
+                "value": [
+                    1727695434.929,
+                    "1"
+                ]
+            },
+            {
+                "metric": {
+                    "__name__": "trivy_configaudits_info",
+                    "config_audit_category": "Kubernetes Security Check",
+                    "config_audit_description": "A program inside the container can bypass Seccomp protection policies.",
+                    "config_audit_id": "KSV104",
+                    "config_audit_success": "true",
+                    "config_audit_title": "Seccomp policies disabled",
+                    "container": "trivy-operator",
+                    "endpoint": "metrics",
+                    "instance": "10.244.0.122:8080",
+                    "job": "trivy-operator",
+                    "name": "daemonset-prom-prometheus-node-exporter",
+                    "namespace": "monitoring",
+                    "pod": "trivy-operator-7d986cb954-8nm7k",
+                    "resource_kind": "DaemonSet",
+                    "resource_name": "prom-prometheus-node-exporter",
+                    "service": "trivy-operator",
+                    "severity": "Medium"
+                },
+                "value": [
+                    1727695434.929,
+                    "1"
+                ]
+            }
+        ]
+    }
+}

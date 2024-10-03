@@ -35,7 +35,7 @@ class TestTrivyOperatorPrometheusParser(TestCase):
     def test_valid_connection(self, mock_requests):
         parser = TrivyOperatorPrometheus()
         with open(
-            path.dirname(__file__) + "/files/multiple_observations.json"
+            path.dirname(__file__) + "/files/trivy_vulnerability_id.json"
         ) as testfile:
             json_data = json.load(testfile)
 
@@ -81,13 +81,179 @@ class TestTrivyOperatorPrometheusParser(TestCase):
             check, messages, data = parser.check_format(testfile)
 
             self.assertFalse(check)
-            print(messages[0])
             self.assertIn("Data not in valid Prometheus-Metric Format", messages[0])
             self.assertFalse(data)
 
-    def test_multiple_observations(self):
+    def test_compliance(self):
         with open(
-            path.dirname(__file__) + "/files/multiple_observations.json"
+            path.dirname(__file__) + "/files/trivy_compliance_info.json"
+        ) as testfile:
+            parser = TrivyOperatorPrometheus()
+
+            parser.api_configuration = Api_Configuration(
+                base_url="https://prometheus.example.com"
+            )
+            observations = parser.get_observations(json.load(testfile))
+
+            self.assertEqual(1, len(observations))
+            self.assertEqual(
+                "National Security Agency - Kubernetes Hardening Guidance v1.0 / Immutable container file systems",
+                observations[0].title,
+            )
+            self.assertEqual("Low", observations[0].parser_severity)
+            self.assertEqual("Trivy Operator", observations[0].scanner)
+            description = """National Security Agency - Kubernetes Hardening Guidance
+
+**Assessment ID:** 1.1
+
+**Prometheus host:** https://prometheus.example.com"""
+            self.assertEqual(
+                description,
+                observations[0].description,
+            )
+            self.assertEqual(
+                "trivy-system", observations[0].origin_kubernetes_namespace
+            )
+            self.assertEqual("", observations[0].origin_kubernetes_resource_type)
+            self.assertEqual(
+                "",
+                observations[0].origin_kubernetes_resource_name,
+            )
+
+    def test_configaudits(self):
+        with open(
+            path.dirname(__file__) + "/files/trivy_configaudits_info.json"
+        ) as testfile:
+            parser = TrivyOperatorPrometheus()
+
+            parser.api_configuration = Api_Configuration(
+                base_url="https://prometheus.example.com"
+            )
+            observations = parser.get_observations(json.load(testfile))
+
+            self.assertEqual(1, len(observations))
+            self.assertEqual(
+                "Seccomp policies disabled",
+                observations[0].title,
+            )
+            self.assertEqual("Medium", observations[0].parser_severity)
+            self.assertEqual("Trivy Operator", observations[0].scanner)
+            description = """A program inside the container can bypass Seccomp protection policies.
+
+**Assessment ID:** [KSV104](https://avd.aquasec.com/misconfig/kubernetes/ksv104)
+
+**Prometheus host:** https://prometheus.example.com"""
+            self.assertEqual(
+                description,
+                observations[0].description,
+            )
+            self.assertEqual("kube-system", observations[0].origin_kubernetes_namespace)
+            self.assertEqual(
+                "DaemonSet", observations[0].origin_kubernetes_resource_type
+            )
+            self.assertEqual(
+                "kube-proxy",
+                observations[0].origin_kubernetes_resource_name,
+            )
+
+    def test_exposedsecrets(self):
+        with open(
+            path.dirname(__file__) + "/files/trivy_exposedsecrets_info.json"
+        ) as testfile:
+            parser = TrivyOperatorPrometheus()
+
+            parser.api_configuration = Api_Configuration(
+                base_url="https://prometheus.example.com"
+            )
+            observations = parser.get_observations(json.load(testfile))
+
+            self.assertEqual(1, len(observations))
+            self.assertEqual("Asymmetric Private Key", observations[0].title)
+            self.assertEqual("High", observations[0].parser_severity)
+            self.assertEqual(
+                "index.docker.io/jeroenwillemsen/wrongsecrets",
+                observations[0].origin_docker_image_name,
+            )
+            self.assertEqual("latest-no-vault", observations[0].origin_docker_image_tag)
+            self.assertEqual(
+                "/var/tmp/helpers/RSAprivatekey.pem", observations[0].origin_source_file
+            )
+            self.assertEqual("Trivy Operator", observations[0].scanner)
+            self.assertEqual(
+                "",
+                observations[0].description,
+            )
+            self.assertEqual("test", observations[0].origin_kubernetes_namespace)
+            self.assertEqual(
+                "ReplicaSet", observations[0].origin_kubernetes_resource_type
+            )
+            self.assertEqual(
+                "wrongsecrets-67cd6df7d",
+                observations[0].origin_kubernetes_resource_name,
+            )
+
+    def test_rbacassessments(self):
+        with open(
+            path.dirname(__file__) + "/files/trivy_rbacassessments_info.json"
+        ) as testfile:
+            parser = TrivyOperatorPrometheus()
+
+            parser.api_configuration = Api_Configuration(
+                base_url="https://prometheus.example.com"
+            )
+            observations = parser.get_observations(json.load(testfile))
+
+            self.assertEqual(2, len(observations))
+
+            self.assertEqual(
+                "Manage Kubernetes networking",
+                observations[0].title,
+            )
+            self.assertEqual("High", observations[0].parser_severity)
+            self.assertEqual("Trivy Operator", observations[0].scanner)
+            description = """The ability to control which pods get service traffic directed to them allows for interception attacks. Controlling network policy allows for bypassing lateral movement restrictions.
+
+**Assessment ID:** [KSV056](https://avd.aquasec.com/misconfig/kubernetes/ksv056)
+
+**Prometheus host:** https://prometheus.example.com"""
+            self.assertEqual(
+                description,
+                observations[0].description,
+            )
+            self.assertEqual("kube-system", observations[0].origin_kubernetes_namespace)
+            self.assertEqual("Role", observations[0].origin_kubernetes_resource_type)
+            self.assertEqual(
+                "role-679f75d6b5",
+                observations[0].origin_kubernetes_resource_name,
+            )
+
+            self.assertEqual(
+                "Manage configmaps",
+                observations[1].title,
+            )
+            self.assertEqual("Medium", observations[1].parser_severity)
+            self.assertEqual("Trivy Operator", observations[1].scanner)
+            description = """Some workloads leverage configmaps to store sensitive data or configuration parameters that affect runtime behavior that can be modified by an attacker or combined with another issue to potentially lead to compromise.
+
+**Assessment ID:** [KSV049](https://avd.aquasec.com/misconfig/kubernetes/ksv049)
+
+**Prometheus host:** https://prometheus.example.com"""
+            self.assertEqual(
+                description,
+                observations[1].description,
+            )
+            self.assertEqual(
+                "kubernetes-dashboard", observations[1].origin_kubernetes_namespace
+            )
+            self.assertEqual("Role", observations[1].origin_kubernetes_resource_type)
+            self.assertEqual(
+                "kubernetes-dashboard",
+                observations[1].origin_kubernetes_resource_name,
+            )
+
+    def test_vulnerabilities(self):
+        with open(
+            path.dirname(__file__) + "/files/trivy_vulnerability_id.json"
         ) as testfile:
             parser = TrivyOperatorPrometheus()
 
