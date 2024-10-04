@@ -125,13 +125,13 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
                 onSuccess: () => {
                     refresh();
                     notify("API configuration added", { type: "success" });
+                    setOpen(false);
                 },
                 onError: (error: any) => {
                     notify(error.message, { type: "warning" });
                 },
             }
         );
-        setOpen(false);
     };
 
     const ParserInput = () => {
@@ -150,7 +150,11 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
                     return (
                         <Fragment>
                             <TextInputWide source="query" label="Query" validate={validate_required_255} />
-                            <BooleanInput source="basic_auth_enabled" label="Basic Auth" defaultValue={false} />
+                            <BooleanInput
+                                source="basic_auth_enabled"
+                                label="Basic authentication"
+                                defaultValue={false}
+                            />
                             <BasicAuthInput />
                         </Fragment>
                     );
@@ -165,8 +169,8 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
         if (basic_auth_enabledId) {
             return (
                 <Fragment>
-                    <TextInputWide source="basic_auth_username" validate={validate_required_255} />
-                    <PasswordInputWide source="basic_auth_password" validate={validate_required_255} />
+                    <TextInputWide source="basic_auth_username" label="Username" validate={validate_required_255} />
+                    <PasswordInputWide source="basic_auth_password" label="Password" validate={validate_required_255} />
                 </Fragment>
             );
         } else {

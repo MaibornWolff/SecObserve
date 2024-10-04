@@ -46,7 +46,7 @@ An import for one product, one branch / version and one file name resp. one API 
 
 ## Parser
 
-SecObserve can parse a variety of data formats, written by vulnerability scanners. Besides file-based parsers, SecObserve implements API-based parsers as well, which get data directly from a system via REST calls. See more about vulnerability scanners and parsers on [Supported scanners](../usage/supported_scanners.md).
+SecObserve can parse a variety of data formats, written by vulnerability scanners. Besides file-based parsers, SecObserve implements API-based parsers as well, which get data directly from a system via REST calls. See more about vulnerability scanners and parsers on [Supported scanners](../integrations/supported_scanners.md).
 
 ## Observation Log
 
