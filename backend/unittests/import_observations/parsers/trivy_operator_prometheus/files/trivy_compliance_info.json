@@ -1,0 +1,74 @@
+{
+    "status": "success",
+    "data": {
+        "resultType": "vector",
+        "result": [
+            {
+                "metric": {
+                    "__name__": "trivy_compliance_info",
+                    "compliance_id": "1",
+                    "compliance_name": "HostProcess",
+                    "container": "trivy-operator",
+                    "description": "Kubernetes Pod Security Standards - Baseline",
+                    "endpoint": "metrics",
+                    "instance": "10.244.0.122:8080",
+                    "job": "trivy-operator",
+                    "namespace": "trivy-system",
+                    "pod": "trivy-operator-7d986cb954-8nm7k",
+                    "service": "trivy-operator",
+                    "severity": "HIGH",
+                    "status": "Pass",
+                    "title": "Kubernetes Pod Security Standards - Baseline"
+                },
+                "value": [
+                    1727805273.894,
+                    "1"
+                ]
+            },
+            {
+                "metric": {
+                    "__name__": "trivy_compliance_info",
+                    "compliance_id": "1",
+                    "compliance_name": "HostProcess",
+                    "container": "trivy-operator",
+                    "description": "Kubernetes Pod Security Standards - Restricted",
+                    "endpoint": "metrics",
+                    "instance": "10.244.0.122:8080",
+                    "job": "trivy-operator",
+                    "namespace": "trivy-system",
+                    "pod": "trivy-operator-7d986cb954-8nm7k",
+                    "service": "trivy-operator",
+                    "severity": "HIGH",
+                    "status": "Pass",
+                    "title": "Kubernetes Pod Security Standards - Restricted"
+                },
+                "value": [
+                    1727805273.894,
+                    "1"
+                ]
+            },
+            {
+                "metric": {
+                    "__name__": "trivy_compliance_info",
+                    "compliance_id": "1.1",
+                    "compliance_name": "Immutable container file systems",
+                    "container": "trivy-operator",
+                    "description": "National Security Agency - Kubernetes Hardening Guidance",
+                    "endpoint": "metrics",
+                    "instance": "10.244.0.122:8080",
+                    "job": "trivy-operator",
+                    "namespace": "trivy-system",
+                    "pod": "trivy-operator-7d986cb954-8nm7k",
+                    "service": "trivy-operator",
+                    "severity": "LOW",
+                    "status": "Fail",
+                    "title": "National Security Agency - Kubernetes Hardening Guidance v1.0"
+                },
+                "value": [
+                    1727805273.894,
+                    "9"
+                ]
+           }
+        ]
+    }
+}

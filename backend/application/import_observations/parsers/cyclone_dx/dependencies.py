@@ -112,12 +112,12 @@ def _get_dependencies(
     try:
         for root in roots:
             recursive_dependencies = _get_dependencies_recursive(
-                root,
-                _translate_component(root, components),
-                root,
-                component_bom_ref,
-                component_dependencies,
-                components,
+                root=root,
+                translated_initial_dependency=_translate_component(root, components),
+                initial_dependency=root,
+                component_bom_ref=component_bom_ref,
+                component_dependencies=component_dependencies,
+                components=components,
             )
             if recursive_dependencies not in dependencies:
                 dependencies += recursive_dependencies
@@ -142,6 +142,7 @@ def _get_dependencies(
 
 
 def _get_dependencies_recursive(
+    *,
     root: str,
     translated_initial_dependency: str,
     initial_dependency: str,
@@ -167,12 +168,12 @@ def _get_dependencies_recursive(
                     dependencies.append(new_translated_dependency)
                 else:
                     new_dependencies = _get_dependencies_recursive(
-                        dependant,
-                        new_translated_dependency,
-                        new_dependency,
-                        component_bom_ref,
-                        component_dependencies,
-                        components,
+                        root=dependant,
+                        translated_initial_dependency=new_translated_dependency,
+                        initial_dependency=new_dependency,
+                        component_bom_ref=component_bom_ref,
+                        component_dependencies=component_dependencies,
+                        components=components,
                     )
                     if new_dependencies not in dependencies:
                         dependencies += new_dependencies

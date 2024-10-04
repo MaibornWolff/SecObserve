@@ -120,12 +120,12 @@ def _process_vex_statements(
             )
 
         _process_products(
-            openvex_document,
-            product_purls,
-            vex_statements,
-            statement_counter,
-            statement,
-            openvex_statement,
+            openvex_document=openvex_document,
+            product_purls=product_purls,
+            vex_statements=vex_statements,
+            statement_counter=statement_counter,
+            statement=statement,
+            openvex_statement=openvex_statement,
         )
 
         statement_counter += 1
@@ -134,6 +134,7 @@ def _process_vex_statements(
 
 
 def _process_products(
+    *,
     openvex_document: VEX_Document,
     product_purls: set,
     vex_statements: set,

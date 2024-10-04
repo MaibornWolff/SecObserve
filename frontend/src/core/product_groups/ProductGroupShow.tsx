@@ -1,6 +1,7 @@
 import BarChartIcon from "@mui/icons-material/BarChart";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import SettingsIcon from "@mui/icons-material/Settings";
 import TokenIcon from "@mui/icons-material/Token";
 import { Badge, Divider, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
@@ -31,7 +32,6 @@ import {
     PERMISSION_PRODUCT_RULE_APPLY,
     PERMISSION_PRODUCT_RULE_CREATE,
 } from "../../access_control/types";
-import product_groups from "../../core/product_groups";
 import MetricsHeader from "../../metrics/MetricsHeader";
 import MetricsSeveritiesCurrent from "../../metrics/MetricsSeveritiesCurrent";
 import MetricsSeveritiesTimeline from "../../metrics/MetricsSeveritiesTimeLine";
@@ -75,8 +75,40 @@ const ProductGroupShow = () => {
                 <WithRecord
                     render={(product_group) => (
                         <TabbedShowLayout tabs={<TabbedShowLayoutTabs variant="scrollable" scrollButtons="auto" />}>
-                            <Tab label="Overview" icon={<product_groups.icon />}>
-                                <Typography variant="h6">Product Group</Typography>
+                            <Tab label="Products" icon={<product.icon />}>
+                                <ProductEmbeddedList product_group={product_group} />
+                            </Tab>
+                            <Tab label="Metrics" path="metrics" icon={<BarChartIcon />}>
+                                <MetricsHeader repository_default_branch={undefined} />
+                                <Stack
+                                    direction="row"
+                                    spacing={2}
+                                    sx={{
+                                        alignItems: "center",
+                                        marginTop: 1,
+                                        marginBottom: 1,
+                                    }}
+                                >
+                                    <MetricsSeveritiesCurrent product_id={product_group.id} />
+                                    <MetricsSeveritiesTimeline product_id={product_group.id} />
+                                    <MetricsStatusCurrent product_id={product_group.id} />
+                                </Stack>
+                            </Tab>
+                            {product_group.product_rule_approvals > 0 && (
+                                <Tab
+                                    label="Reviews"
+                                    path="reviews"
+                                    icon={
+                                        <Badge badgeContent={product_group.product_rule_approvals} color="secondary">
+                                            <ChecklistIcon />
+                                        </Badge>
+                                    }
+                                >
+                                    <ProductGroupReviews product_group={product_group} />
+                                </Tab>
+                            )}
+                            <Tab label="Settings" icon={<SettingsIcon />} path="settings">
+                                <Typography variant="h6">Settings</Typography>
                                 <Stack spacing={1}>
                                     <Labeled>
                                         <TextField source="name" />
@@ -207,38 +239,6 @@ const ProductGroupShow = () => {
                                     </Fragment>
                                 )}
                             </Tab>
-                            <Tab label="Products" path="products" icon={<product.icon />}>
-                                <ProductEmbeddedList product_group={product_group} />
-                            </Tab>
-                            <Tab label="Metrics" path="metrics" icon={<BarChartIcon />}>
-                                <MetricsHeader repository_default_branch={undefined} />
-                                <Stack
-                                    direction="row"
-                                    spacing={2}
-                                    sx={{
-                                        alignItems: "center",
-                                        marginTop: 1,
-                                        marginBottom: 1,
-                                    }}
-                                >
-                                    <MetricsSeveritiesCurrent product_id={product_group.id} />
-                                    <MetricsSeveritiesTimeline product_id={product_group.id} />
-                                    <MetricsStatusCurrent product_id={product_group.id} />
-                                </Stack>
-                            </Tab>
-                            {product_group.product_rule_approvals > 0 && (
-                                <Tab
-                                    label="Reviews"
-                                    path="reviews"
-                                    icon={
-                                        <Badge badgeContent={product_group.product_rule_approvals} color="secondary">
-                                            <ChecklistIcon />
-                                        </Badge>
-                                    }
-                                >
-                                    <ProductGroupReviews product_group={product_group} />
-                                </Tab>
-                            )}
                             <Tab label="Rules" path="rules" icon={<general_rules.icon />}>
                                 <Stack
                                     direction="row"

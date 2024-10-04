@@ -19,7 +19,7 @@
 
 | Feature | Supported |
 |---------|:------------:|
-| [Import from many SAST, SCA, DAST, infrastructure and secrets scanners](../usage/supported_scanners.md) | :material-plus-circle-outline: |
+| [Import from many SAST, SCA, DAST, infrastructure and secrets scanners](../integrations/supported_scanners.md) | :material-plus-circle-outline: |
 | [GitLab CI integration of scanners with predefined templates](../integrations/github_actions_and_templates.md#examplary-pipeline-for-gitlab-ci-templates)<br />[GitHub integration of scanners with predefined actions](../integrations/github_actions_and_templates.md#examplary-workflow-for-github-actions) | :material-plus-circle-outline: |
 | [Data enrichment from Exploit Prediction Scoring System (EPSS)](../integrations/epss.md) | :material-plus-circle-outline: |
 | [Direct link to source code](../integrations/source_code_repositories.md) | :material-plus-circle-outline: |

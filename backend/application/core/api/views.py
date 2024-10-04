@@ -228,13 +228,17 @@ class ProductViewSet(ModelViewSet):
             raise ValidationError(request_serializer.errors)
 
         observations_bulk_assessment(
-            product,
-            request_serializer.validated_data.get("severity"),
-            request_serializer.validated_data.get("status"),
-            request_serializer.validated_data.get("comment"),
-            request_serializer.validated_data.get("observations"),
-            request_serializer.validated_data.get("vex_justification"),
-            request_serializer.validated_data.get("risk_acceptance_expiry_date"),
+            product=product,
+            new_severity=request_serializer.validated_data.get("severity"),
+            new_status=request_serializer.validated_data.get("status"),
+            comment=request_serializer.validated_data.get("comment"),
+            observation_ids=request_serializer.validated_data.get("observations"),
+            new_vex_justification=request_serializer.validated_data.get(
+                "vex_justification"
+            ),
+            new_risk_acceptance_expiry_date=request_serializer.validated_data.get(
+                "risk_acceptance_expiry_date"
+            ),
         )
         return Response(status=HTTP_204_NO_CONTENT)
 
@@ -440,12 +444,12 @@ class ObservationViewSet(ModelViewSet):
         )
 
         save_assessment(
-            observation,
-            new_severity,
-            new_status,
-            comment,
-            new_vex_justification,
-            new_risk_acceptance_expiry_date,
+            observation=observation,
+            new_severity=new_severity,
+            new_status=new_status,
+            comment=comment,
+            new_vex_justification=new_vex_justification,
+            new_risk_acceptance_expiry_date=new_risk_acceptance_expiry_date,
         )
         set_potential_duplicate_both_ways(observation)
 
@@ -497,13 +501,17 @@ class ObservationViewSet(ModelViewSet):
             raise ValidationError(request_serializer.errors)
 
         observations_bulk_assessment(
-            None,
-            request_serializer.validated_data.get("severity"),
-            request_serializer.validated_data.get("status"),
-            request_serializer.validated_data.get("comment"),
-            request_serializer.validated_data.get("observations"),
-            request_serializer.validated_data.get("vex_justification"),
-            request_serializer.validated_data.get("risk_acceptance_expiry_date"),
+            product=None,
+            new_severity=request_serializer.validated_data.get("severity"),
+            new_status=request_serializer.validated_data.get("status"),
+            comment=request_serializer.validated_data.get("comment"),
+            observation_ids=request_serializer.validated_data.get("observations"),
+            new_vex_justification=request_serializer.validated_data.get(
+                "vex_justification"
+            ),
+            new_risk_acceptance_expiry_date=request_serializer.validated_data.get(
+                "risk_acceptance_expiry_date"
+            ),
         )
         return Response(status=HTTP_204_NO_CONTENT)
 

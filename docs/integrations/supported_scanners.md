@@ -27,9 +27,9 @@ These scanners have been tested with SecObserve:
 
 | Scanner | Parser | Type | Source |
 |--------|---------|------|--------|
-| [Dependency Check](https://jeremylong.github.io/DependencyCheck) | SARIF ^1)^ | SCA | API |
-| [Dependency Track](https://dependencytrack.org) | Dependency Track | SCA | API |
-| [Trivy Operator Prometheus](https://github.com/aquasecurity/trivy-operator) | JSON | Cloud infrastructure | API |
+| [Dependency Track](https://dependencytrack.org) | Dependency Track | SCA | [API](../integrations/api_import.md#dependency-track) |
+| [Trivy Operator Prometheus](https://github.com/aquasecurity/trivy-operator) | JSON | Cloud infrastructure | [API](../integrations/api_import.md#trivy-operator-prometheus) |
+| [Dependency Check](https://jeremylong.github.io/DependencyCheck) | SARIF ^1)^ | SCA | File |
 | [Grype](https://github.com/anchore/grype) | CycloneDX | SCA | File |
 | [Trivy](https://aquasecurity.github.io/trivy) | CycloneDX | SCA | File |
 | [Bandit](https://bandit.readthedocs.io/en/latest) | SARIF | Application SAST | File |

@@ -43,8 +43,7 @@ const Login = () => {
                 const features = data.features || [];
                 const feature_disable_user_login_position = features.indexOf("feature_disable_user_login");
                 return setFeatureDisableUserLogin(feature_disable_user_login_position !== -1);
-            })
-            .catch(() => {});
+            });
     }
 
     if (!feature_loaded) {

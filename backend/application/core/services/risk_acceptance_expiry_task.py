@@ -19,10 +19,10 @@ def expire_risk_acceptances() -> None:
             observation.risk_acceptance_expiry_date = None
             observation.save()
             save_assessment(
-                observation,
-                "",
-                Status.STATUS_OPEN,
-                "Risk acceptance has expired.",
-                "",
-                None,
+                observation=observation,
+                new_severity="",
+                new_status=Status.STATUS_OPEN,
+                comment="Risk acceptance has expired.",
+                new_vex_justification="",
+                new_risk_acceptance_expiry_date=None,
             )

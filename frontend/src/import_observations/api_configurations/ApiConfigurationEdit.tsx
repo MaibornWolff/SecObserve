@@ -120,6 +120,7 @@ const ApiConfigurationEdit = () => {
                     notify("API configuration updated", {
                         type: "success",
                     });
+                    setOpen(false);
                 },
                 onError: (error: any) => {
                     notify(error.message, {
@@ -128,7 +129,6 @@ const ApiConfigurationEdit = () => {
                 },
             }
         );
-        setOpen(false);
     };
 
     const CancelButton = () => (
@@ -171,7 +171,11 @@ const ApiConfigurationEdit = () => {
                     return (
                         <>
                             <TextInputWide source="query" label="Query" validate={validate_required_255} />
-                            <BooleanInput source="basic_auth_enabled" label="Basic Auth" defaultValue={false} />
+                            <BooleanInput
+                                source="basic_auth_enabled"
+                                label="Basic authentication"
+                                defaultValue={false}
+                            />
                             <BasicAuthInput />
                         </>
                     );

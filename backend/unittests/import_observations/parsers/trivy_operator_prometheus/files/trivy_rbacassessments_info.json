@@ -1,0 +1,57 @@
+{
+    "status": "success",
+    "data": {
+        "resultType": "vector",
+        "result": [
+            {
+                "metric": {
+                    "__name__": "trivy_rbacassessments_info",
+                    "container": "trivy-operator",
+                    "endpoint": "metrics",
+                    "instance": "10.244.0.122:8080",
+                    "job": "trivy-operator",
+                    "name": "role-679f75d6b5",
+                    "namespace": "kube-system",
+                    "pod": "trivy-operator-7d986cb954-8nm7k",
+                    "rbac_assessment_category": "Kubernetes Security Check",
+                    "rbac_assessment_description": "The ability to control which pods get service traffic directed to them allows for interception attacks. Controlling network policy allows for bypassing lateral movement restrictions.",
+                    "rbac_assessment_id": "KSV056",
+                    "rbac_assessment_success": "false",
+                    "rbac_assessment_title": "Manage Kubernetes networking",
+                    "resource_kind": "Role",
+                    "service": "trivy-operator",
+                    "severity": "High"
+                },
+                "value": [
+                    1727712758.414,
+                    "1"
+                ]
+            },
+            {
+                "metric": {
+                    "__name__": "trivy_rbacassessments_info",
+                    "container": "trivy-operator",
+                    "endpoint": "metrics",
+                    "instance": "10.244.0.122:8080",
+                    "job": "trivy-operator",
+                    "name": "role-kubernetes-dashboard",
+                    "namespace": "kubernetes-dashboard",
+                    "pod": "trivy-operator-7d986cb954-8nm7k",
+                    "rbac_assessment_category": "Kubernetes Security Check",
+                    "rbac_assessment_description": "Some workloads leverage configmaps to store sensitive data or configuration parameters that affect runtime behavior that can be modified by an attacker or combined with another issue to potentially lead to compromise.",
+                    "rbac_assessment_id": "KSV049",
+                    "rbac_assessment_success": "false",
+                    "rbac_assessment_title": "Manage configmaps",
+                    "resource_kind": "Role",
+                    "resource_name": "kubernetes-dashboard",
+                    "service": "trivy-operator",
+                    "severity": "Medium"
+                },
+                "value": [
+                    1727712758.414,
+                    "1"
+                ]
+            }
+        ]
+    }
+}

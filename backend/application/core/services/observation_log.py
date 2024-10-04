@@ -6,8 +6,8 @@ from application.commons.services.global_request import get_current_user
 from application.core.models import Observation, Observation_Log
 
 
-def create_observation_log(  # pylint: disable=too-many-arguments
-    # All arguments are required
+def create_observation_log(
+    *,
     observation: Observation,
     severity: str,
     status: str,

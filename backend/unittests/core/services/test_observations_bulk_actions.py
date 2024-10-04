@@ -26,32 +26,32 @@ class TestObservationsBulkActions(BaseTestCase):
         check_mock.return_value = [self.observation_1, observation_2]
 
         observations_bulk_assessment(
-            self.product_1,
-            Severity.SEVERITY_CRITICAL,
-            Status.STATUS_OPEN,
-            "comment",
-            [1, 2],
-            VexJustification.STATUS_COMPONENT_NOT_PRESENT,
-            date(2024, 7, 1),
+            product=self.product_1,
+            new_severity=Severity.SEVERITY_CRITICAL,
+            new_status=Status.STATUS_OPEN,
+            comment="comment",
+            observation_ids=[1, 2],
+            new_vex_justification=VexJustification.STATUS_COMPONENT_NOT_PRESENT,
+            new_risk_acceptance_expiry_date=date(2024, 7, 1),
         )
 
         check_mock.assert_called_with(self.product_1, [1, 2])
         expected_calls = [
             call(
-                self.observation_1,
-                Severity.SEVERITY_CRITICAL,
-                Status.STATUS_OPEN,
-                "comment",
-                VexJustification.STATUS_COMPONENT_NOT_PRESENT,
-                date(2024, 7, 1),
+                observation=self.observation_1,
+                new_severity=Severity.SEVERITY_CRITICAL,
+                new_status=Status.STATUS_OPEN,
+                comment="comment",
+                new_vex_justification=VexJustification.STATUS_COMPONENT_NOT_PRESENT,
+                new_risk_acceptance_expiry_date=date(2024, 7, 1),
             ),
             call(
-                observation_2,
-                Severity.SEVERITY_CRITICAL,
-                Status.STATUS_OPEN,
-                "comment",
-                VexJustification.STATUS_COMPONENT_NOT_PRESENT,
-                date(2024, 7, 1),
+                observation=observation_2,
+                new_severity=Severity.SEVERITY_CRITICAL,
+                new_status=Status.STATUS_OPEN,
+                comment="comment",
+                new_vex_justification=VexJustification.STATUS_COMPONENT_NOT_PRESENT,
+                new_risk_acceptance_expiry_date=date(2024, 7, 1),
             ),
         ]
         save_mock.assert_has_calls(expected_calls, any_order=False)
