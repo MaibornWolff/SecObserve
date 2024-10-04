@@ -33,13 +33,13 @@ A flowchart visualizes the import algorithm:
 
 ```mermaid
     flowchart TD
-    read(Read observations for a vulnerability check) --> all_observations{For all observations\nof this vulnerability check}
-    all_observations -- with observation --> identity{Identical observation\nin the same\nvulnerability check?}
+    read(Read observations for a vulnerability check) --> all_observations{For all observations of this vulnerability check}
+    all_observations -- with observation --> identity{Identical observation in the same vulnerability check?}
     subgraph Create or update
     identity -- yes --> update(Update existing observation)
     identity -- no --> create(Create new observation)
     end
-    all_observations -- finished ----> resolved(Set status to `Resolved` for all untouched observations of this vulnerability check)
+    all_observations -- finished ----> resolved(Set status to **Resolved** for all untouched observations of this vulnerability check)
 
 ```
 
