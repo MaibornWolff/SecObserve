@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - chore/deploy-docs
+      - chore/documentation_title
 
 permissions: read-all
 
