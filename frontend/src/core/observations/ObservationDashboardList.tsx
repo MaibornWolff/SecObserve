@@ -51,6 +51,7 @@ const ObservationDashboardList = () => {
                         expandSingle
                     >
                         <TextField source="product_data.name" label="Product" />
+                        <TextField source="branch_name" label="Branch / Version" />
                         <TextField source="title" sx={{ wordBreak: "break-word" }} />
                         <SeverityField label="Severity" source="current_severity" />
                         <ChipField source="current_status" label="Status" />
