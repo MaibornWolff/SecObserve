@@ -64,7 +64,6 @@ nav:
     - Upgrading: getting_started/upgrading.md
   - Usage:
     - Import observations: usage/import_observations.md
-    - Supported scanners: usage/supported_scanners.md
     - Assess observations: usage/assess_observations.md
     - Product groups: usage/product_groups.md
     - Branches and Versions: usage/branches.md
@@ -76,6 +75,8 @@ nav:
     - Users, groups and permissions: usage/users_permissions.md
   - Integrations:
     - Overview: integrations/overview.md
+    - Supported scanners: integrations/supported_scanners.md
+    - API import: integrations/api_import.md
     - GitHub actions and GitLab CI templates: integrations/github_actions_and_templates.md
     - OpenID Connect: integrations/oidc_authentication.md
     - Exploit Prediction Scoring System (EPSS): integrations/epss.md

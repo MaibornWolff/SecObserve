@@ -48,15 +48,3 @@ A flowchart visualizes the import algorithm:
 ## Initial status of observations
 
 The initial status of imported observations is `Open` by default. If the attribute **Status "In review" for new observations** in a Product or a Product Group is set to `true`, the initial status of new observations will be `In review` for the respective Product or all Products of the Product Group.
-
-## API configuration
-
-#### Dependency Track API configuration
-
-#### Trivy Operator Prometheus API configuration
-
-![Trivy Operator Prometheus API configuration](../assets/images/screenshot_add_api_trivy_prometheus.png){ width="60%" style="display: block; margin: 0 auto" }
-
-The Trivy Operator exposes a "/metric" endpoint by default for Prometheus access.
-
-Currently only the parsing of vulnerabilities is supported. Which means, the time series with the "trivy_vulnerability_id" metric is required to be used. Details about the querying can be found at the [Prometheus-Doc](https://prometheus.io/docs/prometheus/latest/querying/basics/).
