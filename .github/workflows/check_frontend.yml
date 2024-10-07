@@ -30,16 +30,11 @@ jobs:
       run: |
         npx eslint src
 
-    - name: Check build
-      working-directory: ./frontend
+    - name: End-to-end tests
+      working-directory: .
       run: |
-        npm run build
-
-    # - name: End-to-end tests
-    #   working-directory: .
-    #   run: |
-    #     cd end_to_end_tests
-    #     npm install
-    #     cd ..
-    #     docker compose -f docker-compose-playwright.yml build
-    #     docker compose -f docker-compose-playwright.yml up --abort-on-container-exit --exit-code-from playwright
+        cd end_to_end_tests
+        npm install
+        cd ..
+        docker compose -f docker-compose-playwright.yml build
+        docker compose -f docker-compose-playwright.yml up --abort-on-container-exit --exit-code-from playwright
