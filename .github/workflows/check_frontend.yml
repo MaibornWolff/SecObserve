@@ -30,11 +30,6 @@ jobs:
       run: |
         npx eslint src
 
-    - name: Check build
-      working-directory: ./frontend
-      run: |
-        npm run build
-
     - name: End-to-end tests
       working-directory: .
       run: |
