@@ -35,17 +35,24 @@ Most of the actions and templates use the same set of variables:
 
 | Scanner | GitHub Action | GitLab CI Template | License |
 |----------|---------|-------------|--------|
-| [Bandit](https://bandit.readthedocs.io/en/latest)                 | `actions/SAST/bandit` | `templates/SAST/bandit.yml` | [Apache 2.0](https://github.com/PyCQA/bandit/blob/main/LICENSE) |
-| [ESLint](https://github.com/eslint/eslint)                        | `actions/SAST/eslint` | `templates/SAST/eslint.yml` | [MIT](https://github.com/eslint/eslint/blob/main/LICENSE) |
-| [Semgrep](https://semgrep.dev/docs)                               | `actions/SAST/semgrep` | `templates/SAST/semgrep.yml` |[LGPL 2.1](https://github.com/returntocorp/semgrep/blob/develop/LICENSE) |
-| [Checkov](https://www.checkov.io/1.Welcome/Quick%20Start.html)    | `actions/SAST/checkov` | `templates/SAST/checkov.yml` | [Apache 2.0](https://github.com/bridgecrewio/checkov/blob/main/LICENSE) |
-| [KICS](https://docs.kics.io/latest)                               | `actions/SAST/kics` | `templates/SAST/kics.yml` | [Apache 2.0](https://github.com/Checkmarx/kics/blob/master/LICENSE) |
-| [tfsec](https://aquasecurity.github.io/tfsec)                     | `actions/SAST/tfsec` | `templates/SAST/tfsec.yml` | [MIT](https://github.com/aquasecurity/tfsec/blob/master/LICENSE) |
-| [Trivy](https://aquasecurity.github.io/trivy)                     | `actions/SCA/trivy_config` | `templates/SCA/trivy_config.yml` | [Apache 2.0](https://github.com/aquasecurity/trivy/blob/main/LICENSE) |
+| **SCA** |
 | [Grype](https://github.com/anchore/grype)                         | `actions/SCA/grype_image` | `templates/SCA/grype_image.yml` | [Apache 2.0](https://github.com/anchore/grype/blob/main/LICENSE) |
 | [Trivy](https://aquasecurity.github.io/trivy)                     | `actions/SCA/trivy_filesystem` | `templates/SCA/trivy_filesystem.yml` | [Apache 2.0](https://github.com/aquasecurity/trivy/blob/main/LICENSE) |
 | [Trivy](https://aquasecurity.github.io/trivy)                     | `actions/SCA/trivy_image` | `templates/SCA/trivy_image.yml` | [Apache 2.0](https://github.com/aquasecurity/trivy/blob/main/LICENSE) |
+| **SAST application** |
+| [Bandit](https://bandit.readthedocs.io/en/latest)                 | `actions/SAST/bandit` | `templates/SAST/bandit.yml` | [Apache 2.0](https://github.com/PyCQA/bandit/blob/main/LICENSE) |
+| [ESLint](https://github.com/eslint/eslint)                        | `actions/SAST/eslint` | `templates/SAST/eslint.yml` | [MIT](https://github.com/eslint/eslint/blob/main/LICENSE) |
+| [Semgrep](https://semgrep.dev/docs)                               | `actions/SAST/semgrep` | `templates/SAST/semgrep.yml` |[LGPL 2.1](https://github.com/returntocorp/semgrep/blob/develop/LICENSE) |
+| **SAST infrastructure** |
+| [Checkov](https://www.checkov.io/1.Welcome/Quick%20Start.html)    | `actions/SAST/checkov` | `templates/SAST/checkov.yml` | [Apache 2.0](https://github.com/bridgecrewio/checkov/blob/main/LICENSE) |
+| [KICS](https://docs.kics.io/latest)                               | `actions/SAST/kics` | `templates/SAST/kics.yml` | [Apache 2.0](https://github.com/Checkmarx/kics/blob/master/LICENSE) |
+| [tfsec](https://aquasecurity.github.io/tfsec)                     | `actions/SAST/tfsec` | `templates/SAST/tfsec.yml` | [MIT](https://github.com/aquasecurity/tfsec/blob/master/LICENSE) |
+| [Trivy](https://aquasecurity.github.io/trivy)                     | `actions/SAST/trivy_config` | `templates/SAST/trivy_config.yml` | [Apache 2.0](https://github.com/aquasecurity/trivy/blob/main/LICENSE) |
+| **Secrets** |
 | [Gitleaks](https://gitleaks.io)                                   | `actions/secrets/gitleaks` | `templates/secrets/gitleaks.yml` | [MIT](https://github.com/gitleaks/gitleaks/blob/master/LICENSE) |
+| [Trivy](https://aquasecurity.github.io/trivy)                     | `actions/secrets/trivy_filesystem_secrets` | `templates/secrets/trivy_filesystem_secrets.yml` | [Apache 2.0](https://github.com/aquasecurity/trivy/blob/main/LICENSE) |
+| [Trivy](https://aquasecurity.github.io/trivy)                     | `actions/secrets/trivy_image_secrets` | `templates/secrets/trivy_image_secrets.yml` | [Apache 2.0](https://github.com/aquasecurity/trivy/blob/main/LICENSE) |
+| **DAST** |
 | [CryptoLyzer](https://gitlab.com/coroner/cryptolyzer)             | `actions/DAST/cryptolyzer` | `templates/DAST/cryptolyzer.yml` | [MPL 2.0](https://gitlab.com/coroner/cryptolyzer/-/blob/master/LICENSE.txt) |
 | [DrHeader](https://github.com/Santandersecurityresearch/DrHeader) | `actions/DAST/drheader` | `templates/DAST/drheader.yml` | [MIT](https://github.com/Santandersecurityresearch/DrHeader/blob/master/LICENSE) |
 | [ZAP](https://github.com/zaproxy/zaproxy)                         | `actions/DAST/zap` | `templates/DAST/zap.yml` | [Apache 2.0](https://github.com/zaproxy/zaproxy/blob/main/LICENSE) |
