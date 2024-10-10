@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from django.utils import timezone
 from django_filters import (
+    BooleanFilter,
     CharFilter,
     ChoiceFilter,
     FilterSet,
@@ -100,11 +101,13 @@ class ProductFilter(FilterSet):
 
 class ProductMemberFilter(FilterSet):
     product = NumberFilter(field_name="product")
+    is_product_group = BooleanFilter(field_name="product__is_product_group")
 
     ordering = OrderingFilter(
         # tuple-mapping retains order
         fields=(
             ("user__full_name", "user_data.full_name"),
+            ("product__name", "product_data.name"),
             ("role", "role"),
         ),
     )
@@ -116,11 +119,13 @@ class ProductMemberFilter(FilterSet):
 
 class ProductAuthorizationGroupMemberFilter(FilterSet):
     product = NumberFilter(field_name="product")
+    is_product_group = BooleanFilter(field_name="product__is_product_group")
 
     ordering = OrderingFilter(
         # tuple-mapping retains order
         fields=(
-            ("authorization_group__name", "authorization_group_name"),
+            ("authorization_group__name", "authorization_group_data.name"),
+            ("product__name", "product_data.name"),
             ("role", "role"),
         ),
     )

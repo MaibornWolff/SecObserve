@@ -7,7 +7,10 @@ from rest_framework.serializers import (
     ValidationError,
 )
 
-from application.access_control.api.serializers import UserListSerializer
+from application.access_control.api.serializers import (
+    NestedAuthorizationGroupSerializer,
+    UserListSerializer,
+)
 from application.access_control.services.authorization import get_highest_user_role
 from application.access_control.services.roles_permissions import (
     Permissions,
@@ -384,6 +387,12 @@ class NestedProductSerializer(ModelSerializer):
         return calculate_risk_acceptance_expiry_date(obj)
 
 
+class NestedProductSerializerSmall(ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ["id", "name", "is_product_group"]
+
+
 class NestedProductListSerializer(ModelSerializer):
     product_group_name = SerializerMethodField()
 
@@ -399,6 +408,7 @@ class NestedProductListSerializer(ModelSerializer):
 
 class ProductMemberSerializer(ModelSerializer):
     user_data = UserListSerializer(source="user", read_only=True)
+    product_data = NestedProductSerializerSmall(source="product", read_only=True)
 
     class Meta:
         model = Product_Member
@@ -446,16 +456,14 @@ class ProductMemberSerializer(ModelSerializer):
 
 
 class ProductAuthorizationGroupMemberSerializer(ModelSerializer):
-    authorization_group_name = SerializerMethodField()
+    authorization_group_data = NestedAuthorizationGroupSerializer(
+        source="authorization_group", read_only=True
+    )
+    product_data = NestedProductSerializerSmall(source="product", read_only=True)
 
     class Meta:
         model = Product_Authorization_Group_Member
         fields = "__all__"
-
-    def get_authorization_group_name(
-        self, obj: Product_Authorization_Group_Member
-    ) -> str:
-        return obj.authorization_group.name
 
     def validate(self, attrs: dict):
         self.instance: Product_Authorization_Group_Member

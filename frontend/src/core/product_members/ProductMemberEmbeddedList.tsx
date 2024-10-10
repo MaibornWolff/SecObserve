@@ -1,5 +1,5 @@
 import { Stack } from "@mui/material";
-import { Datagrid, ListContextProvider, SelectField, TextField, WithRecord, useListController } from "react-admin";
+import { Datagrid, Identifier, ListContextProvider, SelectField, WithRecord, useListController } from "react-admin";
 
 import {
     PERMISSION_PRODUCT_MEMBER_DELETE,
@@ -7,12 +7,17 @@ import {
     ROLE_CHOICES,
 } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
+import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import { getSettingListSize } from "../../commons/user_settings/functions";
 import ProductMemberDelete from "./ProductMemberDelete";
 import ProductMemberEdit from "./ProductMemberEdit";
 
 type ProductMemberEmbeddedListProps = {
     product: any;
+};
+
+const showUser = (id: Identifier) => {
+    return "#/users/" + id + "/show";
 };
 
 const ProductMemberEmbeddedList = ({ product }: ProductMemberEmbeddedListProps) => {
@@ -22,7 +27,6 @@ const ProductMemberEmbeddedList = ({ product }: ProductMemberEmbeddedListProps) 
         resource: "product_members",
         sort: { field: "user_data.full_name", order: "ASC" },
         disableSyncWithLocation: true,
-        storeKey: "product_member.embedded",
     });
 
     if (listContext.isLoading) {
@@ -39,7 +43,16 @@ const ProductMemberEmbeddedList = ({ product }: ProductMemberEmbeddedListProps) 
                     rowClick={false}
                     resource="product_members"
                 >
-                    <TextField source="user_data.full_name" label="User" />
+                    <WithRecord
+                        label="User"
+                        render={(product_member) => (
+                            <TextUrlField
+                                label="User"
+                                text={product_member.user_data.full_name}
+                                url={showUser(product_member.user_data.id)}
+                            />
+                        )}
+                    />
                     <SelectField source="role" choices={ROLE_CHOICES} />
                     <WithRecord
                         render={(product_member) => (

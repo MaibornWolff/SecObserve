@@ -4,6 +4,7 @@ import { EditButton, Labeled, PrevNextButtons, Show, TextField, TopToolbar, With
 
 import { is_superuser } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
+import UserProductAuthorizationGroupMemberEmbeddedList from "../../core/product_authorization_group_members/UserProductAuthorizationGroupMemberEmbeddedList";
 import UserAGEmbeddedList from "../users/UserAGEmbeddedList";
 
 const ShowActions = () => {
@@ -29,7 +30,7 @@ const AuthorizationGroupComponent = () => {
         <WithRecord
             render={(authorization_group) => (
                 <Box width={"100%"}>
-                    <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
+                    <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
                         <Typography variant="h6" sx={{ marginBottom: 1 }}>
                             Authorization Group
                         </Typography>
@@ -44,12 +45,34 @@ const AuthorizationGroupComponent = () => {
                             )}
                         </Stack>
                     </Paper>
-                    <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
+                    <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
                         <Typography variant="h6" sx={{ marginBottom: 1 }}>
                             Users
                         </Typography>
                         <UserAGEmbeddedList authorization_group={authorization_group} />
                     </Paper>
+                    {authorization_group.has_product_group_members && (
+                        <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Product Groups
+                            </Typography>
+                            <UserProductAuthorizationGroupMemberEmbeddedList
+                                authorization_group={authorization_group}
+                                is_product_group={true}
+                            />
+                        </Paper>
+                    )}
+                    {authorization_group.has_product_members && (
+                        <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Products
+                            </Typography>
+                            <UserProductAuthorizationGroupMemberEmbeddedList
+                                authorization_group={authorization_group}
+                                is_product_group={false}
+                            />
+                        </Paper>
+                    )}
                 </Box>
             )}
         />
