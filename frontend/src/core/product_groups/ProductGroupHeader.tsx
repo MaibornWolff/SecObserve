@@ -1,4 +1,4 @@
-import { Paper } from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
 import { Labeled, RecordContextProvider, TextField, useGetOne } from "react-admin";
 import { useParams } from "react-router-dom";
 
@@ -15,19 +15,27 @@ const ProductGroupHeader = () => {
         <RecordContextProvider value={product_group}>
             <Paper
                 sx={{
-                    alignItems: "top",
-                    display: "flex",
-                    justifyContent: "space-between",
                     padding: 2,
                     marginTop: 2,
                 }}
             >
-                <Labeled label="Product Group name">
-                    <TextField source="name" className={classes.fontBigBold} />
-                </Labeled>
-                <Labeled>
-                    <ObservationsCountField label="Open observations" withLabel={true} />
-                </Labeled>
+                <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                    Product Group
+                </Typography>
+                <Box
+                    sx={{
+                        alignItems: "top",
+                        display: "flex",
+                        justifyContent: "space-between",
+                    }}
+                >
+                    <Labeled label="Product Group name">
+                        <TextField source="name" className={classes.fontBigBold} />
+                    </Labeled>
+                    <Labeled>
+                        <ObservationsCountField label="Open observations" withLabel={true} />
+                    </Labeled>
+                </Box>
             </Paper>
         </RecordContextProvider>
     );
