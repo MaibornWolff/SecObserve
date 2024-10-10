@@ -108,7 +108,9 @@ const ObservationShowComponent = () => {
             render={(observation) => (
                 <Box width={"100%"}>
                     <Paper sx={{ marginBottom: 2, padding: 2 }}>
-                        <Typography variant="h6">Observation</Typography>
+                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                            Observation
+                        </Typography>
                         <Stack direction="row" spacing={4}>
                             <Stack spacing={2}>
                                 <Labeled>

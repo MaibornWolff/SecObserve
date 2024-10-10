@@ -2,15 +2,16 @@ import {
     BooleanField,
     Datagrid,
     FilterForm,
+    Identifier,
     ListContextProvider,
     NullableBooleanInput,
-    TextField,
     TextInput,
     WithRecord,
     useListController,
 } from "react-admin";
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
+import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import { is_superuser } from "../../commons/functions";
 import { getSettingListSize } from "../../commons/user_settings/functions";
 import AuthorizationGroupUserAdd from "../authorization_groups/AuthorizationGroupUserAdd";
@@ -30,6 +31,10 @@ function listFilters() {
         return [<TextInput source="username" alwaysOn />, <TextInput source="full_name" alwaysOn />];
     }
 }
+
+const showUser = (id: Identifier) => {
+    return "#/users/" + id + "/show";
+};
 
 type UserAGEmbeddedListProps = {
     authorization_group: any;
@@ -60,8 +65,14 @@ const UserAGEmbeddedList = ({ authorization_group }: UserAGEmbeddedListProps) =>
                 {is_superuser() && <AuthorizationGroupUserAdd id={authorization_group.id} />}
                 <FilterForm filters={listFilters()} />
                 <Datagrid size={getSettingListSize()} rowClick={false} bulkActionButtons={false} resource="users">
-                    <TextField source="username" />
-                    <TextField source="full_name" sx={{ wordBreak: "break-word" }} />
+                    <WithRecord
+                        label="Username"
+                        render={(user) => <TextUrlField label="User" text={user.username} url={showUser(user.id)} />}
+                    />
+                    <WithRecord
+                        label="Full name"
+                        render={(user) => <TextUrlField label="User" text={user.full_name} url={showUser(user.id)} />}
+                    />
                     {is_superuser() && <BooleanField source="is_active" label="Active" />}
                     {is_superuser() && <BooleanField source="is_oidc_user" label="OIDC user" />}
                     {is_superuser() && <BooleanField source="is_external" label="External" />}
