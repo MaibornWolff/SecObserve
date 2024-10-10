@@ -1,5 +1,5 @@
 import { Stack } from "@mui/material";
-import { Datagrid, ListContextProvider, SelectField, TextField, WithRecord, useListController } from "react-admin";
+import { Datagrid, Identifier, ListContextProvider, SelectField, WithRecord, useListController } from "react-admin";
 
 import {
     PERMISSION_PRODUCT_AUTHORIZATION_GROUP_MEMBER_DELETE,
@@ -7,6 +7,7 @@ import {
     ROLE_CHOICES,
 } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
+import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import { getSettingListSize } from "../../commons/user_settings/functions";
 import ProductAuthorizationGroupMemberDelete from "./ProductAuthorizationGroupMemberDelete";
 import ProductAuthorizationGroupMemberEdit from "./ProductAuthorizationGroupMemberEdit";
@@ -15,14 +16,17 @@ type ProductAuthorizationGroupMemberEmbeddedListProps = {
     product: any;
 };
 
+const showAuthorizationGroup = (id: Identifier) => {
+    return "#/authorization_groups/" + id + "/show";
+};
+
 const ProductAuthorizationGroupMemberEmbeddedList = ({ product }: ProductAuthorizationGroupMemberEmbeddedListProps) => {
     const listContext = useListController({
         filter: { product: Number(product.id) },
         perPage: 25,
         resource: "product_authorization_group_members",
-        sort: { field: "authorization_group_name", order: "ASC" },
+        sort: { field: "authorization_group_data.name", order: "ASC" },
         disableSyncWithLocation: true,
-        storeKey: "product_authorization_group_member.embedded",
     });
 
     if (listContext.isLoading) {
@@ -39,7 +43,18 @@ const ProductAuthorizationGroupMemberEmbeddedList = ({ product }: ProductAuthori
                     rowClick={false}
                     resource="product_authorization_group_members"
                 >
-                    <TextField source="authorization_group_name" label="Authorization Group" />
+                    <WithRecord
+                        label="Authorization Group"
+                        render={(product_authorization_group_member) => (
+                            <TextUrlField
+                                label="User"
+                                text={product_authorization_group_member.authorization_group_data.name}
+                                url={showAuthorizationGroup(
+                                    product_authorization_group_member.authorization_group_data.id
+                                )}
+                            />
+                        )}
+                    />
                     <SelectField source="role" choices={ROLE_CHOICES} />
                     <WithRecord
                         render={(product_authorization_group_member) => (

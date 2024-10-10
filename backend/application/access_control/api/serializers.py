@@ -14,7 +14,7 @@ from application.access_control.models import API_Token, Authorization_Group, Us
 from application.access_control.services.authorization import get_user_permissions
 from application.access_control.services.roles_permissions import Permissions, Roles
 from application.commons.services.global_request import get_current_user
-from application.core.models import Product_Member
+from application.core.models import Product_Authorization_Group_Member, Product_Member
 
 
 class NestedAuthorizationGroupSerializer(ModelSerializer):
@@ -24,6 +24,7 @@ class NestedAuthorizationGroupSerializer(ModelSerializer):
 
 
 class UserListSerializer(ModelSerializer):
+    full_name = SerializerMethodField()
     permissions = SerializerMethodField()
     has_password = SerializerMethodField()
 
@@ -71,6 +72,12 @@ class UserListSerializer(ModelSerializer):
 
         return data
 
+    def get_full_name(self, obj: User) -> str:
+        if not obj.is_active:
+            return f"{obj.full_name} (inactive)"
+
+        return obj.full_name
+
     def get_permissions(self, obj: User) -> list[Permissions]:
         return get_user_permissions(obj)
 
@@ -84,7 +91,10 @@ class UserListSerializer(ModelSerializer):
 
 
 class UserSerializer(UserListSerializer):
+    full_name = SerializerMethodField()
     authorization_groups = NestedAuthorizationGroupSerializer(many=True)
+    has_product_group_members = SerializerMethodField()
+    has_product_members = SerializerMethodField()
 
     class Meta:
         model = User
@@ -107,6 +117,8 @@ class UserSerializer(UserListSerializer):
             "date_joined",
             "has_password",
             "authorization_groups",
+            "has_product_group_members",
+            "has_product_members",
         ]
 
     def to_representation(self, instance: User):
@@ -115,8 +127,23 @@ class UserSerializer(UserListSerializer):
         user = get_current_user()
         if user and not user.is_superuser and not user.pk == instance.pk:
             data.pop("authorization_groups")
+            data.pop("has_product_group_members")
+            data.pop("has_product_members")
 
         return data
+
+    def get_full_name(self, obj: User) -> str:
+        return obj.full_name
+
+    def get_has_product_group_members(self, obj: User) -> bool:
+        return Product_Member.objects.filter(
+            user=obj, product__is_product_group=True
+        ).exists()
+
+    def get_has_product_members(self, obj: User) -> bool:
+        return Product_Member.objects.filter(
+            user=obj, product__is_product_group=False
+        ).exists()
 
 
 class UserUpdateSerializer(ModelSerializer):
@@ -146,9 +173,22 @@ class UserPasswortRulesSerializer(Serializer):
 
 
 class AuthorizationGroupSerializer(ModelSerializer):
+    has_product_group_members = SerializerMethodField()
+    has_product_members = SerializerMethodField()
+
     class Meta:
         model = Authorization_Group
         fields = "__all__"
+
+    def get_has_product_group_members(self, obj: Authorization_Group) -> bool:
+        return Product_Authorization_Group_Member.objects.filter(
+            authorization_group=obj, product__is_product_group=True
+        ).exists()
+
+    def get_has_product_members(self, obj: Authorization_Group) -> bool:
+        return Product_Authorization_Group_Member.objects.filter(
+            authorization_group=obj, product__is_product_group=False
+        ).exists()
 
 
 class AuthorizationGroupUserSerializer(Serializer):

@@ -85,7 +85,7 @@ const ProductAuthorizationGroupMemberEdit = () => {
                 <DialogTitle>Edit authorization group member</DialogTitle>
                 <DialogContent>
                     <SimpleForm onSubmit={product_authorization_group_member_update} toolbar={<CustomToolbar />}>
-                        <TextInputWide source="authorization_group_name" label="Authorization group" disabled />
+                        <TextInputWide source="authorization_group_data.name" label="Authorization group" disabled />
                         <AutocompleteInputWide source="role" choices={ROLE_CHOICES} validate={validate_required} />
                     </SimpleForm>
                 </DialogContent>
