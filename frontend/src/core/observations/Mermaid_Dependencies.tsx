@@ -1,4 +1,6 @@
 import CloseIcon from "@mui/icons-material/Close";
+import ZoomInIcon from "@mui/icons-material/ZoomIn";
+import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import { Dialog, DialogContent, DialogTitle, Divider, IconButton, Stack } from "@mui/material";
 import mermaid from "mermaid";
 import { Fragment, useEffect, useState } from "react";
@@ -13,6 +15,12 @@ mermaid.initialize({
     },
 });
 
+function resizeDependencyGraph(scale: number) {
+    const img = document.getElementById("dependency-graph-svg-in-dialog") as HTMLImageElement;
+    img.setAttribute("width", `${img.width * scale}`);
+    img.setAttribute("height", `${img.height * scale}`);
+}
+
 const GraphSVG = () => {
     const svg = document.querySelector(".mermaid svg");
     if (svg == null) {
@@ -22,7 +30,7 @@ const GraphSVG = () => {
     const blob = new Blob([svgData], { type: "image/svg+xml" });
     const url = URL.createObjectURL(blob);
     console.log(url);
-    return <img src={url} alt="Component dependency graph not available" />;
+    return <img src={url} alt="Component dependency graph not available" id="dependency-graph-svg-in-dialog" />;
 };
 
 const createMermaidGraph = (dependencies_str: string) => {
@@ -132,6 +140,14 @@ const MermaidDependencies = () => {
                             </Stack>
                         </DialogTitle>
                         <DialogContent>
+                            <div style={{ position: "absolute", background: "white", right: 0, paddingRight: 24 }}>
+                                <IconButton onClick={() => resizeDependencyGraph(1.1)}>
+                                    <ZoomInIcon />
+                                </IconButton>
+                                <IconButton onClick={() => resizeDependencyGraph(0.9)}>
+                                    <ZoomOutIcon />
+                                </IconButton>
+                            </div>
                             <GraphSVG />
                         </DialogContent>
                     </Dialog>
