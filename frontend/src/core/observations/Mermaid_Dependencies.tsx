@@ -1,5 +1,7 @@
+import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
-import { Dialog, DialogContent, DialogTitle, Divider, IconButton, Stack } from "@mui/material";
+import RemoveIcon from "@mui/icons-material/Remove";
+import { Dialog, DialogContent, DialogTitle, Divider, IconButton, Paper, Stack } from "@mui/material";
 import mermaid from "mermaid";
 import { Fragment, useEffect, useState } from "react";
 import { Labeled, WrapperField, useRecordContext } from "react-admin";
@@ -13,6 +15,12 @@ mermaid.initialize({
     },
 });
 
+function resizeDependencyGraph(scale: number) {
+    const img = document.getElementById("dependency-graph-svg-in-dialog") as HTMLImageElement;
+    img.setAttribute("width", `${img.width * scale}`);
+    img.setAttribute("height", `${img.height * scale}`);
+}
+
 const GraphSVG = () => {
     const svg = document.querySelector(".mermaid svg");
     if (svg == null) {
@@ -22,7 +30,7 @@ const GraphSVG = () => {
     const blob = new Blob([svgData], { type: "image/svg+xml" });
     const url = URL.createObjectURL(blob);
     console.log(url);
-    return <img src={url} alt="Component dependency graph not available" />;
+    return <img src={url} alt="Component dependency graph not available" id="dependency-graph-svg-in-dialog" />;
 };
 
 const createMermaidGraph = (dependencies_str: string) => {
@@ -132,6 +140,15 @@ const MermaidDependencies = () => {
                             </Stack>
                         </DialogTitle>
                         <DialogContent>
+                            <Paper sx={{ position: "absolute", right: 0, marginRight: 3 }}>
+                                <IconButton onClick={() => resizeDependencyGraph(1.1)}>
+                                    <AddIcon />
+                                </IconButton>
+                                <Divider />
+                                <IconButton onClick={() => resizeDependencyGraph(0.9)}>
+                                    <RemoveIcon />
+                                </IconButton>
+                            </Paper>
                             <GraphSVG />
                         </DialogContent>
                     </Dialog>
