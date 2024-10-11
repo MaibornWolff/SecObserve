@@ -1,7 +1,7 @@
+import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
-import ZoomInIcon from "@mui/icons-material/ZoomIn";
-import ZoomOutIcon from "@mui/icons-material/ZoomOut";
-import { Dialog, DialogContent, DialogTitle, Divider, IconButton, Stack } from "@mui/material";
+import RemoveIcon from "@mui/icons-material/Remove";
+import { Dialog, DialogContent, DialogTitle, Divider, IconButton, Paper, Stack } from "@mui/material";
 import mermaid from "mermaid";
 import { Fragment, useEffect, useState } from "react";
 import { Labeled, WrapperField, useRecordContext } from "react-admin";
@@ -140,14 +140,15 @@ const MermaidDependencies = () => {
                             </Stack>
                         </DialogTitle>
                         <DialogContent>
-                            <div style={{ position: "absolute", background: "white", right: 0, paddingRight: 24 }}>
+                            <Paper sx={{ position: "absolute", right: 0, marginRight: 3 }}>
                                 <IconButton onClick={() => resizeDependencyGraph(1.1)}>
-                                    <ZoomInIcon />
+                                    <AddIcon />
                                 </IconButton>
+                                <Divider />
                                 <IconButton onClick={() => resizeDependencyGraph(0.9)}>
-                                    <ZoomOutIcon />
+                                    <RemoveIcon />
                                 </IconButton>
-                            </div>
+                            </Paper>
                             <GraphSVG />
                         </DialogContent>
                     </Dialog>
