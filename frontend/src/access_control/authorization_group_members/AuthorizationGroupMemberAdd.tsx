@@ -2,17 +2,26 @@ import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { CreateBase, ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
+import {
+    BooleanInput,
+    CreateBase,
+    ReferenceInput,
+    SaveButton,
+    SimpleForm,
+    Toolbar,
+    useNotify,
+    useRefresh,
+} from "react-admin";
 
 import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
-export type AuthorizationGroupUserAddProps = {
+export type AuthorizationGroupMemberAddProps = {
     id: any;
 };
 
-const AuthorizationGroupUserAdd = ({ id }: AuthorizationGroupUserAddProps) => {
+const AuthorizationGroupMemberAdd = ({ id }: AuthorizationGroupMemberAddProps) => {
     const [open, setOpen] = useState(false);
     const refresh = useRefresh();
     const notify = useNotify();
@@ -47,10 +56,11 @@ const AuthorizationGroupUserAdd = ({ id }: AuthorizationGroupUserAddProps) => {
     );
 
     const add_user = (data: any) => {
-        const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/authorization_groups/" + id + "/add_user/";
+        const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/authorization_group_members/";
+        const body = JSON.stringify({ authorization_group: id, ...data });
         httpClient(url, {
             method: "POST",
-            body: JSON.stringify(data),
+            body: body,
         })
             .then(() => {
                 refresh();
@@ -86,6 +96,7 @@ const AuthorizationGroupUserAdd = ({ id }: AuthorizationGroupUserAddProps) => {
                             >
                                 <AutocompleteInputWide optionText="full_name" validate={validate_required} />
                             </ReferenceInput>
+                            <BooleanInput source="is_manager" label="Manager" />
                         </SimpleForm>
                     </CreateBase>
                 </DialogContent>
@@ -94,4 +105,4 @@ const AuthorizationGroupUserAdd = ({ id }: AuthorizationGroupUserAddProps) => {
     );
 };
 
-export default AuthorizationGroupUserAdd;
+export default AuthorizationGroupMemberAdd;

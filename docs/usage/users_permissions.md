@@ -36,7 +36,8 @@ There are some general permissions based on the user's type:
 | Change own password ^1)^    | X        | X        | X         |
 | Change all passwords  ^1)^  | -        | -        | X         |
 | Manage users                | -        | -        | X         |
-| Manage authorization groups | -        | -        | X         |
+| Create authorization groups | X        | -        | X         |
+| Manage authorization groups | X ^2)^   | X ^2)^   | X         |
 |                             |          |          |           |
 | Import VEX documents        | -        | -        | X         |
 | Manage VEX counters         | -        | -        | X         |
@@ -45,6 +46,8 @@ There are some general permissions based on the user's type:
 | Reset JWT secret            | -        | -        | X         |
 
 **^1)^** Not for OIDC users
+
+**^2)^** Only if the user is a manager of the authorization group
 
 
 ## Authorization groups

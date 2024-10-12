@@ -1,9 +1,7 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
 import {
-    ArrayField,
     BooleanField,
-    Datagrid,
     DateField,
     EditButton,
     Labeled,
@@ -17,8 +15,8 @@ import {
 
 import { is_superuser } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
-import { getSettingListSize } from "../../commons/user_settings/functions";
 import UserProductMemberEmbeddedList from "../../core/product_members/UserProductMemberEmbeddedList";
+import AuthorizationGroupEmbeddedList from "../authorization_groups/AuthorizationGroupEmbeddedList";
 import UserChangePassword from "./UserChangePassword";
 
 const ShowActions = () => {
@@ -58,10 +56,6 @@ const ShowActions = () => {
             </Stack>
         </TopToolbar>
     );
-};
-
-const ShowAuthorizationGroup = (id: any) => {
-    return "../../../../authorization_groups/" + id + "/show";
 };
 
 const UserComponent = () => {
@@ -164,21 +158,12 @@ const UserComponent = () => {
                             </Stack>
                         )}
                     </Stack>
-                    {showFullInformation(user) && user.authorization_groups && user.authorization_groups.length > 0 && (
+                    {showFullInformation(user) && user.has_authorization_groups && (
                         <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
                             <Typography variant="h6" sx={{ marginBottom: 1 }}>
                                 Authorization Groups
                             </Typography>
-                            <ArrayField source="authorization_groups">
-                                <Datagrid
-                                    bulkActionButtons={false}
-                                    rowClick={ShowAuthorizationGroup}
-                                    size={getSettingListSize()}
-                                >
-                                    <TextField source="name" label="Authorization group" />
-                                    <TextField source="oidc_group" label="OIDC group" />
-                                </Datagrid>{" "}
-                            </ArrayField>
+                            <AuthorizationGroupEmbeddedList user={user} />
                         </Paper>
                     )}
                     {showFullInformation(user) && user.has_product_group_members && (

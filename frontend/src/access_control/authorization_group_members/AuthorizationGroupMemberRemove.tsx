@@ -4,12 +4,11 @@ import { Button, Confirm, useNotify, useRefresh } from "react-admin";
 
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
-type AuthorizationGroupUserRemoveProps = {
-    id: any;
-    user: any;
+type AuthorizationGroupMemberRemoveProps = {
+    authorization_group_member: any;
 };
 
-const AuthorizationGroupUserRemove = ({ id, user }: AuthorizationGroupUserRemoveProps) => {
+const AuthorizationGroupMemberRemove = ({ authorization_group_member }: AuthorizationGroupMemberRemoveProps) => {
     const [open, setOpen] = useState(false);
     const refresh = useRefresh();
     const notify = useNotify();
@@ -17,11 +16,13 @@ const AuthorizationGroupUserRemove = ({ id, user }: AuthorizationGroupUserRemove
     const handleDialogClose = () => setOpen(false);
 
     const removeUser = async () => {
-        const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/authorization_groups/" + id + "/remove_user/";
-        const data = { user: user.id };
+        const url =
+            window.__RUNTIME_CONFIG__.API_BASE_URL +
+            "/authorization_group_members/" +
+            authorization_group_member.id +
+            "/";
         httpClient(url, {
-            method: "POST",
-            body: JSON.stringify(data),
+            method: "DELETE",
         })
             .then(() => {
                 refresh();
@@ -40,7 +41,9 @@ const AuthorizationGroupUserRemove = ({ id, user }: AuthorizationGroupUserRemove
             <Confirm
                 isOpen={open}
                 title="Remove user"
-                content={"Are you sure you want to remove the user " + user.full_name + "?"}
+                content={
+                    "Are you sure you want to remove the user " + authorization_group_member.user_data.full_name + "?"
+                }
                 onConfirm={removeUser}
                 onClose={handleDialogClose}
             />
@@ -48,4 +51,4 @@ const AuthorizationGroupUserRemove = ({ id, user }: AuthorizationGroupUserRemove
     );
 };
 
-export default AuthorizationGroupUserRemove;
+export default AuthorizationGroupMemberRemove;

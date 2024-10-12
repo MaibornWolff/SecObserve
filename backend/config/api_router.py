@@ -2,6 +2,7 @@ from rest_framework.routers import SimpleRouter
 
 from application.access_control.api.views import (
     ApiTokenViewSet,
+    AuthorizationGroupMemberViewSet,
     AuthorizationGroupViewSet,
     ProductApiTokenViewset,
     UserViewSet,
@@ -42,6 +43,11 @@ router = SimpleRouter()
 router.register("users", UserViewSet, basename="users")
 router.register(
     "authorization_groups", AuthorizationGroupViewSet, basename="authorization_groups"
+)
+router.register(
+    "authorization_group_members",
+    AuthorizationGroupMemberViewSet,
+    basename="authorization_group_members",
 )
 router.register("api_tokens", ApiTokenViewSet, basename="api_tokens")
 router.register(
