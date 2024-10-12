@@ -16,6 +16,7 @@ export const validate_0_10 = [minValue(0), maxValue(10)];
 export const validate_0_999999 = [minValue(0), maxValue(999999)];
 export const validate_0_23 = [minValue(0), maxValue(23)];
 export const validate_0_59 = [minValue(0), maxValue(59)];
+export const validate_1_4096 = [minValue(1), maxValue(4096)];
 export const validate_2000_9999 = [minValue(2000), maxValue(9999)];
 
 export function validate_after_today() {

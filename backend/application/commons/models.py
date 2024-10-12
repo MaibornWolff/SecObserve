@@ -199,6 +199,22 @@ class Settings(Model):
         help_text="Hour crontab expression for API imports (UTC)",
     )
 
+    password_validator_minimum_length = IntegerField(
+        default=8,
+        validators=[MinValueValidator(1), MaxValueValidator(4096)],
+        help_text="Validates that the password is of a minimum length.",
+    )
+    password_validator_attribute_similarity = BooleanField(
+        default=True,
+        help_text="Validates that the password is sufficiently different from certain attributes of the user.",
+    )
+    password_validator_common_passwords = BooleanField(
+        default=True, help_text="Validates that the password is not a common password."
+    )
+    password_validator_not_numeric = BooleanField(
+        default=True, help_text="Validate that the password is not entirely numeric."
+    )
+
     def save(self, *args, **kwargs):
         """
         Save object to the database. Removes all other entries if there

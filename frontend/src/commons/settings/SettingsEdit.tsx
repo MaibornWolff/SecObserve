@@ -3,7 +3,13 @@ import { Fragment } from "react";
 import { BooleanInput, Edit, FormDataConsumer, NumberInput, SaveButton, SimpleForm, Toolbar } from "react-admin";
 
 import settings from ".";
-import { validate_0_23, validate_0_59, validate_0_999999, validate_255 } from "../../commons/custom_validators";
+import {
+    validate_0_23,
+    validate_0_59,
+    validate_0_999999,
+    validate_1_4096,
+    validate_255,
+} from "../../commons/custom_validators";
 import ListHeader from "../../commons/layout/ListHeader";
 import { TextInputWide } from "../../commons/layout/themes";
 
@@ -312,7 +318,7 @@ const SettingsEdit = () => {
                         helperText="Days before risk acceptance expires, 0 means no expiry"
                         sx={{ marginBottom: 2 }}
                     />
-                    <Stack direction="row" spacing={2}>
+                    <Stack direction="row" spacing={2} sx={{ marginBottom: 1 }}>
                         <NumberInput
                             source="risk_acceptance_expiry_crontab_hour"
                             label="Risk acceptance expiry crontab (hour)"
@@ -320,7 +326,6 @@ const SettingsEdit = () => {
                             step={1}
                             validate={validate_0_23}
                             helperText="Hour crontab expression for checking risk acceptance expiry (UTC)"
-                            sx={{ marginBottom: 2 }}
                         />
                         <NumberInput
                             source="risk_acceptance_expiry_crontab_minute"
@@ -329,23 +334,18 @@ const SettingsEdit = () => {
                             step={1}
                             validate={validate_0_59}
                             helperText="Minute crontab expression for checking risk acceptance expiry"
-                            sx={{ marginBottom: 2 }}
                         />
                     </Stack>
 
                     <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
-                    <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                    <Typography variant="h6" sx={{ marginBottom: 1 }}>
                         Automatic API import
                     </Typography>
-                    <BooleanInput
-                        source="feature_automatic_api_import"
-                        label="Enable automatic API imports"
-                        sx={{ marginBottom: 2 }}
-                    />
+                    <BooleanInput source="feature_automatic_api_import" label="Enable automatic API imports" />
                     <FormDataConsumer>
                         {({ formData }) =>
                             formData.feature_automatic_api_import && (
-                                <Stack direction="row" spacing={2}>
+                                <Stack direction="row" spacing={2} sx={{ marginBottom: 1 }}>
                                     <NumberInput
                                         source="api_import_crontab_hour"
                                         label="API import crontab (hour)"
@@ -353,7 +353,6 @@ const SettingsEdit = () => {
                                         step={1}
                                         validate={validate_0_23}
                                         helperText="Hour crontab expression for API imports (UTC)"
-                                        sx={{ marginBottom: 2 }}
                                     />
                                     <NumberInput
                                         source="api_import_crontab_minute"
@@ -362,12 +361,43 @@ const SettingsEdit = () => {
                                         step={1}
                                         validate={validate_0_59}
                                         helperText="Minute crontab expression for API imports"
-                                        sx={{ marginBottom: 2 }}
                                     />
                                 </Stack>
                             )
                         }
                     </FormDataConsumer>
+
+                    <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+                    <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                        Password validation for non-OIDC users
+                    </Typography>
+                    <NumberInput
+                        source="password_validator_minimum_length"
+                        label="Minimum length"
+                        min={1}
+                        step={1}
+                        validate={validate_1_4096}
+                        helperText="Validates that the password is of a minimum length."
+                        sx={{ marginBottom: 1 }}
+                    />
+                    <BooleanInput
+                        source="password_validator_attribute_similarity"
+                        label="Attribute similarity"
+                        helperText="Validates that the password is sufficiently different from certain attributes of the user."
+                        sx={{ marginBottom: 1 }}
+                    />
+                    <BooleanInput
+                        source="password_validator_common_passwords"
+                        label="Common passwords"
+                        helperText="Validates that the password is not a common password."
+                        sx={{ marginBottom: 1 }}
+                    />
+                    <BooleanInput
+                        source="password_validator_not_numeric"
+                        label="Not entirely numeric"
+                        helperText="Validate that the password is not entirely numeric."
+                        sx={{ marginBottom: 1 }}
+                    />
                 </SimpleForm>
             </Edit>
         </Fragment>
