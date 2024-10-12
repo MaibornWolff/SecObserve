@@ -1,11 +1,4 @@
-import {
-    Datagrid,
-    FilterForm,
-    ListContextProvider,
-    TextField,
-    TextInput,
-    useListController,
-} from "react-admin";
+import { Datagrid, FilterForm, ListContextProvider, TextField, TextInput, useListController } from "react-admin";
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { is_external } from "../../commons/functions";
