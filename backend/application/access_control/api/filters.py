@@ -1,10 +1,5 @@
 from django.db.models import Exists
-from django_filters import (
-    CharFilter,
-    FilterSet,
-    NumberFilter,
-    OrderingFilter,
-)
+from django_filters import CharFilter, FilterSet, NumberFilter, OrderingFilter
 
 from application.access_control.models import (
     API_Token,
