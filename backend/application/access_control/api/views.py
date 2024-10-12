@@ -1,8 +1,13 @@
 import logging
 from dataclasses import dataclass
+from typing import Any
 
 from django.contrib.auth import authenticate as django_authenticate
 from django.contrib.auth.password_validation import (
+    CommonPasswordValidator,
+    MinimumLengthValidator,
+    NumericPasswordValidator,
+    UserAttributeSimilarityValidator,
     password_validators_help_texts,
     validate_password,
 )
@@ -73,6 +78,7 @@ from application.access_control.services.user_api_token import (
     create_user_api_token,
     revoke_user_api_token,
 )
+from application.commons.models import Settings
 from application.commons.services.log_message import format_log_message
 from application.core.models import Product
 from application.core.queries.product import get_product_by_id
@@ -176,7 +182,7 @@ class UserViewSet(ModelViewSet):
             raise ValidationError("Current password is incorrect")
 
         try:
-            validate_password(new_password_1, instance)
+            validate_password(new_password_1, instance, self._get_password_validators())
         except DjangoValidationError as e:
             raise ValidationError(e.messages)  # pylint: disable=raise-missing-from
             # The DjangoValidationError itself is not relevant and must not be re-raised
@@ -198,10 +204,29 @@ class UserViewSet(ModelViewSet):
         class PasswordRules:
             password_rules: str
 
-        password_rules_text = password_validators_help_texts()
+        password_rules_text = password_validators_help_texts(
+            self._get_password_validators()
+        )
         password_rules = PasswordRules("- " + "\n- ".join(password_rules_text))
         response_serializer = UserPasswortRulesSerializer(password_rules)
         return Response(response_serializer.data, status=status.HTTP_200_OK)
+
+    def _get_password_validators(self) -> list[Any]:
+        validators: list[Any] = []
+        settings = Settings.load()
+        validators.append(
+            MinimumLengthValidator(
+                min_length=settings.password_validator_minimum_length
+            )
+        )
+        if settings.password_validator_common_passwords:
+            validators.append(CommonPasswordValidator())
+        if settings.password_validator_attribute_similarity:
+            validators.append(UserAttributeSimilarityValidator())
+        if settings.password_validator_not_numeric:
+            validators.append(NumericPasswordValidator())
+
+        return validators
 
 
 class AuthorizationGroupViewSet(ModelViewSet):
