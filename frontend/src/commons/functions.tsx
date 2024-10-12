@@ -173,3 +173,8 @@ export const is_superuser = () => {
     const user = localStorage.getItem("user");
     return user && JSON.parse(user).is_superuser;
 };
+
+export const is_external = () => {
+    const user = localStorage.getItem("user");
+    return user && JSON.parse(user).is_external;
+};

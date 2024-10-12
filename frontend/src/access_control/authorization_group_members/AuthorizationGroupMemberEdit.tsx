@@ -2,11 +2,9 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import EditIcon from "@mui/icons-material/Edit";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { SaveButton, SimpleForm, Toolbar, useNotify, useRefresh, useUpdate } from "react-admin";
+import { BooleanInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh, useUpdate } from "react-admin";
 
-import { ROLE_CHOICES } from "../../access_control/types";
-import { validate_required } from "../../commons/custom_validators";
-import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
+import { TextInputWide } from "../../commons/layout/themes";
 
 const ProductMemberEdit = () => {
     const [open, setOpen] = useState(false);
@@ -20,13 +18,13 @@ const ProductMemberEdit = () => {
         setOpen(false);
     };
 
-    const product_member_update = async (data: any) => {
+    const member_update = async (data: any) => {
         const patch = {
-            role: data.role,
+            is_manager: data.is_manager,
         };
 
         update(
-            "product_members",
+            "authorization_group_members",
 
             {
                 id: data.id,
@@ -83,11 +81,11 @@ const ProductMemberEdit = () => {
                 Edit
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Edit user member</DialogTitle>
+                <DialogTitle>Edit user</DialogTitle>
                 <DialogContent>
-                    <SimpleForm onSubmit={product_member_update} toolbar={<CustomToolbar />}>
+                    <SimpleForm onSubmit={member_update} toolbar={<CustomToolbar />}>
                         <TextInputWide source="user_data.full_name" label="User" disabled />
-                        <AutocompleteInputWide source="role" choices={ROLE_CHOICES} validate={validate_required} />
+                        <BooleanInput source="is_manager" label="Manager" />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>

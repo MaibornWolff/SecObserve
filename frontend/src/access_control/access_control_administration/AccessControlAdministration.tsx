@@ -113,7 +113,7 @@ export default function AccessControlAdministration() {
                     <UserEmbeddedList />
                 </CustomTabPanel>
                 <CustomTabPanel value={currentTab()} index={1}>
-                    <AuthorizationGroupEmbeddedList />
+                    <AuthorizationGroupEmbeddedList user={null} />
                 </CustomTabPanel>
                 <CustomTabPanel value={currentTab()} index={2}>
                     <ApiTokenEmbeddedList />

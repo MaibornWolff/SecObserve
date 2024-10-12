@@ -5,7 +5,7 @@ import { EditButton, Labeled, PrevNextButtons, Show, TextField, TopToolbar, With
 import { is_superuser } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
 import UserProductAuthorizationGroupMemberEmbeddedList from "../../core/product_authorization_group_members/UserProductAuthorizationGroupMemberEmbeddedList";
-import UserAGEmbeddedList from "../users/UserAGEmbeddedList";
+import AuthorizationGroupMemberEmbeddedList from "../authorization_group_members/AuthorizationGroupMemberEmbeddedList";
 
 const ShowActions = () => {
     return (
@@ -49,7 +49,7 @@ const AuthorizationGroupComponent = () => {
                         <Typography variant="h6" sx={{ marginBottom: 1 }}>
                             Users
                         </Typography>
-                        <UserAGEmbeddedList authorization_group={authorization_group} />
+                        <AuthorizationGroupMemberEmbeddedList authorization_group={authorization_group} />
                     </Paper>
                     {authorization_group.has_product_group_members && (
                         <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>

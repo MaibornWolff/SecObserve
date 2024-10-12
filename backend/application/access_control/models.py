@@ -3,6 +3,7 @@ from django.db.models import (
     CASCADE,
     BooleanField,
     CharField,
+    ForeignKey,
     Index,
     ManyToManyField,
     Model,
@@ -55,7 +56,12 @@ class User(AbstractUser):
 class Authorization_Group(Model):
     name = CharField(max_length=255, unique=True)
     oidc_group = CharField(max_length=255, blank=True)
-    users = ManyToManyField(User, related_name="authorization_groups", blank=True)
+    users: ManyToManyField = ManyToManyField(
+        User,
+        through="Authorization_Group_Member",
+        related_name="authorization_groups",
+        blank=True,
+    )
 
     class Meta:
         verbose_name = "Authorization Group"
@@ -66,6 +72,21 @@ class Authorization_Group(Model):
 
     def __str__(self):
         return self.name
+
+
+class Authorization_Group_Member(Model):
+    authorization_group = ForeignKey(Authorization_Group, on_delete=CASCADE)
+    user = ForeignKey(User, on_delete=CASCADE)
+    is_manager = BooleanField(default=False)
+
+    class Meta:
+        unique_together = (
+            "authorization_group",
+            "user",
+        )
+
+    def __str__(self):
+        return f"{self.authorization_group} / {self.user}"
 
 
 class JWT_Secret(Model):
