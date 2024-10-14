@@ -2,13 +2,11 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import EditIcon from "@mui/icons-material/Edit";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { SaveButton, SimpleForm, Toolbar, useNotify, useRefresh, useUpdate } from "react-admin";
+import { BooleanInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh, useUpdate } from "react-admin";
 
-import { ROLE_CHOICES } from "../../access_control/types";
-import { validate_required } from "../../commons/custom_validators";
-import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
+import { TextInputWide } from "../../commons/layout/themes";
 
-const ProductAuthorizationGroupMemberEdit = () => {
+const ProductMemberEdit = () => {
     const [open, setOpen] = useState(false);
     const [update] = useUpdate();
     const refresh = useRefresh();
@@ -19,13 +17,14 @@ const ProductAuthorizationGroupMemberEdit = () => {
         if (reason && reason == "backdropClick") return;
         setOpen(false);
     };
-    const product_authorization_group_member_update = async (data: any) => {
+
+    const member_update = async (data: any) => {
         const patch = {
-            role: data.role,
+            is_manager: data.is_manager,
         };
 
         update(
-            "product_authorization_group_members",
+            "authorization_group_members",
 
             {
                 id: data.id,
@@ -34,7 +33,7 @@ const ProductAuthorizationGroupMemberEdit = () => {
             {
                 onSuccess: () => {
                     refresh();
-                    notify("Authorization group member updated", {
+                    notify("User member updated", {
                         type: "success",
                     });
                 },
@@ -82,11 +81,11 @@ const ProductAuthorizationGroupMemberEdit = () => {
                 Edit
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Edit authorization group member</DialogTitle>
+                <DialogTitle>Edit user</DialogTitle>
                 <DialogContent>
-                    <SimpleForm onSubmit={product_authorization_group_member_update} toolbar={<CustomToolbar />}>
-                        <TextInputWide source="authorization_group_data.name" label="Authorization group" disabled />
-                        <AutocompleteInputWide source="role" choices={ROLE_CHOICES} validate={validate_required} />
+                    <SimpleForm onSubmit={member_update} toolbar={<CustomToolbar />}>
+                        <TextInputWide source="user_data.full_name" label="User" disabled />
+                        <BooleanInput source="is_manager" label="Manager" />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>
@@ -94,4 +93,4 @@ const ProductAuthorizationGroupMemberEdit = () => {
     );
 };
 
-export default ProductAuthorizationGroupMemberEdit;
+export default ProductMemberEdit;

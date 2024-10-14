@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 
 import About from "../about/About";
 import Logo from "./Logo";
+import ToggleThemeButton from "./ToggleThemeButton";
 
 const DocumentationMenu = forwardRef(() => {
     const userMenuContext = useUserMenu();
@@ -108,6 +109,7 @@ const CustomAppBar = () => {
             userMenu={<CustomUserMenu />}
             toolbar={
                 <>
+                    <ToggleThemeButton />
                     <LoadingIndicator />
                 </>
             }

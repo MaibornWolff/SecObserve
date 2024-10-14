@@ -43,7 +43,7 @@ const ProductAuthorizationGroupMemberDelete = (props: ProductAuthorizationGroupM
                 title="Delete authorization group member"
                 content={
                     "Are you sure you want to delete the authorization group member " +
-                    props.product_authorization_group_member.authorization_group_name +
+                    props.product_authorization_group_member.authorization_group_data.name +
                     "?"
                 }
                 onConfirm={handleConfirm}

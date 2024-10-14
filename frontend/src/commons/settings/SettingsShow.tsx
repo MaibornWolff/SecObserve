@@ -196,6 +196,24 @@ const SettingsShowComponent = () => {
                             )}
                         </Stack>
                     </Paper>
+
+                    <Paper sx={{ marginBottom: 2, padding: 2 }}>
+                        <Typography variant="h6">Password validation for non-OIDC users</Typography>
+                        <Stack spacing={2}>
+                            <Labeled label="Minimum length">
+                                <NumberField source="password_validator_minimum_length" />
+                            </Labeled>
+                            <Labeled label="Attribute similarity">
+                                <BooleanField source="password_validator_attribute_similarity" />
+                            </Labeled>
+                            <Labeled label="Common passwords">
+                                <BooleanField source="password_validator_common_passwords" />
+                            </Labeled>
+                            <Labeled label="Not entirely numeric">
+                                <BooleanField source="password_validator_not_numeric" />
+                            </Labeled>
+                        </Stack>
+                    </Paper>
                 </Box>
             )}
         />

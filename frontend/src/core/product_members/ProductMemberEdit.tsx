@@ -19,6 +19,7 @@ const ProductMemberEdit = () => {
         if (reason && reason == "backdropClick") return;
         setOpen(false);
     };
+
     const product_member_update = async (data: any) => {
         const patch = {
             role: data.role,

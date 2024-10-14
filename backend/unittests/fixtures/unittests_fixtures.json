@@ -132,8 +132,7 @@
         "pk": 1,
         "fields": {
             "name": "oidc_group_1",
-            "oidc_group": "oidc_1",
-            "users": []
+            "oidc_group": "oidc_1"
         }
     },
     {
@@ -141,8 +140,7 @@
         "pk": 2,
         "fields": {
             "name": "oidc_group_2",
-            "oidc_group": "oidc_2",
-            "users": []
+            "oidc_group": "oidc_2"
         }
     },
     {
@@ -150,8 +148,25 @@
         "pk": 3,
         "fields": {
             "name": "non_oidc_group",
-            "oidc_group": "",
-            "users": [2, 3]
+            "oidc_group": ""
+        }
+    },
+    {
+        "model": "access_control.authorization_group_member",
+        "pk": 1,
+        "fields": {
+            "authorization_group": 3,
+            "user": 2,
+            "is_manager": true
+        }
+    },
+    {
+        "model": "access_control.authorization_group_member",
+        "pk": 2,
+        "fields": {
+            "authorization_group": 3,
+            "user": 3,
+            "is_manager": false
         }
     },
     {

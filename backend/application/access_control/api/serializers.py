@@ -8,13 +8,22 @@ from rest_framework.serializers import (
     ModelSerializer,
     Serializer,
     SerializerMethodField,
+    ValidationError,
 )
 
-from application.access_control.models import API_Token, Authorization_Group, User
+from application.access_control.models import (
+    API_Token,
+    Authorization_Group,
+    Authorization_Group_Member,
+    User,
+)
+from application.access_control.queries.authorization_group_member import (
+    get_authorization_group_member,
+)
 from application.access_control.services.authorization import get_user_permissions
 from application.access_control.services.roles_permissions import Permissions, Roles
 from application.commons.services.global_request import get_current_user
-from application.core.models import Product_Member
+from application.core.models import Product_Authorization_Group_Member, Product_Member
 
 
 class NestedAuthorizationGroupSerializer(ModelSerializer):
@@ -24,6 +33,7 @@ class NestedAuthorizationGroupSerializer(ModelSerializer):
 
 
 class UserListSerializer(ModelSerializer):
+    full_name = SerializerMethodField()
     permissions = SerializerMethodField()
     has_password = SerializerMethodField()
 
@@ -71,6 +81,12 @@ class UserListSerializer(ModelSerializer):
 
         return data
 
+    def get_full_name(self, obj: User) -> str:
+        if not obj.is_active:
+            return f"{obj.full_name} (inactive)"
+
+        return obj.full_name
+
     def get_permissions(self, obj: User) -> list[Permissions]:
         return get_user_permissions(obj)
 
@@ -84,7 +100,10 @@ class UserListSerializer(ModelSerializer):
 
 
 class UserSerializer(UserListSerializer):
-    authorization_groups = NestedAuthorizationGroupSerializer(many=True)
+    full_name = SerializerMethodField()
+    has_authorization_groups = SerializerMethodField()
+    has_product_group_members = SerializerMethodField()
+    has_product_members = SerializerMethodField()
 
     class Meta:
         model = User
@@ -106,7 +125,9 @@ class UserSerializer(UserListSerializer):
             "is_oidc_user",
             "date_joined",
             "has_password",
-            "authorization_groups",
+            "has_authorization_groups",
+            "has_product_group_members",
+            "has_product_members",
         ]
 
     def to_representation(self, instance: User):
@@ -114,9 +135,27 @@ class UserSerializer(UserListSerializer):
 
         user = get_current_user()
         if user and not user.is_superuser and not user.pk == instance.pk:
-            data.pop("authorization_groups")
+            data.pop("has_authorization_groups")
+            data.pop("has_product_group_members")
+            data.pop("has_product_members")
 
         return data
+
+    def get_full_name(self, obj: User) -> str:
+        return obj.full_name
+
+    def get_has_authorization_groups(self, obj: User) -> bool:
+        return Authorization_Group_Member.objects.filter(user=obj).exists()
+
+    def get_has_product_group_members(self, obj: User) -> bool:
+        return Product_Member.objects.filter(
+            user=obj, product__is_product_group=True
+        ).exists()
+
+    def get_has_product_members(self, obj: User) -> bool:
+        return Product_Member.objects.filter(
+            user=obj, product__is_product_group=False
+        ).exists()
 
 
 class UserUpdateSerializer(ModelSerializer):
@@ -146,13 +185,74 @@ class UserPasswortRulesSerializer(Serializer):
 
 
 class AuthorizationGroupSerializer(ModelSerializer):
+    has_product_group_members = SerializerMethodField()
+    has_product_members = SerializerMethodField()
+    is_manager = SerializerMethodField()
+
     class Meta:
         model = Authorization_Group
+        exclude = ["users"]
+
+    def get_has_product_group_members(self, obj: Authorization_Group) -> bool:
+        return Product_Authorization_Group_Member.objects.filter(
+            authorization_group=obj, product__is_product_group=True
+        ).exists()
+
+    def get_has_product_members(self, obj: Authorization_Group) -> bool:
+        return Product_Authorization_Group_Member.objects.filter(
+            authorization_group=obj, product__is_product_group=False
+        ).exists()
+
+    def get_is_manager(self, obj: Authorization_Group) -> bool:
+        user = get_current_user()
+        return Authorization_Group_Member.objects.filter(
+            authorization_group=obj, user=user, is_manager=True
+        ).exists()
+
+
+class AuthorizationGroupListSerializer(ModelSerializer):
+    class Meta:
+        model = Authorization_Group
+        exclude = ["users"]
+
+
+class AuthorizationGroupMemberSerializer(ModelSerializer):
+    authorization_group_data = AuthorizationGroupListSerializer(
+        source="authorization_group",
+        read_only=True,
+    )
+    user_data = UserListSerializer(source="user", read_only=True)
+
+    class Meta:
+        model = Authorization_Group_Member
         fields = "__all__"
 
+    def validate(self, attrs: dict):
+        self.instance: Authorization_Group_Member
+        data_authorization_group: Optional[Authorization_Group] = attrs.get(
+            "authorization_group"
+        )
+        data_user = attrs.get("user")
 
-class AuthorizationGroupUserSerializer(Serializer):
-    user = IntegerField(validators=[MinValueValidator(0)])
+        if self.instance is not None and (
+            (
+                data_authorization_group
+                and data_authorization_group != self.instance.authorization_group
+            )
+            or (data_user and data_user != self.instance.user)
+        ):
+            raise ValidationError("Authorization group and user cannot be changed")
+
+        if self.instance is None:
+            authorization_group_member = get_authorization_group_member(
+                data_authorization_group, data_user
+            )
+            if authorization_group_member:
+                raise ValidationError(
+                    f"Authorization group member {data_authorization_group} / {data_user} already exists"
+                )
+
+        return attrs
 
 
 class UserSettingsSerializer(ModelSerializer):

@@ -1,6 +1,10 @@
 from django.test import TestCase
 
-from application.access_control.models import Authorization_Group, User
+from application.access_control.models import (
+    Authorization_Group,
+    Authorization_Group_Member,
+    User,
+)
 from application.access_control.services.roles_permissions import Roles
 from application.core.models import (
     Branch,
@@ -63,6 +67,11 @@ class BaseTestCase(TestCase):
         )
 
         self.authorization_group_1 = Authorization_Group(name="authorization_group_1")
+        self.authorization_group_member_1 = Authorization_Group_Member(
+            authorization_group=self.authorization_group_1,
+            user=self.user_internal,
+            is_manager=True,
+        )
         self.product_authorization_group_member_1 = Product_Authorization_Group_Member(
             product=self.product_1,
             authorization_group=self.authorization_group_1,

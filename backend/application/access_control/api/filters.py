@@ -1,6 +1,12 @@
+from django.db.models import Exists
 from django_filters import CharFilter, FilterSet, NumberFilter, OrderingFilter
 
-from application.access_control.models import API_Token, Authorization_Group, User
+from application.access_control.models import (
+    API_Token,
+    Authorization_Group,
+    Authorization_Group_Member,
+    User,
+)
 
 
 class UserFilter(FilterSet):
@@ -53,6 +59,7 @@ class UserFilter(FilterSet):
 class AuthorizationGroupFilter(FilterSet):
     name = CharFilter(field_name="name", lookup_expr="icontains")
     oidc_group = CharFilter(field_name="oidc_group", lookup_expr="icontains")
+    user = NumberFilter(field_name="users")
 
     # search is needed for the ReferenceArrayInput field of react-admin
     search = CharFilter(field_name="name", lookup_expr="icontains")
@@ -65,6 +72,36 @@ class AuthorizationGroupFilter(FilterSet):
     class Meta:
         model = Authorization_Group
         fields = ["name", "oidc_group", "search"]
+
+    def get_user(self, queryset, name, value):  # pylint: disable=unused-argument
+        # field_name is used as a positional argument
+
+        authorization_group_members = Authorization_Group_Member.objects.filter(
+            user__id=value
+        )
+        queryset = queryset.annotate(
+            member=Exists(authorization_group_members),
+        )
+        return queryset.filter(member=True)
+
+
+class AuthorizationGroupMemberFilter(FilterSet):
+    username = CharFilter(field_name="user__username", lookup_expr="icontains")
+    full_name = CharFilter(field_name="user__full_name", lookup_expr="icontains")
+
+    ordering = OrderingFilter(
+        # tuple-mapping retains order
+        fields=(
+            ("user__full_name", "user_data.full_name"),
+            ("authorization_group", "authorization_group"),
+            ("user", "user"),
+            ("is_manager", "is_manager"),
+        ),
+    )
+
+    class Meta:
+        model = Authorization_Group_Member
+        fields = ["authorization_group", "user", "is_manager", "username", "full_name"]
 
 
 class ApiTokenFilter(FilterSet):

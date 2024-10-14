@@ -1,7 +1,7 @@
 import { Datagrid, FilterForm, ListContextProvider, TextField, TextInput, useListController } from "react-admin";
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
-import { is_superuser } from "../../commons/functions";
+import { is_external } from "../../commons/functions";
 import { getSettingListSize } from "../../commons/user_settings/functions";
 import AuthorizationGroupCreateButton from "./AuthorizationGroupCreateButton";
 
@@ -13,15 +13,22 @@ function listFilters() {
     return [<TextInput source="name" alwaysOn />, <TextInput source="oidc_group" label="OIDC group" alwaysOn />];
 }
 
-const AuthorizationGroupEmbeddedList = () => {
+type AuthorizationGroupEmbeddedListProps = {
+    user: any;
+};
+
+const AuthorizationGroupEmbeddedList = ({ user }: AuthorizationGroupEmbeddedListProps) => {
+    const filter = user ? { user: Number(user.id) } : {};
+    const storeKey = user ? false : "authorization_groups.embedded";
+
     const listContext = useListController({
-        filter: {},
+        filter: filter,
         perPage: 25,
         resource: "authorization_groups",
         sort: { field: "name", order: "ASC" },
         filterDefaultValues: { is_active: true },
         disableSyncWithLocation: false,
-        storeKey: "authorization_groups.embedded",
+        storeKey: storeKey,
     });
 
     if (listContext.isLoading) {
@@ -31,8 +38,8 @@ const AuthorizationGroupEmbeddedList = () => {
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
-                {is_superuser() && <AuthorizationGroupCreateButton />}
-                <FilterForm filters={listFilters()} />
+                {!is_external() && !user && <AuthorizationGroupCreateButton />}
+                {!user && <FilterForm filters={listFilters()} />}
                 <Datagrid
                     size={getSettingListSize()}
                     rowClick={ShowAuthorizationGroups}

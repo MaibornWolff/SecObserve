@@ -1,4 +1,4 @@
-import { Paper } from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
 import { Labeled, RecordContextProvider, TextField, useGetOne } from "react-admin";
 import { useParams } from "react-router-dom";
 
@@ -23,24 +23,32 @@ const ProductHeader = () => {
         <RecordContextProvider value={product}>
             <Paper
                 sx={{
-                    alignItems: "top",
-                    display: "flex",
-                    justifyContent: "space-between",
                     padding: 2,
                     marginTop: 2,
                 }}
             >
-                <Labeled label="Product name">
-                    <TextField source="name" className={classes.fontBigBold} />
-                </Labeled>
-                {product && product.security_gate_passed != undefined && (
-                    <Labeled>
-                        <SecurityGateTextField label="Security gate" />
+                <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                    Product
+                </Typography>
+                <Box
+                    sx={{
+                        alignItems: "top",
+                        display: "flex",
+                        justifyContent: "space-between",
+                    }}
+                >
+                    <Labeled label="Product name">
+                        <TextField source="name" className={classes.fontBigBold} />
                     </Labeled>
-                )}
-                <Labeled>
-                    <ObservationsCountField label={get_open_observation_label(product)} withLabel={true} />
-                </Labeled>
+                    {product && product.security_gate_passed != undefined && (
+                        <Labeled>
+                            <SecurityGateTextField label="Security gate" />
+                        </Labeled>
+                    )}
+                    <Labeled>
+                        <ObservationsCountField label={get_open_observation_label(product)} withLabel={true} />
+                    </Labeled>
+                </Box>
             </Paper>
         </RecordContextProvider>
     );

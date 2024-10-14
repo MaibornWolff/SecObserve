@@ -1,12 +1,22 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
-import { EditButton, Labeled, PrevNextButtons, Show, TextField, TopToolbar, WithRecord } from "react-admin";
+import {
+    EditButton,
+    Labeled,
+    PrevNextButtons,
+    Show,
+    TextField,
+    TopToolbar,
+    WithRecord,
+    useRecordContext,
+} from "react-admin";
 
-import { is_superuser } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
-import UserAGEmbeddedList from "../users/UserAGEmbeddedList";
+import UserProductAuthorizationGroupMemberEmbeddedList from "../../core/product_authorization_group_members/UserProductAuthorizationGroupMemberEmbeddedList";
+import AuthorizationGroupMemberEmbeddedList from "../authorization_group_members/AuthorizationGroupMemberEmbeddedList";
 
 const ShowActions = () => {
+    const authorization_group = useRecordContext();
     return (
         <TopToolbar>
             <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -16,7 +26,7 @@ const ShowActions = () => {
                     filterDefaultValues={{ is_active: true }}
                     storeKey="authorization_groups.embedded"
                 />
-                {is_superuser() && <EditButton />}
+                {authorization_group && authorization_group.is_manager && <EditButton />}
             </Stack>
         </TopToolbar>
     );
@@ -29,7 +39,7 @@ const AuthorizationGroupComponent = () => {
         <WithRecord
             render={(authorization_group) => (
                 <Box width={"100%"}>
-                    <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
+                    <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
                         <Typography variant="h6" sx={{ marginBottom: 1 }}>
                             Authorization Group
                         </Typography>
@@ -44,12 +54,34 @@ const AuthorizationGroupComponent = () => {
                             )}
                         </Stack>
                     </Paper>
-                    <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
+                    <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
                         <Typography variant="h6" sx={{ marginBottom: 1 }}>
                             Users
                         </Typography>
-                        <UserAGEmbeddedList authorization_group={authorization_group} />
+                        <AuthorizationGroupMemberEmbeddedList authorization_group={authorization_group} />
                     </Paper>
+                    {authorization_group.has_product_group_members && (
+                        <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Product Groups
+                            </Typography>
+                            <UserProductAuthorizationGroupMemberEmbeddedList
+                                authorization_group={authorization_group}
+                                is_product_group={true}
+                            />
+                        </Paper>
+                    )}
+                    {authorization_group.has_product_members && (
+                        <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Products
+                            </Typography>
+                            <UserProductAuthorizationGroupMemberEmbeddedList
+                                authorization_group={authorization_group}
+                                is_product_group={false}
+                            />
+                        </Paper>
+                    )}
                 </Box>
             )}
         />

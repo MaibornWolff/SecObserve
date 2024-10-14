@@ -3,7 +3,11 @@ from unittest.mock import patch
 from django.core.management import call_command
 from rest_framework.exceptions import PermissionDenied
 
-from application.access_control.models import Authorization_Group, User
+from application.access_control.models import (
+    Authorization_Group,
+    Authorization_Group_Member,
+    User,
+)
 from application.access_control.services.authorization import (
     NoAuthorizationImplementedError,
     PermissionDoesNotExistError,
@@ -461,7 +465,14 @@ def prepare_authorization_groups():
     group_internal_write = Authorization_Group.objects.create(
         name="db_group_internal_write"
     )
-    group_internal_write.users.add(user_internal_write)
+    Authorization_Group_Member.objects.filter(
+        authorization_group=group_internal_write
+    ).delete()
+    Authorization_Group_Member.objects.create(
+        authorization_group=group_internal_write,
+        user=user_internal_write,
+        is_manager=True,
+    )
     Product_Authorization_Group_Member.objects.create(
         product=product_internal, authorization_group=group_internal_write, role=5
     )
@@ -469,13 +480,27 @@ def prepare_authorization_groups():
     group_internal_read = Authorization_Group.objects.create(
         name="db_group_internal_read"
     )
-    group_internal_read.users.add(User.objects.get(id=3))
+    Authorization_Group_Member.objects.filter(
+        authorization_group=group_internal_read
+    ).delete()
+    Authorization_Group_Member.objects.create(
+        authorization_group=group_internal_read,
+        user=User.objects.get(id=3),
+        is_manager=False,
+    )
     Product_Authorization_Group_Member.objects.create(
         product=product_internal, authorization_group=group_internal_read, role=1
     )
 
     group_external = Authorization_Group.objects.create(name="db_group_external")
-    group_external.users.add(User.objects.get(id=4))
+    Authorization_Group_Member.objects.filter(
+        authorization_group=group_external
+    ).delete()
+    Authorization_Group_Member.objects.create(
+        authorization_group=group_external,
+        user=User.objects.get(id=4),
+        is_manager=False,
+    )
     Product_Authorization_Group_Member.objects.create(
         product=product_external, authorization_group=group_external, role=5
     )
@@ -483,9 +508,17 @@ def prepare_authorization_groups():
     group_product_group = Authorization_Group.objects.create(
         name="db_group_product_group"
     )
-    group_product_group.users.add(User.objects.get(id=6))
+    Authorization_Group_Member.objects.filter(
+        authorization_group=group_product_group
+    ).delete()
+    Authorization_Group_Member.objects.create(
+        authorization_group=group_product_group,
+        user=User.objects.get(id=6),
+        is_manager=False,
+    )
     Product_Authorization_Group_Member.objects.create(
         product=product_group, authorization_group=group_product_group, role=5
     )
 
-    group_product_group = Authorization_Group.objects.create(name="db_group_unused")
+    group_unused = Authorization_Group.objects.create(name="db_group_unused")
+    Authorization_Group_Member.objects.filter(authorization_group=group_unused).delete()
