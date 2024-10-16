@@ -215,6 +215,20 @@ class Settings(Model):
         default=True, help_text="Validate that the password is not entirely numeric."
     )
 
+    feature_license_management = BooleanField(
+        default=True, help_text="Enable license management"
+    )
+    license_import_crontab_minute = IntegerField(
+        default=30,
+        validators=[MinValueValidator(0), MaxValueValidator(59)],
+        help_text="Minute crontab expression for importing licenses",
+    )
+    license_import_crontab_hour = IntegerField(
+        default=1,
+        validators=[MinValueValidator(0), MaxValueValidator(23)],
+        help_text="Hour crontab expression for importing licenses (UTC)",
+    )
+
     def save(self, *args, **kwargs):
         """
         Save object to the database. Removes all other entries if there

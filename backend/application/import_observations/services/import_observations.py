@@ -6,6 +6,7 @@ from django.core.files.base import File
 from django.utils import timezone
 from rest_framework.exceptions import ValidationError
 
+from application.commons.models import Settings
 from application.core.models import (
     Branch,
     Evidence,
@@ -49,6 +50,7 @@ from application.import_observations.services.parser_registry import (
 from application.issue_tracker.services.issue_tracker import (
     push_observations_to_issue_tracker,
 )
+from application.licenses.services.components import process_components
 from application.rules.services.rule_engine import Rule_Engine
 from application.vex.services.vex_engine import VEX_Engine
 
@@ -126,7 +128,7 @@ def file_upload_observations(
 
     numbers: Tuple[int, int, int, str] = _process_data(import_parameters)
 
-    Vulnerability_Check.objects.update_or_create(
+    vulnerability_check, _ = Vulnerability_Check.objects.update_or_create(
         product=import_parameters.product,
         branch=import_parameters.branch,
         filename=import_parameters.filename,
@@ -137,6 +139,11 @@ def file_upload_observations(
             "scanner": numbers[3],
         },
     )
+
+    settings = Settings.load()
+    if settings.feature_license_management:
+        imported_components = parser_instance.get_components(data)
+        process_components(imported_components, vulnerability_check)
 
     return numbers[0], numbers[1], numbers[2]
 
