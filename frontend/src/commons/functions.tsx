@@ -160,6 +160,17 @@ export const feature_general_rules_need_approval_enabled = () => {
     }
 };
 
+export const feature_license_management = () => {
+    try {
+        const settings = JSON.parse(localStorage.getItem("settings") || "{}");
+        const features = settings.features || [];
+        const feature_vex_position = features.indexOf("feature_license_management");
+        return feature_vex_position !== -1;
+    } catch {
+        return false;
+    }
+};
+
 export const justificationIsEnabledForStatus = (status: string) => {
     const vex_enabled = feature_vex_enabled();
     const justification_recommended_for_status =

@@ -67,6 +67,8 @@ class StatusSettingsView(APIView):
                 features.append("feature_vex")
             if settings.feature_general_rules_need_approval:
                 features.append("feature_general_rules_need_approval")
+            if settings.feature_license_management:
+                features.append("feature_license_management")
 
         content = {
             "features": features,
