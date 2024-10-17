@@ -3,7 +3,7 @@ from json import loads
 import requests
 
 from application.licenses.models import License, License_Group
-from application.licenses.queries.license import get_license_by_license_id
+from application.licenses.queries.license import get_license_by_spdx_id
 
 
 def import_licenses() -> None:
@@ -17,9 +17,9 @@ def import_licenses() -> None:
     data = loads(response.content)
     licenses = data["licenses"]
     for spdx_license in licenses:
-        license_id = spdx_license["licenseId"]
+        spdx_id = spdx_license["licenseId"]
         try:
-            secobserve_license = License.objects.get(license_id=license_id)
+            secobserve_license = License.objects.get(spdx_id=spdx_id)
             license_changed = False
             if secobserve_license.name != spdx_license.get("name", ""):
                 secobserve_license.name = spdx_license.get("name", "")
@@ -41,7 +41,7 @@ def import_licenses() -> None:
                 secobserve_license.save()
         except License.DoesNotExist:
             License.objects.create(
-                license_id=license_id,
+                spdx_id=spdx_id,
                 name=spdx_license.get("name", ""),
                 reference=spdx_license.get("reference", ""),
                 is_osi_approved=spdx_license.get("isOsiApproved"),
@@ -82,8 +82,8 @@ def _process_permissive_license_groups(data: dict) -> None:
         )
         licenses = rating["licenses"]
         for blue_oak_license in licenses:
-            license_id = blue_oak_license["id"]
-            secobserve_license = get_license_by_license_id(license_id)
+            spdx_id = blue_oak_license["id"]
+            secobserve_license = get_license_by_spdx_id(spdx_id)
             if secobserve_license:
                 license_group.licenses.add(secobserve_license)
 
@@ -125,7 +125,7 @@ def _process_copyleft_license_groups(data: dict) -> None:
 def _process_copyleft_family(license_group: License_Group, family: list) -> None:
     for name in family:
         for blue_oak_license in name["versions"]:
-            license_id = blue_oak_license["id"]
-            secobserve_license = get_license_by_license_id(license_id)
+            spdx_id = blue_oak_license["id"]
+            secobserve_license = get_license_by_spdx_id(spdx_id)
             if secobserve_license:
                 license_group.licenses.add(secobserve_license)
