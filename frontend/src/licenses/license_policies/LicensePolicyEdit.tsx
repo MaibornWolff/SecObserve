@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import { DeleteButton, Edit, SaveButton, SimpleForm, Toolbar } from "react-admin";
+import { BooleanInput, DeleteButton, Edit, SaveButton, SimpleForm, Toolbar } from "react-admin";
 
 import { validate_2048, validate_required_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
@@ -35,6 +35,7 @@ const LicensePolicyEdit = () => {
                     validate={validate_2048}
                     helperText="Markdown supported."
                 />
+                <BooleanInput source="is_public" label="Public" />
             </SimpleForm>
         </Edit>
     );

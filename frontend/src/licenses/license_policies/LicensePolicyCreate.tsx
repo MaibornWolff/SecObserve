@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import { Create, SimpleForm } from "react-admin";
+import { BooleanInput, Create, SimpleForm } from "react-admin";
 
 import { validate_2048, validate_required_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
@@ -26,6 +26,7 @@ const LicensePolicyCreate = () => {
                     validate={validate_2048}
                     helperText="Markdown supported."
                 />
+                <BooleanInput source="is_public" label="Public" />
             </SimpleForm>
         </Create>
     );

@@ -1,6 +1,6 @@
 from typing import Optional
 
-from django.db.models.query import QuerySet
+from django.db.models.query import Q, QuerySet
 
 from application.commons.services.global_request import get_current_user
 from application.licenses.models import License_Policy
@@ -24,4 +24,4 @@ def get_license_policys() -> QuerySet[License_Policy]:
     if user.is_superuser:
         return license_policys
 
-    return license_policys.filter(users=user)
+    return license_policys.filter(Q(users=user) | Q(is_public=True))

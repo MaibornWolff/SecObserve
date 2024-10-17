@@ -1,4 +1,13 @@
-import { Datagrid, FilterForm, ListContextProvider, TextField, TextInput, useListController } from "react-admin";
+import {
+    BooleanField,
+    Datagrid,
+    FilterForm,
+    ListContextProvider,
+    NullableBooleanInput,
+    TextField,
+    TextInput,
+    useListController,
+} from "react-admin";
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { is_external } from "../../commons/functions";
@@ -9,10 +18,10 @@ const showLicensePolicy = (id: any) => {
     return "../../../../license_policies/" + id + "/show";
 };
 
-function listFilters() {
-    const list_filters = [<TextInput source="name" alwaysOn />];
-    return list_filters;
-}
+const listFilters = [
+    <TextInput source="name" alwaysOn />,
+    <NullableBooleanInput source="is_public" label="Public" alwaysOn />,
+];
 
 type LicensePolicyEmbeddedListProps = {
     license: any;
@@ -42,7 +51,7 @@ const LicensePolicyEmbeddedList = ({ license }: LicensePolicyEmbeddedListProps) 
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
                 {!is_external() && !license && <LicensePolicyCreateButton />}
-                <FilterForm filters={listFilters()} />
+                <FilterForm filters={listFilters} />
                 <Datagrid
                     size={getSettingListSize()}
                     rowClick={showLicensePolicy}
@@ -50,6 +59,7 @@ const LicensePolicyEmbeddedList = ({ license }: LicensePolicyEmbeddedListProps) 
                     resource="license_policies"
                 >
                     <TextField source="name" label="Name" />
+                    <BooleanField source="is_public" label="Public" />
                 </Datagrid>
                 <CustomPagination />
             </div>
