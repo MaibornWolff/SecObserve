@@ -1,26 +1,31 @@
 import { Datagrid, FilterForm, ListContextProvider, TextField, TextInput, useListController } from "react-admin";
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
+import { is_external } from "../../commons/functions";
 import { getSettingListSize } from "../../commons/user_settings/functions";
+import LicensePolicyCreateButton from "./LicensePolicyCreateButton";
 
-const showLicenseGroup = (id: any) => {
-    return "../../../../license_groups/" + id + "/show";
+const showLicensePolicy = (id: any) => {
+    return "../../../../license_policies/" + id + "/show";
 };
 
-const listFilters = [<TextInput source="name" alwaysOn />];
+function listFilters() {
+    const list_filters = [<TextInput source="name" alwaysOn />];
+    return list_filters;
+}
 
-type LicenseGroupEmbeddedListProps = {
+type LicensePolicyEmbeddedListProps = {
     license: any;
 };
 
-const LicenseGroupEmbeddedList = ({ license }: LicenseGroupEmbeddedListProps) => {
+const LicensePolicyEmbeddedList = ({ license }: LicensePolicyEmbeddedListProps) => {
     const filter = license ? { licenses: Number(license.id) } : {};
-    const storeKey = license ? false : "licensegroups.embedded";
+    const storeKey = license ? false : "license_policies.embedded";
 
     const listContext = useListController({
         filter: filter,
         perPage: 25,
-        resource: "license_groups",
+        resource: "license_policies",
         sort: { field: "name", order: "ASC" },
         disableSyncWithLocation: false,
         storeKey: storeKey,
@@ -30,18 +35,19 @@ const LicenseGroupEmbeddedList = ({ license }: LicenseGroupEmbeddedListProps) =>
         return <div>Loading...</div>;
     }
 
-    localStorage.setItem("licensegroupembeddedlist", "true");
-    localStorage.removeItem("licensegroupotherlist");
+    localStorage.setItem("licensepolicyembeddedlist", "true");
+    localStorage.removeItem("licenseotherlist");
 
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
-                {!license && <FilterForm filters={listFilters} />}
+                {!is_external() && !license && <LicensePolicyCreateButton />}
+                <FilterForm filters={listFilters()} />
                 <Datagrid
                     size={getSettingListSize()}
-                    rowClick={showLicenseGroup}
+                    rowClick={showLicensePolicy}
                     bulkActionButtons={false}
-                    resource="license_groups"
+                    resource="license_policies"
                 >
                     <TextField source="name" label="Name" />
                 </Datagrid>
@@ -51,4 +57,4 @@ const LicenseGroupEmbeddedList = ({ license }: LicenseGroupEmbeddedListProps) =>
     );
 };
 
-export default LicenseGroupEmbeddedList;
+export default LicensePolicyEmbeddedList;

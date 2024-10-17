@@ -15,18 +15,18 @@ from application.licenses.types import License_Policy_Evaluation_Result
 
 
 class License(Model):
-    license_id = CharField(max_length=255, unique=True)
+    spdx_id = CharField(max_length=255, unique=True)
     name = CharField(max_length=255)
     reference = TextField(max_length=2048, blank=True)
     is_osi_approved = BooleanField(null=True)
     is_deprecated = BooleanField(null=True)
 
     def __str__(self):
-        return self.license_id
+        return self.spdx_id
 
 
 class License_Group(Model):
-    name = CharField(max_length=255)
+    name = CharField(max_length=255, unique=True)
     description = TextField(max_length=2048, blank=True)
     licenses = ManyToManyField(License, related_name="license_groups")
 
@@ -56,7 +56,7 @@ class Component(Model):
 
 
 class License_Policy(Model):
-    name = CharField(max_length=255)
+    name = CharField(max_length=255, unique=True)
     description = TextField(max_length=2048, blank=True)
     users: ManyToManyField = ManyToManyField(
         User,
@@ -70,7 +70,9 @@ class License_Policy(Model):
 
 
 class License_Policy_Item(Model):
-    license_policy = ForeignKey(License_Policy, on_delete=CASCADE)
+    license_policy = ForeignKey(
+        License_Policy, related_name="license_policy_items", on_delete=CASCADE
+    )
     license_group = ForeignKey(License_Group, on_delete=CASCADE, null=True)
     license = ForeignKey(License, on_delete=PROTECT, null=True)
     unknown_license = CharField(max_length=255, blank=True)

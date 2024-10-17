@@ -2,7 +2,7 @@ from packageurl import PackageURL
 
 from application.import_observations.models import Vulnerability_Check
 from application.licenses.models import Component
-from application.licenses.queries.license import get_license_by_license_id
+from application.licenses.queries.license import get_license_by_spdx_id
 
 
 def process_components(
@@ -82,7 +82,7 @@ def prepare_component(
     if component.purl_type is None:
         component.purl_type = ""
 
-    my_license = get_license_by_license_id(component.unknown_license)
+    my_license = get_license_by_spdx_id(component.unknown_license)
     if my_license:
         component.license = my_license
         component.unknown_license = ""

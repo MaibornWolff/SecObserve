@@ -7,8 +7,8 @@ from application.commons import settings_static
 from application.commons.models import Settings
 from application.commons.services.tasks import handle_task_exception
 from application.licenses.services.licenses import (
-    import_licenses,
     import_license_groups,
+    import_licenses,
 )
 
 logger = logging.getLogger("secobserve.import_licenses")

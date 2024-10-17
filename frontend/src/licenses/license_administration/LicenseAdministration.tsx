@@ -6,6 +6,8 @@ import administration from ".";
 import ListHeader from "../../commons/layout/ListHeader";
 import license_groups from "../license_groups";
 import LicenseGroupEmbeddedList from "../license_groups/LicenseGroupEmbeddedList";
+import license_policies from "../license_policies";
+import LicensePolicyEmbeddedList from "../license_policies/LicensePolicyEmbeddedList";
 import licenses from "../licenses";
 import LicenseEmbeddedList from "../licenses/LicenseEmbeddedList";
 
@@ -92,7 +94,7 @@ export default function LicenseAdministration() {
                     />
                     <Tab
                         label="License Policies"
-                        // icon={<api_tokens.icon />}
+                        icon={<license_policies.icon />}
                         to="/license/license_policies"
                         component={Link}
                         {...a11yProps(2)} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
@@ -107,7 +109,7 @@ export default function LicenseAdministration() {
                     <LicenseGroupEmbeddedList license={null} />
                 </CustomTabPanel>
                 <CustomTabPanel value={currentTab()} index={2}>
-                    {/* <ApiTokenEmbeddedList /> */}
+                    <LicensePolicyEmbeddedList license={null} />
                 </CustomTabPanel>
             </Paper>
         </Fragment>

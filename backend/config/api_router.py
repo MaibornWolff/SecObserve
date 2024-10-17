@@ -25,7 +25,13 @@ from application.import_observations.api.views import (
     ParserViewSet,
     VulnerabilityCheckViewSet,
 )
-from application.licenses.api.views import LicenseGroupViewSet, LicenseViewSet
+from application.licenses.api.views import (
+    LicenseGroupViewSet,
+    LicensePolicyItemViewSet,
+    LicensePolicyMemberViewSet,
+    LicensePolicyViewSet,
+    LicenseViewSet,
+)
 from application.rules.api.views import GeneralRuleViewSet, ProductRuleViewSet
 from application.vex.api.views import (
     CSAFBranchViewSet,
@@ -102,6 +108,15 @@ router.register("vex/vex_statements", VEXStatementViewSet, basename="vex_stateme
 
 router.register("licenses", LicenseViewSet, basename="licenses")
 router.register("license_groups", LicenseGroupViewSet, basename="license_groups")
+router.register("license_policies", LicensePolicyViewSet, basename="license_policies")
+router.register(
+    "license_policy_items", LicensePolicyItemViewSet, basename="license_policy_items"
+)
+router.register(
+    "license_policy_members",
+    LicensePolicyMemberViewSet,
+    basename="license_policy_members",
+)
 
 app_name = "api"
 urlpatterns = router.urls

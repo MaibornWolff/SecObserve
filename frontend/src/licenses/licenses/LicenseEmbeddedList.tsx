@@ -18,7 +18,7 @@ const showLicense = (id: any) => {
 
 function listFilters(license_group: any) {
     const list_filters = [
-        <TextInput source="license_id" alwaysOn />,
+        <TextInput source="spdx_id" label="SPDX Id" alwaysOn />,
         <TextInput source="name" alwaysOn />,
         <NullableBooleanInput source="is_osi_approved" label="OSI approved" alwaysOn />,
         <NullableBooleanInput source="is_deprecated" label="Deprecated" alwaysOn />,
@@ -41,7 +41,7 @@ const LicenseEmbeddedList = ({ license_group }: LicenseEmbeddedListProps) => {
         filter: filter,
         perPage: 25,
         resource: "licenses",
-        sort: { field: "license_id", order: "ASC" },
+        sort: { field: "spdx_id", order: "ASC" },
         disableSyncWithLocation: false,
         storeKey: storeKey,
     });
@@ -63,7 +63,7 @@ const LicenseEmbeddedList = ({ license_group }: LicenseEmbeddedListProps) => {
                     bulkActionButtons={false}
                     resource="licenses"
                 >
-                    <TextField source="license_id" label="Id" />
+                    <TextField source="spdx_id" label="SPDX Id" />
                     <TextField source="name" label="Name" />
                     <BooleanField source="is_osi_approved" label="OSI approved" />
                     <BooleanField source="is_deprecated" label="Deprecated" />
