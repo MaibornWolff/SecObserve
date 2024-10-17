@@ -1,6 +1,7 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
 import {
+    BooleanField,
     EditButton,
     Labeled,
     PrevNextButtons,
@@ -58,6 +59,9 @@ const LicensePolicyComponent = () => {
                                     <MarkdownField content={license_policy.description} label="Description" />
                                 </Labeled>
                             )}
+                            <Labeled label="Public">
+                                <BooleanField source="is_public" />
+                            </Labeled>
                         </Stack>
                     </Paper>
                     <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>

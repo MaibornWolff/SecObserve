@@ -58,6 +58,7 @@ class Component(Model):
 class License_Policy(Model):
     name = CharField(max_length=255, unique=True)
     description = TextField(max_length=2048, blank=True)
+    is_public = BooleanField(default=False)
     users: ManyToManyField = ManyToManyField(
         User,
         through="License_Policy_Member",

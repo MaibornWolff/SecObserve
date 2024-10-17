@@ -65,7 +65,10 @@ class LicensePolicyFilter(FilterSet):
 
     ordering = OrderingFilter(
         # tuple-mapping retains order
-        fields=(("name", "name"),),
+        fields=(
+            ("name", "name"),
+            ("is_public", "is_public"),
+        ),
     )
 
     # search is needed for the ReferenceArrayInput field of react-admin
@@ -73,7 +76,7 @@ class LicensePolicyFilter(FilterSet):
 
     class Meta:
         model = License_Policy
-        fields = ["name"]
+        fields = ["name", "is_public"]
 
 
 class LicensePolicyItemFilter(FilterSet):
