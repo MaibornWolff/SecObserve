@@ -79,7 +79,12 @@ const createMermaidGraph = (dependencies_str: string) => {
     return mermaid_content;
 };
 
-const MermaidDependencies = () => {
+type ComponentShowProps = {
+    dependencies: string;
+    needs_initialization: boolean;
+};
+
+const MermaidDependencies = ({ dependencies, needs_initialization }: ComponentShowProps) => {
     const [open, setOpen] = useState(false);
     const handleOpen = () => {
         setOpen(true);
@@ -89,24 +94,23 @@ const MermaidDependencies = () => {
         setOpen(false);
     };
 
-    const observation = useRecordContext();
-
     useEffect(() => {
-        if (observation) {
-            if (document.getElementById("mermaid-dependencies")) {
-                document.getElementById("mermaid-dependencies")?.removeAttribute("data-processed");
-                if (!document.getElementById("mermaid-dependencies")?.hasChildNodes()) {
+        if (needs_initialization && dependencies) {
+            if (dependencies) {
+                if (document.getElementById("mermaid-dependencies")) {
+                    document.getElementById("mermaid-dependencies")?.removeAttribute("data-processed");
+                    // if (!document.getElementById("mermaid-dependencies")?.hasChildNodes()) {
                     mermaid.contentLoaded();
+                    needs_initialization = false;
+                    // }
                 }
-            } else {
-                mermaid.contentLoaded();
             }
         }
-    }, [observation && observation.origin_component_dependencies, mermaid.contentLoaded()]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [dependencies, needs_initialization, mermaid.contentLoaded()]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <Fragment>
-            {observation && !createMermaidGraph(observation.origin_component_dependencies).startsWith("Error") && (
+            {!createMermaidGraph(dependencies).startsWith("Error") && (
                 <Fragment>
                     <Labeled sx={{ width: "100%", marginTop: 2 }}>
                         <WrapperField label="Component dependency graph">
@@ -116,7 +120,7 @@ const MermaidDependencies = () => {
                                 onClick={handleOpen}
                                 style={{ cursor: "pointer" }}
                             >
-                                {createMermaidGraph(observation.origin_component_dependencies)}
+                                {createMermaidGraph(dependencies)}
                             </div>
                         </WrapperField>
                     </Labeled>
@@ -154,12 +158,9 @@ const MermaidDependencies = () => {
                     </Dialog>
                 </Fragment>
             )}
-            {observation && createMermaidGraph(observation.origin_component_dependencies).startsWith("Error") && (
+            {createMermaidGraph(dependencies).startsWith("Error") && (
                 <Labeled sx={{ width: "100%", marginTop: 2 }}>
-                    <LabeledTextField
-                        label="Component dependency graph"
-                        text={createMermaidGraph(observation.origin_component_dependencies)}
-                    />
+                    <LabeledTextField label="Component dependency graph" text={createMermaidGraph(dependencies)} />
                 </Labeled>
             )}
         </Fragment>

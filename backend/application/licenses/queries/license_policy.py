@@ -13,15 +13,15 @@ def get_license_policy(license_policy_id: int) -> Optional[License_Policy]:
         return None
 
 
-def get_license_policys() -> QuerySet[License_Policy]:
+def get_license_policies() -> QuerySet[License_Policy]:
     user = get_current_user()
 
     if user is None:
         return License_Policy.objects.none()
 
-    license_policys = License_Policy.objects.all()
+    license_policies = License_Policy.objects.all()
 
     if user.is_superuser:
-        return license_policys
+        return license_policies
 
-    return license_policys.filter(Q(users=user) | Q(is_public=True))
+    return license_policies.filter(Q(users=user) | Q(is_public=True))

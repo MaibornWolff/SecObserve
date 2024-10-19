@@ -4,6 +4,7 @@ import { BooleanField, Labeled, PrevNextButtons, Show, TextField, TopToolbar, Wi
 
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import LicenseGroupEmbeddedList from "../license_groups/LicenseGroupEmbeddedList";
+import { useStyles } from "../../commons/layout/themes";
 
 const ShowActions = () => {
     return (
@@ -20,6 +21,8 @@ const ShowActions = () => {
 };
 
 const LicenseComponent = () => {
+    const { classes } = useStyles();
+
     return (
         <WithRecord
             render={(license) => (
@@ -28,7 +31,7 @@ const LicenseComponent = () => {
                         <Stack spacing={1}>
                             <Typography variant="h6">License</Typography>
                             <Labeled label="SPDX Id">
-                                <TextField source="spdx_id" />
+                                <TextField source="spdx_id" className={classes.fontBigBold} />
                             </Labeled>
                             <Labeled>
                                 <TextField source="name" />
@@ -36,7 +39,7 @@ const LicenseComponent = () => {
                             <Labeled label="OSI approved">
                                 <BooleanField source="is_osi_approved" />
                             </Labeled>
-                            <Labeled label="Deprecated approved">
+                            <Labeled label="Deprecated">
                                 <BooleanField source="is_deprecated" />
                             </Labeled>
                             <WithRecord
@@ -54,7 +57,7 @@ const LicenseComponent = () => {
                     </Paper>
                     {license.is_in_license_group && (
                         <Paper sx={{ marginBottom: 1, padding: 2 }}>
-                            <Typography variant="h6">License Groups</Typography>
+                            <Typography variant="h6" sx={{marginBottom: 2}}>License Groups</Typography>
                             <WithRecord render={(license) => <LicenseGroupEmbeddedList license={license} />} />
                         </Paper>
                     )}

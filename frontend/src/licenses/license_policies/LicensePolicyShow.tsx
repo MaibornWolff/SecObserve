@@ -15,7 +15,7 @@ import {
 import MarkdownField from "../../commons/custom_fields/MarkdownField";
 import { is_external, is_superuser } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
-import LicensePolicyItemEmbeddedList from "../license_policy_items copy/LicensePolicyItemEmbeddedList";
+import LicensePolicyItemEmbeddedList from "../license_policy_items/LicensePolicyItemEmbeddedList";
 import LicensePolicyMemberEmbeddedList from "../license_policy_members/LicensePolicyMemberEmbeddedList";
 import LicensePolicyCopy from "./LicensePolicyCopy";
 
@@ -28,7 +28,7 @@ const ShowActions = () => {
                     linkType="show"
                     sort={{ field: "name", order: "ASC" }}
                     filterDefaultValues={{ is_active: true }}
-                    storeKey="license_policys.embedded"
+                    storeKey="license_policies.embedded"
                 />
                 {license_policy && (!is_external || is_superuser()) && (
                     <LicensePolicyCopy license_policy={license_policy} />

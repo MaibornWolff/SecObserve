@@ -6,7 +6,7 @@ import { ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh,
 
 import { validate_255, validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
-import { LICENSE_POLICY_EVALUATION_RESULT_CHOICES } from "../types";
+import { EVALUATION_RESULT_CHOICES } from "../types";
 
 const LicensePolicyItemEdit = () => {
     const [open, setOpen] = useState(false);
@@ -112,7 +112,7 @@ const LicensePolicyItemEdit = () => {
                         <AutocompleteInputMedium
                             source="evaluation_result"
                             label="Evaluation result"
-                            choices={LICENSE_POLICY_EVALUATION_RESULT_CHOICES}
+                            choices={EVALUATION_RESULT_CHOICES}
                             validate={validate_required}
                         />
                     </SimpleForm>
