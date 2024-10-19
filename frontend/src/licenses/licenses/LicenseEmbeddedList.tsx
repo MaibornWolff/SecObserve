@@ -50,9 +50,6 @@ const LicenseEmbeddedList = ({ license_group }: LicenseEmbeddedListProps) => {
         return <div>Loading...</div>;
     }
 
-    localStorage.setItem("licenseembeddedlist", "true");
-    localStorage.removeItem("licenseotherlist");
-
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>

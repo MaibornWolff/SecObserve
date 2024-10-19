@@ -60,16 +60,15 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             observation_component_dependencies, _ = get_component_dependencies(
                 data, self.components, component, self.metadata
             )
-            components.append(
-                ComponentModel(
-                    name=component.name,
-                    version=component.version,
-                    purl=component.purl,
-                    cpe=component.cpe,
-                    unknown_license=component.unknown_license,
-                    dependencies=observation_component_dependencies,
-                )
+            model_component = ComponentModel(
+                name=component.name,
+                version=component.version,
+                purl=component.purl,
+                cpe=component.cpe,
+                dependencies=observation_component_dependencies,
             )
+            model_component.unsaved_license = component.unknown_license
+            components.append(model_component)
 
         if licenses_exist:
             return components

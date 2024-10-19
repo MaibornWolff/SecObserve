@@ -1,13 +1,75 @@
-from django_filters import BooleanFilter, CharFilter, FilterSet, OrderingFilter
+from django_filters import (
+    BooleanFilter,
+    CharFilter,
+    FilterSet,
+    NumberFilter,
+    OrderingFilter,
+)
 
 from application.commons.api.extended_ordering_filter import ExtendedOrderingFilter
 from application.licenses.models import (
+    Component,
+    Component_License,
     License,
     License_Group,
+    License_Group_Member,
     License_Policy,
     License_Policy_Item,
     License_Policy_Member,
 )
+
+
+class ComponentFilter(FilterSet):
+    name_version = CharFilter(field_name="name_version", lookup_expr="icontains")
+
+    ordering = OrderingFilter(
+        # tuple-mapping retains order
+        fields=(
+            ("name_version", "name_version"),
+            ("purl_type", "purl_type"),
+        ),
+    )
+
+    # search is needed for the ReferenceArrayInput field of react-admin
+    search = CharFilter(field_name="spdx_id", lookup_expr="icontains")
+
+    class Meta:
+        model = Component
+        fields = [
+            "component_license",
+            "name_version",
+            "purl_type",
+        ]
+
+
+class ComponentLicenseFilter(FilterSet):
+    product = NumberFilter(field_name="vulnerability_check__product")
+    branch = NumberFilter(field_name="vulnerability_check__branch")
+    license_spdx_id = CharFilter(field_name="license__spdx_id", lookup_expr="icontains")
+    unknown_license = CharFilter(field_name="unknown_license", lookup_expr="icontains")
+
+    ordering = ExtendedOrderingFilter(
+        # tuple-mapping retains order
+        fields=(
+            ("vulnerability_check__branch__name", "branch_name"),
+            ("license__spdx_id", "license_spdx_id"),
+            ("unknown_license", "unknown_license"),
+            (
+                ("numerical_evaluation_result", "license__spdx_id", "unknown_license"),
+                "evaluation_result",
+            ),
+        ),
+    )
+
+    class Meta:
+        model = Component_License
+        fields = [
+            "product",
+            "branch",
+            "license_spdx_id",
+            "unknown_license",
+            "evaluation_result",
+        ]
 
 
 class LicenseFilter(FilterSet):
@@ -60,6 +122,24 @@ class LicenseGroupFilter(FilterSet):
         fields = ["name", "licenses"]
 
 
+class LicenseGroupMemberFilter(FilterSet):
+    username = CharFilter(field_name="user__username", lookup_expr="icontains")
+    full_name = CharFilter(field_name="user__full_name", lookup_expr="icontains")
+
+    ordering = OrderingFilter(
+        # tuple-mapping retains order
+        fields=(
+            ("user__full_name", "user_data.full_name"),
+            ("license_group", "license_group"),
+            ("user", "user"),
+        ),
+    )
+
+    class Meta:
+        model = License_Group_Member
+        fields = ["license_group", "user", "username", "full_name"]
+
+
 class LicensePolicyFilter(FilterSet):
     name = CharFilter(field_name="name", lookup_expr="icontains")
 
@@ -102,13 +182,20 @@ class LicensePolicyItemFilter(FilterSet):
                 ("unknown_license", "license_group__name", "license__spdx_id"),
                 "unknown_license",
             ),
-            ("evaluation_result", "evaluation_result"),
+            (
+                (
+                    "numerical_evaluation_result",
+                    "license_group__name",
+                    "license__spdx_id",
+                    "unknown_license",
+                ),
+                "evaluation_result",
+            ),
         ),
     )
 
     class Meta:
         model = License_Policy_Item
-        # fields = "__all__"
         fields = [
             "license_policy",
             "license_group_name",

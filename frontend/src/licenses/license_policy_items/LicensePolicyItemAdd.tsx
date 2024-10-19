@@ -7,7 +7,7 @@ import { CreateBase, ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify,
 import { validate_255, validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
-import { LICENSE_POLICY_EVALUATION_RESULT_CHOICES } from "../types";
+import { EVALUATION_RESULT_CHOICES } from "../types";
 
 export type LicensePolicyItemAddProps = {
     id: any;
@@ -102,7 +102,7 @@ const LicensePolicyItemAdd = ({ id }: LicensePolicyItemAddProps) => {
                             <AutocompleteInputMedium
                                 source="evaluation_result"
                                 label="Evaluation result"
-                                choices={LICENSE_POLICY_EVALUATION_RESULT_CHOICES}
+                                choices={EVALUATION_RESULT_CHOICES}
                                 validate={validate_required}
                             />
                         </SimpleForm>

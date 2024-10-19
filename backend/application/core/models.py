@@ -109,6 +109,13 @@ class Product(Model):
         validators=[MinValueValidator(0), MaxValueValidator(999999)],
         help_text="Days before risk acceptance expires, 0 means no expiry",
     )
+    license_policy = ForeignKey(
+        "licenses.License_Policy",
+        on_delete=PROTECT,
+        related_name="product",
+        null=True,
+        blank=True,
+    )
     has_cloud_resource = BooleanField(default=False)
     has_component = BooleanField(default=False)
     has_docker_image = BooleanField(default=False)

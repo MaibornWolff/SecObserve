@@ -1,10 +1,19 @@
 class License_Policy_Evaluation_Result:
     RESULT_ALLOWED = "Allowed"
     RESULT_FORBIDDEN = "Forbidden"
-    RESULT_UNKOWN = "Unkown"
+    RESULT_REVIEW_REQUIRED = "Review required"
+    RESULT_UNKNOWN = "Unknown"
 
     RESULT_CHOICES = [
         (RESULT_ALLOWED, RESULT_ALLOWED),
         (RESULT_FORBIDDEN, RESULT_FORBIDDEN),
-        (RESULT_UNKOWN, RESULT_UNKOWN),
+        (RESULT_REVIEW_REQUIRED, RESULT_REVIEW_REQUIRED),
+        (RESULT_UNKNOWN, RESULT_UNKNOWN),
     ]
+
+    NUMERICAL_RESULTS = {
+        RESULT_FORBIDDEN: 1,
+        RESULT_REVIEW_REQUIRED: 2,
+        RESULT_UNKNOWN: 3,
+        RESULT_ALLOWED: 4,
+    }

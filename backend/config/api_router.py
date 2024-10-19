@@ -26,7 +26,10 @@ from application.import_observations.api.views import (
     VulnerabilityCheckViewSet,
 )
 from application.licenses.api.views import (
+    ComponentLicenseViewSet,
+    ComponentViewSet,
     LicenseGroupViewSet,
+    LicenseGroupMemberViewSet,
     LicensePolicyItemViewSet,
     LicensePolicyMemberViewSet,
     LicensePolicyViewSet,
@@ -106,8 +109,13 @@ router.register("vex/vex_counters", VEXCounterViewSet, basename="vex_counters")
 router.register("vex/vex_documents", VEXDocumentViewSet, basename="vex_documents")
 router.register("vex/vex_statements", VEXStatementViewSet, basename="vex_statements")
 
+router.register("components", ComponentViewSet, basename="components")
+router.register(
+    "component_licenses", ComponentLicenseViewSet, basename="component_licenses"
+)
 router.register("licenses", LicenseViewSet, basename="licenses")
 router.register("license_groups", LicenseGroupViewSet, basename="license_groups")
+router.register("license_group_members", LicenseGroupMemberViewSet, basename="license_group_members")
 router.register("license_policies", LicensePolicyViewSet, basename="license_policies")
 router.register(
     "license_policy_items", LicensePolicyItemViewSet, basename="license_policy_items"

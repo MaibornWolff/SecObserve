@@ -5,7 +5,7 @@ from django.db.models.query import QuerySet
 from application.access_control.models import User
 from application.commons.services.global_request import get_current_user
 from application.licenses.models import License_Policy, License_Policy_Member
-from application.licenses.queries.license_policy import get_license_policys
+from application.licenses.queries.license_policy import get_license_policies
 
 
 def get_license_policy_member(
@@ -30,5 +30,5 @@ def get_license_policy_members() -> QuerySet[License_Policy_Member]:
     if user.is_superuser:
         return license_policy_members
 
-    license_policys = get_license_policys()
-    return license_policy_members.filter(license_policy__in=license_policys)
+    license_policies = get_license_policies()
+    return license_policy_members.filter(license_policy__in=license_policies)

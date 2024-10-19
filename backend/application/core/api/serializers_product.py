@@ -53,6 +53,7 @@ class ProductCoreSerializer(ModelSerializer):
     open_none_observation_count = SerializerMethodField()
     open_unkown_observation_count = SerializerMethodField()
     permissions = SerializerMethodField()
+    license_policy_name = SerializerMethodField()
 
     class Meta:
         model = Product
@@ -78,6 +79,11 @@ class ProductCoreSerializer(ModelSerializer):
 
     def get_permissions(self, obj: Product) -> list[Permissions]:
         return get_permissions_for_role(get_highest_user_role(obj))
+
+    def get_license_policy_name(self, obj: Product) -> str:
+        if not obj.license_policy:
+            return ""
+        return obj.license_policy.name
 
     def validate(self, attrs: dict):
         if attrs.get("repository_branch_housekeeping_active"):
@@ -148,6 +154,8 @@ class ProductGroupSerializer(ProductCoreSerializer):
             "risk_acceptance_expiry_days",
             "new_observations_in_review",
             "product_rule_approvals",
+            "license_policy",
+            "license_policy_name",
         ]
 
     def get_products_count(self, obj: Product) -> int:

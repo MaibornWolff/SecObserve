@@ -13,7 +13,7 @@ import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { is_superuser } from "../../commons/functions";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/user_settings/functions";
-import { LICENSE_POLICY_EVALUATION_RESULT_CHOICES } from "../types";
+import { EVALUATION_RESULT_CHOICES } from "../types";
 import LicensePolicyItemAdd from "./LicensePolicyItemAdd";
 import LicensePolicyItemEdit from "./LicensePolicyItemEdit";
 import LicensePolicyItemRemove from "./LicensePolicyItemRemove";
@@ -26,7 +26,7 @@ function listFilters() {
         <AutocompleteInputMedium
             source="evaluation_result"
             label="Evaluation result"
-            choices={LICENSE_POLICY_EVALUATION_RESULT_CHOICES}
+            choices={EVALUATION_RESULT_CHOICES}
             alwaysOn
         />,
     ];
@@ -41,7 +41,7 @@ const LicensePolicyItemEmbeddedList = ({ license_policy }: LicensePolicyItemEmbe
         filter: { license_policy: Number(license_policy.id) },
         perPage: 25,
         resource: "license_policy_items",
-        sort: { field: "license_group_name", order: "ASC" },
+        sort: { field: "evaluation_result", order: "ASC" },
         filterDefaultValues: {},
         disableSyncWithLocation: true,
     });
