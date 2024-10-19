@@ -63,7 +63,7 @@
         "@types/recharts": "1.8.29",
         "@typescript-eslint/eslint-plugin": "8.10.0",
         "@typescript-eslint/parser": "8.10.0",
-        "@vitejs/plugin-react": "4.3.2",
+        "@vitejs/plugin-react": "4.3.3",
         "eslint": "9.13.0",
         "eslint-plugin-react": "7.37.1",
         "eslint-plugin-react-hooks": "rc",
