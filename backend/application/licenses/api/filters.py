@@ -1,16 +1,9 @@
-from django_filters import (
-    BooleanFilter,
-    CharFilter,
-    FilterSet,
-    NumberFilter,
-    OrderingFilter,
-)
+from django_filters import BooleanFilter, CharFilter, FilterSet, OrderingFilter
 
 from application.commons.api.extended_ordering_filter import ExtendedOrderingFilter
 from application.licenses.models import (
-    Component,
-    Component_License,
     License,
+    License_Component,
     License_Group,
     License_Group_Member,
     License_Policy,
@@ -19,56 +12,41 @@ from application.licenses.models import (
 )
 
 
-class ComponentFilter(FilterSet):
+class LicenseComponentFilter(FilterSet):
     name_version = CharFilter(field_name="name_version", lookup_expr="icontains")
-
-    ordering = OrderingFilter(
-        # tuple-mapping retains order
-        fields=(
-            ("name_version", "name_version"),
-            ("purl_type", "purl_type"),
-        ),
-    )
-
-    # search is needed for the ReferenceArrayInput field of react-admin
-    search = CharFilter(field_name="spdx_id", lookup_expr="icontains")
-
-    class Meta:
-        model = Component
-        fields = [
-            "component_license",
-            "name_version",
-            "purl_type",
-        ]
-
-
-class ComponentLicenseFilter(FilterSet):
-    product = NumberFilter(field_name="vulnerability_check__product")
-    branch = NumberFilter(field_name="vulnerability_check__branch")
     license_spdx_id = CharFilter(field_name="license__spdx_id", lookup_expr="icontains")
     unknown_license = CharFilter(field_name="unknown_license", lookup_expr="icontains")
 
     ordering = ExtendedOrderingFilter(
         # tuple-mapping retains order
         fields=(
-            ("vulnerability_check__branch__name", "branch_name"),
-            ("license__spdx_id", "license_spdx_id"),
+            ("license__spdx_id", "license_data.spdx_id"),
             ("unknown_license", "unknown_license"),
             (
-                ("numerical_evaluation_result", "license__spdx_id", "unknown_license"),
+                (
+                    "numerical_evaluation_result",
+                    "license__spdx_id",
+                    "unknown_license",
+                    "name_version",
+                ),
                 "evaluation_result",
             ),
+            ("branch__name", "branch_name"),
+            ("name_version", "name_version"),
+            ("purl_type", "purl_type"),
         ),
     )
 
     class Meta:
-        model = Component_License
+        model = License_Component
         fields = [
             "product",
             "branch",
             "license_spdx_id",
             "unknown_license",
             "evaluation_result",
+            "name_version",
+            "purl_type",
         ]
 
 
@@ -102,7 +80,9 @@ class LicenseFilter(FilterSet):
             "license_groups",
         ]
 
-    def get_is_in_license_group(self, queryset, field_name, value) -> bool:
+    def get_is_in_license_group(
+        self, queryset, field_name, value  # pylint: disable=unused-argument
+    ) -> bool:
         return queryset.filter(license_groups__isnull=not value)
 
 
@@ -111,7 +91,10 @@ class LicenseGroupFilter(FilterSet):
 
     ordering = OrderingFilter(
         # tuple-mapping retains order
-        fields=(("name", "name"),),
+        fields=(
+            ("name", "name"),
+            ("is_public", "is_public"),
+        ),
     )
 
     # search is needed for the ReferenceArrayInput field of react-admin
@@ -119,7 +102,7 @@ class LicenseGroupFilter(FilterSet):
 
     class Meta:
         model = License_Group
-        fields = ["name", "licenses"]
+        fields = ["name", "is_public", "licenses"]
 
 
 class LicenseGroupMemberFilter(FilterSet):

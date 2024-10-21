@@ -36,6 +36,9 @@ def copy_license_group(source_license_group: License_Group, name: str) -> Licens
         is_public=source_license_group.is_public,
     )
 
+    for license_to_be_added in source_license_group.licenses.all():
+        new_license_group.licenses.add(license_to_be_added)
+
     members = License_Group_Member.objects.filter(license_group=source_license_group)
     for member in members:
         License_Group_Member.objects.create(
@@ -55,6 +58,7 @@ def _process_permissive_license_groups(data: dict) -> None:
         license_group = License_Group.objects.create(
             name=f"Permissive {blue_oak_group_name} (Blue Oak Council)",
             description=f"{notes} Source: [Blue Oak Council](https://blueoakcouncil.org)",
+            is_public=True,
         )
         licenses = rating["licenses"]
         for blue_oak_license in licenses:
@@ -70,6 +74,7 @@ def _process_copyleft_license_groups(data: dict) -> None:
         description="Weak copyleft licenses require sharing changes and additions "
         + "to the licensed software when you give copies to others. Source: "
         + "[Blue Oak Council](https://blueoakcouncil.org)",
+        is_public=True,
     )
     _process_copyleft_family(weak_license_group, data["families"]["weak"])
 
@@ -78,6 +83,7 @@ def _process_copyleft_license_groups(data: dict) -> None:
         description="In addition to the requirements of the weak copyleft licenses, strong copyleft licenses "
         + "require you to share larger programs that you build with the licensed software when you give copies "
         + "to others. Source: [Blue Oak Council](https://blueoakcouncil.org)",
+        is_public=True,
     )
     _process_copyleft_family(strong_license_group, data["families"]["strong"])
 
@@ -87,6 +93,7 @@ def _process_copyleft_license_groups(data: dict) -> None:
         + "require you to share larger programs that you build with the licensed software not just when you "
         + "give copies to others, but also when you run the software for others to use over the Internet or "
         + "another network. Source: [Blue Oak Council](https://blueoakcouncil.org)",
+        is_public=True,
     )
     _process_copyleft_family(network_license_group, data["families"]["network"])
 
@@ -96,6 +103,7 @@ def _process_copyleft_license_groups(data: dict) -> None:
         + "differently than other families. Maximal copyleft licenses require you to share software you make with "
         + "others, and to license that software alike when you do. Source: "
         + "[Blue Oak Council](https://blueoakcouncil.org)",
+        is_public=True,
     )
     _process_copyleft_family(maximal_license_group, data["families"]["maximal"])
 

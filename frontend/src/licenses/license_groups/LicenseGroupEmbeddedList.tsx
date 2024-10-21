@@ -1,13 +1,27 @@
-import { Datagrid, FilterForm, ListContextProvider, TextField, TextInput, useListController } from "react-admin";
+import {
+    BooleanField,
+    Datagrid,
+    FilterForm,
+    ListContextProvider,
+    NullableBooleanInput,
+    TextField,
+    TextInput,
+    useListController,
+} from "react-admin";
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
+import { is_external } from "../../commons/functions";
 import { getSettingListSize } from "../../commons/user_settings/functions";
+import LicenseGroupCreateButton from "./LicenseGroupCreateButton";
 
 const showLicenseGroup = (id: any) => {
     return "../../../../license_groups/" + id + "/show";
 };
 
-const listFilters = [<TextInput source="name" alwaysOn />];
+const listFilters = [
+    <TextInput source="name" alwaysOn />,
+    <NullableBooleanInput source="is_public" label="Public" alwaysOn />,
+];
 
 type LicenseGroupEmbeddedListProps = {
     license: any;
@@ -33,6 +47,7 @@ const LicenseGroupEmbeddedList = ({ license }: LicenseGroupEmbeddedListProps) =>
     return (
         <ListContextProvider value={listContext}>
             <div style={{ width: "100%" }}>
+                {!is_external() && !license && <LicenseGroupCreateButton />}
                 {!license && <FilterForm filters={listFilters} />}
                 <Datagrid
                     size={getSettingListSize()}
@@ -41,6 +56,7 @@ const LicenseGroupEmbeddedList = ({ license }: LicenseGroupEmbeddedListProps) =>
                     resource="license_groups"
                 >
                     <TextField source="name" label="Name" />
+                    <BooleanField source="is_public" label="Public" />
                 </Datagrid>
                 <CustomPagination />
             </div>

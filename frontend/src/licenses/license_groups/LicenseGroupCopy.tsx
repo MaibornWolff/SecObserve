@@ -9,11 +9,11 @@ import { validate_required } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
-type LicensePolicyCopyProps = {
-    license_policy: any;
+type LicenseGroupCopyProps = {
+    license_group: any;
 };
 
-const LicensePolicyCopy = ({ license_policy }: LicensePolicyCopyProps) => {
+const LicenseGroupCopy = ({ license_group }: LicenseGroupCopyProps) => {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const refresh = useRefresh();
@@ -48,8 +48,8 @@ const LicensePolicyCopy = ({ license_policy }: LicensePolicyCopyProps) => {
         </Toolbar>
     );
 
-    const copyLicensePolicy = (data: any) => {
-        const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/license_policies/" + license_policy.id + "/copy/";
+    const copyLicenseGroup = (data: any) => {
+        const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/license_groups/" + license_group.id + "/copy/";
         const body = JSON.stringify({ name: data.new_name });
         httpClient(url, {
             method: "POST",
@@ -57,8 +57,8 @@ const LicensePolicyCopy = ({ license_policy }: LicensePolicyCopyProps) => {
         })
             .then((response) => {
                 refresh();
-                notify("License policy copied", { type: "success" });
-                navigate("/license_policies/" + response.json.id + "/show");
+                notify("License group copied", { type: "success" });
+                navigate("/license_groups/" + response.json.id + "/show");
             })
             .catch((error) => {
                 notify(error.message, { type: "warning" });
@@ -76,10 +76,10 @@ const LicensePolicyCopy = ({ license_policy }: LicensePolicyCopyProps) => {
                 Copy
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Copy license policy</DialogTitle>
+                <DialogTitle>Copy license group</DialogTitle>
                 <DialogContent>
-                    <CreateBase resource="license_policy_members">
-                        <SimpleForm onSubmit={copyLicensePolicy} toolbar={<CustomToolbar />}>
+                    <CreateBase resource="license_group_members">
+                        <SimpleForm onSubmit={copyLicenseGroup} toolbar={<CustomToolbar />}>
                             <TextInputWide source="new_name" label="Name" validate={validate_required} />
                         </SimpleForm>
                     </CreateBase>
@@ -89,4 +89,4 @@ const LicensePolicyCopy = ({ license_policy }: LicensePolicyCopyProps) => {
     );
 };
 
-export default LicensePolicyCopy;
+export default LicenseGroupCopy;

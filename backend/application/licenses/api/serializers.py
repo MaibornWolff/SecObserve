@@ -1,8 +1,10 @@
 from typing import Optional
 
+from packageurl import PackageURL
 from rest_framework.serializers import (
     CharField,
     IntegerField,
+    ListField,
     ModelSerializer,
     Serializer,
     SerializerMethodField,
@@ -11,11 +13,9 @@ from rest_framework.serializers import (
 
 from application.access_control.api.serializers import UserListSerializer
 from application.commons.services.global_request import get_current_user
-from application.import_observations.api.serializers import VulnerabilityCheckSerializer
 from application.licenses.models import (
-    Component,
-    Component_License,
     License,
+    License_Component,
     License_Group,
     License_Group_Member,
     License_Policy,
@@ -24,41 +24,6 @@ from application.licenses.models import (
 )
 from application.licenses.queries.license_group_member import get_license_group_member
 from application.licenses.queries.license_policy_member import get_license_policy_member
-
-
-class ComponentSerializer(ModelSerializer):
-
-    class Meta:
-        model = Component
-        fields = "__all__"
-
-
-class ComponentLicenseSerializer(ModelSerializer):
-    vulnerability_check_data = VulnerabilityCheckSerializer(
-        source="vulnerability_check"
-    )
-    branch_name = SerializerMethodField()
-    license_spdx_id = SerializerMethodField()
-    num_components = SerializerMethodField()
-
-    class Meta:
-        model = Component_License
-        fields = "__all__"
-
-    def get_branch_name(self, obj: Component_License) -> str:
-        if obj.vulnerability_check.branch:
-            return obj.vulnerability_check.branch.name
-
-        return ""
-
-    def get_license_spdx_id(self, obj: Component_License) -> str:
-        if obj.license:
-            return obj.license.spdx_id
-
-        return ""
-
-    def get_num_components(self, obj: Component_License) -> int:
-        return Component.objects.filter(component_license=obj).count()
 
 
 class LicenseSerializer(ModelSerializer):
@@ -72,10 +37,74 @@ class LicenseSerializer(ModelSerializer):
         return License_Group.objects.filter(licenses=obj).exists()
 
 
+class LicenseComponentSerializer(ModelSerializer):
+    license_data = LicenseSerializer(
+        source="license",
+        read_only=True,
+    )
+    purl_namespace = SerializerMethodField()
+    branch_name = SerializerMethodField()
+    license_policy_name = SerializerMethodField()
+    license_policy_id = SerializerMethodField()
+
+    class Meta:
+        model = License_Component
+        fields = "__all__"
+
+    def get_purl_namespace(self, obj: License_Component) -> Optional[str]:
+        if obj.purl:
+            purl = PackageURL.from_string(obj.purl)
+            return purl.namespace
+
+        return ""
+
+    def get_branch_name(self, obj: License_Component) -> str:
+        if obj.branch:
+            return obj.branch.name
+
+        return ""
+
+    def get_license_policy_name(self, obj: License_Component) -> str:
+        if obj.product.license_policy:
+            return obj.product.license_policy.name
+
+        if obj.product.product_group and obj.product.product_group.license_policy:
+            return obj.product.product_group.license_policy.name
+
+        return ""
+
+    def get_license_policy_id(self, obj: License_Component) -> int:
+        if obj.product.license_policy:
+            return obj.product.license_policy.pk
+
+        if obj.product.product_group and obj.product.product_group.license_policy:
+            return obj.product.product_group.license_policy.pk
+
+        return 0
+
+
+class LicenseComponentBulkDeleteSerializer(Serializer):
+    components = ListField(
+        child=IntegerField(min_value=1), min_length=0, max_length=100, required=True
+    )
+
+
 class LicenseGroupSerializer(ModelSerializer):
+    is_manager = SerializerMethodField()
+
     class Meta:
         model = License_Group
         exclude = ["licenses"]
+
+    def get_is_manager(self, obj: License_Group) -> bool:
+        user = get_current_user()
+        return License_Group_Member.objects.filter(
+            license_group=obj, user=user, is_manager=True
+        ).exists()
+
+
+class LicenseGroupLicenseAddRemoveSerializer(Serializer):
+    license = IntegerField(min_value=1, required=True)
 
 
 class LicenseGroupMemberSerializer(ModelSerializer):
@@ -113,7 +142,6 @@ class LicenseGroupMemberSerializer(ModelSerializer):
 
 
 class LicenseGroupCopySerializer(Serializer):
-    license_group = IntegerField(min_value=1, required=True)
     name = CharField(max_length=255, required=True)
 
 
@@ -159,7 +187,7 @@ class LicensePolicyItemSerializer(ModelSerializer):
         self.instance: License_Policy_Item
         data_license_group = attrs.get("license_group")
         data_license = attrs.get("license")
-        data_unknown_license = attrs.get("unknown_license")
+        data_unknown_license = attrs.get("unknown_license", "")
 
         if self.instance:
             self.instance.license_group = data_license_group
@@ -247,5 +275,4 @@ class LicensePolicyMemberSerializer(ModelSerializer):
 
 
 class LicensePolicyCopySerializer(Serializer):
-    license_policy = IntegerField(min_value=1, required=True)
     name = CharField(max_length=255, required=True)

@@ -4,7 +4,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { Dialog, DialogContent, DialogTitle, Divider, IconButton, Paper, Stack } from "@mui/material";
 import mermaid from "mermaid";
 import { Fragment, useEffect, useState } from "react";
-import { Labeled, WrapperField, useRecordContext } from "react-admin";
+import { Labeled, WrapperField } from "react-admin";
 
 import LabeledTextField from "../../commons/custom_fields/LabeledTextField";
 import { getTheme } from "../../commons/user_settings/functions";
@@ -29,7 +29,6 @@ const GraphSVG = () => {
     const svgData = new XMLSerializer().serializeToString(svg);
     const blob = new Blob([svgData], { type: "image/svg+xml" });
     const url = URL.createObjectURL(blob);
-    console.log(url);
     return <img src={url} alt="Component dependency graph not available" id="dependency-graph-svg-in-dialog" />;
 };
 
@@ -81,10 +80,9 @@ const createMermaidGraph = (dependencies_str: string) => {
 
 type ComponentShowProps = {
     dependencies: string;
-    needs_initialization: boolean;
 };
 
-const MermaidDependencies = ({ dependencies, needs_initialization }: ComponentShowProps) => {
+const MermaidDependencies = ({ dependencies }: ComponentShowProps) => {
     const [open, setOpen] = useState(false);
     const handleOpen = () => {
         setOpen(true);
@@ -95,18 +93,13 @@ const MermaidDependencies = ({ dependencies, needs_initialization }: ComponentSh
     };
 
     useEffect(() => {
-        if (needs_initialization && dependencies) {
-            if (dependencies) {
-                if (document.getElementById("mermaid-dependencies")) {
-                    document.getElementById("mermaid-dependencies")?.removeAttribute("data-processed");
-                    // if (!document.getElementById("mermaid-dependencies")?.hasChildNodes()) {
-                    mermaid.contentLoaded();
-                    needs_initialization = false;
-                    // }
-                }
+        if (dependencies) {
+            if (document.getElementById("mermaid-dependencies")) {
+                document.getElementById("mermaid-dependencies")?.removeAttribute("data-processed");
+                mermaid.contentLoaded();
             }
         }
-    }, [dependencies, needs_initialization, mermaid.contentLoaded()]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [dependencies, mermaid.contentLoaded()]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <Fragment>

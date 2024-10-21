@@ -1,17 +1,16 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import action
-from rest_framework.exceptions import NotFound, ValidationError
+from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError
 from rest_framework.filters import SearchFilter
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.status import HTTP_201_CREATED
+from rest_framework.status import HTTP_201_CREATED, HTTP_204_NO_CONTENT
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from application.licenses.api.filters import (
-    ComponentFilter,
-    ComponentLicenseFilter,
+    LicenseComponentFilter,
     LicenseFilter,
     LicenseGroupFilter,
     LicenseGroupMemberFilter,
@@ -26,9 +25,9 @@ from application.licenses.api.permissions import (
     UserHasLicensePolicyPermission,
 )
 from application.licenses.api.serializers import (
-    ComponentLicenseSerializer,
-    ComponentSerializer,
+    LicenseComponentSerializer,
     LicenseGroupCopySerializer,
+    LicenseGroupLicenseAddRemoveSerializer,
     LicenseGroupMemberSerializer,
     LicenseGroupSerializer,
     LicensePolicyCopySerializer,
@@ -38,17 +37,16 @@ from application.licenses.api.serializers import (
     LicenseSerializer,
 )
 from application.licenses.models import (
-    Component,
-    Component_License,
     License,
+    License_Component,
     License_Group,
     License_Group_Member,
     License_Policy,
     License_Policy_Item,
     License_Policy_Member,
 )
-from application.licenses.queries.component import get_components
-from application.licenses.queries.component_license import get_component_licenses
+from application.licenses.queries.license import get_license
+from application.licenses.queries.license_component import get_license_components
 from application.licenses.queries.license_group import (
     get_license_group,
     get_license_groups,
@@ -66,28 +64,18 @@ from application.licenses.queries.license_policy_member import (
     get_license_policy_member,
     get_license_policy_members,
 )
-from application.licenses.services.license_groups import copy_license_group
-from application.licenses.services.license_policies import copy_license_policy
+from application.licenses.services.license_group import copy_license_group
+from application.licenses.services.license_policy import copy_license_policy
 
 
-class ComponentLicenseViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
-    serializer_class = ComponentLicenseSerializer
-    filterset_class = ComponentLicenseFilter
-    queryset = Component_License.objects.none()
+class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
+    serializer_class = LicenseComponentSerializer
+    filterset_class = LicenseComponentFilter
+    queryset = License_Component.objects.none()
     filter_backends = [DjangoFilterBackend]
 
     def get_queryset(self):
-        return get_component_licenses()
-
-
-class ComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
-    serializer_class = ComponentSerializer
-    filterset_class = ComponentFilter
-    queryset = Component.objects.none()
-    filter_backends = [DjangoFilterBackend]
-
-    def get_queryset(self):
-        return get_components()
+        return get_license_components()
 
 
 class LicenseViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
@@ -114,14 +102,13 @@ class LicenseGroupViewSet(ModelViewSet):
         request=LicenseGroupCopySerializer,
         responses={HTTP_201_CREATED: LicenseGroupSerializer},
     )
-    @action(detail=False, methods=["post"])
-    def copy(self, request, pk=None):
+    @action(detail=True, methods=["post"])
+    def copy(self, request, pk):
         request_serializer = LicenseGroupCopySerializer(data=request.data)
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
 
-        license_group_id = request_serializer.validated_data.get("license_group")
-        license_group = get_license_group(license_group_id)
+        license_group = get_license_group(pk)
         if license_group is None:
             raise NotFound("License group not found")
 
@@ -144,6 +131,70 @@ class LicenseGroupViewSet(ModelViewSet):
             status=HTTP_201_CREATED,
             data=LicenseGroupSerializer(new_license_group).data,
         )
+
+    @extend_schema(
+        methods=["POST"],
+        request=LicenseGroupLicenseAddRemoveSerializer,
+        responses={HTTP_204_NO_CONTENT: None},
+    )
+    @action(detail=True, methods=["post"])
+    def add_license(self, request, pk):
+        request_serializer = LicenseGroupLicenseAddRemoveSerializer(data=request.data)
+        if not request_serializer.is_valid():
+            raise ValidationError(request_serializer.errors)
+
+        license_group = get_license_group(pk)
+        if license_group is None:
+            raise NotFound("License group not found")
+
+        user = request.user
+        if not user.is_superuser:
+            license_group_member = get_license_group_member(license_group, user)
+            if not license_group_member:
+                raise NotFound("License group not found")
+            if not license_group_member.is_manager:
+                raise PermissionDenied("User is not a manager of the license group")
+
+        license_id = request_serializer.validated_data.get("license")
+        license_to_be_added = get_license(license_id)
+        if not license_to_be_added:
+            raise ValidationError(f"License {license_id} not found")
+
+        license_group.licenses.add(license_to_be_added)
+
+        return Response(status=HTTP_204_NO_CONTENT)
+
+    @extend_schema(
+        methods=["POST"],
+        request=LicenseGroupLicenseAddRemoveSerializer,
+        responses={HTTP_204_NO_CONTENT: None},
+    )
+    @action(detail=True, methods=["post"])
+    def remove_license(self, request, pk):
+        request_serializer = LicenseGroupLicenseAddRemoveSerializer(data=request.data)
+        if not request_serializer.is_valid():
+            raise ValidationError(request_serializer.errors)
+
+        license_group = get_license_group(pk)
+        if license_group is None:
+            raise NotFound("License group not found")
+
+        user = request.user
+        if not user.is_superuser:
+            license_group_member = get_license_group_member(license_group, user)
+            if not license_group_member:
+                raise NotFound("License group not found")
+            if not license_group_member.is_manager:
+                raise PermissionDenied("User is not a manager of the license group")
+
+        license_id = request_serializer.validated_data.get("license")
+        license_to_be_removed = get_license(license_id)
+        if not license_to_be_removed:
+            raise ValidationError(f"License {license_id} not found")
+
+        license_group.licenses.remove(license_to_be_removed)
+
+        return Response(status=HTTP_204_NO_CONTENT)
 
 
 class LicenseGroupMemberViewSet(ModelViewSet):
@@ -173,14 +224,13 @@ class LicensePolicyViewSet(ModelViewSet):
         request=LicensePolicyCopySerializer,
         responses={HTTP_201_CREATED: LicensePolicySerializer},
     )
-    @action(detail=False, methods=["post"])
-    def copy(self, request, pk=None):
+    @action(detail=True, methods=["post"])
+    def copy(self, request, pk):
         request_serializer = LicensePolicyCopySerializer(data=request.data)
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
 
-        license_policy_id = request_serializer.validated_data.get("license_policy")
-        license_policy = get_license_policy(license_policy_id)
+        license_policy = get_license_policy(pk)
         if license_policy is None:
             raise NotFound("License policy not found")
 

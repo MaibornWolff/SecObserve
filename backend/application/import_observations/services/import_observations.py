@@ -50,7 +50,7 @@ from application.import_observations.services.parser_registry import (
 from application.issue_tracker.services.issue_tracker import (
     push_observations_to_issue_tracker,
 )
-from application.licenses.services.components import process_components
+from application.licenses.services.license_component import process_license_components
 from application.rules.services.rule_engine import Rule_Engine
 from application.vex.services.vex_engine import VEX_Engine
 
@@ -93,7 +93,7 @@ class ApiImportParameters:
 
 def file_upload_observations(
     file_upload_parameters: FileUploadParameters,
-) -> Tuple[int, int, int]:
+) -> Tuple[int, int, int, int, int, int]:
     parser_instance = _instanciate_parser(file_upload_parameters.parser)
 
     if not isinstance(parser_instance, BaseFileParser):
@@ -126,26 +126,36 @@ def file_upload_observations(
         imported_observations=imported_observations,
     )
 
-    numbers: Tuple[int, int, int, str] = _process_data(import_parameters)
+    numbers_observations: Tuple[int, int, int, str] = _process_data(import_parameters)
 
     vulnerability_check, _ = Vulnerability_Check.objects.update_or_create(
         product=import_parameters.product,
         branch=import_parameters.branch,
         filename=import_parameters.filename,
         defaults={
-            "last_import_observations_new": numbers[0],
-            "last_import_observations_updated": numbers[1],
-            "last_import_observations_resolved": numbers[2],
-            "scanner": numbers[3],
+            "last_import_observations_new": numbers_observations[0],
+            "last_import_observations_updated": numbers_observations[1],
+            "last_import_observations_resolved": numbers_observations[2],
+            "scanner": numbers_observations[3],
         },
     )
 
+    numbers_components = (0, 0, 0)
     settings = Settings.load()
     if settings.feature_license_management:
-        imported_components = parser_instance.get_components(data)
-        process_components(imported_components, vulnerability_check)
+        imported_components = parser_instance.get_license_components(data)
+        numbers_components = process_license_components(
+            imported_components, vulnerability_check
+        )
 
-    return numbers[0], numbers[1], numbers[2]
+    return (
+        numbers_observations[0],
+        numbers_observations[1],
+        numbers_observations[2],
+        numbers_components[0],
+        numbers_components[1],
+        numbers_components[2],
+    )
 
 
 def api_import_observations(

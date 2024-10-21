@@ -12,7 +12,14 @@ interface EvaluationResultProps {
     label: string;
 }
 
-function get_evaluation_result_color(evaluation_result: string): string {
+function get_evaluation_result_color(record: any): string {
+    let evaluation_result = "";
+    if (record && record.component_license_data) {
+        evaluation_result = record.component_license_data.evaluation_result;
+    } else {
+        evaluation_result = record.evaluation_result;
+    }
+
     let backgroundColor = "transparent";
     switch (evaluation_result) {
         case EVALUATION_RESULT_ALLOWED:
@@ -39,7 +46,7 @@ export const EvaluationResultField = (props: EvaluationResultProps) => {
             sortable={true}
             sortBy={props.source}
             sx={{
-                backgroundColor: get_evaluation_result_color(record.evaluation_result),
+                backgroundColor: get_evaluation_result_color(record),
                 color: "white",
                 width: "fit-content",
             }}

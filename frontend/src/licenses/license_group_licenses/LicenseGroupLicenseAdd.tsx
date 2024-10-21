@@ -1,20 +1,18 @@
+import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
-import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { CreateBase, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
-import { useNavigate } from "react-router";
+import { ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
 
 import { validate_required } from "../../commons/custom_validators";
-import { TextInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
-type LicensePolicyCopyProps = {
-    license_policy: any;
+export type LicenseGroupLicenseAddProps = {
+    id: any;
 };
 
-const LicensePolicyCopy = ({ license_policy }: LicensePolicyCopyProps) => {
-    const navigate = useNavigate();
+const LicenseGroupLicenseAdd = ({ id }: LicenseGroupLicenseAddProps) => {
     const [open, setOpen] = useState(false);
     const refresh = useRefresh();
     const notify = useNotify();
@@ -44,21 +42,21 @@ const LicensePolicyCopy = ({ license_policy }: LicensePolicyCopyProps) => {
     const CustomToolbar = () => (
         <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
             <CancelButton />
-            <SaveButton label="Copy" icon={<LibraryAddIcon />} />
+            <SaveButton />
         </Toolbar>
     );
 
-    const copyLicensePolicy = (data: any) => {
-        const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/license_policies/" + license_policy.id + "/copy/";
-        const body = JSON.stringify({ name: data.new_name });
+    const add_license = (data: any) => {
+        const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/license_groups/" + id + "/add_license/";
+        const body = JSON.stringify({ license: data.license });
         httpClient(url, {
             method: "POST",
             body: body,
         })
-            .then((response) => {
+            .then(() => {
                 refresh();
-                notify("License policy copied", { type: "success" });
-                navigate("/license_policies/" + response.json.id + "/show");
+                notify("License added", { type: "success" });
+                setOpen(false);
             })
             .catch((error) => {
                 notify(error.message, { type: "warning" });
@@ -68,25 +66,30 @@ const LicensePolicyCopy = ({ license_policy }: LicensePolicyCopyProps) => {
     return (
         <Fragment>
             <Button
-                size="small"
-                sx={{ paddingTop: "0px", paddingBottom: "2px" }}
+                variant="contained"
                 onClick={handleOpen}
-                startIcon={<LibraryAddIcon />}
+                sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem", marginBottom: 1, marginTop: 1 }}
+                startIcon={<AddIcon />}
             >
-                Copy
+                Add license
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Copy license policy</DialogTitle>
+                <DialogTitle>Add license</DialogTitle>
                 <DialogContent>
-                    <CreateBase resource="license_policy_members">
-                        <SimpleForm onSubmit={copyLicensePolicy} toolbar={<CustomToolbar />}>
-                            <TextInputWide source="new_name" label="Name" validate={validate_required} />
-                        </SimpleForm>
-                    </CreateBase>
+                    <SimpleForm onSubmit={add_license} toolbar={<CustomToolbar />}>
+                        <ReferenceInput
+                            source="license"
+                            reference="licenses"
+                            label="License"
+                            sort={{ field: "spdx_id", order: "ASC" }}
+                        >
+                            <AutocompleteInputWide optionText="spdx_id" validate={validate_required} />
+                        </ReferenceInput>
+                    </SimpleForm>
                 </DialogContent>
             </Dialog>
         </Fragment>
     );
 };
 
-export default LicensePolicyCopy;
+export default LicenseGroupLicenseAdd;

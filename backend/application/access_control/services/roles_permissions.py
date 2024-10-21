@@ -76,6 +76,8 @@ class Permissions(IntEnum):
     VEX_Delete = 5003
     VEX_Create = 5004
 
+    License_Component_Delete = 6003
+
     @classmethod
     def has_value(cls, value):
         try:
@@ -176,6 +178,12 @@ class Permissions(IntEnum):
             Permissions.Product_View,
         }
 
+    @classmethod
+    def get_component_license_permissions(cls):
+        return {
+            Permissions.License_Component_Delete,
+        }
+
 
 def get_roles_with_permissions():
     return {
@@ -250,6 +258,7 @@ def get_roles_with_permissions():
             Permissions.VEX_Edit,
             Permissions.VEX_Create,
             Permissions.VEX_Delete,
+            Permissions.License_Component_Delete,
         },
         Roles.Owner: {
             Permissions.Product_Group_View,
@@ -295,6 +304,7 @@ def get_roles_with_permissions():
             Permissions.VEX_Edit,
             Permissions.VEX_Create,
             Permissions.VEX_Delete,
+            Permissions.License_Component_Delete,
         },
     }
 

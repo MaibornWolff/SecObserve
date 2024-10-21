@@ -14,13 +14,13 @@ from application.import_observations.parsers.cyclone_dx.dependencies import (
 )
 from application.import_observations.parsers.cyclone_dx.types import Component, Metadata
 from application.import_observations.types import Parser_Type
-from application.licenses.models import Component as ComponentModel
+from application.licenses.models import License_Component
 
 
 class CycloneDXParser(BaseParser, BaseFileParser):
     def __init__(self):
-        self.metadata = None
-        self.components = None
+        self.metadata = Metadata("", "", "", "", "")
+        self.components: dict[str, Component] = {}
 
     @classmethod
     def get_name(cls) -> str:
@@ -49,7 +49,12 @@ class CycloneDXParser(BaseParser, BaseFileParser):
 
         return observations
 
-    def get_components(self, data) -> list[ComponentModel]:
+    def get_license_components(self, data) -> list[License_Component]:
+        if not self.components:
+            self.components = self._get_components(data)
+        if not self.metadata:
+            self.metadata = self._get_metadata(data)
+
         components = []
         licenses_exist = False
 
@@ -60,7 +65,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             observation_component_dependencies, _ = get_component_dependencies(
                 data, self.components, component, self.metadata
             )
-            model_component = ComponentModel(
+            model_component = License_Component(
                 name=component.name,
                 version=component.version,
                 purl=component.purl,
@@ -95,15 +100,17 @@ class CycloneDXParser(BaseParser, BaseFileParser):
     def _get_root_component_with_subs(self, data: dict) -> list[Component]:
         metadata_component = data.get("metadata", {}).get("component")
         if not metadata_component:
-            return None
+            return []
 
         return self._get_sbom_component_with_subs(metadata_component)
 
     def _get_sbom_component_with_subs(
         self, component_data: dict[str, Any]
     ) -> list[Component]:
-        components = []
-        components.append(self._get_component(component_data))
+        components: list[Component] = []
+        component = self._get_component(component_data)
+        if component:
+            components.append(component)
 
         for sub_component in component_data.get("components", []):
             components.extend(self._get_sbom_component_with_subs(sub_component))

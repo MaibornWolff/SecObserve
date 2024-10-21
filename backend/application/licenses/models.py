@@ -2,7 +2,6 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import (
     CASCADE,
     PROTECT,
-    SET_NULL,
     BooleanField,
     CharField,
     ForeignKey,
@@ -13,7 +12,7 @@ from django.db.models import (
 )
 
 from application.access_control.models import User
-from application.import_observations.models import Vulnerability_Check
+from application.core.models import Branch, Product
 from application.licenses.types import License_Policy_Evaluation_Result
 
 
@@ -33,6 +32,12 @@ class License_Group(Model):
     description = TextField(max_length=2048, blank=True)
     is_public = BooleanField(default=False)
     licenses = ManyToManyField(License, related_name="license_groups")
+    users: ManyToManyField = ManyToManyField(
+        User,
+        through="License_Group_Member",
+        related_name="license_groups",
+        blank=True,
+    )
 
     def __str__(self):
         return self.name
@@ -53,8 +58,21 @@ class License_Group_Member(Model):
         return f"{self.license_group} / {self.user}"
 
 
-class Component_License(Model):
-    vulnerability_check = ForeignKey(Vulnerability_Check, on_delete=CASCADE)
+class License_Component(Model):
+    identity_hash = CharField(max_length=64)
+
+    product = ForeignKey(Product, on_delete=PROTECT)
+    branch = ForeignKey(Branch, on_delete=CASCADE, null=True)
+    upload_filename = CharField(max_length=255, blank=True)
+
+    name = CharField(max_length=255)
+    version = CharField(max_length=255, blank=True)
+    name_version = CharField(max_length=513, blank=True)
+    purl = CharField(max_length=255, blank=True)
+    purl_type = CharField(max_length=16, blank=True)
+    cpe = CharField(max_length=255, blank=True)
+    dependencies = TextField(max_length=32768, blank=True)
+
     license = ForeignKey(License, on_delete=CASCADE, blank=True, null=True)
     unknown_license = CharField(max_length=255, blank=True)
     evaluation_result = CharField(
@@ -63,30 +81,8 @@ class Component_License(Model):
         blank=True,
     )
     numerical_evaluation_result = IntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(3)]
+        validators=[MinValueValidator(1), MaxValueValidator(4)]
     )
-
-    def save(self, *args, **kwargs) -> None:
-        self.numerical_evaluation_result = (
-            License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
-                self.evaluation_result
-            )
-        )
-
-        return super().save(*args, **kwargs)
-
-
-class Component(Model):
-    component_license = ForeignKey(
-        Component_License, on_delete=SET_NULL, blank=True, null=True
-    )
-    name = CharField(max_length=255)
-    version = CharField(max_length=255, blank=True)
-    name_version = CharField(max_length=513, blank=True)
-    purl = CharField(max_length=255, blank=True)
-    purl_type = CharField(max_length=16, blank=True)
-    cpe = CharField(max_length=255, blank=True)
-    dependencies = TextField(max_length=32768, blank=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -97,9 +93,11 @@ class Component(Model):
         return self.name_version
 
     def save(self, *args, **kwargs) -> None:
-        if not self.component_license:
-            raise ValueError("Component_License is required")
-
+        self.numerical_evaluation_result = (
+            License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
+                self.evaluation_result, License_Policy_Evaluation_Result.RESULT_UNKNOWN
+            )
+        )
         return super().save(*args, **kwargs)
 
 
@@ -135,7 +133,7 @@ class License_Policy_Item(Model):
     def save(self, *args, **kwargs) -> None:
         self.numerical_evaluation_result = (
             License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
-                self.evaluation_result
+                self.evaluation_result, License_Policy_Evaluation_Result.RESULT_UNKNOWN
             )
         )
 

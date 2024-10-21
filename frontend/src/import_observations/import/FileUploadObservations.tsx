@@ -70,18 +70,41 @@ const FileUploadObservations = () => {
                 body: formData,
             })
                 .then((result) => {
-                    const message =
+                    const observations =
                         result.json.observations_new +
-                        " new observations\n" +
-                        result.json.observations_updated +
-                        " updated observations\n" +
-                        result.json.observations_resolved +
-                        " resolved observations";
+                            result.json.observations_updated +
+                            result.json.observations_resolved >
+                        0;
+                    const license_components =
+                        result.json.license_components_new +
+                            result.json.license_components_updated +
+                            result.json.license_components_deleted >
+                        0;
+                    let message = "";
+                    if (observations)
+                        message +=
+                            result.json.observations_new +
+                            " new observations\n" +
+                            result.json.observations_updated +
+                            " updated observations\n" +
+                            result.json.observations_resolved +
+                            " resolved observations";
+                    if (observations && license_components) message += "\n";
+                    if (license_components) {
+                        message +=
+                            result.json.license_components_new +
+                            " new license components\n" +
+                            result.json.license_components_updated +
+                            " updated license components\n" +
+                            result.json.license_components_deleted +
+                            " deleted license components";
+                    }
                     refresh();
                     setLoading(false);
                     setOpen(false);
                     notify(message, {
                         type: "success",
+                        multiLine: true,
                     });
                 })
                 .catch((error) => {

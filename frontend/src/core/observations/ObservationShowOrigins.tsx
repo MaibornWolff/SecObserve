@@ -93,10 +93,7 @@ const ObservationShowOrigins = ({ elevated }: ObservationShowOriginsProps) => {
                                     )}
                                 </Stack>
                                 {observation.origin_component_dependencies != "" && elevated && (
-                                    <MermaidDependencies
-                                        dependencies={observation.origin_component_dependencies}
-                                        needs_initialization={true}
-                                    />
+                                    <MermaidDependencies dependencies={observation.origin_component_dependencies} />
                                 )}
                             </Fragment>
                         )}

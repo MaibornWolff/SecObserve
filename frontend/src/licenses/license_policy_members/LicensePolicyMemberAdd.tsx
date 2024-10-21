@@ -65,12 +65,11 @@ const LicensePolicyMemberAdd = ({ id }: LicensePolicyMemberAddProps) => {
             .then(() => {
                 refresh();
                 notify("User added", { type: "success" });
+                setOpen(false);
             })
             .catch((error) => {
                 notify(error.message, { type: "warning" });
             });
-
-        setOpen(false);
     };
 
     return (

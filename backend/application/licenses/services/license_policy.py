@@ -20,18 +20,20 @@ def get_license_evaluation_result(product: Product) -> dict:
         license_policy=license_policy, license_group__isnull=False
     )
     for item in items_license_groups:
-        for my_license in item.license_group.licenses.all():
-            license_evaluation_results[f"spdx_{my_license.spdx_id}"] = (
-                item.evaluation_result
-            )
+        if item.license_group:
+            for my_license in item.license_group.licenses.all():
+                license_evaluation_results[f"spdx_{my_license.spdx_id}"] = (
+                    item.evaluation_result
+                )
 
     items_licenses = License_Policy_Item.objects.filter(
         license_policy=license_policy, license__isnull=False
     )
     for item in items_licenses:
-        license_evaluation_results[f"spdx_{item.license.spdx_id}"] = (
-            item.evaluation_result
-        )
+        if item.license:
+            license_evaluation_results[f"spdx_{item.license.spdx_id}"] = (
+                item.evaluation_result
+            )
 
     items_unknown_licenses = License_Policy_Item.objects.filter(
         license_policy=license_policy, unknown_license=True

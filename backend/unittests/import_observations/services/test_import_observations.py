@@ -138,11 +138,21 @@ class TestImportObservations(BaseTestCase):
             kubernetes_cluster=kubernetes_cluster,
         )
 
-        new, updated, resolved = file_upload_observations(file_upload_parameters)
+        (
+            new_observations,
+            updated_observations,
+            resolved_observations,
+            new_license_objects,
+            updated_license_objects,
+            deleted_license_objects,
+        ) = file_upload_observations(file_upload_parameters)
 
-        self.assertEqual(new, 2)
-        self.assertEqual(updated, 0)
-        self.assertEqual(resolved, 0)
+        self.assertEqual(new_observations, 2)
+        self.assertEqual(updated_observations, 0)
+        self.assertEqual(resolved_observations, 0)
+        self.assertEqual(new_license_objects, 0)
+        self.assertEqual(updated_license_objects, 0)
+        self.assertEqual(deleted_license_objects, 0)
 
         product = Product.objects.get(id=1)
 
@@ -236,11 +246,21 @@ class TestImportObservations(BaseTestCase):
             kubernetes_cluster=kubernetes_cluster,
         )
 
-        new, updated, resolved = file_upload_observations(file_upload_parameters)
+        (
+            new_observations,
+            updated_observations,
+            resolved_observations,
+            new_license_objects,
+            updated_license_objects,
+            deleted_license_objects,
+        ) = file_upload_observations(file_upload_parameters)
 
-        self.assertEqual(new, 0)
-        self.assertEqual(updated, 1)
-        self.assertEqual(resolved, 1)
+        self.assertEqual(new_observations, 0)
+        self.assertEqual(updated_observations, 1)
+        self.assertEqual(resolved_observations, 1)
+        self.assertEqual(new_license_objects, 0)
+        self.assertEqual(updated_license_objects, 0)
+        self.assertEqual(deleted_license_objects, 0)
 
         observations = Observation.objects.filter(product=1).order_by("id")
         self.assertEqual(len(observations), 3)

@@ -3,8 +3,8 @@ import { Fragment } from "react";
 import { BooleanField, Labeled, PrevNextButtons, Show, TextField, TopToolbar, WithRecord } from "react-admin";
 
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
-import LicenseGroupEmbeddedList from "../license_groups/LicenseGroupEmbeddedList";
 import { useStyles } from "../../commons/layout/themes";
+import LicenseGroupEmbeddedList from "../license_groups/LicenseGroupEmbeddedList";
 
 const ShowActions = () => {
     return (
@@ -57,7 +57,9 @@ const LicenseComponent = () => {
                     </Paper>
                     {license.is_in_license_group && (
                         <Paper sx={{ marginBottom: 1, padding: 2 }}>
-                            <Typography variant="h6" sx={{marginBottom: 2}}>License Groups</Typography>
+                            <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                                License Groups
+                            </Typography>
                             <WithRecord render={(license) => <LicenseGroupEmbeddedList license={license} />} />
                         </Paper>
                     )}
