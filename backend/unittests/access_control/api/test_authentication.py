@@ -305,6 +305,41 @@ class TestAuthentication(BaseTestCase):
         self._check_authentication(["delete", "get"], "/api/notifications/1/")
         self._check_authentication(["post"], "/api/notifications/bulk_delete/")
 
+        self._check_authentication(["get"], "/api/licenses/")
+        self._check_authentication(["get"], "/api/licenses/1/")
+
+        self._check_authentication(["get"], "/api/license_components/")
+        self._check_authentication(["get"], "/api/license_components/1/")
+
+        self._check_authentication(["get", "post"], "/api/license_groups/")
+        self._check_authentication(
+            ["delete", "get", "put", "patch"], "/api/license_groups/1/"
+        )
+        self._check_authentication(["post"], "/api/license_groups/1/copy/")
+        self._check_authentication(["post"], "/api/license_groups/1/add_license/")
+        self._check_authentication(["post"], "/api/license_groups/1/remove_license/")
+
+        self._check_authentication(["get", "post"], "/api/license_group_members/")
+        self._check_authentication(
+            ["delete", "get", "put", "patch"], "/api/license_group_members/1001/"
+        )
+
+        self._check_authentication(["get", "post"], "/api/license_policies/")
+        self._check_authentication(
+            ["delete", "get", "put", "patch"], "/api/license_policies/1/"
+        )
+        self._check_authentication(["post"], "/api/license_policies/1/copy/")
+
+        self._check_authentication(["get", "post"], "/api/license_policy_items/")
+        self._check_authentication(
+            ["delete", "get", "put", "patch"], "/api/license_policy_items/1001/"
+        )
+
+        self._check_authentication(["get", "post"], "/api/license_policy_members/")
+        self._check_authentication(
+            ["delete", "get", "put", "patch"], "/api/license_policy_members/1001/"
+        )
+
     def test_authentication_users(self):
         self._check_authentication(["get"], "/api/users/me/")
         self._check_authentication(["get"], "/api/users/")

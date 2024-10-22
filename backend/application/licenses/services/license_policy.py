@@ -67,7 +67,7 @@ def copy_license_policy(
 
     members = License_Policy_Member.objects.filter(license_policy=source_license_policy)
     for member in members:
-        License_Policy_Member.objects.create(
+        License_Policy_Member.objects.update_or_create(
             license_policy=new_license_policy,
             user=member.user,
             is_manager=member.is_manager,

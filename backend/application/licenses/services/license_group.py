@@ -13,7 +13,7 @@ def copy_license_group(source_license_group: License_Group, name: str) -> Licens
 
     members = License_Group_Member.objects.filter(license_group=source_license_group)
     for member in members:
-        License_Group_Member.objects.create(
+        License_Group_Member.objects.update_or_create(
             license_group=new_license_group,
             user=member.user,
             is_manager=member.is_manager,

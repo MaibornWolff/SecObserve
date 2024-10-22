@@ -20,7 +20,7 @@ def get_license_groups() -> QuerySet[License_Group]:
     if user is None:
         return License_Group.objects.none()
 
-    license_groups = License_Group.objects.all()
+    license_groups = License_Group.objects.all().order_by("id")
 
     if user.is_superuser:
         return license_groups
