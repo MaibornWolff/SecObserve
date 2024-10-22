@@ -41,6 +41,7 @@ from application.core.services.risk_acceptance_expiry import (
 )
 from application.core.types import Assessment_Status, Status
 from application.issue_tracker.types import Issue_Tracker
+from application.licenses.models import License_Component
 from application.rules.models import Rule
 from application.rules.types import Rule_Status
 
@@ -148,6 +149,7 @@ class ProductGroupSerializer(ProductCoreSerializer):
             "risk_acceptance_expiry_days",
             "new_observations_in_review",
             "product_rule_approvals",
+            "license_policy",
         ]
 
     def get_products_count(self, obj: Product) -> int:
@@ -175,7 +177,10 @@ class ProductGroupSerializer(ProductCoreSerializer):
         return product_group
 
 
-class ProductSerializer(ProductCoreSerializer):
+class ProductSerializer(
+    ProductCoreSerializer
+):  # pylint: disable=too-many-public-methods
+    # all these methods are needed
     product_group_name = SerializerMethodField()
     product_group_repository_branch_housekeeping_active = SerializerMethodField()
     product_group_security_gate_active = SerializerMethodField()
@@ -189,6 +194,7 @@ class ProductSerializer(ProductCoreSerializer):
     risk_acceptance_expiry_date_calculated = SerializerMethodField()
     product_group_new_observations_in_review = SerializerMethodField()
     has_branches = SerializerMethodField()
+    has_licenses = SerializerMethodField()
 
     class Meta:
         model = Product
@@ -277,6 +283,9 @@ class ProductSerializer(ProductCoreSerializer):
 
     def get_has_branches(self, obj: Product) -> bool:
         return Branch.objects.filter(product=obj).exists()
+
+    def get_has_licenses(self, obj: Product) -> bool:
+        return License_Component.objects.filter(product=obj).exists()
 
     def validate(self, attrs: dict):  # pylint: disable=too-many-branches
         # There are quite a lot of branches, but at least they are not nested too much

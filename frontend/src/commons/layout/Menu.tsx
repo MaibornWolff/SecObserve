@@ -9,12 +9,13 @@ import observations from "../../core/observations";
 import product_groups from "../../core/product_groups";
 import products from "../../core/products";
 import parsers from "../../import_observations/parsers";
+import licenses from "../../licenses/licenses";
 import general_rules from "../../rules/general_rules";
 import csaf from "../../vex/csaf";
 import openvex from "../../vex/openvex";
 import vex_counters from "../../vex/vex_counters";
 import vex_documents from "../../vex/vex_documents";
-import { feature_vex_enabled } from "../functions";
+import { feature_license_management, feature_vex_enabled } from "../functions";
 import { is_superuser } from "../functions";
 import notifications from "../notifications";
 import settings from "../settings";
@@ -148,6 +149,15 @@ const Menu = ({ dense = false }: MenuProps) => {
                             state={{ _scrollToTop: true }}
                             primaryText="VEX Counters"
                             leftIcon={<vex_counters.icon />}
+                            dense={dense}
+                        />
+                    )}
+                    {feature_license_management() && (
+                        <MenuItemLink
+                            to="/license/licenses"
+                            state={{ _scrollToTop: true }}
+                            primaryText="Licenses"
+                            leftIcon={<licenses.icon />}
                             dense={dense}
                         />
                     )}

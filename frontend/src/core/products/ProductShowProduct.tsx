@@ -285,6 +285,22 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                     )}
                 </Fragment>
             )}
+            {product.license_policy && (
+                <Fragment>
+                    <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+                    <Typography variant="h6">License management</Typography>
+                    <Labeled label="License policy">
+                        <ReferenceField
+                            source="license_policy"
+                            reference="license_policies"
+                            link="show"
+                            sx={{ "& a": { textDecoration: "none" } }}
+                        >
+                            <TextField source="name" />
+                        </ReferenceField>
+                    </Labeled>
+                </Fragment>
+            )}
         </Fragment>
     );
 };

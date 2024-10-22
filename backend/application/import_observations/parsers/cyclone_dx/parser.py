@@ -1,5 +1,5 @@
 from json import dumps, load
-from typing import Optional
+from typing import Any, Optional
 
 from django.core.files.base import File
 
@@ -14,9 +14,14 @@ from application.import_observations.parsers.cyclone_dx.dependencies import (
 )
 from application.import_observations.parsers.cyclone_dx.types import Component, Metadata
 from application.import_observations.types import Parser_Type
+from application.licenses.models import License_Component
 
 
 class CycloneDXParser(BaseParser, BaseFileParser):
+    def __init__(self):
+        self.metadata = Metadata("", "", "", "", "")
+        self.components: dict[str, Component] = {}
+
     @classmethod
     def get_name(cls) -> str:
         return "CycloneDX"
@@ -38,37 +43,97 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         return True, [], data
 
     def get_observations(self, data: dict) -> list[Observation]:
-        components = self._get_components(data)
-        metadata = self._get_metadata(data)
-        observations = self._create_observations(data, components, metadata)
+        self.components = self._get_components(data)
+        self.metadata = self._get_metadata(data)
+        observations = self._create_observations(data)
 
         return observations
 
-    def _get_components(self, data: dict) -> dict[str, Component]:
-        components = {}
+    def get_license_components(self, data) -> list[License_Component]:
+        if not self.components:
+            self.components = self._get_components(data)
+        if not self.metadata:
+            self.metadata = self._get_metadata(data)
 
-        root_component = self._get_root_component(data)
-        if root_component:
-            components[root_component.bom_ref] = root_component
+        components = []
+        licenses_exist = False
+
+        for component in self.components.values():
+            if component.unknown_license:
+                licenses_exist = True
+
+            observation_component_dependencies, _ = get_component_dependencies(
+                data, self.components, component, self.metadata
+            )
+            model_component = License_Component(
+                name=component.name,
+                version=component.version,
+                purl=component.purl,
+                cpe=component.cpe,
+                dependencies=observation_component_dependencies,
+            )
+            model_component.unsaved_license = component.unknown_license
+            components.append(model_component)
+
+        if licenses_exist:
+            return components
+
+        return []
+
+    def _get_components(self, data: dict) -> dict[str, Component]:
+        components_dict = {}
+        components_list: list[Component] = []
+
+        root_components = self._get_root_component_with_subs(data)
+        components_list.extend(root_components)
 
         sbom_components = data.get("components", [])
         for sbom_component in sbom_components:
-            component = self._get_component(sbom_component)
-            if component:
-                components[component.bom_ref] = component
+            components = self._get_sbom_component_with_subs(sbom_component)
+            components_list.extend(components)
+
+        for component in components_list:
+            components_dict[component.bom_ref] = component
+
+        return components_dict
+
+    def _get_root_component_with_subs(self, data: dict) -> list[Component]:
+        metadata_component = data.get("metadata", {}).get("component")
+        if not metadata_component:
+            return []
+
+        return self._get_sbom_component_with_subs(metadata_component)
+
+    def _get_sbom_component_with_subs(
+        self, component_data: dict[str, Any]
+    ) -> list[Component]:
+        components: list[Component] = []
+        component = self._get_component(component_data)
+        if component:
+            components.append(component)
+
+        for sub_component in component_data.get("components", []):
+            components.extend(self._get_sbom_component_with_subs(sub_component))
 
         return components
 
-    def _get_root_component(self, data: dict) -> Optional[Component]:
-        metadata_component = data.get("metadata", {}).get("component")
-        if not metadata_component:
-            return None
-
-        return self._get_component(metadata_component)
-
-    def _get_component(self, component_data: dict[str, str]) -> Optional[Component]:
+    def _get_component(self, component_data: dict[str, Any]) -> Optional[Component]:
         if not component_data.get("bom-ref"):
             return None
+
+        unknown_license = ""
+        licenses = component_data.get("licenses", [])
+        if licenses and licenses[0].get("expression"):
+            unknown_license = licenses[0].get("expression")
+        else:
+            for my_license in licenses:
+                component_license = my_license.get("license", {}).get("id")
+                if component_license:
+                    unknown_license += (
+                        f", {component_license}"
+                        if unknown_license
+                        else component_license
+                    )
 
         return Component(
             bom_ref=component_data.get("bom-ref", ""),
@@ -78,10 +143,11 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             purl=component_data.get("purl", ""),
             cpe=component_data.get("cpe", ""),
             json=component_data,
+            unknown_license=unknown_license,
         )
 
     def _create_observations(  # pylint: disable=too-many-locals
-        self, data: dict, components: dict[str, Component], metadata: Metadata
+        self, data: dict
     ) -> list[Observation]:
         observations = []
 
@@ -100,7 +166,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             for affected in vulnerability.get("affects", []):
                 ref = affected.get("ref")
                 if ref:
-                    component = components.get(ref)
+                    component = self.components.get(ref)
                     if component:
                         title = vulnerability_id
 
@@ -108,7 +174,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                             observation_component_dependencies,
                             translated_component_dependencies,
                         ) = get_component_dependencies(
-                            data, components, component, metadata
+                            data, self.components, component, self.metadata
                         )
 
                         observation = Observation(
@@ -125,11 +191,11 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                             cvss3_score=cvss3_score,
                             cvss3_vector=cvss3_vector,
                             cwe=cwe,
-                            scanner=metadata.scanner,
-                            origin_docker_image_name=metadata.container_name,
-                            origin_docker_image_tag=metadata.container_tag,
-                            origin_docker_image_digest=metadata.container_digest,
-                            origin_source_file=metadata.file,
+                            scanner=self.metadata.scanner,
+                            origin_docker_image_name=self.metadata.container_name,
+                            origin_docker_image_tag=self.metadata.container_tag,
+                            origin_docker_image_digest=self.metadata.container_digest,
+                            origin_source_file=self.metadata.file,
                         )
 
                         self._add_references(vulnerability, observation)

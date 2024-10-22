@@ -24,6 +24,11 @@ import product_groups from "./core/product_groups";
 import products from "./core/products";
 import { Dashboard } from "./dashboard";
 import parsers from "./import_observations/parsers";
+import LicenseAdministration from "./licenses/license_administration/LicenseAdministration";
+import license_components from "./licenses/license_components";
+import license_groups from "./licenses/license_groups";
+import license_policies from "./licenses/license_policies";
+import licenses from "./licenses/licenses";
 import general_rules from "./rules/general_rules";
 import product_rules from "./rules/product_rules";
 import csaf from "./vex/csaf";
@@ -59,6 +64,9 @@ const App = () => {
                     <Route path="/access_control/users" element={<AccessControlAdministration />} />
                     <Route path="/access_control/authorization_groups" element={<AccessControlAdministration />} />
                     <Route path="/access_control/api_tokens" element={<AccessControlAdministration />} />
+                    <Route path="/license/licenses" element={<LicenseAdministration />} />
+                    <Route path="/license/license_groups" element={<LicenseAdministration />} />
+                    <Route path="/license/license_policies" element={<LicenseAdministration />} />
                     <Route path="/user_settings" element={<UserSettings />} />
                 </CustomRoutes>
                 <Resource
@@ -157,6 +165,26 @@ const App = () => {
                 <Resource
                     name="vex/vex_statements"
                     {...vex_statements} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                    // nosemgrep because the props are well defined in the import
+                />
+                <Resource
+                    name="license_components"
+                    {...license_components} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                    // nosemgrep because the props are well defined in the import
+                />
+                <Resource
+                    name="licenses"
+                    {...licenses} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                    // nosemgrep because the props are well defined in the import
+                />
+                <Resource
+                    name="license_groups"
+                    {...license_groups} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                    // nosemgrep because the props are well defined in the import
+                />
+                <Resource
+                    name="license_policies"
+                    {...license_policies} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
                     // nosemgrep because the props are well defined in the import
                 />
             </Admin>

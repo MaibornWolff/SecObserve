@@ -3,6 +3,7 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import UploadIcon from "@mui/icons-material/CloudUpload";
 import ConstructionIcon from "@mui/icons-material/Construction";
+import FactCheckIcon from "@mui/icons-material/FactCheck";
 import GradingIcon from "@mui/icons-material/Grading";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -41,6 +42,7 @@ import ApiConfigurationCreate from "../../import_observations/api_configurations
 import ApiConfigurationEmbeddedList from "../../import_observations/api_configurations/ApiConfigurationEmbeddedList";
 import ImportMenu from "../../import_observations/import/ImportMenu";
 import VulnerabilityCheckEmbeddedList from "../../import_observations/vulnerability_checks/VulnerabilityCheckEmbeddedList";
+import LicenseComponentEmbeddedList from "../../licenses/license_components/LicenseComponentEmbeddedList";
 import MetricsHeader from "../../metrics/MetricsHeader";
 import MetricsSeveritiesCurrent from "../../metrics/MetricsSeveritiesCurrent";
 import MetricsSeveritiesTimeline from "../../metrics/MetricsSeveritiesTimeLine";
@@ -194,7 +196,7 @@ const ProductShow = () => {
                             <Tab
                                 label="Vulnerability Checks"
                                 path="vulnerability_checks"
-                                icon={<GradingIcon />}
+                                icon={<FactCheckIcon />}
                                 onClick={hideSettingsTabs}
                             >
                                 <VulnerabilityCheckEmbeddedList product={product} long_list={true} />
@@ -218,6 +220,12 @@ const ProductShow = () => {
                                     onClick={hideSettingsTabs}
                                 >
                                     <ServiceEmbeddedList product={product} />
+                                </Tab>
+                            )}
+                            {product.has_licenses && (
+                                <Tab label="Licenses" path="licenses" icon={<GradingIcon />} onClick={hideSettingsTabs}>
+                                    <LicenseComponentEmbeddedList product={product} />
+                                    {/* <ComponentLicenseEmbeddedList product={product} /> */}
                                 </Tab>
                             )}
                             <Tab
