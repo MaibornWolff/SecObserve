@@ -31,11 +31,11 @@ jobs:
         env:
           FETCH_LICENSE: 1
         run: |
-          cdxgen ../backend --type python --required-only --profile license-compliance --no-auto-compositions --output sbom_backend_application.json
+          cdxgen ./backend --type python --required-only --profile license-compliance --no-auto-compositions --output sbom_backend_application.json
       - 
         name: Generate SBOM for frontend application
         run: |
-          cdxgen ../frontend --type npm --no-babel --required-only --profile license-compliance --no-auto-compositions --project-name secobserve --output sbom_frontend_application.json
+          cdxgen ./frontend --type npm --no-babel --required-only --profile license-compliance --no-auto-compositions --project-name secobserve --output sbom_frontend_application.json
       -
         name: Import backend SBOM
         uses: MaibornWolff/secobserve_actions_templates/actions/importer@70451f5f17e1de8fddcaebb767167a279dc8815b # main
