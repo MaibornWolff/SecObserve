@@ -8,6 +8,7 @@ from rest_framework.test import APIClient
 
 from application.access_control.models import User
 from application.core.models import Observation, Product, Product_Member
+from application.licenses.models import License_Component
 from application.vex.models import CSAF, CSAF_Branch, CSAF_Revision, CSAF_Vulnerability
 from application.vex.types import (
     CSAF_Publisher_Category,
@@ -19,6 +20,7 @@ from application.vex.types import (
 class TestCSAF(TestCase):
     def setUp(self):
         Observation.objects.all().delete()
+        License_Component.objects.all().delete()
         Product.objects.filter(is_product_group=False).delete()
         Product.objects.all().delete()
         Product_Member.objects.all().delete()
