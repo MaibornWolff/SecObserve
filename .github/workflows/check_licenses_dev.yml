@@ -43,7 +43,7 @@ jobs:
           so_product_name: 'SecObserve'
           so_file_name: 'sbom_backend_application.json'
           so_parser_name: 'CycloneDX'
-          so_branch_name: ${{ env.GITHUB_REF_NAME }}
+          so_branch_name: 'dev'
           so_api_base_url: "https://secobserve-backend.maibornwolff.de"
           so_api_token: ${{ secrets.SO_API_TOKEN }}
       -
@@ -53,7 +53,7 @@ jobs:
           so_product_name: 'SecObserve'
           so_file_name: 'sbom_frontend_application.json'
           so_parser_name: 'CycloneDX'
-          so_branch_name: ${{ env.GITHUB_REF_NAME }}
+          so_branch_name: 'dev'
           so_api_base_url: "https://secobserve-backend.maibornwolff.de"
           so_api_token: ${{ secrets.SO_API_TOKEN }}
       - 
