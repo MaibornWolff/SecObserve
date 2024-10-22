@@ -7,7 +7,8 @@ def load_initial_data(apps, schema_editor):
 
 
 def reverse(apps, schema_editor):
-    pass
+    pass  # nosemgrep
+    # This is a no-op on purpose because we can't reverse loading initial data
 
 
 class Migration(migrations.Migration):
