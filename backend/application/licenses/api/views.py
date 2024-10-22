@@ -83,7 +83,7 @@ class LicenseViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     filterset_class = LicenseFilter
     queryset = License.objects.all()
     filter_backends = [SearchFilter, DjangoFilterBackend]
-    search_fields = ["name"]
+    search_fields = ["spdx_id"]
 
 
 class LicenseGroupViewSet(ModelViewSet):
@@ -104,6 +104,10 @@ class LicenseGroupViewSet(ModelViewSet):
     )
     @action(detail=True, methods=["post"])
     def copy(self, request, pk):
+        user = request.user
+        if user.is_external:
+            raise PermissionDenied("You are not allowed to copy a license group")
+
         request_serializer = LicenseGroupCopySerializer(data=request.data)
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
@@ -112,10 +116,9 @@ class LicenseGroupViewSet(ModelViewSet):
         if license_group is None:
             raise NotFound("License group not found")
 
-        user = request.user
-        if not user.is_superuser:
-            license_policy_member = get_license_group_member(license_group, user)
-            if not license_policy_member:
+        if not (user.is_superuser or license_group.is_public):
+            license_group_member = get_license_group_member(license_group, user)
+            if not license_group_member:
                 raise NotFound("License group not found")
 
         name = request_serializer.validated_data.get("name")
@@ -226,6 +229,10 @@ class LicensePolicyViewSet(ModelViewSet):
     )
     @action(detail=True, methods=["post"])
     def copy(self, request, pk):
+        user = request.user
+        if user.is_external:
+            raise PermissionDenied("You are not allowed to copy a license policy")
+
         request_serializer = LicensePolicyCopySerializer(data=request.data)
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
@@ -234,8 +241,7 @@ class LicensePolicyViewSet(ModelViewSet):
         if license_policy is None:
             raise NotFound("License policy not found")
 
-        user = request.user
-        if not user.is_superuser:
+        if not (user.is_superuser or license_policy.is_public):
             license_policy_member = get_license_policy_member(license_policy, user)
             if not license_policy_member:
                 raise NotFound("License policy not found")
