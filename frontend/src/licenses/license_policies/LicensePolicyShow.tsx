@@ -30,7 +30,7 @@ const ShowActions = () => {
                     filterDefaultValues={{ is_active: true }}
                     storeKey="license_policies.embedded"
                 />
-                {license_policy && (!is_external || is_superuser()) && (
+                {license_policy && (!is_external() || is_superuser()) && (
                     <LicensePolicyCopy license_policy={license_policy} />
                 )}
                 {((license_policy && license_policy.is_manager) || is_superuser()) && <EditButton />}

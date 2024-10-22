@@ -29,7 +29,7 @@ const ShowActions = () => {
                     sort={{ field: "name", order: "ASC" }}
                     storeKey="licensegroups.embedded"
                 />
-                {license_group && (!is_external || is_superuser()) && (
+                {license_group && (!is_external() || is_superuser()) && (
                     <LicenseGroupCopy license_group={license_group} />
                 )}
                 {((license_group && license_group.is_manager) || is_superuser()) && <EditButton />}
