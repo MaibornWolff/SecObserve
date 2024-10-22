@@ -7,7 +7,6 @@ from application.commons import settings_static
 from application.commons.models import Settings
 from application.commons.services.tasks import handle_task_exception
 from application.licenses.services.license import import_licenses
-from application.licenses.services.license_group import import_license_groups
 
 logger = logging.getLogger("secobserve.import_licenses")
 
@@ -28,7 +27,6 @@ def task_api_import() -> None:
 
     try:
         import_licenses()
-        import_license_groups()
     except Exception as e:
         handle_task_exception(e)
 

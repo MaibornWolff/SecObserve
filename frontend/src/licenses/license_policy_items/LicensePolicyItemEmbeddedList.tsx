@@ -10,6 +10,7 @@ import {
 } from "react-admin";
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
+import { EvaluationResultField } from "../../commons/custom_fields/EvaluationResultField";
 import { is_superuser } from "../../commons/functions";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/user_settings/functions";
@@ -64,7 +65,7 @@ const LicensePolicyItemEmbeddedList = ({ license_policy }: LicensePolicyItemEmbe
                     <TextField source="license_group_name" label="License group" />
                     <TextField source="license_spdx_id" label="License" />
                     <TextField source="unknown_license" label="Unknown license" />
-                    <TextField source="evaluation_result" label="Evaluation result" />
+                    <EvaluationResultField source="evaluation_result" label="Evaluation result" />
                     {(is_superuser() || license_policy.is_manager) && (
                         <WithRecord
                             render={(license_policy_item) => (
