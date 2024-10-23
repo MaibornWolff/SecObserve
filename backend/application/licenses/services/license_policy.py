@@ -6,7 +6,7 @@ from application.licenses.models import (
 )
 
 
-def get_license_evaluation_result(product: Product) -> dict:
+def get_license_evaluation_results(product: Product) -> dict:
     if product.license_policy:
         license_policy = product.license_policy
     elif product.product_group and product.product_group.license_policy:
@@ -36,8 +36,8 @@ def get_license_evaluation_result(product: Product) -> dict:
             )
 
     items_unknown_licenses = License_Policy_Item.objects.filter(
-        license_policy=license_policy, unknown_license=True
-    )
+        license_policy=license_policy
+    ).exclude(unknown_license="")
     for item in items_unknown_licenses:
         license_evaluation_results[f"unknown_{item.unknown_license}"] = (
             item.evaluation_result

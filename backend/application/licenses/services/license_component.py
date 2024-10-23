@@ -9,7 +9,7 @@ from application.core.models import Product
 from application.import_observations.models import Vulnerability_Check
 from application.licenses.models import License_Component
 from application.licenses.queries.license import get_license_by_spdx_id
-from application.licenses.services.license_policy import get_license_evaluation_result
+from application.licenses.services.license_policy import get_license_evaluation_results
 from application.licenses.types import License_Policy_Evaluation_Result
 
 
@@ -48,7 +48,7 @@ def process_license_components(
     for existing_component in existing_components:
         existing_components_dict[existing_component.identity_hash] = existing_component
 
-    license_evaluation_results = get_license_evaluation_result(
+    license_evaluation_results = get_license_evaluation_results(
         vulnerability_check.product
     )
 

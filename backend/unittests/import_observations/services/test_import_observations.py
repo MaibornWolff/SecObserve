@@ -4,6 +4,7 @@ from django.core.files.base import File
 from django.core.management import call_command
 
 from application.access_control.models import User
+from application.commons.models import Settings
 from application.core.models import (
     Branch,
     Evidence,
@@ -18,6 +19,13 @@ from application.import_observations.services.import_observations import (
     FileUploadParameters,
     file_upload_observations,
 )
+from application.licenses.models import (
+    License,
+    License_Component,
+    License_Policy,
+    License_Policy_Item,
+)
+from application.licenses.types import License_Policy_Evaluation_Result
 from application.rules.models import Rule
 from unittests.base_test_case import BaseTestCase
 
@@ -312,6 +320,380 @@ class TestImportObservations(BaseTestCase):
         self.assertEqual(vulnerability_checks[0].last_import_observations_new, 0)
         self.assertEqual(vulnerability_checks[0].last_import_observations_updated, 1)
         self.assertEqual(vulnerability_checks[0].last_import_observations_resolved, 1)
+
+    @patch("application.commons.services.global_request.get_current_request")
+    @patch(
+        "application.import_observations.services.import_observations.check_security_gate"
+    )
+    @patch(
+        "application.import_observations.services.import_observations.set_repository_default_branch"
+    )
+    @patch(
+        "application.import_observations.services.import_observations.push_observations_to_issue_tracker"
+    )
+    @patch(
+        "application.import_observations.services.import_observations.epss_apply_observation"
+    )
+    @patch(
+        "application.import_observations.services.import_observations.find_potential_duplicates"
+    )
+    @patch(
+        "application.vex.services.vex_engine.VEX_Engine.apply_vex_statements_for_observation"
+    )
+    @patch(
+        "application.import_observations.parsers.cyclone_dx.parser.CycloneDXParser.get_license_components"
+    )
+    @patch(
+        "application.import_observations.services.import_observations.process_license_components"
+    )
+    def test_file_upload_licenses_feature_false(
+        self,
+        mock_process_license_components,
+        mock_get_license_components,
+        mock_apply_vex_statements_for_observation,
+        mock_find_potential_duplicates,
+        mock_epss_apply_observation,
+        mock_push_observations_to_issue_tracker,
+        mock_set_repository_default_branch,
+        mock_check_security_gate,
+        mock_get_current_request,
+    ):
+        mock_get_current_request.return_value = RequestMock(User.objects.get(id=1))
+
+        settings = Settings.load()
+        settings.feature_license_management = False
+        settings.save()
+
+        self._file_upload_licenses(
+            Branch.objects.get(id=1),
+            "test_service",
+            "test_docker_image_name_tag",
+            "test_endpoint_url",
+            "test_kubernetes_cluster",
+        )
+
+        self.assertEqual(mock_get_license_components.call_count, 0)
+        self.assertEqual(mock_process_license_components.call_count, 0)
+
+        settings = Settings.load()
+        settings.feature_license_management = True
+        settings.save()
+
+    @patch("application.commons.services.global_request.get_current_request")
+    @patch(
+        "application.import_observations.services.import_observations.check_security_gate"
+    )
+    @patch(
+        "application.import_observations.services.import_observations.set_repository_default_branch"
+    )
+    @patch(
+        "application.import_observations.services.import_observations.push_observations_to_issue_tracker"
+    )
+    @patch(
+        "application.import_observations.services.import_observations.epss_apply_observation"
+    )
+    @patch(
+        "application.import_observations.services.import_observations.find_potential_duplicates"
+    )
+    @patch(
+        "application.vex.services.vex_engine.VEX_Engine.apply_vex_statements_for_observation"
+    )
+    def test_file_upload_licenses_feature_true(
+        self,
+        mock_apply_vex_statements_for_observation,
+        mock_find_potential_duplicates,
+        mock_epss_apply_observation,
+        mock_push_observations_to_issue_tracker,
+        mock_set_repository_default_branch,
+        mock_check_security_gate,
+        mock_get_current_request,
+    ):
+        mock_get_current_request.return_value = RequestMock(User.objects.get(id=1))
+
+        settings = Settings.load()
+        settings.feature_license_management = True
+        settings.save()
+
+        self._file_upload_licenses(
+            Branch.objects.get(id=1),
+            "test_service",
+            "test_docker_image_name_tag",
+            "test_endpoint_url",
+            "test_kubernetes_cluster",
+        )
+
+    def _file_upload_licenses(
+        self, branch, service, docker_image_name_tag, endpoint_url, kubernetes_cluster
+    ):
+        License_Component.objects.all().delete()
+
+        # --- First import without license policy ---
+
+        file_upload_parameters = FileUploadParameters(
+            product=Product.objects.get(id=1),
+            branch=branch,
+            parser=Parser.objects.get(name="CycloneDX"),
+            file=File(
+                open(
+                    "unittests/import_observations/parsers/cyclone_dx/files/licenses_1.json",
+                    "r",
+                )
+            ),
+            service=service,
+            docker_image_name_tag=docker_image_name_tag,
+            endpoint_url=endpoint_url,
+            kubernetes_cluster=kubernetes_cluster,
+        )
+
+        (
+            new_observations,
+            updated_observations,
+            resolved_observations,
+            new_license_objects,
+            updated_license_objects,
+            deleted_license_objects,
+        ) = file_upload_observations(file_upload_parameters)
+
+        settings = Settings.load()
+        if settings.feature_license_management:
+            self.assertEqual(new_observations, 0)
+            self.assertEqual(updated_observations, 0)
+            self.assertEqual(resolved_observations, 0)
+            self.assertEqual(new_license_objects, 67)
+            self.assertEqual(updated_license_objects, 0)
+            self.assertEqual(deleted_license_objects, 0)
+
+            license_components = License_Component.objects.filter(product=1).order_by(
+                "id"
+            )
+            self.assertEqual(len(license_components), 67)
+
+            self.assertEqual(license_components[1].branch, branch)
+            self.assertEqual(license_components[1].upload_filename, "licenses_1.json")
+            self.assertEqual(license_components[1].name, "argon2-cffi-bindings")
+            self.assertEqual(license_components[1].version, "21.2.0")
+            self.assertEqual(
+                license_components[1].name_version, "argon2-cffi-bindings:21.2.0"
+            )
+            self.assertEqual(
+                license_components[1].purl, "pkg:pypi/argon2-cffi-bindings@21.2.0"
+            )
+            self.assertEqual(license_components[1].purl_type, "pypi")
+            self.assertEqual(license_components[1].cpe, "")
+            dependencies = """SecObserve:1.20.0 --> argon2-cffi:23.1.0
+argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
+            self.assertEqual(license_components[1].dependencies, dependencies)
+            self.assertEqual(
+                license_components[1].license, License.objects.get(spdx_id="MIT")
+            )
+            self.assertEqual(license_components[1].unknown_license, "")
+            self.assertEqual(
+                license_components[1].evaluation_result,
+                License_Policy_Evaluation_Result.RESULT_UNKNOWN,
+            )
+            self.assertEqual(
+                license_components[1].numerical_evaluation_result,
+                License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
+                    License_Policy_Evaluation_Result.RESULT_UNKNOWN,
+                ),
+            )
+
+            self.assertEqual(license_components[3].name_version, "asgiref:3.8.1")
+            self.assertEqual(license_components[3].license, None)
+            self.assertEqual(
+                license_components[3].unknown_license, "0BSD, BSD-3-Clause"
+            )
+            self.assertEqual(
+                license_components[3].evaluation_result,
+                License_Policy_Evaluation_Result.RESULT_UNKNOWN,
+            )
+            self.assertEqual(
+                license_components[3].numerical_evaluation_result,
+                License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
+                    License_Policy_Evaluation_Result.RESULT_UNKNOWN,
+                ),
+            )
+
+        # --- Second import with license policy ---
+
+        product = Product.objects.get(id=1)
+        product.license_policy = License_Policy.objects.get(name="Standard")
+        product.save()
+
+        file_upload_parameters = FileUploadParameters(
+            product=product,
+            branch=branch,
+            parser=Parser.objects.get(name="CycloneDX"),
+            file=File(
+                open(
+                    "unittests/import_observations/parsers/cyclone_dx/files/licenses_1.json",
+                    "r",
+                )
+            ),
+            service=service,
+            docker_image_name_tag=docker_image_name_tag,
+            endpoint_url=endpoint_url,
+            kubernetes_cluster=kubernetes_cluster,
+        )
+
+        (
+            new_observations,
+            updated_observations,
+            resolved_observations,
+            new_license_objects,
+            updated_license_objects,
+            deleted_license_objects,
+        ) = file_upload_observations(file_upload_parameters)
+
+        settings = Settings.load()
+        if settings.feature_license_management:
+            self.assertEqual(new_observations, 0)
+            self.assertEqual(updated_observations, 0)
+            self.assertEqual(resolved_observations, 0)
+            self.assertEqual(new_license_objects, 0)
+            self.assertEqual(updated_license_objects, 67)
+            self.assertEqual(deleted_license_objects, 0)
+
+            license_components = License_Component.objects.filter(product=1).order_by(
+                "id"
+            )
+            self.assertEqual(len(license_components), 67)
+
+            self.assertEqual(
+                license_components[1].name_version, "argon2-cffi-bindings:21.2.0"
+            )
+            self.assertEqual(
+                license_components[1].license, License.objects.get(spdx_id="MIT")
+            )
+            self.assertEqual(license_components[1].unknown_license, "")
+            self.assertEqual(
+                license_components[1].evaluation_result,
+                License_Policy_Evaluation_Result.RESULT_ALLOWED,
+            )
+            self.assertEqual(
+                license_components[1].numerical_evaluation_result,
+                License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
+                    License_Policy_Evaluation_Result.RESULT_ALLOWED,
+                ),
+            )
+
+            self.assertEqual(license_components[3].name_version, "asgiref:3.8.1")
+            self.assertEqual(license_components[3].license, None)
+            self.assertEqual(
+                license_components[3].unknown_license, "0BSD, BSD-3-Clause"
+            )
+            self.assertEqual(
+                license_components[3].evaluation_result,
+                License_Policy_Evaluation_Result.RESULT_UNKNOWN,
+            )
+            self.assertEqual(
+                license_components[3].numerical_evaluation_result,
+                License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
+                    License_Policy_Evaluation_Result.RESULT_UNKNOWN,
+                ),
+            )
+
+        # --- Third import with some changes ---
+
+        license_policy_item = License_Policy_Item(
+            license_policy=License_Policy.objects.get(name="Standard"),
+            license_group=None,
+            license=None,
+            unknown_license="0BSD, BSD-3-Clause",
+            evaluation_result=License_Policy_Evaluation_Result.RESULT_REVIEW_REQUIRED,
+        )
+        license_policy_item.save()
+        license_policy_item = License_Policy_Item(
+            license_policy=License_Policy.objects.get(name="Standard"),
+            license_group=None,
+            license=License.objects.get(spdx_id="MIT"),
+            unknown_license="",
+            evaluation_result=License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
+        )
+        license_policy_item.save()
+
+        file_upload_parameters = FileUploadParameters(
+            product=product,
+            branch=branch,
+            parser=Parser.objects.get(name="CycloneDX"),
+            file=File(
+                open(
+                    "unittests/import_observations/parsers/cyclone_dx/files/changed/licenses_1.json",
+                    "r",
+                )
+            ),
+            service=service,
+            docker_image_name_tag=docker_image_name_tag,
+            endpoint_url=endpoint_url,
+            kubernetes_cluster=kubernetes_cluster,
+        )
+
+        (
+            new_observations,
+            updated_observations,
+            resolved_observations,
+            new_license_objects,
+            updated_license_objects,
+            deleted_license_objects,
+        ) = file_upload_observations(file_upload_parameters)
+
+        settings = Settings.load()
+        if settings.feature_license_management:
+            self.assertEqual(new_observations, 0)
+            self.assertEqual(updated_observations, 0)
+            self.assertEqual(resolved_observations, 0)
+            self.assertEqual(new_license_objects, 3)
+            self.assertEqual(updated_license_objects, 64)
+            self.assertEqual(deleted_license_objects, 3)
+
+            license_components = License_Component.objects.filter(product=1).order_by(
+                "id"
+            )
+            self.assertEqual(len(license_components), 67)
+
+            self.assertEqual(
+                license_components[64].name_version, "argon2-cffi-bindings:21.2.1"
+            )
+            self.assertEqual(
+                license_components[64].license, License.objects.get(spdx_id="MIT")
+            )
+            self.assertEqual(license_components[64].unknown_license, "")
+            self.assertEqual(
+                license_components[64].evaluation_result,
+                License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
+            )
+            self.assertEqual(
+                license_components[64].numerical_evaluation_result,
+                License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
+                    License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
+                ),
+            )
+
+            self.assertEqual(license_components[2].name_version, "asgiref:3.8.1")
+            self.assertEqual(license_components[2].license, None)
+            self.assertEqual(
+                license_components[2].unknown_license, "0BSD, BSD-3-Clause"
+            )
+            self.assertEqual(
+                license_components[2].evaluation_result,
+                License_Policy_Evaluation_Result.RESULT_REVIEW_REQUIRED,
+            )
+            self.assertEqual(
+                license_components[2].numerical_evaluation_result,
+                License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
+                    License_Policy_Evaluation_Result.RESULT_REVIEW_REQUIRED,
+                ),
+            )
+        else:
+            self.assertEqual(new_observations, 0)
+            self.assertEqual(updated_observations, 0)
+            self.assertEqual(resolved_observations, 0)
+            self.assertEqual(new_license_objects, 0)
+            self.assertEqual(updated_license_objects, 0)
+            self.assertEqual(deleted_license_objects, 0)
+
+            license_components = License_Component.objects.filter(product=1)
+            self.assertEqual(len(license_components), 0)
 
 
 class RequestMock:
