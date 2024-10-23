@@ -127,7 +127,7 @@ class LicenseGroupMemberSerializer(ModelSerializer):
             (data_license_group and data_license_group != self.instance.license_group)
             or (data_user and data_user != self.instance.user)
         ):
-            raise ValidationError("Authorization group and user cannot be changed")
+            raise ValidationError("License group and user cannot be changed")
 
         if self.instance is None:
             license_group_member = get_license_group_member(
@@ -260,7 +260,7 @@ class LicensePolicyMemberSerializer(ModelSerializer):
             )
             or (data_user and data_user != self.instance.user)
         ):
-            raise ValidationError("Authorization group and user cannot be changed")
+            raise ValidationError("License policy and user cannot be changed")
 
         if self.instance is None:
             license_group_member = get_license_policy_member(

@@ -59,10 +59,7 @@
             ],
             "licenses": [
                 {
-                    "license": {
-                        "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
-                    }
+                    "expression": "MIT"
                 }
             ],
             "purl": "pkg:pypi/argon2-cffi-bindings@21.2.1",

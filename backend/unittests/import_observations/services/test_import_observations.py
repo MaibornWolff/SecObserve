@@ -597,9 +597,18 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
 
         license_policy_item = License_Policy_Item(
             license_policy=License_Policy.objects.get(name="Standard"),
+            license_group=None,
             license=None,
             unknown_license="0BSD, BSD-3-Clause",
             evaluation_result=License_Policy_Evaluation_Result.RESULT_REVIEW_REQUIRED,
+        )
+        license_policy_item.save()
+        license_policy_item = License_Policy_Item(
+            license_policy=License_Policy.objects.get(name="Standard"),
+            license_group=None,
+            license=License.objects.get(spdx_id="MIT"),
+            unknown_license="",
+            evaluation_result=License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
         )
         license_policy_item.save()
 
@@ -651,12 +660,12 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             self.assertEqual(license_components[64].unknown_license, "")
             self.assertEqual(
                 license_components[64].evaluation_result,
-                License_Policy_Evaluation_Result.RESULT_ALLOWED,
+                License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
             )
             self.assertEqual(
                 license_components[64].numerical_evaluation_result,
                 License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
-                    License_Policy_Evaluation_Result.RESULT_ALLOWED,
+                    License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
                 ),
             )
 
