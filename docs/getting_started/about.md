@@ -1,7 +1,7 @@
 # About SecObserve
 
 !!! note "SecObserve in a nutshell"
-    SecObserve is an open source vulnerability management system for software development and cloud environments. It supports a variety of open source vulnerability scanners and integrates easily into CI/CD pipelines.
+    SecObserve is an open source vulnerability and license management system for software development temas and cloud environments. It supports a variety of open source vulnerability scanners and integrates easily into CI/CD pipelines.
 
 ![Dashboard](../assets/images/screenshot_dashboard.png)
 
@@ -9,7 +9,7 @@
 
 The aim of SecObserve is to make vulnerability scanning and vulnerability management as easy as possible for software development projects using open source tools. It consists of 2 major components:
 
-* **Vulnerability management system SecObserve:** SecObserve provides the development team with an overview of the results of all vulnerability scans for their project, which can be easily filtered and sorted. In the detailed view, the results are displayed uniformly with a wealth of information, regardless of which vulnerability scanner generated them.
+* **Vulnerability and license management system SecObserve:** SecObserve provides the development team with an overview of the results of all vulnerability and license scans for their project, which can be easily filtered and sorted. In the detailed view, the results are displayed uniformly with a wealth of information, regardless of which vulnerability scanner generated them.
 
     With the help of automatically executed rules and manual assessments, the results can be efficiently evaluated to eliminate irrelevant results and accept risks. This allows the development team to concentrate on fixing the relevant vulnerabilities.
 
