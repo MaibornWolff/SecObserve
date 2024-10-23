@@ -253,14 +253,25 @@ class FileUploadObservationsById(APIView):
             license_components_deleted,
         ) = file_upload_observations(file_upload_parameters)
 
-        response_data = {
-            "observations_new": observations_new,
-            "observations_updated": observations_updated,
-            "observations_resolved": observations_resolved,
-            "license_components_new": license_components_new,
-            "license_components_updated": license_components_updated,
-            "license_components_deleted": license_components_deleted,
-        }
+        num_observations = (
+            observations_new + observations_updated + observations_resolved
+        )
+        num_license_components = (
+            license_components_new
+            + license_components_updated
+            + license_components_deleted
+        )
+
+        response_data = {}
+        if num_observations > 0 or num_license_components == 0:
+            response_data["observations_new"] = observations_new
+            response_data["observations_updated"] = observations_updated
+            response_data["observations_resolved"] = observations_resolved
+        if num_license_components > 0:
+            response_data["license_components_new"] = license_components_new
+            response_data["license_components_updated"] = license_components_updated
+            response_data["license_components_deleted"] = license_components_deleted
+
         return Response(response_data)
 
 
@@ -326,14 +337,25 @@ class FileUploadObservationsByName(APIView):
             license_components_deleted,
         ) = file_upload_observations(file_upload_parameters)
 
-        response_data = {
-            "observations_new": observations_new,
-            "observations_updated": observations_updated,
-            "observations_resolved": observations_resolved,
-            "license_components_new": license_components_new,
-            "license_components_updated": license_components_updated,
-            "license_components_deleted": license_components_deleted,
-        }
+        num_observations = (
+            observations_new + observations_updated + observations_resolved
+        )
+        num_license_components = (
+            license_components_new
+            + license_components_updated
+            + license_components_deleted
+        )
+
+        response_data = {}
+        if num_observations > 0 or num_license_components == 0:
+            response_data["observations_new"] = observations_new
+            response_data["observations_updated"] = observations_updated
+            response_data["observations_resolved"] = observations_resolved
+        if num_license_components > 0:
+            response_data["license_components_new"] = license_components_new
+            response_data["license_components_updated"] = license_components_updated
+            response_data["license_components_deleted"] = license_components_deleted
+
         return Response(response_data)
 
 
