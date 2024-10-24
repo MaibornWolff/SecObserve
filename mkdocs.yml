@@ -72,6 +72,7 @@ nav:
     - Duplicates: usage/duplicates.md
     - Risk acceptance expiry: usage/risk_acceptance_expiry.md
     - Metrics: usage/metrics.md
+    - License management: usage/license_management.md
     - Users, groups and permissions: usage/users_permissions.md
   - Integrations:
     - Overview: integrations/overview.md
@@ -80,6 +81,7 @@ nav:
     - GitHub actions and GitLab CI templates: integrations/github_actions_and_templates.md
     - OpenID Connect: integrations/oidc_authentication.md
     - Exploit Prediction Scoring System (EPSS): integrations/epss.md
+    - SPDX licenses: integrations/spdx_licenses.md
     - Source code repositories: integrations/source_code_repositories.md
     - Issue trackers: integrations/issue_trackers.md
     - Notifications: integrations/notifications.md
