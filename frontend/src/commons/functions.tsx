@@ -10,6 +10,12 @@ import {
     OBSERVATION_STATUS_NOT_AFFECTED,
     OBSERVATION_STATUS_NOT_SECURITY,
 } from "../core/types";
+import {
+    EVALUATION_RESULT_ALLOWED,
+    EVALUATION_RESULT_FORBIDDEN,
+    EVALUATION_RESULT_REVIEW_REQUIRED,
+    EVALUATION_RESULT_UNKNOWN,
+} from "../licenses/types";
 import { getSettingTheme } from "./user_settings/functions";
 
 export function getIconAndFontColor() {
@@ -40,6 +46,33 @@ export function get_severity_color(severity: string): string {
             break;
         case OBSERVATION_SEVERITY_CRITICAL:
             backgroundColor = "#cc0500";
+            break;
+    }
+    return backgroundColor;
+}
+
+export function get_evaluation_result_color(record: any | null, evaluation_result: string | null): string {
+    if (!evaluation_result) {
+        if (record && record.component_license_data) {
+            evaluation_result = record.component_license_data.evaluation_result;
+        } else {
+            evaluation_result = record.evaluation_result;
+        }
+    }
+
+    let backgroundColor = "transparent";
+    switch (evaluation_result) {
+        case EVALUATION_RESULT_ALLOWED:
+            backgroundColor = "#53aa33";
+            break;
+        case EVALUATION_RESULT_FORBIDDEN:
+            backgroundColor = "#df3d03";
+            break;
+        case EVALUATION_RESULT_REVIEW_REQUIRED:
+            backgroundColor = "#f9a009";
+            break;
+        case EVALUATION_RESULT_UNKNOWN:
+            backgroundColor = "rgba(255, 255, 255, 0.16)";
             break;
     }
     return backgroundColor;

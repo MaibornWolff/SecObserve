@@ -15,9 +15,11 @@ import {
 import products from ".";
 import { PERMISSION_PRODUCT_CREATE } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
+import LicensesCountField from "../../commons/custom_fields/LicensesCountField";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
 import { SecurityGateTextField } from "../../commons/custom_fields/SecurityGateTextField";
 import { humanReadableDate } from "../../commons/functions";
+import { feature_license_management } from "../../commons/functions";
 import ListHeader from "../../commons/layout/ListHeader";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/user_settings/functions";
@@ -50,6 +52,7 @@ const ListActions = () => {
 
 const ProductList = () => {
     localStorage.removeItem("productembeddedlist.product_group");
+    localStorage.removeItem("productembeddedlist.license_policy");
 
     return (
         <Fragment>
@@ -73,6 +76,7 @@ const ProductList = () => {
                     />
                     <SecurityGateTextField label="Security gate" />
                     <ObservationsCountField label="Open observations" withLabel={false} />
+                    {feature_license_management() && <LicensesCountField label="Licenses" withLabel={false} />}
                     <FunctionField<Product>
                         label="Last observation change"
                         sortBy="last_observation_change"

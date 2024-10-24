@@ -96,7 +96,7 @@ class ProductFilter(FilterSet):
 
     class Meta:
         model = Product
-        fields = ["name", "security_gate_passed", "product_group"]
+        fields = ["name", "security_gate_passed", "product_group", "license_policy"]
 
 
 class ProductMemberFilter(FilterSet):

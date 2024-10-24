@@ -1,7 +1,8 @@
-import { Box, Paper, Typography } from "@mui/material";
+import { Box, Paper, Stack, Typography } from "@mui/material";
 import { Labeled, RecordContextProvider, TextField, useGetOne } from "react-admin";
 import { useParams } from "react-router-dom";
 
+import LicensesCountField from "../../commons/custom_fields/LicensesCountField";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
 import { SecurityGateTextField } from "../../commons/custom_fields/SecurityGateTextField";
 import { useStyles } from "../../commons/layout/themes";
@@ -45,9 +46,16 @@ const ProductHeader = () => {
                             <SecurityGateTextField label="Security gate" />
                         </Labeled>
                     )}
-                    <Labeled>
-                        <ObservationsCountField label={get_open_observation_label(product)} withLabel={true} />
-                    </Labeled>
+                    <Stack spacing={8} direction="row">
+                        <Labeled>
+                            <ObservationsCountField label={get_open_observation_label(product)} withLabel={true} />
+                        </Labeled>
+                        {product && product.has_licenses && (
+                            <Labeled>
+                                <LicensesCountField label="Licenses" withLabel={true} />
+                            </Labeled>
+                        )}
+                    </Stack>
                 </Box>
             </Paper>
         </RecordContextProvider>

@@ -9,15 +9,18 @@ import {
 } from "react-admin";
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
+import LicensesCountField from "../../commons/custom_fields/LicensesCountField";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
 import { SecurityGateTextField } from "../../commons/custom_fields/SecurityGateTextField";
 import { humanReadableDate } from "../../commons/functions";
+import { feature_license_management } from "../../commons/functions";
 import { getSettingListSize } from "../../commons/user_settings/functions";
 import { Product } from "../types";
 
-type ProductEmbeddedListProps = {
-    product_group: any;
-};
+interface ProductEmbeddedListProps {
+    product_group?: any;
+    license_policy?: any;
+}
 
 const ShowProducts = (id: any) => {
     return "../../../../products/" + id + "/show";
@@ -27,9 +30,16 @@ function listFilters() {
     return [<TextInput source="name" alwaysOn />];
 }
 
-const ProductEmbeddedList = ({ product_group }: ProductEmbeddedListProps) => {
+const ProductEmbeddedList = ({ product_group, license_policy }: ProductEmbeddedListProps) => {
+    let filter = {};
+    if (product_group) {
+        filter = { product_group: Number(product_group.id) };
+    }
+    if (license_policy) {
+        filter = { ...filter, license_policy: Number(license_policy.id) };
+    }
     const listContext = useListController({
-        filter: { product_group: Number(product_group.id) },
+        filter: filter,
         perPage: 25,
         resource: "products",
         sort: { field: "name", order: "ASC" },
@@ -41,8 +51,10 @@ const ProductEmbeddedList = ({ product_group }: ProductEmbeddedListProps) => {
     if (listContext.isLoading) {
         return <div>Loading...</div>;
     }
-
-    localStorage.setItem("productembeddedlist.product_group", product_group.id);
+    localStorage.removeItem("productembeddedlist.product_group");
+    localStorage.removeItem("productembeddedlist.license_policy");
+    if (product_group) localStorage.setItem("productembeddedlist.product_group", product_group.id);
+    if (license_policy) localStorage.setItem("productembeddedlist.license_policy", license_policy.id);
 
     return (
         <ListContextProvider value={listContext}>
@@ -62,6 +74,14 @@ const ProductEmbeddedList = ({ product_group }: ProductEmbeddedListProps) => {
                     />
                     <SecurityGateTextField label="Security gate" />
                     <ObservationsCountField label="Open observations" withLabel={false} />
+                    {feature_license_management() &&
+                        ((product_group &&
+                            product_group.forbidden_licenses_count +
+                                product_group.review_required_licenses_count +
+                                product_group.unknown_licenses_count +
+                                product_group.allowed_licenses_count >
+                                0) ||
+                            license_policy) && <LicensesCountField label="Licenses" withLabel={false} />}
                     <FunctionField<Product>
                         label="Last observation change"
                         sortBy="last_observation_change"

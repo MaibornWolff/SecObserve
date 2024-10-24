@@ -4,7 +4,9 @@ import { CreateButton, Datagrid, List, TextField, TextInput, TopToolbar } from "
 import product_groups from ".";
 import { PERMISSION_PRODUCT_GROUP_CREATE } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
+import LicensesCountField from "../../commons/custom_fields/LicensesCountField";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
+import { feature_license_management } from "../../commons/functions";
 import ListHeader from "../../commons/layout/ListHeader";
 import { getSettingListSize } from "../../commons/user_settings/functions";
 
@@ -36,6 +38,7 @@ const ProductGroupList = () => {
                     <TextField source="name" />
                     <TextField source="products_count" label="Products" />
                     <ObservationsCountField label="Open observations" withLabel={false} />
+                    {feature_license_management() && <LicensesCountField label="Licenses" withLabel={false} />}
                 </Datagrid>
             </List>
         </Fragment>
