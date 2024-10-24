@@ -1,9 +1,11 @@
 from application.core.models import Product
 from application.licenses.models import (
+    License_Component,
     License_Policy,
     License_Policy_Item,
     License_Policy_Member,
 )
+from application.licenses.types import License_Policy_Evaluation_Result
 
 
 def get_license_evaluation_results(product: Product) -> dict:
@@ -44,6 +46,33 @@ def get_license_evaluation_results(product: Product) -> dict:
         )
 
     return license_evaluation_results
+
+
+def apply_license_policy_to_component(
+    component: License_Component,
+    evaluation_results: dict,
+) -> None:
+    evaluation_result = None
+    if component.license:
+        evaluation_result = evaluation_results.get(f"spdx_{component.license.spdx_id}")
+    elif component.unknown_license:
+        evaluation_result = evaluation_results.get(
+            f"unknown_{component.unknown_license}"
+        )
+    if not evaluation_result:
+        evaluation_result = License_Policy_Evaluation_Result.RESULT_UNKNOWN
+
+    component.evaluation_result = evaluation_result
+
+
+def apply_license_policy(license_policy: License_Policy) -> None:
+    products = Product.objects.filter(license_policy=license_policy)
+    for product in products:
+        license_evaluation_results = get_license_evaluation_results(product)
+        components = License_Component.objects.filter(product=product)
+        for component in components:
+            apply_license_policy_to_component(component, license_evaluation_results)
+            component.save()
 
 
 def copy_license_policy(

@@ -22,7 +22,11 @@ interface ProductEmbeddedListProps {
     license_policy?: any;
 }
 
-const ShowProducts = (id: any) => {
+const showProduct = (id: any, resource: any, record: any) => {
+    const license_policy_id = localStorage.getItem("productembeddedlist.license_policy");
+    if (license_policy_id && record.has_licenses) {
+        return "../../../../products/" + id + "/show/licenses";
+    }
     return "../../../../products/" + id + "/show";
 };
 
@@ -62,7 +66,7 @@ const ProductEmbeddedList = ({ product_group, license_policy }: ProductEmbeddedL
                 <FilterForm filters={listFilters()} />
                 <Datagrid
                     size={getSettingListSize()}
-                    rowClick={ShowProducts}
+                    rowClick={showProduct}
                     bulkActionButtons={false}
                     resource="products"
                 >
