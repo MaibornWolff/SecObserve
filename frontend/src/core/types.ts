@@ -18,7 +18,7 @@ export interface Product extends RaRecord {
     security_gate_threshold_medium: number;
     security_gate_threshold_low: number;
     security_gate_threshold_none: number;
-    security_gate_threshold_unkown: number;
+    security_gate_threshold_unknown: number;
     apply_general_rules: boolean;
     notification_ms_teams_webhook: string;
     notification_slack_webhook: string;
@@ -128,7 +128,7 @@ export const OBSERVATION_SEVERITY_HIGH = "High";
 export const OBSERVATION_SEVERITY_MEDIUM = "Medium";
 export const OBSERVATION_SEVERITY_LOW = "Low";
 export const OBSERVATION_SEVERITY_NONE = "None";
-export const OBSERVATION_SEVERITY_UNKOWN = "Unkown";
+export const OBSERVATION_SEVERITY_UNKNOWN = "Unknown";
 
 export const OBSERVATION_SEVERITY_CHOICES = [
     { id: OBSERVATION_SEVERITY_CRITICAL, name: OBSERVATION_SEVERITY_CRITICAL },
@@ -136,7 +136,7 @@ export const OBSERVATION_SEVERITY_CHOICES = [
     { id: OBSERVATION_SEVERITY_MEDIUM, name: OBSERVATION_SEVERITY_MEDIUM },
     { id: OBSERVATION_SEVERITY_LOW, name: OBSERVATION_SEVERITY_LOW },
     { id: OBSERVATION_SEVERITY_NONE, name: OBSERVATION_SEVERITY_NONE },
-    { id: OBSERVATION_SEVERITY_UNKOWN, name: OBSERVATION_SEVERITY_UNKOWN },
+    { id: OBSERVATION_SEVERITY_UNKNOWN, name: OBSERVATION_SEVERITY_UNKNOWN },
 ];
 
 export const OBSERVATION_STATUS_OPEN = "Open";

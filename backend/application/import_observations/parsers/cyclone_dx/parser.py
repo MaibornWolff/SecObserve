@@ -274,12 +274,14 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         return None, None
 
     def _get_highest_severity(self, vulnerability):
-        current_severity = Severity.SEVERITY_UNKOWN
+        current_severity = Severity.SEVERITY_UNKNOWN
         current_numerical_severity = 999
         ratings = vulnerability.get("ratings", [])
         if ratings:
             for rating in ratings:
-                severity = rating.get("severity", Severity.SEVERITY_UNKOWN).capitalize()
+                severity = rating.get(
+                    "severity", Severity.SEVERITY_UNKNOWN
+                ).capitalize()
                 numerical_severity = Severity.NUMERICAL_SEVERITIES.get(severity, 99)
                 if numerical_severity < current_numerical_severity:
                     current_severity = severity

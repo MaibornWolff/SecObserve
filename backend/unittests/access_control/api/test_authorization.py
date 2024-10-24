@@ -83,7 +83,7 @@ class TestAuthorizationBase(BaseTestCase):
         elif data.method.lower() == "put":
             response = api_client.put(data.url, data.post_data, format="json")
         else:
-            raise Exception(f"Unkown method: {data.method}")
+            raise Exception(f"Unknown method: {data.method}")
 
         self.assertEqual(data.expected_status_code, response.status_code)
         if data.expected_data:
@@ -110,7 +110,7 @@ class TestAuthorizationBase(BaseTestCase):
             elif data.method.lower() == "put":
                 response = api_client.put(data.url, data.post_data, format="json")
             else:
-                raise Exception(f"Unkown method: {data.method}")
+                raise Exception(f"Unknown method: {data.method}")
 
             self.assertEqual(data.expected_status_code, response.status_code)
             if data.expected_data_product_group:

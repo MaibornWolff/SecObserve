@@ -84,7 +84,7 @@ class DependencyTrack(BaseParser, BaseAPIParser):
             cvss_v3_base_score = finding.get("vulnerability", {}).get("cvssV3BaseScore")
             cvss_v3_vector = finding.get("vulnerability", {}).get("cvssV3Vector")
             severity = finding.get("vulnerability", {}).get(
-                "severity", Severity.SEVERITY_UNKOWN
+                "severity", Severity.SEVERITY_UNKNOWN
             )
             description = finding.get("vulnerability", {}).get("description")
 
@@ -133,7 +133,7 @@ class DependencyTrack(BaseParser, BaseAPIParser):
         ) in Severity.SEVERITY_CHOICES:
             return severity.capitalize()
 
-        return Severity.SEVERITY_UNKOWN
+        return Severity.SEVERITY_UNKNOWN
 
     def get_cwe(self, cwes: list[dict]) -> int | None:
         if cwes:

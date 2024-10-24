@@ -49,7 +49,7 @@ class ZAPParser(BaseParser, BaseFileParser):
             for alert in site.get("alerts"):
                 data_title = alert.get("alert")
                 data_severity = SEVERITIES.get(
-                    alert.get("riskcode"), Severity.SEVERITY_UNKOWN
+                    alert.get("riskcode"), Severity.SEVERITY_UNKNOWN
                 )
 
                 data_description = self.get_description(alert)

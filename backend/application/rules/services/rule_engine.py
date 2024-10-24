@@ -274,7 +274,7 @@ class Rule_Engine:
         elif previous_general_rule:
             comment = f"Removed general rule {previous_general_rule.name}"
         else:
-            comment = "Removed unkown rule"
+            comment = "Removed unknown rule"
 
         risk_acceptance_expiry_date = (
             calculate_risk_acceptance_expiry_date(observation.product)

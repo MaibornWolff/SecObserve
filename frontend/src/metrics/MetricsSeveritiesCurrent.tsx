@@ -12,7 +12,7 @@ import {
     OBSERVATION_SEVERITY_LOW,
     OBSERVATION_SEVERITY_MEDIUM,
     OBSERVATION_SEVERITY_NONE,
-    OBSERVATION_SEVERITY_UNKOWN,
+    OBSERVATION_SEVERITY_UNKNOWN,
 } from "../core/types";
 import { getBackgroundColor, getElevation, getFontColor, getGridColor } from "./functions";
 
@@ -34,7 +34,7 @@ const MetricsSeveritiesCurrent = (props: MetricsSeveritiesCurrentProps) => {
             OBSERVATION_SEVERITY_MEDIUM,
             OBSERVATION_SEVERITY_LOW,
             OBSERVATION_SEVERITY_NONE,
-            OBSERVATION_SEVERITY_UNKOWN,
+            OBSERVATION_SEVERITY_UNKNOWN,
         ],
         datasets: [
             {
@@ -46,7 +46,7 @@ const MetricsSeveritiesCurrent = (props: MetricsSeveritiesCurrentProps) => {
                     get_severity_color(OBSERVATION_SEVERITY_MEDIUM),
                     get_severity_color(OBSERVATION_SEVERITY_LOW),
                     get_severity_color(OBSERVATION_SEVERITY_NONE),
-                    get_severity_color(OBSERVATION_SEVERITY_UNKOWN),
+                    get_severity_color(OBSERVATION_SEVERITY_UNKNOWN),
                 ],
             },
         ],

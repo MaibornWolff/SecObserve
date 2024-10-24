@@ -13,7 +13,7 @@ There is an instance-wide definition of the thresholds, that can be changed by a
 | Medium   | 99999     |
 | Low      | 99999     |
 | None     | 99999     |
-| Unkown   | 99999     |
+| Unknown   | 99999     |
 
 A product can decide how to deal with security gates by setting the `Security gate` attribute:
 

@@ -31,7 +31,7 @@ FROM python AS python-run-stage
 
 ARG BUILD_ENVIRONMENT=prod
 ARG APP_HOME=/app
-ARG VERSION=unkown
+ARG VERSION=unknown
 ARG CREATED
 ARG REVISION
 
@@ -88,7 +88,7 @@ RUN addgroup -g 1001 -S ${group} \
     && chmod +x /entrypoint \
     && chmod +x /wait-for-it.sh \
     # insert version for status endpoint
-    && sed -i 's/version_unkown/'"${VERSION}"'/g' ${APP_HOME}/application/commons/api/views.py \
+    && sed -i 's/version_unknown/'"${VERSION}"'/g' ${APP_HOME}/application/commons/api/views.py \
     # make staticfiles writeable 
     && mkdir ${APP_HOME}/application/staticfiles \
     && chmod ugo+w ${APP_HOME}/application/staticfiles \

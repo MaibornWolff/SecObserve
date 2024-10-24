@@ -98,7 +98,7 @@ class ProductMetricsExportCodeChartaView(APIView):
                 f"Vulnerabilities_{Severity.SEVERITY_MEDIUM}".lower(),
                 f"Vulnerabilities_{Severity.SEVERITY_LOW}".lower(),
                 f"Vulnerabilities_{Severity.SEVERITY_NONE}".lower(),
-                f"Vulnerabilities_{Severity.SEVERITY_UNKOWN}".lower(),
+                f"Vulnerabilities_{Severity.SEVERITY_UNKNOWN}".lower(),
                 f"Vulnerabilities_{Severity.SEVERITY_HIGH}_and_above".lower(),
                 f"Vulnerabilities_{Severity.SEVERITY_MEDIUM}_and_above".lower(),
                 f"Vulnerabilities_{Severity.SEVERITY_LOW}_and_above".lower(),

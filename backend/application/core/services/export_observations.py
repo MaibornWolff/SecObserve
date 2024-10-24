@@ -55,7 +55,7 @@ def _get_excludes():
         "SEVERITY_LOW",
         "SEVERITY_MEDIUM",
         "SEVERITY_NONE",
-        "SEVERITY_UNKOWN",
+        "SEVERITY_UNKNOWN",
         "STATUS_CHOICES",
         "STATUS_DUPLICATE",
         "STATUS_FALSE_POSITIVE",

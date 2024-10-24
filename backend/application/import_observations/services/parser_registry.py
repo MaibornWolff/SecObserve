@@ -22,7 +22,7 @@ def register_parser(module_name: str, class_name: str) -> None:
     name = parser_class.get_name()
     my_type = parser_class.get_type()
 
-    source = Parser_Source.SOURCE_UNKOWN
+    source = Parser_Source.SOURCE_UNKNOWN
     for base in parser_class.__bases__:
         if base is BaseAPIParser:
             source = Parser_Source.SOURCE_API

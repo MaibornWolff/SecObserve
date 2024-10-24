@@ -17,7 +17,7 @@ import { Fragment, useState } from "react";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
 const About = () => {
-    const get_version = "version_unkown";
+    const get_version = "version_unknown";
 
     const [open, setOpen] = useState(false);
     const [backendVersion, setBackendVersion] = useState("...");

@@ -265,7 +265,7 @@ def write_observation_log_no_vex_statement(
             f"Removed VEX statement from {previous_vex_statement.document.document_id}"
         )
     else:
-        log_comment = "Removed unkown VEX statement"
+        log_comment = "Removed unknown VEX statement"
 
     risk_acceptance_expiry_date = (
         calculate_risk_acceptance_expiry_date(observation.product)

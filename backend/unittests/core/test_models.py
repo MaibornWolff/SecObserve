@@ -72,14 +72,14 @@ class TestProduct(BaseTestCase):
         )
 
     @patch("application.core.models.Observation.objects.filter")
-    def test_observation_count_unkown(self, mock):
+    def test_observation_count_unknown(self, mock):
         mock.return_value.count.return_value = 99
         product = Product(name="product_name")
-        self.assertEqual(99, product.open_unkown_observation_count)
+        self.assertEqual(99, product.open_unknown_observation_count)
         mock.assert_called_with(
             product=product,
             branch=None,
-            current_severity=Severity.SEVERITY_UNKOWN,
+            current_severity=Severity.SEVERITY_UNKNOWN,
             current_status=Status.STATUS_OPEN,
         )
 

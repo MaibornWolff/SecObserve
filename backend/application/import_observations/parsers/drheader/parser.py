@@ -131,7 +131,7 @@ class DrHEADerParser(BaseParser, BaseFileParser):
         for drheader_observation in data:
             rule = drheader_observation.get("rule")
             message = drheader_observation.get("message")
-            severity = drheader_observation.get("severity", Severity.SEVERITY_UNKOWN)
+            severity = drheader_observation.get("severity", Severity.SEVERITY_UNKNOWN)
             value = drheader_observation.get("value")
             expected = drheader_observation.get("expected")
             delimiter = drheader_observation.get("delimiter")

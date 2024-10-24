@@ -2,13 +2,13 @@ class Parser_Source:
     SOURCE_API = "API"
     SOURCE_FILE = "File"
     SOURCE_MANUAL = "Manual"
-    SOURCE_UNKOWN = "Unkown"
+    SOURCE_UNKNOWN = "Unknown"
 
     SOURCE_CHOICES = [
         (SOURCE_API, SOURCE_API),
         (SOURCE_FILE, SOURCE_FILE),
         (SOURCE_MANUAL, SOURCE_MANUAL),
-        (SOURCE_UNKOWN, SOURCE_UNKOWN),
+        (SOURCE_UNKNOWN, SOURCE_UNKNOWN),
     ]
 
 

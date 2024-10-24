@@ -153,8 +153,8 @@ const SettingsShowComponent = () => {
                                     <Labeled label="Threshold none">
                                         <NumberField source="security_gate_threshold_none" />
                                     </Labeled>
-                                    <Labeled label="Threshold unkown">
-                                        <NumberField source="security_gate_threshold_unkown" />
+                                    <Labeled label="Threshold unknown">
+                                        <NumberField source="security_gate_threshold_unknown" />
                                     </Labeled>
                                 </Fragment>
                             )}
