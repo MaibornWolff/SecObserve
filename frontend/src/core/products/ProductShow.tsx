@@ -37,6 +37,7 @@ import {
     PERMISSION_PRODUCT_RULE_APPLY,
     PERMISSION_PRODUCT_RULE_CREATE,
 } from "../../access_control/types";
+import { feature_license_management } from "../../commons/functions";
 import observations from "../../core/observations";
 import ApiConfigurationCreate from "../../import_observations/api_configurations/ApiConfigurationCreate";
 import ApiConfigurationEmbeddedList from "../../import_observations/api_configurations/ApiConfigurationEmbeddedList";
@@ -123,6 +124,11 @@ const ProductShow = () => {
     const product_group_id = localStorage.getItem("productembeddedlist.product_group");
     if (product_group_id !== null) {
         filter = { product_group: Number(product_group_id) };
+        storeKey = "products.embedded";
+    }
+    const license_policy_id = localStorage.getItem("productembeddedlist.license_policy");
+    if (license_policy_id !== null) {
+        filter = { license_policy: Number(license_policy_id) };
         storeKey = "products.embedded";
     }
 
@@ -222,10 +228,9 @@ const ProductShow = () => {
                                     <ServiceEmbeddedList product={product} />
                                 </Tab>
                             )}
-                            {product.has_licenses && (
+                            {feature_license_management() && product.has_licenses && (
                                 <Tab label="Licenses" path="licenses" icon={<GradingIcon />} onClick={hideSettingsTabs}>
                                     <LicenseComponentEmbeddedList product={product} />
-                                    {/* <ComponentLicenseEmbeddedList product={product} /> */}
                                 </Tab>
                             )}
                             <Tab

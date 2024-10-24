@@ -15,6 +15,7 @@ import {
 import MarkdownField from "../../commons/custom_fields/MarkdownField";
 import { is_external, is_superuser } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
+import ProductEmbeddedList from "../../core/products/ProductEmbeddedList";
 import LicensePolicyItemEmbeddedList from "../license_policy_items/LicensePolicyItemEmbeddedList";
 import LicensePolicyMemberEmbeddedList from "../license_policy_members/LicensePolicyMemberEmbeddedList";
 import LicensePolicyCopy from "./LicensePolicyCopy";
@@ -76,6 +77,14 @@ const LicensePolicyComponent = () => {
                         </Typography>
                         <LicensePolicyMemberEmbeddedList license_policy={license_policy} />
                     </Paper>
+                    {license_policy.has_products && (
+                        <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Products using this license policy
+                            </Typography>
+                            <ProductEmbeddedList license_policy={license_policy} />
+                        </Paper>
+                    )}
                 </Box>
             )}
         />

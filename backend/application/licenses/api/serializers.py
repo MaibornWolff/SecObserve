@@ -147,6 +147,7 @@ class LicenseGroupCopySerializer(Serializer):
 
 class LicensePolicySerializer(ModelSerializer):
     is_manager = SerializerMethodField()
+    has_products = SerializerMethodField()
 
     class Meta:
         model = License_Policy
@@ -157,6 +158,9 @@ class LicensePolicySerializer(ModelSerializer):
         return License_Policy_Member.objects.filter(
             license_policy=obj, user=user, is_manager=True
         ).exists()
+
+    def get_has_products(self, obj: License_Policy) -> bool:
+        return obj.product.exists()
 
 
 class LicensePolicyItemSerializer(ModelSerializer):
