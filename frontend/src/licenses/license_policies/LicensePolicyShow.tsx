@@ -18,19 +18,23 @@ import { useStyles } from "../../commons/layout/themes";
 import ProductEmbeddedList from "../../core/products/ProductEmbeddedList";
 import LicensePolicyItemEmbeddedList from "../license_policy_items/LicensePolicyItemEmbeddedList";
 import LicensePolicyMemberEmbeddedList from "../license_policy_members/LicensePolicyMemberEmbeddedList";
+import LicensePolicyApply from "./LicensePolicyApply";
 import LicensePolicyCopy from "./LicensePolicyCopy";
 
 const ShowActions = () => {
     const license_policy = useRecordContext();
     return (
         <TopToolbar>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
+            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
                 <PrevNextButtons
                     linkType="show"
                     sort={{ field: "name", order: "ASC" }}
                     filterDefaultValues={{ is_active: true }}
                     storeKey="license_policies.embedded"
                 />
+                {license_policy && (license_policy.is_manager || is_superuser()) && license_policy.has_products && (
+                    <LicensePolicyApply license_policy={license_policy} />
+                )}
                 {license_policy && (!is_external() || is_superuser()) && (
                     <LicensePolicyCopy license_policy={license_policy} />
                 )}
