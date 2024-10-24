@@ -52,7 +52,7 @@ jobs:
             VERSION=dev
       - 
         name: Run SCA vulnerability scanners
-        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@70451f5f17e1de8fddcaebb767167a279dc8815b # main
+        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@6eefe400d9efeaae2b7abe05710785fa4a53dbf6 # main
         with:
           so_configuration: 'so_configuration_sca_dev.yml'
           SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
