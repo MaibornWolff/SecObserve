@@ -1,5 +1,5 @@
 class Severity:
-    SEVERITY_UNKOWN = "Unkown"
+    SEVERITY_UNKNOWN = "Unknown"
     SEVERITY_NONE = "None"
     SEVERITY_LOW = "Low"
     SEVERITY_HIGH = "High"
@@ -7,7 +7,7 @@ class Severity:
     SEVERITY_CRITICAL = "Critical"
 
     SEVERITY_CHOICES = [
-        (SEVERITY_UNKOWN, SEVERITY_UNKOWN),
+        (SEVERITY_UNKNOWN, SEVERITY_UNKNOWN),
         (SEVERITY_NONE, SEVERITY_NONE),
         (SEVERITY_LOW, SEVERITY_LOW),
         (SEVERITY_MEDIUM, SEVERITY_MEDIUM),
@@ -16,7 +16,7 @@ class Severity:
     ]
 
     NUMERICAL_SEVERITIES = {
-        SEVERITY_UNKOWN: 6,
+        SEVERITY_UNKNOWN: 6,
         SEVERITY_NONE: 5,
         SEVERITY_LOW: 4,
         SEVERITY_MEDIUM: 3,

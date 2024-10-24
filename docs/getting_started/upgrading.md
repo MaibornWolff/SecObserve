@@ -10,6 +10,13 @@
 
 * There will be specific upgrade instructions if necessary, e.g. when there are new configuration parameters.
 
+## Release 1.21.0
+
+**Breaking changes**
+
+* There was a typo in severities, where there was a missing "n" in "Unknown". This has been fixed in the code as well as in the data. If you use the severity "Unknown" in API calls, you need to change it from "Unkown" to "Unknown".
+
+
 ## Release 1.18.0
 
 **Breaking changes**

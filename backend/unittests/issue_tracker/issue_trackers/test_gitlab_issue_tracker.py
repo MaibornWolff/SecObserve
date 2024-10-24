@@ -54,7 +54,7 @@ class TestGitLabIssueTracker(BaseTestCase):
     def test_create_issue_exception(self, post_mock):
         response = Response()
         response.status_code = 500
-        response.reason = "unkown reason"
+        response.reason = "unknown reason"
         response.url = "https://api.gitlab.com/repos/gh_project_1/issues"
         post_mock.return_value = response
         with self.assertRaises(HTTPError) as e:
@@ -62,7 +62,7 @@ class TestGitLabIssueTracker(BaseTestCase):
             issue_tracker.create_issue(self.observation_1)
 
         self.assertEqual(
-            "500 Server Error: unkown reason for url: https://api.gitlab.com/repos/gh_project_1/issues",
+            "500 Server Error: unknown reason for url: https://api.gitlab.com/repos/gh_project_1/issues",
             str(e.exception),
         )
         post_mock.assert_called_once_with(
@@ -81,7 +81,7 @@ class TestGitLabIssueTracker(BaseTestCase):
     def test_get_issue_exception(self, get_mock):
         response = Response()
         response.status_code = 500
-        response.reason = "unkown reason"
+        response.reason = "unknown reason"
         response.url = (
             "https://gitlab.example.com/api/v4/projects/gh_project_1/issues/gh_1"
         )
@@ -91,7 +91,7 @@ class TestGitLabIssueTracker(BaseTestCase):
             issue_tracker.get_issue(self.observation_1.product, "gh_1")
 
         self.assertEqual(
-            "500 Server Error: unkown reason for url: https://gitlab.example.com/api/v4/projects/gh_project_1/issues/gh_1",
+            "500 Server Error: unknown reason for url: https://gitlab.example.com/api/v4/projects/gh_project_1/issues/gh_1",
             str(e.exception),
         )
         get_mock.assert_called_once_with(
@@ -147,7 +147,7 @@ class TestGitLabIssueTracker(BaseTestCase):
     def test_update_issue_exception(self, put_mock):
         response = Response()
         response.status_code = 404
-        response.reason = "unkown reason"
+        response.reason = "unknown reason"
         response.url = "https://api.gitlab.com/repos/gh_project_1/issues/gh_1"
         put_mock.return_value = response
         self.observation_1.issue_tracker_issue_id = "gh_1"
@@ -163,7 +163,7 @@ class TestGitLabIssueTracker(BaseTestCase):
             issue_tracker.update_issue(self.observation_1, issue)
 
         self.assertEqual(
-            "404 Client Error: unkown reason for url: https://api.gitlab.com/repos/gh_project_1/issues/gh_1",
+            "404 Client Error: unknown reason for url: https://api.gitlab.com/repos/gh_project_1/issues/gh_1",
             str(e.exception),
         )
         put_mock.assert_called_once_with(
@@ -218,7 +218,7 @@ class TestGitLabIssueTracker(BaseTestCase):
     def test_close_issue_exception(self, put_mock):
         response = Response()
         response.status_code = 404
-        response.reason = "unkown reason"
+        response.reason = "unknown reason"
         response.url = "https://api.gitlab.com/repos/gh_project_1/issues/gh_1"
         put_mock.return_value = response
         self.observation_1.issue_tracker_issue_id = "gh_1"
@@ -235,7 +235,7 @@ class TestGitLabIssueTracker(BaseTestCase):
             issue_tracker.close_issue(self.observation_1, issue)
 
         self.assertEqual(
-            "404 Client Error: unkown reason for url: https://api.gitlab.com/repos/gh_project_1/issues/gh_1",
+            "404 Client Error: unknown reason for url: https://api.gitlab.com/repos/gh_project_1/issues/gh_1",
             str(e.exception),
         )
         put_mock.assert_called_once_with(
@@ -284,7 +284,7 @@ class TestGitLabIssueTracker(BaseTestCase):
     def test_close_issue_for_deleted_observation_exception(self, put_mock):
         response = Response()
         response.status_code = 404
-        response.reason = "unkown reason"
+        response.reason = "unknown reason"
         response.url = "https://api.gitlab.com/repos/gh_project_1/issues/gh_1"
         put_mock.return_value = response
         self.observation_1.product.issue_tracker_labels = "label_2,label_3"
@@ -301,7 +301,7 @@ class TestGitLabIssueTracker(BaseTestCase):
             )
 
         self.assertEqual(
-            "404 Client Error: unkown reason for url: https://api.gitlab.com/repos/gh_project_1/issues/gh_1",
+            "404 Client Error: unknown reason for url: https://api.gitlab.com/repos/gh_project_1/issues/gh_1",
             str(e.exception),
         )
         put_mock.assert_called_once_with(

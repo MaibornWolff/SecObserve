@@ -57,8 +57,8 @@ const ProductGroupCreate = () => {
             if (data.security_gate_threshold_none == "") {
                 data.security_gate_threshold_none = 0;
             }
-            if (data.security_gate_threshold_unkown == "") {
-                data.security_gate_threshold_unkown = 0;
+            if (data.security_gate_threshold_unknown == "") {
+                data.security_gate_threshold_unknown = 0;
             }
         } else {
             if (data.security_gate_threshold_critical == "") {
@@ -76,8 +76,8 @@ const ProductGroupCreate = () => {
             if (data.security_gate_threshold_none == "") {
                 data.security_gate_threshold_none = null;
             }
-            if (data.security_gate_threshold_unkown == "") {
-                data.security_gate_threshold_unkown = null;
+            if (data.security_gate_threshold_unknown == "") {
+                data.security_gate_threshold_unknown = null;
             }
         }
         if (data.risk_acceptance_expiry_active) {
@@ -220,8 +220,8 @@ const ProductGroupCreate = () => {
                                     validate={validate_0_999999}
                                 />
                                 <NumberInput
-                                    label="Threshold unkown"
-                                    source="security_gate_threshold_unkown"
+                                    label="Threshold unknown"
+                                    source="security_gate_threshold_unknown"
                                     min={0}
                                     max={999999}
                                     validate={validate_0_999999}

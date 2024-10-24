@@ -47,7 +47,7 @@ The resulting file `secobserve.cc.json.gz` can now be visualized using [https://
 * vulnerabilities_medium
 * vulnerabilities_low
 * vulnerabilities_none
-* vulnerabilities_unkown
+* vulnerabilities_unknown
 * vulnerabilities_high_and_above
 * vulnerabilities_medium_and_above
 * vulnerabilities_low_and_above

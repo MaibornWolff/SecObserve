@@ -65,10 +65,10 @@ class Settings(Model):
         validators=[MinValueValidator(0), MaxValueValidator(999999)],
         help_text="Number of none observations that must not be exceeded",
     )
-    security_gate_threshold_unkown = IntegerField(
+    security_gate_threshold_unknown = IntegerField(
         default=99999,
         validators=[MinValueValidator(0), MaxValueValidator(999999)],
-        help_text="Number of unkown observations that must not be exceeded",
+        help_text="Number of unknown observations that must not be exceeded",
     )
 
     jwt_validity_duration_user = IntegerField(

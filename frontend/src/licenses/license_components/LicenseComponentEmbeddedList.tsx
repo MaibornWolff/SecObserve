@@ -96,7 +96,7 @@ const LicenseComponentEmbeddedList = ({ product }: LicenseComponentEmbeddedListP
                     resource="license_components"
                 >
                     <TextField source="license_data.spdx_id" label="SPDX Id" />
-                    <TextField source="unknown_license" label="Unkown license" />
+                    <TextField source="unknown_license" label="Unknown license" />
                     <EvaluationResultField source="evaluation_result" label="Evaluation result" />
                     {product && product.has_branches && <TextField source="branch_name" label="Branch / Version" />}
                     <TextField source="name_version" label="Component" />

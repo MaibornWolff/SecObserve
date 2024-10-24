@@ -292,12 +292,12 @@ const SettingsEdit = () => {
                                         sx={{ marginBottom: 2 }}
                                     />
                                     <NumberInput
-                                        source="security_gate_threshold_unkown"
+                                        source="security_gate_threshold_unknown"
                                         label="Threshold unknown"
                                         min={0}
                                         step={1}
                                         validate={validate_0_999999}
-                                        helperText="Number of unkown observations that must not be exceeded"
+                                        helperText="Number of unknown observations that must not be exceeded"
                                         sx={{ marginBottom: 2 }}
                                     />
                                 </Fragment>

@@ -172,7 +172,7 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                                 <NumberField source="security_gate_threshold_none" />
                             </Labeled>
                             <Labeled>
-                                <NumberField source="security_gate_threshold_unkown" />
+                                <NumberField source="security_gate_threshold_unknown" />
                             </Labeled>
                         </Stack>
                     )}

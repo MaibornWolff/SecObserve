@@ -199,4 +199,4 @@ def get_severity(finding: DetectionFinding) -> str:
         if (severity, severity) in Severity.SEVERITY_CHOICES:
             return finding.severity.capitalize()
 
-    return Severity.SEVERITY_UNKOWN
+    return Severity.SEVERITY_UNKNOWN

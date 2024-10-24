@@ -5,7 +5,7 @@ import {
     OBSERVATION_SEVERITY_LOW,
     OBSERVATION_SEVERITY_MEDIUM,
     OBSERVATION_SEVERITY_NONE,
-    OBSERVATION_SEVERITY_UNKOWN,
+    OBSERVATION_SEVERITY_UNKNOWN,
     OBSERVATION_STATUS_FALSE_POSITIVE,
     OBSERVATION_STATUS_NOT_AFFECTED,
     OBSERVATION_STATUS_NOT_SECURITY,
@@ -23,7 +23,7 @@ export function getIconAndFontColor() {
 export function get_severity_color(severity: string): string {
     let backgroundColor = "transparent";
     switch (severity) {
-        case OBSERVATION_SEVERITY_UNKOWN:
+        case OBSERVATION_SEVERITY_UNKNOWN:
             backgroundColor = "#00B4F0";
             break;
         case OBSERVATION_SEVERITY_NONE:

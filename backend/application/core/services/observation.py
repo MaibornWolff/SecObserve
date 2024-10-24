@@ -78,7 +78,7 @@ def get_current_severity(observation) -> str:
 
 def get_cvss3_severity(cvss3_score: int):
     if cvss3_score is None:
-        return Severity.SEVERITY_UNKOWN
+        return Severity.SEVERITY_UNKNOWN
 
     if cvss3_score >= 9:
         return Severity.SEVERITY_CRITICAL
@@ -396,7 +396,7 @@ def normalize_severity(observation):
             observation.parser_severity,
             observation.parser_severity,
         ) not in Severity.SEVERITY_CHOICES:
-            observation.parser_severity = Severity.SEVERITY_UNKOWN
+            observation.parser_severity = Severity.SEVERITY_UNKNOWN
 
     observation.current_severity = get_current_severity(observation)
 

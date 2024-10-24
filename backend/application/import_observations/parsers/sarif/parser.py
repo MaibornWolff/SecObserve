@@ -250,17 +250,17 @@ class SARIFParser(BaseParser, BaseFileParser):
         sarif_level = result.get("level")
         if sarif_level:
             parser_severity = SEVERITIES.get(
-                sarif_level.lower(), Severity.SEVERITY_UNKOWN
+                sarif_level.lower(), Severity.SEVERITY_UNKNOWN
             )
         elif sarif_rule.default_level:
             parser_severity = SEVERITIES.get(
                 sarif_rule.default_level.lower(),
-                Severity.SEVERITY_UNKOWN,
+                Severity.SEVERITY_UNKNOWN,
             )
         elif self.get_bandit_severity(sarif_scanner, result):
             parser_severity = self.get_bandit_severity(sarif_scanner, result)
         else:
-            parser_severity = Severity.SEVERITY_UNKOWN
+            parser_severity = Severity.SEVERITY_UNKNOWN
 
         return parser_severity
 

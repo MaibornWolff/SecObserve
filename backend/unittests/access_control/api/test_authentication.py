@@ -22,7 +22,7 @@ class TestAuthentication(BaseTestCase):
             elif method.lower() == "put":
                 response = api_client.put(url)
             else:
-                raise Exception(f"Unkown method: {method}")
+                raise Exception(f"Unknown method: {method}")
 
             self.assertEqual(401, response.status_code)
 
@@ -50,7 +50,7 @@ class TestAuthentication(BaseTestCase):
             elif method.lower() == "put":
                 response = api_client.put(url)
             else:
-                raise Exception(f"Unkown method: {method}")
+                raise Exception(f"Unknown method: {method}")
 
             self.assertEqual(401, response.status_code)
             self.assertEqual(
@@ -81,7 +81,7 @@ class TestAuthentication(BaseTestCase):
             elif method.lower() == "put":
                 response = api_client.put(url)
             else:
-                raise Exception(f"Unkown method: {method}")
+                raise Exception(f"Unknown method: {method}")
 
             self.assertTrue(response.status_code in [200, 204, 400, 404])
             mock_authentication.assert_called_once()
@@ -111,7 +111,7 @@ class TestAuthentication(BaseTestCase):
             elif method.lower() == "put":
                 response = api_client.put(url)
             else:
-                raise Exception(f"Unkown method: {method}")
+                raise Exception(f"Unknown method: {method}")
 
             self.assertEqual(401, response.status_code)
             self.assertEqual(
@@ -142,7 +142,7 @@ class TestAuthentication(BaseTestCase):
             elif method.lower() == "put":
                 response = api_client.put(url)
             else:
-                raise Exception(f"Unkown method: {method}")
+                raise Exception(f"Unknown method: {method}")
 
             self.assertTrue(response.status_code in [200, 204, 400, 404])
             mock_authentication.assert_called_once()
@@ -172,7 +172,7 @@ class TestAuthentication(BaseTestCase):
             elif method.lower() == "put":
                 response = api_client.put(url)
             else:
-                raise Exception(f"Unkown method: {method}")
+                raise Exception(f"Unknown method: {method}")
 
             self.assertEqual(401, response.status_code)
             # self.assertEqual(
@@ -203,7 +203,7 @@ class TestAuthentication(BaseTestCase):
             elif method.lower() == "put":
                 response = api_client.put(url)
             else:
-                raise Exception(f"Unkown method: {method}")
+                raise Exception(f"Unknown method: {method}")
 
             self.assertTrue(response.status_code in [200, 204, 400, 404])
             mock_authentication.assert_called_once()
