@@ -279,7 +279,7 @@ class LicensePolicyViewSet(ModelViewSet):
             license_policy_member = get_license_policy_member(license_policy, user)
             if not license_policy.is_public and not license_policy_member:
                 raise NotFound("License policy not found")
-            if not license_policy_member.is_manager:
+            if license_policy_member and not license_policy_member.is_manager:
                 raise PermissionDenied("You are not allowed to apply a license policy")
 
         apply_license_policy(license_policy)
