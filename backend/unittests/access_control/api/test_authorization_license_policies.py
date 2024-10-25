@@ -180,6 +180,46 @@ class TestAuthorizationLicensePolicies(TestAuthorizationBase):
         self._test_api(
             APITest(
                 "db_internal_write",
+                "post",
+                "/api/license_policies/1002/apply/",
+                None,
+                204,
+                None,
+                no_second_user=True,
+            )
+        )
+
+        expected_data = "{'message': 'License policy not found'}"
+        self._test_api(
+            APITest(
+                "db_internal_write",
+                "post",
+                "/api/license_policies/1001/apply/",
+                None,
+                404,
+                None,
+                no_second_user=True,
+            )
+        )
+
+        expected_data = (
+            "{'message': 'You do not have permission to perform this action.'}"
+        )
+        self._test_api(
+            APITest(
+                "db_internal_read",
+                "post",
+                "/api/license_policies/1001/apply/",
+                None,
+                403,
+                None,
+                no_second_user=True,
+            )
+        )
+
+        self._test_api(
+            APITest(
+                "db_internal_write",
                 "delete",
                 "/api/license_policies/1002/",
                 None,

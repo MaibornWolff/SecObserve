@@ -270,19 +270,17 @@ class LicensePolicyViewSet(ModelViewSet):
     )
     @action(detail=True, methods=["post"])
     def apply(self, request, pk):
-
         license_policy = get_license_policy(pk)
         if license_policy is None:
             raise NotFound("License policy not found")
 
         user = request.user
-        if not (user.is_superuser or license_policy.is_public):
+        if not user.is_superuser:
             license_policy_member = get_license_policy_member(license_policy, user)
-            if not license_policy_member:
+            if not license_policy.is_public and not license_policy_member:
                 raise NotFound("License policy not found")
-
-        if not (user.is_superuser or license_policy_member.is_manager):
-            raise PermissionDenied("You are not allowed to apply a license policy")
+            if not license_policy_member.is_manager:
+                raise PermissionDenied("You are not allowed to apply a license policy")
 
         apply_license_policy(license_policy)
 
