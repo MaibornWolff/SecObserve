@@ -9,8 +9,10 @@ from application.core.models import Product
 from application.import_observations.models import Vulnerability_Check
 from application.licenses.models import License_Component
 from application.licenses.queries.license import get_license_by_spdx_id
-from application.licenses.services.license_policy import get_license_evaluation_results
-from application.licenses.types import License_Policy_Evaluation_Result
+from application.licenses.services.license_policy import (
+    apply_license_policy_to_component,
+    get_license_evaluation_results,
+)
 
 
 def get_identity_hash(observation) -> str:
@@ -67,7 +69,7 @@ def process_license_components(
             existing_component.dependencies = component.dependencies
             existing_component.license = component.license
             existing_component.unknown_license = component.unknown_license
-            _apply_license_policy(
+            apply_license_policy_to_component(
                 existing_component,
                 license_evaluation_results,
             )
@@ -78,7 +80,7 @@ def process_license_components(
             component.product = vulnerability_check.product
             component.branch = vulnerability_check.branch
             component.upload_filename = vulnerability_check.filename
-            _apply_license_policy(
+            apply_license_policy_to_component(
                 component,
                 license_evaluation_results,
             )
@@ -145,23 +147,6 @@ def _prepare_name_version(component: License_Component) -> None:
         elif len(component_parts) == 1:
             component.name = component.name_version
             component.version = ""
-
-
-def _apply_license_policy(
-    component: License_Component,
-    evaluation_results: dict,
-) -> None:
-    evaluation_result = None
-    if component.license:
-        evaluation_result = evaluation_results.get(f"spdx_{component.license.spdx_id}")
-    elif component.unknown_license:
-        evaluation_result = evaluation_results.get(
-            f"unknown_{component.unknown_license}"
-        )
-    if not evaluation_result:
-        evaluation_result = License_Policy_Evaluation_Result.RESULT_UNKNOWN
-
-    component.evaluation_result = evaluation_result
 
 
 def license_components_bulk_delete(product: Product, component_ids: list[int]) -> None:

@@ -65,7 +65,10 @@ from application.licenses.queries.license_policy_member import (
     get_license_policy_members,
 )
 from application.licenses.services.license_group import copy_license_group
-from application.licenses.services.license_policy import copy_license_policy
+from application.licenses.services.license_policy import (
+    apply_license_policy,
+    copy_license_policy,
+)
 
 
 class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
@@ -258,6 +261,31 @@ class LicensePolicyViewSet(ModelViewSet):
         return Response(
             status=HTTP_201_CREATED,
             data=LicensePolicySerializer(new_license_policy).data,
+        )
+
+    @extend_schema(
+        methods=["POST"],
+        request=None,
+        responses={HTTP_204_NO_CONTENT: None},
+    )
+    @action(detail=True, methods=["post"])
+    def apply(self, request, pk):
+        license_policy = get_license_policy(pk)
+        if license_policy is None:
+            raise NotFound("License policy not found")
+
+        user = request.user
+        if not user.is_superuser:
+            license_policy_member = get_license_policy_member(license_policy, user)
+            if not license_policy.is_public and not license_policy_member:
+                raise NotFound("License policy not found")
+            if license_policy_member and not license_policy_member.is_manager:
+                raise PermissionDenied("You are not allowed to apply a license policy")
+
+        apply_license_policy(license_policy)
+
+        return Response(
+            status=HTTP_204_NO_CONTENT,
         )
 
 
