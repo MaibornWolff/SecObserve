@@ -18,7 +18,7 @@ const RevokeProductApiToken = (props: RevokeProductApiTokenProps) => {
     const handleClose = () => setOpen(false);
 
     const handleApiTokenRevoke = async () => {
-        const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/product_api_tokens/" + props.product.id;
+        const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/product_api_tokens/" + props.product.id + "/";
         httpClient(url, {
             method: "DELETE",
         })

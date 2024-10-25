@@ -5,6 +5,7 @@ import {
     FilterForm,
     ListContextProvider,
     ReferenceInput,
+    ResourceContextProvider,
     TextField,
     TextInput,
     useListController,
@@ -81,30 +82,32 @@ const LicenseComponentEmbeddedList = ({ product }: LicenseComponentEmbeddedListP
     }
 
     return (
-        <ListContextProvider value={listContext}>
-            <div style={{ width: "100%" }}>
-                <FilterForm filters={listFilters(product)} />
-                <Datagrid
-                    size={getSettingListSize()}
-                    rowClick={showLicenseComponent}
-                    bulkActionButtons={
-                        product &&
-                        product.permissions.includes(PERMISSION_COMPONENT_LICENSE_DELETE) && (
-                            <BulkActionButtons product={product} />
-                        )
-                    }
-                    resource="license_components"
-                >
-                    <TextField source="license_data.spdx_id" label="SPDX Id" />
-                    <TextField source="unknown_license" label="Unknown license" />
-                    <EvaluationResultField source="evaluation_result" label="Evaluation result" />
-                    {product && product.has_branches && <TextField source="branch_name" label="Branch / Version" />}
-                    <TextField source="name_version" label="Component" />
-                    <TextField source="purl_type" label="Component type" />
-                </Datagrid>
-                <CustomPagination />
-            </div>
-        </ListContextProvider>
+        <ResourceContextProvider value="license_components">
+            <ListContextProvider value={listContext}>
+                <div style={{ width: "100%" }}>
+                    <FilterForm filters={listFilters(product)} />
+                    <Datagrid
+                        size={getSettingListSize()}
+                        rowClick={showLicenseComponent}
+                        bulkActionButtons={
+                            product &&
+                            product.permissions.includes(PERMISSION_COMPONENT_LICENSE_DELETE) && (
+                                <BulkActionButtons product={product} />
+                            )
+                        }
+                        resource="license_components"
+                    >
+                        <TextField source="license_data.spdx_id" label="SPDX Id" />
+                        <TextField source="unknown_license" label="Unknown license" />
+                        <EvaluationResultField source="evaluation_result" label="Evaluation result" />
+                        {product && product.has_branches && <TextField source="branch_name" label="Branch / Version" />}
+                        <TextField source="name_version" label="Component" />
+                        <TextField source="purl_type" label="Component type" />
+                    </Datagrid>
+                    <CustomPagination />
+                </div>
+            </ListContextProvider>
+        </ResourceContextProvider>
     );
 };
 

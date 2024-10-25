@@ -3,6 +3,7 @@ import {
     Datagrid,
     FilterForm,
     ListContextProvider,
+    ResourceContextProvider,
     TextField,
     TextInput,
     WithRecord,
@@ -52,34 +53,36 @@ const LicensePolicyItemEmbeddedList = ({ license_policy }: LicensePolicyItemEmbe
     }
 
     return (
-        <ListContextProvider value={listContext}>
-            <div style={{ width: "100%" }}>
-                {(is_superuser() || license_policy.is_manager) && <LicensePolicyItemAdd id={license_policy.id} />}
-                <FilterForm filters={listFilters()} />
-                <Datagrid
-                    size={getSettingListSize()}
-                    rowClick={false}
-                    bulkActionButtons={false}
-                    resource="license_policy_item"
-                >
-                    <TextField source="license_group_name" label="License group" />
-                    <TextField source="license_spdx_id" label="License" />
-                    <TextField source="unknown_license" label="Unknown license" />
-                    <EvaluationResultField source="evaluation_result" label="Evaluation result" />
-                    {(is_superuser() || license_policy.is_manager) && (
-                        <WithRecord
-                            render={(license_policy_item) => (
-                                <Stack direction="row" spacing={4}>
-                                    <LicensePolicyItemEdit />
-                                    <LicensePolicyItemRemove license_policy_item={license_policy_item} />
-                                </Stack>
-                            )}
-                        />
-                    )}
-                </Datagrid>
-                <CustomPagination />
-            </div>
-        </ListContextProvider>
+        <ResourceContextProvider value="license_policy_items">
+            <ListContextProvider value={listContext}>
+                <div style={{ width: "100%" }}>
+                    {(is_superuser() || license_policy.is_manager) && <LicensePolicyItemAdd id={license_policy.id} />}
+                    <FilterForm filters={listFilters()} />
+                    <Datagrid
+                        size={getSettingListSize()}
+                        rowClick={false}
+                        bulkActionButtons={false}
+                        resource="license_policy_item"
+                    >
+                        <TextField source="license_group_name" label="License group" />
+                        <TextField source="license_spdx_id" label="License" />
+                        <TextField source="unknown_license" label="Unknown license" />
+                        <EvaluationResultField source="evaluation_result" label="Evaluation result" />
+                        {(is_superuser() || license_policy.is_manager) && (
+                            <WithRecord
+                                render={(license_policy_item) => (
+                                    <Stack direction="row" spacing={4}>
+                                        <LicensePolicyItemEdit />
+                                        <LicensePolicyItemRemove license_policy_item={license_policy_item} />
+                                    </Stack>
+                                )}
+                            />
+                        )}
+                    </Datagrid>
+                    <CustomPagination />
+                </div>
+            </ListContextProvider>
+        </ResourceContextProvider>
     );
 };
 

@@ -5,6 +5,7 @@ import {
     ListContextProvider,
     ReferenceField,
     ReferenceInput,
+    ResourceContextProvider,
     TextField,
     TextInput,
     WithRecord,
@@ -44,36 +45,43 @@ const ApiConfigurationEmbeddedList = ({ product }: ApiConfigurationEmbeddedListP
     }
 
     return (
-        <ListContextProvider value={listContext}>
-            <div style={{ width: "100%" }}>
-                <FilterForm filters={listFilters} />
-                <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false} rowClick={false}>
-                    <TextField source="name" />
-                    <ReferenceField
-                        source="parser"
-                        reference="parsers"
-                        link={false}
-                        sx={{ "& a": { textDecoration: "none" } }}
-                    />
-                    <TextField source="base_url" label="Base URL" />
-                    <TextField source="query" label="Query" />
-                    <TextField source="project_key" />
-                    <WithRecord
-                        render={(api_configuration) => (
-                            <Stack direction="row" spacing={4}>
-                                {product && product.permissions.includes(PERMISSION_API_CONFIGURATION_EDIT) && (
-                                    <ApiConfigurationEdit />
-                                )}
-                                {product && product.permissions.includes(PERMISSION_API_CONFIGURATION_DELETE) && (
-                                    <APIConfigurationDelete api_configuration={api_configuration} />
-                                )}
-                            </Stack>
-                        )}
-                    />
-                </Datagrid>
-                <CustomPagination />
-            </div>
-        </ListContextProvider>
+        <ResourceContextProvider value="api_configurations">
+            <ListContextProvider value={listContext}>
+                <div style={{ width: "100%" }}>
+                    <FilterForm filters={listFilters} />
+                    <Datagrid
+                        size={getSettingListSize()}
+                        sx={{ width: "100%" }}
+                        bulkActionButtons={false}
+                        rowClick={false}
+                    >
+                        <TextField source="name" />
+                        <ReferenceField
+                            source="parser"
+                            reference="parsers"
+                            link={false}
+                            sx={{ "& a": { textDecoration: "none" } }}
+                        />
+                        <TextField source="base_url" label="Base URL" />
+                        <TextField source="query" label="Query" />
+                        <TextField source="project_key" />
+                        <WithRecord
+                            render={(api_configuration) => (
+                                <Stack direction="row" spacing={4}>
+                                    {product && product.permissions.includes(PERMISSION_API_CONFIGURATION_EDIT) && (
+                                        <ApiConfigurationEdit />
+                                    )}
+                                    {product && product.permissions.includes(PERMISSION_API_CONFIGURATION_DELETE) && (
+                                        <APIConfigurationDelete api_configuration={api_configuration} />
+                                    )}
+                                </Stack>
+                            )}
+                        />
+                    </Datagrid>
+                    <CustomPagination />
+                </div>
+            </ListContextProvider>
+        </ResourceContextProvider>
     );
 };
 

@@ -10,6 +10,7 @@ import {
     NullableBooleanInput,
     NumberField,
     ReferenceInput,
+    ResourceContextProvider,
     TextField,
     TextInput,
     useListController,
@@ -137,76 +138,82 @@ const ObservationsReviewList = ({ product }: ObservationsReviewListProps) => {
     }
 
     return (
-        <ListContextProvider value={listContext}>
-            <div style={{ width: "100%" }}>
-                <FilterForm filters={listFilters(product)} />
-                <Datagrid
-                    size={getSettingListSize()}
-                    sx={{ width: "100%" }}
-                    rowClick={ShowObservations}
-                    bulkActionButtons={
-                        product &&
-                        product.permissions.includes(PERMISSION_OBSERVATION_ASSESSMENT) && (
-                            <BulkActionButtons product={product} />
-                        )
-                    }
-                    resource="observations"
-                    expand={<ObservationExpand />}
-                    expandSingle
-                >
-                    <TextField source="branch_name" label="Branch / Version" />
-                    <TextField source="title" />
-                    <SeverityField label="Severity" source="current_severity" />
-                    {product && product.has_component && <NumberField source="epss_score" label="EPSS" />}
-                    <ChipField source="current_status" label="Status" />
-                    {product && product.has_services && <TextField source="origin_service_name" label="Service" />}
-                    {product && product.has_component && (
-                        <TextField
-                            source="origin_component_name_version"
-                            label="Component"
-                            sx={{ wordBreak: "break-word" }}
+        <ResourceContextProvider value="observations">
+            <ListContextProvider value={listContext}>
+                <div style={{ width: "100%" }}>
+                    <FilterForm filters={listFilters(product)} />
+                    <Datagrid
+                        size={getSettingListSize()}
+                        sx={{ width: "100%" }}
+                        rowClick={ShowObservations}
+                        bulkActionButtons={
+                            product &&
+                            product.permissions.includes(PERMISSION_OBSERVATION_ASSESSMENT) && (
+                                <BulkActionButtons product={product} />
+                            )
+                        }
+                        resource="observations"
+                        expand={<ObservationExpand />}
+                        expandSingle
+                    >
+                        <TextField source="branch_name" label="Branch / Version" />
+                        <TextField source="title" />
+                        <SeverityField label="Severity" source="current_severity" />
+                        {product && product.has_component && <NumberField source="epss_score" label="EPSS" />}
+                        <ChipField source="current_status" label="Status" />
+                        {product && product.has_services && <TextField source="origin_service_name" label="Service" />}
+                        {product && product.has_component && (
+                            <TextField
+                                source="origin_component_name_version"
+                                label="Component"
+                                sx={{ wordBreak: "break-word" }}
+                            />
+                        )}
+                        {product && product.has_docker_image && (
+                            <TextField
+                                source="origin_docker_image_name_tag_short"
+                                label="Container"
+                                sx={{ wordBreak: "break-word" }}
+                            />
+                        )}
+                        {product && product.has_endpoint && (
+                            <TextField
+                                source="origin_endpoint_hostname"
+                                label="Host"
+                                sx={{ wordBreak: "break-word" }}
+                            />
+                        )}
+                        {product && product.has_source && (
+                            <TextField source="origin_source_file" label="Source" sx={{ wordBreak: "break-word" }} />
+                        )}
+                        {product && product.has_cloud_resource && (
+                            <TextField
+                                source="origin_cloud_qualified_resource"
+                                label="Cloud resource"
+                                sx={{ wordBreak: "break-word" }}
+                            />
+                        )}
+                        {product && product.has_kubernetes_resource && (
+                            <TextField
+                                source="origin_kubernetes_qualified_resource"
+                                label="Kubernetes resource"
+                                sx={{ wordBreak: "break-word" }}
+                            />
+                        )}
+                        <TextField source="scanner_name" label="Scanner" />
+                        <FunctionField<Observation>
+                            label="Age"
+                            sortBy="last_observation_log"
+                            render={(record) => (record ? humanReadableDate(record.last_observation_log) : "")}
                         />
-                    )}
-                    {product && product.has_docker_image && (
-                        <TextField
-                            source="origin_docker_image_name_tag_short"
-                            label="Container"
-                            sx={{ wordBreak: "break-word" }}
-                        />
-                    )}
-                    {product && product.has_endpoint && (
-                        <TextField source="origin_endpoint_hostname" label="Host" sx={{ wordBreak: "break-word" }} />
-                    )}
-                    {product && product.has_source && (
-                        <TextField source="origin_source_file" label="Source" sx={{ wordBreak: "break-word" }} />
-                    )}
-                    {product && product.has_cloud_resource && (
-                        <TextField
-                            source="origin_cloud_qualified_resource"
-                            label="Cloud resource"
-                            sx={{ wordBreak: "break-word" }}
-                        />
-                    )}
-                    {product && product.has_kubernetes_resource && (
-                        <TextField
-                            source="origin_kubernetes_qualified_resource"
-                            label="Kubernetes resource"
-                            sx={{ wordBreak: "break-word" }}
-                        />
-                    )}
-                    <TextField source="scanner_name" label="Scanner" />
-                    <FunctionField<Observation>
-                        label="Age"
-                        sortBy="last_observation_log"
-                        render={(record) => (record ? humanReadableDate(record.last_observation_log) : "")}
-                    />
-                    {product && product.has_potential_duplicates && (
-                        <BooleanField source="has_potential_duplicates" label="Dupl." />
-                    )}
-                </Datagrid>
-                <CustomPagination />
-            </div>
-        </ListContextProvider>
+                        {product && product.has_potential_duplicates && (
+                            <BooleanField source="has_potential_duplicates" label="Dupl." />
+                        )}
+                    </Datagrid>
+                    <CustomPagination />
+                </div>
+            </ListContextProvider>
+        </ResourceContextProvider>
     );
 };
 

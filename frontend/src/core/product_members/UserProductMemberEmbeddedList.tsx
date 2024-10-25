@@ -3,6 +3,7 @@ import {
     Identifier,
     ListContextProvider,
     RaRecord,
+    ResourceContextProvider,
     SelectField,
     TextField,
     useListController,
@@ -42,21 +43,23 @@ const UserProductMemberEmbeddedList = ({ user, is_product_group }: UserProductMe
     }
 
     return (
-        <ListContextProvider value={listContext}>
-            <div style={{ width: "100%" }}>
-                <Datagrid
-                    size={getSettingListSize()}
-                    sx={{ width: "100%" }}
-                    bulkActionButtons={false}
-                    rowClick={showProduct}
-                    resource="product_members"
-                >
-                    <TextField source="product_data.name" label={productLabel(is_product_group)} />
-                    <SelectField source="role" choices={ROLE_CHOICES} />
-                </Datagrid>
-                <CustomPagination />
-            </div>
-        </ListContextProvider>
+        <ResourceContextProvider value="product_members">
+            <ListContextProvider value={listContext}>
+                <div style={{ width: "100%" }}>
+                    <Datagrid
+                        size={getSettingListSize()}
+                        sx={{ width: "100%" }}
+                        bulkActionButtons={false}
+                        rowClick={showProduct}
+                        resource="product_members"
+                    >
+                        <TextField source="product_data.name" label={productLabel(is_product_group)} />
+                        <SelectField source="role" choices={ROLE_CHOICES} />
+                    </Datagrid>
+                    <CustomPagination />
+                </div>
+            </ListContextProvider>
+        </ResourceContextProvider>
     );
 };
 

@@ -1,5 +1,13 @@
 import { Fragment } from "react";
-import { ChipField, Datagrid, FunctionField, ListContextProvider, TextField, useListController } from "react-admin";
+import {
+    ChipField,
+    Datagrid,
+    FunctionField,
+    ListContextProvider,
+    ResourceContextProvider,
+    TextField,
+    useListController,
+} from "react-admin";
 
 import { PERMISSION_OBSERVATION_ASSESSMENT } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
@@ -45,70 +53,72 @@ const PotentialDuplicatesList = ({ observation }: PotentialDuplicatesListProps) 
     }
 
     return (
-        <ListContextProvider value={listContext}>
-            <Datagrid
-                size={getSettingListSize()}
-                rowClick={ShowObservations}
-                bulkActionButtons={<BulkActionButtons observation={observation} />}
-                resource="potential_duplicates"
-            >
-                <TextField source="potential_duplicate_observation.title" label="Title" />
-                <SeverityField label="Severity" source="potential_duplicate_observation.current_severity" />
-                <ChipField source="potential_duplicate_observation.current_status" label="Status" />
-                <TextField source="potential_duplicate_observation.origin_service_name" label="Service" />
-                {observation && observation.product_data.has_component && (
-                    <TextField
-                        source="potential_duplicate_observation.origin_component_name_version"
-                        label="Component"
-                        sx={{ wordBreak: "break-word" }}
+        <ResourceContextProvider value="potential_duplicates">
+            <ListContextProvider value={listContext}>
+                <Datagrid
+                    size={getSettingListSize()}
+                    rowClick={ShowObservations}
+                    bulkActionButtons={<BulkActionButtons observation={observation} />}
+                    resource="potential_duplicates"
+                >
+                    <TextField source="potential_duplicate_observation.title" label="Title" />
+                    <SeverityField label="Severity" source="potential_duplicate_observation.current_severity" />
+                    <ChipField source="potential_duplicate_observation.current_status" label="Status" />
+                    <TextField source="potential_duplicate_observation.origin_service_name" label="Service" />
+                    {observation && observation.product_data.has_component && (
+                        <TextField
+                            source="potential_duplicate_observation.origin_component_name_version"
+                            label="Component"
+                            sx={{ wordBreak: "break-word" }}
+                        />
+                    )}
+                    {observation && observation.product_data.has_docker_image && (
+                        <TextField
+                            source="potential_duplicate_observation.origin_docker_image_name_tag_short"
+                            label="Container"
+                            sx={{ wordBreak: "break-word" }}
+                        />
+                    )}
+                    {observation && observation.product_data.has_endpoint && (
+                        <TextField
+                            source="potential_duplicate_observation.origin_endpoint_hostname"
+                            label="Host"
+                            sx={{ wordBreak: "break-word" }}
+                        />
+                    )}
+                    {observation && observation.product_data.has_source && (
+                        <TextField
+                            source="potential_duplicate_observation.origin_source_file"
+                            label="Source"
+                            sx={{ wordBreak: "break-word" }}
+                        />
+                    )}
+                    {observation && observation.product_data.has_cloud_resource && (
+                        <TextField
+                            source="potential_duplicate_observation.origin_cloud_qualified_resource"
+                            label="Cloud resource"
+                            sx={{ wordBreak: "break-word" }}
+                        />
+                    )}
+                    {observation && observation.product_data.has_kubernetes_resource && (
+                        <TextField
+                            source="potential_duplicate_observation.origin_kubernetes_qualified_resource"
+                            label="Kubernetes resource"
+                            sx={{ wordBreak: "break-word" }}
+                        />
+                    )}
+                    <TextField source="potential_duplicate_observation.scanner_name" label="Scanner" />
+                    <FunctionField<Observation>
+                        label="Age"
+                        sortBy="potential_duplicate_observation.last_observation_log"
+                        render={(record) =>
+                            record ? humanReadableDate(record.potential_duplicate_observation.last_observation_log) : ""
+                        }
                     />
-                )}
-                {observation && observation.product_data.has_docker_image && (
-                    <TextField
-                        source="potential_duplicate_observation.origin_docker_image_name_tag_short"
-                        label="Container"
-                        sx={{ wordBreak: "break-word" }}
-                    />
-                )}
-                {observation && observation.product_data.has_endpoint && (
-                    <TextField
-                        source="potential_duplicate_observation.origin_endpoint_hostname"
-                        label="Host"
-                        sx={{ wordBreak: "break-word" }}
-                    />
-                )}
-                {observation && observation.product_data.has_source && (
-                    <TextField
-                        source="potential_duplicate_observation.origin_source_file"
-                        label="Source"
-                        sx={{ wordBreak: "break-word" }}
-                    />
-                )}
-                {observation && observation.product_data.has_cloud_resource && (
-                    <TextField
-                        source="potential_duplicate_observation.origin_cloud_qualified_resource"
-                        label="Cloud resource"
-                        sx={{ wordBreak: "break-word" }}
-                    />
-                )}
-                {observation && observation.product_data.has_kubernetes_resource && (
-                    <TextField
-                        source="potential_duplicate_observation.origin_kubernetes_qualified_resource"
-                        label="Kubernetes resource"
-                        sx={{ wordBreak: "break-word" }}
-                    />
-                )}
-                <TextField source="potential_duplicate_observation.scanner_name" label="Scanner" />
-                <FunctionField<Observation>
-                    label="Age"
-                    sortBy="potential_duplicate_observation.last_observation_log"
-                    render={(record) =>
-                        record ? humanReadableDate(record.potential_duplicate_observation.last_observation_log) : ""
-                    }
-                />
-            </Datagrid>
-            <CustomPagination />
-        </ListContextProvider>
+                </Datagrid>
+                <CustomPagination />
+            </ListContextProvider>
+        </ResourceContextProvider>
     );
 };
 

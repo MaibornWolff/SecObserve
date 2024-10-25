@@ -4,6 +4,7 @@ import {
     FilterForm,
     ListContextProvider,
     NullableBooleanInput,
+    ResourceContextProvider,
     TextField,
     TextInput,
     useListController,
@@ -45,22 +46,24 @@ const LicenseGroupEmbeddedList = ({ license }: LicenseGroupEmbeddedListProps) =>
     }
 
     return (
-        <ListContextProvider value={listContext}>
-            <div style={{ width: "100%" }}>
-                {!is_external() && !license && <LicenseGroupCreateButton />}
-                {!license && <FilterForm filters={listFilters} />}
-                <Datagrid
-                    size={getSettingListSize()}
-                    rowClick={showLicenseGroup}
-                    bulkActionButtons={false}
-                    resource="license_groups"
-                >
-                    <TextField source="name" label="Name" />
-                    <BooleanField source="is_public" label="Public" />
-                </Datagrid>
-                <CustomPagination />
-            </div>
-        </ListContextProvider>
+        <ResourceContextProvider value="license_groups">
+            <ListContextProvider value={listContext}>
+                <div style={{ width: "100%" }}>
+                    {!is_external() && !license && <LicenseGroupCreateButton />}
+                    {!license && <FilterForm filters={listFilters} />}
+                    <Datagrid
+                        size={getSettingListSize()}
+                        rowClick={showLicenseGroup}
+                        bulkActionButtons={false}
+                        resource="license_groups"
+                    >
+                        <TextField source="name" label="Name" />
+                        <BooleanField source="is_public" label="Public" />
+                    </Datagrid>
+                    <CustomPagination />
+                </div>
+            </ListContextProvider>
+        </ResourceContextProvider>
     );
 };
 

@@ -3,6 +3,7 @@ import {
     Identifier,
     ListContextProvider,
     RaRecord,
+    ResourceContextProvider,
     SelectField,
     TextField,
     useListController,
@@ -45,21 +46,23 @@ const UserProductAuthorizationGroupMemberEmbeddedList = ({
     }
 
     return (
-        <ListContextProvider value={listContext}>
-            <div style={{ width: "100%" }}>
-                <Datagrid
-                    size={getSettingListSize()}
-                    sx={{ width: "100%" }}
-                    bulkActionButtons={false}
-                    rowClick={showProduct}
-                    resource="product_authorization_group_members"
-                >
-                    <TextField source="product_data.name" label={productLabel(is_product_group)} />
-                    <SelectField source="role" choices={ROLE_CHOICES} />
-                </Datagrid>
-                <CustomPagination />
-            </div>
-        </ListContextProvider>
+        <ResourceContextProvider value="product_authorization_group_members">
+            <ListContextProvider value={listContext}>
+                <div style={{ width: "100%" }}>
+                    <Datagrid
+                        size={getSettingListSize()}
+                        sx={{ width: "100%" }}
+                        bulkActionButtons={false}
+                        rowClick={showProduct}
+                        resource="product_authorization_group_members"
+                    >
+                        <TextField source="product_data.name" label={productLabel(is_product_group)} />
+                        <SelectField source="role" choices={ROLE_CHOICES} />
+                    </Datagrid>
+                    <CustomPagination />
+                </div>
+            </ListContextProvider>
+        </ResourceContextProvider>
     );
 };
 
