@@ -126,7 +126,7 @@ export function get_component_purl_url(
 
     let component_purl_url = "https://deps.dev/" + purl_type + "/";
     if (!component_name.includes(":") && purl_namespace !== null) {
-        component_purl_url = component_purl_url + purl_namespace + "%3A";
+        component_purl_url = component_purl_url + purl_namespace + "%2F";
     }
     component_purl_url = component_purl_url + component_name;
     if (component_version !== null) {
