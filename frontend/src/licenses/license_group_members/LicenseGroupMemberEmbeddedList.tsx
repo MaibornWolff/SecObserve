@@ -6,6 +6,7 @@ import {
     Identifier,
     ListContextProvider,
     NullableBooleanInput,
+    ResourceContextProvider,
     TextInput,
     WithRecord,
     useListController,
@@ -50,46 +51,48 @@ const LicenseGroupMemberEmbeddedList = ({ license_group }: LicenseGroupMemberEmb
     }
 
     return (
-        <ListContextProvider value={listContext}>
-            <div style={{ width: "100%" }}>
-                {(is_superuser() || license_group.is_manager) && <LicenseGroupMemberAdd id={license_group.id} />}
-                <FilterForm filters={listFilters()} />
-                <Datagrid size={getSettingListSize()} rowClick={false} bulkActionButtons={false} resource="users">
-                    <WithRecord
-                        label="Full name"
-                        render={(license_group_member) => (
-                            <TextUrlField
-                                label="User"
-                                text={license_group_member.user_data.full_name}
-                                url={showUser(license_group_member.user_data.id)}
-                            />
-                        )}
-                    />
-                    <WithRecord
-                        label="Username"
-                        render={(license_group_member) => (
-                            <TextUrlField
-                                label="User"
-                                text={license_group_member.user_data.username}
-                                url={showUser(license_group_member.user_data.id)}
-                            />
-                        )}
-                    />
-                    <BooleanField source="is_manager" label="Manager" />
-                    {(is_superuser() || license_group.is_manager) && (
+        <ResourceContextProvider value="license_group_members">
+            <ListContextProvider value={listContext}>
+                <div style={{ width: "100%" }}>
+                    {(is_superuser() || license_group.is_manager) && <LicenseGroupMemberAdd id={license_group.id} />}
+                    <FilterForm filters={listFilters()} />
+                    <Datagrid size={getSettingListSize()} rowClick={false} bulkActionButtons={false} resource="users">
                         <WithRecord
+                            label="Full name"
                             render={(license_group_member) => (
-                                <Stack direction="row" spacing={4}>
-                                    <LicenseGroupMemberEdit />
-                                    <LicenseGroupMemberRemove license_group_member={license_group_member} />
-                                </Stack>
+                                <TextUrlField
+                                    label="User"
+                                    text={license_group_member.user_data.full_name}
+                                    url={showUser(license_group_member.user_data.id)}
+                                />
                             )}
                         />
-                    )}
-                </Datagrid>
-                <CustomPagination />
-            </div>
-        </ListContextProvider>
+                        <WithRecord
+                            label="Username"
+                            render={(license_group_member) => (
+                                <TextUrlField
+                                    label="User"
+                                    text={license_group_member.user_data.username}
+                                    url={showUser(license_group_member.user_data.id)}
+                                />
+                            )}
+                        />
+                        <BooleanField source="is_manager" label="Manager" />
+                        {(is_superuser() || license_group.is_manager) && (
+                            <WithRecord
+                                render={(license_group_member) => (
+                                    <Stack direction="row" spacing={4}>
+                                        <LicenseGroupMemberEdit />
+                                        <LicenseGroupMemberRemove license_group_member={license_group_member} />
+                                    </Stack>
+                                )}
+                            />
+                        )}
+                    </Datagrid>
+                    <CustomPagination />
+                </div>
+            </ListContextProvider>
+        </ResourceContextProvider>
     );
 };
 

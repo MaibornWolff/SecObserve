@@ -1,5 +1,13 @@
 import { Paper, Typography } from "@mui/material";
-import { ChipField, Datagrid, FunctionField, ListContextProvider, TextField, useListController } from "react-admin";
+import {
+    ChipField,
+    Datagrid,
+    FunctionField,
+    ListContextProvider,
+    ResourceContextProvider,
+    TextField,
+    useListController,
+} from "react-admin";
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
@@ -39,32 +47,34 @@ const ObservationDashboardList = () => {
             <Typography variant="h6" sx={{ paddingBottom: 2 }}>
                 Open observations of the last 7 days
             </Typography>
-            <ListContextProvider value={listContext}>
-                <div style={{ width: "100%" }}>
-                    <Datagrid
-                        size={getSettingListSize()}
-                        sx={{ width: "100%" }}
-                        rowClick={ShowObservations}
-                        bulkActionButtons={false}
-                        resource="observations"
-                        expand={<ObservationExpand />}
-                        expandSingle
-                    >
-                        <TextField source="product_data.name" label="Product" />
-                        <TextField source="branch_name" label="Branch / Version" />
-                        <TextField source="title" sx={{ wordBreak: "break-word" }} />
-                        <SeverityField label="Severity" source="current_severity" />
-                        <ChipField source="current_status" label="Status" />
-                        <TextField source="scanner_name" label="Scanner" />
-                        <FunctionField<Observation>
-                            label="Age"
-                            sortBy="last_observation_log"
-                            render={(record) => (record ? humanReadableDate(record.last_observation_log) : "")}
-                        />
-                    </Datagrid>
-                    <CustomPagination />
-                </div>
-            </ListContextProvider>
+            <ResourceContextProvider value="observations">
+                <ListContextProvider value={listContext}>
+                    <div style={{ width: "100%" }}>
+                        <Datagrid
+                            size={getSettingListSize()}
+                            sx={{ width: "100%" }}
+                            rowClick={ShowObservations}
+                            bulkActionButtons={false}
+                            resource="observations"
+                            expand={<ObservationExpand />}
+                            expandSingle
+                        >
+                            <TextField source="product_data.name" label="Product" />
+                            <TextField source="branch_name" label="Branch / Version" />
+                            <TextField source="title" sx={{ wordBreak: "break-word" }} />
+                            <SeverityField label="Severity" source="current_severity" />
+                            <ChipField source="current_status" label="Status" />
+                            <TextField source="scanner_name" label="Scanner" />
+                            <FunctionField<Observation>
+                                label="Age"
+                                sortBy="last_observation_log"
+                                render={(record) => (record ? humanReadableDate(record.last_observation_log) : "")}
+                            />
+                        </Datagrid>
+                        <CustomPagination />
+                    </div>
+                </ListContextProvider>
+            </ResourceContextProvider>
         </Paper>
     );
 };

@@ -4,6 +4,7 @@ import {
     FilterForm,
     ListContextProvider,
     NullableBooleanInput,
+    ResourceContextProvider,
     TextField,
     TextInput,
     useListController,
@@ -51,26 +52,28 @@ const LicenseEmbeddedList = ({ license_group }: LicenseEmbeddedListProps) => {
     }
 
     return (
-        <ListContextProvider value={listContext}>
-            <div style={{ width: "100%" }}>
-                <FilterForm filters={listFilters(license_group)} />
-                <Datagrid
-                    size={getSettingListSize()}
-                    rowClick={showLicense}
-                    bulkActionButtons={false}
-                    resource="licenses"
-                >
-                    <TextField source="spdx_id" label="SPDX Id" />
-                    <TextField source="name" label="Name" />
-                    <BooleanField source="is_osi_approved" label="OSI approved" />
-                    <BooleanField source="is_deprecated" label="Deprecated" />
-                    {license_group === null && (
-                        <BooleanField source="is_in_license_group" label="In license group" sortable={false} />
-                    )}
-                </Datagrid>
-                <CustomPagination />
-            </div>
-        </ListContextProvider>
+        <ResourceContextProvider value="licenses">
+            <ListContextProvider value={listContext}>
+                <div style={{ width: "100%" }}>
+                    <FilterForm filters={listFilters(license_group)} />
+                    <Datagrid
+                        size={getSettingListSize()}
+                        rowClick={showLicense}
+                        bulkActionButtons={false}
+                        resource="licenses"
+                    >
+                        <TextField source="spdx_id" label="SPDX Id" />
+                        <TextField source="name" label="Name" />
+                        <BooleanField source="is_osi_approved" label="OSI approved" />
+                        <BooleanField source="is_deprecated" label="Deprecated" />
+                        {license_group === null && (
+                            <BooleanField source="is_in_license_group" label="In license group" sortable={false} />
+                        )}
+                    </Datagrid>
+                    <CustomPagination />
+                </div>
+            </ListContextProvider>
+        </ResourceContextProvider>
     );
 };
 

@@ -1,5 +1,13 @@
 import { Stack } from "@mui/material";
-import { Datagrid, Identifier, ListContextProvider, SelectField, WithRecord, useListController } from "react-admin";
+import {
+    Datagrid,
+    Identifier,
+    ListContextProvider,
+    ResourceContextProvider,
+    SelectField,
+    WithRecord,
+    useListController,
+} from "react-admin";
 
 import {
     PERMISSION_PRODUCT_AUTHORIZATION_GROUP_MEMBER_DELETE,
@@ -34,50 +42,52 @@ const ProductAuthorizationGroupMemberEmbeddedList = ({ product }: ProductAuthori
     }
 
     return (
-        <ListContextProvider value={listContext}>
-            <div style={{ width: "100%" }}>
-                <Datagrid
-                    size={getSettingListSize()}
-                    sx={{ width: "100%" }}
-                    bulkActionButtons={false}
-                    rowClick={false}
-                    resource="product_authorization_group_members"
-                >
-                    <WithRecord
-                        label="Authorization Group"
-                        render={(product_authorization_group_member) => (
-                            <TextUrlField
-                                label="User"
-                                text={product_authorization_group_member.authorization_group_data.name}
-                                url={showAuthorizationGroup(
-                                    product_authorization_group_member.authorization_group_data.id
-                                )}
-                            />
-                        )}
-                    />
-                    <SelectField source="role" choices={ROLE_CHOICES} />
-                    <WithRecord
-                        render={(product_authorization_group_member) => (
-                            <Stack direction="row" spacing={4}>
-                                {product &&
-                                    product.permissions.includes(
-                                        PERMISSION_PRODUCT_AUTHORIZATION_GROUP_MEMBER_EDIT
-                                    ) && <ProductAuthorizationGroupMemberEdit />}
-                                {product &&
-                                    product.permissions.includes(
-                                        PERMISSION_PRODUCT_AUTHORIZATION_GROUP_MEMBER_DELETE
-                                    ) && (
-                                        <ProductAuthorizationGroupMemberDelete
-                                            product_authorization_group_member={product_authorization_group_member}
-                                        />
+        <ResourceContextProvider value="product_authorization_group_members">
+            <ListContextProvider value={listContext}>
+                <div style={{ width: "100%" }}>
+                    <Datagrid
+                        size={getSettingListSize()}
+                        sx={{ width: "100%" }}
+                        bulkActionButtons={false}
+                        rowClick={false}
+                        resource="product_authorization_group_members"
+                    >
+                        <WithRecord
+                            label="Authorization Group"
+                            render={(product_authorization_group_member) => (
+                                <TextUrlField
+                                    label="User"
+                                    text={product_authorization_group_member.authorization_group_data.name}
+                                    url={showAuthorizationGroup(
+                                        product_authorization_group_member.authorization_group_data.id
                                     )}
-                            </Stack>
-                        )}
-                    />
-                </Datagrid>
-                <CustomPagination />
-            </div>
-        </ListContextProvider>
+                                />
+                            )}
+                        />
+                        <SelectField source="role" choices={ROLE_CHOICES} />
+                        <WithRecord
+                            render={(product_authorization_group_member) => (
+                                <Stack direction="row" spacing={4}>
+                                    {product &&
+                                        product.permissions.includes(
+                                            PERMISSION_PRODUCT_AUTHORIZATION_GROUP_MEMBER_EDIT
+                                        ) && <ProductAuthorizationGroupMemberEdit />}
+                                    {product &&
+                                        product.permissions.includes(
+                                            PERMISSION_PRODUCT_AUTHORIZATION_GROUP_MEMBER_DELETE
+                                        ) && (
+                                            <ProductAuthorizationGroupMemberDelete
+                                                product_authorization_group_member={product_authorization_group_member}
+                                            />
+                                        )}
+                                </Stack>
+                            )}
+                        />
+                    </Datagrid>
+                    <CustomPagination />
+                </div>
+            </ListContextProvider>
+        </ResourceContextProvider>
     );
 };
 

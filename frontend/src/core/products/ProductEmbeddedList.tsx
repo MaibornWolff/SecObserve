@@ -3,6 +3,7 @@ import {
     FilterForm,
     FunctionField,
     ListContextProvider,
+    ResourceContextProvider,
     TextField,
     TextInput,
     useListController,
@@ -61,41 +62,43 @@ const ProductEmbeddedList = ({ product_group, license_policy }: ProductEmbeddedL
     if (license_policy) localStorage.setItem("productembeddedlist.license_policy", license_policy.id);
 
     return (
-        <ListContextProvider value={listContext}>
-            <div style={{ width: "100%" }}>
-                <FilterForm filters={listFilters()} />
-                <Datagrid
-                    size={getSettingListSize()}
-                    rowClick={showProduct}
-                    bulkActionButtons={false}
-                    resource="products"
-                >
-                    <TextField source="name" />
-                    <TextField
-                        source="repository_default_branch_name"
-                        label="Default branch / version"
-                        sortable={false}
-                    />
-                    <SecurityGateTextField label="Security gate" />
-                    <ObservationsCountField label="Open observations" withLabel={false} />
-                    {feature_license_management() &&
-                        ((product_group &&
-                            product_group.forbidden_licenses_count +
-                                product_group.review_required_licenses_count +
-                                product_group.unknown_licenses_count +
-                                product_group.allowed_licenses_count +
-                                product_group.ignored_licenses_count >
-                                0) ||
-                            license_policy) && <LicensesCountField label="Licenses" withLabel={false} />}
-                    <FunctionField<Product>
-                        label="Last observation change"
-                        sortBy="last_observation_change"
-                        render={(record) => (record ? humanReadableDate(record.last_observation_change) : "")}
-                    />
-                </Datagrid>
-                <CustomPagination />
-            </div>
-        </ListContextProvider>
+        <ResourceContextProvider value="products">
+            <ListContextProvider value={listContext}>
+                <div style={{ width: "100%" }}>
+                    <FilterForm filters={listFilters()} />
+                    <Datagrid
+                        size={getSettingListSize()}
+                        rowClick={showProduct}
+                        bulkActionButtons={false}
+                        resource="products"
+                    >
+                        <TextField source="name" />
+                        <TextField
+                            source="repository_default_branch_name"
+                            label="Default branch / version"
+                            sortable={false}
+                        />
+                        <SecurityGateTextField label="Security gate" />
+                        <ObservationsCountField label="Open observations" withLabel={false} />
+                        {feature_license_management() &&
+                            ((product_group &&
+                                product_group.forbidden_licenses_count +
+                                    product_group.review_required_licenses_count +
+                                    product_group.unknown_licenses_count +
+                                    product_group.allowed_licenses_count +
+                                    product_group.ignored_licenses_count >
+                                    0) ||
+                                license_policy) && <LicensesCountField label="Licenses" withLabel={false} />}
+                        <FunctionField<Product>
+                            label="Last observation change"
+                            sortBy="last_observation_change"
+                            render={(record) => (record ? humanReadableDate(record.last_observation_change) : "")}
+                        />
+                    </Datagrid>
+                    <CustomPagination />
+                </div>
+            </ListContextProvider>
+        </ResourceContextProvider>
     );
 };
 
