@@ -11,6 +11,7 @@ from application.licenses.models import License_Component
 from application.licenses.queries.license import get_license_by_spdx_id
 from application.licenses.services.license_policy import (
     apply_license_policy_to_component,
+    get_ignore_component_type_list,
     get_license_evaluation_results,
 )
 
@@ -57,6 +58,13 @@ def process_license_components(
     components_new = 0
     components_updated = 0
 
+    license_policy = vulnerability_check.product.license_policy
+    ignore_component_types = (
+        get_ignore_component_type_list(license_policy.ignore_component_types)
+        if license_policy
+        else []
+    )
+
     for component in license_components:
         _prepare_component(component)
         existing_component = existing_components_dict.get(component.identity_hash)
@@ -72,6 +80,7 @@ def process_license_components(
             apply_license_policy_to_component(
                 existing_component,
                 license_evaluation_results,
+                ignore_component_types,
             )
             existing_component.save()
             existing_components_dict.pop(component.identity_hash)
@@ -83,6 +92,7 @@ def process_license_components(
             apply_license_policy_to_component(
                 component,
                 license_evaluation_results,
+                ignore_component_types,
             )
 
             component.save()

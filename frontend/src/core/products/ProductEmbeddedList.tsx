@@ -83,7 +83,8 @@ const ProductEmbeddedList = ({ product_group, license_policy }: ProductEmbeddedL
                             product_group.forbidden_licenses_count +
                                 product_group.review_required_licenses_count +
                                 product_group.unknown_licenses_count +
-                                product_group.allowed_licenses_count >
+                                product_group.allowed_licenses_count +
+                                product_group.ignored_licenses_count >
                                 0) ||
                             license_policy) && <LicensesCountField label="Licenses" withLabel={false} />}
                     <FunctionField<Product>

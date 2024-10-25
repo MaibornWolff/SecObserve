@@ -595,6 +595,10 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
 
         # --- Third import with some changes ---
 
+        license_policy = License_Policy.objects.get(name="Standard")
+        license_policy.ignore_component_types = "npm"
+        license_policy.save()
+
         license_policy_item = License_Policy_Item(
             license_policy=License_Policy.objects.get(name="Standard"),
             license_group=None,
@@ -682,6 +686,85 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 license_components[2].numerical_evaluation_result,
                 License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
                     License_Policy_Evaluation_Result.RESULT_REVIEW_REQUIRED,
+                ),
+            )
+
+        # --- Fourth import with ignoring the PiPy packages ---
+
+        license_policy = License_Policy.objects.get(name="Standard")
+        license_policy.ignore_component_types = "npm, pypi"
+        license_policy.save()
+
+        file_upload_parameters = FileUploadParameters(
+            product=product,
+            branch=branch,
+            parser=Parser.objects.get(name="CycloneDX"),
+            file=File(
+                open(
+                    "unittests/import_observations/parsers/cyclone_dx/files/changed/licenses_1.json",
+                    "r",
+                )
+            ),
+            service=service,
+            docker_image_name_tag=docker_image_name_tag,
+            endpoint_url=endpoint_url,
+            kubernetes_cluster=kubernetes_cluster,
+        )
+
+        (
+            new_observations,
+            updated_observations,
+            resolved_observations,
+            new_license_objects,
+            updated_license_objects,
+            deleted_license_objects,
+        ) = file_upload_observations(file_upload_parameters)
+
+        settings = Settings.load()
+        if settings.feature_license_management:
+            self.assertEqual(new_observations, 0)
+            self.assertEqual(updated_observations, 0)
+            self.assertEqual(resolved_observations, 0)
+            self.assertEqual(new_license_objects, 0)
+            self.assertEqual(updated_license_objects, 67)
+            self.assertEqual(deleted_license_objects, 0)
+
+            license_components = License_Component.objects.filter(product=1).order_by(
+                "id"
+            )
+            self.assertEqual(len(license_components), 67)
+
+            self.assertEqual(
+                license_components[64].name_version, "argon2-cffi-bindings:21.2.1"
+            )
+            self.assertEqual(
+                license_components[64].license, License.objects.get(spdx_id="MIT")
+            )
+            self.assertEqual(license_components[64].unknown_license, "")
+            self.assertEqual(
+                license_components[64].evaluation_result,
+                License_Policy_Evaluation_Result.RESULT_IGNORED,
+            )
+            self.assertEqual(
+                license_components[64].numerical_evaluation_result,
+                License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
+                    License_Policy_Evaluation_Result.RESULT_IGNORED,
+                ),
+            )
+
+            self.assertEqual(license_components[2].name_version, "asgiref:3.8.1")
+            self.assertEqual(license_components[2].license, None)
+            self.assertEqual(
+                license_components[2].unknown_license, "0BSD, BSD-3-Clause"
+            )
+            self.assertEqual(
+                license_components[2].evaluation_result,
+                License_Policy_Evaluation_Result.RESULT_IGNORED,
+            )
+            self.assertEqual(
+                license_components[2].numerical_evaluation_result,
+                License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
+                    License_Policy_Evaluation_Result.RESULT_IGNORED,
                 ),
             )
         else:

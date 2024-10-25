@@ -284,6 +284,21 @@ class Product(Model):
             evaluation_result=License_Policy_Evaluation_Result.RESULT_ALLOWED,
         ).count()
 
+    @property
+    def ignored_licenses_count(self):
+        if self.is_product_group:
+            count = 0
+            for product in Product.objects.filter(product_group=self):
+                count += product.ignored_licenses_count
+            return count
+
+        License_Component = apps.get_model("licenses", "License_Component")
+        return License_Component.objects.filter(
+            product=self,
+            branch=self.repository_default_branch,
+            evaluation_result=License_Policy_Evaluation_Result.RESULT_IGNORED,
+        ).count()
+
 
 class Branch(Model):
     product = ForeignKey(Product, on_delete=CASCADE)

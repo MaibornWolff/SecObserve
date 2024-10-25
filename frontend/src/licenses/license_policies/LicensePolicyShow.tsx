@@ -64,6 +64,11 @@ const LicensePolicyComponent = () => {
                                     <MarkdownField content={license_policy.description} label="Description" />
                                 </Labeled>
                             )}
+                            {license_policy.ignore_component_types && (
+                                <Labeled>
+                                    <TextField source="ignore_component_types" />
+                                </Labeled>
+                            )}
                             <Labeled label="Public">
                                 <BooleanField source="is_public" />
                             </Labeled>

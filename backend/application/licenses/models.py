@@ -81,7 +81,7 @@ class License_Component(Model):
         blank=True,
     )
     numerical_evaluation_result = IntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(4)]
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
 
     def __init__(self, *args, **kwargs):
@@ -95,7 +95,7 @@ class License_Component(Model):
     def save(self, *args, **kwargs) -> None:
         self.numerical_evaluation_result = (
             License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
-                self.evaluation_result, License_Policy_Evaluation_Result.RESULT_UNKNOWN
+                self.evaluation_result, 3
             )
         )
         return super().save(*args, **kwargs)
@@ -105,6 +105,7 @@ class License_Policy(Model):
     name = CharField(max_length=255, unique=True)
     description = TextField(max_length=2048, blank=True)
     is_public = BooleanField(default=False)
+    ignore_component_types = CharField(max_length=255, blank=True)
     users: ManyToManyField = ManyToManyField(
         User,
         through="License_Policy_Member",
@@ -127,7 +128,7 @@ class License_Policy_Item(Model):
         max_length=16, choices=License_Policy_Evaluation_Result.RESULT_CHOICES
     )
     numerical_evaluation_result = IntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(3)]
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
 
     def save(self, *args, **kwargs) -> None:

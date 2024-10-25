@@ -57,6 +57,7 @@ class ProductCoreSerializer(ModelSerializer):
     review_required_licenses_count = SerializerMethodField()
     unknown_licenses_count = SerializerMethodField()
     allowed_licenses_count = SerializerMethodField()
+    ignored_licenses_count = SerializerMethodField()
     permissions = SerializerMethodField()
 
     class Meta:
@@ -95,6 +96,9 @@ class ProductCoreSerializer(ModelSerializer):
 
     def get_allowed_licenses_count(self, obj: Product) -> int:
         return obj.allowed_licenses_count
+
+    def get_ignored_licenses_count(self, obj: Product) -> int:
+        return obj.ignored_licenses_count
 
     def validate(self, attrs: dict):
         if attrs.get("repository_branch_housekeeping_active"):
@@ -170,6 +174,7 @@ class ProductGroupSerializer(ProductCoreSerializer):
             "review_required_licenses_count",
             "unknown_licenses_count",
             "allowed_licenses_count",
+            "ignored_licenses_count",
         ]
 
     def get_products_count(self, obj: Product) -> int:

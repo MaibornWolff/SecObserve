@@ -41,7 +41,8 @@ const ProductGroupHeader = () => {
                             product_group.forbidden_licenses_count +
                                 product_group.review_required_licenses_count +
                                 product_group.unknown_licenses_count +
-                                product_group.allowed_licenses_count >
+                                product_group.allowed_licenses_count +
+                                product_group.ignored_licenses_count >
                                 0 && (
                                 <Labeled>
                                     <LicensesCountField label="Licenses" withLabel={true} />

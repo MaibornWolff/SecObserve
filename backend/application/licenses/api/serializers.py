@@ -13,6 +13,7 @@ from rest_framework.serializers import (
 
 from application.access_control.api.serializers import UserListSerializer
 from application.commons.services.global_request import get_current_user
+from application.core.types import PURL_Type
 from application.licenses.models import (
     License,
     License_Component,
@@ -24,6 +25,7 @@ from application.licenses.models import (
 )
 from application.licenses.queries.license_group_member import get_license_group_member
 from application.licenses.queries.license_policy_member import get_license_policy_member
+from application.licenses.services.license_policy import get_ignore_component_type_list
 
 
 class LicenseSerializer(ModelSerializer):
@@ -152,6 +154,15 @@ class LicensePolicySerializer(ModelSerializer):
     class Meta:
         model = License_Policy
         fields = "__all__"
+
+    def validate_ignore_component_types(self, value: str) -> str:
+        ignore_component_types = get_ignore_component_type_list(value)
+        for component_type in ignore_component_types:
+            for component_type in ignore_component_types:
+                if not PURL_Type.PURL_TYPE_CHOICES.get(component_type):
+                    raise ValidationError(f"Invalid component type {component_type}")
+
+        return value
 
     def get_is_manager(self, obj: License_Policy) -> bool:
         user = get_current_user()
