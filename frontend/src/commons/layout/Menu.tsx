@@ -113,20 +113,15 @@ const Menu = ({ dense = false }: MenuProps) => {
                     icon={<SettingsIcon />}
                     dense={dense}
                 >
-                    <MenuItemLink
-                        to="/parsers"
-                        state={{ _scrollToTop: true }}
-                        primaryText="Parsers"
-                        leftIcon={<parsers.icon />}
-                        dense={dense}
-                    />
-                    <MenuItemLink
-                        to="/general_rules"
-                        state={{ _scrollToTop: true }}
-                        primaryText="General Rules"
-                        leftIcon={<general_rules.icon />}
-                        dense={dense}
-                    />
+                    {feature_license_management() && (
+                        <MenuItemLink
+                            to="/license/licenses"
+                            state={{ _scrollToTop: true }}
+                            primaryText="Licenses"
+                            leftIcon={<licenses.icon />}
+                            dense={dense}
+                        />
+                    )}
                     <MenuItemLink
                         to="/access_control/users"
                         state={{ _scrollToTop: true }}
@@ -143,21 +138,26 @@ const Menu = ({ dense = false }: MenuProps) => {
                             dense={dense}
                         />
                     )}
+                    <MenuItemLink
+                        to="/parsers"
+                        state={{ _scrollToTop: true }}
+                        primaryText="Parsers"
+                        leftIcon={<parsers.icon />}
+                        dense={dense}
+                    />
+                    <MenuItemLink
+                        to="/general_rules"
+                        state={{ _scrollToTop: true }}
+                        primaryText="General Rules"
+                        leftIcon={<general_rules.icon />}
+                        dense={dense}
+                    />
                     {feature_vex_enabled() && (
                         <MenuItemLink
                             to="/vex/vex_counters"
                             state={{ _scrollToTop: true }}
                             primaryText="VEX Counters"
                             leftIcon={<vex_counters.icon />}
-                            dense={dense}
-                        />
-                    )}
-                    {feature_license_management() && (
-                        <MenuItemLink
-                            to="/license/licenses"
-                            state={{ _scrollToTop: true }}
-                            primaryText="Licenses"
-                            leftIcon={<licenses.icon />}
                             dense={dense}
                         />
                     )}

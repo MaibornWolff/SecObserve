@@ -49,7 +49,7 @@ function listFilters(product: any) {
         );
     }
     filters.push(<TextInput source="name_version" label="Component" alwaysOn />);
-    filters.push(<AutocompleteInput source="purl_type" label="PURL type" choices={PURL_TYPE_CHOICES} alwaysOn />);
+    filters.push(<AutocompleteInput source="purl_type" label="Component type" choices={PURL_TYPE_CHOICES} alwaysOn />);
 
     return filters;
 }
@@ -100,7 +100,7 @@ const LicenseComponentEmbeddedList = ({ product }: LicenseComponentEmbeddedListP
                     <EvaluationResultField source="evaluation_result" label="Evaluation result" />
                     {product && product.has_branches && <TextField source="branch_name" label="Branch / Version" />}
                     <TextField source="name_version" label="Component" />
-                    <TextField source="purl_type" label="PURL type" />
+                    <TextField source="purl_type" label="Component type" />
                 </Datagrid>
                 <CustomPagination />
             </div>

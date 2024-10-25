@@ -51,9 +51,12 @@ def get_license_evaluation_results(product: Product) -> dict:
 def apply_license_policy_to_component(
     component: License_Component,
     evaluation_results: dict,
+    ignore_component_types: list,
 ) -> None:
     evaluation_result = None
-    if component.license:
+    if component.purl_type in ignore_component_types:
+        evaluation_result = License_Policy_Evaluation_Result.RESULT_IGNORED
+    elif component.license:
         evaluation_result = evaluation_results.get(f"spdx_{component.license.spdx_id}")
     elif component.unknown_license:
         evaluation_result = evaluation_results.get(
@@ -71,7 +74,11 @@ def apply_license_policy(license_policy: License_Policy) -> None:
         license_evaluation_results = get_license_evaluation_results(product)
         components = License_Component.objects.filter(product=product)
         for component in components:
-            apply_license_policy_to_component(component, license_evaluation_results)
+            apply_license_policy_to_component(
+                component,
+                license_evaluation_results,
+                get_ignore_component_type_list(license_policy.ignore_component_types),
+            )
             component.save()
 
 
@@ -82,6 +89,7 @@ def copy_license_policy(
         name=name,
         description=source_license_policy.description,
         is_public=source_license_policy.is_public,
+        ignore_component_types=source_license_policy.ignore_component_types,
     )
 
     items = License_Policy_Item.objects.filter(license_policy=source_license_policy)
@@ -103,3 +111,11 @@ def copy_license_policy(
         )
 
     return new_license_policy
+
+
+def get_ignore_component_type_list(ignore_component_types: str) -> list:
+    ignore_component_types_list = (
+        ignore_component_types.split(",") if ignore_component_types else []
+    )
+    ignore_component_types_list = [x.strip() for x in ignore_component_types_list]
+    return ignore_component_types_list

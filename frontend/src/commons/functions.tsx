@@ -13,6 +13,7 @@ import {
 import {
     EVALUATION_RESULT_ALLOWED,
     EVALUATION_RESULT_FORBIDDEN,
+    EVALUATION_RESULT_IGNORED,
     EVALUATION_RESULT_REVIEW_REQUIRED,
     EVALUATION_RESULT_UNKNOWN,
 } from "../licenses/types";
@@ -72,6 +73,9 @@ export function get_evaluation_result_color(record: any | null, evaluation_resul
             backgroundColor = "#f9a009";
             break;
         case EVALUATION_RESULT_UNKNOWN:
+            backgroundColor = "rgba(255, 255, 255, 0.16)";
+            break;
+        case EVALUATION_RESULT_IGNORED:
             backgroundColor = "rgba(255, 255, 255, 0.16)";
             break;
     }

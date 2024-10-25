@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 import { BooleanInput, DeleteButton, Edit, SaveButton, SimpleForm, Toolbar } from "react-admin";
 
-import { validate_2048, validate_required_255 } from "../../commons/custom_validators";
+import { validate_255, validate_2048, validate_required_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 
 const CustomToolbar = () => {
@@ -17,6 +17,9 @@ const LicensePolicyEdit = () => {
     const transform = (data: any) => {
         if (!data.description) {
             data.description = "";
+        }
+        if (!data.ignore_component_types) {
+            data.ignore_component_types = "";
         }
         return data;
     };
@@ -35,6 +38,7 @@ const LicensePolicyEdit = () => {
                     validate={validate_2048}
                     helperText="Markdown supported."
                 />
+                <TextInputWide source="ignore_component_types" validate={validate_255} />
                 <BooleanInput source="is_public" label="Public" />
             </SimpleForm>
         </Edit>

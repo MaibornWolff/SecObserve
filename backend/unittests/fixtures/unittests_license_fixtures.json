@@ -1,0 +1,192 @@
+[
+    {
+        "model": "licenses.license_component",
+        "pk": 1,
+        "fields": {
+            "identity_hash": "6eef8088480aa2523aeeb64ad35f876a942cc3172cfb36752f3a052a4f88642c",
+            "product": 1,
+            "upload_filename": "",
+            "name": "internal_component",
+            "version": "1.0.0",
+            "name_version": "internal_component:1.0.0",
+            "purl": "",
+            "purl_type": "",
+            "cpe": "",
+            "dependencies": "",
+            "unknown_license": "internal license",
+            "evaluation_result": "Allowed",
+            "numerical_evaluation_result": 1
+        }
+    },
+    {
+        "model": "licenses.license_component",
+        "pk": 2,
+        "fields": {
+            "identity_hash": "bc8e59b7687fe3533616b3914c636389c131eac3bdbda1b67d8d26f890a74007",
+            "product": 2,
+            "upload_filename": "",
+            "name": "external_component",
+            "version": "2.0.0",
+            "name_version": "external_component:2.0.0",
+            "purl": "",
+            "purl_type": "",
+            "cpe": "",
+            "dependencies": "",
+            "unknown_license": "external license",
+            "evaluation_result": "Review required",
+            "numerical_evaluation_result": 2
+        }
+    },
+    {
+        "model": "licenses.license_group",
+        "pk": 1000,
+        "fields": {
+            "name": "public",
+            "description": "",
+            "is_public": true,
+            "licenses": [
+                1,
+                2
+            ]
+        }
+    },
+    {
+        "model": "licenses.license_group",
+        "pk": 1001,
+        "fields": {
+            "name": "internal_read_not_manager",
+            "description": "",
+            "is_public": false,
+            "licenses": [
+                3,
+                4
+            ]
+        }
+    },
+    {
+        "model": "licenses.license_group",
+        "pk": 1002,
+        "fields": {
+            "name": "internal_write_manager",
+            "description": "",
+            "is_public": false,
+            "licenses": [
+                5,
+                6
+            ]
+        }
+    },
+    {
+        "model": "licenses.license_group_member",
+        "pk": 1001,
+        "fields": {
+            "license_group": 1001,
+            "user": 3,
+            "is_manager": false
+        }
+    },
+    {
+        "model": "licenses.license_group_member",
+        "pk": 1002,
+        "fields": {
+            "license_group": 1002,
+            "user": 2,
+            "is_manager": true
+        }
+    },
+    {
+        "model": "licenses.license_group_member",
+        "pk": 1003,
+        "fields": {
+            "license_group": 1001,
+            "user": 4,
+            "is_manager": false
+        }
+    },
+    {
+        "model": "licenses.license_policy",
+        "pk": 1000,
+        "fields": {
+            "name": "public",
+            "description": "",
+            "is_public": true
+        }
+    },
+    {
+        "model": "licenses.license_policy",
+        "pk": 1001,
+        "fields": {
+            "name": "internal_read_not_manager",
+            "description": "",
+            "is_public": false
+        }
+    },
+    {
+        "model": "licenses.license_policy",
+        "pk": 1002,
+        "fields": {
+            "name": "internal_write_manager",
+            "description": "",
+            "is_public": false
+        }
+    },
+    {
+        "model": "licenses.license_policy_item",
+        "pk": 1000,
+        "fields": {
+            "license_policy": 1000,
+            "license_group": 1,
+            "unknown_license": "",
+            "evaluation_result": "Allowed",
+            "numerical_evaluation_result": 4
+        }
+    },
+    {
+        "model": "licenses.license_policy_item",
+        "pk": 1001,
+        "fields": {
+            "license_policy": 1001,
+            "license": 1,
+            "unknown_license": "",
+            "evaluation_result": "Forbidden",
+            "numerical_evaluation_result": 1
+        }
+    },
+    {
+        "model": "licenses.license_policy_item",
+        "pk": 1002,
+        "fields": {
+            "license_policy": 1002,
+            "unknown_license": "Two unknown licenses",
+            "evaluation_result": "Unknown",
+            "numerical_evaluation_result": 3
+        }
+    },
+    {
+        "model": "licenses.license_policy_member",
+        "pk": 1001,
+        "fields": {
+            "license_policy": 1001,
+            "user": 3,
+            "is_manager": false
+        }
+    },
+    {
+        "model": "licenses.license_policy_member",
+        "pk": 1002,
+        "fields": {
+            "license_policy": 1002,
+            "user": 2,
+            "is_manager": true
+        }
+    },
+    {
+        "model": "licenses.license_policy_member",
+        "pk": 1003,
+        "fields": {
+            "license_policy": 1001,
+            "user": 4,
+            "is_manager": false
+        }
+    }
+]
