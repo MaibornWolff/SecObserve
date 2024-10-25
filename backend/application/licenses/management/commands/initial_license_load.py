@@ -25,6 +25,4 @@ class Command(BaseCommand):
             logger.info(
                 "Importing initial licenses, license groups and license policies..."
             )
-            call_command(
-                "loaddata", "application/licenses/fixtures/initial_data.json"
-            )
+            call_command("loaddata", "application/licenses/fixtures/initial_data.json")

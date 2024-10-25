@@ -34,7 +34,14 @@ class TestAuthorizationBase(BaseTestCase):
     @patch("application.core.signals.get_current_user")
     def setUpClass(self, mock_user):
         mock_user.return_value = None
-        call_command("loaddata", ["application/licenses/fixtures/initial_data.json", "unittests/fixtures/unittests_fixtures.json", "unittests/fixtures/unittests_license_fixtures.json"])
+        call_command(
+            "loaddata",
+            [
+                "application/licenses/fixtures/initial_data.json",
+                "unittests/fixtures/unittests_fixtures.json",
+                "unittests/fixtures/unittests_license_fixtures.json",
+            ],
+        )
 
         product_metrics = Product_Metrics.objects.get(pk=1)
         product_metrics.date = timezone.now().replace(
