@@ -73,10 +73,10 @@ export function get_evaluation_result_color(record: any | null, evaluation_resul
             backgroundColor = "#f9a009";
             break;
         case EVALUATION_RESULT_UNKNOWN:
-            backgroundColor = "rgba(255, 255, 255, 0.16)";
+            backgroundColor = "#424242";
             break;
         case EVALUATION_RESULT_IGNORED:
-            backgroundColor = "rgba(255, 255, 255, 0.16)";
+            backgroundColor = "#424242";
             break;
     }
     return backgroundColor;
