@@ -19,9 +19,9 @@
 
 | Feature | Supported |
 |---------|:------------:|
-| [Import of license information from CycloneDX SBOMs](../usage/license_management.md#importing-licenses) | :material-plus-circle-outline: |
-| [Flexible license policies to evaluate the impact of different license conditions](../usage/license_management.md#using-license-policies) | :material-plus-circle-outline: |
-| [Organize licenses with similar conditions in license groups](../usage/license_management.md#using-license-groups) | :material-plus-circle-outline: |
+| [Import of license information from CycloneDX SBOMs](../usage/license_management.md#managing-licenses-in-products) | :material-plus-circle-outline: |
+| [Flexible license policies to evaluate the impact of different license conditions](../usage/license_management.md#managing-license-policies) | :material-plus-circle-outline: |
+| [Organize licenses with similar conditions in license groups](../usage/license_management.md#managing-license-groups) | :material-plus-circle-outline: |
 
 ## Integrations
 

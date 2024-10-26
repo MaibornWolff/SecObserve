@@ -15,7 +15,7 @@ const LicenseComponentBulkDeleteButton = (props: LicenseComponentBulkDeleteButto
     const refresh = useRefresh();
     const [loading, setLoading] = useState(false);
     const notify = useNotify();
-    const unselectAll = useUnselectAll("components");
+    const unselectAll = useUnselectAll("license_components");
     const handleClick = () => setOpen(true);
     const handleDialogClose = () => setOpen(false);
 

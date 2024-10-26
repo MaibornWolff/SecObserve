@@ -78,7 +78,9 @@ Parsers who get data from vulnerability scanners via a REST API need a configura
 
 ``` mermaid
 erDiagram
+    Product ||--o{ Branch_Version : has
     Product ||--o{ License_Component : has
+    Branch_Version }o--o| License_Policy : references
     Product }o--o| License_Policy : references
     Product_Group }o--o| License_Policy : references
     License_Component }o--o| License : references
