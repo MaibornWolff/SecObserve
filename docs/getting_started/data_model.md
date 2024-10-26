@@ -80,6 +80,7 @@ Parsers who get data from vulnerability scanners via a REST API need a configura
 erDiagram
     Product ||--o{ License_Component : has
     Product }o--o| License_Policy : references
+    Product_Group }o--o| License_Policy : references
     License_Component }o--o| License : references
     License_Policy ||--o{ License_Policy_Item : has
     License_Policy ||--o{ License_Policy_Member : has
@@ -90,28 +91,28 @@ erDiagram
 ```
 #### License
 
-*to be done*
+The [Linux Foundation](https://www.linuxfoundation.org/) gathers a list of commonly found licenses and exceptions used for open source and other collaborative software. The list is called [SPDX License List](https://spdx.org/licenses/) and is imported daily into SecObserve.
 
 #### License Component
 
-*to be done*
-
-#### License Group
-
-*to be done*
-
-#### License Group Members
-
-*to be done*
+A `License Component` is a library or package used in a product that is licensed under a specific license and has an evaluation of the license according to a license policy. 
 
 #### License Policy
 
-*to be done*
+A `License Policy` defines the rules for the usage of licenses in a product. It can define which licenses are allowed, which are forbidden, and which need a review.
 
 #### License Policy Item
 
-*to be done*
+A `License Policy Item` is a single rule in a license policy. It can be a rule for a specific license, a rule for a license group or a rule for an unkown license string, e.g. a license that is not in the SPDX list or a license expression.
 
 #### License Policy Member
 
-*to be done*
+`License Policy Members` define who has access to a license policy, either read-only or as a manager.
+
+#### License Group
+
+A `License Group` is a collection of licenses with similar license conditions. There is a predefined list of license groups, taken from the classification of the [Blue Oak Council](https://blueoakcouncil.org/).
+
+#### License Group Members
+
+`License Group Members` define who has access to a license group, either read-only or as a manager.
