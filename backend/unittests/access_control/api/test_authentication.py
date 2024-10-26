@@ -301,7 +301,9 @@ class TestAuthentication(BaseTestCase):
             ["get"], "/api/products/1/export_observations_excel/"
         )
 
-        self._check_authentication(["get"], "/api/products/1/export_license_components_csv/")
+        self._check_authentication(
+            ["get"], "/api/products/1/export_license_components_csv/"
+        )
         self._check_authentication(
             ["get"], "/api/products/1/export_license_components_excel/"
         )

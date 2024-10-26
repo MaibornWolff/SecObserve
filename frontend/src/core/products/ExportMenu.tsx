@@ -213,7 +213,10 @@ const ExportMenu = (props: ExportMenuProps) => {
                     </ListItemIcon>
                     Metrics / Excel
                 </MenuItem>
-                <MenuItem onClick={exportMetricsCsv} divider={!props.is_product_group || (props.is_product_group && showLicenseExport())}>
+                <MenuItem
+                    onClick={exportMetricsCsv}
+                    divider={!props.is_product_group || (props.is_product_group && showLicenseExport())}
+                >
                     <ListItemIcon>
                         <FontAwesomeIcon icon={faFileCsv} color={getIconAndFontColor()} />
                     </ListItemIcon>

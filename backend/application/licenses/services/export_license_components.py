@@ -33,7 +33,10 @@ def _get_license_components(product: Product) -> QuerySet:
         license_components = License_Component.objects.filter(product=product)
 
     license_components = license_components.order_by(
-        "numerical_evaluation_result", "license__name", "unknown_license", "name_version"
+        "numerical_evaluation_result",
+        "license__name",
+        "unknown_license",
+        "name_version",
     )
 
     return license_components
