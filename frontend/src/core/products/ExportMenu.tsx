@@ -10,7 +10,7 @@ import { Fragment, MouseEvent, useState } from "react";
 import { useNotify } from "react-admin";
 
 import axios_instance from "../../access_control/axios_instance";
-import { getIconAndFontColor } from "../../commons/functions";
+import { feature_license_management, getIconAndFontColor } from "../../commons/functions";
 
 interface ExportMenuProps {
     product: any;
@@ -131,6 +131,35 @@ const ExportMenu = (props: ExportMenuProps) => {
         exportDataCsv("/metrics/export_csv?product_id=" + props.product.id, "product_metrics.csv", "Product Metrics");
     };
 
+    const exportLicenseComponentsExcel = async () => {
+        exportDataExcel(
+            "/products/" + props.product.id + "/export_license_components_excel/",
+            "license_component.xlsx",
+            "License Components"
+        );
+    };
+
+    const exportLicenseComponentsCsv = async () => {
+        exportDataCsv(
+            "/products/" + props.product.id + "/export_license_components_csv/",
+            "license_component.csv",
+            "License Components"
+        );
+    };
+
+    const showLicenseExport = (): boolean => {
+        return (
+            feature_license_management() &&
+            props.product &&
+            props.product.forbidden_licenses_count +
+                props.product.review_required_licenses_count +
+                props.product.unknown_licenses_count +
+                props.product.allowed_licenses_count +
+                props.product.ignored_licenses_count >
+                0
+        );
+    };
+
     return (
         <Fragment>
             <Button
@@ -184,18 +213,37 @@ const ExportMenu = (props: ExportMenuProps) => {
                     </ListItemIcon>
                     Metrics / Excel
                 </MenuItem>
-                <MenuItem onClick={exportMetricsCsv} divider={!props.is_product_group}>
+                <MenuItem
+                    onClick={exportMetricsCsv}
+                    divider={!props.is_product_group || (props.is_product_group && showLicenseExport())}
+                >
                     <ListItemIcon>
                         <FontAwesomeIcon icon={faFileCsv} color={getIconAndFontColor()} />
                     </ListItemIcon>
                     Metrics / CSV
                 </MenuItem>
                 {!props.is_product_group && (
-                    <MenuItem onClick={exportCodeChartaMetrics}>
+                    <MenuItem onClick={exportCodeChartaMetrics} divider={showLicenseExport()}>
                         <ListItemIcon>
                             <ViewQuiltIcon sx={{ color: getIconAndFontColor() }} />
                         </ListItemIcon>
                         CodeCharta metrics
+                    </MenuItem>
+                )}
+                {showLicenseExport() && (
+                    <MenuItem onClick={exportLicenseComponentsExcel}>
+                        <ListItemIcon>
+                            <FontAwesomeIcon icon={faFileExcel} color={getIconAndFontColor()} />
+                        </ListItemIcon>
+                        Licenses / Excel
+                    </MenuItem>
+                )}
+                {showLicenseExport() && (
+                    <MenuItem onClick={exportLicenseComponentsCsv}>
+                        <ListItemIcon>
+                            <FontAwesomeIcon icon={faFileCsv} color={getIconAndFontColor()} />
+                        </ListItemIcon>
+                        Licenses / CSV
                     </MenuItem>
                 )}
             </Menu>

@@ -301,6 +301,13 @@ class TestAuthentication(BaseTestCase):
             ["get"], "/api/products/1/export_observations_excel/"
         )
 
+        self._check_authentication(
+            ["get"], "/api/products/1/export_license_components_csv/"
+        )
+        self._check_authentication(
+            ["get"], "/api/products/1/export_license_components_excel/"
+        )
+
         self._check_authentication(["get"], "/api/notifications/")
         self._check_authentication(["delete", "get"], "/api/notifications/1/")
         self._check_authentication(["post"], "/api/notifications/bulk_delete/")
