@@ -9,12 +9,12 @@ class TestAuthorizationLicenseGroups(TestAuthorizationBase):
     def test_authorization_license_groups(self):
         License_Group.objects.filter(pk__lt=1000).delete()
 
-        expected_data = "{'count': 3, 'next': None, 'previous': None, 'results': [{'id': 1000, 'is_manager': False, 'name': 'public', 'description': '', 'is_public': True, 'users': []}, {'id': 1001, 'is_manager': False, 'name': 'internal_read_not_manager', 'description': '', 'is_public': False, 'users': [3, 4]}, {'id': 1002, 'is_manager': False, 'name': 'internal_write_manager', 'description': '', 'is_public': False, 'users': [2]}]}"
+        expected_data = "{'count': 3, 'next': None, 'previous': None, 'results': [{'id': 1000, 'is_manager': False, 'is_in_license_policy': False, 'name': 'public', 'description': '', 'is_public': True, 'users': []}, {'id': 1001, 'is_manager': False, 'is_in_license_policy': False, 'name': 'internal_read_not_manager', 'description': '', 'is_public': False, 'users': [3, 4]}, {'id': 1002, 'is_manager': False, 'is_in_license_policy': False, 'name': 'internal_write_manager', 'description': '', 'is_public': False, 'users': [2]}]}"
         self._test_api(
             APITest("db_admin", "get", "/api/license_groups/", None, 200, expected_data)
         )
 
-        expected_data = "{'count': 2, 'next': None, 'previous': None, 'results': [{'id': 1000, 'is_manager': False, 'name': 'public', 'description': '', 'is_public': True, 'users': []}, {'id': 1002, 'is_manager': True, 'name': 'internal_write_manager', 'description': '', 'is_public': False, 'users': [2]}]}"
+        expected_data = "{'count': 2, 'next': None, 'previous': None, 'results': [{'id': 1000, 'is_manager': False, 'is_in_license_policy': False, 'name': 'public', 'description': '', 'is_public': True, 'users': []}, {'id': 1002, 'is_manager': True, 'is_in_license_policy': False, 'name': 'internal_write_manager', 'description': '', 'is_public': False, 'users': [2]}]}"
         self._test_api(
             APITest(
                 "db_internal_write",
@@ -27,7 +27,7 @@ class TestAuthorizationLicenseGroups(TestAuthorizationBase):
             )
         )
 
-        expected_data = "{'id': 1002, 'is_manager': True, 'name': 'internal_write_manager', 'description': '', 'is_public': False, 'users': [2]}"
+        expected_data = "{'id': 1002, 'is_manager': True, 'is_in_license_policy': False, 'name': 'internal_write_manager', 'description': '', 'is_public': False, 'users': [2]}"
         self._test_api(
             APITest(
                 "db_internal_write",
@@ -64,7 +64,7 @@ class TestAuthorizationLicenseGroups(TestAuthorizationBase):
         )
 
         post_data = {"name": "new_license_group"}
-        expected_data = "{'id': 1003, 'is_manager': True, 'name': 'new_license_group', 'description': '', 'is_public': False, 'users': [2]}"
+        expected_data = "{'id': 1003, 'is_manager': True, 'is_in_license_policy': False, 'name': 'new_license_group', 'description': '', 'is_public': False, 'users': [2]}"
         self._test_api(
             APITest(
                 "db_internal_write",
@@ -93,7 +93,7 @@ class TestAuthorizationLicenseGroups(TestAuthorizationBase):
             )
         )
 
-        expected_data = "{'id': 1002, 'is_manager': True, 'name': 'internal_write_manager', 'description': 'changed', 'is_public': False, 'users': [2]}"
+        expected_data = "{'id': 1002, 'is_manager': True, 'is_in_license_policy': False, 'name': 'internal_write_manager', 'description': 'changed', 'is_public': False, 'users': [2]}"
         self._test_api(
             APITest(
                 "db_internal_write",
@@ -134,7 +134,7 @@ class TestAuthorizationLicenseGroups(TestAuthorizationBase):
         )
 
         post_data = {"name": "copied_license_group"}
-        expected_data = "{'id': 1004, 'is_manager': True, 'name': 'copied_license_group', 'description': 'changed', 'is_public': False, 'users': [2]}"
+        expected_data = "{'id': 1004, 'is_manager': True, 'is_in_license_policy': False, 'name': 'copied_license_group', 'description': 'changed', 'is_public': False, 'users': [2]}"
         self._test_api(
             APITest(
                 "db_internal_write",
