@@ -145,6 +145,7 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
         const current_product_id = localStorage.getItem("observationembeddedlist.product");
         if (current_product_id == null || Number(current_product_id) !== product.id) {
             localStorage.removeItem("RaStore.observations.embedded");
+            localStorage.removeItem("RaStore.license_components.embedded");
             localStorage.setItem("observationembeddedlist.product", product.id);
             navigate(get_observations_url(product.repository_default_branch));
         }
