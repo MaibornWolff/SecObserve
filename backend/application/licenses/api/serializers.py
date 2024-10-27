@@ -109,7 +109,7 @@ class LicenseGroupSerializer(ModelSerializer):
             license_group=obj, user=user, is_manager=True
         ).exists()
 
-    def get_is_in_license_policy(self, obj: License) -> bool:
+    def get_is_in_license_policy(self, obj: License_Group) -> bool:
         return License_Policy_Item.objects.filter(license_group=obj).exists()
 
 
