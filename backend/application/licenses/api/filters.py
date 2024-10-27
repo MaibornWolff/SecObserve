@@ -1,9 +1,4 @@
-from django_filters import (
-    CharFilter,
-    FilterSet,
-    NumberFilter,
-    OrderingFilter,
-)
+from django_filters import CharFilter, FilterSet, NumberFilter, OrderingFilter
 
 from application.commons.api.extended_ordering_filter import ExtendedOrderingFilter
 from application.licenses.models import (
