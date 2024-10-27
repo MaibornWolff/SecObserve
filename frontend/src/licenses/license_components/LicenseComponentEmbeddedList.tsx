@@ -26,16 +26,6 @@ const showLicenseComponent = (id: any) => {
 
 function listFilters(product: any) {
     const filters = [];
-    filters.push(<TextInput source="license_spdx_id" label="SPDX Id" alwaysOn />);
-    filters.push(<TextInput source="unknown_license" alwaysOn />);
-    filters.push(
-        <AutocompleteInputMedium
-            source="evaluation_result"
-            label="Evaluation result"
-            choices={EVALUATION_RESULT_CHOICES}
-            alwaysOn
-        />
-    );
     if (product && product.has_branches) {
         filters.push(
             <ReferenceInput
@@ -49,6 +39,16 @@ function listFilters(product: any) {
             </ReferenceInput>
         );
     }
+    filters.push(<TextInput source="license_spdx_id" label="SPDX Id" alwaysOn />);
+    filters.push(<TextInput source="unknown_license" alwaysOn />);
+    filters.push(
+        <AutocompleteInputMedium
+            source="evaluation_result"
+            label="Evaluation result"
+            choices={EVALUATION_RESULT_CHOICES}
+            alwaysOn
+        />
+    );
     filters.push(<TextInput source="name_version" label="Component" alwaysOn />);
     filters.push(<AutocompleteInput source="purl_type" label="Component type" choices={PURL_TYPE_CHOICES} alwaysOn />);
 
@@ -73,6 +73,7 @@ const LicenseComponentEmbeddedList = ({ product }: LicenseComponentEmbeddedListP
         perPage: 25,
         resource: "license_components",
         sort: { field: "evaluation_result", order: "ASC" },
+        filterDefaultValues: { branch: product.repository_default_branch },
         disableSyncWithLocation: true,
         storeKey: "license_components.embedded",
     });
@@ -97,10 +98,10 @@ const LicenseComponentEmbeddedList = ({ product }: LicenseComponentEmbeddedListP
                         }
                         resource="license_components"
                     >
+                        {product && product.has_branches && <TextField source="branch_name" label="Branch / Version" />}
                         <TextField source="license_data.spdx_id" label="SPDX Id" />
                         <TextField source="unknown_license" label="Unknown license" />
                         <EvaluationResultField source="evaluation_result" label="Evaluation result" />
-                        {product && product.has_branches && <TextField source="branch_name" label="Branch / Version" />}
                         <TextField source="name_version" label="Component" />
                         <TextField source="purl_type" label="Component type" />
                     </Datagrid>
