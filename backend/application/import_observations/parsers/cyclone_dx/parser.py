@@ -62,23 +62,25 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             if component.unknown_license:
                 licenses_exist = True
 
-            observation_component_dependencies, _ = get_component_dependencies(
-                data, self.components, component, self.metadata
-            )
-            model_component = License_Component(
-                name=component.name,
-                version=component.version,
-                purl=component.purl,
-                cpe=component.cpe,
-                dependencies=observation_component_dependencies,
-            )
-            model_component.unsaved_license = component.unknown_license
-            components.append(model_component)
-
         if licenses_exist:
-            return components
+            for component in self.components.values():
+                if component.unknown_license:
+                    licenses_exist = True
 
-        return []
+                observation_component_dependencies, _ = get_component_dependencies(
+                    data, self.components, component, self.metadata
+                )
+                model_component = License_Component(
+                    name=component.name,
+                    version=component.version,
+                    purl=component.purl,
+                    cpe=component.cpe,
+                    dependencies=observation_component_dependencies,
+                )
+                model_component.unsaved_license = component.unknown_license
+                components.append(model_component)
+
+        return components
 
     def _get_components(self, data: dict) -> dict[str, Component]:
         components_dict = {}

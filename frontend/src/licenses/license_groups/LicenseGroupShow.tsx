@@ -17,6 +17,7 @@ import { is_external, is_superuser } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
 import LicenseGroupLicenseEmbeddedList from "../license_group_licenses/LicenseGroupLicenseEmbeddedList";
 import LicenseGroupMemberEmbeddedList from "../license_group_members/LicenseGroupMemberEmbeddedList";
+import LicensePolicyEmbeddedList from "../license_policies/LicensePolicyEmbeddedList";
 import LicenseGroupCopy from "./LicenseGroupCopy";
 
 const ShowActions = () => {
@@ -69,6 +70,14 @@ const LicenseGroupComponent = () => {
                         </Typography>
                         <LicenseGroupMemberEmbeddedList license_group={license_group} />
                     </Paper>
+                    {license_group.is_in_license_policy && (
+                        <Paper sx={{ marginBottom: 1, padding: 2 }}>
+                            <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                                License Policies containing this license group
+                            </Typography>
+                            <LicensePolicyEmbeddedList license={null} license_group={license_group} />
+                        </Paper>
+                    )}
                 </Stack>
             )}
         />

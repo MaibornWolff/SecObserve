@@ -1,4 +1,9 @@
-from django_filters import BooleanFilter, CharFilter, FilterSet, OrderingFilter
+from django_filters import (
+    CharFilter,
+    FilterSet,
+    NumberFilter,
+    OrderingFilter,
+)
 
 from application.commons.api.extended_ordering_filter import ExtendedOrderingFilter
 from application.licenses.models import (
@@ -53,9 +58,6 @@ class LicenseComponentFilter(FilterSet):
 class LicenseFilter(FilterSet):
     spdx_id = CharFilter(field_name="spdx_id", lookup_expr="icontains")
     name = CharFilter(field_name="name", lookup_expr="icontains")
-    is_in_license_group = BooleanFilter(
-        field_name="is_in_license_group", method="get_is_in_license_group"
-    )
 
     ordering = OrderingFilter(
         # tuple-mapping retains order
@@ -79,11 +81,6 @@ class LicenseFilter(FilterSet):
             "is_deprecated",
             "license_groups",
         ]
-
-    def get_is_in_license_group(
-        self, queryset, field_name, value  # pylint: disable=unused-argument
-    ) -> bool:
-        return queryset.filter(license_groups__isnull=not value)
 
 
 class LicenseGroupFilter(FilterSet):
@@ -125,6 +122,12 @@ class LicenseGroupMemberFilter(FilterSet):
 
 class LicensePolicyFilter(FilterSet):
     name = CharFilter(field_name="name", lookup_expr="icontains")
+    licenses = NumberFilter(
+        field_name="licenses", method="get_license_policies_with_license"
+    )
+    license_groups = NumberFilter(
+        field_name="license_groups", method="get_license_policies_with_license_group"
+    )
 
     ordering = OrderingFilter(
         # tuple-mapping retains order
@@ -140,6 +143,16 @@ class LicensePolicyFilter(FilterSet):
     class Meta:
         model = License_Policy
         fields = ["name", "is_public"]
+
+    def get_license_policies_with_license(
+        self, queryset, field_name, value  # pylint: disable=unused-argument
+    ) -> bool:
+        return queryset.filter(license_policy_items__license=value)
+
+    def get_license_policies_with_license_group(
+        self, queryset, field_name, value  # pylint: disable=unused-argument
+    ) -> bool:
+        return queryset.filter(license_policy_items__license_group=value)
 
 
 class LicensePolicyItemFilter(FilterSet):

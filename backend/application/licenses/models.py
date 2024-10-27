@@ -44,8 +44,10 @@ class License_Group(Model):
 
 
 class License_Group_Member(Model):
-    license_group = ForeignKey(License_Group, on_delete=CASCADE)
-    user = ForeignKey(User, on_delete=CASCADE)
+    license_group = ForeignKey(
+        License_Group, related_name="license_group_members", on_delete=CASCADE
+    )
+    user = ForeignKey(User, related_name="license_group_members", on_delete=CASCADE)
     is_manager = BooleanField(default=False)
 
     class Meta:
@@ -61,8 +63,10 @@ class License_Group_Member(Model):
 class License_Component(Model):
     identity_hash = CharField(max_length=64)
 
-    product = ForeignKey(Product, on_delete=PROTECT)
-    branch = ForeignKey(Branch, on_delete=CASCADE, null=True)
+    product = ForeignKey(Product, related_name="license_components", on_delete=PROTECT)
+    branch = ForeignKey(
+        Branch, related_name="license_components", on_delete=CASCADE, null=True
+    )
     upload_filename = CharField(max_length=255, blank=True)
 
     name = CharField(max_length=255)
@@ -73,7 +77,13 @@ class License_Component(Model):
     cpe = CharField(max_length=255, blank=True)
     dependencies = TextField(max_length=32768, blank=True)
 
-    license = ForeignKey(License, on_delete=CASCADE, blank=True, null=True)
+    license = ForeignKey(
+        License,
+        related_name="license_components",
+        on_delete=CASCADE,
+        blank=True,
+        null=True,
+    )
     unknown_license = CharField(max_length=255, blank=True)
     evaluation_result = CharField(
         max_length=16,
@@ -121,8 +131,20 @@ class License_Policy_Item(Model):
     license_policy = ForeignKey(
         License_Policy, related_name="license_policy_items", on_delete=CASCADE
     )
-    license_group = ForeignKey(License_Group, on_delete=CASCADE, blank=True, null=True)
-    license = ForeignKey(License, on_delete=PROTECT, blank=True, null=True)
+    license_group = ForeignKey(
+        License_Group,
+        related_name="license_policy_items",
+        on_delete=CASCADE,
+        blank=True,
+        null=True,
+    )
+    license = ForeignKey(
+        License,
+        related_name="license_policy_items",
+        on_delete=PROTECT,
+        blank=True,
+        null=True,
+    )
     unknown_license = CharField(max_length=255, blank=True)
     evaluation_result = CharField(
         max_length=16, choices=License_Policy_Evaluation_Result.RESULT_CHOICES
@@ -142,8 +164,10 @@ class License_Policy_Item(Model):
 
 
 class License_Policy_Member(Model):
-    license_policy = ForeignKey(License_Policy, on_delete=CASCADE)
-    user = ForeignKey(User, on_delete=CASCADE)
+    license_policy = ForeignKey(
+        License_Policy, related_name="license_policy_members", on_delete=CASCADE
+    )
+    user = ForeignKey(User, related_name="license_policy_members", on_delete=CASCADE)
     is_manager = BooleanField(default=False)
 
     class Meta:
