@@ -554,6 +554,11 @@ class BranchSerializer(ModelSerializer):
     open_low_observation_count = SerializerMethodField()
     open_none_observation_count = SerializerMethodField()
     open_unknown_observation_count = SerializerMethodField()
+    forbidden_licenses_count = SerializerMethodField()
+    review_required_licenses_count = SerializerMethodField()
+    unknown_licenses_count = SerializerMethodField()
+    allowed_licenses_count = SerializerMethodField()
+    ignored_licenses_count = SerializerMethodField()
 
     class Meta:
         model = Branch
@@ -588,6 +593,21 @@ class BranchSerializer(ModelSerializer):
 
     def get_open_unknown_observation_count(self, obj: Branch) -> int:
         return obj.open_unknown_observation_count
+
+    def get_forbidden_licenses_count(self, obj: Branch) -> int:
+        return obj.forbidden_licenses_count
+
+    def get_review_required_licenses_count(self, obj: Branch) -> int:
+        return obj.review_required_licenses_count
+
+    def get_unknown_licenses_count(self, obj: Branch) -> int:
+        return obj.unknown_licenses_count
+
+    def get_allowed_licenses_count(self, obj: Branch) -> int:
+        return obj.allowed_licenses_count
+
+    def get_ignored_licenses_count(self, obj: Branch) -> int:
+        return obj.ignored_licenses_count
 
 
 class ServiceSerializer(ModelSerializer):

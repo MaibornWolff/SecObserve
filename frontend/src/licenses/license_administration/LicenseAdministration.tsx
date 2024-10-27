@@ -109,7 +109,7 @@ export default function LicenseAdministration() {
                     <LicenseGroupEmbeddedList license={null} />
                 </CustomTabPanel>
                 <CustomTabPanel value={currentTab()} index={2}>
-                    <LicensePolicyEmbeddedList license={null} />
+                    <LicensePolicyEmbeddedList license={null} license_group={null} />
                 </CustomTabPanel>
             </Paper>
         </Fragment>

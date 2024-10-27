@@ -368,6 +368,46 @@ class Branch(Model):
             current_status=Status.STATUS_OPEN,
         ).count()
 
+    @property
+    def forbidden_licenses_count(self):
+        License_Component = apps.get_model("licenses", "License_Component")
+        return License_Component.objects.filter(
+            branch=self,
+            evaluation_result=License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
+        ).count()
+
+    @property
+    def review_required_licenses_count(self):
+        License_Component = apps.get_model("licenses", "License_Component")
+        return License_Component.objects.filter(
+            branch=self,
+            evaluation_result=License_Policy_Evaluation_Result.RESULT_REVIEW_REQUIRED,
+        ).count()
+
+    @property
+    def unknown_licenses_count(self):
+        License_Component = apps.get_model("licenses", "License_Component")
+        return License_Component.objects.filter(
+            branch=self,
+            evaluation_result=License_Policy_Evaluation_Result.RESULT_UNKNOWN,
+        ).count()
+
+    @property
+    def allowed_licenses_count(self):
+        License_Component = apps.get_model("licenses", "License_Component")
+        return License_Component.objects.filter(
+            branch=self,
+            evaluation_result=License_Policy_Evaluation_Result.RESULT_ALLOWED,
+        ).count()
+
+    @property
+    def ignored_licenses_count(self):
+        License_Component = apps.get_model("licenses", "License_Component")
+        return License_Component.objects.filter(
+            branch=self,
+            evaluation_result=License_Policy_Evaluation_Result.RESULT_IGNORED,
+        ).count()
+
 
 class Service(Model):
     product = ForeignKey(Product, on_delete=CASCADE)

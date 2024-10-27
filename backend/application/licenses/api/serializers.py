@@ -30,6 +30,7 @@ from application.licenses.services.license_policy import get_ignore_component_ty
 
 class LicenseSerializer(ModelSerializer):
     is_in_license_group = SerializerMethodField()
+    is_in_license_policy = SerializerMethodField()
 
     class Meta:
         model = License
@@ -37,6 +38,9 @@ class LicenseSerializer(ModelSerializer):
 
     def get_is_in_license_group(self, obj: License) -> bool:
         return License_Group.objects.filter(licenses=obj).exists()
+
+    def get_is_in_license_policy(self, obj: License) -> bool:
+        return License_Policy_Item.objects.filter(license=obj).exists()
 
 
 class LicenseComponentSerializer(ModelSerializer):
@@ -93,6 +97,7 @@ class LicenseComponentBulkDeleteSerializer(Serializer):
 
 class LicenseGroupSerializer(ModelSerializer):
     is_manager = SerializerMethodField()
+    is_in_license_policy = SerializerMethodField()
 
     class Meta:
         model = License_Group
@@ -103,6 +108,9 @@ class LicenseGroupSerializer(ModelSerializer):
         return License_Group_Member.objects.filter(
             license_group=obj, user=user, is_manager=True
         ).exists()
+
+    def get_is_in_license_policy(self, obj: License_Group) -> bool:
+        return License_Policy_Item.objects.filter(license_group=obj).exists()
 
 
 class LicenseGroupLicenseAddRemoveSerializer(Serializer):

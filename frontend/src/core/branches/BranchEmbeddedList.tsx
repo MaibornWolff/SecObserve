@@ -12,8 +12,10 @@ import {
 
 import { PERMISSION_BRANCH_DELETE, PERMISSION_BRANCH_EDIT } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
+import LicensesCountField from "../../commons/custom_fields/LicensesCountField";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
+import { feature_license_management } from "../../commons/functions";
 import { getSettingListSize } from "../../commons/user_settings/functions";
 import BranchDelete from "./BranchDelete";
 import BranchEdit from "./BranchEdit";
@@ -64,6 +66,9 @@ const BranchEmbeddedList = ({ product }: BranchEmbeddedListProps) => {
                         <TextField source="purl" label="PURL" />
                         <TextField source="cpe23" label="CPE 2.3" />
                         <ObservationsCountField label="Open observations" withLabel={false} />
+                        {feature_license_management() && product.has_licenses && (
+                            <LicensesCountField label="Licenses" withLabel={false} />
+                        )}
                         <DateField source="last_import" showTime />
                         <WithRecord
                             label="Protect"

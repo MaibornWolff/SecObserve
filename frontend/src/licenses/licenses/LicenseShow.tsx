@@ -5,6 +5,7 @@ import { BooleanField, Labeled, PrevNextButtons, Show, TextField, TopToolbar, Wi
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import { useStyles } from "../../commons/layout/themes";
 import LicenseGroupEmbeddedList from "../license_groups/LicenseGroupEmbeddedList";
+import LicensePolicyEmbeddedList from "../license_policies/LicensePolicyEmbeddedList";
 
 const ShowActions = () => {
     return (
@@ -58,9 +59,21 @@ const LicenseComponent = () => {
                     {license.is_in_license_group && (
                         <Paper sx={{ marginBottom: 1, padding: 2 }}>
                             <Typography variant="h6" sx={{ marginBottom: 2 }}>
-                                License Groups
+                                License Groups containing this license
                             </Typography>
                             <WithRecord render={(license) => <LicenseGroupEmbeddedList license={license} />} />
+                        </Paper>
+                    )}
+                    {license.is_in_license_policy && (
+                        <Paper sx={{ marginBottom: 1, padding: 2 }}>
+                            <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                                License Policies containing this license
+                            </Typography>
+                            <WithRecord
+                                render={(license) => (
+                                    <LicensePolicyEmbeddedList license={license} license_group={null} />
+                                )}
+                            />
                         </Paper>
                     )}
                 </Stack>

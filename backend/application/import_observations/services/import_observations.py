@@ -140,21 +140,42 @@ def file_upload_observations(
         },
     )
 
-    numbers_components = (0, 0, 0)
+    numbers_license_components = (0, 0, 0)
     settings = Settings.load()
     if settings.feature_license_management:
-        imported_components = parser_instance.get_license_components(data)
-        numbers_components = process_license_components(
-            imported_components, vulnerability_check
+        imported_license_components = parser_instance.get_license_components(data)
+        numbers_license_components = process_license_components(
+            imported_license_components, vulnerability_check
         )
+        if numbers_license_components != (0, 0, 0):
+            vulnerability_check.last_import_licenses_new = numbers_license_components[0]
+            vulnerability_check.last_import_licenses_updated = (
+                numbers_license_components[1]
+            )
+            vulnerability_check.last_import_licenses_deleted = (
+                numbers_license_components[2]
+            )
+            if (
+                numbers_observations[0] == 0
+                and numbers_observations[1] == 0
+                and numbers_observations[2] == 0
+            ):
+                vulnerability_check.last_import_observations_new = None
+                vulnerability_check.last_import_observations_updated = None
+                vulnerability_check.last_import_observations_resolved = None
+        else:
+            vulnerability_check.last_import_licenses_new = None
+            vulnerability_check.last_import_licenses_updated = None
+            vulnerability_check.last_import_licenses_deleted = None
+        vulnerability_check.save()
 
     return (
         numbers_observations[0],
         numbers_observations[1],
         numbers_observations[2],
-        numbers_components[0],
-        numbers_components[1],
-        numbers_components[2],
+        numbers_license_components[0],
+        numbers_license_components[1],
+        numbers_license_components[2],
     )
 
 
