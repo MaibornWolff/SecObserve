@@ -4,12 +4,14 @@ from django.db.models import (
     PROTECT,
     BooleanField,
     CharField,
+    DateTimeField,
     ForeignKey,
     IntegerField,
     ManyToManyField,
     Model,
     TextField,
 )
+from django.utils import timezone
 
 from application.access_control.models import User
 from application.core.models import Branch, Product
@@ -93,6 +95,10 @@ class License_Component(Model):
     numerical_evaluation_result = IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
+
+    created = DateTimeField(auto_now_add=True)
+    import_last_seen = DateTimeField(default=timezone.now)
+    last_change = DateTimeField(default=timezone.now)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

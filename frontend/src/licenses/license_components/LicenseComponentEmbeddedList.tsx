@@ -3,6 +3,7 @@ import {
     AutocompleteInput,
     Datagrid,
     FilterForm,
+    FunctionField,
     ListContextProvider,
     ReferenceInput,
     ResourceContextProvider,
@@ -14,9 +15,11 @@ import {
 import { PERMISSION_COMPONENT_LICENSE_DELETE } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { EvaluationResultField } from "../../commons/custom_fields/EvaluationResultField";
+import { humanReadableDate } from "../../commons/functions";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/user_settings/functions";
 import { PURL_TYPE_CHOICES } from "../../core/types";
+import { AGE_CHOICES } from "../../core/types";
 import { EVALUATION_RESULT_CHOICES } from "../types";
 import LicenseComponentBulkDeleteButton from "./LicenseComponentBulkDeleteButton";
 
@@ -51,6 +54,7 @@ function listFilters(product: any) {
     );
     filters.push(<TextInput source="name_version" label="Component" alwaysOn />);
     filters.push(<AutocompleteInput source="purl_type" label="Component type" choices={PURL_TYPE_CHOICES} alwaysOn />);
+    filters.push(<AutocompleteInputMedium source="age" choices={AGE_CHOICES} alwaysOn />);
 
     return filters;
 }
@@ -104,6 +108,11 @@ const LicenseComponentEmbeddedList = ({ product }: LicenseComponentEmbeddedListP
                         <EvaluationResultField source="evaluation_result" label="Evaluation result" />
                         <TextField source="name_version" label="Component" />
                         <TextField source="purl_type" label="Component type" />
+                        <FunctionField
+                            label="Age"
+                            sortBy="last_change"
+                            render={(record) => (record ? humanReadableDate(record.last_change) : "")}
+                        />
                     </Datagrid>
                     <CustomPagination />
                 </div>

@@ -1,5 +1,5 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
-import { Labeled, ReferenceField, TextField, WithRecord } from "react-admin";
+import { DateField, Labeled, ReferenceField, TextField, WithRecord } from "react-admin";
 
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
 
@@ -45,6 +45,15 @@ const MetaData = () => {
                                 <TextField source="upload_filename" />
                             </Labeled>
                         )}
+                        <Labeled label="Last change">
+                            <DateField source="last_change" showTime />
+                        </Labeled>
+                        <Labeled label="Last seen">
+                            <DateField source="import_last_seen" showTime />
+                        </Labeled>
+                        <Labeled label="Created">
+                            <DateField source="created" showTime />
+                        </Labeled>
                     </Stack>
                 </Paper>
             )}

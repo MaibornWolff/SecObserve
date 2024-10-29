@@ -1,6 +1,16 @@
-from django_filters import CharFilter, FilterSet, NumberFilter, OrderingFilter
+from datetime import timedelta
+
+from django.utils import timezone
+from django_filters import (
+    CharFilter,
+    ChoiceFilter,
+    FilterSet,
+    NumberFilter,
+    OrderingFilter,
+)
 
 from application.commons.api.extended_ordering_filter import ExtendedOrderingFilter
+from application.commons.types import Age_Choices
 from application.licenses.models import (
     License,
     License_Component,
@@ -16,6 +26,9 @@ class LicenseComponentFilter(FilterSet):
     name_version = CharFilter(field_name="name_version", lookup_expr="icontains")
     license_spdx_id = CharFilter(field_name="license__spdx_id", lookup_expr="icontains")
     unknown_license = CharFilter(field_name="unknown_license", lookup_expr="icontains")
+    age = ChoiceFilter(
+        field_name="age", method="get_age", choices=Age_Choices.AGE_CHOICES
+    )
 
     ordering = ExtendedOrderingFilter(
         # tuple-mapping retains order
@@ -34,6 +47,7 @@ class LicenseComponentFilter(FilterSet):
             ("branch__name", "branch_name"),
             ("name_version", "name_version"),
             ("purl_type", "purl_type"),
+            ("last_change", "last_change"),
         ),
     )
 
@@ -48,6 +62,18 @@ class LicenseComponentFilter(FilterSet):
             "name_version",
             "purl_type",
         ]
+
+    def get_age(self, queryset, field_name, value):  # pylint: disable=unused-argument
+        # field_name is used as a positional argument
+
+        days = Age_Choices.get_days_from_age(value)
+
+        if days is None:
+            return queryset
+
+        today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        time_threshold = today - timedelta(days=int(days))
+        return queryset.filter(last_change__gte=time_threshold)
 
 
 class LicenseFilter(FilterSet):

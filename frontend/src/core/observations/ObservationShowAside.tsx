@@ -53,8 +53,6 @@ const MetaData = () => {
                         )}
                         {observation.scanner != "" && <TextField source="scanner" />}
                         <TextField source="parser_data.name" label="Parser name" />
-                        <TextField source="parser_data.type" label="Parser type" />
-                        <TextField source="parser_data.source" label="Parser source" />
                         {observation.scanner_observation_id != "" && (
                             <TextField source="scanner_observation_id" label="Scanner observation id" />
                         )}
@@ -102,7 +100,8 @@ const MetaData = () => {
                                 />
                             </Labeled>
                         )}
-                        <DateField source="import_last_seen" showTime />
+                        <DateField source="last_observation_log" label="Last change" showTime />
+                        <DateField source="import_last_seen" label="Last seen" showTime />
                         <DateField source="created" showTime />
                     </SimpleShowLayout>
                 )}
