@@ -15,7 +15,10 @@
             "dependencies": "",
             "unknown_license": "internal license",
             "evaluation_result": "Allowed",
-            "numerical_evaluation_result": 1
+            "numerical_evaluation_result": 1,
+            "created": "2022-12-15T16:10:35.513Z",
+            "import_last_seen": "2022-12-15T16:10:35.513Z",
+            "last_change": "2022-12-15T16:10:35.513Z"
         }
     },
     {
@@ -34,7 +37,11 @@
             "dependencies": "",
             "unknown_license": "external license",
             "evaluation_result": "Review required",
-            "numerical_evaluation_result": 2
+            "numerical_evaluation_result": 2,
+            "created": "2022-12-15T16:10:35.513Z",
+            "import_last_seen": "2022-12-15T16:10:35.513Z",
+            "last_change": "2022-12-15T16:10:35.513Z"
+
         }
     },
     {

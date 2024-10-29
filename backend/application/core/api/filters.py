@@ -11,6 +11,7 @@ from django_filters import (
     OrderingFilter,
 )
 
+from application.commons.types import Age_Choices
 from application.core.models import (
     Branch,
     Evidence,
@@ -23,36 +24,6 @@ from application.core.models import (
     Service,
 )
 from application.core.types import Status
-
-AGE_DAY = "Today"
-AGE_WEEK = "Past 7 days"
-AGE_MONTH = "Past 30 days"
-AGE_QUARTER = "Past 90 days"
-AGE_YEAR = "Past 365 days"
-
-AGE_CHOICES = [
-    (AGE_DAY, AGE_DAY),
-    (AGE_WEEK, AGE_WEEK),
-    (AGE_MONTH, AGE_MONTH),
-    (AGE_QUARTER, AGE_QUARTER),
-    (AGE_YEAR, AGE_YEAR),
-]
-
-
-def _get_days_from_age(value):
-    if value == AGE_DAY:
-        days = 0
-    elif value == AGE_WEEK:
-        days = 7
-    elif value == AGE_MONTH:
-        days = 30
-    elif value == AGE_QUARTER:
-        days = 90
-    elif value == AGE_YEAR:
-        days = 365
-    else:
-        days = None
-    return days
 
 
 class ProductGroupFilter(FilterSet):
@@ -70,7 +41,9 @@ class ProductGroupFilter(FilterSet):
 
 class ProductFilter(FilterSet):
     name = CharFilter(field_name="name", lookup_expr="icontains")
-    age = ChoiceFilter(field_name="age", method="get_age", choices=AGE_CHOICES)
+    age = ChoiceFilter(
+        field_name="age", method="get_age", choices=Age_Choices.AGE_CHOICES
+    )
 
     ordering = OrderingFilter(
         # tuple-mapping retains order
@@ -85,7 +58,7 @@ class ProductFilter(FilterSet):
     def get_age(self, queryset, field_name, value):  # pylint: disable=unused-argument
         # field_name is used as a positional argument
 
-        days = _get_days_from_age(value)
+        days = Age_Choices.get_days_from_age(value)
 
         if days is None:
             return queryset
@@ -188,7 +161,9 @@ class ObservationFilter(FilterSet):
         field_name="origin_kubernetes_qualified_resource", lookup_expr="icontains"
     )
     scanner = CharFilter(field_name="scanner", lookup_expr="icontains")
-    age = ChoiceFilter(field_name="age", method="get_age", choices=AGE_CHOICES)
+    age = ChoiceFilter(
+        field_name="age", method="get_age", choices=Age_Choices.AGE_CHOICES
+    )
     product_group = ModelChoiceFilter(
         field_name="product__product_group",
         queryset=Product.objects.filter(is_product_group=True),
@@ -274,7 +249,7 @@ class ObservationFilter(FilterSet):
     def get_age(self, queryset, field_name, value):  # pylint: disable=unused-argument
         # field_name is used as a positional argument
 
-        days = _get_days_from_age(value)
+        days = Age_Choices.get_days_from_age(value)
 
         if days is None:
             return queryset
@@ -285,7 +260,9 @@ class ObservationFilter(FilterSet):
 
 
 class ObservationLogFilter(FilterSet):
-    age = ChoiceFilter(field_name="age", method="get_age", choices=AGE_CHOICES)
+    age = ChoiceFilter(
+        field_name="age", method="get_age", choices=Age_Choices.AGE_CHOICES
+    )
     product = ModelChoiceFilter(
         field_name="observation__product",
         queryset=Product.objects.all(),
@@ -319,7 +296,7 @@ class ObservationLogFilter(FilterSet):
     def get_age(self, queryset, field_name, value):  # pylint: disable=unused-argument
         # field_name is used as a positional argument
 
-        days = _get_days_from_age(value)
+        days = Age_Choices.get_days_from_age(value)
 
         if days is None:
             return queryset

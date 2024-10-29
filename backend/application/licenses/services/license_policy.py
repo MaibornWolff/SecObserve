@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from application.core.models import Product
 from application.licenses.models import (
     License_Component,
@@ -74,11 +76,23 @@ def apply_license_policy(license_policy: License_Policy) -> None:
         license_evaluation_results = get_license_evaluation_results(product)
         components = License_Component.objects.filter(product=product)
         for component in components:
+            license_before = component.license
+            unknown_license_before = component.unknown_license
+            evaluation_result_before = component.evaluation_result
+
             apply_license_policy_to_component(
                 component,
                 license_evaluation_results,
                 get_ignore_component_type_list(license_policy.ignore_component_types),
             )
+
+            if (
+                license_before != component.license
+                or unknown_license_before != component.unknown_license
+                or evaluation_result_before != component.evaluation_result
+            ):
+                component.last_change = timezone.now()
+
             component.save()
 
 

@@ -2,6 +2,7 @@ import hashlib
 from typing import Optional, Tuple
 
 from django.db.models.query import QuerySet
+from django.utils import timezone
 from packageurl import PackageURL
 from rest_framework.exceptions import ValidationError
 
@@ -69,6 +70,9 @@ def process_license_components(
         _prepare_component(component)
         existing_component = existing_components_dict.get(component.identity_hash)
         if existing_component:
+            license_before = existing_component.license
+            unknown_license_before = existing_component.unknown_license
+            evaluation_result_before = existing_component.evaluation_result
             existing_component.name = component.name
             existing_component.version = component.version
             existing_component.purl = component.purl
@@ -82,6 +86,13 @@ def process_license_components(
                 license_evaluation_results,
                 ignore_component_types,
             )
+            existing_component.import_last_seen = timezone.now()
+            if (
+                license_before != existing_component.license
+                or unknown_license_before != existing_component.unknown_license
+                or evaluation_result_before != existing_component.evaluation_result
+            ):
+                existing_component.last_change = timezone.now()
             existing_component.save()
             existing_components_dict.pop(component.identity_hash)
             components_updated += 1
@@ -95,6 +106,8 @@ def process_license_components(
                 ignore_component_types,
             )
 
+            component.import_last_seen = timezone.now()
+            component.last_change = timezone.now()
             component.save()
             components_new += 1
 
