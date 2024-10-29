@@ -251,3 +251,13 @@ def get_current_observation_log(observation: Observation):
         return Observation_Log.objects.filter(observation=observation).latest("created")
     except Observation_Log.DoesNotExist:
         return None
+
+
+def get_current_modifying_observation_log(observation: Observation):
+    try:
+        return Observation_Log.objects.filter(
+            Q(observation_id=observation.id)
+            & (~Q(status="") | ~Q(severity="") | ~Q(vex_justification=""))
+        ).latest("created")
+    except Observation_Log.DoesNotExist:
+        return None
