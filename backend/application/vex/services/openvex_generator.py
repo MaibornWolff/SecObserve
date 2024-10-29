@@ -10,7 +10,7 @@ from application.access_control.services.authorization import user_has_permissio
 from application.access_control.services.roles_permissions import Permissions
 from application.commons.services.global_request import get_current_user
 from application.core.models import Branch, Observation, Product
-from application.core.queries.observation import get_current_observation_log
+from application.core.queries.observation import get_current_modifying_observation_log
 from application.core.types import Status
 from application.vex.models import OpenVEX, OpenVEX_Branch, OpenVEX_Vulnerability
 from application.vex.queries.openvex import get_openvex_by_document_id
@@ -336,7 +336,7 @@ def _prepare_statement(observation: Observation) -> Optional[OpenVEXStatement]:
                 "No recommendation for remediation or mitigation available"
             )
     else:
-        observation_log = get_current_observation_log(observation)
+        observation_log = get_current_modifying_observation_log(observation)
         if openvex_status == OpenVEX_Status.OPENVEX_STATUS_NOT_AFFECTED:
             if observation_log:
                 if observation_log.vex_justification:
