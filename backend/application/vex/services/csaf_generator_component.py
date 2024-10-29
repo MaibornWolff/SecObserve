@@ -44,6 +44,8 @@ def append_component_to_product_tree(
         )
         product_tree.branches.append(components_branch)
 
+    _append_component_to_relationships(product_tree, observation)
+
     if not components_branch.branches:
         components_branch.branches = []
 
@@ -61,8 +63,6 @@ def append_component_to_product_tree(
         ),
     )
     components_branch.branches.append(component_branch)
-
-    _append_component_to_relationships(product_tree, observation)
 
 
 def _create_component(
