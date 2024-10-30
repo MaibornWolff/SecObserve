@@ -56,6 +56,7 @@ trivy_filesystem_backend:
   SCANNER: trivy_filesystem
   RUN_DIRECTORY: "."
   TARGET: "backend/poetry.lock"
+  FURTHER_PARAMETERS: "--db-repository public.ecr.aws/aquasecurity/trivy-db:2"
   REPORT_NAME: "trivy_backend_poetry.json"
   SO_ORIGIN_SERVICE: "backend"
   SO_BRANCH_NAME: $GITHUB_REF_NAME
@@ -64,6 +65,7 @@ trivy_filesystem_frontend:
   SCANNER: trivy_filesystem
   RUN_DIRECTORY: "."
   TARGET: "frontend/package-lock.json"
+  FURTHER_PARAMETERS: "--db-repository public.ecr.aws/aquasecurity/trivy-db:2"
   REPORT_NAME: "trivy_frontend_npm.json"
   SO_ORIGIN_SERVICE: "frontend"
   SO_BRANCH_NAME: $GITHUB_REF_NAME

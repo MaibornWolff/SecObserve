@@ -8,12 +8,14 @@ from rest_framework.test import APIClient
 
 from application.access_control.models import User
 from application.core.models import Observation, Product, Product_Member
+from application.licenses.models import License_Component
 from application.vex.models import OpenVEX, OpenVEX_Branch, OpenVEX_Vulnerability
 
 
 class TestOpenVEX(TestCase):
     def setUp(self):
         Observation.objects.all().delete()
+        License_Component.objects.all().delete()
         Product.objects.filter(is_product_group=False).delete()
         Product.objects.all().delete()
         Product_Member.objects.all().delete()

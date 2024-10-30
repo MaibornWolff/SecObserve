@@ -172,7 +172,7 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                                 <NumberField source="security_gate_threshold_none" />
                             </Labeled>
                             <Labeled>
-                                <NumberField source="security_gate_threshold_unkown" />
+                                <NumberField source="security_gate_threshold_unknown" />
                             </Labeled>
                         </Stack>
                     )}
@@ -283,6 +283,22 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                             </Labeled>
                         </Stack>
                     )}
+                </Fragment>
+            )}
+            {product.license_policy && (
+                <Fragment>
+                    <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+                    <Typography variant="h6">License management</Typography>
+                    <Labeled label="License policy">
+                        <ReferenceField
+                            source="license_policy"
+                            reference="license_policies"
+                            link="show"
+                            sx={{ "& a": { textDecoration: "none" } }}
+                        >
+                            <TextField source="name" />
+                        </ReferenceField>
+                    </Labeled>
                 </Fragment>
             )}
         </Fragment>

@@ -97,7 +97,7 @@ def calculate_metrics_for_product(  # pylint: disable=too-many-branches
                     todays_product_metrics.open_low += 1
                 elif observation.get("current_severity") == Severity.SEVERITY_NONE:
                     todays_product_metrics.open_none += 1
-                elif observation.get("current_severity") == Severity.SEVERITY_UNKOWN:
+                elif observation.get("current_severity") == Severity.SEVERITY_UNKNOWN:
                     todays_product_metrics.open_unknown += 1
             elif observation.get("current_status") == Status.STATUS_RESOLVED:
                 todays_product_metrics.resolved += 1
@@ -286,7 +286,7 @@ def get_codecharta_metrics(product: Product) -> list[dict]:
                     f"Vulnerabilities_{Severity.SEVERITY_NONE}".lower()
                 ] = 0
                 file_severities_value[
-                    f"Vulnerabilities_{Severity.SEVERITY_UNKOWN}".lower()
+                    f"Vulnerabilities_{Severity.SEVERITY_UNKNOWN}".lower()
                 ] = 0
                 file_severities_value[
                     f"Vulnerabilities_{Severity.SEVERITY_HIGH}_and_above".lower()

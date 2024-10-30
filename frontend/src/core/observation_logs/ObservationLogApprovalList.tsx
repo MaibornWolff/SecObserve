@@ -7,6 +7,7 @@ import {
     ListContextProvider,
     ReferenceField,
     ReferenceInput,
+    ResourceContextProvider,
     TextField,
     TextInput,
     useListController,
@@ -66,47 +67,49 @@ const ObservationLogApprovalList = ({ product }: ObservationLogApprovalListProps
     localStorage.removeItem("observationlogembeddedlist");
 
     return (
-        <ListContextProvider value={listContext}>
-            <div style={{ width: "100%" }}>
-                <FilterForm filters={listFilters()} />
-                <Datagrid
-                    size={getSettingListSize()}
-                    sx={{ width: "100%" }}
-                    bulkActionButtons={false}
-                    rowClick={ShowObservationLogs}
-                    resource="observation_logs"
-                >
-                    <ChipField source="assessment_status" sortable={false} />
-                    <ReferenceField
-                        source="observation"
-                        reference="observations"
-                        link="show"
-                        sx={{ "& a": { textDecoration: "none" } }}
+        <ResourceContextProvider value="observation_logs">
+            <ListContextProvider value={listContext}>
+                <div style={{ width: "100%" }}>
+                    <FilterForm filters={listFilters()} />
+                    <Datagrid
+                        size={getSettingListSize()}
+                        sx={{ width: "100%" }}
+                        bulkActionButtons={false}
+                        rowClick={ShowObservationLogs}
+                        resource="observation_logs"
                     >
-                        <TextField source="title" />
-                    </ReferenceField>
-                    <TextField source="user_full_name" label="User" />
-                    <TextField source="severity" emptyText="---" />
-                    <TextField source="status" emptyText="---" />
-                    {feature_vex_enabled() && (
+                        <ChipField source="assessment_status" sortable={false} />
+                        <ReferenceField
+                            source="observation"
+                            reference="observations"
+                            link="show"
+                            sx={{ "& a": { textDecoration: "none" } }}
+                        >
+                            <TextField source="title" />
+                        </ReferenceField>
+                        <TextField source="user_full_name" label="User" />
+                        <TextField source="severity" emptyText="---" />
+                        <TextField source="status" emptyText="---" />
+                        {feature_vex_enabled() && (
+                            <TextField
+                                label="VEX justification"
+                                source="vex_justification"
+                                emptyText="---"
+                                sx={{ wordBreak: "break-word" }}
+                            />
+                        )}
                         <TextField
-                            label="VEX justification"
-                            source="vex_justification"
-                            emptyText="---"
+                            source="comment_shortened"
+                            sortable={false}
+                            label="Comment"
                             sx={{ wordBreak: "break-word" }}
                         />
-                    )}
-                    <TextField
-                        source="comment_shortened"
-                        sortable={false}
-                        label="Comment"
-                        sx={{ wordBreak: "break-word" }}
-                    />
-                    <DateField source="created" showTime />
-                </Datagrid>
-                <CustomPagination />
-            </div>
-        </ListContextProvider>
+                        <DateField source="created" showTime />
+                    </Datagrid>
+                    <CustomPagination />
+                </div>
+            </ListContextProvider>
+        </ResourceContextProvider>
     );
 };
 

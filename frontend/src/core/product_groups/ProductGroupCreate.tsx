@@ -1,9 +1,19 @@
 import { Divider, Stack, Typography } from "@mui/material";
 import { RichTextInput } from "ra-input-rich-text";
-import { BooleanInput, Create, FormDataConsumer, NullableBooleanInput, NumberInput, SimpleForm } from "react-admin";
+import { Fragment } from "react";
+import {
+    BooleanInput,
+    Create,
+    FormDataConsumer,
+    NullableBooleanInput,
+    NumberInput,
+    ReferenceInput,
+    SimpleForm,
+} from "react-admin";
 
 import { validate_0_999999, validate_255, validate_2048, validate_required_255 } from "../../commons/custom_validators";
-import { TextInputWide } from "../../commons/layout/themes";
+import { feature_license_management } from "../../commons/functions";
+import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 
 const ProductGroupCreate = () => {
     const transform = (data: any) => {
@@ -47,8 +57,8 @@ const ProductGroupCreate = () => {
             if (data.security_gate_threshold_none == "") {
                 data.security_gate_threshold_none = 0;
             }
-            if (data.security_gate_threshold_unkown == "") {
-                data.security_gate_threshold_unkown = 0;
+            if (data.security_gate_threshold_unknown == "") {
+                data.security_gate_threshold_unknown = 0;
             }
         } else {
             if (data.security_gate_threshold_critical == "") {
@@ -66,8 +76,8 @@ const ProductGroupCreate = () => {
             if (data.security_gate_threshold_none == "") {
                 data.security_gate_threshold_none = null;
             }
-            if (data.security_gate_threshold_unkown == "") {
-                data.security_gate_threshold_unkown = null;
+            if (data.security_gate_threshold_unknown == "") {
+                data.security_gate_threshold_unknown = null;
             }
         }
         if (data.risk_acceptance_expiry_active) {
@@ -210,8 +220,8 @@ const ProductGroupCreate = () => {
                                     validate={validate_0_999999}
                                 />
                                 <NumberInput
-                                    label="Threshold unkown"
-                                    source="security_gate_threshold_unkown"
+                                    label="Threshold unknown"
+                                    source="security_gate_threshold_unknown"
                                     min={0}
                                     max={999999}
                                     validate={validate_0_999999}
@@ -269,6 +279,23 @@ const ProductGroupCreate = () => {
                         )
                     }
                 </FormDataConsumer>
+
+                {feature_license_management() && (
+                    <Fragment>
+                        <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+                        <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                            License management
+                        </Typography>
+                        <ReferenceInput
+                            source="license_policy"
+                            reference="license_policies"
+                            label="License policy"
+                            sort={{ field: "name", order: "ASC" }}
+                        >
+                            <AutocompleteInputWide optionText="name" />
+                        </ReferenceInput>
+                    </Fragment>
+                )}
             </SimpleForm>
         </Create>
     );

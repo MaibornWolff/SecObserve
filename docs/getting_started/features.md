@@ -1,6 +1,6 @@
 # Features
 
-## Core
+## Vulnerability Management
 
 | Feature | Supported |
 |---------|:------------:|
@@ -15,6 +15,14 @@
 | [Actual and weekly metrics](../usage/metrics.md) | :material-plus-circle-outline: |
 | [Configurable expiry for accepted risks](../usage/risk_acceptance_expiry.md) | :material-plus-circle-outline: |
 
+## License Management
+
+| Feature | Supported |
+|---------|:------------:|
+| [Import of license information from CycloneDX SBOMs](../usage/license_management.md#managing-licenses-in-products) | :material-plus-circle-outline: |
+| [Flexible license policies to evaluate the impact of different license conditions](../usage/license_management.md#managing-license-policies) | :material-plus-circle-outline: |
+| [Organize licenses with similar conditions in license groups](../usage/license_management.md#managing-license-groups) | :material-plus-circle-outline: |
+
 ## Integrations
 
 | Feature | Supported |
@@ -22,6 +30,7 @@
 | [Import from many SAST, SCA, DAST, infrastructure and secrets scanners](../integrations/supported_scanners.md) | :material-plus-circle-outline: |
 | [GitLab CI integration of scanners with predefined templates](../integrations/github_actions_and_templates.md#examplary-pipeline-for-gitlab-ci-templates)<br />[GitHub integration of scanners with predefined actions](../integrations/github_actions_and_templates.md#examplary-workflow-for-github-actions) | :material-plus-circle-outline: |
 | [Data enrichment from Exploit Prediction Scoring System (EPSS)](../integrations/epss.md) | :material-plus-circle-outline: |
+| [Always up-to-date SPDX licenses](../integrations/spdx_licenses.md) | :material-plus-circle-outline: |
 | [Direct link to source code](../integrations/source_code_repositories.md) | :material-plus-circle-outline: |
 | [Export vulnerabilities to issue trackers (Jira, GitLab, GitHub)](../integrations/issue_trackers.md) | :material-plus-circle-outline: |
 | [Import/export vulnerabilities from/to VEX documents (CSAF, OpenVEX)](../integrations/vex.md) | :material-plus-circle-outline: |

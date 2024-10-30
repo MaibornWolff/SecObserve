@@ -4,7 +4,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { Dialog, DialogContent, DialogTitle, Divider, IconButton, Paper, Stack } from "@mui/material";
 import mermaid from "mermaid";
 import { Fragment, useEffect, useState } from "react";
-import { Labeled, WrapperField, useRecordContext } from "react-admin";
+import { Labeled, WrapperField } from "react-admin";
 
 import LabeledTextField from "../../commons/custom_fields/LabeledTextField";
 import { getTheme } from "../../commons/user_settings/functions";
@@ -29,7 +29,6 @@ const GraphSVG = () => {
     const svgData = new XMLSerializer().serializeToString(svg);
     const blob = new Blob([svgData], { type: "image/svg+xml" });
     const url = URL.createObjectURL(blob);
-    console.log(url);
     return <img src={url} alt="Component dependency graph not available" id="dependency-graph-svg-in-dialog" />;
 };
 
@@ -79,7 +78,11 @@ const createMermaidGraph = (dependencies_str: string) => {
     return mermaid_content;
 };
 
-const MermaidDependencies = () => {
+type ComponentShowProps = {
+    dependencies: string;
+};
+
+const MermaidDependencies = ({ dependencies }: ComponentShowProps) => {
     const [open, setOpen] = useState(false);
     const handleOpen = () => {
         setOpen(true);
@@ -89,24 +92,18 @@ const MermaidDependencies = () => {
         setOpen(false);
     };
 
-    const observation = useRecordContext();
-
     useEffect(() => {
-        if (observation) {
+        if (dependencies) {
             if (document.getElementById("mermaid-dependencies")) {
                 document.getElementById("mermaid-dependencies")?.removeAttribute("data-processed");
-                if (!document.getElementById("mermaid-dependencies")?.hasChildNodes()) {
-                    mermaid.contentLoaded();
-                }
-            } else {
                 mermaid.contentLoaded();
             }
         }
-    }, [observation && observation.origin_component_dependencies, mermaid.contentLoaded()]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [dependencies, mermaid.contentLoaded()]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <Fragment>
-            {observation && !createMermaidGraph(observation.origin_component_dependencies).startsWith("Error") && (
+            {!createMermaidGraph(dependencies).startsWith("Error") && (
                 <Fragment>
                     <Labeled sx={{ width: "100%", marginTop: 2 }}>
                         <WrapperField label="Component dependency graph">
@@ -116,7 +113,7 @@ const MermaidDependencies = () => {
                                 onClick={handleOpen}
                                 style={{ cursor: "pointer" }}
                             >
-                                {createMermaidGraph(observation.origin_component_dependencies)}
+                                {createMermaidGraph(dependencies)}
                             </div>
                         </WrapperField>
                     </Labeled>
@@ -154,12 +151,9 @@ const MermaidDependencies = () => {
                     </Dialog>
                 </Fragment>
             )}
-            {observation && createMermaidGraph(observation.origin_component_dependencies).startsWith("Error") && (
+            {createMermaidGraph(dependencies).startsWith("Error") && (
                 <Labeled sx={{ width: "100%", marginTop: 2 }}>
-                    <LabeledTextField
-                        label="Component dependency graph"
-                        text={createMermaidGraph(observation.origin_component_dependencies)}
-                    />
+                    <LabeledTextField label="Component dependency graph" text={createMermaidGraph(dependencies)} />
                 </Labeled>
             )}
         </Fragment>

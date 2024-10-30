@@ -113,6 +113,14 @@ from application.issue_tracker.services.issue_tracker import (
     push_deleted_observation_to_issue_tracker,
     push_observations_to_issue_tracker,
 )
+from application.licenses.api.serializers import LicenseComponentBulkDeleteSerializer
+from application.licenses.services.export_license_components import (
+    export_license_components_csv,
+    export_license_components_excel,
+)
+from application.licenses.services.license_component import (
+    license_components_bulk_delete,
+)
 from application.rules.services.rule_engine import Rule_Engine
 
 
@@ -198,6 +206,45 @@ class ProductViewSet(ModelViewSet):
 
         return response
 
+    @action(detail=True, methods=["get"])
+    def export_license_components_excel(self, request, pk=None):
+        product = self.__get_product(pk)
+
+        workbook = export_license_components_excel(product)
+
+        with NamedTemporaryFile() as tmp:
+            workbook.save(
+                tmp.name  # nosemgrep: python.lang.correctness.tempfile.flush.tempfile-without-flush
+            )
+            # export works fine without .flush()
+            tmp.seek(0)
+            stream = tmp.read()
+
+        response = HttpResponse(
+            content=stream,
+            content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        )
+        response["Content-Disposition"] = "attachment; filename=license_components.xlsx"
+
+        return response
+
+    @extend_schema(
+        methods=["GET"],
+        responses={200: None},
+    )
+    @action(detail=True, methods=["get"])
+    def export_license_components_csv(self, request, pk=None):
+        product = self.__get_product(pk)
+
+        response = HttpResponse(content_type="text/csv")
+        response["Content-Disposition"] = (
+            "attachment; filename=license_observations.csv"
+        )
+
+        export_license_components_csv(response, product)
+
+        return response
+
     @extend_schema(
         methods=["POST"],
         request=None,
@@ -279,6 +326,25 @@ class ProductViewSet(ModelViewSet):
 
         observations_bulk_delete(
             product, request_serializer.validated_data.get("observations")
+        )
+        return Response(status=HTTP_204_NO_CONTENT)
+
+    @extend_schema(
+        methods=["POST"],
+        request=LicenseComponentBulkDeleteSerializer,
+        responses={HTTP_204_NO_CONTENT: None},
+    )
+    @action(detail=True, methods=["post"])
+    def license_components_bulk_delete(self, request, pk):
+        product = self.__get_product(pk)
+        user_has_permission_or_403(product, Permissions.License_Component_Delete)
+
+        request_serializer = LicenseComponentBulkDeleteSerializer(data=request.data)
+        if not request_serializer.is_valid():
+            raise ValidationError(request_serializer.errors)
+
+        license_components_bulk_delete(
+            product, request_serializer.validated_data.get("components")
         )
         return Response(status=HTTP_204_NO_CONTENT)
 

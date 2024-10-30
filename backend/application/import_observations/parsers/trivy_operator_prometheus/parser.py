@@ -163,7 +163,7 @@ class TrivyOperatorPrometheus(BaseParser, BaseAPIParser):
         compliance_name = finding.get("metric", {}).get("compliance_name", "")
         compliance_id = finding.get("metric", {}).get("compliance_id", "")
         description = finding.get("metric", {}).get("description", "")
-        severity = finding.get("metric", {}).get("severity", Severity.SEVERITY_UNKOWN)
+        severity = finding.get("metric", {}).get("severity", Severity.SEVERITY_UNKNOWN)
 
         return Observation(
             title=f"{title} / {compliance_name}",
@@ -179,7 +179,7 @@ class TrivyOperatorPrometheus(BaseParser, BaseAPIParser):
             "config_audit_description", ""
         )
         config_audit_id = finding.get("metric", {}).get("config_audit_id", "")
-        severity = finding.get("metric", {}).get("severity", Severity.SEVERITY_UNKOWN)
+        severity = finding.get("metric", {}).get("severity", Severity.SEVERITY_UNKNOWN)
 
         return Observation(
             title=config_audit_title,
@@ -195,7 +195,7 @@ class TrivyOperatorPrometheus(BaseParser, BaseAPIParser):
         image_tag = finding.get("metric", {}).get("image_tag", "")
         secret_target = finding.get("metric", {}).get("secret_target", "")
         secret_title = finding.get("metric", {}).get("secret_title", "")
-        severity = finding.get("metric", {}).get("severity", Severity.SEVERITY_UNKOWN)
+        severity = finding.get("metric", {}).get("severity", Severity.SEVERITY_UNKNOWN)
 
         return Observation(
             title=secret_title,
@@ -213,7 +213,7 @@ class TrivyOperatorPrometheus(BaseParser, BaseAPIParser):
             "rbac_assessment_description", ""
         )
         rbac_assessment_id = finding.get("metric", {}).get("rbac_assessment_id", "")
-        severity = finding.get("metric", {}).get("severity", Severity.SEVERITY_UNKOWN)
+        severity = finding.get("metric", {}).get("severity", Severity.SEVERITY_UNKNOWN)
 
         return Observation(
             title=rbac_assessment_title,
@@ -228,7 +228,7 @@ class TrivyOperatorPrometheus(BaseParser, BaseAPIParser):
         vuln_title = finding.get("metric", {}).get("vuln_title", "")
         vulnerability_id = finding.get("metric", {}).get("vuln_id", "")
         cvss3_score = finding.get("metric", {}).get("vuln_score")
-        severity = finding.get("metric", {}).get("severity", Severity.SEVERITY_UNKOWN)
+        severity = finding.get("metric", {}).get("severity", Severity.SEVERITY_UNKNOWN)
         origin_docker_image_registry = finding.get("metric", {}).get(
             "image_registry", ""
         )
@@ -304,7 +304,7 @@ class TrivyOperatorPrometheus(BaseParser, BaseAPIParser):
         ) in Severity.SEVERITY_CHOICES:
             return severity.capitalize()
 
-        return Severity.SEVERITY_UNKOWN
+        return Severity.SEVERITY_UNKNOWN
 
     def _get_kubernetes_resource(self, finding) -> KubernetesResource:
         return KubernetesResource(

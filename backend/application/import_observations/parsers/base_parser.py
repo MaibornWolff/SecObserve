@@ -4,6 +4,7 @@ from django.core.files.base import File
 
 from application.core.models import Observation
 from application.import_observations.models import Api_Configuration
+from application.licenses.models import License_Component
 
 
 class BaseParser:
@@ -17,6 +18,12 @@ class BaseParser:
 
     def get_observations(self, data: Any) -> list[Observation]:
         raise NotImplementedError("get_observations() must be overridden")
+
+    def get_license_components(
+        self, data: Any  # pylint: disable=unused-argument
+    ) -> list[License_Component]:
+        # data is used in the child classes
+        return []
 
     def get_int_or_none(self, value: Optional[str]) -> int | None:
         if value:

@@ -1,4 +1,4 @@
-import { Datagrid, ListContextProvider, SelectField, useListController } from "react-admin";
+import { Datagrid, ListContextProvider, ResourceContextProvider, SelectField, useListController } from "react-admin";
 
 import { PERMISSION_PRODUCT_API_TOKEN_REVOKE, ROLE_CHOICES } from "../../access_control/types";
 import { getSettingListSize } from "../../commons/user_settings/functions";
@@ -23,16 +23,23 @@ const ProductApiTokenEmbeddedList = ({ product }: ProductApiTokenEmbeddedListPro
     }
 
     return (
-        <ListContextProvider value={listContext}>
-            <div style={{ width: "100%" }}>
-                <Datagrid size={getSettingListSize()} sx={{ width: "100%" }} bulkActionButtons={false} rowClick={false}>
-                    <SelectField source="role" choices={ROLE_CHOICES} />
-                    {product && product.permissions.includes(PERMISSION_PRODUCT_API_TOKEN_REVOKE) && (
-                        <RevokeProductApiToken product={product} />
-                    )}
-                </Datagrid>
-            </div>
-        </ListContextProvider>
+        <ResourceContextProvider value="product_api_tokens">
+            <ListContextProvider value={listContext}>
+                <div style={{ width: "100%" }}>
+                    <Datagrid
+                        size={getSettingListSize()}
+                        sx={{ width: "100%" }}
+                        bulkActionButtons={false}
+                        rowClick={false}
+                    >
+                        <SelectField source="role" choices={ROLE_CHOICES} />
+                        {product && product.permissions.includes(PERMISSION_PRODUCT_API_TOKEN_REVOKE) && (
+                            <RevokeProductApiToken product={product} />
+                        )}
+                    </Datagrid>
+                </div>
+            </ListContextProvider>
+        </ResourceContextProvider>
     );
 };
 

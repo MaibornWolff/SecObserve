@@ -1,5 +1,6 @@
 import { Divider, Stack, Typography } from "@mui/material";
 import { RichTextInput } from "ra-input-rich-text";
+import { Fragment } from "react";
 import {
     BooleanInput,
     DeleteButton,
@@ -17,6 +18,7 @@ import {
 
 import { PERMISSION_PRODUCT_DELETE } from "../../access_control/types";
 import { validate_0_999999, validate_255, validate_2048, validate_required_255 } from "../../commons/custom_validators";
+import { feature_license_management } from "../../commons/functions";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { ISSUE_TRACKER_TYPE_CHOICES, OBSERVATION_SEVERITY_CHOICES } from "../types";
 
@@ -84,8 +86,8 @@ const ProductEdit = () => {
             if (data.security_gate_threshold_none == "") {
                 data.security_gate_threshold_none = 0;
             }
-            if (data.security_gate_threshold_unkown == "") {
-                data.security_gate_threshold_unkown = 0;
+            if (data.security_gate_threshold_unknown == "") {
+                data.security_gate_threshold_unknown = 0;
             }
         } else {
             if (data.security_gate_threshold_critical == "") {
@@ -103,8 +105,8 @@ const ProductEdit = () => {
             if (data.security_gate_threshold_none == "") {
                 data.security_gate_threshold_none = null;
             }
-            if (data.security_gate_threshold_unkown == "") {
-                data.security_gate_threshold_unkown = null;
+            if (data.security_gate_threshold_unknown == "") {
+                data.security_gate_threshold_unknown = null;
             }
         }
         if (!data.issue_tracker_type) {
@@ -308,8 +310,8 @@ const ProductEdit = () => {
                                     validate={validate_0_999999}
                                 />
                                 <NumberInput
-                                    label="Threshold unkown"
-                                    source="security_gate_threshold_unkown"
+                                    label="Threshold unknown"
+                                    source="security_gate_threshold_unknown"
                                     min={0}
                                     max={999999}
                                     sx={{ width: "12em" }}
@@ -428,6 +430,23 @@ const ProductEdit = () => {
                         )
                     }
                 </FormDataConsumer>
+
+                {feature_license_management() && (
+                    <Fragment>
+                        <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+                        <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                            License management
+                        </Typography>
+                        <ReferenceInput
+                            source="license_policy"
+                            reference="license_policies"
+                            label="License policy"
+                            sort={{ field: "name", order: "ASC" }}
+                        >
+                            <AutocompleteInputWide optionText="name" />
+                        </ReferenceInput>
+                    </Fragment>
+                )}
             </SimpleForm>
         </Edit>
     );

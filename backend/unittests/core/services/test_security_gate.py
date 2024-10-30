@@ -233,7 +233,7 @@ class TestSecurityGate(BaseTestCase):
         notification_save_mock.assert_called()
 
     @patch("application.core.models.Observation.objects.filter")
-    def test_check_security_gate_true_unkown(self, mock):
+    def test_check_security_gate_true_unknown(self, mock):
         mock.return_value.count.return_value = 2
         product = Product(
             security_gate_passed=False,
@@ -243,7 +243,7 @@ class TestSecurityGate(BaseTestCase):
             security_gate_threshold_medium=3,
             security_gate_threshold_low=3,
             security_gate_threshold_none=3,
-            security_gate_threshold_unkown=1,
+            security_gate_threshold_unknown=1,
         )
         check_security_gate(product)
         self.assertFalse(product.security_gate_passed)
@@ -251,7 +251,7 @@ class TestSecurityGate(BaseTestCase):
     @patch("application.core.models.Observation.objects.filter")
     @patch("application.core.models.Product.save")
     @patch("application.commons.models.Notification.save")
-    def test_check_security_gate_true_unkown_product_group(
+    def test_check_security_gate_true_unknown_product_group(
         self, notification_save_mock, product_save_mock, filter_mock
     ):
         filter_mock.return_value.count.return_value = 2
@@ -263,7 +263,7 @@ class TestSecurityGate(BaseTestCase):
             security_gate_threshold_medium=3,
             security_gate_threshold_low=3,
             security_gate_threshold_none=3,
-            security_gate_threshold_unkown=1,
+            security_gate_threshold_unknown=1,
         )
         product = Product(
             product_group=product_group,
@@ -286,7 +286,7 @@ class TestSecurityGate(BaseTestCase):
             security_gate_threshold_medium=3,
             security_gate_threshold_low=3,
             security_gate_threshold_none=3,
-            security_gate_threshold_unkown=3,
+            security_gate_threshold_unknown=3,
         )
         check_security_gate(product)
         self.assertTrue(product.security_gate_passed)
@@ -373,14 +373,14 @@ class TestSecurityGate(BaseTestCase):
 
     @patch("application.commons.models.Settings.load")
     @patch("application.core.models.Observation.objects.filter")
-    def test_check_security_gate_none_unkown(self, mock, mock_settings_load):
+    def test_check_security_gate_none_unknown(self, mock, mock_settings_load):
         settings = Settings()
         settings.security_gate_threshold_critical = 3
         settings.security_gate_threshold_high = 3
         settings.security_gate_threshold_medium = 3
         settings.security_gate_threshold_low = 3
         settings.security_gate_threshold_none = 3
-        settings.security_gate_threshold_unkown = 1
+        settings.security_gate_threshold_unknown = 1
         mock_settings_load.return_value = settings
 
         mock.return_value.count.return_value = 2
@@ -399,7 +399,7 @@ class TestSecurityGate(BaseTestCase):
         settings.security_gate_threshold_medium = 3
         settings.security_gate_threshold_low = 3
         settings.security_gate_threshold_none = 3
-        settings.security_gate_threshold_unkown = 3
+        settings.security_gate_threshold_unknown = 3
         mock_settings_load.return_value = settings
 
         mock.return_value.count.return_value = 2

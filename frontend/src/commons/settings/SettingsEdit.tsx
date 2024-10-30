@@ -292,12 +292,12 @@ const SettingsEdit = () => {
                                         sx={{ marginBottom: 2 }}
                                     />
                                     <NumberInput
-                                        source="security_gate_threshold_unkown"
+                                        source="security_gate_threshold_unknown"
                                         label="Threshold unknown"
                                         min={0}
                                         step={1}
                                         validate={validate_0_999999}
-                                        helperText="Number of unkown observations that must not be exceeded"
+                                        helperText="Number of unknown observations that must not be exceeded"
                                         sx={{ marginBottom: 2 }}
                                     />
                                 </Fragment>
@@ -398,6 +398,36 @@ const SettingsEdit = () => {
                         helperText="Validate that the password is not entirely numeric."
                         sx={{ marginBottom: 1 }}
                     />
+
+                    <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+                    <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                        License management
+                    </Typography>
+                    <BooleanInput source="feature_license_management" label="Enable license management" />
+                    <FormDataConsumer>
+                        {({ formData }) =>
+                            formData.feature_license_management && (
+                                <Stack direction="row" spacing={2} sx={{ marginBottom: 1 }}>
+                                    <NumberInput
+                                        source="license_import_crontab_hour"
+                                        label="License import crontab (hour)"
+                                        min={0}
+                                        step={1}
+                                        validate={validate_0_23}
+                                        helperText="Hour crontab expression for license imports (UTC)"
+                                    />
+                                    <NumberInput
+                                        source="license_import_crontab_minute"
+                                        label="License import crontab (minute)"
+                                        min={0}
+                                        step={1}
+                                        validate={validate_0_59}
+                                        helperText="Minute crontab expression for license imports"
+                                    />
+                                </Stack>
+                            )
+                        }
+                    </FormDataConsumer>
                 </SimpleForm>
             </Edit>
         </Fragment>

@@ -22,7 +22,7 @@ class TestAuthentication(BaseTestCase):
             elif method.lower() == "put":
                 response = api_client.put(url)
             else:
-                raise Exception(f"Unkown method: {method}")
+                raise Exception(f"Unknown method: {method}")
 
             self.assertEqual(401, response.status_code)
 
@@ -50,7 +50,7 @@ class TestAuthentication(BaseTestCase):
             elif method.lower() == "put":
                 response = api_client.put(url)
             else:
-                raise Exception(f"Unkown method: {method}")
+                raise Exception(f"Unknown method: {method}")
 
             self.assertEqual(401, response.status_code)
             self.assertEqual(
@@ -81,7 +81,7 @@ class TestAuthentication(BaseTestCase):
             elif method.lower() == "put":
                 response = api_client.put(url)
             else:
-                raise Exception(f"Unkown method: {method}")
+                raise Exception(f"Unknown method: {method}")
 
             self.assertTrue(response.status_code in [200, 204, 400, 404])
             mock_authentication.assert_called_once()
@@ -111,7 +111,7 @@ class TestAuthentication(BaseTestCase):
             elif method.lower() == "put":
                 response = api_client.put(url)
             else:
-                raise Exception(f"Unkown method: {method}")
+                raise Exception(f"Unknown method: {method}")
 
             self.assertEqual(401, response.status_code)
             self.assertEqual(
@@ -142,7 +142,7 @@ class TestAuthentication(BaseTestCase):
             elif method.lower() == "put":
                 response = api_client.put(url)
             else:
-                raise Exception(f"Unkown method: {method}")
+                raise Exception(f"Unknown method: {method}")
 
             self.assertTrue(response.status_code in [200, 204, 400, 404])
             mock_authentication.assert_called_once()
@@ -172,7 +172,7 @@ class TestAuthentication(BaseTestCase):
             elif method.lower() == "put":
                 response = api_client.put(url)
             else:
-                raise Exception(f"Unkown method: {method}")
+                raise Exception(f"Unknown method: {method}")
 
             self.assertEqual(401, response.status_code)
             # self.assertEqual(
@@ -203,7 +203,7 @@ class TestAuthentication(BaseTestCase):
             elif method.lower() == "put":
                 response = api_client.put(url)
             else:
-                raise Exception(f"Unkown method: {method}")
+                raise Exception(f"Unknown method: {method}")
 
             self.assertTrue(response.status_code in [200, 204, 400, 404])
             mock_authentication.assert_called_once()
@@ -301,9 +301,52 @@ class TestAuthentication(BaseTestCase):
             ["get"], "/api/products/1/export_observations_excel/"
         )
 
+        self._check_authentication(
+            ["get"], "/api/products/1/export_license_components_csv/"
+        )
+        self._check_authentication(
+            ["get"], "/api/products/1/export_license_components_excel/"
+        )
+
         self._check_authentication(["get"], "/api/notifications/")
         self._check_authentication(["delete", "get"], "/api/notifications/1/")
         self._check_authentication(["post"], "/api/notifications/bulk_delete/")
+
+        self._check_authentication(["get"], "/api/licenses/")
+        self._check_authentication(["get"], "/api/licenses/1/")
+
+        self._check_authentication(["get"], "/api/license_components/")
+        self._check_authentication(["get"], "/api/license_components/1/")
+
+        self._check_authentication(["get", "post"], "/api/license_groups/")
+        self._check_authentication(
+            ["delete", "get", "put", "patch"], "/api/license_groups/1/"
+        )
+        self._check_authentication(["post"], "/api/license_groups/1/copy/")
+        self._check_authentication(["post"], "/api/license_groups/1/add_license/")
+        self._check_authentication(["post"], "/api/license_groups/1/remove_license/")
+
+        self._check_authentication(["get", "post"], "/api/license_group_members/")
+        self._check_authentication(
+            ["delete", "get", "put", "patch"], "/api/license_group_members/1001/"
+        )
+
+        self._check_authentication(["get", "post"], "/api/license_policies/")
+        self._check_authentication(
+            ["delete", "get", "put", "patch"], "/api/license_policies/1/"
+        )
+        self._check_authentication(["post"], "/api/license_policies/1/copy/")
+        self._check_authentication(["post"], "/api/license_policies/1/apply/")
+
+        self._check_authentication(["get", "post"], "/api/license_policy_items/")
+        self._check_authentication(
+            ["delete", "get", "put", "patch"], "/api/license_policy_items/1001/"
+        )
+
+        self._check_authentication(["get", "post"], "/api/license_policy_members/")
+        self._check_authentication(
+            ["delete", "get", "put", "patch"], "/api/license_policy_members/1001/"
+        )
 
     def test_authentication_users(self):
         self._check_authentication(["get"], "/api/users/me/")

@@ -1,0 +1,57 @@
+name: Check application licenses for dev
+
+on:
+  push:
+    branches:
+      - dev
+
+permissions: read-all
+
+jobs:
+  scan_licenses:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - 
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+        with:
+          node-version: 20
+      - 
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - 
+        name: Install programs
+        env:
+          CDXGEN_VERSION: 10.10.6
+        run: |
+          npm install -g @cyclonedx/cdxgen@"$CDXGEN_VERSION"
+      - 
+        name: Generate SBOM for backend application
+        env:
+          FETCH_LICENSE: 1
+        run: |
+          cdxgen ./backend --type python --required-only --profile license-compliance --no-auto-compositions --output sbom_backend_application.json
+      - 
+        name: Generate SBOM for frontend application
+        run: |
+          cdxgen ./frontend --type npm --no-babel --required-only --profile license-compliance --no-auto-compositions --project-name secobserve --output sbom_frontend_application.json
+      -
+        name: Import backend SBOM
+        uses: MaibornWolff/secobserve_actions_templates/actions/importer@6eefe400d9efeaae2b7abe05710785fa4a53dbf6 # main
+        with:
+          so_product_name: 'SecObserve'
+          so_file_name: 'sbom_backend_application.json'
+          so_parser_name: 'CycloneDX'
+          so_branch_name: 'dev'
+          so_api_base_url: "https://secobserve-backend.maibornwolff.de"
+          so_api_token: ${{ secrets.SO_API_TOKEN }}
+      -
+        name: Import frontend SBOM
+        uses: MaibornWolff/secobserve_actions_templates/actions/importer@6eefe400d9efeaae2b7abe05710785fa4a53dbf6 # main
+        with:
+          so_product_name: 'SecObserve'
+          so_file_name: 'sbom_frontend_application.json'
+          so_parser_name: 'CycloneDX'
+          so_branch_name: 'dev'
+          so_api_base_url: "https://secobserve-backend.maibornwolff.de"
+          so_api_token: ${{ secrets.SO_API_TOKEN }}

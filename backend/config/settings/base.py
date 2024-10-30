@@ -126,6 +126,7 @@ LOCAL_APPS = [
     "application.epss",
     "application.import_observations",
     "application.issue_tracker",
+    "application.licenses",
     "application.metrics",
     "application.rules",
     "application.vex",

@@ -91,15 +91,15 @@ class TestBranchSerializer(BaseTestCase):
         )
 
     @patch("application.core.models.Observation.objects.filter")
-    def test_get_open_unkown_observation_count(self, mock_filter):
+    def test_get_open_unknown_observation_count(self, mock_filter):
         mock_filter.return_value.count.return_value = 99
         branch_serializer = BranchSerializer()
         self.assertEqual(
-            99, branch_serializer.get_open_unkown_observation_count(obj=self.branch_1)
+            99, branch_serializer.get_open_unknown_observation_count(obj=self.branch_1)
         )
         mock_filter.assert_called_with(
             branch=self.branch_1,
-            current_severity=Severity.SEVERITY_UNKOWN,
+            current_severity=Severity.SEVERITY_UNKNOWN,
             current_status=Status.STATUS_OPEN,
         )
 
@@ -177,16 +177,17 @@ class TestProductSerializer(BaseTestCase):
         )
 
     @patch("application.core.models.Observation.objects.filter")
-    def test_get_open_unkown_observation_count(self, mock_filter):
+    def test_get_open_unknown_observation_count(self, mock_filter):
         mock_filter.return_value.count.return_value = 99
         product_serializer = ProductSerializer()
         self.assertEqual(
-            99, product_serializer.get_open_unkown_observation_count(obj=self.product_1)
+            99,
+            product_serializer.get_open_unknown_observation_count(obj=self.product_1),
         )
         mock_filter.assert_called_with(
             product=self.product_1,
             branch=self.branch_1,
-            current_severity=Severity.SEVERITY_UNKOWN,
+            current_severity=Severity.SEVERITY_UNKNOWN,
             current_status=Status.STATUS_OPEN,
         )
 
@@ -216,7 +217,7 @@ class TestProductSerializer(BaseTestCase):
         product.security_gate_threshold_medium = None
         product.security_gate_threshold_low = None
         product.security_gate_threshold_none = None
-        product.security_gate_threshold_unkown = None
+        product.security_gate_threshold_unknown = None
         product.save()
 
         product_serializer = ProductSerializer(product)
@@ -227,7 +228,7 @@ class TestProductSerializer(BaseTestCase):
         self.assertEqual(0, data["security_gate_threshold_medium"])
         self.assertEqual(0, data["security_gate_threshold_low"])
         self.assertEqual(0, data["security_gate_threshold_none"])
-        self.assertEqual(0, data["security_gate_threshold_unkown"])
+        self.assertEqual(0, data["security_gate_threshold_unknown"])
 
     @patch("application.core.api.serializers_product.get_product_member")
     def test_validate_security_gate_active_full(self, mock_product_member):
@@ -238,7 +239,7 @@ class TestProductSerializer(BaseTestCase):
         product.security_gate_threshold_medium = 3
         product.security_gate_threshold_low = 4
         product.security_gate_threshold_none = 5
-        product.security_gate_threshold_unkown = 6
+        product.security_gate_threshold_unknown = 6
         product.save()
 
         product_serializer = ProductSerializer(product)
@@ -249,7 +250,7 @@ class TestProductSerializer(BaseTestCase):
         self.assertEqual(3, data["security_gate_threshold_medium"])
         self.assertEqual(4, data["security_gate_threshold_low"])
         self.assertEqual(5, data["security_gate_threshold_none"])
-        self.assertEqual(6, data["security_gate_threshold_unkown"])
+        self.assertEqual(6, data["security_gate_threshold_unknown"])
 
     def test_validate_repository_prefix_empty(self):
         product = Product()

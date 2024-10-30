@@ -3,6 +3,7 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import UploadIcon from "@mui/icons-material/CloudUpload";
 import ConstructionIcon from "@mui/icons-material/Construction";
+import FactCheckIcon from "@mui/icons-material/FactCheck";
 import GradingIcon from "@mui/icons-material/Grading";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -36,11 +37,13 @@ import {
     PERMISSION_PRODUCT_RULE_APPLY,
     PERMISSION_PRODUCT_RULE_CREATE,
 } from "../../access_control/types";
+import { feature_license_management } from "../../commons/functions";
 import observations from "../../core/observations";
 import ApiConfigurationCreate from "../../import_observations/api_configurations/ApiConfigurationCreate";
 import ApiConfigurationEmbeddedList from "../../import_observations/api_configurations/ApiConfigurationEmbeddedList";
 import ImportMenu from "../../import_observations/import/ImportMenu";
 import VulnerabilityCheckEmbeddedList from "../../import_observations/vulnerability_checks/VulnerabilityCheckEmbeddedList";
+import LicenseComponentEmbeddedList from "../../licenses/license_components/LicenseComponentEmbeddedList";
 import MetricsHeader from "../../metrics/MetricsHeader";
 import MetricsSeveritiesCurrent from "../../metrics/MetricsSeveritiesCurrent";
 import MetricsSeveritiesTimeline from "../../metrics/MetricsSeveritiesTimeLine";
@@ -123,6 +126,11 @@ const ProductShow = () => {
         filter = { product_group: Number(product_group_id) };
         storeKey = "products.embedded";
     }
+    const license_policy_id = localStorage.getItem("productembeddedlist.license_policy");
+    if (license_policy_id !== null) {
+        filter = { license_policy: Number(license_policy_id) };
+        storeKey = "products.embedded";
+    }
 
     return (
         <Fragment>
@@ -194,7 +202,7 @@ const ProductShow = () => {
                             <Tab
                                 label="Vulnerability Checks"
                                 path="vulnerability_checks"
-                                icon={<GradingIcon />}
+                                icon={<FactCheckIcon />}
                                 onClick={hideSettingsTabs}
                             >
                                 <VulnerabilityCheckEmbeddedList product={product} long_list={true} />
@@ -218,6 +226,11 @@ const ProductShow = () => {
                                     onClick={hideSettingsTabs}
                                 >
                                     <ServiceEmbeddedList product={product} />
+                                </Tab>
+                            )}
+                            {feature_license_management() && product.has_licenses && (
+                                <Tab label="Licenses" path="licenses" icon={<GradingIcon />} onClick={hideSettingsTabs}>
+                                    <LicenseComponentEmbeddedList product={product} />
                                 </Tab>
                             )}
                             <Tab

@@ -6,7 +6,7 @@ import {
     OBSERVATION_SEVERITY_LOW,
     OBSERVATION_SEVERITY_MEDIUM,
     OBSERVATION_SEVERITY_NONE,
-    OBSERVATION_SEVERITY_UNKOWN,
+    OBSERVATION_SEVERITY_UNKNOWN,
 } from "../../core/types";
 import { get_severity_color } from "../functions";
 
@@ -75,12 +75,12 @@ const ObservationsCountField = (props: ObservationsProps) => {
             </span>
             <span
                 style={{
-                    background: get_severity_color(OBSERVATION_SEVERITY_UNKOWN),
+                    background: get_severity_color(OBSERVATION_SEVERITY_UNKNOWN),
                     color: "white",
                     padding: 8,
                 }}
             >
-                {record.open_unkown_observation_count}
+                {record.open_unknown_observation_count}
             </span>
         </div>
     ) : null;

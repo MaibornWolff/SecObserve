@@ -3,6 +3,7 @@ import {
     Datagrid,
     FilterForm,
     ListContextProvider,
+    ResourceContextProvider,
     TextField,
     TextInput,
     useListController,
@@ -43,23 +44,25 @@ const VEXStatementEmbeddedList = ({ vex_document }: VEXStatementEmbeddedListProp
     }
 
     return (
-        <ListContextProvider value={listContext}>
-            <div style={{ width: "100%" }}>
-                <FilterForm filters={listFilters()} />
-                <Datagrid
-                    size={getSettingListSize()}
-                    rowClick={ShowVEXStatement}
-                    bulkActionButtons={false}
-                    resource="vex/vex_statements"
-                >
-                    <TextField source="vulnerability_id" label="Vulnerability ID" />
-                    <ChipField source="status" />
-                    <TextField source="product_purl" label="Product" />
-                    <TextField source="component_purl" label="Component" />
-                </Datagrid>
-                <CustomPagination />
-            </div>
-        </ListContextProvider>
+        <ResourceContextProvider value="vex_statements">
+            <ListContextProvider value={listContext}>
+                <div style={{ width: "100%" }}>
+                    <FilterForm filters={listFilters()} />
+                    <Datagrid
+                        size={getSettingListSize()}
+                        rowClick={ShowVEXStatement}
+                        bulkActionButtons={false}
+                        resource="vex/vex_statements"
+                    >
+                        <TextField source="vulnerability_id" label="Vulnerability ID" />
+                        <ChipField source="status" />
+                        <TextField source="product_purl" label="Product" />
+                        <TextField source="component_purl" label="Component" />
+                    </Datagrid>
+                    <CustomPagination />
+                </div>
+            </ListContextProvider>
+        </ResourceContextProvider>
     );
 };
 

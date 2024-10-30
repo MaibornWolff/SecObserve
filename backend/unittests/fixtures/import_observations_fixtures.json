@@ -42,7 +42,7 @@
             "security_gate_threshold_medium": null,
             "security_gate_threshold_low": null,
             "security_gate_threshold_none": null,
-            "security_gate_threshold_unkown": null,
+            "security_gate_threshold_unknown": null,
             "apply_general_rules": true,
             "notification_ms_teams_webhook": "",
             "last_observation_change": "2022-12-16T16:13:18.283Z",
@@ -75,6 +75,17 @@
             "source": "File",
             "module_name": "sarif",
             "class_name": "SARIFParser"
+        }
+    },
+    {
+        "model": "import_observations.parser",
+        "pk": 2,
+        "fields": {
+            "name": "CycloneDX",
+            "type": "SCA",
+            "source": "File",
+            "module_name": "cyclone_dx",
+            "class_name": "CycloneDXParser"
         }
     },
     {

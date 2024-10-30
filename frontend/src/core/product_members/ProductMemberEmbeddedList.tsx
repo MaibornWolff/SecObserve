@@ -1,5 +1,13 @@
 import { Stack } from "@mui/material";
-import { Datagrid, Identifier, ListContextProvider, SelectField, WithRecord, useListController } from "react-admin";
+import {
+    Datagrid,
+    Identifier,
+    ListContextProvider,
+    ResourceContextProvider,
+    SelectField,
+    WithRecord,
+    useListController,
+} from "react-admin";
 
 import {
     PERMISSION_PRODUCT_MEMBER_DELETE,
@@ -34,42 +42,44 @@ const ProductMemberEmbeddedList = ({ product }: ProductMemberEmbeddedListProps) 
     }
 
     return (
-        <ListContextProvider value={listContext}>
-            <div style={{ width: "100%" }}>
-                <Datagrid
-                    size={getSettingListSize()}
-                    sx={{ width: "100%" }}
-                    bulkActionButtons={false}
-                    rowClick={false}
-                    resource="product_members"
-                >
-                    <WithRecord
-                        label="User"
-                        render={(product_member) => (
-                            <TextUrlField
-                                label="User"
-                                text={product_member.user_data.full_name}
-                                url={showUser(product_member.user_data.id)}
-                            />
-                        )}
-                    />
-                    <SelectField source="role" choices={ROLE_CHOICES} />
-                    <WithRecord
-                        render={(product_member) => (
-                            <Stack direction="row" spacing={4}>
-                                {product && product.permissions.includes(PERMISSION_PRODUCT_MEMBER_EDIT) && (
-                                    <ProductMemberEdit />
-                                )}
-                                {product && product.permissions.includes(PERMISSION_PRODUCT_MEMBER_DELETE) && (
-                                    <ProductMemberDelete product_member={product_member} />
-                                )}
-                            </Stack>
-                        )}
-                    />
-                </Datagrid>
-                <CustomPagination />
-            </div>
-        </ListContextProvider>
+        <ResourceContextProvider value="product_members">
+            <ListContextProvider value={listContext}>
+                <div style={{ width: "100%" }}>
+                    <Datagrid
+                        size={getSettingListSize()}
+                        sx={{ width: "100%" }}
+                        bulkActionButtons={false}
+                        rowClick={false}
+                        resource="product_members"
+                    >
+                        <WithRecord
+                            label="User"
+                            render={(product_member) => (
+                                <TextUrlField
+                                    label="User"
+                                    text={product_member.user_data.full_name}
+                                    url={showUser(product_member.user_data.id)}
+                                />
+                            )}
+                        />
+                        <SelectField source="role" choices={ROLE_CHOICES} />
+                        <WithRecord
+                            render={(product_member) => (
+                                <Stack direction="row" spacing={4}>
+                                    {product && product.permissions.includes(PERMISSION_PRODUCT_MEMBER_EDIT) && (
+                                        <ProductMemberEdit />
+                                    )}
+                                    {product && product.permissions.includes(PERMISSION_PRODUCT_MEMBER_DELETE) && (
+                                        <ProductMemberDelete product_member={product_member} />
+                                    )}
+                                </Stack>
+                            )}
+                        />
+                    </Datagrid>
+                    <CustomPagination />
+                </div>
+            </ListContextProvider>
+        </ResourceContextProvider>
     );
 };
 

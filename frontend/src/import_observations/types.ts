@@ -48,5 +48,5 @@ export const PARSER_SOURCE_CHOICES = [
     { id: "API", name: "API" },
     { id: "File", name: "File" },
     { id: "Manual", name: "Manual" },
-    { id: "Unkown", name: "Unkown" },
+    { id: "Unknown", name: "Unknown" },
 ];

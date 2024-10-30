@@ -1,5 +1,5 @@
 class Severity:
-    SEVERITY_UNKOWN = "Unkown"
+    SEVERITY_UNKNOWN = "Unknown"
     SEVERITY_NONE = "None"
     SEVERITY_LOW = "Low"
     SEVERITY_HIGH = "High"
@@ -7,7 +7,7 @@ class Severity:
     SEVERITY_CRITICAL = "Critical"
 
     SEVERITY_CHOICES = [
-        (SEVERITY_UNKOWN, SEVERITY_UNKOWN),
+        (SEVERITY_UNKNOWN, SEVERITY_UNKNOWN),
         (SEVERITY_NONE, SEVERITY_NONE),
         (SEVERITY_LOW, SEVERITY_LOW),
         (SEVERITY_MEDIUM, SEVERITY_MEDIUM),
@@ -16,7 +16,7 @@ class Severity:
     ]
 
     NUMERICAL_SEVERITIES = {
-        SEVERITY_UNKOWN: 6,
+        SEVERITY_UNKNOWN: 6,
         SEVERITY_NONE: 5,
         SEVERITY_LOW: 4,
         SEVERITY_MEDIUM: 3,
@@ -90,3 +90,40 @@ class VexJustification:
         ),
         (STATUS_INLINE_MITIGATIONS_ALREADY_EXIST, "Inline mitigations already exist"),
     ]
+
+
+class PURL_Type:
+    PURL_TYPE_CHOICES = {
+        "alpm": "alpm",
+        "apk": "APK",
+        "bitbucket": "Bitbucket",
+        "bitnami": "Bitnami",
+        "cargo": "Rust",
+        "cocoapods": "Cocoapods",
+        "composer": "Composer",
+        "conan": "Conan",
+        "conda": "Conda",
+        "cpan": "CPAN Perl",
+        "cran": "CRAN R",
+        "deb": "Debian",
+        "docker": "Docker",
+        "gem": "Ruby Gem",
+        "generic": "Generic",
+        "github": "GitHub",
+        "golang": "Go",
+        "hackage": "Hackage",
+        "hex": "Hex",
+        "huggingface": "Huggingface",
+        "luarocks": "Lua",
+        "maven": "Maven",
+        "mlflow": "MLflow",
+        "npm": "NPM",
+        "nuget": "NuGet",
+        "oci": "OCI",
+        "pub": "Dart",
+        "pypi": "PyPI",
+        "rpm": "RPM",
+        "qpkg": "QNX",
+        "swid": "SWID",
+        "swift": "Swift",
+    }

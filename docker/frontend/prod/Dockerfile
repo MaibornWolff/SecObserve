@@ -1,7 +1,7 @@
 # build environment
-FROM node:20.18.0-alpine3.19@sha256:2d8c24d9104bda27e07dced6d7110aa728dd917dde8255d8af3678e532b339d6 AS build
+FROM node:22.11.0-alpine3.20@sha256:f265794478aa0b1a23d85a492c8311ed795bc527c3fe7e43453b3c872dcd71a3 AS build
 
-ARG VERSION=unkown
+ARG VERSION=unknown
 
 WORKDIR /app
 ENV PATH=/app/node_modules/.bin:$PATH
@@ -13,7 +13,7 @@ COPY frontend/.npmrc ./
 RUN npm ci
 COPY ./frontend ./
 # insert version for status endpoint
-RUN sed -i 's/version_unkown/'"${VERSION}"'/g' ./src/commons/about/About.tsx && \
+RUN sed -i 's/version_unknown/'"${VERSION}"'/g' ./src/commons/about/About.tsx && \
         npm run build
 
 WORKDIR /app/lib/runtime-env-cra
@@ -38,7 +38,7 @@ COPY ./frontend/robots.txt /usr/share/nginx/html/robots.txt
 
 ARG user=nginx
 ARG group=nginx
-ARG VERSION=unkown
+ARG VERSION=unknown
 ARG CREATED
 ARG REVISION
 

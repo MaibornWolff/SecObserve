@@ -65,10 +65,10 @@ class Settings(Model):
         validators=[MinValueValidator(0), MaxValueValidator(999999)],
         help_text="Number of none observations that must not be exceeded",
     )
-    security_gate_threshold_unkown = IntegerField(
+    security_gate_threshold_unknown = IntegerField(
         default=99999,
         validators=[MinValueValidator(0), MaxValueValidator(999999)],
-        help_text="Number of unkown observations that must not be exceeded",
+        help_text="Number of unknown observations that must not be exceeded",
     )
 
     jwt_validity_duration_user = IntegerField(
@@ -213,6 +213,20 @@ class Settings(Model):
     )
     password_validator_not_numeric = BooleanField(
         default=True, help_text="Validate that the password is not entirely numeric."
+    )
+
+    feature_license_management = BooleanField(
+        default=True, help_text="Enable license management"
+    )
+    license_import_crontab_minute = IntegerField(
+        default=30,
+        validators=[MinValueValidator(0), MaxValueValidator(59)],
+        help_text="Minute crontab expression for importing licenses",
+    )
+    license_import_crontab_hour = IntegerField(
+        default=1,
+        validators=[MinValueValidator(0), MaxValueValidator(23)],
+        help_text="Hour crontab expression for importing licenses (UTC)",
     )
 
     def save(self, *args, **kwargs):

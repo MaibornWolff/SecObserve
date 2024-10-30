@@ -67,6 +67,9 @@ class ImportObservationsResponseSerializer(Serializer):
     observations_new = IntegerField()
     observations_updated = IntegerField()
     observations_resolved = IntegerField()
+    license_components_new = IntegerField()
+    license_components_updated = IntegerField()
+    license_components_deleted = IntegerField()
 
 
 class ApiConfigurationSerializer(ModelSerializer):

@@ -81,6 +81,15 @@ class Vulnerability_Check(Model):
     last_import_observations_resolved = IntegerField(
         null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]
     )
+    last_import_licenses_new = IntegerField(
+        null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]
+    )
+    last_import_licenses_updated = IntegerField(
+        null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]
+    )
+    last_import_licenses_deleted = IntegerField(
+        null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]
+    )
 
     class Meta:
         unique_together = (

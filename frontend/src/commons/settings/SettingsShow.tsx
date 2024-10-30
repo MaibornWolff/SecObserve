@@ -153,8 +153,8 @@ const SettingsShowComponent = () => {
                                     <Labeled label="Threshold none">
                                         <NumberField source="security_gate_threshold_none" />
                                     </Labeled>
-                                    <Labeled label="Threshold unkown">
-                                        <NumberField source="security_gate_threshold_unkown" />
+                                    <Labeled label="Threshold unknown">
+                                        <NumberField source="security_gate_threshold_unknown" />
                                     </Labeled>
                                 </Fragment>
                             )}
@@ -212,6 +212,25 @@ const SettingsShowComponent = () => {
                             <Labeled label="Not entirely numeric">
                                 <BooleanField source="password_validator_not_numeric" />
                             </Labeled>
+                        </Stack>
+                    </Paper>
+
+                    <Paper sx={{ marginBottom: 2, padding: 2 }}>
+                        <Typography variant="h6">License management</Typography>
+                        <Stack spacing={2}>
+                            <Labeled label="Enable license management">
+                                <BooleanField source="feature_license_management" />
+                            </Labeled>
+                            {settings.feature_license_management && (
+                                <Stack direction="row" spacing={2}>
+                                    <Labeled label="License import crontab (hour/UTC)">
+                                        <NumberField source="license_import_crontab_hour" />
+                                    </Labeled>
+                                    <Labeled label="License import crontab (minute)">
+                                        <NumberField source="license_import_crontab_minute" />
+                                    </Labeled>
+                                </Stack>
+                            )}
                         </Stack>
                     </Paper>
                 </Box>

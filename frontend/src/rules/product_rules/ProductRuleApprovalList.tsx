@@ -6,6 +6,7 @@ import {
     ListContextProvider,
     ReferenceField,
     ReferenceInput,
+    ResourceContextProvider,
     TextField,
     TextInput,
     useListController,
@@ -51,36 +52,39 @@ const ProductRuleApprovalList = ({ product }: ProductRuleApprovalListProps) => {
     localStorage.removeItem("productruleembeddedlist");
 
     return (
-        <ListContextProvider value={listContext}>
-            <div style={{ width: "100%" }}>
-                <FilterForm filters={listFilters()} />
-                <Datagrid
-                    size={getSettingListSize()}
-                    sx={{ width: "100%" }}
-                    bulkActionButtons={false}
-                    rowClick={ShowProductRule}
-                    resource="product_rules"
-                >
-                    <TextField source="name" sx={{ wordBreak: "break-word" }} />
-                    <TextField source="new_severity" />
-                    <TextField source="new_status" />
-                    {product &&
-                        (product.product_rules_need_approval || product.product_group_product_rules_need_approval) && (
-                            <ChipField source="approval_status" />
-                        )}
-                    <BooleanField source="enabled" />
-                    <ReferenceField
-                        source="parser"
-                        reference="parsers"
-                        link={false}
-                        sx={{ "& a": { textDecoration: "none" } }}
-                    />
-                    <TextField source="scanner_prefix" />
-                    <TextField source="title" label="Observation title" />
-                </Datagrid>
-                <CustomPagination />
-            </div>
-        </ListContextProvider>
+        <ResourceContextProvider value="product_rules">
+            <ListContextProvider value={listContext}>
+                <div style={{ width: "100%" }}>
+                    <FilterForm filters={listFilters()} />
+                    <Datagrid
+                        size={getSettingListSize()}
+                        sx={{ width: "100%" }}
+                        bulkActionButtons={false}
+                        rowClick={ShowProductRule}
+                        resource="product_rules"
+                    >
+                        <TextField source="name" sx={{ wordBreak: "break-word" }} />
+                        <TextField source="new_severity" />
+                        <TextField source="new_status" />
+                        {product &&
+                            (product.product_rules_need_approval ||
+                                product.product_group_product_rules_need_approval) && (
+                                <ChipField source="approval_status" />
+                            )}
+                        <BooleanField source="enabled" />
+                        <ReferenceField
+                            source="parser"
+                            reference="parsers"
+                            link={false}
+                            sx={{ "& a": { textDecoration: "none" } }}
+                        />
+                        <TextField source="scanner_prefix" />
+                        <TextField source="title" label="Observation title" />
+                    </Datagrid>
+                    <CustomPagination />
+                </div>
+            </ListContextProvider>
+        </ResourceContextProvider>
     );
 };
 

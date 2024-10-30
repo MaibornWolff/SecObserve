@@ -4,6 +4,7 @@ import {
     FilterForm,
     ListContextProvider,
     NullableBooleanInput,
+    ResourceContextProvider,
     TextField,
     TextInput,
     useListController,
@@ -53,21 +54,28 @@ const UserEmbeddedList = () => {
     localStorage.removeItem("useragembeddedlist.authorization_group");
 
     return (
-        <ListContextProvider value={listContext}>
-            <div style={{ width: "100%" }}>
-                {is_superuser() && <UserCreateButton />}
-                <FilterForm filters={listFilters()} />
-                <Datagrid size={getSettingListSize()} rowClick={ShowUsers} bulkActionButtons={false} resource="users">
-                    <TextField source="username" />
-                    <TextField source="full_name" sx={{ wordBreak: "break-word" }} />
-                    {is_superuser() && <BooleanField source="is_active" label="Active" />}
-                    {is_superuser() && <BooleanField source="is_oidc_user" label="OIDC user" />}
-                    {is_superuser() && <BooleanField source="is_external" label="External" />}
-                    {is_superuser() && <BooleanField source="is_superuser" label="Superuser" />}
-                </Datagrid>
-                <CustomPagination />
-            </div>
-        </ListContextProvider>
+        <ResourceContextProvider value="users">
+            <ListContextProvider value={listContext}>
+                <div style={{ width: "100%" }}>
+                    {is_superuser() && <UserCreateButton />}
+                    <FilterForm filters={listFilters()} />
+                    <Datagrid
+                        size={getSettingListSize()}
+                        rowClick={ShowUsers}
+                        bulkActionButtons={false}
+                        resource="users"
+                    >
+                        <TextField source="username" />
+                        <TextField source="full_name" sx={{ wordBreak: "break-word" }} />
+                        {is_superuser() && <BooleanField source="is_active" label="Active" />}
+                        {is_superuser() && <BooleanField source="is_oidc_user" label="OIDC user" />}
+                        {is_superuser() && <BooleanField source="is_external" label="External" />}
+                        {is_superuser() && <BooleanField source="is_superuser" label="Superuser" />}
+                    </Datagrid>
+                    <CustomPagination />
+                </div>
+            </ListContextProvider>
+        </ResourceContextProvider>
     );
 };
 

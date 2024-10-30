@@ -9,12 +9,13 @@ import observations from "../../core/observations";
 import product_groups from "../../core/product_groups";
 import products from "../../core/products";
 import parsers from "../../import_observations/parsers";
+import licenses from "../../licenses/licenses";
 import general_rules from "../../rules/general_rules";
 import csaf from "../../vex/csaf";
 import openvex from "../../vex/openvex";
 import vex_counters from "../../vex/vex_counters";
 import vex_documents from "../../vex/vex_documents";
-import { feature_vex_enabled } from "../functions";
+import { feature_license_management, feature_vex_enabled } from "../functions";
 import { is_superuser } from "../functions";
 import notifications from "../notifications";
 import settings from "../settings";
@@ -112,20 +113,15 @@ const Menu = ({ dense = false }: MenuProps) => {
                     icon={<SettingsIcon />}
                     dense={dense}
                 >
-                    <MenuItemLink
-                        to="/parsers"
-                        state={{ _scrollToTop: true }}
-                        primaryText="Parsers"
-                        leftIcon={<parsers.icon />}
-                        dense={dense}
-                    />
-                    <MenuItemLink
-                        to="/general_rules"
-                        state={{ _scrollToTop: true }}
-                        primaryText="General Rules"
-                        leftIcon={<general_rules.icon />}
-                        dense={dense}
-                    />
+                    {feature_license_management() && (
+                        <MenuItemLink
+                            to="/license/licenses"
+                            state={{ _scrollToTop: true }}
+                            primaryText="Licenses"
+                            leftIcon={<licenses.icon />}
+                            dense={dense}
+                        />
+                    )}
                     <MenuItemLink
                         to="/access_control/users"
                         state={{ _scrollToTop: true }}
@@ -142,6 +138,20 @@ const Menu = ({ dense = false }: MenuProps) => {
                             dense={dense}
                         />
                     )}
+                    <MenuItemLink
+                        to="/parsers"
+                        state={{ _scrollToTop: true }}
+                        primaryText="Parsers"
+                        leftIcon={<parsers.icon />}
+                        dense={dense}
+                    />
+                    <MenuItemLink
+                        to="/general_rules"
+                        state={{ _scrollToTop: true }}
+                        primaryText="General Rules"
+                        leftIcon={<general_rules.icon />}
+                        dense={dense}
+                    />
                     {feature_vex_enabled() && (
                         <MenuItemLink
                             to="/vex/vex_counters"

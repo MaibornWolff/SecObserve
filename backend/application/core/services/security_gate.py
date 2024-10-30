@@ -49,8 +49,8 @@ def _calculate_active_product_security_gate(product: Product) -> bool:
         security_gate_threshold_none = (
             product.product_group.security_gate_threshold_none
         )
-        security_gate_threshold_unkown = (
-            product.product_group.security_gate_threshold_unkown
+        security_gate_threshold_unknown = (
+            product.product_group.security_gate_threshold_unknown
         )
     else:
         security_gate_threshold_critical = product.security_gate_threshold_critical
@@ -58,7 +58,7 @@ def _calculate_active_product_security_gate(product: Product) -> bool:
         security_gate_threshold_medium = product.security_gate_threshold_medium
         security_gate_threshold_low = product.security_gate_threshold_low
         security_gate_threshold_none = product.security_gate_threshold_none
-        security_gate_threshold_unkown = product.security_gate_threshold_unkown
+        security_gate_threshold_unknown = product.security_gate_threshold_unknown
 
     if (
         product.open_critical_observation_count  # pylint: disable=too-many-boolean-expressions
@@ -67,7 +67,7 @@ def _calculate_active_product_security_gate(product: Product) -> bool:
         or product.open_medium_observation_count > security_gate_threshold_medium
         or product.open_low_observation_count > security_gate_threshold_low
         or product.open_none_observation_count > security_gate_threshold_none
-        or product.open_unkown_observation_count > security_gate_threshold_unkown
+        or product.open_unknown_observation_count > security_gate_threshold_unknown
     ):
         new_security_gate_passed = False
 
@@ -86,8 +86,8 @@ def _calculate_active_config_security_gate(product: Product) -> bool:
         > settings.security_gate_threshold_medium
         or product.open_low_observation_count > settings.security_gate_threshold_low
         or product.open_none_observation_count > settings.security_gate_threshold_none
-        or product.open_unkown_observation_count
-        > settings.security_gate_threshold_unkown
+        or product.open_unknown_observation_count
+        > settings.security_gate_threshold_unknown
     ):
         new_security_gate_passed = False
 

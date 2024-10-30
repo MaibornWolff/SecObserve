@@ -34,7 +34,14 @@ class TestAuthorizationBase(BaseTestCase):
     @patch("application.core.signals.get_current_user")
     def setUpClass(self, mock_user):
         mock_user.return_value = None
-        call_command("loaddata", "unittests/fixtures/unittests_fixtures.json")
+        call_command(
+            "loaddata",
+            [
+                "application/licenses/fixtures/initial_data.json",
+                "unittests/fixtures/unittests_fixtures.json",
+                "unittests/fixtures/unittests_license_fixtures.json",
+            ],
+        )
 
         product_metrics = Product_Metrics.objects.get(pk=1)
         product_metrics.date = timezone.now().replace(
@@ -83,7 +90,7 @@ class TestAuthorizationBase(BaseTestCase):
         elif data.method.lower() == "put":
             response = api_client.put(data.url, data.post_data, format="json")
         else:
-            raise Exception(f"Unkown method: {data.method}")
+            raise Exception(f"Unknown method: {data.method}")
 
         self.assertEqual(data.expected_status_code, response.status_code)
         if data.expected_data:
@@ -110,7 +117,7 @@ class TestAuthorizationBase(BaseTestCase):
             elif data.method.lower() == "put":
                 response = api_client.put(data.url, data.post_data, format="json")
             else:
-                raise Exception(f"Unkown method: {data.method}")
+                raise Exception(f"Unknown method: {data.method}")
 
             self.assertEqual(data.expected_status_code, response.status_code)
             if data.expected_data_product_group:

@@ -59,7 +59,7 @@ class ProwlerParser(BaseParser, BaseFileParser):
                     "StatusExtended", "No StatusExtended found"
                 )
                 severity = prowler_observation.get(
-                    "Severity", Severity.SEVERITY_UNKOWN
+                    "Severity", Severity.SEVERITY_UNKNOWN
                 ).capitalize()
                 if severity == "Informational":
                     severity = Severity.SEVERITY_NONE

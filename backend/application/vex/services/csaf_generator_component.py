@@ -44,11 +44,21 @@ def append_component_to_product_tree(
         )
         product_tree.branches.append(components_branch)
 
+    _append_component_to_relationships(product_tree, observation)
+
     if not components_branch.branches:
         components_branch.branches = []
 
     for component_branch in components_branch.branches:
-        if component_branch.name == observation.origin_component_name_version:
+        if (
+            component_branch.product
+            and component_branch.product.product_id
+            == get_component_id(
+                observation.origin_component_name_version,
+                observation.origin_component_purl,
+                observation.origin_component_cpe,
+            )
+        ):
             return
 
     component_branch = CSAFProductBranch(
@@ -61,8 +71,6 @@ def append_component_to_product_tree(
         ),
     )
     components_branch.branches.append(component_branch)
-
-    _append_component_to_relationships(product_tree, observation)
 
 
 def _create_component(
