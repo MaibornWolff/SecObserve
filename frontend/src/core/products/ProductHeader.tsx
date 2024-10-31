@@ -50,11 +50,17 @@ const ProductHeader = () => {
                         <Labeled>
                             <ObservationsCountField label={get_open_observation_label(product)} withLabel={true} />
                         </Labeled>
-                        {product && product.has_licenses && (
-                            <Labeled>
-                                <LicensesCountField label="Licenses" withLabel={true} />
-                            </Labeled>
-                        )}
+                        {product &&
+                            product.forbidden_licenses_count +
+                                product.review_required_licenses_count +
+                                product.unknown_licenses_count +
+                                product.allowed_licenses_count +
+                                product.ignored_licenses_count >
+                                0 && (
+                                <Labeled>
+                                    <LicensesCountField label="Licenses" withLabel={true} />
+                                </Labeled>
+                            )}
                     </Stack>
                 </Box>
             </Paper>
