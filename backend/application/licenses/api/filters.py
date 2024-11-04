@@ -15,8 +15,10 @@ from application.licenses.models import (
     License,
     License_Component,
     License_Group,
+    License_Group_Authorization_Group_Member,
     License_Group_Member,
     License_Policy,
+    License_Policy_Authorization_Group_Member,
     License_Policy_Item,
     License_Policy_Member,
 )
@@ -133,12 +135,31 @@ class LicenseGroupMemberFilter(FilterSet):
             ("user__full_name", "user_data.full_name"),
             ("license_group", "license_group"),
             ("user", "user"),
+            ("is_manager", "is_manager"),
         ),
     )
 
     class Meta:
         model = License_Group_Member
-        fields = ["license_group", "user", "username", "full_name"]
+        fields = ["license_group", "user", "username", "full_name", "is_manager"]
+
+
+class LicenseGroupAuthorizationGroupFilter(FilterSet):
+    name = CharFilter(field_name="authorization_group__name", lookup_expr="icontains")
+
+    ordering = OrderingFilter(
+        # tuple-mapping retains order
+        fields=(
+            ("authorization_group__name", "authorization_group_data.name"),
+            ("license_group", "license_group"),
+            ("authorization_group", "authorization_group"),
+            ("is_manager", "is_manager"),
+        ),
+    )
+
+    class Meta:
+        model = License_Group_Authorization_Group_Member
+        fields = ["license_group", "authorization_group", "name", "is_manager"]
 
 
 class LicensePolicyFilter(FilterSet):
@@ -233,9 +254,28 @@ class LicensePolicyMemberFilter(FilterSet):
             ("user__full_name", "user_data.full_name"),
             ("license_policy", "license_policy"),
             ("user", "user"),
+            ("is_manager", "is_manager"),
         ),
     )
 
     class Meta:
         model = License_Policy_Member
-        fields = ["license_policy", "user", "username", "full_name"]
+        fields = ["license_policy", "user", "username", "full_name", "is_manager"]
+
+
+class LicensePolicyAuthorizationGroupFilter(FilterSet):
+    name = CharFilter(field_name="authorization_group__name", lookup_expr="icontains")
+
+    ordering = OrderingFilter(
+        # tuple-mapping retains order
+        fields=(
+            ("authorization_group__name", "authorization_group_data.name"),
+            ("license_policy", "license_policy"),
+            ("authorization_group", "authorization_group"),
+            ("is_manager", "is_manager"),
+        ),
+    )
+
+    class Meta:
+        model = License_Policy_Authorization_Group_Member
+        fields = ["license_policy", "authorization_group", "name", "is_manager"]

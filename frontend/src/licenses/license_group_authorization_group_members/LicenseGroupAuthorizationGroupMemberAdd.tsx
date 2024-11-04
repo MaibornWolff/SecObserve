@@ -2,17 +2,25 @@ import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { BooleanInput, ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
+import {
+    BooleanInput,
+    ReferenceInput,
+    SaveButton,
+    SimpleForm,
+    Toolbar,
+    useNotify,
+    useRefresh,
+} from "react-admin";
 
 import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
-export type LicenseGroupMemberAddProps = {
+export type LicenseGroupAuthorizationGroupMemberAddProps = {
     id: any;
 };
 
-const LicenseGroupMemberAdd = ({ id }: LicenseGroupMemberAddProps) => {
+const LicenseGroupAuthorizationGroupMemberAdd = ({ id }: LicenseGroupAuthorizationGroupMemberAddProps) => {
     const [open, setOpen] = useState(false);
     const refresh = useRefresh();
     const notify = useNotify();
@@ -46,8 +54,8 @@ const LicenseGroupMemberAdd = ({ id }: LicenseGroupMemberAddProps) => {
         </Toolbar>
     );
 
-    const add_user = (data: any) => {
-        const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/license_group_members/";
+    const add_authorization_group = (data: any) => {
+        const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/license_group_authorization_group_members/";
         const body = JSON.stringify({ license_group: id, ...data });
         httpClient(url, {
             method: "POST",
@@ -55,7 +63,7 @@ const LicenseGroupMemberAdd = ({ id }: LicenseGroupMemberAddProps) => {
         })
             .then(() => {
                 refresh();
-                notify("User added", { type: "success" });
+                notify("Authorization group added", { type: "success" });
                 setOpen(false);
             })
             .catch((error) => {
@@ -71,19 +79,19 @@ const LicenseGroupMemberAdd = ({ id }: LicenseGroupMemberAddProps) => {
                 sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem", marginBottom: 1 }}
                 startIcon={<AddIcon />}
             >
-                Add user
+                Add authorization group
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Add user</DialogTitle>
+                <DialogTitle>Add authorization group</DialogTitle>
                 <DialogContent>
-                    <SimpleForm onSubmit={add_user} toolbar={<CustomToolbar />}>
+                    <SimpleForm onSubmit={add_authorization_group} toolbar={<CustomToolbar />}>
                         <ReferenceInput
-                            source="user"
-                            reference="users"
-                            label="User"
-                            sort={{ field: "full_name", order: "ASC" }}
+                            source="authorization_group"
+                            reference="authorization_groups"
+                            label="Authorization group"
+                            sort={{ field: "name", order: "ASC" }}
                         >
-                            <AutocompleteInputWide optionText="full_name" validate={validate_required} />
+                            <AutocompleteInputWide optionText="name" validate={validate_required} />
                         </ReferenceInput>
                         <BooleanInput source="is_manager" label="Manager" />
                     </SimpleForm>
@@ -93,4 +101,4 @@ const LicenseGroupMemberAdd = ({ id }: LicenseGroupMemberAddProps) => {
     );
 };
 
-export default LicenseGroupMemberAdd;
+export default LicenseGroupAuthorizationGroupMemberAdd;

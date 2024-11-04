@@ -27,8 +27,10 @@ from application.import_observations.api.views import (
 )
 from application.licenses.api.views import (
     LicenseComponentViewSet,
+    LicenseGroupAuthorizationGroupMemberViewSet,
     LicenseGroupMemberViewSet,
     LicenseGroupViewSet,
+    LicensePolicyAuthorizationGroupMemberViewSet,
     LicensePolicyItemViewSet,
     LicensePolicyMemberViewSet,
     LicensePolicyViewSet,
@@ -116,6 +118,11 @@ router.register("license_groups", LicenseGroupViewSet, basename="license_groups"
 router.register(
     "license_group_members", LicenseGroupMemberViewSet, basename="license_group_members"
 )
+router.register(
+    "license_group_authorization_group_members",
+    LicenseGroupAuthorizationGroupMemberViewSet,
+    basename="license_group_authorization_group_members",
+)
 router.register("license_policies", LicensePolicyViewSet, basename="license_policies")
 router.register(
     "license_policy_items", LicensePolicyItemViewSet, basename="license_policy_items"
@@ -124,6 +131,11 @@ router.register(
     "license_policy_members",
     LicensePolicyMemberViewSet,
     basename="license_policy_members",
+)
+router.register(
+    "license_policy_authorization_group_members",
+    LicensePolicyAuthorizationGroupMemberViewSet,
+    basename="license_policy_authorization_group_members",
 )
 
 app_name = "api"

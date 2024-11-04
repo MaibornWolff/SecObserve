@@ -331,6 +331,14 @@ class TestAuthentication(BaseTestCase):
             ["delete", "get", "put", "patch"], "/api/license_group_members/1001/"
         )
 
+        self._check_authentication(
+            ["get", "post"], "/api/license_group_authorization_group_members/"
+        )
+        self._check_authentication(
+            ["delete", "get", "put", "patch"],
+            "/api/license_group_authorization_group_members/1001/",
+        )
+
         self._check_authentication(["get", "post"], "/api/license_policies/")
         self._check_authentication(
             ["delete", "get", "put", "patch"], "/api/license_policies/1/"
@@ -346,6 +354,14 @@ class TestAuthentication(BaseTestCase):
         self._check_authentication(["get", "post"], "/api/license_policy_members/")
         self._check_authentication(
             ["delete", "get", "put", "patch"], "/api/license_policy_members/1001/"
+        )
+
+        self._check_authentication(
+            ["get", "post"], "/api/license_policy_authorization_group_members/"
+        )
+        self._check_authentication(
+            ["delete", "get", "put", "patch"],
+            "/api/license_policy_authorization_group_members/1001/",
         )
 
     def test_authentication_users(self):

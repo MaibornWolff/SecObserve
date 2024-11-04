@@ -17,32 +17,33 @@ import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import { is_superuser } from "../../commons/functions";
 import { getSettingListSize } from "../../commons/user_settings/functions";
-import LicenseGroupMemberAdd from "./LicenseGroupMemberAdd";
-import LicenseGroupMemberEdit from "./LicenseGroupMemberEdit";
-import LicenseGroupMemberRemove from "./LicenseGroupMemberRemove";
+import LicenseGroupAuthorizationGroupMemberAdd from "./LicenseGroupAuthorizationGroupMemberAdd";
+import LicenseGroupAuthorizationGroupMemberEdit from "./LicenseGroupAuthorizationGroupMemberEdit";
+import LicenseGroupAuthorizationGroupMemberRemove from "./LicenseGroupAuthorizationGroupMemberRemove";
 
 function listFilters() {
     return [
-        <TextInput source="full_name" alwaysOn />,
-        <TextInput source="username" alwaysOn />,
+        <TextInput source="name" alwaysOn />,
         <NullableBooleanInput source="is_manager" label="Manager" alwaysOn />,
     ];
 }
 
-const showUser = (id: Identifier) => {
-    return "#/users/" + id + "/show";
+const showAuthorizationGroup = (id: Identifier) => {
+    return "#/authorization_groups/" + id + "/show";
 };
 
-type LicenseGroupMemberEmbeddedListProps = {
+type LicenseGroupAuthorizationGroupMemberEmbeddedListProps = {
     license_group: any;
 };
 
-const LicenseGroupMemberEmbeddedList = ({ license_group }: LicenseGroupMemberEmbeddedListProps) => {
+const LicenseGroupAuthorizationGroupMemberEmbeddedList = ({
+    license_group,
+}: LicenseGroupAuthorizationGroupMemberEmbeddedListProps) => {
     const listContext = useListController({
         filter: { license_group: Number(license_group.id) },
         perPage: 25,
-        resource: "license_group_members",
-        sort: { field: "user_data.full_name", order: "ASC" },
+        resource: "license_group_authorization_group_members",
+        sort: { field: "authorization_group_data.name", order: "ASC" },
         filterDefaultValues: {},
         disableSyncWithLocation: true,
     });
@@ -52,46 +53,44 @@ const LicenseGroupMemberEmbeddedList = ({ license_group }: LicenseGroupMemberEmb
     }
 
     return (
-        <ResourceContextProvider value="license_group_members">
+        <ResourceContextProvider value="license_group_authorization_group_members">
             <ListContextProvider value={listContext}>
                 <div style={{ width: "100%" }}>
-                    {(is_superuser() || license_group.is_manager) && <LicenseGroupMemberAdd id={license_group.id} />}
-                    {license_group.has_users && (
+                    {(is_superuser() || license_group.is_manager) && (
+                        <LicenseGroupAuthorizationGroupMemberAdd id={license_group.id} />
+                    )}
+                    {license_group.has_authorization_groups && (
                         <Fragment>
                             <FilterForm filters={listFilters()} />
                             <Datagrid
                                 size={getSettingListSize()}
                                 rowClick={false}
                                 bulkActionButtons={false}
-                                resource="users"
+                                resource="license_group_authorization_group_members"
                             >
                                 <WithRecord
-                                    label="Full name"
-                                    render={(license_group_member) => (
+                                    label="Name"
+                                    render={(license_group_authorization_group) => (
                                         <TextUrlField
-                                            label="User"
-                                            text={license_group_member.user_data.full_name}
-                                            url={showUser(license_group_member.user_data.id)}
-                                        />
-                                    )}
-                                />
-                                <WithRecord
-                                    label="Username"
-                                    render={(license_group_member) => (
-                                        <TextUrlField
-                                            label="User"
-                                            text={license_group_member.user_data.username}
-                                            url={showUser(license_group_member.user_data.id)}
+                                            label="Authorization group"
+                                            text={license_group_authorization_group.authorization_group_data.name}
+                                            url={showAuthorizationGroup(
+                                                license_group_authorization_group.authorization_group_data.id
+                                            )}
                                         />
                                     )}
                                 />
                                 <BooleanField source="is_manager" label="Manager" />
                                 {(is_superuser() || license_group.is_manager) && (
                                     <WithRecord
-                                        render={(license_group_member) => (
+                                        render={(license_group_authorization_group_member) => (
                                             <Stack direction="row" spacing={4}>
-                                                <LicenseGroupMemberEdit />
-                                                <LicenseGroupMemberRemove license_group_member={license_group_member} />
+                                                <LicenseGroupAuthorizationGroupMemberEdit />
+                                                <LicenseGroupAuthorizationGroupMemberRemove
+                                                    license_group_authorization_group_member={
+                                                        license_group_authorization_group_member
+                                                    }
+                                                />
                                             </Stack>
                                         )}
                                     />
@@ -106,4 +105,4 @@ const LicenseGroupMemberEmbeddedList = ({ license_group }: LicenseGroupMemberEmb
     );
 };
 
-export default LicenseGroupMemberEmbeddedList;
+export default LicenseGroupAuthorizationGroupMemberEmbeddedList;

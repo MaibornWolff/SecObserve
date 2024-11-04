@@ -25,4 +25,6 @@ def get_license_policies() -> QuerySet[License_Policy]:
     if user.is_superuser:
         return license_policies
 
-    return license_policies.filter(Q(users=user) | Q(is_public=True))
+    return license_policies.filter(
+        Q(users=user) | Q(authorization_groups__users=user) | Q(is_public=True)
+    )
