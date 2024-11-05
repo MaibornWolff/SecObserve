@@ -16,7 +16,7 @@ class TestAuthorizationAuthorizationGroups(TestAuthorizationBase):
     def test_authorization_authorization_groups(self):
         prepare_authorization_groups()
 
-        expected_data = "{'count': 5, 'next': None, 'previous': None, 'results': [{'id': 4, 'has_product_group_members': False, 'has_product_members': True, 'is_manager': False, 'name': 'db_group_internal_write', 'oidc_group': ''}, {'id': 5, 'has_product_group_members': False, 'has_product_members': True, 'is_manager': False, 'name': 'db_group_internal_read', 'oidc_group': ''}, {'id': 6, 'has_product_group_members': False, 'has_product_members': True, 'is_manager': False, 'name': 'db_group_external', 'oidc_group': ''}, {'id': 7, 'has_product_group_members': True, 'has_product_members': False, 'is_manager': False, 'name': 'db_group_product_group', 'oidc_group': ''}, {'id': 8, 'has_product_group_members': False, 'has_product_members': False, 'is_manager': False, 'name': 'db_group_unused', 'oidc_group': ''}]}"
+        expected_data = "{'count': 5, 'next': None, 'previous': None, 'results': [{'id': 4, 'has_product_group_members': False, 'has_product_members': True, 'has_users': True, 'is_manager': False, 'name': 'db_group_internal_write', 'oidc_group': ''}, {'id': 5, 'has_product_group_members': False, 'has_product_members': True, 'has_users': True, 'is_manager': False, 'name': 'db_group_internal_read', 'oidc_group': ''}, {'id': 6, 'has_product_group_members': False, 'has_product_members': True, 'has_users': True, 'is_manager': False, 'name': 'db_group_external', 'oidc_group': ''}, {'id': 7, 'has_product_group_members': True, 'has_product_members': False, 'has_users': True, 'is_manager': False, 'name': 'db_group_product_group', 'oidc_group': ''}, {'id': 8, 'has_product_group_members': False, 'has_product_members': False, 'has_users': False, 'is_manager': False, 'name': 'db_group_unused', 'oidc_group': ''}]}"
         self._test_api(
             APITest(
                 "db_admin",
@@ -28,8 +28,8 @@ class TestAuthorizationAuthorizationGroups(TestAuthorizationBase):
             )
         )
 
-        expected_data = "{'count': 1, 'next': None, 'previous': None, 'results': [{'id': 4, 'has_product_group_members': False, 'has_product_members': True, 'is_manager': True, 'name': 'db_group_internal_write', 'oidc_group': ''}]}"
-        expected_data_product_group = "{'count': 1, 'next': None, 'previous': None, 'results': [{'id': 7, 'has_product_group_members': True, 'has_product_members': False, 'is_manager': False, 'name': 'db_group_product_group', 'oidc_group': ''}]}"
+        expected_data = "{'count': 1, 'next': None, 'previous': None, 'results': [{'id': 4, 'has_product_group_members': False, 'has_product_members': True, 'has_users': True, 'is_manager': True, 'name': 'db_group_internal_write', 'oidc_group': ''}]}"
+        expected_data_product_group = "{'count': 1, 'next': None, 'previous': None, 'results': [{'id': 7, 'has_product_group_members': True, 'has_product_members': False, 'has_users': True, 'is_manager': False, 'name': 'db_group_product_group', 'oidc_group': ''}]}"
         self._test_api(
             APITest(
                 "db_internal_write",
@@ -41,7 +41,7 @@ class TestAuthorizationAuthorizationGroups(TestAuthorizationBase):
                 expected_data_product_group=expected_data_product_group,
             )
         )
-        expected_data = "{'id': 4, 'has_product_group_members': False, 'has_product_members': True, 'is_manager': True, 'name': 'db_group_internal_write', 'oidc_group': ''}"
+        expected_data = "{'id': 4, 'has_product_group_members': False, 'has_product_members': True, 'has_users': True, 'is_manager': True, 'name': 'db_group_internal_write', 'oidc_group': ''}"
         self._test_api(
             APITest(
                 "db_internal_write",
@@ -65,7 +65,7 @@ class TestAuthorizationAuthorizationGroups(TestAuthorizationBase):
             )
         )
 
-        expected_data = "{'count': 1, 'next': None, 'previous': None, 'results': [{'id': 6, 'has_product_group_members': False, 'has_product_members': True, 'is_manager': False, 'name': 'db_group_external', 'oidc_group': ''}]}"
+        expected_data = "{'count': 1, 'next': None, 'previous': None, 'results': [{'id': 6, 'has_product_group_members': False, 'has_product_members': True, 'has_users': True, 'is_manager': False, 'name': 'db_group_external', 'oidc_group': ''}]}"
         self._test_api(
             APITest(
                 "db_external",
@@ -76,7 +76,7 @@ class TestAuthorizationAuthorizationGroups(TestAuthorizationBase):
                 expected_data,
             )
         )
-        expected_data = "{'id': 6, 'has_product_group_members': False, 'has_product_members': True, 'is_manager': False, 'name': 'db_group_external', 'oidc_group': ''}"
+        expected_data = "{'id': 6, 'has_product_group_members': False, 'has_product_members': True, 'has_users': True, 'is_manager': False, 'name': 'db_group_external', 'oidc_group': ''}"
         self._test_api(
             APITest(
                 "db_external",
@@ -99,7 +99,7 @@ class TestAuthorizationAuthorizationGroups(TestAuthorizationBase):
             )
         )
 
-        expected_data = "{'id': 9, 'has_product_group_members': False, 'has_product_members': False, 'is_manager': False, 'name': 'string', 'oidc_group': 'oidc'}"
+        expected_data = "{'id': 9, 'has_product_group_members': False, 'has_product_members': False, 'has_users': False, 'is_manager': False, 'name': 'string', 'oidc_group': 'oidc'}"
         self._test_api(
             APITest(
                 "db_admin",
@@ -115,7 +115,7 @@ class TestAuthorizationAuthorizationGroups(TestAuthorizationBase):
             )
         )
 
-        expected_data = "{'id': 10, 'has_product_group_members': False, 'has_product_members': False, 'is_manager': True, 'name': 'string_2', 'oidc_group': 'oidc'}"
+        expected_data = "{'id': 10, 'has_product_group_members': False, 'has_product_members': False, 'has_users': True, 'is_manager': True, 'name': 'string_2', 'oidc_group': 'oidc'}"
         self._test_api(
             APITest(
                 "db_internal_write",
@@ -149,7 +149,7 @@ class TestAuthorizationAuthorizationGroups(TestAuthorizationBase):
             )
         )
 
-        expected_data = "{'id': 9, 'has_product_group_members': False, 'has_product_members': False, 'is_manager': False, 'name': 'changed_string', 'oidc_group': 'oidc'}"
+        expected_data = "{'id': 9, 'has_product_group_members': False, 'has_product_members': False, 'has_users': False, 'is_manager': False, 'name': 'changed_string', 'oidc_group': 'oidc'}"
         self._test_api(
             APITest(
                 "db_admin",
@@ -162,7 +162,7 @@ class TestAuthorizationAuthorizationGroups(TestAuthorizationBase):
             )
         )
 
-        expected_data = "{'id': 10, 'has_product_group_members': False, 'has_product_members': False, 'is_manager': True, 'name': 'changed_string_2', 'oidc_group': 'oidc'}"
+        expected_data = "{'id': 10, 'has_product_group_members': False, 'has_product_members': False, 'has_users': True, 'is_manager': True, 'name': 'changed_string_2', 'oidc_group': 'oidc'}"
         self._test_api(
             APITest(
                 "db_internal_write",
