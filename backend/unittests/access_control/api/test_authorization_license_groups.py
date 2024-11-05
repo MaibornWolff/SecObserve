@@ -27,6 +27,19 @@ class TestAuthorizationLicenseGroups(TestAuthorizationBase):
             )
         )
 
+        expected_data = "{'count': 3, 'next': None, 'previous': None, 'results': [{'id': 1000, 'is_manager': False, 'is_in_license_policy': False, 'has_licenses': True, 'has_users': False, 'has_authorization_groups': False, 'name': 'public', 'description': '', 'is_public': True}, {'id': 1003, 'is_manager': False, 'is_in_license_policy': False, 'has_licenses': False, 'has_users': False, 'has_authorization_groups': True, 'name': 'authorization_group_not_manager', 'description': '', 'is_public': False}, {'id': 1004, 'is_manager': True, 'is_in_license_policy': False, 'has_licenses': False, 'has_users': False, 'has_authorization_groups': True, 'name': 'authorization_group_manager', 'description': '', 'is_public': False}]}"
+        self._test_api(
+            APITest(
+                "db_product_group_user",
+                "get",
+                "/api/license_groups/",
+                None,
+                200,
+                expected_data,
+                no_second_user=True,
+            )
+        )
+
         expected_data = "{'id': 1002, 'is_manager': True, 'is_in_license_policy': False, 'has_licenses': True, 'has_users': True, 'has_authorization_groups': False, 'name': 'internal_write_manager', 'description': '', 'is_public': False}"
         self._test_api(
             APITest(
@@ -114,6 +127,34 @@ class TestAuthorizationLicenseGroups(TestAuthorizationBase):
                 "db_internal_write",
                 "patch",
                 "/api/license_groups/1000/",
+                {"description": "changed"},
+                403,
+                expected_data,
+                no_second_user=True,
+            )
+        )
+
+        expected_data = "{'id': 1004, 'is_manager': True, 'is_in_license_policy': False, 'has_licenses': False, 'has_users': False, 'has_authorization_groups': True, 'name': 'authorization_group_manager', 'description': 'changed', 'is_public': False}"
+        self._test_api(
+            APITest(
+                "db_product_group_user",
+                "patch",
+                "/api/license_groups/1004/",
+                {"description": "changed"},
+                200,
+                expected_data,
+                no_second_user=True,
+            )
+        )
+
+        expected_data = (
+            "{'message': 'You do not have permission to perform this action.'}"
+        )
+        self._test_api(
+            APITest(
+                "db_product_group_user",
+                "patch",
+                "/api/license_groups/1003/",
                 {"description": "changed"},
                 403,
                 expected_data,
@@ -282,6 +323,30 @@ class TestAuthorizationLicenseGroups(TestAuthorizationBase):
                 "db_internal_read",
                 "delete",
                 "/api/license_groups/1001/",
+                None,
+                403,
+                None,
+                no_second_user=True,
+            )
+        )
+
+        self._test_api(
+            APITest(
+                "db_product_group_user",
+                "delete",
+                "/api/license_groups/1004/",
+                None,
+                204,
+                None,
+                no_second_user=True,
+            )
+        )
+
+        self._test_api(
+            APITest(
+                "db_product_group_user",
+                "delete",
+                "/api/license_groups/1003/",
                 None,
                 403,
                 None,

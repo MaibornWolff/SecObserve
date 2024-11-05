@@ -2,15 +2,7 @@ import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import {
-    BooleanInput,
-    ReferenceInput,
-    SaveButton,
-    SimpleForm,
-    Toolbar,
-    useNotify,
-    useRefresh,
-} from "react-admin";
+import { BooleanInput, ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
 
 import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
