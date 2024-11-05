@@ -25,4 +25,6 @@ def get_license_groups() -> QuerySet[License_Group]:
     if user.is_superuser:
         return license_groups
 
-    return license_groups.filter(Q(users=user) | Q(is_public=True))
+    return license_groups.filter(
+        Q(users=user) | Q(authorization_groups__users=user) | Q(is_public=True)
+    )

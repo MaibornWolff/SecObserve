@@ -9,14 +9,14 @@ class TestAuthorizationLicensePolicies(TestAuthorizationBase):
     def test_authorization_license_policies(self):
         License_Policy.objects.filter(pk__lt=1000).delete()
 
-        expected_data = "{'count': 3, 'next': None, 'previous': None, 'results': [{'id': 1000, 'is_manager': False, 'has_products': False, 'name': 'public', 'description': '', 'is_public': True, 'ignore_component_types': '', 'users': []}, {'id': 1001, 'is_manager': False, 'has_products': False, 'name': 'internal_read_not_manager', 'description': '', 'is_public': False, 'ignore_component_types': '', 'users': [3, 4]}, {'id': 1002, 'is_manager': False, 'has_products': False, 'name': 'internal_write_manager', 'description': '', 'is_public': False, 'ignore_component_types': '', 'users': [2]}]}"
+        expected_data = "{'count': 5, 'next': None, 'previous': None, 'results': [{'id': 1000, 'is_manager': False, 'has_products': False, 'has_items': True, 'has_users': False, 'has_authorization_groups': False, 'name': 'public', 'description': '', 'is_public': True, 'ignore_component_types': ''}, {'id': 1001, 'is_manager': False, 'has_products': False, 'has_items': True, 'has_users': True, 'has_authorization_groups': False, 'name': 'internal_read_not_manager', 'description': '', 'is_public': False, 'ignore_component_types': ''}, {'id': 1002, 'is_manager': False, 'has_products': False, 'has_items': True, 'has_users': True, 'has_authorization_groups': False, 'name': 'internal_write_manager', 'description': '', 'is_public': False, 'ignore_component_types': ''}, {'id': 1003, 'is_manager': False, 'has_products': False, 'has_items': True, 'has_users': False, 'has_authorization_groups': True, 'name': 'authorization_group_not_manager', 'description': '', 'is_public': False, 'ignore_component_types': ''}, {'id': 1004, 'is_manager': False, 'has_products': False, 'has_items': True, 'has_users': False, 'has_authorization_groups': True, 'name': 'authorization_group_manager', 'description': '', 'is_public': False, 'ignore_component_types': ''}]}"
         self._test_api(
             APITest(
                 "db_admin", "get", "/api/license_policies/", None, 200, expected_data
             )
         )
 
-        expected_data = "{'count': 2, 'next': None, 'previous': None, 'results': [{'id': 1000, 'is_manager': False, 'has_products': False, 'name': 'public', 'description': '', 'is_public': True, 'ignore_component_types': '', 'users': []}, {'id': 1002, 'is_manager': True, 'has_products': False, 'name': 'internal_write_manager', 'description': '', 'is_public': False, 'ignore_component_types': '', 'users': [2]}]}"
+        expected_data = "{'count': 3, 'next': None, 'previous': None, 'results': [{'id': 1000, 'is_manager': False, 'has_products': False, 'has_items': True, 'has_users': False, 'has_authorization_groups': False, 'name': 'public', 'description': '', 'is_public': True, 'ignore_component_types': ''}, {'id': 1002, 'is_manager': True, 'has_products': False, 'has_items': True, 'has_users': True, 'has_authorization_groups': False, 'name': 'internal_write_manager', 'description': '', 'is_public': False, 'ignore_component_types': ''}, {'id': 1003, 'is_manager': True, 'has_products': False, 'has_items': True, 'has_users': False, 'has_authorization_groups': True, 'name': 'authorization_group_not_manager', 'description': '', 'is_public': False, 'ignore_component_types': ''}]}"
         self._test_api(
             APITest(
                 "db_internal_write",
@@ -29,7 +29,20 @@ class TestAuthorizationLicensePolicies(TestAuthorizationBase):
             )
         )
 
-        expected_data = "{'id': 1002, 'is_manager': True, 'has_products': False, 'name': 'internal_write_manager', 'description': '', 'is_public': False, 'ignore_component_types': '', 'users': [2]}"
+        expected_data = "{'count': 3, 'next': None, 'previous': None, 'results': [{'id': 1000, 'is_manager': False, 'has_products': False, 'has_items': True, 'has_users': False, 'has_authorization_groups': False, 'name': 'public', 'description': '', 'is_public': True, 'ignore_component_types': ''}, {'id': 1003, 'is_manager': False, 'has_products': False, 'has_items': True, 'has_users': False, 'has_authorization_groups': True, 'name': 'authorization_group_not_manager', 'description': '', 'is_public': False, 'ignore_component_types': ''}, {'id': 1004, 'is_manager': True, 'has_products': False, 'has_items': True, 'has_users': False, 'has_authorization_groups': True, 'name': 'authorization_group_manager', 'description': '', 'is_public': False, 'ignore_component_types': ''}]}"
+        self._test_api(
+            APITest(
+                "db_product_group_user",
+                "get",
+                "/api/license_policies/",
+                None,
+                200,
+                expected_data,
+                no_second_user=True,
+            )
+        )
+
+        expected_data = "{'id': 1002, 'is_manager': True, 'has_products': False, 'has_items': True, 'has_users': True, 'has_authorization_groups': False, 'name': 'internal_write_manager', 'description': '', 'is_public': False, 'ignore_component_types': ''}"
         self._test_api(
             APITest(
                 "db_internal_write",
@@ -66,7 +79,7 @@ class TestAuthorizationLicensePolicies(TestAuthorizationBase):
         )
 
         post_data = {"name": "new_license_policy"}
-        expected_data = "{'id': 1003, 'is_manager': True, 'has_products': False, 'name': 'new_license_policy', 'description': '', 'is_public': False, 'ignore_component_types': '', 'users': [2]}"
+        expected_data = "{'id': 1005, 'is_manager': True, 'has_products': False, 'has_items': False, 'has_users': True, 'has_authorization_groups': False, 'name': 'new_license_policy', 'description': '', 'is_public': False, 'ignore_component_types': ''}"
         self._test_api(
             APITest(
                 "db_internal_write",
@@ -95,7 +108,7 @@ class TestAuthorizationLicensePolicies(TestAuthorizationBase):
             )
         )
 
-        expected_data = "{'id': 1002, 'is_manager': True, 'has_products': False, 'name': 'internal_write_manager', 'description': 'changed', 'is_public': False, 'ignore_component_types': '', 'users': [2]}"
+        expected_data = "{'id': 1002, 'is_manager': True, 'has_products': False, 'has_items': True, 'has_users': True, 'has_authorization_groups': False, 'name': 'internal_write_manager', 'description': 'changed', 'is_public': False, 'ignore_component_types': ''}"
         self._test_api(
             APITest(
                 "db_internal_write",
@@ -123,6 +136,34 @@ class TestAuthorizationLicensePolicies(TestAuthorizationBase):
             )
         )
 
+        expected_data = "{'id': 1004, 'is_manager': True, 'has_products': False, 'has_items': True, 'has_users': False, 'has_authorization_groups': True, 'name': 'authorization_group_manager', 'description': 'changed', 'is_public': False, 'ignore_component_types': ''}"
+        self._test_api(
+            APITest(
+                "db_product_group_user",
+                "patch",
+                "/api/license_policies/1004/",
+                {"description": "changed"},
+                200,
+                expected_data,
+                no_second_user=True,
+            )
+        )
+
+        expected_data = (
+            "{'message': 'You do not have permission to perform this action.'}"
+        )
+        self._test_api(
+            APITest(
+                "db_product_group_user",
+                "patch",
+                "/api/license_policies/1003/",
+                {"description": "changed"},
+                403,
+                expected_data,
+                no_second_user=True,
+            )
+        )
+
         self._test_api(
             APITest(
                 "db_internal_read",
@@ -136,7 +177,7 @@ class TestAuthorizationLicensePolicies(TestAuthorizationBase):
         )
 
         post_data = {"name": "copied_license_policy"}
-        expected_data = "{'id': 1004, 'is_manager': True, 'has_products': False, 'name': 'copied_license_policy', 'description': 'changed', 'is_public': False, 'ignore_component_types': '', 'users': [2]}"
+        expected_data = "{'id': 1006, 'is_manager': True, 'has_products': False, 'has_items': True, 'has_users': True, 'has_authorization_groups': False, 'name': 'copied_license_policy', 'description': 'changed', 'is_public': False, 'ignore_component_types': ''}"
         self._test_api(
             APITest(
                 "db_internal_write",
@@ -246,6 +287,30 @@ class TestAuthorizationLicensePolicies(TestAuthorizationBase):
                 "db_internal_read",
                 "delete",
                 "/api/license_policies/1001/",
+                None,
+                403,
+                None,
+                no_second_user=True,
+            )
+        )
+
+        self._test_api(
+            APITest(
+                "db_product_group_user",
+                "delete",
+                "/api/license_policies/1004/",
+                None,
+                204,
+                None,
+                no_second_user=True,
+            )
+        )
+
+        self._test_api(
+            APITest(
+                "db_product_group_user",
+                "delete",
+                "/api/license_policies/1003/",
                 None,
                 403,
                 None,

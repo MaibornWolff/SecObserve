@@ -84,6 +84,24 @@
         }
     },
     {
+        "model": "licenses.license_group",
+        "pk": 1003,
+        "fields": {
+            "name": "authorization_group_not_manager",
+            "description": "",
+            "is_public": false
+        }
+    },
+    {
+        "model": "licenses.license_group",
+        "pk": 1004,
+        "fields": {
+            "name": "authorization_group_manager",
+            "description": "",
+            "is_public": false
+        }
+    },
+    {
         "model": "licenses.license_group_member",
         "pk": 1001,
         "fields": {
@@ -111,6 +129,33 @@
         }
     },
     {
+        "model": "licenses.license_group_authorization_group_member",
+        "pk": 1000,
+        "fields": {
+            "license_group": 1003,
+            "authorization_group": 2,
+            "is_manager": false
+        }
+    },
+    {
+        "model": "licenses.license_group_authorization_group_member",
+        "pk": 1001,
+        "fields": {
+            "license_group": 1004,
+            "authorization_group": 2,
+            "is_manager": true
+        }
+    },
+    {
+        "model": "licenses.license_group_authorization_group_member",
+        "pk": 1002,
+        "fields": {
+            "license_group": 1003,
+            "authorization_group": 3,
+            "is_manager": true
+        }
+    },
+    {
         "model": "licenses.license_policy",
         "pk": 1000,
         "fields": {
@@ -133,6 +178,24 @@
         "pk": 1002,
         "fields": {
             "name": "internal_write_manager",
+            "description": "",
+            "is_public": false
+        }
+    },
+    {
+        "model": "licenses.license_policy",
+        "pk": 1003,
+        "fields": {
+            "name": "authorization_group_not_manager",
+            "description": "",
+            "is_public": false
+        }
+    },
+    {
+        "model": "licenses.license_policy",
+        "pk": 1004,
+        "fields": {
+            "name": "authorization_group_manager",
             "description": "",
             "is_public": false
         }
@@ -170,6 +233,26 @@
         }
     },
     {
+        "model": "licenses.license_policy_item",
+        "pk": 1003,
+        "fields": {
+            "license_policy": 1003,
+            "unknown_license": "Three unknown licenses",
+            "evaluation_result": "Unknown",
+            "numerical_evaluation_result": 3
+        }
+    },
+    {
+        "model": "licenses.license_policy_item",
+        "pk": 1004,
+        "fields": {
+            "license_policy": 1004,
+            "unknown_license": "Four unknown licenses",
+            "evaluation_result": "Unknown",
+            "numerical_evaluation_result": 3
+        }
+    },
+    {
         "model": "licenses.license_policy_member",
         "pk": 1001,
         "fields": {
@@ -194,6 +277,33 @@
             "license_policy": 1001,
             "user": 4,
             "is_manager": false
+        }
+    },
+    {
+        "model": "licenses.license_policy_authorization_group_member",
+        "pk": 1000,
+        "fields": {
+            "license_policy": 1003,
+            "authorization_group": 2,
+            "is_manager": false
+        }
+    },
+    {
+        "model": "licenses.license_policy_authorization_group_member",
+        "pk": 1001,
+        "fields": {
+            "license_policy": 1004,
+            "authorization_group": 2,
+            "is_manager": true
+        }
+    },
+    {
+        "model": "licenses.license_policy_authorization_group_member",
+        "pk": 1002,
+        "fields": {
+            "license_policy": 1003,
+            "authorization_group": 3,
+            "is_manager": true
         }
     }
 ]

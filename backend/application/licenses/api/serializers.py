@@ -11,19 +11,34 @@ from rest_framework.serializers import (
     ValidationError,
 )
 
-from application.access_control.api.serializers import UserListSerializer
+from application.access_control.api.serializers import (
+    AuthorizationGroupListSerializer,
+    UserListSerializer,
+)
 from application.commons.services.global_request import get_current_user
+from application.core.queries.product import get_products
 from application.core.types import PURL_Type
 from application.licenses.models import (
     License,
     License_Component,
     License_Group,
+    License_Group_Authorization_Group_Member,
     License_Group_Member,
     License_Policy,
+    License_Policy_Authorization_Group_Member,
     License_Policy_Item,
     License_Policy_Member,
 )
+from application.licenses.queries.license_group_authorization_group_member import (
+    get_license_group_authorization_group_member,
+    get_license_group_authorization_group_members,
+)
 from application.licenses.queries.license_group_member import get_license_group_member
+from application.licenses.queries.license_policy_authorization_group_member import (
+    get_license_policy_authorization_group_member,
+    get_license_policy_authorization_group_members,
+)
+from application.licenses.queries.license_policy_item import get_license_policy_items
 from application.licenses.queries.license_policy_member import get_license_policy_member
 from application.licenses.services.license_policy import get_ignore_component_type_list
 
@@ -98,23 +113,94 @@ class LicenseComponentBulkDeleteSerializer(Serializer):
 class LicenseGroupSerializer(ModelSerializer):
     is_manager = SerializerMethodField()
     is_in_license_policy = SerializerMethodField()
+    has_licenses = SerializerMethodField()
+    has_users = SerializerMethodField()
+    has_authorization_groups = SerializerMethodField()
 
     class Meta:
         model = License_Group
-        exclude = ["licenses"]
+        exclude = ["licenses", "users", "authorization_groups"]
 
     def get_is_manager(self, obj: License_Group) -> bool:
         user = get_current_user()
-        return License_Group_Member.objects.filter(
+
+        if License_Group_Member.objects.filter(
             license_group=obj, user=user, is_manager=True
-        ).exists()
+        ).exists():
+            return True
+
+        if License_Group_Authorization_Group_Member.objects.filter(
+            license_group=obj,
+            authorization_group__users=user,
+            is_manager=True,
+        ).exists():
+            return True
+
+        return False
 
     def get_is_in_license_policy(self, obj: License_Group) -> bool:
-        return License_Policy_Item.objects.filter(license_group=obj).exists()
+        return get_license_policy_items().filter(license_group=obj).exists()
+
+    def get_has_licenses(self, obj: License_Group) -> bool:
+        return obj.licenses.exists()
+
+    def get_has_users(self, obj: License_Group) -> bool:
+        return obj.users.exists()
+
+    def get_has_authorization_groups(self, obj: License_Group) -> bool:
+        return (
+            get_license_group_authorization_group_members()
+            .filter(license_group=obj)
+            .exists()
+        )
 
 
 class LicenseGroupLicenseAddRemoveSerializer(Serializer):
     license = IntegerField(min_value=1, required=True)
+
+
+class LicenseGroupAuthorizationGroupMemberSerializer(ModelSerializer):
+    license_group_data = LicenseGroupSerializer(
+        source="license_group",
+        read_only=True,
+    )
+    authorization_group_data = AuthorizationGroupListSerializer(
+        source="authorization_group", read_only=True
+    )
+
+    class Meta:
+        model = License_Group_Authorization_Group_Member
+        fields = "__all__"
+
+    def validate(self, attrs: dict):
+        self.instance: License_Group_Authorization_Group_Member
+        data_license_group: Optional[License_Group] = attrs.get("license_group")
+        data_authorization_group = attrs.get("authorization_group")
+
+        if self.instance is not None and (
+            (data_license_group and data_license_group != self.instance.license_group)
+            or (
+                data_authorization_group
+                and data_authorization_group != self.instance.authorization_group
+            )
+        ):
+            raise ValidationError(
+                "License group and authorization group cannot be changed"
+            )
+
+        if self.instance is None:
+            license_group_authorization_group_member = (
+                get_license_group_authorization_group_member(
+                    data_license_group, data_authorization_group
+                )
+            )
+            if license_group_authorization_group_member:
+                raise ValidationError(
+                    "License group authorization group member "
+                    + f"{data_license_group} / {data_authorization_group} already exists"
+                )
+
+        return attrs
 
 
 class LicenseGroupMemberSerializer(ModelSerializer):
@@ -158,10 +244,13 @@ class LicenseGroupCopySerializer(Serializer):
 class LicensePolicySerializer(ModelSerializer):
     is_manager = SerializerMethodField()
     has_products = SerializerMethodField()
+    has_items = SerializerMethodField()
+    has_users = SerializerMethodField()
+    has_authorization_groups = SerializerMethodField()
 
     class Meta:
         model = License_Policy
-        fields = "__all__"
+        exclude = ["users", "authorization_groups"]
 
     def validate_ignore_component_types(self, value: str) -> str:
         ignore_component_types = get_ignore_component_type_list(value)
@@ -174,12 +263,36 @@ class LicensePolicySerializer(ModelSerializer):
 
     def get_is_manager(self, obj: License_Policy) -> bool:
         user = get_current_user()
-        return License_Policy_Member.objects.filter(
+
+        if License_Policy_Member.objects.filter(
             license_policy=obj, user=user, is_manager=True
-        ).exists()
+        ).exists():
+            return True
+
+        if License_Policy_Authorization_Group_Member.objects.filter(
+            license_policy=obj,
+            authorization_group__users=user,
+            is_manager=True,
+        ).exists():
+            return True
+
+        return False
 
     def get_has_products(self, obj: License_Policy) -> bool:
-        return obj.product.exists()
+        return get_products().filter(license_policy=obj).exists()
+
+    def get_has_items(self, obj: License_Policy) -> bool:
+        return obj.license_policy_items.exists()
+
+    def get_has_users(self, obj: License_Policy) -> bool:
+        return obj.users.exists()
+
+    def get_has_authorization_groups(self, obj: License_Policy) -> bool:
+        return (
+            get_license_policy_authorization_group_members()
+            .filter(license_policy=obj)
+            .exists()
+        )
 
 
 class LicensePolicyItemSerializer(ModelSerializer):
@@ -292,6 +405,53 @@ class LicensePolicyMemberSerializer(ModelSerializer):
             if license_group_member:
                 raise ValidationError(
                     f"License policy member {data_license_policy} / {data_user} already exists"
+                )
+
+        return attrs
+
+
+class LicensePolicyAuthorizationGroupMemberSerializer(ModelSerializer):
+    license_policy_data = LicensePolicySerializer(
+        source="license_policy",
+        read_only=True,
+    )
+    authorization_group_data = AuthorizationGroupListSerializer(
+        source="authorization_group", read_only=True
+    )
+
+    class Meta:
+        model = License_Policy_Authorization_Group_Member
+        fields = "__all__"
+
+    def validate(self, attrs: dict):
+        self.instance: License_Policy_Authorization_Group_Member
+        data_license_policy: Optional[License_Policy] = attrs.get("license_policy")
+        data_authorization_group = attrs.get("authorization_group")
+
+        if self.instance is not None and (
+            (
+                data_license_policy
+                and data_license_policy != self.instance.license_policy
+            )
+            or (
+                data_authorization_group
+                and data_authorization_group != self.instance.authorization_group
+            )
+        ):
+            raise ValidationError(
+                "License policy and authorization group cannot be changed"
+            )
+
+        if self.instance is None:
+            license_policy_authorization_group_member = (
+                get_license_policy_authorization_group_member(
+                    data_license_policy, data_authorization_group
+                )
+            )
+            if license_policy_authorization_group_member:
+                raise ValidationError(
+                    "License policy authorization group member "
+                    + f"{data_license_policy} / {data_authorization_group} already exists"
                 )
 
         return attrs
