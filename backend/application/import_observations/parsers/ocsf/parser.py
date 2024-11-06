@@ -8,6 +8,8 @@ from py_ocsf_models.events.findings.detection_finding import (
     StatusID,
 )
 from py_ocsf_models.events.findings.finding import ActivityID
+from rest_framework.exceptions import ValidationError
+from semver import Version
 
 from application.core.models import Observation
 from application.core.types import Severity
@@ -55,6 +57,22 @@ class OCSFParser(BaseParser, BaseFileParser):
                     ],
                     {},
                 )
+
+            tool_name = (
+                first_element.get("metadata", {}).get("product", {}).get("name", "")
+            )
+            tool_version = (
+                first_element.get("metadata", {}).get("product", {}).get("version", "")
+            )
+            if tool_name == "Prowler":
+                if not tool_version or Version.parse(tool_version) < Version.parse(
+                    "4.5.0"
+                ):
+                    return (
+                        False,
+                        ["Prowler is only supported with version 4.5.0 and above"],
+                        {},
+                    )
 
         return True, [], data
 
@@ -108,7 +126,7 @@ class OCSFParser(BaseParser, BaseFileParser):
 
                     observation.unsaved_references = get_references(finding)
             except Exception as e:
-                logger.warning("Error parsing OCSF finding: %s", str(e))
+                raise ValidationError(f"Error parsing OCSF finding: {str(e)}")
 
         return observations
 
