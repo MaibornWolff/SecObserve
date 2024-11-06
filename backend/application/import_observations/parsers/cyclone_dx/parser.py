@@ -123,19 +123,26 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         if not component_data.get("bom-ref"):
             return None
 
-        unknown_license = ""
+        unknown_licenses = []
         licenses = component_data.get("licenses", [])
         if licenses and licenses[0].get("expression"):
-            unknown_license = licenses[0].get("expression")
+            unknown_licenses.append(licenses[0].get("expression"))
         else:
+            unknown_license_ids = []
+            unknown_license_names = []
             for my_license in licenses:
                 component_license = my_license.get("license", {}).get("id")
                 if component_license:
-                    unknown_license += (
-                        f", {component_license}"
-                        if unknown_license
-                        else component_license
-                    )
+                    unknown_license_ids.append(component_license)
+
+                component_license = my_license.get("license", {}).get("name")
+                if component_license:
+                    unknown_license_names.append(component_license)
+
+                if unknown_license_ids:
+                    unknown_licenses = unknown_license_ids
+                else:
+                    unknown_licenses = unknown_license_names
 
         return Component(
             bom_ref=component_data.get("bom-ref", ""),
@@ -145,7 +152,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             purl=component_data.get("purl", ""),
             cpe=component_data.get("cpe", ""),
             json=component_data,
-            unknown_license=unknown_license,
+            unknown_license=", ".join(unknown_licenses),
         )
 
     def _create_observations(  # pylint: disable=too-many-locals
