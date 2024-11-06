@@ -126,7 +126,7 @@ class OCSFParser(BaseParser, BaseFileParser):
 
                     observation.unsaved_references = get_references(finding)
             except Exception as e:
-                raise ValidationError(f"Error parsing OCSF finding: {str(e)}")
+                raise ValidationError(f"Error parsing OCSF finding: {str(e)}") from e
 
         return observations
 
