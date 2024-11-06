@@ -56,8 +56,9 @@ jira = "3.8.0"  # https://github.com/pycontribs/jira
 inflect = "7.4.0"  # https://github.com/jaraco/inflect
 validators = "0.34.0"  # https://github.com/python-validators/validators
 cvss = "3.3"  # https://github.com/RedHatProductSecurity/cvss
-jsonpickle = "3.4.1"  # https://github.com/jsonpickle/jsonpickle
-py-ocsf-models="0.1.1"  # https://github.com/prowler-cloud/py-ocsf-models 
+jsonpickle = "3.4.2"  # https://github.com/jsonpickle/jsonpickle
+py-ocsf-models = "0.2.0"  # https://github.com/prowler-cloud/py-ocsf-models
+semver = "3.0.2"  # https://github.com/python-semver/python-semver
 
 # Development dependencies
 # ------------------------------------------------------------------------------
