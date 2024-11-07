@@ -68,7 +68,7 @@ A `License Policy` has a list of items, which are the rules of the policy. It ca
 ![License policy item](../assets/images/screenshot_license_policy_item.png){ width="60%" style="display: block; margin: 0 auto" }
 
 
-Additionally a `License Policy` has a list of members, which define who has access to a license policy, either read-only or as a manager. To define read-only is not necessary, if the policy is defined as `Public`.
+Additionally a `License Policy` has a list of user members and a list of authorization group members, which define who has access to a license policy, either read-only or as a manager. To define read-only members is not necessary, if the policy is defined as `Public`.
 
 ![License policy member](../assets/images/screenshot_license_policy_member.png){ width="60%" style="display: block; margin: 0 auto" }
 
@@ -82,4 +82,4 @@ As with `License Policies`, a `License Group`
 * can be found in the `Licenses` sub-menu under `Administration`,
 * can be copied if adjustments are needed for a specific Product,
 * can be public, so that all users can see the group and its licenses and
-* has a list of members, which define who has access to a license group, either read-only or as a manager.
+* has a list of user members and a list of authorization group members, which define who has access to a license group, either read-only or as a manager.
