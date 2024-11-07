@@ -175,6 +175,11 @@ def normalize_description(observation):
         while observation.description.endswith("\n"):
             observation.description = observation.description[:-1]
 
+        # \u0000 can lead to SQL exceptions
+        observation.description = observation.description.replace(
+            "\u0000", "REDACTED_NULL"
+        )
+
 
 def normalize_origin_component(observation):  # pylint: disable=too-many-branches
     if not observation.origin_component_name_version:

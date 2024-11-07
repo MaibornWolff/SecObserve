@@ -11,6 +11,7 @@ import {
     useRecordContext,
 } from "react-admin";
 
+import { is_superuser } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
 import UserProductAuthorizationGroupMemberEmbeddedList from "../../core/product_authorization_group_members/UserProductAuthorizationGroupMemberEmbeddedList";
 import AuthorizationGroupMemberEmbeddedList from "../authorization_group_members/AuthorizationGroupMemberEmbeddedList";
@@ -26,7 +27,7 @@ const ShowActions = () => {
                     filterDefaultValues={{ is_active: true }}
                     storeKey="authorization_groups.embedded"
                 />
-                {authorization_group && authorization_group.is_manager && <EditButton />}
+                {((authorization_group && authorization_group.is_manager) || is_superuser()) && <EditButton />}
             </Stack>
         </TopToolbar>
     );

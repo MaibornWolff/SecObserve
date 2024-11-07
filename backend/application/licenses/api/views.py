@@ -12,24 +12,30 @@ from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from application.licenses.api.filters import (
     LicenseComponentFilter,
     LicenseFilter,
+    LicenseGroupAuthorizationGroupFilter,
     LicenseGroupFilter,
     LicenseGroupMemberFilter,
+    LicensePolicyAuthorizationGroupFilter,
     LicensePolicyFilter,
     LicensePolicyItemFilter,
     LicensePolicyMemberFilter,
 )
 from application.licenses.api.permissions import (
+    UserHasLicenseGroupAuthenticationGroupMemberPermission,
     UserHasLicenseGroupMemberPermission,
     UserHasLicenseGroupPermission,
+    UserHasLicensePolicyAuthorizationGroupMemberPermission,
     UserHasLicensePolicyItemMemberPermission,
     UserHasLicensePolicyPermission,
 )
 from application.licenses.api.serializers import (
     LicenseComponentSerializer,
+    LicenseGroupAuthorizationGroupMemberSerializer,
     LicenseGroupCopySerializer,
     LicenseGroupLicenseAddRemoveSerializer,
     LicenseGroupMemberSerializer,
     LicenseGroupSerializer,
+    LicensePolicyAuthorizationGroupMemberSerializer,
     LicensePolicyCopySerializer,
     LicensePolicyItemSerializer,
     LicensePolicyMemberSerializer,
@@ -40,8 +46,10 @@ from application.licenses.models import (
     License,
     License_Component,
     License_Group,
+    License_Group_Authorization_Group_Member,
     License_Group_Member,
     License_Policy,
+    License_Policy_Authorization_Group_Member,
     License_Policy_Item,
     License_Policy_Member,
 )
@@ -51,6 +59,9 @@ from application.licenses.queries.license_group import (
     get_license_group,
     get_license_groups,
 )
+from application.licenses.queries.license_group_authorization_group_member import (
+    get_license_group_authorization_group_members,
+)
 from application.licenses.queries.license_group_member import (
     get_license_group_member,
     get_license_group_members,
@@ -58,6 +69,9 @@ from application.licenses.queries.license_group_member import (
 from application.licenses.queries.license_policy import (
     get_license_policies,
     get_license_policy,
+)
+from application.licenses.queries.license_policy_authorization_group_member import (
+    get_license_policy_authorization_group_members,
 )
 from application.licenses.queries.license_policy_item import get_license_policy_items
 from application.licenses.queries.license_policy_member import (
@@ -214,6 +228,20 @@ class LicenseGroupMemberViewSet(ModelViewSet):
         return get_license_group_members()
 
 
+class LicenseGroupAuthorizationGroupMemberViewSet(ModelViewSet):
+    serializer_class = LicenseGroupAuthorizationGroupMemberSerializer
+    filterset_class = LicenseGroupAuthorizationGroupFilter
+    queryset = License_Group_Authorization_Group_Member.objects.none()
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    permission_classes = [
+        IsAuthenticated,
+        UserHasLicenseGroupAuthenticationGroupMemberPermission,
+    ]
+
+    def get_queryset(self):
+        return get_license_group_authorization_group_members()
+
+
 class LicensePolicyViewSet(ModelViewSet):
     serializer_class = LicensePolicySerializer
     filterset_class = LicensePolicyFilter
@@ -309,3 +337,17 @@ class LicensePolicyMemberViewSet(ModelViewSet):
 
     def get_queryset(self):
         return get_license_policy_members()
+
+
+class LicensePolicyAuthorizationGroupMemberViewSet(ModelViewSet):
+    serializer_class = LicensePolicyAuthorizationGroupMemberSerializer
+    filterset_class = LicensePolicyAuthorizationGroupFilter
+    queryset = License_Policy_Authorization_Group_Member.objects.none()
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    permission_classes = [
+        IsAuthenticated,
+        UserHasLicensePolicyAuthorizationGroupMemberPermission,
+    ]
+
+    def get_queryset(self):
+        return get_license_policy_authorization_group_members()

@@ -13,7 +13,7 @@ from django.db.models import (
 )
 from django.utils import timezone
 
-from application.access_control.models import User
+from application.access_control.models import Authorization_Group, User
 from application.core.models import Branch, Product
 from application.licenses.types import License_Policy_Evaluation_Result
 
@@ -40,6 +40,12 @@ class License_Group(Model):
         related_name="license_groups",
         blank=True,
     )
+    authorization_groups: ManyToManyField = ManyToManyField(
+        Authorization_Group,
+        through="License_Group_Authorization_Group_Member",
+        related_name="license_groups",
+        blank=True,
+    )
 
     def __str__(self):
         return self.name
@@ -60,6 +66,29 @@ class License_Group_Member(Model):
 
     def __str__(self):
         return f"{self.license_group} / {self.user}"
+
+
+class License_Group_Authorization_Group_Member(Model):
+    license_group = ForeignKey(
+        License_Group,
+        related_name="license_group_authorization_group_members",
+        on_delete=CASCADE,
+    )
+    authorization_group = ForeignKey(
+        Authorization_Group,
+        related_name="license_group_authorization_group_members",
+        on_delete=CASCADE,
+    )
+    is_manager = BooleanField(default=False)
+
+    class Meta:
+        unique_together = (
+            "license_group",
+            "authorization_group",
+        )
+
+    def __str__(self):
+        return f"{self.license_group} / {self.authorization_group}"
 
 
 class License_Component(Model):
@@ -128,6 +157,12 @@ class License_Policy(Model):
         related_name="license_policies",
         blank=True,
     )
+    authorization_groups: ManyToManyField = ManyToManyField(
+        Authorization_Group,
+        through="License_Policy_Authorization_Group_Member",
+        related_name="license_policies",
+        blank=True,
+    )
 
     def __str__(self):
         return self.name
@@ -184,3 +219,26 @@ class License_Policy_Member(Model):
 
     def __str__(self):
         return f"{self.license_policy} / {self.user}"
+
+
+class License_Policy_Authorization_Group_Member(Model):
+    license_policy = ForeignKey(
+        License_Policy,
+        related_name="license_policy_authorization_group_members",
+        on_delete=CASCADE,
+    )
+    authorization_group = ForeignKey(
+        Authorization_Group,
+        related_name="license_policy_authorization_group_members",
+        on_delete=CASCADE,
+    )
+    is_manager = BooleanField(default=False)
+
+    class Meta:
+        unique_together = (
+            "license_policy",
+            "authorization_group",
+        )
+
+    def __str__(self):
+        return f"{self.license_policy} / {self.authorization_group}"

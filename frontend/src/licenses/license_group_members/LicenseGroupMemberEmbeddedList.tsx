@@ -1,4 +1,5 @@
 import { Stack } from "@mui/material";
+import { Fragment } from "react";
 import {
     BooleanField,
     Datagrid,
@@ -55,41 +56,50 @@ const LicenseGroupMemberEmbeddedList = ({ license_group }: LicenseGroupMemberEmb
             <ListContextProvider value={listContext}>
                 <div style={{ width: "100%" }}>
                     {(is_superuser() || license_group.is_manager) && <LicenseGroupMemberAdd id={license_group.id} />}
-                    <FilterForm filters={listFilters()} />
-                    <Datagrid size={getSettingListSize()} rowClick={false} bulkActionButtons={false} resource="users">
-                        <WithRecord
-                            label="Full name"
-                            render={(license_group_member) => (
-                                <TextUrlField
-                                    label="User"
-                                    text={license_group_member.user_data.full_name}
-                                    url={showUser(license_group_member.user_data.id)}
+                    {license_group.has_users && (
+                        <Fragment>
+                            <FilterForm filters={listFilters()} />
+                            <Datagrid
+                                size={getSettingListSize()}
+                                rowClick={false}
+                                bulkActionButtons={false}
+                                resource="users"
+                            >
+                                <WithRecord
+                                    label="Full name"
+                                    render={(license_group_member) => (
+                                        <TextUrlField
+                                            label="User"
+                                            text={license_group_member.user_data.full_name}
+                                            url={showUser(license_group_member.user_data.id)}
+                                        />
+                                    )}
                                 />
-                            )}
-                        />
-                        <WithRecord
-                            label="Username"
-                            render={(license_group_member) => (
-                                <TextUrlField
-                                    label="User"
-                                    text={license_group_member.user_data.username}
-                                    url={showUser(license_group_member.user_data.id)}
+                                <WithRecord
+                                    label="Username"
+                                    render={(license_group_member) => (
+                                        <TextUrlField
+                                            label="User"
+                                            text={license_group_member.user_data.username}
+                                            url={showUser(license_group_member.user_data.id)}
+                                        />
+                                    )}
                                 />
-                            )}
-                        />
-                        <BooleanField source="is_manager" label="Manager" />
-                        {(is_superuser() || license_group.is_manager) && (
-                            <WithRecord
-                                render={(license_group_member) => (
-                                    <Stack direction="row" spacing={4}>
-                                        <LicenseGroupMemberEdit />
-                                        <LicenseGroupMemberRemove license_group_member={license_group_member} />
-                                    </Stack>
+                                <BooleanField source="is_manager" label="Manager" />
+                                {(is_superuser() || license_group.is_manager) && (
+                                    <WithRecord
+                                        render={(license_group_member) => (
+                                            <Stack direction="row" spacing={4}>
+                                                <LicenseGroupMemberEdit />
+                                                <LicenseGroupMemberRemove license_group_member={license_group_member} />
+                                            </Stack>
+                                        )}
+                                    />
                                 )}
-                            />
-                        )}
-                    </Datagrid>
-                    <CustomPagination />
+                            </Datagrid>
+                            <CustomPagination />
+                        </Fragment>
+                    )}
                 </div>
             </ListContextProvider>
         </ResourceContextProvider>

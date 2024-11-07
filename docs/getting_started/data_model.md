@@ -12,6 +12,7 @@ erDiagram
     Product ||--o{ Product_Rule : has
     Product ||--o{ API_Configuration : has
     Product ||--o{ Product_Member : has
+    Product ||--o{ Product_Authorization_Group_Member : has
     Parser ||--o{ Observation: discovered_by
     Observation }o--o| Branch_Version: found_in
     Observation ||--|{ Observation_Log : has
@@ -72,7 +73,12 @@ Parsers who get data from vulnerability scanners via a REST API need a configura
 
 #### Product Member
 
-`Product Members` define who has access to a product. Depending on the role of a user for a product, they have more or less functionality available, see more on [Users and permissions](../usage/users_permissions.md).
+`Product Members` define which users have access to a product. Depending on the role of a user for a product, they have more or less functionality available, see more on [Users and permissions](../usage/users_permissions.md).
+
+#### Product Authorization Group Member
+
+`Product Authorization Group Members` define which authorization groups have access to a product. Depending on the role, the users of the authorization group have more or less functionality available, see more on [Users and permissions](../usage/users_permissions.md).
+
 
 ## License Management
 
@@ -86,8 +92,10 @@ erDiagram
     License_Component }o--o| License : references
     License_Policy ||--o{ License_Policy_Item : has
     License_Policy ||--o{ License_Policy_Member : has
+    License_Policy ||--o{ License_Policy_Authorization_Group_Member : has
     License_Group }o--o{ License : references
-    License_Group ||--o{ License_Group_Members : has
+    License_Group ||--o{ License_Group_Member : has
+    License_Group ||--o{ License_Group_Authorization_Group_Member : has
     License_Policy_Item }o--o| License : references
     License_Policy_Item }o--o| License_Group : references
 ```
@@ -109,12 +117,20 @@ A `License Policy Item` is a single rule in a license policy. It can be a rule f
 
 #### License Policy Member
 
-`License Policy Members` define who has access to a license policy, either read-only or as a manager.
+`License Policy Members` define which users have access to a license policy, either read-only or as a manager.
+
+#### License Policy Authorization Group Member
+
+`License Policy Authorization Group Members` define which authorization groups have access to a license policy, either read-only or as a manager.
 
 #### License Group
 
 A `License Group` is a collection of licenses with similar license conditions. There is a predefined list of license groups, taken from the classification of the [Blue Oak Council](https://blueoakcouncil.org/).
 
-#### License Group Members
+#### License Group Member
 
-`License Group Members` define who has access to a license group, either read-only or as a manager.
+`License Group Members` define which users have access to a license group, either read-only or as a manager.
+
+#### License Group Authorization Group Member
+
+`License Group Authorization Group Members` define which authorization groups have access to a license group, either read-only or as a manager.

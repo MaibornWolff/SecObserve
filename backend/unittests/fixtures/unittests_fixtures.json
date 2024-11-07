@@ -170,6 +170,24 @@
         }
     },
     {
+        "model": "access_control.authorization_group_member",
+        "pk": 3,
+        "fields": {
+            "authorization_group": 1,
+            "user": 6,
+            "is_manager": false
+        }
+    },
+    {
+        "model": "access_control.authorization_group_member",
+        "pk": 4,
+        "fields": {
+            "authorization_group": 2,
+            "user": 6,
+            "is_manager": false
+        }
+    },
+    {
         "model": "core.product",
         "pk": 1,
         "fields": {

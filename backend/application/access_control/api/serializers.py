@@ -187,6 +187,7 @@ class UserPasswortRulesSerializer(Serializer):
 class AuthorizationGroupSerializer(ModelSerializer):
     has_product_group_members = SerializerMethodField()
     has_product_members = SerializerMethodField()
+    has_users = SerializerMethodField()
     is_manager = SerializerMethodField()
 
     class Meta:
@@ -201,6 +202,11 @@ class AuthorizationGroupSerializer(ModelSerializer):
     def get_has_product_members(self, obj: Authorization_Group) -> bool:
         return Product_Authorization_Group_Member.objects.filter(
             authorization_group=obj, product__is_product_group=False
+        ).exists()
+
+    def get_has_users(self, obj: Authorization_Group) -> bool:
+        return Authorization_Group_Member.objects.filter(
+            authorization_group=obj
         ).exists()
 
     def get_is_manager(self, obj: Authorization_Group) -> bool:

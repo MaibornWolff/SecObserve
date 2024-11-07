@@ -1,4 +1,5 @@
 import { Stack } from "@mui/material";
+import { Fragment } from "react";
 import {
     BooleanField,
     Datagrid,
@@ -57,43 +58,52 @@ const AuthorizationGroupMemberEmbeddedList = ({ authorization_group }: Authoriza
                     {(is_superuser() || authorization_group.is_manager) && (
                         <AuthorizationGroupMemberAdd id={authorization_group.id} />
                     )}
-                    <FilterForm filters={listFilters()} />
-                    <Datagrid size={getSettingListSize()} rowClick={false} bulkActionButtons={false} resource="users">
-                        <WithRecord
-                            label="Full name"
-                            render={(authorization_group_member) => (
-                                <TextUrlField
-                                    label="User"
-                                    text={authorization_group_member.user_data.full_name}
-                                    url={showUser(authorization_group_member.user_data.id)}
-                                />
-                            )}
-                        />
-                        <WithRecord
-                            label="Username"
-                            render={(authorization_group_member) => (
-                                <TextUrlField
-                                    label="User"
-                                    text={authorization_group_member.user_data.username}
-                                    url={showUser(authorization_group_member.user_data.id)}
-                                />
-                            )}
-                        />
-                        <BooleanField source="is_manager" label="Manager" />
-                        {(is_superuser() || authorization_group.is_manager) && (
-                            <WithRecord
-                                render={(authorization_group_member) => (
-                                    <Stack direction="row" spacing={4}>
-                                        <AuthorizationGroupMemberEdit />
-                                        <AuthorizationGroupMemberRemove
-                                            authorization_group_member={authorization_group_member}
+                    {authorization_group.has_users && (
+                        <Fragment>
+                            <FilterForm filters={listFilters()} />
+                            <Datagrid
+                                size={getSettingListSize()}
+                                rowClick={false}
+                                bulkActionButtons={false}
+                                resource="users"
+                            >
+                                <WithRecord
+                                    label="Full name"
+                                    render={(authorization_group_member) => (
+                                        <TextUrlField
+                                            label="User"
+                                            text={authorization_group_member.user_data.full_name}
+                                            url={showUser(authorization_group_member.user_data.id)}
                                         />
-                                    </Stack>
+                                    )}
+                                />
+                                <WithRecord
+                                    label="Username"
+                                    render={(authorization_group_member) => (
+                                        <TextUrlField
+                                            label="User"
+                                            text={authorization_group_member.user_data.username}
+                                            url={showUser(authorization_group_member.user_data.id)}
+                                        />
+                                    )}
+                                />
+                                <BooleanField source="is_manager" label="Manager" />
+                                {(is_superuser() || authorization_group.is_manager) && (
+                                    <WithRecord
+                                        render={(authorization_group_member) => (
+                                            <Stack direction="row" spacing={4}>
+                                                <AuthorizationGroupMemberEdit />
+                                                <AuthorizationGroupMemberRemove
+                                                    authorization_group_member={authorization_group_member}
+                                                />
+                                            </Stack>
+                                        )}
+                                    />
                                 )}
-                            />
-                        )}
-                    </Datagrid>
-                    <CustomPagination />
+                            </Datagrid>
+                            <CustomPagination />
+                        </Fragment>
+                    )}
                 </div>
             </ListContextProvider>
         </ResourceContextProvider>

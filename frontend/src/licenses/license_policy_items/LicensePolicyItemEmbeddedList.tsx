@@ -1,4 +1,5 @@
 import { Stack } from "@mui/material";
+import { Fragment } from "react";
 import {
     Datagrid,
     FilterForm,
@@ -67,47 +68,51 @@ const LicensePolicyItemEmbeddedList = ({ license_policy }: LicensePolicyItemEmbe
             <ListContextProvider value={listContext}>
                 <div style={{ width: "100%" }}>
                     {(is_superuser() || license_policy.is_manager) && <LicensePolicyItemAdd id={license_policy.id} />}
-                    <FilterForm filters={listFilters()} />
-                    <Datagrid
-                        size={getSettingListSize()}
-                        rowClick={false}
-                        bulkActionButtons={false}
-                        resource="license_policy_item"
-                    >
-                        <WithRecord
-                            label="License group"
-                            render={(license_group) => (
-                                <TextUrlField
-                                    label="SPDX Id"
-                                    text={license_group.license_group_name}
-                                    url={showLicenseGroup(license_group.license_group)}
+                    {license_policy.has_items && (
+                        <Fragment>
+                            <FilterForm filters={listFilters()} />
+                            <Datagrid
+                                size={getSettingListSize()}
+                                rowClick={false}
+                                bulkActionButtons={false}
+                                resource="license_policy_item"
+                            >
+                                <WithRecord
+                                    label="License group"
+                                    render={(license_group) => (
+                                        <TextUrlField
+                                            label="SPDX Id"
+                                            text={license_group.license_group_name}
+                                            url={showLicenseGroup(license_group.license_group)}
+                                        />
+                                    )}
                                 />
-                            )}
-                        />
-                        <WithRecord
-                            label="License"
-                            render={(license_group) => (
-                                <TextUrlField
-                                    label="SPDX Id"
-                                    text={license_group.license_spdx_id}
-                                    url={showLicense(license_group.license)}
+                                <WithRecord
+                                    label="License"
+                                    render={(license_group) => (
+                                        <TextUrlField
+                                            label="SPDX Id"
+                                            text={license_group.license_spdx_id}
+                                            url={showLicense(license_group.license)}
+                                        />
+                                    )}
                                 />
-                            )}
-                        />
-                        <TextField source="unknown_license" label="Unknown license" />
-                        <EvaluationResultField source="evaluation_result" label="Evaluation result" />
-                        {(is_superuser() || license_policy.is_manager) && (
-                            <WithRecord
-                                render={(license_policy_item) => (
-                                    <Stack direction="row" spacing={4}>
-                                        <LicensePolicyItemEdit />
-                                        <LicensePolicyItemRemove license_policy_item={license_policy_item} />
-                                    </Stack>
+                                <TextField source="unknown_license" label="Unknown license" />
+                                <EvaluationResultField source="evaluation_result" label="Evaluation result" />
+                                {(is_superuser() || license_policy.is_manager) && (
+                                    <WithRecord
+                                        render={(license_policy_item) => (
+                                            <Stack direction="row" spacing={4}>
+                                                <LicensePolicyItemEdit />
+                                                <LicensePolicyItemRemove license_policy_item={license_policy_item} />
+                                            </Stack>
+                                        )}
+                                    />
                                 )}
-                            />
-                        )}
-                    </Datagrid>
-                    <CustomPagination />
+                            </Datagrid>
+                            <CustomPagination />
+                        </Fragment>
+                    )}
                 </div>
             </ListContextProvider>
         </ResourceContextProvider>

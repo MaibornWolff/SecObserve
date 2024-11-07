@@ -15,6 +15,7 @@ import {
 import MarkdownField from "../../commons/custom_fields/MarkdownField";
 import { is_external, is_superuser } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
+import LicenseGroupAuthorizationGroupMemberEmbeddedList from "../license_group_authorization_group_members/LicenseGroupAuthorizationGroupMemberEmbeddedList";
 import LicenseGroupLicenseEmbeddedList from "../license_group_licenses/LicenseGroupLicenseEmbeddedList";
 import LicenseGroupMemberEmbeddedList from "../license_group_members/LicenseGroupMemberEmbeddedList";
 import LicensePolicyEmbeddedList from "../license_policies/LicensePolicyEmbeddedList";
@@ -69,6 +70,12 @@ const LicenseGroupComponent = () => {
                             Users
                         </Typography>
                         <LicenseGroupMemberEmbeddedList license_group={license_group} />
+                    </Paper>
+                    <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
+                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                            Authorization Groups
+                        </Typography>
+                        <LicenseGroupAuthorizationGroupMemberEmbeddedList license_group={license_group} />
                     </Paper>
                     {license_group.is_in_license_policy && (
                         <Paper sx={{ marginBottom: 1, padding: 2 }}>

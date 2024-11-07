@@ -2,16 +2,7 @@ import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import {
-    BooleanInput,
-    CreateBase,
-    ReferenceInput,
-    SaveButton,
-    SimpleForm,
-    Toolbar,
-    useNotify,
-    useRefresh,
-} from "react-admin";
+import { BooleanInput, ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
 
 import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
@@ -85,19 +76,17 @@ const LicenseGroupMemberAdd = ({ id }: LicenseGroupMemberAddProps) => {
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Add user</DialogTitle>
                 <DialogContent>
-                    <CreateBase resource="license_group_members">
-                        <SimpleForm onSubmit={add_user} toolbar={<CustomToolbar />}>
-                            <ReferenceInput
-                                source="user"
-                                reference="users"
-                                label="User"
-                                sort={{ field: "full_name", order: "ASC" }}
-                            >
-                                <AutocompleteInputWide optionText="full_name" validate={validate_required} />
-                            </ReferenceInput>
-                            <BooleanInput source="is_manager" label="Manager" />
-                        </SimpleForm>
-                    </CreateBase>
+                    <SimpleForm onSubmit={add_user} toolbar={<CustomToolbar />}>
+                        <ReferenceInput
+                            source="user"
+                            reference="users"
+                            label="User"
+                            sort={{ field: "full_name", order: "ASC" }}
+                        >
+                            <AutocompleteInputWide optionText="full_name" validate={validate_required} />
+                        </ReferenceInput>
+                        <BooleanInput source="is_manager" label="Manager" />
+                    </SimpleForm>
                 </DialogContent>
             </Dialog>
         </Fragment>

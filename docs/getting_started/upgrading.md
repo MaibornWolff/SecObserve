@@ -10,6 +10,13 @@
 
 * There will be specific upgrade instructions if necessary, e.g. when there are new configuration parameters.
 
+## Release 1.22.0
+
+**Breaking changes**
+
+* Due to a library change, the `OCSF (Open Cybersecurity Schema Framework)` parser now only supports reports from Prowler 4.5.0 and above.
+
+
 ## Release 1.21.0
 
 **Breaking changes**

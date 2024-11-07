@@ -119,21 +119,32 @@ export function get_component_purl_url(
         return null;
     }
 
-    const typeArray: string[] = ["cargo", "go", "maven", "npm", "nuget", "pypi"];
+    const typeArray: string[] = ["cargo", "golang", "maven", "npm", "nuget", "pypi"];
     if (!typeArray.includes(purl_type)) {
         return null;
     }
 
-    let component_purl_url = "https://deps.dev/" + purl_type + "/";
-    if (!component_name.includes(":") && purl_namespace !== null) {
-        component_purl_url = component_purl_url + purl_namespace + "%2F";
+    let deps_dev_type = purl_type;
+    if (purl_type === "golang") {
+        deps_dev_type = "go";
     }
-    component_purl_url = component_purl_url + component_name;
+
+    let namespace_separator = "/";
+    if (purl_type === "maven") {
+        namespace_separator = ":";
+    }
+
+    let component_purl_url = "https://deps.dev/" + deps_dev_type + "/";
+    if (!component_name.includes(":") && purl_namespace !== null) {
+        component_purl_url =
+            component_purl_url + encodeURIComponent(purl_namespace) + encodeURIComponent(namespace_separator);
+    }
+    component_purl_url = component_purl_url + encodeURIComponent(component_name);
     if (component_version !== null) {
         component_purl_url = component_purl_url + "/" + component_version;
     }
 
-    return encodeURI(component_purl_url);
+    return component_purl_url;
 }
 
 const rtf = new Intl.RelativeTimeFormat("en", {

@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import {
     BooleanField,
     Datagrid,
@@ -56,26 +57,42 @@ const LicenseGroupLicenseEmbeddedList = ({ license_group }: LicenseGroupLicenseE
             <ListContextProvider value={listContext}>
                 <div style={{ width: "100%" }}>
                     {(is_superuser() || license_group.is_manager) && <LicenseGroupLicenseAdd id={license_group.id} />}
-                    <FilterForm filters={listFilters()} />
-                    <Datagrid size={getSettingListSize()} rowClick={false} bulkActionButtons={false} resource="users">
-                        <WithRecord
-                            label="Full name"
-                            render={(license) => (
-                                <TextUrlField label="SPDX Id" text={license.spdx_id} url={showLicense(license.id)} />
-                            )}
-                        />
-                        <TextField source="name" label="Name" />
-                        <BooleanField source="is_osi_approved" label="OSI approved" />
-                        <BooleanField source="is_deprecated" label="Deprecated" />
-                        {(is_superuser() || license_group.is_manager) && (
-                            <WithRecord
-                                render={(license) => (
-                                    <LicenseGroupLicenseRemove license_group={license_group} license={license} />
+                    {license_group.has_licenses && (
+                        <Fragment>
+                            <FilterForm filters={listFilters()} />
+                            <Datagrid
+                                size={getSettingListSize()}
+                                rowClick={false}
+                                bulkActionButtons={false}
+                                resource="users"
+                            >
+                                <WithRecord
+                                    label="Full name"
+                                    render={(license) => (
+                                        <TextUrlField
+                                            label="SPDX Id"
+                                            text={license.spdx_id}
+                                            url={showLicense(license.id)}
+                                        />
+                                    )}
+                                />
+                                <TextField source="name" label="Name" />
+                                <BooleanField source="is_osi_approved" label="OSI approved" />
+                                <BooleanField source="is_deprecated" label="Deprecated" />
+                                {(is_superuser() || license_group.is_manager) && (
+                                    <WithRecord
+                                        render={(license) => (
+                                            <LicenseGroupLicenseRemove
+                                                license_group={license_group}
+                                                license={license}
+                                            />
+                                        )}
+                                    />
                                 )}
-                            />
-                        )}
-                    </Datagrid>
-                    <CustomPagination />
+                            </Datagrid>
+                            <CustomPagination />
+                        </Fragment>
+                    )}
                 </div>
             </ListContextProvider>
         </ResourceContextProvider>
