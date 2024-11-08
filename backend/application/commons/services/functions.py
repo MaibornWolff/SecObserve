@@ -1,3 +1,6 @@
+from django.apps import apps
+from django.db.models.fields import CharField, TextField
+
 from application.commons.models import Settings
 
 
@@ -16,3 +19,23 @@ def get_base_url_frontend() -> str:
     if not base_url_frontend.endswith("/"):
         base_url_frontend += "/"
     return base_url_frontend
+
+
+def clip_fields(application: str, model: str, my_object) -> None:
+    Model = apps.get_model(application, model)
+    for field in Model._meta.get_fields():
+        if isinstance(field, (CharField, TextField)):
+            _, _, _, key_args = field.deconstruct()
+            max_length = key_args.get("max_length")
+            if max_length:
+                value = getattr(my_object, field.name)
+                if value and len(value) > max_length:
+                    setattr(my_object, field.name, value[: max_length - 4] + " ...")
+                    value = getattr(my_object, field.name)
+                    if value.count("```") == 1:
+                        # There is an open code block, that we have to close
+                        setattr(
+                            my_object,
+                            field.name,
+                            value[: max_length - 9] + "\n```\n\n...",
+                        )

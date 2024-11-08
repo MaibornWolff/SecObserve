@@ -1,8 +1,6 @@
 import hashlib
 from urllib.parse import urlparse
 
-from django.apps import apps
-from django.db.models.fields import CharField, TextField
 from packageurl import PackageURL
 
 from application.core.types import Severity, Status
@@ -438,26 +436,6 @@ def normalize_vex_justification(observation):
         observation.vex_vex_justification = ""
 
     observation.current_vex_justification = get_current_vex_justification(observation)
-
-
-def clip_fields(model: str, my_object) -> None:
-    Model = apps.get_model("core", model)
-    for field in Model._meta.get_fields():
-        if isinstance(field, (CharField, TextField)):
-            _, _, _, key_args = field.deconstruct()
-            max_length = key_args.get("max_length")
-            if max_length:
-                value = getattr(my_object, field.name)
-                if value and len(value) > max_length:
-                    setattr(my_object, field.name, value[: max_length - 4] + " ...")
-                    value = getattr(my_object, field.name)
-                    if value.count("```") == 1:
-                        # There is an open code block, that we have to close
-                        setattr(
-                            my_object,
-                            field.name,
-                            value[: max_length - 9] + "\n```\n\n...",
-                        )
 
 
 def set_product_flags(observation) -> None:
