@@ -65,8 +65,8 @@ class LicenseComponentSerializer(ModelSerializer):
     )
     purl_namespace = SerializerMethodField()
     branch_name = SerializerMethodField()
-    license_policy_name = SerializerMethodField()
-    license_policy_id = SerializerMethodField()
+    license_policy_name: Optional[SerializerMethodField] = SerializerMethodField()
+    license_policy_id: Optional[SerializerMethodField] = SerializerMethodField()
 
     class Meta:
         model = License_Component
