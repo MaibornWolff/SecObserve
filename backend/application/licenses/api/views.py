@@ -29,6 +29,8 @@ from application.licenses.api.permissions import (
     UserHasLicensePolicyPermission,
 )
 from application.licenses.api.serializers import (
+    LicenseComponentIdSerializer,
+    LicenseComponentListSerializer,
     LicenseComponentSerializer,
     LicenseGroupAuthorizationGroupMemberSerializer,
     LicenseGroupCopySerializer,
@@ -87,6 +89,23 @@ from application.licenses.services.license_policy import (
 
 class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     serializer_class = LicenseComponentSerializer
+    filterset_class = LicenseComponentFilter
+    queryset = License_Component.objects.none()
+    filter_backends = [DjangoFilterBackend]
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return LicenseComponentListSerializer
+        return super().get_serializer_class()
+
+    def get_queryset(self):
+        return (
+            get_license_components().select_related("branch").select_related("license")
+        )
+
+
+class LicenseComponentIdViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
+    serializer_class = LicenseComponentIdSerializer
     filterset_class = LicenseComponentFilter
     queryset = License_Component.objects.none()
     filter_backends = [DjangoFilterBackend]
@@ -225,7 +244,11 @@ class LicenseGroupMemberViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, UserHasLicenseGroupMemberPermission]
 
     def get_queryset(self):
-        return get_license_group_members()
+        return (
+            get_license_group_members()
+            .select_related("license_group")
+            .select_related("user")
+        )
 
 
 class LicenseGroupAuthorizationGroupMemberViewSet(ModelViewSet):
@@ -239,7 +262,11 @@ class LicenseGroupAuthorizationGroupMemberViewSet(ModelViewSet):
     ]
 
     def get_queryset(self):
-        return get_license_group_authorization_group_members()
+        return (
+            get_license_group_authorization_group_members()
+            .select_related("license_group")
+            .select_related("authorization_group")
+        )
 
 
 class LicensePolicyViewSet(ModelViewSet):
@@ -325,7 +352,12 @@ class LicensePolicyItemViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, UserHasLicensePolicyItemMemberPermission]
 
     def get_queryset(self):
-        return get_license_policy_items()
+        return (
+            get_license_policy_items()
+            .select_related("license_policy")
+            .select_related("license")
+            .select_related("license_group")
+        )
 
 
 class LicensePolicyMemberViewSet(ModelViewSet):
@@ -336,7 +368,11 @@ class LicensePolicyMemberViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, UserHasLicensePolicyItemMemberPermission]
 
     def get_queryset(self):
-        return get_license_policy_members()
+        return (
+            get_license_policy_members()
+            .select_related("license_policy")
+            .select_related("user")
+        )
 
 
 class LicensePolicyAuthorizationGroupMemberViewSet(ModelViewSet):
@@ -350,4 +386,8 @@ class LicensePolicyAuthorizationGroupMemberViewSet(ModelViewSet):
     ]
 
     def get_queryset(self):
-        return get_license_policy_authorization_group_members()
+        return (
+            get_license_policy_authorization_group_members()
+            .select_related("license_policy")
+            .select_related("authorization_group")
+        )

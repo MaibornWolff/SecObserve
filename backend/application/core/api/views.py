@@ -52,6 +52,7 @@ from application.core.api.serializers_observation import (
     ObservationLogSerializer,
     ObservationRemoveAssessmentSerializer,
     ObservationSerializer,
+    ObservationTitleSerializer,
     ObservationUpdateSerializer,
     PotentialDuplicateSerializer,
 )
@@ -410,7 +411,7 @@ class ProductMemberViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend]
 
     def get_queryset(self):
-        return get_product_members().select_related("user")
+        return get_product_members().select_related("product").select_related("user")
 
 
 class ProductAuthorizationGroupMemberViewSet(ModelViewSet):
@@ -424,7 +425,11 @@ class ProductAuthorizationGroupMemberViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend]
 
     def get_queryset(self):
-        return get_product_authorization_group_members()
+        return (
+            get_product_authorization_group_members()
+            .select_related("product")
+            .select_related("authorization_group")
+        )
 
 
 class BranchViewSet(ModelViewSet):
@@ -469,7 +474,7 @@ class ServiceViewSet(
     search_fields = ["name"]
 
     def get_queryset(self):
-        return get_services()
+        return get_services().select_related("product")
 
 
 class ObservationViewSet(ModelViewSet):
@@ -620,6 +625,18 @@ class ObservationViewSet(ModelViewSet):
         return Response(status=HTTP_204_NO_CONTENT)
 
 
+class ObservationTitleViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
+    serializer_class = ObservationTitleSerializer
+    filterset_class = ObservationFilter
+    permission_classes = (IsAuthenticated, UserHasObservationPermission)
+    queryset = Observation.objects.none()
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ["title"]
+
+    def get_queryset(self):
+        return get_observations()
+
+
 class ObservationLogViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     serializer_class = ObservationLogSerializer
     filterset_class = ObservationLogFilter
@@ -633,7 +650,9 @@ class ObservationLogViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
         return super().get_serializer_class()
 
     def get_queryset(self):
-        return get_observation_logs()
+        return (
+            get_observation_logs().select_related("observation").select_related("user")
+        )
 
     @extend_schema(
         methods=["PATCH"],
@@ -669,7 +688,7 @@ class EvidenceViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     queryset = Evidence.objects.none()
 
     def get_queryset(self):
-        return get_evidences()
+        return get_evidences().select_related("observation__product")
 
 
 class PotentialDuplicateViewSet(GenericViewSet, ListModelMixin):
