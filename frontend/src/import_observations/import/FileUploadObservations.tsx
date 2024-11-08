@@ -174,6 +174,7 @@ const FileUploadObservations = () => {
                                     source="branch"
                                     reference="branches"
                                     sort={{ field: "name", order: "ASC" }}
+                                    queryOptions={{ meta: { api_resource: "branch_names" } }}
                                     filter={{ product: product.id }}
                                     alwaysOn
                                 >

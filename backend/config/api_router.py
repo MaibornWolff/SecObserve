@@ -9,14 +9,17 @@ from application.access_control.api.views import (
 )
 from application.commons.api.views import NotificationViewSet
 from application.core.api.views import (
+    BranchNameViewSet,
     BranchViewSet,
     EvidenceViewSet,
     ObservationLogViewSet,
     ObservationViewSet,
     PotentialDuplicateViewSet,
     ProductAuthorizationGroupMemberViewSet,
+    ProductGroupNameViewSet,
     ProductGroupViewSet,
     ProductMemberViewSet,
+    ProductNameViewSet,
     ProductViewSet,
     ServiceViewSet,
 )
@@ -65,7 +68,11 @@ router.register(
     "product_api_tokens", ProductApiTokenViewset, basename="product_api_tokens"
 )
 router.register("products", ProductViewSet, basename="products")
+router.register("product_names", ProductNameViewSet, basename="product_names")
 router.register("product_groups", ProductGroupViewSet, basename="product_groups")
+router.register(
+    "product_group_names", ProductGroupNameViewSet, basename="product_group_names"
+)
 router.register("product_members", ProductMemberViewSet, basename="product_members")
 router.register(
     "product_authorization_group_members",
@@ -73,6 +80,7 @@ router.register(
     basename="product_authorization_group_members",
 )
 router.register("branches", BranchViewSet, basename="branches")
+router.register("branch_names", BranchNameViewSet, basename="branch_names")
 router.register("services", ServiceViewSet, basename="services")
 router.register("parsers", ParserViewSet, basename="parsers")
 router.register("observations", ObservationViewSet, basename="observations")

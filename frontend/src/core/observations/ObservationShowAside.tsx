@@ -39,6 +39,7 @@ const MetaData = () => {
                         <ReferenceField
                             source="product"
                             reference="products"
+                            queryOptions={{ meta: { api_resource: "product_names" } }}
                             link="show"
                             sx={{ "& a": { textDecoration: "none" } }}
                         />
@@ -46,6 +47,7 @@ const MetaData = () => {
                             <ReferenceField
                                 source="branch"
                                 reference="branches"
+                                queryOptions={{ meta: { api_resource: "branch_names" } }}
                                 label="Branch / Version"
                                 link={false}
                                 sx={{ "& a": { textDecoration: "none" } }}

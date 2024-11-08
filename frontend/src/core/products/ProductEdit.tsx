@@ -159,6 +159,7 @@ const ProductEdit = () => {
                 <ReferenceInput
                     source="product_group"
                     reference="product_groups"
+                    queryOptions={{ meta: { api_resource: "product_group_names" } }}
                     sort={{ field: "name", order: "ASC" }}
                 >
                     <AutocompleteInputWide optionText="name" />
@@ -184,6 +185,7 @@ const ProductEdit = () => {
                         <ReferenceInput
                             source="repository_default_branch"
                             reference="branches"
+                            queryOptions={{ meta: { api_resource: "branch_names" } }}
                             sort={{ field: "name", order: "ASC" }}
                             filter={{ product: product.id }}
                         >

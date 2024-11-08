@@ -202,6 +202,12 @@ class ProductGroupSerializer(ProductCoreSerializer):
         return product_group
 
 
+class ProductNameSerializer(ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ["id", "name"]
+
+
 class ProductSerializer(
     ProductCoreSerializer
 ):  # pylint: disable=too-many-public-methods
@@ -608,6 +614,17 @@ class BranchSerializer(ModelSerializer):
 
     def get_ignored_licenses_count(self, obj: Branch) -> int:
         return obj.ignored_licenses_count
+
+
+class BranchNameSerializer(ModelSerializer):
+    name_with_product = SerializerMethodField()
+
+    class Meta:
+        model = Branch
+        fields = ["id", "name", "name_with_product"]
+
+    def get_name_with_product(self, obj: Service) -> str:
+        return f"{obj.name} ({obj.product.name})"
 
 
 class ServiceSerializer(ModelSerializer):

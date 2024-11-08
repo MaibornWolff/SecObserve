@@ -56,10 +56,12 @@ from application.core.api.serializers_observation import (
     PotentialDuplicateSerializer,
 )
 from application.core.api.serializers_product import (
+    BranchNameSerializer,
     BranchSerializer,
     ProductAuthorizationGroupMemberSerializer,
     ProductGroupSerializer,
     ProductMemberSerializer,
+    ProductNameSerializer,
     ProductSerializer,
     ServiceSerializer,
 )
@@ -126,6 +128,18 @@ from application.rules.services.rule_engine import Rule_Engine
 
 class ProductGroupViewSet(ModelViewSet):
     serializer_class = ProductGroupSerializer
+    filterset_class = ProductGroupFilter
+    permission_classes = (IsAuthenticated, UserHasProductGroupPermission)
+    queryset = Product.objects.none()
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ["name"]
+
+    def get_queryset(self):
+        return get_products(is_product_group=True)
+
+
+class ProductGroupNameViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
+    serializer_class = ProductNameSerializer
     filterset_class = ProductGroupFilter
     permission_classes = (IsAuthenticated, UserHasProductGroupPermission)
     queryset = Product.objects.none()
@@ -376,6 +390,18 @@ class ProductViewSet(ModelViewSet):
         return product
 
 
+class ProductNameViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
+    serializer_class = ProductNameSerializer
+    filterset_class = ProductFilter
+    permission_classes = (IsAuthenticated, UserHasProductPermission)
+    queryset = Product.objects.none()
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ["name"]
+
+    def get_queryset(self):
+        return get_products(is_product_group=False)
+
+
 class ProductMemberViewSet(ModelViewSet):
     serializer_class = ProductMemberSerializer
     filterset_class = ProductMemberFilter
@@ -410,7 +436,7 @@ class BranchViewSet(ModelViewSet):
     search_fields = ["name"]
 
     def get_queryset(self):
-        return get_branches()
+        return get_branches().select_related("product")
 
     def destroy(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         instance: Branch = self.get_object()
@@ -418,6 +444,18 @@ class BranchViewSet(ModelViewSet):
             raise ValidationError("You cannot delete the default branch of a product.")
 
         return super().destroy(request, *args, **kwargs)
+
+
+class BranchNameViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
+    serializer_class = BranchNameSerializer
+    filterset_class = BranchFilter
+    permission_classes = (IsAuthenticated, UserHasBranchPermission)
+    queryset = Branch.objects.none()
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ["name"]
+
+    def get_queryset(self):
+        return get_branches().select_related("product")
 
 
 class ServiceViewSet(

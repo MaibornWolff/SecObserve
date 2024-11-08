@@ -43,6 +43,7 @@ const NotificationShow = () => {
                             <ReferenceField
                                 source="product"
                                 reference="products"
+                                queryOptions={{ meta: { api_resource: "product_names" } }}
                                 link="show"
                                 sx={{ "& a": { textDecoration: "none" } }}
                             />

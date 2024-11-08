@@ -122,6 +122,7 @@ const ObservationEditForm = () => {
                         <ReferenceInput
                             source="branch"
                             reference="branches"
+                            queryOptions={{ meta: { api_resource: "branch_names" } }}
                             sort={{ field: "name", order: "ASC" }}
                             filter={{ product: branch.product_data.id }}
                         >

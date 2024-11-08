@@ -24,7 +24,13 @@ const listFilters = [
     <TextInput source="name" alwaysOn />,
     <TextInput source="message" alwaysOn />,
     <TextInput source="function" alwaysOn />,
-    <ReferenceInput source="product" reference="products" sort={{ field: "name", order: "ASC" }} alwaysOn>
+    <ReferenceInput
+        source="product"
+        reference="products"
+        sort={{ field: "name", order: "ASC" }}
+        queryOptions={{ meta: { api_resource: "product_names" } }}
+        alwaysOn
+    >
         <AutocompleteInputMedium optionText="name" />
     </ReferenceInput>,
     <ReferenceInput source="user" reference="users" sort={{ field: "full_name", order: "ASC" }} alwaysOn>
