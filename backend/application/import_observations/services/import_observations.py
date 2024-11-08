@@ -7,6 +7,7 @@ from django.utils import timezone
 from rest_framework.exceptions import ValidationError
 
 from application.commons.models import Settings
+from application.commons.services.functions import clip_fields
 from application.core.models import (
     Branch,
     Evidence,
@@ -19,7 +20,6 @@ from application.core.queries.observation import (
     get_observations_for_vulnerability_check,
 )
 from application.core.services.observation import (
-    clip_fields,
     get_current_severity,
     get_current_status,
     get_identity_hash,
@@ -284,7 +284,7 @@ def _process_data(import_parameters: ImportParameters) -> Tuple[int, int, int, s
             imported_observation,
         )
         normalize_observation_fields(imported_observation)
-        clip_fields("Observation", imported_observation)
+        clip_fields("core", "Observation", imported_observation)
         imported_observation.identity_hash = get_identity_hash(imported_observation)
 
         # Only process observation if it hasn't been processed in this run before
@@ -427,7 +427,7 @@ def _process_current_observation(
                 observation=observation_before,
                 url=reference,
             )
-            clip_fields("Reference", reference)
+            clip_fields("core", "Reference", reference)
             reference.save()
 
     observation_before.evidences.all().delete()
@@ -438,7 +438,7 @@ def _process_current_observation(
                 name=evidence[0],
                 evidence=evidence[1],
             )
-            clip_fields("Evidence", evidence)
+            clip_fields("core", "Evidence", evidence)
             evidence.save()
 
             # Write observation log if status or severity has been changed
@@ -491,7 +491,7 @@ def _process_new_observation(imported_observation: Observation) -> None:
                 observation=imported_observation,
                 url=reference,
             )
-            clip_fields("Reference", reference)
+            clip_fields("core", "Reference", reference)
             reference.save()
 
     if imported_observation.unsaved_evidences:
@@ -501,7 +501,7 @@ def _process_new_observation(imported_observation: Observation) -> None:
                 name=evidence[0],
                 evidence=evidence[1],
             )
-            clip_fields("Evidence", evidence)
+            clip_fields("core", "Evidence", evidence)
             evidence.save()
 
     create_observation_log(
