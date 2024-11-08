@@ -200,6 +200,12 @@ class ObservationSerializer(ModelSerializer):
         return product
 
 
+class ObservationTitleSerializer(ModelSerializer):
+    class Meta:
+        model = Observation
+        fields = ["id", "title"]
+
+
 class ObservationListSerializer(ModelSerializer):
     product_data = NestedProductListSerializer(source="product")
     branch_name = SerializerMethodField()
@@ -209,7 +215,11 @@ class ObservationListSerializer(ModelSerializer):
 
     class Meta:
         model = Observation
-        exclude = ["numerical_severity", "issue_tracker_jira_initial_status"]
+        exclude = [
+            "numerical_severity",
+            "issue_tracker_jira_initial_status",
+            "origin_component_dependencies",
+        ]
 
     def get_branch_name(self, observation: Observation) -> str:
         return get_branch_name(observation)

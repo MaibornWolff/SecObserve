@@ -104,6 +104,21 @@ class LicenseComponentSerializer(ModelSerializer):
         return 0
 
 
+class LicenseComponentListSerializer(LicenseComponentSerializer):
+    license_policy_id = None
+    license_policy_name = None
+
+    class Meta:
+        model = License_Component
+        exclude = ["dependencies"]
+
+
+class LicenseComponentIdSerializer(ModelSerializer):
+    class Meta:
+        model = License_Component
+        fields = ["id"]
+
+
 class LicenseComponentBulkDeleteSerializer(Serializer):
     components = ListField(
         child=IntegerField(min_value=1), min_length=0, max_length=100, required=True

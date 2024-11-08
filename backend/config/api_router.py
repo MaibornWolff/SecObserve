@@ -13,6 +13,7 @@ from application.core.api.views import (
     BranchViewSet,
     EvidenceViewSet,
     ObservationLogViewSet,
+    ObservationTitleViewSet,
     ObservationViewSet,
     PotentialDuplicateViewSet,
     ProductAuthorizationGroupMemberViewSet,
@@ -29,6 +30,7 @@ from application.import_observations.api.views import (
     VulnerabilityCheckViewSet,
 )
 from application.licenses.api.views import (
+    LicenseComponentIdViewSet,
     LicenseComponentViewSet,
     LicenseGroupAuthorizationGroupMemberViewSet,
     LicenseGroupMemberViewSet,
@@ -84,6 +86,9 @@ router.register("branch_names", BranchNameViewSet, basename="branch_names")
 router.register("services", ServiceViewSet, basename="services")
 router.register("parsers", ParserViewSet, basename="parsers")
 router.register("observations", ObservationViewSet, basename="observations")
+router.register(
+    "observation_titles", ObservationTitleViewSet, basename="observation_titles"
+)
 router.register("observation_logs", ObservationLogViewSet, basename="observation_logs")
 router.register("general_rules", GeneralRuleViewSet, basename="general_rules")
 router.register(
@@ -120,6 +125,9 @@ router.register("vex/vex_statements", VEXStatementViewSet, basename="vex_stateme
 
 router.register(
     "license_components", LicenseComponentViewSet, basename="license_components"
+)
+router.register(
+    "license_component_ids", LicenseComponentIdViewSet, basename="license_component_ids"
 )
 router.register("licenses", LicenseViewSet, basename="licenses")
 router.register("license_groups", LicenseGroupViewSet, basename="license_groups")
