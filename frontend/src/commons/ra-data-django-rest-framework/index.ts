@@ -79,13 +79,18 @@ export default (): DataProvider => {
 
     return {
         getList: async (resource, params) => {
+            let api_resource = resource;
+            if (params.meta && params.meta.api_resource) {
+                api_resource = params.meta.api_resource;
+            }
+
             const query = {
                 ...getFilterQuery(params),
                 ...getPaginationQuery(params),
                 ...getOrderingQuery(params),
             };
 
-            const url = `${base_url}/${resource}/?${queryString.stringify(query)}`;
+            const url = `${base_url}/${api_resource}/?${queryString.stringify(query)}`;
 
             const { json } = await httpClient(url);
 
@@ -103,7 +108,12 @@ export default (): DataProvider => {
         },
 
         getMany: (resource, params) => {
-            return Promise.all(params.ids.map((id) => getOneJson(resource, id))).then((data) => ({ data }));
+            let api_resource = resource;
+            if (params.meta && params.meta.api_resource) {
+                api_resource = params.meta.api_resource;
+            }
+
+            return Promise.all(params.ids.map((id) => getOneJson(api_resource, id))).then((data) => ({ data }));
         },
 
         getManyReference: async (resource, params) => {

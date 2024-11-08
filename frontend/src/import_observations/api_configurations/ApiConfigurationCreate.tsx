@@ -186,6 +186,7 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
                     <ReferenceInput
                         source="automatic_import_branch"
                         reference="branches"
+                        queryOptions={{ meta: { api_resource: "branch_names" } }}
                         sort={{ field: "name", order: "ASC" }}
                         filter={{ product: id }}
                         alwaysOn

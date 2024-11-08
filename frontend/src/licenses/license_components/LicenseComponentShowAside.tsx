@@ -22,6 +22,7 @@ const MetaData = () => {
                             <ReferenceField
                                 source="product"
                                 reference="products"
+                                queryOptions={{ meta: { api_resource: "product_names" } }}
                                 link={(record, reference) => `/${reference}/${record.id}/show/licenses`}
                                 sx={{ "& a": { textDecoration: "none" } }}
                             />

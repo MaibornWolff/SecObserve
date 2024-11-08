@@ -28,7 +28,13 @@ import { AGE_CHOICES } from "../types";
 
 const listFilters = [
     <TextInput source="name" alwaysOn />,
-    <ReferenceInput source="product_group" reference="product_groups" sort={{ field: "name", order: "ASC" }} alwaysOn>
+    <ReferenceInput
+        source="product_group"
+        reference="product_groups"
+        queryOptions={{ meta: { api_resource: "product_group_names" } }}
+        sort={{ field: "name", order: "ASC" }}
+        alwaysOn
+    >
         <AutocompleteInputMedium optionText="name" />
     </ReferenceInput>,
     <NullableBooleanInput source="security_gate_passed" alwaysOn />,

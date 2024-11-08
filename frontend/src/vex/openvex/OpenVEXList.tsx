@@ -23,7 +23,13 @@ import { OpenVEX } from "../../vex/types";
 import OpenVEXCreate from "./OpenVEXCreate";
 
 const listFilters = [
-    <ReferenceInput source="product" reference="products" sort={{ field: "name", order: "ASC" }} alwaysOn>
+    <ReferenceInput
+        source="product"
+        reference="products"
+        sort={{ field: "name", order: "ASC" }}
+        queryOptions={{ meta: { api_resource: "product_names" } }}
+        alwaysOn
+    >
         <AutocompleteInputMedium optionText="name" />
     </ReferenceInput>,
     <TextInput source="vulnerability_names__name" label="Vulnerability" alwaysOn />,

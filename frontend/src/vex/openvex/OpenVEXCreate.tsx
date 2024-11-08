@@ -131,6 +131,7 @@ const OpenVEXCreate = () => {
                             <ReferenceInput
                                 source="product"
                                 reference="products"
+                                queryOptions={{ meta: { api_resource: "product_names" } }}
                                 sort={{ field: "name", order: "ASC" }}
                             >
                                 <AutocompleteInputWide optionText="name" />

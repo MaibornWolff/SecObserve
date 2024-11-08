@@ -27,6 +27,7 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                         <ReferenceField
                             source="product_group"
                             reference="product_groups"
+                            queryOptions={{ meta: { api_resource: "product_group_names" } }}
                             link="show"
                             sx={{ "& a": { textDecoration: "none" } }}
                         >
@@ -69,6 +70,7 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                             <ReferenceField
                                 source="repository_default_branch"
                                 reference="branches"
+                                queryOptions={{ meta: { api_resource: "branch_names" } }}
                                 link={false}
                                 sx={{ "& a": { textDecoration: "none" } }}
                             >
