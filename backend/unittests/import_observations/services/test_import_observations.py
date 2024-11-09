@@ -474,7 +474,7 @@ class TestImportObservations(BaseTestCase):
             "test_docker_image_name_tag",
             "test_endpoint_url",
             "test_kubernetes_cluster",
-            suppress_licenses=False
+            suppress_licenses=False,
         )
 
     def _file_upload_licenses(
