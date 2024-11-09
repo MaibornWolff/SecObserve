@@ -232,6 +232,9 @@ class FileUploadObservationsById(APIView):
         )
         endpoint_url = request_serializer.validated_data.get("endpoint_url")
         kubernetes_cluster = request_serializer.validated_data.get("kubernetes_cluster")
+        suppress_licenses = request_serializer.validated_data.get(
+            "suppress_licenses", False
+        )
 
         file_upload_parameters = FileUploadParameters(
             product=product,
@@ -242,6 +245,7 @@ class FileUploadObservationsById(APIView):
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
+            suppress_licenses=suppress_licenses,
         )
 
         (
@@ -316,6 +320,9 @@ class FileUploadObservationsByName(APIView):
         )
         endpoint_url = request_serializer.validated_data.get("endpoint_url")
         kubernetes_cluster = request_serializer.validated_data.get("kubernetes_cluster")
+        suppress_licenses = request_serializer.validated_data.get(
+            "suppress_licenses", False
+        )
 
         file_upload_parameters = FileUploadParameters(
             product=product,
@@ -326,6 +333,7 @@ class FileUploadObservationsByName(APIView):
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
+            suppress_licenses=suppress_licenses,
         )
 
         (
