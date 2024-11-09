@@ -32,6 +32,7 @@ class FileUploadObservationsByIdRequestSerializer(Serializer):
     docker_image_name_tag = CharField(max_length=513, required=False)
     endpoint_url = CharField(max_length=2048, required=False)
     kubernetes_cluster = CharField(max_length=255, required=False)
+    suppress_licenses = BooleanField(required=False)
 
 
 class FileUploadObservationsByNameRequestSerializer(Serializer):
@@ -43,6 +44,7 @@ class FileUploadObservationsByNameRequestSerializer(Serializer):
     docker_image_name_tag = CharField(max_length=513, required=False)
     endpoint_url = CharField(max_length=2048, required=False)
     kubernetes_cluster = CharField(max_length=255, required=False)
+    suppress_licenses = BooleanField(required=False)
 
 
 class ApiImportObservationsByIdRequestSerializer(Serializer):

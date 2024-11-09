@@ -144,6 +144,7 @@ class TestImportObservations(BaseTestCase):
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
+            suppress_licenses=False,
         )
 
         (
@@ -252,6 +253,7 @@ class TestImportObservations(BaseTestCase):
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
+            suppress_licenses=False,
         )
 
         (
@@ -443,6 +445,7 @@ class TestImportObservations(BaseTestCase):
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
+            suppress_licenses=False,
         )
 
         (
@@ -534,6 +537,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
+            suppress_licenses=False,
         )
 
         (
@@ -630,6 +634,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
+            suppress_licenses=False,
         )
 
         (
@@ -709,6 +714,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
+            suppress_licenses=False,
         )
 
         (

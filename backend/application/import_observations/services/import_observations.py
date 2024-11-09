@@ -79,6 +79,7 @@ class FileUploadParameters:
     docker_image_name_tag: str
     endpoint_url: str
     kubernetes_cluster: str
+    suppress_licenses: bool
 
 
 @dataclass
@@ -142,7 +143,10 @@ def file_upload_observations(
 
     numbers_license_components = (0, 0, 0)
     settings = Settings.load()
-    if settings.feature_license_management:
+    if (
+        settings.feature_license_management
+        and not file_upload_parameters.suppress_licenses
+    ):
         imported_license_components = parser_instance.get_license_components(data)
         numbers_license_components = process_license_components(
             imported_license_components, vulnerability_check
