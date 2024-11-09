@@ -30,6 +30,7 @@ Most of the actions and templates use the same set of variables:
 | `SO_ORIGIN_SERVICE` | *optional* | Service name to be set for all imported observations. |
 | `SO_ORIGIN_DOCKER_IMAGE_NAME_TAG` | *optional* | Name:Tag of Docker image to be set for all imported observations. |
 | `SO_ORIGIN_ENDPOINT_URL` | *optional* | URL of endpoint to be set for all imported observations. |
+| `SO_SUPPRESS_LICENSES` | *optional, only for CycloneDX* | Suppress importing license information if value is `true`. Default is `true` for the *Grype*, *Trivy Filesystem* and *Trivy Image* GitHub action / GitLab templates, default is `false` for the *Importer*  action/template |
 
 ## Available actions and templates
 
