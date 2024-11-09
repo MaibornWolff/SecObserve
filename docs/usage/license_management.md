@@ -17,7 +17,9 @@ If license management is deactivated:
 
 #### Importing components with licenses
 
-When importing data from CycloneDX SBOMs, the licenses of the components are imported as well, if they are available in the SBOM. The licenses are shown in the `License` tab of the Product view.
+When importing data from CycloneDX SBOMs, the licenses of the components are imported as well, if they are available in the SBOM and the parameter `SO_SUPPRESS_LICENSES` is not set or set to `false` ^1)^. The licenses are shown in the `License` tab of the Product view.
+
+**^1)^** `SO_SUPPRESS_LICENSES` will be set to `true` by the *Grype*, *Trivy Filesystem* and *Trivy Image* GitHub actions / GitLab templates if not set otherwise, to not accidently import licenses.
 
 ![License component list](../assets/images/screenshot_license_component_list.png)
 
