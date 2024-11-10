@@ -2,7 +2,16 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import UploadIcon from "@mui/icons-material/Upload";
 import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { ChangeEvent, Fragment, useState } from "react";
-import { ReferenceInput, SaveButton, SimpleForm, Toolbar, WithRecord, useNotify, useRefresh } from "react-admin";
+import {
+    BooleanInput,
+    ReferenceInput,
+    SaveButton,
+    SimpleForm,
+    Toolbar,
+    WithRecord,
+    useNotify,
+    useRefresh,
+} from "react-admin";
 import { makeStyles } from "tss-react/mui";
 
 import { validate_255, validate_513, validate_2048, validate_required } from "../../commons/custom_validators";
@@ -64,6 +73,7 @@ const FileUploadObservations = () => {
             if (data.kubernetes_cluster) {
                 formData.append("kubernetes_cluster", data.kubernetes_cluster);
             }
+            formData.append("suppress_licenses", data.suppress_licenses);
 
             httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/import/file_upload_observations_by_id/", {
                 method: "POST",
@@ -174,6 +184,7 @@ const FileUploadObservations = () => {
                                     source="branch"
                                     reference="branches"
                                     sort={{ field: "name", order: "ASC" }}
+                                    queryOptions={{ meta: { api_resource: "branch_names" } }}
                                     filter={{ product: product.id }}
                                     alwaysOn
                                 >
@@ -197,6 +208,7 @@ const FileUploadObservations = () => {
                         />
                         <TextInputWide label="Endpoint URL" source="endpoint_url" validate={validate_2048} />
                         <TextInputWide source="kubernetes_cluster" validate={validate_255} />
+                        <BooleanInput source="suppress_licenses" label="Suppress licenses" />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>

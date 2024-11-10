@@ -140,6 +140,7 @@ const ProductCreate = () => {
                 <ReferenceInput
                     source="product_group"
                     reference="product_groups"
+                    queryOptions={{ meta: { api_resource: "product_group_names" } }}
                     sort={{ field: "name", order: "ASC" }}
                 >
                     <AutocompleteInputWide optionText="name" />

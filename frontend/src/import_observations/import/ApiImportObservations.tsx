@@ -136,6 +136,7 @@ const ApiImportObservations = (product: any) => {
                         <ReferenceInput
                             source="branch"
                             reference="branches"
+                            queryOptions={{ meta: { api_resource: "branch_names" } }}
                             sort={{ field: "name", order: "ASC" }}
                             filter={{ product: product.product.id }}
                             alwaysOn

@@ -53,6 +53,7 @@ const ApiTokenEmbeddedList = () => {
                                         <ReferenceField
                                             source="product"
                                             reference="products"
+                                            queryOptions={{ meta: { api_resource: "product_names" } }}
                                             link={(record: any, reference: any) =>
                                                 `../../${reference}/${record.id}/show/api_token`
                                             }
@@ -70,6 +71,7 @@ const ApiTokenEmbeddedList = () => {
                                         <ReferenceField
                                             source="product_group"
                                             reference="product_groups"
+                                            queryOptions={{ meta: { api_resource: "product_group_names" } }}
                                             link={(record: any, reference: any) =>
                                                 `../../${reference}/${record.id}/show/api_token`
                                             }

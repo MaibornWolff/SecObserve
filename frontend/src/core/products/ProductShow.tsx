@@ -81,6 +81,7 @@ const ShowActions = (props: ShowActionsProps) => {
                     filter={props.filter}
                     linkType="show"
                     sort={{ field: "name", order: "ASC" }}
+                    queryOptions={{ meta: { api_resource: "product_names" } }}
                     storeKey={props.storeKey}
                 />
                 {product && product.permissions.includes(PERMISSION_PRODUCT_IMPORT_OBSERVATIONS) && (

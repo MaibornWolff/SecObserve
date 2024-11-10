@@ -181,6 +181,7 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
                                 <ReferenceInput
                                     source="product"
                                     reference="products"
+                                    queryOptions={{ meta: { api_resource: "product_names" } }}
                                     sort={{ field: "name", order: "ASC" }}
                                 >
                                     <AutocompleteInputWide optionText="name" defaultValue={id} disabled={true} />
@@ -188,6 +189,7 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
                                 <ReferenceInput
                                     source="branch"
                                     reference="branches"
+                                    queryOptions={{ meta: { api_resource: "branch_names" } }}
                                     sort={{ field: "name", order: "ASC" }}
                                     filter={{ product: id }}
                                 >

@@ -144,6 +144,7 @@ class TestImportObservations(BaseTestCase):
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
+            suppress_licenses=False,
         )
 
         (
@@ -252,6 +253,7 @@ class TestImportObservations(BaseTestCase):
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
+            suppress_licenses=False,
         )
 
         (
@@ -370,6 +372,7 @@ class TestImportObservations(BaseTestCase):
             "test_docker_image_name_tag",
             "test_endpoint_url",
             "test_kubernetes_cluster",
+            suppress_licenses=False,
         )
 
         self.assertEqual(mock_get_license_components.call_count, 0)
@@ -378,6 +381,57 @@ class TestImportObservations(BaseTestCase):
         settings = Settings.load()
         settings.feature_license_management = True
         settings.save()
+
+    @patch("application.commons.services.global_request.get_current_request")
+    @patch(
+        "application.import_observations.services.import_observations.check_security_gate"
+    )
+    @patch(
+        "application.import_observations.services.import_observations.set_repository_default_branch"
+    )
+    @patch(
+        "application.import_observations.services.import_observations.push_observations_to_issue_tracker"
+    )
+    @patch(
+        "application.import_observations.services.import_observations.epss_apply_observation"
+    )
+    @patch(
+        "application.import_observations.services.import_observations.find_potential_duplicates"
+    )
+    @patch(
+        "application.vex.services.vex_engine.VEX_Engine.apply_vex_statements_for_observation"
+    )
+    @patch(
+        "application.import_observations.parsers.cyclone_dx.parser.CycloneDXParser.get_license_components"
+    )
+    @patch(
+        "application.import_observations.services.import_observations.process_license_components"
+    )
+    def test_file_upload_suppress_licenses_true(
+        self,
+        mock_process_license_components,
+        mock_get_license_components,
+        mock_apply_vex_statements_for_observation,
+        mock_find_potential_duplicates,
+        mock_epss_apply_observation,
+        mock_push_observations_to_issue_tracker,
+        mock_set_repository_default_branch,
+        mock_check_security_gate,
+        mock_get_current_request,
+    ):
+        mock_get_current_request.return_value = RequestMock(User.objects.get(id=1))
+
+        self._file_upload_licenses(
+            Branch.objects.get(id=1),
+            "test_service",
+            "test_docker_image_name_tag",
+            "test_endpoint_url",
+            "test_kubernetes_cluster",
+            suppress_licenses=True,
+        )
+
+        self.assertEqual(mock_get_license_components.call_count, 0)
+        self.assertEqual(mock_process_license_components.call_count, 0)
 
     @patch("application.commons.services.global_request.get_current_request")
     @patch(
@@ -420,10 +474,17 @@ class TestImportObservations(BaseTestCase):
             "test_docker_image_name_tag",
             "test_endpoint_url",
             "test_kubernetes_cluster",
+            suppress_licenses=False,
         )
 
     def _file_upload_licenses(
-        self, branch, service, docker_image_name_tag, endpoint_url, kubernetes_cluster
+        self,
+        branch,
+        service,
+        docker_image_name_tag,
+        endpoint_url,
+        kubernetes_cluster,
+        suppress_licenses,
     ):
         License_Component.objects.all().delete()
 
@@ -443,6 +504,7 @@ class TestImportObservations(BaseTestCase):
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
+            suppress_licenses=suppress_licenses,
         )
 
         (
@@ -455,7 +517,7 @@ class TestImportObservations(BaseTestCase):
         ) = file_upload_observations(file_upload_parameters)
 
         settings = Settings.load()
-        if settings.feature_license_management:
+        if settings.feature_license_management and not suppress_licenses:
             self.assertEqual(new_observations, 0)
             self.assertEqual(updated_observations, 0)
             self.assertEqual(resolved_observations, 0)
@@ -480,7 +542,7 @@ class TestImportObservations(BaseTestCase):
             )
             self.assertEqual(license_components[1].purl_type, "pypi")
             self.assertEqual(license_components[1].cpe, "")
-            dependencies = """SecObserve:1.22.0 --> argon2-cffi:23.1.0
+            dependencies = """SecObserve:1.22.1 --> argon2-cffi:23.1.0
 argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             self.assertEqual(license_components[1].dependencies, dependencies)
             self.assertEqual(
@@ -534,6 +596,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
+            suppress_licenses=suppress_licenses,
         )
 
         (
@@ -546,7 +609,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
         ) = file_upload_observations(file_upload_parameters)
 
         settings = Settings.load()
-        if settings.feature_license_management:
+        if settings.feature_license_management and not suppress_licenses:
             self.assertEqual(new_observations, 0)
             self.assertEqual(updated_observations, 0)
             self.assertEqual(resolved_observations, 0)
@@ -630,6 +693,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
+            suppress_licenses=suppress_licenses,
         )
 
         (
@@ -642,7 +706,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
         ) = file_upload_observations(file_upload_parameters)
 
         settings = Settings.load()
-        if settings.feature_license_management:
+        if settings.feature_license_management and not suppress_licenses:
             self.assertEqual(new_observations, 0)
             self.assertEqual(updated_observations, 0)
             self.assertEqual(resolved_observations, 0)
@@ -709,6 +773,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
+            suppress_licenses=suppress_licenses,
         )
 
         (
@@ -721,7 +786,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
         ) = file_upload_observations(file_upload_parameters)
 
         settings = Settings.load()
-        if settings.feature_license_management:
+        if settings.feature_license_management and not suppress_licenses:
             self.assertEqual(new_observations, 0)
             self.assertEqual(updated_observations, 0)
             self.assertEqual(resolved_observations, 0)

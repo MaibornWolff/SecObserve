@@ -37,6 +37,7 @@ class BaseTestVEXImport(TestCase):
                 docker_image_name_tag="",
                 endpoint_url="",
                 kubernetes_cluster="",
+                suppress_licenses=False,
             )
             file_upload_observations(file_upload_parameter)
 

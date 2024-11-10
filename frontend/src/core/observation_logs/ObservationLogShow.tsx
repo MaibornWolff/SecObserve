@@ -70,6 +70,7 @@ const ObservationLogComponent = () => {
                                 <ReferenceField
                                     source="observation_data.product"
                                     reference="products"
+                                    queryOptions={{ meta: { api_resource: "product_names" } }}
                                     link="show"
                                     sx={{ "& a": { textDecoration: "none" } }}
                                 >

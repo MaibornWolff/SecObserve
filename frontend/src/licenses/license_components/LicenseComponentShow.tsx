@@ -28,6 +28,7 @@ const ShowActions = () => {
                         filter={{
                             product: Number(component.product),
                         }}
+                        queryOptions={{ meta: { api_resource: "license_component_ids" } }}
                         linkType="show"
                         sort={{ field: "evaluation_result", order: "ASC" }}
                         storeKey="license_components.embedded"
@@ -134,7 +135,7 @@ export const LicenseComponentComponent = () => {
                                     <TextField source="cpe" label="Component CPE" />
                                 </Labeled>
                             )}
-                            {component.dependencies != "" && (
+                            {component.dependencies && component.dependencies != "" && (
                                 <MermaidDependencies dependencies={component.dependencies} />
                             )}
                         </Stack>

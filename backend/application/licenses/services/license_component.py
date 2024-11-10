@@ -6,6 +6,7 @@ from django.utils import timezone
 from packageurl import PackageURL
 from rest_framework.exceptions import ValidationError
 
+from application.commons.services.functions import clip_fields
 from application.core.models import Product
 from application.import_observations.models import Vulnerability_Check
 from application.licenses.models import License_Component
@@ -93,6 +94,7 @@ def process_license_components(
                 or evaluation_result_before != existing_component.evaluation_result
             ):
                 existing_component.last_change = timezone.now()
+            clip_fields("licenses", "License_Component", existing_component)
             existing_component.save()
             existing_components_dict.pop(component.identity_hash)
             components_updated += 1
@@ -108,6 +110,7 @@ def process_license_components(
 
             component.import_last_seen = timezone.now()
             component.last_change = timezone.now()
+            clip_fields("licenses", "License_Component", component)
             component.save()
             components_new += 1
 
