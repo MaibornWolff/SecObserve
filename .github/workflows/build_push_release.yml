@@ -64,13 +64,13 @@ jobs:
             VERSION=${{ github.event.inputs.release }}
       - 
         name: Run vulnerability scanners for images
-        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@bf9f43210f57165ebe40e5bd10e78dac61ce63c8 # main
+        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@5606a843f40e25d002053dfd14cd525496c76560 # main
         with:
           so_configuration: 'so_configuration_sca_current.yml'
           SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
       - 
         name: Run vulnerability scanners for endpoints
-        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@bf9f43210f57165ebe40e5bd10e78dac61ce63c8 # main
+        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@5606a843f40e25d002053dfd14cd525496c76560 # main
         with:
           so_configuration: 'so_configuration_endpoints.yml'
           SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
