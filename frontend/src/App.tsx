@@ -36,6 +36,7 @@ import openvex from "./vex/openvex";
 import vex_counters from "./vex/vex_counters";
 import vex_documents from "./vex/vex_documents";
 import vex_statements from "./vex/vex_statements";
+import { queryClient } from "./commons/queryClient";
 
 const i18nProvider = polyglotI18nProvider(() => {
     return englishMessages;
@@ -50,6 +51,7 @@ const App = () => {
             <Admin
                 title=""
                 dataProvider={drfProvider()}
+                queryClient={queryClient}
                 authProvider={authProvider}
                 dashboard={Dashboard}
                 loginPage={Login}
@@ -59,6 +61,7 @@ const App = () => {
                 lightTheme={lightTheme}
                 darkTheme={darkTheme}
                 defaultTheme={getTheme()}
+                requireAuth
             >
                 <CustomRoutes>
                     <Route path="/access_control/users" element={<AccessControlAdministration />} />
