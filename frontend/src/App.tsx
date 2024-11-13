@@ -13,6 +13,7 @@ import englishMessages from "./commons/i18n/en";
 import { Layout } from "./commons/layout";
 import { darkTheme, lightTheme } from "./commons/layout/themes";
 import notifications from "./commons/notifications";
+import { queryClient } from "./commons/queryClient";
 import drfProvider from "./commons/ra-data-django-rest-framework";
 import settings from "./commons/settings";
 import UserSettings from "./commons/user_settings/UserSettings";
@@ -36,7 +37,6 @@ import openvex from "./vex/openvex";
 import vex_counters from "./vex/vex_counters";
 import vex_documents from "./vex/vex_documents";
 import vex_statements from "./vex/vex_statements";
-import { queryClient } from "./commons/queryClient";
 
 const i18nProvider = polyglotI18nProvider(() => {
     return englishMessages;
