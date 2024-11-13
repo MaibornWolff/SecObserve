@@ -13,6 +13,7 @@ import englishMessages from "./commons/i18n/en";
 import { Layout } from "./commons/layout";
 import { darkTheme, lightTheme } from "./commons/layout/themes";
 import notifications from "./commons/notifications";
+import { queryClient } from "./commons/queryClient";
 import drfProvider from "./commons/ra-data-django-rest-framework";
 import settings from "./commons/settings";
 import UserSettings from "./commons/user_settings/UserSettings";
@@ -50,6 +51,7 @@ const App = () => {
             <Admin
                 title=""
                 dataProvider={drfProvider()}
+                queryClient={queryClient}
                 authProvider={authProvider}
                 dashboard={Dashboard}
                 loginPage={Login}
@@ -59,6 +61,7 @@ const App = () => {
                 lightTheme={lightTheme}
                 darkTheme={darkTheme}
                 defaultTheme={getTheme()}
+                requireAuth
             >
                 <CustomRoutes>
                     <Route path="/access_control/users" element={<AccessControlAdministration />} />
