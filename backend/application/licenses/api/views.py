@@ -201,7 +201,7 @@ class LicenseGroupViewSet(ModelViewSet):
 
         if license_to_be_added in license_group.licenses.filter(id=license_id):
             raise ValidationError(
-                f"License {license_to_be_added} is already in thhis license group"
+                f"License {license_to_be_added} is already in this license group"
             )
 
         license_group.licenses.add(license_to_be_added)
