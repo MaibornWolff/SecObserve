@@ -5,7 +5,7 @@ import { Fragment, useState } from "react";
 import { ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh, useUpdate } from "react-admin";
 
 import { validate_255, validate_required } from "../../commons/custom_validators";
-import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputExtraWide, AutocompleteInputMedium, TextInputExtraWide } from "../../commons/layout/themes";
 import { EVALUATION_RESULT_CHOICES } from "../types";
 
 const LicensePolicyItemEdit = () => {
@@ -88,7 +88,7 @@ const LicensePolicyItemEdit = () => {
             >
                 Edit
             </Button>
-            <Dialog open={open} onClose={handleClose}>
+            <Dialog open={open} onClose={handleClose} maxWidth={"lg"}>
                 <DialogTitle>Edit license policy item</DialogTitle>
                 <DialogContent>
                     <SimpleForm onSubmit={item_update} toolbar={<CustomToolbar />}>
@@ -98,7 +98,7 @@ const LicensePolicyItemEdit = () => {
                             label="License group"
                             sort={{ field: "name", order: "ASC" }}
                         >
-                            <AutocompleteInputWide optionText="name" />
+                            <AutocompleteInputExtraWide optionText="name" />
                         </ReferenceInput>
                         <ReferenceInput
                             source="license"
@@ -106,9 +106,9 @@ const LicensePolicyItemEdit = () => {
                             label="License"
                             sort={{ field: "spdx_id", order: "ASC" }}
                         >
-                            <AutocompleteInputWide optionText="spdx_id" />
+                            <AutocompleteInputExtraWide optionText="spdx_id_name" />
                         </ReferenceInput>
-                        <TextInputWide source="unknown_license" label="Unknown license" validate={validate_255} />
+                        <TextInputExtraWide source="unknown_license" label="Unknown license" validate={validate_255} />
                         <AutocompleteInputMedium
                             source="evaluation_result"
                             label="Evaluation result"

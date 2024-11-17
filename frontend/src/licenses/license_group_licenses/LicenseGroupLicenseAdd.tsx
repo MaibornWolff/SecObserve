@@ -6,7 +6,7 @@ import { ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh 
 import { useFormContext } from "react-hook-form";
 
 import { validate_required } from "../../commons/custom_validators";
-import { AutocompleteInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputExtraWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
 export type LicenseGroupLicenseAddProps = {
@@ -106,7 +106,7 @@ const LicenseGroupLicenseAdd = ({ id }: LicenseGroupLicenseAddProps) => {
             >
                 Add license
             </Button>
-            <Dialog open={open} onClose={handleClose}>
+            <Dialog open={open} onClose={handleClose} maxWidth={"lg"}>
                 <DialogTitle>Add license</DialogTitle>
                 <DialogContent>
                     <SimpleForm toolbar={<CustomToolbar />}>
@@ -116,8 +116,8 @@ const LicenseGroupLicenseAdd = ({ id }: LicenseGroupLicenseAddProps) => {
                             label="License"
                             sort={{ field: "spdx_id", order: "ASC" }}
                         >
-                            <AutocompleteInputWide
-                                optionText="spdx_id"
+                            <AutocompleteInputExtraWide
+                                optionText="spdx_id_name"
                                 validate={validate_required}
                                 onChange={(e) => setLicense(e)}
                             />

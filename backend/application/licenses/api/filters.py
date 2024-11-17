@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.db.models import Q
 from django.utils import timezone
 from django_filters import (
     CharFilter,
@@ -91,9 +92,6 @@ class LicenseFilter(FilterSet):
             ("is_deprecated", "is_deprecated"),
         ),
     )
-
-    # search is needed for the ReferenceArrayInput field of react-admin
-    search = CharFilter(field_name="spdx_id", lookup_expr="icontains")
 
     class Meta:
         model = License

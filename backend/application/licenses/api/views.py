@@ -119,7 +119,7 @@ class LicenseViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     filterset_class = LicenseFilter
     queryset = License.objects.all()
     filter_backends = [SearchFilter, DjangoFilterBackend]
-    search_fields = ["spdx_id"]
+    search_fields = ["spdx_id", "name"]
 
 
 class LicenseGroupViewSet(ModelViewSet):
