@@ -57,9 +57,9 @@ import BranchEmbeddedList from "../branches/BranchEmbeddedList";
 import ShowDefaultBranchObservationsButton from "../branches/ShowDefaultBranchObservationsButton";
 import ObservationCreate from "../observations/ObservationCreate";
 import ObservationsEmbeddedList from "../observations/ObservationEmbeddedList";
-import ProductAuthorizationGroupMemberCreate from "../product_authorization_group_members/ProductAuthorizationGroupMemberCreate";
+import ProductAuthorizationGroupMemberAdd from "../product_authorization_group_members/ProductAuthorizationGroupMemberAdd";
 import ProductAuthorizationGroupMemberEmbeddedList from "../product_authorization_group_members/ProductAuthorizationGroupMemberEmbeddedList";
-import ProductMemberCreate from "../product_members/ProductMemberCreate";
+import ProductMemberAdd from "../product_members/ProductMemberAdd";
 import ProductMemberEmbeddedList from "../product_members/ProductMemberEmbeddedList";
 import ServiceEmbeddedList from "../services/ServiceEmbeddedList";
 import ExportMenu from "./ExportMenu";
@@ -273,7 +273,7 @@ const ProductShow = () => {
                                 <Tab label="Members" path="members" icon={<PeopleAltIcon />}>
                                     <Typography variant="h6">User members</Typography>
                                     {product && product.permissions.includes(PERMISSION_PRODUCT_MEMBER_CREATE) && (
-                                        <ProductMemberCreate id={product.id} />
+                                        <ProductMemberAdd id={product.id} />
                                     )}
                                     <ProductMemberEmbeddedList product={product} />
 
@@ -282,7 +282,7 @@ const ProductShow = () => {
                                     {product &&
                                         product.permissions.includes(
                                             PERMISSION_PRODUCT_AUTHORIZATION_GROUP_MEMBER_CREATE
-                                        ) && <ProductAuthorizationGroupMemberCreate id={product.id} />}
+                                        ) && <ProductAuthorizationGroupMemberAdd id={product.id} />}
                                     <ProductAuthorizationGroupMemberEmbeddedList product={product} />
                                 </Tab>
                             )}

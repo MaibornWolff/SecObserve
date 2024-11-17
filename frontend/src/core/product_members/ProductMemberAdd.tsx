@@ -2,21 +2,22 @@ import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { BooleanInput, ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
+import { ReferenceInput, SaveButton, SimpleForm, Toolbar, useCreate, useNotify, useRefresh } from "react-admin";
 import { useFormContext } from "react-hook-form";
 
+import { ROLE_CHOICES } from "../../access_control/types";
 import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
-import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
-export type AuthorizationGroupMemberAddProps = {
+export type ProductMemberAddProps = {
     id: any;
 };
 
-const AuthorizationGroupMemberAdd = ({ id }: AuthorizationGroupMemberAddProps) => {
+const ProductMemberAdd = ({ id }: ProductMemberAddProps) => {
     const [open, setOpen] = useState(false);
     const refresh = useRefresh();
     const notify = useNotify();
+    const [create] = useCreate();
     const handleOpen = () => setOpen(true);
     const handleCancel = () => {
         resetState();
@@ -29,10 +30,10 @@ const AuthorizationGroupMemberAdd = ({ id }: AuthorizationGroupMemberAddProps) =
     };
 
     const [user, setUser] = useState();
-    const [is_manager, setIsManager] = useState(false);
+    const [role, setRole] = useState();
     const resetState = () => {
         setUser(undefined);
-        setIsManager(false);
+        setRole(undefined);
     };
 
     const CancelButton = () => (
@@ -59,39 +60,40 @@ const AuthorizationGroupMemberAdd = ({ id }: AuthorizationGroupMemberAddProps) =
             e.preventDefault(); // necessary to prevent default SaveButton submit logic
             const data = {
                 user: user,
-                is_manager: is_manager,
+                role: role,
             };
-            add_user(data, false);
+            add_product_member(data, false);
         };
 
         const handleSaveClose = (e: any) => {
             e.preventDefault(); // necessary to prevent default SaveButton submit logic
             const data = {
                 user: user,
-                is_manager: is_manager,
+                role: role,
             };
-            add_user(data, true);
+            add_product_member(data, true);
         };
 
-        const add_user = (data: any, close_dialog: boolean) => {
-            const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/authorization_group_members/";
-            const body = JSON.stringify({ authorization_group: id, ...data });
-            httpClient(url, {
-                method: "POST",
-                body: body,
-            })
-                .then(() => {
-                    refresh();
-                    notify("User added", { type: "success" });
-                    resetState();
-                    reset();
-                    if (close_dialog) {
-                        setOpen(false);
-                    }
-                })
-                .catch((error) => {
-                    notify(error.message, { type: "warning" });
-                });
+        const add_product_member = (data: any, close_dialog: boolean) => {
+            data.product = id;
+            create(
+                "product_members",
+                { data: data },
+                {
+                    onSuccess: () => {
+                        refresh();
+                        notify("User member added", { type: "success" });
+                        resetState();
+                        reset();
+                        if (close_dialog) {
+                            setOpen(false);
+                        }
+                    },
+                    onError: (error: any) => {
+                        notify(error.message, { type: "warning" });
+                    },
+                }
+            );
         };
 
         return (
@@ -116,10 +118,10 @@ const AuthorizationGroupMemberAdd = ({ id }: AuthorizationGroupMemberAddProps) =
                 sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem", marginBottom: 1 }}
                 startIcon={<AddIcon />}
             >
-                Add user
+                Add user member
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Add user</DialogTitle>
+                <DialogTitle>Add user member</DialogTitle>
                 <DialogContent>
                     <SimpleForm toolbar={<CustomToolbar />}>
                         <ReferenceInput
@@ -134,10 +136,11 @@ const AuthorizationGroupMemberAdd = ({ id }: AuthorizationGroupMemberAddProps) =
                                 onChange={(e) => setUser(e)}
                             />
                         </ReferenceInput>
-                        <BooleanInput
-                            source="is_manager"
-                            label="Manager"
-                            onChange={(e) => setIsManager(e.target.checked)}
+                        <AutocompleteInputWide
+                            source="role"
+                            choices={ROLE_CHOICES}
+                            validate={validate_required}
+                            onChange={(e) => setRole(e)}
                         />
                     </SimpleForm>
                 </DialogContent>
@@ -146,4 +149,4 @@ const AuthorizationGroupMemberAdd = ({ id }: AuthorizationGroupMemberAddProps) =
     );
 };
 
-export default AuthorizationGroupMemberAdd;
+export default ProductMemberAdd;

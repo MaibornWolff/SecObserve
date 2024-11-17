@@ -242,7 +242,7 @@ class TestAuthorizationLicenseGroups(TestAuthorizationBase):
             )
         )
 
-        expected_data = "{'message': 'User is not a manager of the license group'}"
+        expected_data = "{'message': 'User is not a manager of this license group'}"
         self._test_api(
             APITest(
                 "db_internal_read",
@@ -281,7 +281,7 @@ class TestAuthorizationLicenseGroups(TestAuthorizationBase):
             )
         )
 
-        expected_data = "{'message': 'User is not a manager of the license group'}"
+        expected_data = "{'message': 'User is not a manager of this license group'}"
         self._test_api(
             APITest(
                 "db_internal_read",

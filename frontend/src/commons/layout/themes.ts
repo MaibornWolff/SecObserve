@@ -2,12 +2,20 @@ import { styled } from "@mui/system";
 import { AutocompleteInput, PasswordInput, TextInput, defaultTheme } from "react-admin";
 import { tss } from "tss-react";
 
+export const AutocompleteInputExtraWide = styled(AutocompleteInput)({
+    width: "45em",
+});
+
 export const AutocompleteInputWide = styled(AutocompleteInput)({
     width: "30em",
 });
 
 export const AutocompleteInputMedium = styled(AutocompleteInput)({
     width: "15em",
+});
+
+export const TextInputExtraWide = styled(TextInput)({
+    width: "45em",
 });
 
 export const TextInputWide = styled(TextInput)({

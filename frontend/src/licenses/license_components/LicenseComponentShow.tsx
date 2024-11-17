@@ -52,16 +52,21 @@ export const LicenseComponentComponent = () => {
                         </Typography>
                         <Stack spacing={1}>
                             {component.license && (
-                                <Labeled label="SPDX Id">
-                                    <ReferenceField
-                                        source="license"
-                                        reference="licenses"
-                                        link="show"
-                                        sx={{ "& a": { textDecoration: "none" } }}
-                                    >
-                                        <TextField source="spdx_id" className={classes.fontBigBold} />
-                                    </ReferenceField>
-                                </Labeled>
+                                <Stack direction="row" spacing={4}>
+                                    <Labeled label="SPDX Id">
+                                        <ReferenceField
+                                            source="license"
+                                            reference="licenses"
+                                            link="show"
+                                            sx={{ "& a": { textDecoration: "none" } }}
+                                        >
+                                            <TextField source="spdx_id" className={classes.fontBigBold} />
+                                        </ReferenceField>
+                                    </Labeled>
+                                    <Labeled label="Name">
+                                        <TextField source="license_data.name" className={classes.fontBigBold} />
+                                    </Labeled>
+                                </Stack>
                             )}
                             {component.unknown_license && (
                                 <Labeled label="Unknown license">

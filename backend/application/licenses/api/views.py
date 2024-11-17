@@ -119,7 +119,7 @@ class LicenseViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     filterset_class = LicenseFilter
     queryset = License.objects.all()
     filter_backends = [SearchFilter, DjangoFilterBackend]
-    search_fields = ["spdx_id"]
+    search_fields = ["spdx_id", "name"]
 
 
 class LicenseGroupViewSet(ModelViewSet):
@@ -192,12 +192,17 @@ class LicenseGroupViewSet(ModelViewSet):
             if not license_group_member:
                 raise NotFound("License group not found")
             if not license_group_member.is_manager:
-                raise PermissionDenied("User is not a manager of the license group")
+                raise PermissionDenied("User is not a manager of this license group")
 
         license_id = request_serializer.validated_data.get("license")
         license_to_be_added = get_license(license_id)
         if not license_to_be_added:
             raise ValidationError(f"License {license_id} not found")
+
+        if license_to_be_added in license_group.licenses.filter(id=license_id):
+            raise ValidationError(
+                f"License {license_to_be_added} is already in this license group"
+            )
 
         license_group.licenses.add(license_to_be_added)
 
@@ -224,7 +229,7 @@ class LicenseGroupViewSet(ModelViewSet):
             if not license_group_member:
                 raise NotFound("License group not found")
             if not license_group_member.is_manager:
-                raise PermissionDenied("User is not a manager of the license group")
+                raise PermissionDenied("User is not a manager of this license group")
 
         license_id = request_serializer.validated_data.get("license")
         license_to_be_removed = get_license(license_id)
