@@ -92,9 +92,6 @@ class LicenseFilter(FilterSet):
         ),
     )
 
-    # search is needed for the ReferenceArrayInput field of react-admin
-    search = CharFilter(field_name="spdx_id", lookup_expr="icontains")
-
     class Meta:
         model = License
         fields = [

@@ -44,12 +44,16 @@ from application.licenses.services.license_policy import get_ignore_component_ty
 
 
 class LicenseSerializer(ModelSerializer):
+    spdx_id_name = SerializerMethodField()
     is_in_license_group = SerializerMethodField()
     is_in_license_policy = SerializerMethodField()
 
     class Meta:
         model = License
         fields = "__all__"
+
+    def get_spdx_id_name(self, obj: License) -> str:
+        return f"{obj.spdx_id} ({obj.name})"
 
     def get_is_in_license_group(self, obj: License) -> bool:
         return License_Group.objects.filter(licenses=obj).exists()

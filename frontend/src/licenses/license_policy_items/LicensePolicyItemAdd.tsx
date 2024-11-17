@@ -6,7 +6,7 @@ import { CreateBase, ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify,
 import { useFormContext } from "react-hook-form";
 
 import { validate_255, validate_required } from "../../commons/custom_validators";
-import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputExtraWide, AutocompleteInputMedium, TextInputExtraWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 import { EVALUATION_RESULT_CHOICES } from "../types";
 
@@ -129,7 +129,7 @@ const LicensePolicyItemAdd = ({ id }: LicensePolicyItemAddProps) => {
             >
                 Add license policy item
             </Button>
-            <Dialog open={open} onClose={handleClose}>
+            <Dialog open={open} onClose={handleClose} maxWidth={"lg"}>
                 <DialogTitle>Add license policy item</DialogTitle>
                 <DialogContent>
                     <CreateBase resource="license_policy_items">
@@ -140,7 +140,7 @@ const LicensePolicyItemAdd = ({ id }: LicensePolicyItemAddProps) => {
                                 label="License group"
                                 sort={{ field: "name", order: "ASC" }}
                             >
-                                <AutocompleteInputWide optionText="name" onChange={(e) => setLicenseGroup(e)} />
+                                <AutocompleteInputExtraWide optionText="name" onChange={(e) => setLicenseGroup(e)} />
                             </ReferenceInput>
                             <ReferenceInput
                                 source="license"
@@ -148,9 +148,9 @@ const LicensePolicyItemAdd = ({ id }: LicensePolicyItemAddProps) => {
                                 label="License"
                                 sort={{ field: "spdx_id", order: "ASC" }}
                             >
-                                <AutocompleteInputWide optionText="spdx_id" onChange={(e) => setLicense(e)} />
+                                <AutocompleteInputExtraWide optionText="spdx_id_name" onChange={(e) => setLicense(e)} />
                             </ReferenceInput>
-                            <TextInputWide
+                            <TextInputExtraWide
                                 source="unknown_license"
                                 label="Unknown license"
                                 validate={validate_255}
