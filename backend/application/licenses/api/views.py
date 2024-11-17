@@ -229,7 +229,7 @@ class LicenseGroupViewSet(ModelViewSet):
             if not license_group_member:
                 raise NotFound("License group not found")
             if not license_group_member.is_manager:
-                raise PermissionDenied("User is not a manager of the license group")
+                raise PermissionDenied("User is not a manager of this license group")
 
         license_id = request_serializer.validated_data.get("license")
         license_to_be_removed = get_license(license_id)
