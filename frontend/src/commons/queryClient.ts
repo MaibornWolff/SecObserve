@@ -4,11 +4,6 @@ export const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
             /**
-             * The time in milliseconds after data is considered stale.
-             * If set to `Infinity`, the data will never be considered stale.
-             */
-            staleTime: 10000,
-            /**
              * If `false`, failed queries will not retry by default.
              * If `true`, failed queries will retry infinitely., failureCount: num
              * If set to an integer number, e.g. 3, failed queries will retry until the failed query count meets that number.
