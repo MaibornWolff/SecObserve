@@ -41,9 +41,9 @@ import general_rules from "../../rules/general_rules";
 import ProductRuleApply from "../../rules/product_rules/ProductRuleApply";
 import ProductRuleCreate from "../../rules/product_rules/ProductRuleCreate";
 import ProductRuleEmbeddedList from "../../rules/product_rules/ProductRuleEmbeddedList";
-import ProductAuthorizationGroupMemberCreate from "../product_authorization_group_members/ProductAuthorizationGroupMemberCreate";
+import ProductAuthorizationGroupMemberAdd from "../product_authorization_group_members/ProductAuthorizationGroupMemberAdd";
 import ProductAuthorizationGroupMemberEmbeddedList from "../product_authorization_group_members/ProductAuthorizationGroupMemberEmbeddedList";
-import ProductMemberCreate from "../product_members/ProductMemberCreate";
+import ProductMemberAdd from "../product_members/ProductMemberAdd";
 import ProductMemberEmbeddedList from "../product_members/ProductMemberEmbeddedList";
 import product from "../products";
 import ExportMenu from "../products/ExportMenu";
@@ -280,7 +280,7 @@ const ProductGroupShow = () => {
                                 <Typography variant="h6">User members</Typography>
                                 {product_group &&
                                     product_group.permissions.includes(PERMISSION_PRODUCT_MEMBER_CREATE) && (
-                                        <ProductMemberCreate id={product_group.id} />
+                                        <ProductMemberAdd id={product_group.id} />
                                     )}
                                 <ProductMemberEmbeddedList product={product_group} />
 
@@ -289,7 +289,7 @@ const ProductGroupShow = () => {
                                 {product_group &&
                                     product_group.permissions.includes(
                                         PERMISSION_PRODUCT_AUTHORIZATION_GROUP_MEMBER_CREATE
-                                    ) && <ProductAuthorizationGroupMemberCreate id={product_group.id} />}
+                                    ) && <ProductAuthorizationGroupMemberAdd id={product_group.id} />}
                                 <ProductAuthorizationGroupMemberEmbeddedList product={product_group} />
                             </Tab>
                             <Tab label="API Token" path="api_token" icon={<TokenIcon />}>
