@@ -2,21 +2,22 @@ import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { BooleanInput, ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
+import { ReferenceInput, SaveButton, SimpleForm, Toolbar, useCreate, useNotify, useRefresh } from "react-admin";
 import { useFormContext } from "react-hook-form";
 
+import { ROLE_CHOICES } from "../../access_control/types";
 import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
-import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
-export type LicenseGroupAuthorizationGroupMemberAddProps = {
+export type ProductAuthorizationGroupMemberAddProps = {
     id: any;
 };
 
-const LicenseGroupAuthorizationGroupMemberAdd = ({ id }: LicenseGroupAuthorizationGroupMemberAddProps) => {
+const ProductAuthorizationGroupMemberAdd = ({ id }: ProductAuthorizationGroupMemberAddProps) => {
     const [open, setOpen] = useState(false);
     const refresh = useRefresh();
     const notify = useNotify();
+    const [create] = useCreate();
     const handleOpen = () => setOpen(true);
     const handleCancel = () => {
         resetState();
@@ -29,10 +30,10 @@ const LicenseGroupAuthorizationGroupMemberAdd = ({ id }: LicenseGroupAuthorizati
     };
 
     const [authorization_group, setAuthorizationGroup] = useState();
-    const [is_manager, setIsManager] = useState(false);
+    const [role, setRole] = useState();
     const resetState = () => {
         setAuthorizationGroup(undefined);
-        setIsManager(false);
+        setRole(undefined);
     };
 
     const CancelButton = () => (
@@ -59,39 +60,40 @@ const LicenseGroupAuthorizationGroupMemberAdd = ({ id }: LicenseGroupAuthorizati
             e.preventDefault(); // necessary to prevent default SaveButton submit logic
             const data = {
                 authorization_group: authorization_group,
-                is_manager: is_manager,
+                role: role,
             };
-            add_authorization_group(data, false);
+            add_product_authorization_group_member(data, false);
         };
 
         const handleSaveClose = (e: any) => {
             e.preventDefault(); // necessary to prevent default SaveButton submit logic
             const data = {
                 authorization_group: authorization_group,
-                is_manager: is_manager,
+                role: role,
             };
-            add_authorization_group(data, true);
+            add_product_authorization_group_member(data, true);
         };
 
-        const add_authorization_group = (data: any, close_dialog: boolean) => {
-            const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/license_group_authorization_group_members/";
-            const body = JSON.stringify({ license_group: id, ...data });
-            httpClient(url, {
-                method: "POST",
-                body: body,
-            })
-                .then(() => {
-                    refresh();
-                    notify("Authorization group added", { type: "success" });
-                    resetState();
-                    reset();
-                    if (close_dialog) {
-                        setOpen(false);
-                    }
-                })
-                .catch((error) => {
-                    notify(error.message, { type: "warning" });
-                });
+        const add_product_authorization_group_member = (data: any, close_dialog: boolean) => {
+            data.product = id;
+            create(
+                "product_authorization_group_members",
+                { data: data },
+                {
+                    onSuccess: () => {
+                        refresh();
+                        notify("Authorization group member added", { type: "success" });
+                        resetState();
+                        reset();
+                        if (close_dialog) {
+                            setOpen(false);
+                        }
+                    },
+                    onError: (error: any) => {
+                        notify(error.message, { type: "warning" });
+                    },
+                }
+            );
         };
 
         return (
@@ -108,6 +110,24 @@ const LicenseGroupAuthorizationGroupMemberAdd = ({ id }: LicenseGroupAuthorizati
         );
     };
 
+    const create_product_authorization_group_member = (data: any) => {
+        data.product = id;
+        create(
+            "product_authorization_group_members",
+            { data: data },
+            {
+                onSuccess: () => {
+                    refresh();
+                    notify("Authorization group member added", { type: "success" });
+                },
+                onError: (error: any) => {
+                    notify(error.message, { type: "warning" });
+                },
+            }
+        );
+        setOpen(false);
+    };
+
     return (
         <Fragment>
             <Button
@@ -116,12 +136,12 @@ const LicenseGroupAuthorizationGroupMemberAdd = ({ id }: LicenseGroupAuthorizati
                 sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem", marginBottom: 1 }}
                 startIcon={<AddIcon />}
             >
-                Add authorization group
+                Add authorization group member
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Add authorization group</DialogTitle>
+                <DialogTitle>Add authorization group member</DialogTitle>
                 <DialogContent>
-                    <SimpleForm toolbar={<CustomToolbar />}>
+                    <SimpleForm onSubmit={create_product_authorization_group_member} toolbar={<CustomToolbar />}>
                         <ReferenceInput
                             source="authorization_group"
                             reference="authorization_groups"
@@ -134,10 +154,11 @@ const LicenseGroupAuthorizationGroupMemberAdd = ({ id }: LicenseGroupAuthorizati
                                 onChange={(e) => setAuthorizationGroup(e)}
                             />
                         </ReferenceInput>
-                        <BooleanInput
-                            source="is_manager"
-                            label="Manager"
-                            onChange={(e) => setIsManager(e.target.checked)}
+                        <AutocompleteInputWide
+                            source="role"
+                            choices={ROLE_CHOICES}
+                            validate={validate_required}
+                            onChange={(e) => setRole(e)}
                         />
                     </SimpleForm>
                 </DialogContent>
@@ -146,4 +167,4 @@ const LicenseGroupAuthorizationGroupMemberAdd = ({ id }: LicenseGroupAuthorizati
     );
 };
 
-export default LicenseGroupAuthorizationGroupMemberAdd;
+export default ProductAuthorizationGroupMemberAdd;

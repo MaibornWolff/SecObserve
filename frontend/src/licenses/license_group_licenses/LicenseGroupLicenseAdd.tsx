@@ -3,6 +3,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import { ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
+import { useFormContext } from "react-hook-form";
 
 import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
@@ -22,6 +23,8 @@ const LicenseGroupLicenseAdd = ({ id }: LicenseGroupLicenseAddProps) => {
         if (reason && reason == "backdropClick") return;
         setOpen(false);
     };
+    const [license, setLicense] = useState();
+
     const CancelButton = () => (
         <Button
             sx={{
@@ -29,6 +32,7 @@ const LicenseGroupLicenseAdd = ({ id }: LicenseGroupLicenseAddProps) => {
                 direction: "row",
                 justifyContent: "center",
                 alignItems: "center",
+                marginLeft: 2,
             }}
             variant="contained"
             onClick={handleCancel}
@@ -39,28 +43,57 @@ const LicenseGroupLicenseAdd = ({ id }: LicenseGroupLicenseAddProps) => {
         </Button>
     );
 
-    const CustomToolbar = () => (
-        <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <CancelButton />
-            <SaveButton />
-        </Toolbar>
-    );
+    const CustomToolbar = () => {
+        const { reset } = useFormContext();
 
-    const add_license = (data: any) => {
-        const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/license_groups/" + id + "/add_license/";
-        const body = JSON.stringify({ license: data.license });
-        httpClient(url, {
-            method: "POST",
-            body: body,
-        })
-            .then(() => {
-                refresh();
-                notify("License added", { type: "success" });
-                setOpen(false);
+        const handleSaveContinue = (e: any) => {
+            e.preventDefault(); // necessary to prevent default SaveButton submit logic
+            const data = {
+                license: license,
+            };
+            add_license(data, false);
+        };
+
+        const handleSaveClose = (e: any) => {
+            e.preventDefault(); // necessary to prevent default SaveButton submit logic
+            const data = {
+                license: license,
+            };
+            add_license(data, true);
+        };
+
+        const add_license = (data: any, close_dialog: boolean) => {
+            const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/license_groups/" + id + "/add_license/";
+            const body = JSON.stringify({ license: data.license });
+            httpClient(url, {
+                method: "POST",
+                body: body,
             })
-            .catch((error) => {
-                notify(error.message, { type: "warning" });
-            });
+                .then(() => {
+                    refresh();
+                    notify("License added", { type: "success" });
+                    reset();
+                    if (close_dialog) {
+                        setOpen(false);
+                    }
+                })
+                .catch((error) => {
+                    notify(error.message, { type: "warning" });
+                });
+        };
+
+        return (
+            <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
+                <CancelButton />
+                <SaveButton
+                    label="Save & Continue"
+                    type="button"
+                    onClick={handleSaveContinue}
+                    sx={{ marginRight: 2 }}
+                />
+                <SaveButton type="button" onClick={handleSaveClose} />
+            </Toolbar>
+        );
     };
 
     return (
@@ -76,14 +109,18 @@ const LicenseGroupLicenseAdd = ({ id }: LicenseGroupLicenseAddProps) => {
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Add license</DialogTitle>
                 <DialogContent>
-                    <SimpleForm onSubmit={add_license} toolbar={<CustomToolbar />}>
+                    <SimpleForm toolbar={<CustomToolbar />}>
                         <ReferenceInput
                             source="license"
                             reference="licenses"
                             label="License"
                             sort={{ field: "spdx_id", order: "ASC" }}
                         >
-                            <AutocompleteInputWide optionText="spdx_id" validate={validate_required} />
+                            <AutocompleteInputWide
+                                optionText="spdx_id"
+                                validate={validate_required}
+                                onChange={(e) => setLicense(e)}
+                            />
                         </ReferenceInput>
                     </SimpleForm>
                 </DialogContent>
