@@ -114,6 +114,7 @@ const LicenseGroupLicenseAdd = ({ id }: LicenseGroupLicenseAddProps) => {
                             source="license"
                             reference="licenses"
                             label="License"
+                            filter={{ exclude_license_group: id }}
                             sort={{ field: "spdx_id", order: "ASC" }}
                         >
                             <AutocompleteInputExtraWide

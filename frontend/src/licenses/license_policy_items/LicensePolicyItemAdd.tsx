@@ -138,6 +138,7 @@ const LicensePolicyItemAdd = ({ id }: LicensePolicyItemAddProps) => {
                                 source="license_group"
                                 reference="license_groups"
                                 label="License group"
+                                filter={{ exclude_license_policy: id }}
                                 sort={{ field: "name", order: "ASC" }}
                             >
                                 <AutocompleteInputExtraWide optionText="name" onChange={(e) => setLicenseGroup(e)} />
@@ -146,6 +147,7 @@ const LicensePolicyItemAdd = ({ id }: LicensePolicyItemAddProps) => {
                                 source="license"
                                 reference="licenses"
                                 label="License"
+                                filter={{ exclude_license_policy: id }}
                                 sort={{ field: "spdx_id", order: "ASC" }}
                             >
                                 <AutocompleteInputExtraWide optionText="spdx_id_name" onChange={(e) => setLicense(e)} />

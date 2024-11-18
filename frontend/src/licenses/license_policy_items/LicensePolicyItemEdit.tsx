@@ -8,7 +8,12 @@ import { validate_255, validate_required } from "../../commons/custom_validators
 import { AutocompleteInputExtraWide, AutocompleteInputMedium, TextInputExtraWide } from "../../commons/layout/themes";
 import { EVALUATION_RESULT_CHOICES } from "../types";
 
-const LicensePolicyItemEdit = () => {
+export type LicensePolicyItemEditProps = {
+    license_policy_id: any;
+    license_policy_item_id: any;
+};
+
+const LicensePolicyItemEdit = ({ license_policy_id, license_policy_item_id }: LicensePolicyItemEditProps) => {
     const [open, setOpen] = useState(false);
     const [update] = useUpdate();
     const refresh = useRefresh();
@@ -35,7 +40,7 @@ const LicensePolicyItemEdit = () => {
             "license_policy_items",
 
             {
-                id: data.id,
+                id: license_policy_item_id,
                 data: patch,
             },
             {
@@ -96,6 +101,7 @@ const LicensePolicyItemEdit = () => {
                             source="license_group"
                             reference="license_groups"
                             label="License group"
+                            filter={{ exclude_license_policy: license_policy_id }}
                             sort={{ field: "name", order: "ASC" }}
                         >
                             <AutocompleteInputExtraWide optionText="name" />
@@ -104,6 +110,7 @@ const LicensePolicyItemEdit = () => {
                             source="license"
                             reference="licenses"
                             label="License"
+                            filter={{ exclude_license_policy: license_policy_id }}
                             sort={{ field: "spdx_id", order: "ASC" }}
                         >
                             <AutocompleteInputExtraWide optionText="spdx_id_name" />

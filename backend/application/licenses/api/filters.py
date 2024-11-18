@@ -1,7 +1,13 @@
 from datetime import timedelta
 
 from django.utils import timezone
-from django_filters import CharFilter, ChoiceFilter, FilterSet, OrderingFilter
+from django_filters import (
+    CharFilter,
+    ChoiceFilter,
+    FilterSet,
+    NumberFilter,
+    OrderingFilter,
+)
 
 from application.commons.api.extended_ordering_filter import ExtendedOrderingFilter
 from application.commons.types import Age_Choices
@@ -75,6 +81,26 @@ class LicenseComponentFilter(FilterSet):
 class LicenseFilter(FilterSet):
     spdx_id = CharFilter(field_name="spdx_id", lookup_expr="icontains")
     name = CharFilter(field_name="name", lookup_expr="icontains")
+    exclude_license_group = NumberFilter(
+        field_name="exclude_license_group", method="get_exclude_license_group"
+    )
+    exclude_license_policy = NumberFilter(
+        field_name="exclude_license_policy", method="get_exclude_license_policy"
+    )
+
+    def get_exclude_license_group(
+        self, queryset, field_name, value
+    ):  # pylint: disable=unused-argument
+        if value is not None:
+            return queryset.exclude(license_groups__id=value)
+        return queryset
+
+    def get_exclude_license_policy(
+        self, queryset, field_name, value
+    ):  # pylint: disable=unused-argument
+        if value is not None:
+            return queryset.exclude(license_policy_items__license_policy__id=value)
+        return queryset
 
     ordering = OrderingFilter(
         # tuple-mapping retains order
@@ -99,6 +125,16 @@ class LicenseFilter(FilterSet):
 
 class LicenseGroupFilter(FilterSet):
     name = CharFilter(field_name="name", lookup_expr="icontains")
+    exclude_license_policy = NumberFilter(
+        field_name="exclude_license_policy", method="get_exclude_license_policy"
+    )
+
+    def get_exclude_license_policy(
+        self, queryset, field_name, value
+    ):  # pylint: disable=unused-argument
+        if value is not None:
+            return queryset.exclude(license_policy_items__license_policy__id=value)
+        return queryset
 
     ordering = OrderingFilter(
         # tuple-mapping retains order

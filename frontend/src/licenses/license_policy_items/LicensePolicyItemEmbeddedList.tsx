@@ -103,7 +103,10 @@ const LicensePolicyItemEmbeddedList = ({ license_policy }: LicensePolicyItemEmbe
                                     <WithRecord
                                         render={(license_policy_item) => (
                                             <Stack direction="row" spacing={4}>
-                                                <LicensePolicyItemEdit />
+                                                <LicensePolicyItemEdit
+                                                    license_policy_id={license_policy.id}
+                                                    license_policy_item_id={license_policy_item.id}
+                                                />
                                                 <LicensePolicyItemRemove license_policy_item={license_policy_item} />
                                             </Stack>
                                         )}

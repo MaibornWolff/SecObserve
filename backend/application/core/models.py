@@ -81,6 +81,13 @@ class Product(Model):
     members: ManyToManyField = ManyToManyField(
         User, through="Product_Member", related_name="product_members", blank=True
     )
+    authorization_group_members: ManyToManyField = ManyToManyField(
+        Authorization_Group,
+        through="Product_Authorization_Group_Member",
+        related_name="authorization_groups",
+        blank=True,
+    )
+
     apply_general_rules = BooleanField(default=True)
 
     notification_ms_teams_webhook = CharField(max_length=255, blank=True)

@@ -136,6 +136,7 @@ const LicensePolicyMemberAdd = ({ id }: LicensePolicyMemberAddProps) => {
                                 source="user"
                                 reference="users"
                                 label="User"
+                                filter={{ exclude_license_policy: id }}
                                 sort={{ field: "full_name", order: "ASC" }}
                             >
                                 <AutocompleteInputWide
