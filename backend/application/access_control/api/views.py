@@ -82,6 +82,8 @@ from application.commons.models import Settings
 from application.commons.services.log_message import format_log_message
 from application.core.models import Product
 from application.core.queries.product import get_product_by_id
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter
 
 logger = logging.getLogger("secobserve.access_control")
 
@@ -91,6 +93,8 @@ class UserViewSet(ModelViewSet):
     filterset_class = UserFilter
     queryset = User.objects.none()
     permission_classes = (IsAuthenticated, UserHasSuperuserPermission)
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ["full_name"]
 
     def get_queryset(self):
         if self.action == "list":
@@ -234,6 +238,8 @@ class AuthorizationGroupViewSet(ModelViewSet):
     filterset_class = AuthorizationGroupFilter
     queryset = Authorization_Group.objects.none()
     permission_classes = (IsAuthenticated, UserHasAuthorizationGroupPermission)
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ["name"]
 
     def get_queryset(self):
         return get_authorization_groups()

@@ -14,9 +14,6 @@ class UserFilter(FilterSet):
     full_name = CharFilter(field_name="full_name", lookup_expr="icontains")
     authorization_group = NumberFilter(field_name="authorization_groups")
 
-    # search is needed for the ReferenceArrayInput field of react-admin
-    search = CharFilter(field_name="full_name", lookup_expr="icontains")
-
     ordering = OrderingFilter(
         # tuple-mapping retains order
         fields=(
@@ -38,7 +35,6 @@ class UserFilter(FilterSet):
             "is_active",
             "is_superuser",
             "is_external",
-            "search",
         ]
 
     def __init__(self, data=None, queryset=None, *, request=None, prefix=None):
@@ -61,9 +57,6 @@ class AuthorizationGroupFilter(FilterSet):
     oidc_group = CharFilter(field_name="oidc_group", lookup_expr="icontains")
     user = NumberFilter(field_name="users")
 
-    # search is needed for the ReferenceArrayInput field of react-admin
-    search = CharFilter(field_name="name", lookup_expr="icontains")
-
     ordering = OrderingFilter(
         # tuple-mapping retains order
         fields=(("name", "name"), ("oidc_group", "oidc_group")),
@@ -71,7 +64,7 @@ class AuthorizationGroupFilter(FilterSet):
 
     class Meta:
         model = Authorization_Group
-        fields = ["name", "oidc_group", "search"]
+        fields = ["name", "oidc_group"]
 
     def get_user(self, queryset, name, value):  # pylint: disable=unused-argument
         # field_name is used as a positional argument

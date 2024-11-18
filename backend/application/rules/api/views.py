@@ -26,6 +26,8 @@ from application.rules.queries.rule import (
     get_product_rules,
 )
 from application.rules.services.approval import rule_approval
+from rest_framework.filters import SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class GeneralRuleViewSet(ModelViewSet):
@@ -33,6 +35,8 @@ class GeneralRuleViewSet(ModelViewSet):
     filterset_class = GeneralRuleFilter
     queryset = Rule.objects.none()
     permission_classes = (IsAuthenticated, UserHasGeneralRulePermission)
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ["name"]
 
     def get_queryset(self):
         return get_general_rules()
@@ -66,6 +70,8 @@ class ProductRuleViewSet(ModelViewSet):
     filterset_class = ProductRuleFilter
     queryset = Rule.objects.none()
     permission_classes = (IsAuthenticated, UserHasProductRulePermission)
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ["name"]
 
     def get_queryset(self):
         return get_product_rules()

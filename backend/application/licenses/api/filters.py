@@ -114,9 +114,6 @@ class LicenseGroupFilter(FilterSet):
         ),
     )
 
-    # search is needed for the ReferenceArrayInput field of react-admin
-    search = CharFilter(field_name="name", lookup_expr="icontains")
-
     class Meta:
         model = License_Group
         fields = ["name", "is_public", "licenses"]
@@ -175,9 +172,6 @@ class LicensePolicyFilter(FilterSet):
             ("is_public", "is_public"),
         ),
     )
-
-    # search is needed for the ReferenceArrayInput field of react-admin
-    search = CharFilter(field_name="name", lookup_expr="icontains")
 
     class Meta:
         model = License_Policy
