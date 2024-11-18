@@ -1,7 +1,9 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound, ValidationError
+from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -26,8 +28,6 @@ from application.rules.queries.rule import (
     get_product_rules,
 )
 from application.rules.services.approval import rule_approval
-from rest_framework.filters import SearchFilter
-from django_filters.rest_framework import DjangoFilterBackend
 
 
 class GeneralRuleViewSet(ModelViewSet):

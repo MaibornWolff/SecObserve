@@ -12,10 +12,12 @@ from django.contrib.auth.password_validation import (
     validate_password,
 )
 from django.core.exceptions import ValidationError as DjangoValidationError
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied, ValidationError
+from rest_framework.filters import SearchFilter
 from rest_framework.mixins import ListModelMixin
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
@@ -82,8 +84,6 @@ from application.commons.models import Settings
 from application.commons.services.log_message import format_log_message
 from application.core.models import Product
 from application.core.queries.product import get_product_by_id
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import SearchFilter
 
 logger = logging.getLogger("secobserve.access_control")
 
