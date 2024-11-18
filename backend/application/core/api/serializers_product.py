@@ -438,7 +438,12 @@ class NestedProductListSerializer(ModelSerializer):
 
     class Meta:
         model = Product
-        exclude = ["members", "authorization_group_members", "is_product_group", "new_observations_in_review"]
+        exclude = [
+            "members",
+            "authorization_group_members",
+            "is_product_group",
+            "new_observations_in_review",
+        ]
 
     def get_product_group_name(self, obj: Product) -> str:
         if not obj.product_group:
