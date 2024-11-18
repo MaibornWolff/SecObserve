@@ -1,4 +1,3 @@
-import polyglotI18nProvider from "ra-i18n-polyglot";
 import { Admin, CustomRoutes, Resource } from "react-admin";
 import { AuthProvider } from "react-oidc-context";
 import { Route } from "react-router";
@@ -9,7 +8,6 @@ import authProvider from "./access_control/authProvider";
 import { oidcConfig } from "./access_control/authProvider";
 import authorization_groups from "./access_control/authorization_groups";
 import users from "./access_control/users";
-import englishMessages from "./commons/i18n/en";
 import { Layout } from "./commons/layout";
 import { darkTheme, lightTheme } from "./commons/layout/themes";
 import notifications from "./commons/notifications";
@@ -38,10 +36,6 @@ import vex_counters from "./vex/vex_counters";
 import vex_documents from "./vex/vex_documents";
 import vex_statements from "./vex/vex_statements";
 
-const i18nProvider = polyglotI18nProvider(() => {
-    return englishMessages;
-}, "en");
-
 const App = () => {
     return (
         <AuthProvider
@@ -56,7 +50,6 @@ const App = () => {
                 dashboard={Dashboard}
                 loginPage={Login}
                 layout={Layout}
-                i18nProvider={i18nProvider}
                 disableTelemetry
                 lightTheme={lightTheme}
                 darkTheme={darkTheme}
