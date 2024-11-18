@@ -1,12 +1,7 @@
 from datetime import timedelta
 
 from django.utils import timezone
-from django_filters import (
-    CharFilter,
-    ChoiceFilter,
-    FilterSet,
-    OrderingFilter,
-)
+from django_filters import CharFilter, ChoiceFilter, FilterSet, OrderingFilter
 
 from application.commons.api.extended_ordering_filter import ExtendedOrderingFilter
 from application.commons.types import Age_Choices
