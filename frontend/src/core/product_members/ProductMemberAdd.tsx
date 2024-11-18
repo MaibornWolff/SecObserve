@@ -128,6 +128,7 @@ const ProductMemberAdd = ({ id }: ProductMemberAddProps) => {
                             source="user"
                             reference="users"
                             label="User"
+                            filter={{ exclude_product: id }}
                             sort={{ field: "full_name", order: "ASC" }}
                         >
                             <AutocompleteInputWide

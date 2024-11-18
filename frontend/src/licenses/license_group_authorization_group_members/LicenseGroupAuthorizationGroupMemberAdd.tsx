@@ -126,6 +126,7 @@ const LicenseGroupAuthorizationGroupMemberAdd = ({ id }: LicenseGroupAuthorizati
                             source="authorization_group"
                             reference="authorization_groups"
                             label="Authorization group"
+                            filter={{ exclude_license_group: id }}
                             sort={{ field: "name", order: "ASC" }}
                         >
                             <AutocompleteInputWide
