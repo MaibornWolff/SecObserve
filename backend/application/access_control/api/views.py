@@ -12,10 +12,12 @@ from django.contrib.auth.password_validation import (
     validate_password,
 )
 from django.core.exceptions import ValidationError as DjangoValidationError
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied, ValidationError
+from rest_framework.filters import SearchFilter
 from rest_framework.mixins import ListModelMixin
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
@@ -91,6 +93,8 @@ class UserViewSet(ModelViewSet):
     filterset_class = UserFilter
     queryset = User.objects.none()
     permission_classes = (IsAuthenticated, UserHasSuperuserPermission)
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ["full_name"]
 
     def get_queryset(self):
         if self.action == "list":
@@ -234,6 +238,8 @@ class AuthorizationGroupViewSet(ModelViewSet):
     filterset_class = AuthorizationGroupFilter
     queryset = Authorization_Group.objects.none()
     permission_classes = (IsAuthenticated, UserHasAuthorizationGroupPermission)
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ["name"]
 
     def get_queryset(self):
         return get_authorization_groups()
