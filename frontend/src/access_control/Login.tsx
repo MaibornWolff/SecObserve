@@ -27,7 +27,7 @@ const Login = () => {
         if (window.__RUNTIME_CONFIG__.OIDC_ENABLE == "true") {
             get_disable_login_feature();
         }
-    }, [])
+    }, []);
 
     function get_disable_login_feature() {
         const request = new Request(window.__RUNTIME_CONFIG__.API_BASE_URL + "/status/settings/", {

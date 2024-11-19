@@ -1,6 +1,6 @@
 import { Paper } from "@mui/material";
 import { ArcElement, Chart as ChartJS, Legend, RadialLinearScale, Title, Tooltip } from "chart.js";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Identifier, useNotify } from "react-admin";
 import { PolarArea } from "react-chartjs-2";
 
@@ -53,7 +53,7 @@ const MetricsSeveritiesCurrent = (props: MetricsSeveritiesCurrentProps) => {
 
     useEffect(() => {
         get_data();
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     function get_data() {
         setLoading(true);

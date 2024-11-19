@@ -1,6 +1,6 @@
 import { Paper } from "@mui/material";
 import { Fragment } from "react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Labeled, useNotify } from "react-admin";
 
 import LabeledTextField from "../commons/custom_fields/LabeledTextField";
@@ -22,7 +22,7 @@ const MetricsHeader = (props: MetricsHeaderProps) => {
 
     useEffect(() => {
         get_data();
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     function get_data() {
         setLoading(true);
