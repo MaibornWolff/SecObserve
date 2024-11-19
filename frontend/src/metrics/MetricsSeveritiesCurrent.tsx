@@ -1,6 +1,6 @@
 import { Paper } from "@mui/material";
 import { ArcElement, Chart as ChartJS, Legend, RadialLinearScale, Title, Tooltip } from "chart.js";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Identifier, useNotify } from "react-admin";
 import { PolarArea } from "react-chartjs-2";
 
@@ -23,7 +23,6 @@ interface MetricsSeveritiesCurrentProps {
 
 const MetricsSeveritiesCurrent = (props: MetricsSeveritiesCurrentProps) => {
     const [data, setData] = useState<number[]>([]);
-    const [loaded, setLoaded] = useState(false);
     const [loading, setLoading] = useState(false);
     const notify = useNotify();
 
@@ -51,6 +50,10 @@ const MetricsSeveritiesCurrent = (props: MetricsSeveritiesCurrentProps) => {
             },
         ],
     };
+
+    useEffect(() => {
+        get_data();
+    }, []);
 
     function get_data() {
         setLoading(true);
@@ -85,12 +88,7 @@ const MetricsSeveritiesCurrent = (props: MetricsSeveritiesCurrentProps) => {
                     });
                 }
             });
-        setLoaded(true);
         setLoading(false);
-    }
-
-    if (!loaded) {
-        get_data();
     }
 
     ChartJS.register(Title, Legend, RadialLinearScale, ArcElement, Tooltip);

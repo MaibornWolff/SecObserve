@@ -1,6 +1,6 @@
 import { Paper } from "@mui/material";
 import { Fragment } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Labeled, useNotify } from "react-admin";
 
 import LabeledTextField from "../commons/custom_fields/LabeledTextField";
@@ -17,9 +17,12 @@ const MetricsHeader = (props: MetricsHeaderProps) => {
         last_calculated: new Date("2023-07-10T19:37:34.750324Z"),
         calculation_interval: 0,
     });
-    const [loaded, setLoaded] = useState(false);
     const [loading, setLoading] = useState(false);
     const notify = useNotify();
+
+    useEffect(() => {
+        get_data();
+    }, []);
 
     function get_data() {
         setLoading(true);
@@ -41,7 +44,6 @@ const MetricsHeader = (props: MetricsHeaderProps) => {
                     });
                 }
             });
-        setLoaded(true);
         setLoading(false);
     }
 
@@ -60,10 +62,6 @@ const MetricsHeader = (props: MetricsHeaderProps) => {
 
         return 0;
     };
-
-    if (!loaded) {
-        get_data();
-    }
 
     return (
         <Paper
