@@ -9,7 +9,7 @@ from rest_framework.exceptions import ValidationError
 from application.commons.services.functions import clip_fields
 from application.core.models import Product
 from application.import_observations.models import Vulnerability_Check
-from application.licenses.models import License_Component
+from application.licenses.models import License_Component, License_Component_Evidence
 from application.licenses.queries.license import get_license_by_spdx_id
 from application.licenses.services.license_policy import (
     apply_license_policy_to_component,
@@ -67,21 +67,23 @@ def process_license_components(
         else []
     )
 
-    for component in license_components:
-        _prepare_component(component)
-        existing_component = existing_components_dict.get(component.identity_hash)
+    for unsaved_component in license_components:
+        _prepare_component(unsaved_component)
+        existing_component = existing_components_dict.get(
+            unsaved_component.identity_hash
+        )
         if existing_component:
             license_before = existing_component.license
             unknown_license_before = existing_component.unknown_license
             evaluation_result_before = existing_component.evaluation_result
-            existing_component.name = component.name
-            existing_component.version = component.version
-            existing_component.purl = component.purl
-            existing_component.purl_type = component.purl_type
-            existing_component.cpe = component.cpe
-            existing_component.dependencies = component.dependencies
-            existing_component.license = component.license
-            existing_component.unknown_license = component.unknown_license
+            existing_component.name = unsaved_component.name
+            existing_component.version = unsaved_component.version
+            existing_component.purl = unsaved_component.purl
+            existing_component.purl_type = unsaved_component.purl_type
+            existing_component.cpe = unsaved_component.cpe
+            existing_component.dependencies = unsaved_component.dependencies
+            existing_component.license = unsaved_component.license
+            existing_component.unknown_license = unsaved_component.unknown_license
             apply_license_policy_to_component(
                 existing_component,
                 license_evaluation_results,
@@ -96,22 +98,29 @@ def process_license_components(
                 existing_component.last_change = timezone.now()
             clip_fields("licenses", "License_Component", existing_component)
             existing_component.save()
-            existing_components_dict.pop(component.identity_hash)
+
+            existing_component.evidences.all().delete()
+            _process_evidences(unsaved_component, existing_component)
+
+            existing_components_dict.pop(unsaved_component.identity_hash)
             components_updated += 1
         else:
-            component.product = vulnerability_check.product
-            component.branch = vulnerability_check.branch
-            component.upload_filename = vulnerability_check.filename
+            unsaved_component.product = vulnerability_check.product
+            unsaved_component.branch = vulnerability_check.branch
+            unsaved_component.upload_filename = vulnerability_check.filename
             apply_license_policy_to_component(
-                component,
+                unsaved_component,
                 license_evaluation_results,
                 ignore_component_types,
             )
 
-            component.import_last_seen = timezone.now()
-            component.last_change = timezone.now()
-            clip_fields("licenses", "License_Component", component)
-            component.save()
+            unsaved_component.import_last_seen = timezone.now()
+            unsaved_component.last_change = timezone.now()
+            clip_fields("licenses", "License_Component", unsaved_component)
+            unsaved_component.save()
+
+            _process_evidences(unsaved_component, unsaved_component)
+
             components_new += 1
 
     components_deleted = len(existing_components_dict)
@@ -119,6 +128,20 @@ def process_license_components(
         existing_component.delete()
 
     return components_new, components_updated, components_deleted
+
+
+def _process_evidences(
+    source_component: License_Component, target_component: License_Component
+) -> None:
+    if source_component.unsaved_evidences:
+        for evidence in source_component.unsaved_evidences:
+            evidence = License_Component_Evidence(
+                license_component=target_component,
+                name=evidence[0],
+                evidence=evidence[1],
+            )
+            clip_fields("licenses", "License_Component_Evidence", evidence)
+            evidence.save()
 
 
 def _prepare_component(component: License_Component) -> None:

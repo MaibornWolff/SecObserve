@@ -10,6 +10,7 @@ from rest_framework.status import HTTP_201_CREATED, HTTP_204_NO_CONTENT
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from application.licenses.api.filters import (
+    LicenseComponentEvidenceFilter,
     LicenseComponentFilter,
     LicenseFilter,
     LicenseGroupAuthorizationGroupFilter,
@@ -29,6 +30,7 @@ from application.licenses.api.permissions import (
     UserHasLicensePolicyPermission,
 )
 from application.licenses.api.serializers import (
+    LicenseComponentEvidenceSerializer,
     LicenseComponentIdSerializer,
     LicenseComponentListSerializer,
     LicenseComponentSerializer,
@@ -47,6 +49,7 @@ from application.licenses.api.serializers import (
 from application.licenses.models import (
     License,
     License_Component,
+    License_Component_Evidence,
     License_Group,
     License_Group_Authorization_Group_Member,
     License_Group_Member,
@@ -57,6 +60,9 @@ from application.licenses.models import (
 )
 from application.licenses.queries.license import get_license
 from application.licenses.queries.license_component import get_license_components
+from application.licenses.queries.license_component_evidence import (
+    get_license_component_evidences,
+)
 from application.licenses.queries.license_group import (
     get_license_group,
     get_license_groups,
@@ -112,6 +118,19 @@ class LicenseComponentIdViewSet(GenericViewSet, ListModelMixin, RetrieveModelMix
 
     def get_queryset(self):
         return get_license_components()
+
+
+class LicenseComponentEvidenceViewSet(
+    GenericViewSet, ListModelMixin, RetrieveModelMixin
+):
+    serializer_class = LicenseComponentEvidenceSerializer
+    filterset_class = LicenseComponentEvidenceFilter
+    queryset = License_Component_Evidence.objects.none()
+
+    def get_queryset(self):
+        return get_license_component_evidences().select_related(
+            "license_component__product"
+        )
 
 
 class LicenseViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):

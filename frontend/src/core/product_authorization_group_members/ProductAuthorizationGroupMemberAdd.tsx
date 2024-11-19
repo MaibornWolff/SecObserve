@@ -146,6 +146,7 @@ const ProductAuthorizationGroupMemberAdd = ({ id }: ProductAuthorizationGroupMem
                             source="authorization_group"
                             reference="authorization_groups"
                             label="Authorization group"
+                            filter={{ exclude_product: id }}
                             sort={{ field: "name", order: "ASC" }}
                         >
                             <AutocompleteInputWide

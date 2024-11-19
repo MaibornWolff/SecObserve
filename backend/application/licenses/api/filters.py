@@ -14,6 +14,7 @@ from application.commons.types import Age_Choices
 from application.licenses.models import (
     License,
     License_Component,
+    License_Component_Evidence,
     License_Group,
     License_Group_Authorization_Group_Member,
     License_Group_Member,
@@ -78,9 +79,42 @@ class LicenseComponentFilter(FilterSet):
         return queryset.filter(last_change__gte=time_threshold)
 
 
+class LicenseComponentEvidenceFilter(FilterSet):
+    name = CharFilter(field_name="name", lookup_expr="icontains")
+
+    ordering = OrderingFilter(
+        # tuple-mapping retains order
+        fields=(("name", "name"), ("license_component", "license_component")),
+    )
+
+    class Meta:
+        model = License_Component_Evidence
+        fields = ["name", "license_component"]
+
+
 class LicenseFilter(FilterSet):
     spdx_id = CharFilter(field_name="spdx_id", lookup_expr="icontains")
     name = CharFilter(field_name="name", lookup_expr="icontains")
+    exclude_license_group = NumberFilter(
+        field_name="exclude_license_group", method="get_exclude_license_group"
+    )
+    exclude_license_policy = NumberFilter(
+        field_name="exclude_license_policy", method="get_exclude_license_policy"
+    )
+
+    def get_exclude_license_group(
+        self, queryset, field_name, value
+    ):  # pylint: disable=unused-argument
+        if value is not None:
+            return queryset.exclude(license_groups__id=value)
+        return queryset
+
+    def get_exclude_license_policy(
+        self, queryset, field_name, value
+    ):  # pylint: disable=unused-argument
+        if value is not None:
+            return queryset.exclude(license_policy_items__license_policy__id=value)
+        return queryset
 
     ordering = OrderingFilter(
         # tuple-mapping retains order
@@ -105,6 +139,16 @@ class LicenseFilter(FilterSet):
 
 class LicenseGroupFilter(FilterSet):
     name = CharFilter(field_name="name", lookup_expr="icontains")
+    exclude_license_policy = NumberFilter(
+        field_name="exclude_license_policy", method="get_exclude_license_policy"
+    )
+
+    def get_exclude_license_policy(
+        self, queryset, field_name, value
+    ):  # pylint: disable=unused-argument
+        if value is not None:
+            return queryset.exclude(license_policy_items__license_policy__id=value)
+        return queryset
 
     ordering = OrderingFilter(
         # tuple-mapping retains order
@@ -113,9 +157,6 @@ class LicenseGroupFilter(FilterSet):
             ("is_public", "is_public"),
         ),
     )
-
-    # search is needed for the ReferenceArrayInput field of react-admin
-    search = CharFilter(field_name="name", lookup_expr="icontains")
 
     class Meta:
         model = License_Group
@@ -161,12 +202,6 @@ class LicenseGroupAuthorizationGroupFilter(FilterSet):
 
 class LicensePolicyFilter(FilterSet):
     name = CharFilter(field_name="name", lookup_expr="icontains")
-    licenses = NumberFilter(
-        field_name="licenses", method="get_license_policies_with_license"
-    )
-    license_groups = NumberFilter(
-        field_name="license_groups", method="get_license_policies_with_license_group"
-    )
 
     ordering = OrderingFilter(
         # tuple-mapping retains order
@@ -176,22 +211,9 @@ class LicensePolicyFilter(FilterSet):
         ),
     )
 
-    # search is needed for the ReferenceArrayInput field of react-admin
-    search = CharFilter(field_name="name", lookup_expr="icontains")
-
     class Meta:
         model = License_Policy
         fields = ["name", "is_public"]
-
-    def get_license_policies_with_license(
-        self, queryset, field_name, value  # pylint: disable=unused-argument
-    ) -> bool:
-        return queryset.filter(license_policy_items__license=value)
-
-    def get_license_policies_with_license_group(
-        self, queryset, field_name, value  # pylint: disable=unused-argument
-    ) -> bool:
-        return queryset.filter(license_policy_items__license_group=value)
 
 
 class LicensePolicyItemFilter(FilterSet):

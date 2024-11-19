@@ -126,6 +126,7 @@ const LicenseGroupMemberAdd = ({ id }: LicenseGroupMemberAddProps) => {
                             source="user"
                             reference="users"
                             label="User"
+                            filter={{ exclude_license_group: id }}
                             sort={{ field: "full_name", order: "ASC" }}
                         >
                             <AutocompleteInputWide

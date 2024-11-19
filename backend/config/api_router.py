@@ -30,6 +30,7 @@ from application.import_observations.api.views import (
     VulnerabilityCheckViewSet,
 )
 from application.licenses.api.views import (
+    LicenseComponentEvidenceViewSet,
     LicenseComponentIdViewSet,
     LicenseComponentViewSet,
     LicenseGroupAuthorizationGroupMemberViewSet,
@@ -128,6 +129,11 @@ router.register(
 )
 router.register(
     "license_component_ids", LicenseComponentIdViewSet, basename="license_component_ids"
+)
+router.register(
+    "license_component_evidences",
+    LicenseComponentEvidenceViewSet,
+    basename="license_component_evidences",
 )
 router.register("licenses", LicenseViewSet, basename="licenses")
 router.register("license_groups", LicenseGroupViewSet, basename="license_groups")

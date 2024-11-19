@@ -78,9 +78,20 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                     dependencies=observation_component_dependencies,
                 )
                 model_component.unsaved_license = component.unknown_license
+                self._add_license_component_evidence(component, model_component)
                 components.append(model_component)
 
         return components
+
+    def _add_license_component_evidence(
+        self,
+        component: Component,
+        license_component: License_Component,
+    ) -> None:
+        evidence = []
+        evidence.append("Component")
+        evidence.append(dumps(component.json))
+        license_component.unsaved_evidences.append(evidence)
 
     def _get_components(self, data: dict) -> dict[str, Component]:
         components_dict = {}
@@ -128,21 +139,14 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         if licenses and licenses[0].get("expression"):
             unknown_licenses.append(licenses[0].get("expression"))
         else:
-            unknown_license_ids = []
-            unknown_license_names = []
             for my_license in licenses:
                 component_license = my_license.get("license", {}).get("id")
                 if component_license:
-                    unknown_license_ids.append(component_license)
+                    unknown_licenses.append(component_license)
 
                 component_license = my_license.get("license", {}).get("name")
                 if component_license:
-                    unknown_license_names.append(component_license)
-
-                if unknown_license_ids:
-                    unknown_licenses = unknown_license_ids
-                else:
-                    unknown_licenses = unknown_license_names
+                    unknown_licenses.append(component_license)
 
         return Component(
             bom_ref=component_data.get("bom-ref", ""),

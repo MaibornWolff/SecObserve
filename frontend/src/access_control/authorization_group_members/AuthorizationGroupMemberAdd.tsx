@@ -126,6 +126,7 @@ const AuthorizationGroupMemberAdd = ({ id }: AuthorizationGroupMemberAddProps) =
                             source="user"
                             reference="users"
                             label="User"
+                            filter={{ exclude_authorization_group: id }}
                             sort={{ field: "full_name", order: "ASC" }}
                         >
                             <AutocompleteInputWide

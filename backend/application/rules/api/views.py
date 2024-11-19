@@ -1,7 +1,9 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound, ValidationError
+from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -33,6 +35,8 @@ class GeneralRuleViewSet(ModelViewSet):
     filterset_class = GeneralRuleFilter
     queryset = Rule.objects.none()
     permission_classes = (IsAuthenticated, UserHasGeneralRulePermission)
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ["name"]
 
     def get_queryset(self):
         return get_general_rules()
@@ -66,6 +70,8 @@ class ProductRuleViewSet(ModelViewSet):
     filterset_class = ProductRuleFilter
     queryset = Rule.objects.none()
     permission_classes = (IsAuthenticated, UserHasProductRulePermission)
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ["name"]
 
     def get_queryset(self):
         return get_product_rules()

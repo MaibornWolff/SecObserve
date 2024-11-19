@@ -1,4 +1,3 @@
-import polyglotI18nProvider from "ra-i18n-polyglot";
 import { Admin, CustomRoutes, Resource } from "react-admin";
 import { AuthProvider } from "react-oidc-context";
 import { Route } from "react-router";
@@ -9,7 +8,6 @@ import authProvider from "./access_control/authProvider";
 import { oidcConfig } from "./access_control/authProvider";
 import authorization_groups from "./access_control/authorization_groups";
 import users from "./access_control/users";
-import englishMessages from "./commons/i18n/en";
 import { Layout } from "./commons/layout";
 import { darkTheme, lightTheme } from "./commons/layout/themes";
 import notifications from "./commons/notifications";
@@ -26,6 +24,7 @@ import products from "./core/products";
 import { Dashboard } from "./dashboard";
 import parsers from "./import_observations/parsers";
 import LicenseAdministration from "./licenses/license_administration/LicenseAdministration";
+import license_component_evidences from "./licenses/license_component_evidences";
 import license_components from "./licenses/license_components";
 import license_groups from "./licenses/license_groups";
 import license_policies from "./licenses/license_policies";
@@ -37,10 +36,6 @@ import openvex from "./vex/openvex";
 import vex_counters from "./vex/vex_counters";
 import vex_documents from "./vex/vex_documents";
 import vex_statements from "./vex/vex_statements";
-
-const i18nProvider = polyglotI18nProvider(() => {
-    return englishMessages;
-}, "en");
 
 const App = () => {
     return (
@@ -56,7 +51,6 @@ const App = () => {
                 dashboard={Dashboard}
                 loginPage={Login}
                 layout={Layout}
-                i18nProvider={i18nProvider}
                 disableTelemetry
                 lightTheme={lightTheme}
                 darkTheme={darkTheme}
@@ -173,6 +167,11 @@ const App = () => {
                 <Resource
                     name="license_components"
                     {...license_components} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                    // nosemgrep because the props are well defined in the import
+                />
+                <Resource
+                    name="license_component_evidences"
+                    {...license_component_evidences} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
                     // nosemgrep because the props are well defined in the import
                 />
                 <Resource

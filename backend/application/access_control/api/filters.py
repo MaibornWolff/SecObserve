@@ -13,9 +13,47 @@ class UserFilter(FilterSet):
     username = CharFilter(field_name="username", lookup_expr="icontains")
     full_name = CharFilter(field_name="full_name", lookup_expr="icontains")
     authorization_group = NumberFilter(field_name="authorization_groups")
+    exclude_authorization_group = NumberFilter(
+        field_name="exclude_authorization_group",
+        method="get_exclude_authorization_group",
+    )
+    exclude_license_group = NumberFilter(
+        field_name="exclude_license_group", method="get_exclude_license_group"
+    )
+    exclude_license_policy = NumberFilter(
+        field_name="exclude_license_policy", method="get_exclude_license_policy"
+    )
+    exclude_product = NumberFilter(
+        field_name="exclude_product", method="get_exclude_product"
+    )
 
-    # search is needed for the ReferenceArrayInput field of react-admin
-    search = CharFilter(field_name="full_name", lookup_expr="icontains")
+    def get_exclude_authorization_group(
+        self, queryset, field_name, value
+    ):  # pylint: disable=unused-argument
+        if value is not None:
+            return queryset.exclude(authorization_groups__id=value)
+        return queryset
+
+    def get_exclude_license_group(
+        self, queryset, field_name, value
+    ):  # pylint: disable=unused-argument
+        if value is not None:
+            return queryset.exclude(license_groups__id=value)
+        return queryset
+
+    def get_exclude_license_policy(
+        self, queryset, field_name, value
+    ):  # pylint: disable=unused-argument
+        if value is not None:
+            return queryset.exclude(license_policies__id=value)
+        return queryset
+
+    def get_exclude_product(
+        self, queryset, field_name, value
+    ):  # pylint: disable=unused-argument
+        if value is not None:
+            return queryset.exclude(product_members__id=value)
+        return queryset
 
     ordering = OrderingFilter(
         # tuple-mapping retains order
@@ -38,7 +76,6 @@ class UserFilter(FilterSet):
             "is_active",
             "is_superuser",
             "is_external",
-            "search",
         ]
 
     def __init__(self, data=None, queryset=None, *, request=None, prefix=None):
@@ -60,9 +97,36 @@ class AuthorizationGroupFilter(FilterSet):
     name = CharFilter(field_name="name", lookup_expr="icontains")
     oidc_group = CharFilter(field_name="oidc_group", lookup_expr="icontains")
     user = NumberFilter(field_name="users")
+    exclude_license_group = NumberFilter(
+        field_name="exclude_license_group", method="get_exclude_license_group"
+    )
+    exclude_license_policy = NumberFilter(
+        field_name="exclude_license_policy", method="get_exclude_license_policy"
+    )
+    exclude_product = NumberFilter(
+        field_name="exclude_product", method="get_exclude_product"
+    )
 
-    # search is needed for the ReferenceArrayInput field of react-admin
-    search = CharFilter(field_name="name", lookup_expr="icontains")
+    def get_exclude_license_group(
+        self, queryset, field_name, value
+    ):  # pylint: disable=unused-argument
+        if value is not None:
+            return queryset.exclude(license_groups__id=value)
+        return queryset
+
+    def get_exclude_license_policy(
+        self, queryset, field_name, value
+    ):  # pylint: disable=unused-argument
+        if value is not None:
+            return queryset.exclude(license_policies__id=value)
+        return queryset
+
+    def get_exclude_product(
+        self, queryset, field_name, value
+    ):  # pylint: disable=unused-argument
+        if value is not None:
+            return queryset.exclude(authorization_groups__id=value)
+        return queryset
 
     ordering = OrderingFilter(
         # tuple-mapping retains order
@@ -71,7 +135,7 @@ class AuthorizationGroupFilter(FilterSet):
 
     class Meta:
         model = Authorization_Group
-        fields = ["name", "oidc_group", "search"]
+        fields = ["name", "oidc_group"]
 
     def get_user(self, queryset, name, value):  # pylint: disable=unused-argument
         # field_name is used as a positional argument
