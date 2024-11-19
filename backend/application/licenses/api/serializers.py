@@ -96,7 +96,7 @@ class LicenseComponentSerializer(ModelSerializer):
     branch_name = SerializerMethodField()
     license_policy_name: Optional[SerializerMethodField] = SerializerMethodField()
     license_policy_id: Optional[SerializerMethodField] = SerializerMethodField()
-    evidences = NestedLicenseComponentEvidenceSerializer(many=True)
+    evidencesOptional: Optional[NestedLicenseComponentEvidenceSerializer] = NestedLicenseComponentEvidenceSerializer(many=True)
     title = SerializerMethodField()
 
     class Meta:
