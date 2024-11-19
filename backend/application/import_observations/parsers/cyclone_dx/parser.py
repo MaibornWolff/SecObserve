@@ -139,21 +139,14 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         if licenses and licenses[0].get("expression"):
             unknown_licenses.append(licenses[0].get("expression"))
         else:
-            unknown_license_ids = []
-            unknown_license_names = []
             for my_license in licenses:
                 component_license = my_license.get("license", {}).get("id")
                 if component_license:
-                    unknown_license_ids.append(component_license)
+                    unknown_licenses.append(component_license)
 
                 component_license = my_license.get("license", {}).get("name")
                 if component_license:
-                    unknown_license_names.append(component_license)
-
-                if unknown_license_ids:
-                    unknown_licenses = unknown_license_ids
-                else:
-                    unknown_licenses = unknown_license_names
+                    unknown_licenses.append(component_license)
 
         return Component(
             bom_ref=component_data.get("bom-ref", ""),
