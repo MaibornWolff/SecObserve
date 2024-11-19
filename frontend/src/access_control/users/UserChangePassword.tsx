@@ -1,7 +1,7 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import PasswordIcon from "@mui/icons-material/Password";
 import { Button, Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { SaveButton, SimpleForm, Toolbar, WithRecord, useNotify, useRefresh } from "react-admin";
 
 import { validate_required_255 } from "../../commons/custom_validators";
@@ -12,8 +12,11 @@ const UserChangePassword = () => {
     const refresh = useRefresh();
     const [open, setOpen] = useState(false);
     const notify = useNotify();
-    const [loaded, setLoaded] = useState(false);
     const [password_rules, setPasswordRules] = useState("");
+
+    useEffect(() => {
+        get_password_rules();
+    }, []);
 
     function get_password_rules() {
         httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/users/password_rules/", {
@@ -21,11 +24,6 @@ const UserChangePassword = () => {
         }).then((result) => {
             setPasswordRules(result.json.password_rules);
         });
-        setLoaded(true);
-    }
-
-    if (!loaded) {
-        get_password_rules();
     }
 
     const changePassword = async (data: any) => {
