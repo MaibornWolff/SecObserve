@@ -9,7 +9,7 @@ from rest_framework.exceptions import ValidationError
 from application.commons.services.functions import clip_fields
 from application.core.models import Product
 from application.import_observations.models import Vulnerability_Check
-from application.licenses.models import License_Component
+from application.licenses.models import License_Component, License_Component_Evidence
 from application.licenses.queries.license import get_license_by_spdx_id
 from application.licenses.services.license_policy import (
     apply_license_policy_to_component,
@@ -96,6 +96,19 @@ def process_license_components(
                 existing_component.last_change = timezone.now()
             clip_fields("licenses", "License_Component", existing_component)
             existing_component.save()
+
+            existing_component.evidences.all().delete()
+            if component.unsaved_evidences:
+                for evidence in component.unsaved_evidences:
+                    evidence = License_Component_Evidence(
+                        license_component=existing_component,
+                        name=evidence[0],
+                        evidence=evidence[1],
+                    )
+                clip_fields("licenses", "License_Component_Evidence", evidence)
+
+                evidence.save()
+
             existing_components_dict.pop(component.identity_hash)
             components_updated += 1
         else:
@@ -112,6 +125,17 @@ def process_license_components(
             component.last_change = timezone.now()
             clip_fields("licenses", "License_Component", component)
             component.save()
+
+            if component.unsaved_evidences:
+                for evidence in component.unsaved_evidences:
+                    evidence = License_Component_Evidence(
+                        license_component=component,
+                        name=evidence[0],
+                        evidence=evidence[1],
+                    )
+                clip_fields("licenses", "License_Component_Evidence", evidence)
+                evidence.save()
+
             components_new += 1
 
     components_deleted = len(existing_components_dict)

@@ -78,9 +78,20 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                     dependencies=observation_component_dependencies,
                 )
                 model_component.unsaved_license = component.unknown_license
+                self._add_license_component_evidence(component, model_component)
                 components.append(model_component)
 
         return components
+
+    def _add_license_component_evidence(
+        self,
+        component: Component,
+        license_component: License_Component,
+    ) -> None:
+        evidence = []
+        evidence.append("Component")
+        evidence.append(dumps(component.json))
+        license_component.unsaved_evidences.append(evidence)
 
     def _get_components(self, data: dict) -> dict[str, Component]:
         components_dict = {}

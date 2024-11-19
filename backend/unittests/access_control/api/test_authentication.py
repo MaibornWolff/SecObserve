@@ -318,6 +318,9 @@ class TestAuthentication(BaseTestCase):
         self._check_authentication(["get"], "/api/license_components/")
         self._check_authentication(["get"], "/api/license_components/1/")
 
+        self._check_authentication(["get"], "/api/license_component_evidences/")
+        self._check_authentication(["get"], "/api/license_component_evidences/1/")
+
         self._check_authentication(["get", "post"], "/api/license_groups/")
         self._check_authentication(
             ["delete", "get", "put", "patch"], "/api/license_groups/1/"

@@ -14,6 +14,7 @@ from application.commons.types import Age_Choices
 from application.licenses.models import (
     License,
     License_Component,
+    License_Component_Evidence,
     License_Group,
     License_Group_Authorization_Group_Member,
     License_Group_Member,
@@ -76,6 +77,19 @@ class LicenseComponentFilter(FilterSet):
         today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
         time_threshold = today - timedelta(days=int(days))
         return queryset.filter(last_change__gte=time_threshold)
+
+
+class LicenseComponentEvidenceFilter(FilterSet):
+    name = CharFilter(field_name="name", lookup_expr="icontains")
+
+    ordering = OrderingFilter(
+        # tuple-mapping retains order
+        fields=(("name", "name"), ("license_component", "license_component")),
+    )
+
+    class Meta:
+        model = License_Component_Evidence
+        fields = ["name", "license_component"]
 
 
 class LicenseFilter(FilterSet):

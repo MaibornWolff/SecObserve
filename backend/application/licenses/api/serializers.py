@@ -21,6 +21,7 @@ from application.core.types import PURL_Type
 from application.licenses.models import (
     License,
     License_Component,
+    License_Component_Evidence,
     License_Group,
     License_Group_Authorization_Group_Member,
     License_Group_Member,
@@ -62,6 +63,30 @@ class LicenseSerializer(ModelSerializer):
         return License_Policy_Item.objects.filter(license=obj).exists()
 
 
+class LicenseComponentEvidenceSerializer(ModelSerializer):
+    product = SerializerMethodField()
+
+    def get_product(self, evidence: License_Component_Evidence) -> int:
+        return evidence.license_component.product.pk
+
+    def get_license_component_title(self, evidence: License_Component_Evidence) -> str:
+        if evidence.license_component.license:
+            return f"{evidence.license_component.license.spdx_id} ({evidence.license_component.license.name})"
+        if evidence.license_component.unknown_license:
+            return evidence.license_component.unknown_license
+        return "No license"
+
+    class Meta:
+        model = License_Component_Evidence
+        fields = "__all__"
+
+
+class NestedLicenseComponentEvidenceSerializer(ModelSerializer):
+    class Meta:
+        model = License_Component_Evidence
+        exclude = ["license_component", "evidence"]
+
+
 class LicenseComponentSerializer(ModelSerializer):
     license_data = LicenseSerializer(
         source="license",
@@ -71,6 +96,8 @@ class LicenseComponentSerializer(ModelSerializer):
     branch_name = SerializerMethodField()
     license_policy_name: Optional[SerializerMethodField] = SerializerMethodField()
     license_policy_id: Optional[SerializerMethodField] = SerializerMethodField()
+    evidences = NestedLicenseComponentEvidenceSerializer(many=True)
+    title = SerializerMethodField()
 
     class Meta:
         model = License_Component
@@ -107,10 +134,18 @@ class LicenseComponentSerializer(ModelSerializer):
 
         return 0
 
+    def get_title(self, obj: License_Component) -> str:
+        if obj.license:
+            return f"{obj.license.spdx_id} ({obj.license.name})"
+        if obj.unknown_license:
+            return obj.unknown_license
+        return "No license"
+
 
 class LicenseComponentListSerializer(LicenseComponentSerializer):
     license_policy_id = None
     license_policy_name = None
+    evidences = None
 
     class Meta:
         model = License_Component

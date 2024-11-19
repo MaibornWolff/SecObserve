@@ -45,6 +45,24 @@
         }
     },
     {
+        "model": "licenses.license_component_evidence",
+        "pk": 1,
+        "fields": {
+            "license_component": 1,
+            "name": "internal_license_evidence_name",
+            "evidence": "internal license evidence"
+        }
+    },
+    {
+        "model": "licenses.license_component_evidence",
+        "pk": 2,
+        "fields": {
+            "license_component": 2,
+            "name": "external_license_evidence_name",
+            "evidence": "external license evidence"
+        }
+    },
+    {
         "model": "licenses.license_group",
         "pk": 1000,
         "fields": {
