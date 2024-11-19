@@ -1,12 +1,17 @@
-import { Box, Paper, Stack, Typography } from "@mui/material";
-import { DateField, Labeled, ReferenceField, TextField, WithRecord } from "react-admin";
+import { Box, Paper, Stack, TableHead, Typography } from "@mui/material";
+import { Fragment } from "react";
+import { ArrayField, Datagrid, DateField, Labeled, ReferenceField, TextField, WithRecord } from "react-admin";
+import { Link } from "react-router-dom";
 
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
+import { useLinkStyles } from "../../commons/layout/themes";
+import { getSettingTheme } from "../../commons/user_settings/functions";
 
 const LicenseComponentShowAside = () => {
     return (
         <Box width={"33%"} marginLeft={2}>
             <MetaData />
+            <Evidences />
         </Box>
     );
 };
@@ -57,6 +62,46 @@ const MetaData = () => {
                         </Labeled>
                     </Stack>
                 </Paper>
+            )}
+        />
+    );
+};
+
+const EmptyDatagridHeader = () => <TableHead />;
+
+const Evidences = () => {
+    const { classes } = useLinkStyles({ setting_theme: getSettingTheme() });
+    return (
+        <WithRecord
+            render={(license_component) => (
+                <Fragment>
+                    {license_component.evidences && license_component.evidences.length > 0 && (
+                        <Paper sx={{ marginBottom: 2 }}>
+                            <Typography variant="h6" sx={{ paddingLeft: 2, paddingTop: 1 }}>
+                                Evidences
+                            </Typography>
+                            <ArrayField source="evidences" label={false}>
+                                <Datagrid
+                                    bulkActionButtons={false}
+                                    header={EmptyDatagridHeader}
+                                    sx={{ paddingBottom: 2 }}
+                                    rowClick={false}
+                                >
+                                    <WithRecord
+                                        render={(evidence) => (
+                                            <Link
+                                                to={"/license_component_evidences/" + evidence.id + "/show"}
+                                                className={classes.link}
+                                            >
+                                                {evidence.name}
+                                            </Link>
+                                        )}
+                                    />
+                                </Datagrid>
+                            </ArrayField>
+                        </Paper>
+                    )}
+                </Fragment>
             )}
         />
     );

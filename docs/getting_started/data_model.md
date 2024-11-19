@@ -90,6 +90,7 @@ erDiagram
     Product }o--o| License_Policy : references
     Product_Group }o--o| License_Policy : references
     License_Component }o--o| License : references
+    License_Component ||--|{ License_Component_Evidence : has
     License_Policy ||--o{ License_Policy_Item : has
     License_Policy ||--o{ License_Policy_Member : has
     License_Policy ||--o{ License_Policy_Authorization_Group_Member : has
@@ -106,6 +107,10 @@ The [Linux Foundation](https://www.linuxfoundation.org/) gathers a list of commo
 #### License Component
 
 A `License Component` is a library or package used in a product that is licensed under a specific license and has an evaluation of the license according to a license policy. 
+
+#### License Component Evidence
+
+`License Component Evidences` are extracts from the scan reports showing the basis on which the license component was created.
 
 #### License Policy
 

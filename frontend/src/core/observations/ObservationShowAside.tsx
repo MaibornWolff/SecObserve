@@ -1,5 +1,4 @@
-import { Box, Paper, Typography } from "@mui/material";
-import { TableHead } from "@mui/material";
+import { Box, Paper, TableHead, Typography } from "@mui/material";
 import { Fragment } from "react";
 import {
     ArrayField,

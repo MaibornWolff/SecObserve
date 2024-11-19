@@ -24,6 +24,7 @@ import products from "./core/products";
 import { Dashboard } from "./dashboard";
 import parsers from "./import_observations/parsers";
 import LicenseAdministration from "./licenses/license_administration/LicenseAdministration";
+import license_component_evidences from "./licenses/license_component_evidences";
 import license_components from "./licenses/license_components";
 import license_groups from "./licenses/license_groups";
 import license_policies from "./licenses/license_policies";
@@ -166,6 +167,11 @@ const App = () => {
                 <Resource
                     name="license_components"
                     {...license_components} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                    // nosemgrep because the props are well defined in the import
+                />
+                <Resource
+                    name="license_component_evidences"
+                    {...license_component_evidences} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
                     // nosemgrep because the props are well defined in the import
                 />
                 <Resource

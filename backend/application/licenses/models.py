@@ -6,6 +6,7 @@ from django.db.models import (
     CharField,
     DateTimeField,
     ForeignKey,
+    Index,
     IntegerField,
     ManyToManyField,
     Model,
@@ -24,6 +25,11 @@ class License(Model):
     reference = TextField(max_length=2048, blank=True)
     is_osi_approved = BooleanField(null=True)
     is_deprecated = BooleanField(null=True)
+
+    class Meta:
+        indexes = [
+            Index(fields=["name"]),
+        ]
 
     def __str__(self):
         return self.spdx_id
@@ -133,6 +139,7 @@ class License_Component(Model):
         super().__init__(*args, **kwargs)
 
         self.unsaved_license = ""
+        self.unsaved_evidences = []
 
     def __str__(self):
         return self.name_version
@@ -144,6 +151,19 @@ class License_Component(Model):
             )
         )
         return super().save(*args, **kwargs)
+
+
+class License_Component_Evidence(Model):
+    license_component = ForeignKey(
+        License_Component, related_name="evidences", on_delete=CASCADE
+    )
+    name = CharField(max_length=255)
+    evidence = TextField()
+
+    class Meta:
+        indexes = [
+            Index(fields=["name"]),
+        ]
 
 
 class License_Policy(Model):
