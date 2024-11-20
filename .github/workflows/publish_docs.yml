@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - chore/doc_trivy_secrets
+      - chore/documentation_check_security_gate
 
 permissions: read-all
 
