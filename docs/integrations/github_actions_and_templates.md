@@ -31,6 +31,10 @@ Most of the actions and templates use the same set of variables:
 | `SO_ORIGIN_DOCKER_IMAGE_NAME_TAG` | *optional* | Name:Tag of Docker image to be set for all imported observations. |
 | `SO_ORIGIN_ENDPOINT_URL` | *optional* | URL of endpoint to be set for all imported observations. |
 | `SO_SUPPRESS_LICENSES` | *optional, only for CycloneDX* | Suppress importing license information if value is `true`. Default is `true` for the *Grype*, *Trivy Filesystem* and *Trivy Image* GitHub action / GitLab templates, default is `false` for the *Importer*  action/template |
+| **Check security gate** |
+| `SO_API_BASE_URL` | *mandatory* | Base URL of the SecObserve backend, e.g. `https://secobserve-backend.example.com`. |
+| `SO_API_TOKEN` | *mandatory* | API token of the user to be used for the check. |
+| `SO_PRODUCT_NAME` | *mandatory* | Name of the product for which the security gate check is being performed. |
 
 ## Available actions and templates
 
@@ -57,6 +61,11 @@ Most of the actions and templates use the same set of variables:
 | [CryptoLyzer](https://gitlab.com/coroner/cryptolyzer)             | `actions/DAST/cryptolyzer` | `templates/DAST/cryptolyzer.yml` | [MPL 2.0](https://gitlab.com/coroner/cryptolyzer/-/blob/master/LICENSE.txt) |
 | [DrHeader](https://github.com/Santandersecurityresearch/DrHeader) | `actions/DAST/drheader` | `templates/DAST/drheader.yml` | [MIT](https://github.com/Santandersecurityresearch/DrHeader/blob/master/LICENSE) |
 | [ZAP](https://github.com/zaproxy/zaproxy)                         | `actions/DAST/zap` | `templates/DAST/zap.yml` | [Apache 2.0](https://github.com/zaproxy/zaproxy/blob/main/LICENSE) |
+
+| Task                                  | GitHub Action             | GitLab CI Template              |
+|---------------------------------------|---------------------------|---------------------------------|
+| Import existing file into SecObserve | `actions/importer` | `templates/importer.yml` |
+| Check security gate of a product (`exit code 1` if security gate **Failed**, `exit code 0` if security gate **Passed** or **Disabled**) | `actions/check_security_gate` | `templates/check_security_gate.yml` |
 
 All GitHub actions and GitLab CI templates use a pre-built Docker image that contains all scanners and the SecObserve importer.
 
