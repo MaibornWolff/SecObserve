@@ -9,7 +9,7 @@ License management is activated by default. If it is not used in an organization
 If license management is deactivated:
 
 * The `Licenses` menu is not visible in the navigation.
-* The automatic import of SPDX licenses is deactivated.
+* The [automatic import of SPDX licenses](../integrations/license_data.md#spdx-licenses) is deactivated.
 * Licenses for components are not imported from CycloneDX files and the `License` tab is not visible in the Product view.
 
 
