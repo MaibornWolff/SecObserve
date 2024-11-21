@@ -2,9 +2,9 @@ import { User, WebStorageStateStore } from "oidc-client-ts";
 import { UserManager } from "oidc-client-ts";
 import { AuthProvider } from "react-admin";
 
-import { set_settings_in_local_storage } from "../commons/functions";
-import { httpClient } from "../commons/ra-data-django-rest-framework";
-import { saveSettingListProperties, setListProperties } from "../commons/user_settings/functions";
+import { set_settings_in_local_storage } from "../../commons/functions";
+import { httpClient } from "../../commons/ra-data-django-rest-framework";
+import { saveSettingListProperties, setListProperties } from "../../commons/user_settings/functions";
 
 const authProvider: AuthProvider = {
     login: ({ username, password }) => {
@@ -56,18 +56,26 @@ const authProvider: AuthProvider = {
 
         return Promise.resolve();
     },
-    checkError: (error) => {
-        if (error) {
-            if (error.status === 401) {
-                if (oidc_signed_in()) {
-                    localStorage.setItem("last_location", location.hash);
-                    const user_manager = new UserManager(oidcConfig);
-                    return user_manager.signinRedirect();
-                }
-                return Promise.reject({ message: error.message });
+    checkError: async (error) => {
+        if (error.status === 401) {
+            if (oidc_signed_in()) {
+                const user_manager = new UserManager(oidcConfig);
+                localStorage.setItem("last_location", location.hash);
+                await user_manager
+                    .signinSilent()
+                    .then(() => {
+                        error.message = false;
+                        error.logoutUser = false;
+                        error.redirectTo = location.hash;
+                        throw error;
+                    })
+                    .catch(() => {
+                        localStorage.removeItem(oidcStorageKey);
+                        return user_manager.signinRedirect();
+                    });
             }
+            throw error;
         }
-        return Promise.resolve();
     },
     checkAuth: () => {
         if (oidc_signed_in() || jwt_signed_in()) {
@@ -124,6 +132,8 @@ export function oidc_signed_in(): boolean {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-invalid-void-type
 const onSigninCallback = (_user: User | void): void => {
+    const user_manager = new UserManager(oidcConfig);
+    user_manager.clearStaleState();
     const last_location = localStorage.getItem("last_location");
     if (last_location) {
         localStorage.removeItem("last_location");

@@ -13,7 +13,7 @@ import {
 import { Fragment, useState } from "react";
 import { SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
 
-import axios_instance from "../../access_control/axios_instance";
+import axios_instance from "../../access_control/auth_provider/axios_instance";
 import { validate_required, validate_required_255 } from "../../commons/custom_validators";
 import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
 import { CSAF_PUBLISHER_CATEGORY_CHOICES, CSAF_TLP_LABEL_CHOICES, CSAF_TRACKING_STATUS_CHOICES } from "../types";
