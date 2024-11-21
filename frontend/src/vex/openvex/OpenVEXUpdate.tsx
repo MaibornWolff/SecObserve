@@ -4,7 +4,7 @@ import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle,
 import { Fragment, useState } from "react";
 import { SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
 
-import axios_instance from "../../access_control/axios_instance";
+import axios_instance from "../../access_control/auth_provider/axios_instance";
 import { validate_required_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 
