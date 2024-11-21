@@ -1,3 +1,4 @@
+import { Stack } from "@mui/material";
 import {
     BooleanField,
     Datagrid,
@@ -11,8 +12,9 @@ import {
 } from "react-admin";
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
-import { is_external } from "../../commons/functions";
+import { is_external, is_superuser } from "../../commons/functions";
 import { getSettingListSize } from "../../commons/user_settings/functions";
+import ImportScanCodeLicenseDB from "./ImportScanCodeLicenseDB";
 import LicenseGroupCreateButton from "./LicenseGroupCreateButton";
 
 const showLicenseGroup = (id: any) => {
@@ -49,7 +51,16 @@ const LicenseGroupEmbeddedList = ({ license }: LicenseGroupEmbeddedListProps) =>
         <ResourceContextProvider value="license_groups">
             <ListContextProvider value={listContext}>
                 <div style={{ width: "100%" }}>
-                    {!is_external() && !license && <LicenseGroupCreateButton />}
+                    <Stack
+                        direction="row"
+                        spacing={2}
+                        sx={{
+                            alignItems: "center",
+                        }}
+                    >
+                        {!is_external() && !license && <LicenseGroupCreateButton />}
+                        {is_superuser() && !license && <ImportScanCodeLicenseDB />}
+                    </Stack>
                     {!license && <FilterForm filters={listFilters} />}
                     <Datagrid
                         size={getSettingListSize()}

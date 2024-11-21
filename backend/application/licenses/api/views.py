@@ -86,7 +86,10 @@ from application.licenses.queries.license_policy_member import (
     get_license_policy_member,
     get_license_policy_members,
 )
-from application.licenses.services.license_group import copy_license_group
+from application.licenses.services.license_group import (
+    copy_license_group,
+    import_scancode_licensedb,
+)
 from application.licenses.services.license_policy import (
     apply_license_policy,
     copy_license_policy,
@@ -256,6 +259,23 @@ class LicenseGroupViewSet(ModelViewSet):
             raise ValidationError(f"License {license_id} not found")
 
         license_group.licenses.remove(license_to_be_removed)
+
+        return Response(status=HTTP_204_NO_CONTENT)
+
+    @extend_schema(
+        methods=["POST"],
+        request=None,
+        responses={HTTP_204_NO_CONTENT: None},
+    )
+    @action(detail=False, methods=["post"])
+    def import_scancode_licensedb(self, request):
+        user = request.user
+        if not user.is_superuser:
+            raise PermissionDenied(
+                "User is not allowed to import license groups from ScanCode LicenseDB"
+            )
+
+        import_scancode_licensedb()
 
         return Response(status=HTTP_204_NO_CONTENT)
 
