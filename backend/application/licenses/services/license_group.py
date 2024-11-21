@@ -37,10 +37,10 @@ def import_scancode_licensedb() -> None:
     response.raise_for_status()
     data = loads(response.content)
 
-    for license in data:
-        category = license.get("category")
-        spdx_license_key = license.get("spdx_license_key")
-        other_spdx_license_keys = license.get("other_spdx_license_keys", [])
+    for db_license in data:
+        category = db_license.get("category")
+        spdx_license_key = db_license.get("spdx_license_key")
+        other_spdx_license_keys = db_license.get("other_spdx_license_keys", [])
 
         if category and spdx_license_key:
             _add_license_to_group(license_groups, category, spdx_license_key)
@@ -50,7 +50,7 @@ def import_scancode_licensedb() -> None:
 
 def _add_license_to_group(license_groups, category, spdx_license_key):
     try:
-        license = License.objects.get(spdx_id=spdx_license_key)
+        spdx_license = License.objects.get(spdx_id=spdx_license_key)
         license_group = license_groups.get(category)
         if not license_group:
             license_group, _ = License_Group.objects.get_or_create(
@@ -62,6 +62,6 @@ def _add_license_to_group(license_groups, category, spdx_license_key):
             )
             license_groups[category] = license_group
             license_group.licenses.clear()
-        license_group.licenses.add(license)
+        license_group.licenses.add(spdx_license)
     except License.DoesNotExist:
         pass
