@@ -195,7 +195,7 @@ class License_Policy_Item(Model):
     license_group = ForeignKey(
         License_Group,
         related_name="license_policy_items",
-        on_delete=CASCADE,
+        on_delete=PROTECT,
         blank=True,
         null=True,
     )
