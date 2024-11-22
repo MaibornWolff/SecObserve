@@ -36,10 +36,16 @@ sequenceDiagram
     activate Pipeline
     Pipeline ->> Pipeline: Run scanners
     Pipeline ->> SecObserve: Upload results
-    deactivate Pipeline
     activate SecObserve
     SecObserve ->> SecObserve: Apply rules
     deactivate SecObserve
+    Pipeline ->> SecObserve: Check security gate
+    activate SecObserve
+    SecObserve -->> Pipeline: exit code 0/1
+    deactivate SecObserve
+    Pipeline ->> Pipeline: Stop or continue
+    Pipeline -->> Developer: Feedback
+    deactivate Pipeline
     Developer ->> SecObserve: View observations
     Developer ->> SecObserve: Assess observations
     Developer ->> Developer: Implement fixes
@@ -51,7 +57,13 @@ sequenceDiagram
 3. The pipeline runs several of the supported vulnerability scanners. To make integration easy, SecObserve provides predefined templates for the most relevant scanners, see [GitHub actions and GitLab CI templates](../integrations/github_actions_and_templates.md).
 4. The scanners store their results in files, which are [uploaded into SecObserve](../usage/import_observations.md).
 5. SecObserve applies [rules](../usage/rule_engine.md) to adjust severity and status of observations during the upload process.
-6. The developer can now look at the observations in SecObserve, to see what has changed ...
-7. ... and if necessary [assess observations](../usage/assess_observations.md) to change their status (eg. false positive or risk accepted) or severity.
-8. If fixes are needed to close vulnerabilities, the developer will implement the fixes ...
-9. ... and check them in to the repository. Now the cycle starts again.
+6. The pipeline can call SecObserve to check the status of the [security gate](../usage/security_gates.md).
+7. SecObserve returns an exit code to the pipeline: 
+    * `1` if the security gate has **failed**
+    * `0` if the security gate has **passed** or is **disabled**
+8. The pipeline can stop or continue based on the exit code, depending on the configuration of the check step. Default is to stop the pipeline if the security gate has failed.
+9. The developer can see the result of the pipeline.
+10. The developer can now look at the observations in SecObserve, to see what has changed ...
+11. ... and if necessary [assess observations](../usage/assess_observations.md) to change their status (eg. false positive or risk accepted) or severity.
+12. If fixes are needed to close vulnerabilities, the developer will implement the fixes ...
+13. ... and check them in to the repository. Now the cycle starts again.

@@ -6,8 +6,7 @@
 import queryString from "query-string";
 import { DataProvider, Identifier, fetchUtils } from "react-admin";
 
-import { jwt_signed_in, oidc_signed_in } from "../../access_control/authProvider";
-import { get_oidc_id_token } from "../../access_control/authProvider";
+import { get_oidc_id_token, jwt_signed_in, oidc_signed_in } from "../../access_control/auth_provider/authProvider";
 
 const base_url = window.__RUNTIME_CONFIG__.API_BASE_URL;
 

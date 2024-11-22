@@ -202,6 +202,22 @@ class LicenseGroupAuthorizationGroupFilter(FilterSet):
 
 class LicensePolicyFilter(FilterSet):
     name = CharFilter(field_name="name", lookup_expr="icontains")
+    license = NumberFilter(
+        field_name="license", method="get_license_policies_with_license"
+    )
+    license_group = NumberFilter(
+        field_name="license_group", method="get_license_policies_with_license_group"
+    )
+
+    def get_license_policies_with_license(
+        self, queryset, field_name, value  # pylint: disable=unused-argument
+    ) -> bool:
+        return queryset.filter(license_policy_items__license=value)
+
+    def get_license_policies_with_license_group(
+        self, queryset, field_name, value  # pylint: disable=unused-argument
+    ) -> bool:
+        return queryset.filter(license_policy_items__license_group=value)
 
     ordering = OrderingFilter(
         # tuple-mapping retains order

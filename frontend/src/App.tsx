@@ -1,12 +1,13 @@
-import { Admin, CustomRoutes, Resource } from "react-admin";
+import { Admin, CustomRoutes, Resource, addRefreshAuthToDataProvider } from "react-admin";
 import { AuthProvider } from "react-oidc-context";
 import { Route } from "react-router";
 
-import { Login } from "./access_control";
 import AccessControlAdministration from "./access_control/access_control_administration/AccessControlAdministration";
-import authProvider from "./access_control/authProvider";
-import { oidcConfig } from "./access_control/authProvider";
+import authProvider from "./access_control/auth_provider/authProvider";
+import { oidcConfig } from "./access_control/auth_provider/authProvider";
+import { updateRefreshToken } from "./access_control/auth_provider/functions";
 import authorization_groups from "./access_control/authorization_groups";
+import { Login } from "./access_control/login";
 import users from "./access_control/users";
 import { Layout } from "./commons/layout";
 import { darkTheme, lightTheme } from "./commons/layout/themes";
@@ -45,7 +46,7 @@ const App = () => {
         >
             <Admin
                 title=""
-                dataProvider={drfProvider()}
+                dataProvider={addRefreshAuthToDataProvider(drfProvider(), updateRefreshToken)}
                 queryClient={queryClient}
                 authProvider={authProvider}
                 dashboard={Dashboard}

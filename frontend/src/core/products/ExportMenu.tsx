@@ -9,7 +9,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { Fragment, MouseEvent, useState } from "react";
 import { useNotify } from "react-admin";
 
-import axios_instance from "../../access_control/axios_instance";
+import axios_instance from "../../access_control/auth_provider/axios_instance";
 import { feature_license_management, getIconAndFontColor } from "../../commons/functions";
 
 interface ExportMenuProps {
