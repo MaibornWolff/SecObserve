@@ -24,6 +24,7 @@
         "react-admin": "5.4.0",
         "react-chartjs-2": "5.2.0",
         "react-dom": "18.3.1",
+        "react-is": "18.3.1",
         "react-oidc-context": "3.2.0",
         "runtime-env-cra": "file:lib/runtime-env-cra",
         "tss-react": "4.9.13"
