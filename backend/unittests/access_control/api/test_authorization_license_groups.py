@@ -1,4 +1,4 @@
-from application.licenses.models import License_Group
+from application.licenses.models import License_Group, License_Policy
 from unittests.access_control.api.test_authorization import (
     APITest,
     TestAuthorizationBase,
@@ -7,6 +7,7 @@ from unittests.access_control.api.test_authorization import (
 
 class TestAuthorizationLicenseGroups(TestAuthorizationBase):
     def test_authorization_license_groups(self):
+        License_Policy.objects.all().delete()
         License_Group.objects.filter(pk__lt=1000).delete()
 
         expected_data = "{'count': 5, 'next': None, 'previous': None, 'results': [{'id': 1000, 'is_manager': False, 'is_in_license_policy': False, 'has_licenses': True, 'has_users': False, 'has_authorization_groups': False, 'name': 'public', 'description': '', 'is_public': True}, {'id': 1001, 'is_manager': False, 'is_in_license_policy': False, 'has_licenses': True, 'has_users': True, 'has_authorization_groups': False, 'name': 'internal_read_not_manager', 'description': '', 'is_public': False}, {'id': 1002, 'is_manager': False, 'is_in_license_policy': False, 'has_licenses': True, 'has_users': True, 'has_authorization_groups': False, 'name': 'internal_write_manager', 'description': '', 'is_public': False}, {'id': 1003, 'is_manager': False, 'is_in_license_policy': False, 'has_licenses': False, 'has_users': False, 'has_authorization_groups': True, 'name': 'authorization_group_not_manager', 'description': '', 'is_public': False}, {'id': 1004, 'is_manager': False, 'is_in_license_policy': False, 'has_licenses': False, 'has_users': False, 'has_authorization_groups': True, 'name': 'authorization_group_manager', 'description': '', 'is_public': False}]}"
