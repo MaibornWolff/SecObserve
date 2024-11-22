@@ -141,11 +141,11 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         else:
             for my_license in licenses:
                 component_license = my_license.get("license", {}).get("id")
-                if component_license:
+                if component_license and component_license not in unknown_licenses:
                     unknown_licenses.append(component_license)
 
                 component_license = my_license.get("license", {}).get("name")
-                if component_license:
+                if component_license and component_license not in unknown_licenses:
                     unknown_licenses.append(component_license)
 
         return Component(
