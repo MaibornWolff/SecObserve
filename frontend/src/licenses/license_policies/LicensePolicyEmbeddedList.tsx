@@ -33,11 +33,11 @@ const LicensePolicyEmbeddedList = ({ license, license_group }: LicensePolicyEmbe
     let filter = {};
     let storeKey: any = "license_policies.embedded";
     if (license) {
-        filter = { licenses: Number(license.id) };
+        filter = { license: Number(license.id) };
         storeKey = false;
     }
     if (license_group) {
-        filter = { license_groups: Number(license_group.id) };
+        filter = { license_group: Number(license_group.id) };
         storeKey = false;
     }
 
