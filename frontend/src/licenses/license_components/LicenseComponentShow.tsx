@@ -17,6 +17,7 @@ import { get_component_purl_url } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
 import MermaidDependencies from "../../core/observations/Mermaid_Dependencies";
 import LicenseComponentShowAside from "./LicenseComponentShowAside";
+import LabeledTextField from "../../commons/custom_fields/LabeledTextField";
 
 const ShowActions = () => {
     const component = useRecordContext();
@@ -73,8 +74,13 @@ export const LicenseComponentComponent = () => {
                                     <TextField source="unknown_license" className={classes.fontBigBold} />
                                 </Labeled>
                             )}
+                            {!component.license && !component.unknown_license && (
+                            <Labeled label="License">
+                                <Typography variant="body1"  className={classes.fontBigBold}>No license</Typography>
+                            </Labeled>
+                            )}
                             <Labeled label="Evaluation result">
-                                <EvaluationResultField source="evaluation_result" label="Evaluation result" />
+                                <EvaluationResultField source="evaluation_result" label="Evaluation result" sortable={false} />
                             </Labeled>
                         </Stack>
                     </Paper>

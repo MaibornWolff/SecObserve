@@ -1,8 +1,15 @@
-from django.db.models import Exists, OuterRef, Q
+from typing import Optional
+
+from django.db.models import Count, Exists, OuterRef, Q
 from django.db.models.query import QuerySet
 
 from application.commons.services.global_request import get_current_user
-from application.core.models import Product_Authorization_Group_Member, Product_Member
+from application.core.models import (
+    Branch,
+    Product,
+    Product_Authorization_Group_Member,
+    Product_Member,
+)
 from application.licenses.models import License_Component
 
 
@@ -57,3 +64,25 @@ def get_license_components() -> QuerySet[License_Component]:
         )
 
     return components
+
+
+def get_license_component_licenses(
+    product: Product, branch: Optional[Branch]
+) -> QuerySet:
+    license_components = get_license_components().filter(
+        product=product,
+    )
+    if branch:
+        license_components = license_components.filter(branch=branch)
+
+    return (
+        license_components.values(
+            "branch__name",
+            "license__spdx_id",
+            "license__name",
+            "unknown_license",
+            "evaluation_result",
+        )
+        .annotate(Count("id"))
+        .order_by("numerical_evaluation_result", "license__spdx_id", "unknown_license")
+    )
