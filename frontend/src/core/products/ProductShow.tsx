@@ -252,7 +252,7 @@ const ProductShow = () => {
                                     <SimpleForm toolbar={false} sx={{ padding: 0 }}>
                                         <RadioButtonGroupInput
                                             source="category"
-                                            label={false}
+                                            label="List view"
                                             choices={[
                                                 { id: "detail", name: "Detail" },
                                                 { id: "overview", name: "Overview" },
