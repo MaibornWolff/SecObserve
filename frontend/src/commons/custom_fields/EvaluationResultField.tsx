@@ -5,7 +5,7 @@ import { get_evaluation_result_color } from "../functions";
 interface EvaluationResultProps {
     source: string;
     label: string;
-    sortable: boolean;
+    sortable?: boolean;
 }
 
 export const EvaluationResultField = (props: EvaluationResultProps) => {

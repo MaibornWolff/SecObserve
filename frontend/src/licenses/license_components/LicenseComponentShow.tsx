@@ -84,7 +84,6 @@ export const LicenseComponentComponent = () => {
                                 <EvaluationResultField
                                     source="evaluation_result"
                                     label="Evaluation result"
-                                    sortable={false}
                                 />
                             </Labeled>
                         </Stack>
