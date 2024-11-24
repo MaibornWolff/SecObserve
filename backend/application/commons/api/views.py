@@ -77,7 +77,9 @@ class StatusSettingsView(APIView):
         }
 
         if request.user.is_authenticated:
-            content["risk_acceptance_expiry_days"] = settings.risk_acceptance_expiry_days
+            content["risk_acceptance_expiry_days"] = (
+                settings.risk_acceptance_expiry_days
+            )
 
         return Response(content)
 
