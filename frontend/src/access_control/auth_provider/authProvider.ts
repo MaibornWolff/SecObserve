@@ -89,14 +89,14 @@ const authProvider: AuthProvider = {
         let fullName = "";
         const avatar = undefined;
 
-        const user = localStorage.getItem("user");
+        let user = localStorage.getItem("user");
+        if (!user) {
+            await setUserInfo();
+        }
+        user = localStorage.getItem("user");
         if (user) {
             const user_json = JSON.parse(user);
             fullName = user_json.full_name;
-        } else {
-            const userinfo = await getUserInfo();
-            const { id: id, full_name: fullName, null: avatar } = userinfo;
-            return Promise.resolve({ id, fullName, avatar });
         }
 
         set_settings_in_local_storage();
@@ -105,12 +105,16 @@ const authProvider: AuthProvider = {
     },
 };
 
-const getUserInfo = async () => {
+export const setUserInfo = async () => {
+    const userinfo = await getUserInfo();
+    setListProperties(userinfo.setting_list_properties);
+    delete userinfo.setting_list_properties;
+    localStorage.setItem("user", JSON.stringify(userinfo));
+    localStorage.setItem("theme", userinfo.setting_theme);
+};
+
+const getUserInfo = () => {
     return httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/users/me/").then((response) => {
-        setListProperties(response.json.setting_list_properties);
-        delete response.json.setting_list_properties;
-        localStorage.setItem("user", JSON.stringify(response.json));
-        localStorage.setItem("theme", response.json.setting_theme);
         return response.json;
     });
 };
