@@ -166,6 +166,20 @@ class LicenseComponentBulkDeleteSerializer(Serializer):
     )
 
 
+class LicenseComponentOverviewElementSerializer(Serializer):
+    branch_name = CharField()
+    spdx_id = CharField()
+    license_name = CharField()
+    unknown_license = CharField()
+    evaluation_result = CharField()
+    num_components = IntegerField()
+
+
+class LicenseComponentOverviewSerializer(Serializer):
+    count = IntegerField()
+    results = ListField(child=LicenseComponentOverviewElementSerializer())
+
+
 class LicenseGroupSerializer(ModelSerializer):
     is_manager = SerializerMethodField()
     is_in_license_policy = SerializerMethodField()

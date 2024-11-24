@@ -73,6 +73,13 @@ export const LicenseComponentComponent = () => {
                                     <TextField source="unknown_license" className={classes.fontBigBold} />
                                 </Labeled>
                             )}
+                            {!component.license && !component.unknown_license && (
+                                <Labeled label="License">
+                                    <Typography variant="body1" className={classes.fontBigBold}>
+                                        No license
+                                    </Typography>
+                                </Labeled>
+                            )}
                             <Labeled label="Evaluation result">
                                 <EvaluationResultField source="evaluation_result" label="Evaluation result" />
                             </Labeled>
