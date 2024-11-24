@@ -81,10 +81,7 @@ export const LicenseComponentComponent = () => {
                                 </Labeled>
                             )}
                             <Labeled label="Evaluation result">
-                                <EvaluationResultField
-                                    source="evaluation_result"
-                                    label="Evaluation result"
-                                />
+                                <EvaluationResultField source="evaluation_result" label="Evaluation result" />
                             </Labeled>
                         </Stack>
                     </Paper>

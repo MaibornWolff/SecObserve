@@ -81,11 +81,12 @@ const LicenseComponentEmbeddedList = ({ product, expand, purl_type }: LicenseCom
 
     let filter: any = { product: Number(product.id) };
     let storeKey: any = "license_components.embedded";
+    let filterDefaultValues: any = {};
 
     const record = useRecordContext();
     if (expand) {
-        if (record && record.branch) {
-            filter = { ...filter, branch: record.branch };
+        if (record && record.branch_name) {
+            filter = { ...filter, branch_name: record.branch_name };
         }
         if (record && !record.spdx_id && !record.unknown_license) {
             filter = { ...filter, no_license: true };
@@ -103,6 +104,8 @@ const LicenseComponentEmbeddedList = ({ product, expand, purl_type }: LicenseCom
             filter = { ...filter, purl_type: purl_type };
         }
         storeKey = false;
+    } else {
+        filterDefaultValues = { branch: product.repository_default_branch };
     }
 
     const listContext = useListController({
@@ -110,7 +113,7 @@ const LicenseComponentEmbeddedList = ({ product, expand, purl_type }: LicenseCom
         perPage: 25,
         resource: "license_components",
         sort: { field: "evaluation_result", order: "ASC" },
-        filterDefaultValues: { branch: product.repository_default_branch },
+        filterDefaultValues: filterDefaultValues,
         disableSyncWithLocation: true,
         storeKey: storeKey,
     });

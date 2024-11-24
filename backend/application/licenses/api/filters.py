@@ -36,6 +36,7 @@ class LicenseComponentFilter(FilterSet):
         field_name="age", method="get_age", choices=Age_Choices.AGE_CHOICES
     )
     no_license = BooleanFilter(field_name="no_license", method="get_no_license")
+    branch_name = CharFilter(field_name="branch__name")
 
     def get_age(self, queryset, field_name, value):  # pylint: disable=unused-argument
         # field_name is used as a positional argument

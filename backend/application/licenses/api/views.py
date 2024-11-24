@@ -222,7 +222,7 @@ class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
         if not branch:
             raise NotFound()
 
-        user_has_permission_or_403(branch, Permissions.Product_View)
+        user_has_permission_or_403(branch, Permissions.Branch_View)
 
         return branch
 
