@@ -13,7 +13,6 @@ import {
     useList,
     useNotify,
 } from "react-admin";
-import { useFormContext } from "react-hook-form";
 
 import { EvaluationResultField } from "../../commons/custom_fields/EvaluationResultField";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
