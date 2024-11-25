@@ -104,6 +104,7 @@ from application.licenses.services.license_group import (
 )
 from application.licenses.services.license_policy import (
     apply_license_policy,
+    apply_license_policy_product,
     copy_license_policy,
 )
 
@@ -153,8 +154,8 @@ class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
         product_id = request.query_params.get("product")
         if not product_id:
             raise ValidationError("No product id provided")
-        product = self.__get_product(product_id)
-        branch = self.__get_branch(product, request.query_params.get("branch"))
+        product = _get_product(product_id, Permissions.Product_View)
+        branch = self._get_branch(product, request.query_params.get("branch"))
         spdx_id = request.query_params.get("spdx_id")
         unknown_license = request.query_params.get("unknown_license")
         evaluation_result = request.query_params.get("evaluation_result")
@@ -202,19 +203,7 @@ class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
             data=response_serializer.data,
         )
 
-    def __get_product(self, pk: int) -> Product:
-        if not pk:
-            raise ValidationError("No product id provided")
-
-        product = get_product_by_id(pk)
-        if not product:
-            raise NotFound()
-
-        user_has_permission_or_403(product, Permissions.Product_View)
-
-        return product
-
-    def __get_branch(self, product: Product, pk: int) -> Optional[Branch]:
+    def _get_branch(self, product: Product, pk: int) -> Optional[Branch]:
         if not pk:
             return None
 
@@ -501,6 +490,25 @@ class LicensePolicyViewSet(ModelViewSet):
             status=HTTP_204_NO_CONTENT,
         )
 
+    @extend_schema(
+        methods=["POST"],
+        request=None,
+        responses={HTTP_204_NO_CONTENT: None},
+        parameters=[
+            OpenApiParameter(name="product", type=int, required=True),
+        ],
+    )
+    @action(detail=False, methods=["post"])
+    def apply_product(self, request):
+        product = _get_product(
+            request.query_params.get("product"), Permissions.Product_Edit
+        )
+        apply_license_policy_product(product)
+
+        return Response(
+            status=HTTP_204_NO_CONTENT,
+        )
+
 
 class LicensePolicyItemViewSet(ModelViewSet):
     serializer_class = LicensePolicyItemSerializer
@@ -549,3 +557,16 @@ class LicensePolicyAuthorizationGroupMemberViewSet(ModelViewSet):
             .select_related("license_policy")
             .select_related("authorization_group")
         )
+
+
+def _get_product(product_id: int, permission: int) -> Product:
+    if not product_id:
+        raise ValidationError("No product id provided")
+
+    product = get_product_by_id(product_id)
+    if not product:
+        raise NotFound()
+
+    user_has_permission_or_403(product, permission)
+
+    return product

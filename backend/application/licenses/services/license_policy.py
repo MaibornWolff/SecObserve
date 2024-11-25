@@ -1,3 +1,6 @@
+from typing import Optional
+
+from django.db.models import Q
 from django.utils import timezone
 
 from application.core.models import Product
@@ -11,11 +14,8 @@ from application.licenses.types import License_Policy_Evaluation_Result
 
 
 def get_license_evaluation_results(product: Product) -> dict:
-    if product.license_policy:
-        license_policy = product.license_policy
-    elif product.product_group and product.product_group.license_policy:
-        license_policy = product.product_group.license_policy
-    else:
+    license_policy = _get_license_policy(product)
+    if not license_policy:
         return {}
 
     license_evaluation_results = {}
@@ -71,29 +71,45 @@ def apply_license_policy_to_component(
 
 
 def apply_license_policy(license_policy: License_Policy) -> None:
-    products = Product.objects.filter(license_policy=license_policy)
+    products = Product.objects.filter(
+        Q(license_policy=license_policy)
+        | (
+            Q(product_group__license_policy=license_policy)
+            & Q(license_policy__isnull=True)
+        )
+    )
     for product in products:
-        license_evaluation_results = get_license_evaluation_results(product)
-        components = License_Component.objects.filter(product=product)
-        for component in components:
-            license_before = component.license
-            unknown_license_before = component.unknown_license
-            evaluation_result_before = component.evaluation_result
+        apply_license_policy_product(product)
 
+
+def apply_license_policy_product(product: Product) -> None:
+    license_evaluation_results = get_license_evaluation_results(product)
+    components = License_Component.objects.filter(product=product)
+    for component in components:
+        license_before = component.license
+        unknown_license_before = component.unknown_license
+        evaluation_result_before = component.evaluation_result
+
+        license_policy = _get_license_policy(product)
+        if license_policy:
             apply_license_policy_to_component(
                 component,
                 license_evaluation_results,
                 get_ignore_component_type_list(license_policy.ignore_component_types),
             )
+        else:
+            component.evaluation_result = (
+                License_Policy_Evaluation_Result.RESULT_UNKNOWN
+            )
 
-            if (
-                license_before != component.license
-                or unknown_license_before != component.unknown_license
-                or evaluation_result_before != component.evaluation_result
-            ):
-                component.last_change = timezone.now()
+        if (
+            license_before != component.license
+            or unknown_license_before != component.unknown_license
+            or evaluation_result_before != component.evaluation_result
+        ):
+            component.last_change = timezone.now()
 
-            component.save()
+        component.save()
 
 
 def copy_license_policy(
@@ -133,3 +149,11 @@ def get_ignore_component_type_list(ignore_component_types: str) -> list:
     )
     ignore_component_types_list = [x.strip() for x in ignore_component_types_list]
     return ignore_component_types_list
+
+
+def _get_license_policy(product: Product) -> Optional[License_Policy]:
+    if product.license_policy:
+        return product.license_policy
+    elif product.product_group and product.product_group.license_policy:
+        return product.product_group.license_policy
+    return None

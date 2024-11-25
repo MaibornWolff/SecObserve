@@ -19,6 +19,7 @@ import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 import { getSettingListSize } from "../../commons/user_settings/functions";
 import { PURL_TYPE_CHOICES } from "../../core/types";
+import { getElevation } from "../../metrics/functions";
 import { EVALUATION_RESULT_CHOICES } from "../types";
 import LicenseComponentEmbeddedList from "./LicenseComponentEmbeddedList";
 
@@ -188,7 +189,7 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
                         bulkActionButtons={false}
                         rowClick={false}
                         expand={
-                            <Paper elevation={4}>
+                            <Paper elevation={getElevation(false)}>
                                 <LicenseComponentEmbeddedList
                                     product={product}
                                     expand={true}
