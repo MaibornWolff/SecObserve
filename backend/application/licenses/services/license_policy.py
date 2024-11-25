@@ -154,6 +154,8 @@ def get_ignore_component_type_list(ignore_component_types: str) -> list:
 def _get_license_policy(product: Product) -> Optional[License_Policy]:
     if product.license_policy:
         return product.license_policy
-    elif product.product_group and product.product_group.license_policy:
+
+    if product.product_group and product.product_group.license_policy:
         return product.product_group.license_policy
+
     return None
