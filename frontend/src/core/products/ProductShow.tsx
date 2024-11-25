@@ -13,9 +13,7 @@ import { Fragment, useState } from "react";
 import {
     EditButton,
     PrevNextButtons,
-    RadioButtonGroupInput,
     Show,
-    SimpleForm,
     Tab,
     TabbedShowLayout,
     TabbedShowLayoutTabs,
@@ -45,8 +43,7 @@ import ApiConfigurationCreate from "../../import_observations/api_configurations
 import ApiConfigurationEmbeddedList from "../../import_observations/api_configurations/ApiConfigurationEmbeddedList";
 import ImportMenu from "../../import_observations/import/ImportMenu";
 import VulnerabilityCheckEmbeddedList from "../../import_observations/vulnerability_checks/VulnerabilityCheckEmbeddedList";
-import LicenseComponentEmbeddedList from "../../licenses/license_components/LicenseComponentEmbeddedList";
-import LicenseComponentOverview from "../../licenses/license_components/LicenseComponentOverview";
+import ProductShowLicenseComponents from "../../licenses/license_components/ProductShowLicenseComponents";
 import MetricsHeader from "../../metrics/MetricsHeader";
 import MetricsSeveritiesCurrent from "../../metrics/MetricsSeveritiesCurrent";
 import MetricsSeveritiesTimeline from "../../metrics/MetricsSeveritiesTimeLine";
@@ -98,7 +95,6 @@ const ShowActions = (props: ShowActionsProps) => {
 };
 
 const ProductShow = () => {
-    const [licenseViewState, setLicenseViewState] = useState("detail"); // eslint-disable-line @typescript-eslint/no-unused-vars
     const [settingsTabsShow, setSettingsTabsShow] = useState(false);
     const [tabs_changed, setTabsChanged] = useState(false);
     function showSettingsTabs() {
@@ -122,20 +118,6 @@ const ProductShow = () => {
         );
     }
     const settingsLabel = settingsTabsShow ? "Settings" : "Settings >>>";
-
-    const licenseView = (): string => {
-        const license_view_storage = localStorage.getItem("license_view");
-        if (license_view_storage === null) {
-            return "detail";
-        }
-        setLicenseViewState(license_view_storage);
-        return license_view_storage;
-    };
-
-    const setLicenseView = (value: string) => {
-        localStorage.setItem("license_view", value);
-        setLicenseViewState(value);
-    };
 
     let filter = {};
     let storeKey = "products.list";
@@ -249,22 +231,7 @@ const ProductShow = () => {
                             )}
                             {feature_license_management() && product.has_licenses && (
                                 <Tab label="Licenses" path="licenses" icon={<GradingIcon />} onClick={hideSettingsTabs}>
-                                    <SimpleForm toolbar={false} sx={{ padding: 0 }}>
-                                        <RadioButtonGroupInput
-                                            source="category"
-                                            label="List view"
-                                            choices={[
-                                                { id: "detail", name: "Detail" },
-                                                { id: "overview", name: "Overview" },
-                                            ]}
-                                            defaultValue={licenseView()}
-                                            onChange={(e) => setLicenseView(e.target.value)}
-                                        />
-                                        {licenseView() === "detail" && (
-                                            <LicenseComponentEmbeddedList product={product} />
-                                        )}
-                                        {licenseView() === "overview" && <LicenseComponentOverview product={product} />}
-                                    </SimpleForm>
+                                    <ProductShowLicenseComponents product={product} />
                                 </Tab>
                             )}
                             <Tab
