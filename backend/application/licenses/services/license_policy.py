@@ -2,6 +2,7 @@ from typing import Optional
 
 from django.db.models import Q
 from django.utils import timezone
+from license_expression import LicenseSymbol, get_spdx_licensing
 
 from application.core.models import Product
 from application.licenses.models import (
@@ -10,6 +11,7 @@ from application.licenses.models import (
     License_Policy_Item,
     License_Policy_Member,
 )
+from application.licenses.queries.license import get_license_by_spdx_id
 from application.licenses.types import License_Policy_Evaluation_Result
 
 
@@ -39,6 +41,14 @@ def get_license_evaluation_results(product: Product) -> dict:
                 item.evaluation_result
             )
 
+    items_license_expressions = License_Policy_Item.objects.filter(
+        license_policy=license_policy
+    ).exclude(license_expression="")
+    for item in items_license_expressions:
+        license_evaluation_results[f"expression_{item.license_expression}"] = (
+            item.evaluation_result
+        )
+
     items_unknown_licenses = License_Policy_Item.objects.filter(
         license_policy=license_policy
     ).exclude(unknown_license="")
@@ -60,6 +70,12 @@ def apply_license_policy_to_component(
         evaluation_result = License_Policy_Evaluation_Result.RESULT_IGNORED
     elif component.license:
         evaluation_result = evaluation_results.get(f"spdx_{component.license.spdx_id}")
+    elif component.license_expression:
+        evaluation_result = _evaluate_license_expression(component, evaluation_results)
+        if not evaluation_result:
+            evaluation_result = evaluation_results.get(
+                f"expression_{component.license_expression}"
+            )
     elif component.unknown_license:
         evaluation_result = evaluation_results.get(
             f"unknown_{component.unknown_license}"
@@ -159,3 +175,76 @@ def _get_license_policy(product: Product) -> Optional[License_Policy]:
         return product.product_group.license_policy
 
     return None
+
+
+def _evaluate_license_expression(
+    component: License_Component, evaluation_results: dict
+) -> Optional[str]:
+    evaluation_result = None
+
+    try:
+        licensing = get_spdx_licensing()
+        parsed_expression = licensing.parse(
+            component.license_expression, validate=True, strict=True
+        )
+
+        operator = parsed_expression.operator.strip().upper()
+        if operator not in ["AND", "OR"]:
+            return evaluation_result
+
+        licenses = []
+        for arg in parsed_expression.args:
+            if isinstance(arg, LicenseSymbol):
+                my_license = get_license_by_spdx_id(arg.key)
+                if not my_license:
+                    return evaluation_result
+                licenses.append(my_license)
+            else:
+                return evaluation_result
+
+        evaluation_result_set = set()
+        for my_license in licenses:
+            evaluation_result_set.add(
+                evaluation_results.get(f"spdx_{my_license.spdx_id}")
+            )
+
+        if operator == "AND":
+            evaluation_result = _evaluate_and_expression(evaluation_result_set)
+
+        if operator == "OR":
+            evaluation_result = _evaluate_or_expression(evaluation_result_set)
+
+    except Exception:
+        pass
+
+    return evaluation_result
+
+
+def _evaluate_and_expression(evaluation_result_set: set) -> str:
+    evaluation_result_set.discard(License_Policy_Evaluation_Result.RESULT_IGNORED)
+    if not evaluation_result_set:
+        return License_Policy_Evaluation_Result.RESULT_UNKNOWN
+
+    if License_Policy_Evaluation_Result.RESULT_FORBIDDEN in evaluation_result_set:
+        return License_Policy_Evaluation_Result.RESULT_FORBIDDEN
+    if License_Policy_Evaluation_Result.RESULT_UNKNOWN in evaluation_result_set:
+        return License_Policy_Evaluation_Result.RESULT_UNKNOWN
+    if License_Policy_Evaluation_Result.RESULT_REVIEW_REQUIRED in evaluation_result_set:
+        return License_Policy_Evaluation_Result.RESULT_REVIEW_REQUIRED
+
+    return License_Policy_Evaluation_Result.RESULT_ALLOWED
+
+
+def _evaluate_or_expression(evaluation_result_set: set) -> str:
+    evaluation_result_set.discard(License_Policy_Evaluation_Result.RESULT_IGNORED)
+    if not evaluation_result_set:
+        return License_Policy_Evaluation_Result.RESULT_UNKNOWN
+
+    if License_Policy_Evaluation_Result.RESULT_ALLOWED in evaluation_result_set:
+        return License_Policy_Evaluation_Result.RESULT_ALLOWED
+    if License_Policy_Evaluation_Result.RESULT_UNKNOWN in evaluation_result_set:
+        return License_Policy_Evaluation_Result.RESULT_UNKNOWN
+    if License_Policy_Evaluation_Result.RESULT_REVIEW_REQUIRED in evaluation_result_set:
+        return License_Policy_Evaluation_Result.RESULT_REVIEW_REQUIRED
+
+    return License_Policy_Evaluation_Result.RESULT_FORBIDDEN

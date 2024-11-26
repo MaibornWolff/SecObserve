@@ -31,12 +31,14 @@ const LicensePolicyItemAdd = ({ id }: LicensePolicyItemAddProps) => {
 
     const [license_group, setLicenseGroup] = useState();
     const [license, setLicense] = useState();
+    const [license_expression, setLicenseExpression] = useState();
     const [unknown_license, setUnknownLicense] = useState();
     const [evaluation_result, setEvaluationResult] = useState();
 
     const resetState = () => {
         setLicenseGroup(undefined);
         setLicense(undefined);
+        setLicenseExpression(undefined);
         setUnknownLicense(undefined);
         setEvaluationResult(undefined);
     };
@@ -75,6 +77,7 @@ const LicensePolicyItemAdd = ({ id }: LicensePolicyItemAddProps) => {
             const data = {
                 license_group: license_group,
                 license: license,
+                license_expression: license_expression,
                 unknown_license: unknown_license,
                 evaluation_result: evaluation_result,
             };
@@ -82,6 +85,9 @@ const LicensePolicyItemAdd = ({ id }: LicensePolicyItemAddProps) => {
         };
 
         const add_item = (data: any, close_dialog: boolean) => {
+            if (!data.license_expression) {
+                data.license_expression = "";
+            }
             if (!data.unknown_license) {
                 data.unknown_license = "";
             }
@@ -152,6 +158,12 @@ const LicensePolicyItemAdd = ({ id }: LicensePolicyItemAddProps) => {
                             >
                                 <AutocompleteInputExtraWide optionText="spdx_id_name" onChange={(e) => setLicense(e)} />
                             </ReferenceInput>
+                            <TextInputExtraWide
+                                source="license_expression"
+                                label="License expression"
+                                validate={validate_255}
+                                onChange={(e) => setLicenseExpression(e.target.value)}
+                            />
                             <TextInputExtraWide
                                 source="unknown_license"
                                 label="Unknown license"

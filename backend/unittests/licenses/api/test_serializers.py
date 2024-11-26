@@ -148,7 +148,7 @@ class TestLicensePolicyItemSerializer(BaseTestCase):
             license_policy_item_serializer.validate(attrs)
 
         self.assertEqual(
-            "[ErrorDetail(string='One of license group, license or unknown license must be set', code='invalid')]",
+            "[ErrorDetail(string='One of license group, license, license expression or unknown license must be set', code='invalid')]",
             str(e.exception),
         )
 
@@ -157,6 +157,7 @@ class TestLicensePolicyItemSerializer(BaseTestCase):
         attrs = {
             "license_group": License_Group.objects.get(id=1),
             "license": License.objects.get(id=1),
+            "license_expression": "license_expression",
             "unknown_license": "unknown_license",
         }
 
@@ -164,6 +165,6 @@ class TestLicensePolicyItemSerializer(BaseTestCase):
             license_policy_item_serializer.validate(attrs)
 
         self.assertEqual(
-            "[ErrorDetail(string='Only one of license group, license or unknown license must be set', code='invalid')]",
+            "[ErrorDetail(string='Only one of license group, license, license expression or unknown license must be set', code='invalid')]",
             str(e.exception),
         )

@@ -114,6 +114,7 @@ class LicenseComponentOverviewElement:
     branch_name: Optional[str]
     spdx_id: Optional[str]
     license_name: Optional[str]
+    license_expression: Optional[str]
     unknown_license: Optional[str]
     evaluation_result: str
     num_components: int
@@ -157,6 +158,7 @@ class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
         product = _get_product(product_id, Permissions.Product_View)
         branch = self._get_branch(product, request.query_params.get("branch"))
         spdx_id = request.query_params.get("spdx_id")
+        license_expression = request.query_params.get("license_expression")
         unknown_license = request.query_params.get("unknown_license")
         evaluation_result = request.query_params.get("evaluation_result")
         purl_type = request.query_params.get("purl_type")
@@ -165,6 +167,10 @@ class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
         if spdx_id:
             license_overview_elements = license_overview_elements.filter(
                 license__spdx_id__icontains=spdx_id
+            )
+        if license_expression:
+            license_overview_elements = license_overview_elements.filter(
+                license_expression__icontains=license_expression
             )
         if unknown_license:
             license_overview_elements = license_overview_elements.filter(
@@ -185,6 +191,7 @@ class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
                 branch_name=element["branch__name"],
                 spdx_id=element["license__spdx_id"],
                 license_name=element["license__name"],
+                license_expression=element["license_expression"],
                 unknown_license=element["unknown_license"],
                 evaluation_result=element["evaluation_result"],
                 num_components=element["id__count"],

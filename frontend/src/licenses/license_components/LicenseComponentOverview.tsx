@@ -33,6 +33,7 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
     const [loading, setLoading] = useState(false);
     const [filterBranch, setFilterBranch] = useState(undefined);
     const [filterSPDXId, setFilterSPDXId] = useState(undefined);
+    const [filterLicenseExpression, setFilterLicenseExpression] = useState(undefined);
     const [filterUnknownLicense, setFilterUnknownLicense] = useState(undefined);
     const [filterEvaluationResult, setFilterEvaluationResult] = useState(undefined);
     const [filterPURLType, setFilterPURLType] = useState(undefined);
@@ -60,6 +61,13 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
         }
         filters.push(
             <TextInput source="spdx_id" label="SPDX Id" onChange={(e) => setFilterSPDXId(e.target.value)} alwaysOn />
+        );
+        filters.push(
+            <TextInput
+                source="license_expression"
+                onChange={(e) => setFilterLicenseExpression(e.target.value)}
+                alwaysOn
+            />
         );
         filters.push(
             <TextInput
@@ -97,6 +105,7 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
                 const filters = JSON.parse(storedFilters);
                 setFilterBranch(filters.branch);
                 setFilterSPDXId(filters.spdx_id);
+                setFilterLicenseExpression(filters.license_expression);
                 setFilterUnknownLicense(filters.unknown_license);
                 setFilterEvaluationResult(filters.evaluation_result);
                 setFilterPURLType(filters.purl_type);
@@ -107,12 +116,21 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
             localStorage.removeItem("RaStore.license_components.datagrid.expanded");
             get_data();
         }
-    }, [filterBranch, filterSPDXId, filterUnknownLicense, filterEvaluationResult, filterPURLType]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [
+        // eslint-disable-line react-hooks/exhaustive-deps
+        filterBranch,
+        filterSPDXId,
+        filterLicenseExpression,
+        filterUnknownLicense,
+        filterEvaluationResult,
+        filterPURLType,
+    ]);
 
     function storeFilters() {
         const filterStorage = {
             branch: filterBranch,
             spdx_id: filterSPDXId,
+            license_expression: filterLicenseExpression,
             unknown_license: filterUnknownLicense,
             evaluation_result: filterEvaluationResult,
             purl_type: filterPURLType,
@@ -130,6 +148,9 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
         }
         if (filterSPDXId) {
             url += "&spdx_id=" + encodeURIComponent(filterSPDXId);
+        }
+        if (filterLicenseExpression) {
+            url += "&license_expression=" + encodeURIComponent(filterLicenseExpression);
         }
         if (filterUnknownLicense) {
             url += "&unknown_license=" + encodeURIComponent(filterUnknownLicense);
@@ -170,6 +191,7 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
         filter: {
             branch: filterBranch,
             spdx_id: filterSPDXId,
+            license_expression: filterLicenseExpression,
             unknown_license: filterUnknownLicense,
             evaluation_result: filterEvaluationResult,
             purl_type: filterPURLType,
@@ -204,6 +226,7 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
                         )}
                         <TextField source="spdx_id" label="SPDX Id" sortable={false} />
                         <TextField source="license_name" label="License name" sortable={false} />
+                        <TextField source="license_expression" label="Expression" sortable={false} />
                         <TextField source="unknown_license" label="Unknown license" sortable={false} />
                         <EvaluationResultField source="evaluation_result" label="Evaluation result" sortable={false} />
                         <NumberField source="num_components" label="# Components" sortable={false} />

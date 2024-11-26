@@ -106,7 +106,11 @@ The [Linux Foundation](https://www.linuxfoundation.org/) gathers a list of commo
 
 #### License Component
 
-A `License Component` is a library or package used in a product that is licensed under a specific license and has an evaluation of the license according to a license policy. 
+A `License Component` is a library or package used in a product that is licensed under a specific license and has an evaluation of the license according to a license policy. Depending on the license information in the scan report, there are 3 different types of licenses:
+
+* a license with a known SPDX identifier
+* a license expression, if the license expression in the scan report is valid [according to the SPDX specification](https://spdx.github.io/spdx-spec/v3.0.1/annexes/spdx-license-expressions/) and consists only of known SPDX identifiers
+* an unknown license string in all other cases
 
 #### License Component Evidence
 

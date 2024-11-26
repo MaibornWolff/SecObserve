@@ -61,6 +61,7 @@ const LicenseComponentEmbeddedList = ({ product, expand, purl_type }: LicenseCom
             );
         }
         filters.push(<TextInput source="license_spdx_id" label="SPDX Id" alwaysOn />);
+        filters.push(<TextInput source="license_expression" alwaysOn />);
         filters.push(<TextInput source="unknown_license" alwaysOn />);
         filters.push(
             <AutocompleteInputMedium
@@ -93,6 +94,9 @@ const LicenseComponentEmbeddedList = ({ product, expand, purl_type }: LicenseCom
         }
         if (record && record.spdx_id) {
             filter = { ...filter, license_spdx_id_exact: record.spdx_id };
+        }
+        if (record && record.license_expression) {
+            filter = { ...filter, license_expression_exact: record.license_expression };
         }
         if (record && record.unknown_license) {
             filter = { ...filter, unknown_license_exact: record.unknown_license };
@@ -142,6 +146,7 @@ const LicenseComponentEmbeddedList = ({ product, expand, purl_type }: LicenseCom
                             <TextField source="branch_name" label="Branch / Version" />
                         )}
                         {!expand && <TextField source="license_data.spdx_id" label="SPDX Id" />}
+                        {!expand && <TextField source="license_expression" label="Expression" />}
                         {!expand && <TextField source="unknown_license" label="Unknown license" />}
                         {!expand && (
                             <EvaluationResultField

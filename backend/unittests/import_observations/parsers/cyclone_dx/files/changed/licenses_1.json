@@ -394,7 +394,7 @@
             ],
             "licenses": [
                 {
-                    "expression": "Apache-2.0 OR BSD-3-Clause"
+                    "expression": "LGPL-3.0-or-later OR GPL-3.0-or-later"
                 }
             ],
             "purl": "pkg:pypi/cryptography@43.0.1",
@@ -438,10 +438,7 @@
             ],
             "licenses": [
                 {
-                    "license": {
-                        "id": "LGPL-3.0-or-later",
-                        "url": "https://opensource.org/licenses/LGPL-3.0-or-later"
-                    }
+                    "expression": "LGPL-3.0-or-later AND BSD-3-Clause"
                 }
             ],
             "purl": "pkg:pypi/cvss@3.2",
@@ -481,10 +478,7 @@
             ],
             "licenses": [
                 {
-                    "license": {
-                        "id": "Apache-2.0",
-                        "url": "https://opensource.org/licenses/Apache-2.0"
-                    }
+                    "expression": "Apache-2.0 AND (BSD-3-Clause OR MIT)"
                 }
             ],
             "purl": "pkg:pypi/defusedcsv@2.0.0",

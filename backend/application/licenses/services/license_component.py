@@ -3,6 +3,7 @@ from typing import Optional, Tuple
 
 from django.db.models.query import QuerySet
 from django.utils import timezone
+from license_expression import get_spdx_licensing
 from packageurl import PackageURL
 from rest_framework.exceptions import ValidationError
 
@@ -83,6 +84,7 @@ def process_license_components(
             existing_component.cpe = unsaved_component.cpe
             existing_component.dependencies = unsaved_component.dependencies
             existing_component.license = unsaved_component.license
+            existing_component.license_expression = unsaved_component.license_expression
             existing_component.unknown_license = unsaved_component.unknown_license
             apply_license_policy_to_component(
                 existing_component,
@@ -170,11 +172,7 @@ def _prepare_component(component: License_Component) -> None:
     if component.purl_type is None:
         component.purl_type = ""
 
-    if component.unsaved_license:
-        component.license = get_license_by_spdx_id(component.unsaved_license)
-        component.unknown_license = ""
-        if not component.license:
-            component.unknown_license = component.unsaved_license
+    _prepare_license(component)
 
     component.identity_hash = get_identity_hash(component)
 
@@ -196,6 +194,26 @@ def _prepare_name_version(component: License_Component) -> None:
         elif len(component_parts) == 1:
             component.name = component.name_version
             component.version = ""
+
+
+def _prepare_license(component: License_Component) -> None:
+    component.license_expression = ""
+    component.unknown_license = ""
+
+    if component.unsaved_license:
+        component.license = get_license_by_spdx_id(component.unsaved_license)
+        if not component.license:
+            licensing = get_spdx_licensing()
+            try:
+                expression_info = licensing.validate(
+                    component.unsaved_license, strict=True
+                )
+                if not expression_info.errors:
+                    component.license_expression = expression_info.normalized_expression
+                else:
+                    component.unknown_license = component.unsaved_license
+            except Exception:
+                component.unknown_license = component.unsaved_license
 
 
 def license_components_bulk_delete(product: Product, component_ids: list[int]) -> None:

@@ -80,9 +80,15 @@ def get_license_component_licenses(
             "branch__name",
             "license__spdx_id",
             "license__name",
+            "license_expression",
             "unknown_license",
             "evaluation_result",
         )
         .annotate(Count("id"))
-        .order_by("numerical_evaluation_result", "license__spdx_id", "unknown_license")
+        .order_by(
+            "numerical_evaluation_result",
+            "license__spdx_id",
+            "license_expression",
+            "unknown_license",
+        )
     )
