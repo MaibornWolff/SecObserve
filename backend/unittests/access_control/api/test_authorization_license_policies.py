@@ -1,3 +1,4 @@
+from application.core.models import Product
 from application.licenses.models import License_Policy
 from unittests.access_control.api.test_authorization import (
     APITest,
@@ -255,6 +256,59 @@ class TestAuthorizationLicensePolicies(TestAuthorizationBase):
                 403,
                 None,
                 no_second_user=True,
+            )
+        )
+
+        product_1 = Product.objects.get(pk=1)
+        license_policy_1000 = License_Policy.objects.get(pk=1000)
+        product_1.license_policy = license_policy_1000
+        product_1.save()
+
+        self._test_api(
+            APITest(
+                "db_admin",
+                "post",
+                "/api/license_policies/apply_product/?product=1",
+                None,
+                204,
+                None,
+                no_second_user=False,
+            )
+        )
+
+        self._test_api(
+            APITest(
+                "db_internal_write",
+                "post",
+                "/api/license_policies/apply_product/?product=1",
+                None,
+                204,
+                None,
+                no_second_user=False,
+            )
+        )
+
+        self._test_api(
+            APITest(
+                "db_internal_read",
+                "post",
+                "/api/license_policies/apply_product/?product=1",
+                None,
+                403,
+                None,
+                no_second_user=False,
+            )
+        )
+
+        self._test_api(
+            APITest(
+                "db_external",
+                "post",
+                "/api/license_policies/apply_product/?product=1",
+                None,
+                403,
+                None,
+                no_second_user=False,
             )
         )
 
