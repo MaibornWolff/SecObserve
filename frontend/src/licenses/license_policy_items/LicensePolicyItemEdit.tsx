@@ -26,12 +26,16 @@ const LicensePolicyItemEdit = ({ license_policy_id, license_policy_item_id }: Li
     };
 
     const item_update = async (data: any) => {
+        if (!data.license_expression) {
+            data.license_expression = "";
+        }
         if (!data.unknown_license) {
             data.unknown_license = "";
         }
         const patch = {
             license_group: data.license_group,
             license: data.license,
+            license_expression: data.license_expression,
             unknown_license: data.unknown_license,
             evaluation_result: data.evaluation_result,
         };
@@ -115,6 +119,11 @@ const LicensePolicyItemEdit = ({ license_policy_id, license_policy_item_id }: Li
                         >
                             <AutocompleteInputExtraWide optionText="spdx_id_name" />
                         </ReferenceInput>
+                        <TextInputExtraWide
+                            source="license_expression"
+                            label="License expression"
+                            validate={validate_255}
+                        />
                         <TextInputExtraWide source="unknown_license" label="Unknown license" validate={validate_255} />
                         <AutocompleteInputMedium
                             source="evaluation_result"

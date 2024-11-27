@@ -68,12 +68,17 @@ export const LicenseComponentComponent = () => {
                                     </Labeled>
                                 </Stack>
                             )}
+                            {component.license_expression && (
+                                <Labeled label="License expression">
+                                    <TextField source="license_expression" className={classes.fontBigBold} />
+                                </Labeled>
+                            )}
                             {component.unknown_license && (
                                 <Labeled label="Unknown license">
                                     <TextField source="unknown_license" className={classes.fontBigBold} />
                                 </Labeled>
                             )}
-                            {!component.license && !component.unknown_license && (
+                            {!component.license && !component.license_expression && !component.unknown_license && (
                                 <Labeled label="License">
                                     <Typography variant="body1" className={classes.fontBigBold}>
                                         No license
