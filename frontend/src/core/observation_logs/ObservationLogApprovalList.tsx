@@ -56,11 +56,10 @@ function listFilters(product_is_set: boolean) {
         </ReferenceInput>,
         <AutocompleteInput source="severity" label="Severity" choices={OBSERVATION_SEVERITY_CHOICES} alwaysOn />,
         <AutocompleteInput source="status" label="Status" choices={OBSERVATION_STATUS_CHOICES} alwaysOn />,
-        <TextInput source="origin_component_name_version" label="Component" alwaysOn />,
+        <TextInput source="origin_component_name_version" label="Component" alwaysOn />
     );
     return filters;
 }
-
 
 type ObservationLogApprovalListProps = {
     product: any;
@@ -68,7 +67,7 @@ type ObservationLogApprovalListProps = {
 
 const ObservationLogApprovalList = ({ product }: ObservationLogApprovalListProps) => {
     const listContext = useListController({
-        filter: { product: (product ? Number(product.id) : null), assessment_status: ASSESSMENT_STATUS_NEEDS_APPROVAL },
+        filter: { product: product ? Number(product.id) : null, assessment_status: ASSESSMENT_STATUS_NEEDS_APPROVAL },
         perPage: 25,
         resource: "observation_logs",
         sort: { field: "created", order: "ASC" },
@@ -101,7 +100,7 @@ const ObservationLogApprovalList = ({ product }: ObservationLogApprovalListProps
             <ListHeader icon={ChecklistIcon} title="Reviews" />
             <ListContextProvider value={listContext}>
                 <div style={{ width: "100%" }}>
-                    <FilterForm filters={listFilters(typeof product !== 'undefined')} />
+                    <FilterForm filters={listFilters(typeof product !== "undefined")} />
                     <Datagrid
                         size={getSettingListSize()}
                         sx={{ width: "100%" }}
@@ -109,15 +108,9 @@ const ObservationLogApprovalList = ({ product }: ObservationLogApprovalListProps
                         rowClick={ShowObservationLogs}
                         resource="observation_logs"
                     >
-                        {!product && (
-                            <TextField source="product_name" label="Product" />
-                        )}
-                        {!product && (
-                            <TextField source="branch_name" label="Branch / Version" />
-                        )}
-                        {product && (
-                            <TextField source="origin_component_name_version" label="Component" />
-                        )}
+                        {!product && <TextField source="product_name" label="Product" />}
+                        {!product && <TextField source="branch_name" label="Branch / Version" />}
+                        {product && <TextField source="origin_component_name_version" label="Component" />}
                         <ReferenceField
                             source="observation"
                             reference="observations"
