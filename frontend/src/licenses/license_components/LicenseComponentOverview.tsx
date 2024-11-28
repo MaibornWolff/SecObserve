@@ -81,7 +81,9 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
     const sort = () => {
         const storedListContext = localStorage.getItem("RaStore.license_components.overview");
         const listContextObject = storedListContext ? JSON.parse(storedListContext) : {};
-        return listContextObject.sort ? {field: listContextObject.sort, order: listContextObject.order }  : { field: "evaluation_result", order: "ASC" };
+        return listContextObject.sort
+            ? { field: listContextObject.sort, order: listContextObject.order }
+            : { field: "evaluation_result", order: "ASC" };
     };
     const listContext = useList({
         data,
@@ -99,14 +101,14 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
 
     function storeListContext() {
         // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
-        const filterStorage: { [key: string]: any } = {}
-            const filter = {
+        const filterStorage: { [key: string]: any } = {};
+        const filter = {
             branch: listContext.filterValues.branch,
             license_name: listContext.filterValues.license_name,
             evaluation_result: listContext.filterValues.evaluation_result,
             purl_type: listContext.filterValues.purl_type,
-            };
-            filterStorage["filter"] = filter;
+        };
+        filterStorage["filter"] = filter;
         if (listContext.sort.field) {
             filterStorage["sort"] = listContext.sort.field;
             filterStorage["order"] = listContext.sort.order;
@@ -138,7 +140,7 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
         if (listContext.sort.field) {
             url += "&ordering=" + (listContext.sort.order === "ASC" ? "" : "-") + listContext.sort.field;
         }
-        
+
         httpClient(url, {
             method: "GET",
         })
@@ -184,9 +186,7 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
                         }
                         expandSingle
                     >
-                        {product && product.has_branches && (
-                            <TextField source="branch_name" label="Branch / Version" />
-                        )}
+                        {product && product.has_branches && <TextField source="branch_name" label="Branch / Version" />}
                         <FunctionField
                             label="License"
                             sortBy="license_name"

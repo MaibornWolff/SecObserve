@@ -79,7 +79,7 @@ def get_license_component_licenses(
     if branch:
         license_components = license_components.filter(branch=branch)
 
-    license_components = license_components.values(
+    license_components_overview = license_components.values(
         "branch__name",
         "license__spdx_id",
         "license__name",
@@ -89,8 +89,8 @@ def get_license_component_licenses(
     ).annotate(Count("id"))
 
     if order_by_1:
-        return license_components.order_by(order_by_1, order_by2, order_by_3)
+        return license_components_overview.order_by(order_by_1, order_by2, order_by_3)
 
-    return license_components.order_by(
+    return license_components_overview.order_by(
         "numerical_evaluation_result", "license_name", "branch__name"
     )

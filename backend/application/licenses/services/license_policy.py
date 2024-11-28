@@ -200,7 +200,9 @@ def _evaluate_license_expression(
                     return evaluation_result
                 licenses.append(spdx_license)
             else:
-                return evaluation_results.get(f"expression_{component.license_expression}")
+                return evaluation_results.get(
+                    f"expression_{component.license_expression}"
+                )
 
         evaluation_result_set = set()
         for spdx_license in licenses:
