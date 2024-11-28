@@ -30,7 +30,7 @@ drf-spectacular = "0.27.2" # https://github.com/tfranzel/drf-spectacular
 drf-spectacular-sidecar = "2024.11.1"  # https://github.com/tfranzel/drf-spectacular-sidecar
 # Token authentication
 # ------------------------------------------------------------------------------
-PyJWT = "2.10.0"  # https://github.com/jpadilla/pyjwt
+PyJWT = "2.10.1"  # https://github.com/jpadilla/pyjwt
 # HTTP requests
 # ------------------------------------------------------------------------------
 requests = "2.32.3"  # https://github.com/psf/requests
