@@ -542,7 +542,7 @@ class TestImportObservations(BaseTestCase):
             )
             self.assertEqual(license_components[1].purl_type, "pypi")
             self.assertEqual(license_components[1].cpe, "")
-            dependencies = """SecObserve:1.22.4 --> argon2-cffi:23.1.0
+            dependencies = """SecObserve:1.22.5 --> argon2-cffi:23.1.0
 argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             self.assertEqual(license_components[1].dependencies, dependencies)
             self.assertEqual(
