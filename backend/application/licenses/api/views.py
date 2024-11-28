@@ -1,6 +1,7 @@
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, Tuple
 
+from django.db.models.query import QuerySet
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework.decorators import action
@@ -112,10 +113,8 @@ from application.licenses.services.license_policy import (
 @dataclass
 class LicenseComponentOverviewElement:
     branch_name: Optional[str]
-    spdx_id: Optional[str]
-    license_name: Optional[str]
-    license_expression: Optional[str]
-    unknown_license: Optional[str]
+    license_name: str
+    type: str
     evaluation_result: str
     num_components: int
 
@@ -156,43 +155,36 @@ class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
         if not product_id:
             raise ValidationError("No product id provided")
         product = _get_product(product_id, Permissions.Product_View)
-        branch = self._get_branch(product, request.query_params.get("branch"))
-        spdx_id = request.query_params.get("spdx_id")
-        license_expression = request.query_params.get("license_expression")
-        unknown_license = request.query_params.get("unknown_license")
-        evaluation_result = request.query_params.get("evaluation_result")
-        purl_type = request.query_params.get("purl_type")
+        filter_branch = self._get_branch(product, request.query_params.get("branch"))
+        order_by_1, order_by_2, order_by_3 = self._get_ordering(
+            request.query_params.get("ordering")
+        )
 
-        license_overview_elements = get_license_component_licenses(product, branch)
-        if spdx_id:
-            license_overview_elements = license_overview_elements.filter(
-                license__spdx_id__icontains=spdx_id
-            )
-        if license_expression:
-            license_overview_elements = license_overview_elements.filter(
-                license_expression__icontains=license_expression
-            )
-        if unknown_license:
-            license_overview_elements = license_overview_elements.filter(
-                unknown_license__icontains=unknown_license
-            )
-        if evaluation_result:
-            license_overview_elements = license_overview_elements.filter(
-                evaluation_result=evaluation_result
-            )
-        if purl_type:
-            license_overview_elements = license_overview_elements.filter(
-                purl_type=purl_type
-            )
+        license_overview_elements = get_license_component_licenses(
+            product, filter_branch, order_by_1, order_by_2, order_by_3
+        )
+        license_overview_elements = self._filter_data(
+            request, license_overview_elements
+        )
 
         results = []
         for element in license_overview_elements:
+            if element["license__spdx_id"]:
+                license_name = element["license__spdx_id"]
+                element_type = "SPDX"
+            elif element["license_expression"]:
+                license_name = element["license_expression"]
+                element_type = "Expression"
+            elif element["unknown_license"]:
+                license_name = element["unknown_license"]
+                element_type = "Unknown"
+            else:
+                license_name = "No license information"
+                element_type = ""
             license_component_overview_element = LicenseComponentOverviewElement(
                 branch_name=element["branch__name"],
-                spdx_id=element["license__spdx_id"],
-                license_name=element["license__name"],
-                license_expression=element["license_expression"],
-                unknown_license=element["unknown_license"],
+                license_name=license_name,
+                type=element_type,
                 evaluation_result=element["evaluation_result"],
                 num_components=element["id__count"],
             )
@@ -209,6 +201,43 @@ class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
             status=HTTP_200_OK,
             data=response_serializer.data,
         )
+
+    def _get_ordering(self, ordering: str) -> Tuple[str, str, str]:
+        if ordering and ordering == "-branch_name":
+            return "-branch__name", "-license_name", "-numerical_evaluation_result"
+        if ordering and ordering == "branch_name":
+            return "branch__name", "license_name", "numerical_evaluation_result"
+
+        if ordering and ordering == "-license_name":
+            return "-license_name", "-numerical_evaluation_result", "-branch__name"
+        if ordering and ordering == "license_name":
+            return "license_name", "numerical_evaluation_result", "branch__name"
+
+        if ordering and ordering == "-evaluation_result":
+            return "-numerical_evaluation_result", "-license_name", "-branch__name"
+
+        return "numerical_evaluation_result", "license_name", "branch__name"
+
+    def _filter_data(self, request, license_overview_elements: QuerySet) -> QuerySet:
+        filter_license_name = request.query_params.get("license_name")
+        if filter_license_name:
+            license_overview_elements = license_overview_elements.filter(
+                license_name__icontains=filter_license_name
+            )
+
+        filter_evaluation_result = request.query_params.get("evaluation_result")
+        if filter_evaluation_result:
+            license_overview_elements = license_overview_elements.filter(
+                evaluation_result=filter_evaluation_result
+            )
+
+        filter_purl_type = request.query_params.get("purl_type")
+        if filter_purl_type:
+            license_overview_elements = license_overview_elements.filter(
+                purl_type=filter_purl_type
+            )
+
+        return license_overview_elements
 
     def _get_branch(self, product: Product, pk: int) -> Optional[Branch]:
         if not pk:

@@ -180,7 +180,7 @@ def _get_license_policy(product: Product) -> Optional[License_Policy]:
 def _evaluate_license_expression(
     component: License_Component, evaluation_results: dict
 ) -> Optional[str]:
-    evaluation_result = None
+    evaluation_result = License_Policy_Evaluation_Result.RESULT_UNKNOWN
 
     try:
         licensing = get_spdx_licensing()
@@ -195,18 +195,21 @@ def _evaluate_license_expression(
         licenses = []
         for arg in parsed_expression.args:
             if isinstance(arg, LicenseSymbol):
-                my_license = get_license_by_spdx_id(arg.key)
-                if not my_license:
+                spdx_license = get_license_by_spdx_id(arg.key)
+                if not spdx_license:
                     return evaluation_result
-                licenses.append(my_license)
+                licenses.append(spdx_license)
             else:
-                return evaluation_result
+                return evaluation_results.get(
+                    f"expression_{component.license_expression}"
+                )
 
         evaluation_result_set = set()
-        for my_license in licenses:
-            evaluation_result_set.add(
-                evaluation_results.get(f"spdx_{my_license.spdx_id}")
-            )
+        for spdx_license in licenses:
+            if evaluation_results.get(f"spdx_{spdx_license.spdx_id}"):
+                evaluation_result_set.add(
+                    evaluation_results.get(f"spdx_{spdx_license.spdx_id}")
+                )
 
         if operator == "AND":
             evaluation_result = _evaluate_and_expression(evaluation_result_set)

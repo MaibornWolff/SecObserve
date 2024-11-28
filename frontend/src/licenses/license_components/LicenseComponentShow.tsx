@@ -75,14 +75,20 @@ export const LicenseComponentComponent = () => {
                             )}
                             {component.unknown_license && (
                                 <Labeled label="Unknown license">
-                                    <TextField source="unknown_license" className={classes.fontBigBold} />
+                                    <TextField
+                                        source="unknown_license"
+                                        sx={{ fontStyle: "italic" }}
+                                        className={classes.fontBigBold}
+                                    />
                                 </Labeled>
                             )}
                             {!component.license && !component.license_expression && !component.unknown_license && (
                                 <Labeled label="License">
-                                    <Typography variant="body1" className={classes.fontBigBold}>
-                                        No license
-                                    </Typography>
+                                    <TextField
+                                        source="license_name"
+                                        sx={{ fontStyle: "italic" }}
+                                        className={classes.fontBigBold}
+                                    />
                                 </Labeled>
                             )}
                             <Labeled label="Evaluation result">
