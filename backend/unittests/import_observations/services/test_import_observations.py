@@ -542,7 +542,7 @@ class TestImportObservations(BaseTestCase):
             )
             self.assertEqual(license_components[1].purl_type, "pypi")
             self.assertEqual(license_components[1].cpe, "")
-            dependencies = """SecObserve:1.22.4 --> argon2-cffi:23.1.0
+            dependencies = """SecObserve:1.22.5 --> argon2-cffi:23.1.0
 argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             self.assertEqual(license_components[1].dependencies, dependencies)
             self.assertEqual(
@@ -581,6 +581,16 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
         product = Product.objects.get(id=1)
         product.license_policy = License_Policy.objects.get(name="Standard")
         product.save()
+
+        license_policy_item = License_Policy_Item(
+            license_policy=License_Policy.objects.get(name="Standard"),
+            license_group=None,
+            license=None,
+            license_expression="(Apache-2.0 OR BSD-3-Clause) AND MIT",
+            unknown_license="",
+            evaluation_result=License_Policy_Evaluation_Result.RESULT_ALLOWED,
+        )
+        license_policy_item.save()
 
         file_upload_parameters = FileUploadParameters(
             product=product,
@@ -653,6 +663,57 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 license_components[3].numerical_evaluation_result,
                 License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
                     License_Policy_Evaluation_Result.RESULT_UNKNOWN,
+                ),
+            )
+
+            self.assertEqual(license_components[9].name_version, "cryptography:43.0.1")
+            self.assertEqual(license_components[9].license, None)
+            self.assertEqual(
+                license_components[9].license_expression,
+                "LGPL-3.0-or-later OR BSD-3-Clause",
+            )
+            self.assertEqual(
+                license_components[9].evaluation_result,
+                License_Policy_Evaluation_Result.RESULT_ALLOWED,
+            )
+            self.assertEqual(
+                license_components[9].numerical_evaluation_result,
+                License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
+                    License_Policy_Evaluation_Result.RESULT_ALLOWED,
+                ),
+            )
+
+            self.assertEqual(license_components[10].name_version, "cvss:3.2")
+            self.assertEqual(license_components[10].license, None)
+            self.assertEqual(
+                license_components[10].license_expression,
+                "GPL-3.0-or-later AND BSD-3-Clause",
+            )
+            self.assertEqual(
+                license_components[10].evaluation_result,
+                License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
+            )
+            self.assertEqual(
+                license_components[10].numerical_evaluation_result,
+                License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
+                    License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
+                ),
+            )
+
+            self.assertEqual(license_components[11].name_version, "defusedcsv:2.0.0")
+            self.assertEqual(license_components[11].license, None)
+            self.assertEqual(
+                license_components[11].license_expression,
+                "(Apache-2.0 OR BSD-3-Clause) AND MIT",
+            )
+            self.assertEqual(
+                license_components[11].evaluation_result,
+                License_Policy_Evaluation_Result.RESULT_ALLOWED,
+            )
+            self.assertEqual(
+                license_components[11].numerical_evaluation_result,
+                License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
+                    License_Policy_Evaluation_Result.RESULT_ALLOWED,
                 ),
             )
 
@@ -750,6 +811,57 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 license_components[2].numerical_evaluation_result,
                 License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
                     License_Policy_Evaluation_Result.RESULT_REVIEW_REQUIRED,
+                ),
+            )
+
+            self.assertEqual(license_components[7].name_version, "cryptography:43.0.1")
+            self.assertEqual(license_components[7].license, None)
+            self.assertEqual(
+                license_components[7].license_expression,
+                "LGPL-3.0-or-later OR GPL-3.0-or-later",
+            )
+            self.assertEqual(
+                license_components[7].evaluation_result,
+                License_Policy_Evaluation_Result.RESULT_REVIEW_REQUIRED,
+            )
+            self.assertEqual(
+                license_components[7].numerical_evaluation_result,
+                License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
+                    License_Policy_Evaluation_Result.RESULT_REVIEW_REQUIRED,
+                ),
+            )
+
+            self.assertEqual(license_components[8].name_version, "cvss:3.2")
+            self.assertEqual(license_components[8].license, None)
+            self.assertEqual(
+                license_components[8].license_expression,
+                "LGPL-3.0-or-later AND BSD-3-Clause",
+            )
+            self.assertEqual(
+                license_components[8].evaluation_result,
+                License_Policy_Evaluation_Result.RESULT_REVIEW_REQUIRED,
+            )
+            self.assertEqual(
+                license_components[8].numerical_evaluation_result,
+                License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
+                    License_Policy_Evaluation_Result.RESULT_REVIEW_REQUIRED,
+                ),
+            )
+
+            self.assertEqual(license_components[9].name_version, "defusedcsv:2.0.0")
+            self.assertEqual(license_components[9].license, None)
+            self.assertEqual(
+                license_components[9].license_expression,
+                "Apache-2.0 AND (BSD-3-Clause OR MIT)",
+            )
+            self.assertEqual(
+                license_components[9].evaluation_result,
+                License_Policy_Evaluation_Result.RESULT_UNKNOWN,
+            )
+            self.assertEqual(
+                license_components[9].numerical_evaluation_result,
+                License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
+                    License_Policy_Evaluation_Result.RESULT_UNKNOWN,
                 ),
             )
 

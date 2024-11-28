@@ -27,44 +27,17 @@ from application.licenses.models import (
 
 class LicenseComponentFilter(FilterSet):
     name_version = CharFilter(field_name="name_version", lookup_expr="icontains")
+    license_name = CharFilter(field_name="license_name", lookup_expr="icontains")
+    license_name_exact = CharFilter(field_name="license_name")
     license_spdx_id = CharFilter(field_name="license__spdx_id", lookup_expr="icontains")
+    license_expression = CharFilter(
+        field_name="license_expression", lookup_expr="icontains"
+    )
     unknown_license = CharFilter(field_name="unknown_license", lookup_expr="icontains")
     age = ChoiceFilter(
         field_name="age", method="get_age", choices=Age_Choices.AGE_CHOICES
     )
-
-    ordering = ExtendedOrderingFilter(
-        # tuple-mapping retains order
-        fields=(
-            ("license__spdx_id", "license_data.spdx_id"),
-            ("unknown_license", "unknown_license"),
-            (
-                (
-                    "numerical_evaluation_result",
-                    "license__spdx_id",
-                    "unknown_license",
-                    "name_version",
-                ),
-                "evaluation_result",
-            ),
-            ("branch__name", "branch_name"),
-            ("name_version", "name_version"),
-            ("purl_type", "purl_type"),
-            ("last_change", "last_change"),
-        ),
-    )
-
-    class Meta:
-        model = License_Component
-        fields = [
-            "product",
-            "branch",
-            "license_spdx_id",
-            "unknown_license",
-            "evaluation_result",
-            "name_version",
-            "purl_type",
-        ]
+    branch_name = CharFilter(field_name="branch__name")
 
     def get_age(self, queryset, field_name, value):  # pylint: disable=unused-argument
         # field_name is used as a positional argument
@@ -77,6 +50,65 @@ class LicenseComponentFilter(FilterSet):
         today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
         time_threshold = today - timedelta(days=int(days))
         return queryset.filter(last_change__gte=time_threshold)
+
+    ordering = ExtendedOrderingFilter(
+        # tuple-mapping retains order
+        fields=(
+            ("license__spdx_id", "license_data.spdx_id"),
+            ("license_expression", "license_expression"),
+            ("unknown_license", "unknown_license"),
+            (
+                (
+                    "license_name",
+                    "numerical_evaluation_result",
+                    "name_version",
+                ),
+                "license_name",
+            ),
+            (
+                (
+                    "numerical_evaluation_result",
+                    "license_name",
+                    "name_version",
+                ),
+                "evaluation_result",
+            ),
+            (
+                (
+                    "branch__name",
+                    "license_name",
+                    "numerical_evaluation_result",
+                    "name_version",
+                ),
+                "branch_name",
+            ),
+            ("name_version", "name_version"),
+            (
+                (
+                    "purl_type",
+                    "numerical_evaluation_result",
+                    "license_name",
+                    "name_version",
+                ),
+                "purl_type",
+            ),
+            ("last_change", "last_change"),
+        ),
+    )
+
+    class Meta:
+        model = License_Component
+        fields = [
+            "product",
+            "branch",
+            "license_name",
+            "license_spdx_id",
+            "license_expression",
+            "unknown_license",
+            "evaluation_result",
+            "name_version",
+            "purl_type",
+        ]
 
 
 class LicenseComponentEvidenceFilter(FilterSet):
@@ -237,6 +269,9 @@ class LicensePolicyItemFilter(FilterSet):
         field_name="license_group__name", lookup_expr="icontains"
     )
     license_spdx_id = CharFilter(field_name="license__spdx_id", lookup_expr="icontains")
+    license_expression = CharFilter(
+        field_name="license_expression", lookup_expr="icontains"
+    )
     unknown_license = CharFilter(field_name="unknown_license", lookup_expr="icontains")
 
     ordering = ExtendedOrderingFilter(
@@ -244,15 +279,39 @@ class LicensePolicyItemFilter(FilterSet):
         fields=(
             ("license_policy__name", "license_policy_data.name"),
             (
-                ("license_group__name", "license__spdx_id", "unknown_license"),
+                (
+                    "license_group__name",
+                    "license__spdx_id",
+                    "license_expression",
+                    "unknown_license",
+                ),
                 "license_group_name",
             ),
             (
-                ("license__spdx_id", "license_group__name", "unknown_license"),
+                (
+                    "license__spdx_id",
+                    "license_group__name",
+                    "license_expression",
+                    "unknown_license",
+                ),
                 "license_spdx_id",
             ),
             (
-                ("unknown_license", "license_group__name", "license__spdx_id"),
+                (
+                    "license_expression",
+                    "license_group__name",
+                    "license__spdx_id",
+                    "unknown_license",
+                ),
+                "license_expression",
+            ),
+            (
+                (
+                    "unknown_license",
+                    "license_group__name",
+                    "license__spdx_id",
+                    "license_expression",
+                ),
                 "unknown_license",
             ),
             (
@@ -260,6 +319,7 @@ class LicensePolicyItemFilter(FilterSet):
                     "numerical_evaluation_result",
                     "license_group__name",
                     "license__spdx_id",
+                    "license_expression",
                     "unknown_license",
                 ),
                 "evaluation_result",
@@ -273,6 +333,7 @@ class LicensePolicyItemFilter(FilterSet):
             "license_policy",
             "license_group_name",
             "license_spdx_id",
+            "license_expression",
             "unknown_license",
             "evaluation_result",
             "license_group_name",

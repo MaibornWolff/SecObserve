@@ -2,6 +2,7 @@ import { Stack } from "@mui/material";
 import { Fragment, useEffect, useState } from "react";
 import { useTheme } from "react-admin";
 
+import { setUserInfo } from "../access_control/auth_provider/authProvider";
 import { getSettingTheme, getTheme } from "../commons/user_settings/functions";
 import ObservationDashboardList from "../core/observations/ObservationDashboardList";
 import MetricsHeader from "../metrics/MetricsHeader";
@@ -13,11 +14,16 @@ const Dashboard = () => {
     const [setting_theme, setSettingTheme] = useState("");
     const [, setTheme] = useTheme();
 
-    if (setting_theme != getSettingTheme()) {
+    const getUserInfo = async () => {
+        const user = localStorage.getItem("user");
+        if (!user) {
+            await setUserInfo();
+        }
         setSettingTheme(getSettingTheme());
-    }
+    };
 
     useEffect(() => {
+        getUserInfo();
         setTheme(getTheme());
     }, [setting_theme, setTheme]);
 

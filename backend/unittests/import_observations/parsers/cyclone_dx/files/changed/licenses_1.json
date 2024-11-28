@@ -31,11 +31,11 @@
         ],
         "component": {
             "name": "SecObserve",
-            "version": "1.22.4",
+            "version": "1.22.5",
             "description": "SecObserve is an open source vulnerability management system for software development and cloud environments.",
             "type": "application",
-            "bom-ref": "pkg:pypi/secobserve@1.22.4",
-            "purl": "pkg:pypi/secobserve@1.22.4"
+            "bom-ref": "pkg:pypi/secobserve@1.22.5",
+            "purl": "pkg:pypi/secobserve@1.22.5"
         },
         "properties": [
             {
@@ -394,7 +394,7 @@
             ],
             "licenses": [
                 {
-                    "expression": "Apache-2.0 OR BSD-3-Clause"
+                    "expression": "LGPL-3.0-or-later OR GPL-3.0-or-later"
                 }
             ],
             "purl": "pkg:pypi/cryptography@43.0.1",
@@ -438,10 +438,7 @@
             ],
             "licenses": [
                 {
-                    "license": {
-                        "id": "LGPL-3.0-or-later",
-                        "url": "https://opensource.org/licenses/LGPL-3.0-or-later"
-                    }
+                    "expression": "LGPL-3.0-or-later AND BSD-3-Clause"
                 }
             ],
             "purl": "pkg:pypi/cvss@3.2",
@@ -481,10 +478,7 @@
             ],
             "licenses": [
                 {
-                    "license": {
-                        "id": "Apache-2.0",
-                        "url": "https://opensource.org/licenses/Apache-2.0"
-                    }
+                    "expression": "Apache-2.0 AND (BSD-3-Clause OR MIT)"
                 }
             ],
             "purl": "pkg:pypi/defusedcsv@2.0.0",
@@ -2792,7 +2786,7 @@
     ],
     "dependencies": [
         {
-            "ref": "pkg:pypi/secobserve@1.22.4",
+            "ref": "pkg:pypi/secobserve@1.22.5",
             "dependsOn": [
                 "pkg:pypi/argon2-cffi@23.1.0",
                 "pkg:pypi/cvss@3.2",

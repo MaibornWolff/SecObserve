@@ -99,6 +99,7 @@ class LicenseComponentSerializer(ModelSerializer):
     evidences: Optional[NestedLicenseComponentEvidenceSerializer] = (
         NestedLicenseComponentEvidenceSerializer(many=True)
     )
+    type = SerializerMethodField()
     title = SerializerMethodField()
 
     class Meta:
@@ -136,12 +137,17 @@ class LicenseComponentSerializer(ModelSerializer):
 
         return 0
 
-    def get_title(self, obj: License_Component) -> str:
+    def get_type(self, obj: License_Component) -> str:
         if obj.license:
-            return f"{obj.license.spdx_id} ({obj.license.name})"
+            return "SPDX"
+        if obj.license_expression:
+            return "Expression"
         if obj.unknown_license:
-            return obj.unknown_license
-        return "No license"
+            return "Unknown"
+        return ""
+
+    def get_title(self, obj: License_Component) -> str:
+        return f"{obj.license_name} / {obj.name_version}"
 
 
 class LicenseComponentListSerializer(LicenseComponentSerializer):
@@ -164,6 +170,19 @@ class LicenseComponentBulkDeleteSerializer(Serializer):
     components = ListField(
         child=IntegerField(min_value=1), min_length=0, max_length=100, required=True
     )
+
+
+class LicenseComponentOverviewElementSerializer(Serializer):
+    branch_name = CharField()
+    license_name = CharField()
+    type = CharField()
+    evaluation_result = CharField()
+    num_components = IntegerField()
+
+
+class LicenseComponentOverviewSerializer(Serializer):
+    count = IntegerField()
+    results = ListField(child=LicenseComponentOverviewElementSerializer())
 
 
 class LicenseGroupSerializer(ModelSerializer):
@@ -300,6 +319,7 @@ class LicenseGroupCopySerializer(Serializer):
 class LicensePolicySerializer(ModelSerializer):
     is_manager = SerializerMethodField()
     has_products = SerializerMethodField()
+    has_product_groups = SerializerMethodField()
     has_items = SerializerMethodField()
     has_users = SerializerMethodField()
     has_authorization_groups = SerializerMethodField()
@@ -336,6 +356,9 @@ class LicensePolicySerializer(ModelSerializer):
 
     def get_has_products(self, obj: License_Policy) -> bool:
         return get_products().filter(license_policy=obj).exists()
+
+    def get_has_product_groups(self, obj: License_Policy) -> bool:
+        return get_products(is_product_group=True).filter(license_policy=obj).exists()
 
     def get_has_items(self, obj: License_Policy) -> bool:
         return obj.license_policy_items.exists()
@@ -379,15 +402,18 @@ class LicensePolicyItemSerializer(ModelSerializer):
         self.instance: License_Policy_Item
         data_license_group = attrs.get("license_group")
         data_license = attrs.get("license")
+        data_license_expression = attrs.get("license_expression", "")
         data_unknown_license = attrs.get("unknown_license", "")
 
         if self.instance:
             self.instance.license_group = data_license_group
             self.instance.license = data_license
+            self.instance.license_expression = data_license_expression
             self.instance.unknown_license = data_unknown_license
             num_fields = (
                 bool(self.instance.license_group)
                 + bool(self.instance.license)
+                + bool(self.instance.license_expression)
                 + bool(self.instance.unknown_license)
             )
             try:
@@ -395,6 +421,7 @@ class LicensePolicyItemSerializer(ModelSerializer):
                     license_policy=self.instance.license_policy,
                     license_group=self.instance.license_group,
                     license=self.instance.license,
+                    license_expression=self.instance.license_expression,
                     unknown_license=self.instance.unknown_license,
                 )
                 if item.pk != self.instance.pk:
@@ -405,6 +432,7 @@ class LicensePolicyItemSerializer(ModelSerializer):
             num_fields = (
                 bool(data_license_group)
                 + bool(data_license)
+                + bool(data_license_expression)
                 + bool(data_unknown_license)
             )
             try:
@@ -412,6 +440,7 @@ class LicensePolicyItemSerializer(ModelSerializer):
                     license_policy=attrs.get("license_policy"),
                     license_group=data_license_group,
                     license=data_license,
+                    license_expression=data_license_expression,
                     unknown_license=data_unknown_license,
                 )
                 raise ValidationError("License policy item already exists")
@@ -420,11 +449,11 @@ class LicensePolicyItemSerializer(ModelSerializer):
 
         if num_fields == 0:
             raise ValidationError(
-                "One of license group, license or unknown license must be set"
+                "One of license group, license, license expression or unknown license must be set"
             )
         if num_fields > 1:
             raise ValidationError(
-                "Only one of license group, license or unknown license must be set"
+                "Only one of license group, license, license expression or unknown license must be set"
             )
         return attrs
 

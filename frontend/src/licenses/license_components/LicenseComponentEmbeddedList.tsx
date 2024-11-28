@@ -9,7 +9,9 @@ import {
     ResourceContextProvider,
     TextField,
     TextInput,
+    WithListContext,
     useListController,
+    useRecordContext,
 } from "react-admin";
 
 import { PERMISSION_COMPONENT_LICENSE_DELETE } from "../../access_control/types";
@@ -23,45 +25,10 @@ import { AGE_CHOICES } from "../../core/types";
 import { EVALUATION_RESULT_CHOICES } from "../types";
 import LicenseComponentBulkDeleteButton from "./LicenseComponentBulkDeleteButton";
 
-const showLicenseComponent = (id: any) => {
-    return "../../../../license_components/" + id + "/show";
-};
-
-function listFilters(product: any) {
-    const filters = [];
-    if (product && product.has_branches) {
-        filters.push(
-            <ReferenceInput
-                source="branch"
-                reference="branches"
-                queryOptions={{ meta: { api_resource: "branch_names" } }}
-                sort={{ field: "name", order: "ASC" }}
-                filter={{ product: product.id }}
-                alwaysOn
-            >
-                <AutocompleteInputMedium optionText="name" label="Branch / Version" />
-            </ReferenceInput>
-        );
-    }
-    filters.push(<TextInput source="license_spdx_id" label="SPDX Id" alwaysOn />);
-    filters.push(<TextInput source="unknown_license" alwaysOn />);
-    filters.push(
-        <AutocompleteInputMedium
-            source="evaluation_result"
-            label="Evaluation result"
-            choices={EVALUATION_RESULT_CHOICES}
-            alwaysOn
-        />
-    );
-    filters.push(<TextInput source="name_version" label="Component" alwaysOn />);
-    filters.push(<AutocompleteInput source="purl_type" label="Component type" choices={PURL_TYPE_CHOICES} alwaysOn />);
-    filters.push(<AutocompleteInputMedium source="age" choices={AGE_CHOICES} alwaysOn />);
-
-    return filters;
-}
-
 type LicenseComponentEmbeddedListProps = {
     product: any;
+    expand?: boolean;
+    purl_type?: string;
 };
 
 const BulkActionButtons = (product: any) => (
@@ -72,15 +39,83 @@ const BulkActionButtons = (product: any) => (
     </Fragment>
 );
 
-const LicenseComponentEmbeddedList = ({ product }: LicenseComponentEmbeddedListProps) => {
+const licenseNameStyle = (type: string): string => {
+    if (type === "" || type === "Unknown") {
+        return "italic";
+    }
+    return "normal";
+};
+
+const LicenseComponentEmbeddedList = ({ product, expand, purl_type }: LicenseComponentEmbeddedListProps) => {
+    const showLicenseComponent = (id: any) => {
+        return "../../../../license_components/" + id + "/show";
+    };
+
+    function listFilters() {
+        const filters = [];
+        if (product && product.has_branches) {
+            filters.push(
+                <ReferenceInput
+                    source="branch"
+                    reference="branches"
+                    queryOptions={{ meta: { api_resource: "branch_names" } }}
+                    sort={{ field: "name", order: "ASC" }}
+                    filter={{ product: product.id }}
+                    alwaysOn
+                >
+                    <AutocompleteInputMedium optionText="name" label="Branch / Version" />
+                </ReferenceInput>
+            );
+        }
+        filters.push(<TextInput source="license_name" label="License" alwaysOn />);
+        filters.push(
+            <AutocompleteInputMedium
+                source="evaluation_result"
+                label="Evaluation result"
+                choices={EVALUATION_RESULT_CHOICES}
+                alwaysOn
+            />
+        );
+        filters.push(<TextInput source="name_version" label="Component" alwaysOn />);
+        filters.push(
+            <AutocompleteInput source="purl_type" label="Component type" choices={PURL_TYPE_CHOICES} alwaysOn />
+        );
+        filters.push(<AutocompleteInputMedium source="age" choices={AGE_CHOICES} alwaysOn />);
+
+        return filters;
+    }
+
+    let filter: any = { product: Number(product.id) };
+    let storeKey: any = "license_components.embedded";
+    let filterDefaultValues: any = {};
+
+    const record = useRecordContext();
+    if (expand) {
+        if (record && record.branch_name) {
+            filter = { ...filter, branch_name: record.branch_name };
+        }
+        if (record && record.license_name) {
+            filter = { ...filter, license_name_exact: record.license_name };
+        }
+        if (record && record.evaluation_result) {
+            filter = { ...filter, evaluation_result: record.evaluation_result };
+        }
+        if (purl_type) {
+            filter = { ...filter, purl_type: purl_type };
+        }
+        storeKey = false;
+    } else {
+        filterDefaultValues = { branch: product.repository_default_branch };
+    }
+
     const listContext = useListController({
-        filter: { product: Number(product.id) },
+        filter: filter,
         perPage: 25,
         resource: "license_components",
         sort: { field: "evaluation_result", order: "ASC" },
-        filterDefaultValues: { branch: product.repository_default_branch },
+        filterDefaultValues: filterDefaultValues,
         disableSyncWithLocation: true,
-        storeKey: "license_components.embedded",
+        storeKey: storeKey,
     });
 
     if (listContext.isLoading) {
@@ -91,7 +126,7 @@ const LicenseComponentEmbeddedList = ({ product }: LicenseComponentEmbeddedListP
         <ResourceContextProvider value="license_components">
             <ListContextProvider value={listContext}>
                 <div style={{ width: "100%" }}>
-                    <FilterForm filters={listFilters(product)} />
+                    {!expand && <FilterForm filters={listFilters()} />}
                     <Datagrid
                         size={getSettingListSize()}
                         rowClick={showLicenseComponent}
@@ -103,10 +138,23 @@ const LicenseComponentEmbeddedList = ({ product }: LicenseComponentEmbeddedListP
                         }
                         resource="license_components"
                     >
-                        {product && product.has_branches && <TextField source="branch_name" label="Branch / Version" />}
-                        <TextField source="license_data.spdx_id" label="SPDX Id" />
-                        <TextField source="unknown_license" label="Unknown license" />
-                        <EvaluationResultField source="evaluation_result" label="Evaluation result" />
+                        {!expand && product && product.has_branches && (
+                            <TextField source="branch_name" label="Branch / Version" />
+                        )}
+                        <FunctionField
+                            label="License"
+                            sortBy="license_name"
+                            render={(record: any) => (
+                                <span style={{ fontStyle: licenseNameStyle(record.type) }}>{record.license_name}</span>
+                            )}
+                        />
+                        {!expand && (
+                            <EvaluationResultField
+                                source="evaluation_result"
+                                label="Evaluation result"
+                                sortable={true}
+                            />
+                        )}
                         <TextField source="name_version" label="Component" />
                         <TextField source="purl_type" label="Component type" />
                         <FunctionField
@@ -115,7 +163,11 @@ const LicenseComponentEmbeddedList = ({ product }: LicenseComponentEmbeddedListP
                             render={(record) => (record ? humanReadableDate(record.last_change) : "")}
                         />
                     </Datagrid>
-                    <CustomPagination />
+                    <WithListContext
+                        render={({ total }) => (
+                            <Fragment>{((expand && total && total > 25) || !expand) && <CustomPagination />}</Fragment>
+                        )}
+                    />
                 </div>
             </ListContextProvider>
         </ResourceContextProvider>

@@ -114,6 +114,7 @@ class License_Component(Model):
     cpe = CharField(max_length=255, blank=True)
     dependencies = TextField(max_length=32768, blank=True)
 
+    license_name = CharField(max_length=255, blank=True)
     license = ForeignKey(
         License,
         related_name="license_components",
@@ -121,6 +122,7 @@ class License_Component(Model):
         blank=True,
         null=True,
     )
+    license_expression = CharField(max_length=255, blank=True)
     unknown_license = CharField(max_length=255, blank=True)
     evaluation_result = CharField(
         max_length=16,
@@ -206,6 +208,7 @@ class License_Policy_Item(Model):
         blank=True,
         null=True,
     )
+    license_expression = CharField(max_length=255, blank=True)
     unknown_license = CharField(max_length=255, blank=True)
     evaluation_result = CharField(
         max_length=16, choices=License_Policy_Evaluation_Result.RESULT_CHOICES

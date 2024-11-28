@@ -16,6 +16,10 @@ COPY ./frontend ./
 RUN sed -i 's/version_unknown/'"${VERSION}"'/g' ./src/commons/about/About.tsx && \
         npm run build
 
+# insert hash of assets to detect changes
+RUN ASSET_HASH=$(sha256sum ./build/assets/* | sha256sum | cut -d ' ' -f 1) && \
+        sed -i 's/hash_unknown/'"${ASSET_HASH}"'/g' ./build/index.html
+
 WORKDIR /app/lib/runtime-env-cra
 RUN npm ci
 

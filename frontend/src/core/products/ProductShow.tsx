@@ -43,7 +43,7 @@ import ApiConfigurationCreate from "../../import_observations/api_configurations
 import ApiConfigurationEmbeddedList from "../../import_observations/api_configurations/ApiConfigurationEmbeddedList";
 import ImportMenu from "../../import_observations/import/ImportMenu";
 import VulnerabilityCheckEmbeddedList from "../../import_observations/vulnerability_checks/VulnerabilityCheckEmbeddedList";
-import LicenseComponentEmbeddedList from "../../licenses/license_components/LicenseComponentEmbeddedList";
+import ProductShowLicenseComponents from "../../licenses/license_components/ProductShowLicenseComponents";
 import MetricsHeader from "../../metrics/MetricsHeader";
 import MetricsSeveritiesCurrent from "../../metrics/MetricsSeveritiesCurrent";
 import MetricsSeveritiesTimeline from "../../metrics/MetricsSeveritiesTimeLine";
@@ -231,7 +231,7 @@ const ProductShow = () => {
                             )}
                             {feature_license_management() && product.has_licenses && (
                                 <Tab label="Licenses" path="licenses" icon={<GradingIcon />} onClick={hideSettingsTabs}>
-                                    <LicenseComponentEmbeddedList product={product} />
+                                    <ProductShowLicenseComponents product={product} />
                                 </Tab>
                             )}
                             <Tab

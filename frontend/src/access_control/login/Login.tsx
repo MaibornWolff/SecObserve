@@ -10,7 +10,7 @@ import { Navigate, useLocation } from "react-router-dom";
 
 import { getTheme } from "../../commons/user_settings/functions";
 import { OIDCSignInButton } from "../auth_provider/OIDCSignInButton";
-import { jwt_signed_in } from "../auth_provider/authProvider";
+import { jwt_signed_in, oidc_signed_in } from "../auth_provider/authProvider";
 
 const Login = () => {
     const [loading, setLoading] = useState(false);
@@ -21,11 +21,18 @@ const Login = () => {
     const login = useLogin();
     const location = useLocation();
 
-    const isAuthenticated = jwt_signed_in() || auth.isAuthenticated;
+    const isAuthenticated = jwt_signed_in() || oidc_signed_in();
 
     useEffect(() => {
         if (window.__RUNTIME_CONFIG__.OIDC_ENABLE == "true") {
-            get_disable_login_feature();
+            const settingsStorage = localStorage.getItem("settings");
+            if (settingsStorage) {
+                const settings = JSON.parse(settingsStorage);
+                const features = settings.features || [];
+                setFeatureDisableUserLogin(features.indexOf("feature_disable_user_login") !== -1);
+            } else {
+                get_disable_login_feature();
+            }
         }
     }, []);
 
@@ -44,9 +51,10 @@ const Login = () => {
                 return response.json();
             })
             .then((data) => {
+                localStorage.setItem("settings", JSON.stringify(data));
                 const features = data.features || [];
                 const feature_disable_user_login_position = features.indexOf("feature_disable_user_login");
-                return setFeatureDisableUserLogin(feature_disable_user_login_position !== -1);
+                setFeatureDisableUserLogin(feature_disable_user_login_position !== -1);
             });
     }
 

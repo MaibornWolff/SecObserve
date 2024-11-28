@@ -165,8 +165,8 @@ export const humanReadableDate = (date: string | undefined) => {
     return rtf.format(Math.trunc(diffInDays), "day").replace(" ago", "");
 };
 
-export async function set_settings_in_local_storage() {
-    await httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/status/settings/").then((response) => {
+export function set_settings_in_local_storage() {
+    httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/status/settings/").then((response) => {
         localStorage.setItem("settings", JSON.stringify(response.json));
     });
 }

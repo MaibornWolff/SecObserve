@@ -34,13 +34,15 @@ A License Policy for the Product can be set, when editing the product settings.
 
 ![Product set license policy](../assets/images/screenshot_product_license_policy.png){ width="80%" style="display: block; margin: 0 auto" }
 
-If now License Policy is set, all licenses are evaluated as `Unkown`. If a License Policy is set, the licenses are evaluated according to the policy:
+If no License Policy is set, all licenses are evaluated as `Unkown`. If a License Policy is set, the licenses are evaluated according to the policy:
 
 * **Allowed:** There is no problem using the component with that license.
 * **Forbidden:** Using the component with that license might lead to legal problems and the component cannot be used for the Product.
 * **Review:** The license shall be reviewed and the License Policy shall be updated after the review.
 * **Unknown:** The license is not included in the License Policy.
 * **Ignored:** The component is not relevant for the license management.
+
+License expressions are evaluated by their included licenses, if the operators are either all `AND` or all `OR`. If the operators are mixed or other operators are used, the expression is evaluated as `Unknown`, if there is no explicit rule for this license expression.
 
 A good strategy is to start with an existing License Policy and when needed make a copy of it and adjust the rules to the needs of the Product.
 
@@ -64,7 +66,8 @@ The `Copy` button creates a new License Policy with the same rules, which can be
 A `License Policy` has a list of items, which are the rules of the policy. It can be 
 
 * a rule for a **License Group** or
-* a rule for a specific **License**, 
+* a rule for a specific **SPDX license**, 
+* a rule for a **license expression** or
 * a rule for an **unkown license** string, e.g. a license that is not in the SPDX list or a license expression.
 
 ![License policy item](../assets/images/screenshot_license_policy_item.png){ width="60%" style="display: block; margin: 0 auto" }
@@ -77,7 +80,7 @@ Additionally a `License Policy` has a list of user members and a list of authori
 
 ## Managing License Groups
 
-A `License Group` is a collection of licenses with similar license conditions. There is a predefined list of license groups, taken from the classification of the [Blue Oak Council](https://blueoakcouncil.org/). 
+A `License Group` is a collection of licenses with similar license conditions. There is a predefined list of license groups, taken from the classification of the [Blue Oak Council](https://blueoakcouncil.org/). Administrators can import license group from the ScanCode LicenseDB, see [License data import](../integrations/license_data.md#scancode-licensedb).
 
 As with `License Policies`, a `License Group` 
 

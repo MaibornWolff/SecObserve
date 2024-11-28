@@ -13,11 +13,18 @@ const ProductHeader = () => {
     const { data: product } = useGetOne<Product>("products", { id: id });
     const { classes } = useStyles();
 
-    function get_open_observation_label(product: Product | undefined) {
+    function get_open_observations_label(product: Product | undefined) {
         if (!product || product.repository_default_branch == null) {
             return "Open observations";
         }
         return "Open observations (" + product.repository_default_branch_name + ")";
+    }
+
+    function get_licenses_label(product: Product | undefined) {
+        if (!product || product.repository_default_branch == null) {
+            return "Licenses";
+        }
+        return "Licenses (" + product.repository_default_branch_name + ")";
     }
 
     return (
@@ -48,7 +55,7 @@ const ProductHeader = () => {
                     )}
                     <Stack spacing={8} direction="row">
                         <Labeled>
-                            <ObservationsCountField label={get_open_observation_label(product)} withLabel={true} />
+                            <ObservationsCountField label={get_open_observations_label(product)} withLabel={true} />
                         </Labeled>
                         {product &&
                             product.forbidden_licenses_count +
@@ -58,7 +65,7 @@ const ProductHeader = () => {
                                 product.ignored_licenses_count >
                                 0 && (
                                 <Labeled>
-                                    <LicensesCountField label="Licenses" withLabel={true} />
+                                    <LicensesCountField label={get_licenses_label(product)} withLabel={true} />
                                 </Labeled>
                             )}
                     </Stack>

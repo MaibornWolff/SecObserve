@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "SecObserve"
-version = "1.22.4"
+version = "1.22.5"
 description = "SecObserve is an open source vulnerability management system for software development and cloud environments."
 license = "BSD-3-Clause"
 authors = [
@@ -30,7 +30,7 @@ drf-spectacular = "0.27.2" # https://github.com/tfranzel/drf-spectacular
 drf-spectacular-sidecar = "2024.11.1"  # https://github.com/tfranzel/drf-spectacular-sidecar
 # Token authentication
 # ------------------------------------------------------------------------------
-PyJWT = "2.10.0"  # https://github.com/jpadilla/pyjwt
+PyJWT = "2.10.1"  # https://github.com/jpadilla/pyjwt
 # HTTP requests
 # ------------------------------------------------------------------------------
 requests = "2.32.3"  # https://github.com/psf/requests
@@ -59,6 +59,7 @@ cvss = "3.3"  # https://github.com/RedHatProductSecurity/cvss
 jsonpickle = "4.0.0"  # https://github.com/jsonpickle/jsonpickle
 py-ocsf-models = "0.2.0"  # https://github.com/prowler-cloud/py-ocsf-models
 semver = "3.0.2"  # https://github.com/python-semver/python-semver
+license-expression = "30.4.0"  # https://github.com/aboutcode-org/license-expression
 
 # Development dependencies
 # ------------------------------------------------------------------------------
@@ -70,7 +71,7 @@ django-extensions = { version = "3.2.3", optional = true }  # https://github.com
 
 # Unittest dependencies
 # ------------------------------------------------------------------------------
-coverage = { version = "7.6.7", optional = true }  # https://github.com/nedbat/coveragepy
+coverage = { version = "7.6.8", optional = true }  # https://github.com/nedbat/coveragepy
 django-coverage-plugin = { version = "3.1.0", optional = true }  # https://github.com/nedbat/django_coverage_plugin
 
 # Code quality dependencies

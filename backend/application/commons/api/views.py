@@ -60,8 +60,10 @@ class StatusSettingsView(APIView):
         features = []
 
         settings = Settings.load()
+
         if settings.feature_disable_user_login:
             features.append("feature_disable_user_login")
+
         if request.user.is_authenticated:
             if settings.feature_vex:
                 features.append("feature_vex")
@@ -72,8 +74,13 @@ class StatusSettingsView(APIView):
 
         content = {
             "features": features,
-            "risk_acceptance_expiry_days": settings.risk_acceptance_expiry_days,
         }
+
+        if request.user.is_authenticated:
+            content["risk_acceptance_expiry_days"] = (
+                settings.risk_acceptance_expiry_days
+            )
+
         return Response(content)
 
 

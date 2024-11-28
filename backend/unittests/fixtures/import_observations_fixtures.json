@@ -62,7 +62,7 @@
         "pk": 1,
         "fields": {
             "product": 1,
-            "user": 5,
+            "user": 1,
             "role": 5
         }
     },

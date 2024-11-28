@@ -6,10 +6,11 @@ import { Confirm, useNotify, useRefresh } from "react-admin";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
 type LicensePolicyApplyProps = {
-    license_policy: any;
+    license_policy?: any;
+    product?: any;
 };
 
-const LicensePolicyApply = ({ license_policy }: LicensePolicyApplyProps) => {
+const LicensePolicyApply = ({ license_policy, product }: LicensePolicyApplyProps) => {
     const [open, setOpen] = useState(false);
     const refresh = useRefresh();
     const [loading, setLoading] = useState(false);
@@ -17,29 +18,50 @@ const LicensePolicyApply = ({ license_policy }: LicensePolicyApplyProps) => {
     const handleClick = () => setOpen(true);
     const handleDialogClose = () => setOpen(false);
 
+    const buttonText = () => {
+        if (product) {
+            return "Apply license policy";
+        }
+        return "Apply";
+    };
+
+    const content = () => {
+        if (product) {
+            return "Are you sure you want to apply the license policy?";
+        }
+        return "Are you sure you want to apply the license policy " + license_policy.name + " to all products?";
+    };
+
     const handleConfirm = async () => {
         setLoading(true);
-        const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/license_policies/" + license_policy.id + "/apply/";
+        let url = "";
+        if (product) {
+            url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/license_policies/apply_product/?product=" + product.id;
+        } else {
+            url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/license_policies/" + license_policy.id + "/apply/";
+        }
 
-        httpClient(url, {
-            method: "POST",
-        })
-            .then(() => {
-                refresh();
-                setOpen(false);
-                setLoading(false);
-                notify("License policy applied", {
-                    type: "success",
-                });
+        if (url !== "") {
+            httpClient(url, {
+                method: "POST",
             })
-            .catch((error) => {
-                refresh();
-                setOpen(false);
-                setLoading(false);
-                notify(error.message, {
-                    type: "warning",
+                .then(() => {
+                    refresh();
+                    setOpen(false);
+                    setLoading(false);
+                    notify("License policy applied", {
+                        type: "success",
+                    });
+                })
+                .catch((error) => {
+                    refresh();
+                    setOpen(false);
+                    setLoading(false);
+                    notify(error.message, {
+                        type: "warning",
+                    });
                 });
-            });
+        }
     };
 
     return (
@@ -50,14 +72,12 @@ const LicensePolicyApply = ({ license_policy }: LicensePolicyApplyProps) => {
                 onClick={handleClick}
                 startIcon={<License_Policy_Icon />}
             >
-                Apply
+                {buttonText()}
             </Button>
             <Confirm
                 isOpen={open && !loading}
                 title="Apply license policy"
-                content={
-                    "Are you sure you want to apply the license policy " + license_policy.name + " to all products?"
-                }
+                content={content()}
                 onConfirm={handleConfirm}
                 onClose={handleDialogClose}
             />

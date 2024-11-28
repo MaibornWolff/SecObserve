@@ -27,6 +27,7 @@ function listFilters() {
     return [
         <TextInput source="license_group_name" label="License group" alwaysOn />,
         <TextInput source="license_spdx_id" label="License" alwaysOn />,
+        <TextInput source="license_expression" label="License expression" alwaysOn />,
         <TextInput source="unknown_license" label="Unknown license" alwaysOn />,
         <AutocompleteInputMedium
             source="evaluation_result"
@@ -97,6 +98,7 @@ const LicensePolicyItemEmbeddedList = ({ license_policy }: LicensePolicyItemEmbe
                                         />
                                     )}
                                 />
+                                <TextField source="license_expression" label="License expression" />
                                 <TextField source="unknown_license" label="Unknown license" />
                                 <EvaluationResultField source="evaluation_result" label="Evaluation result" />
                                 {(is_superuser() || license_policy.is_manager) && (

@@ -5,6 +5,7 @@ import { get_evaluation_result_color } from "../functions";
 interface EvaluationResultProps {
     source: string;
     label: string;
+    sortable?: boolean;
 }
 
 export const EvaluationResultField = (props: EvaluationResultProps) => {
@@ -12,7 +13,7 @@ export const EvaluationResultField = (props: EvaluationResultProps) => {
     return record ? (
         <ChipField
             source={props.source}
-            sortable={true}
+            sortable={props.sortable}
             sortBy={props.source}
             sx={{
                 backgroundColor: get_evaluation_result_color(record, null),
