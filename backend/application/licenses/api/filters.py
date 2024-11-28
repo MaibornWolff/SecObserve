@@ -73,9 +73,25 @@ class LicenseComponentFilter(FilterSet):
                 ),
                 "evaluation_result",
             ),
-            ("branch__name", "branch_name"),
+            (
+                (
+                    "branch__name",
+                    "license_name",
+                    "numerical_evaluation_result",
+                    "name_version",
+                ),
+                "branch_name",
+            ),
             ("name_version", "name_version"),
-            ("purl_type", "purl_type"),
+            (
+                (
+                    "purl_type",
+                    "numerical_evaluation_result",
+                    "license_name",
+                    "name_version",
+                ),
+                "purl_type",
+            ),
             ("last_change", "last_change"),
         ),
     )
