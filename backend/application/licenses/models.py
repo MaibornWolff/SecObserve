@@ -114,6 +114,7 @@ class License_Component(Model):
     cpe = CharField(max_length=255, blank=True)
     dependencies = TextField(max_length=32768, blank=True)
 
+    license_name = CharField(max_length=255, blank=True)
     license = ForeignKey(
         License,
         related_name="license_components",

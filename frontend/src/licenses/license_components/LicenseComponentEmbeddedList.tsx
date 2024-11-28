@@ -39,6 +39,13 @@ const BulkActionButtons = (product: any) => (
     </Fragment>
 );
 
+const licenseNameStyle = (type: string): string => {
+    if (type === "" || type === "Unknown") {
+        return "italic";
+    }
+    return "normal";
+};
+
 const LicenseComponentEmbeddedList = ({ product, expand, purl_type }: LicenseComponentEmbeddedListProps) => {
     const showLicenseComponent = (id: any) => {
         return "../../../../license_components/" + id + "/show";
@@ -60,9 +67,7 @@ const LicenseComponentEmbeddedList = ({ product, expand, purl_type }: LicenseCom
                 </ReferenceInput>
             );
         }
-        filters.push(<TextInput source="license_spdx_id" label="SPDX Id" alwaysOn />);
-        filters.push(<TextInput source="license_expression" alwaysOn />);
-        filters.push(<TextInput source="unknown_license" alwaysOn />);
+        filters.push(<TextInput source="license_name" label="License" alwaysOn />);
         filters.push(
             <AutocompleteInputMedium
                 source="evaluation_result"
@@ -89,17 +94,8 @@ const LicenseComponentEmbeddedList = ({ product, expand, purl_type }: LicenseCom
         if (record && record.branch_name) {
             filter = { ...filter, branch_name: record.branch_name };
         }
-        if (record && !record.spdx_id && !record.unknown_license) {
-            filter = { ...filter, no_license: true };
-        }
-        if (record && record.spdx_id) {
-            filter = { ...filter, license_spdx_id_exact: record.spdx_id };
-        }
-        if (record && record.license_expression) {
-            filter = { ...filter, license_expression_exact: record.license_expression };
-        }
-        if (record && record.unknown_license) {
-            filter = { ...filter, unknown_license_exact: record.unknown_license };
+        if (record && record.license_name) {
+            filter = { ...filter, license_name_exact: record.license_name };
         }
         if (record && record.evaluation_result) {
             filter = { ...filter, evaluation_result: record.evaluation_result };
@@ -145,9 +141,13 @@ const LicenseComponentEmbeddedList = ({ product, expand, purl_type }: LicenseCom
                         {!expand && product && product.has_branches && (
                             <TextField source="branch_name" label="Branch / Version" />
                         )}
-                        {!expand && <TextField source="license_data.spdx_id" label="SPDX Id" />}
-                        {!expand && <TextField source="license_expression" label="Expression" />}
-                        {!expand && <TextField source="unknown_license" label="Unknown license" />}
+                        <FunctionField
+                            label="License"
+                            sortBy="license_name"
+                            render={(record: any) => (
+                                <span style={{ fontStyle: licenseNameStyle(record.type) }}>{record.license_name}</span>
+                            )}
+                        />
                         {!expand && (
                             <EvaluationResultField
                                 source="evaluation_result"
