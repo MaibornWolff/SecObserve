@@ -85,6 +85,7 @@ class ObservationSerializer(ModelSerializer):
     origin_component_purl_namespace = SerializerMethodField()
     issue_tracker_issue_url = SerializerMethodField()
     assessment_needs_approval = SerializerMethodField()
+    origin_component_name_version = SerializerMethodField()
 
     class Meta:
         model = Observation
@@ -198,6 +199,9 @@ class ObservationSerializer(ModelSerializer):
             raise ValidationError("Product must not be a product group")
 
         return product
+
+    def get_origin_component_name_version(self, observation: Observation) -> str:
+        return get_origin_component_name_version(observation)
 
 
 class ObservationTitleSerializer(ModelSerializer):
@@ -534,6 +538,9 @@ class ObservationLogSerializer(ModelSerializer):
 
 class ObservationLogListSerializer(ModelSerializer):
     observation_title = SerializerMethodField()
+    product_name = SerializerMethodField()
+    branch_name = SerializerMethodField()
+    origin_component_name_version = SerializerMethodField()
     user_full_name = SerializerMethodField()
     approval_user_full_name = SerializerMethodField()
 
@@ -552,6 +559,15 @@ class ObservationLogListSerializer(ModelSerializer):
 
         return None
 
+    def get_product_name(self, obj: Observation_Log) -> str:
+        return obj.observation.product.name
+
+    def get_branch_name(self, obj: Observation_Log) -> str:
+        return get_branch_name(obj.observation)
+
+    def get_origin_component_name_version(self, obj: Observation_Log) -> str:
+        return get_origin_component_name_version(obj.observation)
+
     class Meta:
         model = Observation_Log
         fields = "__all__"
@@ -562,6 +578,16 @@ class ObservationLogApprovalSerializer(Serializer):
         choices=Assessment_Status.ASSESSMENT_STATUS_CHOICES_APPROVAL, required=False
     )
     approval_remark = CharField(max_length=255, required=True)
+
+
+class ObservationLogBulkApprovalSerializer(Serializer):
+    assessment_status = ChoiceField(
+        choices=Assessment_Status.ASSESSMENT_STATUS_CHOICES_APPROVAL, required=False
+    )
+    approval_remark = CharField(max_length=255, required=True)
+    observation_logs = ListField(
+        child=IntegerField(min_value=1), min_length=0, max_length=10000, required=True
+    )
 
 
 class PotentialDuplicateSerializer(ModelSerializer):

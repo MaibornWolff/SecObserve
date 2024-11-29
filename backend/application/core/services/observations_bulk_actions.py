@@ -3,15 +3,24 @@ from typing import Optional
 
 from django.db.models.query import QuerySet
 from django.utils import timezone
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import NotFound, ValidationError
 
-from application.access_control.services.authorization import user_has_permission
+from application.access_control.services.authorization import (
+    user_has_permission,
+    user_has_permission_or_403,
+)
 from application.access_control.services.roles_permissions import Permissions
 from application.commons.services.global_request import get_current_user
 from application.core.models import Observation, Potential_Duplicate, Product
-from application.core.queries.observation import get_current_observation_log
-from application.core.services.assessment import save_assessment
-from application.core.services.potential_duplicates import set_potential_duplicate
+from application.core.queries.observation import (
+    get_current_observation_log,
+    get_observation_log_by_id,
+)
+from application.core.services.assessment import assessment_approval, save_assessment
+from application.core.services.potential_duplicates import (
+    set_potential_duplicate,
+    set_potential_duplicate_both_ways,
+)
 from application.core.services.security_gate import check_security_gate
 from application.core.types import Assessment_Status, Status
 from application.issue_tracker.services.issue_tracker import (
@@ -136,3 +145,22 @@ def _check_observations(
             )
 
     return observations
+
+
+def observation_logs_bulk_approval(
+    assessment_status: str,
+    approval_remark: str,
+    observation_logs: list[int],
+) -> None:
+    for observation_log_id in observation_logs:
+        observation_log = get_observation_log_by_id(observation_log_id)
+        if not observation_log:
+            raise NotFound(f"Observation Log {observation_log_id} not found")
+
+        user_has_permission_or_403(
+            observation_log, Permissions.Observation_Log_Approval
+        )
+
+        assessment_approval(observation_log, assessment_status, approval_remark)
+
+        set_potential_duplicate_both_ways(observation_log.observation)

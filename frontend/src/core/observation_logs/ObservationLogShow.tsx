@@ -77,6 +77,12 @@ const ObservationLogComponent = () => {
                                     <TextField source="name" />
                                 </ReferenceField>
                             </Labeled>
+                            <Labeled label="Branch / Version">
+                                <TextField source="observation_data.branch_name" />
+                            </Labeled>
+                            <Labeled label="Component">
+                                <TextField source="observation_data.origin_component_name_version" />
+                            </Labeled>
                             <Labeled label="Observation">
                                 <ReferenceField
                                     source="observation"
