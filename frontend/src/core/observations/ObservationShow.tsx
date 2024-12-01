@@ -1,8 +1,6 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
 import {
-    ChipField,
-    DateField,
     EditButton,
     Labeled,
     NumberField,
@@ -19,17 +17,15 @@ import {
     PERMISSION_OBSERVATION_EDIT,
     PERMISSION_OBSERVATION_LOG_APPROVAL,
 } from "../../access_control/types";
-import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import { get_cwe_url, get_vulnerability_url } from "../../commons/functions";
-import { useStyles } from "../../commons/layout/themes";
 import AssessmentApproval from "../observation_logs/AssessmentApproval";
 import ObservationLogEmbeddedList from "../observation_logs/ObservationLogEmbeddedList";
 import { OBSERVATION_STATUS_IN_REVIEW, OBSERVATION_STATUS_OPEN } from "../types";
 import ObservationAssessment from "./ObservationAssessment";
 import ObservationRemoveAssessment from "./ObservationRemoveAssessment";
 import ObservationsShowAside from "./ObservationShowAside";
-import ObservationShowDescriptionRecommendation from "./ObservationShowDescriptionRecommendation";
+import ObservationShowHeader from "./ObservationShowHeader";
 import ObservationShowOrigins from "./ObservationShowOrigins";
 import PotentialDuplicatesList from "./PotentialDuplicatesList";
 import {
@@ -102,82 +98,11 @@ const ShowActions = () => {
 };
 
 const ObservationShowComponent = () => {
-    const { classes } = useStyles();
-
     return (
         <WithRecord
             render={(observation) => (
                 <Box width={"100%"}>
-                    <Paper sx={{ marginBottom: 2, padding: 2 }}>
-                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                            Observation
-                        </Typography>
-                        <Stack direction="row" spacing={4}>
-                            <Stack spacing={2}>
-                                <Labeled>
-                                    <SeverityField label="Severity" source="current_severity" />
-                                </Labeled>
-                                {observation.parser_severity != "" &&
-                                    (observation.rule_severity != "" || observation.assessment_severity != "") && (
-                                        <Labeled>
-                                            <TextField source="parser_severity" />
-                                        </Labeled>
-                                    )}
-                                {observation.rule_severity != "" && (
-                                    <Labeled>
-                                        <TextField source="rule_severity" />
-                                    </Labeled>
-                                )}
-                                {observation.assessment_severity != "" && (
-                                    <Labeled>
-                                        <TextField source="assessment_severity" />
-                                    </Labeled>
-                                )}
-                            </Stack>
-                            <Stack spacing={2}>
-                                <Labeled>
-                                    <ChipField source="current_status" label="Status" />
-                                </Labeled>
-                                {observation.parser_status != "" &&
-                                    (observation.rule_status != "" ||
-                                        observation.assessment_status != "" ||
-                                        observation.vex_status != "") && (
-                                        <Labeled>
-                                            <TextField source="parser_status" />
-                                        </Labeled>
-                                    )}
-                                {observation.vex_status != "" && (
-                                    <Labeled label="VEX status">
-                                        <TextField source="vex_status" />
-                                    </Labeled>
-                                )}
-                                {observation.rule_status != "" && (
-                                    <Labeled>
-                                        <TextField source="rule_status" />
-                                    </Labeled>
-                                )}
-                                {observation.assessment_status != "" && (
-                                    <Labeled>
-                                        <TextField source="assessment_status" />
-                                    </Labeled>
-                                )}
-                            </Stack>
-                            {observation.found != null && (
-                                <Labeled>
-                                    <DateField source="found" />
-                                </Labeled>
-                            )}
-                            {observation.risk_acceptance_expiry_date != null && (
-                                <Labeled label="Risk acceptance expiry">
-                                    <DateField source="risk_acceptance_expiry_date" />
-                                </Labeled>
-                            )}
-                            <Labeled>
-                                <TextField source="title" className={classes.fontBigBold} />
-                            </Labeled>
-                        </Stack>
-                        <ObservationShowDescriptionRecommendation />
-                    </Paper>
+                    <ObservationShowHeader />
 
                     {(observation.vulnerability_id != "" ||
                         observation.cvss3_score != null ||
@@ -240,7 +165,7 @@ const ObservationShowComponent = () => {
                         </Paper>
                     )}
 
-                    <ObservationShowOrigins elevated={true} />
+                    <ObservationShowOrigins showDependencies={true} elevated={true} />
 
                     <Paper sx={{ marginBottom: 2, padding: 2 }}>
                         <Typography variant="h6" sx={{ paddingBottom: 1 }}>

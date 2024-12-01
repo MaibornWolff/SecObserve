@@ -1,6 +1,6 @@
 import { Paper, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
-import { Labeled, TextField, useRecordContext } from "react-admin";
+import { Labeled, RecordContextProvider, TextField, useRecordContext } from "react-admin";
 
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import { get_component_purl_url } from "../../commons/functions";
@@ -8,14 +8,19 @@ import { getElevation } from "../../metrics/functions";
 import MermaidDependencies from "./Mermaid_Dependencies";
 
 type ObservationShowOriginsProps = {
+    observation?: any;
+    showDependencies: boolean;
     elevated: boolean;
 };
 
-const ObservationShowOrigins = ({ elevated }: ObservationShowOriginsProps) => {
-    const observation = useRecordContext();
+const ObservationShowOrigins = ({ observation, showDependencies, elevated }: ObservationShowOriginsProps) => {
+    const observation_record = useRecordContext();
+    if (!observation) {
+        observation = observation_record;
+    }
 
     return (
-        <Fragment>
+        <RecordContextProvider value={observation}>
             {observation &&
                 (observation.origin_service_name != "" ||
                     observation.origin_component_name != "" ||
@@ -94,7 +99,7 @@ const ObservationShowOrigins = ({ elevated }: ObservationShowOriginsProps) => {
                                 </Stack>
                                 {observation.origin_component_dependencies &&
                                     observation.origin_component_dependencies != "" &&
-                                    elevated && (
+                                    showDependencies && (
                                         <MermaidDependencies dependencies={observation.origin_component_dependencies} />
                                     )}
                             </Fragment>
@@ -247,7 +252,7 @@ const ObservationShowOrigins = ({ elevated }: ObservationShowOriginsProps) => {
                         )}
                     </Paper>
                 )}
-        </Fragment>
+        </RecordContextProvider>
     );
 };
 
