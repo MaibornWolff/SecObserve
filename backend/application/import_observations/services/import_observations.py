@@ -414,11 +414,14 @@ def _process_current_observation(
                 observation_before.product
             )
     observation_before.current_status = get_current_status(observation_before)
-    observation_before.risk_acceptance_expiry_date = (
-        calculate_risk_acceptance_expiry_date(observation_before.product)
-        if observation_before.current_status == Status.STATUS_RISK_ACCEPTED
-        else None
-    )
+
+    if observation_before.current_status == Status.STATUS_RISK_ACCEPTED:
+        if previous_status != Status.STATUS_RISK_ACCEPTED:
+            observation_before.risk_acceptance_expiry_date = (
+                calculate_risk_acceptance_expiry_date(observation_before.product)
+            )
+    else:
+        observation_before.risk_acceptance_expiry_date = None
 
     epss_apply_observation(observation_before)
     observation_before.import_last_seen = timezone.now()
@@ -479,6 +482,7 @@ def _process_new_observation(imported_observation: Observation) -> None:
         )
 
     imported_observation.current_status = get_current_status(imported_observation)
+
     imported_observation.risk_acceptance_expiry_date = (
         calculate_risk_acceptance_expiry_date(imported_observation.product)
         if imported_observation.current_status == Status.STATUS_RISK_ACCEPTED

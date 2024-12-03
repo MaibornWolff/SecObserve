@@ -1,4 +1,5 @@
 import re
+from datetime import date
 from typing import Optional
 
 from application.commons.services.global_request import get_current_user
@@ -113,11 +114,6 @@ class Rule_Engine:
                 if rule.new_status:
                     observation.rule_status = rule.new_status
                     observation.current_status = get_current_status(observation)
-                    observation.risk_acceptance_expiry_date = (
-                        calculate_risk_acceptance_expiry_date(observation.product)
-                        if observation.current_status == Status.STATUS_RISK_ACCEPTED
-                        else None
-                    )
 
                 previous_vex_justification = observation.current_vex_justification
                 previous_rule_vex_justification = observation.rule_vex_justification
@@ -126,6 +122,17 @@ class Rule_Engine:
                     observation.current_vex_justification = (
                         get_current_vex_justification(observation)
                     )
+
+                previous_risk_acceptance_expiry_date = (
+                    observation.risk_acceptance_expiry_date
+                )
+                if observation.current_status == Status.STATUS_RISK_ACCEPTED:
+                    if previous_status != Status.STATUS_RISK_ACCEPTED:
+                        observation.risk_acceptance_expiry_date = (
+                            calculate_risk_acceptance_expiry_date(observation.product)
+                        )
+                else:
+                    observation.risk_acceptance_expiry_date = None
 
                 if rule.product:
                     observation.product_rule = rule
@@ -151,6 +158,7 @@ class Rule_Engine:
                         previous_severity=previous_severity,
                         previous_status=previous_status,
                         previous_vex_justification=previous_vex_justification,
+                        previous_risk_acceptance_expiry_date=previous_risk_acceptance_expiry_date,
                     )
                     push_observation_to_issue_tracker(observation, get_current_user())
                 rule_found = True
@@ -193,6 +201,7 @@ class Rule_Engine:
         previous_severity: str,
         previous_status: str,
         previous_vex_justification: str,
+        previous_risk_acceptance_expiry_date: Optional[date],
     ) -> None:
         if previous_status != observation.current_status:
             status = observation.current_status
@@ -206,6 +215,13 @@ class Rule_Engine:
             vex_justification = observation.current_vex_justification
         else:
             vex_justification = ""
+        if (
+            previous_risk_acceptance_expiry_date
+            != observation.risk_acceptance_expiry_date
+        ):
+            risk_acceptance_expiry_date = observation.risk_acceptance_expiry_date
+        else:
+            risk_acceptance_expiry_date = None
 
         if rule.description:
             comment = rule.description
@@ -214,12 +230,6 @@ class Rule_Engine:
                 comment = f"Updated by product rule {rule.name}"
             else:
                 comment = f"Updated by general rule {rule.name}"
-
-        risk_acceptance_expiry_date = (
-            calculate_risk_acceptance_expiry_date(observation.product)
-            if status == Status.STATUS_RISK_ACCEPTED
-            else None
-        )
 
         create_observation_log(
             observation=observation,
@@ -244,11 +254,6 @@ class Rule_Engine:
         observation.rule_status = ""
         previous_status = observation.current_status
         observation.current_status = get_current_status(observation)
-        observation.risk_acceptance_expiry_date = (
-            calculate_risk_acceptance_expiry_date(observation.product)
-            if observation.current_status == Status.STATUS_RISK_ACCEPTED
-            else None
-        )
 
         observation.rule_vex_justification = ""
         previous_vex_justification = observation.current_vex_justification
@@ -256,18 +261,37 @@ class Rule_Engine:
             observation
         )
 
+        previous_risk_acceptance_expiry_date = observation.risk_acceptance_expiry_date
+        if observation.current_status == Status.STATUS_RISK_ACCEPTED:
+            if previous_status != Status.STATUS_RISK_ACCEPTED:
+                observation.risk_acceptance_expiry_date = (
+                    calculate_risk_acceptance_expiry_date(observation.product)
+                )
+        else:
+            observation.risk_acceptance_expiry_date = None
+
         if previous_status != observation.current_status:
             status = observation.current_status
         else:
             status = ""
+
         if previous_severity != observation.current_severity:
             severity = observation.current_severity
         else:
             severity = ""
+
         if previous_vex_justification != observation.current_vex_justification:
             vex_justification = observation.current_vex_justification
         else:
             vex_justification = ""
+
+        if (
+            previous_risk_acceptance_expiry_date
+            != observation.risk_acceptance_expiry_date
+        ):
+            risk_acceptance_expiry_date = observation.risk_acceptance_expiry_date
+        else:
+            risk_acceptance_expiry_date = None
 
         if previous_product_rule:
             comment = f"Removed product rule {previous_product_rule.name}"
@@ -275,12 +299,6 @@ class Rule_Engine:
             comment = f"Removed general rule {previous_general_rule.name}"
         else:
             comment = "Removed unknown rule"
-
-        risk_acceptance_expiry_date = (
-            calculate_risk_acceptance_expiry_date(observation.product)
-            if status == Status.STATUS_RISK_ACCEPTED
-            else None
-        )
 
         create_observation_log(
             observation=observation,
