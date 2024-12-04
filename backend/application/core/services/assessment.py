@@ -135,10 +135,11 @@ def _update_observation(
         )
 
     previous_risk_acceptance_expiry_date = observation.risk_acceptance_expiry_date
-    if observation.current_status == Status.STATUS_RISK_ACCEPTED:
-        observation.risk_acceptance_expiry_date = new_risk_acceptance_expiry_date
-    else:
-        observation.risk_acceptance_expiry_date = None
+    observation.risk_acceptance_expiry_date = (
+        new_risk_acceptance_expiry_date
+        if observation.current_status == Status.STATUS_RISK_ACCEPTED
+        else None
+    )
 
     if (
         previous_current_severity  # pylint: disable=too-many-boolean-expressions
