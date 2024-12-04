@@ -217,7 +217,8 @@ def _evaluate_license_expression(
         if operator == "OR":
             evaluation_result = _evaluate_or_expression(evaluation_result_set)
 
-    except Exception:
+    except Exception:  # nosec B110
+        # a meaningful return value is set as a default in case on an exception
         pass
 
     return evaluation_result
