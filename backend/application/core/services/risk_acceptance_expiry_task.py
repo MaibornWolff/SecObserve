@@ -16,7 +16,6 @@ def expire_risk_acceptances() -> None:
         )
         if not assessment_removed:
             observation.parser_status = Status.STATUS_OPEN
-            observation.risk_acceptance_expiry_date = None
             observation.save()
             save_assessment(
                 observation=observation,

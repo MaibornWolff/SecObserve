@@ -135,7 +135,11 @@ def _update_observation(
         )
 
     previous_risk_acceptance_expiry_date = observation.risk_acceptance_expiry_date
-    observation.risk_acceptance_expiry_date = new_risk_acceptance_expiry_date
+    observation.risk_acceptance_expiry_date = (
+        new_risk_acceptance_expiry_date
+        if observation.current_status == Status.STATUS_RISK_ACCEPTED
+        else None
+    )
 
     if (
         previous_current_severity  # pylint: disable=too-many-boolean-expressions
@@ -164,16 +168,19 @@ def remove_assessment(observation: Observation, comment: str) -> bool:
         observation.assessment_status = ""
         observation.assessment_vex_justification = ""
         observation.current_severity = get_current_severity(observation)
+        previous_status = observation.current_status
         observation.current_status = get_current_status(observation)
         observation.current_vex_justification = get_current_vex_justification(
             observation
         )
-        risk_acceptance_expiry_date = (
-            calculate_risk_acceptance_expiry_date(observation.product)
-            if observation.current_status == Status.STATUS_RISK_ACCEPTED
-            else None
-        )
-        observation.risk_acceptance_expiry_date = risk_acceptance_expiry_date
+
+        if observation.current_status == Status.STATUS_RISK_ACCEPTED:
+            if previous_status != Status.STATUS_RISK_ACCEPTED:
+                observation.risk_acceptance_expiry_date = (
+                    calculate_risk_acceptance_expiry_date(observation.product)
+                )
+        else:
+            observation.risk_acceptance_expiry_date = None
 
         create_observation_log(
             observation=observation,
@@ -182,7 +189,7 @@ def remove_assessment(observation: Observation, comment: str) -> bool:
             comment=comment,
             vex_justification="",
             assessment_status=Assessment_Status.ASSESSMENT_STATUS_REMOVED,
-            risk_acceptance_expiry_date=risk_acceptance_expiry_date,
+            risk_acceptance_expiry_date=observation.risk_acceptance_expiry_date,
         )
 
         check_security_gate(observation.product)

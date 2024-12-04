@@ -266,6 +266,7 @@ class ObservationUpdateSerializer(ModelSerializer):
         actual_severity = instance.current_severity
         actual_status = instance.current_status
         actual_vex_justification = instance.current_vex_justification
+        actual_risk_acceptance_expiry_date = instance.risk_acceptance_expiry_date
 
         instance.origin_component_name = ""
         instance.origin_component_version = ""
@@ -282,30 +283,45 @@ class ObservationUpdateSerializer(ModelSerializer):
 
         observation: Observation = super().update(instance, validated_data)
 
-        if actual_severity != observation.current_severity:
-            actual_severity = observation.current_severity
-        else:
-            actual_severity = ""
+        log_severity = (
+            observation.current_severity
+            if actual_severity != observation.current_severity
+            else ""
+        )
 
-        if actual_status != observation.current_status:
-            actual_status = observation.current_status
-        else:
-            actual_status = ""
+        log_status = (
+            observation.current_status
+            if actual_status != observation.current_status
+            else ""
+        )
 
-        if actual_vex_justification != observation.current_vex_justification:
-            actual_vex_justification = observation.current_vex_justification
-        else:
-            actual_vex_justification = ""
+        log_vex_justification = (
+            observation.current_vex_justification
+            if actual_vex_justification != observation.current_vex_justification
+            else ""
+        )
 
-        if actual_severity or actual_status:
+        log_risk_acceptance_expiry_date = (
+            observation.risk_acceptance_expiry_date
+            if actual_risk_acceptance_expiry_date
+            != observation.risk_acceptance_expiry_date
+            else None
+        )
+
+        if (
+            log_severity
+            or log_status
+            or log_vex_justification
+            or log_risk_acceptance_expiry_date
+        ):
             create_observation_log(
                 observation=observation,
-                severity=actual_severity,
-                status=actual_status,
+                severity=log_severity,
+                status=log_status,
                 comment="Observation changed manually",
-                vex_justification=actual_vex_justification,
+                vex_justification=log_vex_justification,
                 assessment_status=Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
-                risk_acceptance_expiry_date=observation.risk_acceptance_expiry_date,
+                risk_acceptance_expiry_date=log_risk_acceptance_expiry_date,
             )
 
         check_security_gate(observation.product)
