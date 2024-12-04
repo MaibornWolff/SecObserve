@@ -453,14 +453,17 @@ def _process_current_observation(
         previous_status != observation_before.current_status
         or previous_severity != observation_before.current_severity
     ):
-        if previous_status != observation_before.current_status:
-            status = observation_before.current_status
-        else:
-            status = ""
-        if previous_severity != observation_before.current_severity:
-            severity = imported_observation.current_severity
-        else:
-            severity = ""
+        status = (
+            observation_before.current_status
+            if previous_status != observation_before.current_status
+            else ""
+        )
+
+        severity = (
+            imported_observation.current_severity
+            if previous_severity != observation_before.current_severity
+            else ""
+        )
 
         create_observation_log(
             observation=observation_before,

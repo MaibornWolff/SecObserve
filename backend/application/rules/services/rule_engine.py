@@ -54,12 +54,13 @@ class Rule_Engine:
         self.product = product
 
     def apply_rules_for_observation(self, observation: Observation) -> None:
-        previous_product_rule = None
-        if observation.product_rule:
-            previous_product_rule = observation.product_rule
-        previous_general_rule = None
-        if observation.general_rule:
-            previous_general_rule = observation.general_rule
+        previous_product_rule = (
+            observation.product_rule if observation.product_rule else None
+        )
+        previous_general_rule = (
+            observation.general_rule if observation.general_rule else None
+        )
+
         observation.product_rule = None
         observation.general_rule = None
 
@@ -270,28 +271,30 @@ class Rule_Engine:
         else:
             observation.risk_acceptance_expiry_date = None
 
-        if previous_status != observation.current_status:
-            status = observation.current_status
-        else:
-            status = ""
+        log_status = (
+            observation.current_status
+            if previous_status != observation.current_status
+            else ""
+        )
 
-        if previous_severity != observation.current_severity:
-            severity = observation.current_severity
-        else:
-            severity = ""
+        log_severity = (
+            observation.current_severity
+            if previous_severity != observation.current_severity
+            else ""
+        )
 
-        if previous_vex_justification != observation.current_vex_justification:
-            vex_justification = observation.current_vex_justification
-        else:
-            vex_justification = ""
+        log_vex_justification = (
+            observation.current_vex_justification
+            if previous_vex_justification != observation.current_vex_justification
+            else ""
+        )
 
-        if (
-            previous_risk_acceptance_expiry_date
+        log_risk_acceptance_expiry_date = (
+            observation.risk_acceptance_expiry_date
+            if previous_risk_acceptance_expiry_date
             != observation.risk_acceptance_expiry_date
-        ):
-            risk_acceptance_expiry_date = observation.risk_acceptance_expiry_date
-        else:
-            risk_acceptance_expiry_date = None
+            else None
+        )
 
         if previous_product_rule:
             comment = f"Removed product rule {previous_product_rule.name}"
@@ -302,10 +305,10 @@ class Rule_Engine:
 
         create_observation_log(
             observation=observation,
-            severity=severity,
-            status=status,
+            severity=log_severity,
+            status=log_status,
             comment=comment,
-            vex_justification=vex_justification,
+            vex_justification=log_vex_justification,
             assessment_status=Assessment_Status.ASSESSMENT_STATUS_AUTO_APPROVED,
-            risk_acceptance_expiry_date=risk_acceptance_expiry_date,
+            risk_acceptance_expiry_date=log_risk_acceptance_expiry_date,
         )
