@@ -16,8 +16,3 @@ EMAIL_PORT = 1025
 # STATIC
 # ------------------------
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
-
-# Your stuff...
-# ------------------------------------------------------------------------------
-
-CORS_ALLOWED_ORIGINS = [env("CORS_ALLOWED_ORIGINS")]
