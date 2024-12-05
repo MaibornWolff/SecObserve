@@ -11,8 +11,8 @@ A part of the configuration is done with environment variables, which need to be
 | `ADMIN_USER`           | mandatory   | Username of the administration user. The user will be created at the fist start of the backend. |
 | `ADMIN_EMAIL`          | optional    | E-Mail of the administration user. |
 | `ADMIN_PASSWORD`       | optional    | Initial password of the admin user. If it is not set, a random password will be created during startup and shown in the log. |
-| `ALLOWED_HOSTS`        | mandatory   | Hostname of the backend, see [Django settings ALLOWED_HOSTS](https://docs.djangoproject.com/en/3.2/ref/settings/#allowed-hosts) |
-| `CORS_ALLOWED_ORIGINS` | mandatory   | URL of the frontend that is authorized to make cross-site HTTP requests. |
+| `ALLOWED_HOSTS`        | mandatory   | Hostnames of the backend, see [Django settings ALLOWED_HOSTS](https://docs.djangoproject.com/en/5.1/ref/settings/#allowed-hosts). This can be a comma-separated list of hostnames. |
+| `CORS_ALLOWED_ORIGINS` | mandatory   | URL of the frontend that is authorized to make cross-site HTTP requests. This can be a comma-separated list of URLs. |
 | `DATABASE_HOST`        | mandatory   | Which host to use when connecting to the database. |
 | `DATABASE_DB`          | mandatory   | The name of the database to use. |
 | `DATABASE_PORT`        | mandatory   | The port to use when connecting to the database. |
@@ -20,7 +20,7 @@ A part of the configuration is done with environment variables, which need to be
 | `DATABASE_PASSWORD`    | mandatory   | The password to use when connecting to the database. |
 | `DATABASE_ENGINE`      | mandatory   | The database backend to use. Supported database backends are `django.db.backends.mysql` and `django.db.backends.postgresql` |
 | `MYSQL_AZURE`          | optional    | Must be set if Azure Database for MySQL is used, to use the necessary SSL certificate. For **MySQL Flexible Server** it needs to have the value `flexible`, for **MySQL Single Server** the the value needs to be `single`. See [Connect using mysql command-line client with TLS/SSL](https://learn.microsoft.com/en-us/azure/mysql/flexible-server/how-to-connect-tls-ssl#connect-using-mysql-command-line-client-with-tlsssl) and [Configure SSL connectivity in your application to securely connect to Azure Database for MySQL](https://learn.microsoft.com/en-us/azure/mysql/single-server/how-to-configure-ssl#step-1-obtain-ssl-certificate).
-| `DJANGO_SECRET_KEY`    | mandatory   | A secret key for a particular Django installation. This is used to provide cryptographic signing, and should be set to a unique, unpredictable value with at least 50 characters, see [Django settings SECRET_KEY](https://docs.djangoproject.com/en/3.2/ref/settings/#secret-key).
+| `DJANGO_SECRET_KEY`    | mandatory   | A secret key for a particular Django installation. This is used to provide cryptographic signing, and should be set to a unique, unpredictable value with at least 50 characters, see [Django settings SECRET_KEY](https://docs.djangoproject.com/en/5.1/ref/settings/#secret-key).
 | `FIELD_ENCRYPTION_KEY` | mandatory   | Key to encrypt fields like the JWT secret. See [Generating an Encryption Key](https://gitlab.com/lansharkconsulting/django/django-encrypted-model-fields#generating-an-encryption-key) how to generate the key. |
 | `GUNICORN_WORKERS`     | optional   | Number of worker processes for the Gunicorn web server, see [Gunicorn documentation](https://docs.gunicorn.org/en/stable/design.html#how-many-workers). Default is 3. |
 | `GUNICORN_THREADS`     | optional   | Number of worker threads for the Gunicorn web server, default is 10. |
