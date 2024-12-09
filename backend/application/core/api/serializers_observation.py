@@ -537,10 +537,8 @@ class ObservationLogSerializer(ModelSerializer):
 
 
 class ObservationLogListSerializer(ModelSerializer):
-    observation_title = SerializerMethodField()
-    product_name = SerializerMethodField()
+    observation_data = ObservationListSerializer(source="observation")
     branch_name = SerializerMethodField()
-    origin_component_name_version = SerializerMethodField()
     user_full_name = SerializerMethodField()
     approval_user_full_name = SerializerMethodField()
 
@@ -550,23 +548,14 @@ class ObservationLogListSerializer(ModelSerializer):
 
         return None
 
-    def get_observation_title(self, obj: Observation_Log) -> str:
-        return obj.observation.title
-
     def get_approval_user_full_name(self, obj: Observation_Log) -> Optional[str]:
         if obj.approval_user:
             return obj.approval_user.full_name
 
         return None
 
-    def get_product_name(self, obj: Observation_Log) -> str:
-        return obj.observation.product.name
-
     def get_branch_name(self, obj: Observation_Log) -> str:
         return get_branch_name(obj.observation)
-
-    def get_origin_component_name_version(self, obj: Observation_Log) -> str:
-        return get_origin_component_name_version(obj.observation)
 
     class Meta:
         model = Observation_Log
@@ -586,7 +575,7 @@ class ObservationLogBulkApprovalSerializer(Serializer):
     )
     approval_remark = CharField(max_length=255, required=True)
     observation_logs = ListField(
-        child=IntegerField(min_value=1), min_length=0, max_length=10000, required=True
+        child=IntegerField(min_value=1), min_length=0, max_length=100, required=True
     )
 
 

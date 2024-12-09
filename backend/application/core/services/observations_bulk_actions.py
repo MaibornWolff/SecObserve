@@ -3,19 +3,18 @@ from typing import Optional
 
 from django.db.models.query import QuerySet
 from django.utils import timezone
-from rest_framework.exceptions import NotFound, ValidationError
+from rest_framework.exceptions import ValidationError
 
-from application.access_control.services.authorization import (
-    user_has_permission,
-    user_has_permission_or_403,
-)
+from application.access_control.services.authorization import user_has_permission
 from application.access_control.services.roles_permissions import Permissions
 from application.commons.services.global_request import get_current_user
-from application.core.models import Observation, Potential_Duplicate, Product
-from application.core.queries.observation import (
-    get_current_observation_log,
-    get_observation_log_by_id,
+from application.core.models import (
+    Observation,
+    Observation_Log,
+    Potential_Duplicate,
+    Product,
 )
+from application.core.queries.observation import get_current_observation_log
 from application.core.services.assessment import assessment_approval, save_assessment
 from application.core.services.potential_duplicates import (
     set_potential_duplicate,
@@ -150,17 +149,44 @@ def _check_observations(
 def observation_logs_bulk_approval(
     assessment_status: str,
     approval_remark: str,
-    observation_logs: list[int],
+    observation_log_ids: list[int],
 ) -> None:
-    for observation_log_id in observation_logs:
-        observation_log = get_observation_log_by_id(observation_log_id)
-        if not observation_log:
-            raise NotFound(f"Observation Log {observation_log_id} not found")
-
-        user_has_permission_or_403(
-            observation_log, Permissions.Observation_Log_Approval
-        )
-
+    observation_logs = _check_observation_logs(None, observation_log_ids)
+    for observation_log in observation_logs:
         assessment_approval(observation_log, assessment_status, approval_remark)
-
         set_potential_duplicate_both_ways(observation_log.observation)
+
+
+def _check_observation_logs(
+    product: Optional[Product], observation_log_ids: list[int]
+) -> QuerySet[Observation_Log]:
+    observation_logs = Observation_Log.objects.filter(id__in=observation_log_ids)
+    if len(observation_logs) != len(observation_log_ids):
+        raise ValidationError("Some observation logs do not exist")
+
+    for observation_log in observation_logs:
+        if product:
+            if observation_log.observation.product != product:
+                raise ValidationError(
+                    f"Observation log {observation_log.pk} does not belong to product {product.pk}"
+                )
+        else:
+            if not user_has_permission(
+                observation_log, Permissions.Observation_Log_Approval
+            ):
+                raise ValidationError(
+                    f"First observation log without approval permission: {observation_log.pk}"
+                )
+            if (
+                not observation_log.assessment_status
+                == Assessment_Status.ASSESSMENT_STATUS_NEEDS_APPROVAL
+            ):
+                raise ValidationError(
+                    f"First observation log that does not need approval: {observation_log.pk}"
+                )
+            if get_current_user() == observation_log.user:
+                raise ValidationError(
+                    f"First observation log where user cannot approve their own assessment: {observation_log.pk}"
+                )
+
+    return observation_logs

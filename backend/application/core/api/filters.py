@@ -290,9 +290,9 @@ class ObservationLogFilter(FilterSet):
         fields=(
             ("id", "id"),
             ("user__full_name", "user_full_name"),
-            ("product__name", "product_name"),
-            ("product__product_group__name", "product.product_group_name"),
-            ("branch__name", "branch_name"),
+            ("observation__product__name", "product_name"),
+            ("observation__product__product_group__name", "product.product_group_name"),
+            ("observation__branch__name", "branch_name"),
             ("observation__title", "observation_title"),
             ("severity", "severity"),
             ("status", "status"),

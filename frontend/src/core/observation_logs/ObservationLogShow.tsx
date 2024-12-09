@@ -32,13 +32,24 @@ const ShowActions = () => {
         sort = { field: "created", order: "DESC" };
         storeKey = "observation_logs.embedded";
     }
-    if (observation_log && observation_log.observation_data && localStorage.getItem("observationlogapprovallist")) {
+    if (observation_log && localStorage.getItem("observationlogapprovallist")) {
+        filter = {
+            assessment_status: ASSESSMENT_STATUS_NEEDS_APPROVAL,
+        };
+        sort = { field: "created", order: "ASC" };
+        storeKey = "observation_logs.approval";
+    }
+    if (
+        observation_log &&
+        observation_log.observation_data &&
+        localStorage.getItem("observationlogapprovalembeddedlist")
+    ) {
         filter = {
             product: observation_log.observation_data.product,
             assessment_status: ASSESSMENT_STATUS_NEEDS_APPROVAL,
         };
         sort = { field: "created", order: "ASC" };
-        storeKey = "observation_logs.approval";
+        storeKey = "observation_logs.approvalembedded";
     }
 
     return (
@@ -49,6 +60,8 @@ const ShowActions = () => {
                 )}
                 {observation_log &&
                     observation_log.observation_data &&
+                    observation_log.observation_data.product_data &&
+                    observation_log.observation_data.product_data.permissions &&
                     observation_log.assessment_status == ASSESSMENT_STATUS_NEEDS_APPROVAL &&
                     observation_log.observation_data.product_data.permissions.includes(
                         PERMISSION_OBSERVATION_LOG_APPROVAL
@@ -79,9 +92,6 @@ const ObservationLogComponent = () => {
                             </Labeled>
                             <Labeled label="Branch / Version">
                                 <TextField source="observation_data.branch_name" />
-                            </Labeled>
-                            <Labeled label="Component">
-                                <TextField source="observation_data.origin_component_name_version" />
                             </Labeled>
                             <Labeled label="Observation">
                                 <ReferenceField
