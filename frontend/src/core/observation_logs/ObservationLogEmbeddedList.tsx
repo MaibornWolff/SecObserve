@@ -44,6 +44,7 @@ const ObservationLogEmbeddedList = ({ observation }: ObservationLogEmbeddedListP
     };
 
     localStorage.setItem("observationlogembeddedlist", "true");
+    localStorage.removeItem("observationlogapprovalembeddedlist");
     localStorage.removeItem("observationlogapprovallist");
 
     return (

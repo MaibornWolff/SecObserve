@@ -549,7 +549,7 @@ class ObservationLogSerializer(ModelSerializer):
 
 
 class ObservationLogListSerializer(ModelSerializer):
-    observation_title = SerializerMethodField()
+    observation_data = ObservationListSerializer(source="observation")
     user_full_name = SerializerMethodField()
     approval_user_full_name = SerializerMethodField()
 
@@ -558,9 +558,6 @@ class ObservationLogListSerializer(ModelSerializer):
             return obj.user.full_name
 
         return None
-
-    def get_observation_title(self, obj: Observation_Log) -> str:
-        return obj.observation.title
 
     def get_approval_user_full_name(self, obj: Observation_Log) -> Optional[str]:
         if obj.approval_user:
@@ -578,6 +575,16 @@ class ObservationLogApprovalSerializer(Serializer):
         choices=Assessment_Status.ASSESSMENT_STATUS_CHOICES_APPROVAL, required=False
     )
     approval_remark = CharField(max_length=255, required=True)
+
+
+class ObservationLogBulkApprovalSerializer(Serializer):
+    assessment_status = ChoiceField(
+        choices=Assessment_Status.ASSESSMENT_STATUS_CHOICES_APPROVAL, required=False
+    )
+    approval_remark = CharField(max_length=255, required=True)
+    observation_logs = ListField(
+        child=IntegerField(min_value=1), min_length=0, max_length=100, required=True
+    )
 
 
 class PotentialDuplicateSerializer(ModelSerializer):

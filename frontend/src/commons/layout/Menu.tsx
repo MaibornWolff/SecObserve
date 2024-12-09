@@ -1,3 +1,4 @@
+import ChecklistIcon from "@mui/icons-material/Checklist";
 import SecurityIcon from "@mui/icons-material/Security";
 import SettingsIcon from "@mui/icons-material/Settings";
 import Box from "@mui/material/Box";
@@ -64,6 +65,13 @@ const Menu = ({ dense = false }: MenuProps) => {
                     state={{ _scrollToTop: true }}
                     primaryText="Observations"
                     leftIcon={<observations.icon />}
+                    dense={dense}
+                />
+                <MenuItemLink
+                    to="/observation_logs/needs_approval"
+                    state={{ _scrollToTop: true }}
+                    primaryText="Reviews"
+                    leftIcon={<ChecklistIcon />}
                     dense={dense}
                 />
                 <MenuItemLink
