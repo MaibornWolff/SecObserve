@@ -14,7 +14,7 @@ import {
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { feature_vex_enabled } from "../../commons/functions";
-import { AutocompleteInputMedium, AutocompleteInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/user_settings/functions";
 import { ASSESSMENT_STATUS_NEEDS_APPROVAL } from "../types";
 import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../types";
@@ -105,7 +105,9 @@ const ObservationLogApprovalEmbeddedList = ({ product }: ObservationLogApprovalE
                         rowClick={ShowObservationLogs}
                         resource="observation_logs"
                     >
-                        {product && product.has_branches && <TextField source="branch_name" label="Branch / Version" />}
+                        {product && product.has_branches && (
+                            <TextField source="observation_data.branch_name" label="Branch / Version" />
+                        )}
                         <TextField source="observation_data.title" label="Observation" />
                         {product && product.has_component && (
                             <TextField

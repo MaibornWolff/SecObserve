@@ -86,7 +86,7 @@ const ObservationLogApprovalList = () => {
                 <Datagrid size={getSettingListSize()} rowClick="show" bulkActionButtons={<BulkActionButtons />}>
                     <TextField source="observation_data.product_data.name" label="Product" />
                     <TextField source="observation_data.product_data.product_group_name" label="Group" />
-                    <TextField source="branch_name" label="Branch / Version" />
+                    <TextField source="observation_data.branch_name" label="Branch / Version" />
                     <TextField source="observation_data.title" label="Observation" />
                     <TextField source="user_full_name" label="User" />
                     <TextField source="severity" emptyText="---" />

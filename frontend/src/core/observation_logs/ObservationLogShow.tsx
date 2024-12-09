@@ -77,7 +77,7 @@ const ObservationLogComponent = () => {
         <WithRecord
             render={(observation_log) => (
                 <Box width={"100%"}>
-                    <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
+                    <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
                         <Stack spacing={1}>
                             <Typography variant="h6">Observation Log</Typography>
                             <Labeled label="User">
