@@ -2,7 +2,6 @@ from datetime import timedelta
 
 from django.utils import timezone
 from django_filters import (
-    BooleanFilter,
     CharFilter,
     ChoiceFilter,
     FilterSet,
@@ -28,18 +27,16 @@ from application.licenses.models import (
 
 class LicenseComponentFilter(FilterSet):
     name_version = CharFilter(field_name="name_version", lookup_expr="icontains")
+    license_name = CharFilter(field_name="license_name", lookup_expr="icontains")
+    license_name_exact = CharFilter(field_name="license_name")
     license_spdx_id = CharFilter(field_name="license__spdx_id", lookup_expr="icontains")
-    license_spdx_id_exact = CharFilter(field_name="license__spdx_id")
     license_expression = CharFilter(
         field_name="license_expression", lookup_expr="icontains"
     )
-    license_expression_exact = CharFilter(field_name="license_expression")
     unknown_license = CharFilter(field_name="unknown_license", lookup_expr="icontains")
-    unknown_license_exact = CharFilter(field_name="unknown_license")
     age = ChoiceFilter(
         field_name="age", method="get_age", choices=Age_Choices.AGE_CHOICES
     )
-    no_license = BooleanFilter(field_name="no_license", method="get_no_license")
     branch_name = CharFilter(field_name="branch__name")
 
     def get_age(self, queryset, field_name, value):  # pylint: disable=unused-argument
@@ -54,13 +51,6 @@ class LicenseComponentFilter(FilterSet):
         time_threshold = today - timedelta(days=int(days))
         return queryset.filter(last_change__gte=time_threshold)
 
-    def get_no_license(
-        self, queryset, field_name, value
-    ):  # pylint: disable=unused-argument
-        if value is True:
-            return queryset.filter(license=None, unknown_license="")
-        return queryset
-
     ordering = ExtendedOrderingFilter(
         # tuple-mapping retains order
         fields=(
@@ -69,17 +59,39 @@ class LicenseComponentFilter(FilterSet):
             ("unknown_license", "unknown_license"),
             (
                 (
+                    "license_name",
                     "numerical_evaluation_result",
-                    "license__spdx_id",
-                    "license_expression",
-                    "unknown_license",
+                    "name_version",
+                ),
+                "license_name",
+            ),
+            (
+                (
+                    "numerical_evaluation_result",
+                    "license_name",
                     "name_version",
                 ),
                 "evaluation_result",
             ),
-            ("branch__name", "branch_name"),
+            (
+                (
+                    "branch__name",
+                    "license_name",
+                    "numerical_evaluation_result",
+                    "name_version",
+                ),
+                "branch_name",
+            ),
             ("name_version", "name_version"),
-            ("purl_type", "purl_type"),
+            (
+                (
+                    "purl_type",
+                    "numerical_evaluation_result",
+                    "license_name",
+                    "name_version",
+                ),
+                "purl_type",
+            ),
             ("last_change", "last_change"),
         ),
     )
@@ -89,6 +101,7 @@ class LicenseComponentFilter(FilterSet):
         fields = [
             "product",
             "branch",
+            "license_name",
             "license_spdx_id",
             "license_expression",
             "unknown_license",

@@ -25,7 +25,9 @@ DEBUG = env.bool("DJANGO_DEBUG", False)
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", env("ALLOWED_HOSTS")]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"] + [
+    x.strip() for x in env("ALLOWED_HOSTS").split(",")
+]
 
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -397,6 +399,7 @@ REST_FRAMEWORK = {
 }
 
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
+CORS_ALLOWED_ORIGINS = [x.strip() for x in env("CORS_ALLOWED_ORIGINS").split(",")]
 CORS_EXPOSE_HEADERS = ("content-disposition",)
 
 # Your stuff...

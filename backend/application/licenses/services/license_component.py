@@ -83,6 +83,7 @@ def process_license_components(
             existing_component.purl_type = unsaved_component.purl_type
             existing_component.cpe = unsaved_component.cpe
             existing_component.dependencies = unsaved_component.dependencies
+            existing_component.license_name = unsaved_component.license_name
             existing_component.license = unsaved_component.license
             existing_component.license_expression = unsaved_component.license_expression
             existing_component.unknown_license = unsaved_component.unknown_license
@@ -200,6 +201,8 @@ def _prepare_license(component: License_Component) -> None:
     component.license_expression = ""
     component.unknown_license = ""
 
+    component.license_name = component.unsaved_license
+
     if component.unsaved_license:
         component.license = get_license_by_spdx_id(component.unsaved_license)
         if not component.license:
@@ -210,10 +213,14 @@ def _prepare_license(component: License_Component) -> None:
                 )
                 if not expression_info.errors:
                     component.license_expression = expression_info.normalized_expression
+                    component.license_name = component.license_expression
                 else:
                     component.unknown_license = component.unsaved_license
             except Exception:
                 component.unknown_license = component.unsaved_license
+
+    if not component.license_name:
+        component.license_name = "No license information"
 
 
 def license_components_bulk_delete(product: Product, component_ids: list[int]) -> None:

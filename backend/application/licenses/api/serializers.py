@@ -99,6 +99,7 @@ class LicenseComponentSerializer(ModelSerializer):
     evidences: Optional[NestedLicenseComponentEvidenceSerializer] = (
         NestedLicenseComponentEvidenceSerializer(many=True)
     )
+    type = SerializerMethodField()
     title = SerializerMethodField()
 
     class Meta:
@@ -136,14 +137,17 @@ class LicenseComponentSerializer(ModelSerializer):
 
         return 0
 
-    def get_title(self, obj: License_Component) -> str:
+    def get_type(self, obj: License_Component) -> str:
         if obj.license:
-            return f"{obj.license.spdx_id} ({obj.license.name})"
+            return "SPDX"
         if obj.license_expression:
-            return obj.license_expression
+            return "Expression"
         if obj.unknown_license:
-            return obj.unknown_license
-        return "No license"
+            return "Unknown"
+        return ""
+
+    def get_title(self, obj: License_Component) -> str:
+        return f"{obj.license_name} / {obj.name_version}"
 
 
 class LicenseComponentListSerializer(LicenseComponentSerializer):
@@ -170,10 +174,8 @@ class LicenseComponentBulkDeleteSerializer(Serializer):
 
 class LicenseComponentOverviewElementSerializer(Serializer):
     branch_name = CharField()
-    spdx_id = CharField()
     license_name = CharField()
-    license_expression = CharField()
-    unknown_license = CharField()
+    type = CharField()
     evaluation_result = CharField()
     num_components = IntegerField()
 

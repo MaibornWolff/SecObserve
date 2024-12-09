@@ -20,6 +20,7 @@ import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { is_superuser } from "../../commons/functions";
 import { ASSESSMENT_STATUS_NEEDS_APPROVAL } from "../types";
 import AssessmentApproval from "./AssessmentApproval";
+import ObservationLogShowAside from "./ObservationLogShowAside";
 
 const ShowActions = () => {
     const observation_log = useRecordContext();
@@ -79,30 +80,6 @@ const ObservationLogComponent = () => {
                     <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
                         <Stack spacing={1}>
                             <Typography variant="h6">Observation Log</Typography>
-                            <Labeled label="Product">
-                                <ReferenceField
-                                    source="observation_data.product"
-                                    reference="products"
-                                    queryOptions={{ meta: { api_resource: "product_names" } }}
-                                    link="show"
-                                    sx={{ "& a": { textDecoration: "none" } }}
-                                >
-                                    <TextField source="name" />
-                                </ReferenceField>
-                            </Labeled>
-                            <Labeled label="Branch / Version">
-                                <TextField source="observation_data.branch_name" />
-                            </Labeled>
-                            <Labeled label="Observation">
-                                <ReferenceField
-                                    source="observation"
-                                    reference="observations"
-                                    link="show"
-                                    sx={{ "& a": { textDecoration: "none" } }}
-                                >
-                                    <TextField source="title" />
-                                </ReferenceField>
-                            </Labeled>
                             <Labeled label="User">
                                 <TextField source="user_full_name" />
                             </Labeled>
@@ -213,7 +190,7 @@ const ObservationLogComponent = () => {
 };
 const ObservationLogShow = () => {
     return (
-        <Show actions={<ShowActions />} component={ObservationLogComponent}>
+        <Show actions={<ShowActions />} component={ObservationLogComponent} aside={<ObservationLogShowAside />}>
             <Fragment />
         </Show>
     );

@@ -42,16 +42,7 @@ const MetaData = () => {
                             link="show"
                             sx={{ "& a": { textDecoration: "none" } }}
                         />
-                        {observation.branch && (
-                            <ReferenceField
-                                source="branch"
-                                reference="branches"
-                                queryOptions={{ meta: { api_resource: "branch_names" } }}
-                                label="Branch / Version"
-                                link={false}
-                                sx={{ "& a": { textDecoration: "none" } }}
-                            />
-                        )}
+                        {observation.branch && <TextField label="Branch / Version" source="branch_name" />}
                         {observation.scanner != "" && <TextField source="scanner" />}
                         <TextField source="parser_data.name" label="Parser name" />
                         {observation.scanner_observation_id != "" && (

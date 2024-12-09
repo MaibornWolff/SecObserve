@@ -67,7 +67,11 @@ def get_license_components() -> QuerySet[License_Component]:
 
 
 def get_license_component_licenses(
-    product: Product, branch: Optional[Branch]
+    product: Product,
+    branch: Optional[Branch],
+    order_by_1: str,
+    order_by2: str,
+    order_by_3: str,
 ) -> QuerySet:
     license_components = get_license_components().filter(
         product=product,
@@ -75,20 +79,18 @@ def get_license_component_licenses(
     if branch:
         license_components = license_components.filter(branch=branch)
 
-    return (
-        license_components.values(
-            "branch__name",
-            "license__spdx_id",
-            "license__name",
-            "license_expression",
-            "unknown_license",
-            "evaluation_result",
-        )
-        .annotate(Count("id"))
-        .order_by(
-            "numerical_evaluation_result",
-            "license__spdx_id",
-            "license_expression",
-            "unknown_license",
-        )
+    license_components_overview = license_components.values(
+        "branch__name",
+        "license__spdx_id",
+        "license__name",
+        "license_expression",
+        "unknown_license",
+        "evaluation_result",
+    ).annotate(Count("id"))
+
+    if order_by_1:
+        return license_components_overview.order_by(order_by_1, order_by2, order_by_3)
+
+    return license_components_overview.order_by(
+        "numerical_evaluation_result", "license_name", "branch__name"
     )
