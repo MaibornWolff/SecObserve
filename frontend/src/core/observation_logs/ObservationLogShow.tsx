@@ -33,13 +33,24 @@ const ShowActions = () => {
         sort = { field: "created", order: "DESC" };
         storeKey = "observation_logs.embedded";
     }
-    if (observation_log && observation_log.observation_data && localStorage.getItem("observationlogapprovallist")) {
+    if (observation_log && localStorage.getItem("observationlogapprovallist")) {
+        filter = {
+            assessment_status: ASSESSMENT_STATUS_NEEDS_APPROVAL,
+        };
+        sort = { field: "created", order: "ASC" };
+        storeKey = "observation_logs.approval";
+    }
+    if (
+        observation_log &&
+        observation_log.observation_data &&
+        localStorage.getItem("observationlogapprovalembeddedlist")
+    ) {
         filter = {
             product: observation_log.observation_data.product,
             assessment_status: ASSESSMENT_STATUS_NEEDS_APPROVAL,
         };
         sort = { field: "created", order: "ASC" };
-        storeKey = "observation_logs.approval";
+        storeKey = "observation_logs.approvalembedded";
     }
 
     return (
@@ -50,6 +61,8 @@ const ShowActions = () => {
                 )}
                 {observation_log &&
                     observation_log.observation_data &&
+                    observation_log.observation_data.product_data &&
+                    observation_log.observation_data.product_data.permissions &&
                     observation_log.assessment_status == ASSESSMENT_STATUS_NEEDS_APPROVAL &&
                     observation_log.observation_data.product_data.permissions.includes(
                         PERMISSION_OBSERVATION_LOG_APPROVAL
@@ -64,7 +77,7 @@ const ObservationLogComponent = () => {
         <WithRecord
             render={(observation_log) => (
                 <Box width={"100%"}>
-                    <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
+                    <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
                         <Stack spacing={1}>
                             <Typography variant="h6">Observation Log</Typography>
                             <Labeled label="User">
