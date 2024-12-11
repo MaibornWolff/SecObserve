@@ -284,16 +284,58 @@ class ObservationLogFilter(FilterSet):
     origin_component_name_version = CharFilter(
         field_name="observation__origin_component_name_version", lookup_expr="icontains"
     )
+    origin_docker_image_name_tag_short = CharFilter(
+        field_name="observation__origin_docker_image_name_tag_short",
+        lookup_expr="icontains",
+    )
+    origin_endpoint_hostname = CharFilter(
+        field_name="observation__origin_endpoint_hostname", lookup_expr="icontains"
+    )
+    origin_source_file = CharFilter(
+        field_name="observation__origin_source_file", lookup_expr="icontains"
+    )
+    origin_cloud_qualified_resource = CharFilter(
+        field_name="observation__origin_cloud_qualified_resource",
+        lookup_expr="icontains",
+    )
+    origin_kubernetes_qualified_resource = CharFilter(
+        field_name="observation__origin_kubernetes_qualified_resource",
+        lookup_expr="icontains",
+    )
 
     ordering = OrderingFilter(
         # tuple-mapping retains order
         fields=(
             ("id", "id"),
             ("user__full_name", "user_full_name"),
-            ("observation__product__name", "product_name"),
-            ("observation__product__product_group__name", "product.product_group_name"),
-            ("observation__branch__name", "branch_name"),
-            ("observation__title", "observation_title"),
+            ("observation__product__name", "observation_data.product_data.name"),
+            (
+                "observation__product__product_group__name",
+                "observation_data.product_data.product_group_name",
+            ),
+            ("observation__branch__name", "observation_data.branch_name"),
+            ("observation__title", "observation_data.title"),
+            (
+                "observation__origin_component_name_version",
+                "observation_data.origin_component_name_version",
+            ),
+            (
+                "observation__origin_docker_image_name_tag_short",
+                "observation_data.origin_docker_image_name_tag_short",
+            ),
+            (
+                "observation__origin_endpoint_hostname",
+                "observation_data.origin_endpoint_hostname",
+            ),
+            ("observation__origin_source_file", "observation_data.origin_source_file"),
+            (
+                "observation__origin_cloud_qualified_resource",
+                "observation_data.origin_cloud_qualified_resource",
+            ),
+            (
+                "observation__origin_kubernetes_qualified_resource",
+                "observation_data.origin_kubernetes_qualified_resource",
+            ),
             ("severity", "severity"),
             ("status", "status"),
             ("comment", "comment"),

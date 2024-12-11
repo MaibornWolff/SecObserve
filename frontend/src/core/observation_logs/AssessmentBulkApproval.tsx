@@ -19,15 +19,15 @@ const AssessmentBulkApproval = () => {
 
     const assessmentUpdate = async (data: any) => {
         setLoading(true);
-        const patch = {
+        const post_data = {
             assessment_status: data.assessment_status,
             approval_remark: data.approval_remark,
             observation_logs: selectedIds,
         };
 
         httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/observation_logs/bulk_approval/", {
-            method: "PATCH",
-            body: JSON.stringify(patch),
+            method: "POST",
+            body: JSON.stringify(post_data),
         })
             .then(() => {
                 refresh();

@@ -33,6 +33,7 @@ import {
     IDENTIFIER_OBSERVATION_EMBEDDED_LIST,
     IDENTIFIER_OBSERVATION_LIST,
     IDENTIFIER_OBSERVATION_REVIEW_LIST,
+    IDENTIFIER_OBSERVATION_REVIEW_LIST_PRODUCT,
 } from "./functions";
 
 const ShowActions = () => {
@@ -54,8 +55,11 @@ const ShowActions = () => {
             current_status: OBSERVATION_STATUS_OPEN,
         };
         storeKey = "observations.dashboard";
-    } else if (observation && localStorage.getItem(IDENTIFIER_OBSERVATION_REVIEW_LIST) === "true") {
+    } else if (observation && localStorage.getItem(IDENTIFIER_OBSERVATION_REVIEW_LIST_PRODUCT) === "true") {
         filter = { product: observation.product, current_status: OBSERVATION_STATUS_IN_REVIEW };
+        storeKey = "observations.review.product";
+    } else if (localStorage.getItem(IDENTIFIER_OBSERVATION_REVIEW_LIST) === "true") {
+        filter = { current_status: OBSERVATION_STATUS_IN_REVIEW };
         storeKey = "observations.review";
     }
 
