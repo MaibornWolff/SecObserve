@@ -12,7 +12,7 @@ from rest_framework.mixins import DestroyModelMixin, ListModelMixin, RetrieveMod
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.status import HTTP_204_NO_CONTENT
+from rest_framework.status import HTTP_200_OK, HTTP_204_NO_CONTENT
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from application.access_control.services.authorization import user_has_permission_or_403
@@ -40,6 +40,7 @@ from application.core.api.permissions import (
     UserHasServicePermission,
 )
 from application.core.api.serializers_observation import (
+    CountSerializer,
     EvidenceSerializer,
     ObservationAssessmentSerializer,
     ObservationBulkAssessmentSerializer,
@@ -626,6 +627,18 @@ class ObservationViewSet(ModelViewSet):
         )
         return Response(status=HTTP_204_NO_CONTENT)
 
+    @extend_schema(
+        methods=["GET"],
+        request=None,
+        responses={HTTP_200_OK: CountSerializer},
+    )
+    @action(detail=False, methods=["get"])
+    def count_reviews(self, request):
+        count = (
+            get_observations().filter(current_status=Status.STATUS_IN_REVIEW).count()
+        )
+        return Response(status=HTTP_200_OK, data={"count": count})
+
 
 class ObservationTitleViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     serializer_class = ObservationTitleSerializer
@@ -684,11 +697,11 @@ class ObservationLogViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
         return Response()
 
     @extend_schema(
-        methods=["PATCH"],
+        methods=["POST"],
         request=ObservationLogBulkApprovalSerializer,
         responses={HTTP_204_NO_CONTENT: None},
     )
-    @action(detail=False, methods=["patch"])
+    @action(detail=False, methods=["post"])
     def bulk_approval(self, request):
         request_serializer = ObservationLogBulkApprovalSerializer(data=request.data)
         if not request_serializer.is_valid():
@@ -700,6 +713,22 @@ class ObservationLogViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
             request_serializer.validated_data.get("observation_logs"),
         )
         return Response(status=HTTP_204_NO_CONTENT)
+
+    @extend_schema(
+        methods=["GET"],
+        request=None,
+        responses={HTTP_200_OK: CountSerializer},
+    )
+    @action(detail=False, methods=["get"])
+    def count_approvals(self, request):
+        count = (
+            get_observation_logs()
+            .filter(
+                assessment_status=Assessment_Status.ASSESSMENT_STATUS_NEEDS_APPROVAL
+            )
+            .count()
+        )
+        return Response(status=HTTP_200_OK, data={"count": count})
 
 
 class EvidenceViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):

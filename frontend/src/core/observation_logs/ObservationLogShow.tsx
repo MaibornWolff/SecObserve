@@ -43,14 +43,14 @@ const ShowActions = () => {
     if (
         observation_log &&
         observation_log.observation_data &&
-        localStorage.getItem("observationlogapprovalembeddedlist")
+        localStorage.getItem("observationlogapprovallistproduct")
     ) {
         filter = {
             product: observation_log.observation_data.product,
             assessment_status: ASSESSMENT_STATUS_NEEDS_APPROVAL,
         };
         sort = { field: "created", order: "ASC" };
-        storeKey = "observation_logs.approvalembedded";
+        storeKey = "observation_logs.approvalproduct";
     }
 
     return (

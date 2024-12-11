@@ -593,3 +593,7 @@ class PotentialDuplicateSerializer(ModelSerializer):
     class Meta:
         model = Potential_Duplicate
         fields = "__all__"
+
+
+class CountSerializer(Serializer):
+    count = IntegerField()

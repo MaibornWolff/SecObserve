@@ -4,7 +4,7 @@ import { Fragment } from "react";
 
 import { getElevation } from "../../metrics/functions";
 import ProductRuleApprovalList from "../../rules/product_rules/ProductRuleApprovalList";
-import ObservationLogApprovalEmbeddedList from "../observation_logs/ObservationLogApprovalEmbeddedList";
+import ObservationLogApprovalList from "../observation_logs/ObservationLogApprovalList";
 import ObservationsReviewList from "../observations/ObservationReviewList";
 
 type ProductReviewsProps = {
@@ -59,7 +59,7 @@ const ProductReviews = ({ product }: ProductReviewsProps) => {
                         </Stack>
                     </AccordionSummary>
                     <AccordionDetails>
-                        <ObservationLogApprovalEmbeddedList product={product} />
+                        <ObservationLogApprovalList product={product} />
                     </AccordionDetails>
                 </Accordion>
             )}
