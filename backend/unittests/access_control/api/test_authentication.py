@@ -258,7 +258,6 @@ class TestAuthentication(BaseTestCase):
         self._check_authentication(["post"], "/api/observation_logs/bulk_approval/")
         self._check_authentication(["get"], "/api/observation_logs/count_approvals/")
 
-
         self._check_authentication(["get"], "/api/observation_titles/")
         self._check_authentication(["get"], "/api/observation_titles/1/")
 
