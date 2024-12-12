@@ -84,7 +84,7 @@ services:
       - "8025:8025"
 
   keycloak:
-    image: keycloak/keycloak:26.0.6
+    image: keycloak/keycloak:26.0.7
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin

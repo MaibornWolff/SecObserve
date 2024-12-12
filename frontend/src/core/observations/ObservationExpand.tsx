@@ -15,7 +15,7 @@ const ObservationExpand = () => {
                     <ObservationShowDescriptionRecommendation />
                 </Paper>
             )}
-            <ObservationShowOrigins elevated={false} />
+            <ObservationShowOrigins showDependencies={false} elevated={false} />
         </SimpleShowLayout>
     );
 };

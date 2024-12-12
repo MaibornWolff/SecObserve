@@ -22,6 +22,7 @@ import observation_logs from "./core/observation_logs";
 import observations from "./core/observations";
 import product_groups from "./core/product_groups";
 import products from "./core/products";
+import Reviews from "./core/reviews/Reviews";
 import { Dashboard } from "./dashboard";
 import parsers from "./import_observations/parsers";
 import LicenseAdministration from "./licenses/license_administration/LicenseAdministration";
@@ -65,6 +66,9 @@ const App = () => {
                     <Route path="/license/licenses" element={<LicenseAdministration />} />
                     <Route path="/license/license_groups" element={<LicenseAdministration />} />
                     <Route path="/license/license_policies" element={<LicenseAdministration />} />
+                    <Route path="/reviews" element={<Reviews />} />
+                    <Route path="/reviews/observation_reviews" element={<Reviews />} />
+                    <Route path="/reviews/observation_log_approvals" element={<Reviews />} />
                     <Route path="/user_settings" element={<UserSettings />} />
                 </CustomRoutes>
                 <Resource
