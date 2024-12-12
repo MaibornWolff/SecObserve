@@ -60,19 +60,18 @@ const ObservationShowHeader = ({ observation }: ObservationShowHeaderProps) => {
                             <Labeled>
                                 <SeverityField label="Severity" source="current_severity" />
                             </Labeled>
-                            {!in_observation_log &&
-                                observation.parser_severity != "" &&
+                            {observation.parser_severity != "" &&
                                 (observation.rule_severity != "" || observation.assessment_severity != "") && (
                                     <Labeled>
                                         <TextField source="parser_severity" />
                                     </Labeled>
                                 )}
-                            {!in_observation_log && observation.rule_severity != "" && (
+                            {observation.rule_severity != "" && (
                                 <Labeled>
                                     <TextField source="rule_severity" />
                                 </Labeled>
                             )}
-                            {!in_observation_log && observation.assessment_severity != "" && (
+                            {observation.assessment_severity != "" && (
                                 <Labeled>
                                     <TextField source="assessment_severity" />
                                 </Labeled>
@@ -82,8 +81,7 @@ const ObservationShowHeader = ({ observation }: ObservationShowHeaderProps) => {
                             <Labeled>
                                 <ChipField source="current_status" label="Status" />
                             </Labeled>
-                            {!in_observation_log &&
-                                observation.parser_status != "" &&
+                            {observation.parser_status != "" &&
                                 (observation.rule_status != "" ||
                                     observation.assessment_status != "" ||
                                     observation.vex_status != "") && (
@@ -91,17 +89,17 @@ const ObservationShowHeader = ({ observation }: ObservationShowHeaderProps) => {
                                         <TextField source="parser_status" />
                                     </Labeled>
                                 )}
-                            {!in_observation_log && observation.vex_status != "" && (
+                            {observation.vex_status != "" && (
                                 <Labeled label="VEX status">
                                     <TextField source="vex_status" />
                                 </Labeled>
                             )}
-                            {!in_observation_log && observation.rule_status != "" && (
+                            {observation.rule_status != "" && (
                                 <Labeled>
                                     <TextField source="rule_status" />
                                 </Labeled>
                             )}
-                            {!in_observation_log && observation.assessment_status != "" && (
+                            {observation.assessment_status != "" && (
                                 <Labeled>
                                     <TextField source="assessment_status" />
                                 </Labeled>
