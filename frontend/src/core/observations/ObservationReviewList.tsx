@@ -254,14 +254,14 @@ const ObservationsReviewList = ({ product }: ObservationsReviewListProps) => {
                         {(!product || (product && product.has_cloud_resource)) && (
                             <TextField
                                 source="origin_cloud_qualified_resource"
-                                label="Cloud resource"
+                                label="Cloud res."
                                 sx={{ wordBreak: "break-word" }}
                             />
                         )}
                         {(!product || (product && product.has_kubernetes_resource)) && (
                             <TextField
                                 source="origin_kubernetes_qualified_resource"
-                                label="Kubernetes resource"
+                                label="Kube. res."
                                 sx={{ wordBreak: "break-word" }}
                             />
                         )}
