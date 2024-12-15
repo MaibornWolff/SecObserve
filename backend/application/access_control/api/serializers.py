@@ -1,9 +1,8 @@
 from typing import Optional
 
-from django.core.validators import MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 from rest_framework.serializers import (
     CharField,
-    ChoiceField,
     IntegerField,
     ModelSerializer,
     Serializer,
@@ -21,7 +20,7 @@ from application.access_control.queries.authorization_group_member import (
     get_authorization_group_member,
 )
 from application.access_control.services.authorization import get_user_permissions
-from application.access_control.services.roles_permissions import Permissions, Roles
+from application.access_control.services.roles_permissions import Permissions
 from application.commons.services.global_request import get_current_user
 from application.core.models import Product_Authorization_Group_Member, Product_Member
 
@@ -283,7 +282,7 @@ class AuthenticationResponseSerializer(Serializer):
 
 class ProductApiTokenSerializer(Serializer):
     id = IntegerField(validators=[MinValueValidator(0)])
-    role = ChoiceField(choices=Roles)
+    role = IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
 
 
 class ApiTokenSerializer(ModelSerializer):
