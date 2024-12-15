@@ -91,7 +91,7 @@ const FileUploadObservations = () => {
                             result.json.license_components_deleted >
                         0;
                     let message = "";
-                    if (observations)
+                    if (observations || !license_components)
                         message +=
                             result.json.observations_new +
                             " new observations\n" +
