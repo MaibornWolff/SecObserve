@@ -89,8 +89,8 @@ jobs:
       - name: Run Bandit
         uses: MaibornWolff/secobserve_actions_templates/actions/SAST/bandit@main
         with:
-          target: 'dd_import'
-          report_name: 'dd_import_bandit.sarif'
+          target: 'backend'
+          report_name: 'backend_bandit.sarif'
           so_api_base_url: ${{ vars.SO_API_BASE_URL }}
           so_api_token: ${{ secrets.SO_API_TOKEN }}
           so_product_name: ${{ vars.SO_PRODUCT_NAME }}
@@ -98,8 +98,8 @@ jobs:
       - name: Run Semgrep
         uses: MaibornWolff/secobserve_actions_templates/actions/SAST/semgrep@main
         with:
-          target: 'dd_import'
-          report_name: 'dd_import_semgrep.json'
+          target: 'backend'
+          report_name: 'backend_semgrep.json'
           configuration: 'r/python'
           so_api_base_url: ${{ vars.SO_API_BASE_URL }}
           so_api_token: ${{ secrets.SO_API_TOKEN }}
@@ -109,7 +109,7 @@ jobs:
         uses: MaibornWolff/secobserve_actions_templates/actions/SAST/kics@main
         with:
           target: '.'
-          report_name: 'dd_import_kics.sarif'
+          report_name: 'backend_kics.sarif'
           so_api_base_url: ${{ vars.SO_API_BASE_URL }}
           so_api_token: ${{ secrets.SO_API_TOKEN }}
           so_product_name: ${{ vars.SO_PRODUCT_NAME }}
@@ -118,7 +118,7 @@ jobs:
         uses: MaibornWolff/secobserve_actions_templates/actions/SAST/checkov@main
         with:
           target: '.'
-          report_name: 'dd_import_checkov.sarif'
+          report_name: 'backend_checkov.sarif'
           so_api_base_url: ${{ vars.SO_API_BASE_URL }}
           so_api_token: ${{ secrets.SO_API_TOKEN }}
           so_product_name: ${{ vars.SO_PRODUCT_NAME }}
@@ -126,8 +126,8 @@ jobs:
       - name: Run Trivy image
         uses: MaibornWolff/secobserve_actions_templates/actions/SCA/trivy_image@main
         with:
-          target: 'maibornwolff/dd-import:latest'
-          report_name: 'dd_import_trivy_image.json'
+          target: 'maibornwolff/secobserve-backend:latest'
+          report_name: 'backend_trivy_image.json'
           so_api_base_url: ${{ vars.SO_API_BASE_URL }}
           so_api_token: ${{ secrets.SO_API_TOKEN }}
           so_product_name: ${{ vars.SO_PRODUCT_NAME }}
@@ -135,8 +135,8 @@ jobs:
       - name: Run Grype image
         uses: MaibornWolff/secobserve_actions_templates/actions/SCA/grype_image@main
         with:
-          target: 'maibornwolff/dd-import:latest'
-          report_name: 'dd_import_grype_image.json'
+          target: 'maibornwolff/secobserve-backend:latest'
+          report_name: 'backend_grype_image.json'
           so_api_base_url: ${{ vars.SO_API_BASE_URL }}
           so_api_token: ${{ secrets.SO_API_TOKEN }}
           so_product_name: ${{ vars.SO_PRODUCT_NAME }}
@@ -144,7 +144,7 @@ jobs:
       - name: Run Gitleaks
         uses: MaibornWolff/secobserve_actions_templates/actions/secrets/gitleaks@main
         with:
-          report_name: 'dd_import_gitleaks.sarif'
+          report_name: 'backend_gitleaks.sarif'
           so_api_base_url: ${{ vars.SO_API_BASE_URL }}
           so_api_token: ${{ secrets.SO_API_TOKEN }}
           so_product_name: ${{ vars.SO_PRODUCT_NAME }}
@@ -154,13 +154,13 @@ jobs:
         with:
           name: secobserve
           path: |
-            dd_import_bandit.sarif
-            dd_import_semgrep.json
-            dd_import_kics.sarif
-            dd_import_checkov.sarif
-            dd_import_trivy_image.json
-            dd_import_grype_image.json
-            dd_import_gitleaks.sarif
+            backend_bandit.sarif
+            backend_semgrep.json
+            backend_kics.sarif
+            backend_checkov.sarif
+            backend_trivy_image.json
+            backend_grype_image.json
+            backend_gitleaks.sarif
 ```
 
 ##  Examplary pipeline for GitLab CI templates
@@ -377,7 +377,7 @@ semgrep_backend:
   RUN_DIRECTORY: "."
   CONFIGURATION: "r/python"
   TARGET: "backend"
-  REPORT_NAME: "semgrep_backend.sarif"
+  REPORT_NAME: "semgrep_backend.json"
   SO_ORIGIN_SERVICE: "backend"
   SO_BRANCH_NAME: $GITHUB_REF_NAME
 
@@ -386,7 +386,7 @@ semgrep_frontend:
   RUN_DIRECTORY: "."
   CONFIGURATION: "r/typescript"
   TARGET: "frontend/src"
-  REPORT_NAME: "semgrep_frontend.sarif"
+  REPORT_NAME: "semgrep_frontend.json"
   SO_ORIGIN_SERVICE: "frontend"
   SO_BRANCH_NAME: $GITHUB_REF_NAME
 
