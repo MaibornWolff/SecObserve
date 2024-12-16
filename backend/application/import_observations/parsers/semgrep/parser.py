@@ -62,7 +62,7 @@ class SemgrepParser(BaseParser, BaseFileParser):
 
         version = data.get("version")
 
-        for result in data.get("results"):
+        for result in data.get("results", {}):
             extra = result.get("extra", {})
             metadata = extra.get("metadata", {})
             category = metadata.get("category")
@@ -122,7 +122,9 @@ class SemgrepParser(BaseParser, BaseFileParser):
         if len(vulnerability_class) == 1:
             description += f"\n\n**Vulnerability Class:** {vulnerability_class[0]}"
         if len(vulnerability_class) > 1:
-            description += f"\n\n**Vulnerability Classes:** {', '.join(vulnerability_class)}"
+            description += (
+                f"\n\n**Vulnerability Classes:** {', '.join(vulnerability_class)}"
+            )
 
         return description
 
