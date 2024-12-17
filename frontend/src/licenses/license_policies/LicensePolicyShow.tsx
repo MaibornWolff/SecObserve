@@ -20,6 +20,7 @@ import ProductEmbeddedList from "../../core/products/ProductEmbeddedList";
 import LicensePolicyAuthorizationGroupMemberEmbeddedList from "../license_policy_authorization_group_members/LicensePolicyAuthorizationGroupMemberEmbeddedList";
 import LicensePolicyItemEmbeddedList from "../license_policy_items/LicensePolicyItemEmbeddedList";
 import LicensePolicyMemberEmbeddedList from "../license_policy_members/LicensePolicyMemberEmbeddedList";
+import ExportMenu from "./ExportMenu";
 import LicensePolicyApply from "./LicensePolicyApply";
 import LicensePolicyCopy from "./LicensePolicyCopy";
 
@@ -34,6 +35,7 @@ const ShowActions = () => {
                     filterDefaultValues={{ is_active: true }}
                     storeKey="license_policies.embedded"
                 />
+                {license_policy && <ExportMenu license_policy={license_policy} />}
                 {license_policy && (license_policy.is_manager || is_superuser()) && license_policy.has_products && (
                     <LicensePolicyApply license_policy={license_policy} />
                 )}

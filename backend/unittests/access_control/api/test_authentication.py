@@ -382,6 +382,8 @@ class TestAuthentication(BaseTestCase):
         self._check_authentication(["post"], "/api/license_policies/1/copy/")
         self._check_authentication(["post"], "/api/license_policies/1/apply/")
         self._check_authentication(["post"], "/api/license_policies/apply_product/")
+        self._check_authentication(["get"], "/api/license_policy/1/export_json/")
+        self._check_authentication(["get"], "/api/license_policy/1/export_yaml/")
 
         self._check_authentication(["get", "post"], "/api/license_policy_items/")
         self._check_authentication(

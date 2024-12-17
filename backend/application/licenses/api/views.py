@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import Optional, Tuple
 
 from django.db.models.query import QuerySet
+from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework.decorators import action
@@ -15,6 +16,7 @@ from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from application.access_control.services.authorization import user_has_permission_or_403
 from application.access_control.services.roles_permissions import Permissions
+from application.commons.services.global_request import get_current_user
 from application.core.models import Branch, Product
 from application.core.queries.branch import get_branch_by_id
 from application.core.queries.product import get_product_by_id
@@ -98,6 +100,10 @@ from application.licenses.queries.license_policy_item import get_license_policy_
 from application.licenses.queries.license_policy_member import (
     get_license_policy_member,
     get_license_policy_members,
+)
+from application.licenses.services.export_license_policy import (
+    export_license_policy_json,
+    export_license_policy_yaml,
 )
 from application.licenses.services.license_group import (
     copy_license_group,
@@ -544,6 +550,68 @@ class LicensePolicyViewSet(ModelViewSet):
         return Response(
             status=HTTP_204_NO_CONTENT,
         )
+
+    @extend_schema(
+        methods=["GET"],
+        responses={200: None},
+    )
+    @action(detail=True, methods=["get"])
+    def export_json(self, request, pk=None):
+        license_policy = self._get_license_policy(pk, False)
+        license_policy_export = export_license_policy_json(license_policy)
+
+        response = HttpResponse(  # pylint: disable=http-response-with-content-type-json
+            content=license_policy_export,
+            content_type="application/json",
+        )
+        response["Content-Disposition"] = (
+            f"attachment; filename=license_policy_{pk}.json"
+        )
+
+        return response
+
+    @extend_schema(
+        methods=["GET"],
+        responses={200: None},
+    )
+    @action(detail=True, methods=["get"])
+    def export_yaml(self, request, pk=None):
+        license_policy = self._get_license_policy(pk, False)
+        license_policy_export = export_license_policy_yaml(license_policy)
+
+        response = HttpResponse(
+            content=license_policy_export,
+            content_type="application/yaml",
+        )
+        response["Content-Disposition"] = (
+            f"attachment; filename=license_policy_{pk}.yaml"
+        )
+
+        return response
+
+    def _get_license_policy(self, pk: int, manager: bool) -> License_Policy:
+        license_policy = get_license_policy(pk)
+        if license_policy is None:
+            raise NotFound("License policy not found")
+
+        if not manager and license_policy.is_public:
+            return license_policy
+
+        user = get_current_user()
+        if not user:
+            raise PermissionDenied("No user found")
+
+        if user.is_superuser:
+            return license_policy
+
+        license_policy_member = get_license_policy_member(license_policy, user)
+        if not license_policy.is_public and not license_policy_member:
+            raise NotFound("License policy not found")
+
+        if manager and license_policy_member and not license_policy_member.is_manager:
+            raise PermissionDenied("You are not a manager of this license policy")
+
+        return license_policy
 
 
 class LicensePolicyItemViewSet(ModelViewSet):

@@ -1,6 +1,8 @@
+import json
 from datetime import datetime
 from typing import Any
 
+import jsonpickle
 from defusedcsv import csv
 from django.db.models.query import QuerySet
 from django.http import HttpResponse
@@ -98,3 +100,31 @@ def export_csv(
                     fields.append(value)
 
             writer.writerow(fields)
+
+
+def object_to_json(object_to_encode: Any) -> str:
+    jsonpickle.set_encoder_options("json", ensure_ascii=False)
+    json_string = jsonpickle.encode(object_to_encode, unpicklable=False)
+
+    json_dict = json.loads(json_string)
+    json_dict = _remove_empty_elements(json_dict)
+
+    return json.dumps(json_dict, indent=4, sort_keys=True, ensure_ascii=False)
+
+
+def _remove_empty_elements(d: dict) -> dict:
+    """recursively remove empty lists, empty dicts, or None elements from a dictionary"""
+
+    def empty(x):
+        return x is None or x == {} or x == []
+
+    if not isinstance(d, (dict, list)):
+        return d
+    if isinstance(d, list):
+        return [v for v in (_remove_empty_elements(v) for v in d) if not empty(v)]
+
+    return {
+        k: v
+        for k, v in ((k, _remove_empty_elements(v)) for k, v in d.items())
+        if not empty(v)
+    }
