@@ -55,6 +55,29 @@ class TestAuthorizationLicensePolicies(TestAuthorizationBase):
                 no_second_user=True,
             )
         )
+        self._test_api(
+            APITest(
+                "db_internal_write",
+                "get",
+                "/api/license_policies/1002/export_json/",
+                None,
+                200,
+                None,
+                no_second_user=True,
+            )
+        )
+        self._test_api(
+            APITest(
+                "db_internal_write",
+                "get",
+                "/api/license_policies/1002/export_yaml/",
+                None,
+                200,
+                None,
+                no_second_user=True,
+            )
+        )
+
         expected_data = "{'message': 'No License_Policy matches the given query.'}"
         self._test_api(
             APITest(
@@ -67,11 +90,59 @@ class TestAuthorizationLicensePolicies(TestAuthorizationBase):
                 no_second_user=True,
             )
         )
+        expected_data = "{'message': 'License policy not found'}"
+        self._test_api(
+            APITest(
+                "db_internal_write",
+                "get",
+                "/api/license_policies/1001/export_json/",
+                None,
+                404,
+                expected_data,
+                no_second_user=True,
+            )
+        )
+        self._test_api(
+            APITest(
+                "db_internal_write",
+                "get",
+                "/api/license_policies/1001/export_yaml/",
+                None,
+                404,
+                expected_data,
+                no_second_user=True,
+            )
+        )
+
+        expected_data = "{'message': 'No License_Policy matches the given query.'}"
         self._test_api(
             APITest(
                 "db_internal_write",
                 "get",
                 "/api/license_policies/99999/",
+                None,
+                404,
+                expected_data,
+                no_second_user=True,
+            )
+        )
+        expected_data = "{'message': 'License policy not found'}"
+        self._test_api(
+            APITest(
+                "db_internal_write",
+                "get",
+                "/api/license_policies/99999/export_json/",
+                None,
+                404,
+                expected_data,
+                no_second_user=True,
+            )
+        )
+        self._test_api(
+            APITest(
+                "db_internal_write",
+                "get",
+                "/api/license_policies/99999/export_yaml/",
                 None,
                 404,
                 expected_data,

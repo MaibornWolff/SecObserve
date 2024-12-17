@@ -38,13 +38,18 @@ requests = "2.32.3"  # https://github.com/psf/requests
 # ------------------------------------------------------------------------------
 pymysql = "1.1.1"  # https://github.com/PyMySQL/PyMySQL
 psycopg = { version = "3.2.3", extras = ["binary"] }  # https://github.com/psycopg/psycopg
-# Excel and CSV
+# Dataformats
 # ------------------------------------------------------------------------------
 defusedcsv = "2.0.0"  # https://github.com/raphaelm/defusedcsv
 openpyxl = "3.1.5"  # https://foss.heptapod.net/openpyxl/openpyxl
-# Package URL
+jsonpickle = "4.0.1"  # https://github.com/jsonpickle/jsonpickle
+pyyaml = "6.0.2"  # https://github.com/yaml/pyyaml
+# Field specifications
 # ------------------------------------------------------------------------------
 packageurl-python = "0.16.0"  # https://github.com/package-url/packageurl-python
+cvss = "3.3"  # https://github.com/RedHatProductSecurity/cvss
+semver = "3.0.2"  # https://github.com/python-semver/python-semver
+license-expression = "30.4.0"  # https://github.com/aboutcode-org/license-expression
 # Task queue
 # ------------------------------------------------------------------------------
 huey = "2.5.2"  # https://github.com/coleifer/huey
@@ -55,11 +60,7 @@ jira = "3.8.0"  # https://github.com/pycontribs/jira
 # ------------------------------------------------------------------------------
 inflect = "7.4.0"  # https://github.com/jaraco/inflect
 validators = "0.34.0"  # https://github.com/python-validators/validators
-cvss = "3.3"  # https://github.com/RedHatProductSecurity/cvss
-jsonpickle = "4.0.1"  # https://github.com/jsonpickle/jsonpickle
 py-ocsf-models = "0.2.0"  # https://github.com/prowler-cloud/py-ocsf-models
-semver = "3.0.2"  # https://github.com/python-semver/python-semver
-license-expression = "30.4.0"  # https://github.com/aboutcode-org/license-expression
 
 # Development dependencies
 # ------------------------------------------------------------------------------
