@@ -91,6 +91,7 @@ erDiagram
     Product_Group }o--o| License_Policy : references
     License_Component }o--o| License : references
     License_Component ||--|{ License_Component_Evidence : has
+    License_Policy }o--o| License_Policy : parent
     License_Policy ||--o{ License_Policy_Item : has
     License_Policy ||--o{ License_Policy_Member : has
     License_Policy ||--o{ License_Policy_Authorization_Group_Member : has
@@ -119,6 +120,8 @@ A `License Component` is a library or package used in a product that is licensed
 #### License Policy
 
 A `License Policy` defines the rules for the usage of licenses in a product. It can define which licenses are allowed, which are forbidden, and which need a review.
+
+A `License Policy` can have another license policy as a `Parent`. If a license policy has a parent, the rules of the parent are also valid for the child policy, but existing rules of the parent can be overriden and new rules can be added. 
 
 #### License Policy Item
 

@@ -1,8 +1,18 @@
 import { Typography } from "@mui/material";
-import { BooleanInput, DeleteButton, Edit, SaveButton, SimpleForm, Toolbar } from "react-admin";
+import { Fragment } from "react";
+import {
+    BooleanInput,
+    DeleteButton,
+    Edit,
+    ReferenceInput,
+    SaveButton,
+    SimpleForm,
+    Toolbar,
+    WithRecord,
+} from "react-admin";
 
 import { validate_255, validate_2048, validate_required_255 } from "../../commons/custom_validators";
-import { TextInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 
 const CustomToolbar = () => {
     return (
@@ -37,6 +47,22 @@ const LicensePolicyEdit = () => {
                     minRows={3}
                     validate={validate_2048}
                     helperText="Markdown supported."
+                />
+                <WithRecord
+                    render={(license_policy) => (
+                        <Fragment>
+                            {!license_policy.is_parent && (
+                                <ReferenceInput
+                                    source="parent"
+                                    reference="license_policies"
+                                    filter={{ is_child: false, is_not_id: license_policy.id }}
+                                    sort={{ field: "name", order: "ASC" }}
+                                >
+                                    <AutocompleteInputWide optionText="name" />
+                                </ReferenceInput>
+                            )}
+                        </Fragment>
+                    )}
                 />
                 <TextInputWide source="ignore_component_types" validate={validate_255} />
                 <BooleanInput source="is_public" label="Public" />

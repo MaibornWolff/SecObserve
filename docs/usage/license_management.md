@@ -52,6 +52,8 @@ A `License Policy` defines the rules for the usage of licenses in a Product.
 
 The list of `License Policies` can be found in the `Licenses` sub-menu under `Administration`.
 
+A `License Policy` can have another license policy as a `Parent`. If a license policy has a parent, the rules of the parent are also valid for the child policy, but existing rules of the parent can be overriden and new rules can be added. A license policy which is a parent cannot have a parent itself.
+
 Within the `License Policy` itself a comma-separated list of component (e.g. `apk` or `deb`) types can be defined, which shall be ignored in the license evaluation. This can be useful for operating system packages in a Docker container, which are not relevant for the license management.
 
 The attribute `Public` defines, if the License Policy is visible for all users or only for the members of the policy.

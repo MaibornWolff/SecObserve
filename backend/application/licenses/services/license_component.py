@@ -15,7 +15,7 @@ from application.licenses.queries.license import get_license_by_spdx_id
 from application.licenses.services.license_policy import (
     apply_license_policy_to_component,
     get_ignore_component_type_list,
-    get_license_evaluation_results,
+    get_license_evaluation_results_for_product,
 )
 
 
@@ -54,7 +54,7 @@ def process_license_components(
     for existing_component in existing_components:
         existing_components_dict[existing_component.identity_hash] = existing_component
 
-    license_evaluation_results = get_license_evaluation_results(
+    license_evaluation_results = get_license_evaluation_results_for_product(
         vulnerability_check.product
     )
 

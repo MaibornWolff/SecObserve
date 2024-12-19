@@ -1,8 +1,8 @@
 import { Typography } from "@mui/material";
-import { BooleanInput, Create, SimpleForm } from "react-admin";
+import { BooleanInput, Create, ReferenceInput, SimpleForm } from "react-admin";
 
 import { validate_255, validate_2048, validate_required_255 } from "../../commons/custom_validators";
-import { TextInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 
 const LicensePolicyCreate = () => {
     const transform = (data: any) => {
@@ -29,6 +29,14 @@ const LicensePolicyCreate = () => {
                     validate={validate_2048}
                     helperText="Markdown supported."
                 />
+                <ReferenceInput
+                    source="parent"
+                    reference="license_policies"
+                    filter={{ is_child: false }}
+                    sort={{ field: "name", order: "ASC" }}
+                >
+                    <AutocompleteInputWide optionText="name" />
+                </ReferenceInput>
                 <TextInputWide source="ignore_component_types" validate={validate_255} />
                 <BooleanInput source="is_public" label="Public" />
             </SimpleForm>
