@@ -240,7 +240,7 @@ semgrep_backend:
   variables:
     CONFIGURATION: "r/python"
     TARGET: "backend"
-    REPORT_NAME: "semgrep_backend.json"
+    REPORT_NAME: "semgrep_backend.sarif.json"
     SO_ORIGIN_SERVICE: "backend"
   needs: []
 
@@ -249,7 +249,7 @@ semgrep_frontend:
   variables:
     CONFIGURATION: "r/typescript"
     TARGET: "frontend/src"
-    REPORT_NAME: "semgrep_frontend.json"
+    REPORT_NAME: "semgrep_frontend.sarif.json"
     SO_ORIGIN_SERVICE: "frontend"
   needs: []
 
