@@ -5,6 +5,7 @@ import {
     EditButton,
     Labeled,
     PrevNextButtons,
+    ReferenceField,
     Show,
     TextField,
     TopToolbar,
@@ -66,6 +67,18 @@ const LicensePolicyComponent = () => {
                             {license_policy.description && (
                                 <Labeled>
                                     <MarkdownField content={license_policy.description} label="Description" />
+                                </Labeled>
+                            )}
+                            {license_policy.parent && (
+                                <Labeled label="Parent">
+                                    <ReferenceField
+                                        source="parent"
+                                        reference="license_policies"
+                                        link="show"
+                                        sx={{ "& a": { textDecoration: "none" } }}
+                                    >
+                                        <TextField source="name" />
+                                    </ReferenceField>
                                 </Labeled>
                             )}
                             {license_policy.ignore_component_types && (

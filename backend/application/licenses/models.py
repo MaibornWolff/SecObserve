@@ -169,6 +169,9 @@ class License_Component_Evidence(Model):
 
 
 class License_Policy(Model):
+    parent = ForeignKey(
+        "self", on_delete=PROTECT, related_name="children", null=True, blank=True
+    )
     name = CharField(max_length=255, unique=True)
     description = TextField(max_length=2048, blank=True)
     is_public = BooleanField(default=False)
@@ -216,6 +219,7 @@ class License_Policy_Item(Model):
     numerical_evaluation_result = IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
+    comment = CharField(max_length=255, blank=True)
 
     def save(self, *args, **kwargs) -> None:
         self.numerical_evaluation_result = (

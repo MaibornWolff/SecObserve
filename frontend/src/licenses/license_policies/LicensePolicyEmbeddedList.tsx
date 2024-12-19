@@ -4,6 +4,7 @@ import {
     FilterForm,
     ListContextProvider,
     NullableBooleanInput,
+    ReferenceInput,
     ResourceContextProvider,
     TextField,
     TextInput,
@@ -12,6 +13,7 @@ import {
 
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { is_external } from "../../commons/functions";
+import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/user_settings/functions";
 import LicensePolicyCreateButton from "./LicensePolicyCreateButton";
 
@@ -21,6 +23,15 @@ const showLicensePolicy = (id: any) => {
 
 const listFilters = [
     <TextInput source="name" alwaysOn />,
+    <ReferenceInput
+        source="parent"
+        reference="license_policies"
+        // filter={{ is_child: false, is_not_id: license_policy.id }}
+        sort={{ field: "name", order: "ASC" }}
+        alwaysOn
+    >
+        <AutocompleteInputMedium optionText="name" />
+    </ReferenceInput>,
     <NullableBooleanInput source="is_public" label="Public" alwaysOn />,
 ];
 
@@ -70,6 +81,7 @@ const LicensePolicyEmbeddedList = ({ license, license_group }: LicensePolicyEmbe
                         resource="license_policies"
                     >
                         <TextField source="name" label="Name" />
+                        <TextField source="parent_name" label="Parent" />
                         <BooleanField source="is_public" label="Public" />
                     </Datagrid>
                     <CustomPagination />

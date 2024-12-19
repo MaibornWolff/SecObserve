@@ -5,17 +5,23 @@ from typing import Optional
 import yaml
 
 from application.commons.services.export import object_to_json
-from application.licenses.models import License_Policy, License_Policy_Item
-from application.licenses.services.license_policy import get_ignore_component_type_list
+from application.licenses.models import License_Policy
+from application.licenses.services.license_policy import (
+    LicensePolicyEvaluationResult,
+    get_ignore_component_type_list,
+    get_license_evaluation_results_for_license_policy,
+)
 
 
 @dataclass
 class License_Policy_Export_Item:
     evaluation_result: str
+    from_parent: bool
     spdx_license: Optional[str] = None
     license_expression: Optional[str] = None
     unknown_license: Optional[str] = None
     license_group: Optional[str] = None
+    comment: Optional[str] = None
 
 
 @dataclass
@@ -29,6 +35,7 @@ class License_Policy_Export:
     description: str
     items: list[License_Policy_Export_Item]
     ignore_component_types: list[License_Policy_Export_Ignore_Component_Type]
+    parent: Optional[str] = None
 
 
 def export_license_policy_yaml(license_policy: License_Policy) -> str:
@@ -42,7 +49,7 @@ def export_license_policy_json(license_policy: License_Policy) -> str:
 def _create_license_policy_export(
     license_policy: License_Policy,
 ) -> License_Policy_Export:
-    license_policy_eport = License_Policy_Export(
+    license_policy_export = License_Policy_Export(
         name=license_policy.name,
         description=license_policy.description,
         items=[],
@@ -50,34 +57,42 @@ def _create_license_policy_export(
             license_policy.ignore_component_types
         ),
     )
+    if license_policy.parent:
+        license_policy_export.parent = license_policy.parent.name
 
-    license_policy_item: Optional[License_Policy_Item] = None
-    for license_policy_item in license_policy.license_policy_items.all():
-        if license_policy_item.license_group:
-            for spdx_license in license_policy_item.license_group.licenses.all():
-                license_policy_eport_item = License_Policy_Export_Item(
-                    spdx_license=spdx_license.spdx_id,
-                    license_group=license_policy_item.license_group.name,
-                    evaluation_result=license_policy_item.evaluation_result,
-                )
-                license_policy_eport.items.append(license_policy_eport_item)
-        elif license_policy_item.license:
-            license_policy_eport_item = License_Policy_Export_Item(
-                spdx_license=license_policy_item.license.spdx_id,
-                evaluation_result=license_policy_item.evaluation_result,
-            )
-            license_policy_eport.items.append(license_policy_eport_item)
-        elif license_policy_item.license_expression:
-            license_policy_eport_item = License_Policy_Export_Item(
-                license_expression=license_policy_item.license_expression,
-                evaluation_result=license_policy_item.evaluation_result,
-            )
-            license_policy_eport.items.append(license_policy_eport_item)
-        elif license_policy_item.unknown_license:
-            license_policy_eport_item = License_Policy_Export_Item(
-                unknown_license=license_policy_item.unknown_license,
-                evaluation_result=license_policy_item.evaluation_result,
-            )
-            license_policy_eport.items.append(license_policy_eport_item)
+    license_evaluation_results: dict[str, LicensePolicyEvaluationResult] = {}
 
-    return license_policy_eport
+    if license_policy.parent:
+        get_license_evaluation_results_for_license_policy(
+            license_policy.parent, True, license_evaluation_results
+        )
+
+    get_license_evaluation_results_for_license_policy(
+        license_policy, False, license_evaluation_results
+    )
+
+    for license_string, evaluation_result in license_evaluation_results.items():
+        license_policy_export_item = License_Policy_Export_Item(
+            evaluation_result=evaluation_result.evaluation_result,
+            from_parent=evaluation_result.from_parent,
+            license_group=evaluation_result.license_group_name,
+            comment=evaluation_result.comment,
+        )
+        if license_string.startswith("spdx_"):
+            license_policy_export_item.spdx_license = license_string.replace(
+                "spdx_", ""
+            )
+        elif license_string.startswith("expression_"):
+            license_policy_export_item.license_expression = license_string.replace(
+                "expression_", ""
+            )
+        elif license_string.startswith("unknown_"):
+            license_policy_export_item.unknown_license = license_string.replace(
+                "unknown_", ""
+            )
+        else:
+            continue
+
+        license_policy_export.items.append(license_policy_export_item)
+
+    return license_policy_export
