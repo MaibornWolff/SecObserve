@@ -39,7 +39,7 @@ These scanners have been tested with SecObserve:
 | [Bandit](https://bandit.readthedocs.io/en/latest) | SARIF | File |
 | [ESLint](https://github.com/nodesecurity/eslint-plugin-security) | SARIF | File |
 | [Find-Sec-Bugs](https://find-sec-bugs.github.io) | SARIF | File |
-| [Semgrep](https://semgrep.dev/docs) | Semgrep | File |
+| [Semgrep](https://semgrep.dev/docs) | SARIF | File |
 | **SAST infrastructure** |
 | [Checkov](https://www.checkov.io/1.Welcome/Quick%20Start.html) | SARIF | File |
 | [KICS](https://docs.kics.io/latest) | SARIF | File |
