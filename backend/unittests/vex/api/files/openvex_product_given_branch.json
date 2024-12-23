@@ -12,12 +12,7 @@
                     "@id": "pkg:so/vex_product_2@main",
                     "identifiers": {
                         "purl": "pkg:so/vex_product_2@main"
-                    },
-                    "subcomponents": [
-                        {
-                            "@id": "pkg:so/vex_comp_5@5.0.0"
-                        }
-                    ]
+                    }
                 }
             ],
             "status": "not_affected",

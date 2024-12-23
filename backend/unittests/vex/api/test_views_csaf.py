@@ -75,6 +75,7 @@ class TestCSAF(TestCase):
             "attachment; filename=csaf_2024_0001_0001.json",
             response.headers["Content-Disposition"],
         )
+
         with open(
             path.dirname(__file__) + "/files/csaf_product_no_branch.json", "r"
         ) as testfile:
@@ -85,7 +86,7 @@ class TestCSAF(TestCase):
         self.assertEqual(Product.objects.get(id=1), csaf.product)
         self.assertEqual(1, csaf.version)
         self.assertEqual(
-            "42cd21890a073aa88a4b6e882ae267321d2a11e2de040c97c4ba81997e0b6b2e",
+            "eaa6cdcec3ea5f1feff8ecd7d0c8802e027e5c26d34f57f7a8cb0f31f633da0a",
             csaf.content_hash,
         )
         self.assertEqual("Title", csaf.title)
@@ -174,6 +175,7 @@ class TestCSAF(TestCase):
             "attachment; filename=csaf_2024_0001_0002.json",
             response.headers["Content-Disposition"],
         )
+
         with open(
             path.dirname(__file__) + "/files/csaf_product_no_branch_update.json", "r"
         ) as testfile:
@@ -184,7 +186,7 @@ class TestCSAF(TestCase):
         self.assertEqual(Product.objects.get(id=1), csaf.product)
         self.assertEqual(2, csaf.version)
         self.assertEqual(
-            "03da3485b7cf22c1b223343b280fb9fd8adc5b618721abe5d95e4b363fb47a69",
+            "65aeaea7aa45c945515b81613bd0a937b2f2262a9a6dfc0512bbde340c67aad1",
             csaf.content_hash,
         )
         self.assertEqual("Title", csaf.title)
@@ -267,6 +269,7 @@ class TestCSAF(TestCase):
             "attachment; filename=csaf_2024_0001_0001.json",
             response.headers["Content-Disposition"],
         )
+
         with open(
             path.dirname(__file__) + "/files/csaf_product_branches.json", "r"
         ) as testfile:
@@ -277,7 +280,7 @@ class TestCSAF(TestCase):
         self.assertEqual(Product.objects.get(id=2), csaf.product)
         self.assertEqual(1, csaf.version)
         self.assertEqual(
-            "8dc411d11d433ad370b988ac2bf447443927de3bb57fa7e3ce72de4412eabda0",
+            "ad81aa72d9cd265574eef05a13f86e6c7072212532b2d167e3ca120b6d26b897",
             csaf.content_hash,
         )
         self.assertEqual("Title", csaf.title)
@@ -361,6 +364,7 @@ class TestCSAF(TestCase):
             "attachment; filename=csaf_2024_0001_0001.json",
             response.headers["Content-Disposition"],
         )
+
         with open(
             path.dirname(__file__) + "/files/csaf_product_given_branch.json", "r"
         ) as testfile:
@@ -371,7 +375,7 @@ class TestCSAF(TestCase):
         self.assertEqual(Product.objects.get(id=2), csaf.product)
         self.assertEqual(1, csaf.version)
         self.assertEqual(
-            "7233ee583bc5d5d0a31439030d9e3da505368b0582e02182ab12c056854e2c60",
+            "cf643f6b631cf5d2bf9a11b0c7247d1be9e456482e9fc9ed073c8b3823d8bd0d",
             csaf.content_hash,
         )
         self.assertEqual("Title", csaf.title)
@@ -455,6 +459,7 @@ class TestCSAF(TestCase):
             "attachment; filename=csaf_2024_0001_0001.json",
             response.headers["Content-Disposition"],
         )
+
         with open(
             path.dirname(__file__) + "/files/csaf_given_vulnerability.json", "r"
         ) as testfile:
@@ -465,7 +470,7 @@ class TestCSAF(TestCase):
         self.assertEqual(None, csaf.product)
         self.assertEqual(1, csaf.version)
         self.assertEqual(
-            "b4a6c3264182f1e5ae292a7386f169c04d5a0f93ef44c652ef9a97ebee71d0c8",
+            "191a9c71fc1f1ab976b5d45adeedbc1faf997c43d59ab4977b907b95a9ab003d",
             csaf.content_hash,
         )
         self.assertEqual("Title", csaf.title)
@@ -551,6 +556,7 @@ class TestCSAF(TestCase):
             "attachment; filename=csaf_2024_0001_0002.json",
             response.headers["Content-Disposition"],
         )
+
         with open(
             path.dirname(__file__) + "/files/csaf_given_vulnerability_update.json", "r"
         ) as testfile:
@@ -561,7 +567,7 @@ class TestCSAF(TestCase):
         self.assertEqual(None, csaf.product)
         self.assertEqual(2, csaf.version)
         self.assertEqual(
-            "b3d5d54c989a8906100d2dcb4ccc8078d3daea6ad323ba52e55d1aa8c3c61771",
+            "25495e803982bde094cd1f337f48c9740cd0250f0b04a9c5af3a6cdb72640184",
             csaf.content_hash,
         )
         self.assertEqual("Title", csaf.title)

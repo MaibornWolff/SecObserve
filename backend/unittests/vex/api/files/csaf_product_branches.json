@@ -67,44 +67,64 @@
             {
                 "branches": [
                     {
-                        "category": "product_version",
-                        "name": "vex_comp_2:2.0.0",
-                        "product": {
-                            "name": "vex_comp_2:2.0.0",
-                            "product_id": "pkg:so/vex_comp_2@2.0.0",
-                            "product_identification_helper": {
-                                "cpe": "cpe:2.3:a:so:vex_comp_2:2.0.0:*:*:*:*:*:*:*",
-                                "purl": "pkg:so/vex_comp_2@2.0.0"
+                        "branches": [
+                            {
+                                "category": "product_version",
+                                "name": "2.0.0",
+                                "product": {
+                                    "name": "vex_comp_2:2.0.0",
+                                    "product_id": "pkg:so/vendor2/vex_comp_2@2.0.0",
+                                    "product_identification_helper": {
+                                        "cpe": "cpe:2.3:a:so:vex_comp_2:2.0.0:*:*:*:*:*:*:*",
+                                        "purl": "pkg:so/vendor2/vex_comp_2@2.0.0"
+                                    }
+                                }
                             }
-                        }
-                    },
-                    {
-                        "category": "product_version",
-                        "name": "vex_comp_4:4.0.0",
-                        "product": {
-                            "name": "vex_comp_4:4.0.0",
-                            "product_id": "pkg:so/vex_comp_4@4.0.0",
-                            "product_identification_helper": {
-                                "cpe": "cpe:2.3:a:so:vex_comp_4:4.0.0:*:*:*:*:*:*:*",
-                                "purl": "pkg:so/vex_comp_4@4.0.0"
-                            }
-                        }
-                    },
-                    {
-                        "category": "product_version",
-                        "name": "vex_comp_5:5.0.0",
-                        "product": {
-                            "name": "vex_comp_5:5.0.0",
-                            "product_id": "pkg:so/vex_comp_5@5.0.0",
-                            "product_identification_helper": {
-                                "cpe": "cpe:2.3:a:so:vex_comp_5:5.0.0:*:*:*:*:*:*:*",
-                                "purl": "pkg:so/vex_comp_5@5.0.0"
-                            }
-                        }
+                        ],
+                        "category": "product_name",
+                        "name": "vex_comp_2"
                     }
                 ],
-                "category": "product_family",
-                "name": "_components_"
+                "category": "vendor",
+                "name": "vendor2"
+            },
+            {
+                "branches": [
+                    {
+                        "branches": [
+                            {
+                                "category": "product_version",
+                                "name": "4.0.0",
+                                "product": {
+                                    "name": "vex_comp_4:4.0.0",
+                                    "product_id": "pkg:so/vex_comp_4@4.0.0",
+                                    "product_identification_helper": {
+                                        "cpe": "cpe:2.3:a:so:vex_comp_4:4.0.0:*:*:*:*:*:*:*",
+                                        "purl": "pkg:so/vex_comp_4@4.0.0"
+                                    }
+                                }
+                            }
+                        ],
+                        "category": "product_name",
+                        "name": "vex_comp_4"
+                    },
+                    {
+                        "branches": [
+                            {
+                                "category": "product_version",
+                                "name": "5.0.0",
+                                "product": {
+                                    "name": "vex_comp_5:5.0.0",
+                                    "product_id": "vex_comp_5:5.0.0"
+                                }
+                            }
+                        ],
+                        "category": "product_name",
+                        "name": "vex_comp_5"
+                    }
+                ],
+                "category": "vendor",
+                "name": "unknown"
             }
         ],
         "relationships": [
@@ -114,7 +134,7 @@
                     "name": "vex_comp_2:2.0.0@vex_product_2:dev",
                     "product_id": "vex_comp_2:2.0.0@vex_product_2:dev"
                 },
-                "product_reference": "pkg:so/vex_comp_2@2.0.0",
+                "product_reference": "pkg:so/vendor2/vex_comp_2@2.0.0",
                 "relates_to_product_reference": "pkg:so/vex_product_2@dev"
             },
             {
@@ -132,7 +152,7 @@
                     "name": "vex_comp_5:5.0.0@vex_product_2:main",
                     "product_id": "vex_comp_5:5.0.0@vex_product_2:main"
                 },
-                "product_reference": "pkg:so/vex_comp_5@5.0.0",
+                "product_reference": "vex_comp_5:5.0.0",
                 "relates_to_product_reference": "pkg:so/vex_product_2@main"
             }
         ]
