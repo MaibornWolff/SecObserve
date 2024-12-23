@@ -225,6 +225,7 @@ def normalize_origin_component(observation):  # pylint: disable=too-many-branche
             purl = PackageURL.from_string(observation.origin_component_purl)
             observation.origin_component_purl_type = purl.type
         except ValueError:
+            observation.origin_component_purl = ""
             observation.origin_component_purl_type = ""
 
     if observation.origin_component_purl_type is None:
