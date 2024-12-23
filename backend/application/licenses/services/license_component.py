@@ -168,6 +168,7 @@ def _prepare_component(component: License_Component) -> None:
             purl = PackageURL.from_string(component.purl)
             component.purl_type = purl.type
         except ValueError:
+            component.purl = ""
             component.purl_type = ""
 
     if component.purl_type is None:

@@ -108,8 +108,11 @@ class LicenseComponentSerializer(ModelSerializer):
 
     def get_purl_namespace(self, obj: License_Component) -> Optional[str]:
         if obj.purl:
-            purl = PackageURL.from_string(obj.purl)
-            return purl.namespace
+            try:
+                purl = PackageURL.from_string(obj.purl)
+                return purl.namespace
+            except ValueError:
+                return ""
 
         return ""
 

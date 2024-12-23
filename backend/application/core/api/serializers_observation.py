@@ -125,16 +125,23 @@ class ObservationSerializer(ModelSerializer):
 
     def get_origin_component_purl_type(self, observation: Observation) -> str:
         if observation.origin_component_purl:
-            purl = PackageURL.from_string(observation.origin_component_purl)
-            return purl.type
+            try:
+                purl = PackageURL.from_string(observation.origin_component_purl)
+                return purl.type
+            except ValueError:
+                return ""
+
         return ""
 
     def get_origin_component_purl_namespace(
         self, observation: Observation
     ) -> Optional[str]:
         if observation.origin_component_purl:
-            purl = PackageURL.from_string(observation.origin_component_purl)
-            return purl.namespace
+            try:
+                purl = PackageURL.from_string(observation.origin_component_purl)
+                return purl.namespace
+            except ValueError:
+                return ""
         return ""
 
     def _create_azure_devops_url(
