@@ -95,12 +95,15 @@ maibornwolff/secobserve-backend:1.20.0 --> alpine:3.20.3"""
             self.assertEqual("2.9.0", license_component.version)
 
             license_component = license_components[4]
-            self.assertEqual('', license_component.unsaved_license)
+            self.assertEqual("", license_component.unsaved_license)
             self.assertEqual("PyMySQL", license_component.name)
             self.assertEqual("1.1.1", license_component.version)
 
             license_component = license_components[89]
-            self.assertEqual("Artistic-1.0-Perl AND GPL-1.0-or-later", license_component.unsaved_license)
+            self.assertEqual(
+                "Artistic-1.0-Perl AND GPL-1.0-or-later",
+                license_component.unsaved_license,
+            )
             self.assertEqual("perl", license_component.name)
             self.assertEqual("5.38.2-r0", license_component.version)
             self.assertEqual(
