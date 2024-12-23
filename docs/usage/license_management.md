@@ -10,14 +10,14 @@ If license management is deactivated:
 
 * The `Licenses` menu is not visible in the navigation.
 * The [automatic import of SPDX licenses](../integrations/license_data.md#spdx-licenses) is deactivated.
-* Licenses for components are not imported from CycloneDX files and the `License` tab is not visible in the Product view.
+* Licenses for components are not imported from CycloneDX or SPDX files and the `License` tab is not visible in the Product view.
 
 
 ## Managing licenses in products
 
 #### Importing components with licenses
 
-When importing data from CycloneDX SBOMs, the licenses of the components are imported as well, if they are available in the SBOM and the parameter `SO_SUPPRESS_LICENSES` is not set or set to `false` ^1)^. The licenses are shown in the `License` tab of the Product view.
+When importing data from CycloneDX or SPDX SBOMs, the licenses of the components are imported as well, if they are available in the SBOM and the parameter `SO_SUPPRESS_LICENSES` is not set or set to `false` ^1)^. The licenses are shown in the `License` tab of the Product view.
 
 **^1)^** `SO_SUPPRESS_LICENSES` will be set to `true` by the *Grype*, *Trivy Filesystem* and *Trivy Image* GitHub actions / GitLab templates if not set otherwise, to not accidently import licenses.
 

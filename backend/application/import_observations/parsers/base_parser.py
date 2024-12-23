@@ -43,5 +43,5 @@ class BaseAPIParser:
 
 
 class BaseFileParser:
-    def check_format(self, file: File) -> tuple[bool, list[str], dict | list]:
+    def check_format(self, file: File) -> tuple[bool, list[str], Any]:
         raise NotImplementedError("check_format() must be overridden")
