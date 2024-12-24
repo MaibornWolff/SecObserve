@@ -108,8 +108,11 @@ class LicenseComponentSerializer(ModelSerializer):
 
     def get_purl_namespace(self, obj: License_Component) -> Optional[str]:
         if obj.purl:
-            purl = PackageURL.from_string(obj.purl)
-            return purl.namespace
+            try:
+                purl = PackageURL.from_string(obj.purl)
+                return purl.namespace
+            except ValueError:
+                return ""
 
         return ""
 
@@ -317,6 +320,8 @@ class LicenseGroupCopySerializer(Serializer):
 
 
 class LicensePolicySerializer(ModelSerializer):
+    parent_name = SerializerMethodField()
+    is_parent = SerializerMethodField()
     is_manager = SerializerMethodField()
     has_products = SerializerMethodField()
     has_product_groups = SerializerMethodField()
@@ -324,18 +329,14 @@ class LicensePolicySerializer(ModelSerializer):
     has_users = SerializerMethodField()
     has_authorization_groups = SerializerMethodField()
 
-    class Meta:
-        model = License_Policy
-        exclude = ["users", "authorization_groups"]
+    def get_parent_name(self, obj: License_Policy) -> str:
+        if obj.parent:
+            return obj.parent.name
 
-    def validate_ignore_component_types(self, value: str) -> str:
-        ignore_component_types = get_ignore_component_type_list(value)
-        for component_type in ignore_component_types:
-            for component_type in ignore_component_types:
-                if not PURL_Type.PURL_TYPE_CHOICES.get(component_type):
-                    raise ValidationError(f"Invalid component type {component_type}")
+        return ""
 
-        return value
+    def get_is_parent(self, obj: License_Policy) -> bool:
+        return obj.children.exists()
 
     def get_is_manager(self, obj: License_Policy) -> bool:
         user = get_current_user()
@@ -372,6 +373,36 @@ class LicensePolicySerializer(ModelSerializer):
             .filter(license_policy=obj)
             .exists()
         )
+
+    class Meta:
+        model = License_Policy
+        exclude = ["users", "authorization_groups"]
+
+    def validate_ignore_component_types(self, value: str) -> str:
+        ignore_component_types = get_ignore_component_type_list(value)
+        for component_type in ignore_component_types:
+            for component_type in ignore_component_types:
+                if not PURL_Type.PURL_TYPE_CHOICES.get(component_type):
+                    raise ValidationError(f"Invalid component type {component_type}")
+
+        return value
+
+    def validate_parent(self, value: License_Policy) -> License_Policy:
+        if value.parent:
+            raise ValidationError("A child cannot be a parent itself")
+
+        return value
+
+    def update(self, instance: License_Policy, validated_data: dict):
+        parent = validated_data.get("parent")
+        instance_has_children = instance.children.exists()
+        if parent:
+            if instance_has_children:
+                raise ValidationError("A parent cannot have a parent itself")
+            if instance == parent:
+                raise ValidationError("A license policy cannot be parent of itself")
+
+        return super().update(instance, validated_data)
 
 
 class LicensePolicyItemSerializer(ModelSerializer):

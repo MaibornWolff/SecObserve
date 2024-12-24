@@ -32,12 +32,17 @@ const LicensePolicyItemEdit = ({ license_policy_id, license_policy_item_id }: Li
         if (!data.unknown_license) {
             data.unknown_license = "";
         }
+        if (!data.comment) {
+            data.comment = "";
+        }
+
         const patch = {
             license_group: data.license_group,
             license: data.license,
             license_expression: data.license_expression,
             unknown_license: data.unknown_license,
             evaluation_result: data.evaluation_result,
+            comment: data.comment,
         };
 
         update(
@@ -131,6 +136,7 @@ const LicensePolicyItemEdit = ({ license_policy_id, license_policy_item_id }: Li
                             choices={EVALUATION_RESULT_CHOICES}
                             validate={validate_required}
                         />
+                        <TextInputExtraWide source="comment" label="Comment" validate={validate_255} />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>

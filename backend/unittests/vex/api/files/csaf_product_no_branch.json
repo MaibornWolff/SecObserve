@@ -18,7 +18,7 @@
             "generator": {
                 "engine": {
                     "name": "SecObserve",
-                    "version": "1.22.5"
+                    "version": "1.24.0"
                 }
             },
             "id": "CSAF_2024_0001_0001",
@@ -53,44 +53,74 @@
             {
                 "branches": [
                     {
-                        "category": "product_version",
-                        "name": "vex_comp_1:1.0.0",
-                        "product": {
-                            "name": "vex_comp_1:1.0.0",
-                            "product_id": "pkg:so/vex_comp_1@1.0.0",
-                            "product_identification_helper": {
-                                "cpe": "cpe:2.3:a:so:vex_comp_1:1.0.0:*:*:*:*:*:*:*",
-                                "purl": "pkg:so/vex_comp_1@1.0.0"
+                        "branches": [
+                            {
+                                "category": "product_version",
+                                "name": "1.0.0",
+                                "product": {
+                                    "name": "vex_comp_1:1.0.0",
+                                    "product_id": "pkg:so/vex_comp_1@1.0.0",
+                                    "product_identification_helper": {
+                                        "cpe": "cpe:2.3:a:so:vex_comp_1:1.0.0:*:*:*:*:*:*:*",
+                                        "purl": "pkg:so/vex_comp_1@1.0.0"
+                                    }
+                                }
                             }
-                        }
-                    },
-                    {
-                        "category": "product_version",
-                        "name": "vex_comp_2:2.0.0",
-                        "product": {
-                            "name": "vex_comp_2:2.0.0",
-                            "product_id": "pkg:so/vex_comp_2@2.0.0",
-                            "product_identification_helper": {
-                                "cpe": "cpe:2.3:a:so:vex_comp_2:2.0.0:*:*:*:*:*:*:*",
-                                "purl": "pkg:so/vex_comp_2@2.0.0"
-                            }
-                        }
-                    },
-                    {
-                        "category": "product_version",
-                        "name": "vex_comp_3:3.0.0",
-                        "product": {
-                            "name": "vex_comp_3:3.0.0",
-                            "product_id": "pkg:so/vex_comp_3@3.0.0",
-                            "product_identification_helper": {
-                                "cpe": "cpe:2.3:a:so:vex_comp_3:3.0.0:*:*:*:*:*:*:*",
-                                "purl": "pkg:so/vex_comp_3@3.0.0"
-                            }
-                        }
+                        ],
+                        "category": "product_name",
+                        "name": "vex_comp_1"
                     }
                 ],
-                "category": "product_family",
-                "name": "_components_"
+                "category": "vendor",
+                "name": "unknown"
+            },
+            {
+                "branches": [
+                    {
+                        "branches": [
+                            {
+                                "category": "product_version",
+                                "name": "2.0.0",
+                                "product": {
+                                    "name": "vex_comp_2:2.0.0",
+                                    "product_id": "pkg:so/vendor2/vex_comp_2@2.0.0",
+                                    "product_identification_helper": {
+                                        "cpe": "cpe:2.3:a:so:vex_comp_2:2.0.0:*:*:*:*:*:*:*",
+                                        "purl": "pkg:so/vendor2/vex_comp_2@2.0.0"
+                                    }
+                                }
+                            }
+                        ],
+                        "category": "product_name",
+                        "name": "vex_comp_2"
+                    }
+                ],
+                "category": "vendor",
+                "name": "vendor2"
+            },
+            {
+                "branches": [
+                    {
+                        "branches": [
+                            {
+                                "category": "product_version",
+                                "name": "3.0.0",
+                                "product": {
+                                    "name": "vex_comp_3:3.0.0",
+                                    "product_id": "pkg:so/vendor_3/vex_comp_3@3.0.0",
+                                    "product_identification_helper": {
+                                        "cpe": "cpe:2.3:a:so:vex_comp_3:3.0.0:*:*:*:*:*:*:*",
+                                        "purl": "pkg:so/vendor_3/vex_comp_3@3.0.0"
+                                    }
+                                }
+                            }
+                        ],
+                        "category": "product_name",
+                        "name": "vex_comp_3"
+                    }
+                ],
+                "category": "vendor",
+                "name": "vendor_3"
             }
         ],
         "relationships": [
@@ -109,7 +139,7 @@
                     "name": "vex_comp_2:2.0.0@vex_product_1",
                     "product_id": "vex_comp_2:2.0.0@vex_product_1"
                 },
-                "product_reference": "pkg:so/vex_comp_2@2.0.0",
+                "product_reference": "pkg:so/vendor2/vex_comp_2@2.0.0",
                 "relates_to_product_reference": "vex_product_1"
             },
             {
@@ -118,7 +148,7 @@
                     "name": "vex_comp_3:3.0.0@vex_product_1",
                     "product_id": "vex_comp_3:3.0.0@vex_product_1"
                 },
-                "product_reference": "pkg:so/vex_comp_3@3.0.0",
+                "product_reference": "pkg:so/vendor_3/vex_comp_3@3.0.0",
                 "relates_to_product_reference": "vex_product_1"
             }
         ]

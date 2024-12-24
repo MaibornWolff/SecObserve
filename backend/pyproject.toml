@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "SecObserve"
-version = "1.22.5"
+version = "1.24.0"
 description = "SecObserve is an open source vulnerability management system for software development and cloud environments."
 license = "BSD-3-Clause"
 authors = [
@@ -12,7 +12,7 @@ python = ">= 3.10, < 3.13"
 # Django
 # ------------------------------------------------------------------------------
 gunicorn = "23.0.0"  # https://github.com/benoitc/gunicorn
-django = "5.1.3"  # https://www.djangoproject.com/
+django = "5.1.4"  # https://www.djangoproject.com/
 django-environ = "0.11.2"  # https://github.com/joke2k/django-environ
 django-filter = "24.3"  # https://github.com/carltongibson/django-filter 
 django-csp = "3.8"  # https://github.com/mozilla/django-csp
@@ -26,8 +26,8 @@ djangorestframework = "3.15.2"  # https://github.com/encode/django-rest-framewor
 django-cors-headers = "4.6.0" # https://github.com/adamchainz/django-cors-headers
 # OpenAPI 3
 # ------------------------------------------------------------------------------
-drf-spectacular = "0.27.2" # https://github.com/tfranzel/drf-spectacular
-drf-spectacular-sidecar = "2024.11.1"  # https://github.com/tfranzel/drf-spectacular-sidecar
+drf-spectacular = "0.28.0" # https://github.com/tfranzel/drf-spectacular
+drf-spectacular-sidecar = "2024.12.1"  # https://github.com/tfranzel/drf-spectacular-sidecar
 # Token authentication
 # ------------------------------------------------------------------------------
 PyJWT = "2.10.1"  # https://github.com/jpadilla/pyjwt
@@ -38,13 +38,18 @@ requests = "2.32.3"  # https://github.com/psf/requests
 # ------------------------------------------------------------------------------
 pymysql = "1.1.1"  # https://github.com/PyMySQL/PyMySQL
 psycopg = { version = "3.2.3", extras = ["binary"] }  # https://github.com/psycopg/psycopg
-# Excel and CSV
+# Dataformats
 # ------------------------------------------------------------------------------
 defusedcsv = "2.0.0"  # https://github.com/raphaelm/defusedcsv
 openpyxl = "3.1.5"  # https://foss.heptapod.net/openpyxl/openpyxl
-# Package URL
+jsonpickle = "4.0.1"  # https://github.com/jsonpickle/jsonpickle
+pyyaml = "6.0.2"  # https://github.com/yaml/pyyaml
+# Field specifications
 # ------------------------------------------------------------------------------
 packageurl-python = "0.16.0"  # https://github.com/package-url/packageurl-python
+cvss = "3.3"  # https://github.com/RedHatProductSecurity/cvss
+semver = "3.0.2"  # https://github.com/python-semver/python-semver
+license-expression = "30.4.0"  # https://github.com/aboutcode-org/license-expression
 # Task queue
 # ------------------------------------------------------------------------------
 huey = "2.5.2"  # https://github.com/coleifer/huey
@@ -55,11 +60,8 @@ jira = "3.8.0"  # https://github.com/pycontribs/jira
 # ------------------------------------------------------------------------------
 inflect = "7.4.0"  # https://github.com/jaraco/inflect
 validators = "0.34.0"  # https://github.com/python-validators/validators
-cvss = "3.3"  # https://github.com/RedHatProductSecurity/cvss
-jsonpickle = "4.0.0"  # https://github.com/jsonpickle/jsonpickle
 py-ocsf-models = "0.2.0"  # https://github.com/prowler-cloud/py-ocsf-models
-semver = "3.0.2"  # https://github.com/python-semver/python-semver
-license-expression = "30.4.0"  # https://github.com/aboutcode-org/license-expression
+spdx-tools = "0.8.3"  # https://github.com/spdx/tools-python
 
 # Development dependencies
 # ------------------------------------------------------------------------------
@@ -71,7 +73,7 @@ django-extensions = { version = "3.2.3", optional = true }  # https://github.com
 
 # Unittest dependencies
 # ------------------------------------------------------------------------------
-coverage = { version = "7.6.8", optional = true }  # https://github.com/nedbat/coveragepy
+coverage = { version = "7.6.9", optional = true }  # https://github.com/nedbat/coveragepy
 django-coverage-plugin = { version = "3.1.0", optional = true }  # https://github.com/nedbat/django_coverage_plugin
 
 # Code quality dependencies
@@ -79,12 +81,12 @@ django-coverage-plugin = { version = "3.1.0", optional = true }  # https://githu
 flake8 = { version = "7.1.1", optional = true }  # https://github.com/PyCQA/flake8
 flake8-isort = { version = "6.1.1", optional = true }  # https://github.com/gforcada/flake8-isort
 black = { version = "24.10.0", optional = true }  # https://github.com/psf/black
-pylint = { version = "3.3.1", optional = true }  # https://github.com/pylint-dev/pylint
+pylint = { version = "3.3.3", optional = true }  # https://github.com/pylint-dev/pylint
 pylint-django = { version = "2.6.1", optional = true }  # https://github.com/PyCQA/pylint-django
 pre-commit = { version = "4.0.1", optional = true }  # https://github.com/pre-commit/pre-commit
-mypy = { version = "1.13.0", optional = true }  # https://github.com/python/mypy
+mypy = { version = "1.14.0", optional = true }  # https://github.com/python/mypy
 django-stubs = { version = "5.1.1", optional = true }  # https://github.com/typeddjango/django-stubs
-djangorestframework-stubs = { version = "3.15.1", optional = true }  # https://github.com/typeddjango/djangorestframework-stubs
+djangorestframework-stubs = { version = "3.15.2", optional = true }  # https://github.com/typeddjango/djangorestframework-stubs
 types-PyMySQL = { version = "1.1.0.20241103", optional = true }  # https://github.com/python/typeshed
 # import-linter = "2.0"  # https://github.com/seddonym/import-linter --> Cannot be build with Docker
 

@@ -10,14 +10,14 @@ If license management is deactivated:
 
 * The `Licenses` menu is not visible in the navigation.
 * The [automatic import of SPDX licenses](../integrations/license_data.md#spdx-licenses) is deactivated.
-* Licenses for components are not imported from CycloneDX files and the `License` tab is not visible in the Product view.
+* Licenses for components are not imported from CycloneDX or SPDX files and the `License` tab is not visible in the Product view.
 
 
 ## Managing licenses in products
 
 #### Importing components with licenses
 
-When importing data from CycloneDX SBOMs, the licenses of the components are imported as well, if they are available in the SBOM and the parameter `SO_SUPPRESS_LICENSES` is not set or set to `false` ^1)^. The licenses are shown in the `License` tab of the Product view.
+When importing data from CycloneDX or SPDX SBOMs, the licenses of the components are imported as well, if they are available in the SBOM and the parameter `SO_SUPPRESS_LICENSES` is not set or set to `false` ^1)^. The licenses are shown in the `License` tab of the Product view.
 
 **^1)^** `SO_SUPPRESS_LICENSES` will be set to `true` by the *Grype*, *Trivy Filesystem* and *Trivy Image* GitHub actions / GitLab templates if not set otherwise, to not accidently import licenses.
 
@@ -51,6 +51,8 @@ A good strategy is to start with an existing License Policy and when needed make
 A `License Policy` defines the rules for the usage of licenses in a Product. 
 
 The list of `License Policies` can be found in the `Licenses` sub-menu under `Administration`.
+
+A `License Policy` can have another license policy as a `Parent`. If a license policy has a parent, the rules of the parent are also valid for the child policy, but existing rules of the parent can be overriden and new rules can be added. A license policy which is a parent cannot have a parent itself.
 
 Within the `License Policy` itself a comma-separated list of component (e.g. `apk` or `deb`) types can be defined, which shall be ignored in the license evaluation. This can be useful for operating system packages in a Docker container, which are not relevant for the license management.
 

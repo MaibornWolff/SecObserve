@@ -34,6 +34,7 @@ const LicensePolicyItemAdd = ({ id }: LicensePolicyItemAddProps) => {
     const [license_expression, setLicenseExpression] = useState();
     const [unknown_license, setUnknownLicense] = useState();
     const [evaluation_result, setEvaluationResult] = useState();
+    const [comment, setComment] = useState();
 
     const resetState = () => {
         setLicenseGroup(undefined);
@@ -41,6 +42,7 @@ const LicensePolicyItemAdd = ({ id }: LicensePolicyItemAddProps) => {
         setLicenseExpression(undefined);
         setUnknownLicense(undefined);
         setEvaluationResult(undefined);
+        setComment(undefined);
     };
 
     const CancelButton = () => (
@@ -80,6 +82,7 @@ const LicensePolicyItemAdd = ({ id }: LicensePolicyItemAddProps) => {
                 license_expression: license_expression,
                 unknown_license: unknown_license,
                 evaluation_result: evaluation_result,
+                comment: comment,
             };
             return data;
         };
@@ -90,6 +93,9 @@ const LicensePolicyItemAdd = ({ id }: LicensePolicyItemAddProps) => {
             }
             if (!data.unknown_license) {
                 data.unknown_license = "";
+            }
+            if (!data.comment) {
+                data.comment = "";
             }
             const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/license_policy_items/";
             const body = JSON.stringify({ license_policy: id, ...data });
@@ -176,6 +182,12 @@ const LicensePolicyItemAdd = ({ id }: LicensePolicyItemAddProps) => {
                                 choices={EVALUATION_RESULT_CHOICES}
                                 validate={validate_required}
                                 onChange={(e) => setEvaluationResult(e)}
+                            />
+                            <TextInputExtraWide
+                                source="comment"
+                                label="Comment"
+                                validate={validate_255}
+                                onChange={(e) => setComment(e.target.value)}
                             />
                         </SimpleForm>
                     </CreateBase>

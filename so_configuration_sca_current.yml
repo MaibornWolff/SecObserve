@@ -1,18 +1,18 @@
 trivy_image_backend_current:
   SCANNER: trivy_image
-  TARGET: "maibornwolff/secobserve-backend:1.22.5"
+  TARGET: "maibornwolff/secobserve-backend:1.24.0"
   FURTHER_PARAMETERS: "--pkg-types os --db-repository public.ecr.aws/aquasecurity/trivy-db:2"
   REPORT_NAME: "trivy_backend_image.json"
   SO_ORIGIN_SERVICE: "backend"
-  SO_BRANCH_NAME: "1.22.5"
+  SO_BRANCH_NAME: "1.24.0"
 
 trivy_image_frontend_current:
   SCANNER: trivy_image
-  TARGET: "maibornwolff/secobserve-frontend:1.22.5"
+  TARGET: "maibornwolff/secobserve-frontend:1.24.0"
   FURTHER_PARAMETERS: "--pkg-types os --db-repository public.ecr.aws/aquasecurity/trivy-db:2"
   REPORT_NAME: "trivy_frontend_image.json"
   SO_ORIGIN_SERVICE: "frontend"
-  SO_BRANCH_NAME: "1.22.5"
+  SO_BRANCH_NAME: "1.24.0"
 
 trivy_filesystem_backend_current:
   SCANNER: trivy_filesystem
@@ -21,7 +21,7 @@ trivy_filesystem_backend_current:
   FURTHER_PARAMETERS: "--db-repository public.ecr.aws/aquasecurity/trivy-db:2"
   REPORT_NAME: "trivy_backend_poetry.json"
   SO_ORIGIN_SERVICE: "backend"
-  SO_BRANCH_NAME: "1.22.5"
+  SO_BRANCH_NAME: "1.24.0"
 
 trivy_filesystem_frontend_current:
   SCANNER: trivy_filesystem
@@ -30,7 +30,7 @@ trivy_filesystem_frontend_current:
   FURTHER_PARAMETERS: "--db-repository public.ecr.aws/aquasecurity/trivy-db:2"
   REPORT_NAME: "trivy_frontend_npm.json"
   SO_ORIGIN_SERVICE: "frontend"
-  SO_BRANCH_NAME: "1.22.5"
+  SO_BRANCH_NAME: "1.24.0"
 
 importer:
   SO_UPLOAD: "true"

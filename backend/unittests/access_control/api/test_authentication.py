@@ -248,6 +248,18 @@ class TestAuthentication(BaseTestCase):
         )
         self._check_authentication(["patch"], "/api/observations/1/assessment/")
         self._check_authentication(["patch"], "/api/observations/1/remove_assessment/")
+        self._check_authentication(["post"], "/api/observations/bulk_assessment/")
+        self._check_authentication(["post"], "/api/observations/bulk_approval/")
+        self._check_authentication(["get"], "/api/observations/count_reviews/")
+
+        self._check_authentication(["get"], "/api/observation_logs/")
+        self._check_authentication(["get"], "/api/observation_logs/1/")
+        self._check_authentication(["patch"], "/api/observation_logs/1/approval/")
+        self._check_authentication(["post"], "/api/observation_logs/bulk_approval/")
+        self._check_authentication(["get"], "/api/observation_logs/count_approvals/")
+
+        self._check_authentication(["get"], "/api/observation_titles/")
+        self._check_authentication(["get"], "/api/observation_titles/1/")
 
         self._check_authentication(["get"], "/api/parsers/")
         self._check_authentication(["get"], "/api/parsers/1/")
@@ -256,6 +268,9 @@ class TestAuthentication(BaseTestCase):
         self._check_authentication(
             ["delete", "get", "put", "patch"], "/api/branches/1/"
         )
+
+        self._check_authentication(["get"], "/api/branch_names/")
+        self._check_authentication(["get"], "/api/branch_names/1/")
 
         self._check_authentication(["get"], "/api/services/")
         self._check_authentication(["delete", "get"], "/api/services/1/")
@@ -275,17 +290,13 @@ class TestAuthentication(BaseTestCase):
             ["delete", "get", "put", "patch"], "/api/product_groups/1/"
         )
 
+        self._check_authentication(["get"], "/api/product_group_names/")
+        self._check_authentication(["get"], "/api/product_group_names/1/")
+
         self._check_authentication(["get", "post"], "/api/products/")
         self._check_authentication(
             ["delete", "get", "put", "patch"], "/api/products/1/"
         )
-
-        self._check_authentication(["get"], "/api/evidences/1/")
-
-        self._check_authentication(["get"], "/api/status/version/")
-
-        self._check_authentication(["get", "post"], "/api/product_api_tokens/")
-        self._check_authentication(["delete"], "/api/product_api_tokens/1/")
 
         self._check_authentication(["post"], "/api/products/1/apply_rules/")
 
@@ -294,6 +305,12 @@ class TestAuthentication(BaseTestCase):
         )
         self._check_authentication(
             ["post"], "/api/products/1/observations_bulk_delete/"
+        )
+        self._check_authentication(
+            ["post"], "/api/products/1/observations_bulk_mark_duplicates/"
+        )
+        self._check_authentication(
+            ["post"], "/api/products/1/license_components_bulk_delete/"
         )
 
         self._check_authentication(["get"], "/api/products/1/export_observations_csv/")
@@ -308,6 +325,16 @@ class TestAuthentication(BaseTestCase):
             ["get"], "/api/products/1/export_license_components_excel/"
         )
 
+        self._check_authentication(["get"], "/api/product_names/")
+        self._check_authentication(["get"], "/api/product_names/1/")
+
+        self._check_authentication(["get"], "/api/evidences/1/")
+
+        self._check_authentication(["get"], "/api/status/version/")
+
+        self._check_authentication(["get", "post"], "/api/product_api_tokens/")
+        self._check_authentication(["delete"], "/api/product_api_tokens/1/")
+
         self._check_authentication(["get"], "/api/notifications/")
         self._check_authentication(["delete", "get"], "/api/notifications/1/")
         self._check_authentication(["post"], "/api/notifications/bulk_delete/")
@@ -317,6 +344,9 @@ class TestAuthentication(BaseTestCase):
 
         self._check_authentication(["get"], "/api/license_components/")
         self._check_authentication(["get"], "/api/license_components/1/")
+
+        self._check_authentication(["get"], "/api/license_component_ids/")
+        self._check_authentication(["get"], "/api/license_component_ids/1/")
 
         self._check_authentication(["get"], "/api/license_component_evidences/")
         self._check_authentication(["get"], "/api/license_component_evidences/1/")
@@ -352,6 +382,8 @@ class TestAuthentication(BaseTestCase):
         self._check_authentication(["post"], "/api/license_policies/1/copy/")
         self._check_authentication(["post"], "/api/license_policies/1/apply/")
         self._check_authentication(["post"], "/api/license_policies/apply_product/")
+        self._check_authentication(["get"], "/api/license_policies/1/export_json/")
+        self._check_authentication(["get"], "/api/license_policies/1/export_yaml/")
 
         self._check_authentication(["get", "post"], "/api/license_policy_items/")
         self._check_authentication(

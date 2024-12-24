@@ -18,7 +18,7 @@
             "generator": {
                 "engine": {
                     "name": "SecObserve",
-                    "version": "1.22.5"
+                    "version": "1.24.0"
                 }
             },
             "id": "CSAF_2024_0001_0001",
@@ -56,20 +56,22 @@
             {
                 "branches": [
                     {
-                        "category": "product_version",
-                        "name": "vex_comp_5:5.0.0",
-                        "product": {
-                            "name": "vex_comp_5:5.0.0",
-                            "product_id": "pkg:so/vex_comp_5@5.0.0",
-                            "product_identification_helper": {
-                                "cpe": "cpe:2.3:a:so:vex_comp_5:5.0.0:*:*:*:*:*:*:*",
-                                "purl": "pkg:so/vex_comp_5@5.0.0"
+                        "branches": [
+                            {
+                                "category": "product_version",
+                                "name": "5.0.0",
+                                "product": {
+                                    "name": "vex_comp_5:5.0.0",
+                                    "product_id": "vex_comp_5:5.0.0"
+                                }
                             }
-                        }
+                        ],
+                        "category": "product_name",
+                        "name": "vex_comp_5"
                     }
                 ],
-                "category": "product_family",
-                "name": "_components_"
+                "category": "vendor",
+                "name": "unknown"
             }
         ],
         "relationships": [
@@ -79,7 +81,7 @@
                     "name": "vex_comp_5:5.0.0@vex_product_2:main",
                     "product_id": "vex_comp_5:5.0.0@vex_product_2:main"
                 },
-                "product_reference": "pkg:so/vex_comp_5@5.0.0",
+                "product_reference": "vex_comp_5:5.0.0",
                 "relates_to_product_reference": "pkg:so/vex_product_2@main"
             }
         ]

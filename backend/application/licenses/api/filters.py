@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from django.utils import timezone
 from django_filters import (
+    BooleanFilter,
     CharFilter,
     ChoiceFilter,
     FilterSet,
@@ -234,12 +235,25 @@ class LicenseGroupAuthorizationGroupFilter(FilterSet):
 
 class LicensePolicyFilter(FilterSet):
     name = CharFilter(field_name="name", lookup_expr="icontains")
+    is_child = BooleanFilter(field_name="is_child", method="get_is_child")
+    is_not_id = NumberFilter(field_name="is_not_id", method="get_is_not_id")
     license = NumberFilter(
         field_name="license", method="get_license_policies_with_license"
     )
     license_group = NumberFilter(
         field_name="license_group", method="get_license_policies_with_license_group"
     )
+
+    def get_is_child(
+        self, queryset, field_name, value  # pylint: disable=unused-argument
+    ) -> bool:
+        parent_null = not value
+        return queryset.filter(parent__isnull=parent_null)
+
+    def get_is_not_id(
+        self, queryset, field_name, value  # pylint: disable=unused-argument
+    ) -> bool:
+        return queryset.exclude(pk=value)
 
     def get_license_policies_with_license(
         self, queryset, field_name, value  # pylint: disable=unused-argument
@@ -251,17 +265,18 @@ class LicensePolicyFilter(FilterSet):
     ) -> bool:
         return queryset.filter(license_policy_items__license_group=value)
 
-    ordering = OrderingFilter(
+    ordering = ExtendedOrderingFilter(
         # tuple-mapping retains order
         fields=(
             ("name", "name"),
+            (("parent__name", "name"), "parent_name"),
             ("is_public", "is_public"),
         ),
     )
 
     class Meta:
         model = License_Policy
-        fields = ["name", "is_public"]
+        fields = ["name", "is_public", "parent"]
 
 
 class LicensePolicyItemFilter(FilterSet):
