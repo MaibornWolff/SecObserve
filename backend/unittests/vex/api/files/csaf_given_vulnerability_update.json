@@ -18,7 +18,7 @@
             "generator": {
                 "engine": {
                     "name": "SecObserve",
-                    "version": "1.23.0"
+                    "version": "1.24.0"
                 }
             },
             "id": "CSAF_2024_0001_0002",
