@@ -58,7 +58,7 @@
         "@typescript-eslint/parser": "8.18.2",
         "@vitejs/plugin-react": "4.3.4",
         "eslint": "9.17.0",
-        "eslint-plugin-react": "7.37.2",
+        "eslint-plugin-react": "7.37.3",
         "eslint-plugin-react-hooks": "rc",
         "eslint-plugin-security": "3.0.1",
         "globals": "15.14.0",
