@@ -1,7 +1,7 @@
-import DeleteIcon from "@mui/icons-material/Delete";
 import { useState } from "react";
-import { Button, Confirm, useNotify, useRefresh } from "react-admin";
+import { Confirm, useNotify, useRefresh } from "react-admin";
 
+import RemoveButton from "../../commons/custom_fields/RemoveButton";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
 type AuthorizationGroupMemberRemoveProps = {
@@ -37,13 +37,7 @@ const AuthorizationGroupMemberRemove = ({ authorization_group_member }: Authoriz
 
     return (
         <>
-            <Button
-                label="Remove"
-                onClick={handleClick}
-                size="small"
-                startIcon={<DeleteIcon />}
-                sx={{ padding: "0px", color: "#d32f2f" }}
-            />
+            <RemoveButton title="Remove" onClick={handleClick} />
             <Confirm
                 isOpen={open}
                 title="Remove user"

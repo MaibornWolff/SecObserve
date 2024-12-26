@@ -1,8 +1,8 @@
-import DeleteIcon from "@mui/icons-material/Delete";
 import { useState } from "react";
-import { Button, Confirm, useNotify, useRefresh } from "react-admin";
+import { Confirm, useNotify, useRefresh } from "react-admin";
 
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
+import RemoveButton from "../../commons/custom_fields/RemoveButton";
 
 type LicenseGroupMemberRemoveProps = {
     license_group_member: any;
@@ -33,7 +33,7 @@ const LicenseGroupMemberRemove = ({ license_group_member }: LicenseGroupMemberRe
 
     return (
         <>
-            <Button label="Remove" onClick={handleClick} startIcon={<DeleteIcon />} sx={{ color: "#d32f2f" }} />
+            <RemoveButton title="Remove" onClick={handleClick} />
             <Confirm
                 isOpen={open}
                 title="Remove user"

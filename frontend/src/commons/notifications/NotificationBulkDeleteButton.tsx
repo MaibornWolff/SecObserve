@@ -1,9 +1,9 @@
-import DeleteIcon from "@mui/icons-material/Delete";
 import { Backdrop, CircularProgress } from "@mui/material";
 import { useState } from "react";
-import { Button, Confirm, useListContext, useNotify, useRefresh, useUnselectAll } from "react-admin";
+import { Confirm, useListContext, useNotify, useRefresh, useUnselectAll } from "react-admin";
 
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
+import RemoveButton from "../custom_fields/RemoveButton";
 
 const NotificationBulkDeleteButton = () => {
     const [open, setOpen] = useState(false);
@@ -48,7 +48,7 @@ const NotificationBulkDeleteButton = () => {
 
     return (
         <>
-            <Button label="Delete" onClick={handleClick} startIcon={<DeleteIcon />} sx={{ color: "#d32f2f" }} />
+            <RemoveButton title="Delete" onClick={handleClick} />
             <Confirm
                 isOpen={open && !loading}
                 title="Delete Notifications"

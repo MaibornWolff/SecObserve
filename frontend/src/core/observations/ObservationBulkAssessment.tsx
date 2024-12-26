@@ -104,7 +104,7 @@ const ObservationBulkAssessment = (props: ObservationBulkAssessmentButtonProps) 
             <Button
                 onClick={handleOpen}
                 size="small"
-                sx={{ paddingTop: "0px", paddingBottom: "2px" }}
+                sx={{ padding: "0px" }}
                 startIcon={<PlaylistAddCheckIcon />}
             >
                 Assessment
