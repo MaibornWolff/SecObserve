@@ -1,9 +1,9 @@
-import AddIcon from "@mui/icons-material/Add";
-import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import { ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
 import { useFormContext } from "react-hook-form";
 
+import AddButton from "../../commons/custom_fields/AddButton";
 import CancelButton from "../../commons/custom_fields/CancelButton";
 import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputExtraWide } from "../../commons/layout/themes";
@@ -80,14 +80,7 @@ const LicenseGroupLicenseAdd = ({ id }: LicenseGroupLicenseAddProps) => {
 
     return (
         <Fragment>
-            <Button
-                variant="contained"
-                onClick={handleOpen}
-                sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem", marginBottom: 1, marginTop: 1 }}
-                startIcon={<AddIcon />}
-            >
-                Add license
-            </Button>
+            <AddButton title="Add license" onClick={handleOpen} />
             <Dialog open={open} onClose={handleClose} maxWidth={"lg"}>
                 <DialogTitle>Add license</DialogTitle>
                 <DialogContent>

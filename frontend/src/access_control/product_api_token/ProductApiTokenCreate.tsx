@@ -3,6 +3,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextF
 import { useState } from "react";
 import { SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
 
+import AddButton from "../../commons/custom_fields/AddButton";
 import CancelButton from "../../commons/custom_fields/CancelButton";
 import CopyToClipboardButton from "../../commons/custom_fields/CopyToClipboardButton";
 import { validate_required } from "../../commons/custom_validators";
@@ -77,14 +78,7 @@ const CreateProductApiToken = (props: CreateProductApiTokenProps) => {
 
     return (
         <>
-            <Button
-                variant="contained"
-                onClick={handleRoleOpen}
-                sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem" }}
-                startIcon={<AddIcon />}
-            >
-                Create API token
-            </Button>
+            <AddButton title="Create API token" onClick={handleRoleOpen} />
             <Dialog open={roleOpen} onClose={handleRoleClose}>
                 <DialogTitle>Create product API token</DialogTitle>
                 <DialogContent>

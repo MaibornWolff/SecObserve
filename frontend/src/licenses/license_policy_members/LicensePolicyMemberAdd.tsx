@@ -1,5 +1,4 @@
-import AddIcon from "@mui/icons-material/Add";
-import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import {
     BooleanInput,
@@ -13,6 +12,7 @@ import {
 } from "react-admin";
 import { useFormContext } from "react-hook-form";
 
+import AddButton from "../../commons/custom_fields/AddButton";
 import CancelButton from "../../commons/custom_fields/CancelButton";
 import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
@@ -102,14 +102,7 @@ const LicensePolicyMemberAdd = ({ id }: LicensePolicyMemberAddProps) => {
 
     return (
         <Fragment>
-            <Button
-                variant="contained"
-                onClick={handleOpen}
-                sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem", marginBottom: 1 }}
-                startIcon={<AddIcon />}
-            >
-                Add user
-            </Button>
+            <AddButton title="Add user" onClick={handleOpen} />
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Add user</DialogTitle>
                 <DialogContent>

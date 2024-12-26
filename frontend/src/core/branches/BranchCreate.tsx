@@ -1,5 +1,4 @@
-import AddIcon from "@mui/icons-material/Add";
-import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import {
     BooleanInput,
@@ -12,6 +11,7 @@ import {
     useRefresh,
 } from "react-admin";
 
+import AddButton from "../../commons/custom_fields/AddButton";
 import CancelButton from "../../commons/custom_fields/CancelButton";
 import { validate_255, validate_required_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
@@ -59,14 +59,7 @@ const BranchCreate = ({ id }: BranchCreateProps) => {
 
     return (
         <Fragment>
-            <Button
-                variant="contained"
-                onClick={handleOpen}
-                sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem" }}
-                startIcon={<AddIcon />}
-            >
-                Add branch / version
-            </Button>
+            <AddButton title="Add branch / version" onClick={handleOpen} />
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Add branch / version</DialogTitle>
                 <DialogContent>
