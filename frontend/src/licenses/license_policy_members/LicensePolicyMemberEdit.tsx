@@ -3,8 +3,8 @@ import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import { BooleanInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh, useUpdate } from "react-admin";
 
-import { TextInputWide } from "../../commons/layout/themes";
 import CancelButton from "../../commons/custom_fields/CancelButton";
+import { TextInputWide } from "../../commons/layout/themes";
 
 const LicensePolicyMemberEdit = () => {
     const [open, setOpen] = useState(false);

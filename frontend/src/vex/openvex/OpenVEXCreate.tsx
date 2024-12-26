@@ -24,9 +24,9 @@ import {
 } from "react-admin";
 
 import axios_instance from "../../access_control/auth_provider/axios_instance";
+import CancelButton from "../../commons/custom_fields/CancelButton";
 import { validate_255, validate_required_255 } from "../../commons/custom_validators";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
-import CancelButton from "../../commons/custom_fields/CancelButton";
 
 const OpenVEXCreate = () => {
     const [open, setOpen] = useState(false);

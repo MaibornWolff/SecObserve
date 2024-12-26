@@ -13,6 +13,7 @@ import {
     useRefresh,
 } from "react-admin";
 
+import CancelButton from "../../commons/custom_fields/CancelButton";
 import {
     validate_255,
     validate_513,
@@ -29,7 +30,6 @@ import {
     OBSERVATION_VEX_JUSTIFICATION_CHOICES,
 } from "../../core/types";
 import { validateRuleForm } from "../functions";
-import CancelButton from "../../commons/custom_fields/CancelButton";
 
 export type ProductRuleCreateProps = {
     id: any;

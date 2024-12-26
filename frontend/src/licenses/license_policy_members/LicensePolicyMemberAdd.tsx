@@ -13,10 +13,10 @@ import {
 } from "react-admin";
 import { useFormContext } from "react-hook-form";
 
+import CancelButton from "../../commons/custom_fields/CancelButton";
 import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
-import CancelButton from "../../commons/custom_fields/CancelButton";
 
 export type LicensePolicyMemberAddProps = {
     id: any;
