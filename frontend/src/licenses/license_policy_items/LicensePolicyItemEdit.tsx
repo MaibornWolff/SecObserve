@@ -3,10 +3,10 @@ import { Fragment, useState } from "react";
 import { ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh, useUpdate } from "react-admin";
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
+import EditButton from "../../commons/custom_fields/EditButton";
 import { validate_255, validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputExtraWide, AutocompleteInputMedium, TextInputExtraWide } from "../../commons/layout/themes";
 import { EVALUATION_RESULT_CHOICES } from "../types";
-import EditButton from "../../commons/custom_fields/EditButton";
 
 export type LicensePolicyItemEditProps = {
     license_policy_id: any;

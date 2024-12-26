@@ -1,22 +1,14 @@
 import EditIcon from "@mui/icons-material/Edit";
-import {
-    Backdrop,
-    CircularProgress,
-    Dialog,
-    DialogContent,
-    DialogTitle,
-    Divider,
-    Typography,
-} from "@mui/material";
+import { Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle, Divider, Typography } from "@mui/material";
 import { Fragment, useState } from "react";
 import { SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
 
 import axios_instance from "../../access_control/auth_provider/axios_instance";
 import CancelButton from "../../commons/custom_fields/CancelButton";
+import EditButton from "../../commons/custom_fields/EditButton";
 import { validate_required, validate_required_255 } from "../../commons/custom_validators";
 import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
 import { CSAF_PUBLISHER_CATEGORY_CHOICES, CSAF_TLP_LABEL_CHOICES, CSAF_TRACKING_STATUS_CHOICES } from "../types";
-import EditButton from "../../commons/custom_fields/EditButton";
 
 const CSAFUpdate = () => {
     const [open, setOpen] = useState(false);

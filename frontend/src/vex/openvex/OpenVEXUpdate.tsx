@@ -5,9 +5,9 @@ import { SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-ad
 
 import axios_instance from "../../access_control/auth_provider/axios_instance";
 import CancelButton from "../../commons/custom_fields/CancelButton";
+import EditButton from "../../commons/custom_fields/EditButton";
 import { validate_required_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
-import EditButton from "../../commons/custom_fields/EditButton";
 
 const OpenVEXUpdate = () => {
     const [open, setOpen] = useState(false);
