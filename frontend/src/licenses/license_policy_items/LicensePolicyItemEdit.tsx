@@ -1,5 +1,4 @@
-import EditIcon from "@mui/icons-material/Edit";
-import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import { ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh, useUpdate } from "react-admin";
 
@@ -7,6 +6,7 @@ import CancelButton from "../../commons/custom_fields/CancelButton";
 import { validate_255, validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputExtraWide, AutocompleteInputMedium, TextInputExtraWide } from "../../commons/layout/themes";
 import { EVALUATION_RESULT_CHOICES } from "../types";
+import EditButton from "../../commons/custom_fields/EditButton";
 
 export type LicensePolicyItemEditProps = {
     license_policy_id: any;
@@ -77,14 +77,7 @@ const LicensePolicyItemEdit = ({ license_policy_id, license_policy_item_id }: Li
     );
     return (
         <Fragment>
-            <Button
-                onClick={handleOpen}
-                size="small"
-                sx={{ paddingTop: "0px", paddingBottom: "2px" }}
-                startIcon={<EditIcon />}
-            >
-                Edit
-            </Button>
+            <EditButton title="Edit" onClick={handleOpen} />
             <Dialog open={open} onClose={handleClose} maxWidth={"lg"}>
                 <DialogTitle>Edit license policy item</DialogTitle>
                 <DialogContent>

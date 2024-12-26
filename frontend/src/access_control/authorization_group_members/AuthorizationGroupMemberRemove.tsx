@@ -37,7 +37,13 @@ const AuthorizationGroupMemberRemove = ({ authorization_group_member }: Authoriz
 
     return (
         <>
-            <Button label="Remove" onClick={handleClick} startIcon={<DeleteIcon />} sx={{ color: "#d32f2f" }} />
+            <Button
+                label="Remove"
+                onClick={handleClick}
+                size="small"
+                startIcon={<DeleteIcon />}
+                sx={{ padding: "0px", color: "#d32f2f" }}
+            />
             <Confirm
                 isOpen={open}
                 title="Remove user"

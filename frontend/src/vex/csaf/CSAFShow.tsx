@@ -22,7 +22,7 @@ const ShowActions = () => {
     const csaf = useRecordContext();
     return (
         <TopToolbar>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
+            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
                 <PrevNextButtons
                     linkType="show"
                     sort={{ field: "tracking_initial_release_date", order: "DESC" }}

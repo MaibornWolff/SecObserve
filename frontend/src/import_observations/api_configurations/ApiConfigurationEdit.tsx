@@ -1,5 +1,4 @@
-import EditIcon from "@mui/icons-material/Edit";
-import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useEffect, useState } from "react";
 import {
     BooleanInput,
@@ -16,6 +15,7 @@ import {
 import { useWatch } from "react-hook-form";
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
+import EditButton from "../../commons/custom_fields/EditButton";
 import {
     validate_255,
     validate_513,
@@ -226,14 +226,7 @@ const ApiConfigurationEdit = () => {
 
     return (
         <Fragment>
-            <Button
-                onClick={handleOpen}
-                size="small"
-                sx={{ paddingTop: "0px", paddingBottom: "2px" }}
-                startIcon={<EditIcon />}
-            >
-                Edit
-            </Button>
+            <EditButton title="Edit" onClick={handleOpen} />
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Edit API configuration</DialogTitle>
                 <DialogContent>

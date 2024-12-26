@@ -22,7 +22,7 @@ const ShowActions = () => {
     const openvex = useRecordContext();
     return (
         <TopToolbar>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
+            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
                 <PrevNextButtons linkType="show" sort={{ field: "timestamp", order: "DESC" }} storeKey="openvex.list" />
                 {update_permission(openvex) && <OpenVEXUpdate />}
                 {delete_permission(openvex) && <DeleteWithConfirmButton />}

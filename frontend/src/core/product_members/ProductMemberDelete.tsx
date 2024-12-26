@@ -37,12 +37,12 @@ const ProductMemberDelete = (props: ProductMemberDeleteProps) => {
 
     return (
         <>
-            <Button label="Delete" onClick={handleClick} startIcon={<DeleteIcon />} sx={{ color: "#d32f2f" }} />
+            <Button label="Remove" onClick={handleClick} startIcon={<DeleteIcon />} sx={{ color: "#d32f2f" }} />
             <Confirm
                 isOpen={open}
-                title="Delete user member"
+                title="Remove user member"
                 content={
-                    "Are you sure you want to delete the user member " + props.product_member.user_data.full_name + "?"
+                    "Are you sure you want to remove the user member " + props.product_member.user_data.full_name + "?"
                 }
                 onConfirm={handleConfirm}
                 onClose={handleDialogClose}

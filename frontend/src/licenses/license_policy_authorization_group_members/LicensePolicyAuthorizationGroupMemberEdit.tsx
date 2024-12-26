@@ -1,10 +1,10 @@
-import EditIcon from "@mui/icons-material/Edit";
-import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import { BooleanInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh, useUpdate } from "react-admin";
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
 import { TextInputWide } from "../../commons/layout/themes";
+import EditButton from "../../commons/custom_fields/EditButton";
 
 const LicensePolicyAuthorizationGroupMemberEdit = () => {
     const [open, setOpen] = useState(false);
@@ -56,14 +56,7 @@ const LicensePolicyAuthorizationGroupMemberEdit = () => {
 
     return (
         <Fragment>
-            <Button
-                onClick={handleOpen}
-                size="small"
-                sx={{ paddingTop: "0px", paddingBottom: "2px" }}
-                startIcon={<EditIcon />}
-            >
-                Edit
-            </Button>
+            <EditButton title="Edit" onClick={handleOpen} />
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Edit authorization group</DialogTitle>
                 <DialogContent>

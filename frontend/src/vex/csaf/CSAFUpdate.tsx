@@ -1,7 +1,6 @@
 import EditIcon from "@mui/icons-material/Edit";
 import {
     Backdrop,
-    Button,
     CircularProgress,
     Dialog,
     DialogContent,
@@ -17,6 +16,7 @@ import CancelButton from "../../commons/custom_fields/CancelButton";
 import { validate_required, validate_required_255 } from "../../commons/custom_validators";
 import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
 import { CSAF_PUBLISHER_CATEGORY_CHOICES, CSAF_TLP_LABEL_CHOICES, CSAF_TRACKING_STATUS_CHOICES } from "../types";
+import EditButton from "../../commons/custom_fields/EditButton";
 
 const CSAFUpdate = () => {
     const [open, setOpen] = useState(false);
@@ -79,14 +79,7 @@ const CSAFUpdate = () => {
 
     return (
         <Fragment>
-            <Button
-                onClick={handleOpen}
-                size="small"
-                sx={{ paddingTop: "0px", paddingBottom: "2px" }}
-                startIcon={<EditIcon />}
-            >
-                Update CSAF document
-            </Button>
+            <EditButton title="Update CSAF document" onClick={handleOpen} />
             <Dialog open={open && !loading} onClose={handleClose} maxWidth={"lg"}>
                 <DialogTitle>Update CSAF document</DialogTitle>
                 <DialogContent>

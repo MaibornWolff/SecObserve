@@ -1,5 +1,5 @@
 import EditIcon from "@mui/icons-material/Edit";
-import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
+import { Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
 import { Fragment, useState } from "react";
 import { SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
 
@@ -7,6 +7,7 @@ import axios_instance from "../../access_control/auth_provider/axios_instance";
 import CancelButton from "../../commons/custom_fields/CancelButton";
 import { validate_required_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
+import EditButton from "../../commons/custom_fields/EditButton";
 
 const OpenVEXUpdate = () => {
     const [open, setOpen] = useState(false);
@@ -69,14 +70,7 @@ const OpenVEXUpdate = () => {
 
     return (
         <Fragment>
-            <Button
-                onClick={handleOpen}
-                size="small"
-                sx={{ paddingTop: "0px", paddingBottom: "2px" }}
-                startIcon={<EditIcon />}
-            >
-                Update OpenVEX document
-            </Button>
+            <EditButton title="Update OpenVEX document" onClick={handleOpen} />
             <Dialog open={open && !loading} onClose={handleClose} maxWidth={"lg"}>
                 <DialogTitle>Update OpenVEX document</DialogTitle>
                 <DialogContent>
