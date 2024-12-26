@@ -11,11 +11,11 @@ import {
     useListController,
 } from "react-admin";
 
+import CreateButton from "../../commons/custom_fields/CreateButton";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { is_external } from "../../commons/functions";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/user_settings/functions";
-import LicensePolicyCreateButton from "./LicensePolicyCreateButton";
 
 const showLicensePolicy = (id: any) => {
     return "../../../../license_policies/" + id + "/show";
@@ -72,7 +72,9 @@ const LicensePolicyEmbeddedList = ({ license, license_group }: LicensePolicyEmbe
         <ResourceContextProvider value="license_policies">
             <ListContextProvider value={listContext}>
                 <div style={{ width: "100%" }}>
-                    {!is_external() && !license && !license_group && <LicensePolicyCreateButton />}
+                    {!is_external() && !license && !license_group && (
+                        <CreateButton title="Create license policy" to="/license_policies/create" />
+                    )}
                     <FilterForm filters={listFilters} />
                     <Datagrid
                         size={getSettingListSize()}

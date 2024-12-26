@@ -1,4 +1,3 @@
-import CancelIcon from "@mui/icons-material/Cancel";
 import EditIcon from "@mui/icons-material/Edit";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useEffect, useState } from "react";
@@ -16,6 +15,7 @@ import {
 } from "react-admin";
 import { useWatch } from "react-hook-form";
 
+import CancelButton from "../../commons/custom_fields/CancelButton";
 import {
     validate_255,
     validate_513,
@@ -131,26 +131,9 @@ const ApiConfigurationEdit = () => {
         );
     };
 
-    const CancelButton = () => (
-        <Button
-            sx={{
-                mr: "1em",
-                direction: "row",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-            variant="contained"
-            onClick={handleCancel}
-            color="inherit"
-            startIcon={<CancelIcon />}
-        >
-            Cancel
-        </Button>
-    );
-
     const CustomToolbar = () => (
         <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <CancelButton />
+            <CancelButton onClick={handleCancel} />
             <SaveButton />
         </Toolbar>
     );

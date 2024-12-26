@@ -1,5 +1,4 @@
 import AddIcon from "@mui/icons-material/Add";
-import CancelIcon from "@mui/icons-material/Cancel";
 import {
     Backdrop,
     Button,
@@ -28,6 +27,7 @@ import axios_instance from "../../access_control/auth_provider/axios_instance";
 import { validate_255, validate_required, validate_required_255 } from "../../commons/custom_validators";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { CSAF_PUBLISHER_CATEGORY_CHOICES, CSAF_TLP_LABEL_CHOICES, CSAF_TRACKING_STATUS_CHOICES } from "../types";
+import CancelButton from "../../commons/custom_fields/CancelButton";
 
 const CSAFCreate = () => {
     const [open, setOpen] = useState(false);
@@ -45,26 +45,9 @@ const CSAFCreate = () => {
         setLoading(false);
     };
 
-    const CancelButton = () => (
-        <Button
-            sx={{
-                mr: "1em",
-                direction: "row",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-            variant="contained"
-            onClick={handleCancel}
-            color="inherit"
-            startIcon={<CancelIcon />}
-        >
-            Cancel
-        </Button>
-    );
-
     const CustomToolbar = () => (
         <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <CancelButton />
+            <CancelButton onClick={handleCancel} />
             <SaveButton label="Create" icon={<AddIcon />} />
         </Toolbar>
     );

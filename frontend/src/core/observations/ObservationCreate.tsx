@@ -1,5 +1,4 @@
 import AddIcon from "@mui/icons-material/Add";
-import CancelIcon from "@mui/icons-material/Cancel";
 import { Button, Dialog, DialogContent, DialogTitle, Divider, Stack, Typography } from "@mui/material";
 import { Fragment, useState } from "react";
 import {
@@ -17,6 +16,7 @@ import {
     useRefresh,
 } from "react-admin";
 
+import CancelButton from "../../commons/custom_fields/CancelButton";
 import {
     validate_0_10,
     validate_0_999999,
@@ -55,26 +55,9 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
         setOpen(false);
     };
 
-    const CancelButton = () => (
-        <Button
-            sx={{
-                mr: "1em",
-                direction: "row",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-            variant="contained"
-            onClick={handleCancel}
-            color="inherit"
-            startIcon={<CancelIcon />}
-        >
-            Cancel
-        </Button>
-    );
-
     const CustomToolbar = () => (
         <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <CancelButton />
+            <CancelButton onClick={handleCancel} />
             <SaveButton />
         </Toolbar>
     );

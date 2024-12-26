@@ -1,5 +1,4 @@
 import AddIcon from "@mui/icons-material/Add";
-import CancelIcon from "@mui/icons-material/Cancel";
 import {
     Backdrop,
     Button,
@@ -27,6 +26,7 @@ import {
 import axios_instance from "../../access_control/auth_provider/axios_instance";
 import { validate_255, validate_required_255 } from "../../commons/custom_validators";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
+import CancelButton from "../../commons/custom_fields/CancelButton";
 
 const OpenVEXCreate = () => {
     const [open, setOpen] = useState(false);
@@ -44,26 +44,9 @@ const OpenVEXCreate = () => {
         setLoading(false);
     };
 
-    const CancelButton = () => (
-        <Button
-            sx={{
-                mr: "1em",
-                direction: "row",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-            variant="contained"
-            onClick={handleCancel}
-            color="inherit"
-            startIcon={<CancelIcon />}
-        >
-            Cancel
-        </Button>
-    );
-
     const CustomToolbar = () => (
         <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <CancelButton />
+            <CancelButton onClick={handleCancel} />
             <SaveButton label="Create" icon={<AddIcon />} />
         </Toolbar>
     );

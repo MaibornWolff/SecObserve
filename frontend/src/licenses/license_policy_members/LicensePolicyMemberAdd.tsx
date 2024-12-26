@@ -1,5 +1,4 @@
 import AddIcon from "@mui/icons-material/Add";
-import CancelIcon from "@mui/icons-material/Cancel";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import {
@@ -17,6 +16,7 @@ import { useFormContext } from "react-hook-form";
 import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
+import CancelButton from "../../commons/custom_fields/CancelButton";
 
 export type LicensePolicyMemberAddProps = {
     id: any;
@@ -43,23 +43,6 @@ const LicensePolicyMemberAdd = ({ id }: LicensePolicyMemberAddProps) => {
         setUser(undefined);
         setIsManager(false);
     };
-
-    const CancelButton = () => (
-        <Button
-            sx={{
-                mr: "1em",
-                direction: "row",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-            variant="contained"
-            onClick={handleCancel}
-            color="inherit"
-            startIcon={<CancelIcon />}
-        >
-            Cancel
-        </Button>
-    );
 
     const CustomToolbar = () => {
         const { reset } = useFormContext();
@@ -105,7 +88,7 @@ const LicensePolicyMemberAdd = ({ id }: LicensePolicyMemberAddProps) => {
 
         return (
             <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
-                <CancelButton />
+                <CancelButton onClick={handleCancel} />
                 <SaveButton
                     label="Save & Continue"
                     type="button"

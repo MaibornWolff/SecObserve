@@ -1,5 +1,4 @@
 import AddIcon from "@mui/icons-material/Add";
-import CancelIcon from "@mui/icons-material/Cancel";
 import { Button, Dialog, DialogContent, DialogTitle, Divider, Typography } from "@mui/material";
 import { Fragment, useState } from "react";
 import {
@@ -30,6 +29,7 @@ import {
     OBSERVATION_VEX_JUSTIFICATION_CHOICES,
 } from "../../core/types";
 import { validateRuleForm } from "../functions";
+import CancelButton from "../../commons/custom_fields/CancelButton";
 
 export type ProductRuleCreateProps = {
     id: any;
@@ -50,26 +50,9 @@ const ProductRuleCreate = ({ id }: ProductRuleCreateProps) => {
         setOpen(false);
     };
 
-    const CancelButton = () => (
-        <Button
-            sx={{
-                mr: "1em",
-                direction: "row",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-            variant="contained"
-            onClick={handleCancel}
-            color="inherit"
-            startIcon={<CancelIcon />}
-        >
-            Cancel
-        </Button>
-    );
-
     const CustomToolbar = () => (
         <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <CancelButton />
+            <CancelButton onClick={handleCancel} />
             <SaveButton />
         </Toolbar>
     );

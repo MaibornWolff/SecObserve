@@ -1,10 +1,10 @@
 import AddIcon from "@mui/icons-material/Add";
-import CancelIcon from "@mui/icons-material/Cancel";
 import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import { ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
 import { useFormContext } from "react-hook-form";
 
+import CancelButton from "../../commons/custom_fields/CancelButton";
 import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputExtraWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
@@ -24,24 +24,6 @@ const LicenseGroupLicenseAdd = ({ id }: LicenseGroupLicenseAddProps) => {
         setOpen(false);
     };
     const [license, setLicense] = useState();
-
-    const CancelButton = () => (
-        <Button
-            sx={{
-                mr: "1em",
-                direction: "row",
-                justifyContent: "center",
-                alignItems: "center",
-                marginLeft: 2,
-            }}
-            variant="contained"
-            onClick={handleCancel}
-            color="inherit"
-            startIcon={<CancelIcon />}
-        >
-            Cancel
-        </Button>
-    );
 
     const CustomToolbar = () => {
         const { reset } = useFormContext();
@@ -84,7 +66,7 @@ const LicenseGroupLicenseAdd = ({ id }: LicenseGroupLicenseAddProps) => {
 
         return (
             <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
-                <CancelButton />
+                <CancelButton onClick={handleCancel} />
                 <SaveButton
                     label="Save & Continue"
                     type="button"

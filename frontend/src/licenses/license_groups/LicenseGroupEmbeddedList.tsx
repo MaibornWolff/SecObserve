@@ -11,11 +11,11 @@ import {
     useListController,
 } from "react-admin";
 
+import CreateButton from "../../commons/custom_fields/CreateButton";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { is_external, is_superuser } from "../../commons/functions";
 import { getSettingListSize } from "../../commons/user_settings/functions";
 import ImportScanCodeLicenseDB from "./ImportScanCodeLicenseDB";
-import LicenseGroupCreateButton from "./LicenseGroupCreateButton";
 
 const showLicenseGroup = (id: any) => {
     return "../../../../license_groups/" + id + "/show";
@@ -58,7 +58,9 @@ const LicenseGroupEmbeddedList = ({ license }: LicenseGroupEmbeddedListProps) =>
                             alignItems: "center",
                         }}
                     >
-                        {!is_external() && !license && <LicenseGroupCreateButton />}
+                        {!is_external() && !license && (
+                            <CreateButton title="Create license group" to="/license_groups/create" />
+                        )}
                         {is_superuser() && !license && <ImportScanCodeLicenseDB />}
                     </Stack>
                     {!license && <FilterForm filters={listFilters} />}

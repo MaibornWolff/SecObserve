@@ -10,10 +10,10 @@ import {
     useListController,
 } from "react-admin";
 
+import CreateButton from "../../commons/custom_fields/CreateButton";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { is_superuser } from "../../commons/functions";
 import { getSettingListSize } from "../../commons/user_settings/functions";
-import UserCreateButton from "./UserCreateButton";
 
 const ShowUsers = (id: any) => {
     return "../../../../users/" + id + "/show";
@@ -57,7 +57,7 @@ const UserEmbeddedList = () => {
         <ResourceContextProvider value="users">
             <ListContextProvider value={listContext}>
                 <div style={{ width: "100%" }}>
-                    {is_superuser() && <UserCreateButton />}
+                    {is_superuser() && <CreateButton title="Add user" to="/users/create" />}
                     <FilterForm filters={listFilters()} />
                     <Datagrid
                         size={getSettingListSize()}
