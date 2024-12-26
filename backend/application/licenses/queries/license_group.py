@@ -5,6 +5,7 @@ from django.db.models.query import QuerySet
 
 from application.commons.services.global_request import get_current_user
 from application.licenses.models import License_Group
+from application.licenses.queries.license_policy_item import get_license_policy_items
 
 
 def get_license_group(license_group_id: int) -> Optional[License_Group]:
@@ -25,6 +26,11 @@ def get_license_groups() -> QuerySet[License_Group]:
     if user.is_superuser:
         return license_groups
 
+    license_policy_items = get_license_policy_items()
+
     return license_groups.filter(
-        Q(users=user) | Q(authorization_groups__users=user) | Q(is_public=True)
-    )
+        Q(users=user)
+        | Q(authorization_groups__users=user)
+        | Q(is_public=True)
+        | Q(license_policy_items__in=license_policy_items)
+    ).distinct()

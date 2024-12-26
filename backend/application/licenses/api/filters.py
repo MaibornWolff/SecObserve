@@ -6,6 +6,7 @@ from django_filters import (
     CharFilter,
     ChoiceFilter,
     FilterSet,
+    ModelMultipleChoiceFilter,
     NumberFilter,
     OrderingFilter,
 )
@@ -24,6 +25,7 @@ from application.licenses.models import (
     License_Policy_Item,
     License_Policy_Member,
 )
+from application.licenses.queries.license_group import get_license_groups
 
 
 class LicenseComponentFilter(FilterSet):
@@ -134,6 +136,7 @@ class LicenseFilter(FilterSet):
     exclude_license_policy = NumberFilter(
         field_name="exclude_license_policy", method="get_exclude_license_policy"
     )
+    license_groups = ModelMultipleChoiceFilter(queryset=License.objects.none())
 
     def get_exclude_license_group(
         self, queryset, field_name, value
@@ -158,6 +161,10 @@ class LicenseFilter(FilterSet):
             ("is_deprecated", "is_deprecated"),
         ),
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.filters["license_groups"].queryset = get_license_groups()
 
     class Meta:
         model = License
