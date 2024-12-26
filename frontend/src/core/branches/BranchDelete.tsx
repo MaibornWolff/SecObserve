@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Confirm, useDelete, useNotify, useRefresh } from "react-admin";
+
 import RemoveButton from "../../commons/custom_fields/RemoveButton";
 
 type BranchDeleteProps = {

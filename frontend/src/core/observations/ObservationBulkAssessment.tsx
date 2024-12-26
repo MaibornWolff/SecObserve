@@ -101,12 +101,7 @@ const ObservationBulkAssessment = (props: ObservationBulkAssessmentButtonProps) 
 
     return (
         <Fragment>
-            <Button
-                onClick={handleOpen}
-                size="small"
-                sx={{ padding: "0px" }}
-                startIcon={<PlaylistAddCheckIcon />}
-            >
+            <Button onClick={handleOpen} size="small" sx={{ padding: "0px" }} startIcon={<PlaylistAddCheckIcon />}>
                 Assessment
             </Button>
             <Dialog open={open && !loading} onClose={handleClose}>

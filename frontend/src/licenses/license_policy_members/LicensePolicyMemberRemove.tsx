@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Confirm, useNotify, useRefresh } from "react-admin";
 
-import { httpClient } from "../../commons/ra-data-django-rest-framework";
 import RemoveButton from "../../commons/custom_fields/RemoveButton";
+import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
 type LicensePolicyMemberRemoveProps = {
     license_policy_member: any;

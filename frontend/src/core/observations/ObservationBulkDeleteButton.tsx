@@ -2,8 +2,8 @@ import { Backdrop, CircularProgress } from "@mui/material";
 import { useState } from "react";
 import { Confirm, useListContext, useNotify, useRefresh, useUnselectAll } from "react-admin";
 
-import { httpClient } from "../../commons/ra-data-django-rest-framework";
 import RemoveButton from "../../commons/custom_fields/RemoveButton";
+import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
 type ObservationBulkDeleteButtonProps = {
     product: any;
