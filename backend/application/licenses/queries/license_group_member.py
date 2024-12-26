@@ -3,6 +3,7 @@ from typing import Optional
 from django.db.models.query import QuerySet
 
 from application.access_control.models import User
+from application.access_control.queries.user import get_users
 from application.commons.services.global_request import get_current_user
 from application.licenses.models import License_Group, License_Group_Member
 from application.licenses.queries.license_group import get_license_groups
@@ -29,4 +30,8 @@ def get_license_group_members() -> QuerySet[License_Group_Member]:
         return license_group_members
 
     license_groups = get_license_groups()
-    return license_group_members.filter(license_group__in=license_groups)
+    users = get_users()
+
+    return license_group_members.filter(
+        license_group__in=license_groups, user__in=users
+    )
