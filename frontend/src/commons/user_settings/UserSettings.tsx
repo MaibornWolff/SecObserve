@@ -35,36 +35,42 @@ const UserSettings = () => {
             <CardContent>
                 <Stack sx={{ width: "100%" }}>
                     <Typography variant="subtitle1">Theme</Typography>
-                    <RadioGroup defaultValue={getSettingTheme()} name="radio-buttons-group-theme" row>
-                        <FormControlLabel
-                            value="light"
-                            control={<Radio />}
-                            label="Light"
-                            onClick={() => setLightTheme()}
-                        />
-                        <FormControlLabel
-                            value="dark"
-                            control={<Radio />}
-                            label="Dark"
-                            onClick={() => setDarkTheme()}
-                        />
-                    </RadioGroup>
+                    <FormControl>
+                        <RadioGroup defaultValue={getSettingTheme()} name="radio-buttons-group-theme" row>
+                            <FormControlLabel
+                                value="light"
+                                control={<Radio />}
+                                label="Light"
+                                onClick={() => setLightTheme()}
+                            />
+                            <FormControlLabel
+                                value="dark"
+                                control={<Radio />}
+                                label="Dark"
+                                onClick={() => setDarkTheme()}
+                            />
+                        </RadioGroup>
+                    </FormControl>
 
-                    <Typography variant="subtitle1" sx={{ marginTop: 2}}>List size</Typography>
-                    <RadioGroup defaultValue={getSettingListSize()} name="radio-buttons-group-list-size" row>
-                        <FormControlLabel
-                            value="small"
-                            control={<Radio />}
-                            label="Small"
-                            onClick={() => saveSettingListSize("small")}
-                        />
-                        <FormControlLabel
-                            value="medium"
-                            control={<Radio />}
-                            label="Medium"
-                            onClick={() => saveSettingListSize("medium")}
-                        />
-                    </RadioGroup>
+                    <Typography variant="subtitle1" sx={{ marginTop: 2 }}>
+                        List size
+                    </Typography>
+                    <FormControl>
+                        <RadioGroup defaultValue={getSettingListSize()} name="radio-buttons-group-list-size" row>
+                            <FormControlLabel
+                                value="small"
+                                control={<Radio />}
+                                label="Small"
+                                onClick={() => saveSettingListSize("small")}
+                            />
+                            <FormControlLabel
+                                value="medium"
+                                control={<Radio />}
+                                label="Medium"
+                                onClick={() => saveSettingListSize("medium")}
+                            />
+                        </RadioGroup>
+                    </FormControl>
                 </Stack>
             </CardContent>
         </Card>
