@@ -85,7 +85,6 @@ const AuthorizationGroupMemberAdd = ({ id }: AuthorizationGroupMemberAddProps) =
                     label="Save & Continue"
                     type="button"
                     onClick={handleSaveContinue}
-                    sx={{ marginRight: 2 }}
                 />
                 <SaveButton type="button" onClick={handleSaveClose} />
             </Toolbar>
