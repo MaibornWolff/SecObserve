@@ -81,11 +81,7 @@ const AuthorizationGroupMemberAdd = ({ id }: AuthorizationGroupMemberAddProps) =
         return (
             <Toolbar>
                 <CancelButton onClick={handleCancel} />
-                <SaveButton
-                    label="Save & Continue"
-                    type="button"
-                    onClick={handleSaveContinue}
-                />
+                <SaveButton label="Save & Continue" type="button" onClick={handleSaveContinue} />
                 <SaveButton type="button" onClick={handleSaveClose} />
             </Toolbar>
         );
