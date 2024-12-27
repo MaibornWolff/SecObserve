@@ -89,8 +89,10 @@ const ApiImportObservations = (product: any) => {
                 onClick={handleOpen}
                 size="small"
                 sx={{
-                    paddingTop: "0px",
-                    paddingBottom: "2px",
+                    paddingTop: 0,
+                    paddingBottom: 0,
+                    paddingLeft: "5px",
+                    paddingRight: "5px",
                     color: getIconAndFontColor(),
                     textTransform: "none",
                     fontWeight: "normal",

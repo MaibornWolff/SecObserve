@@ -30,7 +30,7 @@ const ImportMenu = (props: ImportMenuProps) => {
                 aria-expanded={open ? "true" : undefined}
                 onClick={handleClick}
                 size="small"
-                sx={{ padding: "0px" }}
+                sx={{ paddingTop: 0, paddingBottom: 0, paddingLeft: "5px", paddingRight: "5px" }}
                 startIcon={<UploadIcon />}
             >
                 import

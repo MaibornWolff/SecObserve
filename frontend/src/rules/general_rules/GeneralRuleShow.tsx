@@ -27,7 +27,7 @@ const ShowActions = () => {
     const rule = useRecordContext();
     return (
         <TopToolbar>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
+            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
                 <PrevNextButtons linkType="show" sort={{ field: "name", order: "ASC" }} storeKey="general_rules.list" />
                 {rule &&
                     rule.approval_status == RULE_STATUS_NEEDS_APPROVAL &&

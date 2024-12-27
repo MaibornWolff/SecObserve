@@ -8,7 +8,12 @@ interface SmallButtonProps {
 
 const SmallButton = ({ title, onClick, icon }: SmallButtonProps) => {
     return (
-        <Button onClick={onClick} size="small" sx={{ padding: "0px" }} startIcon={icon}>
+        <Button
+            onClick={onClick}
+            size="small"
+            sx={{ paddingTop: 0, paddingBottom: 0, paddingLeft: "5px", paddingRight: "5px" }}
+            startIcon={icon}
+        >
             {title}
         </Button>
     );
