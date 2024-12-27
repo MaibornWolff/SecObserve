@@ -1,10 +1,11 @@
 import UploadIcon from "@mui/icons-material/Upload";
-import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { ChangeEvent, Fragment, useState } from "react";
 import { SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
 import { makeStyles } from "tss-react/mui";
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
+import SmallButton from "../../commons/custom_fields/SmallButton";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
 const VEXDocumentImport = () => {
@@ -75,17 +76,7 @@ const VEXDocumentImport = () => {
     );
     return (
         <Fragment>
-            <Button
-                onClick={handleOpen}
-                size="small"
-                sx={{
-                    paddingTop: "0px",
-                    paddingBottom: "2px",
-                }}
-                startIcon={<UploadIcon />}
-            >
-                Import VEX document
-            </Button>
+            <SmallButton title="Import VEX document" onClick={handleOpen} icon={<UploadIcon />} />
             <Dialog open={open && !loading} onClose={handleClose}>
                 <DialogTitle>Import VEX document</DialogTitle>
                 <DialogContent>

@@ -1,9 +1,10 @@
 import ApprovalIcon from "@mui/icons-material/Approval";
-import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import { SaveButton, SimpleForm, Toolbar, useListContext, useNotify, useRefresh, useUnselectAll } from "react-admin";
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
+import SmallButton from "../../commons/custom_fields/SmallButton";
 import { validate_required, validate_required_255 } from "../../commons/custom_validators";
 import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
@@ -64,14 +65,7 @@ const AssessmentBulkApproval = () => {
     );
     return (
         <Fragment>
-            <Button
-                onClick={handleOpen}
-                size="small"
-                sx={{ paddingTop: "0px", paddingBottom: "2px" }}
-                startIcon={<ApprovalIcon />}
-            >
-                Approval
-            </Button>
+            <SmallButton title="Approval" onClick={handleOpen} icon={<ApprovalIcon />} />
             <Dialog open={open && !loading} onClose={handleClose}>
                 <DialogTitle sx={{ display: "flex", alignItems: "center" }}>
                     <ApprovalIcon />

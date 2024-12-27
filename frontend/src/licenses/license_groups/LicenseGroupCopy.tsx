@@ -1,10 +1,11 @@
 import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
-import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import { CreateBase, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
 import { useNavigate } from "react-router";
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
+import SmallButton from "../../commons/custom_fields/SmallButton";
 import { validate_required } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
@@ -51,14 +52,7 @@ const LicenseGroupCopy = ({ license_group }: LicenseGroupCopyProps) => {
 
     return (
         <Fragment>
-            <Button
-                size="small"
-                sx={{ paddingTop: "0px", paddingBottom: "2px" }}
-                onClick={handleOpen}
-                startIcon={<LibraryAddIcon />}
-            >
-                Copy
-            </Button>
+            <SmallButton title="Copy" onClick={handleOpen} icon={<LibraryAddIcon />} />
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Copy license group</DialogTitle>
                 <DialogContent>

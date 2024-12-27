@@ -1,5 +1,5 @@
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
-import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import {
     DateInput,
@@ -14,6 +14,7 @@ import {
 } from "react-admin";
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
+import SmallButton from "../../commons/custom_fields/SmallButton";
 import { validate_after_today, validate_required_4096 } from "../../commons/custom_validators";
 import { justificationIsEnabledForStatus, settings_risk_acceptance_expiry_date } from "../../commons/functions";
 import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
@@ -101,9 +102,7 @@ const ObservationBulkAssessment = (props: ObservationBulkAssessmentButtonProps) 
 
     return (
         <Fragment>
-            <Button onClick={handleOpen} size="small" sx={{ padding: "0px" }} startIcon={<PlaylistAddCheckIcon />}>
-                Assessment
-            </Button>
+            <SmallButton title="Assessment" onClick={handleOpen} icon={<PlaylistAddCheckIcon />} />
             <Dialog open={open && !loading} onClose={handleClose}>
                 <DialogTitle>Bulk Observation Assessment</DialogTitle>
                 <DialogContent>

@@ -68,7 +68,7 @@ const ExportMenu = ({ license_policy }: ExportMenuProps) => {
                 aria-expanded={open ? "true" : undefined}
                 onClick={handleClick}
                 size="small"
-                sx={{ paddingTop: "0px", paddingBottom: "2px" }}
+                sx={{ padding: "0px" }}
                 startIcon={<DownloadIcon />}
             >
                 Export

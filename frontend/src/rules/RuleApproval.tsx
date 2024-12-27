@@ -1,9 +1,10 @@
 import ApprovalIcon from "@mui/icons-material/Approval";
-import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import { SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
 
 import CancelButton from "../commons/custom_fields/CancelButton";
+import SmallButton from "../commons/custom_fields/SmallButton";
 import { validate_required, validate_required_255 } from "../commons/custom_validators";
 import { AutocompleteInputMedium, TextInputWide } from "../commons/layout/themes";
 import { httpClient } from "../commons/ra-data-django-rest-framework";
@@ -60,14 +61,7 @@ const RuleApproval = (props: RuleApprovalProps) => {
 
     return (
         <Fragment>
-            <Button
-                onClick={handleOpen}
-                size="small"
-                sx={{ paddingTop: "0px", paddingBottom: "2px" }}
-                startIcon={<ApprovalIcon />}
-            >
-                Approval
-            </Button>
+            <SmallButton title="Approval" onClick={handleOpen} icon={<ApprovalIcon />} />
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle sx={{ display: "flex", alignItems: "center" }}>
                     <ApprovalIcon />
