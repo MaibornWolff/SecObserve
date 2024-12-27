@@ -1,10 +1,11 @@
 import ApprovalIcon from "@mui/icons-material/Approval";
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
+import { SaveButton, SimpleForm, useNotify, useRefresh } from "react-admin";
 
 import CancelButton from "../commons/custom_fields/CancelButton";
 import SmallButton from "../commons/custom_fields/SmallButton";
+import Toolbar from "../commons/custom_fields/Toolbar";
 import { validate_required, validate_required_255 } from "../commons/custom_validators";
 import { AutocompleteInputMedium, TextInputWide } from "../commons/layout/themes";
 import { httpClient } from "../commons/ra-data-django-rest-framework";
@@ -53,7 +54,7 @@ const RuleApproval = (props: RuleApprovalProps) => {
     const handleOpen = () => setOpen(true);
 
     const CustomToolbar = () => (
-        <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Toolbar>
             <CancelButton onClick={handleCancel} />
             <SaveButton />
         </Toolbar>

@@ -1,11 +1,12 @@
 import AddIcon from "@mui/icons-material/Add";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField } from "@mui/material";
 import { useState } from "react";
-import { SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
+import { SaveButton, SimpleForm, useNotify, useRefresh } from "react-admin";
 
 import AddButton from "../../commons/custom_fields/AddButton";
 import CancelButton from "../../commons/custom_fields/CancelButton";
 import CopyToClipboardButton from "../../commons/custom_fields/CopyToClipboardButton";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
@@ -43,7 +44,7 @@ const CreateProductApiToken = (props: CreateProductApiTokenProps) => {
     };
 
     const CustomToolbar = () => (
-        <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Toolbar>
             <CancelButton onClick={handleRoleCancel} />
             <SaveButton label="Create" icon={<AddIcon />} />
         </Toolbar>

@@ -1,11 +1,12 @@
 import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { CreateBase, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
+import { CreateBase, SaveButton, SimpleForm, useNotify, useRefresh } from "react-admin";
 import { useNavigate } from "react-router";
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
 import SmallButton from "../../commons/custom_fields/SmallButton";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import { validate_required } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
@@ -27,7 +28,7 @@ const LicensePolicyCopy = ({ license_policy }: LicensePolicyCopyProps) => {
     };
 
     const CustomToolbar = () => (
-        <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Toolbar>
             <CancelButton onClick={handleCancel} />
             <SaveButton label="Copy" icon={<LibraryAddIcon />} />
         </Toolbar>

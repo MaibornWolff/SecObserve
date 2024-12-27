@@ -6,7 +6,6 @@ import {
     FormDataConsumer,
     SaveButton,
     SimpleForm,
-    Toolbar,
     useListContext,
     useNotify,
     useRefresh,
@@ -15,6 +14,7 @@ import {
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
 import SmallButton from "../../commons/custom_fields/SmallButton";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import { validate_after_today, validate_required_4096 } from "../../commons/custom_validators";
 import { justificationIsEnabledForStatus, settings_risk_acceptance_expiry_date } from "../../commons/functions";
 import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
@@ -94,7 +94,7 @@ const ObservationBulkAssessment = (props: ObservationBulkAssessmentButtonProps) 
     const handleOpen = () => setOpen(true);
 
     const CustomToolbar = () => (
-        <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Toolbar>
             <CancelButton onClick={handleCancel} />
             <SaveButton />
         </Toolbar>

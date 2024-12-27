@@ -1,11 +1,12 @@
 import UploadIcon from "@mui/icons-material/Upload";
 import { Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { ChangeEvent, Fragment, useState } from "react";
-import { SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
+import { SaveButton, SimpleForm, useNotify, useRefresh } from "react-admin";
 import { makeStyles } from "tss-react/mui";
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
 import SmallButton from "../../commons/custom_fields/SmallButton";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
 const VEXDocumentImport = () => {
@@ -69,7 +70,7 @@ const VEXDocumentImport = () => {
     };
 
     const CustomToolbar = () => (
-        <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Toolbar>
             <CancelButton onClick={handleCancel} />
             <SaveButton label="Import" icon={<UploadIcon />} alwaysEnable />
         </Toolbar>

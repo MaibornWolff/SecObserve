@@ -11,7 +11,7 @@ const AddButton = ({ title, onClick }: AddButtonProps) => {
         <Button
             variant="contained"
             onClick={onClick}
-            sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem", marginBottom: 1 }}
+            sx={{ width: "fit-content", fontSize: "0.8125rem" }}
             startIcon={<AddIcon />}
         >
             {title}

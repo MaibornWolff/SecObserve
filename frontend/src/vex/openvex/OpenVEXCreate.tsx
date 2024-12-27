@@ -9,7 +9,6 @@ import {
     SaveButton,
     SimpleForm,
     SimpleFormIterator,
-    Toolbar,
     useNotify,
     useRefresh,
 } from "react-admin";
@@ -17,6 +16,7 @@ import {
 import axios_instance from "../../access_control/auth_provider/axios_instance";
 import AddButton from "../../commons/custom_fields/AddButton";
 import CancelButton from "../../commons/custom_fields/CancelButton";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import { validate_255, validate_required_255 } from "../../commons/custom_validators";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 
@@ -37,7 +37,7 @@ const OpenVEXCreate = () => {
     };
 
     const CustomToolbar = () => (
-        <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Toolbar>
             <CancelButton onClick={handleCancel} />
             <SaveButton label="Create" icon={<AddIcon />} />
         </Toolbar>

@@ -5,7 +5,6 @@ import {
     ReferenceInput,
     SaveButton,
     SimpleForm,
-    Toolbar,
     WithRecord,
     useDataProvider,
     useNotify,
@@ -16,6 +15,7 @@ import { useWatch } from "react-hook-form";
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
 import EditButton from "../../commons/custom_fields/EditButton";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import {
     validate_255,
     validate_513,
@@ -132,7 +132,7 @@ const ApiConfigurationEdit = () => {
     };
 
     const CustomToolbar = () => (
-        <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Toolbar>
             <CancelButton onClick={handleCancel} />
             <SaveButton />
         </Toolbar>

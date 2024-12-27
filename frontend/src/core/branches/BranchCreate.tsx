@@ -1,18 +1,10 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import {
-    BooleanInput,
-    CreateBase,
-    SaveButton,
-    SimpleForm,
-    Toolbar,
-    useCreate,
-    useNotify,
-    useRefresh,
-} from "react-admin";
+import { BooleanInput, CreateBase, SaveButton, SimpleForm, useCreate, useNotify, useRefresh } from "react-admin";
 
 import AddButton from "../../commons/custom_fields/AddButton";
 import CancelButton from "../../commons/custom_fields/CancelButton";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import { validate_255, validate_required_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 
@@ -33,7 +25,7 @@ const BranchCreate = ({ id }: BranchCreateProps) => {
     };
 
     const CustomToolbar = () => (
-        <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Toolbar>
             <CancelButton onClick={handleCancel} />
             <SaveButton />
         </Toolbar>

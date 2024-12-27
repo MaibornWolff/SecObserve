@@ -1,9 +1,10 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh, useUpdate } from "react-admin";
+import { ReferenceInput, SaveButton, SimpleForm, useNotify, useRefresh, useUpdate } from "react-admin";
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
 import EditButton from "../../commons/custom_fields/EditButton";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import { validate_255, validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputExtraWide, AutocompleteInputMedium, TextInputExtraWide } from "../../commons/layout/themes";
 import { EVALUATION_RESULT_CHOICES } from "../types";
@@ -70,7 +71,7 @@ const LicensePolicyItemEdit = ({ license_policy_id, license_policy_item_id }: Li
     };
 
     const CustomToolbar = () => (
-        <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Toolbar>
             <CancelButton onClick={handleCancel} />
             <SaveButton />
         </Toolbar>

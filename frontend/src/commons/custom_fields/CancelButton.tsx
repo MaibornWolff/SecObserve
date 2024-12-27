@@ -6,18 +6,7 @@ interface CancelButtonProps {
 }
 
 const CancelButton = ({ onClick }: CancelButtonProps) => (
-    <Button
-        sx={{
-            mr: "1em",
-            direction: "row",
-            justifyContent: "center",
-            alignItems: "center",
-        }}
-        variant="contained"
-        onClick={onClick}
-        color="inherit"
-        startIcon={<CancelIcon />}
-    >
+    <Button sx={{ mr: "1em" }} variant="contained" onClick={onClick} color="inherit" startIcon={<CancelIcon />}>
         Cancel
     </Button>
 );

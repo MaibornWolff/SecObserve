@@ -48,7 +48,7 @@ const ProductRuleApply = (props: ProductRuleApplyProps) => {
                 variant="contained"
                 onClick={handleClick}
                 startIcon={<GeneralRuleIcon />}
-                sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem" }}
+                sx={{ width: "fit-content", fontSize: "0.8125rem" }}
             >
                 Apply rules
             </Button>

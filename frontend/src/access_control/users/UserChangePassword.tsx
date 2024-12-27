@@ -1,10 +1,11 @@
 import PasswordIcon from "@mui/icons-material/Password";
 import { Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
 import { Fragment, useEffect, useState } from "react";
-import { SaveButton, SimpleForm, Toolbar, WithRecord, useNotify, useRefresh } from "react-admin";
+import { SaveButton, SimpleForm, WithRecord, useNotify, useRefresh } from "react-admin";
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
 import SmallButton from "../../commons/custom_fields/SmallButton";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import { validate_required_255 } from "../../commons/custom_validators";
 import { PasswordInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
@@ -62,7 +63,7 @@ const UserChangePassword = () => {
     const handleOpen = () => setOpen(true);
 
     const CustomToolbar = () => (
-        <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Toolbar>
             <CancelButton onClick={handleCancel} />
             <SaveButton label="Change" />
         </Toolbar>
