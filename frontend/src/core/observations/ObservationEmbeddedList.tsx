@@ -126,7 +126,7 @@ type ObservationsEmbeddedListProps = {
 };
 
 const BulkActionButtons = (product: any) => (
-    <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+    <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
         {product.product.permissions.includes(PERMISSION_OBSERVATION_ASSESSMENT) && (
             <ObservationBulkAssessment product={product.product} />
         )}
