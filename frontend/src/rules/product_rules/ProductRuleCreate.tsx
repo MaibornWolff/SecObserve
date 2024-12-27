@@ -128,7 +128,9 @@ const ProductRuleCreate = ({ id }: ProductRuleCreateProps) => {
                             toolbar={<CustomToolbar />}
                             validate={validateRuleForm}
                         >
-                            <Typography variant="h6">Rule</Typography>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Rule
+                            </Typography>
                             <TextInputWide autoFocus source="name" validate={validate_required_255} />
                             <TextInputWide
                                 source="description"
@@ -153,7 +155,9 @@ const ProductRuleCreate = ({ id }: ProductRuleCreateProps) => {
 
                             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
-                            <Typography variant="h6">Observation</Typography>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Observation
+                            </Typography>
                             <ReferenceInput source="parser" reference="parsers" sort={{ field: "name", order: "ASC" }}>
                                 <AutocompleteInputWide optionText="name" />
                             </ReferenceInput>
@@ -173,7 +177,9 @@ const ProductRuleCreate = ({ id }: ProductRuleCreateProps) => {
 
                             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
-                            <Typography variant="h6">Origins</Typography>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Origins
+                            </Typography>
                             <TextInputWide
                                 source="origin_component_name_version"
                                 label="Component name:version"

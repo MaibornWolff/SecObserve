@@ -95,7 +95,9 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
                 <DialogContent>
                     <CreateBase resource="observations">
                         <SimpleForm onSubmit={create_observation} toolbar={<CustomToolbar />}>
-                            <Typography variant="h6">Observation</Typography>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Observation
+                            </Typography>
                             <Stack>
                                 <TextInputWide autoFocus source="title" validate={validate_required_255} />
                                 <Stack direction="row" spacing={2} alignItems="center">
@@ -152,7 +154,9 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
 
                             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
-                            <Typography variant="h6">Product</Typography>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Product
+                            </Typography>
                             <Stack>
                                 <ReferenceInput
                                     source="product"
@@ -175,7 +179,9 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
 
                             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
-                            <Typography variant="h6">Vulnerability</Typography>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Vulnerability
+                            </Typography>
                             <Stack>
                                 <TextInputWide
                                     source="vulnerability_id"
@@ -205,7 +211,9 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
 
                             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
-                            <Typography variant="h6">Origins</Typography>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Origins
+                            </Typography>
                             <Stack>
                                 <ReferenceInput
                                     source="origin_service"

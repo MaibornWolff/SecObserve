@@ -36,7 +36,7 @@ const ObservationShowHeader = ({ observation }: ObservationShowHeaderProps) => {
                         Observation
                     </Typography>
                     {in_observation_log && (
-                        <Stack direction="row" spacing={4} sx={{ marginBottom: 2 }}>
+                        <Stack direction="row" spacing={4} sx={{ marginBottom: 1 }}>
                             <Labeled label="Product">
                                 <ReferenceField
                                     source="product_data.id"
@@ -55,7 +55,7 @@ const ObservationShowHeader = ({ observation }: ObservationShowHeaderProps) => {
                             )}
                         </Stack>
                     )}
-                    <Stack direction="row" spacing={4}>
+                    <Stack direction="row" spacing={4} sx={{ marginBottom: 1 }}>
                         <Stack spacing={2}>
                             <Labeled>
                                 <SeverityField label="Severity" source="current_severity" />

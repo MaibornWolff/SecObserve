@@ -124,7 +124,9 @@ const ProductGroupShow = () => {
                                 {product_group.repository_branch_housekeeping_active != null && (
                                     <Fragment>
                                         <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-                                        <Typography variant="h6">Housekeeping (for products)</Typography>
+                                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                            Housekeeping (for products)
+                                        </Typography>
 
                                         <Labeled label="Housekeeping">
                                             <BooleanField
@@ -150,7 +152,9 @@ const ProductGroupShow = () => {
                                     product_group.notification_slack_webhook) && (
                                     <Fragment>
                                         <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-                                        <Typography variant="h6">Notifications (for products)</Typography>
+                                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                            Notifications (for products)
+                                        </Typography>
                                         <Stack spacing={1}>
                                             {product_group.notification_email_to && (
                                                 <Labeled label="Email">
@@ -173,7 +177,9 @@ const ProductGroupShow = () => {
                                 {product_group.security_gate_active != null && (
                                     <Fragment>
                                         <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-                                        <Typography variant="h6">Security Gate (for products)</Typography>
+                                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                            Security Gate (for products)
+                                        </Typography>
                                         <Labeled label="Security gate">
                                             <BooleanField
                                                 source="security_gate_active"
@@ -207,7 +213,9 @@ const ProductGroupShow = () => {
                                 )}
 
                                 <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-                                <Typography variant="h6">Review</Typography>
+                                <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                    Review
+                                </Typography>
                                 <Stack spacing={1}>
                                     <Labeled label="Assessments need approval">
                                         <BooleanField source="assessments_need_approval" />
@@ -222,7 +230,9 @@ const ProductGroupShow = () => {
                                 {product_group.risk_acceptance_expiry_active != null && (
                                     <Fragment>
                                         <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-                                        <Typography variant="h6">Risk acceptance expiry</Typography>
+                                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                            Risk acceptance expiry
+                                        </Typography>
 
                                         <Labeled label="Risk acceptance expiry">
                                             <BooleanField
@@ -243,7 +253,9 @@ const ProductGroupShow = () => {
                                 {product_group.license_policy && (
                                     <Fragment>
                                         <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-                                        <Typography variant="h6">License management</Typography>
+                                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                            License management
+                                        </Typography>
                                         <Labeled label="License policy">
                                             <ReferenceField
                                                 source="license_policy"
@@ -277,7 +289,9 @@ const ProductGroupShow = () => {
                                 <ProductRuleEmbeddedList product={product_group} />
                             </Tab>
                             <Tab label="Members" path="members" icon={<PeopleAltIcon />}>
-                                <Typography variant="h6">User members</Typography>
+                                <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                    User members
+                                </Typography>
                                 {product_group &&
                                     product_group.permissions.includes(PERMISSION_PRODUCT_MEMBER_CREATE) && (
                                         <ProductMemberAdd id={product_group.id} />
@@ -285,7 +299,9 @@ const ProductGroupShow = () => {
                                 <ProductMemberEmbeddedList product={product_group} />
 
                                 <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-                                <Typography variant="h6">Authorization group members</Typography>
+                                <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                    Authorization group members
+                                </Typography>
                                 {product_group &&
                                     product_group.permissions.includes(
                                         PERMISSION_PRODUCT_AUTHORIZATION_GROUP_MEMBER_CREATE

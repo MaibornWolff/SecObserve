@@ -96,7 +96,9 @@ const CSAFCreate = () => {
                 <DialogContent>
                     <CreateBase resource="csaf">
                         <SimpleForm onSubmit={create_csaf} toolbar={<CustomToolbar />}>
-                            <Typography variant="h6">CSAF</Typography>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                CSAF
+                            </Typography>
                             <ReferenceInput
                                 source="product"
                                 reference="products"
@@ -131,7 +133,9 @@ const CSAFCreate = () => {
                                 }
                             </FormDataConsumer>
                             <Divider flexItem sx={{ marginBottom: 2 }} />
-                            <Typography variant="h6">Document</Typography>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Document
+                            </Typography>
                             <TextInputWide
                                 source="document_id_prefix"
                                 label="ID prefix"
@@ -145,7 +149,9 @@ const CSAFCreate = () => {
                                 validate={validate_required}
                             />
                             <Divider flexItem sx={{ marginBottom: 2 }} />
-                            <Typography variant="h6">Tracking and Publisher</Typography>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Tracking and Publisher
+                            </Typography>
                             <AutocompleteInputMedium
                                 source="tracking_status"
                                 choices={CSAF_TRACKING_STATUS_CHOICES}

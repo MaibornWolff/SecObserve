@@ -1,5 +1,4 @@
 import {
-    Box,
     Card,
     CardContent,
     CardHeader,
@@ -8,6 +7,7 @@ import {
     Radio,
     RadioGroup,
     Stack,
+    Typography,
 } from "@mui/material";
 import { Title, useTheme } from "react-admin";
 
@@ -33,8 +33,8 @@ const UserSettings = () => {
             <Title title="Settings" />
             <CardHeader title="Settings" />
             <CardContent>
-                <Stack spacing={2} sx={{ width: "100%" }}>
-                    <Box sx={{ width: "10em", display: "inline-block" }}>Theme</Box>
+                <Stack sx={{ width: "100%" }}>
+                    <Typography variant="subtitle1">Theme</Typography>
                     <FormControl>
                         <RadioGroup defaultValue={getSettingTheme()} name="radio-buttons-group-theme" row>
                             <FormControlLabel
@@ -51,7 +51,10 @@ const UserSettings = () => {
                             />
                         </RadioGroup>
                     </FormControl>
-                    <Box sx={{ width: "10em", display: "inline-block" }}>List size</Box>
+
+                    <Typography variant="subtitle1" sx={{ marginTop: 2 }}>
+                        List size
+                    </Typography>
                     <FormControl>
                         <RadioGroup defaultValue={getSettingListSize()} name="radio-buttons-group-list-size" row>
                             <FormControlLabel

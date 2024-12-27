@@ -38,7 +38,9 @@ const VEXStatementShow = () => {
             <WithRecord
                 render={(vex_statement) => (
                     <SimpleShowLayout>
-                        <Typography variant="h6">Imported VEX Statement</Typography>
+                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                            Imported VEX Statement
+                        </Typography>
                         <ReferenceField
                             source="document"
                             reference="vex/vex_documents"

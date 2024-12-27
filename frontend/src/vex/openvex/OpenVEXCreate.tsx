@@ -95,7 +95,9 @@ const OpenVEXCreate = () => {
                 <DialogContent>
                     <CreateBase resource="openvex">
                         <SimpleForm onSubmit={create_openvex} toolbar={<CustomToolbar />}>
-                            <Typography variant="h6">OpenVEX</Typography>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                OpenVEX
+                            </Typography>
                             <ReferenceInput
                                 source="product"
                                 reference="products"
@@ -130,7 +132,9 @@ const OpenVEXCreate = () => {
                                 }
                             </FormDataConsumer>
                             <Divider flexItem sx={{ marginBottom: 2 }} />
-                            <Typography variant="h6">Document</Typography>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Document
+                            </Typography>
                             <TextInputWide
                                 source="id_namespace"
                                 label="ID namespace"

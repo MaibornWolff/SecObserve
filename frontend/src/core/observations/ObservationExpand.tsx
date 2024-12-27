@@ -11,7 +11,9 @@ const ObservationExpand = () => {
         <SimpleShowLayout>
             {observation && (observation.description || observation.recommendation) && (
                 <Paper elevation={getElevation(false)} sx={{ marginBottom: 2, padding: 2 }}>
-                    <Typography variant="h6">Observation</Typography>
+                    <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                        Observation
+                    </Typography>
                     <ObservationShowDescriptionRecommendation />
                 </Paper>
             )}

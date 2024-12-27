@@ -21,7 +21,9 @@ const MetaData = () => {
         <WithRecord
             render={(component) => (
                 <Paper sx={{ marginBottom: 2, padding: 2 }}>
-                    <Typography variant="h6">Metadata</Typography>
+                    <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                        Metadata
+                    </Typography>
                     <Stack spacing={1}>
                         <Labeled label="Product">
                             <ReferenceField
@@ -77,7 +79,7 @@ const Evidences = () => {
                 <Fragment>
                     {license_component.evidences && license_component.evidences.length > 0 && (
                         <Paper sx={{ marginBottom: 2 }}>
-                            <Typography variant="h6" sx={{ paddingLeft: 2, paddingTop: 1 }}>
+                            <Typography variant="h6" sx={{ paddingLeft: 2, paddingTop: 1, marginBottom: 1 }}>
                                 Evidences
                             </Typography>
                             <ArrayField source="evidences" label={false}>

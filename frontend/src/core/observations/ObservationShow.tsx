@@ -115,7 +115,9 @@ const ObservationShowComponent = () => {
                         observation.epss_score != null ||
                         observation.epss_percentile != null) && (
                         <Paper sx={{ marginBottom: 2, padding: 2 }}>
-                            <Typography variant="h6">Vulnerability</Typography>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Vulnerability
+                            </Typography>
                             <Stack direction="row" spacing={4}>
                                 {observation.vulnerability_id != "" &&
                                     get_vulnerability_url(observation.vulnerability_id) == null && (
@@ -172,7 +174,7 @@ const ObservationShowComponent = () => {
                     <ObservationShowOrigins showDependencies={true} elevated={true} />
 
                     <Paper sx={{ marginBottom: 2, padding: 2 }}>
-                        <Typography variant="h6" sx={{ paddingBottom: 1 }}>
+                        <Typography variant="h6" sx={{ paddingBottom: 1, marginBottom: 1 }}>
                             Log
                         </Typography>
                         <ObservationLogEmbeddedList observation={observation} />
@@ -180,7 +182,7 @@ const ObservationShowComponent = () => {
 
                     {observation && observation.has_potential_duplicates && (
                         <Paper sx={{ marginBottom: 2, paddingTop: 2, paddingLeft: 2, paddingRight: 2 }}>
-                            <Typography variant="h6" sx={{ paddingBottom: 1 }}>
+                            <Typography variant="h6" sx={{ paddingBottom: 1, marginBottom: 1 }}>
                                 Potential Duplicates
                             </Typography>
                             <PotentialDuplicatesList observation={observation} />

@@ -35,7 +35,9 @@ const EvidenceShow = () => {
     return (
         <Show actions={<ShowActions />}>
             <SimpleShowLayout>
-                <Typography variant="h6">Evidence</Typography>
+                <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                    Evidence
+                </Typography>
                 <ReferenceField
                     source="product"
                     reference="products"
