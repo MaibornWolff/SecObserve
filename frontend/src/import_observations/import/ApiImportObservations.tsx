@@ -1,9 +1,9 @@
-import CancelIcon from "@mui/icons-material/Cancel";
 import UploadIcon from "@mui/icons-material/CloudUpload";
 import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import { ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
 
+import CancelButton from "../../commons/custom_fields/CancelButton";
 import { validate_255, validate_513, validate_2048, validate_required } from "../../commons/custom_validators";
 import { getIconAndFontColor } from "../../commons/functions";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
@@ -76,26 +76,9 @@ const ApiImportObservations = (product: any) => {
             });
     };
 
-    const CancelButton = () => (
-        <Button
-            sx={{
-                mr: "1em",
-                direction: "row",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-            variant="contained"
-            onClick={handleCancel}
-            color="inherit"
-            startIcon={<CancelIcon />}
-        >
-            Cancel
-        </Button>
-    );
-
     const CustomToolbar = () => (
         <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <CancelButton />
+            <CancelButton onClick={handleCancel} />
             <SaveButton label="Import" icon={<UploadIcon />} />
         </Toolbar>
     );
@@ -106,8 +89,10 @@ const ApiImportObservations = (product: any) => {
                 onClick={handleOpen}
                 size="small"
                 sx={{
-                    paddingTop: "0px",
-                    paddingBottom: "2px",
+                    paddingTop: 0,
+                    paddingBottom: 0,
+                    paddingLeft: "5px",
+                    paddingRight: "5px",
                     color: getIconAndFontColor(),
                     textTransform: "none",
                     fontWeight: "normal",

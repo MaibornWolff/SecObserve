@@ -20,7 +20,7 @@ const ShowActions = () => {
     const authorization_group = useRecordContext();
     return (
         <TopToolbar>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
+            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
                 <PrevNextButtons
                     linkType="show"
                     sort={{ field: "name", order: "ASC" }}

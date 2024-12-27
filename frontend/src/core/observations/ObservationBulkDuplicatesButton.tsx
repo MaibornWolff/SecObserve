@@ -1,8 +1,9 @@
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import { Backdrop, CircularProgress } from "@mui/material";
 import { useState } from "react";
-import { Button, Confirm, useListContext, useNotify, useRefresh, useUnselectAll } from "react-admin";
+import { Confirm, useListContext, useNotify, useRefresh, useUnselectAll } from "react-admin";
 
+import SmallButton from "../../commons/custom_fields/SmallButton";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
 type ObservationBulkDuplicatesButtonProps = {
@@ -57,7 +58,7 @@ const ObservationBulkDuplicatesButton = (props: ObservationBulkDuplicatesButtonP
 
     return (
         <>
-            <Button label="Mark Duplicates" onClick={handleClick} startIcon={<PlaylistAddCheckIcon />} />
+            <SmallButton title="Mark Duplicates" onClick={handleClick} icon={<PlaylistAddCheckIcon />} />
             <Confirm
                 isOpen={open && !loading}
                 title="Mark duplicates"

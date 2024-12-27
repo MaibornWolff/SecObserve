@@ -1,6 +1,5 @@
-import CancelIcon from "@mui/icons-material/Cancel";
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
-import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import {
     DateInput,
@@ -14,6 +13,8 @@ import {
     useUnselectAll,
 } from "react-admin";
 
+import CancelButton from "../../commons/custom_fields/CancelButton";
+import SmallButton from "../../commons/custom_fields/SmallButton";
 import { validate_after_today, validate_required_4096 } from "../../commons/custom_validators";
 import { justificationIsEnabledForStatus, settings_risk_acceptance_expiry_date } from "../../commons/functions";
 import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
@@ -89,44 +90,19 @@ const ObservationBulkAssessment = (props: ObservationBulkAssessmentButtonProps) 
         if (reason && reason == "backdropClick") return;
         setOpen(false);
     };
-
     const handleCancel = () => setOpen(false);
-
     const handleOpen = () => setOpen(true);
-
-    const CancelButton = () => (
-        <Button
-            sx={{
-                mr: "1em",
-                direction: "row",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-            variant="contained"
-            onClick={handleCancel}
-            color="inherit"
-            startIcon={<CancelIcon />}
-        >
-            Cancel
-        </Button>
-    );
 
     const CustomToolbar = () => (
         <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <CancelButton />
+            <CancelButton onClick={handleCancel} />
             <SaveButton />
         </Toolbar>
     );
+
     return (
         <Fragment>
-            <Button
-                onClick={handleOpen}
-                size="small"
-                sx={{ paddingTop: "0px", paddingBottom: "2px" }}
-                startIcon={<PlaylistAddCheckIcon />}
-            >
-                Assessment
-            </Button>
+            <SmallButton title="Assessment" onClick={handleOpen} icon={<PlaylistAddCheckIcon />} />
             <Dialog open={open && !loading} onClose={handleClose}>
                 <DialogTitle>Bulk Observation Assessment</DialogTitle>
                 <DialogContent>

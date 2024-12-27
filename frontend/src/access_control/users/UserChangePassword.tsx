@@ -1,9 +1,10 @@
-import CancelIcon from "@mui/icons-material/Cancel";
 import PasswordIcon from "@mui/icons-material/Password";
-import { Button, Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
 import { Fragment, useEffect, useState } from "react";
 import { SaveButton, SimpleForm, Toolbar, WithRecord, useNotify, useRefresh } from "react-admin";
 
+import CancelButton from "../../commons/custom_fields/CancelButton";
+import SmallButton from "../../commons/custom_fields/SmallButton";
 import { validate_required_255 } from "../../commons/custom_validators";
 import { PasswordInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
@@ -60,39 +61,15 @@ const UserChangePassword = () => {
 
     const handleOpen = () => setOpen(true);
 
-    const CancelButton = () => (
-        <Button
-            sx={{
-                mr: "1em",
-                direction: "row",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-            variant="contained"
-            onClick={handleCancel}
-            color="inherit"
-            startIcon={<CancelIcon />}
-        >
-            Cancel
-        </Button>
-    );
-
     const CustomToolbar = () => (
         <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <CancelButton />
+            <CancelButton onClick={handleCancel} />
             <SaveButton label="Change" />
         </Toolbar>
     );
     return (
         <Fragment>
-            <Button
-                onClick={handleOpen}
-                size="small"
-                sx={{ paddingTop: "0px", paddingBottom: "2px" }}
-                startIcon={<PasswordIcon />}
-            >
-                Change password
-            </Button>
+            <SmallButton title="Change password" onClick={handleOpen} icon={<PasswordIcon />} />
             <WithRecord
                 render={(user) => (
                     <Dialog open={open} onClose={handleClose}>

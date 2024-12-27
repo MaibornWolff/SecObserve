@@ -1,4 +1,4 @@
-import { Stack, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import {
     ChipField,
     PrevNextButtons,
@@ -18,16 +18,14 @@ const ShowActions = () => {
 
     return (
         <TopToolbar>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
-                {vex_statement && (
-                    <PrevNextButtons
-                        linkType="show"
-                        filter={{ document: vex_statement.document }}
-                        sort={{ field: "vulnerability_id", order: "ASC" }}
-                        storeKey="vex_statements.embedded"
-                    />
-                )}
-            </Stack>
+            {vex_statement && (
+                <PrevNextButtons
+                    linkType="show"
+                    filter={{ document: vex_statement.document }}
+                    sort={{ field: "vulnerability_id", order: "ASC" }}
+                    storeKey="vex_statements.embedded"
+                />
+            )}
         </TopToolbar>
     );
 };

@@ -1,6 +1,4 @@
-import AddIcon from "@mui/icons-material/Add";
-import CancelIcon from "@mui/icons-material/Cancel";
-import { Button, Dialog, DialogContent, DialogTitle, Divider, Stack, Typography } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle, Divider, Stack, Typography } from "@mui/material";
 import { Fragment, useState } from "react";
 import {
     CreateBase,
@@ -17,6 +15,8 @@ import {
     useRefresh,
 } from "react-admin";
 
+import AddButton from "../../commons/custom_fields/AddButton";
+import CancelButton from "../../commons/custom_fields/CancelButton";
 import {
     validate_0_10,
     validate_0_999999,
@@ -55,26 +55,9 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
         setOpen(false);
     };
 
-    const CancelButton = () => (
-        <Button
-            sx={{
-                mr: "1em",
-                direction: "row",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-            variant="contained"
-            onClick={handleCancel}
-            color="inherit"
-            startIcon={<CancelIcon />}
-        >
-            Cancel
-        </Button>
-    );
-
     const CustomToolbar = () => (
         <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <CancelButton />
+            <CancelButton onClick={handleCancel} />
             <SaveButton />
         </Toolbar>
     );
@@ -106,14 +89,7 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
 
     return (
         <Fragment>
-            <Button
-                variant="contained"
-                onClick={handleOpen}
-                sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem" }}
-                startIcon={<AddIcon />}
-            >
-                Add observation
-            </Button>
+            <AddButton title="Add observation" onClick={handleOpen} />
             <Dialog open={open} onClose={handleClose} maxWidth={"lg"}>
                 <DialogTitle>Add observation</DialogTitle>
                 <DialogContent>

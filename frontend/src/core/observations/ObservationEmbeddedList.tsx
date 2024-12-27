@@ -1,4 +1,5 @@
-import { Fragment, useEffect } from "react";
+import { Stack } from "@mui/material";
+import { useEffect } from "react";
 import {
     AutocompleteInput,
     BooleanField,
@@ -125,14 +126,14 @@ type ObservationsEmbeddedListProps = {
 };
 
 const BulkActionButtons = (product: any) => (
-    <Fragment>
+    <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
         {product.product.permissions.includes(PERMISSION_OBSERVATION_ASSESSMENT) && (
             <ObservationBulkAssessment product={product.product} />
         )}
         {product.product.permissions.includes(PERMISSION_OBSERVATION_DELETE) && (
             <ObservationBulkDeleteButton product={product.product} />
         )}
-    </Fragment>
+    </Stack>
 );
 
 const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) => {

@@ -45,17 +45,15 @@ const ShowActions = () => {
 
     return (
         <TopToolbar>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
-                {license_component && (
-                    <PrevNextButtons
-                        filter={filter()}
-                        queryOptions={{ meta: { api_resource: "license_component_ids" } }}
-                        linkType="show"
-                        sort={{ field: "evaluation_result", order: "ASC" }}
-                        storeKey="license_components.embedded"
-                    />
-                )}
-            </Stack>
+            {license_component && (
+                <PrevNextButtons
+                    filter={filter()}
+                    queryOptions={{ meta: { api_resource: "license_component_ids" } }}
+                    linkType="show"
+                    sort={{ field: "evaluation_result", order: "ASC" }}
+                    storeKey="license_components.embedded"
+                />
+            )}
         </TopToolbar>
     );
 };

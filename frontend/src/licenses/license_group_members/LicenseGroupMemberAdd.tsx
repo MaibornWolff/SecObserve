@@ -1,10 +1,10 @@
-import AddIcon from "@mui/icons-material/Add";
-import CancelIcon from "@mui/icons-material/Cancel";
-import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import { BooleanInput, ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
 import { useFormContext } from "react-hook-form";
 
+import AddButton from "../../commons/custom_fields/AddButton";
+import CancelButton from "../../commons/custom_fields/CancelButton";
 import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
@@ -34,23 +34,6 @@ const LicenseGroupMemberAdd = ({ id }: LicenseGroupMemberAddProps) => {
         setUser(undefined);
         setIsManager(false);
     };
-
-    const CancelButton = () => (
-        <Button
-            sx={{
-                mr: "1em",
-                direction: "row",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-            variant="contained"
-            onClick={handleCancel}
-            color="inherit"
-            startIcon={<CancelIcon />}
-        >
-            Cancel
-        </Button>
-    );
 
     const CustomToolbar = () => {
         const { reset } = useFormContext();
@@ -96,7 +79,7 @@ const LicenseGroupMemberAdd = ({ id }: LicenseGroupMemberAddProps) => {
 
         return (
             <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
-                <CancelButton />
+                <CancelButton onClick={handleCancel} />
                 <SaveButton
                     label="Save & Continue"
                     type="button"
@@ -110,14 +93,7 @@ const LicenseGroupMemberAdd = ({ id }: LicenseGroupMemberAddProps) => {
 
     return (
         <Fragment>
-            <Button
-                variant="contained"
-                onClick={handleOpen}
-                sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem", marginBottom: 1 }}
-                startIcon={<AddIcon />}
-            >
-                Add user
-            </Button>
+            <AddButton title="Add user" onClick={handleOpen} />
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Add user</DialogTitle>
                 <DialogContent>

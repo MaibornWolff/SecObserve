@@ -1,6 +1,7 @@
-import DeleteIcon from "@mui/icons-material/Delete";
 import { useState } from "react";
-import { Button, Confirm, useDelete, useNotify, useRefresh } from "react-admin";
+import { Confirm, useDelete, useNotify, useRefresh } from "react-admin";
+
+import RemoveButton from "../../commons/custom_fields/RemoveButton";
 
 type ProductAuthorizationGroupMemberDeleteProps = {
     product_authorization_group_member: any;
@@ -37,12 +38,12 @@ const ProductAuthorizationGroupMemberDelete = (props: ProductAuthorizationGroupM
 
     return (
         <>
-            <Button label="Delete" onClick={handleClick} startIcon={<DeleteIcon />} sx={{ color: "#d32f2f" }} />
+            <RemoveButton title="Remove" onClick={handleClick} />
             <Confirm
                 isOpen={open}
-                title="Delete authorization group member"
+                title="Remove authorization group member"
                 content={
-                    "Are you sure you want to delete the authorization group member " +
+                    "Are you sure you want to remove the authorization group member " +
                     props.product_authorization_group_member.authorization_group_data.name +
                     "?"
                 }

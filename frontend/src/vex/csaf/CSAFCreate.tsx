@@ -1,15 +1,5 @@
 import AddIcon from "@mui/icons-material/Add";
-import CancelIcon from "@mui/icons-material/Cancel";
-import {
-    Backdrop,
-    Button,
-    CircularProgress,
-    Dialog,
-    DialogContent,
-    DialogTitle,
-    Divider,
-    Typography,
-} from "@mui/material";
+import { Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle, Divider, Typography } from "@mui/material";
 import { Fragment, useState } from "react";
 import {
     ArrayInput,
@@ -25,6 +15,8 @@ import {
 } from "react-admin";
 
 import axios_instance from "../../access_control/auth_provider/axios_instance";
+import AddButton from "../../commons/custom_fields/AddButton";
+import CancelButton from "../../commons/custom_fields/CancelButton";
 import { validate_255, validate_required, validate_required_255 } from "../../commons/custom_validators";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { CSAF_PUBLISHER_CATEGORY_CHOICES, CSAF_TLP_LABEL_CHOICES, CSAF_TRACKING_STATUS_CHOICES } from "../types";
@@ -45,26 +37,9 @@ const CSAFCreate = () => {
         setLoading(false);
     };
 
-    const CancelButton = () => (
-        <Button
-            sx={{
-                mr: "1em",
-                direction: "row",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-            variant="contained"
-            onClick={handleCancel}
-            color="inherit"
-            startIcon={<CancelIcon />}
-        >
-            Cancel
-        </Button>
-    );
-
     const CustomToolbar = () => (
         <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <CancelButton />
+            <CancelButton onClick={handleCancel} />
             <SaveButton label="Create" icon={<AddIcon />} />
         </Toolbar>
     );
@@ -115,14 +90,7 @@ const CSAFCreate = () => {
 
     return (
         <Fragment>
-            <Button
-                onClick={handleOpen}
-                size="small"
-                sx={{ paddingTop: "0px", paddingBottom: "2px" }}
-                startIcon={<AddIcon />}
-            >
-                Create CSAF document
-            </Button>
+            <AddButton title="Create CSAF document" onClick={handleOpen} />
             <Dialog open={open && !loading} onClose={handleClose} maxWidth={"lg"}>
                 <DialogTitle>Create CSAF document</DialogTitle>
                 <DialogContent>

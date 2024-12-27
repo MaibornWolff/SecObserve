@@ -1,6 +1,4 @@
-import AddIcon from "@mui/icons-material/Add";
-import CancelIcon from "@mui/icons-material/Cancel";
-import { Button, Dialog, DialogContent, DialogTitle, Divider, Typography } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle, Divider, Typography } from "@mui/material";
 import { Fragment, useState } from "react";
 import {
     BooleanInput,
@@ -14,6 +12,8 @@ import {
     useRefresh,
 } from "react-admin";
 
+import AddButton from "../../commons/custom_fields/AddButton";
+import CancelButton from "../../commons/custom_fields/CancelButton";
 import {
     validate_255,
     validate_513,
@@ -50,26 +50,9 @@ const ProductRuleCreate = ({ id }: ProductRuleCreateProps) => {
         setOpen(false);
     };
 
-    const CancelButton = () => (
-        <Button
-            sx={{
-                mr: "1em",
-                direction: "row",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-            variant="contained"
-            onClick={handleCancel}
-            color="inherit"
-            startIcon={<CancelIcon />}
-        >
-            Cancel
-        </Button>
-    );
-
     const CustomToolbar = () => (
         <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <CancelButton />
+            <CancelButton onClick={handleCancel} />
             <SaveButton />
         </Toolbar>
     );
@@ -135,14 +118,7 @@ const ProductRuleCreate = ({ id }: ProductRuleCreateProps) => {
 
     return (
         <Fragment>
-            <Button
-                variant="contained"
-                onClick={handleOpen}
-                sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem" }}
-                startIcon={<AddIcon />}
-            >
-                Add product rule
-            </Button>
+            <AddButton title="Add product rule" onClick={handleOpen} />
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Add product rule</DialogTitle>
                 <DialogContent>

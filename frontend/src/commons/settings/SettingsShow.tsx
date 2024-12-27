@@ -9,7 +9,7 @@ import JWTSecretReset from "./JWTSecretReset";
 const ShowActions = () => {
     return (
         <TopToolbar>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
+            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
                 <JWTSecretReset />
                 <EditButton />
             </Stack>

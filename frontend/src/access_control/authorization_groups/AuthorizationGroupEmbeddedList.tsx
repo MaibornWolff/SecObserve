@@ -8,10 +8,10 @@ import {
     useListController,
 } from "react-admin";
 
+import CreateButton from "../../commons/custom_fields/CreateButton";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { is_external } from "../../commons/functions";
 import { getSettingListSize } from "../../commons/user_settings/functions";
-import AuthorizationGroupCreateButton from "./AuthorizationGroupCreateButton";
 
 const ShowAuthorizationGroups = (id: any) => {
     return "../../../../authorization_groups/" + id + "/show";
@@ -47,7 +47,9 @@ const AuthorizationGroupEmbeddedList = ({ user }: AuthorizationGroupEmbeddedList
         <ResourceContextProvider value="authorization_groups">
             <ListContextProvider value={listContext}>
                 <div style={{ width: "100%" }}>
-                    {!is_external() && !user && <AuthorizationGroupCreateButton />}
+                    {!is_external() && !user && (
+                        <CreateButton title="Add authorization group" to="/authorization_groups/create" />
+                    )}
                     {!user && <FilterForm filters={listFilters()} />}
                     <Datagrid
                         size={getSettingListSize()}

@@ -1,9 +1,10 @@
 import ApprovalIcon from "@mui/icons-material/Approval";
-import CancelIcon from "@mui/icons-material/Cancel";
-import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import { SaveButton, SimpleForm, Toolbar, useListContext, useNotify, useRefresh, useUnselectAll } from "react-admin";
 
+import CancelButton from "../../commons/custom_fields/CancelButton";
+import SmallButton from "../../commons/custom_fields/SmallButton";
 import { validate_required, validate_required_255 } from "../../commons/custom_validators";
 import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
@@ -53,44 +54,18 @@ const AssessmentBulkApproval = () => {
         if (reason && reason == "backdropClick") return;
         setOpen(false);
     };
-
     const handleCancel = () => setOpen(false);
-
     const handleOpen = () => setOpen(true);
-
-    const CancelButton = () => (
-        <Button
-            sx={{
-                mr: "1em",
-                direction: "row",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-            variant="contained"
-            onClick={handleCancel}
-            color="inherit"
-            startIcon={<CancelIcon />}
-        >
-            Cancel
-        </Button>
-    );
 
     const CustomToolbar = () => (
         <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <CancelButton />
+            <CancelButton onClick={handleCancel} />
             <SaveButton />
         </Toolbar>
     );
     return (
         <Fragment>
-            <Button
-                onClick={handleOpen}
-                size="small"
-                sx={{ paddingTop: "0px", paddingBottom: "2px" }}
-                startIcon={<ApprovalIcon />}
-            >
-                Approval
-            </Button>
+            <SmallButton title="Approval" onClick={handleOpen} icon={<ApprovalIcon />} />
             <Dialog open={open && !loading} onClose={handleClose}>
                 <DialogTitle sx={{ display: "flex", alignItems: "center" }}>
                     <ApprovalIcon />
