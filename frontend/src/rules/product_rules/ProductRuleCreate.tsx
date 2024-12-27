@@ -13,6 +13,7 @@ import {
 
 import AddButton from "../../commons/custom_fields/AddButton";
 import CancelButton from "../../commons/custom_fields/CancelButton";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import {
     validate_255,
     validate_513,
@@ -29,7 +30,6 @@ import {
     OBSERVATION_VEX_JUSTIFICATION_CHOICES,
 } from "../../core/types";
 import { validateRuleForm } from "../functions";
-import Toolbar from "../../commons/custom_fields/Toolbar";
 
 export type ProductRuleCreateProps = {
     id: any;

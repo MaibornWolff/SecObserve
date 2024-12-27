@@ -15,6 +15,7 @@ import { useWatch } from "react-hook-form";
 
 import AddButton from "../../commons/custom_fields/AddButton";
 import CancelButton from "../../commons/custom_fields/CancelButton";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import {
     validate_255,
     validate_513,
@@ -23,7 +24,6 @@ import {
     validate_required_255,
 } from "../../commons/custom_validators";
 import { AutocompleteInputWide, PasswordInputWide, TextInputWide } from "../../commons/layout/themes";
-import Toolbar from "../../commons/custom_fields/Toolbar";
 
 export type ApiConfigurationCreateProps = {
     id: any;

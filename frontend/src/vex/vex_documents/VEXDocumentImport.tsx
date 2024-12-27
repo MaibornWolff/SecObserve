@@ -3,10 +3,10 @@ import { Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle } from "
 import { ChangeEvent, Fragment, useState } from "react";
 import { SaveButton, SimpleForm, useNotify, useRefresh } from "react-admin";
 import { makeStyles } from "tss-react/mui";
-import Toolbar from "../../commons/custom_fields/Toolbar";
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
 import SmallButton from "../../commons/custom_fields/SmallButton";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
 const VEXDocumentImport = () => {

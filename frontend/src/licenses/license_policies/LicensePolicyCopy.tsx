@@ -6,10 +6,10 @@ import { useNavigate } from "react-router";
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
 import SmallButton from "../../commons/custom_fields/SmallButton";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import { validate_required } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
-import Toolbar from "../../commons/custom_fields/Toolbar";
 
 type LicensePolicyCopyProps = {
     license_policy: any;

@@ -1,23 +1,15 @@
 import UploadIcon from "@mui/icons-material/Upload";
 import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { ChangeEvent, Fragment, useState } from "react";
-import {
-    BooleanInput,
-    ReferenceInput,
-    SaveButton,
-    SimpleForm,
-    WithRecord,
-    useNotify,
-    useRefresh,
-} from "react-admin";
+import { BooleanInput, ReferenceInput, SaveButton, SimpleForm, WithRecord, useNotify, useRefresh } from "react-admin";
 import { makeStyles } from "tss-react/mui";
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import { validate_255, validate_513, validate_2048, validate_required } from "../../commons/custom_validators";
 import { getIconAndFontColor } from "../../commons/functions";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
-import Toolbar from "../../commons/custom_fields/Toolbar";
 
 const FileUploadObservations = () => {
     const useStyles = makeStyles()({

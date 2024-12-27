@@ -6,9 +6,9 @@ import { useFormContext } from "react-hook-form";
 import { ROLE_CHOICES } from "../../access_control/types";
 import AddButton from "../../commons/custom_fields/AddButton";
 import CancelButton from "../../commons/custom_fields/CancelButton";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
-import Toolbar from "../../commons/custom_fields/Toolbar";
 
 export type ProductMemberAddProps = {
     id: any;
@@ -83,11 +83,7 @@ const ProductMemberAdd = ({ id }: ProductMemberAddProps) => {
         return (
             <Toolbar>
                 <CancelButton onClick={handleCancel} />
-                <SaveButton
-                    label="Save & Continue"
-                    type="button"
-                    onClick={handleSaveContinue}
-                />
+                <SaveButton label="Save & Continue" type="button" onClick={handleSaveContinue} />
                 <SaveButton type="button" onClick={handleSaveClose} />
             </Toolbar>
         );

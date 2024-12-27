@@ -1,22 +1,14 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import {
-    BooleanInput,
-    CreateBase,
-    ReferenceInput,
-    SaveButton,
-    SimpleForm,
-    useNotify,
-    useRefresh,
-} from "react-admin";
+import { BooleanInput, CreateBase, ReferenceInput, SaveButton, SimpleForm, useNotify, useRefresh } from "react-admin";
 import { useFormContext } from "react-hook-form";
 
 import AddButton from "../../commons/custom_fields/AddButton";
 import CancelButton from "../../commons/custom_fields/CancelButton";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
-import Toolbar from "../../commons/custom_fields/Toolbar";
 
 export type LicensePolicyMemberAddProps = {
     id: any;
@@ -89,11 +81,7 @@ const LicensePolicyMemberAdd = ({ id }: LicensePolicyMemberAddProps) => {
         return (
             <Toolbar>
                 <CancelButton onClick={handleCancel} />
-                <SaveButton
-                    label="Save & Continue"
-                    type="button"
-                    onClick={handleSaveContinue}
-                />
+                <SaveButton label="Save & Continue" type="button" onClick={handleSaveContinue} />
                 <SaveButton type="button" onClick={handleSaveClose} />
             </Toolbar>
         );

@@ -4,10 +4,10 @@ import { SaveButton, SimpleForm, useNotify, useRefresh } from "react-admin";
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
 import RemoveButton from "../../commons/custom_fields/RemoveButton";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import { validate_required_4096 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
-import Toolbar from "../../commons/custom_fields/Toolbar";
 
 const ObservationRemoveAssessment = () => {
     const [open, setOpen] = useState(false);

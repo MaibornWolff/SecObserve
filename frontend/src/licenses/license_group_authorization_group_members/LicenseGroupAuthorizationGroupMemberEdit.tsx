@@ -4,8 +4,8 @@ import { BooleanInput, SaveButton, SimpleForm, useNotify, useRefresh, useUpdate 
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
 import EditButton from "../../commons/custom_fields/EditButton";
-import { TextInputWide } from "../../commons/layout/themes";
 import Toolbar from "../../commons/custom_fields/Toolbar";
+import { TextInputWide } from "../../commons/layout/themes";
 
 const LicenseGroupAuthorizationGroupMemberEdit = () => {
     const [open, setOpen] = useState(false);

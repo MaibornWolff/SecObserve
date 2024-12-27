@@ -5,11 +5,11 @@ import { useFormContext } from "react-hook-form";
 
 import AddButton from "../../commons/custom_fields/AddButton";
 import CancelButton from "../../commons/custom_fields/CancelButton";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import { validate_255, validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputExtraWide, AutocompleteInputMedium, TextInputExtraWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 import { EVALUATION_RESULT_CHOICES } from "../types";
-import Toolbar from "../../commons/custom_fields/Toolbar";
 
 export type LicensePolicyItemAddProps = {
     id: any;
@@ -104,11 +104,7 @@ const LicensePolicyItemAdd = ({ id }: LicensePolicyItemAddProps) => {
         return (
             <Toolbar>
                 <CancelButton onClick={handleCancel} />
-                <SaveButton
-                    label="Save & Continue"
-                    type="button"
-                    onClick={handleSaveContinue}
-                />
+                <SaveButton label="Save & Continue" type="button" onClick={handleSaveContinue} />
                 <SaveButton type="button" onClick={handleSaveClose} />
             </Toolbar>
         );
