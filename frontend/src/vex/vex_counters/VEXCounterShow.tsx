@@ -22,7 +22,9 @@ const VEXCounterShow = () => {
     return (
         <Show actions={<ShowActions />}>
             <SimpleShowLayout>
-                <Typography variant="h6">VEX Counter</Typography>
+                <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                    VEX Counter
+                </Typography>
                 <TextField source="document_id_prefix" label="Document ID prefix" />
                 <NumberField source="year" options={{ useGrouping: false }} />
                 <TextField source="counter" />

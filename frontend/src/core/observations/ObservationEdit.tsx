@@ -54,7 +54,7 @@ const ObservationEditForm = () => {
 
     return (
         <SimpleForm warnWhenUnsavedChanges toolbar={<CustomToolbar />}>
-            <Typography variant="h6" sx={{ marginBottom: 2 }}>
+            <Typography variant="h6" sx={{ marginBottom: 1 }}>
                 Observation
             </Typography>
             <Stack>
@@ -112,7 +112,7 @@ const ObservationEditForm = () => {
 
             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
-            <Typography variant="h6" sx={{ marginBottom: 2 }}>
+            <Typography variant="h6" sx={{ marginBottom: 1 }}>
                 Product
             </Typography>
             <Stack>
@@ -134,7 +134,9 @@ const ObservationEditForm = () => {
 
             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
-            <Typography variant="h6">Vulnerability</Typography>
+            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                Vulnerability
+            </Typography>
             <Stack>
                 <TextInputWide source="vulnerability_id" label="Vulnerability ID" validate={validate_255} />
                 <Stack direction="row" spacing={2}>
@@ -160,7 +162,7 @@ const ObservationEditForm = () => {
 
             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
-            <Typography variant="h6" sx={{ marginBottom: 2 }}>
+            <Typography variant="h6" sx={{ marginBottom: 1 }}>
                 Origins
             </Typography>
             <Stack>

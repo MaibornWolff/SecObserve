@@ -34,7 +34,9 @@ const MetaData = () => {
             <WithRecord
                 render={(observation) => (
                     <SimpleShowLayout>
-                        <Typography variant="h6">Metadata</Typography>
+                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                            Metadata
+                        </Typography>
                         <ReferenceField
                             source="product"
                             reference="products"
@@ -113,7 +115,7 @@ const References = () => {
                 <Fragment>
                     {observation.references && observation.references.length > 0 && (
                         <Paper sx={{ marginBottom: 2 }}>
-                            <Typography variant="h6" sx={{ paddingLeft: 2, paddingTop: 1 }}>
+                            <Typography variant="h6" sx={{ paddingLeft: 2, paddingTop: 1, marginBottom: 1 }}>
                                 References
                             </Typography>
                             <ArrayField source="references" label={false}>
@@ -142,7 +144,7 @@ const Evidences = () => {
                 <Fragment>
                     {observation.evidences && observation.evidences.length > 0 && (
                         <Paper sx={{ marginBottom: 2 }}>
-                            <Typography variant="h6" sx={{ paddingLeft: 2, paddingTop: 1 }}>
+                            <Typography variant="h6" sx={{ paddingLeft: 2, paddingTop: 1, marginBottom: 1 }}>
                                 Evidences
                             </Typography>
                             <ArrayField source="evidences" label={false}>

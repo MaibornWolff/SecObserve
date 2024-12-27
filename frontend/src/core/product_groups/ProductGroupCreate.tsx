@@ -283,7 +283,7 @@ const ProductGroupCreate = () => {
                 {feature_license_management() && (
                     <Fragment>
                         <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
-                        <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
                             License management
                         </Typography>
                         <ReferenceInput

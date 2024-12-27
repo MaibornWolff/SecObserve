@@ -1,5 +1,4 @@
 import {
-    Box,
     Card,
     CardContent,
     CardHeader,
@@ -8,6 +7,7 @@ import {
     Radio,
     RadioGroup,
     Stack,
+    Typography,
 } from "@mui/material";
 import { Title, useTheme } from "react-admin";
 
@@ -33,41 +33,38 @@ const UserSettings = () => {
             <Title title="Settings" />
             <CardHeader title="Settings" />
             <CardContent>
-                <Stack spacing={2} sx={{ width: "100%" }}>
-                    <Box sx={{ width: "10em", display: "inline-block" }}>Theme</Box>
-                    <FormControl>
-                        <RadioGroup defaultValue={getSettingTheme()} name="radio-buttons-group-theme" row>
-                            <FormControlLabel
-                                value="light"
-                                control={<Radio />}
-                                label="Light"
-                                onClick={() => setLightTheme()}
-                            />
-                            <FormControlLabel
-                                value="dark"
-                                control={<Radio />}
-                                label="Dark"
-                                onClick={() => setDarkTheme()}
-                            />
-                        </RadioGroup>
-                    </FormControl>
-                    <Box sx={{ width: "10em", display: "inline-block" }}>List size</Box>
-                    <FormControl>
-                        <RadioGroup defaultValue={getSettingListSize()} name="radio-buttons-group-list-size" row>
-                            <FormControlLabel
-                                value="small"
-                                control={<Radio />}
-                                label="Small"
-                                onClick={() => saveSettingListSize("small")}
-                            />
-                            <FormControlLabel
-                                value="medium"
-                                control={<Radio />}
-                                label="Medium"
-                                onClick={() => saveSettingListSize("medium")}
-                            />
-                        </RadioGroup>
-                    </FormControl>
+                <Stack sx={{ width: "100%" }}>
+                    <Typography variant="subtitle1">Theme</Typography>
+                    <RadioGroup defaultValue={getSettingTheme()} name="radio-buttons-group-theme" row>
+                        <FormControlLabel
+                            value="light"
+                            control={<Radio />}
+                            label="Light"
+                            onClick={() => setLightTheme()}
+                        />
+                        <FormControlLabel
+                            value="dark"
+                            control={<Radio />}
+                            label="Dark"
+                            onClick={() => setDarkTheme()}
+                        />
+                    </RadioGroup>
+
+                    <Typography variant="subtitle1" sx={{ marginTop: 2}}>List size</Typography>
+                    <RadioGroup defaultValue={getSettingListSize()} name="radio-buttons-group-list-size" row>
+                        <FormControlLabel
+                            value="small"
+                            control={<Radio />}
+                            label="Small"
+                            onClick={() => saveSettingListSize("small")}
+                        />
+                        <FormControlLabel
+                            value="medium"
+                            control={<Radio />}
+                            label="Medium"
+                            onClick={() => saveSettingListSize("medium")}
+                        />
+                    </RadioGroup>
                 </Stack>
             </CardContent>
         </Card>

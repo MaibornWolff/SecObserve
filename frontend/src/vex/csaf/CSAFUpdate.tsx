@@ -77,7 +77,9 @@ const CSAFUpdate = () => {
                 <DialogTitle>Update CSAF document</DialogTitle>
                 <DialogContent>
                     <SimpleForm onSubmit={update_csaf} toolbar={<CustomToolbar />}>
-                        <Typography variant="h6">Document</Typography>
+                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                            Document
+                        </Typography>
                         <AutocompleteInputMedium
                             source="tlp_label"
                             choices={CSAF_TLP_LABEL_CHOICES}
@@ -85,7 +87,9 @@ const CSAFUpdate = () => {
                             validate={validate_required}
                         />
                         <Divider flexItem sx={{ marginBottom: 2 }} />
-                        <Typography variant="h6">Tracking and Publisher</Typography>
+                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                            Tracking and Publisher
+                        </Typography>
                         <AutocompleteInputMedium
                             source="tracking_status"
                             choices={CSAF_TRACKING_STATUS_CHOICES}

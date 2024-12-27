@@ -76,7 +76,9 @@ const OpenVEXUpdate = () => {
                 <DialogTitle>Update OpenVEX document</DialogTitle>
                 <DialogContent>
                     <SimpleForm onSubmit={update_openvex} toolbar={<CustomToolbar />}>
-                        <Typography variant="h6">Document</Typography>
+                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                            Document
+                        </Typography>
                         <TextInputWide source="author" validate={validate_required_255} />
                         <TextInputWide source="role" validate={validate_required_255} />
                     </SimpleForm>

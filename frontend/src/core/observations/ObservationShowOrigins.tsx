@@ -33,7 +33,7 @@ const ObservationShowOrigins = ({ observation, showDependencies, elevated }: Obs
                         <Typography variant="h6">Origins</Typography>
                         {observation.origin_service_name != "" && (
                             <Fragment>
-                                <Typography variant="subtitle1" sx={{ paddingTop: 1 }}>
+                                <Typography variant="subtitle1" sx={{ paddingTop: 1, marginBottom: 0.5 }}>
                                     Service
                                 </Typography>
                                 <Labeled>
@@ -43,7 +43,7 @@ const ObservationShowOrigins = ({ observation, showDependencies, elevated }: Obs
                         )}
                         {observation.origin_component_name != "" && (
                             <Fragment>
-                                <Typography variant="subtitle1" sx={{ paddingTop: 1 }}>
+                                <Typography variant="subtitle1" sx={{ paddingTop: 1, marginBottom: 0.5 }}>
                                     Component
                                 </Typography>
                                 <Stack direction="row" spacing={4}>
@@ -106,7 +106,7 @@ const ObservationShowOrigins = ({ observation, showDependencies, elevated }: Obs
                         )}
                         {observation.origin_docker_image_name != "" && (
                             <Fragment>
-                                <Typography variant="subtitle1" sx={{ paddingTop: 1 }}>
+                                <Typography variant="subtitle1" sx={{ paddingTop: 1, marginBottom: 0.5 }}>
                                     Docker
                                 </Typography>
                                 <Stack direction="row" spacing={4}>
@@ -130,7 +130,7 @@ const ObservationShowOrigins = ({ observation, showDependencies, elevated }: Obs
                         )}
                         {observation.origin_endpoint_url != "" && (
                             <Fragment>
-                                <Typography variant="subtitle1" sx={{ paddingTop: 1 }}>
+                                <Typography variant="subtitle1" sx={{ paddingTop: 1, marginBottom: 0.5 }}>
                                     Endpoint
                                 </Typography>
                                 {observation.origin_endpoint_url != "" && (
@@ -163,7 +163,7 @@ const ObservationShowOrigins = ({ observation, showDependencies, elevated }: Obs
                         )}
                         {observation.origin_source_file != "" && (
                             <Fragment>
-                                <Typography variant="subtitle1" sx={{ paddingTop: 1 }}>
+                                <Typography variant="subtitle1" sx={{ paddingTop: 1, marginBottom: 0.5 }}>
                                     Source
                                 </Typography>
                                 <Stack direction="row" spacing={4}>
@@ -191,7 +191,7 @@ const ObservationShowOrigins = ({ observation, showDependencies, elevated }: Obs
                         )}
                         {observation.origin_cloud_qualified_resource != "" && (
                             <Fragment>
-                                <Typography variant="subtitle1" sx={{ paddingTop: 1 }}>
+                                <Typography variant="subtitle1" sx={{ paddingTop: 1, marginBottom: 0.5 }}>
                                     Cloud
                                 </Typography>
                                 <Stack direction="row" spacing={4}>
@@ -223,7 +223,7 @@ const ObservationShowOrigins = ({ observation, showDependencies, elevated }: Obs
                         )}
                         {observation.origin_kubernetes_qualified_resource != "" && (
                             <Fragment>
-                                <Typography variant="subtitle1" sx={{ paddingTop: 1 }}>
+                                <Typography variant="subtitle1" sx={{ paddingTop: 1, marginBottom: 0.5 }}>
                                     Kubernetes
                                 </Typography>
                                 <Stack direction="row" spacing={4}>
