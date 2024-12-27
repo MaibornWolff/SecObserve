@@ -1,10 +1,11 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { BooleanInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh, useUpdate } from "react-admin";
+import { BooleanInput, SaveButton, SimpleForm, useNotify, useRefresh, useUpdate } from "react-admin";
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
 import EditButton from "../../commons/custom_fields/EditButton";
 import { TextInputWide } from "../../commons/layout/themes";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 
 const LicenseGroupAuthorizationGroupMemberEdit = () => {
     const [open, setOpen] = useState(false);
@@ -48,7 +49,7 @@ const LicenseGroupAuthorizationGroupMemberEdit = () => {
     };
 
     const CustomToolbar = () => (
-        <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Toolbar>
             <CancelButton onClick={handleCancel} />
             <SaveButton />
         </Toolbar>

@@ -5,7 +5,6 @@ import {
     ReferenceInput,
     SaveButton,
     SimpleForm,
-    Toolbar,
     WithRecord,
     useDataProvider,
     useNotify,
@@ -24,6 +23,7 @@ import {
     validate_required_255,
 } from "../../commons/custom_validators";
 import { AutocompleteInputWide, PasswordInputWide, TextInputWide } from "../../commons/layout/themes";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 
 const ApiConfigurationEdit = () => {
     const [open, setOpen] = useState(false);
@@ -132,7 +132,7 @@ const ApiConfigurationEdit = () => {
     };
 
     const CustomToolbar = () => (
-        <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Toolbar>
             <CancelButton onClick={handleCancel} />
             <SaveButton />
         </Toolbar>

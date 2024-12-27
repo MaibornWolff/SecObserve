@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
+import { ReferenceInput, SaveButton, SimpleForm, useNotify, useRefresh } from "react-admin";
 import { useFormContext } from "react-hook-form";
 
 import AddButton from "../../commons/custom_fields/AddButton";
@@ -8,6 +8,7 @@ import CancelButton from "../../commons/custom_fields/CancelButton";
 import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputExtraWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 
 export type LicenseGroupLicenseAddProps = {
     id: any;
@@ -65,13 +66,12 @@ const LicenseGroupLicenseAdd = ({ id }: LicenseGroupLicenseAddProps) => {
         };
 
         return (
-            <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Toolbar>
                 <CancelButton onClick={handleCancel} />
                 <SaveButton
                     label="Save & Continue"
                     type="button"
                     onClick={handleSaveContinue}
-                    sx={{ marginRight: 2 }}
                 />
                 <SaveButton type="button" onClick={handleSaveClose} />
             </Toolbar>

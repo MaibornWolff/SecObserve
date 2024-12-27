@@ -62,7 +62,7 @@ const LicenseGroupComponent = () => {
                         </Stack>
                     </Paper>
                     <Paper sx={{ marginBottom: 1, padding: 2 }}>
-                        <Typography variant="h6">Licenses</Typography>
+                        <Typography variant="h6" sx={{ marginBottom: 1 }}>Licenses</Typography>
                         <LicenseGroupLicenseEmbeddedList license_group={license_group} />
                     </Paper>
                     <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>

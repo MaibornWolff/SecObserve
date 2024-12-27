@@ -11,7 +11,7 @@ const CreateButton = ({ title, to }: CreateButtonProps) => {
     return (
         <Button
             variant="contained"
-            sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem" }}
+            sx={{ width: "fit-content", fontSize: "0.8125rem" }}
             startIcon={<AddIcon />}
             component={Link}
             to={to}

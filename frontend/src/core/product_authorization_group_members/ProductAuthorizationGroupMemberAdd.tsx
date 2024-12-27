@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { ReferenceInput, SaveButton, SimpleForm, Toolbar, useCreate, useNotify, useRefresh } from "react-admin";
+import { ReferenceInput, SaveButton, SimpleForm, useCreate, useNotify, useRefresh } from "react-admin";
 import { useFormContext } from "react-hook-form";
 
 import { ROLE_CHOICES } from "../../access_control/types";
@@ -8,6 +8,7 @@ import AddButton from "../../commons/custom_fields/AddButton";
 import CancelButton from "../../commons/custom_fields/CancelButton";
 import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 
 export type ProductAuthorizationGroupMemberAddProps = {
     id: any;
@@ -80,13 +81,12 @@ const ProductAuthorizationGroupMemberAdd = ({ id }: ProductAuthorizationGroupMem
         };
 
         return (
-            <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Toolbar>
                 <CancelButton onClick={handleCancel} />
                 <SaveButton
                     label="Save & Continue"
                     type="button"
                     onClick={handleSaveContinue}
-                    sx={{ marginRight: 2 }}
                 />
                 <SaveButton type="button" onClick={handleSaveClose} />
             </Toolbar>

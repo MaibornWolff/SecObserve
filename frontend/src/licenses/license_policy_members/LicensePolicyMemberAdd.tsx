@@ -6,7 +6,6 @@ import {
     ReferenceInput,
     SaveButton,
     SimpleForm,
-    Toolbar,
     useNotify,
     useRefresh,
 } from "react-admin";
@@ -17,6 +16,7 @@ import CancelButton from "../../commons/custom_fields/CancelButton";
 import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 
 export type LicensePolicyMemberAddProps = {
     id: any;
@@ -87,13 +87,12 @@ const LicensePolicyMemberAdd = ({ id }: LicensePolicyMemberAddProps) => {
         };
 
         return (
-            <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Toolbar>
                 <CancelButton onClick={handleCancel} />
                 <SaveButton
                     label="Save & Continue"
                     type="button"
                     onClick={handleSaveContinue}
-                    sx={{ marginRight: 2 }}
                 />
                 <SaveButton type="button" onClick={handleSaveClose} />
             </Toolbar>

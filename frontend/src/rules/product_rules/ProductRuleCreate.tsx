@@ -6,7 +6,6 @@ import {
     ReferenceInput,
     SaveButton,
     SimpleForm,
-    Toolbar,
     useCreate,
     useNotify,
     useRefresh,
@@ -30,6 +29,7 @@ import {
     OBSERVATION_VEX_JUSTIFICATION_CHOICES,
 } from "../../core/types";
 import { validateRuleForm } from "../functions";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 
 export type ProductRuleCreateProps = {
     id: any;
@@ -51,7 +51,7 @@ const ProductRuleCreate = ({ id }: ProductRuleCreateProps) => {
     };
 
     const CustomToolbar = () => (
-        <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Toolbar>
             <CancelButton onClick={handleCancel} />
             <SaveButton />
         </Toolbar>

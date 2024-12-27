@@ -6,7 +6,6 @@ import {
     ReferenceInput,
     SaveButton,
     SimpleForm,
-    Toolbar,
     WithRecord,
     useNotify,
     useRefresh,
@@ -18,6 +17,7 @@ import { validate_255, validate_513, validate_2048, validate_required } from "..
 import { getIconAndFontColor } from "../../commons/functions";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 
 const FileUploadObservations = () => {
     const useStyles = makeStyles()({
@@ -128,7 +128,7 @@ const FileUploadObservations = () => {
     };
 
     const CustomToolbar = () => (
-        <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Toolbar>
             <CancelButton onClick={handleCancel} />
             <SaveButton label="Upload" icon={<UploadIcon />} />
         </Toolbar>

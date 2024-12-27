@@ -1,13 +1,14 @@
 import UploadIcon from "@mui/icons-material/CloudUpload";
 import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
+import { ReferenceInput, SaveButton, SimpleForm, useNotify, useRefresh } from "react-admin";
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
 import { validate_255, validate_513, validate_2048, validate_required } from "../../commons/custom_validators";
 import { getIconAndFontColor } from "../../commons/functions";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 
 const ApiImportObservations = (product: any) => {
     const [open, setOpen] = useState(false);
@@ -77,7 +78,7 @@ const ApiImportObservations = (product: any) => {
     };
 
     const CustomToolbar = () => (
-        <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Toolbar>
             <CancelButton onClick={handleCancel} />
             <SaveButton label="Import" icon={<UploadIcon />} />
         </Toolbar>

@@ -26,7 +26,7 @@ const ShowDefaultBranchObservationsButton = ({ product }: ShowDefaultBranchObser
             <Button
                 variant="contained"
                 onClick={navigateToObservations}
-                sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem" }}
+                sx={{ width: "fit-content", fontSize: "0.8125rem" }}
                 startIcon={<observations.icon />}
             >
                 Show default branch / version observations

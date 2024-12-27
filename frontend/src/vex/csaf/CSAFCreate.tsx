@@ -9,7 +9,6 @@ import {
     SaveButton,
     SimpleForm,
     SimpleFormIterator,
-    Toolbar,
     useNotify,
     useRefresh,
 } from "react-admin";
@@ -20,6 +19,7 @@ import CancelButton from "../../commons/custom_fields/CancelButton";
 import { validate_255, validate_required, validate_required_255 } from "../../commons/custom_validators";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { CSAF_PUBLISHER_CATEGORY_CHOICES, CSAF_TLP_LABEL_CHOICES, CSAF_TRACKING_STATUS_CHOICES } from "../types";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 
 const CSAFCreate = () => {
     const [open, setOpen] = useState(false);
@@ -38,7 +38,7 @@ const CSAFCreate = () => {
     };
 
     const CustomToolbar = () => (
-        <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Toolbar>
             <CancelButton onClick={handleCancel} />
             <SaveButton label="Create" icon={<AddIcon />} />
         </Toolbar>
