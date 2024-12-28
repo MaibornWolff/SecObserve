@@ -1,87 +1,8 @@
 from unittest.mock import patch
 
 from application.core.models import Observation, Product
-from application.core.types import Severity, Status
 from application.import_observations.models import Parser
 from unittests.base_test_case import BaseTestCase
-
-
-class TestProduct(BaseTestCase):
-    def test_str(self):
-        product = Product(name="product_name")
-        self.assertEqual("product_name", str(product))
-
-    @patch("application.core.models.Observation.objects.filter")
-    def test_observation_count_critical(self, mock):
-        mock.return_value.count.return_value = 99
-        product = Product(name="product_name")
-        self.assertEqual(99, product.open_critical_observation_count)
-        mock.assert_called_with(
-            product=product,
-            branch=None,
-            current_severity=Severity.SEVERITY_CRITICAL,
-            current_status=Status.STATUS_OPEN,
-        )
-
-    @patch("application.core.models.Observation.objects.filter")
-    def test_observation_count_high(self, mock):
-        mock.return_value.count.return_value = 99
-        product = Product(name="product_name")
-        self.assertEqual(99, product.open_high_observation_count)
-        mock.assert_called_with(
-            product=product,
-            branch=None,
-            current_severity=Severity.SEVERITY_HIGH,
-            current_status=Status.STATUS_OPEN,
-        )
-
-    @patch("application.core.models.Observation.objects.filter")
-    def test_observation_count_medium(self, mock):
-        mock.return_value.count.return_value = 99
-        product = Product(name="product_name")
-        self.assertEqual(99, product.open_medium_observation_count)
-        mock.assert_called_with(
-            product=product,
-            branch=None,
-            current_severity=Severity.SEVERITY_MEDIUM,
-            current_status=Status.STATUS_OPEN,
-        )
-
-    @patch("application.core.models.Observation.objects.filter")
-    def test_observation_count_low(self, mock):
-        mock.return_value.count.return_value = 99
-        product = Product(name="product_name")
-        self.assertEqual(99, product.open_low_observation_count)
-        mock.assert_called_with(
-            product=product,
-            branch=None,
-            current_severity=Severity.SEVERITY_LOW,
-            current_status=Status.STATUS_OPEN,
-        )
-
-    @patch("application.core.models.Observation.objects.filter")
-    def test_observation_count_none(self, mock):
-        mock.return_value.count.return_value = 99
-        product = Product(name="product_name")
-        self.assertEqual(99, product.open_none_observation_count)
-        mock.assert_called_with(
-            product=product,
-            branch=None,
-            current_severity=Severity.SEVERITY_NONE,
-            current_status=Status.STATUS_OPEN,
-        )
-
-    @patch("application.core.models.Observation.objects.filter")
-    def test_observation_count_unknown(self, mock):
-        mock.return_value.count.return_value = 99
-        product = Product(name="product_name")
-        self.assertEqual(99, product.open_unknown_observation_count)
-        mock.assert_called_with(
-            product=product,
-            branch=None,
-            current_severity=Severity.SEVERITY_UNKNOWN,
-            current_status=Status.STATUS_OPEN,
-        )
 
 
 class TestParser(BaseTestCase):

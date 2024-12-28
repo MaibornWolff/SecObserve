@@ -164,7 +164,7 @@ class ProductViewSet(ModelViewSet):
 
     def get_queryset(self):
         return (
-            get_products(is_product_group=False)
+            get_products(is_product_group=False, with_annotations=True)
             .select_related("product_group")
             .select_related("repository_default_branch")
         )

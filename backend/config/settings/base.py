@@ -336,13 +336,13 @@ LOGGING = {
     },
     "root": {"level": "INFO", "handlers": ["console"]},
     "loggers": {
-        # 'django.db.backends': {
-        #     'level': 'DEBUG',
-        #     'handlers': ['console'],
+        # "django.db.backends": {
+        #     "level": "DEBUG",
+        #     "handlers": ["console"],
         # },
-        # 'django_auth_adfs': {
-        #     'handlers': ['console'],
-        #     'level': 'DEBUG',
+        # "django_auth_adfs": {
+        #     "handlers": ["console"],
+        #     "level": "DEBUG",
         # },
         "werkzeug": {
             "handlers": ["console"],
