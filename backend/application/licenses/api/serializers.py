@@ -362,7 +362,7 @@ class LicensePolicySerializer(ModelSerializer):
         return False
 
     def get_has_products(self, obj: License_Policy) -> bool:
-        return get_products().filter(license_policy=obj).exists()
+        return get_products(is_product_group=False).filter(license_policy=obj).exists()
 
     def get_has_product_groups(self, obj: License_Policy) -> bool:
         return get_products(is_product_group=True).filter(license_policy=obj).exists()

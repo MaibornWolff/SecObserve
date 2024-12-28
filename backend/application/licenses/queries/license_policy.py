@@ -26,7 +26,7 @@ def get_license_policies() -> QuerySet[License_Policy]:
     if user.is_superuser:
         return license_policies
 
-    products = get_products()
+    products = get_products(is_product_group=False)
 
     return license_policies.filter(
         Q(users=user)
