@@ -58,7 +58,7 @@ huey = "2.5.2"  # https://github.com/coleifer/huey
 jira = "3.8.0"  # https://github.com/pycontribs/jira
 # Others
 # ------------------------------------------------------------------------------
-inflect = "7.4.0"  # https://github.com/jaraco/inflect
+inflect = "7.5.0"  # https://github.com/jaraco/inflect
 validators = "0.34.0"  # https://github.com/python-validators/validators
 py-ocsf-models = "0.2.0"  # https://github.com/prowler-cloud/py-ocsf-models
 spdx-tools = "0.8.3"  # https://github.com/spdx/tools-python
