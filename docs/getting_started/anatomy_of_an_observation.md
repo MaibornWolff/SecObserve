@@ -17,7 +17,7 @@ As for the severity, if a [rule](../usage/rule_engine.md) matches the observatio
 
 *(not shown in the screenshot)*
 
-Vulnerability data can comprise a **Vulnerability Id** like a CVE or GHSA, a **CVSSv3 score** and **CVSSv3 vector** as well as a **CWE** number.
+Vulnerability data can comprise a **Vulnerability Id** like a CVE or GHSA, a **CVSSv3 score** / **CVSSv3 vector** and/or **CVSSv4 score** / **CVSSv4 vector** as well as a **CWE** number.
 
 ## Origins
 

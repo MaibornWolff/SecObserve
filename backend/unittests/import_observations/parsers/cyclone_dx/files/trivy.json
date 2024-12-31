@@ -3190,6 +3190,15 @@
           "severity": "medium",
           "method": "CVSSv31",
           "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "redhat"
+          },
+          "score": 8.8,
+          "severity": "high",
+          "method": "CVSSv4",
+          "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:L/VA:L/SC:L/SI:L/SA:N"
         }
       ],
       "description": "No description is available for this CVE.",

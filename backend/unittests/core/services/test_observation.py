@@ -76,6 +76,7 @@ class TestObservation(BaseTestCase):
             rule_severity=Severity.SEVERITY_LOW,
             assessment_severity=Severity.SEVERITY_MEDIUM,
             cvss3_score=9.5,
+            cvss4_score=9.5,
         )
         self.assertEqual(Severity.SEVERITY_MEDIUM, get_current_severity(observation))
 
@@ -98,7 +99,7 @@ class TestObservation(BaseTestCase):
         )
         self.assertEqual(Severity.SEVERITY_LOW, get_current_severity(observation))
 
-    def test_get_current_severity_cvss_critical(self):
+    def test_get_current_severity_cvss3_critical(self):
         observation = Observation(
             title="parser_severity",
             current_severity=Severity.SEVERITY_NONE,
@@ -106,7 +107,7 @@ class TestObservation(BaseTestCase):
         )
         self.assertEqual(Severity.SEVERITY_CRITICAL, get_current_severity(observation))
 
-    def test_get_current_severity_cvss_high(self):
+    def test_get_current_severity_cvss3_high(self):
         observation = Observation(
             title="parser_severity",
             current_severity=Severity.SEVERITY_NONE,
@@ -114,7 +115,7 @@ class TestObservation(BaseTestCase):
         )
         self.assertEqual(Severity.SEVERITY_HIGH, get_current_severity(observation))
 
-    def test_get_current_severity_cvss_medium(self):
+    def test_get_current_severity_cvss3_medium(self):
         observation = Observation(
             title="parser_severity",
             current_severity=Severity.SEVERITY_NONE,
@@ -122,7 +123,7 @@ class TestObservation(BaseTestCase):
         )
         self.assertEqual(Severity.SEVERITY_MEDIUM, get_current_severity(observation))
 
-    def test_get_current_severity_cvss_low(self):
+    def test_get_current_severity_cvss3_low(self):
         observation = Observation(
             title="parser_severity",
             current_severity=Severity.SEVERITY_NONE,
@@ -130,11 +131,56 @@ class TestObservation(BaseTestCase):
         )
         self.assertEqual(Severity.SEVERITY_LOW, get_current_severity(observation))
 
-    def test_get_current_severity_cvss_none(self):
+    def test_get_current_severity_cvss3_none(self):
         observation = Observation(
             title="parser_severity",
             current_severity=Severity.SEVERITY_MEDIUM,
             cvss3_score=0,
+        )
+        self.assertEqual(Severity.SEVERITY_NONE, get_current_severity(observation))
+
+    def test_get_current_severity_cvss4_critical(self):
+        observation = Observation(
+            title="parser_severity",
+            current_severity=Severity.SEVERITY_NONE,
+            cvss3_score=4,
+            cvss4_score=9,
+        )
+        self.assertEqual(Severity.SEVERITY_CRITICAL, get_current_severity(observation))
+
+    def test_get_current_severity_cvss4_high(self):
+        observation = Observation(
+            title="parser_severity",
+            current_severity=Severity.SEVERITY_NONE,
+            cvss3_score=9,
+            cvss4_score=7,
+        )
+        self.assertEqual(Severity.SEVERITY_HIGH, get_current_severity(observation))
+
+    def test_get_current_severity_cvss4_medium(self):
+        observation = Observation(
+            title="parser_severity",
+            current_severity=Severity.SEVERITY_NONE,
+            cvss3_score=9,
+            cvss4_score=4,
+        )
+        self.assertEqual(Severity.SEVERITY_MEDIUM, get_current_severity(observation))
+
+    def test_get_current_severity_cvss4_low(self):
+        observation = Observation(
+            title="parser_severity",
+            current_severity=Severity.SEVERITY_NONE,
+            cvss3_score=9,
+            cvss4_score=0.1,
+        )
+        self.assertEqual(Severity.SEVERITY_LOW, get_current_severity(observation))
+
+    def test_get_current_severity_cvss4_none(self):
+        observation = Observation(
+            title="parser_severity",
+            current_severity=Severity.SEVERITY_MEDIUM,
+            cvss3_score=9,
+            cvss4_score=0,
         )
         self.assertEqual(Severity.SEVERITY_NONE, get_current_severity(observation))
 

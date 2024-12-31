@@ -1,4 +1,4 @@
-<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/25.0.2 Chrome/128.0.6613.186 Electron/32.2.5 Safari/537.36" version="25.0.2">
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
   <diagram name="Page-1" id="VX-3E3aqqD7pf1Rg54WV">
     <mxGraphModel dx="1434" dy="1784" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
@@ -97,7 +97,7 @@
           <mxGeometry x="920" y="650.02" width="120" height="59.96" as="geometry" />
         </mxCell>
         <mxCell id="thoTgJwvwBRAFEuy037D-37" value="open/source/&lt;br&gt;insights" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
-          <mxGeometry x="780" y="729.96" width="120" height="59.96" as="geometry" />
+          <mxGeometry x="850" y="729.96" width="120" height="59.96" as="geometry" />
         </mxCell>
         <mxCell id="qOO4yE6-o5YvLIt4YbO8-1" value="CSAF&amp;nbsp; (VEX)" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="780" y="-70" width="120" height="60" as="geometry" />
@@ -174,22 +174,19 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="XJ2QC1-pdl4xAl0XCKq4-1" value="EPSS" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
+        <mxCell id="XJ2QC1-pdl4xAl0XCKq4-1" value="EPSS" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
           <mxGeometry x="270" y="470" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="XJ2QC1-pdl4xAl0XCKq4-2" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" parent="1" source="bolqJ5kDSpF7zOIxnR-b-1" target="NQz_Nwzh-ESSq-r7xiTD-1" edge="1">
+        <mxCell id="XJ2QC1-pdl4xAl0XCKq4-2" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" edge="1" parent="1" source="bolqJ5kDSpF7zOIxnR-b-1" target="NQz_Nwzh-ESSq-r7xiTD-1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="620" y="480" as="sourcePoint" />
             <mxPoint x="620" y="360" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="XJ2QC1-pdl4xAl0XCKq4-3" value="Licenses" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" parent="XJ2QC1-pdl4xAl0XCKq4-2" vertex="1" connectable="0">
+        <mxCell id="XJ2QC1-pdl4xAl0XCKq4-3" value="Licenses" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;" vertex="1" connectable="0" parent="XJ2QC1-pdl4xAl0XCKq4-2">
           <mxGeometry x="0.14" y="-3" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
-        </mxCell>
-        <mxCell id="txpyq0Q0yciagI06FU9S-1" value="FIRST.org&lt;br&gt;CVSS calculator" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
-          <mxGeometry x="920" y="729.96" width="120" height="59.96" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

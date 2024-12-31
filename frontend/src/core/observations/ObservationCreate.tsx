@@ -16,6 +16,7 @@ import {
 
 import AddButton from "../../commons/custom_fields/AddButton";
 import CancelButton from "../../commons/custom_fields/CancelButton";
+import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import Toolbar from "../../commons/custom_fields/Toolbar";
 import {
     validate_0_10,
@@ -188,16 +189,45 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
                                     label="Vulnerability ID"
                                     validate={validate_255}
                                 />
-                                <Stack direction="row" spacing={2}>
+                                <Stack direction="row" spacing={2} alignItems="center">
                                     <NumberInput
-                                        source="cvss3_score"
-                                        label="CVSS3 score"
+                                        source="cvss4_score"
+                                        label="CVSS 4 score"
                                         min={0}
                                         step={0.1}
                                         validate={validate_0_10}
                                         sx={{ width: "10em" }}
                                     />
-                                    <TextInputWide source="cvss3_vector" label="CVSS3 vector" validate={validate_255} />
+                                    <TextInputWide
+                                        source="cvss4_vector"
+                                        label="CVSS 4 vector"
+                                        validate={validate_255}
+                                    />
+                                    <TextUrlField
+                                        url="https://www.first.org/cvss/calculator/4.0"
+                                        text="CVSS 4 calculator"
+                                        label=""
+                                    />
+                                </Stack>
+                                <Stack direction="row" spacing={2} alignItems="center">
+                                    <NumberInput
+                                        source="cvss3_score"
+                                        label="CVSS 3 score"
+                                        min={0}
+                                        step={0.1}
+                                        validate={validate_0_10}
+                                        sx={{ width: "10em" }}
+                                    />
+                                    <TextInputWide
+                                        source="cvss3_vector"
+                                        label="CVSS 3 vector"
+                                        validate={validate_255}
+                                    />
+                                    <TextUrlField
+                                        url="https://www.first.org/cvss/calculator/3.1"
+                                        text="CVSS 3.1 calculator"
+                                        label=""
+                                    />
                                 </Stack>
                                 <NumberInput
                                     source="cwe"
