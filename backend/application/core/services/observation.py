@@ -71,23 +71,29 @@ def get_current_severity(observation) -> str:
     if observation.parser_severity:
         return observation.parser_severity
 
-    return get_cvss3_severity(observation.cvss3_score)
+    if observation.cvss4_score is not None:
+        return get_cvss_severity(observation.cvss4_score)
+
+    if observation.cvss3_score is not None:
+        return get_cvss_severity(observation.cvss3_score)
+
+    return Severity.SEVERITY_UNKNOWN
 
 
-def get_cvss3_severity(cvss3_score: int):
-    if cvss3_score is None:
+def get_cvss_severity(cvss_score: int) -> str:
+    if cvss_score is None:
         return Severity.SEVERITY_UNKNOWN
 
-    if cvss3_score >= 9:
+    if cvss_score >= 9:
         return Severity.SEVERITY_CRITICAL
 
-    if cvss3_score >= 7:
+    if cvss_score >= 7:
         return Severity.SEVERITY_HIGH
 
-    if cvss3_score >= 4:
+    if cvss_score >= 4:
         return Severity.SEVERITY_MEDIUM
 
-    if cvss3_score >= 0.1:
+    if cvss_score >= 0.1:
         return Severity.SEVERITY_LOW
 
     return Severity.SEVERITY_NONE
@@ -151,6 +157,8 @@ def normalize_observation_fields(observation) -> None:
         observation.origin_source_file = ""
     if observation.cvss3_vector is None:
         observation.cvss3_vector = ""
+    if observation.cvss4_vector is None:
+        observation.cvss4_vector = ""
     if observation.scanner is None:
         observation.scanner = ""
     if observation.api_configuration_name is None:

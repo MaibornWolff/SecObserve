@@ -391,6 +391,8 @@ def _process_current_observation(
     observation_before.vulnerability_id = imported_observation.vulnerability_id
     observation_before.cvss3_score = imported_observation.cvss3_score
     observation_before.cvss3_vector = imported_observation.cvss3_vector
+    observation_before.cvss4_score = imported_observation.cvss4_score
+    observation_before.cvss4_vector = imported_observation.cvss4_vector
     observation_before.cwe = imported_observation.cwe
     observation_before.found = imported_observation.found
     observation_before.scanner = imported_observation.scanner

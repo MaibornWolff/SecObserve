@@ -424,6 +424,8 @@ class Observation(Model):
     origin_kubernetes_qualified_resource = CharField(max_length=255, blank=True)
     cvss3_score = DecimalField(max_digits=3, decimal_places=1, null=True)
     cvss3_vector = CharField(max_length=255, blank=True)
+    cvss4_score = DecimalField(max_digits=3, decimal_places=1, null=True)
+    cvss4_vector = CharField(max_length=255, blank=True)
     cwe = IntegerField(
         null=True, validators=[MinValueValidator(1), MaxValueValidator(999999)]
     )

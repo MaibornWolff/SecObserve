@@ -166,9 +166,10 @@ class CycloneDXParser(BaseParser, BaseFileParser):
 
         for vulnerability in data.get("vulnerabilities", []):
             vulnerability_id = vulnerability.get("id")
-            cvss3_score, cvss3_vector = self._get_cvss3(vulnerability)
+            cvss3_score, cvss3_vector = self._get_cvss(vulnerability, 3)
+            cvss4_score, cvss4_vector = self._get_cvss(vulnerability, 4)
             severity = ""
-            if not cvss3_score:
+            if not cvss3_score and not cvss4_score:
                 severity = self._get_highest_severity(vulnerability)
             cwe = self._get_cwe(vulnerability)
             description = vulnerability.get("description")
@@ -203,6 +204,8 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                             origin_component_dependencies=observation_component_dependencies,
                             cvss3_score=cvss3_score,
                             cvss3_vector=cvss3_vector,
+                            cvss4_score=cvss4_score,
+                            cvss4_vector=cvss4_vector,
                             cwe=cwe,
                             scanner=self.metadata.scanner,
                             origin_docker_image_name=self.metadata.container_name,
@@ -270,20 +273,20 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             file=file,
         )
 
-    def _get_cvss3(self, vulnerability):
+    def _get_cvss(self, vulnerability: dict, version: int):
         ratings = vulnerability.get("ratings", [])
         if ratings:
-            cvss3_score = 0
-            cvss3_vector = None
+            cvss_score = 0
+            cvss_vector = None
             for rating in ratings:
                 method = rating.get("method")
-                if method and method.lower().startswith("cvssv3"):
-                    current_cvss3_score = rating.get("score", 0)
-                    if current_cvss3_score > cvss3_score:
-                        cvss3_score = current_cvss3_score
-                        cvss3_vector = rating.get("vector")
-            if cvss3_score > 0:
-                return cvss3_score, cvss3_vector
+                if method and method.lower().startswith(f"cvssv{str(version)}"):
+                    current_cvss_score = rating.get("score", 0)
+                    if current_cvss_score > cvss_score:
+                        cvss_score = current_cvss_score
+                        cvss_vector = rating.get("vector")
+            if cvss_score > 0:
+                return cvss_score, cvss_vector
         return None, None
 
     def _get_highest_severity(self, vulnerability):
