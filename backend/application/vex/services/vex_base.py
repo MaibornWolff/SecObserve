@@ -1,6 +1,6 @@
-import datetime
 from typing import Optional
 
+from django.utils import timezone
 from rest_framework.exceptions import ValidationError
 
 from application.core.models import Branch, Observation, Product
@@ -10,7 +10,7 @@ from application.vex.models import VEX_Counter
 
 
 def create_document_base_id(document_id_prefix: str) -> str:
-    year = datetime.date.today().year
+    year = timezone.now().year
     counter = VEX_Counter.objects.get_or_create(
         document_id_prefix=document_id_prefix, year=year
     )[0]

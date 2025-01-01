@@ -12,12 +12,12 @@ class TestVEXImportCSAF(BaseTestVEXImport):
         self.load_vex_test()
 
         with open(
-            path.dirname(__file__) + "/files/so_csaf_2024_0001_0001.json"
+            path.dirname(__file__) + "/files/so_csaf_2020_0001_0001.json"
         ) as testfile:
             import_vex(testfile)
 
             vex_document = VEX_Document.objects.get(
-                document_id="https://csaf.example.com/so_2024_0001_0001",
+                document_id="https://csaf.example.com/so_2020_0001_0001",
                 author="SecObserve",
             )
             self.check_vex_document(
@@ -30,12 +30,12 @@ class TestVEXImportCSAF(BaseTestVEXImport):
         self.load_vex_test()
 
         with open(
-            path.dirname(__file__) + "/files/so_csaf_2024_0001_0001_short.json"
+            path.dirname(__file__) + "/files/so_csaf_2020_0001_0001_short.json"
         ) as testfile:
             import_vex(testfile)
 
             vex_document = VEX_Document.objects.get(
-                document_id="https://csaf.example.com/so_2024_0001_0001",
+                document_id="https://csaf.example.com/so_2020_0001_0001",
                 author="SecObserve",
             )
             self.check_vex_document(
@@ -48,12 +48,12 @@ class TestVEXImportCSAF(BaseTestVEXImport):
         self.load_vex_test(short=True)
 
         with open(
-            path.dirname(__file__) + "/files/so_csaf_2024_0001_0001.json"
+            path.dirname(__file__) + "/files/so_csaf_2020_0001_0001.json"
         ) as testfile:
             import_vex(testfile)
 
             vex_document = VEX_Document.objects.get(
-                document_id="https://csaf.example.com/so_2024_0001_0001",
+                document_id="https://csaf.example.com/so_2020_0001_0001",
                 author="SecObserve",
             )
             self.check_vex_document(
@@ -66,12 +66,12 @@ class TestVEXImportCSAF(BaseTestVEXImport):
         self.load_vex_test(short=True)
 
         with open(
-            path.dirname(__file__) + "/files/so_csaf_2024_0001_0001_short.json"
+            path.dirname(__file__) + "/files/so_csaf_2020_0001_0001_short.json"
         ) as testfile:
             import_vex(testfile)
 
             vex_document = VEX_Document.objects.get(
-                document_id="https://csaf.example.com/so_2024_0001_0001",
+                document_id="https://csaf.example.com/so_2020_0001_0001",
                 author="SecObserve",
             )
             self.check_vex_document(
