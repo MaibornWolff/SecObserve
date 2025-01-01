@@ -22,7 +22,7 @@
         "ra-input-rich-text": "5.4.3",
         "react": "18.3.1",
         "react-admin": "5.4.3",
-        "react-chartjs-2": "5.2.0",
+        "react-chartjs-2": "5.3.0",
         "react-dom": "18.3.1",
         "react-is": "18.3.1",
         "react-oidc-context": "3.2.0",
