@@ -47,6 +47,7 @@ def _get_excludes():
         "pk",
         "objects",
         "unsaved_license",
+        "unsaved_evidences",
     ]
 
 
