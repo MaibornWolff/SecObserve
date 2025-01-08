@@ -1,4 +1,4 @@
-FROM node:22.12.0-alpine@sha256:b09589de497084c656bb7f05078860793d1dffc019bfd1d733cdc1404bff3d1e AS build
+FROM node:22.12.0-alpine@sha256:51eff88af6dff26f59316b6e356188ffa2c422bd3c3b76f2556a2e7e89d080bd AS build
 
 WORKDIR /app
 COPY ./frontend/package*.json /app/.
