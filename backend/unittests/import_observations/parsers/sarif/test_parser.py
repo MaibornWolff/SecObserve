@@ -272,6 +272,15 @@ Set when the resource will be become inactive.
             )
             self.assertEqual("", observation.parser_severity)
 
+            observation = observations[1]
+            self.assertEqual("CVE-2023-0044", observation.title)
+            self.assertEqual(8.8, observation.cvss4_score)
+            self.assertEqual(
+                "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:L/VA:L/SC:L/SI:L/SA:N",
+                observation.cvss4_vector,
+            )
+            self.assertEqual("", observation.parser_severity)
+
     def test_semgrep(self):
         with open(path.dirname(__file__) + "/files/semgrep.sarif") as testfile:
             parser = SARIFParser()

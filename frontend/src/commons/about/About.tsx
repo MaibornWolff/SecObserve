@@ -46,17 +46,7 @@ const About = () => {
     };
 
     const OKButton = () => (
-        <Button
-            sx={{
-                mr: "1em",
-                direction: "row",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-            variant="contained"
-            onClick={handleOk}
-            color="inherit"
-        >
+        <Button variant="contained" onClick={handleOk} color="inherit">
             OK
         </Button>
     );

@@ -1,15 +1,5 @@
 import AddIcon from "@mui/icons-material/Add";
-import CancelIcon from "@mui/icons-material/Cancel";
-import {
-    Backdrop,
-    Button,
-    CircularProgress,
-    Dialog,
-    DialogContent,
-    DialogTitle,
-    Divider,
-    Typography,
-} from "@mui/material";
+import { Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle, Divider, Typography } from "@mui/material";
 import { Fragment, useState } from "react";
 import {
     ArrayInput,
@@ -19,12 +9,14 @@ import {
     SaveButton,
     SimpleForm,
     SimpleFormIterator,
-    Toolbar,
     useNotify,
     useRefresh,
 } from "react-admin";
 
 import axios_instance from "../../access_control/auth_provider/axios_instance";
+import AddButton from "../../commons/custom_fields/AddButton";
+import CancelButton from "../../commons/custom_fields/CancelButton";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import { validate_255, validate_required_255 } from "../../commons/custom_validators";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 
@@ -44,26 +36,9 @@ const OpenVEXCreate = () => {
         setLoading(false);
     };
 
-    const CancelButton = () => (
-        <Button
-            sx={{
-                mr: "1em",
-                direction: "row",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-            variant="contained"
-            onClick={handleCancel}
-            color="inherit"
-            startIcon={<CancelIcon />}
-        >
-            Cancel
-        </Button>
-    );
-
     const CustomToolbar = () => (
-        <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <CancelButton />
+        <Toolbar>
+            <CancelButton onClick={handleCancel} />
             <SaveButton label="Create" icon={<AddIcon />} />
         </Toolbar>
     );
@@ -114,20 +89,15 @@ const OpenVEXCreate = () => {
 
     return (
         <Fragment>
-            <Button
-                onClick={handleOpen}
-                size="small"
-                sx={{ paddingTop: "0px", paddingBottom: "2px" }}
-                startIcon={<AddIcon />}
-            >
-                Create OpenVEX document
-            </Button>
+            <AddButton title="Create OpenVEX document" onClick={handleOpen} />
             <Dialog open={open && !loading} onClose={handleClose} maxWidth={"lg"}>
                 <DialogTitle>Create OpenVEX document</DialogTitle>
                 <DialogContent>
                     <CreateBase resource="openvex">
                         <SimpleForm onSubmit={create_openvex} toolbar={<CustomToolbar />}>
-                            <Typography variant="h6">OpenVEX</Typography>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                OpenVEX
+                            </Typography>
                             <ReferenceInput
                                 source="product"
                                 reference="products"
@@ -162,7 +132,9 @@ const OpenVEXCreate = () => {
                                 }
                             </FormDataConsumer>
                             <Divider flexItem sx={{ marginBottom: 2 }} />
-                            <Typography variant="h6">Document</Typography>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Document
+                            </Typography>
                             <TextInputWide
                                 source="id_namespace"
                                 label="ID namespace"

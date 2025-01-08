@@ -1,18 +1,10 @@
-import AddIcon from "@mui/icons-material/Add";
-import CancelIcon from "@mui/icons-material/Cancel";
-import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import {
-    BooleanInput,
-    CreateBase,
-    SaveButton,
-    SimpleForm,
-    Toolbar,
-    useCreate,
-    useNotify,
-    useRefresh,
-} from "react-admin";
+import { BooleanInput, CreateBase, SaveButton, SimpleForm, useCreate, useNotify, useRefresh } from "react-admin";
 
+import AddButton from "../../commons/custom_fields/AddButton";
+import CancelButton from "../../commons/custom_fields/CancelButton";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import { validate_255, validate_required_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 
@@ -31,26 +23,10 @@ const BranchCreate = ({ id }: BranchCreateProps) => {
         if (reason && reason == "backdropClick") return;
         setOpen(false);
     };
-    const CancelButton = () => (
-        <Button
-            sx={{
-                mr: "1em",
-                direction: "row",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-            variant="contained"
-            onClick={handleCancel}
-            color="inherit"
-            startIcon={<CancelIcon />}
-        >
-            Cancel
-        </Button>
-    );
 
     const CustomToolbar = () => (
-        <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <CancelButton />
+        <Toolbar>
+            <CancelButton onClick={handleCancel} />
             <SaveButton />
         </Toolbar>
     );
@@ -75,14 +51,7 @@ const BranchCreate = ({ id }: BranchCreateProps) => {
 
     return (
         <Fragment>
-            <Button
-                variant="contained"
-                onClick={handleOpen}
-                sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem" }}
-                startIcon={<AddIcon />}
-            >
-                Add branch / version
-            </Button>
+            <AddButton title="Add branch / version" onClick={handleOpen} />
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Add branch / version</DialogTitle>
                 <DialogContent>

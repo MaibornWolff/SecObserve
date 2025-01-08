@@ -1,6 +1,6 @@
 {
     "@context": "https://openvex.dev/ns/v0.2.0",
-    "@id": "https://vex.example.com/OpenVEX_2024_0001",
+    "@id": "https://vex.example.com/OpenVEX_2020_0001",
     "author": "New Author",
     "last_updated": "2020-02-01T04:30:00+00:00",
     "role": "New Role",
@@ -64,6 +64,6 @@
         }
     ],
     "timestamp": "2020-01-01T04:30:00+00:00",
-    "tooling": "SecObserve / 1.24.0",
+    "tooling": "SecObserve / 1.25.0",
     "version": 2
 }

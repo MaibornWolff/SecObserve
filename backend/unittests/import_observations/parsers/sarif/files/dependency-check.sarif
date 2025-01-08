@@ -79,14 +79,8 @@
                                 "markdown": "\n\nIf this is a false positive - consider using the HTML report to generate a suppression file. For more information see [How dependency-check works](https://jeremylong.github.io/DependencyCheck/general/internals.html), [How to read the HTML report](https://jeremylong.github.io/DependencyCheck/general/thereport.html), and [Suppressing false positives](https://jeremylong.github.io/DependencyCheck/general/suppression.html)."
                             },
                             "properties": {
-                                "cvssv2_score": 5.3,
-                                "cvssv2_accessVector": "N",
-                                "cvssv2_accessComplexity": "L",
-                                "cvssv2_authenticationr": "$enc.json($rule.cvssv2Authentication)",
-                                "cvssv2_confidentialImpact": "$enc.json($rule.cvssv2ConfidentialityImpact)",
-                                "cvssv2_integrityImpact": "N",
-                                "cvssv2_availabilityImpact": "N",
-                                "cvssv2_severity": "MEDIUM",
+                                "cvssv4_baseScore": 8.8,
+                                "cvssv4_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:L/VA:L/SC:L/SI:L/SA:N",
                                 "source": "OSSINDEX"
                             }
                         }

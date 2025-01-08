@@ -1,10 +1,11 @@
-import AddIcon from "@mui/icons-material/Add";
-import CancelIcon from "@mui/icons-material/Cancel";
-import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { CreateBase, ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
+import { CreateBase, ReferenceInput, SaveButton, SimpleForm, useNotify, useRefresh } from "react-admin";
 import { useFormContext } from "react-hook-form";
 
+import AddButton from "../../commons/custom_fields/AddButton";
+import CancelButton from "../../commons/custom_fields/CancelButton";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import { validate_255, validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputExtraWide, AutocompleteInputMedium, TextInputExtraWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
@@ -44,23 +45,6 @@ const LicensePolicyItemAdd = ({ id }: LicensePolicyItemAddProps) => {
         setEvaluationResult(undefined);
         setComment(undefined);
     };
-
-    const CancelButton = () => (
-        <Button
-            sx={{
-                mr: "1em",
-                direction: "row",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-            variant="contained"
-            onClick={handleCancel}
-            color="inherit"
-            startIcon={<CancelIcon />}
-        >
-            Cancel
-        </Button>
-    );
 
     const CustomToolbar = () => {
         const { reset } = useFormContext();
@@ -118,14 +102,9 @@ const LicensePolicyItemAdd = ({ id }: LicensePolicyItemAddProps) => {
         };
 
         return (
-            <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
-                <CancelButton />
-                <SaveButton
-                    label="Save & Continue"
-                    type="button"
-                    onClick={handleSaveContinue}
-                    sx={{ marginRight: 2 }}
-                />
+            <Toolbar>
+                <CancelButton onClick={handleCancel} />
+                <SaveButton label="Save & Continue" type="button" onClick={handleSaveContinue} />
                 <SaveButton type="button" onClick={handleSaveClose} />
             </Toolbar>
         );
@@ -133,14 +112,7 @@ const LicensePolicyItemAdd = ({ id }: LicensePolicyItemAddProps) => {
 
     return (
         <Fragment>
-            <Button
-                variant="contained"
-                onClick={handleOpen}
-                sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem", marginBottom: 1 }}
-                startIcon={<AddIcon />}
-            >
-                Add license policy item
-            </Button>
+            <AddButton title="Add license policy item" onClick={handleOpen} />
             <Dialog open={open} onClose={handleClose} maxWidth={"lg"}>
                 <DialogTitle>Add license policy item</DialogTitle>
                 <DialogContent>

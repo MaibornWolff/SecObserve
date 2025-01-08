@@ -1,13 +1,14 @@
-import { Divider, Stack, Typography } from "@mui/material";
+import { Box, Paper, Stack, Typography } from "@mui/material";
+import { Fragment } from "react";
 import {
     ChipField,
     DateField,
     DeleteWithConfirmButton,
+    Labeled,
     PrevNextButtons,
     ReferenceField,
     ReferenceManyField,
     Show,
-    SimpleShowLayout,
     SingleFieldList,
     TextField,
     TopToolbar,
@@ -22,7 +23,7 @@ const ShowActions = () => {
     const csaf = useRecordContext();
     return (
         <TopToolbar>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
+            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
                 <PrevNextButtons
                     linkType="show"
                     sort={{ field: "tracking_initial_release_date", order: "DESC" }}
@@ -35,69 +36,133 @@ const ShowActions = () => {
     );
 };
 
+const CSAFComponent = () => {
+    return (
+        <WithRecord
+            render={(csaf) => (
+                <Box width={"100%"}>
+                    <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
+                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                            Exported CSAF document
+                        </Typography>
+                        <Stack spacing={1}>
+                            {csaf && csaf.product_data && csaf.product_data.name && (
+                                <Labeled>
+                                    <ReferenceField
+                                        source="product"
+                                        reference="products"
+                                        queryOptions={{ meta: { api_resource: "product_names" } }}
+                                        link="show"
+                                        sx={{ "& a": { textDecoration: "none" } }}
+                                    />
+                                </Labeled>
+                            )}
+                            {csaf && csaf.vulnerability_names && (
+                                <Labeled>
+                                    <ReferenceManyField
+                                        reference="vex/csaf_vulnerabilities"
+                                        target="csaf"
+                                        label="Vulnerabilities"
+                                    >
+                                        <SingleFieldList linkType={false}>
+                                            <ChipField source="name" />
+                                        </SingleFieldList>
+                                    </ReferenceManyField>
+                                </Labeled>
+                            )}
+                            {csaf && csaf.branch_names && (
+                                <Labeled>
+                                    <ReferenceManyField
+                                        reference="vex/csaf_branches"
+                                        target="csaf"
+                                        label="Branches / Versions"
+                                    >
+                                        <SingleFieldList linkType={false}>
+                                            <ChipField source="name" />
+                                        </SingleFieldList>
+                                    </ReferenceManyField>
+                                </Labeled>
+                            )}
+                            <Labeled>
+                                <TextField source="user_full_name" label="User" />
+                            </Labeled>
+                        </Stack>
+                    </Paper>
+
+                    <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
+                        <Stack spacing={1}>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Document
+                            </Typography>{" "}
+                            <Labeled>
+                                <TextField source="document_id_prefix" label="ID prefix" />
+                            </Labeled>
+                            <Labeled>
+                                <TextField source="document_base_id" label="Base ID" />
+                            </Labeled>
+                            <Labeled>
+                                <TextField source="version" />
+                            </Labeled>
+                            <Labeled>
+                                <TextField source="title" />
+                            </Labeled>
+                            <Labeled>
+                                <TextField source="tlp_label" label="TLP label" />
+                            </Labeled>
+                        </Stack>
+                    </Paper>
+
+                    <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
+                        <Stack spacing={1}>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Tracking
+                            </Typography>
+                            <Labeled>
+                                <DateField
+                                    source="tracking_initial_release_date"
+                                    showTime={true}
+                                    label="Initial release date"
+                                />
+                            </Labeled>
+                            <Labeled>
+                                <DateField
+                                    source="tracking_current_release_date"
+                                    showTime={true}
+                                    label="Current release date"
+                                />
+                            </Labeled>
+                            <Labeled>
+                                <TextField source="tracking_status" />
+                            </Labeled>
+                        </Stack>
+                    </Paper>
+
+                    <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
+                        <Stack spacing={1}>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Publisher
+                            </Typography>
+                            <Labeled>
+                                <TextField source="publisher_name" />
+                            </Labeled>
+                            <Labeled>
+                                <TextField source="publisher_category" />
+                            </Labeled>
+                            <Labeled>
+                                <TextField source="publisher_namespace" />
+                            </Labeled>
+                        </Stack>
+                    </Paper>
+                </Box>
+            )}
+        />
+    );
+};
+
 const CSAFShow = () => {
     return (
-        <Show actions={<ShowActions />}>
-            <WithRecord
-                render={(csaf) => (
-                    <SimpleShowLayout>
-                        <Typography variant="h6">Exported CSAF document</Typography>
-                        {csaf && csaf.product_data && csaf.product_data.name && (
-                            <ReferenceField
-                                source="product"
-                                reference="products"
-                                queryOptions={{ meta: { api_resource: "product_names" } }}
-                                link="show"
-                                sx={{ "& a": { textDecoration: "none" } }}
-                            />
-                        )}
-                        {csaf && csaf.vulnerability_names && (
-                            <ReferenceManyField
-                                reference="vex/csaf_vulnerabilities"
-                                target="csaf"
-                                label="Vulnerabilities"
-                            >
-                                <SingleFieldList linkType={false}>
-                                    <ChipField source="name" />
-                                </SingleFieldList>
-                            </ReferenceManyField>
-                        )}
-                        {csaf && csaf.branch_names && (
-                            <ReferenceManyField reference="vex/csaf_branches" target="csaf" label="Branches / Versions">
-                                <SingleFieldList linkType={false}>
-                                    <ChipField source="name" />
-                                </SingleFieldList>
-                            </ReferenceManyField>
-                        )}
-                        <TextField source="user_full_name" label="User" />
-                        <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-                        <Typography variant="h6">Document</Typography>{" "}
-                        <TextField source="document_id_prefix" label="ID prefix" />
-                        <TextField source="document_base_id" label="Base ID" />
-                        <TextField source="version" />
-                        <TextField source="title" />
-                        <TextField source="tlp_label" label="TLP label" />
-                        <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-                        <Typography variant="h6">Tracking</Typography>
-                        <DateField
-                            source="tracking_initial_release_date"
-                            showTime={true}
-                            label="Initial release date"
-                        />
-                        <DateField
-                            source="tracking_current_release_date"
-                            showTime={true}
-                            label="Current release date"
-                        />
-                        <TextField source="tracking_status" />
-                        <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-                        <Typography variant="h6">Publisher</Typography>
-                        <TextField source="publisher_name" />
-                        <TextField source="publisher_category" />
-                        <TextField source="publisher_namespace" />
-                    </SimpleShowLayout>
-                )}
-            />
+        <Show actions={<ShowActions />} component={CSAFComponent}>
+            <Fragment />
         </Show>
     );
 };

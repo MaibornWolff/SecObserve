@@ -1,10 +1,11 @@
-import AddIcon from "@mui/icons-material/Add";
-import CancelIcon from "@mui/icons-material/Cancel";
-import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { BooleanInput, ReferenceInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
+import { BooleanInput, ReferenceInput, SaveButton, SimpleForm, useNotify, useRefresh } from "react-admin";
 import { useFormContext } from "react-hook-form";
 
+import AddButton from "../../commons/custom_fields/AddButton";
+import CancelButton from "../../commons/custom_fields/CancelButton";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
@@ -34,23 +35,6 @@ const LicensePolicyAuthorizationGroupMemberAdd = ({ id }: LicensePolicyAuthoriza
         setAuthorizationGroup(undefined);
         setIsManager(false);
     };
-
-    const CancelButton = () => (
-        <Button
-            sx={{
-                mr: "1em",
-                direction: "row",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-            variant="contained"
-            onClick={handleCancel}
-            color="inherit"
-            startIcon={<CancelIcon />}
-        >
-            Cancel
-        </Button>
-    );
 
     const CustomToolbar = () => {
         const { reset } = useFormContext();
@@ -95,14 +79,9 @@ const LicensePolicyAuthorizationGroupMemberAdd = ({ id }: LicensePolicyAuthoriza
         };
 
         return (
-            <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
-                <CancelButton />
-                <SaveButton
-                    label="Save & Continue"
-                    type="button"
-                    onClick={handleSaveContinue}
-                    sx={{ marginRight: 2 }}
-                />
+            <Toolbar>
+                <CancelButton onClick={handleCancel} />
+                <SaveButton label="Save & Continue" type="button" onClick={handleSaveContinue} />
                 <SaveButton type="button" onClick={handleSaveClose} />
             </Toolbar>
         );
@@ -110,14 +89,7 @@ const LicensePolicyAuthorizationGroupMemberAdd = ({ id }: LicensePolicyAuthoriza
 
     return (
         <Fragment>
-            <Button
-                variant="contained"
-                onClick={handleOpen}
-                sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem", marginBottom: 1 }}
-                startIcon={<AddIcon />}
-            >
-                Add authorization group
-            </Button>
+            <AddButton title="Add authorization group" onClick={handleOpen} />
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Add authorization group</DialogTitle>
                 <DialogContent>

@@ -1,19 +1,20 @@
-import { Divider, Stack, Typography } from "@mui/material";
+import { Box, Paper, Stack, Typography } from "@mui/material";
 import {
     ChipField,
     DateField,
     DeleteWithConfirmButton,
+    Labeled,
     PrevNextButtons,
     ReferenceField,
     ReferenceManyField,
     Show,
-    SimpleShowLayout,
     SingleFieldList,
     TextField,
     TopToolbar,
     WithRecord,
     useRecordContext,
 } from "react-admin";
+import { Fragment } from "react/jsx-runtime";
 
 import { delete_permission, update_permission } from "../functions";
 import OpenVEXUpdate from "./OpenVEXUpdate";
@@ -22,7 +23,7 @@ const ShowActions = () => {
     const openvex = useRecordContext();
     return (
         <TopToolbar>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
+            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
                 <PrevNextButtons linkType="show" sort={{ field: "timestamp", order: "DESC" }} storeKey="openvex.list" />
                 {update_permission(openvex) && <OpenVEXUpdate />}
                 {delete_permission(openvex) && <DeleteWithConfirmButton />}
@@ -31,60 +32,107 @@ const ShowActions = () => {
     );
 };
 
+const OpenVEXComponent = () => {
+    return (
+        <WithRecord
+            render={(openvex) => (
+                <Box width={"100%"}>
+                    <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
+                        <Stack spacing={1}>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Exported OpenVEX document
+                            </Typography>
+                            {openvex && openvex.product_data && openvex.product_data.name && (
+                                <Labeled>
+                                    <ReferenceField
+                                        source="product"
+                                        reference="products"
+                                        queryOptions={{ meta: { api_resource: "product_names" } }}
+                                        link="show"
+                                        sx={{ "& a": { textDecoration: "none" } }}
+                                    />
+                                </Labeled>
+                            )}
+                            {openvex && openvex.vulnerability_names && (
+                                <Labeled>
+                                    <ReferenceManyField
+                                        reference="vex/openvex_vulnerabilities"
+                                        target="openvex"
+                                        label="Vulnerabilities"
+                                    >
+                                        <SingleFieldList linkType={false}>
+                                            <ChipField source="name" />
+                                        </SingleFieldList>
+                                    </ReferenceManyField>
+                                </Labeled>
+                            )}
+                            {openvex && openvex.branch_names && (
+                                <Labeled>
+                                    <ReferenceManyField
+                                        reference="vex/openvex_branches"
+                                        target="openvex"
+                                        label="Branches / Versions"
+                                    >
+                                        <SingleFieldList linkType={false}>
+                                            <ChipField source="name" />
+                                        </SingleFieldList>
+                                    </ReferenceManyField>
+                                </Labeled>
+                            )}
+                            <Labeled>
+                                <TextField source="user_full_name" label="User" />
+                            </Labeled>
+                        </Stack>
+                    </Paper>
+
+                    <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
+                        <Stack spacing={1}>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Document
+                            </Typography>{" "}
+                            <Labeled>
+                                <TextField source="id_namespace" label="ID namespace" />
+                            </Labeled>
+                            <Labeled>
+                                <TextField source="document_id_prefix" label="ID prefix" />
+                            </Labeled>
+                            <Labeled>
+                                <TextField source="document_base_id" label="Base ID" />
+                            </Labeled>
+                            <Labeled>
+                                <TextField source="version" />
+                            </Labeled>
+                            <Labeled>
+                                <TextField source="author" />
+                            </Labeled>
+                            <Labeled>
+                                <TextField source="role" />
+                            </Labeled>
+                        </Stack>
+                    </Paper>
+
+                    <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
+                        <Stack spacing={1}>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Tracking
+                            </Typography>
+                            <Labeled>
+                                <DateField source="timestamp" showTime={true} />
+                            </Labeled>
+                            <Labeled>
+                                <DateField source="last_updated" showTime={true} />
+                            </Labeled>
+                        </Stack>
+                    </Paper>
+                </Box>
+            )}
+        />
+    );
+};
 const OpenVEXShow = () => {
     return (
-        <Show actions={<ShowActions />}>
-            <WithRecord
-                render={(openvex) => (
-                    <SimpleShowLayout>
-                        <Typography variant="h6">Exported OpenVEX document</Typography>
-                        {openvex && openvex.product_data && openvex.product_data.name && (
-                            <ReferenceField
-                                source="product"
-                                reference="products"
-                                queryOptions={{ meta: { api_resource: "product_names" } }}
-                                link="show"
-                                sx={{ "& a": { textDecoration: "none" } }}
-                            />
-                        )}
-                        {openvex && openvex.vulnerability_names && (
-                            <ReferenceManyField
-                                reference="vex/openvex_vulnerabilities"
-                                target="openvex"
-                                label="Vulnerabilities"
-                            >
-                                <SingleFieldList linkType={false}>
-                                    <ChipField source="name" />
-                                </SingleFieldList>
-                            </ReferenceManyField>
-                        )}
-                        {openvex && openvex.branch_names && (
-                            <ReferenceManyField
-                                reference="vex/openvex_branches"
-                                target="openvex"
-                                label="Branches / Versions"
-                            >
-                                <SingleFieldList linkType={false}>
-                                    <ChipField source="name" />
-                                </SingleFieldList>
-                            </ReferenceManyField>
-                        )}
-                        <TextField source="user_full_name" label="User" />
-                        <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-                        <Typography variant="h6">Document</Typography>{" "}
-                        <TextField source="id_namespace" label="ID namespace" />
-                        <TextField source="document_id_prefix" label="ID prefix" />
-                        <TextField source="document_base_id" label="Base ID" />
-                        <TextField source="version" />
-                        <TextField source="author" />
-                        <TextField source="role" />
-                        <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-                        <Typography variant="h6">Tracking</Typography>
-                        <DateField source="timestamp" showTime={true} />
-                        <DateField source="last_updated" showTime={true} />
-                    </SimpleShowLayout>
-                )}
-            />
+        <Show actions={<ShowActions />} component={OpenVEXComponent}>
+            <Fragment />
         </Show>
     );
 };

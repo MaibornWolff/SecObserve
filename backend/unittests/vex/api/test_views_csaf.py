@@ -72,7 +72,7 @@ class TestCSAF(TestCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual("application/json", response.headers["Content-Type"])
         self.assertEqual(
-            "attachment; filename=csaf_2024_0001_0001.json",
+            "attachment; filename=csaf_2020_0001_0001.json",
             response.headers["Content-Disposition"],
         )
 
@@ -81,7 +81,7 @@ class TestCSAF(TestCase):
         ) as testfile:
             self.assertEqual(testfile.read(), response._container[0].decode("utf-8"))
 
-        csaf = CSAF.objects.get(document_id_prefix="CSAF", document_base_id="2024_0001")
+        csaf = CSAF.objects.get(document_id_prefix="CSAF", document_base_id="2020_0001")
         self.assertEqual(vex_user, csaf.user)
         self.assertEqual(Product.objects.get(id=1), csaf.product)
         self.assertEqual(1, csaf.version)
@@ -138,7 +138,7 @@ class TestCSAF(TestCase):
 
         api_client = APIClient()
         response = api_client.post(
-            "/api/vex/csaf_document/update/CSAF/2024_0001/", parameters, format="json"
+            "/api/vex/csaf_document/update/CSAF/2020_0001/", parameters, format="json"
         )
 
         self.assertEqual(204, response.status_code)
@@ -166,13 +166,13 @@ class TestCSAF(TestCase):
 
         api_client = APIClient()
         response = api_client.post(
-            "/api/vex/csaf_document/update/CSAF/2024_0001/", parameters, format="json"
+            "/api/vex/csaf_document/update/CSAF/2020_0001/", parameters, format="json"
         )
 
         self.assertEqual(200, response.status_code)
         self.assertEqual("application/json", response.headers["Content-Type"])
         self.assertEqual(
-            "attachment; filename=csaf_2024_0001_0002.json",
+            "attachment; filename=csaf_2020_0001_0002.json",
             response.headers["Content-Disposition"],
         )
 
@@ -181,7 +181,7 @@ class TestCSAF(TestCase):
         ) as testfile:
             self.assertEqual(testfile.read(), response._container[0].decode("utf-8"))
 
-        csaf = CSAF.objects.get(document_id_prefix="CSAF", document_base_id="2024_0001")
+        csaf = CSAF.objects.get(document_id_prefix="CSAF", document_base_id="2020_0001")
         self.assertEqual(vex_user, csaf.user)
         self.assertEqual(Product.objects.get(id=1), csaf.product)
         self.assertEqual(2, csaf.version)
@@ -266,7 +266,7 @@ class TestCSAF(TestCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual("application/json", response.headers["Content-Type"])
         self.assertEqual(
-            "attachment; filename=csaf_2024_0001_0001.json",
+            "attachment; filename=csaf_2020_0001_0001.json",
             response.headers["Content-Disposition"],
         )
 
@@ -275,7 +275,7 @@ class TestCSAF(TestCase):
         ) as testfile:
             self.assertEqual(testfile.read(), response._container[0].decode("utf-8"))
 
-        csaf = CSAF.objects.get(document_id_prefix="CSAF", document_base_id="2024_0001")
+        csaf = CSAF.objects.get(document_id_prefix="CSAF", document_base_id="2020_0001")
         self.assertEqual(vex_user, csaf.user)
         self.assertEqual(Product.objects.get(id=2), csaf.product)
         self.assertEqual(1, csaf.version)
@@ -361,7 +361,7 @@ class TestCSAF(TestCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual("application/json", response.headers["Content-Type"])
         self.assertEqual(
-            "attachment; filename=csaf_2024_0001_0001.json",
+            "attachment; filename=csaf_2020_0001_0001.json",
             response.headers["Content-Disposition"],
         )
 
@@ -370,7 +370,7 @@ class TestCSAF(TestCase):
         ) as testfile:
             self.assertEqual(testfile.read(), response._container[0].decode("utf-8"))
 
-        csaf = CSAF.objects.get(document_id_prefix="CSAF", document_base_id="2024_0001")
+        csaf = CSAF.objects.get(document_id_prefix="CSAF", document_base_id="2020_0001")
         self.assertEqual(vex_user, csaf.user)
         self.assertEqual(Product.objects.get(id=2), csaf.product)
         self.assertEqual(1, csaf.version)
@@ -456,7 +456,7 @@ class TestCSAF(TestCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual("application/json", response.headers["Content-Type"])
         self.assertEqual(
-            "attachment; filename=csaf_2024_0001_0001.json",
+            "attachment; filename=csaf_2020_0001_0001.json",
             response.headers["Content-Disposition"],
         )
 
@@ -465,7 +465,7 @@ class TestCSAF(TestCase):
         ) as testfile:
             self.assertEqual(testfile.read(), response._container[0].decode("utf-8"))
 
-        csaf = CSAF.objects.get(document_id_prefix="CSAF", document_base_id="2024_0001")
+        csaf = CSAF.objects.get(document_id_prefix="CSAF", document_base_id="2020_0001")
         self.assertEqual(vex_user, csaf.user)
         self.assertEqual(None, csaf.product)
         self.assertEqual(1, csaf.version)
@@ -523,7 +523,7 @@ class TestCSAF(TestCase):
 
         api_client = APIClient()
         response = api_client.post(
-            "/api/vex/csaf_document/update/CSAF/2024_0001/", parameters, format="json"
+            "/api/vex/csaf_document/update/CSAF/2020_0001/", parameters, format="json"
         )
 
         self.assertEqual(204, response.status_code)
@@ -547,13 +547,13 @@ class TestCSAF(TestCase):
 
         api_client = APIClient()
         response = api_client.post(
-            "/api/vex/csaf_document/update/CSAF/2024_0001/", parameters, format="json"
+            "/api/vex/csaf_document/update/CSAF/2020_0001/", parameters, format="json"
         )
 
         self.assertEqual(200, response.status_code)
         self.assertEqual("application/json", response.headers["Content-Type"])
         self.assertEqual(
-            "attachment; filename=csaf_2024_0001_0002.json",
+            "attachment; filename=csaf_2020_0001_0002.json",
             response.headers["Content-Disposition"],
         )
 
@@ -562,7 +562,7 @@ class TestCSAF(TestCase):
         ) as testfile:
             self.assertEqual(testfile.read(), response._container[0].decode("utf-8"))
 
-        csaf = CSAF.objects.get(document_id_prefix="CSAF", document_base_id="2024_0001")
+        csaf = CSAF.objects.get(document_id_prefix="CSAF", document_base_id="2020_0001")
         self.assertEqual(vex_user, csaf.user)
         self.assertEqual(None, csaf.product)
         self.assertEqual(2, csaf.version)

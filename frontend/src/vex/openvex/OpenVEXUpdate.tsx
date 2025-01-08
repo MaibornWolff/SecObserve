@@ -1,10 +1,12 @@
-import CancelIcon from "@mui/icons-material/Cancel";
 import EditIcon from "@mui/icons-material/Edit";
-import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
+import { Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
 import { Fragment, useState } from "react";
-import { SaveButton, SimpleForm, Toolbar, useNotify, useRefresh } from "react-admin";
+import { SaveButton, SimpleForm, useNotify, useRefresh } from "react-admin";
 
 import axios_instance from "../../access_control/auth_provider/axios_instance";
+import CancelButton from "../../commons/custom_fields/CancelButton";
+import EditButton from "../../commons/custom_fields/EditButton";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import { validate_required_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 
@@ -24,26 +26,9 @@ const OpenVEXUpdate = () => {
         setLoading(false);
     };
 
-    const CancelButton = () => (
-        <Button
-            sx={{
-                mr: "1em",
-                direction: "row",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-            variant="contained"
-            onClick={handleCancel}
-            color="inherit"
-            startIcon={<CancelIcon />}
-        >
-            Cancel
-        </Button>
-    );
-
     const CustomToolbar = () => (
-        <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <CancelButton />
+        <Toolbar>
+            <CancelButton onClick={handleCancel} />
             <SaveButton label="Update" icon={<EditIcon />} alwaysEnable />
         </Toolbar>
     );
@@ -86,19 +71,14 @@ const OpenVEXUpdate = () => {
 
     return (
         <Fragment>
-            <Button
-                onClick={handleOpen}
-                size="small"
-                sx={{ paddingTop: "0px", paddingBottom: "2px" }}
-                startIcon={<EditIcon />}
-            >
-                Update OpenVEX document
-            </Button>
+            <EditButton title="Update OpenVEX document" onClick={handleOpen} />
             <Dialog open={open && !loading} onClose={handleClose} maxWidth={"lg"}>
                 <DialogTitle>Update OpenVEX document</DialogTitle>
                 <DialogContent>
                     <SimpleForm onSubmit={update_openvex} toolbar={<CustomToolbar />}>
-                        <Typography variant="h6">Document</Typography>
+                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                            Document
+                        </Typography>
                         <TextInputWide source="author" validate={validate_required_255} />
                         <TextInputWide source="role" validate={validate_required_255} />
                     </SimpleForm>

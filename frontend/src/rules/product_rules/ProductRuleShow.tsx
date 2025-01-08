@@ -45,7 +45,7 @@ const ShowActions = () => {
 
     return (
         <TopToolbar>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
+            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
                 {rule && filter && sort && storeKey && (
                     <PrevNextButtons filter={filter} linkType="show" sort={sort} storeKey={storeKey} />
                 )}
@@ -83,7 +83,7 @@ const ProductRuleComponent = () => {
         <WithRecord
             render={(rule) => (
                 <Box width={"100%"}>
-                    <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
+                    <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
                         <Typography variant="h6" sx={{ marginBottom: 1 }}>
                             Product Rule
                         </Typography>
@@ -130,7 +130,7 @@ const ProductRuleComponent = () => {
                         </Stack>
                     </Paper>
 
-                    <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
+                    <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
                         <Typography variant="h6" sx={{ marginBottom: 1 }}>
                             Observation
                         </Typography>
@@ -171,7 +171,7 @@ const ProductRuleComponent = () => {
                             rule.origin_source_file ||
                             rule.origin_cloud_qualified_resource ||
                             rule.origin_kubernetes_qualified_resource) && (
-                            <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
+                            <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
                                 <Typography variant="h6" sx={{ marginBottom: 1 }}>
                                     Origins
                                 </Typography>

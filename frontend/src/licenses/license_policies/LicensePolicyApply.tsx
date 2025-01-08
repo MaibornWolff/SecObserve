@@ -1,8 +1,9 @@
 import License_Policy_Icon from "@mui/icons-material/Policy";
-import { Backdrop, Button, CircularProgress } from "@mui/material";
+import { Backdrop, CircularProgress } from "@mui/material";
 import { useState } from "react";
 import { Confirm, useNotify, useRefresh } from "react-admin";
 
+import SmallButton from "../../commons/custom_fields/SmallButton";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
 type LicensePolicyApplyProps = {
@@ -66,14 +67,7 @@ const LicensePolicyApply = ({ license_policy, product }: LicensePolicyApplyProps
 
     return (
         <>
-            <Button
-                size="small"
-                sx={{ paddingTop: "0px", paddingBottom: "2px" }}
-                onClick={handleClick}
-                startIcon={<License_Policy_Icon />}
-            >
-                {buttonText()}
-            </Button>
+            <SmallButton title={buttonText()} onClick={handleClick} icon={<License_Policy_Icon />} />
             <Confirm
                 isOpen={open && !loading}
                 title="Apply license policy"

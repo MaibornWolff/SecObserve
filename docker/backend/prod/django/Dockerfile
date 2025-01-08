@@ -1,7 +1,7 @@
-FROM python:3.12.7-alpine@sha256:5049c050bdc68575a10bcb1885baa0689b6c15152d8a56a7e399fb49f783bf98 AS python
+FROM python:3.12.8-alpine@sha256:c157bce5e7d3a196f9f676f6f884ddb8567c395f941cc4bf8ce9adc92c9d16dd AS python-base
 
 # Python build stage
-FROM python AS python-build-stage
+FROM python-base AS python-build-stage
 
 ARG BUILD_ENVIRONMENT=prod
 
@@ -27,7 +27,7 @@ RUN poetry install --no-root && rm -rf $POETRY_CACHE_DIR
 
 
 # Python 'run' stage
-FROM python AS python-run-stage
+FROM python-base AS python-run-stage
 
 ARG BUILD_ENVIRONMENT=prod
 ARG APP_HOME=/app

@@ -18,10 +18,10 @@
             "generator": {
                 "engine": {
                     "name": "SecObserve",
-                    "version": "1.24.0"
+                    "version": "1.25.0"
                 }
             },
-            "id": "so_2024_0001_0001",
+            "id": "so_2020_0001_0001",
             "initial_release_date": "2024-07-14T11:12:19.671904+00:00",
             "revision_history": [
                 {
@@ -43,9 +43,9 @@
                         "name": "VEX Test",
                         "product": {
                             "name": "VEX Test",
-                            "product_id": "pkg:github/MaibornWolff/VEX_Test@v1.7.0",
+                            "product_id": "pkg:github/MaibornWolff/VEX_Test",
                             "product_identification_helper": {
-                                "purl": "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+                                "purl": "pkg:github/MaibornWolff/VEX_Test"
                             }
                         }
                     }
@@ -60,9 +60,9 @@
                         "name": "cryptography:41.0.5",
                         "product": {
                             "name": "cryptography:41.0.5",
-                            "product_id": "pkg:pypi/cryptography@41.0.5",
+                            "product_id": "pkg:pypi/cryptography",
                             "product_identification_helper": {
-                                "purl": "pkg:pypi/cryptography@41.0.5"
+                                "purl": "pkg:pypi/cryptography"
                             }
                         }
                     },
@@ -71,9 +71,9 @@
                         "name": "gunicorn:21.2.0",
                         "product": {
                             "name": "gunicorn:21.2.0",
-                            "product_id": "pkg:pypi/gunicorn@21.2.0",
+                            "product_id": "pkg:pypi/gunicorn",
                             "product_identification_helper": {
-                                "purl": "pkg:pypi/gunicorn@21.2.0"
+                                "purl": "pkg:pypi/gunicorn"
                             }
                         }
                     },
@@ -82,9 +82,9 @@
                         "name": "black:23.11.0",
                         "product": {
                             "name": "black:23.11.0",
-                            "product_id": "pkg:pypi/black@23.11.0",
+                            "product_id": "pkg:pypi/black",
                             "product_identification_helper": {
-                                "purl": "pkg:pypi/black@23.11.0"
+                                "purl": "pkg:pypi/black"
                             }
                         }
                     },
@@ -93,9 +93,9 @@
                         "name": "django:4.2.8",
                         "product": {
                             "name": "django:4.2.8",
-                            "product_id": "pkg:pypi/django@4.2.8",
+                            "product_id": "pkg:pypi/django",
                             "product_identification_helper": {
-                                "purl": "pkg:pypi/django@4.2.8"
+                                "purl": "pkg:pypi/django"
                             }
                         }
                     },
@@ -104,9 +104,9 @@
                         "name": "werkzeug:3.0.1",
                         "product": {
                             "name": "werkzeug:3.0.1",
-                            "product_id": "pkg:pypi/werkzeug@3.0.1",
+                            "product_id": "pkg:pypi/werkzeug",
                             "product_identification_helper": {
-                                "purl": "pkg:pypi/werkzeug@3.0.1"
+                                "purl": "pkg:pypi/werkzeug"
                             }
                         }
                     },
@@ -115,9 +115,9 @@
                         "name": "requests:2.31.0",
                         "product": {
                             "name": "requests:2.31.0",
-                            "product_id": "pkg:pypi/requests@2.31.0",
+                            "product_id": "pkg:pypi/requests",
                             "product_identification_helper": {
-                                "purl": "pkg:pypi/requests@2.31.0"
+                                "purl": "pkg:pypi/requests"
                             }
                         }
                     },
@@ -126,9 +126,9 @@
                         "name": "idna:3.6",
                         "product": {
                             "name": "idna:3.6",
-                            "product_id": "pkg:pypi/idna@3.6",
+                            "product_id": "pkg:pypi/idna",
                             "product_identification_helper": {
-                                "purl": "pkg:pypi/idna@3.6"
+                                "purl": "pkg:pypi/idna"
                             }
                         }
                     },
@@ -137,9 +137,9 @@
                         "name": "urllib3:2.1.0",
                         "product": {
                             "name": "urllib3:2.1.0",
-                            "product_id": "pkg:pypi/urllib3@2.1.0",
+                            "product_id": "pkg:pypi/urllib3",
                             "product_identification_helper": {
-                                "purl": "pkg:pypi/urllib3@2.1.0"
+                                "purl": "pkg:pypi/urllib3"
                             }
                         }
                     },
@@ -148,9 +148,9 @@
                         "name": "sqlparse:0.4.4",
                         "product": {
                             "name": "sqlparse:0.4.4",
-                            "product_id": "pkg:pypi/sqlparse@0.4.4",
+                            "product_id": "pkg:pypi/sqlparse",
                             "product_identification_helper": {
-                                "purl": "pkg:pypi/sqlparse@0.4.4"
+                                "purl": "pkg:pypi/sqlparse"
                             }
                         }
                     }
@@ -166,8 +166,8 @@
                     "name": "cryptography:41.0.5@VEX Test",
                     "product_id": "cryptography:41.0.5@VEX Test"
                 },
-                "product_reference": "pkg:pypi/cryptography@41.0.5",
-                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+                "product_reference": "pkg:pypi/cryptography",
+                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test"
             },
             {
                 "category": "default_component_of",
@@ -175,8 +175,8 @@
                     "name": "gunicorn:21.2.0@VEX Test",
                     "product_id": "gunicorn:21.2.0@VEX Test"
                 },
-                "product_reference": "pkg:pypi/gunicorn@21.2.0",
-                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+                "product_reference": "pkg:pypi/gunicorn",
+                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test"
             },
             {
                 "category": "default_component_of",
@@ -184,8 +184,8 @@
                     "name": "black:23.11.0@VEX Test",
                     "product_id": "black:23.11.0@VEX Test"
                 },
-                "product_reference": "pkg:pypi/black@23.11.0",
-                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+                "product_reference": "pkg:pypi/black",
+                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test"
             },
             {
                 "category": "default_component_of",
@@ -193,8 +193,8 @@
                     "name": "django:4.2.8@VEX Test",
                     "product_id": "django:4.2.8@VEX Test"
                 },
-                "product_reference": "pkg:pypi/django@4.2.8",
-                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+                "product_reference": "pkg:pypi/django",
+                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test"
             },
             {
                 "category": "default_component_of",
@@ -202,8 +202,8 @@
                     "name": "werkzeug:3.0.1@VEX Test",
                     "product_id": "werkzeug:3.0.1@VEX Test"
                 },
-                "product_reference": "pkg:pypi/werkzeug@3.0.1",
-                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+                "product_reference": "pkg:pypi/werkzeug",
+                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test"
             },
             {
                 "category": "default_component_of",
@@ -211,8 +211,8 @@
                     "name": "requests:2.31.0@VEX Test",
                     "product_id": "requests:2.31.0@VEX Test"
                 },
-                "product_reference": "pkg:pypi/requests@2.31.0",
-                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+                "product_reference": "pkg:pypi/requests",
+                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test"
             },
             {
                 "category": "default_component_of",
@@ -220,8 +220,8 @@
                     "name": "idna:3.6@VEX Test",
                     "product_id": "idna:3.6@VEX Test"
                 },
-                "product_reference": "pkg:pypi/idna@3.6",
-                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+                "product_reference": "pkg:pypi/idna",
+                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test"
             },
             {
                 "category": "default_component_of",
@@ -229,8 +229,8 @@
                     "name": "urllib3:2.1.0@VEX Test",
                     "product_id": "urllib3:2.1.0@VEX Test"
                 },
-                "product_reference": "pkg:pypi/urllib3@2.1.0",
-                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+                "product_reference": "pkg:pypi/urllib3",
+                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test"
             },
             {
                 "category": "default_component_of",
@@ -238,8 +238,8 @@
                     "name": "sqlparse:0.4.4@VEX Test",
                     "product_id": "sqlparse:0.4.4@VEX Test"
                 },
-                "product_reference": "pkg:pypi/sqlparse@0.4.4",
-                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+                "product_reference": "pkg:pypi/sqlparse",
+                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test"
             }
         ]
     },

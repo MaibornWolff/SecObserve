@@ -1,8 +1,7 @@
-import DeleteIcon from "@mui/icons-material/Delete";
-import { Button } from "@mui/material";
 import { useState } from "react";
 import { Confirm, useNotify, useRefresh } from "react-admin";
 
+import RemoveButton from "../../commons/custom_fields/RemoveButton";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
 type RevokeProductApiTokenProps = {
@@ -39,9 +38,7 @@ const RevokeProductApiToken = (props: RevokeProductApiTokenProps) => {
 
     return (
         <>
-            <Button sx={{ color: "#d32f2f" }} onClick={handleOpen} startIcon={<DeleteIcon />}>
-                Revoke
-            </Button>
+            <RemoveButton title="Revoke" onClick={handleOpen} />
             <Confirm
                 isOpen={open}
                 title="Revoke product API token"

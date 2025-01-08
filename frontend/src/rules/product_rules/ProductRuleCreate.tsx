@@ -1,6 +1,4 @@
-import AddIcon from "@mui/icons-material/Add";
-import CancelIcon from "@mui/icons-material/Cancel";
-import { Button, Dialog, DialogContent, DialogTitle, Divider, Typography } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle, Divider, Typography } from "@mui/material";
 import { Fragment, useState } from "react";
 import {
     BooleanInput,
@@ -8,12 +6,14 @@ import {
     ReferenceInput,
     SaveButton,
     SimpleForm,
-    Toolbar,
     useCreate,
     useNotify,
     useRefresh,
 } from "react-admin";
 
+import AddButton from "../../commons/custom_fields/AddButton";
+import CancelButton from "../../commons/custom_fields/CancelButton";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import {
     validate_255,
     validate_513,
@@ -50,26 +50,9 @@ const ProductRuleCreate = ({ id }: ProductRuleCreateProps) => {
         setOpen(false);
     };
 
-    const CancelButton = () => (
-        <Button
-            sx={{
-                mr: "1em",
-                direction: "row",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-            variant="contained"
-            onClick={handleCancel}
-            color="inherit"
-            startIcon={<CancelIcon />}
-        >
-            Cancel
-        </Button>
-    );
-
     const CustomToolbar = () => (
-        <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <CancelButton />
+        <Toolbar>
+            <CancelButton onClick={handleCancel} />
             <SaveButton />
         </Toolbar>
     );
@@ -135,14 +118,7 @@ const ProductRuleCreate = ({ id }: ProductRuleCreateProps) => {
 
     return (
         <Fragment>
-            <Button
-                variant="contained"
-                onClick={handleOpen}
-                sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem" }}
-                startIcon={<AddIcon />}
-            >
-                Add product rule
-            </Button>
+            <AddButton title="Add product rule" onClick={handleOpen} />
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Add product rule</DialogTitle>
                 <DialogContent>
@@ -152,7 +128,9 @@ const ProductRuleCreate = ({ id }: ProductRuleCreateProps) => {
                             toolbar={<CustomToolbar />}
                             validate={validateRuleForm}
                         >
-                            <Typography variant="h6">Rule</Typography>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Rule
+                            </Typography>
                             <TextInputWide autoFocus source="name" validate={validate_required_255} />
                             <TextInputWide
                                 source="description"
@@ -177,7 +155,9 @@ const ProductRuleCreate = ({ id }: ProductRuleCreateProps) => {
 
                             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
-                            <Typography variant="h6">Observation</Typography>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Observation
+                            </Typography>
                             <ReferenceInput source="parser" reference="parsers" sort={{ field: "name", order: "ASC" }}>
                                 <AutocompleteInputWide optionText="name" />
                             </ReferenceInput>
@@ -197,7 +177,9 @@ const ProductRuleCreate = ({ id }: ProductRuleCreateProps) => {
 
                             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
-                            <Typography variant="h6">Origins</Typography>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Origins
+                            </Typography>
                             <TextInputWide
                                 source="origin_component_name_version"
                                 label="Component name:version"

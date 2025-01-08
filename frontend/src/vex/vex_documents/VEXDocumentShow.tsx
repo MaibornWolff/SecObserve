@@ -18,7 +18,7 @@ import VEXStatementEmbeddedList from "../vex_statements/VEXStatementEmbeddedList
 const ShowActions = () => {
     return (
         <TopToolbar>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
+            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
                 <PrevNextButtons
                     linkType="show"
                     sort={{ field: "document_id", order: "ASC" }}
@@ -38,7 +38,9 @@ const VEXDocumentComponent = () => {
             render={(vex_document) => (
                 <Box width={"100%"}>
                     <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
-                        <Typography variant="h6">Imported VEX document</Typography>
+                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                            Imported VEX document
+                        </Typography>
                         <Stack spacing={1}>
                             <Labeled label="Type">
                                 <ChipField

@@ -25,7 +25,7 @@ const ShowActions = () => {
     const license_group = useRecordContext();
     return (
         <TopToolbar>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
+            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
                 <PrevNextButtons
                     linkType="show"
                     sort={{ field: "name", order: "ASC" }}
@@ -62,7 +62,9 @@ const LicenseGroupComponent = () => {
                         </Stack>
                     </Paper>
                     <Paper sx={{ marginBottom: 1, padding: 2 }}>
-                        <Typography variant="h6">Licenses</Typography>
+                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                            Licenses
+                        </Typography>
                         <LicenseGroupLicenseEmbeddedList license_group={license_group} />
                     </Paper>
                     <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>

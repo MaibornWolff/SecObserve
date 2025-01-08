@@ -16,6 +16,7 @@ import {
 } from "react-admin";
 
 import { PERMISSION_OBSERVATION_DELETE } from "../../access_control/types";
+import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import {
     validate_0_10,
     validate_0_999999,
@@ -54,7 +55,7 @@ const ObservationEditForm = () => {
 
     return (
         <SimpleForm warnWhenUnsavedChanges toolbar={<CustomToolbar />}>
-            <Typography variant="h6" sx={{ marginBottom: 2 }}>
+            <Typography variant="h6" sx={{ marginBottom: 1 }}>
                 Observation
             </Typography>
             <Stack>
@@ -112,7 +113,7 @@ const ObservationEditForm = () => {
 
             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
-            <Typography variant="h6" sx={{ marginBottom: 2 }}>
+            <Typography variant="h6" sx={{ marginBottom: 1 }}>
                 Product
             </Typography>
             <Stack>
@@ -134,19 +135,34 @@ const ObservationEditForm = () => {
 
             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
-            <Typography variant="h6">Vulnerability</Typography>
+            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                Vulnerability
+            </Typography>
             <Stack>
                 <TextInputWide source="vulnerability_id" label="Vulnerability ID" validate={validate_255} />
-                <Stack direction="row" spacing={2}>
+                <Stack direction="row" spacing={2} alignItems="center">
                     <NumberInput
-                        source="cvss3_score"
-                        label="CVSS3 score"
+                        source="cvss4_score"
+                        label="CVSS 4 score"
                         min={0}
                         step={0.1}
                         validate={validate_0_10}
                         sx={{ width: "10em" }}
                     />
-                    <TextInputWide source="cvss3_vector" label="CVSS3 vector" validate={validate_255} />
+                    <TextInputWide source="cvss4_vector" label="CVSS 4 vector" validate={validate_255} />
+                    <TextUrlField url="https://www.first.org/cvss/calculator/4.0" text="CVSS 4 calculator" label="" />
+                </Stack>
+                <Stack direction="row" spacing={2} alignItems="center">
+                    <NumberInput
+                        source="cvss3_score"
+                        label="CVSS 3 score"
+                        min={0}
+                        step={0.1}
+                        validate={validate_0_10}
+                        sx={{ width: "10em" }}
+                    />
+                    <TextInputWide source="cvss3_vector" label="CVSS 3 vector" validate={validate_255} />
+                    <TextUrlField url="https://www.first.org/cvss/calculator/3.1" text="CVSS 3.1 calculator" label="" />
                 </Stack>
                 <NumberInput
                     source="cwe"
@@ -160,7 +176,7 @@ const ObservationEditForm = () => {
 
             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
-            <Typography variant="h6" sx={{ marginBottom: 2 }}>
+            <Typography variant="h6" sx={{ marginBottom: 1 }}>
                 Origins
             </Typography>
             <Stack>
@@ -309,6 +325,9 @@ const ObservationEdit = () => {
         }
         if (!data.cvss3_vector) {
             data.cvss3_vector = "";
+        }
+        if (!data.cvss4_vector) {
+            data.cvss4_vector = "";
         }
         return data;
     };

@@ -181,10 +181,7 @@ class TestCycloneDXParser(TestCase):
 
             observation = observations[0]
             self.assertEqual("trivy / 0.38.3", observation.scanner)
-            self.assertEqual(
-                "CVE-2023-29469",
-                observation.title,
-            )
+            self.assertEqual("CVE-2023-29469", observation.title)
             description = """No description is available for this CVE."""
             self.assertEqual(description, observation.description)
             self.assertEqual("CVE-2023-29469", observation.vulnerability_id)
@@ -225,6 +222,7 @@ alpine:3.17.3 --> libxml2:2.10.3-r1"""
             )
 
             observation = observations[1]
+            self.assertEqual("CVE-2023-28484", observation.title)
             expected_dependencies = """example/example-frontend:dev --> alpine:3.17.3
 alpine:3.17.3 --> busybox:1.35.0-r29
 alpine:3.17.3 --> icu-data-en:72.1-r1
@@ -234,4 +232,14 @@ icu-data-en:72.1-r1 --> icu-libs:72.1-r1"""
             self.assertEqual(
                 expected_dependencies,
                 observation.origin_component_dependencies,
+            )
+            self.assertEqual("", observation.parser_severity)
+            self.assertEqual(5.9, observation.cvss3_score)
+            self.assertEqual(
+                "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H", observation.cvss3_vector
+            )
+            self.assertEqual(8.8, observation.cvss4_score)
+            self.assertEqual(
+                "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:L/VA:L/SC:L/SI:L/SA:N",
+                observation.cvss4_vector,
             )

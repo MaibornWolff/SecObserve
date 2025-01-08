@@ -12,7 +12,9 @@ type ProductShowProductProps = {
 const ProductShowProduct = ({ product }: ProductShowProductProps) => {
     return (
         <Fragment>
-            <Typography variant="h6">Product</Typography>
+            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                Product
+            </Typography>
             <Stack spacing={1}>
                 <Labeled>
                     <TextField source="name" />
@@ -49,7 +51,9 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
 
             <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
 
-            <Typography variant="h6">Rules</Typography>
+            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                Rules
+            </Typography>
             <Labeled label="Apply general rules">
                 <BooleanField source="apply_general_rules" />
             </Labeled>
@@ -59,7 +63,9 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                 product.repository_branch_housekeeping_active != null) && (
                 <Fragment>
                     <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-                    <Typography variant="h6">Source code repository</Typography>
+                    <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                        Source code repository
+                    </Typography>
                     <Stack spacing={1}>
                         {product.repository_prefix && (
                             <Labeled>
@@ -121,7 +127,9 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                 product.notification_slack_webhook) && (
                 <Fragment>
                     <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-                    <Typography variant="h6">Notifications</Typography>
+                    <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                        Notifications
+                    </Typography>
                     <Stack spacing={1}>
                         {product.notification_email_to && (
                             <Labeled label="Email">
@@ -148,7 +156,9 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                     product.security_gate_active != null)) && (
                 <Fragment>
                     <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-                    <Typography variant="h6">Security Gate</Typography>
+                    <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                        Security Gate
+                    </Typography>
                     <Labeled label="Security gate">
                         <BooleanField
                             source="security_gate_active"
@@ -184,7 +194,9 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
             {product.product_group && product.product_group_security_gate_active != null && (
                 <Fragment>
                     <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-                    <Typography variant="h6">Security Gate</Typography>
+                    <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                        Security Gate
+                    </Typography>
                     <Labeled label="Security gate (from product group)">
                         <BooleanField
                             source="product_group_security_gate_active"
@@ -196,7 +208,9 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
             )}
 
             <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-            <Typography variant="h6">Issue Tracker</Typography>
+            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                Issue Tracker
+            </Typography>
             <Labeled label="Active">
                 <BooleanField source="issue_tracker_active" />
             </Labeled>
@@ -238,7 +252,9 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
             )}
 
             <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-            <Typography variant="h6">Review</Typography>
+            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                Review
+            </Typography>
             <Stack spacing={1}>
                 <Labeled label="Assessments need approval">
                     <BooleanField source="assessments_need_approval" />
@@ -269,7 +285,9 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
             {product.risk_acceptance_expiry_active != null && (
                 <Fragment>
                     <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-                    <Typography variant="h6">Risk acceptance expiry</Typography>
+                    <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                        Risk acceptance expiry
+                    </Typography>
 
                     <Labeled label="Risk acceptance expiry">
                         <BooleanField
@@ -290,7 +308,9 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
             {product.license_policy && (
                 <Fragment>
                     <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-                    <Typography variant="h6">License management</Typography>
+                    <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                        License management
+                    </Typography>
                     <Labeled label="License policy">
                         <ReferenceField
                             source="license_policy"

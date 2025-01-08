@@ -10,13 +10,7 @@ import LicensePolicyEmbeddedList from "../license_policies/LicensePolicyEmbedded
 const ShowActions = () => {
     return (
         <TopToolbar>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <PrevNextButtons
-                    linkType="show"
-                    sort={{ field: "spdx_id", order: "ASC" }}
-                    storeKey="licenses.embedded"
-                />
-            </Stack>
+            <PrevNextButtons linkType="show" sort={{ field: "spdx_id", order: "ASC" }} storeKey="licenses.embedded" />
         </TopToolbar>
     );
 };

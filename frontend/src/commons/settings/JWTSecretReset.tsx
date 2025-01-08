@@ -1,9 +1,9 @@
-import DeleteIcon from "@mui/icons-material/Delete";
-import { Button, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useState } from "react";
 import { Confirm, useNotify } from "react-admin";
 
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
+import RemoveButton from "../custom_fields/RemoveButton";
 
 const JWTSecretReset = () => {
     const notify = useNotify();
@@ -36,9 +36,7 @@ const JWTSecretReset = () => {
 
     return (
         <>
-            <Button sx={{ color: "#d32f2f" }} onClick={handleOpen} startIcon={<DeleteIcon />}>
-                Reset JWT secret
-            </Button>
+            <RemoveButton title="Reset JWT secret" onClick={handleOpen} />
             <Confirm
                 isOpen={open}
                 title="Reset JWT secret"

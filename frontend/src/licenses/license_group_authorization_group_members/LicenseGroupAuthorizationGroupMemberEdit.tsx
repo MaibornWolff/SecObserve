@@ -1,9 +1,10 @@
-import CancelIcon from "@mui/icons-material/Cancel";
-import EditIcon from "@mui/icons-material/Edit";
-import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { BooleanInput, SaveButton, SimpleForm, Toolbar, useNotify, useRefresh, useUpdate } from "react-admin";
+import { BooleanInput, SaveButton, SimpleForm, useNotify, useRefresh, useUpdate } from "react-admin";
 
+import CancelButton from "../../commons/custom_fields/CancelButton";
+import EditButton from "../../commons/custom_fields/EditButton";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import { TextInputWide } from "../../commons/layout/themes";
 
 const LicenseGroupAuthorizationGroupMemberEdit = () => {
@@ -47,39 +48,16 @@ const LicenseGroupAuthorizationGroupMemberEdit = () => {
         setOpen(false);
     };
 
-    const CancelButton = () => (
-        <Button
-            sx={{
-                mr: "1em",
-                direction: "row",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-            variant="contained"
-            onClick={handleCancel}
-            color="inherit"
-            startIcon={<CancelIcon />}
-        >
-            Cancel
-        </Button>
-    );
-
     const CustomToolbar = () => (
-        <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <CancelButton />
+        <Toolbar>
+            <CancelButton onClick={handleCancel} />
             <SaveButton />
         </Toolbar>
     );
+
     return (
         <Fragment>
-            <Button
-                onClick={handleOpen}
-                size="small"
-                sx={{ paddingTop: "0px", paddingBottom: "2px" }}
-                startIcon={<EditIcon />}
-            >
-                Edit
-            </Button>
+            <EditButton title="Edit" onClick={handleOpen} />
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Edit authorization group</DialogTitle>
                 <DialogContent>

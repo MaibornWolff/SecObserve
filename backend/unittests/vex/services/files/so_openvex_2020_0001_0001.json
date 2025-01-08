@@ -1,6 +1,6 @@
 {
     "@context": "https://openvex.dev/ns/v0.2.0",
-    "@id": "https://openvex.example.com/so_openvex_2024_0001",
+    "@id": "https://openvex.example.com/so_openvex_2020_0001",
     "author": "SecObserve",
     "last_updated": "2024-07-14T11:17:57.668609+00:00",
     "role": "vendor",
@@ -294,6 +294,6 @@
         }
     ],
     "timestamp": "2024-07-14T11:17:57.668593+00:00",
-    "tooling": "SecObserve / 1.24.0",
+    "tooling": "SecObserve / 1.25.0",
     "version": 1
 }

@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.db.models.query import QuerySet
 
 from application.commons.services.global_request import get_current_user
+from application.core.queries.product import get_products
 from application.licenses.models import License_Policy
 
 
@@ -25,6 +26,11 @@ def get_license_policies() -> QuerySet[License_Policy]:
     if user.is_superuser:
         return license_policies
 
+    products = get_products(is_product_group=False)
+
     return license_policies.filter(
-        Q(users=user) | Q(authorization_groups__users=user) | Q(is_public=True)
-    )
+        Q(users=user)
+        | Q(authorization_groups__users=user)
+        | Q(is_public=True)
+        | Q(product__in=products)
+    ).distinct()

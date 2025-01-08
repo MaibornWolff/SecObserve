@@ -86,6 +86,22 @@ export function get_cwe_url(cwe: number): string {
     return "https://cwe.mitre.org/data/definitions/" + cwe + ".html";
 }
 
+export function get_cvss3_url(cvss_vector: string): string {
+    if (cvss_vector.startsWith("CVSS:3.0/")) {
+        return "https://www.first.org/cvss/calculator/3.0#" + cvss_vector;
+    } else if (cvss_vector.startsWith("CVSS:3.1/")) {
+        return "https://www.first.org/cvss/calculator/3.1#" + cvss_vector;
+    }
+    return "";
+}
+
+export function get_cvss4_url(cvss_vector: string): string {
+    if (cvss_vector.startsWith("CVSS:4.0/")) {
+        return "https://www.first.org/cvss/calculator/4.0#" + cvss_vector;
+    }
+    return "";
+}
+
 const VULNERABILITY_URLS = {
     CVE: "https://nvd.nist.gov/vuln/detail/",
     DLA: "https://security-tracker.debian.org/tracker/",

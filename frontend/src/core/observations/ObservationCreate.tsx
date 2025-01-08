@@ -1,6 +1,4 @@
-import AddIcon from "@mui/icons-material/Add";
-import CancelIcon from "@mui/icons-material/Cancel";
-import { Button, Dialog, DialogContent, DialogTitle, Divider, Stack, Typography } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle, Divider, Stack, Typography } from "@mui/material";
 import { Fragment, useState } from "react";
 import {
     CreateBase,
@@ -11,12 +9,15 @@ import {
     SaveButton,
     SimpleForm,
     TextInput,
-    Toolbar,
     useCreate,
     useNotify,
     useRefresh,
 } from "react-admin";
 
+import AddButton from "../../commons/custom_fields/AddButton";
+import CancelButton from "../../commons/custom_fields/CancelButton";
+import TextUrlField from "../../commons/custom_fields/TextUrlField";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import {
     validate_0_10,
     validate_0_999999,
@@ -55,26 +56,9 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
         setOpen(false);
     };
 
-    const CancelButton = () => (
-        <Button
-            sx={{
-                mr: "1em",
-                direction: "row",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-            variant="contained"
-            onClick={handleCancel}
-            color="inherit"
-            startIcon={<CancelIcon />}
-        >
-            Cancel
-        </Button>
-    );
-
     const CustomToolbar = () => (
-        <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <CancelButton />
+        <Toolbar>
+            <CancelButton onClick={handleCancel} />
             <SaveButton />
         </Toolbar>
     );
@@ -106,20 +90,15 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
 
     return (
         <Fragment>
-            <Button
-                variant="contained"
-                onClick={handleOpen}
-                sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem" }}
-                startIcon={<AddIcon />}
-            >
-                Add observation
-            </Button>
+            <AddButton title="Add observation" onClick={handleOpen} />
             <Dialog open={open} onClose={handleClose} maxWidth={"lg"}>
                 <DialogTitle>Add observation</DialogTitle>
                 <DialogContent>
                     <CreateBase resource="observations">
                         <SimpleForm onSubmit={create_observation} toolbar={<CustomToolbar />}>
-                            <Typography variant="h6">Observation</Typography>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Observation
+                            </Typography>
                             <Stack>
                                 <TextInputWide autoFocus source="title" validate={validate_required_255} />
                                 <Stack direction="row" spacing={2} alignItems="center">
@@ -176,7 +155,9 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
 
                             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
-                            <Typography variant="h6">Product</Typography>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Product
+                            </Typography>
                             <Stack>
                                 <ReferenceInput
                                     source="product"
@@ -199,23 +180,54 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
 
                             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
-                            <Typography variant="h6">Vulnerability</Typography>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Vulnerability
+                            </Typography>
                             <Stack>
                                 <TextInputWide
                                     source="vulnerability_id"
                                     label="Vulnerability ID"
                                     validate={validate_255}
                                 />
-                                <Stack direction="row" spacing={2}>
+                                <Stack direction="row" spacing={2} alignItems="center">
                                     <NumberInput
-                                        source="cvss3_score"
-                                        label="CVSS3 score"
+                                        source="cvss4_score"
+                                        label="CVSS 4 score"
                                         min={0}
                                         step={0.1}
                                         validate={validate_0_10}
                                         sx={{ width: "10em" }}
                                     />
-                                    <TextInputWide source="cvss3_vector" label="CVSS3 vector" validate={validate_255} />
+                                    <TextInputWide
+                                        source="cvss4_vector"
+                                        label="CVSS 4 vector"
+                                        validate={validate_255}
+                                    />
+                                    <TextUrlField
+                                        url="https://www.first.org/cvss/calculator/4.0"
+                                        text="CVSS 4 calculator"
+                                        label=""
+                                    />
+                                </Stack>
+                                <Stack direction="row" spacing={2} alignItems="center">
+                                    <NumberInput
+                                        source="cvss3_score"
+                                        label="CVSS 3 score"
+                                        min={0}
+                                        step={0.1}
+                                        validate={validate_0_10}
+                                        sx={{ width: "10em" }}
+                                    />
+                                    <TextInputWide
+                                        source="cvss3_vector"
+                                        label="CVSS 3 vector"
+                                        validate={validate_255}
+                                    />
+                                    <TextUrlField
+                                        url="https://www.first.org/cvss/calculator/3.1"
+                                        text="CVSS 3.1 calculator"
+                                        label=""
+                                    />
                                 </Stack>
                                 <NumberInput
                                     source="cwe"
@@ -229,7 +241,9 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
 
                             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
-                            <Typography variant="h6">Origins</Typography>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                Origins
+                            </Typography>
                             <Stack>
                                 <ReferenceInput
                                     source="origin_service"

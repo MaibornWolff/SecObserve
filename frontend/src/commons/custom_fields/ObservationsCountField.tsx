@@ -1,5 +1,6 @@
 import { useRecordContext } from "react-admin";
 
+import { getSettingListSize } from "../../commons/user_settings/functions";
 import {
     OBSERVATION_SEVERITY_CRITICAL,
     OBSERVATION_SEVERITY_HIGH,
@@ -18,16 +19,24 @@ interface ObservationsProps {
 const ObservationsCountField = (props: ObservationsProps) => {
     const record = useRecordContext();
 
-    function get_margin(): number {
-        if (props.withLabel) {
+    function get_no_label_margin(): number {
+        if (getSettingListSize() === "small" && !props.withLabel) {
             return 8;
         } else {
             return 0;
         }
     }
 
+    function get_margin(): number {
+        if (props.withLabel) {
+            return 8;
+        } else {
+            return get_no_label_margin();
+        }
+    }
+
     return record ? (
-        <div style={{ marginTop: get_margin() }}>
+        <div style={{ marginTop: get_margin(), marginBottom: get_no_label_margin() }}>
             <span
                 style={{
                     background: get_severity_color(OBSERVATION_SEVERITY_CRITICAL),

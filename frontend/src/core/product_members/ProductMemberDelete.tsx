@@ -1,6 +1,7 @@
-import DeleteIcon from "@mui/icons-material/Delete";
 import { useState } from "react";
-import { Button, Confirm, useDelete, useNotify, useRefresh } from "react-admin";
+import { Confirm, useDelete, useNotify, useRefresh } from "react-admin";
+
+import RemoveButton from "../../commons/custom_fields/RemoveButton";
 
 type ProductMemberDeleteProps = {
     product_member: any;
@@ -37,12 +38,12 @@ const ProductMemberDelete = (props: ProductMemberDeleteProps) => {
 
     return (
         <>
-            <Button label="Delete" onClick={handleClick} startIcon={<DeleteIcon />} sx={{ color: "#d32f2f" }} />
+            <RemoveButton title="Remove" onClick={handleClick} />
             <Confirm
                 isOpen={open}
-                title="Delete user member"
+                title="Remove user member"
                 content={
-                    "Are you sure you want to delete the user member " + props.product_member.user_data.full_name + "?"
+                    "Are you sure you want to remove the user member " + props.product_member.user_data.full_name + "?"
                 }
                 onConfirm={handleConfirm}
                 onClose={handleDialogClose}

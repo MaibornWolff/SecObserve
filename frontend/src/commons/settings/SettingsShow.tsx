@@ -9,7 +9,7 @@ import JWTSecretReset from "./JWTSecretReset";
 const ShowActions = () => {
     return (
         <TopToolbar>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
+            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
                 <JWTSecretReset />
                 <EditButton />
             </Stack>
@@ -23,7 +23,9 @@ const SettingsShowComponent = () => {
             render={(settings) => (
                 <Box width={"100%"}>
                     <Paper sx={{ marginBottom: 2, padding: 2 }}>
-                        <Typography variant="h6">Authentication</Typography>
+                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                            Authentication
+                        </Typography>
                         <Stack spacing={2}>
                             <Labeled label="JWT validity duration user (hours)">
                                 <NumberField source="jwt_validity_duration_user" />
@@ -40,7 +42,9 @@ const SettingsShowComponent = () => {
                     </Paper>
 
                     <Paper sx={{ marginBottom: 2, padding: 2 }}>
-                        <Typography variant="h6">Background tasks (restart needed)</Typography>
+                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                            Background tasks (restart needed)
+                        </Typography>
                         <Stack spacing={2}>
                             <Labeled label="Product metrics interval (minutes)">
                                 <NumberField source="background_product_metrics_interval_minutes" />
@@ -57,7 +61,9 @@ const SettingsShowComponent = () => {
                     </Paper>
 
                     <Paper sx={{ marginBottom: 2, padding: 2 }}>
-                        <Typography variant="h6">Features</Typography>
+                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                            Features
+                        </Typography>
                         <Stack spacing={2}>
                             <Labeled label="VEX">
                                 <BooleanField source="feature_vex" />
@@ -72,7 +78,9 @@ const SettingsShowComponent = () => {
                     </Paper>
 
                     <Paper sx={{ marginBottom: 2, padding: 2 }}>
-                        <Typography variant="h6">Housekeeping for branches</Typography>
+                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                            Housekeeping for branches
+                        </Typography>
                         <Stack spacing={2}>
                             <Stack direction="row" spacing={2}>
                                 <Labeled label="Branch housekeeping crontab (hour/UTC)">
@@ -97,7 +105,9 @@ const SettingsShowComponent = () => {
                     </Paper>
 
                     <Paper sx={{ marginBottom: 2, padding: 2 }}>
-                        <Typography variant="h6">Integrations</Typography>
+                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                            Integrations
+                        </Typography>
                         <Stack spacing={2}>
                             {settings.base_url_frontend && (
                                 <Labeled label="Base URL frontend">
@@ -131,7 +141,9 @@ const SettingsShowComponent = () => {
                     </Paper>
 
                     <Paper sx={{ marginBottom: 2, padding: 2 }}>
-                        <Typography variant="h6">Security gates</Typography>
+                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                            Security gates
+                        </Typography>
                         <Stack spacing={2}>
                             <Labeled label="Security gates active">
                                 <BooleanField source="security_gate_active" />
@@ -162,7 +174,9 @@ const SettingsShowComponent = () => {
                     </Paper>
 
                     <Paper sx={{ marginBottom: 2, padding: 2 }}>
-                        <Typography variant="h6">Risk acceptance expiry</Typography>
+                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                            Risk acceptance expiry
+                        </Typography>
                         <Stack spacing={2}>
                             <Labeled label="Risk acceptance expiry (days)">
                                 <NumberField source="risk_acceptance_expiry_days" />
@@ -179,7 +193,9 @@ const SettingsShowComponent = () => {
                     </Paper>
 
                     <Paper sx={{ marginBottom: 2, padding: 2 }}>
-                        <Typography variant="h6">Automatic API import</Typography>
+                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                            Automatic API import
+                        </Typography>
                         <Stack spacing={2}>
                             <Labeled label="Enable automatic API imports">
                                 <BooleanField source="feature_automatic_api_import" />
@@ -198,7 +214,9 @@ const SettingsShowComponent = () => {
                     </Paper>
 
                     <Paper sx={{ marginBottom: 2, padding: 2 }}>
-                        <Typography variant="h6">Password validation for non-OIDC users</Typography>
+                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                            Password validation for non-OIDC users
+                        </Typography>
                         <Stack spacing={2}>
                             <Labeled label="Minimum length">
                                 <NumberField source="password_validator_minimum_length" />
@@ -216,7 +234,9 @@ const SettingsShowComponent = () => {
                     </Paper>
 
                     <Paper sx={{ marginBottom: 2, padding: 2 }}>
-                        <Typography variant="h6">License management</Typography>
+                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                            License management
+                        </Typography>
                         <Stack spacing={2}>
                             <Labeled label="Enable license management">
                                 <BooleanField source="feature_license_management" />

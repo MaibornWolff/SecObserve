@@ -55,7 +55,7 @@ const ShowActions = () => {
 
     return (
         <TopToolbar>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
+            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
                 {observation_log && filter && sort && storeKey && (
                     <PrevNextButtons filter={filter} linkType="show" sort={sort} storeKey={storeKey} />
                 )}

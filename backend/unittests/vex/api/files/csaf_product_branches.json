@@ -18,10 +18,10 @@
             "generator": {
                 "engine": {
                     "name": "SecObserve",
-                    "version": "1.24.0"
+                    "version": "1.25.0"
                 }
             },
-            "id": "CSAF_2024_0001_0001",
+            "id": "CSAF_2020_0001_0001",
             "initial_release_date": "2020-01-01T04:30:00+00:00",
             "revision_history": [
                 {

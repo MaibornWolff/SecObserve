@@ -34,13 +34,19 @@ from application.licenses.queries.license_group_authorization_group_member impor
     get_license_group_authorization_group_member,
     get_license_group_authorization_group_members,
 )
-from application.licenses.queries.license_group_member import get_license_group_member
+from application.licenses.queries.license_group_member import (
+    get_license_group_member,
+    get_license_group_members,
+)
 from application.licenses.queries.license_policy_authorization_group_member import (
     get_license_policy_authorization_group_member,
     get_license_policy_authorization_group_members,
 )
 from application.licenses.queries.license_policy_item import get_license_policy_items
-from application.licenses.queries.license_policy_member import get_license_policy_member
+from application.licenses.queries.license_policy_member import (
+    get_license_policy_member,
+    get_license_policy_members,
+)
 from application.licenses.services.license_policy import get_ignore_component_type_list
 
 
@@ -223,7 +229,7 @@ class LicenseGroupSerializer(ModelSerializer):
         return obj.licenses.exists()
 
     def get_has_users(self, obj: License_Group) -> bool:
-        return obj.users.exists()
+        return get_license_group_members().filter(license_group=obj).exists()
 
     def get_has_authorization_groups(self, obj: License_Group) -> bool:
         return (
@@ -356,7 +362,7 @@ class LicensePolicySerializer(ModelSerializer):
         return False
 
     def get_has_products(self, obj: License_Policy) -> bool:
-        return get_products().filter(license_policy=obj).exists()
+        return get_products(is_product_group=False).filter(license_policy=obj).exists()
 
     def get_has_product_groups(self, obj: License_Policy) -> bool:
         return get_products(is_product_group=True).filter(license_policy=obj).exists()
@@ -365,7 +371,7 @@ class LicensePolicySerializer(ModelSerializer):
         return obj.license_policy_items.exists()
 
     def get_has_users(self, obj: License_Policy) -> bool:
-        return obj.users.exists()
+        return get_license_policy_members().filter(license_policy=obj).exists()
 
     def get_has_authorization_groups(self, obj: License_Policy) -> bool:
         return (

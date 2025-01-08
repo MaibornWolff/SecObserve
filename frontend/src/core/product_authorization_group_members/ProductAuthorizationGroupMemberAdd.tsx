@@ -1,11 +1,12 @@
-import AddIcon from "@mui/icons-material/Add";
-import CancelIcon from "@mui/icons-material/Cancel";
-import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { ReferenceInput, SaveButton, SimpleForm, Toolbar, useCreate, useNotify, useRefresh } from "react-admin";
+import { ReferenceInput, SaveButton, SimpleForm, useCreate, useNotify, useRefresh } from "react-admin";
 import { useFormContext } from "react-hook-form";
 
 import { ROLE_CHOICES } from "../../access_control/types";
+import AddButton from "../../commons/custom_fields/AddButton";
+import CancelButton from "../../commons/custom_fields/CancelButton";
+import Toolbar from "../../commons/custom_fields/Toolbar";
 import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
 
@@ -35,23 +36,6 @@ const ProductAuthorizationGroupMemberAdd = ({ id }: ProductAuthorizationGroupMem
         setAuthorizationGroup(undefined);
         setRole(undefined);
     };
-
-    const CancelButton = () => (
-        <Button
-            sx={{
-                mr: "1em",
-                direction: "row",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-            variant="contained"
-            onClick={handleCancel}
-            color="inherit"
-            startIcon={<CancelIcon />}
-        >
-            Cancel
-        </Button>
-    );
 
     const CustomToolbar = () => {
         const { reset } = useFormContext();
@@ -97,14 +81,9 @@ const ProductAuthorizationGroupMemberAdd = ({ id }: ProductAuthorizationGroupMem
         };
 
         return (
-            <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
-                <CancelButton />
-                <SaveButton
-                    label="Save & Continue"
-                    type="button"
-                    onClick={handleSaveContinue}
-                    sx={{ marginRight: 2 }}
-                />
+            <Toolbar>
+                <CancelButton onClick={handleCancel} />
+                <SaveButton label="Save & Continue" type="button" onClick={handleSaveContinue} />
                 <SaveButton type="button" onClick={handleSaveClose} />
             </Toolbar>
         );
@@ -130,14 +109,7 @@ const ProductAuthorizationGroupMemberAdd = ({ id }: ProductAuthorizationGroupMem
 
     return (
         <Fragment>
-            <Button
-                variant="contained"
-                onClick={handleOpen}
-                sx={{ mr: "7px", width: "fit-content", fontSize: "0.8125rem", marginBottom: 1 }}
-                startIcon={<AddIcon />}
-            >
-                Add authorization group member
-            </Button>
+            <AddButton title="Add authorization group member" onClick={handleOpen} />
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Add authorization group member</DialogTitle>
                 <DialogContent>
