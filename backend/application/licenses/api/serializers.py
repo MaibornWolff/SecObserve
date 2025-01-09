@@ -1,5 +1,6 @@
 from typing import Optional
 
+from license_expression import get_spdx_licensing
 from packageurl import PackageURL
 from rest_framework.serializers import (
     CharField,
@@ -493,6 +494,19 @@ class LicensePolicyItemSerializer(ModelSerializer):
                 "Only one of license group, license, license expression or unknown license must be set"
             )
         return attrs
+
+    def validate_license_expression(self, value: str) -> str:
+        if value:
+            licensing = get_spdx_licensing()
+            expression_info = licensing.validate(value, strict=True)
+            if not expression_info.errors:
+                value = expression_info.normalized_expression
+            else:
+                raise ValidationError(
+                    f"Invalid license expression: {expression_info.errors}"
+                )
+
+        return value
 
 
 class LicensePolicyMemberSerializer(ModelSerializer):
