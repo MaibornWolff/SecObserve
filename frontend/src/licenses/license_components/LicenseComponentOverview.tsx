@@ -29,7 +29,7 @@ type LicenseComponentOverviewProps = {
 };
 
 const licenseNameStyle = (type: string): string => {
-    if (type === "" || type === "Unknown") {
+    if (type === "" || type === "Non-SPDX") {
         return "italic";
     }
     return "normal";

@@ -88,11 +88,11 @@ def get_license_evaluation_results_for_license_policy(
             )
         )
 
-    items_unknown_licenses = License_Policy_Item.objects.filter(
+    items_non_spdx_licenses = License_Policy_Item.objects.filter(
         license_policy=license_policy
-    ).exclude(unknown_license="")
-    for item in items_unknown_licenses:
-        license_evaluation_results[f"unknown_{item.unknown_license}"] = (
+    ).exclude(non_spdx_license="")
+    for item in items_non_spdx_licenses:
+        license_evaluation_results[f"non_spdx_{item.non_spdx_license}"] = (
             LicensePolicyEvaluationResult(
                 evaluation_result=item.evaluation_result,
                 from_parent=is_parent,
@@ -119,9 +119,9 @@ def apply_license_policy_to_component(
             evaluation_result = _get_license_evaluation_result(
                 f"expression_{component.license_expression}", evaluation_results
             )
-    elif component.unknown_license:
+    elif component.non_spdx_license:
         evaluation_result = _get_license_evaluation_result(
-            f"unknown_{component.unknown_license}", evaluation_results
+            f"non_spdx_{component.non_spdx_license}", evaluation_results
         )
     if not evaluation_result:
         evaluation_result = License_Policy_Evaluation_Result.RESULT_UNKNOWN
@@ -155,7 +155,7 @@ def apply_license_policy_product(product: Product) -> None:
     components = License_Component.objects.filter(product=product)
     for component in components:
         license_before = component.license
-        unknown_license_before = component.unknown_license
+        non_spdx_license_before = component.non_spdx_license
         evaluation_result_before = component.evaluation_result
 
         license_policy = _get_license_policy(product)
@@ -172,7 +172,7 @@ def apply_license_policy_product(product: Product) -> None:
 
         if (
             license_before != component.license
-            or unknown_license_before != component.unknown_license
+            or non_spdx_license_before != component.non_spdx_license
             or evaluation_result_before != component.evaluation_result
         ):
             component.last_change = timezone.now()
@@ -196,7 +196,7 @@ def copy_license_policy(
             license_policy=new_license_policy,
             license_group=item.license_group,
             license=item.license,
-            unknown_license=item.unknown_license,
+            non_spdx_license=item.non_spdx_license,
             evaluation_result=item.evaluation_result,
         )
 

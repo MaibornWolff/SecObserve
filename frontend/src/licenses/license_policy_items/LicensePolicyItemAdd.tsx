@@ -33,7 +33,7 @@ const LicensePolicyItemAdd = ({ id }: LicensePolicyItemAddProps) => {
     const [license_group, setLicenseGroup] = useState();
     const [license, setLicense] = useState();
     const [license_expression, setLicenseExpression] = useState();
-    const [unknown_license, setUnknownLicense] = useState();
+    const [non_spdx_license, setNonSPDXLicense] = useState();
     const [evaluation_result, setEvaluationResult] = useState();
     const [comment, setComment] = useState();
 
@@ -41,7 +41,7 @@ const LicensePolicyItemAdd = ({ id }: LicensePolicyItemAddProps) => {
         setLicenseGroup(undefined);
         setLicense(undefined);
         setLicenseExpression(undefined);
-        setUnknownLicense(undefined);
+        setNonSPDXLicense(undefined);
         setEvaluationResult(undefined);
         setComment(undefined);
     };
@@ -64,7 +64,7 @@ const LicensePolicyItemAdd = ({ id }: LicensePolicyItemAddProps) => {
                 license_group: license_group,
                 license: license,
                 license_expression: license_expression,
-                unknown_license: unknown_license,
+                non_spdx_license: non_spdx_license,
                 evaluation_result: evaluation_result,
                 comment: comment,
             };
@@ -75,8 +75,8 @@ const LicensePolicyItemAdd = ({ id }: LicensePolicyItemAddProps) => {
             if (!data.license_expression) {
                 data.license_expression = "";
             }
-            if (!data.unknown_license) {
-                data.unknown_license = "";
+            if (!data.non_spdx_license) {
+                data.non_spdx_license = "";
             }
             if (!data.comment) {
                 data.comment = "";
@@ -143,10 +143,10 @@ const LicensePolicyItemAdd = ({ id }: LicensePolicyItemAddProps) => {
                                 onChange={(e) => setLicenseExpression(e.target.value)}
                             />
                             <TextInputExtraWide
-                                source="unknown_license"
-                                label="Unknown license"
+                                source="non_spdx_license"
+                                label="Non-SPDX license"
                                 validate={validate_255}
-                                onChange={(e) => setUnknownLicense(e.target.value)}
+                                onChange={(e) => setNonSPDXLicense(e.target.value)}
                             />
                             <AutocompleteInputMedium
                                 source="evaluation_result"

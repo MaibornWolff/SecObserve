@@ -36,7 +36,9 @@ class LicenseComponentFilter(FilterSet):
     license_expression = CharFilter(
         field_name="license_expression", lookup_expr="icontains"
     )
-    unknown_license = CharFilter(field_name="unknown_license", lookup_expr="icontains")
+    non_spdx_license = CharFilter(
+        field_name="non_spdx_license", lookup_expr="icontains"
+    )
     age = ChoiceFilter(
         field_name="age", method="get_age", choices=Age_Choices.AGE_CHOICES
     )
@@ -59,7 +61,7 @@ class LicenseComponentFilter(FilterSet):
         fields=(
             ("license__spdx_id", "license_data.spdx_id"),
             ("license_expression", "license_expression"),
-            ("unknown_license", "unknown_license"),
+            ("non_spdx_license", "non_spdx_license"),
             (
                 (
                     "license_name",
@@ -107,7 +109,7 @@ class LicenseComponentFilter(FilterSet):
             "license_name",
             "license_spdx_id",
             "license_expression",
-            "unknown_license",
+            "non_spdx_license",
             "evaluation_result",
             "name_version",
             "purl_type",
@@ -294,7 +296,9 @@ class LicensePolicyItemFilter(FilterSet):
     license_expression = CharFilter(
         field_name="license_expression", lookup_expr="icontains"
     )
-    unknown_license = CharFilter(field_name="unknown_license", lookup_expr="icontains")
+    non_spdx_license = CharFilter(
+        field_name="non_spdx_license", lookup_expr="icontains"
+    )
 
     ordering = ExtendedOrderingFilter(
         # tuple-mapping retains order
@@ -305,7 +309,7 @@ class LicensePolicyItemFilter(FilterSet):
                     "license_group__name",
                     "license__spdx_id",
                     "license_expression",
-                    "unknown_license",
+                    "non_spdx_license",
                 ),
                 "license_group_name",
             ),
@@ -314,7 +318,7 @@ class LicensePolicyItemFilter(FilterSet):
                     "license__spdx_id",
                     "license_group__name",
                     "license_expression",
-                    "unknown_license",
+                    "non_spdx_license",
                 ),
                 "license_spdx_id",
             ),
@@ -323,18 +327,18 @@ class LicensePolicyItemFilter(FilterSet):
                     "license_expression",
                     "license_group__name",
                     "license__spdx_id",
-                    "unknown_license",
+                    "non_spdx_license",
                 ),
                 "license_expression",
             ),
             (
                 (
-                    "unknown_license",
+                    "non_spdx_license",
                     "license_group__name",
                     "license__spdx_id",
                     "license_expression",
                 ),
-                "unknown_license",
+                "non_spdx_license",
             ),
             (
                 (
@@ -342,7 +346,7 @@ class LicensePolicyItemFilter(FilterSet):
                     "license_group__name",
                     "license__spdx_id",
                     "license_expression",
-                    "unknown_license",
+                    "non_spdx_license",
                 ),
                 "evaluation_result",
             ),
@@ -356,7 +360,7 @@ class LicensePolicyItemFilter(FilterSet):
             "license_group_name",
             "license_spdx_id",
             "license_expression",
-            "unknown_license",
+            "non_spdx_license",
             "evaluation_result",
             "license_group_name",
         ]

@@ -15,8 +15,8 @@ const getItemName = (license_policy_item: any) => {
     if (license_policy_item.license_spdx_id) {
         return license_policy_item.license_spdx_id;
     }
-    if (license_policy_item.unknown_license) {
-        return license_policy_item.unknown_license;
+    if (license_policy_item.non_spdx_license) {
+        return license_policy_item.non_spdx_license;
     }
     return "";
 };

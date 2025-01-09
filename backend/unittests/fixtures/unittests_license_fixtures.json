@@ -14,7 +14,7 @@
             "cpe": "",
             "dependencies": "",
             "license_name": "internal license",
-            "unknown_license": "internal license",
+            "non_spdx_license": "internal license",
             "evaluation_result": "Allowed",
             "numerical_evaluation_result": 1,
             "created": "2022-12-15T16:10:35.513Z",
@@ -37,7 +37,7 @@
             "cpe": "",
             "dependencies": "",
             "license_name": "external license",
-            "unknown_license": "external license",
+            "non_spdx_license": "external license",
             "evaluation_result": "Review required",
             "numerical_evaluation_result": 2,
             "created": "2022-12-15T16:10:35.513Z",
@@ -226,7 +226,7 @@
         "fields": {
             "license_policy": 1000,
             "license_group": 1,
-            "unknown_license": "",
+            "non_spdx_license": "",
             "evaluation_result": "Allowed",
             "numerical_evaluation_result": 4
         }
@@ -237,7 +237,7 @@
         "fields": {
             "license_policy": 1001,
             "license": 1,
-            "unknown_license": "",
+            "non_spdx_license": "",
             "evaluation_result": "Forbidden",
             "numerical_evaluation_result": 1
         }
@@ -247,7 +247,7 @@
         "pk": 1002,
         "fields": {
             "license_policy": 1002,
-            "unknown_license": "Two unknown licenses",
+            "non_spdx_license": "Two non-spdx licenses",
             "evaluation_result": "Unknown",
             "numerical_evaluation_result": 3
         }
@@ -257,7 +257,7 @@
         "pk": 1003,
         "fields": {
             "license_policy": 1003,
-            "unknown_license": "Three unknown licenses",
+            "non_spdx_license": "Three non-spdx licenses",
             "evaluation_result": "Unknown",
             "numerical_evaluation_result": 3
         }
@@ -267,7 +267,7 @@
         "pk": 1004,
         "fields": {
             "license_policy": 1004,
-            "unknown_license": "Four unknown licenses",
+            "non_spdx_license": "Four non-spdx licenses",
             "evaluation_result": "Unknown",
             "numerical_evaluation_result": 3
         }
