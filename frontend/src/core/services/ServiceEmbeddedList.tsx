@@ -49,6 +49,7 @@ const ServiceEmbeddedList = ({ product }: ServiceEmbeddedListProps) => {
                         rowClick={false}
                     >
                         <WithRecord
+                            label="Name"
                             render={(service) => (
                                 <TextUrlField
                                     label="Name"

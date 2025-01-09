@@ -149,6 +149,7 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
             localStorage.removeItem("RaStore.observations.embedded");
             localStorage.removeItem("RaStore.license_components.embedded");
             localStorage.removeItem("RaStore.license_components.overview");
+            localStorage.removeItem("RaStore.vulnerability_checks.embedded");
             localStorage.setItem("observationembeddedlist.product", product.id);
             navigate(get_observations_url(product.repository_default_branch));
         }
