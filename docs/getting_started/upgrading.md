@@ -10,6 +10,13 @@
 
 * There will be specific upgrade instructions if necessary, e.g. when there are new configuration parameters.
 
+## Release 1.26.0
+
+**Breaking changes**
+
+* The attribute `unknown_license` in License Components and License Policies has been renamed to `non_spdx_license`. This was necessary to avoid confusion with the License Policy evaluation result `Unknown`, when a license is not included in the License Policy.
+
+
 ## Release 1.22.0
 
 **Breaking changes**
