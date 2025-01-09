@@ -19,7 +19,7 @@ class License_Policy_Export_Item:
     from_parent: bool
     spdx_license: Optional[str] = None
     license_expression: Optional[str] = None
-    unknown_license: Optional[str] = None
+    non_spdx_license: Optional[str] = None
     license_group: Optional[str] = None
     comment: Optional[str] = None
 
@@ -86,9 +86,9 @@ def _create_license_policy_export(
             license_policy_export_item.license_expression = license_string.replace(
                 "expression_", ""
             )
-        elif license_string.startswith("unknown_"):
-            license_policy_export_item.unknown_license = license_string.replace(
-                "unknown_", ""
+        elif license_string.startswith("non_spdx_"):
+            license_policy_export_item.non_spdx_license = license_string.replace(
+                "non_spdx_", ""
             )
         else:
             continue

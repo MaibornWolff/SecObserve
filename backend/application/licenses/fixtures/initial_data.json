@@ -7781,7 +7781,7 @@
             "license_policy": 1,
             "license_group": 9,
             "license": null,
-            "unknown_license": "",
+            "non_spdx_license": "",
             "evaluation_result": "Forbidden",
             "numerical_evaluation_result": 1
         }
@@ -7793,7 +7793,7 @@
             "license_policy": 1,
             "license_group": 8,
             "license": null,
-            "unknown_license": "",
+            "non_spdx_license": "",
             "evaluation_result": "Forbidden",
             "numerical_evaluation_result": 1
         }
@@ -7805,7 +7805,7 @@
             "license_policy": 1,
             "license_group": 7,
             "license": null,
-            "unknown_license": "",
+            "non_spdx_license": "",
             "evaluation_result": "Forbidden",
             "numerical_evaluation_result": 1
         }
@@ -7817,7 +7817,7 @@
             "license_policy": 1,
             "license_group": 6,
             "license": null,
-            "unknown_license": "",
+            "non_spdx_license": "",
             "evaluation_result": "Review required",
             "numerical_evaluation_result": 2
         }
@@ -7829,7 +7829,7 @@
             "license_policy": 1,
             "license_group": 4,
             "license": null,
-            "unknown_license": "",
+            "non_spdx_license": "",
             "evaluation_result": "Allowed",
             "numerical_evaluation_result": 4
         }
@@ -7841,7 +7841,7 @@
             "license_policy": 1,
             "license_group": 2,
             "license": null,
-            "unknown_license": "",
+            "non_spdx_license": "",
             "evaluation_result": "Allowed",
             "numerical_evaluation_result": 4
         }
@@ -7853,7 +7853,7 @@
             "license_policy": 1,
             "license_group": 5,
             "license": null,
-            "unknown_license": "",
+            "non_spdx_license": "",
             "evaluation_result": "Review required",
             "numerical_evaluation_result": 2
         }
@@ -7865,7 +7865,7 @@
             "license_policy": 1,
             "license_group": 1,
             "license": null,
-            "unknown_license": "",
+            "non_spdx_license": "",
             "evaluation_result": "Allowed",
             "numerical_evaluation_result": 4
         }
@@ -7877,7 +7877,7 @@
             "license_policy": 1,
             "license_group": 3,
             "license": null,
-            "unknown_license": "",
+            "non_spdx_license": "",
             "evaluation_result": "Allowed",
             "numerical_evaluation_result": 4
         }

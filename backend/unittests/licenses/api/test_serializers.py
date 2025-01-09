@@ -158,7 +158,7 @@ class TestLicensePolicyItemSerializer(BaseTestCase):
             "license_group": License_Group.objects.get(id=1),
             "license": License.objects.get(id=1),
             "license_expression": "license_expression",
-            "unknown_license": "unknown_license",
+            "non_spdx_license": "non_spdx_license",
         }
 
         with self.assertRaises(ValidationError) as e:

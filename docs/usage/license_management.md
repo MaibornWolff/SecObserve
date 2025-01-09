@@ -34,7 +34,7 @@ A License Policy for the Product can be set, when editing the product settings.
 
 ![Product set license policy](../assets/images/screenshot_product_license_policy.png){ width="80%" style="display: block; margin: 0 auto" }
 
-If no License Policy is set, all licenses are evaluated as `Unkown`. If a License Policy is set, the licenses are evaluated according to the policy:
+If no License Policy is set, all licenses are evaluated as `Unknown`. If a License Policy is set, the licenses are evaluated according to the policy:
 
 * **Allowed:** There is no problem using the component with that license.
 * **Forbidden:** Using the component with that license might lead to legal problems and the component cannot be used for the Product.
@@ -58,9 +58,11 @@ Within the `License Policy` itself a comma-separated list of component (e.g. `ap
 
 The attribute `Public` defines, if the License Policy is visible for all users or only for the members of the policy.
 
-With the `Apply` button the rules of the License Policy are applied to all products, that have this License Policy set.
+**Actions**
 
-The `Copy` button creates a new License Policy with the same rules, which can be adjusted for a specific Product.
+* The `Export` button opens a sub-menu to exports the License Policy either as a JSON or a YAML file.	
+* With the `Apply` button the rules of the License Policy are applied to all products, that have this License Policy set.
+* The `Copy` button creates a new License Policy with the same rules, which can be adjusted for a specific Product.
 
 ![License policy](../assets/images/screenshot_license_policy.png)
 
@@ -70,7 +72,7 @@ A `License Policy` has a list of items, which are the rules of the policy. It ca
 * a rule for a **License Group** or
 * a rule for a specific **SPDX license**, 
 * a rule for a **license expression** or
-* a rule for an **unkown license** string, e.g. a license that is not in the SPDX list or a license expression.
+* a rule for an **non-spdx license** string, e.g. a license that is not in the SPDX list or a license expression.
 
 ![License policy item](../assets/images/screenshot_license_policy_item.png){ width="60%" style="display: block; margin: 0 auto" }
 

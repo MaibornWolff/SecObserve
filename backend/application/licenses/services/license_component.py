@@ -34,8 +34,8 @@ def _get_string_to_hash(
         hash_string += license_component.dependencies
     if license_component.license:
         hash_string += license_component.license.spdx_id
-    if license_component.unknown_license:
-        hash_string += license_component.unknown_license
+    if license_component.non_spdx_license:
+        hash_string += license_component.non_spdx_license
 
     return hash_string
 
@@ -75,7 +75,7 @@ def process_license_components(
         )
         if existing_component:
             license_before = existing_component.license
-            unknown_license_before = existing_component.unknown_license
+            non_spdx_license_before = existing_component.non_spdx_license
             evaluation_result_before = existing_component.evaluation_result
             existing_component.name = unsaved_component.name
             existing_component.version = unsaved_component.version
@@ -86,7 +86,7 @@ def process_license_components(
             existing_component.license_name = unsaved_component.license_name
             existing_component.license = unsaved_component.license
             existing_component.license_expression = unsaved_component.license_expression
-            existing_component.unknown_license = unsaved_component.unknown_license
+            existing_component.non_spdx_license = unsaved_component.non_spdx_license
             apply_license_policy_to_component(
                 existing_component,
                 license_evaluation_results,
@@ -95,7 +95,7 @@ def process_license_components(
             existing_component.import_last_seen = timezone.now()
             if (
                 license_before != existing_component.license
-                or unknown_license_before != existing_component.unknown_license
+                or non_spdx_license_before != existing_component.non_spdx_license
                 or evaluation_result_before != existing_component.evaluation_result
             ):
                 existing_component.last_change = timezone.now()
@@ -200,7 +200,7 @@ def _prepare_name_version(component: License_Component) -> None:
 
 def _prepare_license(component: License_Component) -> None:
     component.license_expression = ""
-    component.unknown_license = ""
+    component.non_spdx_license = ""
 
     component.license_name = component.unsaved_license
 
@@ -216,9 +216,9 @@ def _prepare_license(component: License_Component) -> None:
                     component.license_expression = expression_info.normalized_expression
                     component.license_name = component.license_expression
                 else:
-                    component.unknown_license = component.unsaved_license
+                    component.non_spdx_license = component.unsaved_license
             except Exception:
-                component.unknown_license = component.unsaved_license
+                component.non_spdx_license = component.unsaved_license
 
     if not component.license_name:
         component.license_name = "No license information"

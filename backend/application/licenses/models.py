@@ -123,7 +123,7 @@ class License_Component(Model):
         null=True,
     )
     license_expression = CharField(max_length=255, blank=True)
-    unknown_license = CharField(max_length=255, blank=True)
+    non_spdx_license = CharField(max_length=255, blank=True)
     evaluation_result = CharField(
         max_length=16,
         choices=License_Policy_Evaluation_Result.RESULT_CHOICES,
@@ -212,7 +212,7 @@ class License_Policy_Item(Model):
         null=True,
     )
     license_expression = CharField(max_length=255, blank=True)
-    unknown_license = CharField(max_length=255, blank=True)
+    non_spdx_license = CharField(max_length=255, blank=True)
     evaluation_result = CharField(
         max_length=16, choices=License_Policy_Evaluation_Result.RESULT_CHOICES
     )
