@@ -10,7 +10,7 @@ class Component:
     purl: str
     cpe: str
     json: dict[str, str]
-    unknown_license: str
+    unsaved_license: str
 
 
 @dataclass
