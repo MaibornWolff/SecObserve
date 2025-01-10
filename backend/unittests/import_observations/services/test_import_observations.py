@@ -576,6 +576,24 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 ),
             )
 
+            self.assertEqual(
+                license_components[24].name_version, "email-validator:2.1.1"
+            )
+            self.assertEqual(
+                license_components[24].license_expression,
+                "GPL-2.0-or-later WITH Bison-exception-2.2",
+            )
+            self.assertEqual(
+                license_components[24].evaluation_result,
+                License_Policy_Evaluation_Result.RESULT_UNKNOWN,
+            )
+            self.assertEqual(
+                license_components[24].numerical_evaluation_result,
+                License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
+                    License_Policy_Evaluation_Result.RESULT_UNKNOWN,
+                ),
+            )
+
         # --- Second import with license policy ---
 
         product = Product.objects.get(id=1)
@@ -586,9 +604,9 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             license_policy=License_Policy.objects.get(name="Standard"),
             license_group=None,
             license=None,
-            license_expression="(Apache-2.0 OR BSD-3-Clause) AND MIT",
+            license_expression="GPL-2.0-or-later WITH Bison-exception-2.2",
             non_spdx_license="",
-            evaluation_result=License_Policy_Evaluation_Result.RESULT_ALLOWED,
+            evaluation_result=License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
         )
         license_policy_item.save()
 
@@ -717,6 +735,24 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 ),
             )
 
+            self.assertEqual(
+                license_components[24].name_version, "email-validator:2.1.1"
+            )
+            self.assertEqual(
+                license_components[24].license_expression,
+                "GPL-2.0-or-later WITH Bison-exception-2.2",
+            )
+            self.assertEqual(
+                license_components[24].evaluation_result,
+                License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
+            )
+            self.assertEqual(
+                license_components[24].numerical_evaluation_result,
+                License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
+                    License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
+                ),
+            )
+
         # --- Third import with some changes ---
 
         license_policy = License_Policy.objects.get(name="Standard")
@@ -735,6 +771,16 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             license_policy=License_Policy.objects.get(name="Standard"),
             license_group=None,
             license=License.objects.get(spdx_id="MIT"),
+            non_spdx_license="",
+            evaluation_result=License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
+        )
+        license_policy_item.save()
+
+        license_policy_item.save()
+        license_policy_item = License_Policy_Item(
+            license_policy=License_Policy.objects.get(name="Standard"),
+            license_group=None,
+            license=License.objects.get(spdx_id="Apache-2.0"),
             non_spdx_license="",
             evaluation_result=License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
         )
@@ -856,10 +902,28 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             )
             self.assertEqual(
                 license_components[9].evaluation_result,
-                License_Policy_Evaluation_Result.RESULT_UNKNOWN,
+                License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
             )
             self.assertEqual(
                 license_components[9].numerical_evaluation_result,
+                License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
+                    License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
+                ),
+            )
+
+            self.assertEqual(
+                license_components[22].name_version, "email-validator:2.1.1"
+            )
+            self.assertEqual(
+                license_components[22].license_expression,
+                "GPL-3.0-or-later WITH Bison-exception-2.2",
+            )
+            self.assertEqual(
+                license_components[22].evaluation_result,
+                License_Policy_Evaluation_Result.RESULT_UNKNOWN,
+            )
+            self.assertEqual(
+                license_components[22].numerical_evaluation_result,
                 License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
                     License_Policy_Evaluation_Result.RESULT_UNKNOWN,
                 ),

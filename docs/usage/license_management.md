@@ -42,7 +42,7 @@ If no License Policy is set, all licenses are evaluated as `Unknown`. If a Licen
 * **Unknown:** The license is not included in the License Policy.
 * **Ignored:** The component is not relevant for the license management.
 
-License expressions are evaluated by their included licenses, if the operators are either all `AND` or all `OR`. If the operators are mixed or other operators are used, the expression is evaluated as `Unknown`, if there is no explicit rule for this license expression.
+License expressions are evaluated by their included licenses, if the operators are all either `AND` or `OR`. If other operators are used, e.g. `WITH`, the expression is evaluated as `Unknown`, if there is no explicit rule for this license expression.
 
 A good strategy is to start with an existing License Policy and when needed make a copy of it and adjust the rules to the needs of the Product.
 

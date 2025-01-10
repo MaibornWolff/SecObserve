@@ -1013,7 +1013,7 @@
             ],
             "licenses": [
                 {
-                    "expression": "The Unlicense (Unlicense)"
+                    "expression": "(GPL-2.0-or-later WITH Bison-exception-2.2)"
                 }
             ],
             "purl": "pkg:pypi/email-validator@2.1.1",
