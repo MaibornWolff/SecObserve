@@ -43,6 +43,7 @@ class Command(BaseCommand):
             ):
                 _register_parser(module_name)
         except Exception as exc:
+            print(exc)
             raise CommandError(
                 format_log_message(message=f"Failed to load {module_name}")
             ) from exc

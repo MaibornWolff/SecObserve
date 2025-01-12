@@ -1,6 +1,5 @@
-from json import dumps, load
-
-from django.core.files.base import File
+from json import dumps
+from typing import Any
 
 from application.core.models import Observation
 from application.core.types import Severity
@@ -8,7 +7,7 @@ from application.import_observations.parsers.base_parser import (
     BaseFileParser,
     BaseParser,
 )
-from application.import_observations.types import Parser_Type
+from application.import_observations.types import Parser_Filetype, Parser_Type
 
 SEVERITIES = {
     "0": Severity.SEVERITY_NONE,
@@ -28,16 +27,14 @@ class ZAPParser(BaseParser, BaseFileParser):
     def get_type(cls) -> str:
         return Parser_Type.TYPE_DAST
 
-    def check_format(self, file: File) -> tuple[bool, list[str], dict]:
-        try:
-            data = load(file)
-        except Exception:
-            return False, ["File is not valid JSON"], {}
+    @classmethod
+    def get_filetype(cls) -> str:
+        return Parser_Filetype.FILETYPE_JSON
 
-        if "ZAP" not in data.get("@programName", ""):
-            return False, ["File is not a ZAP format"], {}
-
-        return True, [], data
+    def check_format(self, data: Any) -> bool:
+        if isinstance(data, dict) and "ZAP" in data.get("@programName", ""):
+            return True
+        return False
 
     def get_observations(self, data: dict) -> list[Observation]:
         observations = []

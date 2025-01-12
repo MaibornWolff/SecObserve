@@ -1,87 +1,30 @@
 from os import path
+from unittest import TestCase
 
 from application.core.types import Severity
 from application.import_observations.parsers.ocsf.parser import OCSFParser
-from unittests.base_test_case import BaseTestCase
+from application.import_observations.services.parser_detector import detect_parser
 
 
-class TestOCSFParser(BaseTestCase):
-    def test_invalid_format_json(self):
-        with open(path.dirname(__file__) + "/files/invalid_format.json") as testfile:
-            parser = OCSFParser()
-
-            check, messages, data = parser.check_format(testfile)
-
-            self.assertFalse(check)
-            self.assertEqual("File is not valid JSON", messages[0])
-            self.assertFalse(data)
-
-    def test_invalid_not_a_list(self):
-        with open(
-            path.dirname(__file__) + "/files/invalid_not_a_list.json"
-        ) as testfile:
-            parser = OCSFParser()
-            check, messages, data = parser.check_format(testfile)
-
-            self.assertFalse(check)
-            self.assertIn("File is not a OCSF format, data is not a list", messages[0])
-            self.assertFalse(data)
-
-    def test_invalid_no_finding_info(self):
-        with open(
-            path.dirname(__file__) + "/files/invalid_no_finding_info.json"
-        ) as testfile:
-            parser = OCSFParser()
-            check, messages, data = parser.check_format(testfile)
-
-            self.assertFalse(check)
-            self.assertIn(
-                "File is not a OCSF format, first element doesn't have a finding_info entry",
-                messages[0],
-            )
-            self.assertFalse(data)
-
-    def test_no_observation(self):
-        with open(path.dirname(__file__) + "/files/no_observation.json") as testfile:
-            parser = OCSFParser()
-            check, messages, data = parser.check_format(testfile)
-            observations = parser.get_observations(data)
-
-            self.assertTrue(check)
-            self.assertEqual(0, len(messages))
-            self.assertEqual(0, len(observations))
-
-    def test_unsupported_tool_version(self):
-        with open(path.dirname(__file__) + "/files/prowler_4_3_5.json") as testfile:
-            parser = OCSFParser()
-            check, messages, data = parser.check_format(testfile)
-
-            self.assertFalse(check)
-            self.assertIn(
-                "Prowler is only supported with version 4.5.0 and above", messages[0]
-            )
-            self.assertFalse(data)
-
+class TestOCSFParser(TestCase):
     def test_other_finding(self):
         with open(path.dirname(__file__) + "/files/other_finding.json") as testfile:
-            parser = OCSFParser()
-            check, messages, data = parser.check_format(testfile)
-            observations = parser.get_observations(data)
+            parser, parser_instance, data = detect_parser(testfile)
+            self.assertEqual("OCSF (Open Cybersecurity Schema Framework)", parser.name)
+            self.assertTrue(isinstance(parser_instance, OCSFParser))
 
-            self.assertTrue(check)
-            self.assertEqual(0, len(messages))
+            observations = parser_instance.get_observations(data)
             self.assertEqual(0, len(observations))
 
     def test_prowler_multiple_findings(self):
         with open(
             path.dirname(__file__) + "/files/prowler_multiple_findings.json"
         ) as testfile:
-            parser = OCSFParser()
-            check, messages, data = parser.check_format(testfile)
-            observations = parser.get_observations(data)
+            parser, parser_instance, data = detect_parser(testfile)
+            self.assertEqual("OCSF (Open Cybersecurity Schema Framework)", parser.name)
+            self.assertTrue(isinstance(parser_instance, OCSFParser))
 
-            self.assertTrue(check)
-            self.assertEqual(0, len(messages))
+            observations = parser_instance.get_observations(data)
             self.assertEqual(2, len(observations))
 
             observation = observations[0]

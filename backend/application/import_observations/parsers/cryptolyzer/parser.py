@@ -1,7 +1,5 @@
-from json import dumps, load
-from typing import Optional
-
-from django.core.files.base import File
+from json import dumps
+from typing import Any, Optional
 
 from application.core.models import Observation
 from application.core.types import Severity
@@ -9,7 +7,7 @@ from application.import_observations.parsers.base_parser import (
     BaseFileParser,
     BaseParser,
 )
-from application.import_observations.types import Parser_Type
+from application.import_observations.types import Parser_Filetype, Parser_Type
 
 # Recommended cipher suites, curves and signature algorithms according to German BSI as of 2023
 TLS12_RECOMMENDED_CIPHERS = [
@@ -121,24 +119,23 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
         return "CryptoLyzer"
 
     @classmethod
+    def get_filetype(cls) -> str:
+        return Parser_Filetype.FILETYPE_JSON
+
+    @classmethod
     def get_type(cls) -> str:
         return Parser_Type.TYPE_DAST  # pylint: disable=duplicate-code
 
-    def check_format(self, file: File) -> tuple[bool, list[str], dict]:
-        try:
-            data = load(file)
-        except Exception:
-            return False, ["File is not valid JSON"], {}
-
+    def check_format(self, data: Any) -> bool:
         if (
-            not data.get("target")
-            or not data.get("versions")
-            or not data.get("ciphers")
-            or not data.get("curves")
+            isinstance(data, dict)
+            and data.get("target")
+            and data.get("versions")
+            and data.get("ciphers")
+            and data.get("curves")
         ):
-            return False, ["File is not a valid CryptoLyzer format"], {}
-
-        return True, [], data
+            return True
+        return False
 
     def get_observations(self, data: dict) -> list[Observation]:
         observations = []

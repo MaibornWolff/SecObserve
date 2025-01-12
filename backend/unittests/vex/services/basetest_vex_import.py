@@ -31,7 +31,6 @@ class BaseTestVEXImport(TestCase):
             file_upload_parameter = FileUploadParameters(
                 product=product,
                 branch=None,
-                parser=Parser.objects.get(name="CycloneDX"),
                 file=testfile,
                 service="",
                 docker_image_name_tag="",

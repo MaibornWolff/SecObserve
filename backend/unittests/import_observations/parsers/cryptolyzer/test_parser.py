@@ -3,49 +3,20 @@ from unittest import TestCase
 
 from application.core.types import Severity
 from application.import_observations.parsers.cryptolyzer.parser import CryptoLyzerParser
+from application.import_observations.services.parser_detector import detect_parser
 
 
 class TestCryptolyzeParser(TestCase):
-    def test_no_json(self):
-        with open(path.dirname(__file__) + "/test_parser.py") as testfile:
-            parser = CryptoLyzerParser()
-            check, messages, data = parser.check_format(testfile)
-
-            self.assertFalse(check)
-            self.assertEqual(1, len(messages))
-            self.assertEqual("File is not valid JSON", messages[0])
-            self.assertFalse(data)
-
-    def test_wrong_format(self):
-        with open(path.dirname(__file__) + "/files/wrong_format.json") as testfile:
-            parser = CryptoLyzerParser()
-            check, messages, data = parser.check_format(testfile)
-
-            self.assertFalse(check)
-            self.assertEqual(1, len(messages))
-            self.assertEqual("File is not a valid CryptoLyzer format", messages[0])
-            self.assertFalse(data)
-
-    def test_no_observations(self):
-        with open(path.dirname(__file__) + "/files/no_observations.json") as testfile:
-            parser = CryptoLyzerParser()
-            check, messages, data = parser.check_format(testfile)
-            observations = parser.get_observations(data)
-
-            self.assertTrue(check)
-            self.assertEqual(0, len(messages))
-            self.assertEqual(0, len(observations))
-
     def test_multiple_observations(self):
         with open(
             path.dirname(__file__) + "/files/multiple_observations.json"
         ) as testfile:
             parser = CryptoLyzerParser()
-            check, messages, data = parser.check_format(testfile)
-            observations = parser.get_observations(data)
+            parser, parser_instance, data = detect_parser(testfile)
+            self.assertEqual("CryptoLyzer", parser.name)
+            self.assertTrue(isinstance(parser_instance, CryptoLyzerParser))
 
-            self.assertTrue(check)
-            self.assertEqual(0, len(messages))
+            observations = parser_instance.get_observations(data)
             self.assertEqual(4, len(observations))
 
             observation = observations[0]
@@ -127,12 +98,11 @@ class TestCryptolyzeParser(TestCase):
 
     def test_weak_tls(self):
         with open(path.dirname(__file__) + "/files/tls10.json") as testfile:
-            parser = CryptoLyzerParser()
-            check, messages, data = parser.check_format(testfile)
-            observations = parser.get_observations(data)
+            parser, parser_instance, data = detect_parser(testfile)
+            self.assertEqual("CryptoLyzer", parser.name)
+            self.assertTrue(isinstance(parser_instance, CryptoLyzerParser))
 
-            self.assertTrue(check)
-            self.assertEqual(0, len(messages))
+            observations = parser_instance.get_observations(data)
             self.assertEqual(3, len(observations))
 
             observation = observations[0]

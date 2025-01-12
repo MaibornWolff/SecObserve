@@ -1,7 +1,6 @@
 import logging
-from json import load
+from typing import Any
 
-from django.core.files.base import File
 from py_ocsf_models.events.findings.detection_finding import (
     ClassUID,
     DetectionFinding,
@@ -18,7 +17,7 @@ from application.import_observations.parsers.base_parser import (
     BaseParser,
 )
 from application.import_observations.parsers.ocsf.types import Origin
-from application.import_observations.types import Parser_Type
+from application.import_observations.types import Parser_Filetype, Parser_Type
 
 logger = logging.getLogger("secobserve.import_observations.parsers.ocsf")
 
@@ -29,52 +28,32 @@ class OCSFParser(BaseParser, BaseFileParser):
         return "OCSF (Open Cybersecurity Schema Framework)"
 
     @classmethod
+    def get_filetype(cls) -> str:
+        return Parser_Filetype.FILETYPE_JSON
+
+    @classmethod
     def get_type(cls) -> str:
         return Parser_Type.TYPE_INFRASTRUCTURE
 
-    def check_format(self, file: File) -> tuple[bool, list[str], dict | list]:
-        try:
-            data = load(file)
-        except Exception:
-            return False, ["File is not valid JSON"], {}
-
-        if not isinstance(data, list):
-            return False, ["File is not a OCSF format, data is not a list"], {}
-
-        if len(data) >= 1:
-            first_element = data[0]
-            if not isinstance(first_element, dict):
-                return (
-                    False,
-                    ["File is not a OCSF format, element is not a dictionary"],
-                    {},
-                )
-            if not first_element.get("finding_info"):
-                return (
-                    False,
-                    [
-                        "File is not a OCSF format, first element doesn't have a finding_info entry"
-                    ],
-                    {},
-                )
-
-            tool_name = (
-                first_element.get("metadata", {}).get("product", {}).get("name", "")
-            )
+    def check_format(self, data: Any) -> bool:
+        if (
+            isinstance(data, list)
+            and len(data) >= 1
+            and isinstance(data[0], dict)
+            and data[0].get("class_uid")
+        ):
+            tool_name = data[0].get("metadata", {}).get("product", {}).get("name", "")
             tool_version = (
-                first_element.get("metadata", {}).get("product", {}).get("version", "")
+                data[0].get("metadata", {}).get("product", {}).get("version", "")
             )
-            if tool_name == "Prowler":
-                if not tool_version or Version.parse(tool_version) < Version.parse(
-                    "4.5.0"
-                ):
-                    return (
-                        False,
-                        ["Prowler is only supported with version 4.5.0 and above"],
-                        {},
-                    )
+            if tool_name == "Prowler" and (
+                not tool_version or Version.parse(tool_version) < Version.parse("4.5.0")
+            ):
+                return False
 
-        return True, [], data
+            return True
+
+        return False
 
     def get_observations(self, data: list) -> list[Observation]:
         observations = []

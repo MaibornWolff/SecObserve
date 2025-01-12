@@ -1,7 +1,5 @@
-from json import dumps, load
+from json import dumps
 from typing import Any, Optional
-
-from django.core.files.base import File
 
 from application.core.models import Observation
 from application.core.types import Severity
@@ -13,7 +11,7 @@ from application.import_observations.parsers.cyclone_dx.dependencies import (
     get_component_dependencies,
 )
 from application.import_observations.parsers.cyclone_dx.types import Component, Metadata
-from application.import_observations.types import Parser_Type
+from application.import_observations.types import Parser_Filetype, Parser_Type
 from application.licenses.models import License_Component
 
 
@@ -27,20 +25,17 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         return "CycloneDX"
 
     @classmethod
+    def get_filetype(cls) -> str:
+        return Parser_Filetype.FILETYPE_JSON
+
+    @classmethod
     def get_type(cls) -> str:
         return Parser_Type.TYPE_SCA
 
-    def check_format(self, file: File) -> tuple[bool, list[str], dict]:
-        try:
-            data = load(file)
-        except Exception:
-            return False, ["File is not valid JSON"], {}
-
-        bom_format = data.get("bomFormat")
-        if bom_format != "CycloneDX":
-            return False, ["File is not a CycloneDX SBOM"], {}
-
-        return True, [], data
+    def check_format(self, data: Any) -> bool:
+        if isinstance(data, dict) and data.get("bomFormat") == "CycloneDX":
+            return True
+        return False
 
     def get_observations(self, data: dict) -> list[Observation]:
         self.components = self._get_components(data)

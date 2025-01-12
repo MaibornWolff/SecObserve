@@ -1,7 +1,5 @@
 from typing import Any, Optional
 
-from django.core.files.base import File
-
 from application.core.models import Observation
 from application.import_observations.models import Api_Configuration
 from application.licenses.models import License_Component
@@ -43,5 +41,9 @@ class BaseAPIParser:
 
 
 class BaseFileParser:
-    def check_format(self, file: File) -> tuple[bool, list[str], Any]:
+    @classmethod
+    def get_filetype(cls) -> str:
+        raise NotImplementedError("check_format() must be overridden")
+
+    def check_format(self, data: Any) -> bool:
         raise NotImplementedError("check_format() must be overridden")
