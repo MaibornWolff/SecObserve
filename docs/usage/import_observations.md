@@ -14,7 +14,7 @@ Alternatively observations can be imported via the user interface. When showing 
 
 ![Upload of files](../assets/images/screenshot_import_2.png){ width="50%" style="display: block; margin: 0 auto" }
 
-A file needs to be selected. The parser to interpret the content of the file will be detected automatically. Optional are attributes for the branch / version, the origin as service, docker image, endpoint URL and Kubernetes cluster.
+A file needs to be selected. The parser to interpret the content of the file will be detected automatically. Optional are attributes for the branch / version, the origin as service, docker image, endpoint URL and Kubernetes cluster. If `Supress licenses` is checked, no licenses will be imported, only observations.
 
 #### API import
 
