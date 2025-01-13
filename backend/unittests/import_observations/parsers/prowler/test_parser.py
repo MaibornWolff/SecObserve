@@ -3,74 +3,17 @@ from unittest import TestCase
 
 from application.core.types import Severity
 from application.import_observations.parsers.prowler.parser import ProwlerParser
+from application.import_observations.services.parser_detector import detect_parser
 
 
 class TestProwlerParser(TestCase):
-    def test_no_json(self):
-        with open(path.dirname(__file__) + "/test_parser.py") as testfile:
-            parser = ProwlerParser()
-            check, messages, data = parser.check_format(testfile)
-
-            self.assertFalse(check)
-            self.assertEqual(1, len(messages))
-            self.assertEqual("File is not valid JSON", messages[0])
-            self.assertFalse(data)
-
-    def test_wrong_format_1(self):
-        with open(path.dirname(__file__) + "/files/wrong_format_1.json") as testfile:
-            parser = ProwlerParser()
-            check, messages, data = parser.check_format(testfile)
-
-            self.assertFalse(check)
-            self.assertEqual(1, len(messages))
-            self.assertEqual(
-                "File is not a Prowler format, data is not a list", messages[0]
-            )
-            self.assertFalse(data)
-
-    def test_wrong_format_2(self):
-        with open(path.dirname(__file__) + "/files/wrong_format_2.json") as testfile:
-            parser = ProwlerParser()
-            check, messages, data = parser.check_format(testfile)
-
-            self.assertFalse(check)
-            self.assertEqual(1, len(messages))
-            self.assertEqual(
-                "File is not a Prowler format, element is not a dictionary", messages[0]
-            )
-            self.assertFalse(data)
-
-    def test_wrong_format_3(self):
-        with open(path.dirname(__file__) + "/files/wrong_format_3.json") as testfile:
-            parser = ProwlerParser()
-            check, messages, data = parser.check_format(testfile)
-
-            self.assertFalse(check)
-            self.assertEqual(1, len(messages))
-            self.assertEqual(
-                "Data is not a Prowler format, element doesn't have a StatusExtended or Status entry",
-                messages[0],
-            )
-            self.assertFalse(data)
-
-    def test_no_observations(self):
-        with open(path.dirname(__file__) + "/files/no_observations.json") as testfile:
-            parser = ProwlerParser()
-            check, messages, data = parser.check_format(testfile)
-            observations = parser.get_observations(data)
-
-            self.assertTrue(check)
-            self.assertEqual(0, len(messages))
-            self.assertEqual(0, len(observations))
-
     def test_aws(self):
         with open(path.dirname(__file__) + "/files/prowler_aws.json") as testfile:
-            parser = ProwlerParser()
-            check, messages, data = parser.check_format(testfile)
-            observations = parser.get_observations(data)
+            parser, parser_instance, data = detect_parser(testfile)
+            self.assertEqual("Prowler 3", parser.name)
+            self.assertTrue(isinstance(parser_instance, ProwlerParser))
 
-            self.assertTrue(check)
-            self.assertEqual(0, len(messages))
+            observations = parser_instance.get_observations(data)
             self.assertEqual(1, len(observations))
 
             observation = observations[0]
@@ -110,12 +53,11 @@ Auto Minor Version Upgrade is a feature that you can enable to have your databas
 
     def test_azure(self):
         with open(path.dirname(__file__) + "/files/prowler_azure.json") as testfile:
-            parser = ProwlerParser()
-            check, messages, data = parser.check_format(testfile)
-            observations = parser.get_observations(data)
+            parser, parser_instance, data = detect_parser(testfile)
+            self.assertEqual("Prowler 3", parser.name)
+            self.assertTrue(isinstance(parser_instance, ProwlerParser))
 
-            self.assertTrue(check)
-            self.assertEqual(0, len(messages))
+            observations = parser_instance.get_observations(data)
             self.assertEqual(2, len(observations))
 
             observation = observations[0]

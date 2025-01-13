@@ -1,13 +1,11 @@
-from json import load
-
-from django.core.files.base import File
+from typing import Any
 
 from application.core.models import Observation
 from application.import_observations.parsers.base_parser import (
     BaseFileParser,
     BaseParser,
 )
-from application.import_observations.types import Parser_Type
+from application.import_observations.types import Parser_Filetype, Parser_Type
 
 
 class SecObserveParser(BaseParser, BaseFileParser):
@@ -16,19 +14,17 @@ class SecObserveParser(BaseParser, BaseFileParser):
         return "SecObserve"
 
     @classmethod
+    def get_filetype(cls) -> str:
+        return Parser_Filetype.FILETYPE_JSON
+
+    @classmethod
     def get_type(cls) -> str:
         return Parser_Type.TYPE_OTHER
 
-    def check_format(self, file: File) -> tuple[bool, list[str], dict]:
-        try:
-            data = load(file)
-        except Exception:
-            return False, ["File is not valid JSON"], {}
-
-        if not data.get("format") == "SecObserve":
-            return False, ["File is not a SecObserve format"], {}
-
-        return True, [], data
+    def check_format(self, data: Any) -> bool:
+        if isinstance(data, dict) and data.get("format") == "SecObserve":
+            return True
+        return False
 
     def get_observations(self, data: dict) -> list[Observation]:
         observations = []

@@ -3,37 +3,17 @@ from unittest import TestCase
 
 from application.core.types import Severity
 from application.import_observations.parsers.cyclone_dx.parser import CycloneDXParser
+from application.import_observations.services.parser_detector import detect_parser
 
 
 class TestCycloneDXParser(TestCase):
-    def test_no_json(self):
-        with open(path.dirname(__file__) + "/test_parser.py") as testfile:
-            parser = CycloneDXParser()
-            check, messages, data = parser.check_format(testfile)
-
-            self.assertFalse(check)
-            self.assertEqual(1, len(messages))
-            self.assertEqual("File is not valid JSON", messages[0])
-            self.assertFalse(data)
-
-    def test_wrong_format(self):
-        with open(path.dirname(__file__) + "/files/wrong_format.json") as testfile:
-            parser = CycloneDXParser()
-            check, messages, data = parser.check_format(testfile)
-
-            self.assertFalse(check)
-            self.assertEqual(1, len(messages))
-            self.assertEqual("File is not a CycloneDX SBOM", messages[0])
-            self.assertFalse(data)
-
     def test_grype(self):
         with open(path.dirname(__file__) + "/files/grype.json") as testfile:
-            parser = CycloneDXParser()
-            check, messages, data = parser.check_format(testfile)
-            observations = parser.get_observations(data)
+            parser, parser_instance, data = detect_parser(testfile)
+            self.assertEqual("CycloneDX", parser.name)
+            self.assertTrue(isinstance(parser_instance, CycloneDXParser))
 
-            self.assertTrue(check)
-            self.assertEqual(0, len(messages))
+            observations = parser_instance.get_observations(data)
             self.assertEqual(8, len(observations))
 
             observation = observations[0]
@@ -131,12 +111,11 @@ class TestCycloneDXParser(TestCase):
 
     def test_grype_component_version(self):
         with open(path.dirname(__file__) + "/files/grype_2.json") as testfile:
-            parser = CycloneDXParser()
-            check, messages, data = parser.check_format(testfile)
-            observations = parser.get_observations(data)
+            parser, parser_instance, data = detect_parser(testfile)
+            self.assertEqual("CycloneDX", parser.name)
+            self.assertTrue(isinstance(parser_instance, CycloneDXParser))
 
-            self.assertTrue(check)
-            self.assertEqual(0, len(messages))
+            observations = parser_instance.get_observations(data)
             self.assertEqual(1, len(observations))
 
             observation = observations[0]
@@ -150,12 +129,11 @@ class TestCycloneDXParser(TestCase):
 
     def test_grype_tools_components(self):
         with open(path.dirname(__file__) + "/files/grype_3.json") as testfile:
-            parser = CycloneDXParser()
-            check, messages, data = parser.check_format(testfile)
-            observations = parser.get_observations(data)
+            parser, parser_instance, data = detect_parser(testfile)
+            self.assertEqual("CycloneDX", parser.name)
+            self.assertTrue(isinstance(parser_instance, CycloneDXParser))
 
-            self.assertTrue(check)
-            self.assertEqual(0, len(messages))
+            observations = parser_instance.get_observations(data)
             self.assertEqual(1, len(observations))
 
             observation = observations[0]
@@ -171,12 +149,11 @@ class TestCycloneDXParser(TestCase):
         self.maxDiff = None
 
         with open(path.dirname(__file__) + "/files/trivy.json") as testfile:
-            parser = CycloneDXParser()
-            check, messages, data = parser.check_format(testfile)
-            observations = parser.get_observations(data)
+            parser, parser_instance, data = detect_parser(testfile)
+            self.assertEqual("CycloneDX", parser.name)
+            self.assertTrue(isinstance(parser_instance, CycloneDXParser))
 
-            self.assertTrue(check)
-            self.assertEqual(0, len(messages))
+            observations = parser_instance.get_observations(data)
             self.assertEqual(2, len(observations))
 
             observation = observations[0]

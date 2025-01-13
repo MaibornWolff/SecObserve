@@ -2,55 +2,33 @@ from os import path
 from unittest import TestCase
 
 from application.import_observations.parsers.spdx.parser import SPDXParser
+from application.import_observations.services.parser_detector import detect_parser
 
 
 class TestSPDXParser(TestCase):
-    def test_no_json(self):
-        with open(path.dirname(__file__) + "/test_parser.py") as testfile:
-            parser = SPDXParser()
-            check, messages, data = parser.check_format(testfile)
-
-            self.assertFalse(check)
-            self.assertEqual(1, len(messages))
-            self.assertEqual("File is not valid JSON", messages[0])
-            self.assertFalse(data)
-
-    def test_wrong_format(self):
-        with open(path.dirname(__file__) + "/files/wrong_format.json") as testfile:
-            parser = SPDXParser()
-            check, messages, data = parser.check_format(testfile)
-
-            self.assertFalse(check)
-            self.assertEqual(1, len(messages))
-            self.assertEqual(
-                "Error while parsing document None: ['CreationInfo does not exist.']",
-                messages[0],
-            )
-            self.assertFalse(data)
-
     def test_no_observation(self):
         with open(path.dirname(__file__) + "/files/no_observation.json") as testfile:
-            parser = SPDXParser()
-            check, messages, data = parser.check_format(testfile)
-            observations = parser.get_observations(data)
-            license_components = parser.get_license_components(data)
+            parser, parser_instance, data = detect_parser(testfile)
+            self.assertEqual("SPDX", parser.name)
+            self.assertTrue(SPDXParser, isinstance(parser_instance, SPDXParser))
 
-            self.assertTrue(check)
-            self.assertEqual(0, len(messages))
+            observations = parser_instance.get_observations(data)
             self.assertEqual(0, len(observations))
+
+            license_components = parser_instance.get_license_components(data)
             self.assertEqual(0, len(license_components))
 
     def test_multiple_observations(self):
         with open(
             path.dirname(__file__) + "/files/multiple_observations.json"
         ) as testfile:
-            parser = SPDXParser()
-            check, messages, data = parser.check_format(testfile)
-            observations = parser.get_observations(data)
-            license_components = parser.get_license_components(data)
+            parser, parser_instance, data = detect_parser(testfile)
+            self.assertEqual("SPDX", parser.name)
+            self.assertTrue(SPDXParser, isinstance(parser_instance, SPDXParser))
 
-            self.assertTrue(check)
-            self.assertEqual(0, len(messages))
+            observations = parser_instance.get_observations(data)
+            license_components = parser_instance.get_license_components(data)
+
             self.assertEqual(0, len(observations))
             self.assertEqual(124, len(license_components))
 

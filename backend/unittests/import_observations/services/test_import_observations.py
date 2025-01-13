@@ -138,7 +138,6 @@ class TestImportObservations(BaseTestCase):
         file_upload_parameters = FileUploadParameters(
             product=Product.objects.get(id=1),
             branch=branch,
-            parser=Parser.objects.get(name="SARIF"),
             file=File(open("unittests/fixtures/data_1/bandit.sarif", "r")),
             service=service,
             docker_image_name_tag=docker_image_name_tag,
@@ -247,7 +246,6 @@ class TestImportObservations(BaseTestCase):
         file_upload_parameters = FileUploadParameters(
             product=Product.objects.get(id=1),
             branch=branch,
-            parser=Parser.objects.get(id=1),
             file=File(open("unittests/fixtures/data_2/bandit.sarif", "r")),
             service=service,
             docker_image_name_tag=docker_image_name_tag,
@@ -493,7 +491,6 @@ class TestImportObservations(BaseTestCase):
         file_upload_parameters = FileUploadParameters(
             product=Product.objects.get(id=1),
             branch=branch,
-            parser=Parser.objects.get(name="CycloneDX"),
             file=File(
                 open(
                     "unittests/import_observations/parsers/cyclone_dx/files/licenses_1.json",
@@ -613,7 +610,6 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
         file_upload_parameters = FileUploadParameters(
             product=product,
             branch=branch,
-            parser=Parser.objects.get(name="CycloneDX"),
             file=File(
                 open(
                     "unittests/import_observations/parsers/cyclone_dx/files/licenses_1.json",
@@ -789,7 +785,6 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
         file_upload_parameters = FileUploadParameters(
             product=product,
             branch=branch,
-            parser=Parser.objects.get(name="CycloneDX"),
             file=File(
                 open(
                     "unittests/import_observations/parsers/cyclone_dx/files/changed/licenses_1.json",
@@ -938,7 +933,6 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
         file_upload_parameters = FileUploadParameters(
             product=product,
             branch=branch,
-            parser=Parser.objects.get(name="CycloneDX"),
             file=File(
                 open(
                     "unittests/import_observations/parsers/cyclone_dx/files/changed/licenses_1.json",

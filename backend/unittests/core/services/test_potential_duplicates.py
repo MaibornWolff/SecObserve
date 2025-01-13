@@ -88,7 +88,6 @@ class TestSetPotentialDuplicate(BaseTestCase):
             file_upload_parameters = FileUploadParameters(
                 product=Product.objects.get(id=1),
                 branch=None,
-                parser=Parser.objects.get(name="CycloneDX"),
                 file=testfile,
                 service="",
                 docker_image_name_tag="",

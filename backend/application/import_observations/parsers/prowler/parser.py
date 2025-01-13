@@ -1,6 +1,5 @@
-from json import dumps, load
-
-from django.core.files.base import File
+from json import dumps
+from typing import Any
 
 from application.core.models import Observation
 from application.core.types import Severity
@@ -8,7 +7,7 @@ from application.import_observations.parsers.base_parser import (
     BaseFileParser,
     BaseParser,
 )
-from application.import_observations.types import Parser_Type
+from application.import_observations.types import Parser_Filetype, Parser_Type
 
 
 class ProwlerParser(BaseParser, BaseFileParser):
@@ -17,38 +16,23 @@ class ProwlerParser(BaseParser, BaseFileParser):
         return "Prowler 3"
 
     @classmethod
+    def get_filetype(cls) -> str:
+        return Parser_Filetype.FILETYPE_JSON
+
+    @classmethod
     def get_type(cls) -> str:
         return Parser_Type.TYPE_INFRASTRUCTURE
 
-    def check_format(self, file: File) -> tuple[bool, list[str], dict | list]:
-        try:
-            data = load(file)
-        except Exception:
-            return False, ["File is not valid JSON"], {}
-
-        if not isinstance(data, list):
-            return False, ["File is not a Prowler format, data is not a list"], {}
-
-        if len(data) >= 1:
-            first_element = data[0]
-            if not isinstance(first_element, dict):
-                return (
-                    False,
-                    ["File is not a Prowler format, element is not a dictionary"],
-                    {},
-                )
-            if not first_element.get("StatusExtended") or not first_element.get(
-                "Status"
-            ):
-                return (
-                    False,
-                    [
-                        "Data is not a Prowler format, element doesn't have a StatusExtended or Status entry"
-                    ],
-                    {},
-                )
-
-        return True, [], data
+    def check_format(self, data: Any) -> bool:
+        if (
+            isinstance(data, list)
+            and len(data) >= 1
+            and isinstance(data[0], dict)
+            and data[0].get("StatusExtended")
+            and data[0].get("Status")
+        ):
+            return True
+        return False
 
     def get_observations(self, data: list[dict]) -> list[Observation]:
         observations = []

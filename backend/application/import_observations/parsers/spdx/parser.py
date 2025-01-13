@@ -1,9 +1,8 @@
-from dataclasses import dataclass
-from json import dumps, load
+from json import dumps
 from typing import Any
 
-from django.core.files.base import File
-from spdx_tools.spdx.model import Document
+from rest_framework.exceptions import ValidationError
+from spdx_tools.spdx.model.document import Document
 from spdx_tools.spdx.model.relationship import RelationshipType
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.jsonlikedict.json_like_dict_parser import JsonLikeDictParser
@@ -13,14 +12,8 @@ from application.import_observations.parsers.base_parser import (
     BaseFileParser,
     BaseParser,
 )
-from application.import_observations.types import Parser_Type
+from application.import_observations.types import Parser_Filetype, Parser_Type
 from application.licenses.models import License_Component
-
-
-@dataclass
-class ImportedData:
-    data_json: dict
-    document: Document
 
 
 class SPDXParser(BaseParser, BaseFileParser):
@@ -29,34 +22,41 @@ class SPDXParser(BaseParser, BaseFileParser):
         return "SPDX"
 
     @classmethod
+    def get_filetype(cls) -> str:
+        return Parser_Filetype.FILETYPE_JSON
+
+    @classmethod
     def get_type(cls) -> str:
         return Parser_Type.TYPE_SCA
 
-    def check_format(self, file: File) -> tuple[bool, list[str], Any]:
-        try:
-            data = load(file)
-        except Exception:
-            return False, ["File is not valid JSON"], {}
+    def check_format(self, data: Any) -> bool:
+        if (
+            isinstance(data, dict)
+            and data.get("SPDXID")
+            and (data.get("SPDXVersion") or data.get("spdxVersion"))
+        ):
+            return True
+        return False
 
-        try:
-            document = JsonLikeDictParser().parse(data)
-        except SPDXParsingError as e:
-            return False, e.get_messages(), {}
-
-        imported_data = ImportedData(data, document)
-
-        return True, [], imported_data
-
-    def get_observations(self, data: ImportedData) -> list[Observation]:
+    def get_observations(self, data: dict) -> list[Observation]:
         return []
 
-    def get_license_components(self, data: ImportedData) -> list[License_Component]:
+    def get_license_components(self, data: dict) -> list[License_Component]:
+        try:
+            document: Document = JsonLikeDictParser().parse(data)
+        except SPDXParsingError as e:
+            raise ValidationError(  # pylint: disable=raise-missing-from
+                e.get_messages()
+            )
+            # The DjangoValidationError itself is not relevant and must not be re-raised
+
         observations = []
 
-        packages = self._create_package_dict(data.data_json)
-        relationships = self._create_relationship_dict(data.document, packages)
+        packages = self._create_package_dict(data)
+        relationships = self._create_relationship_dict(document, packages)
 
-        for package in data.document.packages:
+        for package in document.packages:  # pylint: disable=not-an-iterable
+            # I don't know why pylint is complaining about this, Document.packages is a list
             version = ""
             if package.version is not None:
                 version = str(package.version)

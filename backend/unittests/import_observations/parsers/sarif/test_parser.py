@@ -3,52 +3,17 @@ from unittest import TestCase
 
 from application.core.types import Severity
 from application.import_observations.parsers.sarif.parser import SARIFParser
+from application.import_observations.services.parser_detector import detect_parser
 
 
 class TestSarifParser(TestCase):
-    def test_no_json(self):
-        with open(path.dirname(__file__) + "/test_parser.py") as testfile:
-            parser = SARIFParser()
-            check, messages, data = parser.check_format(testfile)
-
-            self.assertFalse(check)
-            self.assertEqual(1, len(messages))
-            self.assertEqual("File is not valid JSON", messages[0])
-            self.assertFalse(data)
-
-    def test_wrong_format_1(self):
-        with open(path.dirname(__file__) + "/files/wrong_format_1.json") as testfile:
-            parser = SARIFParser()
-            check, messages, data = parser.check_format(testfile)
-
-            self.assertFalse(check)
-            self.assertEqual(1, len(messages))
-            self.assertEqual(
-                "File is not SARIF format, 'version' and/or '$schema' are missing",
-                messages[0],
-            )
-            self.assertFalse(data)
-
-    def test_wrong_format_2(self):
-        with open(path.dirname(__file__) + "/files/wrong_format_2.sarif") as testfile:
-            parser = SARIFParser()
-            check, messages, data = parser.check_format(testfile)
-
-            self.assertFalse(check)
-            self.assertEqual(1, len(messages))
-            self.assertEqual(
-                "File is not SARIF format, version is not 2.1.0", messages[0]
-            )
-            self.assertFalse(data)
-
     def test_checkov(self):
         with open(path.dirname(__file__) + "/files/checkov.sarif") as testfile:
-            parser = SARIFParser()
-            check, messages, data = parser.check_format(testfile)
-            observations = parser.get_observations(data)
+            parser, parser_instance, data = detect_parser(testfile)
+            self.assertEqual("SARIF", parser.name)
+            self.assertTrue(isinstance(parser_instance, SARIFParser))
 
-            self.assertTrue(check)
-            self.assertEqual(0, len(messages))
+            observations = parser_instance.get_observations(data)
             self.assertEqual(4, len(observations))
 
             observation = observations[0]
@@ -80,12 +45,11 @@ class TestSarifParser(TestCase):
 
     def test_eslint(self):
         with open(path.dirname(__file__) + "/files/eslint.sarif") as testfile:
-            parser = SARIFParser()
-            check, messages, data = parser.check_format(testfile)
-            observations = parser.get_observations(data)
+            parser, parser_instance, data = detect_parser(testfile)
+            self.assertEqual("SARIF", parser.name)
+            self.assertTrue(isinstance(parser_instance, SARIFParser))
 
-            self.assertTrue(check)
-            self.assertEqual(0, len(messages))
+            observations = parser_instance.get_observations(data)
             self.assertEqual(5, len(observations))
 
             observation = observations[0]
@@ -121,12 +85,11 @@ class TestSarifParser(TestCase):
 
     def test_bandit(self):
         with open(path.dirname(__file__) + "/files/bandit.sarif") as testfile:
-            parser = SARIFParser()
-            check, messages, data = parser.check_format(testfile)
-            observations = parser.get_observations(data)
+            parser, parser_instance, data = detect_parser(testfile)
+            self.assertEqual("SARIF", parser.name)
+            self.assertTrue(isinstance(parser_instance, SARIFParser))
 
-            self.assertTrue(check)
-            self.assertEqual(0, len(messages))
+            observations = parser_instance.get_observations(data)
             self.assertEqual(2, len(observations))
 
             observation = observations[0]
@@ -159,12 +122,11 @@ class TestSarifParser(TestCase):
 
     def test_kics(self):
         with open(path.dirname(__file__) + "/files/kics.sarif") as testfile:
-            parser = SARIFParser()
-            check, messages, data = parser.check_format(testfile)
-            observations = parser.get_observations(data)
+            parser, parser_instance, data = detect_parser(testfile)
+            self.assertEqual("SARIF", parser.name)
+            self.assertTrue(isinstance(parser_instance, SARIFParser))
 
-            self.assertTrue(check)
-            self.assertEqual(0, len(messages))
+            observations = parser_instance.get_observations(data)
             self.assertEqual(2, len(observations))
 
             observation = observations[0]
@@ -199,12 +161,11 @@ class TestSarifParser(TestCase):
 
     def test_trivy_config(self):
         with open(path.dirname(__file__) + "/files/trivy_config.sarif") as testfile:
-            parser = SARIFParser()
-            check, messages, data = parser.check_format(testfile)
-            observations = parser.get_observations(data)
+            parser, parser_instance, data = detect_parser(testfile)
+            self.assertEqual("SARIF", parser.name)
+            self.assertTrue(isinstance(parser_instance, SARIFParser))
 
-            self.assertTrue(check)
-            self.assertEqual(0, len(messages))
+            observations = parser_instance.get_observations(data)
             self.assertEqual(1, len(observations))
 
             observation = observations[0]
@@ -247,12 +208,11 @@ Set when the resource will be become inactive.
 
     def test_dependency_check(self):
         with open(path.dirname(__file__) + "/files/dependency-check.sarif") as testfile:
-            parser = SARIFParser()
-            check, messages, data = parser.check_format(testfile)
-            observations = parser.get_observations(data)
+            parser, parser_instance, data = detect_parser(testfile)
+            self.assertEqual("SARIF", parser.name)
+            self.assertTrue(isinstance(parser_instance, SARIFParser))
 
-            self.assertTrue(check)
-            self.assertEqual(0, len(messages))
+            observations = parser_instance.get_observations(data)
             self.assertEqual(3, len(observations))
 
             observation = observations[0]
@@ -283,12 +243,11 @@ Set when the resource will be become inactive.
 
     def test_semgrep(self):
         with open(path.dirname(__file__) + "/files/semgrep.sarif") as testfile:
-            parser = SARIFParser()
-            check, messages, data = parser.check_format(testfile)
-            observations = parser.get_observations(data)
+            parser, parser_instance, data = detect_parser(testfile)
+            self.assertEqual("SARIF", parser.name)
+            self.assertTrue(isinstance(parser_instance, SARIFParser))
 
-            self.assertTrue(check)
-            self.assertEqual(0, len(messages))
+            observations = parser_instance.get_observations(data)
             self.assertEqual(4, len(observations))
 
             observation = observations[0]
