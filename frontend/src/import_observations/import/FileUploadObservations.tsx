@@ -141,7 +141,8 @@ const FileUploadObservations = () => {
                 <DialogContent>
                     <SimpleForm onSubmit={observationUpdate} toolbar={<CustomToolbar />}>
                         <FileInput
-                            source="file" label="Scan report"
+                            source="file"
+                            label="Scan report"
                             accept={{ "application/octet-stream": [".csv, .json, .sarif"] }}
                             validate={validate_required}
                         >
