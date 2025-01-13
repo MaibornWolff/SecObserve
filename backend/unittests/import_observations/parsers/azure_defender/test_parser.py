@@ -1,6 +1,8 @@
 from os import path
 from unittest import TestCase
 
+from rest_framework.exceptions import ValidationError
+
 from application.core.types import Severity
 from application.import_observations.parsers.azure_defender.parser import (
     AzureDefenderParser,
@@ -9,6 +11,16 @@ from application.import_observations.services.parser_detector import detect_pars
 
 
 class TestAzureDefenderParser(TestCase):
+    def test_no_observations(self):
+        with open(path.dirname(__file__) + "/files/no_observations.csv") as testfile:
+            with self.assertRaises(ValidationError) as e:
+                _, _, _ = detect_parser(testfile)
+                self.fail("Expected ValidationError not raised")
+            self.assertEqual(
+                "[ErrorDetail(string='No suitable parser found', code='invalid')]",
+                str(e.exception),
+            )
+
     def test_defender(self):
         with open(
             path.dirname(__file__) + "/files/AzureSecurityCenterRecommendations.csv",

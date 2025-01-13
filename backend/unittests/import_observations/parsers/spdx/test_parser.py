@@ -6,6 +6,18 @@ from application.import_observations.services.parser_detector import detect_pars
 
 
 class TestSPDXParser(TestCase):
+    def test_no_observation(self):
+        with open(path.dirname(__file__) + "/files/no_observation.json") as testfile:
+            parser, parser_instance, data = detect_parser(testfile)
+            self.assertEqual("SPDX", parser.name)
+            self.assertTrue(SPDXParser, isinstance(parser_instance, SPDXParser))
+
+            observations = parser_instance.get_observations(data)
+            self.assertEqual(0, len(observations))
+
+            license_components = parser_instance.get_license_components(data)
+            self.assertEqual(0, len(license_components))
+
     def test_multiple_observations(self):
         with open(
             path.dirname(__file__) + "/files/multiple_observations.json"

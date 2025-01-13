@@ -7,6 +7,15 @@ from application.import_observations.services.parser_detector import detect_pars
 
 
 class TestCryptolyzeParser(TestCase):
+    def test_no_observations(self):
+        with open(path.dirname(__file__) + "/files/no_observations.json") as testfile:
+            parser, parser_instance, data = detect_parser(testfile)
+            self.assertEqual("CryptoLyzer", parser.name)
+            self.assertTrue(isinstance(parser_instance, CryptoLyzerParser))
+
+            observations = parser_instance.get_observations(data)
+            self.assertEqual(0, len(observations))
+
     def test_multiple_observations(self):
         with open(
             path.dirname(__file__) + "/files/multiple_observations.json"
