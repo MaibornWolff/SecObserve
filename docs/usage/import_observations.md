@@ -14,13 +14,13 @@ Alternatively observations can be imported via the user interface. When showing 
 
 ![Upload of files](../assets/images/screenshot_import_2.png){ width="50%" style="display: block; margin: 0 auto" }
 
-A file and a respective parser for the file format need to be selected. Optional are attributes for the branch / version, the origin as service, docker image and endpoint URL.
+A file needs to be selected. The parser to interpret the content of the file will be detected automatically. Optional are attributes for the branch / version, the origin as service, docker image, endpoint URL and Kubernetes cluster.
 
 #### API import
 
 ![API import](../assets/images/screenshot_import_3.png){ width="50%" style="display: block; margin: 0 auto" }
 
-Before importing observations from an API, an API configuration needs to be created for the product. This API configuration specifies how to access the API (URL, API key,Query, Basic Authentication, SSL Verify, ...). Optional for the import are attributes for the branch / version, the origin as service, docker image and endpoint URL.
+Before importing observations from an API, an API configuration needs to be created for the product. This API configuration specifies how to access the API (URL, API key,Query, Basic Authentication, SSL Verify, ...). Optional for the import are attributes for the branch / version, the origin as service, docker image, endpoint URL and Kubernetes cluster.
 
 ## Import algorithm
 
