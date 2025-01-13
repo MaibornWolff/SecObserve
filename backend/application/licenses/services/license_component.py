@@ -27,11 +27,11 @@ def get_identity_hash(observation) -> str:
 def _get_string_to_hash(
     license_component: License_Component,
 ):  # pylint: disable=too-many-branches
-    hash_string = license_component.name_version
-    if license_component.purl:
-        hash_string += license_component.purl
-    if license_component.dependencies:
-        hash_string += license_component.dependencies
+    hash_string = license_component.component_name_version
+    if license_component.component_purl:
+        hash_string += license_component.component_purl
+    if license_component.component_dependencies:
+        hash_string += license_component.component_dependencies
     if license_component.license:
         hash_string += license_component.license.spdx_id
     if license_component.non_spdx_license:
@@ -77,12 +77,16 @@ def process_license_components(
             license_before = existing_component.license
             non_spdx_license_before = existing_component.non_spdx_license
             evaluation_result_before = existing_component.evaluation_result
-            existing_component.name = unsaved_component.name
-            existing_component.version = unsaved_component.version
-            existing_component.purl = unsaved_component.purl
-            existing_component.purl_type = unsaved_component.purl_type
-            existing_component.cpe = unsaved_component.cpe
-            existing_component.dependencies = unsaved_component.dependencies
+            existing_component.component_name = unsaved_component.component_name
+            existing_component.component_version = unsaved_component.component_version
+            existing_component.component_purl = unsaved_component.component_purl
+            existing_component.component_purl_type = (
+                unsaved_component.component_purl_type
+            )
+            existing_component.component_cpe = unsaved_component.component_cpe
+            existing_component.component_dependencies = (
+                unsaved_component.component_dependencies
+            )
             existing_component.license_name = unsaved_component.license_name
             existing_component.license = unsaved_component.license
             existing_component.license_expression = unsaved_component.license_expression
@@ -150,29 +154,29 @@ def _process_evidences(
 def _prepare_component(component: License_Component) -> None:
     _prepare_name_version(component)
 
-    if component.name_version is None:
-        component.name_version = ""
-    if component.name is None:
-        component.name = ""
-    if component.version is None:
-        component.version = ""
-    if component.purl is None:
-        component.purl = ""
-    if component.cpe is None:
-        component.cpe = ""
-    if component.dependencies is None:
-        component.dependencies = ""
+    if component.component_name_version is None:
+        component.component_name_version = ""
+    if component.component_name is None:
+        component.component_name = ""
+    if component.component_version is None:
+        component.component_version = ""
+    if component.component_purl is None:
+        component.component_purl = ""
+    if component.component_cpe is None:
+        component.component_cpe = ""
+    if component.component_dependencies is None:
+        component.component_dependencies = ""
 
-    if component.purl:
+    if component.component_purl:
         try:
-            purl = PackageURL.from_string(component.purl)
-            component.purl_type = purl.type
+            purl = PackageURL.from_string(component.component_purl)
+            component.component_purl_type = purl.type
         except ValueError:
-            component.purl = ""
-            component.purl_type = ""
+            component.component_purl = ""
+            component.component_purl_type = ""
 
-    if component.purl_type is None:
-        component.purl_type = ""
+    if component.component_purl_type is None:
+        component.component_purl_type = ""
 
     _prepare_license(component)
 
@@ -180,22 +184,24 @@ def _prepare_component(component: License_Component) -> None:
 
 
 def _prepare_name_version(component: License_Component) -> None:
-    if not component.name_version:
-        if component.name and component.version:
-            component.name_version = component.name + ":" + component.version
-        elif component.name:
-            component.name_version = component.name
+    if not component.component_name_version:
+        if component.component_name and component.component_version:
+            component.component_name_version = (
+                component.component_name + ":" + component.component_version
+            )
+        elif component.component_name:
+            component.component_name_version = component.component_name
     else:
-        component_parts = component.name_version.split(":")
+        component_parts = component.component_name_version.split(":")
         if len(component_parts) == 3:
-            component.name = f"{component_parts[0]}:{component_parts[1]}"
-            component.version = component_parts[2]
+            component.component_name = f"{component_parts[0]}:{component_parts[1]}"
+            component.component_version = component_parts[2]
         elif len(component_parts) == 2:
-            component.name = component_parts[0]
-            component.version = component_parts[1]
+            component.component_name = component_parts[0]
+            component.component_version = component_parts[1]
         elif len(component_parts) == 1:
-            component.name = component.name_version
-            component.version = ""
+            component.component_name = component.component_name_version
+            component.component_version = ""
 
 
 def _prepare_license(component: License_Component) -> None:

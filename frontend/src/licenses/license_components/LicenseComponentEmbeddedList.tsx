@@ -28,7 +28,7 @@ import LicenseComponentBulkDeleteButton from "./LicenseComponentBulkDeleteButton
 type LicenseComponentEmbeddedListProps = {
     product: any;
     expand?: boolean;
-    purl_type?: string;
+    component_purl_type?: string;
 };
 
 const BulkActionButtons = (product: any) => (
@@ -46,7 +46,7 @@ const licenseNameStyle = (type: string): string => {
     return "normal";
 };
 
-const LicenseComponentEmbeddedList = ({ product, expand, purl_type }: LicenseComponentEmbeddedListProps) => {
+const LicenseComponentEmbeddedList = ({ product, expand, component_purl_type }: LicenseComponentEmbeddedListProps) => {
     const showLicenseComponent = (id: any) => {
         return "../../../../license_components/" + id + "/show";
     };
@@ -76,9 +76,14 @@ const LicenseComponentEmbeddedList = ({ product, expand, purl_type }: LicenseCom
                 alwaysOn
             />
         );
-        filters.push(<TextInput source="name_version" label="Component" alwaysOn />);
+        filters.push(<TextInput source="component_name_version" label="Component" alwaysOn />);
         filters.push(
-            <AutocompleteInput source="purl_type" label="Component type" choices={PURL_TYPE_CHOICES} alwaysOn />
+            <AutocompleteInput
+                source="component_purl_type"
+                label="Component type"
+                choices={PURL_TYPE_CHOICES}
+                alwaysOn
+            />
         );
         filters.push(<AutocompleteInputMedium source="age" choices={AGE_CHOICES} alwaysOn />);
 
@@ -99,15 +104,15 @@ const LicenseComponentEmbeddedList = ({ product, expand, purl_type }: LicenseCom
         if (record && record.evaluation_result) {
             filter = { ...filter, evaluation_result: record.evaluation_result };
         }
-        if (purl_type) {
-            filter = { ...filter, purl_type: purl_type };
+        if (component_purl_type) {
+            filter = { ...filter, component_purl_type: component_purl_type };
         }
         if (record) {
             const storedFilters = {
                 branch_name: record.branch_name,
                 license_name: record.license_name,
                 evaluation_result: record.evaluation_result,
-                purl_type: purl_type,
+                component_purl_type: component_purl_type,
             };
             localStorage.setItem("license_component_expand_filters", JSON.stringify({ storedFilters }));
         }
@@ -163,8 +168,8 @@ const LicenseComponentEmbeddedList = ({ product, expand, purl_type }: LicenseCom
                                 sortable={true}
                             />
                         )}
-                        <TextField source="name_version" label="Component" />
-                        <TextField source="purl_type" label="Component type" />
+                        <TextField source="component_name_version" label="Component" />
+                        <TextField source="component_purl_type" label="Component type" />
                         <FunctionField
                             label="Age"
                             sortBy="last_change"

@@ -86,10 +86,10 @@ class SPDXParser(BaseParser, BaseFileParser):
             )
 
             license_component = License_Component(
-                name=package.name,
-                version=version,
-                purl=purl,
-                dependencies=dependencies,
+                component_name=package.name,
+                component_version=version,
+                component_purl=purl,
+                component_dependencies=dependencies,
             )
             if unsaved_license is not None:
                 license_component.unsaved_license = str(unsaved_license)

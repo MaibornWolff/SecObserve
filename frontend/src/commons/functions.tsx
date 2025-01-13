@@ -128,32 +128,32 @@ export function get_vulnerability_url(vulnerability_id: string): string | null {
 export function get_component_purl_url(
     component_name: string,
     component_version: string | null,
-    purl_type: string | null,
-    purl_namespace: string | null
+    component_purl_type: string | null,
+    component_purl_namespace: string | null
 ): string | null {
-    if (purl_type === null) {
+    if (component_purl_type === null) {
         return null;
     }
 
     const typeArray: string[] = ["cargo", "golang", "maven", "npm", "nuget", "pypi"];
-    if (!typeArray.includes(purl_type)) {
+    if (!typeArray.includes(component_purl_type)) {
         return null;
     }
 
-    let deps_dev_type = purl_type;
-    if (purl_type === "golang") {
+    let deps_dev_type = component_purl_type;
+    if (component_purl_type === "golang") {
         deps_dev_type = "go";
     }
 
     let namespace_separator = "/";
-    if (purl_type === "maven") {
+    if (component_purl_type === "maven") {
         namespace_separator = ":";
     }
 
     let component_purl_url = "https://deps.dev/" + deps_dev_type + "/";
-    if (!component_name.includes(":") && purl_namespace !== null) {
+    if (!component_name.includes(":") && component_purl_namespace !== null) {
         component_purl_url =
-            component_purl_url + encodeURIComponent(purl_namespace) + encodeURIComponent(namespace_separator);
+            component_purl_url + encodeURIComponent(component_purl_namespace) + encodeURIComponent(namespace_separator);
     }
     component_purl_url = component_purl_url + encodeURIComponent(component_name);
     if (component_version !== null) {

@@ -99,7 +99,7 @@ class LicenseComponentSerializer(ModelSerializer):
         source="license",
         read_only=True,
     )
-    purl_namespace = SerializerMethodField()
+    component_purl_namespace = SerializerMethodField()
     branch_name = SerializerMethodField()
     license_policy_name: Optional[SerializerMethodField] = SerializerMethodField()
     license_policy_id: Optional[SerializerMethodField] = SerializerMethodField()
@@ -113,10 +113,10 @@ class LicenseComponentSerializer(ModelSerializer):
         model = License_Component
         fields = "__all__"
 
-    def get_purl_namespace(self, obj: License_Component) -> Optional[str]:
-        if obj.purl:
+    def get_component_purl_namespace(self, obj: License_Component) -> Optional[str]:
+        if obj.component_purl:
             try:
-                purl = PackageURL.from_string(obj.purl)
+                purl = PackageURL.from_string(obj.component_purl)
                 return purl.namespace
             except ValueError:
                 return ""
@@ -157,7 +157,7 @@ class LicenseComponentSerializer(ModelSerializer):
         return ""
 
     def get_title(self, obj: License_Component) -> str:
-        return f"{obj.license_name} / {obj.name_version}"
+        return f"{obj.license_name} / {obj.component_name_version}"
 
 
 class LicenseComponentListSerializer(LicenseComponentSerializer):
@@ -167,7 +167,7 @@ class LicenseComponentListSerializer(LicenseComponentSerializer):
 
     class Meta:
         model = License_Component
-        exclude = ["dependencies"]
+        exclude = ["component_dependencies"]
 
 
 class LicenseComponentIdSerializer(ModelSerializer):

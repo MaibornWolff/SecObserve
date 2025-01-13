@@ -64,11 +64,11 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                     data, self.components, component, self.metadata
                 )
                 model_component = License_Component(
-                    name=component.name,
-                    version=component.version,
-                    purl=component.purl,
-                    cpe=component.cpe,
-                    dependencies=observation_component_dependencies,
+                    component_name=component.name,
+                    component_version=component.version,
+                    component_purl=component.purl,
+                    component_cpe=component.cpe,
+                    component_dependencies=observation_component_dependencies,
                 )
                 model_component.unsaved_license = component.unsaved_license
                 self._add_license_component_evidence(component, model_component)

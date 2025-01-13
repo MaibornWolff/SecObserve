@@ -29,7 +29,9 @@ from application.licenses.queries.license_group import get_license_groups
 
 
 class LicenseComponentFilter(FilterSet):
-    name_version = CharFilter(field_name="name_version", lookup_expr="icontains")
+    component_name_version = CharFilter(
+        field_name="component_name_version", lookup_expr="icontains"
+    )
     license_name = CharFilter(field_name="license_name", lookup_expr="icontains")
     license_name_exact = CharFilter(field_name="license_name")
     license_spdx_id = CharFilter(field_name="license__spdx_id", lookup_expr="icontains")
@@ -66,7 +68,7 @@ class LicenseComponentFilter(FilterSet):
                 (
                     "license_name",
                     "numerical_evaluation_result",
-                    "name_version",
+                    "component_name_version",
                 ),
                 "license_name",
             ),
@@ -74,7 +76,7 @@ class LicenseComponentFilter(FilterSet):
                 (
                     "numerical_evaluation_result",
                     "license_name",
-                    "name_version",
+                    "component_name_version",
                 ),
                 "evaluation_result",
             ),
@@ -83,19 +85,19 @@ class LicenseComponentFilter(FilterSet):
                     "branch__name",
                     "license_name",
                     "numerical_evaluation_result",
-                    "name_version",
+                    "component_name_version",
                 ),
                 "branch_name",
             ),
-            ("name_version", "name_version"),
+            ("component_name_version", "component_name_version"),
             (
                 (
-                    "purl_type",
+                    "component_purl_type",
                     "numerical_evaluation_result",
                     "license_name",
-                    "name_version",
+                    "component_name_version",
                 ),
-                "purl_type",
+                "component_purl_type",
             ),
             ("last_change", "last_change"),
         ),
@@ -111,8 +113,8 @@ class LicenseComponentFilter(FilterSet):
             "license_expression",
             "non_spdx_license",
             "evaluation_result",
-            "name_version",
-            "purl_type",
+            "component_name_version",
+            "component_purl_type",
         ]
 
 

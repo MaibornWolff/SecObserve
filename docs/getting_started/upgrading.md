@@ -15,7 +15,11 @@
 **Breaking changes**
 
 * The attribute `unknown_license` in License Components and License Policies has been renamed to `non_spdx_license`. This was necessary to avoid confusion with the License Policy evaluation result `Unknown`, when a license is not included in the License Policy.
+* Additionally the attributes `name`, `version`, `name_version`, `dependencies`, `purl`, `purl_type` and `cpe` in License Components have been renamed to `component_name`, `component_version`, `component_name_version`, `component_dependencies`, `component_purl`, `component_purl_type` and `component_cpe` respectively. This brings it more in line with the component information in Observations.
 
+**Noteable change**
+
+* The parser does not need to specified anymore when importing observations from files via the API or the UI. The parser is detected automatically by the content of the imported file. If the parser is still in the attributes of the API call, it will be ignored.
 
 ## Release 1.22.0
 
