@@ -18,7 +18,7 @@ from application.import_observations.services.parser_registry import (
 from application.import_observations.types import Parser_Filetype, Parser_Source
 
 
-def detect_parser(file: File) -> tuple[Parser, BaseFileParser, Any]:
+def detect_parser(file: File) -> tuple[Parser, BaseParser, Any]:
     if file.name and not (
         file.name.endswith(".csv")
         or file.name.endswith(".json")
@@ -33,7 +33,10 @@ def detect_parser(file: File) -> tuple[Parser, BaseFileParser, Any]:
                 content = content.decode("utf-8")
             reader = DictReader(StringIO(content), delimiter=",", quotechar='"')
         except Exception:
-            raise ValidationError("File is not valid CSV")
+            raise ValidationError(  # pylint: disable=raise-missing-from
+                "File is not valid CSV"
+            )
+            # The Exception itself is not relevant and must not be re-raised
 
         rows = []
         for row in reader:
@@ -47,7 +50,10 @@ def detect_parser(file: File) -> tuple[Parser, BaseFileParser, Any]:
         try:
             data = load(file)
         except Exception:
-            raise ValidationError("File is not valid JSON")
+            raise ValidationError(  # pylint: disable=raise-missing-from
+                "File is not valid JSON"
+            )
+            # The DjangoValidationError itself is not relevant and must not be re-raised
 
         if data:
             parser, parser_instance = _get_parser(data, Parser_Filetype.FILETYPE_JSON)
@@ -67,7 +73,7 @@ def instanciate_parser(parser: Parser) -> BaseParser:
 
 def _get_parser(
     data: Any, filetype: str
-) -> tuple[Optional[Parser], Optional[BaseFileParser]]:
+) -> tuple[Optional[Parser], Optional[BaseParser]]:
     parsers = Parser.objects.filter(source=Parser_Source.SOURCE_FILE).order_by("name")
     for parser in parsers:
         try:

@@ -2,7 +2,7 @@ from json import dumps
 from typing import Any
 
 from rest_framework.exceptions import ValidationError
-from spdx_tools.spdx.model import Document
+from spdx_tools.spdx.model.document import Document
 from spdx_tools.spdx.model.relationship import RelationshipType
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.jsonlikedict.json_like_dict_parser import JsonLikeDictParser
@@ -45,14 +45,18 @@ class SPDXParser(BaseParser, BaseFileParser):
         try:
             document: Document = JsonLikeDictParser().parse(data)
         except SPDXParsingError as e:
-            raise ValidationError(e.get_messages())
+            raise ValidationError(  # pylint: disable=raise-missing-from
+                e.get_messages()
+            )
+            # The DjangoValidationError itself is not relevant and must not be re-raised
 
         observations = []
 
         packages = self._create_package_dict(data)
         relationships = self._create_relationship_dict(document, packages)
 
-        for package in document.packages:
+        for package in document.packages:  # pylint: disable=not-an-iterable
+            # I don't know why pylint is complaining about this, Document.packages is a list
             version = ""
             if package.version is not None:
                 version = str(package.version)

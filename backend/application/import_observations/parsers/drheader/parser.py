@@ -102,7 +102,7 @@ class DrHEADerParser(BaseParser, BaseFileParser):
 
     def check_format(self, data: Any) -> bool:
         if (
-            isinstance(data, list)
+            isinstance(data, list)  # pylint: disable=too-many-boolean-expressions
             and len(data) >= 1
             and isinstance(data[0], dict)
             and data[0].get("rule")
