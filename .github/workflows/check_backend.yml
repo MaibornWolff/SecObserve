@@ -9,10 +9,8 @@ env:
   POETRY_NO_INTERACTION: 1
 
 jobs:
-  check_backend:
-
+  code_quality:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Set up Python 3.12
@@ -57,6 +55,9 @@ jobs:
         run: |
           lint-imports --no-cache
 
+  unittests:
+    runs-on: ubuntu-latest
+    steps:
       - name: Unittests
         run: |
           docker build -f docker/backend/unittests/django/Dockerfile -t secobserve_backend_unittests:latest .
