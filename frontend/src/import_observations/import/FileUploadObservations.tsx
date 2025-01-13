@@ -141,24 +141,32 @@ const FileUploadObservations = () => {
                 <DialogContent>
                     <SimpleForm onSubmit={observationUpdate} toolbar={<CustomToolbar />}>
                         <FileInput
-                            source="file"
-                            accept={{ "text/plain": [".csv, .json, .sarif"] }}
+                            source="file" label="Scan report"
+                            accept={{ "application/octet-stream": [".csv, .json, .sarif"] }}
                             validate={validate_required}
                         >
                             <FileField source="src" title="title" />
                         </FileInput>
                         <WithRecord
                             render={(product) => (
-                                <ReferenceInput
-                                    source="branch"
-                                    reference="branches"
-                                    sort={{ field: "name", order: "ASC" }}
-                                    queryOptions={{ meta: { api_resource: "branch_names" } }}
-                                    filter={{ product: product.id }}
-                                    alwaysOn
-                                >
-                                    <AutocompleteInputWide optionText="name" label="Branch / Version" />
-                                </ReferenceInput>
+                                <Fragment>
+                                    {product.has_branches && (
+                                        <ReferenceInput
+                                            source="branch"
+                                            reference="branches"
+                                            sort={{ field: "name", order: "ASC" }}
+                                            queryOptions={{ meta: { api_resource: "branch_names" } }}
+                                            filter={{ product: product.id }}
+                                            alwaysOn
+                                        >
+                                            <AutocompleteInputWide
+                                                optionText="name"
+                                                label="Branch / Version"
+                                                defaultValue={product.repository_default_branch}
+                                            />
+                                        </ReferenceInput>
+                                    )}
+                                </Fragment>
                             )}
                         />
                         <TextInputWide source="service" validate={validate_255} />
