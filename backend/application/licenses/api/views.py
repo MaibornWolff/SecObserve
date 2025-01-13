@@ -231,10 +231,10 @@ class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
                 evaluation_result=filter_evaluation_result
             )
 
-        filter_purl_type = request.query_params.get("purl_type")
-        if filter_purl_type:
+        filter_component_purl_type = request.query_params.get("component_purl_type")
+        if filter_component_purl_type:
             license_overview_elements = license_overview_elements.filter(
-                purl_type=filter_purl_type
+                component_purl_type=filter_component_purl_type
             )
 
         return license_overview_elements

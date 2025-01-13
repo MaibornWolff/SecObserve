@@ -186,7 +186,7 @@ def apply_license_policy_to_component(
     ignore_component_types: list,
 ) -> None:
     evaluation_result = None
-    if component.purl_type in ignore_component_types:
+    if component.component_purl_type in ignore_component_types:
         evaluation_result = License_Policy_Evaluation_Result.RESULT_IGNORED
     elif component.license:
         evaluation_result = _get_license_evaluation_result(
