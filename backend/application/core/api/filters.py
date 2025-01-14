@@ -7,7 +7,6 @@ from django_filters import (
     ChoiceFilter,
     FilterSet,
     ModelChoiceFilter,
-    NumberFilter,
     OrderingFilter,
 )
 
@@ -73,7 +72,6 @@ class ProductFilter(FilterSet):
 
 
 class ProductMemberFilter(FilterSet):
-    product = NumberFilter(field_name="product")
     is_product_group = BooleanFilter(field_name="product__is_product_group")
 
     ordering = OrderingFilter(
@@ -91,7 +89,6 @@ class ProductMemberFilter(FilterSet):
 
 
 class ProductAuthorizationGroupMemberFilter(FilterSet):
-    product = NumberFilter(field_name="product")
     is_product_group = BooleanFilter(field_name="product__is_product_group")
 
     ordering = OrderingFilter(
@@ -109,7 +106,6 @@ class ProductAuthorizationGroupMemberFilter(FilterSet):
 
 
 class BranchFilter(FilterSet):
-    product = NumberFilter(field_name="product")
 
     ordering = OrderingFilter(
         # tuple-mapping retains order
@@ -169,13 +165,9 @@ class ObservationFilter(FilterSet):
         queryset=Product.objects.filter(is_product_group=True),
     )
 
-    has_pending_assessment = ChoiceFilter(
+    has_pending_assessment = BooleanFilter(
         field_name="has_pending_assessment",
         method="get_has_pending_assessment",
-        choices=[
-            ("true", "true"),
-            ("false", "false"),
-        ],
     )
 
     def get_has_pending_assessment(
@@ -183,7 +175,7 @@ class ObservationFilter(FilterSet):
     ):  # pylint: disable=unused-argument
         # field_name is used as a positional argument
 
-        if value == "true":
+        if value:
             return queryset.filter(
                 id__in=Observation_Log.objects.filter(
                     assessment_status="Needs approval"
