@@ -3,37 +3,17 @@ from unittest import TestCase
 
 from application.core.types import Severity
 from application.import_observations.parsers.zap.parser import ZAPParser
+from application.import_observations.services.parser_detector import detect_parser
 
 
 class TestZAPParserParser(TestCase):
-    def test_no_json(self):
-        with open(path.dirname(__file__) + "/test_parser.py") as testfile:
-            parser = ZAPParser()
-            check, messages, data = parser.check_format(testfile)
-
-            self.assertFalse(check)
-            self.assertEqual(1, len(messages))
-            self.assertEqual("File is not valid JSON", messages[0])
-            self.assertFalse(data)
-
-    def test_wrong_format(self):
-        with open(path.dirname(__file__) + "/files/wrong_format.json") as testfile:
-            parser = ZAPParser()
-            check, messages, data = parser.check_format(testfile)
-
-            self.assertFalse(check)
-            self.assertEqual(1, len(messages))
-            self.assertEqual("File is not a ZAP format", messages[0])
-            self.assertFalse(data)
-
     def test_owasp_zap(self):
         with open(path.dirname(__file__) + "/files/owasp_zap.json") as testfile:
-            parser = ZAPParser()
-            check, messages, data = parser.check_format(testfile)
-            observations = parser.get_observations(data)
+            parser, parser_instance, data = detect_parser(testfile)
+            self.assertEqual("ZAP", parser.name)
+            self.assertTrue(isinstance(parser_instance, ZAPParser))
 
-            self.assertTrue(check)
-            self.assertEqual(0, len(messages))
+            observations = parser_instance.get_observations(data)
             self.assertEqual(5, len(observations))
 
             observation = observations[0]

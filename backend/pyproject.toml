@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "SecObserve"
-version = "1.25.0"
+version = "1.26.0"
 description = "SecObserve is an open source vulnerability management system for software development and cloud environments."
 license = "BSD-3-Clause"
 authors = [
@@ -13,7 +13,7 @@ python = ">= 3.10, < 3.13"
 # ------------------------------------------------------------------------------
 gunicorn = "23.0.0"  # https://github.com/benoitc/gunicorn
 django = "5.1.4"  # https://www.djangoproject.com/
-django-environ = "0.11.2"  # https://github.com/joke2k/django-environ
+django-environ = "0.12.0"  # https://github.com/joke2k/django-environ
 django-filter = "24.3"  # https://github.com/carltongibson/django-filter 
 django-csp = "3.8"  # https://github.com/mozilla/django-csp
 django-picklefield = "3.2"  # https://github.com/gintas/django-picklefield 
@@ -49,7 +49,7 @@ pyyaml = "6.0.2"  # https://github.com/yaml/pyyaml
 packageurl-python = "0.16.0"  # https://github.com/package-url/packageurl-python
 cvss = "3.3"  # https://github.com/RedHatProductSecurity/cvss
 semver = "3.0.2"  # https://github.com/python-semver/python-semver
-license-expression = "30.4.0"  # https://github.com/aboutcode-org/license-expression
+license-expression = "30.4.1"  # https://github.com/aboutcode-org/license-expression
 # Task queue
 # ------------------------------------------------------------------------------
 huey = "2.5.2"  # https://github.com/coleifer/huey

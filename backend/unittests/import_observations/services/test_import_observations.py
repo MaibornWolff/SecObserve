@@ -138,7 +138,6 @@ class TestImportObservations(BaseTestCase):
         file_upload_parameters = FileUploadParameters(
             product=Product.objects.get(id=1),
             branch=branch,
-            parser=Parser.objects.get(name="SARIF"),
             file=File(open("unittests/fixtures/data_1/bandit.sarif", "r")),
             service=service,
             docker_image_name_tag=docker_image_name_tag,
@@ -247,7 +246,6 @@ class TestImportObservations(BaseTestCase):
         file_upload_parameters = FileUploadParameters(
             product=Product.objects.get(id=1),
             branch=branch,
-            parser=Parser.objects.get(id=1),
             file=File(open("unittests/fixtures/data_2/bandit.sarif", "r")),
             service=service,
             docker_image_name_tag=docker_image_name_tag,
@@ -493,7 +491,6 @@ class TestImportObservations(BaseTestCase):
         file_upload_parameters = FileUploadParameters(
             product=Product.objects.get(id=1),
             branch=branch,
-            parser=Parser.objects.get(name="CycloneDX"),
             file=File(
                 open(
                     "unittests/import_observations/parsers/cyclone_dx/files/licenses_1.json",
@@ -532,23 +529,27 @@ class TestImportObservations(BaseTestCase):
 
             self.assertEqual(license_components[1].branch, branch)
             self.assertEqual(license_components[1].upload_filename, "licenses_1.json")
-            self.assertEqual(license_components[1].name, "argon2-cffi-bindings")
-            self.assertEqual(license_components[1].version, "21.2.0")
             self.assertEqual(
-                license_components[1].name_version, "argon2-cffi-bindings:21.2.0"
+                license_components[1].component_name, "argon2-cffi-bindings"
+            )
+            self.assertEqual(license_components[1].component_version, "21.2.0")
+            self.assertEqual(
+                license_components[1].component_name_version,
+                "argon2-cffi-bindings:21.2.0",
             )
             self.assertEqual(
-                license_components[1].purl, "pkg:pypi/argon2-cffi-bindings@21.2.0"
+                license_components[1].component_purl,
+                "pkg:pypi/argon2-cffi-bindings@21.2.0",
             )
-            self.assertEqual(license_components[1].purl_type, "pypi")
-            self.assertEqual(license_components[1].cpe, "")
-            dependencies = """SecObserve:1.25.0 --> argon2-cffi:23.1.0
+            self.assertEqual(license_components[1].component_purl_type, "pypi")
+            self.assertEqual(license_components[1].component_cpe, "")
+            dependencies = """SecObserve:1.26.0 --> argon2-cffi:23.1.0
 argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
-            self.assertEqual(license_components[1].dependencies, dependencies)
+            self.assertEqual(license_components[1].component_dependencies, dependencies)
             self.assertEqual(
                 license_components[1].license, License.objects.get(spdx_id="MIT")
             )
-            self.assertEqual(license_components[1].unknown_license, "")
+            self.assertEqual(license_components[1].non_spdx_license, "")
             self.assertEqual(
                 license_components[1].evaluation_result,
                 License_Policy_Evaluation_Result.RESULT_UNKNOWN,
@@ -560,10 +561,12 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 ),
             )
 
-            self.assertEqual(license_components[3].name_version, "asgiref:3.8.1")
+            self.assertEqual(
+                license_components[3].component_name_version, "asgiref:3.8.1"
+            )
             self.assertEqual(license_components[3].license, None)
             self.assertEqual(
-                license_components[3].unknown_license, "0BSD, BSD-3-Clause"
+                license_components[3].non_spdx_license, "0BSD, BSD-3-Clause"
             )
             self.assertEqual(
                 license_components[3].evaluation_result,
@@ -571,6 +574,24 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             )
             self.assertEqual(
                 license_components[3].numerical_evaluation_result,
+                License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
+                    License_Policy_Evaluation_Result.RESULT_UNKNOWN,
+                ),
+            )
+
+            self.assertEqual(
+                license_components[24].component_name_version, "email-validator:2.1.1"
+            )
+            self.assertEqual(
+                license_components[24].license_expression,
+                "GPL-2.0-or-later WITH Bison-exception-2.2",
+            )
+            self.assertEqual(
+                license_components[24].evaluation_result,
+                License_Policy_Evaluation_Result.RESULT_UNKNOWN,
+            )
+            self.assertEqual(
+                license_components[24].numerical_evaluation_result,
                 License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
                     License_Policy_Evaluation_Result.RESULT_UNKNOWN,
                 ),
@@ -586,16 +607,15 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             license_policy=License_Policy.objects.get(name="Standard"),
             license_group=None,
             license=None,
-            license_expression="(Apache-2.0 OR BSD-3-Clause) AND MIT",
-            unknown_license="",
-            evaluation_result=License_Policy_Evaluation_Result.RESULT_ALLOWED,
+            license_expression="GPL-2.0-or-later WITH Bison-exception-2.2",
+            non_spdx_license="",
+            evaluation_result=License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
         )
         license_policy_item.save()
 
         file_upload_parameters = FileUploadParameters(
             product=product,
             branch=branch,
-            parser=Parser.objects.get(name="CycloneDX"),
             file=File(
                 open(
                     "unittests/import_observations/parsers/cyclone_dx/files/licenses_1.json",
@@ -633,12 +653,13 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             self.assertEqual(len(license_components), 67)
 
             self.assertEqual(
-                license_components[1].name_version, "argon2-cffi-bindings:21.2.0"
+                license_components[1].component_name_version,
+                "argon2-cffi-bindings:21.2.0",
             )
             self.assertEqual(
                 license_components[1].license, License.objects.get(spdx_id="MIT")
             )
-            self.assertEqual(license_components[1].unknown_license, "")
+            self.assertEqual(license_components[1].non_spdx_license, "")
             self.assertEqual(
                 license_components[1].evaluation_result,
                 License_Policy_Evaluation_Result.RESULT_ALLOWED,
@@ -650,10 +671,12 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 ),
             )
 
-            self.assertEqual(license_components[3].name_version, "asgiref:3.8.1")
+            self.assertEqual(
+                license_components[3].component_name_version, "asgiref:3.8.1"
+            )
             self.assertEqual(license_components[3].license, None)
             self.assertEqual(
-                license_components[3].unknown_license, "0BSD, BSD-3-Clause"
+                license_components[3].non_spdx_license, "0BSD, BSD-3-Clause"
             )
             self.assertEqual(
                 license_components[3].evaluation_result,
@@ -666,7 +689,9 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 ),
             )
 
-            self.assertEqual(license_components[9].name_version, "cryptography:43.0.1")
+            self.assertEqual(
+                license_components[9].component_name_version, "cryptography:43.0.1"
+            )
             self.assertEqual(license_components[9].license, None)
             self.assertEqual(
                 license_components[9].license_expression,
@@ -683,7 +708,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 ),
             )
 
-            self.assertEqual(license_components[10].name_version, "cvss:3.2")
+            self.assertEqual(license_components[10].component_name_version, "cvss:3.2")
             self.assertEqual(license_components[10].license, None)
             self.assertEqual(
                 license_components[10].license_expression,
@@ -700,7 +725,9 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 ),
             )
 
-            self.assertEqual(license_components[11].name_version, "defusedcsv:2.0.0")
+            self.assertEqual(
+                license_components[11].component_name_version, "defusedcsv:2.0.0"
+            )
             self.assertEqual(license_components[11].license, None)
             self.assertEqual(
                 license_components[11].license_expression,
@@ -717,6 +744,24 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 ),
             )
 
+            self.assertEqual(
+                license_components[24].component_name_version, "email-validator:2.1.1"
+            )
+            self.assertEqual(
+                license_components[24].license_expression,
+                "GPL-2.0-or-later WITH Bison-exception-2.2",
+            )
+            self.assertEqual(
+                license_components[24].evaluation_result,
+                License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
+            )
+            self.assertEqual(
+                license_components[24].numerical_evaluation_result,
+                License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
+                    License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
+                ),
+            )
+
         # --- Third import with some changes ---
 
         license_policy = License_Policy.objects.get(name="Standard")
@@ -727,7 +772,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             license_policy=License_Policy.objects.get(name="Standard"),
             license_group=None,
             license=None,
-            unknown_license="0BSD, BSD-3-Clause",
+            non_spdx_license="0BSD, BSD-3-Clause",
             evaluation_result=License_Policy_Evaluation_Result.RESULT_REVIEW_REQUIRED,
         )
         license_policy_item.save()
@@ -735,7 +780,17 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             license_policy=License_Policy.objects.get(name="Standard"),
             license_group=None,
             license=License.objects.get(spdx_id="MIT"),
-            unknown_license="",
+            non_spdx_license="",
+            evaluation_result=License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
+        )
+        license_policy_item.save()
+
+        license_policy_item.save()
+        license_policy_item = License_Policy_Item(
+            license_policy=License_Policy.objects.get(name="Standard"),
+            license_group=None,
+            license=License.objects.get(spdx_id="Apache-2.0"),
+            non_spdx_license="",
             evaluation_result=License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
         )
         license_policy_item.save()
@@ -743,7 +798,6 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
         file_upload_parameters = FileUploadParameters(
             product=product,
             branch=branch,
-            parser=Parser.objects.get(name="CycloneDX"),
             file=File(
                 open(
                     "unittests/import_observations/parsers/cyclone_dx/files/changed/licenses_1.json",
@@ -781,12 +835,13 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             self.assertEqual(len(license_components), 67)
 
             self.assertEqual(
-                license_components[64].name_version, "argon2-cffi-bindings:21.2.1"
+                license_components[64].component_name_version,
+                "argon2-cffi-bindings:21.2.1",
             )
             self.assertEqual(
                 license_components[64].license, License.objects.get(spdx_id="MIT")
             )
-            self.assertEqual(license_components[64].unknown_license, "")
+            self.assertEqual(license_components[64].non_spdx_license, "")
             self.assertEqual(
                 license_components[64].evaluation_result,
                 License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
@@ -798,10 +853,12 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 ),
             )
 
-            self.assertEqual(license_components[2].name_version, "asgiref:3.8.1")
+            self.assertEqual(
+                license_components[2].component_name_version, "asgiref:3.8.1"
+            )
             self.assertEqual(license_components[2].license, None)
             self.assertEqual(
-                license_components[2].unknown_license, "0BSD, BSD-3-Clause"
+                license_components[2].non_spdx_license, "0BSD, BSD-3-Clause"
             )
             self.assertEqual(
                 license_components[2].evaluation_result,
@@ -814,7 +871,9 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 ),
             )
 
-            self.assertEqual(license_components[7].name_version, "cryptography:43.0.1")
+            self.assertEqual(
+                license_components[7].component_name_version, "cryptography:43.0.1"
+            )
             self.assertEqual(license_components[7].license, None)
             self.assertEqual(
                 license_components[7].license_expression,
@@ -831,7 +890,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 ),
             )
 
-            self.assertEqual(license_components[8].name_version, "cvss:3.2")
+            self.assertEqual(license_components[8].component_name_version, "cvss:3.2")
             self.assertEqual(license_components[8].license, None)
             self.assertEqual(
                 license_components[8].license_expression,
@@ -848,7 +907,9 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 ),
             )
 
-            self.assertEqual(license_components[9].name_version, "defusedcsv:2.0.0")
+            self.assertEqual(
+                license_components[9].component_name_version, "defusedcsv:2.0.0"
+            )
             self.assertEqual(license_components[9].license, None)
             self.assertEqual(
                 license_components[9].license_expression,
@@ -856,10 +917,28 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             )
             self.assertEqual(
                 license_components[9].evaluation_result,
-                License_Policy_Evaluation_Result.RESULT_UNKNOWN,
+                License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
             )
             self.assertEqual(
                 license_components[9].numerical_evaluation_result,
+                License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
+                    License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
+                ),
+            )
+
+            self.assertEqual(
+                license_components[22].component_name_version, "email-validator:2.1.1"
+            )
+            self.assertEqual(
+                license_components[22].license_expression,
+                "GPL-3.0-or-later WITH Bison-exception-2.2",
+            )
+            self.assertEqual(
+                license_components[22].evaluation_result,
+                License_Policy_Evaluation_Result.RESULT_UNKNOWN,
+            )
+            self.assertEqual(
+                license_components[22].numerical_evaluation_result,
                 License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
                     License_Policy_Evaluation_Result.RESULT_UNKNOWN,
                 ),
@@ -874,7 +953,6 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
         file_upload_parameters = FileUploadParameters(
             product=product,
             branch=branch,
-            parser=Parser.objects.get(name="CycloneDX"),
             file=File(
                 open(
                     "unittests/import_observations/parsers/cyclone_dx/files/changed/licenses_1.json",
@@ -912,12 +990,13 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             self.assertEqual(len(license_components), 67)
 
             self.assertEqual(
-                license_components[64].name_version, "argon2-cffi-bindings:21.2.1"
+                license_components[64].component_name_version,
+                "argon2-cffi-bindings:21.2.1",
             )
             self.assertEqual(
                 license_components[64].license, License.objects.get(spdx_id="MIT")
             )
-            self.assertEqual(license_components[64].unknown_license, "")
+            self.assertEqual(license_components[64].non_spdx_license, "")
             self.assertEqual(
                 license_components[64].evaluation_result,
                 License_Policy_Evaluation_Result.RESULT_IGNORED,
@@ -929,10 +1008,12 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 ),
             )
 
-            self.assertEqual(license_components[2].name_version, "asgiref:3.8.1")
+            self.assertEqual(
+                license_components[2].component_name_version, "asgiref:3.8.1"
+            )
             self.assertEqual(license_components[2].license, None)
             self.assertEqual(
-                license_components[2].unknown_license, "0BSD, BSD-3-Clause"
+                license_components[2].non_spdx_license, "0BSD, BSD-3-Clause"
             )
             self.assertEqual(
                 license_components[2].evaluation_result,

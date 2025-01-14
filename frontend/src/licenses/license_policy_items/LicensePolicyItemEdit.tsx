@@ -30,8 +30,8 @@ const LicensePolicyItemEdit = ({ license_policy_id, license_policy_item_id }: Li
         if (!data.license_expression) {
             data.license_expression = "";
         }
-        if (!data.unknown_license) {
-            data.unknown_license = "";
+        if (!data.non_spdx_license) {
+            data.non_spdx_license = "";
         }
         if (!data.comment) {
             data.comment = "";
@@ -41,7 +41,7 @@ const LicensePolicyItemEdit = ({ license_policy_id, license_policy_item_id }: Li
             license_group: data.license_group,
             license: data.license,
             license_expression: data.license_expression,
-            unknown_license: data.unknown_license,
+            non_spdx_license: data.non_spdx_license,
             evaluation_result: data.evaluation_result,
             comment: data.comment,
         };
@@ -106,7 +106,11 @@ const LicensePolicyItemEdit = ({ license_policy_id, license_policy_item_id }: Li
                             label="License expression"
                             validate={validate_255}
                         />
-                        <TextInputExtraWide source="unknown_license" label="Unknown license" validate={validate_255} />
+                        <TextInputExtraWide
+                            source="non_spdx_license"
+                            label="Non-SPDX license"
+                            validate={validate_255}
+                        />
                         <AutocompleteInputMedium
                             source="evaluation_result"
                             label="Evaluation result"

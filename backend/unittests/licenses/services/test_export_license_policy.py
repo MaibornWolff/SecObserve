@@ -37,7 +37,7 @@ class TestLicenseGroupMemberSerializer(BaseTestCase):
         ).save()
         License_Policy_Item(
             license_policy=license_policy,
-            unknown_license="Unknown",
+            non_spdx_license="Non-SPDX",
             evaluation_result=License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
         ).save()
 
@@ -61,15 +61,15 @@ class TestLicenseGroupMemberSerializer(BaseTestCase):
         ).save()
         License_Policy_Item(
             license_policy=self.license_policy_with_parent,
-            unknown_license="Unknown",
+            non_spdx_license="Non-SPDX",
             evaluation_result=License_Policy_Evaluation_Result.RESULT_ALLOWED,
-            comment="Permissive unknown license",
+            comment="Permissive non-SPDX license",
         ).save()
         License_Policy_Item(
             license_policy=self.license_policy_with_parent,
-            unknown_license="Another unknown",
+            non_spdx_license="Another non-SPDX",
             evaluation_result=License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
-            comment="Forbidden unknown license",
+            comment="Forbidden non-SPDX license",
         ).save()
 
         super().setUpClass()
@@ -104,7 +104,7 @@ class TestLicenseGroupMemberSerializer(BaseTestCase):
         {
             "evaluation_result": "Forbidden",
             "from_parent": false,
-            "unknown_license": "Unknown"
+            "non_spdx_license": "Non-SPDX"
         }
     ],
     "name": "public"
@@ -132,7 +132,7 @@ items:
   license_expression: MIT OR 3BSD
 - evaluation_result: Forbidden
   from_parent: false
-  unknown_license: Unknown
+  non_spdx_license: Non-SPDX
 name: public
 """
         self.assertEqual(yaml_data_expected, yaml_data)
@@ -162,16 +162,16 @@ name: public
             "license_expression": "MIT OR 3BSD"
         },
         {
-            "comment": "Permissive unknown license",
+            "comment": "Permissive non-SPDX license",
             "evaluation_result": "Allowed",
             "from_parent": false,
-            "unknown_license": "Unknown"
+            "non_spdx_license": "Non-SPDX"
         },
         {
-            "comment": "Forbidden unknown license",
+            "comment": "Forbidden non-SPDX license",
             "evaluation_result": "Forbidden",
             "from_parent": false,
-            "unknown_license": "Another unknown"
+            "non_spdx_license": "Another non-SPDX"
         }
     ],
     "name": "license_policy_with_parent",
@@ -196,14 +196,14 @@ items:
   evaluation_result: Allowed
   from_parent: false
   license_expression: MIT OR 3BSD
-- comment: Permissive unknown license
+- comment: Permissive non-SPDX license
   evaluation_result: Allowed
   from_parent: false
-  unknown_license: Unknown
-- comment: Forbidden unknown license
+  non_spdx_license: Non-SPDX
+- comment: Forbidden non-SPDX license
   evaluation_result: Forbidden
   from_parent: false
-  unknown_license: Another unknown
+  non_spdx_license: Another non-SPDX
 name: license_policy_with_parent
 parent: public
 """

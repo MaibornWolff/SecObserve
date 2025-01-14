@@ -92,16 +92,16 @@ export const LicenseComponentComponent = () => {
                                     <TextField source="license_expression" className={classes.fontBigBold} />
                                 </Labeled>
                             )}
-                            {component.unknown_license && (
-                                <Labeled label="Unknown license">
+                            {component.non_spdx_license && (
+                                <Labeled label="Non-SPDX license">
                                     <TextField
-                                        source="unknown_license"
+                                        source="non_spdx_license"
                                         sx={{ fontStyle: "italic" }}
                                         className={classes.fontBigBold}
                                     />
                                 </Labeled>
                             )}
-                            {!component.license && !component.license_expression && !component.unknown_license && (
+                            {!component.license && !component.license_expression && !component.non_spdx_license && (
                                 <Labeled label="License">
                                     <TextField
                                         source="license_name"
@@ -119,66 +119,66 @@ export const LicenseComponentComponent = () => {
                         <Stack spacing={1}>
                             <Typography variant="h6">Component</Typography>
                             <Stack direction="row" spacing={4}>
-                                {component.name != "" && (
+                                {component.component_name != "" && (
                                     <Labeled>
                                         <TextField
-                                            source="name"
+                                            source="component_name"
                                             label="Component name"
                                             className={classes.fontBigBold}
                                         />
                                     </Labeled>
                                 )}
-                                {component.version != "" && (
+                                {component.component_version != "" && (
                                     <Labeled>
                                         <TextField
-                                            source="version"
+                                            source="component_version"
                                             label="Component version"
                                             className={classes.fontBigBold}
                                         />
                                     </Labeled>
                                 )}
                             </Stack>
-                            {component.purl != "" &&
+                            {component.component_purl != "" &&
                                 get_component_purl_url(
-                                    component.name,
-                                    component.version,
-                                    component.purl_type,
-                                    component.purl_namespace
+                                    component.component_name,
+                                    component.component_version,
+                                    component.component_purl_type,
+                                    component.component_purl_namespace
                                 ) == null && (
                                     <Labeled>
-                                        <TextField source="purl" label="Component PURL" />
+                                        <TextField source="component_purl" label="Component PURL" />
                                     </Labeled>
                                 )}
-                            {component.purl != "" &&
+                            {component.component_purl != "" &&
                                 get_component_purl_url(
-                                    component.name,
-                                    component.version,
-                                    component.purl_type,
-                                    component.purl_namespace
+                                    component.component_name,
+                                    component.component_version,
+                                    component.component_purl_type,
+                                    component.component_purl_namespace
                                 ) != null && (
                                     <Labeled>
                                         <TextUrlField
                                             label="Component PURL"
-                                            text={component.purl}
+                                            text={component.component_purl}
                                             url={
-                                                component.purl &&
+                                                component.component_purl &&
                                                 get_component_purl_url(
-                                                    component.name,
-                                                    component.version,
-                                                    component.purl_type,
-                                                    component.purl_namespace
+                                                    component.component_name,
+                                                    component.component_version,
+                                                    component.component_purl_type,
+                                                    component.component_purl_namespace
                                                 )
                                             }
                                         />
                                     </Labeled>
                                 )}
-                            {component.cpe != "" && (
+                            {component.component_cpe != "" && (
                                 <Labeled>
-                                    <TextField source="cpe" label="Component CPE" />
+                                    <TextField source="component_cpe" label="Component CPE" />
                                 </Labeled>
                             )}
-                            {component.dependencies && component.dependencies != "" && (
-                                <MermaidDependencies dependencies={component.dependencies} />
+                            {component.component_dependencies && component.component_dependencies != "" && (
+                                <MermaidDependencies dependencies={component.component_dependencies} />
                             )}
                         </Stack>
                     </Paper>

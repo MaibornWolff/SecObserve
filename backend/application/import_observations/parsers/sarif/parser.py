@@ -1,8 +1,7 @@
 from dataclasses import dataclass
-from json import dumps, load
-from typing import Optional, Tuple
+from json import dumps
+from typing import Any, Optional, Tuple
 
-from django.core.files.base import File
 from packageurl import PackageURL
 
 from application.core.models import Observation
@@ -11,7 +10,7 @@ from application.import_observations.parsers.base_parser import (
     BaseFileParser,
     BaseParser,
 )
-from application.import_observations.types import Parser_Type
+from application.import_observations.types import Parser_Filetype, Parser_Type
 
 SEVERITIES = {
     "error": Severity.SEVERITY_HIGH,
@@ -48,28 +47,21 @@ class SARIFParser(BaseParser, BaseFileParser):
         return "SARIF"
 
     @classmethod
+    def get_filetype(cls) -> str:
+        return Parser_Filetype.FILETYPE_JSON
+
+    @classmethod
     def get_type(cls) -> str:
         return Parser_Type.TYPE_SAST
 
-    def check_format(self, file: File) -> tuple[bool, list[str], dict]:
-        try:
-            data = load(file)
-        except Exception:
-            return False, ["File is not valid JSON"], {}
-
-        version = data.get("version")
-        schema = data.get("$schema")
-        if not version or not schema:
-            return (
-                False,
-                ["File is not SARIF format, 'version' and/or '$schema' are missing"],
-                {},
-            )
-
-        if version != "2.1.0":
-            return False, ["File is not SARIF format, version is not 2.1.0"], {}
-
-        return True, [], data
+    def check_format(self, data: Any) -> bool:
+        if (
+            isinstance(data, dict)
+            and "sarif" in data.get("$schema", "").lower()
+            and data.get("version") == "2.1.0"
+        ):
+            return True
+        return False
 
     def get_observations(self, data: dict) -> list[Observation]:
         observations: list[Observation] = []

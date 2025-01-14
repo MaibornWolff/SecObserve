@@ -119,16 +119,22 @@ const ApiImportObservations = (product: any) => {
                                 validate={validate_required}
                             />
                         </ReferenceInput>
-                        <ReferenceInput
-                            source="branch"
-                            reference="branches"
-                            queryOptions={{ meta: { api_resource: "branch_names" } }}
-                            sort={{ field: "name", order: "ASC" }}
-                            filter={{ product: product.product.id }}
-                            alwaysOn
-                        >
-                            <AutocompleteInputWide optionText="name" label="Branch / Version" />
-                        </ReferenceInput>
+                        {product.product.has_branches && (
+                            <ReferenceInput
+                                source="branch"
+                                reference="branches"
+                                queryOptions={{ meta: { api_resource: "branch_names" } }}
+                                sort={{ field: "name", order: "ASC" }}
+                                filter={{ product: product.product.id }}
+                                alwaysOn
+                            >
+                                <AutocompleteInputWide
+                                    optionText="name"
+                                    label="Branch / Version"
+                                    defaultValue={product.product.repository_default_branch}
+                                />
+                            </ReferenceInput>
+                        )}
                         <TextInputWide source="service" validate={validate_255} />
                         <TextInputWide
                             source="docker_image_name_tag"

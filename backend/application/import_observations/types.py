@@ -32,3 +32,8 @@ class Parser_Type:
         (TYPE_OTHER, TYPE_OTHER),
         (TYPE_MANUAL, TYPE_MANUAL),
     ]
+
+
+class Parser_Filetype:
+    FILETYPE_CSV = "CSV"
+    FILETYPE_JSON = "JSON"

@@ -111,7 +111,7 @@ A `License Component` is a library or package used in a product that is licensed
 
 * a license with a known SPDX identifier
 * a license expression, if the license expression in the scan report is valid [according to the SPDX specification](https://spdx.github.io/spdx-spec/v3.0.1/annexes/spdx-license-expressions/) and consists only of known SPDX identifiers
-* an unknown license string in all other cases
+* a non-spdx license string in all other cases
 
 #### License Component Evidence
 
@@ -125,7 +125,7 @@ A `License Policy` can have another license policy as a `Parent`. If a license p
 
 #### License Policy Item
 
-A `License Policy Item` is a single rule in a license policy. It can be a rule for a specific license, a rule for a license group or a rule for an unkown license string, e.g. a license that is not in the SPDX list or a license expression.
+A `License Policy Item` is a single rule in a license policy. It can be a rule for a specific license, a rule for a license group or a rule for a non-spdx license string, e.g. a license that is not in the SPDX list or a license expression.
 
 #### License Policy Member
 

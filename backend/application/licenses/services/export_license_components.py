@@ -35,7 +35,7 @@ def _get_license_components(product: Product) -> QuerySet:
     license_components = license_components.order_by(
         "numerical_evaluation_result",
         "license_name",
-        "name_version",
+        "component_name_version",
     )
 
     return license_components
@@ -47,6 +47,7 @@ def _get_excludes():
         "pk",
         "objects",
         "unsaved_license",
+        "unsaved_evidences",
     ]
 
 

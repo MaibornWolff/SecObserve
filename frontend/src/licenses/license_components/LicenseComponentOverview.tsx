@@ -29,7 +29,7 @@ type LicenseComponentOverviewProps = {
 };
 
 const licenseNameStyle = (type: string): string => {
-    if (type === "" || type === "Unknown") {
+    if (type === "" || type === "Non-SPDX") {
         return "italic";
     }
     return "normal";
@@ -67,7 +67,12 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
             />
         );
         filters.push(
-            <AutocompleteInput source="purl_type" label="Component type" choices={PURL_TYPE_CHOICES} alwaysOn />
+            <AutocompleteInput
+                source="component_purl_type"
+                label="Component type"
+                choices={PURL_TYPE_CHOICES}
+                alwaysOn
+            />
         );
         return filters;
     }
@@ -106,7 +111,7 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
             branch: listContext.filterValues.branch,
             license_name: listContext.filterValues.license_name,
             evaluation_result: listContext.filterValues.evaluation_result,
-            purl_type: listContext.filterValues.purl_type,
+            component_purl_type: listContext.filterValues.component_purl_type,
         };
         filterStorage["filter"] = filter;
         if (listContext.sort.field) {
@@ -133,8 +138,8 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
         if (filter.evaluation_result) {
             url += "&evaluation_result=" + encodeURIComponent(filter.evaluation_result);
         }
-        if (filter.purl_type) {
-            url += "&purl_type=" + encodeURIComponent(filter.purl_type);
+        if (filter.component_purl_type) {
+            url += "&component_purl_type=" + encodeURIComponent(filter.component_purl_type);
         }
 
         if (listContext.sort.field) {
@@ -180,7 +185,7 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
                                 <LicenseComponentEmbeddedList
                                     product={product}
                                     expand={true}
-                                    purl_type={listContext.filterValues.purl_type}
+                                    component_purl_type={listContext.filterValues.component_purl_type}
                                 />
                             </Paper>
                         }

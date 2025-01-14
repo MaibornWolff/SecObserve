@@ -1,16 +1,12 @@
-import csv
-import io
 import re
 from json import dumps
-
-from django.core.files.base import File
 
 from application.core.models import Observation
 from application.import_observations.parsers.base_parser import (
     BaseFileParser,
     BaseParser,
 )
-from application.import_observations.types import Parser_Type
+from application.import_observations.types import Parser_Filetype, Parser_Type
 
 
 class AzureDefenderParser(BaseParser, BaseFileParser):
@@ -19,29 +15,17 @@ class AzureDefenderParser(BaseParser, BaseFileParser):
         return "Azure Defender"
 
     @classmethod
+    def get_filetype(cls) -> str:
+        return Parser_Filetype.FILETYPE_CSV
+
+    @classmethod
     def get_type(cls) -> str:
         return Parser_Type.TYPE_INFRASTRUCTURE
 
-    def check_format(self, file: File) -> tuple[bool, list[str], dict | list]:
-        if file.name and not file.name.endswith(".csv"):
-            return False, ["File is not CSV"], {}
-        try:
-            content = file.read()
-            if isinstance(content, bytes):
-                content = content.decode("utf-8")
-            reader = csv.DictReader(io.StringIO(content), delimiter=",", quotechar='"')
-        except Exception:
-            return False, ["File is not valid CSV"], {}
-
-        rows = []
-        for row in reader:
-            rows.append(row)
-
-        if rows:
-            if not rows[0].get("subscriptionName"):
-                return False, ["File is not an Azure Defender export"], {}
-
-        return True, [], rows
+    def check_format(self, data: list[dict]) -> bool:
+        if data and data[0].get("subscriptionId") and data[0].get("subscriptionName"):
+            return True
+        return False
 
     def get_observations(self, data: list[dict]) -> list[Observation]:
         observations = []

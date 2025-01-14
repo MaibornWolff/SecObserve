@@ -34,18 +34,16 @@ from application.core.services.risk_acceptance_expiry import (
 from application.core.services.security_gate import check_security_gate
 from application.core.types import Assessment_Status, Status
 from application.epss.services.epss import epss_apply_observation
+from application.import_observations.exceptions import ParserError
 from application.import_observations.models import (
     Api_Configuration,
     Parser,
     Vulnerability_Check,
 )
-from application.import_observations.parsers.base_parser import (
-    BaseAPIParser,
-    BaseFileParser,
-    BaseParser,
-)
-from application.import_observations.services.parser_registry import (
-    get_parser_class_from_parser_name,
+from application.import_observations.parsers.base_parser import BaseAPIParser
+from application.import_observations.services.parser_detector import (
+    detect_parser,
+    instanciate_parser,
 )
 from application.issue_tracker.services.issue_tracker import (
     push_observations_to_issue_tracker,
@@ -73,7 +71,6 @@ class ImportParameters:
 class FileUploadParameters:
     product: Product
     branch: Optional[Branch]
-    parser: Parser
     file: File
     service: str
     docker_image_name_tag: str
@@ -95,17 +92,8 @@ class ApiImportParameters:
 def file_upload_observations(
     file_upload_parameters: FileUploadParameters,
 ) -> Tuple[int, int, int, int, int, int]:
-    parser_instance = _instanciate_parser(file_upload_parameters.parser)
 
-    if not isinstance(parser_instance, BaseFileParser):
-        raise ParserError(f"{file_upload_parameters.parser.name} isn't a file parser")
-
-    format_valid, errors, data = parser_instance.check_format(
-        file_upload_parameters.file
-    )
-    if not format_valid:
-        raise ValidationError("File format is not valid: " + " / ".join(errors))
-
+    parser, parser_instance, data = detect_parser(file_upload_parameters.file)
     imported_observations = parser_instance.get_observations(data)
 
     filename = (
@@ -117,7 +105,7 @@ def file_upload_observations(
     import_parameters = ImportParameters(
         product=file_upload_parameters.product,
         branch=file_upload_parameters.branch,
-        parser=file_upload_parameters.parser,
+        parser=parser,
         filename=filename,
         api_configuration_name="",
         service=file_upload_parameters.service,
@@ -186,9 +174,7 @@ def file_upload_observations(
 def api_import_observations(
     api_import_parameters: ApiImportParameters,
 ) -> Tuple[int, int, int]:
-    parser_instance = _instanciate_parser(
-        api_import_parameters.api_configuration.parser
-    )
+    parser_instance = instanciate_parser(api_import_parameters.api_configuration.parser)
 
     if not isinstance(parser_instance, BaseAPIParser):
         raise ParserError(
@@ -238,7 +224,7 @@ def api_import_observations(
 def api_check_connection(
     api_configuration: Api_Configuration,
 ) -> Tuple[bool, list[str]]:
-    parser_instance = _instanciate_parser(api_configuration.parser)
+    parser_instance = instanciate_parser(api_configuration.parser)
 
     if not isinstance(parser_instance, BaseAPIParser):
         return False, [f"{api_configuration.parser.name} isn't an API parser"]
@@ -246,14 +232,6 @@ def api_check_connection(
     format_valid, errors, _ = parser_instance.check_connection(api_configuration)
 
     return format_valid, errors
-
-
-def _instanciate_parser(parser: Parser) -> BaseParser:
-    parser_class = get_parser_class_from_parser_name(parser.name)
-    if not parser_class:
-        raise ParserError(f"Parser {parser.name} not found in parser registry")
-    parser_instance: BaseParser = parser_class()
-    return parser_instance
 
 
 def _process_data(import_parameters: ImportParameters) -> Tuple[int, int, int, str]:
@@ -569,8 +547,3 @@ def _get_initial_status(product: Product) -> str:
     if _get_new_observations_in_review(product):
         return Status.STATUS_IN_REVIEW
     return Status.STATUS_OPEN
-
-
-class ParserError(Exception):
-    def __init__(self, message):
-        self.message = message

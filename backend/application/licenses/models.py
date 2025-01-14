@@ -106,13 +106,13 @@ class License_Component(Model):
     )
     upload_filename = CharField(max_length=255, blank=True)
 
-    name = CharField(max_length=255)
-    version = CharField(max_length=255, blank=True)
-    name_version = CharField(max_length=513, blank=True)
-    purl = CharField(max_length=255, blank=True)
-    purl_type = CharField(max_length=16, blank=True)
-    cpe = CharField(max_length=255, blank=True)
-    dependencies = TextField(max_length=32768, blank=True)
+    component_name = CharField(max_length=255)
+    component_version = CharField(max_length=255, blank=True)
+    component_name_version = CharField(max_length=513, blank=True)
+    component_purl = CharField(max_length=255, blank=True)
+    component_purl_type = CharField(max_length=16, blank=True)
+    component_cpe = CharField(max_length=255, blank=True)
+    component_dependencies = TextField(max_length=32768, blank=True)
 
     license_name = CharField(max_length=255, blank=True)
     license = ForeignKey(
@@ -123,7 +123,7 @@ class License_Component(Model):
         null=True,
     )
     license_expression = CharField(max_length=255, blank=True)
-    unknown_license = CharField(max_length=255, blank=True)
+    non_spdx_license = CharField(max_length=255, blank=True)
     evaluation_result = CharField(
         max_length=16,
         choices=License_Policy_Evaluation_Result.RESULT_CHOICES,
@@ -144,7 +144,7 @@ class License_Component(Model):
         self.unsaved_evidences = []
 
     def __str__(self):
-        return self.name_version
+        return self.component_name_version
 
     def save(self, *args, **kwargs) -> None:
         self.numerical_evaluation_result = (
@@ -212,7 +212,7 @@ class License_Policy_Item(Model):
         null=True,
     )
     license_expression = CharField(max_length=255, blank=True)
-    unknown_license = CharField(max_length=255, blank=True)
+    non_spdx_license = CharField(max_length=255, blank=True)
     evaluation_result = CharField(
         max_length=16, choices=License_Policy_Evaluation_Result.RESULT_CHOICES
     )

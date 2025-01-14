@@ -175,9 +175,9 @@ class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
             elif element["license_expression"]:
                 license_name = element["license_expression"]
                 element_type = "Expression"
-            elif element["unknown_license"]:
-                license_name = element["unknown_license"]
-                element_type = "Unknown"
+            elif element["non_spdx_license"]:
+                license_name = element["non_spdx_license"]
+                element_type = "Non-SPDX"
             else:
                 license_name = "No license information"
                 element_type = ""
@@ -231,10 +231,10 @@ class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
                 evaluation_result=filter_evaluation_result
             )
 
-        filter_purl_type = request.query_params.get("purl_type")
-        if filter_purl_type:
+        filter_component_purl_type = request.query_params.get("component_purl_type")
+        if filter_component_purl_type:
             license_overview_elements = license_overview_elements.filter(
-                purl_type=filter_purl_type
+                component_purl_type=filter_component_purl_type
             )
 
         return license_overview_elements

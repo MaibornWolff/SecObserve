@@ -6,15 +6,15 @@
             "identity_hash": "6eef8088480aa2523aeeb64ad35f876a942cc3172cfb36752f3a052a4f88642c",
             "product": 1,
             "upload_filename": "",
-            "name": "internal_component",
-            "version": "1.0.0",
-            "name_version": "internal_component:1.0.0",
-            "purl": "",
-            "purl_type": "",
-            "cpe": "",
-            "dependencies": "",
+            "component_name": "internal_component",
+            "component_version": "1.0.0",
+            "component_name_version": "internal_component:1.0.0",
+            "component_purl": "",
+            "component_purl_type": "",
+            "component_cpe": "",
+            "component_dependencies": "",
             "license_name": "internal license",
-            "unknown_license": "internal license",
+            "non_spdx_license": "internal license",
             "evaluation_result": "Allowed",
             "numerical_evaluation_result": 1,
             "created": "2022-12-15T16:10:35.513Z",
@@ -29,15 +29,15 @@
             "identity_hash": "bc8e59b7687fe3533616b3914c636389c131eac3bdbda1b67d8d26f890a74007",
             "product": 2,
             "upload_filename": "",
-            "name": "external_component",
-            "version": "2.0.0",
-            "name_version": "external_component:2.0.0",
-            "purl": "",
-            "purl_type": "",
-            "cpe": "",
-            "dependencies": "",
+            "component_name": "external_component",
+            "component_version": "2.0.0",
+            "component_name_version": "external_component:2.0.0",
+            "component_purl": "",
+            "component_purl_type": "",
+            "component_cpe": "",
+            "component_dependencies": "",
             "license_name": "external license",
-            "unknown_license": "external license",
+            "non_spdx_license": "external license",
             "evaluation_result": "Review required",
             "numerical_evaluation_result": 2,
             "created": "2022-12-15T16:10:35.513Z",
@@ -226,7 +226,7 @@
         "fields": {
             "license_policy": 1000,
             "license_group": 1,
-            "unknown_license": "",
+            "non_spdx_license": "",
             "evaluation_result": "Allowed",
             "numerical_evaluation_result": 4
         }
@@ -237,7 +237,7 @@
         "fields": {
             "license_policy": 1001,
             "license": 1,
-            "unknown_license": "",
+            "non_spdx_license": "",
             "evaluation_result": "Forbidden",
             "numerical_evaluation_result": 1
         }
@@ -247,7 +247,7 @@
         "pk": 1002,
         "fields": {
             "license_policy": 1002,
-            "unknown_license": "Two unknown licenses",
+            "non_spdx_license": "Two non-spdx licenses",
             "evaluation_result": "Unknown",
             "numerical_evaluation_result": 3
         }
@@ -257,7 +257,7 @@
         "pk": 1003,
         "fields": {
             "license_policy": 1003,
-            "unknown_license": "Three unknown licenses",
+            "non_spdx_license": "Three non-spdx licenses",
             "evaluation_result": "Unknown",
             "numerical_evaluation_result": 3
         }
@@ -267,7 +267,7 @@
         "pk": 1004,
         "fields": {
             "license_policy": 1004,
-            "unknown_license": "Four unknown licenses",
+            "non_spdx_license": "Four non-spdx licenses",
             "evaluation_result": "Unknown",
             "numerical_evaluation_result": 3
         }
