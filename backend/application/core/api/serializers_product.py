@@ -2,8 +2,11 @@ from datetime import date
 from typing import Optional
 
 from rest_framework.serializers import (
+    CharField,
     IntegerField,
+    ListField,
     ModelSerializer,
+    Serializer,
     SerializerMethodField,
     ValidationError,
 )
@@ -699,3 +702,13 @@ class ServiceSerializer(ModelSerializer):
 
     def get_open_unknown_observation_count(self, obj: Service) -> int:
         return obj.open_unknown_observation_count
+
+
+class PURLTypeElementSerializer(Serializer):
+    id = CharField()
+    name = CharField()
+
+
+class PURLTypeSerializer(Serializer):
+    count = IntegerField()
+    results = ListField(child=PURLTypeElementSerializer())

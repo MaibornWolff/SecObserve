@@ -44,7 +44,7 @@ class LicenseComponentFilter(FilterSet):
     age = ChoiceFilter(
         field_name="age", method="get_age", choices=Age_Choices.AGE_CHOICES
     )
-    branch_name = CharFilter(field_name="branch__name")
+    branch_name_exact = CharFilter(field_name="branch__name")
 
     def get_age(self, queryset, field_name, value):  # pylint: disable=unused-argument
         # field_name is used as a positional argument

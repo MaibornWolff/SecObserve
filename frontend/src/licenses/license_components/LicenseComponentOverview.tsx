@@ -1,7 +1,6 @@
 import { Paper } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
-    AutocompleteInput,
     Datagrid,
     FilterForm,
     FunctionField,
@@ -19,7 +18,6 @@ import { EvaluationResultField } from "../../commons/custom_fields/EvaluationRes
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 import { getSettingListSize } from "../../commons/user_settings/functions";
-import { PURL_TYPE_CHOICES } from "../../core/types";
 import { getElevation } from "../../metrics/functions";
 import { EVALUATION_RESULT_CHOICES } from "../types";
 import LicenseComponentEmbeddedList from "./LicenseComponentEmbeddedList";
@@ -50,7 +48,7 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
                     reference="branches"
                     queryOptions={{ meta: { api_resource: "branch_names" } }}
                     sort={{ field: "name", order: "ASC" }}
-                    filter={{ product: product.id }}
+                    filter={{ product: product.id, for_license_components: true }}
                     alwaysOn
                 >
                     <AutocompleteInputMedium optionText="name" label="Branch / Version" />
@@ -67,12 +65,14 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
             />
         );
         filters.push(
-            <AutocompleteInput
+            <ReferenceInput
                 source="component_purl_type"
-                label="Component type"
-                choices={PURL_TYPE_CHOICES}
+                reference="purl_types"
+                filter={{ product: product.id, for_license_components: true }}
                 alwaysOn
-            />
+            >
+                <AutocompleteInputMedium optionText="name" label="Component type" />
+            </ReferenceInput>
         );
         return filters;
     }
