@@ -232,29 +232,6 @@ class ObservationFilter(FilterSet):
         queryset=Product.objects.filter(is_product_group=True),
     )
 
-    has_pending_assessment = BooleanFilter(
-        field_name="has_pending_assessment",
-        method="get_has_pending_assessment",
-    )
-
-    def get_has_pending_assessment(
-        self, queryset, field_name, value
-    ):  # pylint: disable=unused-argument
-        # field_name is used as a positional argument
-
-        if value:
-            return queryset.filter(
-                id__in=Observation_Log.objects.filter(
-                    assessment_status="Needs approval"
-                ).values("observation_id")
-            )
-
-        return queryset.exclude(
-            id__in=Observation_Log.objects.filter(
-                assessment_status="Needs approval"
-            ).values("observation_id")
-        )
-
     ordering = OrderingFilter(
         # tuple-mapping retains order
         fields=(

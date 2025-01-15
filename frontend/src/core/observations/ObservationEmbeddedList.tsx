@@ -111,9 +111,6 @@ function listFilters(product: Product) {
     if (product && product.has_potential_duplicates) {
         filters.push(<NullableBooleanInput source="has_potential_duplicates" label="Duplicates" alwaysOn />);
     }
-    if (product && product.observation_log_approvals > 0) {
-        filters.push(<NullableBooleanInput source="has_pending_assessment" label="Pending assessment" alwaysOn />);
-    }
 
     return filters;
 }
