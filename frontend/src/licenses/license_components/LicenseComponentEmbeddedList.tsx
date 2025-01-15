@@ -1,6 +1,5 @@
 import { Fragment } from "react";
 import {
-    AutocompleteInput,
     Datagrid,
     FilterForm,
     FunctionField,
@@ -17,11 +16,8 @@ import {
 import { PERMISSION_COMPONENT_LICENSE_DELETE } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { EvaluationResultField } from "../../commons/custom_fields/EvaluationResultField";
-import { humanReadableDate } from "../../commons/functions";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/user_settings/functions";
-import { PURL_TYPE_CHOICES } from "../../core/types";
-import { AGE_CHOICES } from "../../core/types";
 import { EVALUATION_RESULT_CHOICES } from "../types";
 import LicenseComponentBulkDeleteButton from "./LicenseComponentBulkDeleteButton";
 
@@ -60,7 +56,7 @@ const LicenseComponentEmbeddedList = ({ product, expand, component_purl_type }: 
                     reference="branches"
                     queryOptions={{ meta: { api_resource: "branch_names" } }}
                     sort={{ field: "name", order: "ASC" }}
-                    filter={{ product: product.id }}
+                    filter={{ product: product.id, for_license_components: true }}
                     alwaysOn
                 >
                     <AutocompleteInputMedium optionText="name" label="Branch / Version" />
@@ -78,14 +74,15 @@ const LicenseComponentEmbeddedList = ({ product, expand, component_purl_type }: 
         );
         filters.push(<TextInput source="component_name_version" label="Component" alwaysOn />);
         filters.push(
-            <AutocompleteInput
+            <ReferenceInput
                 source="component_purl_type"
-                label="Component type"
-                choices={PURL_TYPE_CHOICES}
+                reference="purl_types"
+                filter={{ product: product.id, for_license_components: true }}
                 alwaysOn
-            />
+            >
+                <AutocompleteInputMedium optionText="name" label="Component type" />
+            </ReferenceInput>
         );
-        filters.push(<AutocompleteInputMedium source="age" choices={AGE_CHOICES} alwaysOn />);
 
         return filters;
     }
@@ -95,8 +92,9 @@ const LicenseComponentEmbeddedList = ({ product, expand, component_purl_type }: 
 
     const record = useRecordContext();
     if (expand) {
+        localStorage.removeItem("RaStore.license_components.embedded");
         if (record && record.branch_name) {
-            filter = { ...filter, branch_name: record.branch_name };
+            filter = { ...filter, branch_name_exact: record.branch_name };
         }
         if (record && record.license_name) {
             filter = { ...filter, license_name_exact: record.license_name };
@@ -168,13 +166,7 @@ const LicenseComponentEmbeddedList = ({ product, expand, component_purl_type }: 
                                 sortable={true}
                             />
                         )}
-                        <TextField source="component_name_version" label="Component" />
-                        <TextField source="component_purl_type" label="Component type" />
-                        <FunctionField
-                            label="Age"
-                            sortBy="last_change"
-                            render={(record) => (record ? humanReadableDate(record.last_change) : "")}
-                        />
+                        <TextField source="component_name_version_type" label="Component" />
                     </Datagrid>
                     <WithListContext
                         render={({ total }) => (

@@ -31,10 +31,10 @@ def get_origin_component_name_version(observation: Observation) -> str:
         return ""
 
     origin_component_name_version_with_type = observation.origin_component_name_version
-    if observation.origin_component_purl:
-        purl = PackageURL.from_string(observation.origin_component_purl)
-        if purl.type:
-            origin_component_name_version_with_type += f" ({purl.type})"
+    if observation.origin_component_purl_type:
+        origin_component_name_version_with_type += (
+            f" ({observation.origin_component_purl_type})"
+        )
 
     return origin_component_name_version_with_type
 

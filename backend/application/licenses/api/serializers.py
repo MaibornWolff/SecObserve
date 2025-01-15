@@ -99,6 +99,7 @@ class LicenseComponentSerializer(ModelSerializer):
         source="license",
         read_only=True,
     )
+    component_name_version_type = SerializerMethodField()
     component_purl_namespace = SerializerMethodField()
     branch_name = SerializerMethodField()
     license_policy_name: Optional[SerializerMethodField] = SerializerMethodField()
@@ -112,6 +113,15 @@ class LicenseComponentSerializer(ModelSerializer):
     class Meta:
         model = License_Component
         fields = "__all__"
+
+    def get_component_name_version_type(self, obj: License_Component) -> Optional[str]:
+        if obj.component_name_version:
+            component_name_version_type = obj.component_name_version
+            if obj.component_purl_type:
+                component_name_version_type += f" ({obj.component_purl_type})"
+            return component_name_version_type
+
+        return ""
 
     def get_component_purl_namespace(self, obj: License_Component) -> Optional[str]:
         if obj.component_purl:
