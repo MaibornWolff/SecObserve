@@ -207,7 +207,9 @@ def apply_license_policy_to_component(
 
 
 def get_ignore_component_type_list(ignore_component_types: str) -> list:
-    ignore_component_types_list = ignore_component_types.split(",") if ignore_component_types else []
+    ignore_component_types_list = (
+        ignore_component_types.split(",") if ignore_component_types else []
+    )
     ignore_component_types_list = [x.strip() for x in ignore_component_types_list]
     return ignore_component_types_list
 

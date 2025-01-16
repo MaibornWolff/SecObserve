@@ -25,8 +25,8 @@ class License_Policy_Export_Item:
 
 
 @dataclass
-class License_Policy_Export_Ignore_PURL_Type:
-    purl_type: str
+class License_Policy_Export_Ignore_Component_Type:
+    component_type: str
 
 
 @dataclass
@@ -34,7 +34,7 @@ class License_Policy_Export:
     name: str
     description: str
     items: list[License_Policy_Export_Item]
-    ignore_component_types: list[License_Policy_Export_Ignore_PURL_Type]
+    ignore_component_types: list[License_Policy_Export_Ignore_Component_Type]
     parent: Optional[str] = None
 
 
