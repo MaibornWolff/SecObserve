@@ -10,12 +10,6 @@
 
 * There will be specific upgrade instructions if necessary, e.g. when there are new configuration parameters.
 
-## Release 1.27.0
-
-**Breaking changes**
-
-* The attribute `ignore_components_type` in License Policies has been renamed to `ignore_purl_types`. This is nearer to the purpose of the attribute, because it addresses PURL types.
-
 ## Release 1.26.0
 
 **Breaking changes**

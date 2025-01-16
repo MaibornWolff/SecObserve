@@ -34,7 +34,7 @@ class License_Policy_Export:
     name: str
     description: str
     items: list[License_Policy_Export_Item]
-    ignore_purl_types: list[License_Policy_Export_Ignore_PURL_Type]
+    ignore_component_types: list[License_Policy_Export_Ignore_PURL_Type]
     parent: Optional[str] = None
 
 
@@ -53,8 +53,8 @@ def _create_license_policy_export(
         name=license_policy.name,
         description=license_policy.description,
         items=[],
-        ignore_purl_types=get_ignore_component_type_list(
-            license_policy.ignore_purl_types
+        ignore_component_types=get_ignore_component_type_list(
+            license_policy.ignore_component_types
         ),
     )
     if license_policy.parent:
