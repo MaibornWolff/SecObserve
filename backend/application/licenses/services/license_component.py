@@ -62,8 +62,8 @@ def process_license_components(
     components_updated = 0
 
     license_policy = vulnerability_check.product.license_policy
-    ignore_component_types = (
-        get_ignore_component_type_list(license_policy.ignore_component_types)
+    ignore_purl_types = (
+        get_ignore_component_type_list(license_policy.ignore_purl_types)
         if license_policy
         else []
     )
@@ -94,7 +94,7 @@ def process_license_components(
             apply_license_policy_to_component(
                 existing_component,
                 license_evaluation_results,
-                ignore_component_types,
+                ignore_purl_types,
             )
             existing_component.import_last_seen = timezone.now()
             if (
@@ -118,7 +118,7 @@ def process_license_components(
             apply_license_policy_to_component(
                 unsaved_component,
                 license_evaluation_results,
-                ignore_component_types,
+                ignore_purl_types,
             )
 
             unsaved_component.import_last_seen = timezone.now()

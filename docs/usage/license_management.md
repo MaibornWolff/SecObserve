@@ -54,13 +54,13 @@ The list of `License Policies` can be found in the `Licenses` sub-menu under `Ad
 
 A `License Policy` can have another license policy as a `Parent`. If a license policy has a parent, the rules of the parent are also valid for the child policy, but existing rules of the parent can be overriden and new rules can be added. A license policy which is a parent cannot have a parent itself.
 
-Within the `License Policy` itself a comma-separated list of component (e.g. `apk` or `deb`) types can be defined, which shall be ignored in the license evaluation. This can be useful for operating system packages in a Docker container, which are not relevant for the license management.
+Within the `License Policy` itself a comma-separated list of PURL types (e.g. `apk` or `deb`) can be defined, which shall be ignored in the license evaluation. This can be useful for operating system packages in a Docker container, which are not relevant for the license management.
 
 The attribute `Public` defines, if the License Policy is visible for all users or only for the members of the policy.
 
 **Actions**
 
-* The `Export` button opens a sub-menu to exports the License Policy either as a JSON or a YAML file.	
+* The `Export` button opens a sub-menu to exports the License Policy either as a JSON or a YAML file. The output format is specified as a [JSON schema](../specification/secobserve_license_policy_schema.json).
 * With the `Apply` button the rules of the License Policy are applied to all products, that have this License Policy set.
 * The `Copy` button creates a new License Policy with the same rules, which can be adjusted for a specific Product.
 

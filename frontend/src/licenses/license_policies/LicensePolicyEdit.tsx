@@ -28,8 +28,8 @@ const LicensePolicyEdit = () => {
         if (!data.description) {
             data.description = "";
         }
-        if (!data.ignore_component_types) {
-            data.ignore_component_types = "";
+        if (!data.ignore_purl_types) {
+            data.ignore_purl_types = "";
         }
         return data;
     };
@@ -64,7 +64,7 @@ const LicensePolicyEdit = () => {
                         </Fragment>
                     )}
                 />
-                <TextInputWide source="ignore_component_types" validate={validate_255} />
+                <TextInputWide source="ignore_purl_types" label="Ignore PURL types" validate={validate_255} />
                 <BooleanInput source="is_public" label="Public" />
             </SimpleForm>
         </Edit>

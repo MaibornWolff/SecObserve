@@ -25,8 +25,8 @@ class License_Policy_Export_Item:
 
 
 @dataclass
-class License_Policy_Export_Ignore_Component_Type:
-    component_type: str
+class License_Policy_Export_Ignore_PURL_Type:
+    purl_type: str
 
 
 @dataclass
@@ -34,7 +34,7 @@ class License_Policy_Export:
     name: str
     description: str
     items: list[License_Policy_Export_Item]
-    ignore_component_types: list[License_Policy_Export_Ignore_Component_Type]
+    ignore_purl_types: list[License_Policy_Export_Ignore_PURL_Type]
     parent: Optional[str] = None
 
 
@@ -53,8 +53,8 @@ def _create_license_policy_export(
         name=license_policy.name,
         description=license_policy.description,
         items=[],
-        ignore_component_types=get_ignore_component_type_list(
-            license_policy.ignore_component_types
+        ignore_purl_types=get_ignore_component_type_list(
+            license_policy.ignore_purl_types
         ),
     )
     if license_policy.parent:

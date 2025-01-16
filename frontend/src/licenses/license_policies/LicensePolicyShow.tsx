@@ -81,9 +81,9 @@ const LicensePolicyComponent = () => {
                                     </ReferenceField>
                                 </Labeled>
                             )}
-                            {license_policy.ignore_component_types && (
+                            {license_policy.ignore_purl_types && (
                                 <Labeled>
-                                    <TextField source="ignore_component_types" />
+                                    <TextField source="ignore_purl_types" label="Ignore PURL types" />
                                 </Labeled>
                             )}
                             <Labeled label="Public">

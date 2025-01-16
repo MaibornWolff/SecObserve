@@ -7770,7 +7770,7 @@
         "fields": {
             "name": "Standard",
             "description": "",
-            "ignore_component_types": "",
+            "ignore_purl_types": "",
             "is_public": true
         }
     },

@@ -765,7 +765,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
         # --- Third import with some changes ---
 
         license_policy = License_Policy.objects.get(name="Standard")
-        license_policy.ignore_component_types = "npm"
+        license_policy.ignore_purl_types = "npm"
         license_policy.save()
 
         license_policy_item = License_Policy_Item(
@@ -947,7 +947,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
         # --- Fourth import with ignoring the PiPy packages ---
 
         license_policy = License_Policy.objects.get(name="Standard")
-        license_policy.ignore_component_types = "npm, pypi"
+        license_policy.ignore_purl_types = "npm, pypi"
         license_policy.save()
 
         file_upload_parameters = FileUploadParameters(

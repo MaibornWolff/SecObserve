@@ -23,7 +23,7 @@ class TestLicenseGroupMemberSerializer(BaseTestCase):
 
         license_policy = License_Policy.objects.get(pk=1000)
         license_policy.description = "description_1000"
-        license_policy.ignore_component_types = "apk, oci"
+        license_policy.ignore_purl_types = "apk, oci"
         license_policy.save()
         License_Policy_Item(
             license_policy=license_policy,
@@ -80,7 +80,7 @@ class TestLicenseGroupMemberSerializer(BaseTestCase):
 
         json_data_expected = """{
     "description": "description_1000",
-    "ignore_component_types": [
+    "ignore_purl_types": [
         "apk",
         "oci"
     ],
@@ -116,7 +116,7 @@ class TestLicenseGroupMemberSerializer(BaseTestCase):
         yaml_data = export_license_policy_yaml(license_policy)
 
         yaml_data_expected = """description: description_1000
-ignore_component_types:
+ignore_purl_types:
 - apk
 - oci
 items:
