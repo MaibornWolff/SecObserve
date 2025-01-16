@@ -9,7 +9,7 @@
             "type": "string",
             "description": "Description of the license policy."
         },
-        "ignore_purl_types": {
+        "ignore_component_types": {
             "type": "array",
             "uniqueItems": true,
             "minItems": 1,
