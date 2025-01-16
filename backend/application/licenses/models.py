@@ -175,7 +175,7 @@ class License_Policy(Model):
     name = CharField(max_length=255, unique=True)
     description = TextField(max_length=2048, blank=True)
     is_public = BooleanField(default=False)
-    ignore_component_types = CharField(max_length=255, blank=True)
+    ignore_purl_types = CharField(max_length=255, blank=True)
     users: ManyToManyField = ManyToManyField(
         User,
         through="License_Policy_Member",

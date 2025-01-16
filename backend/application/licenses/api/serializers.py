@@ -395,10 +395,10 @@ class LicensePolicySerializer(ModelSerializer):
         model = License_Policy
         exclude = ["users", "authorization_groups"]
 
-    def validate_ignore_component_types(self, value: str) -> str:
-        ignore_component_types = get_ignore_component_type_list(value)
-        for component_type in ignore_component_types:
-            for component_type in ignore_component_types:
+    def validate_ignore_purl_types(self, value: str) -> str:
+        ignore_purl_types = get_ignore_component_type_list(value)
+        for component_type in ignore_purl_types:
+            for component_type in ignore_purl_types:
                 if not PURL_Type.PURL_TYPE_CHOICES.get(component_type):
                     raise ValidationError(f"Invalid component type {component_type}")
 

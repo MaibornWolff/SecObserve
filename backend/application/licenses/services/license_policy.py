@@ -37,7 +37,7 @@ def copy_license_policy(
         name=name,
         description=source_license_policy.description,
         is_public=source_license_policy.is_public,
-        ignore_component_types=source_license_policy.ignore_component_types,
+        ignore_purl_types=source_license_policy.ignore_purl_types,
     )
 
     items = License_Policy_Item.objects.filter(license_policy=source_license_policy)
@@ -163,7 +163,7 @@ def apply_license_policy_product(product: Product) -> None:
             apply_license_policy_to_component(
                 component,
                 license_evaluation_results,
-                get_ignore_component_type_list(license_policy.ignore_component_types),
+                get_ignore_component_type_list(license_policy.ignore_purl_types),
             )
         else:
             component.evaluation_result = (
@@ -183,10 +183,10 @@ def apply_license_policy_product(product: Product) -> None:
 def apply_license_policy_to_component(
     component: License_Component,
     evaluation_results: dict[str, LicensePolicyEvaluationResult],
-    ignore_component_types: list,
+    ignore_purl_types: list,
 ) -> None:
     evaluation_result = None
-    if component.component_purl_type in ignore_component_types:
+    if component.component_purl_type in ignore_purl_types:
         evaluation_result = License_Policy_Evaluation_Result.RESULT_IGNORED
     elif component.license:
         evaluation_result = _get_license_evaluation_result(
@@ -206,12 +206,10 @@ def apply_license_policy_to_component(
     component.evaluation_result = evaluation_result
 
 
-def get_ignore_component_type_list(ignore_component_types: str) -> list:
-    ignore_component_types_list = (
-        ignore_component_types.split(",") if ignore_component_types else []
-    )
-    ignore_component_types_list = [x.strip() for x in ignore_component_types_list]
-    return ignore_component_types_list
+def get_ignore_component_type_list(ignore_purl_types: str) -> list:
+    ignore_purl_types_list = ignore_purl_types.split(",") if ignore_purl_types else []
+    ignore_purl_types_list = [x.strip() for x in ignore_purl_types_list]
+    return ignore_purl_types_list
 
 
 def _get_license_policy(product: Product) -> Optional[License_Policy]:
