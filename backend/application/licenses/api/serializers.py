@@ -405,7 +405,7 @@ class LicensePolicySerializer(ModelSerializer):
         return value
 
     def validate_parent(self, value: License_Policy) -> License_Policy:
-        if value.parent:
+        if value and value.parent:
             raise ValidationError("A child cannot be a parent itself")
 
         return value
