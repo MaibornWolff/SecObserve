@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import {
     Datagrid,
     FilterForm,
@@ -43,6 +43,8 @@ const licenseNameStyle = (type: string): string => {
 };
 
 const LicenseComponentEmbeddedList = ({ product, expand, component_purl_type }: LicenseComponentEmbeddedListProps) => {
+    const [initialExpand, setInitialExpand] = useState(true);
+
     const showLicenseComponent = (id: any) => {
         return "../../../../license_components/" + id + "/show";
     };
@@ -92,7 +94,10 @@ const LicenseComponentEmbeddedList = ({ product, expand, component_purl_type }: 
 
     const record = useRecordContext();
     if (expand) {
-        localStorage.removeItem("RaStore.license_components.embedded");
+        if (initialExpand) {
+            localStorage.removeItem("RaStore.license_components.embedded");
+            setInitialExpand(false);
+        }
         if (record && record.branch_name) {
             filter = { ...filter, branch_name_exact: record.branch_name };
         }
