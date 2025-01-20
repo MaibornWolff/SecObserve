@@ -217,12 +217,7 @@ class OSVParser(BaseParser):
 
         package_type = parsed_purl.type
         package_namespace = parsed_purl.namespace
-        package_name = parsed_purl.name
-        if package_namespace and package_namespace != "debian":
-            if package_namespace == "maven":
-                package_name = f"{package_namespace}:{package_name}"
-            else:
-                package_name = f"{package_namespace}/{package_name}"
+        package_name = self._get_package_name(parsed_purl, package_namespace)
         qualifiers = (
             parsed_purl.qualifiers
             if parsed_purl.qualifiers and isinstance(parsed_purl.qualifiers, dict)
@@ -259,6 +254,15 @@ class OSVParser(BaseParser):
                 affected.append(affected_item)
 
         return affected
+
+    def _get_package_name(self, parsed_purl: PackageURL, package_namespace: str) -> str:
+        package_name = parsed_purl.name
+        if package_namespace and package_namespace not in ["alpine", "debian"]:
+            if package_namespace == "maven":
+                package_name = f"{package_namespace}:{package_name}"
+            else:
+                package_name = f"{package_namespace}/{package_name}"
+        return package_name
 
     def _get_affected_cvss(self, affected: dict) -> tuple[str, str]:
         cvss3_vector = ""
