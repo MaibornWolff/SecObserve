@@ -85,7 +85,15 @@ def scan_license_components(license_components: list[License_Component]) -> None
     ]
 
     if len(osv_components) != len(results.get("results", [])):
-        raise Exception("Number of results is different than number of components")
+        raise Exception(  # pylint: disable=broad-exception-raised
+            "Number of results is different than number of components"
+        )
+
+    for result in results.get("results", []):
+        if result.get("next_page_token"):
+            raise Exception(  # pylint: disable=broad-exception-raised
+                "Next page token is not yet supported"
+            )
 
     for i, result in enumerate(results.get("results", [])):
         for vuln in result.get("vulns", []):
@@ -101,7 +109,9 @@ def scan_license_components(license_components: list[License_Component]) -> None
 
     parser = get_parser_by_name(osv_parser.get_name())
     if parser is None:
-        raise Exception(f"Parser {osv_parser.get_name()} not found")
+        raise Exception(  # pylint: disable=broad-exception-raised
+            f"Parser {osv_parser.get_name()} not found"
+        )
 
     import_parameters = ImportParameters(
         product=license_components[0].product,
