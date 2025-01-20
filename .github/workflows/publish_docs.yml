@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - chore/documentation_check_security_gate
+      - chore/documentation_sbom
 
 permissions: read-all
 
