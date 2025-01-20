@@ -34,6 +34,7 @@ from application.metrics.api.views import (
     ProductMetricsStatusView,
     ProductMetricsTimelineView,
 )
+from application.osv.api.views import ScanOSVProductView
 from application.vex.api.views import (
     CSAFDocumentCreateView,
     CSAFDocumentUpdateView,
@@ -84,6 +85,7 @@ urlpatterns += [
     ),
     path("api/purl_types/<str:purl_type_id>/", PURLTypeOneView.as_view()),
     path("api/purl_types/", PURLTypeManyView.as_view()),
+    path("api/products/scan_osv/<int:product_id>/", ScanOSVProductView.as_view()),
     path(
         "api/import/api_import_observations_by_name/",
         ApiImportObservationsByName.as_view(),

@@ -130,6 +130,7 @@ LOCAL_APPS = [
     "application.issue_tracker",
     "application.licenses",
     "application.metrics",
+    "application.osv",
     "application.rules",
     "application.vex",
 ]
