@@ -170,23 +170,19 @@ class OSVParser(BaseParser):
 
         if component_in_versions:
             osv_description_parts.append(
-                "**Certainty: ** High (Component found in affected versions)"
+                "**Certainty: High** (Component found in affected versions)"
             )
         elif component_in_ranges:
             osv_description_parts.append(
-                "**Certainty: ** High (Component found in affected ranges)"
+                "**Certainty: High** (Component found in affected ranges)"
             )
         elif component_in_versions is None and component_in_ranges is None:
             osv_description_parts.append(
-                "**Certainty: ** Medium (No information about affected versions or ranges)"
+                "**Certainty: Low** (No information about affected versions or ranges)"
             )
         elif component_in_ranges is None:
             osv_description_parts.append(
-                "**Certainty: ** Low (Not all ranges could be evaluated)"
-            )
-        elif component_in_versions is False and component_in_ranges is False:
-            osv_description_parts.append(
-                "**Component not found in affected versions or ranges!**"
+                "**Certainty: Low** (Not all ranges could be evaluated)"
             )
 
         return "\n\n".join(osv_description_parts)
@@ -222,7 +218,7 @@ class OSVParser(BaseParser):
         package_type = parsed_purl.type
         package_namespace = parsed_purl.namespace
         package_name = parsed_purl.name
-        if package_namespace:
+        if package_namespace and package_namespace != "debian":
             if package_namespace == "maven":
                 package_name = f"{package_namespace}:{package_name}"
             else:
@@ -242,6 +238,15 @@ class OSVParser(BaseParser):
                     package_osv_ecosystem = (
                         f"{package_osv_ecosystem}:v{distro_parts[0]}.{distro_parts[1]}"
                     )
+        if package_osv_ecosystem == "Debian":
+            if qualifiers:
+                distro = str(qualifiers.get("distro", ""))
+                distro = "".join(i for i in distro if i.isdigit() or i == ".")
+                distro_parts = distro.split(".")
+                if len(distro_parts) >= 1:
+                    package_osv_ecosystem = f"{package_osv_ecosystem}:{distro_parts[0]}"
+                else:
+                    package_osv_ecosystem = f"{package_osv_ecosystem}:{distro}"
 
         for affected_item in osv_vulnerability.get("affected", []):
             package = affected_item.get("package", {})
