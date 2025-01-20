@@ -1,6 +1,7 @@
 import hashlib
 from urllib.parse import urlparse
 
+from cvss import CVSS3, CVSS4
 from packageurl import PackageURL
 
 from application.core.types import Severity, Status
@@ -62,6 +63,12 @@ def _get_string_to_hash(observation):  # pylint: disable=too-many-branches
 
 
 def get_current_severity(observation) -> str:
+    if observation.cvss3_vector:
+        observation.cvss3_score = CVSS3(observation.cvss3_vector).base_score
+
+    if observation.cvss4_vector:
+        observation.cvss4_score = CVSS4(observation.cvss4_vector).base_score
+
     if observation.assessment_severity:
         return observation.assessment_severity
 

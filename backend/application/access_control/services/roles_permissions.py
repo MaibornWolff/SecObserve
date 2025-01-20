@@ -29,6 +29,7 @@ class Permissions(IntEnum):
     Product_Delete = 1103
     Product_Create = 1104
     Product_Import_Observations = 1105
+    Product_Scan_OSV = 1106
 
     Product_Member_View = 1201
     Product_Member_Edit = 1202
@@ -206,6 +207,7 @@ def get_roles_with_permissions():
             Permissions.Product_Group_View,
             Permissions.Product_View,
             Permissions.Product_Import_Observations,
+            Permissions.Product_Scan_OSV,
             Permissions.Product_Member_View,
             Permissions.Product_Authorization_Group_Member_View,
             Permissions.Product_Rule_View,
@@ -225,6 +227,7 @@ def get_roles_with_permissions():
             Permissions.Product_View,
             Permissions.Product_Edit,
             Permissions.Product_Import_Observations,
+            Permissions.Product_Scan_OSV,
             Permissions.Product_Member_View,
             Permissions.Product_Member_Edit,
             Permissions.Product_Member_Delete,
@@ -268,6 +271,7 @@ def get_roles_with_permissions():
             Permissions.Product_Edit,
             Permissions.Product_Delete,
             Permissions.Product_Import_Observations,
+            Permissions.Product_Scan_OSV,
             Permissions.Product_Member_View,
             Permissions.Product_Member_Edit,
             Permissions.Product_Member_Delete,
