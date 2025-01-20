@@ -64,12 +64,13 @@ class OSVParser(BaseParser):
                 )
 
                 if osv_vulnerability is None:
-                    logger.warning(f"OSV vulnerability {vulnerability.id} not found")
+                    logger.warning("OSV vulnerability %s not found", vulnerability.id)
                     continue
 
                 if license_component is None:
                     logger.warning(
-                        f"Licencse component for PURL {osv_component.component_purl} not found"
+                        "Licencse component for PURL %s not found",
+                        osv_component.component_purl,
                     )
                     continue
 
@@ -213,7 +214,7 @@ class OSVParser(BaseParser):
         try:
             parsed_purl = PackageURL.from_string(purl)
         except ValueError as e:
-            logger.error(f"Invalid PURL {purl}: {e}")
+            logger.error("Invalid PURL %s: %s", purl, str(e))
             return []
 
         affected = []
