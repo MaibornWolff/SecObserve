@@ -3,7 +3,7 @@ from json import loads
 
 import requests
 
-from application.osv.models import OSV_Cache
+from application.import_observations.models import OSV_Cache
 
 
 def get_osv_vulnerability(osv_id: str, modified: datetime) -> dict:

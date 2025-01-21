@@ -9,6 +9,7 @@ from django.db.models import (
     Index,
     IntegerField,
     Model,
+    TextField,
 )
 from encrypted_model_fields.fields import EncryptedCharField
 
@@ -98,3 +99,12 @@ class Vulnerability_Check(Model):
             "filename",
             "api_configuration_name",
         )
+
+
+class OSV_Cache(Model):
+    osv_id = CharField(max_length=255, unique=True)
+    data = TextField()
+    modified = DateTimeField()
+
+    def __str__(self):
+        return self.osv_id

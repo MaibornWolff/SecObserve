@@ -8,10 +8,9 @@ from semver import Version
 
 from application.core.models import Observation
 from application.import_observations.parsers.base_parser import BaseParser
-from application.import_observations.types import Parser_Type
+from application.import_observations.services.osv_cache import get_osv_vulnerability
+from application.import_observations.types import OSV_Component, Parser_Type
 from application.licenses.models import License_Component
-from application.osv.services.osv_cache import get_osv_vulnerability
-from application.osv.types import OSV_Component
 
 logger = logging.getLogger("secobserve.import_observations")
 

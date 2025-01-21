@@ -13,8 +13,8 @@ from application.import_observations.services.import_observations import (
     ImportParameters,
     _process_data,
 )
+from application.import_observations.types import OSV_Component, OSV_Vulnerability
 from application.licenses.models import License_Component
-from application.osv.types import OSV_Component, OSV_Vulnerability
 
 
 @dataclass

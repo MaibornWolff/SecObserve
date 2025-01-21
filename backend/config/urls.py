@@ -25,6 +25,7 @@ from application.import_observations.api.views import (
     ApiImportObservationsByName,
     FileUploadObservationsById,
     FileUploadObservationsByName,
+    ScanOSVProductView,
 )
 from application.metrics.api.views import (
     ProductMetricsCurrentView,
@@ -34,7 +35,6 @@ from application.metrics.api.views import (
     ProductMetricsStatusView,
     ProductMetricsTimelineView,
 )
-from application.osv.api.views import ScanOSVProductView
 from application.vex.api.views import (
     CSAFDocumentCreateView,
     CSAFDocumentUpdateView,
