@@ -1,16 +1,21 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.filters import SearchFilter
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.status import HTTP_204_NO_CONTENT, HTTP_404_NOT_FOUND
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
-from application.access_control.services.authorization import user_has_permission_or_403
+from application.access_control.services.authorization import (
+    user_has_permission,
+    user_has_permission_or_403,
+)
 from application.access_control.services.roles_permissions import Permissions
 from application.core.models import Branch
 from application.core.queries.branch import get_branch_by_id, get_branch_by_name
@@ -53,6 +58,7 @@ from application.import_observations.services.import_observations import (
     api_import_observations,
     file_upload_observations,
 )
+from application.import_observations.services.osv_scanner import scan_product
 
 
 class ApiImportObservationsById(APIView):
@@ -380,3 +386,17 @@ class ParserViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     queryset = Parser.objects.all()
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["name"]
+
+
+class ScanOSVProductView(APIView):
+    @action(detail=True, methods=["post"])
+    def post(self, request, product_id: int):
+        product = get_product_by_id(product_id)
+        if not product:
+            return Response(status=HTTP_404_NOT_FOUND)
+        if not user_has_permission(product, Permissions.Product_Scan_OSV):
+            return Response(status=HTTP_404_NOT_FOUND)
+
+        scan_product(product)
+
+        return Response(status=HTTP_204_NO_CONTENT)
