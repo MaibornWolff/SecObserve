@@ -1,10 +1,12 @@
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Tuple
 
 import jsonpickle
 import requests
 
 from application.core.models import Branch, Product
+from application.import_observations.models import Vulnerability_Check
 from application.import_observations.parsers.osv.parser import OSVParser
 from application.import_observations.queries.parser import get_parser_by_name
 from application.import_observations.services.import_observations import (
@@ -125,4 +127,17 @@ def scan_license_components(license_components: list[License_Component]) -> None
         kubernetes_cluster="",
         imported_observations=observations,
     )
-    _process_data(import_parameters)
+    numbers: Tuple[int, int, int, str] = _process_data(import_parameters)
+
+    Vulnerability_Check.objects.update_or_create(
+        product=import_parameters.product,
+        branch=import_parameters.branch,
+        filename="",
+        api_configuration_name="",
+        defaults={
+            "last_import_observations_new": numbers[0],
+            "last_import_observations_updated": numbers[1],
+            "last_import_observations_resolved": numbers[2],
+            "scanner": numbers[3],
+        },
+    )
