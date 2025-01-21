@@ -255,7 +255,9 @@ class OSVParser(BaseParser):
 
         return affected
 
-    def _get_package_name(self, parsed_purl: PackageURL, package_namespace: str) -> str:
+    def _get_package_name(
+        self, parsed_purl: PackageURL, package_namespace: Optional[str]
+    ) -> str:
         package_name = parsed_purl.name
         if package_namespace and package_namespace not in ["alpine", "debian"]:
             if package_namespace == "maven":
