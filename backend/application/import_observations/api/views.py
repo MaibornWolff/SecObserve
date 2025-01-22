@@ -8,7 +8,7 @@ from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.status import HTTP_204_NO_CONTENT, HTTP_404_NOT_FOUND
+from rest_framework.status import HTTP_404_NOT_FOUND
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
@@ -30,9 +30,10 @@ from application.import_observations.api.serializers import (
     ApiConfigurationSerializer,
     ApiImportObservationsByIdRequestSerializer,
     ApiImportObservationsByNameRequestSerializer,
+    APIImportObservationsResponseSerializer,
+    FileImportObservationsResponseSerializer,
     FileUploadObservationsByIdRequestSerializer,
     FileUploadObservationsByNameRequestSerializer,
-    ImportObservationsResponseSerializer,
     ParserSerializer,
     VulnerabilityCheckSerializer,
 )
@@ -61,7 +62,7 @@ from application.import_observations.services.osv_scanner import scan_product
 class ApiImportObservationsById(APIView):
     @extend_schema(
         request=ApiImportObservationsByIdRequestSerializer,
-        responses={status.HTTP_200_OK: ImportObservationsResponseSerializer},
+        responses={status.HTTP_200_OK: APIImportObservationsResponseSerializer},
     )
     def post(self, request):
         request_serializer = ApiImportObservationsByIdRequestSerializer(
@@ -125,7 +126,7 @@ class ApiImportObservationsById(APIView):
 class ApiImportObservationsByName(APIView):
     @extend_schema(
         request=ApiImportObservationsByNameRequestSerializer,
-        responses={status.HTTP_200_OK: ImportObservationsResponseSerializer},
+        responses={status.HTTP_200_OK: APIImportObservationsResponseSerializer},
     )
     def post(self, request):
         request_serializer = ApiImportObservationsByNameRequestSerializer(
@@ -193,7 +194,7 @@ class FileUploadObservationsById(APIView):
 
     @extend_schema(
         request=FileUploadObservationsByIdRequestSerializer,
-        responses={status.HTTP_200_OK: ImportObservationsResponseSerializer},
+        responses={status.HTTP_200_OK: FileImportObservationsResponseSerializer},
     )
     def post(self, request):  # pylint: disable=too-many-locals
         # not too much we can do about this
@@ -277,7 +278,7 @@ class FileUploadObservationsByName(APIView):
 
     @extend_schema(
         request=FileUploadObservationsByNameRequestSerializer,
-        responses={status.HTTP_200_OK: ImportObservationsResponseSerializer},
+        responses={status.HTTP_200_OK: FileImportObservationsResponseSerializer},
     )
     def post(self, request):  # pylint: disable=too-many-locals
         # not too much we can do about this
@@ -386,6 +387,10 @@ class ParserViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
 
 
 class ScanOSVProductView(APIView):
+    @extend_schema(
+        request=None,
+        responses={status.HTTP_200_OK: APIImportObservationsResponseSerializer},
+    )
     @action(detail=True, methods=["post"])
     def post(self, request, product_id: int):
         product = get_product_by_id(product_id)
@@ -394,5 +399,12 @@ class ScanOSVProductView(APIView):
 
         user_has_permission_or_403(product, Permissions.Product_Scan_OSV)
 
-        scan_product(product)
-        return Response(status=HTTP_204_NO_CONTENT)
+        observations_new, observations_updated, observations_resolved = scan_product(
+            product
+        )
+        response_data = {
+            "observations_new": observations_new,
+            "observations_updated": observations_updated,
+            "observations_resolved": observations_resolved,
+        }
+        return Response(response_data)
