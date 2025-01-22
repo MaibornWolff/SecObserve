@@ -32,14 +32,28 @@ class Request_Queries:
     queries: list[Request_Package]
 
 
-def scan_product(product: Product) -> None:
+def scan_product(product: Product) -> Tuple[int, int, int]:
+    numbers: Tuple[int, int, int] = (0, 0, 0)
+
     branches = Branch.objects.filter(product=product)
     for branch in branches:
         license_components = get_license_components_for_branch(branch)
-        scan_license_components(license_components)
+        new, updated, resolved = scan_license_components(license_components)
+        numbers = (
+            numbers[0] + new,
+            numbers[1] + updated,
+            numbers[2] + resolved,
+        )
 
     license_components = get_license_components_no_branch(product)
-    scan_license_components(license_components)
+    new, updated, resolved = scan_license_components(license_components)
+    numbers = (
+        numbers[0] + new,
+        numbers[1] + updated,
+        numbers[2] + resolved,
+    )
+
+    return numbers
 
 
 def get_license_components_for_branch(branch: Branch) -> list[License_Component]:
@@ -56,9 +70,11 @@ def get_license_components_no_branch(product: Product) -> list[License_Component
     )
 
 
-def scan_license_components(license_components: list[License_Component]) -> None:
+def scan_license_components(
+    license_components: list[License_Component],
+) -> Tuple[int, int, int]:
     if not license_components:
-        return
+        return 0, 0, 0
 
     jsonpickle.set_encoder_options("json", ensure_ascii=False)
 
@@ -141,3 +157,5 @@ def scan_license_components(license_components: list[License_Component]) -> None
             "scanner": numbers[3],
         },
     )
+
+    return numbers[0], numbers[1], numbers[2]
