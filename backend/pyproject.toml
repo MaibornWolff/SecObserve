@@ -83,7 +83,6 @@ flake8-isort = { version = "6.1.1", optional = true }  # https://github.com/gfor
 black = { version = "24.10.0", optional = true }  # https://github.com/psf/black
 pylint = { version = "3.3.3", optional = true }  # https://github.com/pylint-dev/pylint
 pylint-django = { version = "2.6.1", optional = true }  # https://github.com/PyCQA/pylint-django
-pre-commit = { version = "4.0.1", optional = true }  # https://github.com/pre-commit/pre-commit
 mypy = { version = "1.14.1", optional = true }  # https://github.com/python/mypy
 django-stubs = { version = "5.1.2", optional = true }  # https://github.com/typeddjango/django-stubs
 djangorestframework-stubs = { version = "3.15.2", optional = true }  # https://github.com/typeddjango/djangorestframework-stubs
