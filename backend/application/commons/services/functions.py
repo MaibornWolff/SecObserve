@@ -39,3 +39,8 @@ def clip_fields(application: str, model: str, my_object) -> None:
                             field.name,
                             value[: max_length - 9] + "\n```\n\n...",
                         )
+
+
+def get_comma_separated_as_list(comma_separated_string: str) -> list[str]:
+    return_list = comma_separated_string.split(",") if comma_separated_string else []
+    return [x.strip() for x in return_list]

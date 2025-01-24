@@ -16,6 +16,7 @@ from application.access_control.api.serializers import (
     AuthorizationGroupListSerializer,
     UserListSerializer,
 )
+from application.commons.services.functions import get_comma_separated_as_list
 from application.commons.services.global_request import get_current_user
 from application.core.queries.product import get_products
 from application.core.types import PURL_Type
@@ -48,7 +49,6 @@ from application.licenses.queries.license_policy_member import (
     get_license_policy_member,
     get_license_policy_members,
 )
-from application.licenses.services.license_policy import get_ignore_component_type_list
 
 
 class LicenseSerializer(ModelSerializer):
@@ -396,7 +396,7 @@ class LicensePolicySerializer(ModelSerializer):
         exclude = ["users", "authorization_groups"]
 
     def validate_ignore_component_types(self, value: str) -> str:
-        ignore_component_types = get_ignore_component_type_list(value)
+        ignore_component_types = get_comma_separated_as_list(value)
         for component_type in ignore_component_types:
             for component_type in ignore_component_types:
                 if not PURL_Type.PURL_TYPE_CHOICES.get(component_type):
