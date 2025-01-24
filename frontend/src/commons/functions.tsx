@@ -112,8 +112,8 @@ const VULNERABILITY_URLS = {
     RUSTSEC: "https://rustsec.org/advisories/",
 };
 
-export function get_vulnerability_url(vulnerability_id: string): string | null {
-    let return_value = null;
+export function get_vulnerability_url(vulnerability_id: string): string {
+    let return_value = "";
 
     Object.entries(VULNERABILITY_URLS).forEach((entry) => {
         const [key, value] = entry;

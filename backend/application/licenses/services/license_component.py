@@ -7,14 +7,16 @@ from license_expression import get_spdx_licensing
 from packageurl import PackageURL
 from rest_framework.exceptions import ValidationError
 
-from application.commons.services.functions import clip_fields
+from application.commons.services.functions import (
+    clip_fields,
+    get_comma_separated_as_list,
+)
 from application.core.models import Product
 from application.import_observations.models import Vulnerability_Check
 from application.licenses.models import License_Component, License_Component_Evidence
 from application.licenses.queries.license import get_license_by_spdx_id
 from application.licenses.services.license_policy import (
     apply_license_policy_to_component,
-    get_ignore_component_type_list,
     get_license_evaluation_results_for_product,
 )
 
@@ -63,7 +65,7 @@ def process_license_components(
 
     license_policy = vulnerability_check.product.license_policy
     ignore_component_types = (
-        get_ignore_component_type_list(license_policy.ignore_component_types)
+        get_comma_separated_as_list(license_policy.ignore_component_types)
         if license_policy
         else []
     )

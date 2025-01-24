@@ -381,6 +381,7 @@ class Observation(Model):
     )
     scanner_observation_id = CharField(max_length=255, blank=True)
     vulnerability_id = CharField(max_length=255, blank=True)
+    vulnerability_id_aliases = CharField(max_length=512, blank=True)
     origin_component_name = CharField(max_length=255, blank=True)
     origin_component_version = CharField(max_length=255, blank=True)
     origin_component_name_version = CharField(max_length=513, blank=True)

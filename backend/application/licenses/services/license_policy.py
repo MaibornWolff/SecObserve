@@ -11,6 +11,7 @@ from license_expression import (
     get_spdx_licensing,
 )
 
+from application.commons.services.functions import get_comma_separated_as_list
 from application.core.models import Product
 from application.licenses.models import (
     License_Component,
@@ -163,7 +164,7 @@ def apply_license_policy_product(product: Product) -> None:
             apply_license_policy_to_component(
                 component,
                 license_evaluation_results,
-                get_ignore_component_type_list(license_policy.ignore_component_types),
+                get_comma_separated_as_list(license_policy.ignore_component_types),
             )
         else:
             component.evaluation_result = (
@@ -204,14 +205,6 @@ def apply_license_policy_to_component(
         evaluation_result = License_Policy_Evaluation_Result.RESULT_UNKNOWN
 
     component.evaluation_result = evaluation_result
-
-
-def get_ignore_component_type_list(ignore_component_types: str) -> list:
-    ignore_component_types_list = (
-        ignore_component_types.split(",") if ignore_component_types else []
-    )
-    ignore_component_types_list = [x.strip() for x in ignore_component_types_list]
-    return ignore_component_types_list
 
 
 def _get_license_policy(product: Product) -> Optional[License_Policy]:
