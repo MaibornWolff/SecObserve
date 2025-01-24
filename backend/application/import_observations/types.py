@@ -1,13 +1,19 @@
+from dataclasses import dataclass
+from datetime import datetime
+
+
 class Parser_Source:
     SOURCE_API = "API"
     SOURCE_FILE = "File"
     SOURCE_MANUAL = "Manual"
+    SOURCE_OTHER = "Other"
     SOURCE_UNKNOWN = "Unknown"
 
     SOURCE_CHOICES = [
         (SOURCE_API, SOURCE_API),
         (SOURCE_FILE, SOURCE_FILE),
         (SOURCE_MANUAL, SOURCE_MANUAL),
+        (SOURCE_OTHER, SOURCE_OTHER),
         (SOURCE_UNKNOWN, SOURCE_UNKNOWN),
     ]
 
@@ -37,3 +43,16 @@ class Parser_Type:
 class Parser_Filetype:
     FILETYPE_CSV = "CSV"
     FILETYPE_JSON = "JSON"
+
+
+@dataclass(frozen=True)
+class OSV_Vulnerability:
+    id: str
+    modified: datetime
+
+
+@dataclass
+class OSV_Component:
+    id: int
+    component_purl: str
+    vulnerabilities: set[OSV_Vulnerability]

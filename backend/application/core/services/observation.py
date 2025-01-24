@@ -1,6 +1,7 @@
 import hashlib
 from urllib.parse import urlparse
 
+from cvss import CVSS3, CVSS4
 from packageurl import PackageURL
 
 from application.core.types import Severity, Status
@@ -62,6 +63,12 @@ def _get_string_to_hash(observation):  # pylint: disable=too-many-branches
 
 
 def get_current_severity(observation) -> str:
+    if observation.cvss3_vector:
+        observation.cvss3_score = CVSS3(observation.cvss3_vector).base_score
+
+    if observation.cvss4_vector:
+        observation.cvss4_score = CVSS4(observation.cvss4_vector).base_score
+
     if observation.assessment_severity:
         return observation.assessment_severity
 
@@ -212,10 +219,15 @@ def normalize_origin_component(observation):  # pylint: disable=too-many-branche
     else:
         component_parts = observation.origin_component_name_version.split(":")
         if len(component_parts) == 3:
-            observation.origin_component_name = (
-                f"{component_parts[0]}:{component_parts[1]}"
-            )
-            observation.origin_component_version = component_parts[2]
+            if component_parts[0] == observation.origin_component_name:
+                observation.origin_component_version = (
+                    f"{component_parts[1]}:{component_parts[2]}"
+                )
+            else:
+                observation.origin_component_name = (
+                    f"{component_parts[0]}:{component_parts[1]}"
+                )
+                observation.origin_component_version = component_parts[2]
         elif len(component_parts) == 2:
             observation.origin_component_name = component_parts[0]
             observation.origin_component_version = component_parts[1]

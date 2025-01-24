@@ -63,13 +63,19 @@ class ApiImportObservationsByNameRequestSerializer(Serializer):
     kubernetes_cluster = CharField(max_length=255, required=False)
 
 
-class ImportObservationsResponseSerializer(Serializer):
+class FileImportObservationsResponseSerializer(Serializer):
     observations_new = IntegerField()
     observations_updated = IntegerField()
     observations_resolved = IntegerField()
     license_components_new = IntegerField()
     license_components_updated = IntegerField()
     license_components_deleted = IntegerField()
+
+
+class APIImportObservationsResponseSerializer(Serializer):
+    observations_new = IntegerField()
+    observations_updated = IntegerField()
+    observations_resolved = IntegerField()
 
 
 class ApiConfigurationSerializer(ModelSerializer):
