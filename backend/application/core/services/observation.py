@@ -167,6 +167,8 @@ def normalize_observation_fields(observation) -> None:
         observation.upload_filename = ""
     if observation.vulnerability_id is None:
         observation.vulnerability_id = ""
+    if observation.vulnerability_id_aliases is None:
+        observation.vulnerability_id_aliases = ""
     if observation.issue_tracker_issue_id is None:
         observation.issue_tracker_issue_id = ""
     if observation.issue_tracker_jira_initial_status is None:

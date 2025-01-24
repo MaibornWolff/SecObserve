@@ -3150,6 +3150,20 @@
           "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
         }
       ],
+      "references": [
+        {
+          "id": "GHSA-35m5-8cvj-8783",
+          "source": {
+            "name": "name 1"
+          }
+        },
+        {
+          "id": "alias 2",
+          "source": {
+            "name": "name 2"
+          }
+        }
+      ],
       "description": "No description is available for this CVE.",
       "recommendation": "Upgrade libxml2 to version 2.10.4-r0",
       "advisories": [

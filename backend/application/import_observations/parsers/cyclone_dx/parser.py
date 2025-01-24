@@ -190,6 +190,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                             recommendation=recommendation,
                             parser_severity=severity,
                             vulnerability_id=vulnerability_id,
+                            vulnerability_id_aliases=self._get_aliases(vulnerability),
                             origin_component_name=component.name,
                             origin_component_version=component.version,
                             origin_component_purl=component.purl,
@@ -302,6 +303,16 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             return cwes[0]
 
         return None
+
+    def _get_aliases(self, vulnerability: dict) -> str:
+        aliases = []
+        references = vulnerability.get("references", [])
+        for reference in references:
+            if reference.get("id"):
+                aliases.append(reference.get("id"))
+        if aliases:
+            return ", ".join(aliases)
+        return ""
 
     def _add_references(self, vulnerability: dict, observation: Observation) -> None:
         advisories = vulnerability.get("advisories", [])

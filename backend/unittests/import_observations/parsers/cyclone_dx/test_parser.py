@@ -162,6 +162,7 @@ class TestCycloneDXParser(TestCase):
             description = """No description is available for this CVE."""
             self.assertEqual(description, observation.description)
             self.assertEqual("CVE-2023-29469", observation.vulnerability_id)
+            self.assertEqual("GHSA-35m5-8cvj-8783, alias 2", observation.vulnerability_id_aliases)
             self.assertEqual("", observation.parser_severity)
             self.assertEqual(5.9, observation.cvss3_score)
             self.assertEqual(

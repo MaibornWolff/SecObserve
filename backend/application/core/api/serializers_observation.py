@@ -16,6 +16,7 @@ from rest_framework.serializers import (
     ValidationError,
 )
 
+from application.commons.services.functions import get_comma_separated_as_list
 from application.commons.services.global_request import get_current_user
 from application.core.api.serializers_helpers import (
     get_branch_name,
@@ -85,6 +86,7 @@ class ObservationSerializer(ModelSerializer):
     origin_component_purl_namespace = SerializerMethodField()
     issue_tracker_issue_url = SerializerMethodField()
     assessment_needs_approval = SerializerMethodField()
+    vulnerability_id_aliases = SerializerMethodField()
 
     class Meta:
         model = Observation
@@ -190,6 +192,11 @@ class ObservationSerializer(ModelSerializer):
             return current_observation_log.pk
         return None
 
+    def get_vulnerability_id_aliases(
+        self, observation: Observation
+    ) -> list[dict[str, str]]:
+        return _get_vulnerability_id_aliases(observation)
+
     def validate_product(self, product: Product) -> Product:
         if product and product.is_product_group:
             raise ValidationError("Product must not be a product group")
@@ -209,6 +216,7 @@ class ObservationListSerializer(ModelSerializer):
     parser_data = ParserSerializer(source="parser")
     scanner_name = SerializerMethodField()
     origin_component_name_version = SerializerMethodField()
+    vulnerability_id_aliases = SerializerMethodField()
 
     class Meta:
         model = Observation
@@ -226,6 +234,11 @@ class ObservationListSerializer(ModelSerializer):
 
     def get_origin_component_name_version(self, observation: Observation) -> str:
         return get_origin_component_name_version(observation)
+
+    def get_vulnerability_id_aliases(
+        self, observation: Observation
+    ) -> list[dict[str, str]]:
+        return _get_vulnerability_id_aliases(observation)
 
 
 class ObservationUpdateSerializer(ModelSerializer):
@@ -531,6 +544,14 @@ class NestedObservationSerializer(ModelSerializer):
 
     def get_origin_component_name_version(self, observation: Observation) -> str:
         return get_origin_component_name_version(observation)
+
+
+def _get_vulnerability_id_aliases(observation: Observation) -> list[dict[str, str]]:
+    aliases_list = get_comma_separated_as_list(observation.vulnerability_id_aliases)
+    return_list = []
+    for alias in aliases_list:
+        return_list.append({"alias": alias})
+    return return_list
 
 
 class ObservationLogSerializer(ModelSerializer):
