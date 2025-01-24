@@ -615,6 +615,12 @@ class ObservationLogBulkApprovalSerializer(Serializer):
     )
 
 
+class ObservationLogBulkDeleteSerializer(Serializer):
+    observation_logs = ListField(
+        child=IntegerField(min_value=1), min_length=0, max_length=100, required=True
+    )
+
+
 class PotentialDuplicateSerializer(ModelSerializer):
     potential_duplicate_observation = NestedObservationSerializer()
 
