@@ -146,6 +146,8 @@ def normalize_observation_fields(observation) -> None:
     normalize_vex_justification(observation)
 
     normalize_description(observation)
+    normalize_vulnerability_ids(observation)
+    normalize_cvss_vectors(observation)
 
     if observation.recommendation is None:
         observation.recommendation = ""
@@ -155,24 +157,30 @@ def normalize_observation_fields(observation) -> None:
         observation.origin_service_name = ""
     if observation.origin_source_file is None:
         observation.origin_source_file = ""
-    if observation.cvss3_vector is None:
-        observation.cvss3_vector = ""
-    if observation.cvss4_vector is None:
-        observation.cvss4_vector = ""
     if observation.scanner is None:
         observation.scanner = ""
     if observation.api_configuration_name is None:
         observation.api_configuration_name = ""
     if observation.upload_filename is None:
         observation.upload_filename = ""
-    if observation.vulnerability_id is None:
-        observation.vulnerability_id = ""
-    if observation.vulnerability_id_aliases is None:
-        observation.vulnerability_id_aliases = ""
     if observation.issue_tracker_issue_id is None:
         observation.issue_tracker_issue_id = ""
     if observation.issue_tracker_jira_initial_status is None:
         observation.issue_tracker_jira_initial_status = ""
+
+
+def normalize_vulnerability_ids(observation):
+    if observation.vulnerability_id is None:
+        observation.vulnerability_id = ""
+    if observation.vulnerability_id_aliases is None:
+        observation.vulnerability_id_aliases = ""
+
+
+def normalize_cvss_vectors(observation):
+    if observation.cvss3_vector is None:
+        observation.cvss3_vector = ""
+    if observation.cvss4_vector is None:
+        observation.cvss4_vector = ""
 
 
 def normalize_description(observation):
