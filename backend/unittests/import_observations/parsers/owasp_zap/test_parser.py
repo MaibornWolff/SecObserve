@@ -1,6 +1,7 @@
 from os import path
 from unittest import TestCase
 
+from application.core.models import Product
 from application.core.types import Severity
 from application.import_observations.parsers.zap.parser import ZAPParser
 from application.import_observations.services.parser_detector import detect_parser
@@ -13,7 +14,9 @@ class TestZAPParserParser(TestCase):
             self.assertEqual("ZAP", parser.name)
             self.assertTrue(isinstance(parser_instance, ZAPParser))
 
-            observations = parser_instance.get_observations(data)
+            observations = parser_instance.get_observations(
+                data, Product(name="product"), None
+            )
             self.assertEqual(5, len(observations))
 
             observation = observations[0]

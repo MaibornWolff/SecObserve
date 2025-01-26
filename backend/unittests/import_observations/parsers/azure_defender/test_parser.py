@@ -3,6 +3,7 @@ from unittest import TestCase
 
 from rest_framework.exceptions import ValidationError
 
+from application.core.models import Product
 from application.core.types import Severity
 from application.import_observations.parsers.azure_defender.parser import (
     AzureDefenderParser,
@@ -30,7 +31,9 @@ class TestAzureDefenderParser(TestCase):
             self.assertEqual("Azure Defender", parser.name)
             self.assertTrue(isinstance(parser_instance, AzureDefenderParser))
 
-            observations = parser_instance.get_observations(data)
+            observations = parser_instance.get_observations(
+                data, Product(name="product"), None
+            )
             self.assertEqual(2, len(observations))
 
             observation = observations[0]

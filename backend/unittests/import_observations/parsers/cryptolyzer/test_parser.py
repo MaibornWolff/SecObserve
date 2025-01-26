@@ -1,6 +1,7 @@
 from os import path
 from unittest import TestCase
 
+from application.core.models import Product
 from application.core.types import Severity
 from application.import_observations.parsers.cryptolyzer.parser import CryptoLyzerParser
 from application.import_observations.services.parser_detector import detect_parser
@@ -13,7 +14,9 @@ class TestCryptolyzeParser(TestCase):
             self.assertEqual("CryptoLyzer", parser.name)
             self.assertTrue(isinstance(parser_instance, CryptoLyzerParser))
 
-            observations = parser_instance.get_observations(data)
+            observations = parser_instance.get_observations(
+                data, Product(name="product"), None
+            )
             self.assertEqual(0, len(observations))
 
     def test_multiple_observations(self):
@@ -25,7 +28,9 @@ class TestCryptolyzeParser(TestCase):
             self.assertEqual("CryptoLyzer", parser.name)
             self.assertTrue(isinstance(parser_instance, CryptoLyzerParser))
 
-            observations = parser_instance.get_observations(data)
+            observations = parser_instance.get_observations(
+                data, Product(name="product"), None
+            )
             self.assertEqual(4, len(observations))
 
             observation = observations[0]
@@ -111,7 +116,9 @@ class TestCryptolyzeParser(TestCase):
             self.assertEqual("CryptoLyzer", parser.name)
             self.assertTrue(isinstance(parser_instance, CryptoLyzerParser))
 
-            observations = parser_instance.get_observations(data)
+            observations = parser_instance.get_observations(
+                data, Product(name="product"), None
+            )
             self.assertEqual(3, len(observations))
 
             observation = observations[0]
