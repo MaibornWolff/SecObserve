@@ -1,3 +1,5 @@
+import { Stack } from "@mui/material";
+import { Fragment } from "react";
 import {
     AutocompleteInput,
     Datagrid,
@@ -11,7 +13,6 @@ import {
     TextInput,
     useListController,
 } from "react-admin";
-import { Fragment } from "react/jsx-runtime";
 
 import { PERMISSION_OBSERVATION_LOG_APPROVAL } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
@@ -21,13 +22,17 @@ import { getSettingListSize } from "../../commons/user_settings/functions";
 import { ASSESSMENT_STATUS_NEEDS_APPROVAL } from "../types";
 import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../types";
 import AssessmentBulkApproval from "./AssessmentBulkApproval";
+import AssessmentDeleteApproval from "./AssessmentDeleteApproval";
 import { commentShortened } from "./functions";
 
 const BulkActionButtons = ({ product }: any) => {
     return (
         <Fragment>
             {(!product || (product && product.permissions.includes(PERMISSION_OBSERVATION_LOG_APPROVAL))) && (
-                <AssessmentBulkApproval />
+                <Stack direction="row" spacing={2} alignItems="center">
+                    <AssessmentBulkApproval />
+                    <AssessmentDeleteApproval />
+                </Stack>
             )}
         </Fragment>
     );
@@ -170,9 +175,11 @@ const ObservationLogApprovalList = ({ product }: ObservationLogApprovalListProps
                         size={getSettingListSize()}
                         sx={{ width: "100%" }}
                         bulkActionButtons={
-                            (!product ||
-                                (product && product.permissions.includes(PERMISSION_OBSERVATION_LOG_APPROVAL))) && (
+                            !product ||
+                            (product && product.permissions.includes(PERMISSION_OBSERVATION_LOG_APPROVAL)) ? (
                                 <BulkActionButtons product={product} />
+                            ) : (
+                                false
                             )
                         }
                         rowClick={ShowObservationLogs}

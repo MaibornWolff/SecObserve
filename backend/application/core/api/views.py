@@ -54,6 +54,7 @@ from application.core.api.serializers_observation import (
     ObservationListSerializer,
     ObservationLogApprovalSerializer,
     ObservationLogBulkApprovalSerializer,
+    ObservationLogBulkDeleteSerializer,
     ObservationLogListSerializer,
     ObservationLogSerializer,
     ObservationRemoveAssessmentSerializer,
@@ -736,6 +737,29 @@ class ObservationLogViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
             .count()
         )
         return Response(status=HTTP_200_OK, data={"count": count})
+
+    @extend_schema(
+        methods=["DELETE"],
+        request=ObservationLogBulkApprovalSerializer,
+        responses={HTTP_204_NO_CONTENT: None},
+    )
+    @action(detail=False, methods=["delete"])
+    def bulk_delete(self, request):
+        request_serializer = ObservationLogBulkDeleteSerializer(data=request.data)
+        if not request_serializer.is_valid():
+            raise ValidationError(request_serializer.errors)
+
+        result = Observation_Log.objects.filter(
+            id__in=request_serializer.validated_data.get("observation_logs"),
+            user=get_current_user(),
+        ).delete()
+
+        if result[0] == 0:
+            raise ValidationError(
+                "No assessments were deleted. You can only delete your own assessments."
+            )
+
+        return Response({"count": result[0]}, status=HTTP_200_OK)
 
 
 class EvidenceViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
