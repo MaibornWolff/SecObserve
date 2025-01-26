@@ -56,7 +56,10 @@ from application.import_observations.services.import_observations import (
     api_import_observations,
     file_upload_observations,
 )
-from application.import_observations.services.osv_scanner import scan_product
+from application.import_observations.services.osv_scanner import (
+    scan_branch,
+    scan_product,
+)
 
 
 class ApiImportObservationsById(APIView):
@@ -399,8 +402,42 @@ class ScanOSVProductView(APIView):
 
         user_has_permission_or_403(product, Permissions.Product_Scan_OSV)
 
+        if not product.osv_enabled:
+            raise ValidationError(f"OSV scan is not enabled for product {product.name}")
+
         observations_new, observations_updated, observations_resolved = scan_product(
             product
+        )
+        response_data = {
+            "observations_new": observations_new,
+            "observations_updated": observations_updated,
+            "observations_resolved": observations_resolved,
+        }
+        return Response(response_data)
+
+
+class ScanOSVBranchView(APIView):
+    @extend_schema(
+        request=None,
+        responses={status.HTTP_200_OK: APIImportObservationsResponseSerializer},
+    )
+    @action(detail=True, methods=["post"])
+    def post(self, request, product_id: int, branch_id: int):
+        product = get_product_by_id(product_id)
+        if not product:
+            return Response(status=HTTP_404_NOT_FOUND)
+
+        user_has_permission_or_403(product, Permissions.Product_Scan_OSV)
+
+        if not product.osv_enabled:
+            raise ValidationError(f"OSV scan is not enabled for product {product.name}")
+
+        branch = get_branch_by_id(product, branch_id)
+        if not branch:
+            return Response(status=HTTP_404_NOT_FOUND)
+
+        observations_new, observations_updated, observations_resolved = scan_branch(
+            branch
         )
         response_data = {
             "observations_new": observations_new,

@@ -6,12 +6,13 @@ import { Fragment, MouseEvent, useState } from "react";
 
 import ApiImportObservations from "./ApiImportObservations";
 import FileUploadObservations from "./FileUploadObservations";
+import ScanOSV from "./ScanOSV";
 
 interface ImportMenuProps {
     product: any;
 }
 
-const ImportMenu = (props: ImportMenuProps) => {
+const ImportMenu = ({ product }: ImportMenuProps) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -48,8 +49,13 @@ const ImportMenu = (props: ImportMenuProps) => {
                     <FileUploadObservations />
                 </MenuItem>
                 <MenuItem onKeyDown={(e) => e.stopPropagation()}>
-                    <ApiImportObservations product={props.product} />
+                    <ApiImportObservations product={product} />
                 </MenuItem>
+                {product.osv_enabled && (
+                    <MenuItem onKeyDown={(e) => e.stopPropagation()}>
+                        <ScanOSV product={product} />
+                    </MenuItem>
+                )}
             </Menu>
         </Fragment>
     );

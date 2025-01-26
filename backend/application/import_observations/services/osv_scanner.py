@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Tuple
+from typing import Optional, Tuple
 
 import jsonpickle
 import requests
@@ -37,8 +37,7 @@ def scan_product(product: Product) -> Tuple[int, int, int]:
 
     branches = Branch.objects.filter(product=product)
     for branch in branches:
-        license_components = get_license_components_for_branch(branch)
-        new, updated, resolved = scan_license_components(license_components)
+        (new, updated, resolved) = scan_branch(branch)
         numbers = (
             numbers[0] + new,
             numbers[1] + updated,
@@ -46,7 +45,7 @@ def scan_product(product: Product) -> Tuple[int, int, int]:
         )
 
     license_components = get_license_components_no_branch(product)
-    new, updated, resolved = scan_license_components(license_components)
+    new, updated, resolved = scan_license_components(license_components, product, None)
     numbers = (
         numbers[0] + new,
         numbers[1] + updated,
@@ -54,6 +53,11 @@ def scan_product(product: Product) -> Tuple[int, int, int]:
     )
 
     return numbers
+
+
+def scan_branch(branch: Branch) -> Tuple[int, int, int]:
+    license_components = get_license_components_for_branch(branch)
+    return scan_license_components(license_components, branch.product, branch)
 
 
 def get_license_components_for_branch(branch: Branch) -> list[License_Component]:
@@ -72,6 +76,8 @@ def get_license_components_no_branch(product: Product) -> list[License_Component
 
 def scan_license_components(
     license_components: list[License_Component],
+    product: Product,
+    branch: Optional[Branch],
 ) -> Tuple[int, int, int]:
     if not license_components:
         return 0, 0, 0
@@ -123,7 +129,7 @@ def scan_license_components(
             )
 
     osv_parser = OSVParser()
-    observations = osv_parser.get_observations(osv_components)
+    observations = osv_parser.get_observations(osv_components, product, branch)
 
     parser = get_parser_by_name(osv_parser.get_name())
     if parser is None:

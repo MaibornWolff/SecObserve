@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from json import dumps
 from typing import Any, Optional
 
-from application.core.models import Observation
+from application.core.models import Branch, Observation, Product
 from application.core.types import Severity
 from application.import_observations.parsers.base_parser import (
     BaseFileParser,
@@ -59,7 +59,9 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             return True
         return False
 
-    def get_observations(self, data: dict) -> list[Observation]:
+    def get_observations(
+        self, data: dict, product: Product, branch: Optional[Branch]
+    ) -> list[Observation]:
         self.components = self._get_components(data)
         self.metadata = self._get_metadata(data)
         self.dependencies = self._get_dependencies(data)

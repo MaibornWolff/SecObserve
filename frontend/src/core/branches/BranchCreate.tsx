@@ -1,18 +1,19 @@
-import { Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle, Stack } from "@mui/material";
 import { Fragment, useState } from "react";
 import { BooleanInput, CreateBase, SaveButton, SimpleForm, useCreate, useNotify, useRefresh } from "react-admin";
 
 import AddButton from "../../commons/custom_fields/AddButton";
 import CancelButton from "../../commons/custom_fields/CancelButton";
+import OSVEcosystemInput from "../../commons/custom_fields/OSVEcosystemInput";
 import Toolbar from "../../commons/custom_fields/Toolbar";
 import { validate_255, validate_required_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 
 export type BranchCreateProps = {
-    id: any;
+    product: any;
 };
 
-const BranchCreate = ({ id }: BranchCreateProps) => {
+const BranchCreate = ({ product }: BranchCreateProps) => {
     const [open, setOpen] = useState(false);
     const refresh = useRefresh();
     const notify = useNotify();
@@ -32,7 +33,21 @@ const BranchCreate = ({ id }: BranchCreateProps) => {
     );
 
     const create_branch = (data: any) => {
-        data.product = id;
+        data.product = product.id;
+
+        if (!data.purl) {
+            data.purl = "";
+        }
+        if (!data.cpe23) {
+            data.cpe23 = "";
+        }
+        if (!data.osv_linux_ecosystem) {
+            data.osv_linux_ecosystem = "";
+        }
+        if (!data.osv_linux_release) {
+            data.osv_linux_release = "";
+        }
+
         create(
             "branches",
             { data: data },
@@ -40,19 +55,19 @@ const BranchCreate = ({ id }: BranchCreateProps) => {
                 onSuccess: () => {
                     refresh();
                     notify("Branch / version added", { type: "success" });
+                    setOpen(false);
                 },
                 onError: (error: any) => {
                     notify(error.message, { type: "warning" });
                 },
             }
         );
-        setOpen(false);
     };
 
     return (
         <Fragment>
             <AddButton title="Add branch / version" onClick={handleOpen} />
-            <Dialog open={open} onClose={handleClose}>
+            <Dialog open={open} onClose={handleClose} maxWidth={"lg"}>
                 <DialogTitle>Add branch / version</DialogTitle>
                 <DialogContent>
                     <CreateBase resource="branches">
@@ -65,6 +80,11 @@ const BranchCreate = ({ id }: BranchCreateProps) => {
                                 label="Protect from housekeeping"
                                 defaultValue={false}
                             />
+                            {product && product.osv_enabled && (
+                                <Stack direction="row" spacing={2} alignItems="center">
+                                    <OSVEcosystemInput />
+                                </Stack>
+                            )}
                         </SimpleForm>
                     </CreateBase>
                 </DialogContent>

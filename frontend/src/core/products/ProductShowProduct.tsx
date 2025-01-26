@@ -1,7 +1,8 @@
 import { Divider, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
-import { BooleanField, Labeled, NumberField, ReferenceField, RichTextField, TextField } from "react-admin";
+import { BooleanField, Labeled, NumberField, ReferenceField, RichTextField, TextField, WithRecord } from "react-admin";
 
+import OSVEcosystemField from "../../commons/custom_fields/OSVEcosystemField";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { Product } from "../types";
 
@@ -90,7 +91,7 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                         (product.product_group &&
                             product.product_group_repository_branch_housekeeping_active == null &&
                             product.repository_branch_housekeeping_active != null)) && (
-                        <Fragment>
+                        <Stack direction="row" spacing={4} sx={{ marginTop: 1 }}>
                             <Labeled label="Housekeeping">
                                 <BooleanField
                                     source="repository_branch_housekeeping_active"
@@ -99,16 +100,16 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                                 />
                             </Labeled>
                             {product.repository_branch_housekeeping_active == true && (
-                                <Stack spacing={1}>
+                                <Fragment>
                                     <Labeled label="Keep inactive">
                                         <NumberField source="repository_branch_housekeeping_keep_inactive_days" />
                                     </Labeled>
                                     <Labeled label="Exempt branches / versions">
                                         <TextField source="repository_branch_housekeeping_exempt_branches" />
                                     </Labeled>
-                                </Stack>
+                                </Fragment>
                             )}
-                        </Fragment>
+                        </Stack>
                     )}
                     {product.product_group && product.product_group_repository_branch_housekeeping_active != null && (
                         <Labeled label="Housekeeping (from product group)">
@@ -289,20 +290,20 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                         Risk acceptance expiry
                     </Typography>
 
-                    <Labeled label="Risk acceptance expiry">
-                        <BooleanField
-                            source="risk_acceptance_expiry_active"
-                            valueLabelFalse="Disabled"
-                            valueLabelTrue="Product specific"
-                        />
-                    </Labeled>
-                    {product.risk_acceptance_expiry_active == true && (
-                        <Stack spacing={1}>
+                    <Stack direction="row" spacing={4}>
+                        <Labeled label="Risk acceptance expiry">
+                            <BooleanField
+                                source="risk_acceptance_expiry_active"
+                                valueLabelFalse="Disabled"
+                                valueLabelTrue="Product specific"
+                            />
+                        </Labeled>
+                        {product.risk_acceptance_expiry_active == true && (
                             <Labeled label="Risk acceptance expiry (days)">
                                 <NumberField source="risk_acceptance_expiry_days" />
                             </Labeled>
-                        </Stack>
-                    )}
+                        )}
+                    </Stack>
                 </Fragment>
             )}
             {product.license_policy && (
@@ -323,6 +324,29 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                     </Labeled>
                 </Fragment>
             )}
+
+            <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                Vulnerability scanning
+            </Typography>
+            <Stack direction="row" spacing={4}>
+                <Labeled label="OSV scanning enabled">
+                    <BooleanField source="osv_enabled" sx={{ marginBottom: 2 }} />
+                </Labeled>
+                {product.osv_linux_ecosystem && (
+                    <Labeled label="OSV Linux ecosystem">
+                        <WithRecord
+                            render={(record) => (
+                                <OSVEcosystemField
+                                    osv_linux_ecosystem={record.osv_linux_ecosystem}
+                                    osv_linux_release={record.osv_linux_release}
+                                    label="OSV Linux ecosystem"
+                                />
+                            )}
+                        />
+                    </Labeled>
+                )}
+            </Stack>
         </Fragment>
     );
 };

@@ -1,6 +1,6 @@
 from typing import Any, Optional
 
-from application.core.models import Observation
+from application.core.models import Branch, Observation, Product
 from application.import_observations.models import Api_Configuration
 from application.licenses.models import License_Component
 
@@ -14,7 +14,9 @@ class BaseParser:
     def get_type(cls) -> str:
         raise NotImplementedError("get_type() must be overridden")
 
-    def get_observations(self, data: Any) -> list[Observation]:
+    def get_observations(
+        self, data: Any, product: Product, branch: Optional[Branch]
+    ) -> list[Observation]:
         raise NotImplementedError("get_observations() must be overridden")
 
     def get_license_components(

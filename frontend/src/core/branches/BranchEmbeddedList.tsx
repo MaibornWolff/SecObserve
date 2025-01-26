@@ -13,6 +13,7 @@ import {
 import { PERMISSION_BRANCH_DELETE, PERMISSION_BRANCH_EDIT } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import LicensesCountField from "../../commons/custom_fields/LicensesCountField";
+import OSVEcosystemField from "../../commons/custom_fields/OSVEcosystemField";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import { feature_license_management } from "../../commons/functions";
@@ -65,21 +66,35 @@ const BranchEmbeddedList = ({ product }: BranchEmbeddedListProps) => {
                         <BooleanField source="is_default_branch" label="Default branch / version" sortable={false} />
                         <TextField source="purl" label="PURL" />
                         <TextField source="cpe23" label="CPE 2.3" />
-                        <ObservationsCountField label="Open observations" withLabel={false} />
-                        {feature_license_management() && product.has_licenses && (
-                            <LicensesCountField label="Licenses" withLabel={false} />
-                        )}
-                        <DateField source="last_import" showTime />
                         <WithRecord
                             label="Protect"
                             render={(branch) =>
                                 !branch.is_default_branch && <BooleanField source="housekeeping_protect" />
                             }
                         />
+                        {product && product.osv_enabled && (
+                            <WithRecord
+                                label="OSV ecosystem"
+                                render={(branch) => (
+                                    <OSVEcosystemField
+                                        osv_linux_ecosystem={branch.osv_linux_ecosystem}
+                                        osv_linux_release={branch.osv_linux_release}
+                                        label="OSV ecosystem"
+                                    />
+                                )}
+                            />
+                        )}
+                        <ObservationsCountField label="Open observations" withLabel={false} />
+                        {feature_license_management() && product.has_licenses && (
+                            <LicensesCountField label="Licenses" withLabel={false} />
+                        )}
+                        <DateField source="last_import" showTime />
                         <WithRecord
                             render={(branch) => (
                                 <Stack direction="row" spacing={4}>
-                                    {product && product.permissions.includes(PERMISSION_BRANCH_EDIT) && <BranchEdit />}
+                                    {product && product.permissions.includes(PERMISSION_BRANCH_EDIT) && (
+                                        <BranchEdit product={product} />
+                                    )}
                                     {product &&
                                         product.permissions.includes(PERMISSION_BRANCH_DELETE) &&
                                         !branch.is_default_branch && <BranchDelete branch={branch} />}

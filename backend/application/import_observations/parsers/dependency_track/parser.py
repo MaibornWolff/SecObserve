@@ -3,7 +3,7 @@ from typing import Optional
 
 import requests
 
-from application.core.models import Observation
+from application.core.models import Branch, Observation, Product
 from application.core.types import Severity, Status
 from application.import_observations.models import Api_Configuration
 from application.import_observations.parsers.base_parser import (
@@ -67,7 +67,9 @@ class DependencyTrack(BaseParser, BaseAPIParser):
 
         return True, [], response.json()
 
-    def get_observations(self, data: list[dict]) -> list[Observation]:
+    def get_observations(  # pylint: disable=too-many-locals
+        self, data: list[dict], product: Product, branch: Optional[Branch]
+    ) -> list[Observation]:
         observations = []
 
         scanner, version = self.get_about()

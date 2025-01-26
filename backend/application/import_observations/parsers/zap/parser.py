@@ -1,7 +1,7 @@
 from json import dumps
-from typing import Any
+from typing import Any, Optional
 
-from application.core.models import Observation
+from application.core.models import Branch, Observation, Product
 from application.core.types import Severity
 from application.import_observations.parsers.base_parser import (
     BaseFileParser,
@@ -36,7 +36,9 @@ class ZAPParser(BaseParser, BaseFileParser):
             return True
         return False
 
-    def get_observations(self, data: dict) -> list[Observation]:
+    def get_observations(
+        self, data: dict, product: Product, branch: Optional[Branch]
+    ) -> list[Observation]:
         observations = []
 
         data_scanner = self.get_scanner(data)

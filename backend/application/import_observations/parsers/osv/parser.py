@@ -6,7 +6,7 @@ from typing import Optional
 from packageurl import PackageURL
 from semver import Version
 
-from application.core.models import Observation
+from application.core.models import Branch, Observation, Product
 from application.import_observations.parsers.base_parser import BaseParser
 from application.import_observations.services.osv_cache import get_osv_vulnerability
 from application.import_observations.types import OSV_Component, Parser_Type
@@ -21,13 +21,11 @@ class Event:
     fixed: str
 
 
-OSV_Ecosystems = {
-    "apk": "Alpine",
+OSV_Non_Linux_Ecosystems = {
     "bitnami": "Bitnami",
     "conan": "ConanCenter",
     "cran": "CRAN",
     "cargo": "crates.io",
-    "deb": "Debian",
     "golang": "Go",
     "hackage": "Hackage",
     "hex": "Hex",
@@ -50,7 +48,9 @@ class OSVParser(BaseParser):
     def get_type(cls) -> str:
         return Parser_Type.TYPE_SCA
 
-    def get_observations(self, data: list[OSV_Component]) -> list[Observation]:
+    def get_observations(  # pylint: disable=too-many-locals
+        self, data: list[OSV_Component], product: Product, branch: Optional[Branch]
+    ) -> list[Observation]:
         observations = []
 
         for osv_component in data:
@@ -76,11 +76,13 @@ class OSVParser(BaseParser):
                 if osv_vulnerability.get("withdrawn"):
                     continue
 
-                osv_id = self._get_osv_id(osv_vulnerability)
+                vulnerability_id, vulnerability_id_aliases = self._get_osv_ids(
+                    osv_vulnerability
+                )
                 osv_cvss3_vector, osv_cvss4_vector = self._get_cvss(osv_vulnerability)
 
                 affected = self._get_affected(
-                    osv_component.component_purl, osv_vulnerability
+                    osv_component.component_purl, osv_vulnerability, product, branch
                 )
 
                 component_in_versions = None
@@ -115,7 +117,7 @@ class OSVParser(BaseParser):
                     or component_in_ranges is not False
                 ):
                     observation = Observation(
-                        title=osv_id,
+                        title=vulnerability_id,
                         description=self._get_description(
                             osv_vulnerability,
                             component_in_versions,
@@ -124,7 +126,8 @@ class OSVParser(BaseParser):
                         recommendation=recommendation,
                         cvss3_vector=osv_cvss3_vector,
                         cvss4_vector=osv_cvss4_vector,
-                        vulnerability_id=osv_id,
+                        vulnerability_id=vulnerability_id,
+                        vulnerability_id_aliases=vulnerability_id_aliases,
                         origin_component_name=license_component.component_name,
                         origin_component_version=license_component.component_version,
                         origin_component_purl=license_component.component_purl,
@@ -144,16 +147,19 @@ class OSVParser(BaseParser):
 
         return observations
 
-    def _get_osv_id(self, osv_vulnerability: dict) -> str:
+    def _get_osv_ids(self, osv_vulnerability: dict) -> tuple[str, str]:
         osv_id = str(osv_vulnerability.get("id", ""))
 
-        aliases = osv_vulnerability.get("aliases", [])
-        for alias in aliases:
-            if str(alias).startswith("CVE-"):
+        aliases: list[str] = []
+        for alias in osv_vulnerability.get("aliases", []):
+            if not osv_id.startswith("CVE-") and str(alias).startswith("CVE-"):
+                aliases.append(str(osv_id))
                 osv_id = str(alias)
-                break
+            elif str(alias) != osv_id:
+                aliases.append(str(alias))
 
-        return osv_id
+        aliases.sort()
+        return osv_id, ", ".join(aliases)
 
     def _get_description(
         self,
@@ -169,19 +175,19 @@ class OSVParser(BaseParser):
 
         if component_in_versions:
             osv_description_parts.append(
-                "**Certainty: High** (Component found in affected versions)"
+                "**Confidence: High** (Component found in affected versions)"
             )
         elif component_in_ranges:
             osv_description_parts.append(
-                "**Certainty: High** (Component found in affected ranges)"
+                "**Confidence: High** (Component found in affected ranges)"
             )
         elif component_in_versions is None and component_in_ranges is None:
             osv_description_parts.append(
-                "**Certainty: Low** (No information about affected versions or ranges)"
+                "**Confidence: Low** (No information about affected versions or ranges)"
             )
         elif component_in_ranges is None:
             osv_description_parts.append(
-                "**Certainty: Low** (Not all ranges could be evaluated)"
+                "**Confidence: Low** (Not all ranges could be evaluated)"
             )
 
         return "\n\n".join(osv_description_parts)
@@ -205,7 +211,13 @@ class OSVParser(BaseParser):
             references.append(reference.get("url"))
         return references
 
-    def _get_affected(self, purl: str, osv_vulnerability: dict) -> list[dict]:
+    def _get_affected(
+        self,
+        purl: str,
+        osv_vulnerability: dict,
+        product: Product,
+        branch: Optional[Branch],
+    ) -> list[dict]:
         try:
             parsed_purl = PackageURL.from_string(purl)
         except ValueError as e:
@@ -217,30 +229,29 @@ class OSVParser(BaseParser):
         package_type = parsed_purl.type
         package_namespace = parsed_purl.namespace
         package_name = self._get_package_name(parsed_purl, package_namespace)
-        qualifiers = (
-            parsed_purl.qualifiers
-            if parsed_purl.qualifiers and isinstance(parsed_purl.qualifiers, dict)
-            else {}
-        )
-        package_osv_ecosystem = OSV_Ecosystems.get(package_type)
-        if package_osv_ecosystem == "Alpine":
-            if qualifiers:
-                distro = str(qualifiers.get("distro", ""))
-                distro = "".join(i for i in distro if i.isdigit() or i == ".")
-                distro_parts = distro.split(".")
-                if len(distro_parts) >= 2:
-                    package_osv_ecosystem = (
-                        f"{package_osv_ecosystem}:v{distro_parts[0]}.{distro_parts[1]}"
-                    )
-        if package_osv_ecosystem == "Debian":
-            if qualifiers:
-                distro = str(qualifiers.get("distro", ""))
-                distro = "".join(i for i in distro if i.isdigit() or i == ".")
-                distro_parts = distro.split(".")
-                if len(distro_parts) >= 1:
-                    package_osv_ecosystem = f"{package_osv_ecosystem}:{distro_parts[0]}"
-                else:
-                    package_osv_ecosystem = f"{package_osv_ecosystem}:{distro}"
+
+        package_osv_ecosystem = OSV_Non_Linux_Ecosystems.get(package_type)
+        if (
+            not package_osv_ecosystem
+            and branch
+            and branch.osv_linux_ecosystem
+            and branch.osv_linux_release
+        ):
+            package_osv_ecosystem = (
+                f"{branch.osv_linux_ecosystem}:{branch.osv_linux_release}"
+            )
+        if not package_osv_ecosystem and branch and branch.osv_linux_ecosystem:
+            package_osv_ecosystem = branch.osv_linux_ecosystem
+        if (
+            not package_osv_ecosystem
+            and product.osv_linux_ecosystem
+            and product.osv_linux_release
+        ):
+            package_osv_ecosystem = (
+                f"{product.osv_linux_ecosystem}:{product.osv_linux_release}"
+            )
+        if not package_osv_ecosystem and product.osv_linux_ecosystem:
+            package_osv_ecosystem = product.osv_linux_ecosystem
 
         for affected_item in osv_vulnerability.get("affected", []):
             package = affected_item.get("package", {})
