@@ -1,3 +1,5 @@
+import { Stack } from "@mui/material";
+import { Fragment } from "react";
 import {
     AutocompleteInput,
     Datagrid,
@@ -11,7 +13,6 @@ import {
     TextInput,
     useListController,
 } from "react-admin";
-import { Fragment } from "react/jsx-runtime";
 
 import { PERMISSION_OBSERVATION_LOG_APPROVAL } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
@@ -26,12 +27,14 @@ import { commentShortened } from "./functions";
 
 const BulkActionButtons = ({ product }: any) => {
     return (
-        (!product || (product && product.permissions.includes(PERMISSION_OBSERVATION_LOG_APPROVAL))) && (
-            <Fragment>
-                <AssessmentBulkApproval />
-                <AssessmentDeleteApproval />
-            </Fragment>
-        )
+        <Fragment>
+            {(!product || (product && product.permissions.includes(PERMISSION_OBSERVATION_LOG_APPROVAL))) && (
+                <Stack direction="row" spacing={2} alignItems="center">
+                    <AssessmentBulkApproval />
+                    <AssessmentDeleteApproval />
+                </Stack>
+            )}
+        </Fragment>
     );
 };
 
