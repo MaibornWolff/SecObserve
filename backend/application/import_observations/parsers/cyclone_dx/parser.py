@@ -1,3 +1,5 @@
+import logging
+from dataclasses import dataclass
 from json import dumps
 from typing import Any, Optional
 
@@ -7,18 +9,38 @@ from application.import_observations.parsers.base_parser import (
     BaseFileParser,
     BaseParser,
 )
-from application.import_observations.parsers.cyclone_dx.dependencies import (
-    get_component_dependencies,
-)
-from application.import_observations.parsers.cyclone_dx.types import Component, Metadata
 from application.import_observations.types import Parser_Filetype, Parser_Type
 from application.licenses.models import License_Component
+
+logger = logging.getLogger("secobserve.import_observations.cyclone_dx.dependencies")
+
+
+@dataclass
+class Component:
+    bom_ref: str
+    name: str
+    version: str
+    type: str
+    purl: str
+    cpe: str
+    json: dict[str, str]
+    unsaved_license: str
+
+
+@dataclass
+class Metadata:
+    scanner: str
+    container_name: str
+    container_tag: str
+    container_digest: str
+    file: str
 
 
 class CycloneDXParser(BaseParser, BaseFileParser):
     def __init__(self):
         self.metadata = Metadata("", "", "", "", "")
         self.components: dict[str, Component] = {}
+        self.dependencies: dict[str, list[str]] = {}
 
     @classmethod
     def get_name(cls) -> str:
@@ -40,6 +62,8 @@ class CycloneDXParser(BaseParser, BaseFileParser):
     def get_observations(self, data: dict) -> list[Observation]:
         self.components = self._get_components(data)
         self.metadata = self._get_metadata(data)
+        self.dependencies = self._get_dependencies(data)
+
         observations = self._create_observations(data)
 
         return observations
@@ -49,6 +73,8 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             self.components = self._get_components(data)
         if not self.metadata:
             self.metadata = self._get_metadata(data)
+        if not self.dependencies:
+            self.dependencies = self._get_dependencies(data)
 
         components = []
 
@@ -60,8 +86,8 @@ class CycloneDXParser(BaseParser, BaseFileParser):
 
         if licenses_exist:
             for component in self.components.values():
-                observation_component_dependencies, _ = get_component_dependencies(
-                    data, self.components, component, self.metadata
+                observation_component_dependencies = self._get_component_dependencies(
+                    component.bom_ref, self.components, self.dependencies
                 )
                 model_component = License_Component(
                     component_name=component.name,
@@ -177,11 +203,10 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                     if component:
                         title = vulnerability_id
 
-                        (
-                            observation_component_dependencies,
-                            translated_component_dependencies,
-                        ) = get_component_dependencies(
-                            data, self.components, component, self.metadata
+                        observation_component_dependencies = (
+                            self._get_component_dependencies(
+                                ref, self.components, self.dependencies
+                            )
                         )
 
                         observation = Observation(
@@ -214,7 +239,6 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                             vulnerability,
                             component,
                             observation,
-                            translated_component_dependencies,
                         )
 
                         observations.append(observation)
@@ -325,19 +349,74 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         vulnerability: dict,
         component: Component,
         observation: Observation,
-        translated_component_dependencies: list[dict],
     ):
         evidence = []
         evidence.append("Vulnerability")
         evidence.append(dumps(vulnerability))
         observation.unsaved_evidences.append(evidence)
+
         evidence = []
         evidence.append("Component")
         evidence.append(dumps(component.json))
         observation.unsaved_evidences.append(evidence)
 
-        if translated_component_dependencies:
-            evidence = []
-            evidence.append("Dependencies")
-            evidence.append(dumps(translated_component_dependencies))
-            observation.unsaved_evidences.append(evidence)
+    def _get_dependencies(self, data: dict) -> dict[str, list[str]]:
+        dependency_dict: dict[str, list[str]] = {}
+
+        for dependency in data.get("dependencies", {}):
+            for dependency_key in dependency.get("dependsOn", []):
+                if dependency_key not in dependency_dict:
+                    dependency_dict[dependency_key] = [dependency.get("ref")]
+                else:
+                    dependency_dict[dependency_key].append(dependency.get("ref"))
+
+        return dependency_dict
+
+    def _get_component_dependencies(
+        self,
+        component_bom_ref: str,
+        component_dict: dict[str, Component],
+        dependency_dict: dict[str, list[str]],
+    ) -> str:
+        dependencies: list[str] = []
+        self._get_dependencies_recursive(
+            component_bom_ref, component_dict, dependency_dict, dependencies
+        )
+
+        dependencies.sort()
+        return "\n".join(dependencies)
+
+    def _get_dependencies_recursive(
+        self,
+        component_bom_ref: str,
+        component_dict: dict[str, Component],
+        dependency_dict: dict[str, list[str]],
+        dependencies: list[str],
+    ) -> None:
+        if component_bom_ref in dependency_dict.keys():
+            for dependency_id in dependency_dict[component_bom_ref]:
+                translated_dependency_id = self._translate_package_id(
+                    dependency_id, component_dict
+                )
+                translated_package_id = self._translate_package_id(
+                    component_bom_ref, component_dict
+                )
+                dependency = f"{translated_dependency_id} --> {translated_package_id}"
+                if dependency not in dependencies:
+                    dependencies.append(dependency)
+                    self._get_dependencies_recursive(
+                        dependency_id, component_dict, dependency_dict, dependencies
+                    )
+
+    def _translate_package_id(
+        self, component_bom_ref: str, component_dict: dict[str, Component]
+    ) -> str:
+        component = component_dict.get(component_bom_ref)
+        if not component:
+            logger.warning("Component with BOM ref %s not found", component_bom_ref)
+            return ""
+
+        if component.version:
+            return f"{component.name}:{component.version}"
+
+        return component.name
