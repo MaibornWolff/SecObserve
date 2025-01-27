@@ -107,7 +107,7 @@ const ScanOSV = ({ product }: ScanOSVProps) => {
                                             reference="branches"
                                             sort={{ field: "name", order: "ASC" }}
                                             queryOptions={{ meta: { api_resource: "branch_names" } }}
-                                            filter={{ product: product.id }}
+                                            filter={{ product: product.id, for_license_components: true }}
                                             alwaysOn
                                         >
                                             <AutocompleteInputWide
