@@ -203,11 +203,6 @@ example/example-frontend:dev --> alpine:3.17.3"""
 
             observation = observations[1]
             self.assertEqual("CVE-2023-28484", observation.title)
-
-            print("---------------------------------------------------")
-            print(observation.origin_component_dependencies)
-            print("---------------------------------------------------")
-
             expected_dependencies = """alpine:3.17.3 --> busybox:1.35.0-r29
 alpine:3.17.3 --> geoip:1.6.12-r3
 alpine:3.17.3 --> icu-data-en:72.1-r1
