@@ -90,6 +90,7 @@ class LicenseComponentFilter(FilterSet):
                 "branch_name",
             ),
             ("component_name_version", "component_name_version"),
+            ("component_name_version", "component_name_version_type"),
             (
                 (
                     "component_purl_type",
