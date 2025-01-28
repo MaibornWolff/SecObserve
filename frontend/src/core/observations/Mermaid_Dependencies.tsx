@@ -61,6 +61,11 @@ const createMermaidGraph = (dependencies_str: string) => {
     for (const dependency of dependencies) {
         const components_list = dependency.split(" --> ");
         if (components_list.length != 2) {
+            console.warn("Invalid dependency: " + dependency);
+            continue;
+        }
+        if (dependency.split(" --> ")[0].trim() == "" || dependency.split(" --> ")[1].trim() == "") {
+            console.warn("Invalid dependency: " + dependency);
             continue;
         }
         components.add(dependency.split(" --> ")[0]);
@@ -68,8 +73,13 @@ const createMermaidGraph = (dependencies_str: string) => {
         mermaid_content += "    " + dependency + "\n";
     }
 
+    // Sort components in descending order to make replaceAll more robust
+    const arrayFromSet = Array.from(components);
+    const sortedArray = arrayFromSet.sort((a, b) => b.localeCompare(a));
+    const sortedComponents = new Set(sortedArray);
+
     let i = 1;
-    for (const component of components) {
+    for (const component of sortedComponents) {
         mermaid_content = mermaid_content.replaceAll(component + " ", "id" + i.toString() + '("' + component + '") ');
         mermaid_content = mermaid_content.replaceAll(" " + component, " id" + i.toString() + '("' + component + '")');
         i++;
