@@ -181,8 +181,8 @@ class TestCycloneDXParser(TestCase):
             )
             self.assertEqual("", observation.origin_docker_image_tag)
             self.assertEqual("", observation.origin_docker_image_digest)
-            expected_dependencies = """example/example-frontend:dev --> alpine:3.17.3
-alpine:3.17.3 --> libxml2:2.10.3-r1"""
+            expected_dependencies = """alpine:3.17.3 --> libxml2:2.10.3-r1
+example/example-frontend:dev --> alpine:3.17.3"""
             self.assertEqual(
                 expected_dependencies, observation.origin_component_dependencies
             )
@@ -203,11 +203,14 @@ alpine:3.17.3 --> libxml2:2.10.3-r1"""
 
             observation = observations[1]
             self.assertEqual("CVE-2023-28484", observation.title)
-            expected_dependencies = """example/example-frontend:dev --> alpine:3.17.3
-alpine:3.17.3 --> busybox:1.35.0-r29
+            expected_dependencies = """alpine:3.17.3 --> busybox:1.35.0-r29
+alpine:3.17.3 --> geoip:1.6.12-r3
 alpine:3.17.3 --> icu-data-en:72.1-r1
 alpine:3.17.3 --> icu-libs:72.1-r1
 busybox:1.35.0-r29 --> icu-libs:72.1-r1
+example/example-frontend:dev --> alpine:3.17.3
+geoip:1.6.12-r3 --> icu-data-en:72.1-r1
+icu-data-en:72.1-r1 --> geoip:1.6.12-r3
 icu-data-en:72.1-r1 --> icu-libs:72.1-r1"""
             self.assertEqual(
                 expected_dependencies,
