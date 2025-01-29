@@ -334,7 +334,7 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                     <BooleanField source="osv_enabled" sx={{ marginBottom: 2 }} />
                 </Labeled>
                 {product.osv_linux_ecosystem && (
-                    <Labeled label="OSV Linux ecosystem">
+                    <Labeled label="OSV Linux distribution">
                         <WithRecord
                             render={(record) => (
                                 <OSVEcosystemField

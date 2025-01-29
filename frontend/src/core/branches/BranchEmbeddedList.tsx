@@ -79,7 +79,7 @@ const BranchEmbeddedList = ({ product }: BranchEmbeddedListProps) => {
                                     <OSVEcosystemField
                                         osv_linux_ecosystem={branch.osv_linux_ecosystem}
                                         osv_linux_release={branch.osv_linux_release}
-                                        label="OSV ecosystem"
+                                        label="OSV Linux distribution"
                                     />
                                 )}
                             />

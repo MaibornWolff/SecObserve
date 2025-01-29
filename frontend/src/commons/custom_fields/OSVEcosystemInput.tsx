@@ -22,7 +22,7 @@ const OSVEcosystemInput = () => {
         <Fragment>
             <AutocompleteInputMedium
                 source="osv_linux_ecosystem"
-                label="OSV Linux ecosystem"
+                label="OSV Linux distribution"
                 choices={ECOSYSTEMS_CHOICES}
             />
             <TextInput source="osv_linux_release" label="OSV Linux release" />
