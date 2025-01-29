@@ -2,7 +2,7 @@ import { Divider, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
 import { BooleanField, Labeled, NumberField, ReferenceField, RichTextField, TextField, WithRecord } from "react-admin";
 
-import OSVEcosystemField from "../../commons/custom_fields/OSVEcosystemField";
+import OSVLinuxDistributionField from "../../commons/custom_fields/OSVLinuxDistributionField";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { Product } from "../types";
 
@@ -333,14 +333,14 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                 <Labeled label="OSV scanning enabled">
                     <BooleanField source="osv_enabled" sx={{ marginBottom: 2 }} />
                 </Labeled>
-                {product.osv_linux_ecosystem && (
+                {product.osv_linux_distribution && (
                     <Labeled label="OSV Linux distribution">
                         <WithRecord
                             render={(record) => (
-                                <OSVEcosystemField
-                                    osv_linux_ecosystem={record.osv_linux_ecosystem}
+                                <OSVLinuxDistributionField
+                                    osv_linux_distribution={record.osv_linux_distribution}
                                     osv_linux_release={record.osv_linux_release}
-                                    label="OSV Linux ecosystem"
+                                    label="OSV Linux distribution"
                                 />
                             )}
                         />

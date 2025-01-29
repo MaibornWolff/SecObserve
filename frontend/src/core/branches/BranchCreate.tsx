@@ -4,7 +4,7 @@ import { BooleanInput, CreateBase, SaveButton, SimpleForm, useCreate, useNotify,
 
 import AddButton from "../../commons/custom_fields/AddButton";
 import CancelButton from "../../commons/custom_fields/CancelButton";
-import OSVEcosystemInput from "../../commons/custom_fields/OSVEcosystemInput";
+import OSVLinuxDistributionInput from "../../commons/custom_fields/OSVLinuxDistributionInput";
 import Toolbar from "../../commons/custom_fields/Toolbar";
 import { validate_255, validate_required_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
@@ -41,8 +41,8 @@ const BranchCreate = ({ product }: BranchCreateProps) => {
         if (!data.cpe23) {
             data.cpe23 = "";
         }
-        if (!data.osv_linux_ecosystem) {
-            data.osv_linux_ecosystem = "";
+        if (!data.osv_linux_distribution) {
+            data.osv_linux_distribution = "";
         }
         if (!data.osv_linux_release) {
             data.osv_linux_release = "";
@@ -82,7 +82,7 @@ const BranchCreate = ({ product }: BranchCreateProps) => {
                             />
                             {product && product.osv_enabled && (
                                 <Stack direction="row" spacing={2} alignItems="center">
-                                    <OSVEcosystemInput />
+                                    <OSVLinuxDistributionInput />
                                 </Stack>
                             )}
                         </SimpleForm>

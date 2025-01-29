@@ -13,7 +13,7 @@ import {
 import { PERMISSION_BRANCH_DELETE, PERMISSION_BRANCH_EDIT } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import LicensesCountField from "../../commons/custom_fields/LicensesCountField";
-import OSVEcosystemField from "../../commons/custom_fields/OSVEcosystemField";
+import OSVLinuxDistributionField from "../../commons/custom_fields/OSVLinuxDistributionField";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import { feature_license_management } from "../../commons/functions";
@@ -74,12 +74,12 @@ const BranchEmbeddedList = ({ product }: BranchEmbeddedListProps) => {
                         />
                         {product && product.osv_enabled && (
                             <WithRecord
-                                label="OSV ecosystem"
+                                label="OSV Linux dist."
                                 render={(branch) => (
-                                    <OSVEcosystemField
-                                        osv_linux_ecosystem={branch.osv_linux_ecosystem}
+                                    <OSVLinuxDistributionField
+                                        osv_linux_distribution={branch.osv_linux_distribution}
                                         osv_linux_release={branch.osv_linux_release}
-                                        label="OSV Linux distribution"
+                                        label="OSV Linux dist."
                                     />
                                 )}
                             />

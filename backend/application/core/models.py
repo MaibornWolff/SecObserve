@@ -28,7 +28,7 @@ from application.core.services.observation import (
 )
 from application.core.types import (
     Assessment_Status,
-    OSVLinuxEcosystem,
+    OSVLinuxRelease,
     Severity,
     Status,
     VexJustification,
@@ -137,8 +137,10 @@ class Product(Model):
     )
 
     osv_enabled = BooleanField(default=False)
-    osv_linux_ecosystem = CharField(
-        max_length=12, choices=OSVLinuxEcosystem.OSV_LINUX_ECOSYSTEM_CHOICES, blank=True
+    osv_linux_distribution = CharField(
+        max_length=12,
+        choices=OSVLinuxRelease.OSV_LINUX_DISTRIBUTION_CHOICES,
+        blank=True,
     )
     osv_linux_release = CharField(max_length=255, blank=True)
 
@@ -166,8 +168,10 @@ class Branch(Model):
     housekeeping_protect = BooleanField(default=False)
     purl = CharField(max_length=255, blank=True)
     cpe23 = CharField(max_length=255, blank=True)
-    osv_linux_ecosystem = CharField(
-        max_length=12, choices=OSVLinuxEcosystem.OSV_LINUX_ECOSYSTEM_CHOICES, blank=True
+    osv_linux_distribution = CharField(
+        max_length=12,
+        choices=OSVLinuxRelease.OSV_LINUX_DISTRIBUTION_CHOICES,
+        blank=True,
     )
     osv_linux_release = CharField(max_length=255, blank=True)
 

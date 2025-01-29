@@ -17,7 +17,7 @@ import {
 } from "react-admin";
 
 import { PERMISSION_PRODUCT_DELETE } from "../../access_control/types";
-import OSVEcosystemInput from "../../commons/custom_fields/OSVEcosystemInput";
+import OSVLinuxDistributionInput from "../../commons/custom_fields/OSVLinuxDistributionInput";
 import { validate_0_999999, validate_255, validate_2048, validate_required_255 } from "../../commons/custom_validators";
 import { feature_license_management } from "../../commons/functions";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
@@ -147,11 +147,11 @@ const ProductEdit = () => {
             }
         }
         if (!data.osv_enabled) {
-            data.osv_linux_ecosystem = "";
+            data.osv_linux_distribution = "";
             data.osv_linux_release = "";
         }
-        if (!data.osv_linux_ecosystem) {
-            data.osv_linux_ecosystem = "";
+        if (!data.osv_linux_distribution) {
+            data.osv_linux_distribution = "";
         }
         if (!data.osv_linux_release) {
             data.osv_linux_release = "";
@@ -471,7 +471,7 @@ const ProductEdit = () => {
                 <Stack direction="row" spacing={2} alignItems="center">
                     <BooleanInput source="osv_enabled" label="OSV scanning enabled" defaultValue={false} />
                     <FormDataConsumer>
-                        {({ formData }) => formData.osv_enabled && <OSVEcosystemInput />}
+                        {({ formData }) => formData.osv_enabled && <OSVLinuxDistributionInput />}
                     </FormDataConsumer>
                 </Stack>
             </SimpleForm>

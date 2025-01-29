@@ -411,9 +411,9 @@ class ProductSerializer(
                     "Closed status must not be set when issue tracker type is not Jira"
                 )
 
-        if attrs.get("osv_linux_release") and not attrs.get("osv_linux_ecosystem"):
+        if attrs.get("osv_linux_release") and not attrs.get("osv_linux_distribution"):
             raise ValidationError(
-                "osv_linux_release cannot be set without osv_linux_ecosystem"
+                "osv_linux_release cannot be set without osv_linux_distribution"
             )
 
         return super().validate(attrs)
@@ -663,9 +663,9 @@ class BranchSerializer(ModelSerializer):
         fields = "__all__"
 
     def validate(self, attrs: dict):  # pylint: disable=too-many-branches
-        if attrs.get("osv_linux_release") and not attrs.get("osv_linux_ecosystem"):
+        if attrs.get("osv_linux_release") and not attrs.get("osv_linux_distribution"):
             raise ValidationError(
-                "osv_linux_release cannot be set without osv_linux_ecosystem"
+                "osv_linux_release cannot be set without osv_linux_distribution"
             )
 
         return super().validate(attrs)

@@ -234,24 +234,24 @@ class OSVParser(BaseParser):
         if (
             not package_osv_ecosystem
             and branch
-            and branch.osv_linux_ecosystem
+            and branch.osv_linux_distribution
             and branch.osv_linux_release
         ):
             package_osv_ecosystem = (
-                f"{branch.osv_linux_ecosystem}:{branch.osv_linux_release}"
+                f"{branch.osv_linux_distribution}:{branch.osv_linux_release}"
             )
-        if not package_osv_ecosystem and branch and branch.osv_linux_ecosystem:
-            package_osv_ecosystem = branch.osv_linux_ecosystem
+        if not package_osv_ecosystem and branch and branch.osv_linux_distribution:
+            package_osv_ecosystem = branch.osv_linux_distribution
         if (
             not package_osv_ecosystem
-            and product.osv_linux_ecosystem
+            and product.osv_linux_distribution
             and product.osv_linux_release
         ):
             package_osv_ecosystem = (
-                f"{product.osv_linux_ecosystem}:{product.osv_linux_release}"
+                f"{product.osv_linux_distribution}:{product.osv_linux_release}"
             )
-        if not package_osv_ecosystem and product.osv_linux_ecosystem:
-            package_osv_ecosystem = product.osv_linux_ecosystem
+        if not package_osv_ecosystem and product.osv_linux_distribution:
+            package_osv_ecosystem = product.osv_linux_distribution
 
         for affected_item in osv_vulnerability.get("affected", []):
             package = affected_item.get("package", {})

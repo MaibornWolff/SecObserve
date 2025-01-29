@@ -4,7 +4,7 @@ import { BooleanInput, SaveButton, SimpleForm, useNotify, useRefresh, useUpdate 
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
 import EditButton from "../../commons/custom_fields/EditButton";
-import OSVEcosystemInput from "../../commons/custom_fields/OSVEcosystemInput";
+import OSVLinuxDistributionInput from "../../commons/custom_fields/OSVLinuxDistributionInput";
 import Toolbar from "../../commons/custom_fields/Toolbar";
 import { validate_255, validate_required_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
@@ -31,8 +31,8 @@ const BranchEdit = ({ product }: BranchEditProps) => {
         if (!data.cpe23) {
             data.cpe23 = "";
         }
-        if (!data.osv_linux_ecosystem) {
-            data.osv_linux_ecosystem = "";
+        if (!data.osv_linux_distribution) {
+            data.osv_linux_distribution = "";
         }
         if (!data.osv_linux_release) {
             data.osv_linux_release = "";
@@ -43,7 +43,7 @@ const BranchEdit = ({ product }: BranchEditProps) => {
             housekeeping_protect: data.housekeeping_protect,
             purl: data.purl,
             cpe23: data.cpe23,
-            osv_linux_ecosystem: data.osv_linux_ecosystem,
+            osv_linux_distribution: data.osv_linux_distribution,
             osv_linux_release: data.osv_linux_release,
         };
 
@@ -89,7 +89,7 @@ const BranchEdit = ({ product }: BranchEditProps) => {
                         <BooleanInput source="housekeeping_protect" label="Protect from housekeeping" />
                         {product && product.osv_enabled && (
                             <Stack direction="row" spacing={2} alignItems="center">
-                                <OSVEcosystemInput />
+                                <OSVLinuxDistributionInput />
                             </Stack>
                         )}
                     </SimpleForm>
