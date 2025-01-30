@@ -28,7 +28,7 @@ from application.core.services.observation import (
 )
 from application.core.types import (
     Assessment_Status,
-    OSVLinuxRelease,
+    OSVLinuxDistribution,
     Severity,
     Status,
     VexJustification,
@@ -139,7 +139,7 @@ class Product(Model):
     osv_enabled = BooleanField(default=False)
     osv_linux_distribution = CharField(
         max_length=12,
-        choices=OSVLinuxRelease.OSV_LINUX_DISTRIBUTION_CHOICES,
+        choices=OSVLinuxDistribution.OSV_LINUX_DISTRIBUTION_CHOICES,
         blank=True,
     )
     osv_linux_release = CharField(max_length=255, blank=True)
@@ -170,7 +170,7 @@ class Branch(Model):
     cpe23 = CharField(max_length=255, blank=True)
     osv_linux_distribution = CharField(
         max_length=12,
-        choices=OSVLinuxRelease.OSV_LINUX_DISTRIBUTION_CHOICES,
+        choices=OSVLinuxDistribution.OSV_LINUX_DISTRIBUTION_CHOICES,
         blank=True,
     )
     osv_linux_release = CharField(max_length=255, blank=True)

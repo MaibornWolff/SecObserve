@@ -129,7 +129,7 @@ class PURL_Type:
     }
 
 
-class OSVLinuxRelease:
+class OSVLinuxDistribution:
     DISTRIBUTION_ALMALINUX = "AlmaLinux"
     DISTRIBUTION_ALPINE = "Alpine"
     DISTRIBUTION_DEBIAN = "Debian"
