@@ -510,7 +510,7 @@ def _process_new_observation(imported_observation: Observation) -> None:
 
 
 def _resolve_unimported_observations(
-    observations_before: dict[str, Observation]
+    observations_before: dict[str, Observation],
 ) -> set[Observation]:
     # All observations that are still in observations_before are not in the imported scan
     # and seem to have been resolved.
