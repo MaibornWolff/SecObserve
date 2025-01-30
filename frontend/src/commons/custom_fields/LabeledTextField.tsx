@@ -1,20 +1,12 @@
+import { Typography } from "@mui/material";
+
 interface LabeledTextFieldProps {
     text: string | number;
     label: string;
 }
 
 const LabeledTextField = (props: LabeledTextFieldProps) => {
-    return (
-        <div
-            style={{
-                fontSize: "0.875rem",
-                fontFamily: "Roboto",
-                lineHeight: 1.43,
-            }}
-        >
-            {props.text}
-        </div>
-    );
+    return <Typography variant="body2">{props.text}</Typography>;
 };
 
 export default LabeledTextField;

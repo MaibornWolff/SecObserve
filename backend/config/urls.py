@@ -25,6 +25,8 @@ from application.import_observations.api.views import (
     ApiImportObservationsByName,
     FileUploadObservationsById,
     FileUploadObservationsByName,
+    ScanOSVBranchView,
+    ScanOSVProductView,
 )
 from application.metrics.api.views import (
     ProductMetricsCurrentView,
@@ -84,6 +86,11 @@ urlpatterns += [
     ),
     path("api/purl_types/<str:purl_type_id>/", PURLTypeOneView.as_view()),
     path("api/purl_types/", PURLTypeManyView.as_view()),
+    path("api/products/<int:product_id>/scan_osv/", ScanOSVProductView.as_view()),
+    path(
+        "api/products/<int:product_id>/<int:branch_id>/scan_osv/",
+        ScanOSVBranchView.as_view(),
+    ),
     path(
         "api/import/api_import_observations_by_name/",
         ApiImportObservationsByName.as_view(),

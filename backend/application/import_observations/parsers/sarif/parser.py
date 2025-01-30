@@ -4,7 +4,7 @@ from typing import Any, Optional, Tuple
 
 from packageurl import PackageURL
 
-from application.core.models import Observation
+from application.core.models import Branch, Observation, Product
 from application.core.types import Severity
 from application.import_observations.parsers.base_parser import (
     BaseFileParser,
@@ -63,7 +63,9 @@ class SARIFParser(BaseParser, BaseFileParser):
             return True
         return False
 
-    def get_observations(self, data: dict) -> list[Observation]:
+    def get_observations(
+        self, data: dict, product: Product, branch: Optional[Branch]
+    ) -> list[Observation]:
         observations: list[Observation] = []
 
         for run in data.get("runs", []):

@@ -1,6 +1,7 @@
 from os import path
 from unittest import TestCase
 
+from application.core.models import Product
 from application.core.types import Severity
 from application.import_observations.parsers.sarif.parser import SARIFParser
 from application.import_observations.services.parser_detector import detect_parser
@@ -13,7 +14,9 @@ class TestSarifParser(TestCase):
             self.assertEqual("SARIF", parser.name)
             self.assertTrue(isinstance(parser_instance, SARIFParser))
 
-            observations = parser_instance.get_observations(data)
+            observations = parser_instance.get_observations(
+                data, Product(name="product"), None
+            )
             self.assertEqual(4, len(observations))
 
             observation = observations[0]
@@ -49,7 +52,9 @@ class TestSarifParser(TestCase):
             self.assertEqual("SARIF", parser.name)
             self.assertTrue(isinstance(parser_instance, SARIFParser))
 
-            observations = parser_instance.get_observations(data)
+            observations = parser_instance.get_observations(
+                data, Product(name="product"), None
+            )
             self.assertEqual(5, len(observations))
 
             observation = observations[0]
@@ -89,7 +94,9 @@ class TestSarifParser(TestCase):
             self.assertEqual("SARIF", parser.name)
             self.assertTrue(isinstance(parser_instance, SARIFParser))
 
-            observations = parser_instance.get_observations(data)
+            observations = parser_instance.get_observations(
+                data, Product(name="product"), None
+            )
             self.assertEqual(2, len(observations))
 
             observation = observations[0]
@@ -126,7 +133,9 @@ class TestSarifParser(TestCase):
             self.assertEqual("SARIF", parser.name)
             self.assertTrue(isinstance(parser_instance, SARIFParser))
 
-            observations = parser_instance.get_observations(data)
+            observations = parser_instance.get_observations(
+                data, Product(name="product"), None
+            )
             self.assertEqual(2, len(observations))
 
             observation = observations[0]
@@ -165,7 +174,9 @@ class TestSarifParser(TestCase):
             self.assertEqual("SARIF", parser.name)
             self.assertTrue(isinstance(parser_instance, SARIFParser))
 
-            observations = parser_instance.get_observations(data)
+            observations = parser_instance.get_observations(
+                data, Product(name="product"), None
+            )
             self.assertEqual(1, len(observations))
 
             observation = observations[0]
@@ -212,7 +223,9 @@ Set when the resource will be become inactive.
             self.assertEqual("SARIF", parser.name)
             self.assertTrue(isinstance(parser_instance, SARIFParser))
 
-            observations = parser_instance.get_observations(data)
+            observations = parser_instance.get_observations(
+                data, Product(name="product"), None
+            )
             self.assertEqual(3, len(observations))
 
             observation = observations[0]
@@ -247,7 +260,9 @@ Set when the resource will be become inactive.
             self.assertEqual("SARIF", parser.name)
             self.assertTrue(isinstance(parser_instance, SARIFParser))
 
-            observations = parser_instance.get_observations(data)
+            observations = parser_instance.get_observations(
+                data, Product(name="product"), None
+            )
             self.assertEqual(4, len(observations))
 
             observation = observations[0]

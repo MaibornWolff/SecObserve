@@ -1,6 +1,7 @@
 from os import path
 from unittest import TestCase
 
+from application.core.models import Product
 from application.core.types import Severity
 from application.import_observations.parsers.prowler.parser import ProwlerParser
 from application.import_observations.services.parser_detector import detect_parser
@@ -13,7 +14,9 @@ class TestProwlerParser(TestCase):
             self.assertEqual("Prowler 3", parser.name)
             self.assertTrue(isinstance(parser_instance, ProwlerParser))
 
-            observations = parser_instance.get_observations(data)
+            observations = parser_instance.get_observations(
+                data, Product(name="product"), None
+            )
             self.assertEqual(1, len(observations))
 
             observation = observations[0]
@@ -57,7 +60,9 @@ Auto Minor Version Upgrade is a feature that you can enable to have your databas
             self.assertEqual("Prowler 3", parser.name)
             self.assertTrue(isinstance(parser_instance, ProwlerParser))
 
-            observations = parser_instance.get_observations(data)
+            observations = parser_instance.get_observations(
+                data, Product(name="product"), None
+            )
             self.assertEqual(2, len(observations))
 
             observation = observations[0]

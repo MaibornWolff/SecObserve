@@ -1,4 +1,5 @@
 import LaunchIcon from "@mui/icons-material/Launch";
+import { Link, Typography } from "@mui/material";
 import { Fragment } from "react";
 
 import { useLinkStyles } from "../../commons/layout/themes";
@@ -7,7 +8,7 @@ import { getSettingTheme } from "../../commons/user_settings/functions";
 interface TextUrlFieldProps {
     text: string | number;
     url: string;
-    label: string;
+    label?: string | undefined;
 }
 
 function is_valid_url(urlString: string): boolean {
@@ -42,47 +43,17 @@ const TextUrlField = (props: TextUrlFieldProps) => {
     return (
         <Fragment>
             {is_valid_url(props.url) && (
-                <a
-                    href={props.url} // nosemgrep: typescript.react.security.audit.react-href-var.react-href-var
-                    // nosemgrep because is_valid_url() sanitizes the url
-                    target="_blank"
-                    rel="noreferrer"
-                    className={classes.link}
-                    style={{
-                        fontSize: "0.875rem",
-                        fontFamily: "Roboto",
-                        lineHeight: 1.43,
-                    }}
-                >
+                <Link variant="body2" href={props.url} target="_blank" rel="noreferrer" className={classes.link}>
                     {props.text} &nbsp;
                     <LaunchIcon sx={{ fontSize: "0.8rem" }} />
-                </a>
+                </Link>
             )}
             {is_valid_relative_url(props.url) && (
-                <a
-                    href={props.url} // nosemgrep: typescript.react.security.audit.react-href-var.react-href-var
-                    // nosemgrep because is_valid_url() sanitizes the url
-                    className={classes.link}
-                    style={{
-                        fontSize: "0.875rem",
-                        fontFamily: "Roboto",
-                        lineHeight: 1.43,
-                    }}
-                >
+                <Link variant="body2" href={props.url} target="_blank" rel="noreferrer" className={classes.link}>
                     {props.text}
-                </a>
+                </Link>
             )}
-            {is_invalid_url(props.url) && (
-                <span
-                    style={{
-                        fontSize: "0.875rem",
-                        fontFamily: "Roboto",
-                        lineHeight: 1.43,
-                    }}
-                >
-                    {props.text}
-                </span>
-            )}
+            {is_invalid_url(props.url) && <Typography variant="body2">{props.text}</Typography>}
         </Fragment>
     );
 };

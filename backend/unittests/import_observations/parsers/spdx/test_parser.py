@@ -1,6 +1,7 @@
 from os import path
 from unittest import TestCase
 
+from application.core.models import Product
 from application.import_observations.parsers.spdx.parser import SPDXParser
 from application.import_observations.services.parser_detector import detect_parser
 
@@ -12,7 +13,9 @@ class TestSPDXParser(TestCase):
             self.assertEqual("SPDX", parser.name)
             self.assertTrue(SPDXParser, isinstance(parser_instance, SPDXParser))
 
-            observations = parser_instance.get_observations(data)
+            observations = parser_instance.get_observations(
+                data, Product(name="product"), None
+            )
             self.assertEqual(0, len(observations))
 
             license_components = parser_instance.get_license_components(data)
@@ -26,7 +29,9 @@ class TestSPDXParser(TestCase):
             self.assertEqual("SPDX", parser.name)
             self.assertTrue(SPDXParser, isinstance(parser_instance, SPDXParser))
 
-            observations = parser_instance.get_observations(data)
+            observations = parser_instance.get_observations(
+                data, Product(name="product"), None
+            )
             license_components = parser_instance.get_license_components(data)
 
             self.assertEqual(0, len(observations))

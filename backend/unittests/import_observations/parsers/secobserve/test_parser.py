@@ -1,6 +1,7 @@
 from os import path
 from unittest import TestCase
 
+from application.core.models import Product
 from application.import_observations.parsers.secobserve.parser import SecObserveParser
 from application.import_observations.services.parser_detector import detect_parser
 
@@ -12,7 +13,9 @@ class TestSecObserveParser(TestCase):
             self.assertEqual("SecObserve", parser.name)
             self.assertTrue(isinstance(parser_instance, SecObserveParser))
 
-            observations = parser_instance.get_observations(data)
+            observations = parser_instance.get_observations(
+                data, Product(name="product"), None
+            )
             self.assertEqual(0, len(observations))
 
     def test_multiple_observations(self):
@@ -23,7 +26,9 @@ class TestSecObserveParser(TestCase):
             self.assertEqual("SecObserve", parser.name)
             self.assertTrue(isinstance(parser_instance, SecObserveParser))
 
-            observations = parser_instance.get_observations(data)
+            observations = parser_instance.get_observations(
+                data, Product(name="product"), None
+            )
             self.assertEqual(2, len(observations))
 
             observation = observations[0]
