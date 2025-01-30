@@ -26,7 +26,13 @@ from application.core.services.observation import (
     normalize_observation_fields,
     set_product_flags,
 )
-from application.core.types import Assessment_Status, Severity, Status, VexJustification
+from application.core.types import (
+    Assessment_Status,
+    OSVLinuxDistribution,
+    Severity,
+    Status,
+    VexJustification,
+)
 from application.issue_tracker.types import Issue_Tracker
 from application.licenses.types import License_Policy_Evaluation_Result
 
@@ -108,16 +114,20 @@ class Product(Model):
     issue_tracker_minimum_severity = CharField(
         max_length=12, choices=Severity.SEVERITY_CHOICES, blank=True
     )
+
     last_observation_change = DateTimeField(default=timezone.now)
+
     assessments_need_approval = BooleanField(default=False)
     new_observations_in_review = BooleanField(default=False)
     product_rules_need_approval = BooleanField(default=False)
+
     risk_acceptance_expiry_active = BooleanField(null=True)
     risk_acceptance_expiry_days = IntegerField(
         null=True,
         validators=[MinValueValidator(0), MaxValueValidator(999999)],
         help_text="Days before risk acceptance expires, 0 means no expiry",
     )
+
     license_policy = ForeignKey(
         "licenses.License_Policy",
         on_delete=PROTECT,
@@ -125,6 +135,15 @@ class Product(Model):
         null=True,
         blank=True,
     )
+
+    osv_enabled = BooleanField(default=False)
+    osv_linux_distribution = CharField(
+        max_length=12,
+        choices=OSVLinuxDistribution.OSV_LINUX_DISTRIBUTION_CHOICES,
+        blank=True,
+    )
+    osv_linux_release = CharField(max_length=255, blank=True)
+
     has_cloud_resource = BooleanField(default=False)
     has_component = BooleanField(default=False)
     has_docker_image = BooleanField(default=False)
@@ -149,6 +168,12 @@ class Branch(Model):
     housekeeping_protect = BooleanField(default=False)
     purl = CharField(max_length=255, blank=True)
     cpe23 = CharField(max_length=255, blank=True)
+    osv_linux_distribution = CharField(
+        max_length=12,
+        choices=OSVLinuxDistribution.OSV_LINUX_DISTRIBUTION_CHOICES,
+        blank=True,
+    )
+    osv_linux_release = CharField(max_length=255, blank=True)
 
     class Meta:
         unique_together = (
@@ -381,6 +406,7 @@ class Observation(Model):
     )
     scanner_observation_id = CharField(max_length=255, blank=True)
     vulnerability_id = CharField(max_length=255, blank=True)
+    vulnerability_id_aliases = CharField(max_length=512, blank=True)
     origin_component_name = CharField(max_length=255, blank=True)
     origin_component_version = CharField(max_length=255, blank=True)
     origin_component_name_version = CharField(max_length=513, blank=True)

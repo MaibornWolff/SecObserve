@@ -94,7 +94,9 @@ def file_upload_observations(
 ) -> Tuple[int, int, int, int, int, int]:
 
     parser, parser_instance, data = detect_parser(file_upload_parameters.file)
-    imported_observations = parser_instance.get_observations(data)
+    imported_observations = parser_instance.get_observations(
+        data, file_upload_parameters.product, file_upload_parameters.branch
+    )
 
     filename = (
         os.path.basename(file_upload_parameters.file.name)
@@ -121,6 +123,7 @@ def file_upload_observations(
         product=import_parameters.product,
         branch=import_parameters.branch,
         filename=import_parameters.filename,
+        api_configuration_name="",
         defaults={
             "last_import_observations_new": numbers_observations[0],
             "last_import_observations_updated": numbers_observations[1],
@@ -189,7 +192,11 @@ def api_import_observations(
             "Connection couldn't be established: " + " / ".join(errors)
         )
 
-    imported_observations = parser_instance.get_observations(data)
+    imported_observations = parser_instance.get_observations(
+        data,
+        api_import_parameters.api_configuration.product,
+        api_import_parameters.branch,
+    )
 
     import_parameters = ImportParameters(
         product=api_import_parameters.api_configuration.product,
@@ -209,6 +216,7 @@ def api_import_observations(
     Vulnerability_Check.objects.update_or_create(
         product=import_parameters.product,
         branch=import_parameters.branch,
+        filename="",
         api_configuration_name=import_parameters.api_configuration_name,
         defaults={
             "last_import_observations_new": numbers[0],
@@ -367,6 +375,9 @@ def _process_current_observation(
         imported_observation.scanner_observation_id
     )
     observation_before.vulnerability_id = imported_observation.vulnerability_id
+    observation_before.vulnerability_id_aliases = (
+        imported_observation.vulnerability_id_aliases
+    )
     observation_before.cvss3_score = imported_observation.cvss3_score
     observation_before.cvss3_vector = imported_observation.cvss3_vector
     observation_before.cvss4_score = imported_observation.cvss4_score
@@ -507,7 +518,7 @@ def _process_new_observation(imported_observation: Observation) -> None:
 
 
 def _resolve_unimported_observations(
-    observations_before: dict[str, Observation]
+    observations_before: dict[str, Observation],
 ) -> set[Observation]:
     # All observations that are still in observations_before are not in the imported scan
     # and seem to have been resolved.

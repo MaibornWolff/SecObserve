@@ -11,6 +11,7 @@ import {
     SimpleForm,
 } from "react-admin";
 
+import OSVLinuxDistributionInput from "../../commons/custom_fields/OSVLinuxDistributionInput";
 import { validate_0_999999, validate_255, validate_2048, validate_required_255 } from "../../commons/custom_validators";
 import { feature_license_management } from "../../commons/functions";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
@@ -126,6 +127,16 @@ const ProductCreate = () => {
                 data.risk_acceptance_expiry_days = null;
             }
         }
+        if (!data.osv_enabled) {
+            data.osv_linux_distribution = "";
+            data.osv_linux_release = "";
+        }
+        if (!data.osv_linux_distribution) {
+            data.osv_linux_distribution = "";
+        }
+        if (!data.osv_linux_release) {
+            data.osv_linux_release = "";
+        }
         return data;
     };
 
@@ -145,8 +156,10 @@ const ProductCreate = () => {
                 >
                     <AutocompleteInputWide optionText="name" />
                 </ReferenceInput>
-                <TextInputWide source="purl" validate={validate_255} label="PURL" />
-                <TextInputWide source="cpe23" validate={validate_255} label="CPE 2.3" />
+                <Stack direction="row" spacing={4}>
+                    <TextInputWide source="purl" validate={validate_255} label="PURL" />
+                    <TextInputWide source="cpe23" validate={validate_255} label="CPE 2.3" />
+                </Stack>
 
                 <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
@@ -160,12 +173,12 @@ const ProductCreate = () => {
                 <Typography variant="h6" sx={{ marginBottom: 2 }}>
                     Source code repository
                 </Typography>
-                <Stack spacing={2} sx={{ marginBottom: 2 }}>
-                    <TextInputWide
-                        source="repository_prefix"
-                        helperText="URL prefix to link to a file in the source code repository"
-                        validate={validate_255}
-                    />
+                <TextInputWide
+                    source="repository_prefix"
+                    helperText="URL prefix to link to a file in the source code repository"
+                    validate={validate_255}
+                />
+                <Stack direction="row" spacing={4} sx={{ marginTop: 2 }}>
                     <NullableBooleanInput
                         source="repository_branch_housekeeping_active"
                         label="Housekeeping"
@@ -175,30 +188,30 @@ const ProductCreate = () => {
                         trueLabel="Product specific"
                         helperText="Delete inactive branches / versions"
                     />
+                    <FormDataConsumer>
+                        {({ formData }) =>
+                            formData.repository_branch_housekeeping_active && (
+                                <Fragment>
+                                    <NumberInput
+                                        source="repository_branch_housekeeping_keep_inactive_days"
+                                        label="Keep inactive"
+                                        helperText="Days before inactive branches / versions and their observations are deleted"
+                                        defaultValue={30}
+                                        min={1}
+                                        max={999999}
+                                        validate={validate_0_999999}
+                                    />
+                                    <TextInputWide
+                                        source="repository_branch_housekeeping_exempt_branches"
+                                        label="Exempt branches / versions"
+                                        helperText="Regular expression which branches / versions to exempt from deletion"
+                                        validate={validate_255}
+                                    />
+                                </Fragment>
+                            )
+                        }
+                    </FormDataConsumer>
                 </Stack>
-                <FormDataConsumer>
-                    {({ formData }) =>
-                        formData.repository_branch_housekeeping_active && (
-                            <Stack spacing={2}>
-                                <NumberInput
-                                    source="repository_branch_housekeeping_keep_inactive_days"
-                                    label="Keep inactive"
-                                    helperText="Days before inactive branches / versions and their observations are deleted"
-                                    defaultValue={30}
-                                    min={1}
-                                    max={999999}
-                                    validate={validate_0_999999}
-                                />
-                                <TextInputWide
-                                    source="repository_branch_housekeeping_exempt_branches"
-                                    label="Exempt branches / versions"
-                                    helperText="Regular expression which branches / versions to exempt from deletion"
-                                    validate={validate_255}
-                                />
-                            </Stack>
-                        )
-                    }
-                </FormDataConsumer>
 
                 <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
                 <Typography variant="h6" sx={{ marginBottom: 2 }}>
@@ -377,23 +390,23 @@ const ProductCreate = () => {
                 />
 
                 <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
-                <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                <Typography variant="h6" sx={{ marginBottom: 2 }}>
                     Risk acceptance expiry
                 </Typography>
-                <NullableBooleanInput
-                    source="risk_acceptance_expiry_active"
-                    label="Risk acceptance expiry"
-                    defaultValue={null}
-                    nullLabel="Standard"
-                    falseLabel="Disabled"
-                    trueLabel="Product specific"
-                    helperText="Set date for expiry or risk acceptance"
-                    sx={{ width: "15em", marginBottom: 2 }}
-                />
-                <FormDataConsumer>
-                    {({ formData }) =>
-                        formData.risk_acceptance_expiry_active && (
-                            <Stack spacing={2}>
+                <Stack direction="row" spacing={4}>
+                    <NullableBooleanInput
+                        source="risk_acceptance_expiry_active"
+                        label="Risk acceptance expiry"
+                        defaultValue={null}
+                        nullLabel="Standard"
+                        falseLabel="Disabled"
+                        trueLabel="Product specific"
+                        helperText="Set date for expiry or risk acceptance"
+                        sx={{ width: "15em", marginBottom: 2 }}
+                    />
+                    <FormDataConsumer>
+                        {({ formData }) =>
+                            formData.risk_acceptance_expiry_active && (
                                 <NumberInput
                                     source="risk_acceptance_expiry_days"
                                     label="Risk acceptance expiry (days)"
@@ -403,10 +416,10 @@ const ProductCreate = () => {
                                     max={999999}
                                     validate={validate_0_999999}
                                 />
-                            </Stack>
-                        )
-                    }
-                </FormDataConsumer>
+                            )
+                        }
+                    </FormDataConsumer>
+                </Stack>
 
                 {feature_license_management() && (
                     <Fragment>
@@ -424,6 +437,17 @@ const ProductCreate = () => {
                         </ReferenceInput>
                     </Fragment>
                 )}
+
+                <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
+                <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                    Vulnerability scanning
+                </Typography>
+                <Stack direction="row" spacing={2} alignItems="center">
+                    <BooleanInput source="osv_enabled" label="OSV scanning enabled" defaultValue={false} />
+                    <FormDataConsumer>
+                        {({ formData }) => formData.osv_enabled && <OSVLinuxDistributionInput />}
+                    </FormDataConsumer>
+                </Stack>
             </SimpleForm>
         </Create>
     );

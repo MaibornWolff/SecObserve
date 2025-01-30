@@ -1,5 +1,5 @@
 from json import dumps
-from typing import Any
+from typing import Any, Optional
 
 from rest_framework.exceptions import ValidationError
 from spdx_tools.spdx.model.document import Document
@@ -7,7 +7,7 @@ from spdx_tools.spdx.model.relationship import RelationshipType
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.jsonlikedict.json_like_dict_parser import JsonLikeDictParser
 
-from application.core.models import Observation
+from application.core.models import Branch, Observation, Product
 from application.import_observations.parsers.base_parser import (
     BaseFileParser,
     BaseParser,
@@ -38,7 +38,9 @@ class SPDXParser(BaseParser, BaseFileParser):
             return True
         return False
 
-    def get_observations(self, data: dict) -> list[Observation]:
+    def get_observations(
+        self, data: dict, product: Product, branch: Optional[Branch]
+    ) -> list[Observation]:
         return []
 
     def get_license_components(self, data: dict) -> list[License_Component]:

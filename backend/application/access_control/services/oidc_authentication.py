@@ -179,7 +179,14 @@ class OIDCAuthentication(BaseAuthentication):
             return []
 
         groups = payload.get(os.environ["OIDC_GROUPS"])
-        if not groups or not isinstance(groups, list):
+
+        if not groups:
+            return []
+
+        if isinstance(groups, str):
+            groups = [groups]
+
+        if not isinstance(groups, list):
             return []
 
         return sorted(groups)

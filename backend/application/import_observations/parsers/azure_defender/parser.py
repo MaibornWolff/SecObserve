@@ -1,7 +1,8 @@
 import re
 from json import dumps
+from typing import Optional
 
-from application.core.models import Observation
+from application.core.models import Branch, Observation, Product
 from application.import_observations.parsers.base_parser import (
     BaseFileParser,
     BaseParser,
@@ -27,7 +28,9 @@ class AzureDefenderParser(BaseParser, BaseFileParser):
             return True
         return False
 
-    def get_observations(self, data: list[dict]) -> list[Observation]:
+    def get_observations(
+        self, data: list[dict], product: Product, branch: Optional[Branch]
+    ) -> list[Observation]:
         observations = []
 
         for row in data:

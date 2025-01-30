@@ -215,7 +215,7 @@ const ProductShow = () => {
                                 onClick={hideSettingsTabs}
                             >
                                 {product && product.permissions.includes(PERMISSION_BRANCH_CREATE) && (
-                                    <BranchCreate id={product.id} />
+                                    <BranchCreate product={product} />
                                 )}
                                 <BranchEmbeddedList product={product} />
                             </Tab>

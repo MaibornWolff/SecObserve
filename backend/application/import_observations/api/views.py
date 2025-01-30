@@ -1,12 +1,14 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.filters import SearchFilter
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.status import HTTP_404_NOT_FOUND
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
@@ -28,9 +30,10 @@ from application.import_observations.api.serializers import (
     ApiConfigurationSerializer,
     ApiImportObservationsByIdRequestSerializer,
     ApiImportObservationsByNameRequestSerializer,
+    APIImportObservationsResponseSerializer,
+    FileImportObservationsResponseSerializer,
     FileUploadObservationsByIdRequestSerializer,
     FileUploadObservationsByNameRequestSerializer,
-    ImportObservationsResponseSerializer,
     ParserSerializer,
     VulnerabilityCheckSerializer,
 )
@@ -53,12 +56,16 @@ from application.import_observations.services.import_observations import (
     api_import_observations,
     file_upload_observations,
 )
+from application.import_observations.services.osv_scanner import (
+    scan_branch,
+    scan_product,
+)
 
 
 class ApiImportObservationsById(APIView):
     @extend_schema(
         request=ApiImportObservationsByIdRequestSerializer,
-        responses={status.HTTP_200_OK: ImportObservationsResponseSerializer},
+        responses={status.HTTP_200_OK: APIImportObservationsResponseSerializer},
     )
     def post(self, request):
         request_serializer = ApiImportObservationsByIdRequestSerializer(
@@ -122,7 +129,7 @@ class ApiImportObservationsById(APIView):
 class ApiImportObservationsByName(APIView):
     @extend_schema(
         request=ApiImportObservationsByNameRequestSerializer,
-        responses={status.HTTP_200_OK: ImportObservationsResponseSerializer},
+        responses={status.HTTP_200_OK: APIImportObservationsResponseSerializer},
     )
     def post(self, request):
         request_serializer = ApiImportObservationsByNameRequestSerializer(
@@ -190,7 +197,7 @@ class FileUploadObservationsById(APIView):
 
     @extend_schema(
         request=FileUploadObservationsByIdRequestSerializer,
-        responses={status.HTTP_200_OK: ImportObservationsResponseSerializer},
+        responses={status.HTTP_200_OK: FileImportObservationsResponseSerializer},
     )
     def post(self, request):  # pylint: disable=too-many-locals
         # not too much we can do about this
@@ -274,7 +281,7 @@ class FileUploadObservationsByName(APIView):
 
     @extend_schema(
         request=FileUploadObservationsByNameRequestSerializer,
-        responses={status.HTTP_200_OK: ImportObservationsResponseSerializer},
+        responses={status.HTTP_200_OK: FileImportObservationsResponseSerializer},
     )
     def post(self, request):  # pylint: disable=too-many-locals
         # not too much we can do about this
@@ -380,3 +387,61 @@ class ParserViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     queryset = Parser.objects.all()
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["name"]
+
+
+class ScanOSVProductView(APIView):
+    @extend_schema(
+        request=None,
+        responses={status.HTTP_200_OK: APIImportObservationsResponseSerializer},
+    )
+    @action(detail=True, methods=["post"])
+    def post(self, request, product_id: int):
+        product = get_product_by_id(product_id)
+        if not product:
+            return Response(status=HTTP_404_NOT_FOUND)
+
+        user_has_permission_or_403(product, Permissions.Product_Scan_OSV)
+
+        if not product.osv_enabled:
+            raise ValidationError(f"OSV scan is not enabled for product {product.name}")
+
+        observations_new, observations_updated, observations_resolved = scan_product(
+            product
+        )
+        response_data = {
+            "observations_new": observations_new,
+            "observations_updated": observations_updated,
+            "observations_resolved": observations_resolved,
+        }
+        return Response(response_data)
+
+
+class ScanOSVBranchView(APIView):
+    @extend_schema(
+        request=None,
+        responses={status.HTTP_200_OK: APIImportObservationsResponseSerializer},
+    )
+    @action(detail=True, methods=["post"])
+    def post(self, request, product_id: int, branch_id: int):
+        product = get_product_by_id(product_id)
+        if not product:
+            return Response(status=HTTP_404_NOT_FOUND)
+
+        user_has_permission_or_403(product, Permissions.Product_Scan_OSV)
+
+        if not product.osv_enabled:
+            raise ValidationError(f"OSV scan is not enabled for product {product.name}")
+
+        branch = get_branch_by_id(product, branch_id)
+        if not branch:
+            return Response(status=HTTP_404_NOT_FOUND)
+
+        observations_new, observations_updated, observations_resolved = scan_branch(
+            branch
+        )
+        response_data = {
+            "observations_new": observations_new,
+            "observations_updated": observations_updated,
+            "observations_resolved": observations_resolved,
+        }
+        return Response(response_data)

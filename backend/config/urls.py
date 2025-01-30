@@ -19,11 +19,14 @@ from application.commons.api.views import (
     VersionView,
 )
 from application.commons.views import empty_view
+from application.core.api.views import PURLTypeManyView, PURLTypeOneView
 from application.import_observations.api.views import (
     ApiImportObservationsById,
     ApiImportObservationsByName,
     FileUploadObservationsById,
     FileUploadObservationsByName,
+    ScanOSVBranchView,
+    ScanOSVProductView,
 )
 from application.metrics.api.views import (
     ProductMetricsCurrentView,
@@ -80,6 +83,13 @@ urlpatterns += [
         "api/authentication/revoke_user_api_token/",
         RevokeUserAPITokenView.as_view(),
         name="revoke_user_api_token",
+    ),
+    path("api/purl_types/<str:purl_type_id>/", PURLTypeOneView.as_view()),
+    path("api/purl_types/", PURLTypeManyView.as_view()),
+    path("api/products/<int:product_id>/scan_osv/", ScanOSVProductView.as_view()),
+    path(
+        "api/products/<int:product_id>/<int:branch_id>/scan_osv/",
+        ScanOSVBranchView.as_view(),
     ),
     path(
         "api/import/api_import_observations_by_name/",

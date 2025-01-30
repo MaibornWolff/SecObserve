@@ -4,7 +4,7 @@ from typing import Optional
 
 import requests
 
-from application.core.models import Observation
+from application.core.models import Branch, Observation, Product
 from application.core.types import Severity
 from application.import_observations.models import Api_Configuration
 from application.import_observations.parsers.base_parser import (
@@ -94,7 +94,9 @@ class TrivyOperatorPrometheus(BaseParser, BaseAPIParser):
 
         return True, [], data
 
-    def get_observations(self, data: dict) -> list[Observation]:
+    def get_observations(
+        self, data: dict, product: Product, branch: Optional[Branch]
+    ) -> list[Observation]:
         observations = []
         for finding in data.get("data", {}).get("result"):
             if (

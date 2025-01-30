@@ -1,6 +1,7 @@
 from os import path
 from unittest import TestCase
 
+from application.core.models import Product
 from application.core.types import Severity
 from application.import_observations.parsers.cyclone_dx.parser import CycloneDXParser
 from application.import_observations.services.parser_detector import detect_parser
@@ -13,7 +14,9 @@ class TestCycloneDXParser(TestCase):
             self.assertEqual("CycloneDX", parser.name)
             self.assertTrue(isinstance(parser_instance, CycloneDXParser))
 
-            observations = parser_instance.get_observations(data)
+            observations = parser_instance.get_observations(
+                data, Product(name="product"), None
+            )
             self.assertEqual(8, len(observations))
 
             observation = observations[0]
@@ -115,7 +118,9 @@ class TestCycloneDXParser(TestCase):
             self.assertEqual("CycloneDX", parser.name)
             self.assertTrue(isinstance(parser_instance, CycloneDXParser))
 
-            observations = parser_instance.get_observations(data)
+            observations = parser_instance.get_observations(
+                data, Product(name="product"), None
+            )
             self.assertEqual(1, len(observations))
 
             observation = observations[0]
@@ -133,7 +138,9 @@ class TestCycloneDXParser(TestCase):
             self.assertEqual("CycloneDX", parser.name)
             self.assertTrue(isinstance(parser_instance, CycloneDXParser))
 
-            observations = parser_instance.get_observations(data)
+            observations = parser_instance.get_observations(
+                data, Product(name="product"), None
+            )
             self.assertEqual(1, len(observations))
 
             observation = observations[0]
@@ -153,7 +160,9 @@ class TestCycloneDXParser(TestCase):
             self.assertEqual("CycloneDX", parser.name)
             self.assertTrue(isinstance(parser_instance, CycloneDXParser))
 
-            observations = parser_instance.get_observations(data)
+            observations = parser_instance.get_observations(
+                data, Product(name="product"), None
+            )
             self.assertEqual(2, len(observations))
 
             observation = observations[0]
@@ -162,6 +171,9 @@ class TestCycloneDXParser(TestCase):
             description = """No description is available for this CVE."""
             self.assertEqual(description, observation.description)
             self.assertEqual("CVE-2023-29469", observation.vulnerability_id)
+            self.assertEqual(
+                "GHSA-35m5-8cvj-8783, alias 2", observation.vulnerability_id_aliases
+            )
             self.assertEqual("", observation.parser_severity)
             self.assertEqual(5.9, observation.cvss3_score)
             self.assertEqual(
@@ -178,8 +190,8 @@ class TestCycloneDXParser(TestCase):
             )
             self.assertEqual("", observation.origin_docker_image_tag)
             self.assertEqual("", observation.origin_docker_image_digest)
-            expected_dependencies = """example/example-frontend:dev --> alpine:3.17.3
-alpine:3.17.3 --> libxml2:2.10.3-r1"""
+            expected_dependencies = """alpine:3.17.3 --> libxml2:2.10.3-r1
+example/example-frontend:dev --> alpine:3.17.3"""
             self.assertEqual(
                 expected_dependencies, observation.origin_component_dependencies
             )
@@ -200,11 +212,14 @@ alpine:3.17.3 --> libxml2:2.10.3-r1"""
 
             observation = observations[1]
             self.assertEqual("CVE-2023-28484", observation.title)
-            expected_dependencies = """example/example-frontend:dev --> alpine:3.17.3
-alpine:3.17.3 --> busybox:1.35.0-r29
+            expected_dependencies = """alpine:3.17.3 --> busybox:1.35.0-r29
+alpine:3.17.3 --> geoip:1.6.12-r3
 alpine:3.17.3 --> icu-data-en:72.1-r1
 alpine:3.17.3 --> icu-libs:72.1-r1
 busybox:1.35.0-r29 --> icu-libs:72.1-r1
+example/example-frontend:dev --> alpine:3.17.3
+geoip:1.6.12-r3 --> icu-data-en:72.1-r1
+icu-data-en:72.1-r1 --> geoip:1.6.12-r3
 icu-data-en:72.1-r1 --> icu-libs:72.1-r1"""
             self.assertEqual(
                 expected_dependencies,

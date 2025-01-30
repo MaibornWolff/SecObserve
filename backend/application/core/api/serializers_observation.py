@@ -16,6 +16,7 @@ from rest_framework.serializers import (
     ValidationError,
 )
 
+from application.commons.services.functions import get_comma_separated_as_list
 from application.commons.services.global_request import get_current_user
 from application.core.api.serializers_helpers import (
     get_branch_name,
@@ -82,10 +83,10 @@ class ObservationSerializer(ModelSerializer):
     references = NestedReferenceSerializer(many=True)
     evidences = NestedEvidenceSerializer(many=True)
     origin_source_file_url = SerializerMethodField()
-    origin_component_purl_type = SerializerMethodField()
     origin_component_purl_namespace = SerializerMethodField()
     issue_tracker_issue_url = SerializerMethodField()
     assessment_needs_approval = SerializerMethodField()
+    vulnerability_id_aliases = SerializerMethodField()
 
     class Meta:
         model = Observation
@@ -123,16 +124,6 @@ class ObservationSerializer(ModelSerializer):
                 )
 
         return origin_source_file_url
-
-    def get_origin_component_purl_type(self, observation: Observation) -> str:
-        if observation.origin_component_purl:
-            try:
-                purl = PackageURL.from_string(observation.origin_component_purl)
-                return purl.type
-            except ValueError:
-                return ""
-
-        return ""
 
     def get_origin_component_purl_namespace(
         self, observation: Observation
@@ -201,6 +192,11 @@ class ObservationSerializer(ModelSerializer):
             return current_observation_log.pk
         return None
 
+    def get_vulnerability_id_aliases(
+        self, observation: Observation
+    ) -> list[dict[str, str]]:
+        return _get_vulnerability_id_aliases(observation)
+
     def validate_product(self, product: Product) -> Product:
         if product and product.is_product_group:
             raise ValidationError("Product must not be a product group")
@@ -220,6 +216,7 @@ class ObservationListSerializer(ModelSerializer):
     parser_data = ParserSerializer(source="parser")
     scanner_name = SerializerMethodField()
     origin_component_name_version = SerializerMethodField()
+    vulnerability_id_aliases = SerializerMethodField()
 
     class Meta:
         model = Observation
@@ -237,6 +234,11 @@ class ObservationListSerializer(ModelSerializer):
 
     def get_origin_component_name_version(self, observation: Observation) -> str:
         return get_origin_component_name_version(observation)
+
+    def get_vulnerability_id_aliases(
+        self, observation: Observation
+    ) -> list[dict[str, str]]:
+        return _get_vulnerability_id_aliases(observation)
 
 
 class ObservationUpdateSerializer(ModelSerializer):
@@ -544,6 +546,14 @@ class NestedObservationSerializer(ModelSerializer):
         return get_origin_component_name_version(observation)
 
 
+def _get_vulnerability_id_aliases(observation: Observation) -> list[dict[str, str]]:
+    aliases_list = get_comma_separated_as_list(observation.vulnerability_id_aliases)
+    return_list = []
+    for alias in aliases_list:
+        return_list.append({"alias": alias})
+    return return_list
+
+
 class ObservationLogSerializer(ModelSerializer):
     observation_data = ObservationSerializer(source="observation")
     user_full_name = SerializerMethodField()
@@ -600,6 +610,12 @@ class ObservationLogBulkApprovalSerializer(Serializer):
         choices=Assessment_Status.ASSESSMENT_STATUS_CHOICES_APPROVAL, required=False
     )
     approval_remark = CharField(max_length=255, required=True)
+    observation_logs = ListField(
+        child=IntegerField(min_value=1), min_length=0, max_length=100, required=True
+    )
+
+
+class ObservationLogBulkDeleteSerializer(Serializer):
     observation_logs = ListField(
         child=IntegerField(min_value=1), min_length=0, max_length=100, required=True
     )

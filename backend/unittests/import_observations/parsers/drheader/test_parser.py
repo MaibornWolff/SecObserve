@@ -1,6 +1,7 @@
 from os import path
 from unittest import TestCase
 
+from application.core.models import Product
 from application.core.types import Severity
 from application.import_observations.parsers.drheader.parser import DrHEADerParser
 from application.import_observations.services.parser_detector import detect_parser
@@ -13,7 +14,9 @@ class TestCycloneDXParser(TestCase):
             self.assertEqual("DrHeader", parser.name)
             self.assertTrue(isinstance(parser_instance, DrHEADerParser))
 
-            observations = parser_instance.get_observations(data)
+            observations = parser_instance.get_observations(
+                data, Product(name="product"), None
+            )
             self.assertEqual(6, len(observations))
 
             observation = observations[1]

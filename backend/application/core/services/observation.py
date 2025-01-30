@@ -1,6 +1,7 @@
 import hashlib
 from urllib.parse import urlparse
 
+from cvss import CVSS3, CVSS4
 from packageurl import PackageURL
 
 from application.core.types import Severity, Status
@@ -62,6 +63,12 @@ def _get_string_to_hash(observation):  # pylint: disable=too-many-branches
 
 
 def get_current_severity(observation) -> str:
+    if observation.cvss3_vector:
+        observation.cvss3_score = CVSS3(observation.cvss3_vector).base_score
+
+    if observation.cvss4_vector:
+        observation.cvss4_score = CVSS4(observation.cvss4_vector).base_score
+
     if observation.assessment_severity:
         return observation.assessment_severity
 
@@ -146,6 +153,8 @@ def normalize_observation_fields(observation) -> None:
     normalize_vex_justification(observation)
 
     normalize_description(observation)
+    normalize_vulnerability_ids(observation)
+    normalize_cvss_vectors(observation)
 
     if observation.recommendation is None:
         observation.recommendation = ""
@@ -155,22 +164,30 @@ def normalize_observation_fields(observation) -> None:
         observation.origin_service_name = ""
     if observation.origin_source_file is None:
         observation.origin_source_file = ""
-    if observation.cvss3_vector is None:
-        observation.cvss3_vector = ""
-    if observation.cvss4_vector is None:
-        observation.cvss4_vector = ""
     if observation.scanner is None:
         observation.scanner = ""
     if observation.api_configuration_name is None:
         observation.api_configuration_name = ""
     if observation.upload_filename is None:
         observation.upload_filename = ""
-    if observation.vulnerability_id is None:
-        observation.vulnerability_id = ""
     if observation.issue_tracker_issue_id is None:
         observation.issue_tracker_issue_id = ""
     if observation.issue_tracker_jira_initial_status is None:
         observation.issue_tracker_jira_initial_status = ""
+
+
+def normalize_vulnerability_ids(observation):
+    if observation.vulnerability_id is None:
+        observation.vulnerability_id = ""
+    if observation.vulnerability_id_aliases is None:
+        observation.vulnerability_id_aliases = ""
+
+
+def normalize_cvss_vectors(observation):
+    if observation.cvss3_vector is None:
+        observation.cvss3_vector = ""
+    if observation.cvss4_vector is None:
+        observation.cvss4_vector = ""
 
 
 def normalize_description(observation):
@@ -202,10 +219,15 @@ def normalize_origin_component(observation):  # pylint: disable=too-many-branche
     else:
         component_parts = observation.origin_component_name_version.split(":")
         if len(component_parts) == 3:
-            observation.origin_component_name = (
-                f"{component_parts[0]}:{component_parts[1]}"
-            )
-            observation.origin_component_version = component_parts[2]
+            if component_parts[0] == observation.origin_component_name:
+                observation.origin_component_version = (
+                    f"{component_parts[1]}:{component_parts[2]}"
+                )
+            else:
+                observation.origin_component_name = (
+                    f"{component_parts[0]}:{component_parts[1]}"
+                )
+                observation.origin_component_version = component_parts[2]
         elif len(component_parts) == 2:
             observation.origin_component_name = component_parts[0]
             observation.origin_component_version = component_parts[1]

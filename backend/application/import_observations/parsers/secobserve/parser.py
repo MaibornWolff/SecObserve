@@ -1,6 +1,6 @@
-from typing import Any
+from typing import Any, Optional
 
-from application.core.models import Observation
+from application.core.models import Branch, Observation, Product
 from application.import_observations.parsers.base_parser import (
     BaseFileParser,
     BaseParser,
@@ -26,7 +26,9 @@ class SecObserveParser(BaseParser, BaseFileParser):
             return True
         return False
 
-    def get_observations(self, data: dict) -> list[Observation]:
+    def get_observations(
+        self, data: dict, product: Product, branch: Optional[Branch]
+    ) -> list[Observation]:
         observations = []
 
         for uploaded_observation in data.get("observations", []):

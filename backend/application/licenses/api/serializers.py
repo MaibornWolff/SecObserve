@@ -16,6 +16,7 @@ from application.access_control.api.serializers import (
     AuthorizationGroupListSerializer,
     UserListSerializer,
 )
+from application.commons.services.functions import get_comma_separated_as_list
 from application.commons.services.global_request import get_current_user
 from application.core.queries.product import get_products
 from application.core.types import PURL_Type
@@ -48,7 +49,6 @@ from application.licenses.queries.license_policy_member import (
     get_license_policy_member,
     get_license_policy_members,
 )
-from application.licenses.services.license_policy import get_ignore_component_type_list
 
 
 class LicenseSerializer(ModelSerializer):
@@ -99,6 +99,7 @@ class LicenseComponentSerializer(ModelSerializer):
         source="license",
         read_only=True,
     )
+    component_name_version_type = SerializerMethodField()
     component_purl_namespace = SerializerMethodField()
     branch_name = SerializerMethodField()
     license_policy_name: Optional[SerializerMethodField] = SerializerMethodField()
@@ -112,6 +113,15 @@ class LicenseComponentSerializer(ModelSerializer):
     class Meta:
         model = License_Component
         fields = "__all__"
+
+    def get_component_name_version_type(self, obj: License_Component) -> Optional[str]:
+        if obj.component_name_version:
+            component_name_version_type = obj.component_name_version
+            if obj.component_purl_type:
+                component_name_version_type += f" ({obj.component_purl_type})"
+            return component_name_version_type
+
+        return ""
 
     def get_component_purl_namespace(self, obj: License_Component) -> Optional[str]:
         if obj.component_purl:
@@ -386,7 +396,7 @@ class LicensePolicySerializer(ModelSerializer):
         exclude = ["users", "authorization_groups"]
 
     def validate_ignore_component_types(self, value: str) -> str:
-        ignore_component_types = get_ignore_component_type_list(value)
+        ignore_component_types = get_comma_separated_as_list(value)
         for component_type in ignore_component_types:
             for component_type in ignore_component_types:
                 if not PURL_Type.PURL_TYPE_CHOICES.get(component_type):
@@ -395,7 +405,7 @@ class LicensePolicySerializer(ModelSerializer):
         return value
 
     def validate_parent(self, value: License_Policy) -> License_Policy:
-        if value.parent:
+        if value and value.parent:
             raise ValidationError("A child cannot be a parent itself")
 
         return value

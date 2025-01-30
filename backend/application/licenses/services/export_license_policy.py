@@ -5,10 +5,10 @@ from typing import Optional
 import yaml
 
 from application.commons.services.export import object_to_json
+from application.commons.services.functions import get_comma_separated_as_list
 from application.licenses.models import License_Policy
 from application.licenses.services.license_policy import (
     LicensePolicyEvaluationResult,
-    get_ignore_component_type_list,
     get_license_evaluation_results_for_license_policy,
 )
 
@@ -25,16 +25,11 @@ class License_Policy_Export_Item:
 
 
 @dataclass
-class License_Policy_Export_Ignore_Component_Type:
-    component_type: str
-
-
-@dataclass
 class License_Policy_Export:
     name: str
     description: str
     items: list[License_Policy_Export_Item]
-    ignore_component_types: list[License_Policy_Export_Ignore_Component_Type]
+    ignore_component_types: list[str]
     parent: Optional[str] = None
 
 
@@ -53,7 +48,7 @@ def _create_license_policy_export(
         name=license_policy.name,
         description=license_policy.description,
         items=[],
-        ignore_component_types=get_ignore_component_type_list(
+        ignore_component_types=get_comma_separated_as_list(
             license_policy.ignore_component_types
         ),
     )

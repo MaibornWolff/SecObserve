@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.db.models import Q
 from django.utils import timezone
 from django_filters import (
     BooleanFilter,
@@ -7,7 +8,6 @@ from django_filters import (
     ChoiceFilter,
     FilterSet,
     ModelChoiceFilter,
-    NumberFilter,
     OrderingFilter,
 )
 
@@ -24,6 +24,7 @@ from application.core.models import (
     Service,
 )
 from application.core.types import Status
+from application.licenses.models import License_Component
 
 
 class ProductGroupFilter(FilterSet):
@@ -73,7 +74,6 @@ class ProductFilter(FilterSet):
 
 
 class ProductMemberFilter(FilterSet):
-    product = NumberFilter(field_name="product")
     is_product_group = BooleanFilter(field_name="product__is_product_group")
 
     ordering = OrderingFilter(
@@ -91,7 +91,6 @@ class ProductMemberFilter(FilterSet):
 
 
 class ProductAuthorizationGroupMemberFilter(FilterSet):
-    product = NumberFilter(field_name="product")
     is_product_group = BooleanFilter(field_name="product__is_product_group")
 
     ordering = OrderingFilter(
@@ -109,7 +108,71 @@ class ProductAuthorizationGroupMemberFilter(FilterSet):
 
 
 class BranchFilter(FilterSet):
-    product = NumberFilter(field_name="product")
+    for_observations = BooleanFilter(
+        field_name="for_observations",
+        method="get_for_observations",
+    )
+    for_license_components = BooleanFilter(
+        field_name="for_license_components",
+        method="get_for_license_components",
+    )
+
+    def get_for_observations(
+        self, queryset, field_name, value
+    ):  # pylint: disable=unused-argument
+        # field_name is used as a positional argument
+        if value:
+            product_data = self.data.get("product")
+            if product_data:
+                product_id = int(product_data)
+                observation_branches = (
+                    Observation.objects.filter(
+                        product_id=product_id, branch__isnull=False
+                    )
+                    .values("branch_id")
+                    .distinct()
+                )
+                product_default_branches = (
+                    Product.objects.filter(
+                        id=product_id, repository_default_branch__isnull=False
+                    )
+                    .values("repository_default_branch")
+                    .distinct()
+                )
+                return queryset.filter(
+                    Q(id__in=observation_branches) | Q(id__in=product_default_branches)
+                )
+
+        return queryset
+
+    def get_for_license_components(
+        self, queryset, field_name, value
+    ):  # pylint: disable=unused-argument
+        # field_name is used as a positional argument
+        if value:
+            product_data = self.data.get("product")
+            if product_data:
+                product_id = int(product_data)
+                license_component_branches = (
+                    License_Component.objects.filter(
+                        product_id=product_id, branch__isnull=False
+                    )
+                    .values("branch_id")
+                    .distinct()
+                )
+                product_default_branches = (
+                    Product.objects.filter(
+                        id=product_id, repository_default_branch__isnull=False
+                    )
+                    .values("repository_default_branch")
+                    .distinct()
+                )
+                return queryset.filter(
+                    Q(id__in=license_component_branches)
+                    | Q(id__in=product_default_branches)
+                )
+
+        return queryset
 
     ordering = OrderingFilter(
         # tuple-mapping retains order
@@ -168,33 +231,6 @@ class ObservationFilter(FilterSet):
         field_name="product__product_group",
         queryset=Product.objects.filter(is_product_group=True),
     )
-
-    has_pending_assessment = ChoiceFilter(
-        field_name="has_pending_assessment",
-        method="get_has_pending_assessment",
-        choices=[
-            ("true", "true"),
-            ("false", "false"),
-        ],
-    )
-
-    def get_has_pending_assessment(
-        self, queryset, field_name, value
-    ):  # pylint: disable=unused-argument
-        # field_name is used as a positional argument
-
-        if value == "true":
-            return queryset.filter(
-                id__in=Observation_Log.objects.filter(
-                    assessment_status="Needs approval"
-                ).values("observation_id")
-            )
-
-        return queryset.exclude(
-            id__in=Observation_Log.objects.filter(
-                assessment_status="Needs approval"
-            ).values("observation_id")
-        )
 
     ordering = OrderingFilter(
         # tuple-mapping retains order

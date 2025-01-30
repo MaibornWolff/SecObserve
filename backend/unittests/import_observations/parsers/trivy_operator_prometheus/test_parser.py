@@ -5,6 +5,7 @@ from unittest.mock import MagicMock, patch
 
 import requests
 
+from application.core.models import Product
 from application.import_observations.models import Api_Configuration
 from application.import_observations.parsers.trivy_operator_prometheus.parser import (
     TrivyOperatorPrometheus,
@@ -93,7 +94,9 @@ class TestTrivyOperatorPrometheusParser(TestCase):
             parser.api_configuration = Api_Configuration(
                 base_url="https://prometheus.example.com"
             )
-            observations = parser.get_observations(json.load(testfile))
+            observations = parser.get_observations(
+                json.load(testfile), Product(name="product"), None
+            )
 
             self.assertEqual(1, len(observations))
             self.assertEqual(
@@ -129,7 +132,9 @@ class TestTrivyOperatorPrometheusParser(TestCase):
             parser.api_configuration = Api_Configuration(
                 base_url="https://prometheus.example.com"
             )
-            observations = parser.get_observations(json.load(testfile))
+            observations = parser.get_observations(
+                json.load(testfile), Product(name="product"), None
+            )
 
             self.assertEqual(1, len(observations))
             self.assertEqual(
@@ -165,7 +170,9 @@ class TestTrivyOperatorPrometheusParser(TestCase):
             parser.api_configuration = Api_Configuration(
                 base_url="https://prometheus.example.com"
             )
-            observations = parser.get_observations(json.load(testfile))
+            observations = parser.get_observations(
+                json.load(testfile), Product(name="product"), None
+            )
 
             self.assertEqual(1, len(observations))
             self.assertEqual("Asymmetric Private Key", observations[0].title)
@@ -201,7 +208,9 @@ class TestTrivyOperatorPrometheusParser(TestCase):
             parser.api_configuration = Api_Configuration(
                 base_url="https://prometheus.example.com"
             )
-            observations = parser.get_observations(json.load(testfile))
+            observations = parser.get_observations(
+                json.load(testfile), Product(name="product"), None
+            )
 
             self.assertEqual(2, len(observations))
 
@@ -260,7 +269,9 @@ class TestTrivyOperatorPrometheusParser(TestCase):
             parser.api_configuration = Api_Configuration(
                 base_url="https://prometheus.example.com"
             )
-            observations = parser.get_observations(json.load(testfile))
+            observations = parser.get_observations(
+                json.load(testfile), Product(name="product"), None
+            )
 
             self.assertEqual(2, len(observations))
             self.assertEqual("CVE-2023-1111", observations[0].title)
