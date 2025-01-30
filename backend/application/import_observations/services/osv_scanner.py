@@ -109,11 +109,13 @@ def scan_license_components(
             ]
         )
 
-        response = requests.post(
+        response = requests.post( # nosec B113
+            # This is a false positive, there is a timeout of 5 minutes
             url="https://api.osv.dev/v1/querybatch",
             data=jsonpickle.encode(queries, unpicklable=False),
             timeout=5 * 60,
         )
+
         response.raise_for_status()
         results.extend(response.json().get("results", []))
 
