@@ -227,8 +227,7 @@ class OSVParser(BaseParser):
         affected = []
 
         package_type = parsed_purl.type
-        package_namespace = parsed_purl.namespace
-        package_name = self._get_package_name(parsed_purl, package_namespace)
+        package_name = self._get_package_name(parsed_purl)
 
         package_osv_ecosystem = OSV_Non_Linux_Ecosystems.get(package_type)
         if (
@@ -265,12 +264,12 @@ class OSVParser(BaseParser):
 
         return affected
 
-    def _get_package_name(
-        self, parsed_purl: PackageURL, package_namespace: Optional[str]
-    ) -> str:
+    def _get_package_name(self, parsed_purl: PackageURL) -> str:
         package_name = parsed_purl.name
-        if package_namespace and package_namespace not in ["alpine", "debian"]:
-            if package_namespace == "maven":
+        package_namespace = parsed_purl.namespace
+        package_type = parsed_purl.type
+        if package_namespace and OSV_Non_Linux_Ecosystems.get(package_type):
+            if package_type == "maven":
                 package_name = f"{package_namespace}:{package_name}"
             else:
                 package_name = f"{package_namespace}/{package_name}"

@@ -84,21 +84,6 @@ def scan_license_components(
 
     jsonpickle.set_encoder_options("json", ensure_ascii=False)
 
-    queries = Request_Queries(
-        queries=[
-            Request_Package(Request_PURL(purl=license_component.component_purl))
-            for license_component in license_components
-        ]
-    )
-
-    response = requests.post(
-        url="https://api.osv.dev/v1/querybatch",
-        data=jsonpickle.encode(queries, unpicklable=False),
-        timeout=5 * 60,
-    )
-    response.raise_for_status()
-    results = response.json()
-
     osv_components = [
         OSV_Component(
             id=license_component.id,
@@ -108,18 +93,44 @@ def scan_license_components(
         for license_component in license_components
     ]
 
-    if len(osv_components) != len(results.get("results", [])):
+    slice_actual = 0
+    slice_size = 500
+    results = []
+
+    while slice_actual * slice_size < len(license_components):
+        queries = Request_Queries(
+            queries=[
+                Request_Package(Request_PURL(purl=license_component.component_purl))
+                for license_component in license_components[
+                    (slice_actual * slice_size) : (  # noqa: E203
+                        (slice_actual + 1) * slice_size
+                    )
+                ]
+            ]
+        )
+
+        response = requests.post(
+            url="https://api.osv.dev/v1/querybatch",
+            data=jsonpickle.encode(queries, unpicklable=False),
+            timeout=5 * 60,
+        )
+        response.raise_for_status()
+        results.extend(response.json().get("results", []))
+
+        slice_actual += 1
+
+    if len(osv_components) != len(results):
         raise Exception(  # pylint: disable=broad-exception-raised
             "Number of results is different than number of components"
         )
 
-    for result in results.get("results", []):
+    for result in results:
         if result.get("next_page_token"):
             raise Exception(  # pylint: disable=broad-exception-raised
                 "Next page token is not yet supported"
             )
 
-    for i, result in enumerate(results.get("results", [])):
+    for i, result in enumerate(results):
         for vuln in result.get("vulns", []):
             osv_components[i].vulnerabilities.add(
                 OSV_Vulnerability(
