@@ -3,16 +3,16 @@ import traceback
 from datetime import datetime, timedelta
 from typing import Optional
 
-import requests
-from django.core.mail import send_mail
-from django.template.loader import render_to_string
-
 from application.access_control.models import User
 from application.access_control.queries.user import get_user_by_email
 from application.commons.models import Notification, Settings
 from application.commons.services.functions import get_base_url_frontend, get_classname
 from application.commons.services.global_request import get_current_user
-from application.commons.services.log_message import format_log_message
+from application.commons.tasks import (
+    send_email_notification,
+    send_msteams_notification,
+    send_slack_notification,
+)
 from application.core.models import Product
 
 logger = logging.getLogger("secobserve.commons")
@@ -35,7 +35,7 @@ def send_product_security_gate_notification(product: Product) -> None:
     if email_to_addresses and settings.email_from:
         for email_to_address in email_to_addresses:
             first_name = _get_first_name(email_to_address)
-            _send_email_notification(
+            send_email_notification(
                 email_to_address,
                 f"Security gate for {product.name} has changed to {security_gate_status}",
                 "email_product_security_gate.tpl",
@@ -47,7 +47,7 @@ def send_product_security_gate_notification(product: Product) -> None:
 
     notification_ms_teams_webhook = _get_notification_ms_teams_webhook(product)
     if notification_ms_teams_webhook:
-        _send_msteams_notification(
+        send_msteams_notification(
             notification_ms_teams_webhook,
             "msteams_product_security_gate.tpl",
             product=product,
@@ -57,7 +57,7 @@ def send_product_security_gate_notification(product: Product) -> None:
 
     notification_slack_webhook = _get_notification_slack_webhook(product)
     if notification_slack_webhook:
-        _send_slack_notification(
+        send_slack_notification(
             notification_slack_webhook,
             "slack_product_security_gate.tpl",
             product=product,
@@ -81,7 +81,7 @@ def send_exception_notification(exception: Exception) -> None:
         if email_to_adresses and settings.email_from:
             for notification_email_to in email_to_adresses:
                 first_name = _get_first_name(notification_email_to)
-                _send_email_notification(
+                send_email_notification(
                     notification_email_to,
                     f'Exception "{get_classname(exception)}" has occured',
                     "email_exception.tpl",
@@ -93,7 +93,7 @@ def send_exception_notification(exception: Exception) -> None:
                 )
 
         if settings.exception_ms_teams_webhook:
-            _send_msteams_notification(
+            send_msteams_notification(
                 settings.exception_ms_teams_webhook,
                 "msteams_exception.tpl",
                 exception_class=get_classname(exception),
@@ -103,7 +103,7 @@ def send_exception_notification(exception: Exception) -> None:
             )
 
         if settings.exception_slack_webhook:
-            _send_slack_notification(
+            send_slack_notification(
                 settings.exception_slack_webhook,
                 "slack_exception.tpl",
                 exception_class=get_classname(exception),
@@ -133,7 +133,7 @@ def send_task_exception_notification(
         if email_to_adresses and settings.email_from:
             for notification_email_to in email_to_adresses:
                 first_name = _get_first_name(notification_email_to)
-                _send_email_notification(
+                send_email_notification(
                     notification_email_to,
                     f'Exception "{get_classname(exception)}" has occured in background task',
                     "email_task_exception.tpl",
@@ -148,7 +148,7 @@ def send_task_exception_notification(
                 )
 
         if settings.exception_ms_teams_webhook:
-            _send_msteams_notification(
+            send_msteams_notification(
                 settings.exception_ms_teams_webhook,
                 "msteams_task_exception.tpl",
                 function=function,
@@ -161,7 +161,7 @@ def send_task_exception_notification(
             )
 
         if settings.exception_slack_webhook:
-            _send_slack_notification(
+            send_slack_notification(
                 settings.exception_slack_webhook,
                 "slack_task_exception.tpl",
                 function=function,
@@ -190,86 +190,6 @@ def send_task_exception_notification(
             user=user,
             type=Notification.TYPE_TASK,
         )
-
-
-def _send_email_notification(
-    notification_email_to: str, subject: str, template: str, **kwargs
-) -> None:
-    settings = Settings.load()
-
-    notification_message = _create_notification_message(template, **kwargs)
-    if notification_message:
-        try:
-            send_mail(
-                subject=subject,
-                message=notification_message,
-                from_email=settings.email_from,
-                recipient_list=[notification_email_to],
-                fail_silently=False,
-            )
-        except Exception as e:
-            logger.error(
-                format_log_message(
-                    message=f"Error while sending email to {notification_email_to}",
-                    exception=e,
-                )
-            )
-
-
-def _send_msteams_notification(webhook: str, template: str, **kwargs) -> None:
-    notification_message = _create_notification_message(template, **kwargs)
-    if notification_message:
-        notification_message = notification_message.replace("&quot;", '\\"')
-        try:
-            response = requests.request(
-                method="POST",
-                url=webhook,
-                data=notification_message,
-                timeout=60,
-            )
-            response.raise_for_status()
-        except Exception as e:
-            logger.error(
-                format_log_message(
-                    message=f"Error while calling MS Teams webhook {webhook}",
-                    exception=e,
-                )
-            )
-
-
-def _send_slack_notification(webhook: str, template: str, **kwargs) -> None:
-    notification_message = _create_notification_message(template, **kwargs)
-    if notification_message:
-        notification_message = notification_message.replace("&#x27;", "\\'")
-        notification_message = notification_message.replace("&quot;", '\\"')
-        try:
-            response = requests.request(
-                method="POST",
-                url=webhook,
-                data=notification_message,
-                timeout=60,
-            )
-            response.raise_for_status()
-        except Exception as e:
-            logger.error(
-                format_log_message(
-                    message=f"Error while calling Slack webhook {webhook}",
-                    exception=e,
-                )
-            )
-
-
-def _create_notification_message(template: str, **kwargs) -> Optional[str]:
-    try:
-        return render_to_string(template, kwargs)
-    except Exception as e:
-        logger.error(
-            format_log_message(
-                message=f"Error while rendering template {template}",
-                exception=e,
-            )
-        )
-        return None
 
 
 def _ratelimit_exception(

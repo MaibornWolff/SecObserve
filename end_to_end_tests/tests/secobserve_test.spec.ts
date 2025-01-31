@@ -14,7 +14,7 @@ test.describe("SecObserve", async () => {
     test("Login", async () => {
 
         if (process.env.SO_PW_DOCKER) {
-            await delay(35000);
+            await delay(40000);
         }
 
         await page.goto(process.env.SO_PW_FRONTEND_BASE_URL);
