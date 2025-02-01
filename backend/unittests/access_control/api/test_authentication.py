@@ -337,8 +337,8 @@ class TestAuthentication(BaseTestCase):
 
         self._check_authentication(["get"], "/api/notifications/")
         self._check_authentication(["delete", "get"], "/api/notifications/1/")
-        self._check_authentication(["post"], "/api/notifications/1/mark_as_read/")
-        self._check_authentication(["post"], "/api/notifications/bulk_mark_as_read/")
+        self._check_authentication(["post"], "/api/notifications/1/mark_as_viewed/")
+        self._check_authentication(["post"], "/api/notifications/bulk_mark_as_viewed/")
 
         self._check_authentication(["get"], "/api/licenses/")
         self._check_authentication(["get"], "/api/licenses/1/")

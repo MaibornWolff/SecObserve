@@ -1,17 +1,17 @@
 from django.db.models.query import QuerySet
 from rest_framework.exceptions import ValidationError
 
-from application.commons.models import Notification, Notification_Read
+from application.commons.models import Notification, Notification_Viewed
 from application.commons.queries.notification import get_notifications
 from application.commons.services.global_request import get_current_user
 
 
-def bulk_mark_as_read(notification_ids: list[int]) -> None:
+def bulk_mark_as_viewed(notification_ids: list[int]) -> None:
     notifications = _check_notifications(notification_ids)
     user = get_current_user()
 
     for notification in notifications:
-        Notification_Read.objects.update_or_create(
+        Notification_Viewed.objects.update_or_create(
             notification=notification,
             user=user,
         )

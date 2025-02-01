@@ -10,6 +10,8 @@ import {
     TextField,
     TextInput,
     TopToolbar,
+    FunctionField,
+    ChipField,
 } from "react-admin";
 
 import notifications from ".";
@@ -18,7 +20,15 @@ import ListHeader from "../../commons/layout/ListHeader";
 import { AutocompleteInputMedium } from "../layout/themes";
 import { TYPE_CHOICES } from "../types";
 import { getSettingListSize } from "../user_settings/functions";
-import NotificationBulkMarkAsReadButton from "./NotificationBulkMarkAsReadButton";
+import NotificationBulkMarkAsViewedButton from "./NotificationBulkMarkAsViewedButton";
+import { Chip } from "@mui/material";
+
+const messageShortened = (message: string | null) => {
+    if (message && message.length > 255) {
+        return message.substring(0, 255) + "...";
+    }
+    return message;
+};
 
 const listFilters = [
     <AutocompleteInput source="type" choices={TYPE_CHOICES} alwaysOn />,
@@ -37,12 +47,12 @@ const listFilters = [
     <ReferenceInput source="user" reference="users" sort={{ field: "full_name", order: "ASC" }} alwaysOn>
         <AutocompleteInputMedium optionText="full_name" />
     </ReferenceInput>,
-    <BooleanInput source="exclude_already_read" alwaysOn />,
+    <BooleanInput source="exclude_already_viewed" alwaysOn />,
 ];
 
 const BulkActionButtons = () => (
     <Fragment>
-        <NotificationBulkMarkAsReadButton />
+        <NotificationBulkMarkAsViewedButton />
     </Fragment>
 );
 
@@ -73,11 +83,17 @@ const NotificationList = () => {
                     <TextField source="type" />
                     <TextField source="name" />
                     <DateField source="created" showTime={true} />
-                    <TextField source="message" sx={{ wordBreak: "break-word" }} />
+                        <FunctionField
+                            label="Message"
+                            render={(record) => messageShortened(record.message)}
+                            sortable={false}
+                            sx={{ wordBreak: "break-word" }}
+                        />
                     <TextField source="function" />
                     <TextField source="product_name" label="Product" />
                     <TextField source="observation_title" label="Observation" />
                     <TextField source="user_full_name" label="User" />
+                    <ChipField source="new_viewed" label="Status" sortable={false} />
                 </DatagridConfigurable>
             </List>
         </Fragment>

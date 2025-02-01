@@ -7,7 +7,7 @@ import { httpClient } from "../../commons/ra-data-django-rest-framework";
 import SmallButton from "../custom_fields/SmallButton";
 import { update_notification_count } from "./notification_count";
 
-const NotificationBulkMarkAsReadButton = () => {
+const NotificationBulkMarkAsViewedButton = () => {
     const [open, setOpen] = useState(false);
     const { selectedIds } = useListContext();
     const refresh = useRefresh();
@@ -19,7 +19,7 @@ const NotificationBulkMarkAsReadButton = () => {
 
     const handleConfirm = async () => {
         setLoading(true);
-        const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/notifications/bulk_mark_as_read/";
+        const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/notifications/bulk_mark_as_viewed/";
         const delete_data = {
             notifications: selectedIds,
         };
@@ -34,7 +34,7 @@ const NotificationBulkMarkAsReadButton = () => {
                 setLoading(false);
                 update_notification_count();
                 unselectAll();
-                notify("Notifications marked as read", {
+                notify("Notifications marked as viewed", {
                     type: "success",
                 });
             })
@@ -51,11 +51,11 @@ const NotificationBulkMarkAsReadButton = () => {
 
     return (
         <>
-            <SmallButton icon={<ChecklistIcon />} title="Mark as read" onClick={handleClick} />
+            <SmallButton icon={<ChecklistIcon />} title="Mark as viewed" onClick={handleClick} />
             <Confirm
                 isOpen={open && !loading}
-                title="Mark as read"
-                content="Are you sure you want to mark the selected notifications as read?"
+                title="Mark as viewed"
+                content="Are you sure you want to mark the selected notifications as viewed?"
                 onConfirm={handleConfirm}
                 onClose={handleDialogClose}
             />
@@ -68,4 +68,4 @@ const NotificationBulkMarkAsReadButton = () => {
     );
 };
 
-export default NotificationBulkMarkAsReadButton;
+export default NotificationBulkMarkAsViewedButton;

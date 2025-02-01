@@ -27,7 +27,7 @@ const NotificationShow = () => {
     const recordId = useGetRecordId();
 
     useEffect(() => {
-        const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/notifications/" + recordId + "/mark_as_read/";
+        const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/notifications/" + recordId + "/mark_as_viewed/";
         httpClient(url, {
             method: "POST",
         })
@@ -35,7 +35,7 @@ const NotificationShow = () => {
                 update_notification_count();
             })
             .catch((error) => {
-                console.warn("Cannot mark notification as read: ", error.message);
+                console.warn("Cannot mark notification as viewed: ", error.message);
             });
     }, [recordId]);
 

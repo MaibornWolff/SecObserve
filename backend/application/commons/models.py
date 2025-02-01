@@ -36,7 +36,7 @@ class Notification(Model):
     arguments = TextField(max_length=4096, blank=True)
 
 
-class Notification_Read(Model):
+class Notification_Viewed(Model):
     notification = ForeignKey(Notification, on_delete=CASCADE)
     user = ForeignKey(User, on_delete=CASCADE)
 
