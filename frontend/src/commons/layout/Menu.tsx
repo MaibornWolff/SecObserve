@@ -2,7 +2,7 @@ import ChecklistIcon from "@mui/icons-material/Checklist";
 import SecurityIcon from "@mui/icons-material/Security";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { Badge, Box } from "@mui/material";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { DashboardMenuItem, MenuItemLink, MenuProps, useSidebarState } from "react-admin";
 
 import administration from "../../access_control/access_control_administration";
@@ -39,6 +39,10 @@ const Menu = ({ dense = false }: MenuProps) => {
         },
         5 * 60 * 1000
     );
+
+    useEffect(() => {
+        update_notification_count();
+    }, []);
 
     return (
         <Fragment>

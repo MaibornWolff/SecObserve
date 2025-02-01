@@ -15,5 +15,5 @@ export async function update_notification_count() {
 }
 
 export function get_notification_count() {
-    return localStorage.getItem("notification_count");
+    return localStorage.getItem("notification_count") || "";
 }

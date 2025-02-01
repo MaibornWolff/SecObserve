@@ -48,6 +48,7 @@ const authProvider: AuthProvider = {
 
         localStorage.removeItem("jwt");
         localStorage.removeItem("user");
+        localStorage.removeItem("notification_count");
 
         if (oidc_signed_in()) {
             const user_manager = new UserManager(oidcConfig);
