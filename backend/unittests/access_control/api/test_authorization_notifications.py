@@ -51,33 +51,9 @@ class TestAuthorizationNotifications(TestAuthorizationBase):
             APITest(
                 "db_internal_write",
                 "post",
-                "/api/notifications/bulk_delete/",
+                "/api/notifications/bulk_mark_as_read/",
                 post_data,
                 400,
-                expected_data,
-            )
-        )
-
-        post_data = {"notifications": [3, 5]}
-        self._test_api(
-            APITest(
-                "db_internal_write",
-                "post",
-                "/api/notifications/bulk_delete/",
-                post_data,
-                204,
-                None,
-            )
-        )
-
-        expected_data = "{'count': 0, 'next': None, 'previous': None, 'results': []}"
-        self._test_api(
-            APITest(
-                "db_internal_write",
-                "get",
-                "/api/notifications/",
-                None,
-                200,
                 expected_data,
             )
         )

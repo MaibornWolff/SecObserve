@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import {
     AutocompleteInput,
+    BooleanInput,
     DatagridConfigurable,
     DateField,
     List,
@@ -17,7 +18,7 @@ import ListHeader from "../../commons/layout/ListHeader";
 import { AutocompleteInputMedium } from "../layout/themes";
 import { TYPE_CHOICES } from "../types";
 import { getSettingListSize } from "../user_settings/functions";
-import NotificationBulkDeleteButton from "./NotificationBulkDeleteButton";
+import NotificationBulkMarkAsReadButton from "./NotificationBulkMarkAsReadButton";
 
 const listFilters = [
     <AutocompleteInput source="type" choices={TYPE_CHOICES} alwaysOn />,
@@ -36,11 +37,12 @@ const listFilters = [
     <ReferenceInput source="user" reference="users" sort={{ field: "full_name", order: "ASC" }} alwaysOn>
         <AutocompleteInputMedium optionText="full_name" />
     </ReferenceInput>,
+    <BooleanInput source="exclude_already_read" alwaysOn />,
 ];
 
 const BulkActionButtons = () => (
     <Fragment>
-        <NotificationBulkDeleteButton />
+        <NotificationBulkMarkAsReadButton />
     </Fragment>
 );
 

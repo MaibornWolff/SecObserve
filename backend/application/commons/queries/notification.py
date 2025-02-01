@@ -1,9 +1,18 @@
+from typing import Optional
+
 from django.db.models import Exists, OuterRef, Q
 from django.db.models.query import QuerySet
 
 from application.commons.models import Notification
 from application.commons.services.global_request import get_current_user
 from application.core.models import Product_Authorization_Group_Member, Product_Member
+
+
+def get_notification_by_id(notification_id: int) -> Optional[Notification]:
+    try:
+        return Notification.objects.get(id=notification_id)
+    except Notification.DoesNotExist:
+        return None
 
 
 def get_notifications() -> QuerySet[Notification]:

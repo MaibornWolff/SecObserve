@@ -1,7 +1,7 @@
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import SecurityIcon from "@mui/icons-material/Security";
 import SettingsIcon from "@mui/icons-material/Settings";
-import Box from "@mui/material/Box";
+import { Badge, Box } from "@mui/material";
 import { Fragment, useState } from "react";
 import { DashboardMenuItem, MenuItemLink, MenuProps, useSidebarState } from "react-admin";
 
@@ -16,9 +16,11 @@ import csaf from "../../vex/csaf";
 import openvex from "../../vex/openvex";
 import vex_counters from "../../vex/vex_counters";
 import vex_documents from "../../vex/vex_documents";
+import { IntervalHooks } from "../IntervalHooks";
 import { feature_license_management, feature_vex_enabled } from "../functions";
 import { is_superuser } from "../functions";
 import notifications from "../notifications";
+import { get_notification_count, update_notification_count } from "../notifications/notification_count";
 import settings from "../settings";
 import SubMenu from "./SubMenu";
 
@@ -30,6 +32,13 @@ const Menu = ({ dense = false }: MenuProps) => {
     const handleToggle = (menu: MenuName) => {
         setState((state) => ({ ...state, [menu]: !state[menu] })); // eslint-disable-line security/detect-object-injection
     };
+
+    IntervalHooks.useDispatch(
+        () => {
+            update_notification_count();
+        },
+        5 * 60 * 1000
+    );
 
     return (
         <Fragment>
@@ -77,10 +86,14 @@ const Menu = ({ dense = false }: MenuProps) => {
                 <MenuItemLink
                     to="/notifications"
                     state={{ _scrollToTop: true }}
-                    primaryText="Notifications"
                     leftIcon={<notifications.icon />}
                     dense={dense}
-                />
+                >
+                    Notifications
+                    {get_notification_count() && (
+                        <Badge badgeContent={get_notification_count()} color="secondary" sx={{ marginLeft: 3 }} />
+                    )}
+                </MenuItemLink>
                 {feature_vex_enabled() && (
                     <SubMenu
                         handleToggle={() => handleToggle("menuVEX")}

@@ -1,7 +1,7 @@
-import { Stack, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
+import { useEffect } from "react";
 import {
     DateField,
-    DeleteWithConfirmButton,
     PrevNextButtons,
     ReferenceField,
     Show,
@@ -9,24 +9,36 @@ import {
     TextField,
     TopToolbar,
     WithRecord,
+    useGetRecordId,
 } from "react-admin";
+
+import { httpClient } from "../ra-data-django-rest-framework";
+import { update_notification_count } from "./notification_count";
 
 const ShowActions = () => {
     return (
         <TopToolbar>
-            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
-                <PrevNextButtons
-                    linkType="show"
-                    sort={{ field: "created", order: "DESC" }}
-                    storeKey="notifications.list"
-                />
-                <DeleteWithConfirmButton />
-            </Stack>
+            <PrevNextButtons linkType="show" sort={{ field: "created", order: "DESC" }} storeKey="notifications.list" />
         </TopToolbar>
     );
 };
 
 const NotificationShow = () => {
+    const recordId = useGetRecordId();
+
+    useEffect(() => {
+        const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/notifications/" + recordId + "/mark_as_read/";
+        httpClient(url, {
+            method: "POST",
+        })
+            .then(() => {
+                update_notification_count();
+            })
+            .catch((error) => {
+                console.warn("Cannot mark notification as read: ", error.message);
+            });
+    }, [recordId]);
+
     return (
         <Show actions={<ShowActions />}>
             <WithRecord

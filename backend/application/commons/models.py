@@ -36,6 +36,11 @@ class Notification(Model):
     arguments = TextField(max_length=4096, blank=True)
 
 
+class Notification_Read(Model):
+    notification = ForeignKey(Notification, on_delete=CASCADE)
+    user = ForeignKey(User, on_delete=CASCADE)
+
+
 class Settings(Model):
     security_gate_active = BooleanField(
         default=True, help_text="Is the security gate activated?"
