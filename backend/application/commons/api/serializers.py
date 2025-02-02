@@ -7,7 +7,7 @@ from rest_framework.serializers import (
     SerializerMethodField,
 )
 
-from application.commons.models import Notification, Settings
+from application.commons.models import Notification, Notification_Viewed, Settings
 from application.commons.services.global_request import get_current_user
 
 
@@ -38,6 +38,7 @@ class NotificationSerializer(ModelSerializer):
     product_name = SerializerMethodField()
     observation_title = SerializerMethodField()
     user_full_name = SerializerMethodField()
+    new_viewed = SerializerMethodField()
 
     class Meta:
         model = Notification
@@ -73,6 +74,16 @@ class NotificationSerializer(ModelSerializer):
             return obj.user.full_name
 
         return None
+
+    def get_new_viewed(self, obj: Notification) -> str:
+        user = get_current_user()
+        if user:
+            notification_viewed = Notification_Viewed.objects.filter(
+                notification=obj, user=user
+            ).first()
+            if notification_viewed:
+                return "Viewed"
+        return "New"
 
 
 class NotificationBulkSerializer(Serializer):
