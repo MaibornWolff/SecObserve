@@ -21,7 +21,7 @@ def get_notifications() -> QuerySet[Notification]:
     if user is None:
         return Notification.objects.none()
 
-    notifications = Notification.objects.all()
+    notifications = Notification.objects.all().order_by("-created")
 
     if not user.is_superuser:
         product_members = Product_Member.objects.filter(
