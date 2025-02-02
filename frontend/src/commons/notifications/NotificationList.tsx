@@ -69,6 +69,7 @@ const NotificationList = () => {
                 perPage={25}
                 pagination={<CustomPagination />}
                 filters={listFilters}
+                filterDefaultValues={{ exclude_already_viewed: true }}
                 sort={{ field: "created", order: "DESC" }}
                 disableSyncWithLocation={false}
                 storeKey="notifications.list"
