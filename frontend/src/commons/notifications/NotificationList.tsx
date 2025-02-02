@@ -2,16 +2,16 @@ import { Fragment } from "react";
 import {
     AutocompleteInput,
     BooleanInput,
+    ChipField,
     DatagridConfigurable,
     DateField,
+    FunctionField,
     List,
     ReferenceInput,
     SelectColumnsButton,
     TextField,
     TextInput,
     TopToolbar,
-    FunctionField,
-    ChipField,
 } from "react-admin";
 
 import notifications from ".";
@@ -21,7 +21,6 @@ import { AutocompleteInputMedium } from "../layout/themes";
 import { TYPE_CHOICES } from "../types";
 import { getSettingListSize } from "../user_settings/functions";
 import NotificationBulkMarkAsViewedButton from "./NotificationBulkMarkAsViewedButton";
-import { Chip } from "@mui/material";
 
 const messageShortened = (message: string | null) => {
     if (message && message.length > 255) {
@@ -83,12 +82,12 @@ const NotificationList = () => {
                     <TextField source="type" />
                     <TextField source="name" />
                     <DateField source="created" showTime={true} />
-                        <FunctionField
-                            label="Message"
-                            render={(record) => messageShortened(record.message)}
-                            sortable={false}
-                            sx={{ wordBreak: "break-word" }}
-                        />
+                    <FunctionField
+                        label="Message"
+                        render={(record) => messageShortened(record.message)}
+                        sortable={false}
+                        sx={{ wordBreak: "break-word" }}
+                    />
                     <TextField source="function" />
                     <TextField source="product_name" label="Product" />
                     <TextField source="observation_title" label="Observation" />

@@ -7,7 +7,7 @@ from rest_framework.serializers import (
     SerializerMethodField,
 )
 
-from application.commons.models import Notification, Settings, Notification_Viewed
+from application.commons.models import Notification, Notification_Viewed, Settings
 from application.commons.services.global_request import get_current_user
 
 
@@ -84,6 +84,7 @@ class NotificationSerializer(ModelSerializer):
             if notification_viewed:
                 return "Viewed"
         return "New"
+
 
 class NotificationBulkSerializer(Serializer):
     notifications = ListField(

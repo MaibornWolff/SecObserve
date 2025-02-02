@@ -73,10 +73,14 @@ class TestViews(BaseTestCase):
 
         self.assertEqual(HTTP_204_NO_CONTENT, response.status_code)
 
-        notification_viewed = Notification_Viewed.objects.get(notification_id=3, user=user)
+        notification_viewed = Notification_Viewed.objects.get(
+            notification_id=3, user=user
+        )
         self.assertIsNotNone(notification_viewed)
 
-        notification_viewed = Notification_Viewed.objects.get(notification_id=5, user=user)
+        notification_viewed = Notification_Viewed.objects.get(
+            notification_id=5, user=user
+        )
         self.assertIsNotNone(notification_viewed)
 
     @patch(
