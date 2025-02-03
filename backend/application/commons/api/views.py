@@ -74,6 +74,10 @@ class StatusSettingsView(APIView):
                 features.append("feature_general_rules_need_approval")
             if settings.feature_license_management:
                 features.append("feature_license_management")
+            if settings.feature_automatic_api_import:
+                features.append("feature_automatic_api_import")
+            if settings.feature_automatic_osv_scanning:
+                features.append("feature_automatic_osv_scanning")
 
         content = {
             "features": features,

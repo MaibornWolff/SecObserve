@@ -233,6 +233,9 @@ class Settings(Model):
         validators=[MinValueValidator(0), MaxValueValidator(23)],
         help_text="Hour crontab expression for importing licenses (UTC)",
     )
+    feature_automatic_osv_scanning = BooleanField(
+        default=True, help_text="Enable automatic OSV scanning"
+    )
 
     def save(self, *args, **kwargs):
         """

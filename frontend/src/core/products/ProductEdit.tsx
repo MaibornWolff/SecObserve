@@ -19,7 +19,7 @@ import {
 import { PERMISSION_PRODUCT_DELETE } from "../../access_control/types";
 import OSVLinuxDistributionInput from "../../commons/custom_fields/OSVLinuxDistributionInput";
 import { validate_0_999999, validate_255, validate_2048, validate_required_255 } from "../../commons/custom_validators";
-import { feature_license_management } from "../../commons/functions";
+import { feature_automatic_osv_scanning, feature_license_management } from "../../commons/functions";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { ISSUE_TRACKER_TYPE_CHOICES, OBSERVATION_SEVERITY_CHOICES } from "../types";
 
@@ -149,6 +149,7 @@ const ProductEdit = () => {
         if (!data.osv_enabled) {
             data.osv_linux_distribution = "";
             data.osv_linux_release = "";
+            data.automatic_osv_scanning_enabled = false;
         }
         if (!data.osv_linux_distribution) {
             data.osv_linux_distribution = "";
@@ -468,12 +469,28 @@ const ProductEdit = () => {
                 <Typography variant="h6" sx={{ marginBottom: 2 }}>
                     Vulnerability scanning
                 </Typography>
+
                 <Stack direction="row" spacing={2} alignItems="center">
                     <BooleanInput source="osv_enabled" label="OSV scanning enabled" defaultValue={false} />
                     <FormDataConsumer>
                         {({ formData }) => formData.osv_enabled && <OSVLinuxDistributionInput />}
                     </FormDataConsumer>
                 </Stack>
+                <FormDataConsumer>
+                    {({ formData }) =>
+                        formData.osv_enabled && (
+                            <Fragment>
+                                {feature_automatic_osv_scanning() && (
+                                    <BooleanInput
+                                        source="automatic_osv_scanning_enabled"
+                                        label="Automatic OSV scanning enabled"
+                                        defaultValue={false}
+                                    />
+                                )}
+                            </Fragment>
+                        )
+                    }
+                </FormDataConsumer>
             </SimpleForm>
         </Edit>
     );
