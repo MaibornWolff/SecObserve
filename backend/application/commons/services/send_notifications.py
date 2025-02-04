@@ -124,8 +124,8 @@ def send_task_exception_notification(
     function: Optional[str],
     arguments: Optional[dict],
     user: Optional[User],
-    product: Optional[Product],
     exception: Exception,
+    product: Optional[Product] = None,
 ) -> None:
     settings = Settings.load()
 

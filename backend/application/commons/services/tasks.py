@@ -43,5 +43,5 @@ def handle_task_exception(
     logger.error(traceback.format_exc())
 
     send_task_exception_notification(
-        function=function, arguments=arguments, user=user, product=product, exception=e
+        function=function, arguments=arguments, user=user, exception=e, product=product
     )
