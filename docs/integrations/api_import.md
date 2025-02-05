@@ -37,9 +37,13 @@ API imports can be configured to run automatically at a specific time. There is 
 
 #### General setting
 
-In the `Automatic API import` section of the [Settings](../getting_started/configuration.md#admininistration-in-secobserve) the automatic import can be enabled for the whole SecObserve instance and the hour (in UTC time) and minute can be set, when the automatic API imports will run. A restart of the SecObserve instance is required to apply the changes.
+In the `Features` section of the [Settings](../getting_started/configuration.md#admininistration-in-secobserve) the automatic import can be enabled for the whole SecObserve instance.
 
-![Settings automatic API import](../assets/images/screenshot_settings_automatic_api_import.png){ width="60%" style="display: block; margin: 0 auto" }
+![Settings automatic API import](../assets/images/screenshot_settings_automatic_api_import.png){ width="65%" style="display: block; margin: 0 auto" }
+
+The hour (in UTC time) and minute, when the automatic API imports and the [OSV scanning](./osv_scan.md/#automatic-import) will run, can be set in the `Background tasks`  section. A restart of the SecObserve instance is required to apply the changes.
+
+![Settings automatic API import](../assets/images/screenshot_settings_background_api_osv.png){ width="70%" style="display: block; margin: 0 auto" }
 
 #### Setting per API configuration
 
