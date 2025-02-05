@@ -18,7 +18,7 @@ class TestTasks(BaseTestCase):
     ):
         mock_currentframe.return_value = None
         exception = Exception("Test exception")
-        handle_task_exception(exception, self.user_internal)
+        handle_task_exception(exception, self.user_internal, self.product_1)
 
         self.assertEqual(mock_logger.call_count, 2)
         mock_format_log_message.assert_called_with(
@@ -28,6 +28,10 @@ class TestTasks(BaseTestCase):
             user=self.user_internal,
         )
         mock_send_task_exception_notification.assert_called_with(
-            function=None, arguments=None, user=self.user_internal, exception=exception
+            function=None,
+            arguments=None,
+            user=self.user_internal,
+            exception=exception,
+            product=self.product_1,
         )
         mock_currentframe.assert_called_once()

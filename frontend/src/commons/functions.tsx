@@ -239,6 +239,28 @@ export const feature_license_management = () => {
     }
 };
 
+export const feature_automatic_api_import = () => {
+    try {
+        const settings = JSON.parse(localStorage.getItem("settings") || "{}");
+        const features = settings.features || [];
+        const feature_vex_position = features.indexOf("feature_automatic_api_import");
+        return feature_vex_position !== -1;
+    } catch {
+        return false;
+    }
+};
+
+export const feature_automatic_osv_scanning = () => {
+    try {
+        const settings = JSON.parse(localStorage.getItem("settings") || "{}");
+        const features = settings.features || [];
+        const feature_vex_position = features.indexOf("feature_automatic_osv_scanning");
+        return feature_vex_position !== -1;
+    } catch {
+        return false;
+    }
+};
+
 export const justificationIsEnabledForStatus = (status: string) => {
     const vex_enabled = feature_vex_enabled();
     const justification_recommended_for_status =

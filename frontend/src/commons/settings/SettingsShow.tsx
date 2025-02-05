@@ -70,6 +70,9 @@ const SettingsShowComponent = () => {
                                     <Labeled label="Enable automatic API imports">
                                         <BooleanField source="feature_automatic_api_import" />
                                     </Labeled>
+                                    <Labeled label="Enable automatic OSV scanning">
+                                        <BooleanField source="feature_automatic_osv_scanning" />
+                                    </Labeled>
                                     <Labeled label="Enable license management">
                                         <BooleanField source="feature_license_management" />
                                     </Labeled>
@@ -236,8 +239,9 @@ const SettingsShowComponent = () => {
                                     <Labeled label="EPSS import crontab (hour/UTC)">
                                         <NumberField source="background_epss_import_crontab_hour" />
                                     </Labeled>
-                                    {settings.feature_automatic_api_import && (
-                                        <Labeled label="API import crontab (hour/UTC)">
+                                    {(settings.feature_automatic_api_import ||
+                                        settings.feature_automatic_osv_scanning) && (
+                                        <Labeled label="API import and OSV scanning crontab (hour/UTC)">
                                             <NumberField source="api_import_crontab_hour" />
                                         </Labeled>
                                     )}
@@ -259,8 +263,9 @@ const SettingsShowComponent = () => {
                                     <Labeled label="EPSS import crontab (minutes)">
                                         <NumberField source="background_epss_import_crontab_minute" />
                                     </Labeled>
-                                    {settings.feature_automatic_api_import && (
-                                        <Labeled label="API import crontab (minute)">
+                                    {(settings.feature_automatic_api_import ||
+                                        settings.feature_automatic_osv_scanning) && (
+                                        <Labeled label="API import and OSV scanning crontab (minute)">
                                             <NumberField source="api_import_crontab_minute" />
                                         </Labeled>
                                     )}

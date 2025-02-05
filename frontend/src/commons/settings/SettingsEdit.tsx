@@ -118,6 +118,10 @@ const SettingsEdit = () => {
                                     source="feature_automatic_api_import"
                                     label="Enable automatic API imports"
                                 />
+                                <BooleanInput
+                                    source="feature_automatic_osv_scanning"
+                                    label="Enable automatic OSV scanning"
+                                />
                                 <BooleanInput source="feature_license_management" label="Enable license management" />
                             </Stack>
                         </Grid>
@@ -404,10 +408,11 @@ const SettingsEdit = () => {
                                 />
                                 <FormDataConsumer>
                                     {({ formData }) =>
-                                        formData.feature_automatic_api_import && (
+                                        (formData.feature_automatic_api_import ||
+                                            formData.feature_automatic_osv_scanning) && (
                                             <NumberInput
                                                 source="api_import_crontab_hour"
-                                                label="API import crontab (hour)"
+                                                label="API import and OSV scanning crontab (hour)"
                                                 min={0}
                                                 step={1}
                                                 validate={validate_0_23}
@@ -462,10 +467,11 @@ const SettingsEdit = () => {
                                 />
                                 <FormDataConsumer>
                                     {({ formData }) =>
-                                        formData.feature_automatic_api_import && (
+                                        (formData.feature_automatic_api_import ||
+                                            formData.feature_automatic_osv_scanning) && (
                                             <NumberInput
                                                 source="api_import_crontab_minute"
-                                                label="API import crontab (minute)"
+                                                label="API import and OSV scanning crontab (minute)"
                                                 min={0}
                                                 step={1}
                                                 validate={validate_0_59}

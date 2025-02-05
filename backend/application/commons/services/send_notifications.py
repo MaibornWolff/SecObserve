@@ -125,6 +125,7 @@ def send_task_exception_notification(
     arguments: Optional[dict],
     user: Optional[User],
     exception: Exception,
+    product: Optional[Product] = None,
 ) -> None:
     settings = Settings.load()
 
@@ -173,12 +174,16 @@ def send_task_exception_notification(
                 date_time=datetime.now(),
             )
 
-        product = None
         observation = None
+
         if arguments:
+            if not product:
+                product = arguments.get("product")
+
             observation = arguments.get("observation")
             if observation:
-                product = observation.product
+                if not product:
+                    product = observation.product
 
         Notification.objects.create(
             name=f'Exception "{get_classname(exception)}" has occured',

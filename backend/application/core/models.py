@@ -143,6 +143,7 @@ class Product(Model):
         blank=True,
     )
     osv_linux_release = CharField(max_length=255, blank=True)
+    automatic_osv_scanning_enabled = BooleanField(default=False)
 
     has_cloud_resource = BooleanField(default=False)
     has_component = BooleanField(default=False)

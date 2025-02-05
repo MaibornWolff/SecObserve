@@ -7,7 +7,7 @@ There are 2 preconditions for a product to be met before using the OSV database 
 * License information has to be imported, only then all components are available for scanning.
 * The flag `OSV scanning enabled` in the product settings has to be activated.
 
-Then  the OSV scan can be started from the `Import` menu. If a branch is selected, the scan will be performed on the components of the branch. If no branch is selected, the scan will be performed on the components of all branches and components without a branch.
+![OSV scanning settings](../assets/images/screenshot_osv_scanning_settings_1.png)
 
 OSV delivers vulnerabilities for a component, without regard to the version of the component, plus a list of affected versions. Currently these package managers are supported directly to get the affected versions, by using information from the PURL of the component:
 
@@ -34,4 +34,30 @@ To correctly identify Linux packages, the Linux distribution and version has to 
 | Ubuntu             | 22.04:LTS |
 | Red Hat            | rhel_aus:8.4::appstream |
 
-A regular automated scan for all enabled products is planned for a future release.
+
+## Manual import
+
+If both preconditions are met, the OSV scan can be started manually from the `Import` menu. If a branch is selected, the scan will be performed on the components of the branch. If no branch is selected, the scan will be performed on the components of all branches and components without a branch.
+
+![OSV scanning import](../assets/images/screenshot_osv_scanning_import.png){ width="40%" style="display: block; margin: 0 auto" }
+
+
+## Automatic import
+
+OSV scanning can be configured to run automatically at a specific time. There is a general setting and a setting per API configuration.
+
+#### General setting
+
+In the `Features` section of the [Settings](../getting_started/configuration.md#admininistration-in-secobserve) the automatic OSV scanning can be enabled or disabled for the whole SecObserve instance.
+
+![Settings automatic OSV scanning](../assets/images/screenshot_settings_automatic_osv_scanning.png){ width="65%" style="display: block; margin: 0 auto" }
+
+The hour (in UTC time) and minute, when the automatic [API imports](./api_import.md/#automatic-import) and OSV scanning will run, can be set in the `Background tasks` section. A restart of the SecObserve instance is required to apply the changes.
+
+![Settings automatic OSV scanning](../assets/images/screenshot_settings_background_api_osv.png){ width="70%" style="display: block; margin: 0 auto" }
+
+#### Setting per product
+
+Only products that have `Automatic OSV scanning enabled` turned on will be imported automatically.
+
+![OSV scanning settings](../assets/images/screenshot_osv_scanning_settings_2.png)
