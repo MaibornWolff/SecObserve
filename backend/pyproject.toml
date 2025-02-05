@@ -12,7 +12,7 @@ python = ">= 3.10, < 3.13"
 # Django
 # ------------------------------------------------------------------------------
 gunicorn = "23.0.0"  # https://github.com/benoitc/gunicorn
-django = "5.1.5"  # https://www.djangoproject.com/
+django = "5.1.6"  # https://www.djangoproject.com/
 django-environ = "0.12.0"  # https://github.com/joke2k/django-environ
 django-filter = "24.3"  # https://github.com/carltongibson/django-filter 
 django-csp = "3.8"  # https://github.com/mozilla/django-csp
