@@ -88,5 +88,5 @@ class NotificationSerializer(ModelSerializer):
 
 class NotificationBulkSerializer(Serializer):
     notifications = ListField(
-        child=IntegerField(min_value=1), min_length=0, max_length=100, required=True
+        child=IntegerField(min_value=1), min_length=0, max_length=250, required=True
     )
