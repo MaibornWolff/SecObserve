@@ -1,6 +1,7 @@
 import { faFileCsv, faFileExcel } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DownloadIcon from "@mui/icons-material/Download";
+import SyncIcon from "@mui/icons-material/Sync";
 import ViewQuiltIcon from "@mui/icons-material/ViewQuilt";
 import { ListItemIcon } from "@mui/material";
 import Button from "@mui/material/Button";
@@ -11,6 +12,7 @@ import { useNotify } from "react-admin";
 
 import axios_instance from "../../access_control/auth_provider/axios_instance";
 import { feature_license_management, getIconAndFontColor } from "../../commons/functions";
+import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
 interface ExportMenuProps {
     product: any;
@@ -147,6 +149,19 @@ const ExportMenu = (props: ExportMenuProps) => {
         );
     };
 
+    const synchronizeIssues = async () => {
+        httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/products/" + props.product.id + "/synchronize_issues/", {
+            method: "POST",
+        })
+            .then(() => {
+                notify("Synchronization of issues started in background", { type: "success" });
+            })
+            .catch((error) => {
+                notify(error.message, { type: "warning" });
+            });
+        handleClose();
+    };
+
     const showLicenseExport = (): boolean => {
         return (
             feature_license_management() &&
@@ -223,7 +238,10 @@ const ExportMenu = (props: ExportMenuProps) => {
                     Metrics / CSV
                 </MenuItem>
                 {!props.is_product_group && (
-                    <MenuItem onClick={exportCodeChartaMetrics} divider={showLicenseExport()}>
+                    <MenuItem
+                        onClick={exportCodeChartaMetrics}
+                        divider={showLicenseExport() || (props.product && props.product.issue_tracker_active)}
+                    >
                         <ListItemIcon>
                             <ViewQuiltIcon sx={{ color: getIconAndFontColor() }} />
                         </ListItemIcon>
@@ -239,11 +257,22 @@ const ExportMenu = (props: ExportMenuProps) => {
                     </MenuItem>
                 )}
                 {showLicenseExport() && (
-                    <MenuItem onClick={exportLicenseComponentsCsv}>
+                    <MenuItem
+                        onClick={exportLicenseComponentsCsv}
+                        divider={props.product && props.product.issue_tracker_active}
+                    >
                         <ListItemIcon>
                             <FontAwesomeIcon icon={faFileCsv} color={getIconAndFontColor()} />
                         </ListItemIcon>
                         Licenses / CSV
+                    </MenuItem>
+                )}
+                {!props.is_product_group && props.product && props.product.issue_tracker_active && (
+                    <MenuItem onClick={synchronizeIssues}>
+                        <ListItemIcon>
+                            <SyncIcon sx={{ color: getIconAndFontColor() }} />
+                        </ListItemIcon>
+                        Synchronize issues
                     </MenuItem>
                 )}
             </Menu>
