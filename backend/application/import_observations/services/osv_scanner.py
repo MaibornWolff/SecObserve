@@ -151,8 +151,8 @@ def scan_license_components(
         )
 
     import_parameters = ImportParameters(
-        product=license_components[0].product,
-        branch=license_components[0].branch,
+        product=product,
+        branch=branch,
         parser=parser,
         filename="",
         api_configuration_name="",
