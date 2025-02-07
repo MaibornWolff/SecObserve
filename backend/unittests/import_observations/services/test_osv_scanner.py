@@ -1,5 +1,6 @@
+from datetime import datetime, timezone
 from json import loads
-from unittest.mock import patch, call
+from unittest.mock import call, patch
 
 from django.core.management import call_command
 
@@ -8,11 +9,14 @@ from application.import_observations.models import Parser
 from application.import_observations.services.import_observations import (
     ImportParameters,
 )
-from application.import_observations.services.osv_scanner import scan_license_components, scan_product, scan_branch
+from application.import_observations.services.osv_scanner import (
+    scan_branch,
+    scan_license_components,
+    scan_product,
+)
+from application.import_observations.types import OSV_Component, OSV_Vulnerability
 from application.licenses.models import License_Component
 from unittests.base_test_case import BaseTestCase
-from application.import_observations.types import OSV_Component, OSV_Vulnerability
-from datetime import datetime, timezone
 
 
 class MockResponse:
@@ -44,10 +48,17 @@ class TestImportObservations(BaseTestCase):
         )
 
     @patch("application.import_observations.services.osv_scanner.scan_branch")
-    @patch("application.import_observations.services.osv_scanner.get_license_components_no_branch")
-    @patch("application.import_observations.services.osv_scanner.scan_license_components")
+    @patch(
+        "application.import_observations.services.osv_scanner.get_license_components_no_branch"
+    )
+    @patch(
+        "application.import_observations.services.osv_scanner.scan_license_components"
+    )
     def test_scan_product_no_branch(
-        self, mock_scan_license_components, mock_get_license_components_no_branch, mock_scan_branch
+        self,
+        mock_scan_license_components,
+        mock_get_license_components_no_branch,
+        mock_scan_branch,
     ):
         product = Product.objects.get(id=1)
         Branch.objects.filter(product=product).delete()
@@ -60,13 +71,22 @@ class TestImportObservations(BaseTestCase):
         self.assertEqual((4, 5, 6), numbers)
         mock_scan_branch.assert_not_called()
         mock_get_license_components_no_branch.assert_called_with(product)
-        mock_scan_license_components.assert_called_with(license_components, product, None)
+        mock_scan_license_components.assert_called_with(
+            license_components, product, None
+        )
 
     @patch("application.import_observations.services.osv_scanner.scan_branch")
-    @patch("application.import_observations.services.osv_scanner.get_license_components_no_branch")
-    @patch("application.import_observations.services.osv_scanner.scan_license_components")
+    @patch(
+        "application.import_observations.services.osv_scanner.get_license_components_no_branch"
+    )
+    @patch(
+        "application.import_observations.services.osv_scanner.scan_license_components"
+    )
     def test_scan_product_with_branches(
-        self, mock_scan_license_components, mock_get_license_components_no_branch, mock_scan_branch
+        self,
+        mock_scan_license_components,
+        mock_get_license_components_no_branch,
+        mock_scan_branch,
     ):
         product = Product.objects.get(id=1)
         branches = list(Branch.objects.filter(product=product))
@@ -80,10 +100,16 @@ class TestImportObservations(BaseTestCase):
         self.assertEqual((6, 9, 12), numbers)
         mock_scan_branch.assert_has_calls([call(branches[0]), call(branches[1])])
         mock_get_license_components_no_branch.assert_called_with(product)
-        mock_scan_license_components.assert_called_with(license_components, product, None)
+        mock_scan_license_components.assert_called_with(
+            license_components, product, None
+        )
 
-    @patch("application.import_observations.services.osv_scanner.get_license_components_for_branch")
-    @patch("application.import_observations.services.osv_scanner.scan_license_components")
+    @patch(
+        "application.import_observations.services.osv_scanner.get_license_components_for_branch"
+    )
+    @patch(
+        "application.import_observations.services.osv_scanner.scan_license_components"
+    )
     def test_scan_branch(
         self, mock_scan_license_components, mock_get_license_components_for_branch
     ):
@@ -97,7 +123,9 @@ class TestImportObservations(BaseTestCase):
 
         self.assertEqual((4, 5, 6), numbers)
         mock_get_license_components_for_branch.assert_called_with(branch)
-        mock_scan_license_components.assert_called_with(license_components, product, branch)
+        mock_scan_license_components.assert_called_with(
+            license_components, product, branch
+        )
 
     @patch("requests.post")
     @patch(
@@ -257,7 +285,9 @@ class TestImportObservations(BaseTestCase):
                     ),
                     OSV_Vulnerability(
                         id="GHSA-5hgc-2vfp-mqvc",
-                        modified=datetime(2024, 10, 30, 19, 23, 43, 662562, timezone.utc),
+                        modified=datetime(
+                            2024, 10, 30, 19, 23, 43, 662562, timezone.utc
+                        ),
                     ),
                 },
             ),
