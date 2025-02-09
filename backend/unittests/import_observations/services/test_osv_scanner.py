@@ -6,6 +6,10 @@ from django.core.management import call_command
 
 from application.core.models import Branch, Product
 from application.import_observations.models import Parser
+from application.import_observations.parsers.osv.parser import (
+    OSV_Component,
+    OSV_Vulnerability,
+)
 from application.import_observations.services.import_observations import (
     ImportParameters,
 )
@@ -14,7 +18,6 @@ from application.import_observations.services.osv_scanner import (
     scan_license_components,
     scan_product,
 )
-from application.import_observations.types import OSV_Component, OSV_Vulnerability
 from application.licenses.models import License_Component
 from unittests.base_test_case import BaseTestCase
 
@@ -276,8 +279,7 @@ class TestImportObservations(BaseTestCase):
 
         osv_components = [
             OSV_Component(
-                id=1,
-                component_purl="pkg:pypi/django@4.2.11",
+                license_component=license_components[0],
                 vulnerabilities={
                     OSV_Vulnerability(
                         id="GHSA-795c-9xpc-xw6g",
@@ -292,8 +294,7 @@ class TestImportObservations(BaseTestCase):
                 },
             ),
             OSV_Component(
-                id=2,
-                component_purl="pkg:golang/golang.org/x/net@v0.25.1-0.20240603202750-6249541f2a6c",
+                license_component=license_components[1],
                 vulnerabilities={
                     OSV_Vulnerability(
                         id="GO-2024-3333",
