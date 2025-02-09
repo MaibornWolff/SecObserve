@@ -94,7 +94,7 @@ const Menu = ({ dense = false }: MenuProps) => {
                     dense={dense}
                 >
                     Notifications
-                    {get_notification_count() && (
+                    {get_notification_count() && get_notification_count() != "0" && (
                         <Badge badgeContent={get_notification_count()} color="secondary" sx={{ marginLeft: 3 }} />
                     )}
                 </MenuItemLink>
