@@ -9,5 +9,5 @@ python manage.py migrate
 python manage.py register_parsers
 
 coverage run --branch /app/manage.py test unittests
-# coverage run --branch /app/manage.py test unittests.import_observations.test_types
+# coverage run --branch /app/manage.py test unittests.import_observations.parsers.osv.test_parser
 coverage report --skip-empty --show-missing

@@ -1,0 +1,301 @@
+from datetime import datetime, timezone
+
+from django.core.management import call_command
+
+from application.import_observations.parsers.osv.parser import (
+    OSV_Component,
+    OSV_Vulnerability,
+    OSVParser,
+)
+from application.licenses.models import License_Component
+from unittests.base_test_case import BaseTestCase
+
+
+class TestOSVParser(BaseTestCase):
+    def test_no_observations(self):
+        parser = OSVParser()
+        observations = parser.get_observations([], self.product_1, self.branch_1)
+        self.assertEqual(observations, [])
+
+    def test_java_and_python_open(self):
+        call_command(
+            "loaddata",
+            [
+                "unittests/import_observations/parsers/osv/files/fixtures_osv_cache_java_python.json",
+            ],
+        )
+
+        license_component_java = License_Component(
+            product=self.product_1,
+            branch=self.branch_1,
+            component_name="json",
+            component_version="20190722",
+            component_name_version="json:20190722",
+            component_purl="pkg:maven/org.json/json@20190722?type=jar",
+            component_purl_type="maven",
+            component_cpe="cpe:/a:org.json:json:20190722",
+            component_dependencies="json_dependencies",
+        )
+
+        license_component_python = License_Component(
+            product=self.product_1,
+            branch=self.branch_1,
+            component_name="Django",
+            component_version="5.1.2",
+            component_name_version="Django:5.1.2",
+            component_purl="pkg:pypi/django@5.1.2",
+            component_purl_type="pypi",
+            component_dependencies="django_dependencies",
+        )
+
+        osv_components = [
+            OSV_Component(
+                license_component=license_component_java,
+                vulnerabilities={
+                    OSV_Vulnerability(
+                        id="GHSA-3vqj-43w4-2q58",
+                        modified=datetime(2024, 8, 7, 20, 1, 58, 452618, timezone.utc),
+                    ),
+                    OSV_Vulnerability(
+                        id="GHSA-4jq9-2xhw-jpx7",
+                        modified=datetime(
+                            2024, 10, 30, 19, 23, 43, 662562, timezone.utc
+                        ),
+                    ),
+                },
+            ),
+            OSV_Component(
+                license_component=license_component_python,
+                vulnerabilities={
+                    OSV_Vulnerability(
+                        id="GHSA-m9g8-fxxm-xg86",
+                        modified=datetime(2024, 12, 20, 20, 37, 27, 0, timezone.utc),
+                    ),
+                },
+            ),
+        ]
+
+        parser = OSVParser()
+        observations = parser.get_observations(
+            osv_components, self.product_1, self.branch_1
+        )
+
+        self.assertEqual(len(observations), 3)
+
+        observation = observations[0]
+        self.assertEqual("CVE-2022-45688", observation.title)
+        description = """json stack overflow vulnerability
+
+A stack overflow in the XML.toJSONObject component of hutool-json v5.8.10 and org.json:json before version 20230227 allows attackers to cause a Denial of Service (DoS) via crafted JSON or XML data.
+
+**Confidence: High** (Component found in affected versions)"""
+        self.assertEqual(description, observation.description)
+        self.assertEqual("", observation.recommendation)
+        self.assertEqual("CVE-2022-45688", observation.vulnerability_id)
+        self.assertEqual(
+            "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H", observation.cvss3_vector
+        )
+        self.assertEqual("", observation.cvss4_vector)
+        self.assertEqual("GHSA-3vqj-43w4-2q58", observation.vulnerability_id_aliases)
+        self.assertEqual("json", observation.origin_component_name)
+        self.assertEqual("20190722", observation.origin_component_version)
+        self.assertEqual(
+            "pkg:maven/org.json/json@20190722?type=jar",
+            observation.origin_component_purl,
+        )
+        self.assertEqual(
+            "cpe:/a:org.json:json:20190722", observation.origin_component_cpe
+        )
+        self.assertEqual("json_dependencies", observation.origin_component_dependencies)
+
+        unsaved_references = observation.unsaved_references
+        self.assertEqual(6, len(unsaved_references))
+        self.assertEqual(
+            "https://nvd.nist.gov/vuln/detail/CVE-2022-45688", unsaved_references[0]
+        )
+
+        self.assertEqual("OSV Vulnerability", observation.unsaved_evidences[0][0])
+        self.assertIn("CWE-787", observation.unsaved_evidences[0][1])
+
+        observation = observations[1]
+        self.assertEqual("CVE-2023-5072", observation.title)
+
+        observation = observations[2]
+        self.assertEqual("CVE-2024-53908", observation.title)
+        self.assertEqual("Update to version 5.1.4", observation.recommendation)
+        self.assertEqual(
+            "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", observation.cvss3_vector
+        )
+        self.assertEqual(
+            "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N/E:U",
+            observation.cvss4_vector,
+        )
+
+    def test_python_fixed(self):
+        call_command(
+            "loaddata",
+            [
+                "unittests/import_observations/parsers/osv/files/fixtures_osv_cache_java_python.json",
+            ],
+        )
+
+        license_component_python = License_Component(
+            product=self.product_1,
+            branch=self.branch_1,
+            component_name="Django",
+            component_version="5.1.6",
+            component_name_version="Django:5.1.6",
+            component_purl="pkg:pypi/django@5.1.6",
+            component_purl_type="pypi",
+            component_dependencies="django_dependencies",
+        )
+
+        osv_components = [
+            OSV_Component(
+                license_component=license_component_python,
+                vulnerabilities={
+                    OSV_Vulnerability(
+                        id="GHSA-m9g8-fxxm-xg86",
+                        modified=datetime(2024, 12, 20, 20, 37, 27, 0, timezone.utc),
+                    ),
+                },
+            ),
+        ]
+
+        parser = OSVParser()
+        observations = parser.get_observations(
+            osv_components, self.product_1, self.branch_1
+        )
+
+        self.assertEqual(len(observations), 0)
+
+    def test_linux_no_distribution(self):
+        call_command(
+            "loaddata",
+            [
+                "unittests/import_observations/parsers/osv/files/fixtures_osv_cache_linux.json",
+            ],
+        )
+
+        self.product_1.osv_linux_distribution = ""
+        self.product_1.osv_linux_release = ""
+        osv_components = [self._get_osv_component_git(), self._get_osv_component_vim()]
+
+        parser = OSVParser()
+        observations = parser.get_observations(osv_components, self.product_1, None)
+
+        self.assertEqual(len(observations), 2)
+
+        observation = observations[0]
+        self.assertEqual("CVE-2024-32002", observation.title)
+        description = """Git is a revision control system. Prior to versions 2.45.1, 2.44.1, 2.43.4, 2.42.2, 2.41.1, 2.40.2, and 2.39.4, repositories with submodules can be crafted in a way that exploits a bug in Git whereby it can be fooled into writing files not into the submodule's worktree but into a `.git/` directory. This allows writing a hook that will be executed while the clone operation is still running, giving the user no opportunity to inspect the code that is being executed. The problem has been patched in versions 2.45.1, 2.44.1, 2.43.4, 2.42.2, 2.41.1, 2.40.2, and 2.39.4. If symbolic link support is disabled in Git (e.g. via `git config --global core.symlinks false`), the described attack won't work. As always, it is best to avoid cloning repositories from untrusted sources.
+
+**Confidence: Low** (No information about affected versions or ranges)"""
+        self.assertEqual(description, observation.description)
+
+        observation = observations[1]
+        self.assertEqual("CVE-2017-6349", observation.title)
+        description = """An integer overflow at a u_read_undo memory allocation site would occur for vim before patch 8.0.0377, if it does not properly validate values for tree length when reading a corrupted undo file, which may lead to resultant buffer overflows.
+
+**Confidence: Low** (No information about affected versions or ranges)"""
+        self.assertEqual(description, observation.description)
+
+    def test_linux_product_distribution(self):
+        call_command(
+            "loaddata",
+            [
+                "unittests/import_observations/parsers/osv/files/fixtures_osv_cache_linux.json",
+            ],
+        )
+
+        self.product_1.osv_linux_distribution = "Debian"
+        self.product_1.osv_linux_release = "12"
+        osv_components = [self._get_osv_component_git(), self._get_osv_component_vim()]
+
+        parser = OSVParser()
+        observations = parser.get_observations(osv_components, self.product_1, None)
+
+        self.assertEqual(len(observations), 1)
+
+        observation = observations[0]
+        self.assertEqual("CVE-2017-6349", observation.title)
+        description = """An integer overflow at a u_read_undo memory allocation site would occur for vim before patch 8.0.0377, if it does not properly validate values for tree length when reading a corrupted undo file, which may lead to resultant buffer overflows.
+
+**Confidence: Low** (Events could not be evaluated)
+
+**Events:**
+
+* ECOSYSTEM: Introduced: 0 - Fixed: 2:8.0.0197-3"""
+        self.assertEqual(description, observation.description)
+
+    def test_linux_branch_distribution(self):
+        call_command(
+            "loaddata",
+            [
+                "unittests/import_observations/parsers/osv/files/fixtures_osv_cache_linux.json",
+            ],
+        )
+
+        self.product_1.osv_linux_distribution = ""
+        self.product_1.osv_linux_release = ""
+        self.branch_1.osv_linux_distribution = "Debian"
+        self.branch_1.osv_linux_release = "12"
+        osv_components = [self._get_osv_component_git(), self._get_osv_component_vim()]
+
+        parser = OSVParser()
+        observations = parser.get_observations(
+            osv_components, self.product_1, self.branch_1
+        )
+
+        self.assertEqual(len(observations), 1)
+
+        observation = observations[0]
+        self.assertEqual("CVE-2017-6349", observation.title)
+        description = """An integer overflow at a u_read_undo memory allocation site would occur for vim before patch 8.0.0377, if it does not properly validate values for tree length when reading a corrupted undo file, which may lead to resultant buffer overflows.
+
+**Confidence: Low** (Events could not be evaluated)
+
+**Events:**
+
+* ECOSYSTEM: Introduced: 0 - Fixed: 2:8.0.0197-3"""
+        self.assertEqual(description, observation.description)
+
+    def _get_osv_component_git(self):
+        return OSV_Component(
+            license_component=License_Component(
+                product=self.product_1,
+                branch=self.branch_1,
+                component_name="git",
+                component_version="1:2.39.5-0+deb12u1",
+                component_name_version="git:1:2.39.5-0+deb12u1",
+                component_purl="pkg:deb/debian/git@1:2.39.5-0%2Bdeb12u1?arch=amd64&distro=debian-12",
+                component_purl_type="deb",
+                component_dependencies="git_dependencies",
+            ),
+            vulnerabilities={
+                OSV_Vulnerability(
+                    id="CVE-2024-32002",
+                    modified=datetime(2024, 8, 7, 20, 1, 58, 452618, timezone.utc),
+                ),
+            },
+        )
+
+    def _get_osv_component_vim(self):
+        return OSV_Component(
+            license_component=License_Component(
+                product=self.product_1,
+                branch=self.branch_1,
+                component_name="vim",
+                component_version="2:9.0.1378-2",
+                component_name_version="vim:2:9.0.1378-2",
+                component_purl="pkg:deb/debian/vim@9.0.1378-2?arch=amd64&distro=debian-12.5&epoch=2",
+                component_purl_type="deb",
+                component_dependencies="vim_dependencies",
+            ),
+            vulnerabilities={
+                OSV_Vulnerability(
+                    id="CVE-2017-6349",
+                    modified=datetime(2024, 8, 7, 20, 1, 58, 452618, timezone.utc),
+                ),
+            },
+        )

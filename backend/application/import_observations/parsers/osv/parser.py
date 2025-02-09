@@ -67,7 +67,11 @@ class OSVParser(BaseParser):
         observations = []
 
         for osv_component in data:
-            for vulnerability in osv_component.vulnerabilities:
+            ordered_vulnerabilities = sorted(
+                osv_component.vulnerabilities, key=lambda x: x.id
+            )
+
+            for vulnerability in ordered_vulnerabilities:
                 osv_vulnerability = get_osv_vulnerability(
                     osv_id=vulnerability.id, modified=vulnerability.modified
                 )
