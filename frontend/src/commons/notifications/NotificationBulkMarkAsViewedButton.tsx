@@ -1,11 +1,13 @@
+import ChecklistIcon from "@mui/icons-material/Checklist";
 import { Backdrop, CircularProgress } from "@mui/material";
 import { useState } from "react";
 import { Confirm, useListContext, useNotify, useRefresh, useUnselectAll } from "react-admin";
 
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
-import RemoveButton from "../custom_fields/RemoveButton";
+import SmallButton from "../custom_fields/SmallButton";
+import { update_notification_count } from "./notification_count";
 
-const NotificationBulkDeleteButton = () => {
+const NotificationBulkMarkAsViewedButton = () => {
     const [open, setOpen] = useState(false);
     const { selectedIds } = useListContext();
     const refresh = useRefresh();
@@ -17,7 +19,7 @@ const NotificationBulkDeleteButton = () => {
 
     const handleConfirm = async () => {
         setLoading(true);
-        const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/notifications/bulk_delete/";
+        const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/notifications/bulk_mark_as_viewed/";
         const delete_data = {
             notifications: selectedIds,
         };
@@ -30,8 +32,9 @@ const NotificationBulkDeleteButton = () => {
                 refresh();
                 setOpen(false);
                 setLoading(false);
+                update_notification_count();
                 unselectAll();
-                notify("Notifications deleted", {
+                notify("Notifications marked as viewed", {
                     type: "success",
                 });
             })
@@ -48,11 +51,11 @@ const NotificationBulkDeleteButton = () => {
 
     return (
         <>
-            <RemoveButton title="Delete" onClick={handleClick} />
+            <SmallButton icon={<ChecklistIcon />} title="Mark as viewed" onClick={handleClick} />
             <Confirm
                 isOpen={open && !loading}
-                title="Delete Notifications"
-                content="Are you sure you want to delete the selected notifications?"
+                title="Mark as viewed"
+                content="Are you sure you want to mark the selected notifications as viewed?"
                 onConfirm={handleConfirm}
                 onClose={handleDialogClose}
             />
@@ -65,4 +68,4 @@ const NotificationBulkDeleteButton = () => {
     );
 };
 
-export default NotificationBulkDeleteButton;
+export default NotificationBulkMarkAsViewedButton;

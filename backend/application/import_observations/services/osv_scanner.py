@@ -7,13 +7,16 @@ import requests
 
 from application.core.models import Branch, Product
 from application.import_observations.models import Vulnerability_Check
-from application.import_observations.parsers.osv.parser import OSVParser
+from application.import_observations.parsers.osv.parser import (
+    OSV_Component,
+    OSV_Vulnerability,
+    OSVParser,
+)
 from application.import_observations.queries.parser import get_parser_by_name
 from application.import_observations.services.import_observations import (
     ImportParameters,
     _process_data,
 )
-from application.import_observations.types import OSV_Component, OSV_Vulnerability
 from application.licenses.models import License_Component
 
 
@@ -86,8 +89,7 @@ def scan_license_components(
 
     osv_components = [
         OSV_Component(
-            id=license_component.id,
-            component_purl=license_component.component_purl,
+            license_component=license_component,
             vulnerabilities=set(),
         )
         for license_component in license_components
@@ -151,8 +153,8 @@ def scan_license_components(
         )
 
     import_parameters = ImportParameters(
-        product=license_components[0].product,
-        branch=license_components[0].branch,
+        product=product,
+        branch=branch,
         parser=parser,
         filename="",
         api_configuration_name="",

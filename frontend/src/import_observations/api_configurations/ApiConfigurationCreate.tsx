@@ -23,6 +23,7 @@ import {
     validate_required,
     validate_required_255,
 } from "../../commons/custom_validators";
+import { feature_automatic_api_import } from "../../commons/functions";
 import { AutocompleteInputWide, PasswordInputWide, TextInputWide } from "../../commons/layout/themes";
 
 export type ApiConfigurationCreateProps = {
@@ -219,8 +220,13 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
                             <TextInputWide source="base_url" label="Base URL" validate={validate_required_255} />
                             <ParserInput />
                             <BooleanInput source="verify_ssl" label="Verify SSL" defaultValue={true} />
-                            <BooleanInput source="automatic_import_enabled" defaultValue={false} />
-                            <AutomaticImportInput />
+                            {feature_automatic_api_import() && (
+                                <Fragment>
+                                    <BooleanInput source="automatic_import_enabled" defaultValue={false} />
+
+                                    <AutomaticImportInput />
+                                </Fragment>
+                            )}
                             <BooleanInput source="test_connection" defaultValue={true} />
                         </SimpleForm>
                     </CreateBase>

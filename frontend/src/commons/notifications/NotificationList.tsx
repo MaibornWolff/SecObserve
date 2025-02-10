@@ -1,8 +1,11 @@
 import { Fragment } from "react";
 import {
     AutocompleteInput,
+    BooleanInput,
+    ChipField,
     DatagridConfigurable,
     DateField,
+    FunctionField,
     List,
     ReferenceInput,
     SelectColumnsButton,
@@ -17,7 +20,14 @@ import ListHeader from "../../commons/layout/ListHeader";
 import { AutocompleteInputMedium } from "../layout/themes";
 import { TYPE_CHOICES } from "../types";
 import { getSettingListSize } from "../user_settings/functions";
-import NotificationBulkDeleteButton from "./NotificationBulkDeleteButton";
+import NotificationBulkMarkAsViewedButton from "./NotificationBulkMarkAsViewedButton";
+
+const messageShortened = (message: string | null) => {
+    if (message && message.length > 255) {
+        return message.substring(0, 255) + "...";
+    }
+    return message;
+};
 
 const listFilters = [
     <AutocompleteInput source="type" choices={TYPE_CHOICES} alwaysOn />,
@@ -36,11 +46,12 @@ const listFilters = [
     <ReferenceInput source="user" reference="users" sort={{ field: "full_name", order: "ASC" }} alwaysOn>
         <AutocompleteInputMedium optionText="full_name" />
     </ReferenceInput>,
+    <BooleanInput source="exclude_already_viewed" alwaysOn />,
 ];
 
 const BulkActionButtons = () => (
     <Fragment>
-        <NotificationBulkDeleteButton />
+        <NotificationBulkMarkAsViewedButton />
     </Fragment>
 );
 
@@ -58,6 +69,7 @@ const NotificationList = () => {
                 perPage={25}
                 pagination={<CustomPagination />}
                 filters={listFilters}
+                filterDefaultValues={{ exclude_already_viewed: true }}
                 sort={{ field: "created", order: "DESC" }}
                 disableSyncWithLocation={false}
                 storeKey="notifications.list"
@@ -71,11 +83,17 @@ const NotificationList = () => {
                     <TextField source="type" />
                     <TextField source="name" />
                     <DateField source="created" showTime={true} />
-                    <TextField source="message" sx={{ wordBreak: "break-word" }} />
+                    <FunctionField
+                        label="Message"
+                        render={(record) => messageShortened(record.message)}
+                        sortable={false}
+                        sx={{ wordBreak: "break-word" }}
+                    />
                     <TextField source="function" />
                     <TextField source="product_name" label="Product" />
                     <TextField source="observation_title" label="Observation" />
                     <TextField source="user_full_name" label="User" />
+                    <ChipField source="new_viewed" label="Status" sortable={false} />
                 </DatagridConfigurable>
             </List>
         </Fragment>

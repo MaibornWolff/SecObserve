@@ -1,22 +1,35 @@
 import logging
 from dataclasses import dataclass
+from datetime import datetime
 from json import dumps
 from typing import Optional
 
 from packageurl import PackageURL
-from semver import Version
 
 from application.core.models import Branch, Observation, Product
 from application.import_observations.parsers.base_parser import BaseParser
 from application.import_observations.services.osv_cache import get_osv_vulnerability
-from application.import_observations.types import OSV_Component, Parser_Type
+from application.import_observations.types import ExtendedSemVer, Parser_Type
 from application.licenses.models import License_Component
 
 logger = logging.getLogger("secobserve.import_observations")
 
 
+@dataclass(frozen=True)
+class OSV_Vulnerability:
+    id: str
+    modified: datetime
+
+
+@dataclass
+class OSV_Component:
+    license_component: License_Component
+    vulnerabilities: set[OSV_Vulnerability]
+
+
 @dataclass
 class Event:
+    type: str
     introduced: str
     fixed: str
 
@@ -54,23 +67,17 @@ class OSVParser(BaseParser):
         observations = []
 
         for osv_component in data:
-            for vulnerability in osv_component.vulnerabilities:
-                license_component = License_Component.objects.filter(
-                    component_purl=osv_component.component_purl
-                ).first()
+            ordered_vulnerabilities = sorted(
+                osv_component.vulnerabilities, key=lambda x: x.id
+            )
+
+            for vulnerability in ordered_vulnerabilities:
                 osv_vulnerability = get_osv_vulnerability(
                     osv_id=vulnerability.id, modified=vulnerability.modified
                 )
 
                 if osv_vulnerability is None:
                     logger.warning("OSV vulnerability %s not found", vulnerability.id)
-                    continue
-
-                if license_component is None:
-                    logger.warning(
-                        "Licencse component for PURL %s not found",
-                        osv_component.component_purl,
-                    )
                     continue
 
                 if osv_vulnerability.get("withdrawn"):
@@ -82,20 +89,29 @@ class OSVParser(BaseParser):
                 osv_cvss3_vector, osv_cvss4_vector = self._get_cvss(osv_vulnerability)
 
                 affected = self._get_affected(
-                    osv_component.component_purl, osv_vulnerability, product, branch
+                    osv_component.license_component.component_purl,
+                    osv_vulnerability,
+                    product,
+                    branch,
                 )
 
                 component_in_versions = None
                 component_in_ranges = None
                 recommendation = ""
+                events = []
 
                 for affected_item in affected:
                     component_in_versions = self._is_version_in_affected(
-                        license_component.component_version, affected_item
+                        osv_component.license_component.component_version, affected_item
                     )
-                    component_in_ranges, fixed_version = self._is_version_in_ranges(
-                        license_component.component_version, affected_item
+                    component_in_ranges, fixed_version, affected_events = (
+                        self._is_version_in_ranges(
+                            osv_component.license_component.component_version,
+                            affected_item,
+                        )
                     )
+
+                    events.extend(affected_events)
 
                     if component_in_versions or component_in_ranges:
                         affected_cvss3_vector, affected_cvss4_vector = (
@@ -122,17 +138,18 @@ class OSVParser(BaseParser):
                             osv_vulnerability,
                             component_in_versions,
                             component_in_ranges,
+                            events,
                         ),
                         recommendation=recommendation,
                         cvss3_vector=osv_cvss3_vector,
                         cvss4_vector=osv_cvss4_vector,
                         vulnerability_id=vulnerability_id,
                         vulnerability_id_aliases=vulnerability_id_aliases,
-                        origin_component_name=license_component.component_name,
-                        origin_component_version=license_component.component_version,
-                        origin_component_purl=license_component.component_purl,
-                        origin_component_cpe=license_component.component_cpe,
-                        origin_component_dependencies=license_component.component_dependencies,
+                        origin_component_name=osv_component.license_component.component_name,
+                        origin_component_version=osv_component.license_component.component_version,
+                        origin_component_purl=osv_component.license_component.component_purl,
+                        origin_component_cpe=osv_component.license_component.component_cpe,
+                        origin_component_dependencies=osv_component.license_component.component_dependencies,
                     )
                     observations.append(observation)
 
@@ -166,6 +183,7 @@ class OSVParser(BaseParser):
         osv_vulnerability: dict,
         component_in_versions: Optional[bool],
         component_in_ranges: Optional[bool],
+        events: list[Event],
     ) -> str:
         osv_description_parts: list[str] = []
         if osv_vulnerability.get("summary"):
@@ -187,8 +205,13 @@ class OSVParser(BaseParser):
             )
         elif component_in_ranges is None:
             osv_description_parts.append(
-                "**Confidence: Low** (Not all ranges could be evaluated)"
+                "**Confidence: Low** (Events could not be evaluated)"
             )
+            osv_description_parts.append("**Events:**")
+            for event in events:
+                osv_description_parts.append(
+                    f"* {event.type}: Introduced: {event.introduced} - Fixed: {event.fixed}"
+                )
 
         return "\n\n".join(osv_description_parts)
 
@@ -230,6 +253,7 @@ class OSVParser(BaseParser):
         package_name = self._get_package_name(parsed_purl)
 
         package_osv_ecosystem = OSV_Non_Linux_Ecosystems.get(package_type)
+
         if (
             not package_osv_ecosystem
             and branch
@@ -241,6 +265,7 @@ class OSVParser(BaseParser):
             )
         if not package_osv_ecosystem and branch and branch.osv_linux_distribution:
             package_osv_ecosystem = branch.osv_linux_distribution
+
         if (
             not package_osv_ecosystem
             and product.osv_linux_distribution
@@ -297,76 +322,51 @@ class OSVParser(BaseParser):
 
     def _is_version_in_ranges(
         self, version: str, affected: dict
-    ) -> tuple[Optional[bool], Optional[str]]:
+    ) -> tuple[Optional[bool], Optional[str], list[Event]]:
         if not version:
-            return None, None
+            return None, None, []
 
-        version_semver = self._get_semver(version)
+        events = self._get_events(affected)
+
+        version_semver = ExtendedSemVer.parse(version)
         if not version_semver:
-            return None, None
+            return None, None, events
+
+        num_rejected_events = 0
+        for event in events:
+            if event.type in ("ECOSYSTEM", "SEMVER"):
+                introduced_semver = ExtendedSemVer.parse(event.introduced)
+                fixed_semver = ExtendedSemVer.parse(event.fixed)
+
+                if not introduced_semver:
+                    introduced_semver = ExtendedSemVer.parse("0.0.0")
+                if not fixed_semver:
+                    continue
+
+                if introduced_semver <= version_semver < fixed_semver:
+                    return True, event.fixed, events
+
+                num_rejected_events += 1
+
+        if num_rejected_events == len(events):
+            return False, None, events
+
+        return None, None, events
+
+    def _get_events(self, affected: dict) -> list[Event]:
+        events = []
 
         osv_ranges = affected.get("ranges", [])
-
-        num_ranges = len(osv_ranges)
-        num_rejected_ranges = 0
-
         for osv_range in osv_ranges:
-            if (
-                osv_range.get("type") == "ECOSYSTEM"
-                or osv_range.get("type") == "SEMVER"
-            ):
-                events = self._get_events(osv_range)
-                for event in events:
-                    introduced_semver = self._get_semver(event.introduced)
-                    fixed_semver = self._get_semver(event.fixed)
-
-                    if not introduced_semver:
-                        introduced_semver = Version.parse("0.0.0")
-                    if not fixed_semver:
-                        continue
-
-                    if introduced_semver <= version_semver < fixed_semver:
-                        return True, event.fixed
-
-                num_rejected_ranges += 1
-
-        if num_rejected_ranges == num_ranges:
-            return False, None
-
-        return None, None
-
-    def _get_events(self, osv_range: dict) -> list[Event]:
-        events = []
-        event = Event(introduced="", fixed="")
-        for osv_event in osv_range.get("events", []):
-            introduced = osv_event.get("introduced", "")
-            if introduced:
-                event.introduced = introduced
-            fixed = osv_event.get("fixed", "")
-            if fixed:
-                event.fixed = fixed
-            if event.introduced and event.fixed:
-                events.append(event)
-                event = Event(introduced="", fixed="")
+            event = Event(osv_range.get("type", ""), introduced="", fixed="")
+            for osv_event in osv_range.get("events", []):
+                introduced = osv_event.get("introduced", "")
+                if introduced:
+                    event.introduced = introduced
+                fixed = osv_event.get("fixed", "")
+                if fixed:
+                    event.fixed = fixed
+                if event.introduced and event.fixed:
+                    events.append(event)
+                    event = Event(osv_range.get("type", ""), introduced="", fixed="")
         return events
-
-    def _get_semver(self, version: Optional[str]) -> Optional[Version]:
-        if not version:
-            return None
-
-        if version == "0":
-            return Version.parse("0.0.0")
-
-        if len(version.split("-")) == 2:
-            prefix = version.split("-")[0]
-            if len(prefix.split(".")) == 2:
-                prefix = f"{prefix}.0"
-            version = f"{prefix}-{version.split('-')[1]}"
-
-        if len(version.split(".")) == 2:
-            version = f"{version}.0"
-
-        if not Version.is_valid(version):
-            return None
-
-        return Version.parse(version)

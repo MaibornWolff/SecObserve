@@ -347,6 +347,11 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                     </Labeled>
                 )}
             </Stack>
+            {product.osv_enabled && (
+                <Labeled>
+                    <BooleanField source="automatic_osv_scanning_enabled" label="Automatic OSV scanning enabled" />
+                </Labeled>
+            )}
         </Fragment>
     );
 };

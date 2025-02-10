@@ -1,4 +1,5 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 import { Fragment } from "react";
 import { BooleanField, EditButton, Labeled, NumberField, Show, TextField, TopToolbar, WithRecord } from "react-admin";
 
@@ -26,82 +27,86 @@ const SettingsShowComponent = () => {
                         <Typography variant="h6" sx={{ marginBottom: 1 }}>
                             Authentication
                         </Typography>
-                        <Stack spacing={2}>
-                            <Labeled label="JWT validity duration user (hours)">
-                                <NumberField source="jwt_validity_duration_user" />
-                            </Labeled>
-                            <Labeled label="JWT validity duration superuser (hours)">
-                                <NumberField source="jwt_validity_duration_superuser" />
-                            </Labeled>
-                            {settings.internal_users && (
-                                <Labeled label="Internal users">
-                                    <TextField source="internal_users" />
+                        <Grid container spacing={2} width={"100%"}>
+                            <Grid size={3}>
+                                <Labeled label="JWT validity duration user (hours)">
+                                    <NumberField source="jwt_validity_duration_user" />
                                 </Labeled>
-                            )}
-                        </Stack>
-                    </Paper>
-
-                    <Paper sx={{ marginBottom: 2, padding: 2 }}>
-                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                            Background tasks (restart needed)
-                        </Typography>
-                        <Stack spacing={2}>
-                            <Labeled label="Product metrics interval (minutes)">
-                                <NumberField source="background_product_metrics_interval_minutes" />
+                            </Grid>
+                            <Grid size={3}>
+                                <Labeled label="JWT validity duration superuser (hours)">
+                                    <NumberField source="jwt_validity_duration_superuser" />
+                                </Labeled>
+                            </Grid>
+                            <Grid size={6} />
+                        </Grid>
+                        {settings.internal_users && (
+                            <Labeled label="Internal users">
+                                <TextField source="internal_users" />
                             </Labeled>
-                            <Stack direction="row" spacing={2}>
-                                <Labeled label="EPSS import crontab (hour/UTC)">
-                                    <NumberField source="background_epss_import_crontab_hour" />
-                                </Labeled>
-                                <Labeled label="EPSS import crontab (minutes)">
-                                    <NumberField source="background_epss_import_crontab_minute" />
-                                </Labeled>
-                            </Stack>
-                        </Stack>
+                        )}
                     </Paper>
 
                     <Paper sx={{ marginBottom: 2, padding: 2 }}>
                         <Typography variant="h6" sx={{ marginBottom: 1 }}>
                             Features
                         </Typography>
-                        <Stack spacing={2}>
-                            <Labeled label="VEX">
-                                <BooleanField source="feature_vex" />
-                            </Labeled>
-                            <Labeled label="Disable user login">
-                                <BooleanField source="feature_disable_user_login" />
-                            </Labeled>
-                            <Labeled label="General rules need approval">
-                                <BooleanField source="feature_general_rules_need_approval" />
-                            </Labeled>
-                        </Stack>
+                        <Grid container spacing={2} width={"100%"} sx={{ marginBottom: 2 }}>
+                            <Grid size={3}>
+                                <Stack spacing={2}>
+                                    <Labeled label="VEX">
+                                        <BooleanField source="feature_vex" />
+                                    </Labeled>
+                                    <Labeled label="Disable user login">
+                                        <BooleanField source="feature_disable_user_login" />
+                                    </Labeled>
+                                    <Labeled label="General rules need approval">
+                                        <BooleanField source="feature_general_rules_need_approval" />
+                                    </Labeled>
+                                </Stack>
+                            </Grid>
+                            <Grid size={3}>
+                                <Stack spacing={2}>
+                                    <Labeled label="Enable automatic API imports">
+                                        <BooleanField source="feature_automatic_api_import" />
+                                    </Labeled>
+                                    <Labeled label="Enable automatic OSV scanning">
+                                        <BooleanField source="feature_automatic_osv_scanning" />
+                                    </Labeled>
+                                    <Labeled label="Enable license management">
+                                        <BooleanField source="feature_license_management" />
+                                    </Labeled>
+                                </Stack>
+                            </Grid>
+                        </Grid>
+                        <Labeled label="Risk acceptance expiry (days)">
+                            <NumberField source="risk_acceptance_expiry_days" />
+                        </Labeled>
                     </Paper>
 
                     <Paper sx={{ marginBottom: 2, padding: 2 }}>
                         <Typography variant="h6" sx={{ marginBottom: 1 }}>
                             Housekeeping for branches
                         </Typography>
-                        <Stack spacing={2}>
-                            <Stack direction="row" spacing={2}>
-                                <Labeled label="Branch housekeeping crontab (hour/UTC)">
-                                    <NumberField source="branch_housekeeping_crontab_hour" />
-                                </Labeled>
-                                <Labeled label="Branch housekeeping crontab (minute)">
-                                    <NumberField source="branch_housekeeping_crontab_minute" />
-                                </Labeled>
-                            </Stack>
-                            <Labeled label="Branch housekeeping active">
-                                <BooleanField source="branch_housekeeping_active" />
-                            </Labeled>
-                            <Labeled label="Branch housekeeping keep inactive (days)">
-                                <NumberField source="branch_housekeeping_keep_inactive_days" />
-                            </Labeled>
-                            {settings.branch_housekeeping_exempt_branches && (
-                                <Labeled label="Branch housekeeping exempt branches">
-                                    <TextField source="branch_housekeeping_exempt_branches" />
-                                </Labeled>
-                            )}
-                        </Stack>
+                        <Labeled label="Branch housekeeping active">
+                            <BooleanField source="branch_housekeeping_active" sx={{ marginBottom: 1 }} />
+                        </Labeled>
+                        {settings.branch_housekeeping_active && (
+                            <Grid container spacing={2} width={"100%"}>
+                                <Grid size={3}>
+                                    <Labeled label="Branch housekeeping keep inactive (days)">
+                                        <NumberField source="branch_housekeeping_keep_inactive_days" />
+                                    </Labeled>
+                                </Grid>
+                                <Grid size={3}>
+                                    {settings.branch_housekeeping_exempt_branches && (
+                                        <Labeled label="Branch housekeeping exempt branches">
+                                            <TextField source="branch_housekeeping_exempt_branches" />
+                                        </Labeled>
+                                    )}
+                                </Grid>
+                            </Grid>
+                        )}
                     </Paper>
 
                     <Paper sx={{ marginBottom: 2, padding: 2 }}>
@@ -144,114 +149,129 @@ const SettingsShowComponent = () => {
                         <Typography variant="h6" sx={{ marginBottom: 1 }}>
                             Security gates
                         </Typography>
-                        <Stack spacing={2}>
-                            <Labeled label="Security gates active">
-                                <BooleanField source="security_gate_active" />
-                            </Labeled>
-                            {settings.security_gate_active && (
-                                <Fragment>
-                                    <Labeled label="Threshold critical">
-                                        <NumberField source="security_gate_threshold_critical" />
-                                    </Labeled>
-                                    <Labeled label="Threshold high">
-                                        <NumberField source="security_gate_threshold_high" />
-                                    </Labeled>
-                                    <Labeled label="Threshold medium">
-                                        <NumberField source="security_gate_threshold_medium" />
-                                    </Labeled>
-                                    <Labeled label="Threshold low">
-                                        <NumberField source="security_gate_threshold_low" />
-                                    </Labeled>
-                                    <Labeled label="Threshold none">
-                                        <NumberField source="security_gate_threshold_none" />
-                                    </Labeled>
-                                    <Labeled label="Threshold unknown">
-                                        <NumberField source="security_gate_threshold_unknown" />
-                                    </Labeled>
-                                </Fragment>
-                            )}
-                        </Stack>
-                    </Paper>
-
-                    <Paper sx={{ marginBottom: 2, padding: 2 }}>
-                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                            Risk acceptance expiry
-                        </Typography>
-                        <Stack spacing={2}>
-                            <Labeled label="Risk acceptance expiry (days)">
-                                <NumberField source="risk_acceptance_expiry_days" />
-                            </Labeled>
-                            <Stack direction="row" spacing={2}>
-                                <Labeled label="Risk acceptance expiry crontab (hour/UTC)">
-                                    <NumberField source="risk_acceptance_expiry_crontab_hour" />
-                                </Labeled>
-                                <Labeled label="Risk acceptance expiry crontab (minute)">
-                                    <NumberField source="risk_acceptance_expiry_crontab_minute" />
-                                </Labeled>
-                            </Stack>
-                        </Stack>
-                    </Paper>
-
-                    <Paper sx={{ marginBottom: 2, padding: 2 }}>
-                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                            Automatic API import
-                        </Typography>
-                        <Stack spacing={2}>
-                            <Labeled label="Enable automatic API imports">
-                                <BooleanField source="feature_automatic_api_import" />
-                            </Labeled>
-                            {settings.feature_automatic_api_import && (
-                                <Stack direction="row" spacing={2}>
-                                    <Labeled label="API import crontab (hour/UTC)">
-                                        <NumberField source="api_import_crontab_hour" />
-                                    </Labeled>
-                                    <Labeled label="API import crontab (minute)">
-                                        <NumberField source="api_import_crontab_minute" />
-                                    </Labeled>
-                                </Stack>
-                            )}
-                        </Stack>
+                        <Labeled label="Security gates active" sx={{ marginBottom: 2 }}>
+                            <BooleanField source="security_gate_active" />
+                        </Labeled>
+                        {settings.security_gate_active && (
+                            <Grid container spacing={2} width={"100%"}>
+                                <Grid size={3}>
+                                    <Stack spacing={2}>
+                                        <Labeled label="Threshold critical">
+                                            <NumberField source="security_gate_threshold_critical" />
+                                        </Labeled>
+                                        <Labeled label="Threshold high">
+                                            <NumberField source="security_gate_threshold_high" />
+                                        </Labeled>
+                                        <Labeled label="Threshold medium">
+                                            <NumberField source="security_gate_threshold_medium" />
+                                        </Labeled>
+                                    </Stack>
+                                </Grid>
+                                <Grid size={3}>
+                                    <Stack spacing={2}>
+                                        <Labeled label="Threshold low">
+                                            <NumberField source="security_gate_threshold_low" />
+                                        </Labeled>
+                                        <Labeled label="Threshold none">
+                                            <NumberField source="security_gate_threshold_none" />
+                                        </Labeled>
+                                        <Labeled label="Threshold unknown">
+                                            <NumberField source="security_gate_threshold_unknown" />
+                                        </Labeled>
+                                    </Stack>
+                                </Grid>
+                            </Grid>
+                        )}
                     </Paper>
 
                     <Paper sx={{ marginBottom: 2, padding: 2 }}>
                         <Typography variant="h6" sx={{ marginBottom: 1 }}>
                             Password validation for non-OIDC users
                         </Typography>
-                        <Stack spacing={2}>
-                            <Labeled label="Minimum length">
-                                <NumberField source="password_validator_minimum_length" />
-                            </Labeled>
-                            <Labeled label="Attribute similarity">
-                                <BooleanField source="password_validator_attribute_similarity" />
-                            </Labeled>
-                            <Labeled label="Common passwords">
-                                <BooleanField source="password_validator_common_passwords" />
-                            </Labeled>
-                            <Labeled label="Not entirely numeric">
-                                <BooleanField source="password_validator_not_numeric" />
-                            </Labeled>
-                        </Stack>
+
+                        <Grid container spacing={2} width={"100%"}>
+                            <Grid size={3}>
+                                <Stack spacing={2}>
+                                    <Labeled label="Minimum length">
+                                        <NumberField source="password_validator_minimum_length" />
+                                    </Labeled>
+                                    <Labeled label="Attribute similarity">
+                                        <BooleanField source="password_validator_attribute_similarity" />
+                                    </Labeled>
+                                </Stack>
+                            </Grid>
+                            <Grid size={3}>
+                                <Stack spacing={2}>
+                                    <Labeled label="Common passwords">
+                                        <BooleanField source="password_validator_common_passwords" />
+                                    </Labeled>
+                                    <Labeled label="Not entirely numeric">
+                                        <BooleanField source="password_validator_not_numeric" />
+                                    </Labeled>
+                                </Stack>
+                            </Grid>
+                        </Grid>
                     </Paper>
 
                     <Paper sx={{ marginBottom: 2, padding: 2 }}>
                         <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                            License management
+                            Background tasks
                         </Typography>
-                        <Stack spacing={2}>
-                            <Labeled label="Enable license management">
-                                <BooleanField source="feature_license_management" />
-                            </Labeled>
-                            {settings.feature_license_management && (
-                                <Stack direction="row" spacing={2}>
-                                    <Labeled label="License import crontab (hour/UTC)">
-                                        <NumberField source="license_import_crontab_hour" />
+
+                        <Labeled label="Product metrics interval (minutes)" sx={{ marginBottom: 2 }}>
+                            <NumberField source="background_product_metrics_interval_minutes" />
+                        </Labeled>
+
+                        <Grid container spacing={2} width={"100%"}>
+                            <Grid size={3}>
+                                <Stack spacing={2}>
+                                    <Labeled label="Risk acceptance expiry crontab (hour/UTC)">
+                                        <NumberField source="risk_acceptance_expiry_crontab_hour" />
                                     </Labeled>
-                                    <Labeled label="License import crontab (minute)">
-                                        <NumberField source="license_import_crontab_minute" />
+                                    {settings.feature_license_management && (
+                                        <Labeled label="License import crontab (hour/UTC)">
+                                            <NumberField source="license_import_crontab_hour" />
+                                        </Labeled>
+                                    )}
+                                    <Labeled label="Branch housekeeping crontab (hour/UTC)">
+                                        <NumberField source="branch_housekeeping_crontab_hour" />
                                     </Labeled>
+                                    <Labeled label="EPSS import crontab (hour/UTC)">
+                                        <NumberField source="background_epss_import_crontab_hour" />
+                                    </Labeled>
+                                    {(settings.feature_automatic_api_import ||
+                                        settings.feature_automatic_osv_scanning) && (
+                                        <Labeled label="API import and OSV scanning crontab (hour/UTC)">
+                                            <NumberField source="api_import_crontab_hour" />
+                                        </Labeled>
+                                    )}
                                 </Stack>
-                            )}
-                        </Stack>
+                            </Grid>
+                            <Grid size={3}>
+                                <Stack spacing={2}>
+                                    <Labeled label="Risk acceptance expiry crontab (minute)">
+                                        <NumberField source="risk_acceptance_expiry_crontab_minute" />
+                                    </Labeled>
+                                    {settings.feature_license_management && (
+                                        <Labeled label="License import crontab (minute)">
+                                            <NumberField source="license_import_crontab_minute" />
+                                        </Labeled>
+                                    )}
+                                    <Labeled label="Branch housekeeping crontab (minute)">
+                                        <NumberField source="branch_housekeeping_crontab_minute" />
+                                    </Labeled>
+                                    <Labeled label="EPSS import crontab (minutes)">
+                                        <NumberField source="background_epss_import_crontab_minute" />
+                                    </Labeled>
+                                    {(settings.feature_automatic_api_import ||
+                                        settings.feature_automatic_osv_scanning) && (
+                                        <Labeled label="API import and OSV scanning crontab (minute)">
+                                            <NumberField source="api_import_crontab_minute" />
+                                        </Labeled>
+                                    )}
+                                </Stack>
+                            </Grid>
+                        </Grid>
                     </Paper>
                 </Box>
             )}

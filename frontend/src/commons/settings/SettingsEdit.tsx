@@ -1,4 +1,5 @@
 import { Divider, Stack, Typography } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 import { Fragment } from "react";
 import { BooleanInput, Edit, FormDataConsumer, NumberInput, SaveButton, SimpleForm, Toolbar } from "react-admin";
 
@@ -11,7 +12,7 @@ import {
     validate_255,
 } from "../../commons/custom_validators";
 import ListHeader from "../../commons/layout/ListHeader";
-import { TextInputWide } from "../../commons/layout/themes";
+import { TextInputExtraWide, TextInputWide } from "../../commons/layout/themes";
 
 const CustomToolbar = () => {
     return (
@@ -55,25 +56,31 @@ const SettingsEdit = () => {
                     <Typography variant="h6" sx={{ marginBottom: 2 }}>
                         Authentication
                     </Typography>
-                    <NumberInput
-                        autoFocus
-                        source="jwt_validity_duration_user"
-                        label="JWT validity duration user (hours)"
-                        min={0}
-                        step={1}
-                        validate={validate_0_999999}
-                        helperText="Validity duration of JWT tokens for regular users in hours"
-                        sx={{ marginBottom: 2 }}
-                    />
-                    <NumberInput
-                        source="jwt_validity_duration_superuser"
-                        label="JWT validity duration superuser (hours)"
-                        min={0}
-                        step={1}
-                        validate={validate_0_999999}
-                        helperText="Validity duration of JWT tokens for superusers in hours"
-                        sx={{ marginBottom: 2 }}
-                    />
+                    <Grid container spacing={2} width={"100%"}>
+                        <Grid size={3}>
+                            <NumberInput
+                                autoFocus
+                                source="jwt_validity_duration_user"
+                                label="JWT validity duration user (hours)"
+                                min={0}
+                                step={1}
+                                validate={validate_0_999999}
+                                helperText="Validity duration of JWT tokens for regular users in hours"
+                                sx={{ marginBottom: 2 }}
+                            />
+                        </Grid>
+                        <Grid size={3}>
+                            <NumberInput
+                                source="jwt_validity_duration_superuser"
+                                label="JWT validity duration superuser (hours)"
+                                min={0}
+                                step={1}
+                                validate={validate_0_999999}
+                                helperText="Validity duration of JWT tokens for superusers in hours"
+                                sx={{ marginBottom: 2 }}
+                            />
+                        </Grid>
+                    </Grid>
                     <TextInputWide
                         source="internal_users"
                         label="Internal users"
@@ -84,55 +91,48 @@ const SettingsEdit = () => {
 
                     <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
                     <Typography variant="h6" sx={{ marginBottom: 2 }}>
-                        Background tasks (restart needed)
+                        Features
                     </Typography>
+                    <Grid container spacing={2} width={"100%"}>
+                        <Grid size={3}>
+                            <Stack spacing={2}>
+                                <BooleanInput
+                                    source="feature_vex"
+                                    label="VEX"
+                                    helperText="Generate VEX documents in OpenVEX and CSAF format"
+                                />
+                                <BooleanInput
+                                    source="feature_disable_user_login"
+                                    label="Disable user login"
+                                    helperText="Do not show user and password fields if OIDC login is enabled"
+                                />
+                                <BooleanInput
+                                    source="feature_general_rules_need_approval"
+                                    label="General rules need approval"
+                                />
+                            </Stack>
+                        </Grid>
+                        <Grid size={3}>
+                            <Stack spacing={2}>
+                                <BooleanInput
+                                    source="feature_automatic_api_import"
+                                    label="Enable automatic API imports"
+                                />
+                                <BooleanInput
+                                    source="feature_automatic_osv_scanning"
+                                    label="Enable automatic OSV scanning"
+                                />
+                                <BooleanInput source="feature_license_management" label="Enable license management" />
+                            </Stack>
+                        </Grid>
+                    </Grid>
                     <NumberInput
-                        source="background_product_metrics_interval_minutes"
-                        label="Product metrics interval (minutes)"
+                        source="risk_acceptance_expiry_days"
+                        label="Risk acceptance expiry (days)"
                         min={0}
                         step={1}
                         validate={validate_0_999999}
-                        helperText="Calculate product metrics every x minutes"
-                        sx={{ marginBottom: 2 }}
-                    />
-                    <Stack direction="row" spacing={2}>
-                        <NumberInput
-                            source="background_epss_import_crontab_hour"
-                            label="EPSS import crontab (hour)"
-                            min={0}
-                            step={1}
-                            validate={validate_0_23}
-                            helperText="Hour crontab expression for EPSS import (UTC)"
-                            sx={{ marginBottom: 2 }}
-                        />
-                        <NumberInput
-                            source="background_epss_import_crontab_minute"
-                            label="EPSS import crontab (minute)"
-                            min={0}
-                            step={1}
-                            validate={validate_0_59}
-                            helperText="Minute crontab expression for EPSS import"
-                            sx={{ marginBottom: 2 }}
-                        />
-                    </Stack>
-
-                    <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
-                    <Typography variant="h6" sx={{ marginBottom: 2 }}>
-                        Features
-                    </Typography>
-                    <BooleanInput
-                        source="feature_vex"
-                        label="VEX"
-                        helperText="Generate VEX documents in OpenVEX and CSAF format"
-                    />
-                    <BooleanInput
-                        source="feature_disable_user_login"
-                        label="Disable user login"
-                        helperText="Do not show user and password fields if OIDC login is enabled"
-                    />
-                    <BooleanInput
-                        source="feature_general_rules_need_approval"
-                        label="General rules need approval"
+                        helperText="Days before risk acceptance expires, 0 means no expiry"
                         sx={{ marginBottom: 2 }}
                     />
 
@@ -140,48 +140,41 @@ const SettingsEdit = () => {
                     <Typography variant="h6" sx={{ marginBottom: 2 }}>
                         Housekeeping for branches
                     </Typography>
-                    <Stack direction="row" spacing={2}>
-                        <NumberInput
-                            source="branch_housekeeping_crontab_hour"
-                            label="Branch housekeeping crontab (hour)"
-                            min={0}
-                            step={1}
-                            validate={validate_0_23}
-                            helperText="Hour crontab expression for branch housekeeping (UTC)"
-                            sx={{ marginBottom: 2 }}
-                        />
-                        <NumberInput
-                            source="branch_housekeeping_crontab_minute"
-                            label="Branch housekeeping crontab (minute)"
-                            min={0}
-                            step={1}
-                            validate={validate_0_59}
-                            helperText="Minute crontab expression for branch housekeeping"
-                            sx={{ marginBottom: 2 }}
-                        />
-                    </Stack>
+
                     <BooleanInput
                         source="branch_housekeeping_active"
                         label="Branch housekeeping active"
                         helperText="Delete inactive branches"
                         sx={{ marginBottom: 2 }}
                     />
-                    <NumberInput
-                        source="branch_housekeeping_keep_inactive_days"
-                        label="Branch housekeeping keep inactive (days)"
-                        min={0}
-                        step={1}
-                        validate={validate_0_999999}
-                        helperText="Days before incative branches and their observations are deleted"
-                        sx={{ marginBottom: 2 }}
-                    />
-                    <TextInputWide
-                        source="branch_housekeeping_exempt_branches"
-                        label="Branch housekeeping exempt branches"
-                        validate={validate_255}
-                        helperText="Regular expression which branches to exempt from deletion"
-                        sx={{ marginBottom: 2 }}
-                    />
+                    <FormDataConsumer>
+                        {({ formData }) =>
+                            formData.branch_housekeeping_active && (
+                                <Grid container spacing={2} width={"100%"}>
+                                    <Grid size={3}>
+                                        <NumberInput
+                                            source="branch_housekeeping_keep_inactive_days"
+                                            label="Branch housekeeping keep inactive (days)"
+                                            min={0}
+                                            step={1}
+                                            validate={validate_0_999999}
+                                            helperText="Days before incative branches and their observations are deleted"
+                                            sx={{ marginBottom: 2 }}
+                                        />
+                                    </Grid>
+                                    <Grid size={3}>
+                                        <TextInputWide
+                                            source="branch_housekeeping_exempt_branches"
+                                            label="Branch housekeeping exempt branches"
+                                            validate={validate_255}
+                                            helperText="Regular expression which branches to exempt from deletion"
+                                            sx={{ marginBottom: 2 }}
+                                        />
+                                    </Grid>
+                                </Grid>
+                            )
+                        }
+                    </FormDataConsumer>
 
                     <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
                     <Typography variant="h6" sx={{ marginBottom: 2 }}>
@@ -201,21 +194,21 @@ const SettingsEdit = () => {
                         helperText="From address for sending email notifications"
                         sx={{ marginBottom: 2 }}
                     />
-                    <TextInputWide
+                    <TextInputExtraWide
                         source="exception_email_to"
                         label="Exception email to"
                         validate={validate_255}
                         helperText="Comma separated email addresses to send exception notifications"
                         sx={{ marginBottom: 2 }}
                     />
-                    <TextInputWide
+                    <TextInputExtraWide
                         source="exception_ms_teams_webhook"
                         label="Exception MS Teams webhook"
                         validate={validate_255}
                         helperText="MS Teams webhook to send exception notifications"
                         sx={{ marginBottom: 2 }}
                     />
-                    <TextInputWide
+                    <TextInputExtraWide
                         source="exception_slack_webhook"
                         label="Exception Slack webhook"
                         validate={validate_255}
@@ -245,124 +238,70 @@ const SettingsEdit = () => {
                     <FormDataConsumer>
                         {({ formData }) =>
                             formData.security_gate_active && (
-                                <Fragment>
-                                    <NumberInput
-                                        source="security_gate_threshold_critical"
-                                        label="Threshold critical"
-                                        min={0}
-                                        step={1}
-                                        validate={validate_0_999999}
-                                        helperText="Number of critical observations that must not be exceeded"
-                                        sx={{ marginBottom: 2 }}
-                                    />
-                                    <NumberInput
-                                        source="security_gate_threshold_high"
-                                        label="Threshold high"
-                                        min={0}
-                                        step={1}
-                                        validate={validate_0_999999}
-                                        helperText="Number of high observations that must not be exceeded"
-                                        sx={{ marginBottom: 2 }}
-                                    />
-                                    <NumberInput
-                                        source="security_gate_threshold_medium"
-                                        label="Threshold medium"
-                                        min={0}
-                                        step={1}
-                                        validate={validate_0_999999}
-                                        helperText="Number of medium observations that must not be exceeded"
-                                        sx={{ marginBottom: 2 }}
-                                    />
-                                    <NumberInput
-                                        source="security_gate_threshold_low"
-                                        label="Threshold low"
-                                        min={0}
-                                        step={1}
-                                        validate={validate_0_999999}
-                                        helperText="Number of low observations that must not be exceeded"
-                                        sx={{ marginBottom: 2 }}
-                                    />
-                                    <NumberInput
-                                        source="security_gate_threshold_none"
-                                        label="Threshold none"
-                                        min={0}
-                                        step={1}
-                                        validate={validate_0_999999}
-                                        helperText="Number of none observations that must not be exceeded"
-                                        sx={{ marginBottom: 2 }}
-                                    />
-                                    <NumberInput
-                                        source="security_gate_threshold_unknown"
-                                        label="Threshold unknown"
-                                        min={0}
-                                        step={1}
-                                        validate={validate_0_999999}
-                                        helperText="Number of unknown observations that must not be exceeded"
-                                        sx={{ marginBottom: 2 }}
-                                    />
-                                </Fragment>
-                            )
-                        }
-                    </FormDataConsumer>
-
-                    <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
-                    <Typography variant="h6" sx={{ marginBottom: 2 }}>
-                        Risk acceptance expiry
-                    </Typography>
-                    <NumberInput
-                        source="risk_acceptance_expiry_days"
-                        label="Risk acceptance expiry (days)"
-                        min={0}
-                        step={1}
-                        validate={validate_0_999999}
-                        helperText="Days before risk acceptance expires, 0 means no expiry"
-                        sx={{ marginBottom: 2 }}
-                    />
-                    <Stack direction="row" spacing={2} sx={{ marginBottom: 1 }}>
-                        <NumberInput
-                            source="risk_acceptance_expiry_crontab_hour"
-                            label="Risk acceptance expiry crontab (hour)"
-                            min={0}
-                            step={1}
-                            validate={validate_0_23}
-                            helperText="Hour crontab expression for checking risk acceptance expiry (UTC)"
-                        />
-                        <NumberInput
-                            source="risk_acceptance_expiry_crontab_minute"
-                            label="Risk acceptance expiry crontab (minute)"
-                            min={0}
-                            step={1}
-                            validate={validate_0_59}
-                            helperText="Minute crontab expression for checking risk acceptance expiry"
-                        />
-                    </Stack>
-
-                    <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
-                    <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                        Automatic API import
-                    </Typography>
-                    <BooleanInput source="feature_automatic_api_import" label="Enable automatic API imports" />
-                    <FormDataConsumer>
-                        {({ formData }) =>
-                            formData.feature_automatic_api_import && (
-                                <Stack direction="row" spacing={2} sx={{ marginBottom: 1 }}>
-                                    <NumberInput
-                                        source="api_import_crontab_hour"
-                                        label="API import crontab (hour)"
-                                        min={0}
-                                        step={1}
-                                        validate={validate_0_23}
-                                        helperText="Hour crontab expression for API imports (UTC)"
-                                    />
-                                    <NumberInput
-                                        source="api_import_crontab_minute"
-                                        label="API import crontab (minute)"
-                                        min={0}
-                                        step={1}
-                                        validate={validate_0_59}
-                                        helperText="Minute crontab expression for API imports"
-                                    />
-                                </Stack>
+                                <Grid container spacing={2} width={"100%"}>
+                                    <Grid size={3}>
+                                        <Stack spacing={2}>
+                                            <NumberInput
+                                                source="security_gate_threshold_critical"
+                                                label="Threshold critical"
+                                                min={0}
+                                                step={1}
+                                                validate={validate_0_999999}
+                                                helperText="Number of critical observations that must not be exceeded"
+                                                sx={{ marginBottom: 2 }}
+                                            />
+                                            <NumberInput
+                                                source="security_gate_threshold_high"
+                                                label="Threshold high"
+                                                min={0}
+                                                step={1}
+                                                validate={validate_0_999999}
+                                                helperText="Number of high observations that must not be exceeded"
+                                                sx={{ marginBottom: 2 }}
+                                            />
+                                            <NumberInput
+                                                source="security_gate_threshold_medium"
+                                                label="Threshold medium"
+                                                min={0}
+                                                step={1}
+                                                validate={validate_0_999999}
+                                                helperText="Number of medium observations that must not be exceeded"
+                                                sx={{ marginBottom: 2 }}
+                                            />
+                                        </Stack>
+                                    </Grid>
+                                    <Grid size={3}>
+                                        <Stack spacing={2}>
+                                            <NumberInput
+                                                source="security_gate_threshold_low"
+                                                label="Threshold low"
+                                                min={0}
+                                                step={1}
+                                                validate={validate_0_999999}
+                                                helperText="Number of low observations that must not be exceeded"
+                                                sx={{ marginBottom: 2 }}
+                                            />
+                                            <NumberInput
+                                                source="security_gate_threshold_none"
+                                                label="Threshold none"
+                                                min={0}
+                                                step={1}
+                                                validate={validate_0_999999}
+                                                helperText="Number of none observations that must not be exceeded"
+                                                sx={{ marginBottom: 2 }}
+                                            />
+                                            <NumberInput
+                                                source="security_gate_threshold_unknown"
+                                                label="Threshold unknown"
+                                                min={0}
+                                                step={1}
+                                                validate={validate_0_999999}
+                                                helperText="Number of unknown observations that must not be exceeded"
+                                                sx={{ marginBottom: 2 }}
+                                            />
+                                        </Stack>
+                                    </Grid>
+                                </Grid>
                             )
                         }
                     </FormDataConsumer>
@@ -371,63 +310,179 @@ const SettingsEdit = () => {
                     <Typography variant="h6" sx={{ marginBottom: 2 }}>
                         Password validation for non-OIDC users
                     </Typography>
-                    <NumberInput
-                        source="password_validator_minimum_length"
-                        label="Minimum length"
-                        min={1}
-                        step={1}
-                        validate={validate_1_4096}
-                        helperText="Validates that the password is of a minimum length."
-                        sx={{ marginBottom: 1 }}
-                    />
-                    <BooleanInput
-                        source="password_validator_attribute_similarity"
-                        label="Attribute similarity"
-                        helperText="Validates that the password is sufficiently different from certain attributes of the user."
-                        sx={{ marginBottom: 1 }}
-                    />
-                    <BooleanInput
-                        source="password_validator_common_passwords"
-                        label="Common passwords"
-                        helperText="Validates that the password is not a common password."
-                        sx={{ marginBottom: 1 }}
-                    />
-                    <BooleanInput
-                        source="password_validator_not_numeric"
-                        label="Not entirely numeric"
-                        helperText="Validate that the password is not entirely numeric."
-                        sx={{ marginBottom: 1 }}
-                    />
+
+                    <Grid container spacing={2} width={"100%"}>
+                        <Grid size={3}>
+                            <Stack spacing={2}>
+                                <NumberInput
+                                    source="password_validator_minimum_length"
+                                    label="Minimum length"
+                                    min={1}
+                                    step={1}
+                                    validate={validate_1_4096}
+                                    helperText="Validates that the password is of a minimum length."
+                                    sx={{ marginBottom: 1 }}
+                                />
+                                <BooleanInput
+                                    source="password_validator_attribute_similarity"
+                                    label="Attribute similarity"
+                                    helperText="Validates that the password is sufficiently different from certain attributes of the user."
+                                    sx={{ marginBottom: 1 }}
+                                />
+                            </Stack>
+                        </Grid>
+                        <Grid size={3}>
+                            <Stack spacing={2}>
+                                <BooleanInput
+                                    source="password_validator_common_passwords"
+                                    label="Common passwords"
+                                    helperText="Validates that the password is not a common password."
+                                    sx={{ marginBottom: 1 }}
+                                />
+                                <BooleanInput
+                                    source="password_validator_not_numeric"
+                                    label="Not entirely numeric"
+                                    helperText="Validate that the password is not entirely numeric."
+                                    sx={{ marginBottom: 1 }}
+                                />
+                            </Stack>
+                        </Grid>
+                    </Grid>
 
                     <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
-                    <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                        License management
+                    <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                        Background tasks (restart needed)
                     </Typography>
-                    <BooleanInput source="feature_license_management" label="Enable license management" />
-                    <FormDataConsumer>
-                        {({ formData }) =>
-                            formData.feature_license_management && (
-                                <Stack direction="row" spacing={2} sx={{ marginBottom: 1 }}>
-                                    <NumberInput
-                                        source="license_import_crontab_hour"
-                                        label="License import crontab (hour)"
-                                        min={0}
-                                        step={1}
-                                        validate={validate_0_23}
-                                        helperText="Hour crontab expression for license imports (UTC)"
-                                    />
-                                    <NumberInput
-                                        source="license_import_crontab_minute"
-                                        label="License import crontab (minute)"
-                                        min={0}
-                                        step={1}
-                                        validate={validate_0_59}
-                                        helperText="Minute crontab expression for license imports"
-                                    />
-                                </Stack>
-                            )
-                        }
-                    </FormDataConsumer>
+
+                    <NumberInput
+                        source="background_product_metrics_interval_minutes"
+                        label="Product metrics interval (minutes)"
+                        min={0}
+                        step={1}
+                        validate={validate_0_999999}
+                        helperText="Calculate product metrics every x minutes"
+                        sx={{ marginBottom: 4 }}
+                    />
+
+                    <Grid container spacing={2} width={"100%"}>
+                        <Grid size={3}>
+                            <Stack spacing={2}>
+                                <NumberInput
+                                    source="risk_acceptance_expiry_crontab_hour"
+                                    label="Risk acceptance expiry crontab (hour)"
+                                    min={0}
+                                    step={1}
+                                    validate={validate_0_23}
+                                    // helperText="Hour crontab expression for checking risk acceptance expiry (UTC)"
+                                />
+
+                                <FormDataConsumer>
+                                    {({ formData }) =>
+                                        formData.feature_license_management && (
+                                            <NumberInput
+                                                source="license_import_crontab_hour"
+                                                label="License import crontab (hour)"
+                                                min={0}
+                                                step={1}
+                                                validate={validate_0_23}
+                                                // helperText="Hour crontab expression for license imports (UTC)"
+                                            />
+                                        )
+                                    }
+                                </FormDataConsumer>
+                                <NumberInput
+                                    source="branch_housekeeping_crontab_hour"
+                                    label="Branch housekeeping crontab (hour)"
+                                    min={0}
+                                    step={1}
+                                    validate={validate_0_23}
+                                    // helperText="Hour crontab expression for branch housekeeping (UTC)"
+                                />
+                                <NumberInput
+                                    source="background_epss_import_crontab_hour"
+                                    label="EPSS import crontab (hour)"
+                                    min={0}
+                                    step={1}
+                                    validate={validate_0_23}
+                                    // helperText="Hour crontab expression for EPSS import (UTC)"
+                                />
+                                <FormDataConsumer>
+                                    {({ formData }) =>
+                                        (formData.feature_automatic_api_import ||
+                                            formData.feature_automatic_osv_scanning) && (
+                                            <NumberInput
+                                                source="api_import_crontab_hour"
+                                                label="API import and OSV scanning crontab (hour)"
+                                                min={0}
+                                                step={1}
+                                                validate={validate_0_23}
+                                                // helperText="Hour crontab expression for API imports (UTC)"
+                                            />
+                                        )
+                                    }
+                                </FormDataConsumer>
+                            </Stack>
+                        </Grid>
+
+                        <Grid size={3}>
+                            <Stack spacing={2}>
+                                <NumberInput
+                                    source="risk_acceptance_expiry_crontab_minute"
+                                    label="Risk acceptance expiry crontab (minute)"
+                                    min={0}
+                                    step={1}
+                                    validate={validate_0_59}
+                                    // helperText="Minute crontab expression for checking risk acceptance expiry"
+                                />
+
+                                <FormDataConsumer>
+                                    {({ formData }) =>
+                                        formData.feature_license_management && (
+                                            <NumberInput
+                                                source="license_import_crontab_minute"
+                                                label="License import crontab (minute)"
+                                                min={0}
+                                                step={1}
+                                                validate={validate_0_59}
+                                                // helperText="Minute crontab expression for license imports"
+                                            />
+                                        )
+                                    }
+                                </FormDataConsumer>
+                                <NumberInput
+                                    source="branch_housekeeping_crontab_minute"
+                                    label="Branch housekeeping crontab (minute)"
+                                    min={0}
+                                    step={1}
+                                    validate={validate_0_59}
+                                    // helperText="Minute crontab expression for branch housekeeping"
+                                />
+                                <NumberInput
+                                    source="background_epss_import_crontab_minute"
+                                    label="EPSS import crontab (minute)"
+                                    min={0}
+                                    step={1}
+                                    validate={validate_0_59}
+                                    // helperText="Minute crontab expression for EPSS import"
+                                />
+                                <FormDataConsumer>
+                                    {({ formData }) =>
+                                        (formData.feature_automatic_api_import ||
+                                            formData.feature_automatic_osv_scanning) && (
+                                            <NumberInput
+                                                source="api_import_crontab_minute"
+                                                label="API import and OSV scanning crontab (minute)"
+                                                min={0}
+                                                step={1}
+                                                validate={validate_0_59}
+                                                // helperText="Minute crontab expression for API imports"
+                                            />
+                                        )
+                                    }
+                                </FormDataConsumer>
+                            </Stack>
+                        </Grid>
+                    </Grid>
                 </SimpleForm>
             </Edit>
         </Fragment>

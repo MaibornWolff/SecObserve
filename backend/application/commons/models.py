@@ -36,6 +36,11 @@ class Notification(Model):
     arguments = TextField(max_length=4096, blank=True)
 
 
+class Notification_Viewed(Model):
+    notification = ForeignKey(Notification, on_delete=CASCADE)
+    user = ForeignKey(User, on_delete=CASCADE)
+
+
 class Settings(Model):
     security_gate_active = BooleanField(
         default=True, help_text="Is the security gate activated?"
@@ -227,6 +232,9 @@ class Settings(Model):
         default=1,
         validators=[MinValueValidator(0), MaxValueValidator(23)],
         help_text="Hour crontab expression for importing licenses (UTC)",
+    )
+    feature_automatic_osv_scanning = BooleanField(
+        default=True, help_text="Enable automatic OSV scanning"
     )
 
     def save(self, *args, **kwargs):
