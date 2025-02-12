@@ -73,7 +73,7 @@ django-extensions = { version = "3.2.3", optional = true }  # https://github.com
 
 # Unittest dependencies
 # ------------------------------------------------------------------------------
-coverage = { version = "7.6.11", optional = true }  # https://github.com/nedbat/coveragepy
+coverage = { version = "7.6.12", optional = true }  # https://github.com/nedbat/coveragepy
 django-coverage-plugin = { version = "3.1.0", optional = true }  # https://github.com/nedbat/django_coverage_plugin
 
 # Code quality dependencies
