@@ -1,3 +1,6 @@
+from typing import Union
+
+from django.db.models.query import QuerySet
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import action
@@ -5,6 +8,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.filters import SearchFilter
 from rest_framework.mixins import DestroyModelMixin, ListModelMixin, RetrieveModelMixin
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.status import HTTP_204_NO_CONTENT, HTTP_404_NOT_FOUND
 from rest_framework.views import APIView
@@ -34,7 +38,7 @@ class VersionView(APIView):
     serializer_class = VersionSerializer
 
     @action(detail=True, methods=["get"], url_name="version")
-    def get(self, request):
+    def get(self, request: Request) -> Response:
         content = {
             "version": "version_unknown",
         }
@@ -47,7 +51,7 @@ class HealthView(APIView):
     serializer_class = None
 
     @action(detail=True, methods=["get"], url_name="health")
-    def get(self, request):
+    def get(self, request: Request) -> Response:
         response = Response()
         response["Cache-Control"] = "no-cache, no-store, must-revalidate"
 
@@ -59,7 +63,7 @@ class StatusSettingsView(APIView):
     permission_classes = []
 
     @action(detail=True, methods=["get"], url_name="settings")
-    def get(self, request):
+    def get(self, request: Request) -> Response:
         features = []
 
         settings = Settings.load()
@@ -79,7 +83,7 @@ class StatusSettingsView(APIView):
             if settings.feature_automatic_osv_scanning:
                 features.append("feature_automatic_osv_scanning")
 
-        content = {
+        content: dict[str, Union[int, list[str]]] = {
             "features": features,
         }
 
@@ -96,14 +100,18 @@ class SettingsView(APIView):
     permission_classes = (IsAuthenticated, UserHasSuperuserPermission)
 
     @action(detail=True, methods=["get"], url_name="settings")
-    def get(self, request, pk=None):  # pylint: disable=unused-argument
+    def get(
+        self, request: Request, pk: int = None  # pylint: disable=unused-argument
+    ) -> Response:
         # pk is needed for the API signature but we don't need it
         settings = Settings.load()
         response_serializer = SettingsSerializer(settings)
         return Response(response_serializer.data)
 
     @action(detail=True, methods=["patch"], url_name="settings")
-    def patch(self, request, pk=None):  # pylint: disable=unused-argument
+    def patch(
+        self, request: Request, pk: int = None  # pylint: disable=unused-argument
+    ) -> Response:
         # pk is needed for the API signature but we don't need it
         request_serializer = SettingsSerializer(data=request.data)
         if not request_serializer.is_valid():
@@ -126,7 +134,7 @@ class NotificationViewSet(
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["name"]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Notification]:
         return get_notifications()
 
     @extend_schema(
@@ -135,7 +143,7 @@ class NotificationViewSet(
         responses={HTTP_204_NO_CONTENT: None},
     )
     @action(detail=False, methods=["post"])
-    def bulk_mark_as_viewed(self, request):
+    def bulk_mark_as_viewed(self, request: Request) -> Response:
         request_serializer = NotificationBulkSerializer(data=request.data)
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
@@ -150,7 +158,7 @@ class NotificationViewSet(
         responses={HTTP_204_NO_CONTENT: None},
     )
     @action(detail=True, methods=["post"])
-    def mark_as_viewed(self, request, pk: int = None):
+    def mark_as_viewed(self, request: Request, pk: int = None) -> Response:
         if not get_notification_by_id(pk):
             return Response(status=HTTP_404_NOT_FOUND)
 

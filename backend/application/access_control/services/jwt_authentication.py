@@ -4,6 +4,7 @@ from typing import Optional
 import jwt
 from rest_framework.authentication import BaseAuthentication, get_authorization_header
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.request import Request
 
 from application.access_control.models import JWT_Secret, User
 from application.access_control.queries.user import get_user_by_username
@@ -32,7 +33,7 @@ def create_jwt(user: User) -> str:
 
 
 class JWTAuthentication(BaseAuthentication):
-    def authenticate(self, request):
+    def authenticate(self, request: Request) -> Optional[tuple[User, None]]:
         auth = get_authorization_header(request).split()
 
         if not auth:
@@ -62,7 +63,7 @@ class JWTAuthentication(BaseAuthentication):
 
         return (user, None)
 
-    def authenticate_header(self, request):
+    def authenticate_header(self, request: Request) -> str:
         return JWT_PREFIX
 
     def _validate_jwt(self, token: str) -> Optional[User]:

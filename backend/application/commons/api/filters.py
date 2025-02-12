@@ -1,4 +1,6 @@
-from django.db.models import Subquery
+from typing import Any
+
+from django.db.models import QuerySet, Subquery
 from django_filters import BooleanFilter, CharFilter, FilterSet, OrderingFilter
 
 from application.commons.models import Notification, Notification_Viewed
@@ -14,8 +16,11 @@ class NotificationFilter(FilterSet):
     )
 
     def get_exclude_already_viewed(
-        self, queryset, field_name, value
-    ):  # pylint: disable=unused-argument
+        self,
+        queryset: QuerySet,
+        name: Any,  # pylint: disable=unused-argument
+        value: Any,
+    ) -> QuerySet:
         # field_name is used as a positional argument
         user = get_current_user()
         if not user:

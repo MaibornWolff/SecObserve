@@ -204,7 +204,7 @@ STATICFILES_FINDERS = [
 ]
 
 
-def whitenoise_security_headers(headers, path, url):
+def whitenoise_security_headers(headers: dict, path: str, url: str) -> None:
     headers["Permissions-Policy"] = "geolocation=() camera=(), microphone=()"
 
 

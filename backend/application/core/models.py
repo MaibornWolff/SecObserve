@@ -1,4 +1,5 @@
 from decimal import Decimal
+from typing import Any
 
 from django.apps import apps
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -158,7 +159,7 @@ class Product(Model):
             Index(fields=["name"]),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -185,11 +186,11 @@ class Branch(Model):
             Index(fields=["name"]),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     @property
-    def open_critical_observation_count(self):
+    def open_critical_observation_count(self) -> int:
         return Observation.objects.filter(
             branch=self,
             current_severity=Severity.SEVERITY_CRITICAL,
@@ -197,7 +198,7 @@ class Branch(Model):
         ).count()
 
     @property
-    def open_high_observation_count(self):
+    def open_high_observation_count(self) -> int:
         return Observation.objects.filter(
             branch=self,
             current_severity=Severity.SEVERITY_HIGH,
@@ -205,7 +206,7 @@ class Branch(Model):
         ).count()
 
     @property
-    def open_medium_observation_count(self):
+    def open_medium_observation_count(self) -> int:
         return Observation.objects.filter(
             branch=self,
             current_severity=Severity.SEVERITY_MEDIUM,
@@ -213,7 +214,7 @@ class Branch(Model):
         ).count()
 
     @property
-    def open_low_observation_count(self):
+    def open_low_observation_count(self) -> int:
         return Observation.objects.filter(
             branch=self,
             current_severity=Severity.SEVERITY_LOW,
@@ -221,7 +222,7 @@ class Branch(Model):
         ).count()
 
     @property
-    def open_none_observation_count(self):
+    def open_none_observation_count(self) -> int:
         return Observation.objects.filter(
             branch=self,
             current_severity=Severity.SEVERITY_NONE,
@@ -229,7 +230,7 @@ class Branch(Model):
         ).count()
 
     @property
-    def open_unknown_observation_count(self):
+    def open_unknown_observation_count(self) -> int:
         return Observation.objects.filter(
             branch=self,
             current_severity=Severity.SEVERITY_UNKNOWN,
@@ -237,7 +238,7 @@ class Branch(Model):
         ).count()
 
     @property
-    def forbidden_licenses_count(self):
+    def forbidden_licenses_count(self) -> int:
         License_Component = apps.get_model("licenses", "License_Component")
         return License_Component.objects.filter(
             branch=self,
@@ -245,7 +246,7 @@ class Branch(Model):
         ).count()
 
     @property
-    def review_required_licenses_count(self):
+    def review_required_licenses_count(self) -> int:
         License_Component = apps.get_model("licenses", "License_Component")
         return License_Component.objects.filter(
             branch=self,
@@ -253,7 +254,7 @@ class Branch(Model):
         ).count()
 
     @property
-    def unknown_licenses_count(self):
+    def unknown_licenses_count(self) -> int:
         License_Component = apps.get_model("licenses", "License_Component")
         return License_Component.objects.filter(
             branch=self,
@@ -261,7 +262,7 @@ class Branch(Model):
         ).count()
 
     @property
-    def allowed_licenses_count(self):
+    def allowed_licenses_count(self) -> int:
         License_Component = apps.get_model("licenses", "License_Component")
         return License_Component.objects.filter(
             branch=self,
@@ -269,7 +270,7 @@ class Branch(Model):
         ).count()
 
     @property
-    def ignored_licenses_count(self):
+    def ignored_licenses_count(self) -> int:
         License_Component = apps.get_model("licenses", "License_Component")
         return License_Component.objects.filter(
             branch=self,
@@ -290,11 +291,11 @@ class Service(Model):
             Index(fields=["name"]),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     @property
-    def open_critical_observation_count(self):
+    def open_critical_observation_count(self) -> int:
         return Observation.objects.filter(
             origin_service=self,
             branch=self.product.repository_default_branch,
@@ -303,7 +304,7 @@ class Service(Model):
         ).count()
 
     @property
-    def open_high_observation_count(self):
+    def open_high_observation_count(self) -> int:
         return Observation.objects.filter(
             origin_service=self,
             branch=self.product.repository_default_branch,
@@ -312,7 +313,7 @@ class Service(Model):
         ).count()
 
     @property
-    def open_medium_observation_count(self):
+    def open_medium_observation_count(self) -> int:
         return Observation.objects.filter(
             origin_service=self,
             branch=self.product.repository_default_branch,
@@ -321,7 +322,7 @@ class Service(Model):
         ).count()
 
     @property
-    def open_low_observation_count(self):
+    def open_low_observation_count(self) -> int:
         return Observation.objects.filter(
             origin_service=self,
             branch=self.product.repository_default_branch,
@@ -330,7 +331,7 @@ class Service(Model):
         ).count()
 
     @property
-    def open_none_observation_count(self):
+    def open_none_observation_count(self) -> int:
         return Observation.objects.filter(
             origin_service=self,
             branch=self.product.repository_default_branch,
@@ -339,7 +340,7 @@ class Service(Model):
         ).count()
 
     @property
-    def open_unknown_observation_count(self):
+    def open_unknown_observation_count(self) -> int:
         return Observation.objects.filter(
             origin_service=self,
             branch=self.product.repository_default_branch,
@@ -359,7 +360,7 @@ class Product_Member(Model):
             "user",
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.product} / {self.user}"
 
 
@@ -374,7 +375,7 @@ class Product_Authorization_Group_Member(Model):
             "authorization_group",
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.product} / {self.authorization_group}"
 
 
@@ -539,16 +540,16 @@ class Observation(Model):
             Index(fields=["scanner"]),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.product} / {self.title}"
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
-        self.unsaved_references = []
-        self.unsaved_evidences = []
+        self.unsaved_references: list[str] = []
+        self.unsaved_evidences: list[list[str]] = []
 
-    def save(self, *args, **kwargs) -> None:
+    def save(self, *args: Any, **kwargs: Any) -> None:
         normalize_observation_fields(self)
         self.identity_hash = get_identity_hash(self)
         set_product_flags(self)

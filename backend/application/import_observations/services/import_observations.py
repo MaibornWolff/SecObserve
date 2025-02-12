@@ -420,21 +420,21 @@ def _process_current_observation(
 
     observation_before.references.all().delete()
     if imported_observation.unsaved_references:
-        for reference in imported_observation.unsaved_references:
+        for unsaved_reference in imported_observation.unsaved_references:
             reference = Reference(
                 observation=observation_before,
-                url=reference,
+                url=unsaved_reference,
             )
             clip_fields("core", "Reference", reference)
             reference.save()
 
     observation_before.evidences.all().delete()
     if imported_observation.unsaved_evidences:
-        for evidence in imported_observation.unsaved_evidences:
+        for unsaved_evidence in imported_observation.unsaved_evidences:
             evidence = Evidence(
                 observation=observation_before,
-                name=evidence[0],
-                evidence=evidence[1],
+                name=unsaved_evidence[0],
+                evidence=unsaved_evidence[1],
             )
             clip_fields("core", "Evidence", evidence)
             evidence.save()
@@ -488,20 +488,20 @@ def _process_new_observation(imported_observation: Observation) -> None:
     imported_observation.save()
 
     if imported_observation.unsaved_references:
-        for reference in imported_observation.unsaved_references:
+        for unsaved_reference in imported_observation.unsaved_references:
             reference = Reference(
                 observation=imported_observation,
-                url=reference,
+                url=unsaved_reference,
             )
             clip_fields("core", "Reference", reference)
             reference.save()
 
     if imported_observation.unsaved_evidences:
-        for evidence in imported_observation.unsaved_evidences:
+        for unsaved_evidence in imported_observation.unsaved_evidences:
             evidence = Evidence(
                 observation=imported_observation,
-                name=evidence[0],
-                evidence=evidence[1],
+                name=unsaved_evidence[0],
+                evidence=unsaved_evidence[1],
             )
             clip_fields("core", "Evidence", evidence)
             evidence.save()

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Optional
 
 from rest_framework.exceptions import PermissionDenied
 
@@ -32,7 +32,7 @@ from application.vex.models import VEX_Base
 
 
 def user_has_permission(  # pylint: disable=too-many-return-statements,too-many-branches
-    obj, permission: int, user: User = None
+    obj: Any, permission: Permissions, user: User = None
 ) -> bool:
     # There are a lot of different objects that need to be checked for permissions.
     # Refactoring it wouldn't make it more readable.
@@ -130,12 +130,14 @@ def user_has_permission(  # pylint: disable=too-many-return-statements,too-many-
     )
 
 
-def user_has_permission_or_403(obj, permission: int, user: User = None) -> None:
+def user_has_permission_or_403(
+    obj: Any, permission: Permissions, user: User = None
+) -> None:
     if not user_has_permission(obj, permission, user):
         raise PermissionDenied()
 
 
-def role_has_permission(role: int, permission: int) -> bool:
+def role_has_permission(role: Roles, permission: Permissions) -> bool:
     if not Permissions.has_value(permission):
         raise PermissionDoesNotExistError(f"Permission {permission} does not exist")
 
@@ -149,7 +151,7 @@ def role_has_permission(role: int, permission: int) -> bool:
     return permission in permissions
 
 
-def get_highest_user_role(product: Product, user: User = None) -> Optional[int]:
+def get_highest_user_role(product: Product, user: User = None) -> Optional[Roles]:
     if user is None:
         user = get_current_user()
 
@@ -177,7 +179,7 @@ def get_highest_user_role(product: Product, user: User = None) -> Optional[int]:
     )
 
     if highest_role:
-        return highest_role
+        return Roles(highest_role)
 
     return None
 
@@ -196,15 +198,15 @@ def get_user_permissions(user: User = None) -> list[Permissions]:
 
 
 class NoAuthorizationImplementedError(Exception):
-    def __init__(self, message):
+    def __init__(self, message: str):
         self.message = message
 
 
 class PermissionDoesNotExistError(Exception):
-    def __init__(self, message):
+    def __init__(self, message: str):
         self.message = message
 
 
 class RoleDoesNotExistError(Exception):
-    def __init__(self, message):
+    def __init__(self, message: str):
         self.message = message

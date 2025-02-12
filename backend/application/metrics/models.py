@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.db.models import (
     CASCADE,
     DateField,
@@ -41,12 +43,12 @@ class Product_Metrics(Model):
 class Product_Metrics_Status(Model):
     last_calculated = DateTimeField(default=timezone.now)
 
-    def save(self, *args, **kwargs):
+    def save(self, *args: Any, **kwargs: Any) -> None:
         self.pk = 1
         super().save(*args, **kwargs)
 
-    def delete(self, *args, **kwargs):
-        pass
+    def delete(self, *args: Any, **kwargs: Any) -> tuple[int, dict[str, int]]:
+        return 0, {}
 
     @classmethod
     def load(cls) -> "Product_Metrics_Status":

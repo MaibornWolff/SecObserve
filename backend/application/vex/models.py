@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import (
     CASCADE,
@@ -62,7 +64,7 @@ class OpenVEX(VEX_Base):
 
     # Make sure that timestamp and last updated date are exactly the
     # same when creating a new CSAF record
-    def save(self, *args, **kwargs):
+    def save(self, *args: Any, **kwargs: Any) -> None:
         now = timezone.now()
         if not self.timestamp:
             self.timestamp = now
@@ -96,7 +98,7 @@ class CSAF(VEX_Base):
 
     # Make sure that initial release date and current release date are exactly the
     # same when creating a new CSAF record
-    def save(self, *args, **kwargs):
+    def save(self, *args: Any, **kwargs: Any) -> None:
         now = timezone.now()
         if not self.tracking_initial_release_date:
             self.tracking_initial_release_date = now

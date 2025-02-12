@@ -1,11 +1,13 @@
+from typing import Any
+
 from django.core.validators import EMPTY_VALUES
-from django.db.models import F
+from django.db.models import F, QuerySet
 from django_filters import OrderingFilter
 
 
 # Copied from https://github.com/carltongibson/django-filter/issues/274#issuecomment-1862859556
 class ExtendedOrderingFilter(OrderingFilter):
-    def filter(self, qs, value):
+    def filter(self, qs: QuerySet, value: Any) -> QuerySet:
         if value in EMPTY_VALUES:
             return qs
 

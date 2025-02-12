@@ -1,4 +1,5 @@
 import logging
+from typing import Any
 
 from django.contrib.auth.signals import (
     user_logged_in,
@@ -21,7 +22,7 @@ logger = logging.getLogger("secobserve.access_control")
 
 @receiver(user_logged_in)
 def signal_user_logged_in(  # pylint: disable=unused-argument
-    sender, user: User, **kwargs
+    sender: Any, user: User, **kwargs: Any
 ) -> None:
     # sender is needed according to Django documentation
     logger.info(format_log_message(message="User logged in", user=user))
@@ -29,7 +30,7 @@ def signal_user_logged_in(  # pylint: disable=unused-argument
 
 @receiver(user_logged_out)
 def signal_user_logged_out(  # pylint: disable=unused-argument
-    sender, user: User, **kwargs
+    sender: Any, user: User, **kwargs: Any
 ) -> None:
     # sender is needed according to Django documentation
 
@@ -38,7 +39,7 @@ def signal_user_logged_out(  # pylint: disable=unused-argument
 
 @receiver(user_login_failed)
 def signal_user_login_failed(  # pylint: disable=unused-argument
-    sender, credentials: dict, **kwargs
+    sender: Any, credentials: dict, **kwargs: Any
 ) -> None:
     # sender is needed according to Django documentation
 
@@ -47,7 +48,7 @@ def signal_user_login_failed(  # pylint: disable=unused-argument
 
 @receiver(post_save, sender=Authorization_Group)
 def authorization_group_post_save(  # pylint: disable=unused-argument
-    sender, instance: Authorization_Group, created: bool, **kwargs
+    sender: Any, instance: Authorization_Group, created: bool, **kwargs: Any
 ) -> None:
     # sender is needed according to Django documentation
     _invalidate_oidc_groups_hashes()
@@ -61,13 +62,13 @@ def authorization_group_post_save(  # pylint: disable=unused-argument
 
 @receiver(post_delete, sender=Authorization_Group)
 def authorization_group_post_delete(  # pylint: disable=unused-argument
-    sender, instance: Authorization_Group, **kwargs
+    sender: Any, instance: Authorization_Group, **kwargs: Any
 ) -> None:
     # sender is needed according to Django documentation
     _invalidate_oidc_groups_hashes()
 
 
-def _invalidate_oidc_groups_hashes():
+def _invalidate_oidc_groups_hashes() -> None:
     for user in User.objects.exclude(oidc_groups_hash=""):
         user.oidc_groups_hash = ""
         user.save()

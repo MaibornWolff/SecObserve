@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -8,7 +10,7 @@ from application.core.services.security_gate import check_security_gate
 
 @receiver(post_save, sender=Settings)
 def settings_post_save(  # pylint: disable=unused-argument
-    sender, instance, created, **kwargs
+    sender: Any, instance: Settings, created: bool, **kwargs: Any
 ) -> None:
     # parameters are needed according to Django documentation
     for product in Product.objects.filter(is_product_group=False):
