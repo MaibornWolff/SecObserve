@@ -1,3 +1,5 @@
+from typing import Optional
+
 from rest_framework.serializers import (
     CharField,
     IntegerField,
@@ -27,7 +29,7 @@ class SettingsSerializer(ModelSerializer):
         model = Settings
         fields = "__all__"
 
-    def get_id(self, obj: Settings):  # pylint: disable=unused-argument
+    def get_id(self, obj: Settings) -> int:  # pylint: disable=unused-argument
         # obj is needed for the signature but we don't need it
         # The id is hardcoded to 1 because there is only one instance of the Settings model
         return 1
@@ -44,7 +46,7 @@ class NotificationSerializer(ModelSerializer):
         model = Notification
         fields = "__all__"
 
-    def get_message(self, obj: Notification):
+    def get_message(self, obj: Notification) -> Optional[str]:
         if not obj.message:
             return obj.message
 
@@ -54,7 +56,7 @@ class NotificationSerializer(ModelSerializer):
 
         return "..."
 
-    def get_product_name(self, obj: Notification):
+    def get_product_name(self, obj: Notification) -> Optional[str]:
         if obj.product:
             return obj.product.name
 
@@ -63,13 +65,13 @@ class NotificationSerializer(ModelSerializer):
 
         return None
 
-    def get_observation_title(self, obj: Notification):
+    def get_observation_title(self, obj: Notification) -> Optional[str]:
         if obj.observation:
             return obj.observation.title
 
         return None
 
-    def get_user_full_name(self, obj: Notification):
+    def get_user_full_name(self, obj: Notification) -> Optional[str]:
         if obj.user:
             return obj.user.full_name
 

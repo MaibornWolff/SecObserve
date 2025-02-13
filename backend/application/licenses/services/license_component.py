@@ -143,11 +143,11 @@ def _process_evidences(
     source_component: License_Component, target_component: License_Component
 ) -> None:
     if source_component.unsaved_evidences:
-        for evidence in source_component.unsaved_evidences:
+        for unsaved_evidence in source_component.unsaved_evidences:
             evidence = License_Component_Evidence(
                 license_component=target_component,
-                name=evidence[0],
-                evidence=evidence[1],
+                name=unsaved_evidence[0],
+                evidence=unsaved_evidence[1],
             )
             clip_fields("licenses", "License_Component_Evidence", evidence)
             evidence.save()

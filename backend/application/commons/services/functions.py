@@ -1,10 +1,12 @@
+from typing import Any
+
 from django.apps import apps
 from django.db.models.fields import CharField, TextField
 
 from application.commons.models import Settings
 
 
-def get_classname(obj):
+def get_classname(obj: Any) -> str:
     cls = type(obj)
     module = cls.__module__
     name = cls.__qualname__
@@ -21,7 +23,7 @@ def get_base_url_frontend() -> str:
     return base_url_frontend
 
 
-def clip_fields(application: str, model: str, my_object) -> None:
+def clip_fields(application: str, model: str, my_object: Any) -> None:
     Model = apps.get_model(application, model)
     for field in Model._meta.get_fields():
         if isinstance(field, (CharField, TextField)):

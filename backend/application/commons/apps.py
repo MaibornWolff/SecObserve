@@ -8,7 +8,7 @@ class UtilsConfig(AppConfig):
     name = "application.commons"
     verbose_name = "Commons"
 
-    def ready(self):
+    def ready(self) -> None:
         try:
             import application.commons.signals  # noqa F401 pylint: disable=import-outside-toplevel, unused-import
         except ImportError:

@@ -20,7 +20,7 @@ from application.commons.services.send_notifications import send_exception_notif
 logger = logging.getLogger("secobserve.exception_handler")
 
 
-def custom_exception_handler(exc, context):
+def custom_exception_handler(exc: Exception, context: dict) -> Response:
     response: Optional[Response]
     if isinstance(exc, ProtectedError):
         # An object cannot be deleted because it has dependent objects.
@@ -69,7 +69,7 @@ def custom_exception_handler(exc, context):
     return response
 
 
-def format_exception_message(exc):
+def format_exception_message(exc: Exception) -> str:
     if (
         hasattr(exc, "detail")
         and exc.detail

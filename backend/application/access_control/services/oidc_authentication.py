@@ -9,6 +9,7 @@ from django.core.cache import cache
 from django.db import IntegrityError, transaction
 from rest_framework.authentication import BaseAuthentication, get_authorization_header
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.request import Request
 
 from application.access_control.models import Authorization_Group, User
 from application.access_control.queries.user import get_user_by_username
@@ -19,7 +20,7 @@ ALGORITHMS = ["RS256", "RS384", "RS512", "ES256 ", "ES384", "ES512", "EdDSA"]
 
 
 class OIDCAuthentication(BaseAuthentication):
-    def authenticate(self, request):
+    def authenticate(self, request: Request) -> Optional[tuple[User, None]]:
         auth = get_authorization_header(request).split()
         if not auth:
             return None
@@ -48,7 +49,7 @@ class OIDCAuthentication(BaseAuthentication):
 
         return (user, None)
 
-    def authenticate_header(self, request):
+    def authenticate_header(self, request: Request) -> str:
         return OIDC_PREFIX
 
     def _validate_jwt(self, token: str) -> Optional[User]:
@@ -81,7 +82,7 @@ class OIDCAuthentication(BaseAuthentication):
         except jwt.PyJWTError as e:
             raise AuthenticationFailed(str(e)) from e
 
-    def _get_jwks_uri(self):
+    def _get_jwks_uri(self) -> str:
         jwks_uri = cache.get("jwks_uri")
         if not jwks_uri:
             response = requests.request(
@@ -197,7 +198,7 @@ class OIDCAuthentication(BaseAuthentication):
             return hashlib.sha256("".join(groups).encode("UTF-8")).hexdigest()
         return ""
 
-    def _synchronize_groups(self, user: User, payload: dict):
+    def _synchronize_groups(self, user: User, payload: dict) -> None:
         groups = Authorization_Group.objects.exclude(oidc_group="")
         for group in groups:
             group.users.remove(user)

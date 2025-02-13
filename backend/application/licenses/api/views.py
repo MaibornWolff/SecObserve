@@ -643,7 +643,7 @@ class LicensePolicyAuthorizationGroupMemberViewSet(ModelViewSet):
         )
 
 
-def _get_product(product_id: int, permission: int) -> Product:
+def _get_product(product_id: int, permission: Permissions) -> Product:
     if not product_id:
         raise ValidationError("No product id provided")
 

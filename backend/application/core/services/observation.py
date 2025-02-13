@@ -6,6 +6,7 @@ from packageurl import PackageURL
 
 from application.core.types import Severity, Status
 
+# mypy: disallow_untyped_defs = False
 # Parameter observation cannot be typed, because some methods are used in the model class
 
 

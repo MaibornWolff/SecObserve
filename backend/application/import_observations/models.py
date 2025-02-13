@@ -30,7 +30,7 @@ class Parser(Model):
             Index(fields=["name"]),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -61,7 +61,7 @@ class Api_Configuration(Model):
             "name",
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.product.name} / {self.name}"
 
 
@@ -106,5 +106,5 @@ class OSV_Cache(Model):
     data = TextField()
     modified = DateTimeField()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.osv_id

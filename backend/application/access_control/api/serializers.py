@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Optional
 
 from django.core.validators import MaxValueValidator, MinValueValidator
 from rest_framework.serializers import (
@@ -58,7 +58,7 @@ class UserListSerializer(ModelSerializer):
             "has_password",
         ]
 
-    def to_representation(self, instance: User):
+    def to_representation(self, instance: User) -> dict[str, Any]:
         data = super().to_representation(instance)
 
         user = get_current_user()
@@ -129,7 +129,7 @@ class UserSerializer(UserListSerializer):
             "has_product_members",
         ]
 
-    def to_representation(self, instance: User):
+    def to_representation(self, instance: User) -> dict[str, Any]:
         data = super().to_representation(instance)
 
         user = get_current_user()
@@ -232,7 +232,7 @@ class AuthorizationGroupMemberSerializer(ModelSerializer):
         model = Authorization_Group_Member
         fields = "__all__"
 
-    def validate(self, attrs: dict):
+    def validate(self, attrs: dict) -> dict:
         self.instance: Authorization_Group_Member
         data_authorization_group: Optional[Authorization_Group] = attrs.get(
             "authorization_group"

@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import (
     CASCADE,
@@ -31,7 +33,7 @@ class License(Model):
             Index(fields=["name"]),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.spdx_id
 
 
@@ -53,7 +55,7 @@ class License_Group(Model):
         blank=True,
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -70,7 +72,7 @@ class License_Group_Member(Model):
             "user",
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.license_group} / {self.user}"
 
 
@@ -93,7 +95,7 @@ class License_Group_Authorization_Group_Member(Model):
             "authorization_group",
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.license_group} / {self.authorization_group}"
 
 
@@ -137,16 +139,16 @@ class License_Component(Model):
     import_last_seen = DateTimeField(default=timezone.now)
     last_change = DateTimeField(default=timezone.now)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
         self.unsaved_license = ""
-        self.unsaved_evidences = []
+        self.unsaved_evidences: list[list[str]] = []
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.component_name_version
 
-    def save(self, *args, **kwargs) -> None:
+    def save(self, *args: Any, **kwargs: Any) -> None:
         self.numerical_evaluation_result = (
             License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
                 self.evaluation_result, 3
@@ -189,7 +191,7 @@ class License_Policy(Model):
         blank=True,
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -221,7 +223,7 @@ class License_Policy_Item(Model):
     )
     comment = CharField(max_length=255, blank=True)
 
-    def save(self, *args, **kwargs) -> None:
+    def save(self, *args: Any, **kwargs: Any) -> None:
         self.numerical_evaluation_result = (
             License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
                 self.evaluation_result, License_Policy_Evaluation_Result.RESULT_UNKNOWN
@@ -244,7 +246,7 @@ class License_Policy_Member(Model):
             "user",
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.license_policy} / {self.user}"
 
 
@@ -267,5 +269,5 @@ class License_Policy_Authorization_Group_Member(Model):
             "authorization_group",
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.license_policy} / {self.authorization_group}"

@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.db.models import (
     CASCADE,
     PROTECT,
@@ -67,7 +69,7 @@ class Rule(Model):
             Index(fields=["name"]),
         ]
 
-    def save(self, *args, **kwargs) -> None:
+    def save(self, *args: Any, **kwargs: Any) -> None:
         if not self.approval_status:
             self.user = get_current_user()
 
@@ -98,5 +100,5 @@ class Rule(Model):
 
         return super().save(*args, **kwargs)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name

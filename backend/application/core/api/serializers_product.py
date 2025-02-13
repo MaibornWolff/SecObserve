@@ -58,7 +58,7 @@ from application.rules.types import Rule_Status
 class ProductCoreSerializer(ModelSerializer):
     permissions = SerializerMethodField()
 
-    def get_permissions(self, obj: Product) -> list[Permissions]:
+    def get_permissions(self, obj: Product) -> Optional[set[Permissions]]:
         return get_permissions_for_role(get_highest_user_role(obj))
 
     class Meta:
@@ -450,7 +450,7 @@ class NestedProductSerializer(ModelSerializer):
         model = Product
         exclude = ["members", "authorization_group_members"]
 
-    def get_permissions(self, product: Product) -> list[Permissions]:
+    def get_permissions(self, product: Product) -> Optional[set[Permissions]]:
         return get_permissions_for_role(get_highest_user_role(product))
 
     def get_product_group_assessments_need_approval(self, obj: Product) -> bool:

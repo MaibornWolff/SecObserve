@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import (
     CASCADE,
@@ -237,7 +239,7 @@ class Settings(Model):
         default=True, help_text="Enable automatic OSV scanning"
     )
 
-    def save(self, *args, **kwargs):
+    def save(self, *args: Any, **kwargs: Any) -> None:
         """
         Save object to the database. Removes all other entries if there
         are any.
@@ -246,7 +248,7 @@ class Settings(Model):
         super().save(*args, **kwargs)
 
     @classmethod
-    def load(cls):
+    def load(cls) -> "Settings":
         """
         Load object from the database. Failing that, create a new empty
         (default) instance of the object and return it (without saving it
