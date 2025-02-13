@@ -335,7 +335,7 @@ class ProductApiTokenViewset(ViewSet):
             raise ValidationError("Product is required")
         if not product_id.isdigit():
             raise ValidationError("Product id must be an integer")
-   
+
         product = _get_product(int(str(product_id)))
         user_has_permission_or_403(product, Permissions.Product_View)
         tokens = get_product_api_tokens(product)
