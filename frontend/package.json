@@ -63,7 +63,7 @@
         "eslint-plugin-react-hooks": "rc",
         "eslint-plugin-security": "3.0.1",
         "globals": "15.15.0",
-        "prettier": "3.5.0",
+        "prettier": "3.5.1",
         "rewire": "7.0.0",
         "typescript": "5.7.3",
         "vite": "6.1.0",
