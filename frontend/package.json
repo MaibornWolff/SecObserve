@@ -50,7 +50,7 @@
         "@eslint/js": "9.20.0",
         "@microsoft/eslint-formatter-sarif": "3.1.0",
         "@trivago/prettier-plugin-sort-imports": "5.2.2",
-        "@types/node": "22.13.2",
+        "@types/node": "22.13.4",
         "@types/prop-types": "15.7.14",
         "@types/react": "18.3.18",
         "@types/react-dom": "18.3.5",
