@@ -66,7 +66,7 @@ services:
     command: /start
 
   postgres:
-    image: postgres:15.10-alpine
+    image: postgres:15.11-alpine
     volumes:
       - dev_postgres_data:/var/lib/postgresql/data
     environment:
