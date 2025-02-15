@@ -1,4 +1,5 @@
 import logging
+from typing import Any
 
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
@@ -12,7 +13,7 @@ class Command(BaseCommand):
 
     help = "Initial load of licenses, license groups and license policies."
 
-    def handle(self, *args, **options):
+    def handle(self, *args: Any, **options: Any) -> None:
         licenses_exist = License.objects.exists()
         license_groups_exist = License_Group.objects.exists()
         license_policies_exist = License_Policy.objects.exists()

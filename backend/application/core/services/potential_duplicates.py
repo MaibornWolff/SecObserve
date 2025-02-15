@@ -28,7 +28,9 @@ def find_potential_duplicates(
         handle_task_exception(e)
 
 
-def _handle_observation(observation: Observation, observations: QuerySet[Observation]):
+def _handle_observation(
+    observation: Observation, observations: QuerySet[Observation]
+) -> None:
     Potential_Duplicate.objects.filter(observation=observation).delete()
     initial_has_potential_duplicates = observation.has_potential_duplicates
     observation.has_potential_duplicates = False

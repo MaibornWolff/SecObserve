@@ -4,6 +4,7 @@ from importlib import import_module
 from importlib.util import find_spec
 from inspect import isclass
 from pathlib import Path
+from typing import Any
 
 from django.core.management.base import BaseCommand, CommandError
 from django.db import connection
@@ -23,7 +24,7 @@ class Command(BaseCommand):
 
     help = "Register parsers to import vulnerability scans."
 
-    def handle(self, *args, **options):
+    def handle(self, *args: Any, **options: Any) -> None:
         all_tables = connection.introspection.table_names()
         if "core_parser" in all_tables:
             # Create parser entry for manual observations

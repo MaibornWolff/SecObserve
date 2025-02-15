@@ -19,7 +19,9 @@ def create_document_base_id(document_id_prefix: str) -> str:
     return f"{counter.year}_{counter.counter:04d}"
 
 
-def check_product_or_vulnerabilities(product_id, vulnerability_names):
+def check_product_or_vulnerabilities(
+    product_id: int, vulnerability_names: list[str]
+) -> None:
     if not product_id and not vulnerability_names:
         raise ValidationError("Either product or vulnerabilities or both must be set")
 

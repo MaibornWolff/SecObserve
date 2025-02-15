@@ -1,3 +1,4 @@
+from django.db.models import QuerySet
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
@@ -7,6 +8,7 @@ from rest_framework.filters import SearchFilter
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND
 from rest_framework.views import APIView
@@ -67,7 +69,7 @@ class ApiImportObservationsById(APIView):
         request=ApiImportObservationsByIdRequestSerializer,
         responses={status.HTTP_200_OK: APIImportObservationsResponseSerializer},
     )
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         request_serializer = ApiImportObservationsByIdRequestSerializer(
             data=request.data
         )
@@ -131,7 +133,7 @@ class ApiImportObservationsByName(APIView):
         request=ApiImportObservationsByNameRequestSerializer,
         responses={status.HTTP_200_OK: APIImportObservationsResponseSerializer},
     )
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         request_serializer = ApiImportObservationsByNameRequestSerializer(
             data=request.data
         )
@@ -199,7 +201,7 @@ class FileUploadObservationsById(APIView):
         request=FileUploadObservationsByIdRequestSerializer,
         responses={status.HTTP_200_OK: FileImportObservationsResponseSerializer},
     )
-    def post(self, request):  # pylint: disable=too-many-locals
+    def post(self, request: Request) -> Response:  # pylint: disable=too-many-locals
         # not too much we can do about this
         request_serializer = FileUploadObservationsByIdRequestSerializer(
             data=request.data
@@ -283,7 +285,7 @@ class FileUploadObservationsByName(APIView):
         request=FileUploadObservationsByNameRequestSerializer,
         responses={status.HTTP_200_OK: FileImportObservationsResponseSerializer},
     )
-    def post(self, request):  # pylint: disable=too-many-locals
+    def post(self, request: Request) -> Response:  # pylint: disable=too-many-locals
         # not too much we can do about this
         request_serializer = FileUploadObservationsByNameRequestSerializer(
             data=request.data
@@ -366,7 +368,7 @@ class ApiConfigurationViewSet(ModelViewSet):
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["name"]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Api_Configuration]:
         return get_api_configurations()
 
 
@@ -377,7 +379,7 @@ class VulnerabilityCheckViewSet(GenericViewSet, ListModelMixin, RetrieveModelMix
     queryset = Vulnerability_Check.objects.none()
     filter_backends = [DjangoFilterBackend]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Vulnerability_Check]:
         return get_vulnerability_checks()
 
 
@@ -395,7 +397,7 @@ class ScanOSVProductView(APIView):
         responses={status.HTTP_200_OK: APIImportObservationsResponseSerializer},
     )
     @action(detail=True, methods=["post"])
-    def post(self, request, product_id: int):
+    def post(self, request: Request, product_id: int) -> Response:
         product = get_product_by_id(product_id)
         if not product:
             return Response(status=HTTP_404_NOT_FOUND)
@@ -422,7 +424,7 @@ class ScanOSVBranchView(APIView):
         responses={status.HTTP_200_OK: APIImportObservationsResponseSerializer},
     )
     @action(detail=True, methods=["post"])
-    def post(self, request, product_id: int, branch_id: int):
+    def post(self, request: Request, product_id: int, branch_id: int) -> Response:
         product = get_product_by_id(product_id)
         if not product:
             return Response(status=HTTP_404_NOT_FOUND)

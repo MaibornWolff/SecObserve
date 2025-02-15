@@ -117,7 +117,7 @@ class SARIFParser(BaseParser, BaseFileParser):
         sarif_scanner: str,
         sarif_rules: dict[str, Rule],
         sarif_location: Optional[dict],
-    ):
+    ) -> None:
         location = self.get_location_data(sarif_location)
 
         sarif_rule_id = result.get("ruleId", "")
@@ -400,7 +400,7 @@ class SARIFParser(BaseParser, BaseFileParser):
 
     def get_dependency_check_cvss(
         self, sarif_scanner: str, sarif_rule: Rule, version: int
-    ):
+    ) -> Tuple[Optional[float], str]:
         # Dependency Check SARIF has no proper level, but stores the severity in a property
         if (
             sarif_scanner.lower().startswith("dependency-check")
@@ -411,7 +411,7 @@ class SARIFParser(BaseParser, BaseFileParser):
                 f"cvssv{version}_baseScore"
             ), sarif_rule.properties.get(f"cvssv{version}_vector")
 
-        return None, None
+        return None, ""
 
     def get_dependency_check_vulnerability_id(
         self, sarif_scanner: str, title: str

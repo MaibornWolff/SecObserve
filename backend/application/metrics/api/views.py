@@ -1,15 +1,18 @@
 import csv
 from tempfile import NamedTemporaryFile
+from typing import Optional
 
 from django.http import HttpResponse
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from application.access_control.services.authorization import user_has_permission_or_403
 from application.access_control.services.roles_permissions import Permissions
 from application.commons.models import Settings
+from application.core.models import Product
 from application.core.queries.product import get_product_by_id
 from application.core.types import Severity
 from application.metrics.models import Product_Metrics_Status
@@ -26,7 +29,7 @@ from application.metrics.services.metrics import (
 
 class ProductMetricsTimelineView(APIView):
     @action(detail=False, methods=["get"])
-    def get(self, request):
+    def get(self, request: Request) -> Response:
         product = _get_and_check_product(request)
         age = request.query_params.get("age", "")
         return Response(get_product_metrics_timeline(product, age))
@@ -34,14 +37,14 @@ class ProductMetricsTimelineView(APIView):
 
 class ProductMetricsCurrentView(APIView):
     @action(detail=False, methods=["get"])
-    def get(self, request):
+    def get(self, request: Request) -> Response:
         product = _get_and_check_product(request)
         return Response(get_product_metrics_current(product))
 
 
 class ProductMetricsExportExcelView(APIView):
     @action(detail=False, methods=["get"])
-    def get(self, request):
+    def get(self, request: Request) -> HttpResponse:
         product = _get_and_check_product(request)
 
         workbook = export_product_metrics_excel(product)
@@ -65,7 +68,7 @@ class ProductMetricsExportExcelView(APIView):
 
 class ProductMetricsExportCsvView(APIView):
     @action(detail=False, methods=["get"])
-    def get(self, request):
+    def get(self, request: Request) -> HttpResponse:
         product = _get_and_check_product(request)
 
         response = HttpResponse(content_type="text/csv")
@@ -78,7 +81,7 @@ class ProductMetricsExportCsvView(APIView):
 
 class ProductMetricsExportCodeChartaView(APIView):
     @action(detail=False, methods=["get"])
-    def get(self, request):
+    def get(self, request: Request) -> HttpResponse:
         product = _get_and_check_product(request)
         if not product:
             raise ValidationError("Product not found")
@@ -113,7 +116,7 @@ class ProductMetricsExportCodeChartaView(APIView):
 
 class ProductMetricsStatusView(APIView):
     @action(detail=False, methods=["get"])
-    def get(self, request):
+    def get(self, request: Request) -> Response:
         settings = Settings.load()
 
         status = Product_Metrics_Status.load()
@@ -125,10 +128,14 @@ class ProductMetricsStatusView(APIView):
         )
 
 
-def _get_and_check_product(request):
+def _get_and_check_product(request: Request) -> Optional[Product]:
     product_id = request.query_params.get("product_id")
+    if not product_id:
+        raise ValidationError("product_id is required")
+    if not product_id.isdigit():
+        raise ValidationError("product_id must be a number")
     if product_id:
-        product = get_product_by_id(product_id)
+        product = get_product_by_id(int(product_id))
     else:
         product = None
     if product:

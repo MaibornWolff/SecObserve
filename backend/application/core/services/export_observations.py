@@ -41,7 +41,7 @@ def _get_observations(product: Product, status: Optional[str]) -> QuerySet:
     return observations
 
 
-def _get_excludes():
+def _get_excludes() -> list[str]:
     return [
         "identity_hash",
         "pk",
@@ -69,5 +69,5 @@ def _get_excludes():
     ]
 
 
-def _get_foreign_keys():
+def _get_foreign_keys() -> list[str]:
     return ["branch", "parser", "product"]

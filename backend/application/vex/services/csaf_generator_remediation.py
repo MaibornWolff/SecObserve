@@ -6,7 +6,7 @@ from application.vex.services.csaf_generator_helpers import (
 from application.vex.types import CSAF_Status, CSAFRemediation, CSAFVulnerability
 
 
-def set_remediation(vulnerability: CSAFVulnerability, observation: Observation):
+def set_remediation(vulnerability: CSAFVulnerability, observation: Observation) -> None:
     vex_status = map_status(observation.current_status)
     if vex_status == CSAF_Status.CSAF_STATUS_AFFECTED:
         product_or_relationship_id = get_product_or_relationship_id(observation)

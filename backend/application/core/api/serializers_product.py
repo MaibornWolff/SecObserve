@@ -65,7 +65,7 @@ class ProductCoreSerializer(ModelSerializer):
         model = Product
         fields = "__all__"
 
-    def validate(self, attrs: dict):
+    def validate(self, attrs: dict) -> dict:
         if attrs.get("repository_branch_housekeeping_active"):
             if not attrs.get("repository_branch_housekeeping_keep_inactive_days"):
                 attrs["repository_branch_housekeeping_keep_inactive_days"] = 1
@@ -355,7 +355,7 @@ class ProductSerializer(
             return None
         return obj.product_group.license_policy.id
 
-    def validate(self, attrs: dict):  # pylint: disable=too-many-branches
+    def validate(self, attrs: dict) -> dict:  # pylint: disable=too-many-branches
         # There are quite a lot of branches, but at least they are not nested too much
         if attrs.get("issue_tracker_type") == Issue_Tracker.ISSUE_TRACKER_GITHUB:
             attrs["issue_tracker_base_url"] = "https://api.github.com"
@@ -501,7 +501,7 @@ class ProductMemberSerializer(ModelSerializer):
         model = Product_Member
         fields = "__all__"
 
-    def validate(self, attrs: dict):
+    def validate(self, attrs: dict) -> dict:
         self.instance: Product_Member
         data_product: Optional[Product] = attrs.get("product")
         data_user = attrs.get("user")
@@ -552,7 +552,7 @@ class ProductAuthorizationGroupMemberSerializer(ModelSerializer):
         model = Product_Authorization_Group_Member
         fields = "__all__"
 
-    def validate(self, attrs: dict):
+    def validate(self, attrs: dict) -> dict:
         self.instance: Product_Authorization_Group_Member
         data_product: Optional[Product] = attrs.get("product")
         data_authorization_group = attrs.get("authorization_group")
@@ -662,7 +662,7 @@ class BranchSerializer(ModelSerializer):
         model = Branch
         fields = "__all__"
 
-    def validate(self, attrs: dict):  # pylint: disable=too-many-branches
+    def validate(self, attrs: dict) -> dict:  # pylint: disable=too-many-branches
         if attrs.get("osv_linux_release") and not attrs.get("osv_linux_distribution"):
             raise ValidationError(
                 "osv_linux_release cannot be set without osv_linux_distribution"

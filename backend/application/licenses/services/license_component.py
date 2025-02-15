@@ -21,14 +21,14 @@ from application.licenses.services.license_policy import (
 )
 
 
-def get_identity_hash(observation) -> str:
-    hash_string = _get_string_to_hash(observation)
+def get_identity_hash(license_component: License_Component) -> str:
+    hash_string = _get_string_to_hash(license_component)
     return hashlib.sha256(hash_string.casefold().encode("utf-8").strip()).hexdigest()
 
 
 def _get_string_to_hash(
     license_component: License_Component,
-):  # pylint: disable=too-many-branches
+) -> str:  # pylint: disable=too-many-branches
     hash_string = license_component.component_name_version
     if license_component.component_purl:
         hash_string += license_component.component_purl

@@ -141,7 +141,7 @@ def _process_products(
     statement_counter: int,
     statement: dict,
     openvex_statement: OpenVEX_Statement,
-):
+) -> None:
     products = statement.get("products", [])
     if not products:
         raise ValidationError(

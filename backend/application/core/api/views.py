@@ -1,6 +1,7 @@
 from tempfile import NamedTemporaryFile
 from typing import Any
 
+from django.db.models import QuerySet
 from django.http import HttpResponse
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
@@ -12,6 +13,7 @@ from rest_framework.mixins import DestroyModelMixin, ListModelMixin, RetrieveMod
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.serializers import BaseSerializer
 from rest_framework.status import HTTP_200_OK, HTTP_204_NO_CONTENT, HTTP_404_NOT_FOUND
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
@@ -146,7 +148,7 @@ class ProductGroupViewSet(ModelViewSet):
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["name"]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Product]:
         return get_products(is_product_group=True)
 
 
@@ -158,7 +160,7 @@ class ProductGroupNameViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["name"]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Product]:
         return get_products(is_product_group=True)
 
 
@@ -170,7 +172,7 @@ class ProductViewSet(ModelViewSet):
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["name"]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Product]:
         return (
             get_products(is_product_group=False, with_annotations=True)
             .select_related("product_group")
@@ -185,7 +187,7 @@ class ProductViewSet(ModelViewSet):
         ],
     )
     @action(detail=True, methods=["get"])
-    def export_observations_excel(self, request, pk=None):
+    def export_observations_excel(self, request: Request, pk: int) -> HttpResponse:
         product = self.__get_product(pk)
 
         status = self.request.query_params.get("status")
@@ -218,14 +220,14 @@ class ProductViewSet(ModelViewSet):
         ],
     )
     @action(detail=True, methods=["get"])
-    def export_observations_csv(self, request, pk=None):
+    def export_observations_csv(self, request: Request, pk: int) -> Response:
         product = self.__get_product(pk)
 
         status = self.request.query_params.get("status")
         if status and (status, status) not in Status.STATUS_CHOICES:
             raise ValidationError(f"Status {status} is not a valid choice")
 
-        response = HttpResponse(content_type="text/csv")
+        response = Response(content_type="text/csv")
         response["Content-Disposition"] = "attachment; filename=observations.csv"
 
         export_observations_csv(response, product, status)
@@ -233,7 +235,9 @@ class ProductViewSet(ModelViewSet):
         return response
 
     @action(detail=True, methods=["get"])
-    def export_license_components_excel(self, request, pk=None):
+    def export_license_components_excel(
+        self, request: Request, pk: int
+    ) -> HttpResponse:
         product = self.__get_product(pk)
 
         workbook = export_license_components_excel(product)
@@ -259,10 +263,10 @@ class ProductViewSet(ModelViewSet):
         responses={200: None},
     )
     @action(detail=True, methods=["get"])
-    def export_license_components_csv(self, request, pk=None):
+    def export_license_components_csv(self, request: Request, pk: int) -> Response:
         product = self.__get_product(pk)
 
-        response = HttpResponse(content_type="text/csv")
+        response = Response(content_type="text/csv")
         response["Content-Disposition"] = (
             "attachment; filename=license_observations.csv"
         )
@@ -277,7 +281,7 @@ class ProductViewSet(ModelViewSet):
         responses={HTTP_204_NO_CONTENT: None},
     )
     @action(detail=True, methods=["post"])
-    def apply_rules(self, request, pk=None):
+    def apply_rules(self, request: Request, pk: int) -> Response:
         product = self.__get_product(pk)
         user_has_permission_or_403(product, Permissions.Product_Rule_Apply)
 
@@ -292,7 +296,7 @@ class ProductViewSet(ModelViewSet):
         responses={HTTP_204_NO_CONTENT: None},
     )
     @action(detail=True, methods=["post"])
-    def observations_bulk_assessment(self, request, pk=None):
+    def observations_bulk_assessment(self, request: Request, pk: int) -> Response:
         product = self.__get_product(pk)
         user_has_permission_or_403(product, Permissions.Observation_Assessment)
 
@@ -321,7 +325,7 @@ class ProductViewSet(ModelViewSet):
         responses={HTTP_204_NO_CONTENT: None},
     )
     @action(detail=True, methods=["post"])
-    def observations_bulk_mark_duplicates(self, request, pk=None):
+    def observations_bulk_mark_duplicates(self, request: Request, pk: int) -> Response:
         product = self.__get_product(pk)
         user_has_permission_or_403(product, Permissions.Observation_Assessment)
 
@@ -342,7 +346,7 @@ class ProductViewSet(ModelViewSet):
         responses={HTTP_204_NO_CONTENT: None},
     )
     @action(detail=True, methods=["post"])
-    def observations_bulk_delete(self, request, pk):
+    def observations_bulk_delete(self, request: Request, pk: int) -> Response:
         product = self.__get_product(pk)
         user_has_permission_or_403(product, Permissions.Observation_Delete)
 
@@ -361,7 +365,7 @@ class ProductViewSet(ModelViewSet):
         responses={HTTP_204_NO_CONTENT: None},
     )
     @action(detail=True, methods=["post"])
-    def license_components_bulk_delete(self, request, pk):
+    def license_components_bulk_delete(self, request: Request, pk: int) -> Response:
         product = self.__get_product(pk)
         user_has_permission_or_403(product, Permissions.License_Component_Delete)
 
@@ -380,7 +384,7 @@ class ProductViewSet(ModelViewSet):
         responses={HTTP_204_NO_CONTENT: None},
     )
     @action(detail=True, methods=["post"])
-    def synchronize_issues(self, request, pk):
+    def synchronize_issues(self, request: Request, pk: int) -> Response:
         product = self.__get_product(pk)
         user_has_permission_or_403(product, Permissions.Product_Edit)
 
@@ -389,7 +393,7 @@ class ProductViewSet(ModelViewSet):
 
         return Response(status=HTTP_204_NO_CONTENT)
 
-    def __get_product(self, pk) -> Product:
+    def __get_product(self, pk: int) -> Product:
         if not pk:
             raise ValidationError("No id provided")
 
@@ -410,7 +414,7 @@ class ProductNameViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["name"]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Product]:
         return get_products(is_product_group=False)
 
 
@@ -421,7 +425,7 @@ class ProductMemberViewSet(ModelViewSet):
     queryset = Product_Member.objects.none()
     filter_backends = [DjangoFilterBackend]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Product_Member]:
         return get_product_members().select_related("product").select_related("user")
 
 
@@ -435,7 +439,7 @@ class ProductAuthorizationGroupMemberViewSet(ModelViewSet):
     queryset = Product_Authorization_Group_Member.objects.none()
     filter_backends = [DjangoFilterBackend]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Product_Authorization_Group_Member]:
         return (
             get_product_authorization_group_members()
             .select_related("product")
@@ -451,7 +455,7 @@ class BranchViewSet(ModelViewSet):
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["name"]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Branch]:
         return get_branches().select_related("product")
 
     def destroy(self, request: Request, *args: Any, **kwargs: Any) -> Response:
@@ -470,7 +474,7 @@ class BranchNameViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["name"]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Branch]:
         return get_branches().select_related("product")
 
 
@@ -484,7 +488,7 @@ class ServiceViewSet(
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["name"]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Service]:
         return get_services().select_related("product")
 
 
@@ -496,7 +500,7 @@ class ObservationViewSet(ModelViewSet):
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["title"]
 
-    def get_serializer_class(self):
+    def get_serializer_class(self) -> type[BaseSerializer]:
         if self.action == "list":
             return ObservationListSerializer
 
@@ -508,7 +512,7 @@ class ObservationViewSet(ModelViewSet):
 
         return super().get_serializer_class()
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Observation]:
         return (
             get_observations()
             .select_related("product")
@@ -532,7 +536,7 @@ class ObservationViewSet(ModelViewSet):
         responses={200: None},
     )
     @action(detail=True, methods=["patch"])
-    def assessment(self, request, pk=None):
+    def assessment(self, request: Request, pk: int) -> Response:
         request_serializer = ObservationAssessmentSerializer(data=request.data)
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
@@ -581,7 +585,7 @@ class ObservationViewSet(ModelViewSet):
         responses={200: None},
     )
     @action(detail=True, methods=["patch"])
-    def remove_assessment(self, request, pk=None):
+    def remove_assessment(self, request: Request, pk: int) -> Response:
         request_serializer = ObservationRemoveAssessmentSerializer(data=request.data)
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
@@ -615,7 +619,7 @@ class ObservationViewSet(ModelViewSet):
         responses={HTTP_204_NO_CONTENT: None},
     )
     @action(detail=False, methods=["post"])
-    def bulk_assessment(self, request):
+    def bulk_assessment(self, request: Request) -> Response:
         request_serializer = ObservationBulkAssessmentSerializer(data=request.data)
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
@@ -641,7 +645,7 @@ class ObservationViewSet(ModelViewSet):
         responses={HTTP_200_OK: CountSerializer},
     )
     @action(detail=False, methods=["get"])
-    def count_reviews(self, request):
+    def count_reviews(self, request: Request) -> Response:
         count = (
             get_observations().filter(current_status=Status.STATUS_IN_REVIEW).count()
         )
@@ -656,7 +660,7 @@ class ObservationTitleViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["title"]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Observation]:
         return get_observations()
 
 
@@ -666,13 +670,15 @@ class ObservationLogViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     queryset = Observation_Log.objects.all()
     filter_backends = [SearchFilter, DjangoFilterBackend]
 
-    def get_serializer_class(self):
+    def get_serializer_class(
+        self,
+    ) -> type[ObservationLogListSerializer] | type[BaseSerializer]:
         if self.action == "list":
             return ObservationLogListSerializer
 
         return super().get_serializer_class()
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Observation_Log]:
         return (
             get_observation_logs().select_related("observation").select_related("user")
         )
@@ -683,7 +689,7 @@ class ObservationLogViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
         responses={200: None},
     )
     @action(detail=True, methods=["patch"])
-    def approval(self, request, pk=None):
+    def approval(self, request: Request, pk: int) -> Response:
         request_serializer = ObservationLogApprovalSerializer(data=request.data)
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
@@ -710,7 +716,7 @@ class ObservationLogViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
         responses={HTTP_204_NO_CONTENT: None},
     )
     @action(detail=False, methods=["post"])
-    def bulk_approval(self, request):
+    def bulk_approval(self, request: Request) -> Response:
         request_serializer = ObservationLogBulkApprovalSerializer(data=request.data)
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
@@ -728,7 +734,7 @@ class ObservationLogViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
         responses={HTTP_200_OK: CountSerializer},
     )
     @action(detail=False, methods=["get"])
-    def count_approvals(self, request):
+    def count_approvals(self, request: Request) -> Response:
         count = (
             get_observation_logs()
             .filter(
@@ -744,7 +750,7 @@ class ObservationLogViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
         responses={HTTP_204_NO_CONTENT: None},
     )
     @action(detail=False, methods=["delete"])
-    def bulk_delete(self, request):
+    def bulk_delete(self, request: Request) -> Response:
         request_serializer = ObservationLogBulkDeleteSerializer(data=request.data)
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
@@ -767,7 +773,7 @@ class EvidenceViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     filterset_class = EvidenceFilter
     queryset = Evidence.objects.none()
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Evidence]:
         return get_evidences().select_related("observation__product")
 
 
@@ -776,7 +782,7 @@ class PotentialDuplicateViewSet(GenericViewSet, ListModelMixin):
     filterset_class = PotentialDuplicateFilter
     queryset = Potential_Duplicate.objects.none()
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Potential_Duplicate]:
         return get_potential_duplicates()
 
 

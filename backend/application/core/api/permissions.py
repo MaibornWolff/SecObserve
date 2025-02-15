@@ -1,5 +1,10 @@
-from rest_framework.exceptions import ValidationError
+from typing import Any
+
+from django.contrib.auth.models import AnonymousUser
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.permissions import BasePermission
+from rest_framework.request import Request
+from rest_framework.views import APIView
 
 from application.access_control.api.permissions_base import (
     check_object_permission,
@@ -11,13 +16,16 @@ from application.core.models import Product
 
 
 class UserHasProductPermission(BasePermission):
-    def has_permission(self, request, view):
+    def has_permission(self, request: Request, view: APIView) -> bool:
         if request.method == "POST":
+            if isinstance(request.user, AnonymousUser):
+                raise PermissionDenied("You must be authenticated to create a Product")
+
             return not request.user.is_external
 
         return True
 
-    def has_object_permission(self, request, view, obj):
+    def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool:
         return check_object_permission(
             request=request,
             object_to_check=obj,
@@ -28,13 +36,18 @@ class UserHasProductPermission(BasePermission):
 
 
 class UserHasProductGroupPermission(BasePermission):
-    def has_permission(self, request, view):
+    def has_permission(self, request: Request, view: APIView) -> bool:
         if request.method == "POST":
+            if isinstance(request.user, AnonymousUser):
+                raise PermissionDenied(
+                    "You must be authenticated to create a Product Group"
+                )
+
             return not request.user.is_external
 
         return True
 
-    def has_object_permission(self, request, view, obj):
+    def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool:
         return check_object_permission(
             request=request,
             object_to_check=obj,
@@ -45,12 +58,12 @@ class UserHasProductGroupPermission(BasePermission):
 
 
 class UserHasProductMemberPermission(BasePermission):
-    def has_permission(self, request, view):
+    def has_permission(self, request: Request, view: APIView) -> bool:
         return check_post_permission(
             request, Product, "product", Permissions.Product_Member_Create
         )
 
-    def has_object_permission(self, request, view, obj):
+    def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool:
         if (
             request.method == "DELETE"
             and obj.role == Roles.Owner
@@ -68,7 +81,7 @@ class UserHasProductMemberPermission(BasePermission):
 
 
 class UserHasProductAuthorizationGroupMemberPermission(BasePermission):
-    def has_permission(self, request, view):
+    def has_permission(self, request: Request, view: APIView) -> bool:
         return check_post_permission(
             request,
             Product,
@@ -76,7 +89,7 @@ class UserHasProductAuthorizationGroupMemberPermission(BasePermission):
             Permissions.Product_Authorization_Group_Member_Create,
         )
 
-    def has_object_permission(self, request, view, obj):
+    def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool:
         if (
             request.method == "DELETE"
             and obj.role == Roles.Owner
@@ -93,7 +106,10 @@ class UserHasProductAuthorizationGroupMemberPermission(BasePermission):
         )
 
 
-def _check_delete_owner(request, obj) -> bool:
+def _check_delete_owner(request: Request, obj: Any) -> bool:
+    if isinstance(request.user, AnonymousUser):
+        raise PermissionDenied("You must be authenticated to delete an Owner")
+
     if get_highest_user_role(obj.product, request.user) == Roles.Owner:
         return True
 
@@ -101,12 +117,12 @@ def _check_delete_owner(request, obj) -> bool:
 
 
 class UserHasBranchPermission(BasePermission):
-    def has_permission(self, request, view):
+    def has_permission(self, request: Request, view: APIView) -> bool:
         return check_post_permission(
             request, Product, "product", Permissions.Branch_Create
         )
 
-    def has_object_permission(self, request, view, obj):
+    def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool:
         return check_object_permission(
             request=request,
             object_to_check=obj,
@@ -117,7 +133,7 @@ class UserHasBranchPermission(BasePermission):
 
 
 class UserHasServicePermission(BasePermission):
-    def has_object_permission(self, request, view, obj):
+    def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool:
         return check_object_permission(
             request=request,
             object_to_check=obj,
@@ -128,7 +144,7 @@ class UserHasServicePermission(BasePermission):
 
 
 class UserHasObservationPermission(BasePermission):
-    def has_permission(self, request, view):
+    def has_permission(self, request: Request, view: APIView) -> bool:
         if request.path.endswith("/bulk_assessment/"):
             return True
 
@@ -136,7 +152,7 @@ class UserHasObservationPermission(BasePermission):
             request, Product, "product", Permissions.Observation_Create
         )
 
-    def has_object_permission(self, request, view, obj):
+    def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool:
         return check_object_permission(
             request=request,
             object_to_check=obj,

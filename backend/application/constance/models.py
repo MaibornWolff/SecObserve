@@ -16,5 +16,5 @@ class Constance(Model):
             ("view_config", "Can view config"),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.key

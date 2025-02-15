@@ -70,7 +70,7 @@ def validate_cvss4_vector(cvss4_vector: str) -> str:
     return cvss4_vector
 
 
-def validate_cvss_and_severity(attrs):
+def validate_cvss_and_severity(attrs: dict) -> None:
     cvss3_severity = _validate_cvss3(attrs)
     cvss4_severity = _validate_cvss4(attrs)
 

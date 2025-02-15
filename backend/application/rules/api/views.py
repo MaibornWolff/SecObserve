@@ -1,3 +1,4 @@
+from django.db.models import QuerySet
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
@@ -5,6 +6,7 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
@@ -38,7 +40,7 @@ class GeneralRuleViewSet(ModelViewSet):
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["name"]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Rule]:
         return get_general_rules()
 
     @extend_schema(
@@ -47,7 +49,7 @@ class GeneralRuleViewSet(ModelViewSet):
         responses={status.HTTP_204_NO_CONTENT: None},
     )
     @action(detail=True, methods=["patch"])
-    def approval(self, request, pk=None):
+    def approval(self, request: Request, pk: int) -> Response:
         request_serializer = RuleApprovalSerializer(data=request.data)
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
@@ -73,7 +75,7 @@ class ProductRuleViewSet(ModelViewSet):
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["name"]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Rule]:
         return get_product_rules()
 
     @extend_schema(
@@ -82,7 +84,7 @@ class ProductRuleViewSet(ModelViewSet):
         responses={status.HTTP_204_NO_CONTENT: None},
     )
     @action(detail=True, methods=["patch"])
-    def approval(self, request, pk=None):
+    def approval(self, request: Request, pk: int) -> Response:
         request_serializer = RuleApprovalSerializer(data=request.data)
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)

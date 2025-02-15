@@ -267,7 +267,7 @@ class LicenseGroupAuthorizationGroupMemberSerializer(ModelSerializer):
         model = License_Group_Authorization_Group_Member
         fields = "__all__"
 
-    def validate(self, attrs: dict):
+    def validate(self, attrs: dict) -> dict:
         self.instance: License_Group_Authorization_Group_Member
         data_license_group: Optional[License_Group] = attrs.get("license_group")
         data_authorization_group = attrs.get("authorization_group")
@@ -309,7 +309,7 @@ class LicenseGroupMemberSerializer(ModelSerializer):
         model = License_Group_Member
         fields = "__all__"
 
-    def validate(self, attrs: dict):
+    def validate(self, attrs: dict) -> dict:
         self.instance: License_Group_Member
         data_license_group: Optional[License_Group] = attrs.get("license_group")
         data_user = attrs.get("user")
@@ -410,7 +410,7 @@ class LicensePolicySerializer(ModelSerializer):
 
         return value
 
-    def update(self, instance: License_Policy, validated_data: dict):
+    def update(self, instance: License_Policy, validated_data: dict) -> License_Policy:
         parent = validated_data.get("parent")
         instance_has_children = instance.children.exists()
         if parent:
@@ -446,7 +446,7 @@ class LicensePolicyItemSerializer(ModelSerializer):
 
         return ""
 
-    def validate(self, attrs: dict):
+    def validate(self, attrs: dict) -> dict:
         self.instance: License_Policy_Item
         data_license_group = attrs.get("license_group")
         data_license = attrs.get("license")
@@ -530,7 +530,7 @@ class LicensePolicyMemberSerializer(ModelSerializer):
         model = License_Policy_Member
         fields = "__all__"
 
-    def validate(self, attrs: dict):
+    def validate(self, attrs: dict) -> dict:
         self.instance: License_Policy_Member
         data_license_policy: Optional[License_Policy] = attrs.get("license_policy")
         data_user = attrs.get("user")
@@ -569,7 +569,7 @@ class LicensePolicyAuthorizationGroupMemberSerializer(ModelSerializer):
         model = License_Policy_Authorization_Group_Member
         fields = "__all__"
 
-    def validate(self, attrs: dict):
+    def validate(self, attrs: dict) -> dict:
         self.instance: License_Policy_Authorization_Group_Member
         data_license_policy: Optional[License_Policy] = attrs.get("license_policy")
         data_authorization_group = attrs.get("authorization_group")

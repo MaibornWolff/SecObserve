@@ -1,9 +1,10 @@
 import json
 import re
-from typing import Any
+from typing import Any, Optional, Union
 from urllib.parse import urlparse
 
 import jsonpickle
+from django.db.models import QuerySet
 from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
@@ -12,6 +13,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.mixins import DestroyModelMixin, ListModelMixin, RetrieveModelMixin
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_204_NO_CONTENT
 from rest_framework.views import APIView
@@ -96,7 +98,7 @@ class CSAFDocumentCreateView(APIView):
         responses={HTTP_200_OK: bytes},
     )
     @action(detail=True, methods=["post"])
-    def post(self, request):
+    def post(self, request: Request) -> HttpResponse:
         serializer = CSAFDocumentCreateSerializer(data=request.data)
         if not serializer.is_valid():
             raise ValidationError(serializer.errors)
@@ -148,7 +150,9 @@ class CSAFDocumentUpdateView(APIView):
         request=CSAFDocumentUpdateSerializer,
         responses={HTTP_200_OK: bytes},
     )
-    def post(self, request, document_id_prefix: str, document_base_id: str):
+    def post(
+        self, request: Request, document_id_prefix: str, document_base_id: str
+    ) -> HttpResponse:
         serializer = CSAFDocumentUpdateSerializer(data=request.data)
         if not serializer.is_valid():
             raise ValidationError(serializer.errors)
@@ -188,7 +192,7 @@ class CSAFViewSet(
     filter_backends = [DjangoFilterBackend]
     permission_classes = (IsAuthenticated, UserHasVEXPermission)
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[CSAF]:
         return get_csafs()
 
 
@@ -198,7 +202,7 @@ class CSAFVulnerabilityViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixi
     filterset_class = CSAFVulnerabilityFilter
     filter_backends = [DjangoFilterBackend]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[CSAF_Vulnerability]:
         return get_csaf_vulnerabilities()
 
 
@@ -208,7 +212,7 @@ class CSAFBranchViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     filterset_class = CSAFBranchFilter
     filter_backends = [DjangoFilterBackend]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[CSAF_Branch]:
         return get_csaf_branches()
 
 
@@ -219,7 +223,7 @@ class OpenVEXDocumentCreateView(APIView):
         responses={HTTP_200_OK: bytes},
     )
     @action(detail=True, methods=["post"])
-    def post(self, request):
+    def post(self, request: Request) -> HttpResponse:
         serializer = OpenVEXDocumentCreateSerializer(data=request.data)
         if not serializer.is_valid():
             raise ValidationError(serializer.errors)
@@ -272,7 +276,9 @@ class OpenVEXDocumentUpdateView(APIView):
         responses={HTTP_200_OK: bytes},
     )
     @action(detail=True, methods=["post"])
-    def post(self, request, document_id_prefix: str, document_base_id: str):
+    def post(
+        self, request: Request, document_id_prefix: str, document_base_id: str
+    ) -> HttpResponse:
         serializer = OpenVEXDocumentUpdateSerializer(data=request.data)
         if not serializer.is_valid():
             raise ValidationError(serializer.errors)
@@ -310,7 +316,7 @@ class OpenVEXViewSet(
     filter_backends = [DjangoFilterBackend]
     permission_classes = (IsAuthenticated, UserHasVEXPermission)
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[OpenVEX]:
         return get_openvex_s()
 
 
@@ -320,7 +326,7 @@ class OpenVEXVulnerabilityViewSet(GenericViewSet, ListModelMixin, RetrieveModelM
     filterset_class = OpenVEXVulnerabilityFilter
     filter_backends = [DjangoFilterBackend]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[OpenVEX_Vulnerability]:
         return get_openvex_vulnerabilities()
 
 
@@ -330,7 +336,7 @@ class OpenVEXBranchViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     filterset_class = OpenVEXBranchFilter
     filter_backends = [DjangoFilterBackend]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[OpenVEX_Branch]:
         return get_openvex_branches()
 
 
@@ -351,7 +357,7 @@ class VEXDocumentViewSet(
     filter_backends = [DjangoFilterBackend]
     permission_classes = (IsAuthenticated, UserHasSuperuserPermission)
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[VEX_Document]:
         return get_vex_documents()
 
 
@@ -362,7 +368,7 @@ class VEXStatementViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     filter_backends = [DjangoFilterBackend]
     permission_classes = (IsAuthenticated, UserHasSuperuserPermission)
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[VEX_Statement]:
         return get_vex_statements()
 
 
@@ -374,7 +380,7 @@ class VEXImportView(APIView):
         request=VEXImportSerializer,
         responses={HTTP_204_NO_CONTENT: None},
     )
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         request_serializer = VEXImportSerializer(data=request.data)
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
@@ -400,7 +406,7 @@ def _object_to_json(object_to_encode: Any, vex_type: str) -> str:
 def _remove_empty_elements(d: dict) -> dict:
     """recursively remove empty lists, empty dicts, or None elements from a dictionary"""
 
-    def empty(x):
+    def empty(x: Optional[Union[dict | list]]) -> bool:
         return x is None or x == {} or x == []
 
     if not isinstance(d, (dict, list)):

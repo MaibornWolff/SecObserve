@@ -92,7 +92,7 @@ class ObservationSerializer(ModelSerializer):
         model = Observation
         exclude = ["numerical_severity", "issue_tracker_jira_initial_status"]
 
-    def to_representation(self, instance):
+    def to_representation(self, instance: Observation) -> dict:
         response = super().to_representation(instance)
         response["evidences"] = sorted(response["evidences"], key=lambda x: x["name"])
         return response
@@ -242,7 +242,7 @@ class ObservationListSerializer(ModelSerializer):
 
 
 class ObservationUpdateSerializer(ModelSerializer):
-    def validate(self, attrs: dict):
+    def validate(self, attrs: dict) -> dict:
         self.instance: Observation
         if self.instance and self.instance.parser.type != Parser_Type.TYPE_MANUAL:
             raise ValidationError("Only manual observations can be updated")
@@ -275,7 +275,7 @@ class ObservationUpdateSerializer(ModelSerializer):
     def validate_cvss4_vector(self, cvss4_vector: str) -> str:
         return validate_cvss4_vector(cvss4_vector)
 
-    def update(self, instance: Observation, validated_data: dict):
+    def update(self, instance: Observation, validated_data: dict) -> Observation:
         actual_severity = instance.current_severity
         actual_status = instance.current_status
         actual_vex_justification = instance.current_vex_justification
@@ -345,7 +345,7 @@ class ObservationUpdateSerializer(ModelSerializer):
 
         return observation
 
-    def to_representation(self, instance):
+    def to_representation(self, instance: Observation) -> dict:
         serializer = ObservationSerializer(instance)
         return serializer.data
 
@@ -389,7 +389,7 @@ class ObservationUpdateSerializer(ModelSerializer):
 
 
 class ObservationCreateSerializer(ModelSerializer):
-    def validate(self, attrs):
+    def validate(self, attrs: dict) -> dict:
         attrs["parser"] = Parser.objects.get(type=Parser_Type.TYPE_MANUAL)
         attrs["scanner"] = Parser_Type.TYPE_MANUAL
         attrs["import_last_seen"] = timezone.now()
@@ -416,7 +416,7 @@ class ObservationCreateSerializer(ModelSerializer):
     def validate_cvss4_vector(self, cvss4_vector: str) -> str:
         return validate_cvss4_vector(cvss4_vector)
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict) -> Observation:
         if validated_data.get("origin_service"):
             service = Service.objects.get(pk=validated_data["origin_service"].id)
             validated_data["origin_service_name"] = service.name
@@ -443,7 +443,7 @@ class ObservationCreateSerializer(ModelSerializer):
 
         return observation
 
-    def to_representation(self, instance):
+    def to_representation(self, instance: Observation) -> dict:
         serializer = ObservationSerializer(instance)
         return serializer.data
 
