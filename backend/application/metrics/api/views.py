@@ -130,9 +130,7 @@ class ProductMetricsStatusView(APIView):
 
 def _get_and_check_product(request: Request) -> Optional[Product]:
     product_id = request.query_params.get("product_id")
-    if not product_id:
-        raise ValidationError("product_id is required")
-    if not product_id.isdigit():
+    if product_id and not product_id.isdigit():
         raise ValidationError("product_id must be a number")
     if product_id:
         product = get_product_by_id(int(product_id))
