@@ -169,6 +169,7 @@ export const LicenseComponentComponent = () => {
                                                     component.component_purl_namespace
                                                 )
                                             }
+                                            new_tab={true}
                                         />
                                     </Labeled>
                                 )}

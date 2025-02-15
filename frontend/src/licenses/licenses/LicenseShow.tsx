@@ -44,6 +44,7 @@ const LicenseComponent = () => {
                                             text={license.reference}
                                             url={license.reference}
                                             label="Reference"
+                                            new_tab={true}
                                         />
                                     </Labeled>
                                 )}
