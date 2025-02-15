@@ -31,9 +31,7 @@ class TestAzureDefenderParser(TestCase):
             self.assertEqual("Azure Defender", parser.name)
             self.assertTrue(isinstance(parser_instance, AzureDefenderParser))
 
-            observations = parser_instance.get_observations(
-                data, Product(name="product"), None
-            )
+            observations = parser_instance.get_observations(data, Product(name="product"), None)
             self.assertEqual(2, len(observations))
 
             observation = observations[0]

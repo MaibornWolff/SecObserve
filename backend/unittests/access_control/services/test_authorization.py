@@ -42,11 +42,7 @@ class TestAuthorization(BaseTestCase):
     @patch("application.access_control.services.authorization.get_highest_user_role")
     def test_user_has_permission_product_no_permissions(self, mock):
         mock.return_value = None
-        self.assertFalse(
-            user_has_permission(
-                self.product_1, Permissions.Product_Edit, self.user_internal
-            )
-        )
+        self.assertFalse(user_has_permission(self.product_1, Permissions.Product_Edit, self.user_internal))
         mock.assert_called_with(self.product_1, self.user_internal)
 
     @patch("application.access_control.services.authorization.get_highest_user_role")
@@ -66,11 +62,7 @@ class TestAuthorization(BaseTestCase):
     @patch("application.access_control.services.authorization.get_highest_user_role")
     def test_user_has_permission_product_group_no_permissions(self, mock):
         mock.return_value = None
-        self.assertFalse(
-            user_has_permission(
-                self.product_group_1, Permissions.Product_Edit, self.user_internal
-            )
-        )
+        self.assertFalse(user_has_permission(self.product_group_1, Permissions.Product_Edit, self.user_internal))
         mock.assert_called_with(self.product_group_1, self.user_internal)
 
     @patch("application.access_control.services.authorization.get_highest_user_role")
@@ -89,9 +81,7 @@ class TestAuthorization(BaseTestCase):
 
     def test_user_has_permission_product_member_wrong_permission(self):
         with self.assertRaises(NoAuthorizationImplementedError) as e:
-            user_has_permission(
-                self.product_member_1, Permissions.Product_Edit, self.user_internal
-            )
+            user_has_permission(self.product_member_1, Permissions.Product_Edit, self.user_internal)
         self.assertEqual(
             "No authorization implemented for class Product_Member and permission 1102",
             str(e.exception),
@@ -126,9 +116,7 @@ class TestAuthorization(BaseTestCase):
         )
 
     @patch("application.access_control.services.authorization.get_highest_user_role")
-    def test_user_has_permission_product_authorization_group_member_correct_permission(
-        self, mock
-    ):
+    def test_user_has_permission_product_authorization_group_member_correct_permission(self, mock):
         mock.return_value = None
         self.assertFalse(
             user_has_permission(
@@ -143,9 +131,7 @@ class TestAuthorization(BaseTestCase):
 
     def test_user_has_permission_rule_wrong_permission(self):
         with self.assertRaises(NoAuthorizationImplementedError) as e:
-            user_has_permission(
-                self.product_rule_1, Permissions.Product_Edit, self.user_internal
-            )
+            user_has_permission(self.product_rule_1, Permissions.Product_Edit, self.user_internal)
         self.assertEqual(
             "No authorization implemented for class Rule and permission 1102",
             str(e.exception),
@@ -154,29 +140,19 @@ class TestAuthorization(BaseTestCase):
     @patch("application.access_control.services.authorization.get_highest_user_role")
     def test_user_has_permission_rule_correct_permission(self, mock):
         mock.return_value = None
-        self.assertFalse(
-            user_has_permission(
-                self.product_rule_1, Permissions.Product_Rule_Edit, self.user_internal
-            )
-        )
+        self.assertFalse(user_has_permission(self.product_rule_1, Permissions.Product_Rule_Edit, self.user_internal))
         mock.assert_called_with(self.product_1, self.user_internal)
 
     def test_user_has_permission_rule_general_rule(self):
         with self.assertRaises(NoAuthorizationImplementedError) as e:
-            user_has_permission(
-                self.general_rule, Permissions.Product_Rule_View, self.user_internal
-            )
-        self.assertEqual(
-            "No authorization implemented for General Rules", str(e.exception)
-        )
+            user_has_permission(self.general_rule, Permissions.Product_Rule_View, self.user_internal)
+        self.assertEqual("No authorization implemented for General Rules", str(e.exception))
 
     # --- Branch ---
 
     def test_user_has_permission_branch_wrong_permission(self):
         with self.assertRaises(NoAuthorizationImplementedError) as e:
-            user_has_permission(
-                self.branch_1, Permissions.Product_Edit, self.user_internal
-            )
+            user_has_permission(self.branch_1, Permissions.Product_Edit, self.user_internal)
         self.assertEqual(
             "No authorization implemented for class Branch and permission 1102",
             str(e.exception),
@@ -185,20 +161,14 @@ class TestAuthorization(BaseTestCase):
     @patch("application.access_control.services.authorization.get_highest_user_role")
     def test_user_has_permission_branch_correct_permission(self, mock):
         mock.return_value = None
-        self.assertFalse(
-            user_has_permission(
-                self.branch_1, Permissions.Branch_Edit, self.user_internal
-            )
-        )
+        self.assertFalse(user_has_permission(self.branch_1, Permissions.Branch_Edit, self.user_internal))
         mock.assert_called_with(self.product_1, self.user_internal)
 
     # --- Service ---
 
     def test_user_has_permission_service_wrong_permission(self):
         with self.assertRaises(NoAuthorizationImplementedError) as e:
-            user_has_permission(
-                self.service_1, Permissions.Product_Edit, self.user_internal
-            )
+            user_has_permission(self.service_1, Permissions.Product_Edit, self.user_internal)
         self.assertEqual(
             "No authorization implemented for class Service and permission 1102",
             str(e.exception),
@@ -207,20 +177,14 @@ class TestAuthorization(BaseTestCase):
     @patch("application.access_control.services.authorization.get_highest_user_role")
     def test_user_has_permission_service_correct_permission(self, mock):
         mock.return_value = None
-        self.assertFalse(
-            user_has_permission(
-                self.service_1, Permissions.Service_Delete, self.user_internal
-            )
-        )
+        self.assertFalse(user_has_permission(self.service_1, Permissions.Service_Delete, self.user_internal))
         mock.assert_called_with(self.product_1, self.user_internal)
 
     # --- Observation ---
 
     def test_user_has_permission_observation_wrong_permission(self):
         with self.assertRaises(NoAuthorizationImplementedError) as e:
-            user_has_permission(
-                self.observation_1, Permissions.Product_Edit, self.user_internal
-            )
+            user_has_permission(self.observation_1, Permissions.Product_Edit, self.user_internal)
         self.assertEqual(
             "No authorization implemented for class Observation and permission 1102",
             str(e.exception),
@@ -229,20 +193,14 @@ class TestAuthorization(BaseTestCase):
     @patch("application.access_control.services.authorization.get_highest_user_role")
     def test_user_has_permission_observation_correct_permission(self, mock):
         mock.return_value = None
-        self.assertFalse(
-            user_has_permission(
-                self.observation_1, Permissions.Observation_Delete, self.user_internal
-            )
-        )
+        self.assertFalse(user_has_permission(self.observation_1, Permissions.Observation_Delete, self.user_internal))
         mock.assert_called_with(self.product_1, self.user_internal)
 
     # --- Observation Log ---
 
     def test_user_has_permission_observation_log_wrong_permission(self):
         with self.assertRaises(NoAuthorizationImplementedError) as e:
-            user_has_permission(
-                self.observation_log_1, Permissions.Product_Edit, self.user_internal
-            )
+            user_has_permission(self.observation_log_1, Permissions.Product_Edit, self.user_internal)
         self.assertEqual(
             "No authorization implemented for class Observation_Log and permission 1102",
             str(e.exception),
@@ -264,9 +222,7 @@ class TestAuthorization(BaseTestCase):
 
     def test_user_has_permission_api_configuration_wrong_permission(self):
         with self.assertRaises(NoAuthorizationImplementedError) as e:
-            user_has_permission(
-                self.api_configuration_1, Permissions.Product_Edit, self.user_internal
-            )
+            user_has_permission(self.api_configuration_1, Permissions.Product_Edit, self.user_internal)
         self.assertEqual(
             "No authorization implemented for class Api_Configuration and permission 1102",
             str(e.exception),
@@ -288,9 +244,7 @@ class TestAuthorization(BaseTestCase):
 
     def test_user_has_permission_vex_base_wrong_permission(self):
         with self.assertRaises(NoAuthorizationImplementedError) as e:
-            user_has_permission(
-                self.openvex_1, Permissions.Product_Edit, self.user_internal
-            )
+            user_has_permission(self.openvex_1, Permissions.Product_Edit, self.user_internal)
         self.assertEqual(
             "No authorization implemented for class OpenVEX and permission 1102",
             str(e.exception),
@@ -323,9 +277,7 @@ class TestAuthorization(BaseTestCase):
 
     def test_user_has_permission_vulnerability_check_wrong_permission(self):
         with self.assertRaises(NoAuthorizationImplementedError) as e:
-            user_has_permission(
-                self.vulnerability_check_1, Permissions.Product_Edit, self.user_internal
-            )
+            user_has_permission(self.vulnerability_check_1, Permissions.Product_Edit, self.user_internal)
         self.assertEqual(
             "No authorization implemented for class Vulnerability_Check and permission 1102",
             str(e.exception),
@@ -372,24 +324,16 @@ class TestAuthorization(BaseTestCase):
             role_has_permission(Roles.Reader, 99999)
         self.assertEqual("Permission 99999 does not exist", str(e.exception))
 
-    @patch(
-        "application.access_control.services.authorization.get_roles_with_permissions"
-    )
+    @patch("application.access_control.services.authorization.get_roles_with_permissions")
     def test_role_has_permission_no_permission(self, mock):
         mock.return_value = {Roles.Reader: {}}
-        self.assertFalse(
-            role_has_permission(Roles.Reader, Permissions.Observation_Delete)
-        )
+        self.assertFalse(role_has_permission(Roles.Reader, Permissions.Observation_Delete))
 
     def test_role_has_permission_not_permitted(self):
-        self.assertFalse(
-            role_has_permission(Roles.Maintainer, Permissions.Observation_Delete)
-        )
+        self.assertFalse(role_has_permission(Roles.Maintainer, Permissions.Observation_Delete))
 
     def test_role_has_permission_successful(self):
-        self.assertTrue(
-            role_has_permission(Roles.Owner, Permissions.Observation_Delete)
-        )
+        self.assertTrue(role_has_permission(Roles.Owner, Permissions.Observation_Delete))
 
     # ---------------------------------------------------------------
     # get_user_permission
@@ -397,9 +341,7 @@ class TestAuthorization(BaseTestCase):
 
     def test_get_user_permission_internal(self):
         permissions = get_user_permissions(self.user_internal)
-        self.assertEqual(
-            [Permissions.Product_Create, Permissions.Product_Group_Create], permissions
-        )
+        self.assertEqual([Permissions.Product_Create, Permissions.Product_Group_Create], permissions)
 
     @patch("application.access_control.services.authorization.get_current_user")
     def test_get_user_permission_external(self, mock):
@@ -462,12 +404,8 @@ def prepare_authorization_groups():
     product_group = Product.objects.get(name="db_product_group")
 
     user_internal_write = User.objects.get(username="db_internal_write")
-    group_internal_write = Authorization_Group.objects.create(
-        name="db_group_internal_write"
-    )
-    Authorization_Group_Member.objects.filter(
-        authorization_group=group_internal_write
-    ).delete()
+    group_internal_write = Authorization_Group.objects.create(name="db_group_internal_write")
+    Authorization_Group_Member.objects.filter(authorization_group=group_internal_write).delete()
     Authorization_Group_Member.objects.create(
         authorization_group=group_internal_write,
         user=user_internal_write,
@@ -477,12 +415,8 @@ def prepare_authorization_groups():
         product=product_internal, authorization_group=group_internal_write, role=5
     )
 
-    group_internal_read = Authorization_Group.objects.create(
-        name="db_group_internal_read"
-    )
-    Authorization_Group_Member.objects.filter(
-        authorization_group=group_internal_read
-    ).delete()
+    group_internal_read = Authorization_Group.objects.create(name="db_group_internal_read")
+    Authorization_Group_Member.objects.filter(authorization_group=group_internal_read).delete()
     Authorization_Group_Member.objects.create(
         authorization_group=group_internal_read,
         user=User.objects.get(id=3),
@@ -493,9 +427,7 @@ def prepare_authorization_groups():
     )
 
     group_external = Authorization_Group.objects.create(name="db_group_external")
-    Authorization_Group_Member.objects.filter(
-        authorization_group=group_external
-    ).delete()
+    Authorization_Group_Member.objects.filter(authorization_group=group_external).delete()
     Authorization_Group_Member.objects.create(
         authorization_group=group_external,
         user=User.objects.get(id=4),
@@ -505,12 +437,8 @@ def prepare_authorization_groups():
         product=product_external, authorization_group=group_external, role=5
     )
 
-    group_product_group = Authorization_Group.objects.create(
-        name="db_group_product_group"
-    )
-    Authorization_Group_Member.objects.filter(
-        authorization_group=group_product_group
-    ).delete()
+    group_product_group = Authorization_Group.objects.create(name="db_group_product_group")
+    Authorization_Group_Member.objects.filter(authorization_group=group_product_group).delete()
     Authorization_Group_Member.objects.create(
         authorization_group=group_product_group,
         user=User.objects.get(id=6),

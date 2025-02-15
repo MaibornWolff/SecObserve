@@ -45,8 +45,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="observation",
             name="branch",
-            field=models.ForeignKey(
-                null=True, on_delete=django.db.models.deletion.CASCADE, to="core.branch"
-            ),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to="core.branch"),
         ),
     ]

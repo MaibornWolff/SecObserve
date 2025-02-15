@@ -9,9 +9,7 @@ from application.core.types import Status
 
 
 @db_task()
-def find_potential_duplicates(
-    product: Product, branch: Optional[Branch], service: Optional[str]
-) -> None:
+def find_potential_duplicates(product: Product, branch: Optional[Branch], service: Optional[str]) -> None:
     try:
         if not service:
             service = ""
@@ -28,9 +26,7 @@ def find_potential_duplicates(
         handle_task_exception(e)
 
 
-def _handle_observation(
-    observation: Observation, observations: QuerySet[Observation]
-) -> None:
+def _handle_observation(observation: Observation, observations: QuerySet[Observation]) -> None:
     Potential_Duplicate.objects.filter(observation=observation).delete()
     initial_has_potential_duplicates = observation.has_potential_duplicates
     observation.has_potential_duplicates = False
@@ -46,21 +42,15 @@ def _handle_observation(
                     and potential_duplicate_observation.origin_component_name
                     and observation.title == potential_duplicate_observation.title
                 ):
-                    potential_duplicate_type = (
-                        Potential_Duplicate.POTENTIAL_DUPLICATE_TYPE_COMPONENT
-                    )
+                    potential_duplicate_type = Potential_Duplicate.POTENTIAL_DUPLICATE_TYPE_COMPONENT
                 if (
                     observation.origin_source_file
                     and observation.origin_source_line_start
-                    and observation.origin_source_file
-                    == potential_duplicate_observation.origin_source_file
-                    and observation.origin_source_line_start
-                    == potential_duplicate_observation.origin_source_line_start
+                    and observation.origin_source_file == potential_duplicate_observation.origin_source_file
+                    and observation.origin_source_line_start == potential_duplicate_observation.origin_source_line_start
                     and observation.scanner != potential_duplicate_observation.scanner
                 ):
-                    potential_duplicate_type = (
-                        Potential_Duplicate.POTENTIAL_DUPLICATE_TYPE_SOURCE
-                    )
+                    potential_duplicate_type = Potential_Duplicate.POTENTIAL_DUPLICATE_TYPE_SOURCE
                 if potential_duplicate_type:
                     Potential_Duplicate.objects.update_or_create(
                         observation=observation,
@@ -75,9 +65,7 @@ def _handle_observation(
 def set_potential_duplicate_both_ways(observation: Observation) -> None:
     set_potential_duplicate(observation)
 
-    potential_duplicate_observations = Potential_Duplicate.objects.filter(
-        potential_duplicate_observation=observation
-    )
+    potential_duplicate_observations = Potential_Duplicate.objects.filter(potential_duplicate_observation=observation)
     for potential_duplicate_observation in potential_duplicate_observations:
         set_potential_duplicate(potential_duplicate_observation.observation)
 

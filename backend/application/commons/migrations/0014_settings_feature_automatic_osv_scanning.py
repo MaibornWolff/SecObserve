@@ -13,8 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="settings",
             name="feature_automatic_osv_scanning",
-            field=models.BooleanField(
-                default=True, help_text="Enable automatic OSV scanning"
-            ),
+            field=models.BooleanField(default=True, help_text="Enable automatic OSV scanning"),
         ),
     ]

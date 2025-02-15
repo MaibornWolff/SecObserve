@@ -73,34 +73,20 @@ def _calculate_active_product_security_gate(product: Product) -> bool:
         )
     else:
         security_gate_threshold_critical = (
-            product.security_gate_threshold_critical
-            if product.security_gate_threshold_critical
-            else 0
+            product.security_gate_threshold_critical if product.security_gate_threshold_critical else 0
         )
         security_gate_threshold_high = (
-            product.security_gate_threshold_high
-            if product.security_gate_threshold_high
-            else 0
+            product.security_gate_threshold_high if product.security_gate_threshold_high else 0
         )
         security_gate_threshold_medium = (
-            product.security_gate_threshold_medium
-            if product.security_gate_threshold_medium
-            else 0
+            product.security_gate_threshold_medium if product.security_gate_threshold_medium else 0
         )
-        security_gate_threshold_low = (
-            product.security_gate_threshold_low
-            if product.security_gate_threshold_low
-            else 0
-        )
+        security_gate_threshold_low = product.security_gate_threshold_low if product.security_gate_threshold_low else 0
         security_gate_threshold_none = (
-            product.security_gate_threshold_none
-            if product.security_gate_threshold_none
-            else 0
+            product.security_gate_threshold_none if product.security_gate_threshold_none else 0
         )
         security_gate_threshold_unknown = (
-            product.security_gate_threshold_unknown
-            if product.security_gate_threshold_unknown
-            else 0
+            product.security_gate_threshold_unknown if product.security_gate_threshold_unknown else 0
         )
 
     if (
@@ -108,16 +94,11 @@ def _calculate_active_product_security_gate(product: Product) -> bool:
             product, Severity.SEVERITY_CRITICAL
         )
         > security_gate_threshold_critical
-        or get_product_observation_count(product, Severity.SEVERITY_HIGH)
-        > security_gate_threshold_high
-        or get_product_observation_count(product, Severity.SEVERITY_MEDIUM)
-        > security_gate_threshold_medium
-        or get_product_observation_count(product, Severity.SEVERITY_LOW)
-        > security_gate_threshold_low
-        or get_product_observation_count(product, Severity.SEVERITY_NONE)
-        > security_gate_threshold_none
-        or get_product_observation_count(product, Severity.SEVERITY_UNKNOWN)
-        > security_gate_threshold_unknown
+        or get_product_observation_count(product, Severity.SEVERITY_HIGH) > security_gate_threshold_high
+        or get_product_observation_count(product, Severity.SEVERITY_MEDIUM) > security_gate_threshold_medium
+        or get_product_observation_count(product, Severity.SEVERITY_LOW) > security_gate_threshold_low
+        or get_product_observation_count(product, Severity.SEVERITY_NONE) > security_gate_threshold_none
+        or get_product_observation_count(product, Severity.SEVERITY_UNKNOWN) > security_gate_threshold_unknown
     ):
         new_security_gate_passed = False
 
@@ -133,16 +114,11 @@ def _calculate_active_config_security_gate(product: Product) -> bool:
             product, Severity.SEVERITY_CRITICAL
         )
         > settings.security_gate_threshold_critical
-        or get_product_observation_count(product, Severity.SEVERITY_HIGH)
-        > settings.security_gate_threshold_high
-        or get_product_observation_count(product, Severity.SEVERITY_MEDIUM)
-        > settings.security_gate_threshold_medium
-        or get_product_observation_count(product, Severity.SEVERITY_LOW)
-        > settings.security_gate_threshold_low
-        or get_product_observation_count(product, Severity.SEVERITY_NONE)
-        > settings.security_gate_threshold_none
-        or get_product_observation_count(product, Severity.SEVERITY_UNKNOWN)
-        > settings.security_gate_threshold_unknown
+        or get_product_observation_count(product, Severity.SEVERITY_HIGH) > settings.security_gate_threshold_high
+        or get_product_observation_count(product, Severity.SEVERITY_MEDIUM) > settings.security_gate_threshold_medium
+        or get_product_observation_count(product, Severity.SEVERITY_LOW) > settings.security_gate_threshold_low
+        or get_product_observation_count(product, Severity.SEVERITY_NONE) > settings.security_gate_threshold_none
+        or get_product_observation_count(product, Severity.SEVERITY_UNKNOWN) > settings.security_gate_threshold_unknown
     ):
         new_security_gate_passed = False
 

@@ -27,18 +27,12 @@ class TestSetPotentialDuplicate(BaseTestCase):
 
     @patch("application.core.services.potential_duplicates.set_potential_duplicate")
     @patch("application.core.models.Potential_Duplicate.objects.filter")
-    def test_set_potential_duplicate_both_ways(
-        self, filter_mock, set_potential_duplicate_mock
-    ):
-        potential_duplicate_observation = Observation(
-            title="observation_2", product=self.product_1
-        )
+    def test_set_potential_duplicate_both_ways(self, filter_mock, set_potential_duplicate_mock):
+        potential_duplicate_observation = Observation(title="observation_2", product=self.product_1)
 
         potential_duplicate = Potential_Duplicate()
         potential_duplicate.observation = self.observation_1
-        potential_duplicate.potential_duplicate_observation = (
-            potential_duplicate_observation
-        )
+        potential_duplicate.potential_duplicate_observation = potential_duplicate_observation
 
         filter_mock.return_value = [potential_duplicate]
 
@@ -101,9 +95,7 @@ class TestSetPotentialDuplicate(BaseTestCase):
             self.assertEqual(4, len(observations))
             for observation in observations:
                 self.assertTrue(observation.has_potential_duplicates)
-                for potential_duplicate in Potential_Duplicate.objects.filter(
-                    observation=observation
-                ):
+                for potential_duplicate in Potential_Duplicate.objects.filter(observation=observation):
                     self.assertEqual(
                         potential_duplicate.type,
                         Potential_Duplicate.POTENTIAL_DUPLICATE_TYPE_COMPONENT,

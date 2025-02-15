@@ -42,9 +42,7 @@ class TestBranchSerializer(BaseTestCase):
     def test_get_open_high_observation_count(self, mock_filter):
         mock_filter.return_value.count.return_value = 99
         branch_serializer = BranchSerializer()
-        self.assertEqual(
-            99, branch_serializer.get_open_high_observation_count(obj=self.branch_1)
-        )
+        self.assertEqual(99, branch_serializer.get_open_high_observation_count(obj=self.branch_1))
         mock_filter.assert_called_with(
             branch=self.branch_1,
             current_severity=Severity.SEVERITY_HIGH,
@@ -55,9 +53,7 @@ class TestBranchSerializer(BaseTestCase):
     def test_get_open_medium_observation_count(self, mock_filter):
         mock_filter.return_value.count.return_value = 99
         branch_serializer = BranchSerializer()
-        self.assertEqual(
-            99, branch_serializer.get_open_medium_observation_count(obj=self.branch_1)
-        )
+        self.assertEqual(99, branch_serializer.get_open_medium_observation_count(obj=self.branch_1))
         mock_filter.assert_called_with(
             branch=self.branch_1,
             current_severity=Severity.SEVERITY_MEDIUM,
@@ -68,9 +64,7 @@ class TestBranchSerializer(BaseTestCase):
     def test_get_open_low_observation_count(self, mock_filter):
         mock_filter.return_value.count.return_value = 99
         branch_serializer = BranchSerializer()
-        self.assertEqual(
-            99, branch_serializer.get_open_low_observation_count(obj=self.branch_1)
-        )
+        self.assertEqual(99, branch_serializer.get_open_low_observation_count(obj=self.branch_1))
         mock_filter.assert_called_with(
             branch=self.branch_1,
             current_severity=Severity.SEVERITY_LOW,
@@ -81,9 +75,7 @@ class TestBranchSerializer(BaseTestCase):
     def test_get_open_none_observation_count(self, mock_filter):
         mock_filter.return_value.count.return_value = 99
         branch_serializer = BranchSerializer()
-        self.assertEqual(
-            99, branch_serializer.get_open_none_observation_count(obj=self.branch_1)
-        )
+        self.assertEqual(99, branch_serializer.get_open_none_observation_count(obj=self.branch_1))
         mock_filter.assert_called_with(
             branch=self.branch_1,
             current_severity=Severity.SEVERITY_NONE,
@@ -94,9 +86,7 @@ class TestBranchSerializer(BaseTestCase):
     def test_get_open_unknown_observation_count(self, mock_filter):
         mock_filter.return_value.count.return_value = 99
         branch_serializer = BranchSerializer()
-        self.assertEqual(
-            99, branch_serializer.get_open_unknown_observation_count(obj=self.branch_1)
-        )
+        self.assertEqual(99, branch_serializer.get_open_unknown_observation_count(obj=self.branch_1))
         mock_filter.assert_called_with(
             branch=self.branch_1,
             current_severity=Severity.SEVERITY_UNKNOWN,
@@ -106,9 +96,7 @@ class TestBranchSerializer(BaseTestCase):
     @patch("application.core.api.serializers_product.get_current_user")
     @patch("application.core.api.serializers_product.get_highest_user_role")
     @patch("application.core.api.serializers_product.get_permissions_for_role")
-    def test_get_permissions_user(
-        self, mock_permissions, mock_highest_user_role, mock_user
-    ):
+    def test_get_permissions_user(self, mock_permissions, mock_highest_user_role, mock_user):
         mock_permissions.return_value = [Permissions.Product_View]
         mock_highest_user_role.return_value = Roles.Writer
         mock_user.return_value = self.user_internal
@@ -286,9 +274,7 @@ class TestProductMemberSerializer(BaseTestCase):
 
     @patch("application.core.api.serializers_product.get_current_user")
     @patch("application.core.api.serializers_product.get_highest_user_role")
-    def test_validate_change_owner_not_permitted(
-        self, mock_highest_user_role, mock_user
-    ):
+    def test_validate_change_owner_not_permitted(self, mock_highest_user_role, mock_user):
         mock_highest_user_role.return_value = Roles.Maintainer
         mock_user.return_value = self.user_external
         self.product_member_1.role = Roles.Owner
@@ -322,9 +308,7 @@ class TestProductMemberSerializer(BaseTestCase):
     @patch("application.core.api.serializers_product.get_product_member")
     @patch("application.core.api.serializers_product.get_current_user")
     @patch("application.core.api.serializers_product.get_highest_user_role")
-    def test_validate_successful_no_instance(
-        self, mock_highest_user_role, mock_user, mock_product_member
-    ):
+    def test_validate_successful_no_instance(self, mock_highest_user_role, mock_user, mock_product_member):
         mock_product_member.return_value = None
         mock_highest_user_role.return_value = Roles.Maintainer
         mock_user.return_value = self.user_internal
@@ -346,10 +330,8 @@ class TestProductMemberSerializer(BaseTestCase):
 class TestProductAuthorizationGroupMemberSerializer(BaseTestCase):
     def test_validate_product_change(self):
         product_2 = Product(name="product_2")
-        product_authorization_group_member_serializer = (
-            ProductAuthorizationGroupMemberSerializer(
-                self.product_authorization_group_member_1
-            )
+        product_authorization_group_member_serializer = ProductAuthorizationGroupMemberSerializer(
+            self.product_authorization_group_member_1
         )
         attrs = {
             "product": product_2,
@@ -365,10 +347,8 @@ class TestProductAuthorizationGroupMemberSerializer(BaseTestCase):
 
     def test_validate_authorization_group_change(self):
         authorization_group_1 = Authorization_Group(name="authorization_group_2")
-        product_authorization_group_member_serializer = (
-            ProductAuthorizationGroupMemberSerializer(
-                self.product_authorization_group_member_1
-            )
+        product_authorization_group_member_serializer = ProductAuthorizationGroupMemberSerializer(
+            self.product_authorization_group_member_1
         )
         attrs = {
             "authorization_group": authorization_group_1,
@@ -382,16 +362,10 @@ class TestProductAuthorizationGroupMemberSerializer(BaseTestCase):
             str(e.exception),
         )
 
-    @patch(
-        "application.core.api.serializers_product.get_product_authorization_group_member"
-    )
+    @patch("application.core.api.serializers_product.get_product_authorization_group_member")
     def test_validate_already_exists(self, mock_product_authorization_group_member):
-        mock_product_authorization_group_member.return_value = (
-            self.product_authorization_group_member_1
-        )
-        product_authorization_group_member_serializer = (
-            ProductAuthorizationGroupMemberSerializer()
-        )
+        mock_product_authorization_group_member.return_value = self.product_authorization_group_member_1
+        product_authorization_group_member_serializer = ProductAuthorizationGroupMemberSerializer()
         attrs = {
             "product": self.product_1,
             "authorization_group": self.authorization_group_1,
@@ -404,19 +378,15 @@ class TestProductAuthorizationGroupMemberSerializer(BaseTestCase):
             "[ErrorDetail(string='Product authorization group member product_1 / authorization_group_1 already exists', code='invalid')]",
             str(e.exception),
         )
-        mock_product_authorization_group_member.assert_called_with(
-            self.product_1, self.authorization_group_1
-        )
+        mock_product_authorization_group_member.assert_called_with(self.product_1, self.authorization_group_1)
 
     @patch("application.core.api.serializers_product.get_current_user")
     @patch("application.core.api.serializers_product.get_highest_user_role")
     def test_validate_add_owner_not_permitted(self, mock_highest_user_role, mock_user):
         mock_highest_user_role.return_value = Roles.Maintainer
         mock_user.return_value = self.user_external
-        product_authorization_group_member_serializer = (
-            ProductAuthorizationGroupMemberSerializer(
-                self.product_authorization_group_member_1
-            )
+        product_authorization_group_member_serializer = ProductAuthorizationGroupMemberSerializer(
+            self.product_authorization_group_member_1
         )
         attrs = {"role": Roles.Owner}
 
@@ -432,16 +402,12 @@ class TestProductAuthorizationGroupMemberSerializer(BaseTestCase):
 
     @patch("application.core.api.serializers_product.get_current_user")
     @patch("application.core.api.serializers_product.get_highest_user_role")
-    def test_validate_change_owner_not_permitted(
-        self, mock_highest_user_role, mock_user
-    ):
+    def test_validate_change_owner_not_permitted(self, mock_highest_user_role, mock_user):
         mock_highest_user_role.return_value = Roles.Maintainer
         mock_user.return_value = self.user_external
         self.product_authorization_group_member_1.role = Roles.Owner
-        product_authorization_group_member_serializer = (
-            ProductAuthorizationGroupMemberSerializer(
-                self.product_authorization_group_member_1
-            )
+        product_authorization_group_member_serializer = ProductAuthorizationGroupMemberSerializer(
+            self.product_authorization_group_member_1
         )
         attrs = {"role": Roles.Writer}
 
@@ -460,10 +426,8 @@ class TestProductAuthorizationGroupMemberSerializer(BaseTestCase):
     def test_validate_successful_with_instance(self, mock_highest_user_role, mock_user):
         mock_highest_user_role.return_value = Roles.Maintainer
         mock_user.return_value = self.user_internal
-        product_authorization_group_member_serializer = (
-            ProductAuthorizationGroupMemberSerializer(
-                self.product_authorization_group_member_1
-            )
+        product_authorization_group_member_serializer = ProductAuthorizationGroupMemberSerializer(
+            self.product_authorization_group_member_1
         )
         attrs = {"role": Roles.Writer}
 
@@ -473,9 +437,7 @@ class TestProductAuthorizationGroupMemberSerializer(BaseTestCase):
         mock_highest_user_role.assert_called_with(self.product_1, self.user_internal)
         mock_user.assert_called_once()
 
-    @patch(
-        "application.core.api.serializers_product.get_product_authorization_group_member"
-    )
+    @patch("application.core.api.serializers_product.get_product_authorization_group_member")
     @patch("application.core.api.serializers_product.get_current_user")
     @patch("application.core.api.serializers_product.get_highest_user_role")
     def test_validate_successful_no_instance(
@@ -484,9 +446,7 @@ class TestProductAuthorizationGroupMemberSerializer(BaseTestCase):
         mock_product_authorization_group_member.return_value = None
         mock_highest_user_role.return_value = Roles.Maintainer
         mock_user.return_value = self.user_internal
-        product_authorization_group_member_serializer = (
-            ProductAuthorizationGroupMemberSerializer()
-        )
+        product_authorization_group_member_serializer = ProductAuthorizationGroupMemberSerializer()
         attrs = {
             "product": self.product_1,
             "authorization_group": self.authorization_group_1,
@@ -496,8 +456,6 @@ class TestProductAuthorizationGroupMemberSerializer(BaseTestCase):
         new_attrs = product_authorization_group_member_serializer.validate(attrs)
 
         self.assertEqual(new_attrs, attrs)
-        mock_product_authorization_group_member.assert_called_with(
-            self.product_1, self.authorization_group_1
-        )
+        mock_product_authorization_group_member.assert_called_with(self.product_1, self.authorization_group_1)
         mock_highest_user_role.assert_called_with(self.product_1, self.user_internal)
         mock_user.assert_called_once()

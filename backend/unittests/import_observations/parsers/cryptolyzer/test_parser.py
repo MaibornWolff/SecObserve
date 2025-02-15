@@ -14,23 +14,17 @@ class TestCryptolyzeParser(TestCase):
             self.assertEqual("CryptoLyzer", parser.name)
             self.assertTrue(isinstance(parser_instance, CryptoLyzerParser))
 
-            observations = parser_instance.get_observations(
-                data, Product(name="product"), None
-            )
+            observations = parser_instance.get_observations(data, Product(name="product"), None)
             self.assertEqual(0, len(observations))
 
     def test_multiple_observations(self):
-        with open(
-            path.dirname(__file__) + "/files/multiple_observations.json"
-        ) as testfile:
+        with open(path.dirname(__file__) + "/files/multiple_observations.json") as testfile:
             parser = CryptoLyzerParser()
             parser, parser_instance, data = detect_parser(testfile)
             self.assertEqual("CryptoLyzer", parser.name)
             self.assertTrue(isinstance(parser_instance, CryptoLyzerParser))
 
-            observations = parser_instance.get_observations(
-                data, Product(name="product"), None
-            )
+            observations = parser_instance.get_observations(data, Product(name="product"), None)
             self.assertEqual(4, len(observations))
 
             observation = observations[0]
@@ -40,9 +34,7 @@ class TestCryptolyzeParser(TestCase):
                 observation.description,
             )
             self.assertEqual(Severity.SEVERITY_MEDIUM, observation.parser_severity)
-            self.assertEqual(
-                "https://www.example.org:443", observation.origin_endpoint_url
-            )
+            self.assertEqual("https://www.example.org:443", observation.origin_endpoint_url)
             self.assertEqual("CryptoLyzer", observation.scanner)
             self.assertEqual(
                 "https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TG02102/BSI-TR-02102-2.pdf?__blob=publicationFile&v=5",
@@ -61,18 +53,14 @@ class TestCryptolyzeParser(TestCase):
                 observation.description,
             )
             self.assertEqual(Severity.SEVERITY_MEDIUM, observation.parser_severity)
-            self.assertEqual(
-                "https://www.example.org:443", observation.origin_endpoint_url
-            )
+            self.assertEqual("https://www.example.org:443", observation.origin_endpoint_url)
             self.assertEqual("CryptoLyzer", observation.scanner)
             self.assertEqual(
                 "https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TG02102/BSI-TR-02102-2.pdf?__blob=publicationFile&v=5",
                 observation.unsaved_references[0],
             )
             self.assertEqual("Result", observation.unsaved_evidences[0][0])
-            self.assertIn(
-                "TLS_CHACHA20_POLY1305_SHA256", observation.unsaved_evidences[0][1]
-            )
+            self.assertIn("TLS_CHACHA20_POLY1305_SHA256", observation.unsaved_evidences[0][1])
 
             observation = observations[2]
             self.assertEqual("Unrecommended elliptic curves", observation.title)
@@ -81,9 +69,7 @@ class TestCryptolyzeParser(TestCase):
                 observation.description,
             )
             self.assertEqual(Severity.SEVERITY_MEDIUM, observation.parser_severity)
-            self.assertEqual(
-                "https://www.example.org:443", observation.origin_endpoint_url
-            )
+            self.assertEqual("https://www.example.org:443", observation.origin_endpoint_url)
             self.assertEqual("CryptoLyzer", observation.scanner)
             self.assertEqual(
                 "https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TG02102/BSI-TR-02102-2.pdf?__blob=publicationFile&v=5",
@@ -99,9 +85,7 @@ class TestCryptolyzeParser(TestCase):
                 observation.description,
             )
             self.assertEqual(Severity.SEVERITY_MEDIUM, observation.parser_severity)
-            self.assertEqual(
-                "https://www.example.org:443", observation.origin_endpoint_url
-            )
+            self.assertEqual("https://www.example.org:443", observation.origin_endpoint_url)
             self.assertEqual("CryptoLyzer", observation.scanner)
             self.assertEqual(
                 "https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TG02102/BSI-TR-02102-2.pdf?__blob=publicationFile&v=5",
@@ -116,9 +100,7 @@ class TestCryptolyzeParser(TestCase):
             self.assertEqual("CryptoLyzer", parser.name)
             self.assertTrue(isinstance(parser_instance, CryptoLyzerParser))
 
-            observations = parser_instance.get_observations(
-                data, Product(name="product"), None
-            )
+            observations = parser_instance.get_observations(data, Product(name="product"), None)
             self.assertEqual(3, len(observations))
 
             observation = observations[0]
@@ -128,9 +110,7 @@ class TestCryptolyzeParser(TestCase):
                 observation.description,
             )
             self.assertEqual(Severity.SEVERITY_HIGH, observation.parser_severity)
-            self.assertEqual(
-                "https://tls-v1-0.badssl.com:443", observation.origin_endpoint_url
-            )
+            self.assertEqual("https://tls-v1-0.badssl.com:443", observation.origin_endpoint_url)
             self.assertEqual("CryptoLyzer", observation.scanner)
             self.assertEqual(
                 "https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TG02102/BSI-TR-02102-2.pdf?__blob=publicationFile&v=5",

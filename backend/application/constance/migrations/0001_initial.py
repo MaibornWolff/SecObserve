@@ -26,9 +26,7 @@ class Migration(migrations.Migration):
                 ("key", models.CharField(max_length=255, unique=True)),
                 (
                     "value",
-                    picklefield.fields.PickledObjectField(
-                        blank=True, editable=False, null=True
-                    ),
+                    picklefield.fields.PickledObjectField(blank=True, editable=False, null=True),
                 ),
             ],
             options={

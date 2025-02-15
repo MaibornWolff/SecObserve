@@ -20,15 +20,9 @@ class UserFilter(FilterSet):
         field_name="exclude_authorization_group",
         method="get_exclude_authorization_group",
     )
-    exclude_license_group = NumberFilter(
-        field_name="exclude_license_group", method="get_exclude_license_group"
-    )
-    exclude_license_policy = NumberFilter(
-        field_name="exclude_license_policy", method="get_exclude_license_policy"
-    )
-    exclude_product = NumberFilter(
-        field_name="exclude_product", method="get_exclude_product"
-    )
+    exclude_license_group = NumberFilter(field_name="exclude_license_group", method="get_exclude_license_group")
+    exclude_license_policy = NumberFilter(field_name="exclude_license_policy", method="get_exclude_license_policy")
+    exclude_product = NumberFilter(field_name="exclude_product", method="get_exclude_product")
 
     def get_exclude_authorization_group(
         self,
@@ -99,7 +93,7 @@ class UserFilter(FilterSet):
         queryset: Optional[QuerySet] = None,
         *,
         request: Optional[Request] = None,
-        prefix: Optional[Any] = None
+        prefix: Optional[Any] = None,
     ):
         super().__init__(data, queryset, request=request, prefix=prefix)
         if request and not request.user.is_superuser:
@@ -119,15 +113,9 @@ class AuthorizationGroupFilter(FilterSet):
     name = CharFilter(field_name="name", lookup_expr="icontains")
     oidc_group = CharFilter(field_name="oidc_group", lookup_expr="icontains")
     user = NumberFilter(field_name="users")
-    exclude_license_group = NumberFilter(
-        field_name="exclude_license_group", method="get_exclude_license_group"
-    )
-    exclude_license_policy = NumberFilter(
-        field_name="exclude_license_policy", method="get_exclude_license_policy"
-    )
-    exclude_product = NumberFilter(
-        field_name="exclude_product", method="get_exclude_product"
-    )
+    exclude_license_group = NumberFilter(field_name="exclude_license_group", method="get_exclude_license_group")
+    exclude_license_policy = NumberFilter(field_name="exclude_license_policy", method="get_exclude_license_policy")
+    exclude_product = NumberFilter(field_name="exclude_product", method="get_exclude_product")
 
     def get_exclude_license_group(
         self,
@@ -176,9 +164,7 @@ class AuthorizationGroupFilter(FilterSet):
     ) -> QuerySet:
         # field_name is used as a positional argument
 
-        authorization_group_members = Authorization_Group_Member.objects.filter(
-            user__id=value
-        )
+        authorization_group_members = Authorization_Group_Member.objects.filter(user__id=value)
         queryset = queryset.annotate(
             member=Exists(authorization_group_members),
         )

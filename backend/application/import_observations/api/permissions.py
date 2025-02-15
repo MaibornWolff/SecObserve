@@ -14,9 +14,7 @@ from application.core.models import Product
 
 class UserHasApiConfigurationPermission(BasePermission):
     def has_permission(self, request: Request, view: APIView) -> bool:
-        return check_post_permission(
-            request, Product, "product", Permissions.Api_Configuration_Create
-        )
+        return check_post_permission(request, Product, "product", Permissions.Api_Configuration_Create)
 
     def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool:
         return check_object_permission(

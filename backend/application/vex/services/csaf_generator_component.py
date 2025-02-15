@@ -18,9 +18,7 @@ from application.vex.types import (
 )
 
 
-def get_component_id(
-    component_name_version: str, purl: Optional[str], cpe: Optional[str]
-) -> str:
+def get_component_id(component_name_version: str, purl: Optional[str], cpe: Optional[str]) -> str:
     return purl if purl else cpe if cpe else component_name_version
 
 
@@ -56,9 +54,7 @@ def append_component_to_product_tree(
 
     _append_component_to_relationships(product_tree, observation)
 
-    product_branch_name = (
-        purl.name if purl and purl.name else observation.origin_component_name
-    )
+    product_branch_name = purl.name if purl and purl.name else observation.origin_component_name
     found = False
 
     vendor_branch.branches = vendor_branch.branches or []
@@ -76,14 +72,10 @@ def append_component_to_product_tree(
 
     product_branch.branches = product_branch.branches or []
     for component_branch in product_branch.branches:
-        if (
-            component_branch.product
-            and component_branch.product.product_id
-            == get_component_id(
-                observation.origin_component_name_version,
-                observation.origin_component_purl,
-                observation.origin_component_cpe,
-            )
+        if component_branch.product and component_branch.product.product_id == get_component_id(
+            observation.origin_component_name_version,
+            observation.origin_component_purl,
+            observation.origin_component_cpe,
         ):
             return
 
@@ -99,16 +91,12 @@ def append_component_to_product_tree(
     product_branch.branches.append(component_branch)
 
 
-def _create_component(
-    component_name_version: str, purl: Optional[str], cpe: Optional[str]
-) -> CSAFFullProductName:
+def _create_component(component_name_version: str, purl: Optional[str], cpe: Optional[str]) -> CSAFFullProductName:
     product_identification_helper = None
     if purl or cpe:
         purl = purl if purl else None
         cpe = cpe if cpe else None
-        product_identification_helper = CSAFProductIdentificationHelper(
-            purl=purl, cpe=cpe
-        )
+        product_identification_helper = CSAFProductIdentificationHelper(purl=purl, cpe=cpe)
 
     component_id = get_component_id(component_name_version, purl, cpe)
     full_product_name = CSAFFullProductName(
@@ -120,9 +108,7 @@ def _create_component(
     return full_product_name
 
 
-def _append_component_to_relationships(
-    product_tree: CSAFProductTree, observation: Observation
-) -> None:
+def _append_component_to_relationships(product_tree: CSAFProductTree, observation: Observation) -> None:
     if not observation.origin_component_name_version:
         return
 
@@ -134,10 +120,7 @@ def _append_component_to_relationships(
     product_id = get_product_id(observation.product, observation.branch)
 
     for relationship in product_tree.relationships:
-        if (
-            relationship.product_reference == component_id
-            and relationship.relates_to_product_reference == product_id
-        ):
+        if relationship.product_reference == component_id and relationship.relates_to_product_reference == product_id:
             return
 
     full_product_name = CSAFFullProductName(

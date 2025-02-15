@@ -39,9 +39,7 @@ class UserHasProductGroupPermission(BasePermission):
     def has_permission(self, request: Request, view: APIView) -> bool:
         if request.method == "POST":
             if isinstance(request.user, AnonymousUser):
-                raise PermissionDenied(
-                    "You must be authenticated to create a Product Group"
-                )
+                raise PermissionDenied("You must be authenticated to create a Product Group")
 
             return not request.user.is_external
 
@@ -59,16 +57,10 @@ class UserHasProductGroupPermission(BasePermission):
 
 class UserHasProductMemberPermission(BasePermission):
     def has_permission(self, request: Request, view: APIView) -> bool:
-        return check_post_permission(
-            request, Product, "product", Permissions.Product_Member_Create
-        )
+        return check_post_permission(request, Product, "product", Permissions.Product_Member_Create)
 
     def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool:
-        if (
-            request.method == "DELETE"
-            and obj.role == Roles.Owner
-            and not request.user.is_superuser
-        ):
+        if request.method == "DELETE" and obj.role == Roles.Owner and not request.user.is_superuser:
             _check_delete_owner(request, obj)
 
         return check_object_permission(
@@ -90,11 +82,7 @@ class UserHasProductAuthorizationGroupMemberPermission(BasePermission):
         )
 
     def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool:
-        if (
-            request.method == "DELETE"
-            and obj.role == Roles.Owner
-            and not request.user.is_superuser
-        ):
+        if request.method == "DELETE" and obj.role == Roles.Owner and not request.user.is_superuser:
             _check_delete_owner(request, obj)
 
         return check_object_permission(
@@ -118,9 +106,7 @@ def _check_delete_owner(request: Request, obj: Any) -> bool:
 
 class UserHasBranchPermission(BasePermission):
     def has_permission(self, request: Request, view: APIView) -> bool:
-        return check_post_permission(
-            request, Product, "product", Permissions.Branch_Create
-        )
+        return check_post_permission(request, Product, "product", Permissions.Branch_Create)
 
     def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool:
         return check_object_permission(
@@ -148,9 +134,7 @@ class UserHasObservationPermission(BasePermission):
         if request.path.endswith("/bulk_assessment/"):
             return True
 
-        return check_post_permission(
-            request, Product, "product", Permissions.Observation_Create
-        )
+        return check_post_permission(request, Product, "product", Permissions.Observation_Create)
 
     def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool:
         return check_object_permission(

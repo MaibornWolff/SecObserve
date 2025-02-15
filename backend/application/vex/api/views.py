@@ -150,9 +150,7 @@ class CSAFDocumentUpdateView(APIView):
         request=CSAFDocumentUpdateSerializer,
         responses={HTTP_200_OK: bytes},
     )
-    def post(
-        self, request: Request, document_id_prefix: str, document_base_id: str
-    ) -> HttpResponse:
+    def post(self, request: Request, document_id_prefix: str, document_base_id: str) -> HttpResponse:
         serializer = CSAFDocumentUpdateSerializer(data=request.data)
         if not serializer.is_valid():
             raise ValidationError(serializer.errors)
@@ -183,9 +181,7 @@ class CSAFDocumentUpdateView(APIView):
         return response
 
 
-class CSAFViewSet(
-    GenericViewSet, DestroyModelMixin, ListModelMixin, RetrieveModelMixin
-):
+class CSAFViewSet(GenericViewSet, DestroyModelMixin, ListModelMixin, RetrieveModelMixin):
     serializer_class = CSAFSerializer
     queryset = CSAF.objects.none()
     filterset_class = CSAFFilter
@@ -229,9 +225,7 @@ class OpenVEXDocumentCreateView(APIView):
             raise ValidationError(serializer.errors)
 
         unique_vulnerability_names = (
-            _remove_duplicates_keep_order(
-                serializer.validated_data.get("vulnerability_names")
-            )
+            _remove_duplicates_keep_order(serializer.validated_data.get("vulnerability_names"))
             if serializer.validated_data.get("vulnerability_names")
             else []
         )
@@ -262,9 +256,8 @@ class OpenVEXDocumentCreateView(APIView):
             content=_object_to_json(openvex_document, VEX_TYPE_OPENVEX),
             content_type="application/json",
         )
-        response["Content-Disposition"] = (
-            "attachment; filename="
-            + _get_openvex_filename(openvex_document.id, openvex_document.version)
+        response["Content-Disposition"] = "attachment; filename=" + _get_openvex_filename(
+            openvex_document.id, openvex_document.version
         )
         return response
 
@@ -276,9 +269,7 @@ class OpenVEXDocumentUpdateView(APIView):
         responses={HTTP_200_OK: bytes},
     )
     @action(detail=True, methods=["post"])
-    def post(
-        self, request: Request, document_id_prefix: str, document_base_id: str
-    ) -> HttpResponse:
+    def post(self, request: Request, document_id_prefix: str, document_base_id: str) -> HttpResponse:
         serializer = OpenVEXDocumentUpdateSerializer(data=request.data)
         if not serializer.is_valid():
             raise ValidationError(serializer.errors)
@@ -300,16 +291,13 @@ class OpenVEXDocumentUpdateView(APIView):
             content=_object_to_json(openvex_document, VEX_TYPE_OPENVEX),
             content_type="application/json",
         )
-        response["Content-Disposition"] = (
-            "attachment; filename="
-            + _get_openvex_filename(openvex_document.id, openvex_document.version)
+        response["Content-Disposition"] = "attachment; filename=" + _get_openvex_filename(
+            openvex_document.id, openvex_document.version
         )
         return response
 
 
-class OpenVEXViewSet(
-    GenericViewSet, DestroyModelMixin, ListModelMixin, RetrieveModelMixin
-):
+class OpenVEXViewSet(GenericViewSet, DestroyModelMixin, ListModelMixin, RetrieveModelMixin):
     serializer_class = OpenVEXSerializer
     queryset = OpenVEX.objects.none()
     filterset_class = OpenVEXFilter
@@ -348,9 +336,7 @@ class VEXCounterViewSet(ModelViewSet):
     permission_classes = (IsAuthenticated, UserHasVEXCounterPermission)
 
 
-class VEXDocumentViewSet(
-    GenericViewSet, ListModelMixin, RetrieveModelMixin, DestroyModelMixin
-):
+class VEXDocumentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin, DestroyModelMixin):
     serializer_class = VEXDocumentSerializer
     queryset = VEX_Document.objects.none()
     filterset_class = VEXDocumentFilter
@@ -414,11 +400,7 @@ def _remove_empty_elements(d: dict) -> dict:
     if isinstance(d, list):
         return [v for v in (_remove_empty_elements(v) for v in d) if not empty(v)]
 
-    return {
-        k: v
-        for k, v in ((k, _remove_empty_elements(v)) for k, v in d.items())
-        if not empty(v)
-    }
+    return {k: v for k, v in ((k, _remove_empty_elements(v)) for k, v in d.items()) if not empty(v)}
 
 
 # Change all keys with the value 'id' to '@id' and
@@ -429,9 +411,7 @@ def _change_keys_context(d: dict) -> dict:
     if isinstance(d, list):
         return [_change_keys_context(v) for v in d]
 
-    return {
-        k.replace("context", "@context"): _change_keys_context(v) for k, v in d.items()
-    }
+    return {k.replace("context", "@context"): _change_keys_context(v) for k, v in d.items()}
 
 
 # Change all keys with the value 'id' to '@id' and

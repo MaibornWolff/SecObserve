@@ -29,12 +29,8 @@ def import_licenses() -> None:
             if secobserve_license.is_osi_approved != spdx_license.get("isOsiApproved"):
                 secobserve_license.is_osi_approved = spdx_license.get("isOsiApproved")
                 license_changed = True
-            if secobserve_license.is_deprecated != spdx_license.get(
-                "isDeprecatedLicenseId"
-            ):
-                secobserve_license.is_deprecated = spdx_license.get(
-                    "isDeprecatedLicenseId"
-                )
+            if secobserve_license.is_deprecated != spdx_license.get("isDeprecatedLicenseId"):
+                secobserve_license.is_deprecated = spdx_license.get("isDeprecatedLicenseId")
                 license_changed = True
             if license_changed:
                 secobserve_license.save()

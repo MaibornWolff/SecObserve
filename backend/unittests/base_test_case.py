@@ -29,15 +29,9 @@ class BaseTestCase(TestCase):
     def setUp(self) -> None:
         self.maxDiff = None
 
-        self.user_internal = User(
-            id=1, username="user_internal@example.com", is_external=False
-        )
-        self.user_external = User(
-            username="user_external@example.com", is_external=True
-        )
-        self.user_admin = User(
-            id=2, username="user_admin@example.com", is_superuser=True
-        )
+        self.user_internal = User(id=1, username="user_internal@example.com", is_external=False)
+        self.user_external = User(username="user_external@example.com", is_external=True)
+        self.user_admin = User(id=2, username="user_admin@example.com", is_superuser=True)
 
         self.parser_1 = Parser(name="parser_1")
         self.product_group_1 = Product(name="product_group_1")
@@ -62,9 +56,7 @@ class BaseTestCase(TestCase):
 
         self.service_1 = Service(name="service_1", product=self.product_1)
 
-        self.product_member_1 = Product_Member(
-            product=self.product_1, user=self.user_internal, role=Roles.Writer
-        )
+        self.product_member_1 = Product_Member(product=self.product_1, user=self.user_internal, role=Roles.Writer)
 
         self.authorization_group_1 = Authorization_Group(name="authorization_group_1")
         self.authorization_group_member_1 = Authorization_Group_Member(

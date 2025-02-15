@@ -21,9 +21,7 @@ class APITokenAuthentication(BaseAuthentication):
             raise AuthenticationFailed("Invalid token header: No credentials provided.")
 
         if len(authentication_header) > 2:
-            raise AuthenticationFailed(
-                "Invalid token header: Token string should not contain spaces."
-            )
+            raise AuthenticationFailed("Invalid token header: Token string should not contain spaces.")
 
         auth_prefix = authentication_header[0].decode("UTF-8")
         auth_token = authentication_header[1].decode("UTF-8")

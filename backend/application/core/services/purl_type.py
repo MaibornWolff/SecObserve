@@ -26,9 +26,7 @@ def get_purl_type(purl_type_id: str) -> Optional[PURLTypeElement]:
     return None
 
 
-def get_purl_types(
-    product: Product, for_observations: bool, for_license_components: bool
-) -> PURLTypeList:
+def get_purl_types(product: Product, for_observations: bool, for_license_components: bool) -> PURLTypeList:
     purl_types = PURLTypeList(
         count=0,
         results=[],
@@ -46,9 +44,7 @@ def get_purl_types(
             results=[
                 PURLTypeElement(
                     id=purl_type.get("origin_component_purl_type", ""),
-                    name=PURL_Type.PURL_TYPE_CHOICES.get(
-                        purl_type.get("origin_component_purl_type", ""), ""
-                    ),
+                    name=PURL_Type.PURL_TYPE_CHOICES.get(purl_type.get("origin_component_purl_type", ""), ""),
                 )
                 for purl_type in observation_purl_types
             ],
@@ -65,9 +61,7 @@ def get_purl_types(
             results=[
                 PURLTypeElement(
                     id=purl_type.get("component_purl_type", ""),
-                    name=PURL_Type.PURL_TYPE_CHOICES.get(
-                        purl_type.get("component_purl_type", ""), ""
-                    ),
+                    name=PURL_Type.PURL_TYPE_CHOICES.get(purl_type.get("component_purl_type", ""), ""),
                 )
                 for purl_type in license_component_purl_types
             ],

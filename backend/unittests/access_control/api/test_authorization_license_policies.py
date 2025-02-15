@@ -11,11 +11,7 @@ class TestAuthorizationLicensePolicies(TestAuthorizationBase):
         License_Policy.objects.filter(pk__lt=1000).delete()
 
         expected_data = "{'count': 5, 'next': None, 'previous': None, 'results': [{'id': 1000, 'parent_name': '', 'is_parent': False, 'is_manager': False, 'has_products': False, 'has_product_groups': False, 'has_items': True, 'has_users': False, 'has_authorization_groups': False, 'name': 'public', 'description': '', 'is_public': True, 'ignore_component_types': '', 'parent': None}, {'id': 1001, 'parent_name': '', 'is_parent': False, 'is_manager': False, 'has_products': False, 'has_product_groups': False, 'has_items': True, 'has_users': True, 'has_authorization_groups': False, 'name': 'internal_read_not_manager', 'description': '', 'is_public': False, 'ignore_component_types': '', 'parent': None}, {'id': 1002, 'parent_name': '', 'is_parent': False, 'is_manager': False, 'has_products': False, 'has_product_groups': False, 'has_items': True, 'has_users': True, 'has_authorization_groups': False, 'name': 'internal_write_manager', 'description': '', 'is_public': False, 'ignore_component_types': '', 'parent': None}, {'id': 1003, 'parent_name': '', 'is_parent': False, 'is_manager': False, 'has_products': False, 'has_product_groups': False, 'has_items': True, 'has_users': False, 'has_authorization_groups': True, 'name': 'authorization_group_not_manager', 'description': '', 'is_public': False, 'ignore_component_types': '', 'parent': None}, {'id': 1004, 'parent_name': '', 'is_parent': False, 'is_manager': False, 'has_products': False, 'has_product_groups': False, 'has_items': True, 'has_users': False, 'has_authorization_groups': True, 'name': 'authorization_group_manager', 'description': '', 'is_public': False, 'ignore_component_types': '', 'parent': None}]}"
-        self._test_api(
-            APITest(
-                "db_admin", "get", "/api/license_policies/", None, 200, expected_data
-            )
-        )
+        self._test_api(APITest("db_admin", "get", "/api/license_policies/", None, 200, expected_data))
 
         expected_data = "{'count': 3, 'next': None, 'previous': None, 'results': [{'id': 1000, 'parent_name': '', 'is_parent': False, 'is_manager': False, 'has_products': False, 'has_product_groups': False, 'has_items': True, 'has_users': False, 'has_authorization_groups': False, 'name': 'public', 'description': '', 'is_public': True, 'ignore_component_types': '', 'parent': None}, {'id': 1002, 'parent_name': '', 'is_parent': False, 'is_manager': True, 'has_products': False, 'has_product_groups': False, 'has_items': True, 'has_users': True, 'has_authorization_groups': False, 'name': 'internal_write_manager', 'description': '', 'is_public': False, 'ignore_component_types': '', 'parent': None}, {'id': 1003, 'parent_name': '', 'is_parent': False, 'is_manager': True, 'has_products': False, 'has_product_groups': False, 'has_items': True, 'has_users': False, 'has_authorization_groups': True, 'name': 'authorization_group_not_manager', 'description': '', 'is_public': False, 'ignore_component_types': '', 'parent': None}]}"
         self._test_api(
@@ -165,9 +161,7 @@ class TestAuthorizationLicensePolicies(TestAuthorizationBase):
         )
 
         post_data = {"name": "new_license_policy_external"}
-        expected_data = (
-            "{'message': 'You do not have permission to perform this action.'}"
-        )
+        expected_data = "{'message': 'You do not have permission to perform this action.'}"
         self._test_api(
             APITest(
                 "db_external",
@@ -193,9 +187,7 @@ class TestAuthorizationLicensePolicies(TestAuthorizationBase):
             )
         )
 
-        expected_data = (
-            "{'message': 'You do not have permission to perform this action.'}"
-        )
+        expected_data = "{'message': 'You do not have permission to perform this action.'}"
         self._test_api(
             APITest(
                 "db_internal_write",
@@ -221,9 +213,7 @@ class TestAuthorizationLicensePolicies(TestAuthorizationBase):
             )
         )
 
-        expected_data = (
-            "{'message': 'You do not have permission to perform this action.'}"
-        )
+        expected_data = "{'message': 'You do not have permission to perform this action.'}"
         self._test_api(
             APITest(
                 "db_product_group_user",
@@ -275,9 +265,7 @@ class TestAuthorizationLicensePolicies(TestAuthorizationBase):
             )
         )
 
-        expected_data = (
-            "{'message': 'You do not have permission to perform this action.'}"
-        )
+        expected_data = "{'message': 'You do not have permission to perform this action.'}"
         self._test_api(
             APITest(
                 "db_external",
@@ -315,9 +303,7 @@ class TestAuthorizationLicensePolicies(TestAuthorizationBase):
             )
         )
 
-        expected_data = (
-            "{'message': 'You do not have permission to perform this action.'}"
-        )
+        expected_data = "{'message': 'You do not have permission to perform this action.'}"
         self._test_api(
             APITest(
                 "db_internal_read",

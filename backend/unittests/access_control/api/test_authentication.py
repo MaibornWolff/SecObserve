@@ -26,15 +26,9 @@ class TestAuthentication(BaseTestCase):
 
             self.assertEqual(401, response.status_code)
 
-    @patch(
-        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
-    )
-    def _check_api_token_not_authenticated(
-        self, methods: list[str], url: str, mock_authentication
-    ):
-        mock_authentication.side_effect = AuthenticationFailed(
-            "authentication failed message"
-        )
+    @patch("application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate")
+    def _check_api_token_not_authenticated(self, methods: list[str], url: str, mock_authentication):
+        mock_authentication.side_effect = AuthenticationFailed("authentication failed message")
 
         api_client = APIClient()
 
@@ -53,18 +47,12 @@ class TestAuthentication(BaseTestCase):
                 raise Exception(f"Unknown method: {method}")
 
             self.assertEqual(401, response.status_code)
-            self.assertEqual(
-                "authentication failed message", response.data.get("message")
-            )
+            self.assertEqual("authentication failed message", response.data.get("message"))
             mock_authentication.assert_called_once()
             mock_authentication.reset_mock()
 
-    @patch(
-        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
-    )
-    def _check_api_token_authenticated(
-        self, methods: list[str], url: str, mock_authentication
-    ):
+    @patch("application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate")
+    def _check_api_token_authenticated(self, methods: list[str], url: str, mock_authentication):
         mock_authentication.return_value = self.user_admin, None
 
         api_client = APIClient()
@@ -87,15 +75,9 @@ class TestAuthentication(BaseTestCase):
             mock_authentication.assert_called_once()
             mock_authentication.reset_mock()
 
-    @patch(
-        "application.access_control.services.jwt_authentication.JWTAuthentication.authenticate"
-    )
-    def _check_jwt_not_authenticated(
-        self, methods: list[str], url: str, mock_authentication
-    ):
-        mock_authentication.side_effect = AuthenticationFailed(
-            "authentication failed message"
-        )
+    @patch("application.access_control.services.jwt_authentication.JWTAuthentication.authenticate")
+    def _check_jwt_not_authenticated(self, methods: list[str], url: str, mock_authentication):
+        mock_authentication.side_effect = AuthenticationFailed("authentication failed message")
 
         api_client = APIClient()
 
@@ -114,18 +96,12 @@ class TestAuthentication(BaseTestCase):
                 raise Exception(f"Unknown method: {method}")
 
             self.assertEqual(401, response.status_code)
-            self.assertEqual(
-                "authentication failed message", response.data.get("message")
-            )
+            self.assertEqual("authentication failed message", response.data.get("message"))
             mock_authentication.assert_called_once()
             mock_authentication.reset_mock()
 
-    @patch(
-        "application.access_control.services.jwt_authentication.JWTAuthentication.authenticate"
-    )
-    def _check_jwt_authenticated(
-        self, methods: list[str], url: str, mock_authentication
-    ):
+    @patch("application.access_control.services.jwt_authentication.JWTAuthentication.authenticate")
+    def _check_jwt_authenticated(self, methods: list[str], url: str, mock_authentication):
         mock_authentication.return_value = self.user_admin, None
 
         api_client = APIClient()
@@ -148,15 +124,9 @@ class TestAuthentication(BaseTestCase):
             mock_authentication.assert_called_once()
             mock_authentication.reset_mock()
 
-    @patch(
-        "application.access_control.services.oidc_authentication.OIDCAuthentication.authenticate"
-    )
-    def _check_oidc_not_authenticated(
-        self, methods: list[str], url: str, mock_authentication
-    ):
-        mock_authentication.side_effect = AuthenticationFailed(
-            "authentication failed message"
-        )
+    @patch("application.access_control.services.oidc_authentication.OIDCAuthentication.authenticate")
+    def _check_oidc_not_authenticated(self, methods: list[str], url: str, mock_authentication):
+        mock_authentication.side_effect = AuthenticationFailed("authentication failed message")
 
         api_client = APIClient()
 
@@ -181,12 +151,8 @@ class TestAuthentication(BaseTestCase):
             mock_authentication.assert_called_once()
             mock_authentication.reset_mock()
 
-    @patch(
-        "application.access_control.services.oidc_authentication.OIDCAuthentication.authenticate"
-    )
-    def _check_oidc_authenticated(
-        self, methods: list[str], url: str, mock_authentication
-    ):
+    @patch("application.access_control.services.oidc_authentication.OIDCAuthentication.authenticate")
+    def _check_oidc_authenticated(self, methods: list[str], url: str, mock_authentication):
         mock_authentication.return_value = self.user_admin, None
 
         api_client = APIClient()
@@ -223,17 +189,13 @@ class TestAuthentication(BaseTestCase):
         mock_user.return_value = self.user_admin
 
         self._check_authentication(["get", "post"], "/api/api_configurations/")
-        self._check_authentication(
-            ["delete", "get", "put", "patch"], "/api/api_configurations/1/"
-        )
+        self._check_authentication(["delete", "get", "put", "patch"], "/api/api_configurations/1/")
 
         self._check_authentication(["get"], "/api/vulnerability_checks/")
         self._check_authentication(["get"], "/api/vulnerability_checks/1/")
 
         self._check_authentication(["get", "post"], "/api/general_rules/")
-        self._check_authentication(
-            ["delete", "get", "put", "patch"], "/api/general_rules/1/"
-        )
+        self._check_authentication(["delete", "get", "put", "patch"], "/api/general_rules/1/")
 
         self._check_authentication(["get"], "/api/metrics/export_csv/")
         self._check_authentication(["get"], "/api/metrics/export_excel/")
@@ -243,9 +205,7 @@ class TestAuthentication(BaseTestCase):
         self._check_authentication(["get"], "/api/metrics/product_metrics_status/")
 
         self._check_authentication(["get"], "/api/observations/")
-        self._check_authentication(
-            ["delete", "get", "put", "patch"], "/api/observations/1/"
-        )
+        self._check_authentication(["delete", "get", "put", "patch"], "/api/observations/1/")
         self._check_authentication(["patch"], "/api/observations/1/assessment/")
         self._check_authentication(["patch"], "/api/observations/1/remove_assessment/")
         self._check_authentication(["post"], "/api/observations/bulk_assessment/")
@@ -265,9 +225,7 @@ class TestAuthentication(BaseTestCase):
         self._check_authentication(["get"], "/api/parsers/1/")
 
         self._check_authentication(["get", "post"], "/api/branches/")
-        self._check_authentication(
-            ["delete", "get", "put", "patch"], "/api/branches/1/"
-        )
+        self._check_authentication(["delete", "get", "put", "patch"], "/api/branches/1/")
 
         self._check_authentication(["get"], "/api/branch_names/")
         self._check_authentication(["get"], "/api/branch_names/1/")
@@ -276,54 +234,32 @@ class TestAuthentication(BaseTestCase):
         self._check_authentication(["delete", "get"], "/api/services/1/")
 
         self._check_authentication(["get", "post"], "/api/product_members/")
-        self._check_authentication(
-            ["delete", "get", "put", "patch"], "/api/product_members/1/"
-        )
+        self._check_authentication(["delete", "get", "put", "patch"], "/api/product_members/1/")
 
         self._check_authentication(["get", "post"], "/api/product_rules/")
-        self._check_authentication(
-            ["delete", "get", "put", "patch"], "/api/product_rules/1/"
-        )
+        self._check_authentication(["delete", "get", "put", "patch"], "/api/product_rules/1/")
 
         self._check_authentication(["get", "post"], "/api/product_groups/")
-        self._check_authentication(
-            ["delete", "get", "put", "patch"], "/api/product_groups/1/"
-        )
+        self._check_authentication(["delete", "get", "put", "patch"], "/api/product_groups/1/")
 
         self._check_authentication(["get"], "/api/product_group_names/")
         self._check_authentication(["get"], "/api/product_group_names/1/")
 
         self._check_authentication(["get", "post"], "/api/products/")
-        self._check_authentication(
-            ["delete", "get", "put", "patch"], "/api/products/1/"
-        )
+        self._check_authentication(["delete", "get", "put", "patch"], "/api/products/1/")
 
         self._check_authentication(["post"], "/api/products/1/apply_rules/")
 
-        self._check_authentication(
-            ["post"], "/api/products/1/observations_bulk_assessment/"
-        )
-        self._check_authentication(
-            ["post"], "/api/products/1/observations_bulk_delete/"
-        )
-        self._check_authentication(
-            ["post"], "/api/products/1/observations_bulk_mark_duplicates/"
-        )
-        self._check_authentication(
-            ["post"], "/api/products/1/license_components_bulk_delete/"
-        )
+        self._check_authentication(["post"], "/api/products/1/observations_bulk_assessment/")
+        self._check_authentication(["post"], "/api/products/1/observations_bulk_delete/")
+        self._check_authentication(["post"], "/api/products/1/observations_bulk_mark_duplicates/")
+        self._check_authentication(["post"], "/api/products/1/license_components_bulk_delete/")
 
         self._check_authentication(["get"], "/api/products/1/export_observations_csv/")
-        self._check_authentication(
-            ["get"], "/api/products/1/export_observations_excel/"
-        )
+        self._check_authentication(["get"], "/api/products/1/export_observations_excel/")
 
-        self._check_authentication(
-            ["get"], "/api/products/1/export_license_components_csv/"
-        )
-        self._check_authentication(
-            ["get"], "/api/products/1/export_license_components_excel/"
-        )
+        self._check_authentication(["get"], "/api/products/1/export_license_components_csv/")
+        self._check_authentication(["get"], "/api/products/1/export_license_components_excel/")
 
         self._check_authentication(["get"], "/api/product_names/")
         self._check_authentication(["get"], "/api/product_names/1/")
@@ -353,33 +289,23 @@ class TestAuthentication(BaseTestCase):
         self._check_authentication(["get"], "/api/license_component_evidences/1/")
 
         self._check_authentication(["get", "post"], "/api/license_groups/")
-        self._check_authentication(
-            ["delete", "get", "put", "patch"], "/api/license_groups/1/"
-        )
+        self._check_authentication(["delete", "get", "put", "patch"], "/api/license_groups/1/")
         self._check_authentication(["post"], "/api/license_groups/1/copy/")
         self._check_authentication(["post"], "/api/license_groups/1/add_license/")
         self._check_authentication(["post"], "/api/license_groups/1/remove_license/")
-        self._check_authentication(
-            ["post"], "/api/license_groups/import_scancode_licensedb/"
-        )
+        self._check_authentication(["post"], "/api/license_groups/import_scancode_licensedb/")
 
         self._check_authentication(["get", "post"], "/api/license_group_members/")
-        self._check_authentication(
-            ["delete", "get", "put", "patch"], "/api/license_group_members/1001/"
-        )
+        self._check_authentication(["delete", "get", "put", "patch"], "/api/license_group_members/1001/")
 
-        self._check_authentication(
-            ["get", "post"], "/api/license_group_authorization_group_members/"
-        )
+        self._check_authentication(["get", "post"], "/api/license_group_authorization_group_members/")
         self._check_authentication(
             ["delete", "get", "put", "patch"],
             "/api/license_group_authorization_group_members/1001/",
         )
 
         self._check_authentication(["get", "post"], "/api/license_policies/")
-        self._check_authentication(
-            ["delete", "get", "put", "patch"], "/api/license_policies/1/"
-        )
+        self._check_authentication(["delete", "get", "put", "patch"], "/api/license_policies/1/")
         self._check_authentication(["post"], "/api/license_policies/1/copy/")
         self._check_authentication(["post"], "/api/license_policies/1/apply/")
         self._check_authentication(["post"], "/api/license_policies/apply_product/")
@@ -387,18 +313,12 @@ class TestAuthentication(BaseTestCase):
         self._check_authentication(["get"], "/api/license_policies/1/export_yaml/")
 
         self._check_authentication(["get", "post"], "/api/license_policy_items/")
-        self._check_authentication(
-            ["delete", "get", "put", "patch"], "/api/license_policy_items/1001/"
-        )
+        self._check_authentication(["delete", "get", "put", "patch"], "/api/license_policy_items/1001/")
 
         self._check_authentication(["get", "post"], "/api/license_policy_members/")
-        self._check_authentication(
-            ["delete", "get", "put", "patch"], "/api/license_policy_members/1001/"
-        )
+        self._check_authentication(["delete", "get", "put", "patch"], "/api/license_policy_members/1001/")
 
-        self._check_authentication(
-            ["get", "post"], "/api/license_policy_authorization_group_members/"
-        )
+        self._check_authentication(["get", "post"], "/api/license_policy_authorization_group_members/")
         self._check_authentication(
             ["delete", "get", "put", "patch"],
             "/api/license_policy_authorization_group_members/1001/",

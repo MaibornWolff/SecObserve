@@ -23,9 +23,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddIndex(
             model_name="observation",
-            index=models.Index(
-                fields=["product", "branch"], name="core_observ_product_2b0c8c_idx"
-            ),
+            index=models.Index(fields=["product", "branch"], name="core_observ_product_2b0c8c_idx"),
         ),
         migrations.AddIndex(
             model_name="observation",
@@ -33,27 +31,19 @@ class Migration(migrations.Migration):
         ),
         migrations.AddIndex(
             model_name="observation",
-            index=models.Index(
-                fields=["current_severity"], name="core_observ_current_ac86ae_idx"
-            ),
+            index=models.Index(fields=["current_severity"], name="core_observ_current_ac86ae_idx"),
         ),
         migrations.AddIndex(
             model_name="observation",
-            index=models.Index(
-                fields=["numerical_severity"], name="core_observ_numeric_0b8309_idx"
-            ),
+            index=models.Index(fields=["numerical_severity"], name="core_observ_numeric_0b8309_idx"),
         ),
         migrations.AddIndex(
             model_name="observation",
-            index=models.Index(
-                fields=["current_status"], name="core_observ_current_ad6d8c_idx"
-            ),
+            index=models.Index(fields=["current_status"], name="core_observ_current_ad6d8c_idx"),
         ),
         migrations.AddIndex(
             model_name="observation",
-            index=models.Index(
-                fields=["vulnerability_id"], name="core_observ_vulnera_e3405d_idx"
-            ),
+            index=models.Index(fields=["vulnerability_id"], name="core_observ_vulnera_e3405d_idx"),
         ),
         migrations.AddIndex(
             model_name="observation",
@@ -71,9 +61,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddIndex(
             model_name="observation",
-            index=models.Index(
-                fields=["origin_service_name"], name="core_observ_origin__43587c_idx"
-            ),
+            index=models.Index(fields=["origin_service_name"], name="core_observ_origin__43587c_idx"),
         ),
         migrations.AddIndex(
             model_name="observation",
@@ -84,27 +72,19 @@ class Migration(migrations.Migration):
         ),
         migrations.AddIndex(
             model_name="observation",
-            index=models.Index(
-                fields=["origin_source_file"], name="core_observ_origin__e87800_idx"
-            ),
+            index=models.Index(fields=["origin_source_file"], name="core_observ_origin__e87800_idx"),
         ),
         migrations.AddIndex(
             model_name="observation",
-            index=models.Index(
-                fields=["last_observation_log"], name="core_observ_last_ob_49e4ca_idx"
-            ),
+            index=models.Index(fields=["last_observation_log"], name="core_observ_last_ob_49e4ca_idx"),
         ),
         migrations.AddIndex(
             model_name="observation",
-            index=models.Index(
-                fields=["epss_score"], name="core_observ_epss_sc_6b5f31_idx"
-            ),
+            index=models.Index(fields=["epss_score"], name="core_observ_epss_sc_6b5f31_idx"),
         ),
         migrations.AddIndex(
             model_name="observation",
-            index=models.Index(
-                fields=["scanner"], name="core_observ_scanner_d77e31_idx"
-            ),
+            index=models.Index(fields=["scanner"], name="core_observ_scanner_d77e31_idx"),
         ),
         migrations.AddIndex(
             model_name="observation_log",
@@ -115,9 +95,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddIndex(
             model_name="observation_log",
-            index=models.Index(
-                fields=["-created"], name="core_observ_created_8b59b9_idx"
-            ),
+            index=models.Index(fields=["-created"], name="core_observ_created_8b59b9_idx"),
         ),
         migrations.AddIndex(
             model_name="parser",

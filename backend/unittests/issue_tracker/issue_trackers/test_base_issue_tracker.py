@@ -26,9 +26,7 @@ class TestBaseIssueTracker(BaseTestCase):
         issue_tracker = BaseIssueTracker()
         self.observation_1.origin_component_name_version = "component_1:1.0.0"
         title = issue_tracker._get_title(self.observation_1)
-        self.assertEqual(
-            'High vulnerability: "observation_1" in component_1:1.0.0', title
-        )
+        self.assertEqual('High vulnerability: "observation_1" in component_1:1.0.0', title)
 
     def test_get_title_docker_image(self):
         issue_tracker = BaseIssueTracker()
@@ -40,9 +38,7 @@ class TestBaseIssueTracker(BaseTestCase):
         issue_tracker = BaseIssueTracker()
         self.observation_1.origin_endpoint_hostname = "hostname_1.example.com"
         title = issue_tracker._get_title(self.observation_1)
-        self.assertEqual(
-            'High vulnerability: "observation_1" in hostname_1.example.com', title
-        )
+        self.assertEqual('High vulnerability: "observation_1" in hostname_1.example.com', title)
 
     def test_get_title_source(self):
         issue_tracker = BaseIssueTracker()
@@ -63,9 +59,7 @@ class TestBaseIssueTracker(BaseTestCase):
             title,
         )
 
-    @patch(
-        "application.issue_tracker.issue_trackers.base_issue_tracker.get_base_url_frontend"
-    )
+    @patch("application.issue_tracker.issue_trackers.base_issue_tracker.get_base_url_frontend")
     def test_get_description_with_branch(self, base_url_mock):
         base_url_mock.return_value = "http://localhost:3000"
         self.observation_1.pk = 1
@@ -82,14 +76,10 @@ class TestBaseIssueTracker(BaseTestCase):
         self.assertEqual(expected_description, description)
         base_url_mock.assert_called_once()
 
-    @patch(
-        "application.issue_tracker.issue_trackers.base_issue_tracker.get_base_url_frontend"
-    )
+    @patch("application.issue_tracker.issue_trackers.base_issue_tracker.get_base_url_frontend")
     def test_get_description_without_branch(self, base_url_mock):
         base_url_mock.return_value = "http://localhost:3000"
-        observation_2 = Observation(
-            pk=2, product=self.product_1, description="description_2"
-        )
+        observation_2 = Observation(pk=2, product=self.product_1, description="description_2")
 
         issue_tracker = BaseIssueTracker()
         description = issue_tracker._get_description(observation_2)
@@ -111,9 +101,7 @@ None"""
 
     def test_get_description_for_deleted_observation_with_description(self):
         issue_tracker = BaseIssueTracker()
-        description = issue_tracker._get_description_for_deleted_observation(
-            "original_description"
-        )
+        description = issue_tracker._get_description_for_deleted_observation("original_description")
 
         expected_description = """**--- Observation has been deleted ---**
 

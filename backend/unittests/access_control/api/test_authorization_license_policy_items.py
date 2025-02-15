@@ -108,9 +108,7 @@ class TestAuthorizationLicensePolicyItems(TestAuthorizationBase):
             "non_spdx_license": "",
             "evaluation_result": "Allowed",
         }
-        expected_data = (
-            "{'message': 'You do not have permission to perform this action.'}"
-        )
+        expected_data = "{'message': 'You do not have permission to perform this action.'}"
         self._test_api(
             APITest(
                 "db_internal_write",
@@ -148,9 +146,7 @@ class TestAuthorizationLicensePolicyItems(TestAuthorizationBase):
             "non_spdx_license": "",
             "evaluation_result": "Allowed",
         }
-        expected_data = (
-            "{'message': 'You do not have permission to perform this action.'}"
-        )
+        expected_data = "{'message': 'You do not have permission to perform this action.'}"
         self._test_api(
             APITest(
                 "db_product_group_user",
@@ -197,9 +193,7 @@ class TestAuthorizationLicensePolicyItems(TestAuthorizationBase):
             )
         )
 
-        expected_data = (
-            "{'message': 'You do not have permission to perform this action.'}"
-        )
+        expected_data = "{'message': 'You do not have permission to perform this action.'}"
         self._test_api(
             APITest(
                 "db_internal_read",
@@ -228,9 +222,7 @@ class TestAuthorizationLicensePolicyItems(TestAuthorizationBase):
             )
         )
 
-        expected_data = (
-            "{'message': 'You do not have permission to perform this action.'}"
-        )
+        expected_data = "{'message': 'You do not have permission to perform this action.'}"
         self._test_api(
             APITest(
                 "db_product_group_user",

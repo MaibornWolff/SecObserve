@@ -48,9 +48,7 @@ def import_scancode_licensedb() -> None:
                 _add_license_to_group(license_groups, category, other_spdx_license_key)
 
 
-def _add_license_to_group(
-    license_groups: dict[str, License_Group], category: str, spdx_license_key: str
-) -> None:
+def _add_license_to_group(license_groups: dict[str, License_Group], category: str, spdx_license_key: str) -> None:
     try:
         spdx_license = License.objects.get(spdx_id=spdx_license_key)
         license_group = license_groups.get(category)

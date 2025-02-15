@@ -14,9 +14,7 @@ class TestCycloneDXParser(TestCase):
             self.assertEqual("DrHeader", parser.name)
             self.assertTrue(isinstance(parser_instance, DrHEADerParser))
 
-            observations = parser_instance.get_observations(
-                data, Product(name="product"), None
-            )
+            observations = parser_instance.get_observations(data, Product(name="product"), None)
             self.assertEqual(6, len(observations))
 
             observation = observations[1]

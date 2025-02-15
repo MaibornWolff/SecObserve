@@ -140,9 +140,7 @@ class UserViewSet(ModelViewSet):
 
         setting_theme = request_serializer.validated_data.get("setting_theme")
         setting_list_size = request_serializer.validated_data.get("setting_list_size")
-        setting_list_properties = request_serializer.validated_data.get(
-            "setting_list_properties"
-        )
+        setting_list_properties = request_serializer.validated_data.get("setting_list_properties")
         user = request.user
         if isinstance(user, AnonymousUser):
             raise PermissionDenied("You must be authenticated to change settings")
@@ -164,9 +162,7 @@ class UserViewSet(ModelViewSet):
         responses={status.HTTP_204_NO_CONTENT: None},
     )
     @action(detail=True, methods=["patch"])
-    def change_password(
-        self, request: Request, pk: int = None  # pylint: disable=unused-argument
-    ) -> Response:
+    def change_password(self, request: Request, pk: int = None) -> Response:  # pylint: disable=unused-argument
         # pk is not used, but it is required to match the action signature
         request_serializer = UserPasswordSerializer(data=request.data)
         if not request_serializer.is_valid():
@@ -178,9 +174,7 @@ class UserViewSet(ModelViewSet):
         new_password_2 = request_serializer.validated_data.get("new_password_2")
 
         if not request.user.is_superuser and request.user.pk != instance.pk:
-            raise PermissionDenied(
-                "You are not allowed to change other users' passwords"
-            )
+            raise PermissionDenied("You are not allowed to change other users' passwords")
 
         if not instance.has_usable_password() or instance.is_oidc_user:
             raise ValidationError("User's password cannot be changed")
@@ -217,9 +211,7 @@ class UserViewSet(ModelViewSet):
         class PasswordRules:
             password_rules: str
 
-        password_rules_text = password_validators_help_texts(
-            self._get_password_validators()
-        )
+        password_rules_text = password_validators_help_texts(self._get_password_validators())
         password_rules = PasswordRules("- " + "\n- ".join(password_rules_text))
         response_serializer = UserPasswortRulesSerializer(password_rules)
         return Response(response_serializer.data, status=status.HTTP_200_OK)
@@ -227,11 +219,7 @@ class UserViewSet(ModelViewSet):
     def _get_password_validators(self) -> list[Any]:
         validators: list[Any] = []
         settings = Settings.load()
-        validators.append(
-            MinimumLengthValidator(
-                min_length=settings.password_validator_minimum_length
-            )
-        )
+        validators.append(MinimumLengthValidator(min_length=settings.password_validator_minimum_length))
         if settings.password_validator_common_passwords:
             validators.append(CommonPasswordValidator())
         if settings.password_validator_attribute_similarity:
@@ -285,17 +273,11 @@ class CreateUserAPITokenView(APIView):
             token = create_user_api_token(user)
         except ValidationError as e:
             response = Response(status=status.HTTP_400_BAD_REQUEST)
-            logger.warning(
-                format_log_message(message=str(e), user=user, response=response)
-            )
+            logger.warning(format_log_message(message=str(e), user=user, response=response))
             raise
 
         response = Response({"token": token}, status=status.HTTP_201_CREATED)
-        logger.info(
-            format_log_message(
-                message="API token created", user=user, response=response
-            )
-        )
+        logger.info(format_log_message(message="API token created", user=user, response=response))
         return response
 
 
@@ -311,11 +293,7 @@ class RevokeUserAPITokenView(APIView):
         user = _get_authenticated_user(request.data)
         revoke_user_api_token(user)
         response = Response(status=status.HTTP_204_NO_CONTENT)
-        logger.info(
-            format_log_message(
-                message="API token revoked", user=user, response=response
-            )
-        )
+        logger.info(format_log_message(message="API token revoked", user=user, response=response))
         return response
 
 
@@ -324,9 +302,7 @@ class ProductApiTokenViewset(ViewSet):
 
     @extend_schema(
         parameters=[
-            OpenApiParameter(
-                name="product", location=OpenApiParameter.QUERY, required=True, type=int
-            ),
+            OpenApiParameter(name="product", location=OpenApiParameter.QUERY, required=True, type=int),
         ],
     )
     def list(self, request: Request) -> Response:
@@ -356,14 +332,10 @@ class ProductApiTokenViewset(ViewSet):
 
         user_has_permission_or_403(product, Permissions.Product_Api_Token_Create)
 
-        token = create_product_api_token(
-            product, request_serializer.validated_data.get("role")
-        )
+        token = create_product_api_token(product, request_serializer.validated_data.get("role"))
 
         response = Response({"token": token}, status=status.HTTP_201_CREATED)
-        logger.info(
-            format_log_message(message="Product API token created", response=response)
-        )
+        logger.info(format_log_message(message="Product API token created", response=response))
         return response
 
     @extend_schema(
@@ -376,9 +348,7 @@ class ProductApiTokenViewset(ViewSet):
         revoke_product_api_token(product)
 
         response = Response(status=status.HTTP_204_NO_CONTENT)
-        logger.info(
-            format_log_message(message="Product API token revoked", response=response)
-        )
+        logger.info(format_log_message(message="Product API token revoked", response=response))
         return response
 
 
@@ -397,11 +367,7 @@ class AuthenticateView(APIView):
 
         user_serializer = UserSerializer(user)
         response = Response({"jwt": jwt, "user": user_serializer.data})
-        logger.info(
-            format_log_message(
-                message="User authenticated", user=user, response=response
-            )
-        )
+        logger.info(format_log_message(message="User authenticated", user=user, response=response))
         return response
 
 

@@ -36,13 +36,9 @@ class Rule(Model):
     origin_source_file = CharField(max_length=255, blank=True)
     origin_cloud_qualified_resource = CharField(max_length=255, blank=True)
     origin_kubernetes_qualified_resource = CharField(max_length=255, blank=True)
-    new_severity = CharField(
-        max_length=12, choices=Severity.SEVERITY_CHOICES, blank=True
-    )
+    new_severity = CharField(max_length=12, choices=Severity.SEVERITY_CHOICES, blank=True)
     new_status = CharField(max_length=16, choices=Status.STATUS_CHOICES, blank=True)
-    new_vex_justification = CharField(
-        max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True
-    )
+    new_vex_justification = CharField(max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True)
     enabled = BooleanField(default=True)
     user = ForeignKey(
         User,
@@ -83,12 +79,9 @@ class Rule(Model):
                 needs_approval = settings.feature_general_rules_need_approval
             else:
                 if self.product.product_group:
-                    product_group_product_rules_needs_approval = (
-                        self.product.product_group.product_rules_need_approval
-                    )
+                    product_group_product_rules_needs_approval = self.product.product_group.product_rules_need_approval
                     needs_approval = (
-                        self.product.product_rules_need_approval
-                        or product_group_product_rules_needs_approval
+                        self.product.product_rules_need_approval or product_group_product_rules_needs_approval
                     )
                 else:
                     needs_approval = self.product.product_rules_need_approval

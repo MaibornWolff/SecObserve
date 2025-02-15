@@ -80,15 +80,11 @@ class NotificationSerializer(ModelSerializer):
     def get_new_viewed(self, obj: Notification) -> str:
         user = get_current_user()
         if user:
-            notification_viewed = Notification_Viewed.objects.filter(
-                notification=obj, user=user
-            ).first()
+            notification_viewed = Notification_Viewed.objects.filter(notification=obj, user=user).first()
             if notification_viewed:
                 return "Viewed"
         return "New"
 
 
 class NotificationBulkSerializer(Serializer):
-    notifications = ListField(
-        child=IntegerField(min_value=1), min_length=0, max_length=250, required=True
-    )
+    notifications = ListField(child=IntegerField(min_value=1), min_length=0, max_length=250, required=True)

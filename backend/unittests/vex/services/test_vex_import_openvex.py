@@ -10,17 +10,13 @@ class TestVEXImportOpenVEX(BaseTestVEXImport):
     def test_import(self):
         self.load_vex_test()
 
-        with open(
-            path.dirname(__file__) + "/files/so_openvex_2020_0001_0001.json"
-        ) as testfile:
+        with open(path.dirname(__file__) + "/files/so_openvex_2020_0001_0001.json") as testfile:
             import_vex(testfile)
 
             vex_document = VEX_Document.objects.get(
                 document_id="https://openvex.example.com/so_openvex_2020_0001",
                 author="SecObserve",
             )
-            self.check_vex_document(
-                vex_document, VEX_Document_Type.VEX_DOCUMENT_TYPE_OPENVEX
-            )
+            self.check_vex_document(vex_document, VEX_Document_Type.VEX_DOCUMENT_TYPE_OPENVEX)
 
             self.check_product()

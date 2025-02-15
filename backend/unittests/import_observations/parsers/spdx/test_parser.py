@@ -13,25 +13,19 @@ class TestSPDXParser(TestCase):
             self.assertEqual("SPDX", parser.name)
             self.assertTrue(SPDXParser, isinstance(parser_instance, SPDXParser))
 
-            observations = parser_instance.get_observations(
-                data, Product(name="product"), None
-            )
+            observations = parser_instance.get_observations(data, Product(name="product"), None)
             self.assertEqual(0, len(observations))
 
             license_components = parser_instance.get_license_components(data)
             self.assertEqual(0, len(license_components))
 
     def test_multiple_observations(self):
-        with open(
-            path.dirname(__file__) + "/files/multiple_observations.json"
-        ) as testfile:
+        with open(path.dirname(__file__) + "/files/multiple_observations.json") as testfile:
             parser, parser_instance, data = detect_parser(testfile)
             self.assertEqual("SPDX", parser.name)
             self.assertTrue(SPDXParser, isinstance(parser_instance, SPDXParser))
 
-            observations = parser_instance.get_observations(
-                data, Product(name="product"), None
-            )
+            observations = parser_instance.get_observations(data, Product(name="product"), None)
             license_components = parser_instance.get_license_components(data)
 
             self.assertEqual(0, len(observations))

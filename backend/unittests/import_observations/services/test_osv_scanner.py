@@ -30,9 +30,7 @@ class MockResponse:
         pass
 
     def json(self):
-        with open(
-            f"unittests/import_observations/services/files/{self.filename}"
-        ) as file:
+        with open(f"unittests/import_observations/services/files/{self.filename}") as file:
             return loads(file.read())
 
 
@@ -46,17 +44,11 @@ class TestImportObservations(BaseTestCase):
                 "unittests/fixtures/unittests_license_fixtures.json",
             ],
         )
-        Parser.objects.create(
-            name="OSV (Open Source Vulnerabilities)", type="SCA", source="Other"
-        )
+        Parser.objects.create(name="OSV (Open Source Vulnerabilities)", type="SCA", source="Other")
 
     @patch("application.import_observations.services.osv_scanner.scan_branch")
-    @patch(
-        "application.import_observations.services.osv_scanner.get_license_components_no_branch"
-    )
-    @patch(
-        "application.import_observations.services.osv_scanner.scan_license_components"
-    )
+    @patch("application.import_observations.services.osv_scanner.get_license_components_no_branch")
+    @patch("application.import_observations.services.osv_scanner.scan_license_components")
     def test_scan_product_no_branch(
         self,
         mock_scan_license_components,
@@ -74,17 +66,11 @@ class TestImportObservations(BaseTestCase):
         self.assertEqual((4, 5, 6), numbers)
         mock_scan_branch.assert_not_called()
         mock_get_license_components_no_branch.assert_called_with(product)
-        mock_scan_license_components.assert_called_with(
-            license_components, product, None
-        )
+        mock_scan_license_components.assert_called_with(license_components, product, None)
 
     @patch("application.import_observations.services.osv_scanner.scan_branch")
-    @patch(
-        "application.import_observations.services.osv_scanner.get_license_components_no_branch"
-    )
-    @patch(
-        "application.import_observations.services.osv_scanner.scan_license_components"
-    )
+    @patch("application.import_observations.services.osv_scanner.get_license_components_no_branch")
+    @patch("application.import_observations.services.osv_scanner.scan_license_components")
     def test_scan_product_with_branches(
         self,
         mock_scan_license_components,
@@ -103,19 +89,11 @@ class TestImportObservations(BaseTestCase):
         self.assertEqual((6, 9, 12), numbers)
         mock_scan_branch.assert_has_calls([call(branches[0]), call(branches[1])])
         mock_get_license_components_no_branch.assert_called_with(product)
-        mock_scan_license_components.assert_called_with(
-            license_components, product, None
-        )
+        mock_scan_license_components.assert_called_with(license_components, product, None)
 
-    @patch(
-        "application.import_observations.services.osv_scanner.get_license_components_for_branch"
-    )
-    @patch(
-        "application.import_observations.services.osv_scanner.scan_license_components"
-    )
-    def test_scan_branch(
-        self, mock_scan_license_components, mock_get_license_components_for_branch
-    ):
+    @patch("application.import_observations.services.osv_scanner.get_license_components_for_branch")
+    @patch("application.import_observations.services.osv_scanner.scan_license_components")
+    def test_scan_branch(self, mock_scan_license_components, mock_get_license_components_for_branch):
         product = Product.objects.get(id=1)
         branch = Branch.objects.filter(product=product).first()
         license_components = list(License_Component.objects.all())
@@ -126,14 +104,10 @@ class TestImportObservations(BaseTestCase):
 
         self.assertEqual((4, 5, 6), numbers)
         mock_get_license_components_for_branch.assert_called_with(branch)
-        mock_scan_license_components.assert_called_with(
-            license_components, product, branch
-        )
+        mock_scan_license_components.assert_called_with(license_components, product, branch)
 
     @patch("requests.post")
-    @patch(
-        "application.import_observations.services.osv_scanner.OSVParser.get_observations"
-    )
+    @patch("application.import_observations.services.osv_scanner.OSVParser.get_observations")
     @patch("application.import_observations.services.osv_scanner._process_data")
     def test_scan_license_components_no_license_components(
         self, mock_process_data, mock_get_observations, mock_requests_post
@@ -148,13 +122,9 @@ class TestImportObservations(BaseTestCase):
         mock_process_data.assert_not_called()
 
     @patch("requests.post")
-    @patch(
-        "application.import_observations.services.osv_scanner.OSVParser.get_observations"
-    )
+    @patch("application.import_observations.services.osv_scanner.OSVParser.get_observations")
     @patch("application.import_observations.services.osv_scanner._process_data")
-    @patch(
-        "application.import_observations.services.osv_scanner.Vulnerability_Check.objects.update_or_create"
-    )
+    @patch("application.import_observations.services.osv_scanner.Vulnerability_Check.objects.update_or_create")
     def test_scan_license_components_error_length(
         self,
         mock_vulnerability_check,
@@ -162,13 +132,9 @@ class TestImportObservations(BaseTestCase):
         mock_get_observations,
         mock_requests_post,
     ):
-        license_components: list[License_Component] = list(
-            License_Component.objects.all()
-        )
+        license_components: list[License_Component] = list(License_Component.objects.all())
         license_components[0].component_purl = "pkg:pypi/django@4.2.11"
-        license_components[1].component_purl = (
-            "pkg:golang/golang.org/x/net@v0.25.1-0.20240603202750-6249541f2a6c"
-        )
+        license_components[1].component_purl = "pkg:golang/golang.org/x/net@v0.25.1-0.20240603202750-6249541f2a6c"
         product = Product.objects.get(id=1)
         branch = Branch.objects.get(id=1)
 
@@ -194,13 +160,9 @@ class TestImportObservations(BaseTestCase):
         mock_vulnerability_check.assert_not_called()
 
     @patch("requests.post")
-    @patch(
-        "application.import_observations.services.osv_scanner.OSVParser.get_observations"
-    )
+    @patch("application.import_observations.services.osv_scanner.OSVParser.get_observations")
     @patch("application.import_observations.services.osv_scanner._process_data")
-    @patch(
-        "application.import_observations.services.osv_scanner.Vulnerability_Check.objects.update_or_create"
-    )
+    @patch("application.import_observations.services.osv_scanner.Vulnerability_Check.objects.update_or_create")
     def test_scan_license_components_error_next_page_token(
         self,
         mock_vulnerability_check,
@@ -208,13 +170,9 @@ class TestImportObservations(BaseTestCase):
         mock_get_observations,
         mock_requests_post,
     ):
-        license_components: list[License_Component] = list(
-            License_Component.objects.all()
-        )
+        license_components: list[License_Component] = list(License_Component.objects.all())
         license_components[0].component_purl = "pkg:pypi/django@4.2.11"
-        license_components[1].component_purl = (
-            "pkg:golang/golang.org/x/net@v0.25.1-0.20240603202750-6249541f2a6c"
-        )
+        license_components[1].component_purl = "pkg:golang/golang.org/x/net@v0.25.1-0.20240603202750-6249541f2a6c"
         product = Product.objects.get(id=1)
         branch = Branch.objects.get(id=1)
 
@@ -240,13 +198,9 @@ class TestImportObservations(BaseTestCase):
         mock_vulnerability_check.assert_not_called()
 
     @patch("requests.post")
-    @patch(
-        "application.import_observations.services.osv_scanner.OSVParser.get_observations"
-    )
+    @patch("application.import_observations.services.osv_scanner.OSVParser.get_observations")
     @patch("application.import_observations.services.osv_scanner._process_data")
-    @patch(
-        "application.import_observations.services.osv_scanner.Vulnerability_Check.objects.update_or_create"
-    )
+    @patch("application.import_observations.services.osv_scanner.Vulnerability_Check.objects.update_or_create")
     def test_scan_license_components_success(
         self,
         mock_vulnerability_check,
@@ -254,13 +208,9 @@ class TestImportObservations(BaseTestCase):
         mock_get_observations,
         mock_requests_post,
     ):
-        license_components: list[License_Component] = list(
-            License_Component.objects.all()
-        )
+        license_components: list[License_Component] = list(License_Component.objects.all())
         license_components[0].component_purl = "pkg:pypi/django@4.2.11"
-        license_components[1].component_purl = (
-            "pkg:golang/golang.org/x/net@v0.25.1-0.20240603202750-6249541f2a6c"
-        )
+        license_components[1].component_purl = "pkg:golang/golang.org/x/net@v0.25.1-0.20240603202750-6249541f2a6c"
         product = Product.objects.get(id=1)
         branch = Branch.objects.get(id=1)
 
@@ -287,9 +237,7 @@ class TestImportObservations(BaseTestCase):
                     ),
                     OSV_Vulnerability(
                         id="GHSA-5hgc-2vfp-mqvc",
-                        modified=datetime(
-                            2024, 10, 30, 19, 23, 43, 662562, timezone.utc
-                        ),
+                        modified=datetime(2024, 10, 30, 19, 23, 43, 662562, timezone.utc),
                     ),
                 },
             ),

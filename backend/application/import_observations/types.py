@@ -109,9 +109,7 @@ class ExtendedSemVer:
         if not isinstance(other, self.__class__):
             return False
 
-        if (self.prefix is None and other.prefix is not None) or (
-            self.prefix is not None and other.prefix is None
-        ):
+        if (self.prefix is None and other.prefix is not None) or (self.prefix is not None and other.prefix is None):
             return False
 
         if self.prefix is not None and other.prefix is not None:
@@ -126,9 +124,7 @@ class ExtendedSemVer:
         if not isinstance(other, self.__class__):
             return False
 
-        if (self.prefix is None and other.prefix is not None) or (
-            self.prefix is not None and other.prefix is None
-        ):
+        if (self.prefix is None and other.prefix is not None) or (self.prefix is not None and other.prefix is None):
             return False
 
         if self.prefix is not None and other.prefix is not None:
@@ -143,9 +139,7 @@ class ExtendedSemVer:
         if not isinstance(other, self.__class__):
             return False
 
-        if (self.prefix is None and other.prefix is not None) or (
-            self.prefix is not None and other.prefix is None
-        ):
+        if (self.prefix is None and other.prefix is not None) or (self.prefix is not None and other.prefix is None):
             return False
 
         if self.prefix is not None and other.prefix is not None:
@@ -160,9 +154,7 @@ class ExtendedSemVer:
         if not isinstance(other, self.__class__):
             return False
 
-        if (self.prefix is None and other.prefix is not None) or (
-            self.prefix is not None and other.prefix is None
-        ):
+        if (self.prefix is None and other.prefix is not None) or (self.prefix is not None and other.prefix is None):
             return False
 
         if self.prefix is not None and other.prefix is not None:

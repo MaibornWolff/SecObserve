@@ -44,9 +44,7 @@ def get_users() -> QuerySet[User]:
 
     product_members = get_product_members()
 
-    return users.filter(
-        Q(id__in=[member.user_id for member in product_members]) | Q(id=user.pk)
-    )
+    return users.filter(Q(id__in=[member.user_id for member in product_members]) | Q(id=user.pk))
 
 
 def get_users_without_api_tokens() -> QuerySet[User]:
@@ -67,6 +65,4 @@ def get_users_without_api_tokens() -> QuerySet[User]:
 
     product_members = get_product_members()
 
-    return users.filter(
-        Q(id__in=[member.user_id for member in product_members]) | Q(id=user.pk)
-    )
+    return users.filter(Q(id__in=[member.user_id for member in product_members]) | Q(id=user.pk))

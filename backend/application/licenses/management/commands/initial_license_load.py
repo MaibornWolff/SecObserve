@@ -18,12 +18,6 @@ class Command(BaseCommand):
         license_groups_exist = License_Group.objects.exists()
         license_policies_exist = License_Policy.objects.exists()
 
-        if (
-            not licenses_exist
-            and not license_groups_exist
-            and not license_policies_exist
-        ):
-            logger.info(
-                "Importing initial licenses, license groups and license policies..."
-            )
+        if not licenses_exist and not license_groups_exist and not license_policies_exist:
+            logger.info("Importing initial licenses, license groups and license policies...")
             call_command("loaddata", "application/licenses/fixtures/initial_data.json")

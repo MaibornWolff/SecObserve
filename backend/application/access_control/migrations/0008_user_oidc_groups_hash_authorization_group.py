@@ -42,11 +42,7 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name": "Authorization Group",
                 "verbose_name_plural": "Authorization Groups",
-                "indexes": [
-                    models.Index(
-                        fields=["oidc_group"], name="access_cont_oidc_gr_705c33_idx"
-                    )
-                ],
+                "indexes": [models.Index(fields=["oidc_group"], name="access_cont_oidc_gr_705c33_idx")],
             },
         ),
     ]

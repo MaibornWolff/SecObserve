@@ -17,9 +17,7 @@ def correct_risk_acceptance_expiry_date(apps, schema_editor):
     Observation = apps.get_model("core", "Observation")
 
     Observation_Log = apps.get_model("core", "Observation_Log")
-    observations = Observation.objects.filter(
-        current_status=Status.STATUS_RISK_ACCEPTED
-    ).order_by("id")
+    observations = Observation.objects.filter(current_status=Status.STATUS_RISK_ACCEPTED).order_by("id")
 
     paginator = Paginator(observations, 1000)
     for page_number in paginator.page_range:
@@ -30,39 +28,25 @@ def correct_risk_acceptance_expiry_date(apps, schema_editor):
             risk_acceptance_expiry_date_found = False
             most_recent_risk_acceptance: Optional[date] = None
 
-            observation_logs = Observation_Log.objects.filter(
-                observation=observation
-            ).order_by("-created")
+            observation_logs = Observation_Log.objects.filter(observation=observation).order_by("-created")
             for observation_log in observation_logs:
-                if (
-                    observation_log.status == Status.STATUS_RISK_ACCEPTED
-                    and not most_recent_risk_acceptance
-                ):
+                if observation_log.status == Status.STATUS_RISK_ACCEPTED and not most_recent_risk_acceptance:
                     most_recent_risk_acceptance = observation_log.created.date()
 
                 if observation_log.risk_acceptance_expiry_date:
-                    observation.risk_acceptance_expiry_date = (
-                        observation_log.risk_acceptance_expiry_date
-                    )
+                    observation.risk_acceptance_expiry_date = observation_log.risk_acceptance_expiry_date
                     risk_acceptance_expiry_date_found = True
                     break
 
-            if (
-                not risk_acceptance_expiry_date_found
-                and observation.risk_acceptance_expiry_date
-            ):
-                new_risk_acceptance_expiry_date = calculate_risk_acceptance_expiry_date(
-                    observation.product
-                )
+            if not risk_acceptance_expiry_date_found and observation.risk_acceptance_expiry_date:
+                new_risk_acceptance_expiry_date = calculate_risk_acceptance_expiry_date(observation.product)
                 if most_recent_risk_acceptance:
                     days_between = (date.today() - most_recent_risk_acceptance).days
-                    observation.risk_acceptance_expiry_date = (
-                        new_risk_acceptance_expiry_date - timedelta(days=days_between)
+                    observation.risk_acceptance_expiry_date = new_risk_acceptance_expiry_date - timedelta(
+                        days=days_between
                     )
                 else:
-                    observation.risk_acceptance_expiry_date = (
-                        new_risk_acceptance_expiry_date
-                    )
+                    observation.risk_acceptance_expiry_date = new_risk_acceptance_expiry_date
 
             updates.append(observation)
 

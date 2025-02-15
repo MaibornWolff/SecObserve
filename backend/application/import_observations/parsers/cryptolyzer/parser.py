@@ -137,23 +137,17 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
             return True
         return False
 
-    def get_observations(
-        self, data: dict, product: Product, branch: Optional[Branch]
-    ) -> list[Observation]:
+    def get_observations(self, data: dict, product: Product, branch: Optional[Branch]) -> list[Observation]:
         observations = []
 
         observation = self.check_weak_protocols(data)
         if observation:
             observations.append(observation)
 
-        observation = self.check_ciphers(
-            "tls1_2", "TLS 1.2", TLS12_RECOMMENDED_CIPHERS, data
-        )
+        observation = self.check_ciphers("tls1_2", "TLS 1.2", TLS12_RECOMMENDED_CIPHERS, data)
         if observation:
             observations.append(observation)
-        observation = self.check_ciphers(
-            "tls1_3", "TLS 1.3", TLS13_RECOMMENDED_CIPHERS, data
-        )
+        observation = self.check_ciphers("tls1_3", "TLS 1.3", TLS13_RECOMMENDED_CIPHERS, data)
         if observation:
             observations.append(observation)
 
@@ -174,10 +168,7 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
             versions.remove("tls1_2")
         if "tls1_3" in versions:
             versions.remove("tls1_3")
-        description = (
-            "**Weak protocols according to BSI recommendations:**\n* "
-            + "\n* ".join(versions)
-        )
+        description = "**Weak protocols according to BSI recommendations:**\n* " + "\n* ".join(versions)
 
         if not versions:
             return None
@@ -218,9 +209,8 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
 
                 if unrecommended_cipher_suites:
                     endpoint_url = self.get_endpoint_url(cipher.get("target", {}))
-                    description = (
-                        "**Unrecommended cipher suites according to BSI recommendations:**\n* "
-                        + "\n* ".join(unrecommended_cipher_suites)
+                    description = "**Unrecommended cipher suites according to BSI recommendations:**\n* " + "\n* ".join(
+                        unrecommended_cipher_suites
                     )
                     observation = Observation(
                         title="Unrecommended " + protocol_name + " cipher suites",
@@ -256,9 +246,8 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
             return None
 
         endpoint_url = self.get_endpoint_url(curves.get("target", {}))
-        description = (
-            "**Unrecommended elliptic curves according to BSI recommendations:**\n* "
-            + "\n* ".join(unrecommended_curves)
+        description = "**Unrecommended elliptic curves according to BSI recommendations:**\n* " + "\n* ".join(
+            unrecommended_curves
         )
         observation = Observation(
             title="Unrecommended elliptic curves",
@@ -285,19 +274,15 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
         unrecommended_signature_algorithms = []
         inner_signature_algorithms = signature_algorithms.get("sig_algos", {})
         for inner_signature_algorithm in inner_signature_algorithms:
-            if (
-                inner_signature_algorithm.lower()
-                not in RECOMMENDED_SIGNATURE_ALGORITHMS
-            ):
+            if inner_signature_algorithm.lower() not in RECOMMENDED_SIGNATURE_ALGORITHMS:
                 unrecommended_signature_algorithms.append(inner_signature_algorithm)
 
         if not unrecommended_signature_algorithms:
             return None
 
         endpoint_url = self.get_endpoint_url(signature_algorithms.get("target", {}))
-        description = (
-            "**Unrecommended signature algorithms according to BSI recommendations:**\n* "
-            + "\n* ".join(unrecommended_signature_algorithms)
+        description = "**Unrecommended signature algorithms according to BSI recommendations:**\n* " + "\n* ".join(
+            unrecommended_signature_algorithms
         )
         observation = Observation(
             title="Unrecommended signature algorithms",

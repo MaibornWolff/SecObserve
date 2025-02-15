@@ -11,9 +11,7 @@ class NotificationFilter(FilterSet):
     name = CharFilter(field_name="name", lookup_expr="icontains")
     message = CharFilter(field_name="message", lookup_expr="icontains")
     function = CharFilter(field_name="function", lookup_expr="icontains")
-    exclude_already_viewed = BooleanFilter(
-        field_name="exclude_already_viewed", method="get_exclude_already_viewed"
-    )
+    exclude_already_viewed = BooleanFilter(field_name="exclude_already_viewed", method="get_exclude_already_viewed")
 
     def get_exclude_already_viewed(
         self,
@@ -28,11 +26,7 @@ class NotificationFilter(FilterSet):
 
         if value:
             return queryset.exclude(
-                id__in=Subquery(
-                    Notification_Viewed.objects.filter(user=user).values_list(
-                        "notification_id", flat=True
-                    )
-                )
+                id__in=Subquery(Notification_Viewed.objects.filter(user=user).values_list("notification_id", flat=True))
             )
 
         return queryset

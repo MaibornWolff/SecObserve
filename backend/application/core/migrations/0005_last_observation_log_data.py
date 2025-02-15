@@ -12,9 +12,7 @@ def update_last_observation_log(apps, schema_editor):
     Observation_Log = apps.get_model("core", "Observation_Log")
     for observation in Observation.objects.all():
         try:
-            observation_log = Observation_Log.objects.filter(
-                observation=observation
-            ).latest("created")
+            observation_log = Observation_Log.objects.filter(observation=observation).latest("created")
             observation.last_observation_log = observation_log.created
             observation.save()
         except Exception as e:

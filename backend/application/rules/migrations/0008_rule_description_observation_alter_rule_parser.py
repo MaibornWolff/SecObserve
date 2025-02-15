@@ -19,8 +19,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="rule",
             name="parser",
-            field=models.ForeignKey(
-                null=True, on_delete=django.db.models.deletion.CASCADE, to="core.parser"
-            ),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to="core.parser"),
         ),
     ]

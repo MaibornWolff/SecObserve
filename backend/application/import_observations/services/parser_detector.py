@@ -19,11 +19,7 @@ from application.import_observations.types import Parser_Filetype, Parser_Source
 
 
 def detect_parser(file: File) -> tuple[Parser, BaseParser, Any]:
-    if file.name and not (
-        file.name.endswith(".csv")
-        or file.name.endswith(".json")
-        or file.name.endswith(".sarif")
-    ):
+    if file.name and not (file.name.endswith(".csv") or file.name.endswith(".json") or file.name.endswith(".sarif")):
         raise ValidationError("File is not CSV, JSON or SARIF")
 
     if file.name and file.name.endswith(".csv"):
@@ -33,9 +29,7 @@ def detect_parser(file: File) -> tuple[Parser, BaseParser, Any]:
                 content = content.decode("utf-8")
             reader = DictReader(StringIO(content), delimiter=",", quotechar='"')
         except Exception:
-            raise ValidationError(  # pylint: disable=raise-missing-from
-                "File is not valid CSV"
-            )
+            raise ValidationError("File is not valid CSV")  # pylint: disable=raise-missing-from
             # The Exception itself is not relevant and must not be re-raised
 
         rows = []
@@ -50,9 +44,7 @@ def detect_parser(file: File) -> tuple[Parser, BaseParser, Any]:
         try:
             data = load(file)
         except Exception:
-            raise ValidationError(  # pylint: disable=raise-missing-from
-                "File is not valid JSON"
-            )
+            raise ValidationError("File is not valid JSON")  # pylint: disable=raise-missing-from
             # The DjangoValidationError itself is not relevant and must not be re-raised
 
         if data:
@@ -71,9 +63,7 @@ def instanciate_parser(parser: Parser) -> BaseParser:
     return parser_instance
 
 
-def _get_parser(
-    data: Any, filetype: str
-) -> tuple[Optional[Parser], Optional[BaseParser]]:
+def _get_parser(data: Any, filetype: str) -> tuple[Optional[Parser], Optional[BaseParser]]:
     parsers = Parser.objects.filter(source=Parser_Source.SOURCE_FILE).order_by("name")
     for parser in parsers:
         try:
@@ -84,9 +74,7 @@ def _get_parser(
         if not isinstance(parser_instance, BaseFileParser):
             raise ParserError(f"{parser.name} isn't a file parser")
 
-        if parser_instance.get_filetype() == filetype and parser_instance.check_format(
-            data
-        ):
+        if parser_instance.get_filetype() == filetype and parser_instance.check_format(data):
             return parser, parser_instance
 
     return None, None

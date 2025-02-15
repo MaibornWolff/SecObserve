@@ -15,9 +15,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="api_configuration",
             name="automatic_import_branch",
-            field=models.ForeignKey(
-                null=True, on_delete=django.db.models.deletion.PROTECT, to="core.branch"
-            ),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to="core.branch"),
         ),
         migrations.AddField(
             model_name="api_configuration",

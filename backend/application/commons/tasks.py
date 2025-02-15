@@ -13,9 +13,7 @@ logger = logging.getLogger("secobserve.tasks")
 
 
 @db_task()
-def send_email_notification(
-    notification_email_to: str, subject: str, template: str, **kwargs: Any
-) -> None:
+def send_email_notification(notification_email_to: str, subject: str, template: str, **kwargs: Any) -> None:
     settings = Settings.load()
     notification_message = _create_notification_message(template, **kwargs)
     if notification_message:

@@ -64,17 +64,11 @@ def scan_branch(branch: Branch) -> Tuple[int, int, int]:
 
 
 def get_license_components_for_branch(branch: Branch) -> list[License_Component]:
-    return list(
-        License_Component.objects.filter(branch=branch).exclude(component_purl="")
-    )
+    return list(License_Component.objects.filter(branch=branch).exclude(component_purl=""))
 
 
 def get_license_components_no_branch(product: Product) -> list[License_Component]:
-    return list(
-        License_Component.objects.filter(product=product, branch__isnull=True).exclude(
-            component_purl=""
-        )
-    )
+    return list(License_Component.objects.filter(product=product, branch__isnull=True).exclude(component_purl=""))
 
 
 def scan_license_components(
@@ -104,9 +98,7 @@ def scan_license_components(
             queries=[
                 Request_Package(Request_PURL(purl=license_component.component_purl))
                 for license_component in license_components[
-                    (slice_actual * slice_size) : (  # noqa: E203
-                        (slice_actual + 1) * slice_size
-                    )
+                    (slice_actual * slice_size) : ((slice_actual + 1) * slice_size)  # noqa: E203
                 ]
             ]
         )
@@ -130,9 +122,7 @@ def scan_license_components(
 
     for result in results:
         if result.get("next_page_token"):
-            raise Exception(  # pylint: disable=broad-exception-raised
-                "Next page token is not yet supported"
-            )
+            raise Exception("Next page token is not yet supported")  # pylint: disable=broad-exception-raised
 
     for i, result in enumerate(results):
         for vuln in result.get("vulns", []):
@@ -148,9 +138,7 @@ def scan_license_components(
 
     parser = get_parser_by_name(osv_parser.get_name())
     if parser is None:
-        raise Exception(  # pylint: disable=broad-exception-raised
-            f"Parser {osv_parser.get_name()} not found"
-        )
+        raise Exception(f"Parser {osv_parser.get_name()} not found")  # pylint: disable=broad-exception-raised
 
     import_parameters = ImportParameters(
         product=product,

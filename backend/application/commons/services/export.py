@@ -10,9 +10,7 @@ from openpyxl import Workbook
 from openpyxl.styles import Font
 
 
-def export_excel(
-    objects: QuerySet, title: str, excludes: list[str], foreign_keys: list[str]
-) -> Workbook:
+def export_excel(objects: QuerySet, title: str, excludes: list[str], foreign_keys: list[str]) -> Workbook:
     workbook = Workbook()
     workbook.iso_dates = True
     worksheet = workbook.active
@@ -26,11 +24,7 @@ def export_excel(
         if row_num == 1:
             col_num = 1
             for key in dir(current_object):
-                if (
-                    key not in excludes
-                    and not callable(getattr(current_object, key))
-                    and not key.startswith("_")
-                ):
+                if key not in excludes and not callable(getattr(current_object, key)) and not key.startswith("_"):
                     value = key.replace("_", " ").capitalize()
                     cell = worksheet.cell(row=row_num, column=col_num, value=value)
                     cell.font = font_bold
@@ -40,11 +34,7 @@ def export_excel(
         if row_num > 1:
             col_num = 1
             for key in dir(current_object):
-                if (
-                    key not in excludes
-                    and not callable(getattr(current_object, key))
-                    and not key.startswith("_")
-                ):
+                if key not in excludes and not callable(getattr(current_object, key)) and not key.startswith("_"):
                     value = current_object.__dict__.get(key)
                     if key in foreign_keys and getattr(current_object, key):
                         value = str(getattr(current_object, key))
@@ -73,11 +63,7 @@ def export_csv(
         if first_row:
             fields.clear()
             for key in dir(current_object):
-                if (
-                    key not in excludes
-                    and not callable(getattr(current_object, key))
-                    and not key.startswith("_")
-                ):
+                if key not in excludes and not callable(getattr(current_object, key)) and not key.startswith("_"):
                     value = key.replace("_", " ").capitalize()
                     fields.append(value)
 
@@ -87,11 +73,7 @@ def export_csv(
         if not first_row:
             fields.clear()
             for key in dir(current_object):
-                if (
-                    key not in excludes
-                    and not callable(getattr(current_object, key))
-                    and not key.startswith("_")
-                ):
+                if key not in excludes and not callable(getattr(current_object, key)) and not key.startswith("_"):
                     value = current_object.__dict__.get(key)
                     if key in foreign_keys and getattr(current_object, key):
                         value = str(getattr(current_object, key))
@@ -123,8 +105,4 @@ def _remove_empty_elements(d: dict) -> dict:
     if isinstance(d, list):
         return [v for v in (_remove_empty_elements(v) for v in d) if not empty(v)]
 
-    return {
-        k: v
-        for k, v in ((k, _remove_empty_elements(v)) for k, v in d.items())
-        if not empty(v)
-    }
+    return {k: v for k, v in ((k, _remove_empty_elements(v)) for k, v in d.items()) if not empty(v)}

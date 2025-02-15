@@ -25,9 +25,7 @@ class TestAPITokenAuthentication(BaseTestCase):
         ph = PasswordHasher.from_parameters(RFC_9106_LOW_MEMORY)
         api_token_hash = ph.hash(self.api_token)
 
-        api_token_object = API_Token(
-            user=self.user_internal, api_token_hash=api_token_hash
-        )
+        api_token_object = API_Token(user=self.user_internal, api_token_hash=api_token_hash)
         self.api_tokens = [api_token_object]
 
     # --- authenticate_header ---
@@ -70,9 +68,7 @@ class TestAPITokenAuthentication(BaseTestCase):
             api_token_authentication = APITokenAuthentication()
             api_token_authentication.authenticate(request)
 
-        self.assertEqual(
-            "Invalid token header: No credentials provided.", str(e.exception)
-        )
+        self.assertEqual("Invalid token header: No credentials provided.", str(e.exception))
 
     def test_authenticate_invalid_header_spaces(self):
         request = HttpRequest()
@@ -94,9 +90,7 @@ class TestAPITokenAuthentication(BaseTestCase):
 
         self.assertIsNone(user)
 
-    @patch(
-        "application.access_control.services.api_token_authentication.APITokenAuthentication._validate_api_token"
-    )
+    @patch("application.access_control.services.api_token_authentication.APITokenAuthentication._validate_api_token")
     def test_authenticate_wrong_token(self, mock):
         mock.return_value = None
 
@@ -108,9 +102,7 @@ class TestAPITokenAuthentication(BaseTestCase):
 
         self.assertEqual("Invalid API token.", str(e.exception))
 
-    @patch(
-        "application.access_control.services.api_token_authentication.APITokenAuthentication._validate_api_token"
-    )
+    @patch("application.access_control.services.api_token_authentication.APITokenAuthentication._validate_api_token")
     def test_authenticate_user_deactivated(self, mock):
         mock.return_value = self.user_internal
         self.user_internal.is_active = False
@@ -123,9 +115,7 @@ class TestAPITokenAuthentication(BaseTestCase):
 
         self.assertEqual("User is deactivated.", str(e.exception))
 
-    @patch(
-        "application.access_control.services.api_token_authentication.APITokenAuthentication._validate_api_token"
-    )
+    @patch("application.access_control.services.api_token_authentication.APITokenAuthentication._validate_api_token")
     def test_authenticate_successful(self, mock):
         mock.return_value = self.user_internal
 

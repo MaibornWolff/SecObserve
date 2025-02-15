@@ -82,9 +82,7 @@ class TestGitLabIssueTracker(BaseTestCase):
         response = Response()
         response.status_code = 500
         response.reason = "unknown reason"
-        response.url = (
-            "https://gitlab.example.com/api/v4/projects/gh_project_1/issues/gh_1"
-        )
+        response.url = "https://gitlab.example.com/api/v4/projects/gh_project_1/issues/gh_1"
         get_mock.return_value = response
         with self.assertRaises(HTTPError) as e:
             issue_tracker = GitLabIssueTracker()
@@ -296,9 +294,7 @@ class TestGitLabIssueTracker(BaseTestCase):
                 description="description_1",
                 labels="label_1,label_2",
             )
-            issue_tracker.close_issue_for_deleted_observation(
-                self.observation_1.product, issue
-            )
+            issue_tracker.close_issue_for_deleted_observation(self.observation_1.product, issue)
 
         self.assertEqual(
             "404 Client Error: unknown reason for url: https://api.gitlab.com/repos/gh_project_1/issues/gh_1",
@@ -328,9 +324,7 @@ class TestGitLabIssueTracker(BaseTestCase):
             labels="label_1,label_2",
         )
 
-        issue_tracker.close_issue_for_deleted_observation(
-            self.observation_1.product, issue
-        )
+        issue_tracker.close_issue_for_deleted_observation(self.observation_1.product, issue)
 
         put_mock.assert_called_once_with(
             url="https://gitlab.example.com/api/v4/projects/gh_project_1/issues/gh_1",
@@ -346,9 +340,5 @@ class TestGitLabIssueTracker(BaseTestCase):
 
     def test_get_frontend_issue_url(self):
         issue_tracker = GitLabIssueTracker()
-        frontend_issue_url = issue_tracker.get_frontend_issue_url(
-            self.observation_1.product, "gh_1"
-        )
-        self.assertEqual(
-            "https://gitlab.example.com/gh_project_1/-/issues/gh_1", frontend_issue_url
-        )
+        frontend_issue_url = issue_tracker.get_frontend_issue_url(self.observation_1.product, "gh_1")
+        self.assertEqual("https://gitlab.example.com/gh_project_1/-/issues/gh_1", frontend_issue_url)

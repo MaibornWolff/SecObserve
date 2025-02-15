@@ -62,41 +62,23 @@ def custom_exception_handler(exc: Exception, context: dict) -> Response:
                 logger.error(traceback.format_exc())
                 send_exception_notification(exc)
                 response.data = {}
-                response.data["message"] = (
-                    "Internal server error, check logs for details"
-                )
+                response.data["message"] = "Internal server error, check logs for details"
 
     return response
 
 
 def format_exception_message(exc: Exception) -> str:
-    if (
-        hasattr(exc, "detail")
-        and exc.detail
-        and type(exc.detail).__name__ == "ReturnDict"
-    ):
+    if hasattr(exc, "detail") and exc.detail and type(exc.detail).__name__ == "ReturnDict":
         message_list = []
         for key in exc.detail:
             for message in exc.detail.get(key):
-                message_list.append(
-                    f'{key.replace("_", " ").capitalize()}: {str(message)}'
-                )
+                message_list.append(f'{key.replace("_", " ").capitalize()}: {str(message)}')
         return "\n".join(message_list)
 
-    if (
-        hasattr(exc, "detail")
-        and exc.detail
-        and isinstance(exc.detail, list)
-        and len(exc.detail) > 0
-    ):
+    if hasattr(exc, "detail") and exc.detail and isinstance(exc.detail, list) and len(exc.detail) > 0:
         return " / ".join(exc.detail)
 
-    if (
-        hasattr(exc, "args")
-        and exc.args
-        and isinstance(exc.args[0], str)
-        and "protected foreign keys" in exc.args[0]
-    ):
+    if hasattr(exc, "args") and exc.args and isinstance(exc.args[0], str) and "protected foreign keys" in exc.args[0]:
         return _format_protected_foreign_keys(exc.args[0])
 
     return str(exc)

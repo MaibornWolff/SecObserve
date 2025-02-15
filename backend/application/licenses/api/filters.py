@@ -31,21 +31,13 @@ from application.licenses.queries.license_group import get_license_groups
 
 
 class LicenseComponentFilter(FilterSet):
-    component_name_version = CharFilter(
-        field_name="component_name_version", lookup_expr="icontains"
-    )
+    component_name_version = CharFilter(field_name="component_name_version", lookup_expr="icontains")
     license_name = CharFilter(field_name="license_name", lookup_expr="icontains")
     license_name_exact = CharFilter(field_name="license_name")
     license_spdx_id = CharFilter(field_name="license__spdx_id", lookup_expr="icontains")
-    license_expression = CharFilter(
-        field_name="license_expression", lookup_expr="icontains"
-    )
-    non_spdx_license = CharFilter(
-        field_name="non_spdx_license", lookup_expr="icontains"
-    )
-    age = ChoiceFilter(
-        field_name="age", method="get_age", choices=Age_Choices.AGE_CHOICES
-    )
+    license_expression = CharFilter(field_name="license_expression", lookup_expr="icontains")
+    non_spdx_license = CharFilter(field_name="non_spdx_license", lookup_expr="icontains")
+    age = ChoiceFilter(field_name="age", method="get_age", choices=Age_Choices.AGE_CHOICES)
     branch_name_exact = CharFilter(field_name="branch__name")
 
     def get_age(
@@ -140,12 +132,8 @@ class LicenseComponentEvidenceFilter(FilterSet):
 class LicenseFilter(FilterSet):
     spdx_id = CharFilter(field_name="spdx_id", lookup_expr="icontains")
     name = CharFilter(field_name="name", lookup_expr="icontains")
-    exclude_license_group = NumberFilter(
-        field_name="exclude_license_group", method="get_exclude_license_group"
-    )
-    exclude_license_policy = NumberFilter(
-        field_name="exclude_license_policy", method="get_exclude_license_policy"
-    )
+    exclude_license_group = NumberFilter(field_name="exclude_license_group", method="get_exclude_license_group")
+    exclude_license_policy = NumberFilter(field_name="exclude_license_policy", method="get_exclude_license_policy")
     license_groups = ModelMultipleChoiceFilter(queryset=License.objects.none())
 
     def get_exclude_license_group(
@@ -195,9 +183,7 @@ class LicenseFilter(FilterSet):
 
 class LicenseGroupFilter(FilterSet):
     name = CharFilter(field_name="name", lookup_expr="icontains")
-    exclude_license_policy = NumberFilter(
-        field_name="exclude_license_policy", method="get_exclude_license_policy"
-    )
+    exclude_license_policy = NumberFilter(field_name="exclude_license_policy", method="get_exclude_license_policy")
 
     def get_exclude_license_policy(
         self,
@@ -263,12 +249,8 @@ class LicensePolicyFilter(FilterSet):
     name = CharFilter(field_name="name", lookup_expr="icontains")
     is_child = BooleanFilter(field_name="is_child", method="get_is_child")
     is_not_id = NumberFilter(field_name="is_not_id", method="get_is_not_id")
-    license = NumberFilter(
-        field_name="license", method="get_license_policies_with_license"
-    )
-    license_group = NumberFilter(
-        field_name="license_group", method="get_license_policies_with_license_group"
-    )
+    license = NumberFilter(field_name="license", method="get_license_policies_with_license")
+    license_group = NumberFilter(field_name="license_group", method="get_license_policies_with_license_group")
 
     def get_is_child(
         self,
@@ -318,16 +300,10 @@ class LicensePolicyFilter(FilterSet):
 
 
 class LicensePolicyItemFilter(FilterSet):
-    license_group_name = CharFilter(
-        field_name="license_group__name", lookup_expr="icontains"
-    )
+    license_group_name = CharFilter(field_name="license_group__name", lookup_expr="icontains")
     license_spdx_id = CharFilter(field_name="license__spdx_id", lookup_expr="icontains")
-    license_expression = CharFilter(
-        field_name="license_expression", lookup_expr="icontains"
-    )
-    non_spdx_license = CharFilter(
-        field_name="non_spdx_license", lookup_expr="icontains"
-    )
+    license_expression = CharFilter(field_name="license_expression", lookup_expr="icontains")
+    non_spdx_license = CharFilter(field_name="non_spdx_license", lookup_expr="icontains")
 
     ordering = ExtendedOrderingFilter(
         # tuple-mapping retains order

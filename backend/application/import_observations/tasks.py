@@ -32,9 +32,7 @@ def task_api_import() -> None:
             logger.info("API import is disabled in settings")
             return
 
-        api_configurations = Api_Configuration.objects.filter(
-            automatic_import_enabled=True
-        )
+        api_configurations = Api_Configuration.objects.filter(automatic_import_enabled=True)
         for api_configuration in api_configurations:
             try:
                 api_import_parameters = ApiImportParameters(
@@ -58,9 +56,7 @@ def task_api_import() -> None:
                     observations_resolved,
                 )
             except Exception as e:
-                logger.warning(
-                    "API import - %s: failed with exception", api_configuration
-                )
+                logger.warning("API import - %s: failed with exception", api_configuration)
                 handle_task_exception(e, product=api_configuration.product)
 
     except Exception as e:
@@ -76,9 +72,7 @@ def task_api_import() -> None:
             logger.info("OSV scanning is disabled in settings")
             return
 
-        products = Product.objects.filter(
-            osv_enabled=True, automatic_osv_scanning_enabled=True
-        )
+        products = Product.objects.filter(osv_enabled=True, automatic_osv_scanning_enabled=True)
         for product in products:
             try:
                 (

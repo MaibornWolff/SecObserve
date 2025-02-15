@@ -31,29 +31,21 @@ def get_license_components() -> QuerySet[License_Component]:
             user=user,
         )
 
-        product_authorization_group_members = (
-            Product_Authorization_Group_Member.objects.filter(
-                product=OuterRef("product_id"),
-                authorization_group__users=user,
-            )
+        product_authorization_group_members = Product_Authorization_Group_Member.objects.filter(
+            product=OuterRef("product_id"),
+            authorization_group__users=user,
         )
 
-        product_group_authorization_group_members = (
-            Product_Authorization_Group_Member.objects.filter(
-                product=OuterRef("product__product_group"),
-                authorization_group__users=user,
-            )
+        product_group_authorization_group_members = Product_Authorization_Group_Member.objects.filter(
+            product=OuterRef("product__product_group"),
+            authorization_group__users=user,
         )
 
         components = components.annotate(
             product__member=Exists(product_members),
             product__product_group__member=Exists(product_group_members),
-            product__authorization_group_member=Exists(
-                product_authorization_group_members
-            ),
-            product__product_group_authorization_group_member=Exists(
-                product_group_authorization_group_members
-            ),
+            product__authorization_group_member=Exists(product_authorization_group_members),
+            product__product_group_authorization_group_member=Exists(product_group_authorization_group_members),
         )
 
         components = components.filter(
@@ -91,6 +83,4 @@ def get_license_component_licenses(
     if order_by_1:
         return license_components_overview.order_by(order_by_1, order_by2, order_by_3)
 
-    return license_components_overview.order_by(
-        "numerical_evaluation_result", "license_name", "branch__name"
-    )
+    return license_components_overview.order_by("numerical_evaluation_result", "license_name", "branch__name")

@@ -76,24 +76,16 @@ def create_manual_parser() -> None:
 
 def get_parser_class_from_parser_name(name: str) -> Optional[Type[BaseParser]]:
     parser = Parser.objects.get(name=name)
-    return get_parser_class_from_module_class_names(
-        parser.module_name, parser.class_name
-    )
+    return get_parser_class_from_module_class_names(parser.module_name, parser.class_name)
 
 
-def get_parser_class_from_module_class_names(
-    module_name: str, class_name: str
-) -> Type[BaseParser]:
-    module = importlib.import_module(  # nosemgrep
-        f"application.import_observations.parsers.{module_name}.parser"
-    )
+def get_parser_class_from_module_class_names(module_name: str, class_name: str) -> Type[BaseParser]:
+    module = importlib.import_module(f"application.import_observations.parsers.{module_name}.parser")  # nosemgrep
     # nosemgrep because of rule python.lang.security.audit.non-literal-import.non-literal-import
     # This is the price you pay for a dynamic parser registry. We accept the risk.
 
     parser_class = getattr(module, class_name)
     if not issubclass(parser_class, BaseParser):
-        raise Exception(  # pylint: disable=broad-exception-raised
-            f"{class_name} is not a subclass of BaseParser"
-        )
+        raise Exception(f"{class_name} is not a subclass of BaseParser")  # pylint: disable=broad-exception-raised
 
     return parser_class

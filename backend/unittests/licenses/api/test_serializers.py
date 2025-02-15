@@ -22,12 +22,8 @@ class TestLicenseGroupMemberSerializer(BaseTestCase):
         super().setUp()
 
         self.license_group_1 = License_Group.objects.get(id=1)
-        self.license_group_member_1 = License_Group_Member(
-            license_group=self.license_group_1, user=self.user_internal
-        )
-        self.license_group_member_serializer_1 = LicenseGroupMemberSerializer(
-            self.license_group_member_1
-        )
+        self.license_group_member_1 = License_Group_Member(license_group=self.license_group_1, user=self.user_internal)
+        self.license_group_member_serializer_1 = LicenseGroupMemberSerializer(self.license_group_member_1)
 
     def test_validate_license_group_change(self):
         license_group_2 = License_Group.objects.get(id=2)
@@ -73,9 +69,7 @@ class TestLicenseGroupMemberSerializer(BaseTestCase):
             "[ErrorDetail(string='License group member Permissive Model (Blue Oak Council) / user_internal@example.com already exists', code='invalid')]",
             str(e.exception),
         )
-        mock_license_group_member.assert_called_with(
-            self.license_group_1, self.user_internal
-        )
+        mock_license_group_member.assert_called_with(self.license_group_1, self.user_internal)
 
 
 class TestLicensePolicyMemberSerializer(BaseTestCase):
@@ -86,9 +80,7 @@ class TestLicensePolicyMemberSerializer(BaseTestCase):
         self.license_policy_member_1 = License_Policy_Member(
             license_policy=self.license_policy_1, user=self.user_internal
         )
-        self.license_policy_member_serializer_1 = LicensePolicyMemberSerializer(
-            self.license_policy_member_1
-        )
+        self.license_policy_member_serializer_1 = LicensePolicyMemberSerializer(self.license_policy_member_1)
 
     def test_validate_license_policy_change(self):
         license_policy_2 = License_Policy(name="license_policy_2")
@@ -134,9 +126,7 @@ class TestLicensePolicyMemberSerializer(BaseTestCase):
             "[ErrorDetail(string='License policy member Standard / user_internal@example.com already exists', code='invalid')]",
             str(e.exception),
         )
-        mock_license_policy_member.assert_called_with(
-            self.license_policy_1, self.user_internal
-        )
+        mock_license_policy_member.assert_called_with(self.license_policy_1, self.user_internal)
 
 
 class TestLicensePolicyItemSerializer(BaseTestCase):

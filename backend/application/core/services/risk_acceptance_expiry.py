@@ -23,9 +23,7 @@ def calculate_risk_acceptance_expiry_date(product: Product) -> Optional[date]:
             and product.product_group.risk_acceptance_expiry_days
             and product.product_group.risk_acceptance_expiry_days > 0
         ):
-            return date.today() + timedelta(
-                days=product.product_group.risk_acceptance_expiry_days
-            )
+            return date.today() + timedelta(days=product.product_group.risk_acceptance_expiry_days)
 
     settings = Settings.load()
     if settings.risk_acceptance_expiry_days > 0:

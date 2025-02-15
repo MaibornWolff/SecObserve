@@ -11,17 +11,13 @@ from application.vex.models import VEX_Counter
 
 def create_document_base_id(document_id_prefix: str) -> str:
     year = timezone.now().year
-    counter = VEX_Counter.objects.get_or_create(
-        document_id_prefix=document_id_prefix, year=year
-    )[0]
+    counter = VEX_Counter.objects.get_or_create(document_id_prefix=document_id_prefix, year=year)[0]
     counter.counter += 1
     counter.save()
     return f"{counter.year}_{counter.counter:04d}"
 
 
-def check_product_or_vulnerabilities(
-    product_id: int, vulnerability_names: list[str]
-) -> None:
+def check_product_or_vulnerabilities(product_id: int, vulnerability_names: list[str]) -> None:
     if not product_id and not vulnerability_names:
         raise ValidationError("Either product or vulnerabilities or both must be set")
 
@@ -43,14 +39,10 @@ def check_vulnerability_names(vulnerability_names: list[str]) -> None:
 
     for vulnerability_name in vulnerability_names:
         if not Observation.objects.filter(vulnerability_id=vulnerability_name).exists():
-            raise ValidationError(
-                f"Vulnerability with name {vulnerability_name} does not exist"
-            )
+            raise ValidationError(f"Vulnerability with name {vulnerability_name} does not exist")
 
 
-def check_branch_names(
-    branch_names: list[str], product: Optional[Product]
-) -> list[Branch]:
+def check_branch_names(branch_names: list[str], product: Optional[Product]) -> list[Branch]:
     if not branch_names:
         return []
 
@@ -67,20 +59,13 @@ def check_branch_names(
 def get_observations_for_vulnerability(
     vulnerability_name: str,
 ) -> list[Observation]:
-    return list(
-        get_observations().filter(vulnerability_id=vulnerability_name).order_by("id")
-    )
+    return list(get_observations().filter(vulnerability_id=vulnerability_name).order_by("id"))
 
 
 def get_observations_for_product(
     product: Product, vulnerability_names: list[str], branches: list[Branch]
 ) -> list[Observation]:
-    observations = (
-        get_observations()
-        .filter(product_id=product.pk)
-        .exclude(vulnerability_id="")
-        .order_by("id")
-    )
+    observations = get_observations().filter(product_id=product.pk).exclude(vulnerability_id="").order_by("id")
 
     if vulnerability_names:
         observations = observations.filter(vulnerability_id__in=vulnerability_names)

@@ -35,9 +35,7 @@ class User(AbstractUser):
     full_name = CharField(max_length=301, blank=True)
     is_external = BooleanField(default=False)
     setting_theme = CharField(max_length=5, choices=THEME_CHOICES, default=THEME_LIGHT)
-    setting_list_size = CharField(
-        max_length=6, choices=LIST_SIZE_CHOICES, default=LIST_SIZE_MEDIUM
-    )
+    setting_list_size = CharField(max_length=6, choices=LIST_SIZE_CHOICES, default=LIST_SIZE_MEDIUM)
     setting_list_properties = TextField(max_length=2048, blank=True)
     oidc_groups_hash = CharField(max_length=64, blank=True)
     is_oidc_user = BooleanField(default=False)

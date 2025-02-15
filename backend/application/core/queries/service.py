@@ -35,34 +35,24 @@ def get_services() -> QuerySet[Service]:
     services = Service.objects.all()
 
     if not user.is_superuser:
-        product_members = Product_Member.objects.filter(
-            product=OuterRef("product_id"), user=user
-        )
-        product_group_members = Product_Member.objects.filter(
-            product=OuterRef("product__product_group"), user=user
+        product_members = Product_Member.objects.filter(product=OuterRef("product_id"), user=user)
+        product_group_members = Product_Member.objects.filter(product=OuterRef("product__product_group"), user=user)
+
+        product_authorization_group_members = Product_Authorization_Group_Member.objects.filter(
+            product=OuterRef("product_id"),
+            authorization_group__users=user,
         )
 
-        product_authorization_group_members = (
-            Product_Authorization_Group_Member.objects.filter(
-                product=OuterRef("product_id"),
-                authorization_group__users=user,
-            )
-        )
-
-        product_group_authorization_group_members = (
-            Product_Authorization_Group_Member.objects.filter(
-                product=OuterRef("product__product_group"),
-                authorization_group__users=user,
-            )
+        product_group_authorization_group_members = Product_Authorization_Group_Member.objects.filter(
+            product=OuterRef("product__product_group"),
+            authorization_group__users=user,
         )
 
         services = services.annotate(
             product__member=Exists(product_members),
             product__product_group__member=Exists(product_group_members),
             authorization_group_member=Exists(product_authorization_group_members),
-            product_group_authorization_group_member=Exists(
-                product_group_authorization_group_members
-            ),
+            product_group_authorization_group_member=Exists(product_group_authorization_group_members),
         )
 
         services = services.filter(

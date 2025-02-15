@@ -28,9 +28,7 @@ class UserHasGeneralRulePermission(BasePermission):
 
 class UserHasProductRulePermission(BasePermission):
     def has_permission(self, request: Request, view: APIView) -> bool:
-        return check_post_permission(
-            request, Product, "product", Permissions.Product_Rule_Create
-        )
+        return check_post_permission(request, Product, "product", Permissions.Product_Rule_Create)
 
     def has_object_permission(self, request: Request, view: APIView, obj: Rule) -> bool:
         return check_object_permission(

@@ -14,14 +14,10 @@ class BaseParser:
     def get_type(cls) -> str:
         raise NotImplementedError("get_type() must be overridden")
 
-    def get_observations(
-        self, data: Any, product: Product, branch: Optional[Branch]
-    ) -> list[Observation]:
+    def get_observations(self, data: Any, product: Product, branch: Optional[Branch]) -> list[Observation]:
         raise NotImplementedError("get_observations() must be overridden")
 
-    def get_license_components(
-        self, data: Any  # pylint: disable=unused-argument
-    ) -> list[License_Component]:
+    def get_license_components(self, data: Any) -> list[License_Component]:  # pylint: disable=unused-argument
         # data is used in the child classes
         return []
 
@@ -36,9 +32,7 @@ class BaseParser:
 
 
 class BaseAPIParser:
-    def check_connection(
-        self, api_configuration: Api_Configuration
-    ) -> tuple[bool, list[str], dict | list]:
+    def check_connection(self, api_configuration: Api_Configuration) -> tuple[bool, list[str], dict | list]:
         raise NotImplementedError("check_connection() must be overridden")
 
 

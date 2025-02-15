@@ -14,9 +14,7 @@ class TestZAPParserParser(TestCase):
             self.assertEqual("ZAP", parser.name)
             self.assertTrue(isinstance(parser_instance, ZAPParser))
 
-            observations = parser_instance.get_observations(
-                data, Product(name="product"), None
-            )
+            observations = parser_instance.get_observations(data, Product(name="product"), None)
             self.assertEqual(5, len(observations))
 
             observation = observations[0]
@@ -49,9 +47,7 @@ class TestZAPParserParser(TestCase):
             )
             self.assertEqual(Severity.SEVERITY_NONE, observation.parser_severity)
             self.assertEqual("200", observation.cwe)
-            self.assertEqual(
-                "https://example-backend.example.com", observation.origin_endpoint_url
-            )
+            self.assertEqual("https://example-backend.example.com", observation.origin_endpoint_url)
             self.assertEqual("Alert", observation.unsaved_evidences[0][0])
             self.assertIn(
                 '"alert": "Information Disclosure - Suspicious Comments"',

@@ -48,9 +48,7 @@ def _create_license_policy_export(
         name=license_policy.name,
         description=license_policy.description,
         items=[],
-        ignore_component_types=get_comma_separated_as_list(
-            license_policy.ignore_component_types
-        ),
+        ignore_component_types=get_comma_separated_as_list(license_policy.ignore_component_types),
     )
     if license_policy.parent:
         license_policy_export.parent = license_policy.parent.name
@@ -58,13 +56,9 @@ def _create_license_policy_export(
     license_evaluation_results: dict[str, LicensePolicyEvaluationResult] = {}
 
     if license_policy.parent:
-        get_license_evaluation_results_for_license_policy(
-            license_policy.parent, True, license_evaluation_results
-        )
+        get_license_evaluation_results_for_license_policy(license_policy.parent, True, license_evaluation_results)
 
-    get_license_evaluation_results_for_license_policy(
-        license_policy, False, license_evaluation_results
-    )
+    get_license_evaluation_results_for_license_policy(license_policy, False, license_evaluation_results)
 
     for license_string, evaluation_result in license_evaluation_results.items():
         license_policy_export_item = License_Policy_Export_Item(
@@ -74,17 +68,11 @@ def _create_license_policy_export(
             comment=evaluation_result.comment,
         )
         if license_string.startswith("spdx_"):
-            license_policy_export_item.spdx_license = license_string.replace(
-                "spdx_", ""
-            )
+            license_policy_export_item.spdx_license = license_string.replace("spdx_", "")
         elif license_string.startswith("expression_"):
-            license_policy_export_item.license_expression = license_string.replace(
-                "expression_", ""
-            )
+            license_policy_export_item.license_expression = license_string.replace("expression_", "")
         elif license_string.startswith("non_spdx_"):
-            license_policy_export_item.non_spdx_license = license_string.replace(
-                "non_spdx_", ""
-            )
+            license_policy_export_item.non_spdx_license = license_string.replace("non_spdx_", "")
         else:
             continue
 
