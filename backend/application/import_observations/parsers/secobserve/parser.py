@@ -26,9 +26,7 @@ class SecObserveParser(BaseParser, BaseFileParser):
             return True
         return False
 
-    def get_observations(
-        self, data: dict, product: Product, branch: Optional[Branch]
-    ) -> list[Observation]:
+    def get_observations(self, data: dict, product: Product, branch: Optional[Branch]) -> list[Observation]:
         observations = []
 
         for uploaded_observation in data.get("observations", []):
@@ -37,37 +35,21 @@ class SecObserveParser(BaseParser, BaseFileParser):
                 description=uploaded_observation.get("description"),
                 recommendation=uploaded_observation.get("recommendation"),
                 parser_severity=uploaded_observation.get("parser_severity"),
-                scanner_observation_id=uploaded_observation.get(
-                    "scanner_observation_id"
-                ),
+                scanner_observation_id=uploaded_observation.get("scanner_observation_id"),
                 vulnerability_id=uploaded_observation.get("vulnerability_id"),
                 origin_component_name=uploaded_observation.get("origin_component_name"),
-                origin_component_version=uploaded_observation.get(
-                    "origin_component_version"
-                ),
-                origin_component_name_version=uploaded_observation.get(
-                    "origin_component_name_version"
-                ),
+                origin_component_version=uploaded_observation.get("origin_component_version"),
+                origin_component_name_version=uploaded_observation.get("origin_component_name_version"),
                 origin_component_purl=uploaded_observation.get("origin_component_purl"),
                 origin_component_cpe=uploaded_observation.get("origin_component_cpe"),
-                origin_docker_image_name=uploaded_observation.get(
-                    "origin_docker_image_name"
-                ),
-                origin_docker_image_tag=uploaded_observation.get(
-                    "origin_docker_image_tag"
-                ),
-                origin_docker_image_name_tag=uploaded_observation.get(
-                    "origin_docker_image_name_tag"
-                ),
+                origin_docker_image_name=uploaded_observation.get("origin_docker_image_name"),
+                origin_docker_image_tag=uploaded_observation.get("origin_docker_image_tag"),
+                origin_docker_image_name_tag=uploaded_observation.get("origin_docker_image_name_tag"),
                 origin_endpoint_url=uploaded_observation.get("origin_endpoint_url"),
                 origin_service_name=uploaded_observation.get("origin_service_name"),
                 origin_source_file=uploaded_observation.get("origin_source_file"),
-                origin_source_line_start=uploaded_observation.get(
-                    "origin_source_line_start"
-                ),
-                origin_source_line_end=uploaded_observation.get(
-                    "origin_source_line_end"
-                ),
+                origin_source_line_start=uploaded_observation.get("origin_source_line_start"),
+                origin_source_line_end=uploaded_observation.get("origin_source_line_end"),
                 cvss3_score=uploaded_observation.get("cvss3_score"),
                 cvss3_vector=uploaded_observation.get("cvss3_vector"),
                 cwe=uploaded_observation.get("cwe"),

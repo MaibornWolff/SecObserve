@@ -26,9 +26,7 @@ class ApiConfigurationFilter(FilterSet):
 class VulnerabilityCheckFilter(FilterSet):
     scanner = CharFilter(field_name="scanner", lookup_expr="icontains")
     filename = CharFilter(field_name="filename", lookup_expr="icontains")
-    api_configuration_name = CharFilter(
-        field_name="api_configuration_name", lookup_expr="icontains"
-    )
+    api_configuration_name = CharFilter(field_name="api_configuration_name", lookup_expr="icontains")
 
     ordering = OrderingFilter(
         # tuple-mapping retains order

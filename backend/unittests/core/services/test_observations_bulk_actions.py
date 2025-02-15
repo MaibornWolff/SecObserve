@@ -58,9 +58,7 @@ class TestObservationsBulkActions(BaseTestCase):
 
     @patch("application.core.services.observations_bulk_actions._check_observations")
     @patch("django.db.models.query.QuerySet.delete")
-    @patch(
-        "application.core.services.observations_bulk_actions.push_deleted_observation_to_issue_tracker"
-    )
+    @patch("application.core.services.observations_bulk_actions.push_deleted_observation_to_issue_tracker")
     @patch("application.core.services.observations_bulk_actions.get_current_user")
     @patch("application.core.services.observations_bulk_actions.check_security_gate")
     @patch("application.core.models.Product.save")

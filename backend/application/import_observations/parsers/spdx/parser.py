@@ -30,26 +30,18 @@ class SPDXParser(BaseParser, BaseFileParser):
         return Parser_Type.TYPE_SCA
 
     def check_format(self, data: Any) -> bool:
-        if (
-            isinstance(data, dict)
-            and data.get("SPDXID")
-            and (data.get("SPDXVersion") or data.get("spdxVersion"))
-        ):
+        if isinstance(data, dict) and data.get("SPDXID") and (data.get("SPDXVersion") or data.get("spdxVersion")):
             return True
         return False
 
-    def get_observations(
-        self, data: dict, product: Product, branch: Optional[Branch]
-    ) -> list[Observation]:
+    def get_observations(self, data: dict, product: Product, branch: Optional[Branch]) -> list[Observation]:
         return []
 
     def get_license_components(self, data: dict) -> list[License_Component]:
         try:
             document: Document = JsonLikeDictParser().parse(data)
         except SPDXParsingError as e:
-            raise ValidationError(  # pylint: disable=raise-missing-from
-                e.get_messages()
-            )
+            raise ValidationError(e.get_messages())  # pylint: disable=raise-missing-from
             # The DjangoValidationError itself is not relevant and must not be re-raised
 
         observations = []
@@ -83,9 +75,7 @@ class SPDXParser(BaseParser, BaseFileParser):
                     purl = external_reference.locator
                     break
 
-            dependencies = self._get_dependencies(
-                package.spdx_id, packages, relationships
-            )
+            dependencies = self._get_dependencies(package.spdx_id, packages, relationships)
 
             license_component = License_Component(
                 component_name=package.name,
@@ -113,35 +103,22 @@ class SPDXParser(BaseParser, BaseFileParser):
             package_dict[package["SPDXID"]] = package
         return package_dict
 
-    def _create_relationship_dict(
-        self, document: Document, package_dict: dict[str, dict]
-    ) -> dict[str, list[str]]:
+    def _create_relationship_dict(self, document: Document, package_dict: dict[str, dict]) -> dict[str, list[str]]:
         relationship_dict: dict[str, list[str]] = {}
         for relationship in document.relationships:
             if (
                 relationship.spdx_element_id in package_dict.keys()
                 and relationship.related_spdx_element_id in package_dict.keys()
-                and (
-                    relationship.relationship_type
-                    in (RelationshipType.DEPENDS_ON, RelationshipType.CONTAINS)
-                )
+                and (relationship.relationship_type in (RelationshipType.DEPENDS_ON, RelationshipType.CONTAINS))
             ):
-                relationship_value = relationship_dict.get(
-                    str(relationship.related_spdx_element_id), []
-                )
+                relationship_value = relationship_dict.get(str(relationship.related_spdx_element_id), [])
                 relationship_value.append(relationship.spdx_element_id)
-                relationship_dict[str(relationship.related_spdx_element_id)] = (
-                    relationship_value
-                )
+                relationship_dict[str(relationship.related_spdx_element_id)] = relationship_value
         return relationship_dict
 
-    def _get_dependencies(
-        self, package_id: str, package_dict: dict, relationship_dict: dict
-    ) -> str:
+    def _get_dependencies(self, package_id: str, package_dict: dict, relationship_dict: dict) -> str:
         dependencies: list[str] = []
-        self._get_dependencies_recursive(
-            package_id, package_dict, relationship_dict, dependencies
-        )
+        self._get_dependencies_recursive(package_id, package_dict, relationship_dict, dependencies)
 
         dependencies.sort()
         return "\n".join(dependencies)
@@ -155,18 +132,12 @@ class SPDXParser(BaseParser, BaseFileParser):
     ) -> None:
         if package_id in relationship_dict.keys():
             for dependency_id in relationship_dict[package_id]:
-                translated_dependency_id = self._translate_package_id(
-                    dependency_id, package_dict
-                )
-                translated_package_id = self._translate_package_id(
-                    package_id, package_dict
-                )
+                translated_dependency_id = self._translate_package_id(dependency_id, package_dict)
+                translated_package_id = self._translate_package_id(package_id, package_dict)
                 dependency = f"{translated_dependency_id} --> {translated_package_id}"
                 if dependency not in dependencies:
                     dependencies.append(dependency)
-                    self._get_dependencies_recursive(
-                        dependency_id, package_dict, relationship_dict, dependencies
-                    )
+                    self._get_dependencies_recursive(dependency_id, package_dict, relationship_dict, dependencies)
 
     def _translate_package_id(self, package_id: str, package_dict: dict) -> str:
         package = package_dict.get(package_id)

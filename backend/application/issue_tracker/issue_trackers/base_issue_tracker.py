@@ -26,9 +26,7 @@ class BaseIssueTracker:
     def close_issue(self, observation: Observation, issue: Issue) -> None:
         raise NotImplementedError("close_issue() must be overridden")
 
-    def close_issue_for_deleted_observation(
-        self, product: Product, issue: Issue
-    ) -> None:
+    def close_issue_for_deleted_observation(self, product: Product, issue: Issue) -> None:
         raise NotImplementedError("close_issue() must be overridden")
 
     def get_frontend_issue_url(self, product: Product, issue_id: str) -> str:
@@ -80,9 +78,7 @@ class BaseIssueTracker:
             origin += f"{observation.origin_cloud_resource}"
         return origin
 
-    def _get_description_for_deleted_observation(
-        self, description: Optional[str]
-    ) -> str:
+    def _get_description_for_deleted_observation(self, description: Optional[str]) -> str:
         return f"**--- Observation has been deleted ---**\n\n{description}"
 
     def _normalize_base_url(self, base_url: str) -> str:

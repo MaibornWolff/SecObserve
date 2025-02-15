@@ -18,9 +18,7 @@ class TestAuthorizationApiTokens(TestAuthorizationBase):
             )
         )
 
-        expected_data = (
-            "{'message': 'You do not have permission to perform this action.'}"
-        )
+        expected_data = "{'message': 'You do not have permission to perform this action.'}"
         self._test_api(
             APITest(
                 "db_internal_write",

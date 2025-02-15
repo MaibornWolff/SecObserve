@@ -143,48 +143,20 @@ def get_product_metrics_timeline(product: Optional[Product], age: str) -> dict:
     for product_metric in product_metrics:
         if not product or product.is_product_group:
             response_metric = response_data.get(product_metric.date.isoformat(), {})
-            response_metric["open_critical"] = (
-                response_metric.get("open_critical", 0) + product_metric.open_critical
-            )
-            response_metric["open_high"] = (
-                response_metric.get("open_high", 0) + product_metric.open_high
-            )
-            response_metric["open_medium"] = (
-                response_metric.get("open_medium", 0) + product_metric.open_medium
-            )
-            response_metric["open_low"] = (
-                response_metric.get("open_low", 0) + product_metric.open_low
-            )
-            response_metric["open_none"] = (
-                response_metric.get("open_none", 0) + product_metric.open_none
-            )
-            response_metric["open_unknown"] = (
-                response_metric.get("open_unknown", 0) + product_metric.open_unknown
-            )
-            response_metric["open"] = (
-                response_metric.get("open", 0) + product_metric.open
-            )
-            response_metric["resolved"] = (
-                response_metric.get("resolved", 0) + product_metric.resolved
-            )
-            response_metric["duplicate"] = (
-                response_metric.get("duplicate", 0) + product_metric.duplicate
-            )
-            response_metric["false_positive"] = (
-                response_metric.get("false_positive", 0) + product_metric.false_positive
-            )
-            response_metric["in_review"] = (
-                response_metric.get("in_review", 0) + product_metric.in_review
-            )
-            response_metric["not_affected"] = (
-                response_metric.get("not_affected", 0) + product_metric.not_affected
-            )
-            response_metric["not_security"] = (
-                response_metric.get("not_security", 0) + product_metric.not_security
-            )
-            response_metric["risk_accepted"] = (
-                response_metric.get("risk_accepted", 0) + product_metric.risk_accepted
-            )
+            response_metric["open_critical"] = response_metric.get("open_critical", 0) + product_metric.open_critical
+            response_metric["open_high"] = response_metric.get("open_high", 0) + product_metric.open_high
+            response_metric["open_medium"] = response_metric.get("open_medium", 0) + product_metric.open_medium
+            response_metric["open_low"] = response_metric.get("open_low", 0) + product_metric.open_low
+            response_metric["open_none"] = response_metric.get("open_none", 0) + product_metric.open_none
+            response_metric["open_unknown"] = response_metric.get("open_unknown", 0) + product_metric.open_unknown
+            response_metric["open"] = response_metric.get("open", 0) + product_metric.open
+            response_metric["resolved"] = response_metric.get("resolved", 0) + product_metric.resolved
+            response_metric["duplicate"] = response_metric.get("duplicate", 0) + product_metric.duplicate
+            response_metric["false_positive"] = response_metric.get("false_positive", 0) + product_metric.false_positive
+            response_metric["in_review"] = response_metric.get("in_review", 0) + product_metric.in_review
+            response_metric["not_affected"] = response_metric.get("not_affected", 0) + product_metric.not_affected
+            response_metric["not_security"] = response_metric.get("not_security", 0) + product_metric.not_security
+            response_metric["risk_accepted"] = response_metric.get("risk_accepted", 0) + product_metric.risk_accepted
             response_data[product_metric.date.isoformat()] = response_metric
         else:
             response_metric = {}
@@ -263,74 +235,38 @@ def get_codecharta_metrics(product: Product) -> list[dict]:
     )
     for observation in observations:
         if observation.origin_source_file:
-            file_severities_value = file_severities_dict.get(
-                observation.origin_source_file
-            )
+            file_severities_value = file_severities_dict.get(observation.origin_source_file)
             if not file_severities_value:
                 file_severities_value = {}
                 file_severities_value["source_file"] = observation.origin_source_file
                 file_severities_value["Vulnerabilities_Total".lower()] = 0
-                file_severities_value[
-                    f"Vulnerabilities_{Severity.SEVERITY_CRITICAL}".lower()
-                ] = 0
-                file_severities_value[
-                    f"Vulnerabilities_{Severity.SEVERITY_HIGH}".lower()
-                ] = 0
-                file_severities_value[
-                    f"Vulnerabilities_{Severity.SEVERITY_MEDIUM}".lower()
-                ] = 0
-                file_severities_value[
-                    f"Vulnerabilities_{Severity.SEVERITY_LOW}".lower()
-                ] = 0
-                file_severities_value[
-                    f"Vulnerabilities_{Severity.SEVERITY_NONE}".lower()
-                ] = 0
-                file_severities_value[
-                    f"Vulnerabilities_{Severity.SEVERITY_UNKNOWN}".lower()
-                ] = 0
-                file_severities_value[
-                    f"Vulnerabilities_{Severity.SEVERITY_HIGH}_and_above".lower()
-                ] = 0
-                file_severities_value[
-                    f"Vulnerabilities_{Severity.SEVERITY_MEDIUM}_and_above".lower()
-                ] = 0
-                file_severities_value[
-                    f"Vulnerabilities_{Severity.SEVERITY_LOW}_and_above".lower()
-                ] = 0
-                file_severities_dict[observation.origin_source_file] = (
-                    file_severities_value
-                )
+                file_severities_value[f"Vulnerabilities_{Severity.SEVERITY_CRITICAL}".lower()] = 0
+                file_severities_value[f"Vulnerabilities_{Severity.SEVERITY_HIGH}".lower()] = 0
+                file_severities_value[f"Vulnerabilities_{Severity.SEVERITY_MEDIUM}".lower()] = 0
+                file_severities_value[f"Vulnerabilities_{Severity.SEVERITY_LOW}".lower()] = 0
+                file_severities_value[f"Vulnerabilities_{Severity.SEVERITY_NONE}".lower()] = 0
+                file_severities_value[f"Vulnerabilities_{Severity.SEVERITY_UNKNOWN}".lower()] = 0
+                file_severities_value[f"Vulnerabilities_{Severity.SEVERITY_HIGH}_and_above".lower()] = 0
+                file_severities_value[f"Vulnerabilities_{Severity.SEVERITY_MEDIUM}_and_above".lower()] = 0
+                file_severities_value[f"Vulnerabilities_{Severity.SEVERITY_LOW}_and_above".lower()] = 0
+                file_severities_dict[observation.origin_source_file] = file_severities_value
 
             file_severities_value["Vulnerabilities_Total".lower()] += 1
-            file_severities_value[
-                f"Vulnerabilities_{observation.current_severity}".lower()
-            ] += 1
+            file_severities_value[f"Vulnerabilities_{observation.current_severity}".lower()] += 1
 
             if observation.current_severity in (
                 Severity.SEVERITY_CRITICAL,
                 Severity.SEVERITY_HIGH,
             ):
-                file_severities_value[
-                    f"Vulnerabilities_{Severity.SEVERITY_HIGH}_and_above".lower()
-                ] += 1
-                file_severities_value[
-                    f"Vulnerabilities_{Severity.SEVERITY_MEDIUM}_and_above".lower()
-                ] += 1
-                file_severities_value[
-                    f"Vulnerabilities_{Severity.SEVERITY_LOW}_and_above".lower()
-                ] += 1
+                file_severities_value[f"Vulnerabilities_{Severity.SEVERITY_HIGH}_and_above".lower()] += 1
+                file_severities_value[f"Vulnerabilities_{Severity.SEVERITY_MEDIUM}_and_above".lower()] += 1
+                file_severities_value[f"Vulnerabilities_{Severity.SEVERITY_LOW}_and_above".lower()] += 1
 
             if observation.current_severity == Severity.SEVERITY_MEDIUM:
-                file_severities_value[
-                    f"Vulnerabilities_{Severity.SEVERITY_MEDIUM}_and_above".lower()
-                ] += 1
-                file_severities_value[
-                    f"Vulnerabilities_{Severity.SEVERITY_LOW}_and_above".lower()
-                ] += 1
+                file_severities_value[f"Vulnerabilities_{Severity.SEVERITY_MEDIUM}_and_above".lower()] += 1
+                file_severities_value[f"Vulnerabilities_{Severity.SEVERITY_LOW}_and_above".lower()] += 1
 
             if observation.current_severity == Severity.SEVERITY_LOW:
-                file_severities_value[
-                    f"Vulnerabilities_{Severity.SEVERITY_LOW}_and_above".lower()
-                ] += 1
+                file_severities_value[f"Vulnerabilities_{Severity.SEVERITY_LOW}_and_above".lower()] += 1
 
     return list(file_severities_dict.values())

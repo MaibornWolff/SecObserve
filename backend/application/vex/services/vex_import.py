@@ -37,10 +37,7 @@ def _get_vex_type(data: dict) -> Optional[str]:
     if data.get("@context", "").startswith("https://openvex.dev/ns/v0.2.0"):
         return VEX_Document_Type.VEX_DOCUMENT_TYPE_OPENVEX
 
-    if (
-        data.get("document", {}).get("category") == "csaf_vex"
-        and data.get("document", {}).get("csaf_version") == "2.0"
-    ):
+    if data.get("document", {}).get("category") == "csaf_vex" and data.get("document", {}).get("csaf_version") == "2.0":
         return VEX_Document_Type.VEX_DOCUMENT_TYPE_CSAF
 
     return None

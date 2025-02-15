@@ -36,9 +36,7 @@ class ZAPParser(BaseParser, BaseFileParser):
             return True
         return False
 
-    def get_observations(
-        self, data: dict, product: Product, branch: Optional[Branch]
-    ) -> list[Observation]:
+    def get_observations(self, data: dict, product: Product, branch: Optional[Branch]) -> list[Observation]:
         observations = []
 
         data_scanner = self.get_scanner(data)
@@ -47,9 +45,7 @@ class ZAPParser(BaseParser, BaseFileParser):
             data_origin_endpoint_url = site.get("@name")
             for alert in site.get("alerts"):
                 data_title = alert.get("alert")
-                data_severity = SEVERITIES.get(
-                    alert.get("riskcode"), Severity.SEVERITY_UNKNOWN
-                )
+                data_severity = SEVERITIES.get(alert.get("riskcode"), Severity.SEVERITY_UNKNOWN)
 
                 data_description = self.get_description(alert)
                 data_recommendation = alert.get("solution")

@@ -31,9 +31,7 @@ class TestOIDCAuthentication(BaseTestCase):
             oidc_authentication = OIDCAuthentication()
             oidc_authentication.authenticate(request)
 
-        self.assertEqual(
-            "Invalid token header: No credentials provided.", str(e.exception)
-        )
+        self.assertEqual("Invalid token header: No credentials provided.", str(e.exception))
 
     def test_authenticate_invalid_header_spaces(self):
         request = HttpRequest()
@@ -55,9 +53,7 @@ class TestOIDCAuthentication(BaseTestCase):
 
         self.assertIsNone(user)
 
-    @patch(
-        "application.access_control.services.oidc_authentication.OIDCAuthentication._validate_jwt"
-    )
+    @patch("application.access_control.services.oidc_authentication.OIDCAuthentication._validate_jwt")
     def test_authenticate_wrong_token(self, mock):
         mock.return_value = None
 
@@ -69,9 +65,7 @@ class TestOIDCAuthentication(BaseTestCase):
 
         self.assertEqual("Invalid token.", str(e.exception))
 
-    @patch(
-        "application.access_control.services.oidc_authentication.OIDCAuthentication._validate_jwt"
-    )
+    @patch("application.access_control.services.oidc_authentication.OIDCAuthentication._validate_jwt")
     def test_authenticate_user_deactivated(self, mock):
         mock.return_value = self.user_internal
         self.user_internal.is_active = False
@@ -86,9 +80,7 @@ class TestOIDCAuthentication(BaseTestCase):
 
         self.user_internal.is_active = True
 
-    @patch(
-        "application.access_control.services.oidc_authentication.OIDCAuthentication._validate_jwt"
-    )
+    @patch("application.access_control.services.oidc_authentication.OIDCAuthentication._validate_jwt")
     def test_authenticate_successful(self, mock):
         mock.return_value = self.user_internal
 
@@ -108,14 +100,10 @@ class TestOIDCAuthentication(BaseTestCase):
     # --- _validate_jwt ---
 
     @patch("jwt.decode")
-    @patch(
-        "application.access_control.services.oidc_authentication.OIDCAuthentication._get_jwks_uri"
-    )
+    @patch("application.access_control.services.oidc_authentication.OIDCAuthentication._get_jwks_uri")
     @patch("jwt.PyJWKClient.__init__")
     @patch("jwt.PyJWKClient.get_signing_key_from_jwt")
-    def test_validate_jwt_message(
-        self, get_signing_key_mock, pyjwkclient_mock, jwks_uri_mock, jwt_mock
-    ):
+    def test_validate_jwt_message(self, get_signing_key_mock, pyjwkclient_mock, jwks_uri_mock, jwt_mock):
         jwks_uri_mock.return_value = "test_jwks_uri"
         pyjwkclient_mock.return_value = None
         mock_py_jwk = MockPyJWK("test_key")
@@ -147,17 +135,11 @@ class TestOIDCAuthentication(BaseTestCase):
         )
 
     @patch("jwt.decode")
-    @patch(
-        "application.access_control.services.oidc_authentication.OIDCAuthentication._get_jwks_uri"
-    )
+    @patch("application.access_control.services.oidc_authentication.OIDCAuthentication._get_jwks_uri")
     @patch("jwt.PyJWKClient.__init__")
     @patch("jwt.PyJWKClient.get_signing_key_from_jwt")
-    @patch(
-        "application.access_control.services.oidc_authentication.get_user_by_username"
-    )
-    @patch(
-        "application.access_control.services.oidc_authentication.OIDCAuthentication._create_user"
-    )
+    @patch("application.access_control.services.oidc_authentication.get_user_by_username")
+    @patch("application.access_control.services.oidc_authentication.OIDCAuthentication._create_user")
     def test_validate_jwt_user_not_found(
         self,
         create_user_mock,
@@ -199,22 +181,14 @@ class TestOIDCAuthentication(BaseTestCase):
             algorithms=["RS256", "RS384", "RS512", "ES256 ", "ES384", "ES512", "EdDSA"],
             audience="client_id",
         )
-        create_user_mock.assert_called_once_with(
-            "test_username", {"preferred_username": "test_username"}
-        )
+        create_user_mock.assert_called_once_with("test_username", {"preferred_username": "test_username"})
 
     @patch("jwt.decode")
-    @patch(
-        "application.access_control.services.oidc_authentication.OIDCAuthentication._get_jwks_uri"
-    )
+    @patch("application.access_control.services.oidc_authentication.OIDCAuthentication._get_jwks_uri")
     @patch("jwt.PyJWKClient.__init__")
     @patch("jwt.PyJWKClient.get_signing_key_from_jwt")
-    @patch(
-        "application.access_control.services.oidc_authentication.get_user_by_username"
-    )
-    @patch(
-        "application.access_control.services.oidc_authentication.OIDCAuthentication._check_user_change"
-    )
+    @patch("application.access_control.services.oidc_authentication.get_user_by_username")
+    @patch("application.access_control.services.oidc_authentication.OIDCAuthentication._check_user_change")
     def test_validate_jwt_user_found(
         self,
         check_user_change_mock,
@@ -273,9 +247,7 @@ class TestOIDCAuthentication(BaseTestCase):
         )
 
     @patch("application.access_control.services.oidc_authentication.User.save")
-    @patch(
-        "application.access_control.services.oidc_authentication.OIDCAuthentication._synchronize_groups"
-    )
+    @patch("application.access_control.services.oidc_authentication.OIDCAuthentication._synchronize_groups")
     def test_create_user(self, synchronize_groups_mock, user_save_mock):
         oidc_authentication = OIDCAuthentication()
         payload = {
@@ -304,9 +276,7 @@ class TestOIDCAuthentication(BaseTestCase):
         synchronize_groups_mock.assert_called_with(user, payload)
 
     @patch("application.access_control.services.oidc_authentication.User.save")
-    @patch(
-        "application.access_control.services.oidc_authentication.OIDCAuthentication._synchronize_groups"
-    )
+    @patch("application.access_control.services.oidc_authentication.OIDCAuthentication._synchronize_groups")
     def test_create_user_internal(self, synchronize_groups_mock, user_save_mock):
         settings = Settings.load()
         settings.internal_users = ".*@example.com, .*@test.com"
@@ -342,9 +312,7 @@ class TestOIDCAuthentication(BaseTestCase):
         settings.save()
 
     @patch("application.access_control.services.oidc_authentication.User.save")
-    @patch(
-        "application.access_control.services.oidc_authentication.OIDCAuthentication._synchronize_groups"
-    )
+    @patch("application.access_control.services.oidc_authentication.OIDCAuthentication._synchronize_groups")
     def test_create_user_external(self, synchronize_groups_mock, user_save_mock):
         settings = Settings.load()
         settings.internal_users = ".*@example.com, .*@test.com"
@@ -380,12 +348,8 @@ class TestOIDCAuthentication(BaseTestCase):
         settings.save()
 
     @patch("application.access_control.services.oidc_authentication.User.save")
-    @patch(
-        "application.access_control.services.oidc_authentication.OIDCAuthentication._synchronize_groups"
-    )
-    def test_create_user_no_claim_mappings(
-        self, synchronize_groups_mock, user_save_mock
-    ):
+    @patch("application.access_control.services.oidc_authentication.OIDCAuthentication._synchronize_groups")
+    def test_create_user_no_claim_mappings(self, synchronize_groups_mock, user_save_mock):
         oidc_authentication = OIDCAuthentication()
         payload = {
             "preferred_username": "test_username",
@@ -418,9 +382,7 @@ class TestOIDCAuthentication(BaseTestCase):
             synchronize_groups_mock.assert_called_with(user, payload)
 
     @patch("application.access_control.services.oidc_authentication.User.save")
-    @patch(
-        "application.access_control.services.oidc_authentication.OIDCAuthentication._synchronize_groups"
-    )
+    @patch("application.access_control.services.oidc_authentication.OIDCAuthentication._synchronize_groups")
     def test_check_user_change_no_change(self, synchronize_groups_mock, user_save_mock):
         old_user = User(
             username="test_username",
@@ -454,12 +416,8 @@ class TestOIDCAuthentication(BaseTestCase):
         synchronize_groups_mock.assert_not_called()
 
     @patch("application.access_control.services.oidc_authentication.User.save")
-    @patch(
-        "application.access_control.services.oidc_authentication.OIDCAuthentication._synchronize_groups"
-    )
-    def test_check_user_change_no_claim_mappings(
-        self, synchronize_groups_mock, user_save_mock
-    ):
+    @patch("application.access_control.services.oidc_authentication.OIDCAuthentication._synchronize_groups")
+    def test_check_user_change_no_claim_mappings(self, synchronize_groups_mock, user_save_mock):
         old_user = User(
             username="test_username",
             first_name="test_first_name",
@@ -504,12 +462,8 @@ class TestOIDCAuthentication(BaseTestCase):
             synchronize_groups_mock.assert_not_called()
 
     @patch("application.access_control.services.oidc_authentication.User.save")
-    @patch(
-        "application.access_control.services.oidc_authentication.OIDCAuthentication._synchronize_groups"
-    )
-    def test_check_user_change_with_changes(
-        self, synchronize_groups_mock, user_save_mock
-    ):
+    @patch("application.access_control.services.oidc_authentication.OIDCAuthentication._synchronize_groups")
+    def test_check_user_change_with_changes(self, synchronize_groups_mock, user_save_mock):
         old_user = User(
             username="test_username",
             first_name="test_first_name",

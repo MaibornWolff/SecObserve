@@ -54,12 +54,8 @@ class Rule_Engine:
         self.product = product
 
     def apply_rules_for_observation(self, observation: Observation) -> None:
-        previous_product_rule = (
-            observation.product_rule if observation.product_rule else None
-        )
-        previous_general_rule = (
-            observation.general_rule if observation.general_rule else None
-        )
+        previous_product_rule = observation.product_rule if observation.product_rule else None
+        previous_general_rule = observation.general_rule if observation.general_rule else None
 
         observation.product_rule = None
         observation.general_rule = None
@@ -68,16 +64,9 @@ class Rule_Engine:
         for rule in self.rules:
             if (  # pylint: disable=too-many-boolean-expressions
                 (not rule.parser or observation.parser == rule.parser)
-                and (
-                    not rule.scanner_prefix
-                    or observation.scanner.lower().startswith(
-                        rule.scanner_prefix.lower()
-                    )
-                )
+                and (not rule.scanner_prefix or observation.scanner.lower().startswith(rule.scanner_prefix.lower()))
                 and self._check_regex(rule.title, observation.title)
-                and self._check_regex(
-                    rule.description_observation, observation.description
-                )
+                and self._check_regex(rule.description_observation, observation.description)
                 and self._check_regex(
                     rule.origin_component_name_version,
                     observation.origin_component_name_version,
@@ -86,15 +75,9 @@ class Rule_Engine:
                     rule.origin_docker_image_name_tag,
                     observation.origin_docker_image_name_tag,
                 )
-                and self._check_regex(
-                    rule.origin_endpoint_url, observation.origin_endpoint_url
-                )
-                and self._check_regex(
-                    rule.origin_service_name, observation.origin_service_name
-                )
-                and self._check_regex(
-                    rule.origin_source_file, observation.origin_source_file
-                )
+                and self._check_regex(rule.origin_endpoint_url, observation.origin_endpoint_url)
+                and self._check_regex(rule.origin_service_name, observation.origin_service_name)
+                and self._check_regex(rule.origin_source_file, observation.origin_source_file)
                 and self._check_regex(
                     rule.origin_cloud_qualified_resource,
                     observation.origin_cloud_qualified_resource,
@@ -120,17 +103,13 @@ class Rule_Engine:
                 previous_rule_vex_justification = observation.rule_vex_justification
                 if rule.new_vex_justification:
                     observation.rule_vex_justification = rule.new_vex_justification
-                    observation.current_vex_justification = (
-                        get_current_vex_justification(observation)
-                    )
+                    observation.current_vex_justification = get_current_vex_justification(observation)
 
-                previous_risk_acceptance_expiry_date = (
-                    observation.risk_acceptance_expiry_date
-                )
+                previous_risk_acceptance_expiry_date = observation.risk_acceptance_expiry_date
                 if observation.current_status == Status.STATUS_RISK_ACCEPTED:
                     if previous_status != Status.STATUS_RISK_ACCEPTED:
-                        observation.risk_acceptance_expiry_date = (
-                            calculate_risk_acceptance_expiry_date(observation.product)
+                        observation.risk_acceptance_expiry_date = calculate_risk_acceptance_expiry_date(
+                            observation.product
                         )
                 else:
                     observation.risk_acceptance_expiry_date = None
@@ -148,10 +127,8 @@ class Rule_Engine:
                     or previous_severity != observation.current_severity
                     or previous_general_rule != observation.general_rule
                     or previous_product_rule != observation.product_rule
-                    or previous_rule_vex_justification
-                    != observation.rule_vex_justification
-                    or previous_vex_justification
-                    != observation.current_vex_justification
+                    or previous_rule_vex_justification != observation.rule_vex_justification
+                    or previous_vex_justification != observation.current_vex_justification
                 ):
                     self._write_observation_log(
                         observation=observation,
@@ -167,12 +144,9 @@ class Rule_Engine:
 
         # Write observation and observation log if no rule was found but there was one before
         if not rule_found and (
-            previous_general_rule != observation.general_rule
-            or previous_product_rule != observation.product_rule
+            previous_general_rule != observation.general_rule or previous_product_rule != observation.product_rule
         ):
-            self._write_observation_log_no_rule(
-                observation, previous_product_rule, previous_general_rule
-            )
+            self._write_observation_log_no_rule(observation, previous_product_rule, previous_general_rule)
 
     def apply_all_rules_for_product(self) -> None:
         if self.product.is_product_group:
@@ -216,10 +190,7 @@ class Rule_Engine:
             vex_justification = observation.current_vex_justification
         else:
             vex_justification = ""
-        if (
-            previous_risk_acceptance_expiry_date
-            != observation.risk_acceptance_expiry_date
-        ):
+        if previous_risk_acceptance_expiry_date != observation.risk_acceptance_expiry_date:
             risk_acceptance_expiry_date = observation.risk_acceptance_expiry_date
         else:
             risk_acceptance_expiry_date = None
@@ -258,30 +229,18 @@ class Rule_Engine:
 
         observation.rule_vex_justification = ""
         previous_vex_justification = observation.current_vex_justification
-        observation.current_vex_justification = get_current_vex_justification(
-            observation
-        )
+        observation.current_vex_justification = get_current_vex_justification(observation)
 
         previous_risk_acceptance_expiry_date = observation.risk_acceptance_expiry_date
         if observation.current_status == Status.STATUS_RISK_ACCEPTED:
             if previous_status != Status.STATUS_RISK_ACCEPTED:
-                observation.risk_acceptance_expiry_date = (
-                    calculate_risk_acceptance_expiry_date(observation.product)
-                )
+                observation.risk_acceptance_expiry_date = calculate_risk_acceptance_expiry_date(observation.product)
         else:
             observation.risk_acceptance_expiry_date = None
 
-        log_status = (
-            observation.current_status
-            if previous_status != observation.current_status
-            else ""
-        )
+        log_status = observation.current_status if previous_status != observation.current_status else ""
 
-        log_severity = (
-            observation.current_severity
-            if previous_severity != observation.current_severity
-            else ""
-        )
+        log_severity = observation.current_severity if previous_severity != observation.current_severity else ""
 
         log_vex_justification = (
             observation.current_vex_justification
@@ -291,8 +250,7 @@ class Rule_Engine:
 
         log_risk_acceptance_expiry_date = (
             observation.risk_acceptance_expiry_date
-            if previous_risk_acceptance_expiry_date
-            != observation.risk_acceptance_expiry_date
+            if previous_risk_acceptance_expiry_date != observation.risk_acceptance_expiry_date
             else None
         )
 

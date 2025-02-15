@@ -13,9 +13,7 @@ from application.import_observations.parsers.trivy_operator_prometheus.parser im
 
 
 class TestTrivyOperatorPrometheusParser(TestCase):
-    @patch(
-        "application.import_observations.parsers.trivy_operator_prometheus.parser.requests"
-    )
+    @patch("application.import_observations.parsers.trivy_operator_prometheus.parser.requests")
     def test_invalid_connection(self, mock_requests):
         parser = TrivyOperatorPrometheus()
 
@@ -30,14 +28,10 @@ class TestTrivyOperatorPrometheusParser(TestCase):
         self.assertIn("Cannot access Prometheus", messages[0])
         self.assertFalse(data)
 
-    @patch(
-        "application.import_observations.parsers.trivy_operator_prometheus.parser.requests"
-    )
+    @patch("application.import_observations.parsers.trivy_operator_prometheus.parser.requests")
     def test_valid_connection(self, mock_requests):
         parser = TrivyOperatorPrometheus()
-        with open(
-            path.dirname(__file__) + "/files/trivy_vulnerability_id.json"
-        ) as testfile:
+        with open(path.dirname(__file__) + "/files/trivy_vulnerability_id.json") as testfile:
             json_data = json.load(testfile)
 
             mock_response = MagicMock()
@@ -62,9 +56,7 @@ class TestTrivyOperatorPrometheusParser(TestCase):
             self.assertFalse(data)
 
     def test_no_prometheus_endpoint_json(self):
-        with open(
-            path.dirname(__file__) + "/files/no_prometheus_endpoint.json"
-        ) as testfile:
+        with open(path.dirname(__file__) + "/files/no_prometheus_endpoint.json") as testfile:
             parser = TrivyOperatorPrometheus()
 
             check, messages, data = parser.check_format(testfile)
@@ -74,9 +66,7 @@ class TestTrivyOperatorPrometheusParser(TestCase):
             self.assertFalse(data)
 
     def test_invalid_metric_endpoint_json(self):
-        with open(
-            path.dirname(__file__) + "/files/invalid_metric_endpoint.json"
-        ) as testfile:
+        with open(path.dirname(__file__) + "/files/invalid_metric_endpoint.json") as testfile:
             parser = TrivyOperatorPrometheus()
 
             check, messages, data = parser.check_format(testfile)
@@ -86,17 +76,11 @@ class TestTrivyOperatorPrometheusParser(TestCase):
             self.assertFalse(data)
 
     def test_compliance(self):
-        with open(
-            path.dirname(__file__) + "/files/trivy_compliance_info.json"
-        ) as testfile:
+        with open(path.dirname(__file__) + "/files/trivy_compliance_info.json") as testfile:
             parser = TrivyOperatorPrometheus()
 
-            parser.api_configuration = Api_Configuration(
-                base_url="https://prometheus.example.com"
-            )
-            observations = parser.get_observations(
-                json.load(testfile), Product(name="product"), None
-            )
+            parser.api_configuration = Api_Configuration(base_url="https://prometheus.example.com")
+            observations = parser.get_observations(json.load(testfile), Product(name="product"), None)
 
             self.assertEqual(1, len(observations))
             self.assertEqual(
@@ -114,9 +98,7 @@ class TestTrivyOperatorPrometheusParser(TestCase):
                 description,
                 observations[0].description,
             )
-            self.assertEqual(
-                "trivy-system", observations[0].origin_kubernetes_namespace
-            )
+            self.assertEqual("trivy-system", observations[0].origin_kubernetes_namespace)
             self.assertEqual("", observations[0].origin_kubernetes_resource_type)
             self.assertEqual(
                 "",
@@ -124,17 +106,11 @@ class TestTrivyOperatorPrometheusParser(TestCase):
             )
 
     def test_configaudits(self):
-        with open(
-            path.dirname(__file__) + "/files/trivy_configaudits_info.json"
-        ) as testfile:
+        with open(path.dirname(__file__) + "/files/trivy_configaudits_info.json") as testfile:
             parser = TrivyOperatorPrometheus()
 
-            parser.api_configuration = Api_Configuration(
-                base_url="https://prometheus.example.com"
-            )
-            observations = parser.get_observations(
-                json.load(testfile), Product(name="product"), None
-            )
+            parser.api_configuration = Api_Configuration(base_url="https://prometheus.example.com")
+            observations = parser.get_observations(json.load(testfile), Product(name="product"), None)
 
             self.assertEqual(1, len(observations))
             self.assertEqual(
@@ -153,26 +129,18 @@ class TestTrivyOperatorPrometheusParser(TestCase):
                 observations[0].description,
             )
             self.assertEqual("kube-system", observations[0].origin_kubernetes_namespace)
-            self.assertEqual(
-                "DaemonSet", observations[0].origin_kubernetes_resource_type
-            )
+            self.assertEqual("DaemonSet", observations[0].origin_kubernetes_resource_type)
             self.assertEqual(
                 "kube-proxy",
                 observations[0].origin_kubernetes_resource_name,
             )
 
     def test_exposedsecrets(self):
-        with open(
-            path.dirname(__file__) + "/files/trivy_exposedsecrets_info.json"
-        ) as testfile:
+        with open(path.dirname(__file__) + "/files/trivy_exposedsecrets_info.json") as testfile:
             parser = TrivyOperatorPrometheus()
 
-            parser.api_configuration = Api_Configuration(
-                base_url="https://prometheus.example.com"
-            )
-            observations = parser.get_observations(
-                json.load(testfile), Product(name="product"), None
-            )
+            parser.api_configuration = Api_Configuration(base_url="https://prometheus.example.com")
+            observations = parser.get_observations(json.load(testfile), Product(name="product"), None)
 
             self.assertEqual(1, len(observations))
             self.assertEqual("Asymmetric Private Key", observations[0].title)
@@ -182,35 +150,25 @@ class TestTrivyOperatorPrometheusParser(TestCase):
                 observations[0].origin_docker_image_name,
             )
             self.assertEqual("latest-no-vault", observations[0].origin_docker_image_tag)
-            self.assertEqual(
-                "/var/tmp/helpers/RSAprivatekey.pem", observations[0].origin_source_file
-            )
+            self.assertEqual("/var/tmp/helpers/RSAprivatekey.pem", observations[0].origin_source_file)
             self.assertEqual("Trivy Operator", observations[0].scanner)
             self.assertEqual(
                 "",
                 observations[0].description,
             )
             self.assertEqual("test", observations[0].origin_kubernetes_namespace)
-            self.assertEqual(
-                "ReplicaSet", observations[0].origin_kubernetes_resource_type
-            )
+            self.assertEqual("ReplicaSet", observations[0].origin_kubernetes_resource_type)
             self.assertEqual(
                 "wrongsecrets-67cd6df7d",
                 observations[0].origin_kubernetes_resource_name,
             )
 
     def test_rbacassessments(self):
-        with open(
-            path.dirname(__file__) + "/files/trivy_rbacassessments_info.json"
-        ) as testfile:
+        with open(path.dirname(__file__) + "/files/trivy_rbacassessments_info.json") as testfile:
             parser = TrivyOperatorPrometheus()
 
-            parser.api_configuration = Api_Configuration(
-                base_url="https://prometheus.example.com"
-            )
-            observations = parser.get_observations(
-                json.load(testfile), Product(name="product"), None
-            )
+            parser.api_configuration = Api_Configuration(base_url="https://prometheus.example.com")
+            observations = parser.get_observations(json.load(testfile), Product(name="product"), None)
 
             self.assertEqual(2, len(observations))
 
@@ -251,9 +209,7 @@ class TestTrivyOperatorPrometheusParser(TestCase):
                 description,
                 observations[1].description,
             )
-            self.assertEqual(
-                "kubernetes-dashboard", observations[1].origin_kubernetes_namespace
-            )
+            self.assertEqual("kubernetes-dashboard", observations[1].origin_kubernetes_namespace)
             self.assertEqual("Role", observations[1].origin_kubernetes_resource_type)
             self.assertEqual(
                 "kubernetes-dashboard",
@@ -261,26 +217,18 @@ class TestTrivyOperatorPrometheusParser(TestCase):
             )
 
     def test_vulnerabilities(self):
-        with open(
-            path.dirname(__file__) + "/files/trivy_vulnerability_id.json"
-        ) as testfile:
+        with open(path.dirname(__file__) + "/files/trivy_vulnerability_id.json") as testfile:
             parser = TrivyOperatorPrometheus()
 
-            parser.api_configuration = Api_Configuration(
-                base_url="https://prometheus.example.com"
-            )
-            observations = parser.get_observations(
-                json.load(testfile), Product(name="product"), None
-            )
+            parser.api_configuration = Api_Configuration(base_url="https://prometheus.example.com")
+            observations = parser.get_observations(json.load(testfile), Product(name="product"), None)
 
             self.assertEqual(2, len(observations))
             self.assertEqual("CVE-2023-1111", observations[0].title)
             self.assertEqual("Medium", observations[0].parser_severity)
             self.assertEqual("6.1", observations[0].numerical_severity)
             self.assertEqual("CVE-2023-1111", observations[0].vulnerability_id)
-            self.assertEqual(
-                "registry.io/namespace/image", observations[0].origin_docker_image_name
-            )
+            self.assertEqual("registry.io/namespace/image", observations[0].origin_docker_image_name)
             self.assertEqual("v0.26.0", observations[0].origin_docker_image_tag)
             self.assertEqual("6.1", observations[0].cvss3_score)
             self.assertEqual("recoure.org/x/net", observations[0].origin_component_name)
@@ -294,9 +242,5 @@ class TestTrivyOperatorPrometheusParser(TestCase):
                 observations[0].description,
             )
             self.assertEqual("default", observations[0].origin_kubernetes_namespace)
-            self.assertEqual(
-                "StatefulSet", observations[0].origin_kubernetes_resource_type
-            )
-            self.assertEqual(
-                "recource_name", observations[0].origin_kubernetes_resource_name
-            )
+            self.assertEqual("StatefulSet", observations[0].origin_kubernetes_resource_type)
+            self.assertEqual("recource_name", observations[0].origin_kubernetes_resource_name)

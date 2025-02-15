@@ -48,9 +48,7 @@ urlpatterns = [
     path("", empty_view),
     path(
         "favicon.ico",
-        RedirectView.as_view(
-            url=staticfiles_storage.url("favicon.ico"), permanent=False
-        ),
+        RedirectView.as_view(url=staticfiles_storage.url("favicon.ico"), permanent=False),
         name="favicon",
     ),
     # Your stuff: custom urls includes go here
@@ -95,9 +93,7 @@ urlpatterns += [
         "api/import/api_import_observations_by_name/",
         ApiImportObservationsByName.as_view(),
     ),
-    path(
-        "api/import/api_import_observations_by_id/", ApiImportObservationsById.as_view()
-    ),
+    path("api/import/api_import_observations_by_id/", ApiImportObservationsById.as_view()),
     path(
         "api/import/file_upload_observations_by_name/",
         FileUploadObservationsByName.as_view(),
@@ -111,9 +107,7 @@ urlpatterns += [
     path("api/metrics/product_metrics_status/", ProductMetricsStatusView.as_view()),
     path("api/metrics/export_excel/", ProductMetricsExportExcelView.as_view()),
     path("api/metrics/export_csv/", ProductMetricsExportCsvView.as_view()),
-    path(
-        "api/metrics/export_codecharta/", ProductMetricsExportCodeChartaView.as_view()
-    ),
+    path("api/metrics/export_codecharta/", ProductMetricsExportCodeChartaView.as_view()),
     # OpenAPI 3
     path("api/oa3/schema/", SpectacularAPIView.as_view(), name="schema_oa3"),
     path(

@@ -77,9 +77,7 @@ class TestJWTAuthentication(BaseTestCase):
             jwt_authentication = JWTAuthentication()
             jwt_authentication.authenticate(request)
 
-        self.assertEqual(
-            "Invalid token header: No credentials provided.", str(e.exception)
-        )
+        self.assertEqual("Invalid token header: No credentials provided.", str(e.exception))
 
     def test_authenticate_invalid_header_spaces(self):
         request = HttpRequest()
@@ -101,9 +99,7 @@ class TestJWTAuthentication(BaseTestCase):
 
         self.assertIsNone(user)
 
-    @patch(
-        "application.access_control.services.jwt_authentication.JWTAuthentication._validate_jwt"
-    )
+    @patch("application.access_control.services.jwt_authentication.JWTAuthentication._validate_jwt")
     def test_authenticate_wrong_token(self, mock):
         mock.return_value = None
 
@@ -115,9 +111,7 @@ class TestJWTAuthentication(BaseTestCase):
 
         self.assertEqual("Invalid token.", str(e.exception))
 
-    @patch(
-        "application.access_control.services.jwt_authentication.JWTAuthentication._validate_jwt"
-    )
+    @patch("application.access_control.services.jwt_authentication.JWTAuthentication._validate_jwt")
     def test_authenticate_user_deactivated(self, mock):
         mock.return_value = self.user_internal
         self.user_internal.is_active = False
@@ -132,9 +126,7 @@ class TestJWTAuthentication(BaseTestCase):
 
         self.user_internal.is_active = True
 
-    @patch(
-        "application.access_control.services.jwt_authentication.JWTAuthentication._validate_jwt"
-    )
+    @patch("application.access_control.services.jwt_authentication.JWTAuthentication._validate_jwt")
     def test_authenticate_successful(self, mock):
         mock.return_value = self.user_internal
 
@@ -154,9 +146,7 @@ class TestJWTAuthentication(BaseTestCase):
     # --- _validate_jwt ---
 
     @patch("jwt.decode")
-    @patch(
-        "application.access_control.services.jwt_authentication.get_user_by_username"
-    )
+    @patch("application.access_control.services.jwt_authentication.get_user_by_username")
     @patch("application.access_control.models.JWT_Secret.load")
     def test_validate_jwt_user(self, secret_mock, get_user_mock, jwt_mock):
         jwt_secret = JWT_Secret(secret="secret")

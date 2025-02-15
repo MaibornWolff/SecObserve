@@ -70,38 +70,26 @@ class ApiImportObservationsById(APIView):
         responses={status.HTTP_200_OK: APIImportObservationsResponseSerializer},
     )
     def post(self, request: Request) -> Response:
-        request_serializer = ApiImportObservationsByIdRequestSerializer(
-            data=request.data
-        )
+        request_serializer = ApiImportObservationsByIdRequestSerializer(data=request.data)
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
 
-        api_configuration_id = request_serializer.validated_data.get(
-            "api_configuration"
-        )
+        api_configuration_id = request_serializer.validated_data.get("api_configuration")
         api_configuration = get_api_configuration_by_id(api_configuration_id)
         if not api_configuration:
-            raise ValidationError(
-                f"API Configuration {api_configuration} does not exist"
-            )
+            raise ValidationError(f"API Configuration {api_configuration} does not exist")
 
-        user_has_permission_or_403(
-            api_configuration.product, Permissions.Product_Import_Observations
-        )
+        user_has_permission_or_403(api_configuration.product, Permissions.Product_Import_Observations)
 
         branch = None
         branch_id = request_serializer.validated_data.get("branch")
         if branch_id:
             branch = get_branch_by_id(api_configuration.product, branch_id)
             if not branch:
-                raise ValidationError(
-                    f"Branch {branch_id} does not exist for product {api_configuration.product}"
-                )
+                raise ValidationError(f"Branch {branch_id} does not exist for product {api_configuration.product}")
 
         service = request_serializer.validated_data.get("service")
-        docker_image_name_tag = request_serializer.validated_data.get(
-            "docker_image_name_tag"
-        )
+        docker_image_name_tag = request_serializer.validated_data.get("docker_image_name_tag")
         endpoint_url = request_serializer.validated_data.get("endpoint_url")
         kubernetes_cluster = request_serializer.validated_data.get("kubernetes_cluster")
 
@@ -134,9 +122,7 @@ class ApiImportObservationsByName(APIView):
         responses={status.HTTP_200_OK: APIImportObservationsResponseSerializer},
     )
     def post(self, request: Request) -> Response:
-        request_serializer = ApiImportObservationsByNameRequestSerializer(
-            data=request.data
-        )
+        request_serializer = ApiImportObservationsByNameRequestSerializer(data=request.data)
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
 
@@ -154,21 +140,15 @@ class ApiImportObservationsByName(APIView):
             if not branch:
                 branch = Branch.objects.create(product=product, name=branch_name)
 
-        api_configuration_name = request_serializer.validated_data.get(
-            "api_configuration_name"
-        )
-        api_configuration = get_api_configuration_by_name(
-            product, api_configuration_name
-        )
+        api_configuration_name = request_serializer.validated_data.get("api_configuration_name")
+        api_configuration = get_api_configuration_by_name(product, api_configuration_name)
         if not api_configuration:
             raise ValidationError(
                 f"API Configuration {api_configuration_name} does not exist for product {product.name}"
             )
 
         service = request_serializer.validated_data.get("service")
-        docker_image_name_tag = request_serializer.validated_data.get(
-            "docker_image_name_tag"
-        )
+        docker_image_name_tag = request_serializer.validated_data.get("docker_image_name_tag")
         endpoint_url = request_serializer.validated_data.get("endpoint_url")
         kubernetes_cluster = request_serializer.validated_data.get("kubernetes_cluster")
 
@@ -203,9 +183,7 @@ class FileUploadObservationsById(APIView):
     )
     def post(self, request: Request) -> Response:  # pylint: disable=too-many-locals
         # not too much we can do about this
-        request_serializer = FileUploadObservationsByIdRequestSerializer(
-            data=request.data
-        )
+        request_serializer = FileUploadObservationsByIdRequestSerializer(data=request.data)
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
 
@@ -221,20 +199,14 @@ class FileUploadObservationsById(APIView):
         if branch_id:
             branch = get_branch_by_id(product, branch_id)
             if not branch:
-                raise ValidationError(
-                    f"Branch {branch_id} does not exist for product {product}"
-                )
+                raise ValidationError(f"Branch {branch_id} does not exist for product {product}")
 
         file = request_serializer.validated_data.get("file")
         service = request_serializer.validated_data.get("service")
-        docker_image_name_tag = request_serializer.validated_data.get(
-            "docker_image_name_tag"
-        )
+        docker_image_name_tag = request_serializer.validated_data.get("docker_image_name_tag")
         endpoint_url = request_serializer.validated_data.get("endpoint_url")
         kubernetes_cluster = request_serializer.validated_data.get("kubernetes_cluster")
-        suppress_licenses = request_serializer.validated_data.get(
-            "suppress_licenses", False
-        )
+        suppress_licenses = request_serializer.validated_data.get("suppress_licenses", False)
 
         file_upload_parameters = FileUploadParameters(
             product=product,
@@ -256,14 +228,8 @@ class FileUploadObservationsById(APIView):
             license_components_deleted,
         ) = file_upload_observations(file_upload_parameters)
 
-        num_observations = (
-            observations_new + observations_updated + observations_resolved
-        )
-        num_license_components = (
-            license_components_new
-            + license_components_updated
-            + license_components_deleted
-        )
+        num_observations = observations_new + observations_updated + observations_resolved
+        num_license_components = license_components_new + license_components_updated + license_components_deleted
 
         response_data = {}
         if num_observations > 0 or num_license_components == 0:
@@ -287,9 +253,7 @@ class FileUploadObservationsByName(APIView):
     )
     def post(self, request: Request) -> Response:  # pylint: disable=too-many-locals
         # not too much we can do about this
-        request_serializer = FileUploadObservationsByNameRequestSerializer(
-            data=request.data
-        )
+        request_serializer = FileUploadObservationsByNameRequestSerializer(data=request.data)
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
 
@@ -309,14 +273,10 @@ class FileUploadObservationsByName(APIView):
 
         file = request_serializer.validated_data.get("file")
         service = request_serializer.validated_data.get("service")
-        docker_image_name_tag = request_serializer.validated_data.get(
-            "docker_image_name_tag"
-        )
+        docker_image_name_tag = request_serializer.validated_data.get("docker_image_name_tag")
         endpoint_url = request_serializer.validated_data.get("endpoint_url")
         kubernetes_cluster = request_serializer.validated_data.get("kubernetes_cluster")
-        suppress_licenses = request_serializer.validated_data.get(
-            "suppress_licenses", False
-        )
+        suppress_licenses = request_serializer.validated_data.get("suppress_licenses", False)
 
         file_upload_parameters = FileUploadParameters(
             product=product,
@@ -338,14 +298,8 @@ class FileUploadObservationsByName(APIView):
             license_components_deleted,
         ) = file_upload_observations(file_upload_parameters)
 
-        num_observations = (
-            observations_new + observations_updated + observations_resolved
-        )
-        num_license_components = (
-            license_components_new
-            + license_components_updated
-            + license_components_deleted
-        )
+        num_observations = observations_new + observations_updated + observations_resolved
+        num_license_components = license_components_new + license_components_updated + license_components_deleted
 
         response_data = {}
         if num_observations > 0 or num_license_components == 0:
@@ -407,9 +361,7 @@ class ScanOSVProductView(APIView):
         if not product.osv_enabled:
             raise ValidationError(f"OSV scan is not enabled for product {product.name}")
 
-        observations_new, observations_updated, observations_resolved = scan_product(
-            product
-        )
+        observations_new, observations_updated, observations_resolved = scan_product(product)
         response_data = {
             "observations_new": observations_new,
             "observations_updated": observations_updated,
@@ -438,9 +390,7 @@ class ScanOSVBranchView(APIView):
         if not branch:
             return Response(status=HTTP_404_NOT_FOUND)
 
-        observations_new, observations_updated, observations_resolved = scan_branch(
-            branch
-        )
+        observations_new, observations_updated, observations_resolved = scan_branch(branch)
         response_data = {
             "observations_new": observations_new,
             "observations_updated": observations_updated,

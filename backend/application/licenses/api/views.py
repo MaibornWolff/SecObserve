@@ -142,9 +142,7 @@ class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
         return super().get_serializer_class()
 
     def get_queryset(self) -> QuerySet[License_Component]:
-        return (
-            get_license_components().select_related("branch").select_related("license")
-        )
+        return get_license_components().select_related("branch").select_related("license")
 
     @extend_schema(
         methods=["GET"],
@@ -170,16 +168,12 @@ class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
                 raise ValidationError("Branch id is not an integer")
             filter_branch = self._get_branch(product, int(branch_id))
 
-        order_by_1, order_by_2, order_by_3 = self._get_ordering(
-            request.query_params.get("ordering")
-        )
+        order_by_1, order_by_2, order_by_3 = self._get_ordering(request.query_params.get("ordering"))
 
         license_overview_elements = get_license_component_licenses(
             product, filter_branch, order_by_1, order_by_2, order_by_3
         )
-        license_overview_elements = self._filter_data(
-            request, license_overview_elements
-        )
+        license_overview_elements = self._filter_data(request, license_overview_elements)
 
         results = []
         for element in license_overview_elements:
@@ -232,26 +226,18 @@ class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
 
         return "numerical_evaluation_result", "license_name", "branch__name"
 
-    def _filter_data(
-        self, request: Request, license_overview_elements: QuerySet
-    ) -> QuerySet:
+    def _filter_data(self, request: Request, license_overview_elements: QuerySet) -> QuerySet:
         filter_license_name = request.query_params.get("license_name")
         if filter_license_name:
-            license_overview_elements = license_overview_elements.filter(
-                license_name__icontains=filter_license_name
-            )
+            license_overview_elements = license_overview_elements.filter(license_name__icontains=filter_license_name)
 
         filter_evaluation_result = request.query_params.get("evaluation_result")
         if filter_evaluation_result:
-            license_overview_elements = license_overview_elements.filter(
-                evaluation_result=filter_evaluation_result
-            )
+            license_overview_elements = license_overview_elements.filter(evaluation_result=filter_evaluation_result)
 
         filter_component_purl_type = request.query_params.get("component_purl_type")
         if filter_component_purl_type:
-            license_overview_elements = license_overview_elements.filter(
-                component_purl_type=filter_component_purl_type
-            )
+            license_overview_elements = license_overview_elements.filter(component_purl_type=filter_component_purl_type)
 
         return license_overview_elements
 
@@ -275,17 +261,13 @@ class LicenseComponentIdViewSet(GenericViewSet, ListModelMixin, RetrieveModelMix
         return get_license_components()
 
 
-class LicenseComponentEvidenceViewSet(
-    GenericViewSet, ListModelMixin, RetrieveModelMixin
-):
+class LicenseComponentEvidenceViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     serializer_class = LicenseComponentEvidenceSerializer
     filterset_class = LicenseComponentEvidenceFilter
     queryset = License_Component_Evidence.objects.none()
 
     def get_queryset(self) -> QuerySet[License_Component_Evidence]:
-        return get_license_component_evidences().select_related(
-            "license_component__product"
-        )
+        return get_license_component_evidences().select_related("license_component__product")
 
 
 class LicenseViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
@@ -363,9 +345,7 @@ class LicenseGroupViewSet(ModelViewSet):
             raise ValidationError(f"License {license_id} not found")
 
         if license_to_be_added in license_group.licenses.filter(id=license_id):
-            raise ValidationError(
-                f"License {license_to_be_added} is already in this license group"
-            )
+            raise ValidationError(f"License {license_to_be_added} is already in this license group")
 
         license_group.licenses.add(license_to_be_added)
 
@@ -404,17 +384,13 @@ class LicenseGroupViewSet(ModelViewSet):
     def import_scancode_licensedb(self, request: Request) -> Response:
         user = request.user
         if not user.is_superuser:
-            raise PermissionDenied(
-                "User is not allowed to import license groups from ScanCode LicenseDB"
-            )
+            raise PermissionDenied("User is not allowed to import license groups from ScanCode LicenseDB")
 
         import_scancode_licensedb()
 
         return Response(status=HTTP_204_NO_CONTENT)
 
-    def _get_license_group(
-        self, pk: int, manager: Optional[bool] = False
-    ) -> License_Group:
+    def _get_license_group(self, pk: int, manager: Optional[bool] = False) -> License_Group:
         license_group = get_license_groups().filter(pk=pk).first()
         if license_group is None:
             raise NotFound("License group not found")
@@ -443,11 +419,7 @@ class LicenseGroupMemberViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, UserHasLicenseGroupMemberPermission]
 
     def get_queryset(self) -> QuerySet[License_Group_Member]:
-        return (
-            get_license_group_members()
-            .select_related("license_group")
-            .select_related("user")
-        )
+        return get_license_group_members().select_related("license_group").select_related("user")
 
 
 class LicenseGroupAuthorizationGroupMemberViewSet(ModelViewSet):
@@ -567,9 +539,7 @@ class LicensePolicyViewSet(ModelViewSet):
             content=license_policy_export,
             content_type="application/json",
         )
-        response["Content-Disposition"] = (
-            f"attachment; filename=license_policy_{pk}.json"
-        )
+        response["Content-Disposition"] = f"attachment; filename=license_policy_{pk}.json"
 
         return response
 
@@ -586,15 +556,11 @@ class LicensePolicyViewSet(ModelViewSet):
             content=license_policy_export,
             content_type="application/yaml",
         )
-        response["Content-Disposition"] = (
-            f"attachment; filename=license_policy_{pk}.yaml"
-        )
+        response["Content-Disposition"] = f"attachment; filename=license_policy_{pk}.yaml"
 
         return response
 
-    def _get_license_policy(
-        self, pk: int, manager: Optional[bool] = False
-    ) -> License_Policy:
+    def _get_license_policy(self, pk: int, manager: Optional[bool] = False) -> License_Policy:
         license_policy = get_license_policies().filter(pk=pk).first()
         if license_policy is None:
             raise NotFound("License policy not found")
@@ -639,11 +605,7 @@ class LicensePolicyMemberViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, UserHasLicensePolicyItemMemberPermission]
 
     def get_queryset(self) -> QuerySet[License_Policy_Member]:
-        return (
-            get_license_policy_members()
-            .select_related("license_policy")
-            .select_related("user")
-        )
+        return get_license_policy_members().select_related("license_policy").select_related("user")
 
 
 class LicensePolicyAuthorizationGroupMemberViewSet(ModelViewSet):

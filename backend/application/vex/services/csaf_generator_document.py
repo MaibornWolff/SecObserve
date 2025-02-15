@@ -39,9 +39,7 @@ def create_csaf_root(csaf: CSAF) -> CSAFRoot:
         )
         csaf_revision_history_list.append(csaf_revision_history)
 
-    tracking_id = _get_document_id(
-        csaf.document_id_prefix, csaf.document_base_id, csaf.version
-    )
+    tracking_id = _get_document_id(csaf.document_id_prefix, csaf.document_base_id, csaf.version)
 
     csaf_tracking = CSAFTracking(
         id=tracking_id,
@@ -74,7 +72,5 @@ def create_csaf_root(csaf: CSAF) -> CSAFRoot:
     return csaf_root
 
 
-def _get_document_id(
-    document_id_prefix: str, document_base_id: str, document_version: int
-) -> str:
+def _get_document_id(document_id_prefix: str, document_base_id: str, document_version: int) -> str:
     return document_id_prefix + "_" + document_base_id + f"_{document_version:04d}"

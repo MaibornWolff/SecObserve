@@ -44,9 +44,7 @@ def get_product_observation_count(product: Product, severity: str) -> int:
     ).count()
 
 
-def get_product_group_license_count(
-    product_group: Product, evaluation_result: str
-) -> int:
+def get_product_group_license_count(product_group: Product, evaluation_result: str) -> int:
     count = 0
     for product in Product.objects.filter(product_group=product_group):
         count += get_product_license_count(product, evaluation_result)

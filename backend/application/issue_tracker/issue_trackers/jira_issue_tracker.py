@@ -65,13 +65,10 @@ class JiraIssueTracker(BaseIssueTracker):
 
             if (
                 jira_issue.fields.status
-                and str(jira_issue.fields.status)
-                == observation.product.issue_tracker_status_closed
+                and str(jira_issue.fields.status) == observation.product.issue_tracker_status_closed
                 and observation.issue_tracker_jira_initial_status
             ):
-                self.jira.transition_issue(
-                    jira_issue, observation.issue_tracker_jira_initial_status
-                )
+                self.jira.transition_issue(jira_issue, observation.issue_tracker_jira_initial_status)
 
     def close_issue(self, observation: Observation, issue: Issue) -> None:
         if not observation.issue_tracker_issue_id:
@@ -88,19 +85,13 @@ class JiraIssueTracker(BaseIssueTracker):
                 description=description,
             )
 
-            self.jira.transition_issue(
-                jira_issue, observation.product.issue_tracker_status_closed
-            )
+            self.jira.transition_issue(jira_issue, observation.product.issue_tracker_status_closed)
 
-    def close_issue_for_deleted_observation(
-        self, product: Product, issue: Issue
-    ) -> None:
+    def close_issue_for_deleted_observation(self, product: Product, issue: Issue) -> None:
         jira_issue = self._get_jira_issue(issue.id)
 
         if jira_issue:
-            description = self._get_description_for_deleted_observation(
-                jira_issue.fields.description
-            )
+            description = self._get_description_for_deleted_observation(jira_issue.fields.description)
             description = description.replace("**", "*")
 
             jira_issue.update(

@@ -50,9 +50,7 @@ class ProductMetricsExportExcelView(APIView):
         workbook = export_product_metrics_excel(product)
 
         with NamedTemporaryFile() as tmp:
-            workbook.save(
-                tmp.name  # nosemgrep: python.lang.correctness.tempfile.flush.tempfile-without-flush
-            )
+            workbook.save(tmp.name)  # nosemgrep: python.lang.correctness.tempfile.flush.tempfile-without-flush
             # export works fine without .flush()
             tmp.seek(0)
             stream = tmp.read()
@@ -87,9 +85,7 @@ class ProductMetricsExportCodeChartaView(APIView):
             raise ValidationError("Product not found")
 
         response = HttpResponse(content_type="text/csv")
-        response["Content-Disposition"] = (
-            'attachment; filename="secobserve_codecharta_metrics.csv"'
-        )
+        response["Content-Disposition"] = 'attachment; filename="secobserve_codecharta_metrics.csv"'
 
         writer = csv.DictWriter(
             response,

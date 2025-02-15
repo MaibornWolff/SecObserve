@@ -31,9 +31,7 @@ class LicensePolicyEvaluationResult:
     comment: Optional[str] = None
 
 
-def copy_license_policy(
-    source_license_policy: License_Policy, name: str
-) -> License_Policy:
+def copy_license_policy(source_license_policy: License_Policy, name: str) -> License_Policy:
     new_license_policy = License_Policy.objects.create(
         name=name,
         description=source_license_policy.description,
@@ -70,13 +68,9 @@ def get_license_evaluation_results_for_product(product: Product) -> dict:
     license_evaluation_results: dict[str, LicensePolicyEvaluationResult] = {}
 
     if license_policy.parent:
-        get_license_evaluation_results_for_license_policy(
-            license_policy.parent, True, license_evaluation_results
-        )
+        get_license_evaluation_results_for_license_policy(license_policy.parent, True, license_evaluation_results)
 
-    get_license_evaluation_results_for_license_policy(
-        license_policy, False, license_evaluation_results
-    )
+    get_license_evaluation_results_for_license_policy(license_policy, False, license_evaluation_results)
 
     return license_evaluation_results
 
@@ -92,60 +86,47 @@ def get_license_evaluation_results_for_license_policy(
     for item in items_license_groups:
         if item.license_group:
             for my_license in item.license_group.licenses.all():
-                license_evaluation_results[f"spdx_{my_license.spdx_id}"] = (
-                    LicensePolicyEvaluationResult(
-                        evaluation_result=item.evaluation_result,
-                        from_parent=is_parent,
-                        license_group_name=item.license_group.name,
-                        comment=item.comment if item.comment else None,
-                    )
-                )
-
-    items_licenses = License_Policy_Item.objects.filter(
-        license_policy=license_policy, license__isnull=False
-    )
-    for item in items_licenses:
-        if item.license:
-            license_evaluation_results[f"spdx_{item.license.spdx_id}"] = (
-                LicensePolicyEvaluationResult(
+                license_evaluation_results[f"spdx_{my_license.spdx_id}"] = LicensePolicyEvaluationResult(
                     evaluation_result=item.evaluation_result,
                     from_parent=is_parent,
+                    license_group_name=item.license_group.name,
                     comment=item.comment if item.comment else None,
                 )
-            )
 
-    items_license_expressions = License_Policy_Item.objects.filter(
-        license_policy=license_policy
-    ).exclude(license_expression="")
-    for item in items_license_expressions:
-        license_evaluation_results[f"expression_{item.license_expression}"] = (
-            LicensePolicyEvaluationResult(
+    items_licenses = License_Policy_Item.objects.filter(license_policy=license_policy, license__isnull=False)
+    for item in items_licenses:
+        if item.license:
+            license_evaluation_results[f"spdx_{item.license.spdx_id}"] = LicensePolicyEvaluationResult(
                 evaluation_result=item.evaluation_result,
                 from_parent=is_parent,
                 comment=item.comment if item.comment else None,
             )
+
+    items_license_expressions = License_Policy_Item.objects.filter(license_policy=license_policy).exclude(
+        license_expression=""
+    )
+    for item in items_license_expressions:
+        license_evaluation_results[f"expression_{item.license_expression}"] = LicensePolicyEvaluationResult(
+            evaluation_result=item.evaluation_result,
+            from_parent=is_parent,
+            comment=item.comment if item.comment else None,
         )
 
-    items_non_spdx_licenses = License_Policy_Item.objects.filter(
-        license_policy=license_policy
-    ).exclude(non_spdx_license="")
+    items_non_spdx_licenses = License_Policy_Item.objects.filter(license_policy=license_policy).exclude(
+        non_spdx_license=""
+    )
     for item in items_non_spdx_licenses:
-        license_evaluation_results[f"non_spdx_{item.non_spdx_license}"] = (
-            LicensePolicyEvaluationResult(
-                evaluation_result=item.evaluation_result,
-                from_parent=is_parent,
-                comment=item.comment if item.comment else None,
-            )
+        license_evaluation_results[f"non_spdx_{item.non_spdx_license}"] = LicensePolicyEvaluationResult(
+            evaluation_result=item.evaluation_result,
+            from_parent=is_parent,
+            comment=item.comment if item.comment else None,
         )
 
 
 def apply_license_policy(license_policy: License_Policy) -> None:
     products = Product.objects.filter(
         Q(license_policy=license_policy)
-        | (
-            Q(product_group__license_policy=license_policy)
-            & Q(license_policy__isnull=True)
-        )
+        | (Q(product_group__license_policy=license_policy) & Q(license_policy__isnull=True))
     )
     for product in products:
         apply_license_policy_product(product)
@@ -167,9 +148,7 @@ def apply_license_policy_product(product: Product) -> None:
                 get_comma_separated_as_list(license_policy.ignore_component_types),
             )
         else:
-            component.evaluation_result = (
-                License_Policy_Evaluation_Result.RESULT_UNKNOWN
-            )
+            component.evaluation_result = License_Policy_Evaluation_Result.RESULT_UNKNOWN
 
         if (
             license_before != component.license
@@ -190,17 +169,11 @@ def apply_license_policy_to_component(
     if component.component_purl_type in ignore_component_types:
         evaluation_result = License_Policy_Evaluation_Result.RESULT_IGNORED
     elif component.license:
-        evaluation_result = _get_license_evaluation_result(
-            f"spdx_{component.license.spdx_id}", evaluation_results
-        )
+        evaluation_result = _get_license_evaluation_result(f"spdx_{component.license.spdx_id}", evaluation_results)
     elif component.license_expression:
-        evaluation_result = _evaluate_license_expression(
-            component.license_expression, evaluation_results
-        )
+        evaluation_result = _evaluate_license_expression(component.license_expression, evaluation_results)
     elif component.non_spdx_license:
-        evaluation_result = _get_license_evaluation_result(
-            f"non_spdx_{component.non_spdx_license}", evaluation_results
-        )
+        evaluation_result = _get_license_evaluation_result(f"non_spdx_{component.non_spdx_license}", evaluation_results)
     if not evaluation_result:
         evaluation_result = License_Policy_Evaluation_Result.RESULT_UNKNOWN
 
@@ -235,16 +208,10 @@ def _evaluate_license_expression(
 
     try:
         licensing = get_spdx_licensing()
-        parsed_expression = licensing.parse(
-            license_expression, validate=True, strict=True
-        )
-        evaluation_result = _evaluate_parsed_license_expression(
-            parsed_expression, evaluation_results
-        )
+        parsed_expression = licensing.parse(license_expression, validate=True, strict=True)
+        evaluation_result = _evaluate_parsed_license_expression(parsed_expression, evaluation_results)
         if evaluation_result == License_Policy_Evaluation_Result.RESULT_UNKNOWN:
-            evaluation_result = _get_license_evaluation_result(
-                f"expression_{license_expression}", evaluation_results
-            )
+            evaluation_result = _get_license_evaluation_result(f"expression_{license_expression}", evaluation_results)
     except Exception:  # nosec B110
         # a meaningful return value is set as a default in case on an exception
         pass
@@ -266,17 +233,13 @@ def _evaluate_parsed_license_expression(
         license_symbol = str(parsed_expression)
         spdx_license = get_license_by_spdx_id(license_symbol)
         if spdx_license:
-            return _get_license_evaluation_result(
-                f"spdx_{spdx_license.spdx_id}", evaluation_results
-            )
+            return _get_license_evaluation_result(f"spdx_{spdx_license.spdx_id}", evaluation_results)
         return License_Policy_Evaluation_Result.RESULT_UNKNOWN
 
     if parsed_expression_type in [AND, OR]:
         evaluation_result_set = set()
         for arg in parsed_expression.args:
-            evaluation_result_set.add(
-                _evaluate_parsed_license_expression(arg, evaluation_results)
-            )
+            evaluation_result_set.add(_evaluate_parsed_license_expression(arg, evaluation_results))
         if parsed_expression_type == AND:
             evaluation_result = _evaluate_and_expression(evaluation_result_set)
         if parsed_expression_type == OR:

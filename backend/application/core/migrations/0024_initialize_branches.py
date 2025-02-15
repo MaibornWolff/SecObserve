@@ -13,13 +13,9 @@ def initialize_branches(apps, schema_editor):
     for observation in Observation.objects.exclude(origin_service_name=""):
         try:
             try:
-                service = Service.objects.get(
-                    product=observation.product, name=observation.origin_service_name
-                )
+                service = Service.objects.get(product=observation.product, name=observation.origin_service_name)
             except Service.DoesNotExist:
-                service = Service.objects.create(
-                    product=observation.product, name=observation.origin_service_name
-                )
+                service = Service.objects.create(product=observation.product, name=observation.origin_service_name)
             observation.origin_service = service
             observation.save()
         except Exception as e:

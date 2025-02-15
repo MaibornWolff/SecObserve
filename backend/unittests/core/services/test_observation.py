@@ -239,11 +239,7 @@ class TestObservation(BaseTestCase):
         before_observation = Observation(title="empty")
         after_observation = deepcopy(before_observation)
         for key in dir(after_observation):
-            if (
-                key not in _get_excludes()
-                and not callable(getattr(after_observation, key))
-                and not key.startswith("_")
-            ):
+            if key not in _get_excludes() and not callable(getattr(after_observation, key)) and not key.startswith("_"):
                 value = after_observation.__dict__.get(key)
                 if value == "":
                     after_observation.__dict__[key] = None
@@ -277,9 +273,7 @@ class TestObservation(BaseTestCase):
         self.assertEqual(before_observation, after_observation)
 
     def test_normalize_observation_fields_origin_component_name_version_1(self):
-        before_observation = Observation(
-            title="empty", origin_component_name_version="component_name"
-        )
+        before_observation = Observation(title="empty", origin_component_name_version="component_name")
         after_observation = deepcopy(before_observation)
 
         before_observation.current_severity = Severity.SEVERITY_UNKNOWN
@@ -318,17 +312,13 @@ class TestObservation(BaseTestCase):
         before_observation.current_severity = Severity.SEVERITY_UNKNOWN
         before_observation.numerical_severity = 6
         before_observation.current_status = Status.STATUS_OPEN
-        before_observation.origin_component_name_version = (
-            "component_name:component_version"
-        )
+        before_observation.origin_component_name_version = "component_name:component_version"
 
         normalize_observation_fields(after_observation)
         self.assertEqual(before_observation, after_observation)
 
     def test_normalize_observation_fields_origin_component_name(self):
-        before_observation = Observation(
-            title="empty", origin_component_name="component_name"
-        )
+        before_observation = Observation(title="empty", origin_component_name="component_name")
         after_observation = deepcopy(before_observation)
 
         before_observation.current_severity = Severity.SEVERITY_UNKNOWN
@@ -340,9 +330,7 @@ class TestObservation(BaseTestCase):
         self.assertEqual(before_observation, after_observation)
 
     def test_normalize_observation_fields_origin_docker_image_name_tag_1(self):
-        before_observation = Observation(
-            title="empty", origin_docker_image_name_tag="docker_image_name"
-        )
+        before_observation = Observation(title="empty", origin_docker_image_name_tag="docker_image_name")
         after_observation = deepcopy(before_observation)
 
         before_observation.current_severity = Severity.SEVERITY_UNKNOWN
@@ -366,9 +354,7 @@ class TestObservation(BaseTestCase):
         before_observation.current_status = Status.STATUS_OPEN
         before_observation.origin_docker_image_name = "docker_image_name"
         before_observation.origin_docker_image_tag = "docker_image_tag"
-        before_observation.origin_docker_image_name_tag_short = (
-            "docker_image_name:docker_image_tag"
-        )
+        before_observation.origin_docker_image_name_tag_short = "docker_image_name:docker_image_tag"
 
         normalize_observation_fields(after_observation)
         self.assertEqual(before_observation, after_observation)
@@ -386,20 +372,14 @@ class TestObservation(BaseTestCase):
         before_observation.current_severity = Severity.SEVERITY_UNKNOWN
         before_observation.numerical_severity = 6
         before_observation.current_status = Status.STATUS_OPEN
-        before_observation.origin_docker_image_name_tag = (
-            "docker_image_name:docker_image_tag"
-        )
-        before_observation.origin_docker_image_name_tag_short = (
-            "docker_image_name:docker_image_tag"
-        )
+        before_observation.origin_docker_image_name_tag = "docker_image_name:docker_image_tag"
+        before_observation.origin_docker_image_name_tag_short = "docker_image_name:docker_image_tag"
 
         normalize_observation_fields(after_observation)
         self.assertEqual(before_observation, after_observation)
 
     def test_normalize_observation_fields_origin_docker_image_name(self):
-        before_observation = Observation(
-            title="empty", origin_docker_image_name="docker_image_name"
-        )
+        before_observation = Observation(title="empty", origin_docker_image_name="docker_image_name")
         after_observation = deepcopy(before_observation)
 
         before_observation.current_severity = Severity.SEVERITY_UNKNOWN
@@ -414,17 +394,11 @@ class TestObservation(BaseTestCase):
 
 def _observation_equal(expected_observation, actual_observation, msg=None):
     for key in dir(expected_observation):
-        if (
-            key not in _get_excludes()
-            and not callable(getattr(expected_observation, key))
-            and not key.startswith("_")
-        ):
+        if key not in _get_excludes() and not callable(getattr(expected_observation, key)) and not key.startswith("_"):
             expected_value = expected_observation.__dict__.get(key)
             actual_value = actual_observation.__dict__.get(key)
             if expected_value != actual_value:
-                raise AssertionError(
-                    f"Key {key}: expected: {expected_value}, actual: {actual_value}"
-                )
+                raise AssertionError(f"Key {key}: expected: {expected_value}, actual: {actual_value}")
 
 
 def _get_excludes():

@@ -68,9 +68,7 @@ class Migration(migrations.Migration):
             state_operations=[
                 migrations.AddIndex(
                     model_name="parser",
-                    index=models.Index(
-                        fields=["name"], name="core_parser_name_d48b0a_idx"
-                    ),
+                    index=models.Index(fields=["name"], name="core_parser_name_d48b0a_idx"),
                 ),
             ],
             database_operations=[],

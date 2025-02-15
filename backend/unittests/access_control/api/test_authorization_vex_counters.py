@@ -18,9 +18,7 @@ class TestAuthorizationVEXCounters(TestAuthorizationBase):
             )
         )
 
-        expected_data = (
-            "{'id': 1, 'document_id_prefix': 'prefix', 'year': 2024, 'counter': 2}"
-        )
+        expected_data = "{'id': 1, 'document_id_prefix': 'prefix', 'year': 2024, 'counter': 2}"
         self._test_api(
             APITest(
                 "db_internal_write",
@@ -45,9 +43,7 @@ class TestAuthorizationVEXCounters(TestAuthorizationBase):
         )
 
         post_data = {"document_id_prefix": "string", "year": 2024}
-        expected_data = (
-            "{'message': 'You do not have permission to perform this action.'}"
-        )
+        expected_data = "{'message': 'You do not have permission to perform this action.'}"
         self._test_api(
             APITest(
                 "db_internal_write",
@@ -59,9 +55,7 @@ class TestAuthorizationVEXCounters(TestAuthorizationBase):
             )
         )
 
-        expected_data = (
-            "{'id': 2, 'document_id_prefix': 'string', 'year': 2024, 'counter': 0}"
-        )
+        expected_data = "{'id': 2, 'document_id_prefix': 'string', 'year': 2024, 'counter': 0}"
         self._test_api(
             APITest(
                 "db_admin",
@@ -73,9 +67,7 @@ class TestAuthorizationVEXCounters(TestAuthorizationBase):
             )
         )
 
-        expected_data = (
-            "{'message': 'You do not have permission to perform this action.'}"
-        )
+        expected_data = "{'message': 'You do not have permission to perform this action.'}"
         self._test_api(
             APITest(
                 "db_internal_write",
@@ -87,9 +79,7 @@ class TestAuthorizationVEXCounters(TestAuthorizationBase):
             )
         )
 
-        expected_data = (
-            "{'id': 1, 'document_id_prefix': 'prefix', 'year': 2024, 'counter': 7}"
-        )
+        expected_data = "{'id': 1, 'document_id_prefix': 'prefix', 'year': 2024, 'counter': 7}"
         self._test_api(
             APITest(
                 "db_admin",
@@ -101,9 +91,7 @@ class TestAuthorizationVEXCounters(TestAuthorizationBase):
             )
         )
 
-        expected_data = (
-            "{'message': 'You do not have permission to perform this action.'}"
-        )
+        expected_data = "{'message': 'You do not have permission to perform this action.'}"
         self._test_api(
             APITest(
                 "db_internal_write",

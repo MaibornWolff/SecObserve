@@ -31,9 +31,7 @@ class TestCSAF(TestCase):
         self.maxDiff = None
 
     @patch("django.utils.timezone.now")
-    @patch(
-        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
-    )
+    @patch("application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate")
     @patch("application.vex.services.csaf_generator.user_has_permission_or_403")
     @patch("application.vex.services.csaf_generator.get_current_user")
     @patch("application.core.queries.observation.get_current_user")
@@ -65,9 +63,7 @@ class TestCSAF(TestCase):
         }
 
         api_client = APIClient()
-        response = api_client.post(
-            "/api/vex/csaf_document/create/", parameters, format="json"
-        )
+        response = api_client.post("/api/vex/csaf_document/create/", parameters, format="json")
 
         self.assertEqual(200, response.status_code)
         self.assertEqual("application/json", response.headers["Content-Type"])
@@ -76,9 +72,7 @@ class TestCSAF(TestCase):
             response.headers["Content-Disposition"],
         )
 
-        with open(
-            path.dirname(__file__) + "/files/csaf_product_no_branch.json", "r"
-        ) as testfile:
+        with open(path.dirname(__file__) + "/files/csaf_product_no_branch.json", "r") as testfile:
             self.assertEqual(testfile.read(), response._container[0].decode("utf-8"))
 
         csaf = CSAF.objects.get(document_id_prefix="CSAF", document_base_id="2020_0001")
@@ -96,9 +90,7 @@ class TestCSAF(TestCase):
             csaf.publisher_category,
         )
         self.assertEqual("https://vex.example.com", csaf.publisher_namespace)
-        self.assertEqual(
-            CSAF_Tracking_Status.CSAF_TRACKING_STATUS_FINAL, csaf.tracking_status
-        )
+        self.assertEqual(CSAF_Tracking_Status.CSAF_TRACKING_STATUS_FINAL, csaf.tracking_status)
         self.assertEqual(
             CSAF_TLP_Label.CSAF_TLP_LABEL_WHITE,
             csaf.tlp_label,
@@ -120,9 +112,7 @@ class TestCSAF(TestCase):
 
         csaf_revisions = CSAF_Revision.objects.filter(csaf=csaf)
         self.assertEqual(1, len(csaf_revisions))
-        self.assertEqual(
-            dateparse.parse_datetime("2020-01-01T04:30:00Z"), csaf_revisions[0].date
-        )
+        self.assertEqual(dateparse.parse_datetime("2020-01-01T04:30:00Z"), csaf_revisions[0].date)
         self.assertEqual(1, csaf_revisions[0].version)
         self.assertEqual("Initial release", csaf_revisions[0].summary)
 
@@ -137,9 +127,7 @@ class TestCSAF(TestCase):
         }
 
         api_client = APIClient()
-        response = api_client.post(
-            "/api/vex/csaf_document/update/CSAF/2020_0001/", parameters, format="json"
-        )
+        response = api_client.post("/api/vex/csaf_document/update/CSAF/2020_0001/", parameters, format="json")
 
         self.assertEqual(204, response.status_code)
 
@@ -165,9 +153,7 @@ class TestCSAF(TestCase):
         }
 
         api_client = APIClient()
-        response = api_client.post(
-            "/api/vex/csaf_document/update/CSAF/2020_0001/", parameters, format="json"
-        )
+        response = api_client.post("/api/vex/csaf_document/update/CSAF/2020_0001/", parameters, format="json")
 
         self.assertEqual(200, response.status_code)
         self.assertEqual("application/json", response.headers["Content-Type"])
@@ -176,9 +162,7 @@ class TestCSAF(TestCase):
             response.headers["Content-Disposition"],
         )
 
-        with open(
-            path.dirname(__file__) + "/files/csaf_product_no_branch_update.json", "r"
-        ) as testfile:
+        with open(path.dirname(__file__) + "/files/csaf_product_no_branch_update.json", "r") as testfile:
             self.assertEqual(testfile.read(), response._container[0].decode("utf-8"))
 
         csaf = CSAF.objects.get(document_id_prefix="CSAF", document_base_id="2020_0001")
@@ -196,9 +180,7 @@ class TestCSAF(TestCase):
             csaf.publisher_category,
         )
         self.assertEqual("https://vex.example.com", csaf.publisher_namespace)
-        self.assertEqual(
-            CSAF_Tracking_Status.CSAF_TRACKING_STATUS_DRAFT, csaf.tracking_status
-        )
+        self.assertEqual(CSAF_Tracking_Status.CSAF_TRACKING_STATUS_DRAFT, csaf.tracking_status)
         self.assertEqual(
             CSAF_TLP_Label.CSAF_TLP_LABEL_AMBER,
             csaf.tlp_label,
@@ -220,16 +202,12 @@ class TestCSAF(TestCase):
 
         csaf_revisions = CSAF_Revision.objects.filter(csaf=csaf)
         self.assertEqual(2, len(csaf_revisions))
-        self.assertEqual(
-            dateparse.parse_datetime("2020-02-01T04:30:00Z"), csaf_revisions[1].date
-        )
+        self.assertEqual(dateparse.parse_datetime("2020-02-01T04:30:00Z"), csaf_revisions[1].date)
         self.assertEqual(2, csaf_revisions[1].version)
         self.assertEqual("Update", csaf_revisions[1].summary)
 
     @patch("django.utils.timezone.now")
-    @patch(
-        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
-    )
+    @patch("application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate")
     @patch("application.vex.services.csaf_generator.user_has_permission_or_403")
     @patch("application.vex.services.csaf_generator.get_current_user")
     @patch("application.core.queries.observation.get_current_user")
@@ -259,9 +237,7 @@ class TestCSAF(TestCase):
         }
 
         api_client = APIClient()
-        response = api_client.post(
-            "/api/vex/csaf_document/create/", parameters, format="json"
-        )
+        response = api_client.post("/api/vex/csaf_document/create/", parameters, format="json")
 
         self.assertEqual(200, response.status_code)
         self.assertEqual("application/json", response.headers["Content-Type"])
@@ -270,9 +246,7 @@ class TestCSAF(TestCase):
             response.headers["Content-Disposition"],
         )
 
-        with open(
-            path.dirname(__file__) + "/files/csaf_product_branches.json", "r"
-        ) as testfile:
+        with open(path.dirname(__file__) + "/files/csaf_product_branches.json", "r") as testfile:
             self.assertEqual(testfile.read(), response._container[0].decode("utf-8"))
 
         csaf = CSAF.objects.get(document_id_prefix="CSAF", document_base_id="2020_0001")
@@ -290,9 +264,7 @@ class TestCSAF(TestCase):
             csaf.publisher_category,
         )
         self.assertEqual("https://vex.example.com", csaf.publisher_namespace)
-        self.assertEqual(
-            CSAF_Tracking_Status.CSAF_TRACKING_STATUS_FINAL, csaf.tracking_status
-        )
+        self.assertEqual(CSAF_Tracking_Status.CSAF_TRACKING_STATUS_FINAL, csaf.tracking_status)
         self.assertEqual(
             CSAF_TLP_Label.CSAF_TLP_LABEL_WHITE,
             csaf.tlp_label,
@@ -314,16 +286,12 @@ class TestCSAF(TestCase):
 
         csaf_revisions = CSAF_Revision.objects.filter(csaf=csaf)
         self.assertEqual(1, len(csaf_revisions))
-        self.assertEqual(
-            dateparse.parse_datetime("2020-01-01T04:30:00Z"), csaf_revisions[0].date
-        )
+        self.assertEqual(dateparse.parse_datetime("2020-01-01T04:30:00Z"), csaf_revisions[0].date)
         self.assertEqual(1, csaf_revisions[0].version)
         self.assertEqual("Initial release", csaf_revisions[0].summary)
 
     @patch("django.utils.timezone.now")
-    @patch(
-        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
-    )
+    @patch("application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate")
     @patch("application.vex.services.csaf_generator.user_has_permission_or_403")
     @patch("application.vex.services.csaf_generator.get_current_user")
     @patch("application.core.queries.observation.get_current_user")
@@ -354,9 +322,7 @@ class TestCSAF(TestCase):
         }
 
         api_client = APIClient()
-        response = api_client.post(
-            "/api/vex/csaf_document/create/", parameters, format="json"
-        )
+        response = api_client.post("/api/vex/csaf_document/create/", parameters, format="json")
 
         self.assertEqual(200, response.status_code)
         self.assertEqual("application/json", response.headers["Content-Type"])
@@ -365,9 +331,7 @@ class TestCSAF(TestCase):
             response.headers["Content-Disposition"],
         )
 
-        with open(
-            path.dirname(__file__) + "/files/csaf_product_given_branch.json", "r"
-        ) as testfile:
+        with open(path.dirname(__file__) + "/files/csaf_product_given_branch.json", "r") as testfile:
             self.assertEqual(testfile.read(), response._container[0].decode("utf-8"))
 
         csaf = CSAF.objects.get(document_id_prefix="CSAF", document_base_id="2020_0001")
@@ -385,9 +349,7 @@ class TestCSAF(TestCase):
             csaf.publisher_category,
         )
         self.assertEqual("https://vex.example.com", csaf.publisher_namespace)
-        self.assertEqual(
-            CSAF_Tracking_Status.CSAF_TRACKING_STATUS_FINAL, csaf.tracking_status
-        )
+        self.assertEqual(CSAF_Tracking_Status.CSAF_TRACKING_STATUS_FINAL, csaf.tracking_status)
         self.assertEqual(
             CSAF_TLP_Label.CSAF_TLP_LABEL_WHITE,
             csaf.tlp_label,
@@ -410,16 +372,12 @@ class TestCSAF(TestCase):
 
         csaf_revisions = CSAF_Revision.objects.filter(csaf=csaf)
         self.assertEqual(1, len(csaf_revisions))
-        self.assertEqual(
-            dateparse.parse_datetime("2020-01-01T04:30:00Z"), csaf_revisions[0].date
-        )
+        self.assertEqual(dateparse.parse_datetime("2020-01-01T04:30:00Z"), csaf_revisions[0].date)
         self.assertEqual(1, csaf_revisions[0].version)
         self.assertEqual("Initial release", csaf_revisions[0].summary)
 
     @patch("django.utils.timezone.now")
-    @patch(
-        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
-    )
+    @patch("application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate")
     @patch("application.vex.services.csaf_generator.user_has_permission_or_403")
     @patch("application.vex.services.csaf_generator.get_current_user")
     @patch("application.core.queries.observation.get_current_user")
@@ -449,9 +407,7 @@ class TestCSAF(TestCase):
         }
 
         api_client = APIClient()
-        response = api_client.post(
-            "/api/vex/csaf_document/create/", parameters, format="json"
-        )
+        response = api_client.post("/api/vex/csaf_document/create/", parameters, format="json")
 
         self.assertEqual(200, response.status_code)
         self.assertEqual("application/json", response.headers["Content-Type"])
@@ -460,9 +416,7 @@ class TestCSAF(TestCase):
             response.headers["Content-Disposition"],
         )
 
-        with open(
-            path.dirname(__file__) + "/files/csaf_given_vulnerability.json", "r"
-        ) as testfile:
+        with open(path.dirname(__file__) + "/files/csaf_given_vulnerability.json", "r") as testfile:
             self.assertEqual(testfile.read(), response._container[0].decode("utf-8"))
 
         csaf = CSAF.objects.get(document_id_prefix="CSAF", document_base_id="2020_0001")
@@ -480,9 +434,7 @@ class TestCSAF(TestCase):
             csaf.publisher_category,
         )
         self.assertEqual("https://vex.example.com", csaf.publisher_namespace)
-        self.assertEqual(
-            CSAF_Tracking_Status.CSAF_TRACKING_STATUS_FINAL, csaf.tracking_status
-        )
+        self.assertEqual(CSAF_Tracking_Status.CSAF_TRACKING_STATUS_FINAL, csaf.tracking_status)
         self.assertEqual(
             CSAF_TLP_Label.CSAF_TLP_LABEL_WHITE,
             csaf.tlp_label,
@@ -505,9 +457,7 @@ class TestCSAF(TestCase):
 
         csaf_revisions = CSAF_Revision.objects.filter(csaf=csaf)
         self.assertEqual(1, len(csaf_revisions))
-        self.assertEqual(
-            dateparse.parse_datetime("2020-01-01T04:30:00Z"), csaf_revisions[0].date
-        )
+        self.assertEqual(dateparse.parse_datetime("2020-01-01T04:30:00Z"), csaf_revisions[0].date)
         self.assertEqual(1, csaf_revisions[0].version)
         self.assertEqual("Initial release", csaf_revisions[0].summary)
 
@@ -522,9 +472,7 @@ class TestCSAF(TestCase):
         }
 
         api_client = APIClient()
-        response = api_client.post(
-            "/api/vex/csaf_document/update/CSAF/2020_0001/", parameters, format="json"
-        )
+        response = api_client.post("/api/vex/csaf_document/update/CSAF/2020_0001/", parameters, format="json")
 
         self.assertEqual(204, response.status_code)
 
@@ -546,9 +494,7 @@ class TestCSAF(TestCase):
         }
 
         api_client = APIClient()
-        response = api_client.post(
-            "/api/vex/csaf_document/update/CSAF/2020_0001/", parameters, format="json"
-        )
+        response = api_client.post("/api/vex/csaf_document/update/CSAF/2020_0001/", parameters, format="json")
 
         self.assertEqual(200, response.status_code)
         self.assertEqual("application/json", response.headers["Content-Type"])
@@ -557,9 +503,7 @@ class TestCSAF(TestCase):
             response.headers["Content-Disposition"],
         )
 
-        with open(
-            path.dirname(__file__) + "/files/csaf_given_vulnerability_update.json", "r"
-        ) as testfile:
+        with open(path.dirname(__file__) + "/files/csaf_given_vulnerability_update.json", "r") as testfile:
             self.assertEqual(testfile.read(), response._container[0].decode("utf-8"))
 
         csaf = CSAF.objects.get(document_id_prefix="CSAF", document_base_id="2020_0001")
@@ -577,9 +521,7 @@ class TestCSAF(TestCase):
             csaf.publisher_category,
         )
         self.assertEqual("https://vex.example.com", csaf.publisher_namespace)
-        self.assertEqual(
-            CSAF_Tracking_Status.CSAF_TRACKING_STATUS_DRAFT, csaf.tracking_status
-        )
+        self.assertEqual(CSAF_Tracking_Status.CSAF_TRACKING_STATUS_DRAFT, csaf.tracking_status)
         self.assertEqual(
             CSAF_TLP_Label.CSAF_TLP_LABEL_AMBER,
             csaf.tlp_label,
@@ -602,8 +544,6 @@ class TestCSAF(TestCase):
 
         csaf_revisions = CSAF_Revision.objects.filter(csaf=csaf)
         self.assertEqual(2, len(csaf_revisions))
-        self.assertEqual(
-            dateparse.parse_datetime("2020-02-01T04:30:00Z"), csaf_revisions[1].date
-        )
+        self.assertEqual(dateparse.parse_datetime("2020-02-01T04:30:00Z"), csaf_revisions[1].date)
         self.assertEqual(2, csaf_revisions[1].version)
         self.assertEqual("Update", csaf_revisions[1].summary)

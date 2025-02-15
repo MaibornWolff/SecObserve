@@ -10,14 +10,10 @@ from application.core.models import Observation, Product
 
 def export_observations_excel(product: Product, status: Optional[str]) -> Workbook:
     observations = _get_observations(product, status)
-    return export_excel(
-        observations, "Observations", _get_excludes(), _get_foreign_keys()
-    )
+    return export_excel(observations, "Observations", _get_excludes(), _get_foreign_keys())
 
 
-def export_observations_csv(
-    response: HttpResponse, product: Product, status: Optional[str]
-) -> None:
+def export_observations_csv(response: HttpResponse, product: Product, status: Optional[str]) -> None:
     observations = _get_observations(product, status)
     export_csv(
         response,

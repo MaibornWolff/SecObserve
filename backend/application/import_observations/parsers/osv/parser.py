@@ -67,14 +67,10 @@ class OSVParser(BaseParser):
         observations = []
 
         for osv_component in data:
-            ordered_vulnerabilities = sorted(
-                osv_component.vulnerabilities, key=lambda x: x.id
-            )
+            ordered_vulnerabilities = sorted(osv_component.vulnerabilities, key=lambda x: x.id)
 
             for vulnerability in ordered_vulnerabilities:
-                osv_vulnerability = get_osv_vulnerability(
-                    osv_id=vulnerability.id, modified=vulnerability.modified
-                )
+                osv_vulnerability = get_osv_vulnerability(osv_id=vulnerability.id, modified=vulnerability.modified)
 
                 if osv_vulnerability is None:
                     logger.warning("OSV vulnerability %s not found", vulnerability.id)
@@ -83,9 +79,7 @@ class OSVParser(BaseParser):
                 if osv_vulnerability.get("withdrawn"):
                     continue
 
-                vulnerability_id, vulnerability_id_aliases = self._get_osv_ids(
-                    osv_vulnerability
-                )
+                vulnerability_id, vulnerability_id_aliases = self._get_osv_ids(osv_vulnerability)
                 osv_cvss3_vector, osv_cvss4_vector = self._get_cvss(osv_vulnerability)
 
                 affected = self._get_affected(
@@ -104,19 +98,15 @@ class OSVParser(BaseParser):
                     component_in_versions = self._is_version_in_affected(
                         osv_component.license_component.component_version, affected_item
                     )
-                    component_in_ranges, fixed_version, affected_events = (
-                        self._is_version_in_ranges(
-                            osv_component.license_component.component_version,
-                            affected_item,
-                        )
+                    component_in_ranges, fixed_version, affected_events = self._is_version_in_ranges(
+                        osv_component.license_component.component_version,
+                        affected_item,
                     )
 
                     events.extend(affected_events)
 
                     if component_in_versions or component_in_ranges:
-                        affected_cvss3_vector, affected_cvss4_vector = (
-                            self._get_affected_cvss(affected_item)
-                        )
+                        affected_cvss3_vector, affected_cvss4_vector = self._get_affected_cvss(affected_item)
                         if affected_cvss3_vector:
                             osv_cvss3_vector = affected_cvss3_vector
                         if affected_cvss4_vector:
@@ -153,9 +143,7 @@ class OSVParser(BaseParser):
                     )
                     observations.append(observation)
 
-                    observation.unsaved_references = self._get_references(
-                        osv_vulnerability
-                    )
+                    observation.unsaved_references = self._get_references(osv_vulnerability)
 
                     evidence = []
                     evidence.append("OSV Vulnerability")
@@ -192,26 +180,16 @@ class OSVParser(BaseParser):
             osv_description_parts.append(str(osv_vulnerability.get("details")))
 
         if component_in_versions:
-            osv_description_parts.append(
-                "**Confidence: High** (Component found in affected versions)"
-            )
+            osv_description_parts.append("**Confidence: High** (Component found in affected versions)")
         elif component_in_ranges:
-            osv_description_parts.append(
-                "**Confidence: High** (Component found in affected ranges)"
-            )
+            osv_description_parts.append("**Confidence: High** (Component found in affected ranges)")
         elif component_in_versions is None and component_in_ranges is None:
-            osv_description_parts.append(
-                "**Confidence: Low** (No information about affected versions or ranges)"
-            )
+            osv_description_parts.append("**Confidence: Low** (No information about affected versions or ranges)")
         elif component_in_ranges is None:
-            osv_description_parts.append(
-                "**Confidence: Low** (Events could not be evaluated)"
-            )
+            osv_description_parts.append("**Confidence: Low** (Events could not be evaluated)")
             osv_description_parts.append("**Events:**")
             for event in events:
-                osv_description_parts.append(
-                    f"* {event.type}: Introduced: {event.introduced} - Fixed: {event.fixed}"
-                )
+                osv_description_parts.append(f"* {event.type}: Introduced: {event.introduced} - Fixed: {event.fixed}")
 
         return "\n\n".join(osv_description_parts)
 
@@ -254,26 +232,13 @@ class OSVParser(BaseParser):
 
         package_osv_ecosystem = OSV_Non_Linux_Ecosystems.get(package_type)
 
-        if (
-            not package_osv_ecosystem
-            and branch
-            and branch.osv_linux_distribution
-            and branch.osv_linux_release
-        ):
-            package_osv_ecosystem = (
-                f"{branch.osv_linux_distribution}:{branch.osv_linux_release}"
-            )
+        if not package_osv_ecosystem and branch and branch.osv_linux_distribution and branch.osv_linux_release:
+            package_osv_ecosystem = f"{branch.osv_linux_distribution}:{branch.osv_linux_release}"
         if not package_osv_ecosystem and branch and branch.osv_linux_distribution:
             package_osv_ecosystem = branch.osv_linux_distribution
 
-        if (
-            not package_osv_ecosystem
-            and product.osv_linux_distribution
-            and product.osv_linux_release
-        ):
-            package_osv_ecosystem = (
-                f"{product.osv_linux_distribution}:{product.osv_linux_release}"
-            )
+        if not package_osv_ecosystem and product.osv_linux_distribution and product.osv_linux_release:
+            package_osv_ecosystem = f"{product.osv_linux_distribution}:{product.osv_linux_release}"
         if not package_osv_ecosystem and product.osv_linux_distribution:
             package_osv_ecosystem = product.osv_linux_distribution
 
@@ -281,10 +246,7 @@ class OSVParser(BaseParser):
             package = affected_item.get("package", {})
             affected_ecosystem = package.get("ecosystem")
             affected_name = package.get("name")
-            if (
-                package_osv_ecosystem == affected_ecosystem
-                and package_name == affected_name
-            ):
+            if package_osv_ecosystem == affected_ecosystem and package_name == affected_name:
                 affected.append(affected_item)
 
         return affected
@@ -320,9 +282,7 @@ class OSVParser(BaseParser):
         versions = affected.get("versions", [])
         return version in versions
 
-    def _is_version_in_ranges(
-        self, version: str, affected: dict
-    ) -> tuple[Optional[bool], Optional[str], list[Event]]:
+    def _is_version_in_ranges(self, version: str, affected: dict) -> tuple[Optional[bool], Optional[str], list[Event]]:
         if not version:
             return None, None, []
 

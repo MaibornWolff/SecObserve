@@ -58,9 +58,7 @@ class TestOSVParser(BaseTestCase):
                     ),
                     OSV_Vulnerability(
                         id="GHSA-4jq9-2xhw-jpx7",
-                        modified=datetime(
-                            2024, 10, 30, 19, 23, 43, 662562, timezone.utc
-                        ),
+                        modified=datetime(2024, 10, 30, 19, 23, 43, 662562, timezone.utc),
                     ),
                 },
             ),
@@ -76,9 +74,7 @@ class TestOSVParser(BaseTestCase):
         ]
 
         parser = OSVParser()
-        observations = parser.get_observations(
-            osv_components, self.product_1, self.branch_1
-        )
+        observations = parser.get_observations(osv_components, self.product_1, self.branch_1)
 
         self.assertEqual(len(observations), 3)
 
@@ -92,9 +88,7 @@ A stack overflow in the XML.toJSONObject component of hutool-json v5.8.10 and or
         self.assertEqual(description, observation.description)
         self.assertEqual("", observation.recommendation)
         self.assertEqual("CVE-2022-45688", observation.vulnerability_id)
-        self.assertEqual(
-            "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H", observation.cvss3_vector
-        )
+        self.assertEqual("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H", observation.cvss3_vector)
         self.assertEqual("", observation.cvss4_vector)
         self.assertEqual("GHSA-3vqj-43w4-2q58", observation.vulnerability_id_aliases)
         self.assertEqual("json", observation.origin_component_name)
@@ -103,16 +97,12 @@ A stack overflow in the XML.toJSONObject component of hutool-json v5.8.10 and or
             "pkg:maven/org.json/json@20190722?type=jar",
             observation.origin_component_purl,
         )
-        self.assertEqual(
-            "cpe:/a:org.json:json:20190722", observation.origin_component_cpe
-        )
+        self.assertEqual("cpe:/a:org.json:json:20190722", observation.origin_component_cpe)
         self.assertEqual("json_dependencies", observation.origin_component_dependencies)
 
         unsaved_references = observation.unsaved_references
         self.assertEqual(6, len(unsaved_references))
-        self.assertEqual(
-            "https://nvd.nist.gov/vuln/detail/CVE-2022-45688", unsaved_references[0]
-        )
+        self.assertEqual("https://nvd.nist.gov/vuln/detail/CVE-2022-45688", unsaved_references[0])
 
         self.assertEqual("OSV Vulnerability", observation.unsaved_evidences[0][0])
         self.assertIn("CWE-787", observation.unsaved_evidences[0][1])
@@ -123,9 +113,7 @@ A stack overflow in the XML.toJSONObject component of hutool-json v5.8.10 and or
         observation = observations[2]
         self.assertEqual("CVE-2024-53908", observation.title)
         self.assertEqual("Update to version 5.1.4", observation.recommendation)
-        self.assertEqual(
-            "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", observation.cvss3_vector
-        )
+        self.assertEqual("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", observation.cvss3_vector)
         self.assertEqual(
             "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N/E:U",
             observation.cvss4_vector,
@@ -163,9 +151,7 @@ A stack overflow in the XML.toJSONObject component of hutool-json v5.8.10 and or
         ]
 
         parser = OSVParser()
-        observations = parser.get_observations(
-            osv_components, self.product_1, self.branch_1
-        )
+        observations = parser.get_observations(osv_components, self.product_1, self.branch_1)
 
         self.assertEqual(len(observations), 0)
 
@@ -243,9 +229,7 @@ A stack overflow in the XML.toJSONObject component of hutool-json v5.8.10 and or
         osv_components = [self._get_osv_component_git(), self._get_osv_component_vim()]
 
         parser = OSVParser()
-        observations = parser.get_observations(
-            osv_components, self.product_1, self.branch_1
-        )
+        observations = parser.get_observations(osv_components, self.product_1, self.branch_1)
 
         self.assertEqual(len(observations), 1)
 

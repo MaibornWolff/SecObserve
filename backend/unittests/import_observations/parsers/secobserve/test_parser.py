@@ -13,22 +13,16 @@ class TestSecObserveParser(TestCase):
             self.assertEqual("SecObserve", parser.name)
             self.assertTrue(isinstance(parser_instance, SecObserveParser))
 
-            observations = parser_instance.get_observations(
-                data, Product(name="product"), None
-            )
+            observations = parser_instance.get_observations(data, Product(name="product"), None)
             self.assertEqual(0, len(observations))
 
     def test_multiple_observations(self):
-        with open(
-            path.dirname(__file__) + "/files/multiple_observations.json"
-        ) as testfile:
+        with open(path.dirname(__file__) + "/files/multiple_observations.json") as testfile:
             parser, parser_instance, data = detect_parser(testfile)
             self.assertEqual("SecObserve", parser.name)
             self.assertTrue(isinstance(parser_instance, SecObserveParser))
 
-            observations = parser_instance.get_observations(
-                data, Product(name="product"), None
-            )
+            observations = parser_instance.get_observations(data, Product(name="product"), None)
             self.assertEqual(2, len(observations))
 
             observation = observations[0]
@@ -36,30 +30,18 @@ class TestSecObserveParser(TestCase):
             self.assertEqual("description_1", observation.description)
             self.assertEqual("recommendation_1", observation.recommendation)
             self.assertEqual("Critical", observation.parser_severity)
-            self.assertEqual(
-                "scanner_observation_id_1", observation.scanner_observation_id
-            )
+            self.assertEqual("scanner_observation_id_1", observation.scanner_observation_id)
             self.assertEqual("vulnerability_id_1", observation.vulnerability_id)
-            self.assertEqual(
-                "origin_component_name_1", observation.origin_component_name
-            )
-            self.assertEqual(
-                "origin_component_version_1", observation.origin_component_version
-            )
+            self.assertEqual("origin_component_name_1", observation.origin_component_name)
+            self.assertEqual("origin_component_version_1", observation.origin_component_version)
             self.assertEqual(
                 "origin_component_name_version_1",
                 observation.origin_component_name_version,
             )
-            self.assertEqual(
-                "origin_component_purl_1", observation.origin_component_purl
-            )
+            self.assertEqual("origin_component_purl_1", observation.origin_component_purl)
             self.assertEqual("origin_component_cpe_1", observation.origin_component_cpe)
-            self.assertEqual(
-                "origin_docker_image_name_1", observation.origin_docker_image_name
-            )
-            self.assertEqual(
-                "origin_docker_image_tag_1", observation.origin_docker_image_tag
-            )
+            self.assertEqual("origin_docker_image_name_1", observation.origin_docker_image_name)
+            self.assertEqual("origin_docker_image_tag_1", observation.origin_docker_image_tag)
             self.assertEqual(
                 "origin_docker_image_name_tag_1",
                 observation.origin_docker_image_name_tag,

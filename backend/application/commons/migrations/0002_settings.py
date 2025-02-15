@@ -25,9 +25,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "security_gate_active",
-                    models.BooleanField(
-                        default=True, help_text="Is the security gate activated?"
-                    ),
+                    models.BooleanField(default=True, help_text="Is the security gate activated?"),
                 ),
                 (
                     "security_gate_threshold_critical",
@@ -225,9 +223,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "branch_housekeeping_active",
-                    models.BooleanField(
-                        default=True, help_text="Delete inactive branches"
-                    ),
+                    models.BooleanField(default=True, help_text="Delete inactive branches"),
                 ),
                 (
                     "branch_housekeeping_keep_inactive_days",

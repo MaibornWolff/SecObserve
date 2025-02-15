@@ -12,9 +12,7 @@ from unittests.base_test_case import BaseTestCase
 class TestAuthorizationGroupMemberSerializer(BaseTestCase):
     def test_validate_authorization_group_change(self):
         auhorization_group_2 = Authorization_Group.objects.create(name="group_2")
-        authorization_group_member_serializer = AuthorizationGroupMemberSerializer(
-            self.authorization_group_member_1
-        )
+        authorization_group_member_serializer = AuthorizationGroupMemberSerializer(self.authorization_group_member_1)
         attrs = {
             "authorization_group": auhorization_group_2,
         }
@@ -28,9 +26,7 @@ class TestAuthorizationGroupMemberSerializer(BaseTestCase):
         )
 
     def test_validate_user_change(self):
-        authorization_group_member_serializer = AuthorizationGroupMemberSerializer(
-            self.authorization_group_member_1
-        )
+        authorization_group_member_serializer = AuthorizationGroupMemberSerializer(self.authorization_group_member_1)
         attrs = {
             "user": self.user_external,
         }
@@ -59,14 +55,10 @@ class TestAuthorizationGroupMemberSerializer(BaseTestCase):
             "[ErrorDetail(string='Authorization group member authorization_group_1 / user_internal@example.com already exists', code='invalid')]",
             str(e.exception),
         )
-        mock_authorization_group_member.assert_called_with(
-            self.authorization_group_1, self.user_internal
-        )
+        mock_authorization_group_member.assert_called_with(self.authorization_group_1, self.user_internal)
 
     def test_validate_successful_with_instance(self):
-        authorization_group_member_serializer = AuthorizationGroupMemberSerializer(
-            self.authorization_group_member_1
-        )
+        authorization_group_member_serializer = AuthorizationGroupMemberSerializer(self.authorization_group_member_1)
         attrs = {"is_manager": False}
 
         new_attrs = authorization_group_member_serializer.validate(attrs)
@@ -86,6 +78,4 @@ class TestAuthorizationGroupMemberSerializer(BaseTestCase):
         new_attrs = authorization_group_member_serializer.validate(attrs)
 
         self.assertEqual(new_attrs, attrs)
-        mock_authorization_group_member.assert_called_with(
-            self.authorization_group_1, self.user_external
-        )
+        mock_authorization_group_member.assert_called_with(self.authorization_group_1, self.user_external)

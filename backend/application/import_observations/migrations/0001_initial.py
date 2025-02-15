@@ -31,15 +31,11 @@ class Migration(migrations.Migration):
                 ("api_key", encrypted_model_fields.fields.EncryptedCharField()),
                 (
                     "parser",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.PROTECT, to="core.parser"
-                    ),
+                    models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to="core.parser"),
                 ),
                 (
                     "product",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to="core.product"
-                    ),
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="core.product"),
                 ),
             ],
             options={

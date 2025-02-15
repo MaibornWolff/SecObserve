@@ -131,29 +131,19 @@ class ProductGroupSerializer(ProductCoreSerializer):
         return get_product_group_observation_count(obj, Severity.SEVERITY_UNKNOWN)
 
     def get_forbidden_licenses_count(self, obj: Product) -> int:
-        return get_product_group_license_count(
-            obj, License_Policy_Evaluation_Result.RESULT_FORBIDDEN
-        )
+        return get_product_group_license_count(obj, License_Policy_Evaluation_Result.RESULT_FORBIDDEN)
 
     def get_review_required_licenses_count(self, obj: Product) -> int:
-        return get_product_group_license_count(
-            obj, License_Policy_Evaluation_Result.RESULT_REVIEW_REQUIRED
-        )
+        return get_product_group_license_count(obj, License_Policy_Evaluation_Result.RESULT_REVIEW_REQUIRED)
 
     def get_unknown_licenses_count(self, obj: Product) -> int:
-        return get_product_group_license_count(
-            obj, License_Policy_Evaluation_Result.RESULT_UNKNOWN
-        )
+        return get_product_group_license_count(obj, License_Policy_Evaluation_Result.RESULT_UNKNOWN)
 
     def get_allowed_licenses_count(self, obj: Product) -> int:
-        return get_product_group_license_count(
-            obj, License_Policy_Evaluation_Result.RESULT_ALLOWED
-        )
+        return get_product_group_license_count(obj, License_Policy_Evaluation_Result.RESULT_ALLOWED)
 
     def get_ignored_licenses_count(self, obj: Product) -> int:
-        return get_product_group_license_count(
-            obj, License_Policy_Evaluation_Result.RESULT_IGNORED
-        )
+        return get_product_group_license_count(obj, License_Policy_Evaluation_Result.RESULT_IGNORED)
 
     def get_products_count(self, obj: Product) -> int:
         return obj.products.count()
@@ -162,9 +152,7 @@ class ProductGroupSerializer(ProductCoreSerializer):
         if not obj.product_rules_need_approval:
             return 0
 
-        return Rule.objects.filter(
-            product=obj, approval_status=Rule_Status.RULE_STATUS_NEEDS_APPROVAL
-        ).count()
+        return Rule.objects.filter(product=obj, approval_status=Rule_Status.RULE_STATUS_NEEDS_APPROVAL).count()
 
     class Meta:
         model = Product
@@ -227,9 +215,7 @@ class ProductNameSerializer(ModelSerializer):
         fields = ["id", "name"]
 
 
-class ProductSerializer(
-    ProductCoreSerializer
-):  # pylint: disable=too-many-public-methods
+class ProductSerializer(ProductCoreSerializer):  # pylint: disable=too-many-public-methods
     # all these methods are needed
     open_critical_observation_count = IntegerField(read_only=True)
     open_high_observation_count = IntegerField(read_only=True)
@@ -268,9 +254,7 @@ class ProductSerializer(
             return ""
         return obj.product_group.name
 
-    def get_product_group_repository_branch_housekeeping_active(
-        self, obj: Product
-    ) -> Optional[bool]:
+    def get_product_group_repository_branch_housekeeping_active(self, obj: Product) -> Optional[bool]:
         if not obj.product_group:
             return None
         return obj.product_group.repository_branch_housekeeping_active
@@ -291,16 +275,11 @@ class ProductSerializer(
         return obj.repository_default_branch.name
 
     def get_observation_reviews(self, obj: Product) -> int:
-        return Observation.objects.filter(
-            product=obj, current_status=Status.STATUS_IN_REVIEW
-        ).count()
+        return Observation.objects.filter(product=obj, current_status=Status.STATUS_IN_REVIEW).count()
 
     def get_observation_log_approvals(self, obj: Product) -> int:
         if obj.product_group:
-            if (
-                not obj.product_group.assessments_need_approval
-                and not obj.assessments_need_approval
-            ):
+            if not obj.product_group.assessments_need_approval and not obj.assessments_need_approval:
                 return 0
         else:
             if not obj.assessments_need_approval:
@@ -321,22 +300,15 @@ class ProductSerializer(
 
     def get_product_rule_approvals(self, obj: Product) -> int:
         if obj.product_group:
-            if (
-                not obj.product_group.product_rules_need_approval
-                and not obj.product_rules_need_approval
-            ):
+            if not obj.product_group.product_rules_need_approval and not obj.product_rules_need_approval:
                 return 0
         else:
             if not obj.product_rules_need_approval:
                 return 0
 
-        return Rule.objects.filter(
-            product=obj, approval_status=Rule_Status.RULE_STATUS_NEEDS_APPROVAL
-        ).count()
+        return Rule.objects.filter(product=obj, approval_status=Rule_Status.RULE_STATUS_NEEDS_APPROVAL).count()
 
-    def get_risk_acceptance_expiry_date_calculated(
-        self, obj: Product
-    ) -> Optional[date]:
+    def get_risk_acceptance_expiry_date_calculated(self, obj: Product) -> Optional[date]:
         return calculate_risk_acceptance_expiry_date(obj)
 
     def get_product_group_new_observations_in_review(self, obj: Product) -> bool:
@@ -371,50 +343,29 @@ class ProductSerializer(
             and not attrs.get("issue_tracker_api_key")
             and not attrs.get("issue_tracker_project_id")
         ):
-            raise ValidationError(
-                "Either all or none of the issue tracker fields must be set"
-            )
+            raise ValidationError("Either all or none of the issue tracker fields must be set")
 
         if attrs.get("issue_tracker_active") and not attrs.get("issue_tracker_type"):
-            raise ValidationError(
-                "Issue tracker data must be set when issue tracking is active"
-            )
+            raise ValidationError("Issue tracker data must be set when issue tracking is active")
 
         if attrs.get("issue_tracker_type") == Issue_Tracker.ISSUE_TRACKER_JIRA:
             if not attrs.get("issue_tracker_username"):
-                raise ValidationError(
-                    "Username must be set when issue tracker type is Jira"
-                )
+                raise ValidationError("Username must be set when issue tracker type is Jira")
             if not attrs.get("issue_tracker_issue_type"):
-                raise ValidationError(
-                    "Issue type must be set when issue tracker type is Jira"
-                )
+                raise ValidationError("Issue type must be set when issue tracker type is Jira")
             if not attrs.get("issue_tracker_status_closed"):
-                raise ValidationError(
-                    "Closed status must be set when issue tracker type is Jira"
-                )
+                raise ValidationError("Closed status must be set when issue tracker type is Jira")
 
-        if (
-            attrs.get("issue_tracker_type")
-            and attrs.get("issue_tracker_type") != Issue_Tracker.ISSUE_TRACKER_JIRA
-        ):
+        if attrs.get("issue_tracker_type") and attrs.get("issue_tracker_type") != Issue_Tracker.ISSUE_TRACKER_JIRA:
             if attrs.get("issue_tracker_username"):
-                raise ValidationError(
-                    "Username must not be set when issue tracker type is not Jira"
-                )
+                raise ValidationError("Username must not be set when issue tracker type is not Jira")
             if attrs.get("issue_tracker_issue_type"):
-                raise ValidationError(
-                    "Isse type must not be set when issue tracker type is not Jira"
-                )
+                raise ValidationError("Isse type must not be set when issue tracker type is not Jira")
             if attrs.get("issue_tracker_status_closed"):
-                raise ValidationError(
-                    "Closed status must not be set when issue tracker type is not Jira"
-                )
+                raise ValidationError("Closed status must not be set when issue tracker type is not Jira")
 
         if attrs.get("osv_linux_release") and not attrs.get("osv_linux_distribution"):
-            raise ValidationError(
-                "osv_linux_release cannot be set without osv_linux_distribution"
-            )
+            raise ValidationError("osv_linux_release cannot be set without osv_linux_distribution")
 
         return super().validate(attrs)
 
@@ -463,9 +414,7 @@ class NestedProductSerializer(ModelSerializer):
             return False
         return obj.product_group.product_rules_need_approval
 
-    def get_risk_acceptance_expiry_date_calculated(
-        self, obj: Product
-    ) -> Optional[date]:
+    def get_risk_acceptance_expiry_date_calculated(self, obj: Product) -> Optional[date]:
         return calculate_risk_acceptance_expiry_date(obj)
 
 
@@ -507,45 +456,32 @@ class ProductMemberSerializer(ModelSerializer):
         data_user = attrs.get("user")
 
         if self.instance is not None and (
-            (data_product and data_product != self.instance.product)
-            or (data_user and data_user != self.instance.user)
+            (data_product and data_product != self.instance.product) or (data_user and data_user != self.instance.user)
         ):
             raise ValidationError("Product and user cannot be changed")
 
         if self.instance is None:
             product_member = get_product_member(data_product, data_user)
             if product_member:
-                raise ValidationError(
-                    f"Product member {data_product} / {data_user} already exists"
-                )
+                raise ValidationError(f"Product member {data_product} / {data_user} already exists")
 
         current_user = get_current_user()
         if self.instance is not None:
-            highest_user_role = get_highest_user_role(
-                self.instance.product, current_user
-            )
+            highest_user_role = get_highest_user_role(self.instance.product, current_user)
         else:
             highest_user_role = get_highest_user_role(data_product, current_user)
 
-        if highest_user_role != Roles.Owner and not (
-            current_user and current_user.is_superuser
-        ):
+        if highest_user_role != Roles.Owner and not (current_user and current_user.is_superuser):
             if attrs.get("role") == Roles.Owner:
                 raise ValidationError("You are not permitted to add a member as Owner")
-            if (
-                attrs.get("role") != Roles.Owner
-                and self.instance is not None
-                and self.instance.role == Roles.Owner
-            ):
+            if attrs.get("role") != Roles.Owner and self.instance is not None and self.instance.role == Roles.Owner:
                 raise ValidationError("You are not permitted to change the Owner role")
 
         return attrs
 
 
 class ProductAuthorizationGroupMemberSerializer(ModelSerializer):
-    authorization_group_data = NestedAuthorizationGroupSerializer(
-        source="authorization_group", read_only=True
-    )
+    authorization_group_data = NestedAuthorizationGroupSerializer(source="authorization_group", read_only=True)
     product_data = NestedProductSerializerSmall(source="product", read_only=True)
 
     class Meta:
@@ -559,10 +495,7 @@ class ProductAuthorizationGroupMemberSerializer(ModelSerializer):
 
         if self.instance is not None and (
             (data_product and data_product != self.instance.product)
-            or (
-                data_authorization_group
-                and data_authorization_group != self.instance.authorization_group
-            )
+            or (data_authorization_group and data_authorization_group != self.instance.authorization_group)
         ):
             raise ValidationError("Product and authorization group cannot be changed")
 
@@ -577,22 +510,14 @@ class ProductAuthorizationGroupMemberSerializer(ModelSerializer):
 
         current_user = get_current_user()
         if self.instance is not None:
-            highest_user_role = get_highest_user_role(
-                self.instance.product, current_user
-            )
+            highest_user_role = get_highest_user_role(self.instance.product, current_user)
         else:
             highest_user_role = get_highest_user_role(data_product, current_user)
 
-        if highest_user_role != Roles.Owner and not (
-            current_user and current_user.is_superuser
-        ):
+        if highest_user_role != Roles.Owner and not (current_user and current_user.is_superuser):
             if attrs.get("role") == Roles.Owner:
                 raise ValidationError("You are not permitted to add a member as Owner")
-            if (
-                attrs.get("role") != Roles.Owner
-                and self.instance is not None
-                and self.instance.role == Roles.Owner
-            ):
+            if attrs.get("role") != Roles.Owner and self.instance is not None and self.instance.role == Roles.Owner:
                 raise ValidationError("You are not permitted to change the Owner role")
 
         return attrs
@@ -664,9 +589,7 @@ class BranchSerializer(ModelSerializer):
 
     def validate(self, attrs: dict) -> dict:  # pylint: disable=too-many-branches
         if attrs.get("osv_linux_release") and not attrs.get("osv_linux_distribution"):
-            raise ValidationError(
-                "osv_linux_release cannot be set without osv_linux_distribution"
-            )
+            raise ValidationError("osv_linux_release cannot be set without osv_linux_distribution")
 
         return super().validate(attrs)
 

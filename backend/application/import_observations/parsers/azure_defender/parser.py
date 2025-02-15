@@ -28,9 +28,7 @@ class AzureDefenderParser(BaseParser, BaseFileParser):
             return True
         return False
 
-    def get_observations(
-        self, data: list[dict], product: Product, branch: Optional[Branch]
-    ) -> list[Observation]:
+    def get_observations(self, data: list[dict], product: Product, branch: Optional[Branch]) -> list[Observation]:
         observations = []
 
         for row in data:

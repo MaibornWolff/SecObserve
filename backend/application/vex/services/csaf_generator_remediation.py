@@ -11,19 +11,11 @@ def set_remediation(vulnerability: CSAFVulnerability, observation: Observation) 
     if vex_status == CSAF_Status.CSAF_STATUS_AFFECTED:
         product_or_relationship_id = get_product_or_relationship_id(observation)
         category = "mitigation" if observation.recommendation else "none_available"
-        details = (
-            observation.recommendation
-            if observation.recommendation
-            else "No remediation available"
-        )
+        details = observation.recommendation if observation.recommendation else "No remediation available"
 
-        found = _check_and_append_none_available(
-            vulnerability, product_or_relationship_id, category
-        )
+        found = _check_and_append_none_available(vulnerability, product_or_relationship_id, category)
 
-        found = _check_and_append_mitigation(
-            found, vulnerability, product_or_relationship_id, category, details
-        )
+        found = _check_and_append_mitigation(found, vulnerability, product_or_relationship_id, category, details)
 
         if not found:
             remediation = CSAFRemediation(
@@ -36,10 +28,7 @@ def set_remediation(vulnerability: CSAFVulnerability, observation: Observation) 
         # remove "none_available" remediation if mitigation is available
         if category == "mitigation":
             for remediation in vulnerability.remediations:
-                if (
-                    remediation.category == "none_available"
-                    and product_or_relationship_id in remediation.product_ids
-                ):
+                if remediation.category == "none_available" and product_or_relationship_id in remediation.product_ids:
                     remediation.product_ids.remove(product_or_relationship_id)
 
         # remove remediations without product_ids

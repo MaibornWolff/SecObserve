@@ -11,9 +11,7 @@ logger = logging.getLogger("secobserve.migration")
 def populate_purl_type(apps, schema_editor):
     Observation = apps.get_model("core", "Observation")
     observations = (
-        Observation.objects.exclude(origin_component_purl="")
-        .filter(origin_component_purl_type="")
-        .order_by("id")
+        Observation.objects.exclude(origin_component_purl="").filter(origin_component_purl_type="").order_by("id")
     )
 
     paginator = Paginator(observations, 1000)

@@ -19,34 +19,22 @@ def populate_product_flags(apps, schema_editor):
 
         for product in page.object_list:
             product.has_cloud_resource = (
-                Observation.objects.filter(product=product)
-                .exclude(origin_cloud_qualified_resource="")
-                .exists()
+                Observation.objects.filter(product=product).exclude(origin_cloud_qualified_resource="").exists()
             )
 
             product.has_component = (
-                Observation.objects.filter(product=product)
-                .exclude(origin_component_name_version="")
-                .exists()
+                Observation.objects.filter(product=product).exclude(origin_component_name_version="").exists()
             )
 
             product.has_docker_image = (
-                Observation.objects.filter(product=product)
-                .exclude(origin_docker_image_name_tag_short="")
-                .exists()
+                Observation.objects.filter(product=product).exclude(origin_docker_image_name_tag_short="").exists()
             )
 
             product.has_endpoint = (
-                Observation.objects.filter(product=product)
-                .exclude(origin_endpoint_hostname="")
-                .exists()
+                Observation.objects.filter(product=product).exclude(origin_endpoint_hostname="").exists()
             )
 
-            product.has_source = (
-                Observation.objects.filter(product=product)
-                .exclude(origin_source_file="")
-                .exists()
-            )
+            product.has_source = Observation.objects.filter(product=product).exclude(origin_source_file="").exists()
 
             product.has_potential_duplicates = Observation.objects.filter(
                 product=product, has_potential_duplicates=True
@@ -73,7 +61,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(
-            populate_product_flags, reverse_code=migrations.RunPython.noop
-        ),
+        migrations.RunPython(populate_product_flags, reverse_code=migrations.RunPython.noop),
     ]

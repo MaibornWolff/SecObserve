@@ -29,9 +29,7 @@ class OIDCAuthentication(BaseAuthentication):
             raise AuthenticationFailed("Invalid token header: No credentials provided.")
 
         if len(auth) > 2:
-            raise AuthenticationFailed(
-                "Invalid token header: Token string should not contain spaces."
-            )
+            raise AuthenticationFailed("Invalid token header: Token string should not contain spaces.")
 
         auth_prefix = auth[0].decode("UTF-8")
         auth_token = auth[1].decode("UTF-8")
@@ -135,28 +133,16 @@ class OIDCAuthentication(BaseAuthentication):
 
     def _check_user_change(self, user: User, payload: dict) -> User:
         user_changed = False
-        if (
-            os.environ.get("OIDC_EMAIL")
-            and user.email != payload[os.environ["OIDC_EMAIL"]]
-        ):
+        if os.environ.get("OIDC_EMAIL") and user.email != payload[os.environ["OIDC_EMAIL"]]:
             user.email = payload[os.environ["OIDC_EMAIL"]]
             user_changed = True
-        if (
-            os.environ.get("OIDC_FULL_NAME")
-            and user.full_name != payload[os.environ["OIDC_FULL_NAME"]]
-        ):
+        if os.environ.get("OIDC_FULL_NAME") and user.full_name != payload[os.environ["OIDC_FULL_NAME"]]:
             user.full_name = payload[os.environ["OIDC_FULL_NAME"]]
             user_changed = True
-        if (
-            os.environ.get("OIDC_FIRST_NAME")
-            and user.first_name != payload[os.environ["OIDC_FIRST_NAME"]]
-        ):
+        if os.environ.get("OIDC_FIRST_NAME") and user.first_name != payload[os.environ["OIDC_FIRST_NAME"]]:
             user.first_name = payload[os.environ["OIDC_FIRST_NAME"]]
             user_changed = True
-        if (
-            os.environ.get("OIDC_LAST_NAME")
-            and user.last_name != payload[os.environ["OIDC_LAST_NAME"]]
-        ):
+        if os.environ.get("OIDC_LAST_NAME") and user.last_name != payload[os.environ["OIDC_LAST_NAME"]]:
             user.last_name = payload[os.environ["OIDC_LAST_NAME"]]
             user_changed = True
         groups_hash = self._get_groups_hash(payload)
@@ -204,8 +190,6 @@ class OIDCAuthentication(BaseAuthentication):
             group.users.remove(user)
 
         oidc_groups = self._get_groups_from_token(payload)
-        authorization_groups = Authorization_Group.objects.filter(
-            oidc_group__in=oidc_groups
-        )
+        authorization_groups = Authorization_Group.objects.filter(oidc_group__in=oidc_groups)
         for authorization_group in authorization_groups:
             user.authorization_groups.add(authorization_group)

@@ -15,7 +15,7 @@ def product_post_save(
     sender: Any,  # pylint: disable=unused-argument
     instance: Product,
     created: bool,
-    **kwargs: Any  # pylint: disable=unused-argument
+    **kwargs: Any,  # pylint: disable=unused-argument
 ) -> None:
     # sender is needed according to Django documentation
     if not created:
@@ -35,15 +35,13 @@ def branch_post_save(
     sender: Any,  # pylint: disable=unused-argument
     instance: Branch,
     created: bool,  # pylint: disable=unused-argument
-    **kwargs: Any  # pylint: disable=unused-argument
+    **kwargs: Any,  # pylint: disable=unused-argument
 ) -> None:
     # sender is needed according to Django documentation
     set_repository_default_branch(instance.product)
 
 
 @receiver(post_delete, sender=Branch)
-def branch_post_delete(
-    sender: Any, instance: Branch, **kwargs: Any  # pylint: disable=unused-argument
-) -> None:
+def branch_post_delete(sender: Any, instance: Branch, **kwargs: Any) -> None:  # pylint: disable=unused-argument
     # sender is needed according to Django documentation
     set_repository_default_branch(instance.product)

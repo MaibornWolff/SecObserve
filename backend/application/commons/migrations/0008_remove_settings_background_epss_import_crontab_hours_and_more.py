@@ -44,9 +44,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="settings",
             name="feature_automatic_api_import",
-            field=models.BooleanField(
-                default=True, help_text="Enable automatic API imports"
-            ),
+            field=models.BooleanField(default=True, help_text="Enable automatic API imports"),
         ),
         migrations.AddField(
             model_name="settings",

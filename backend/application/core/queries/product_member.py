@@ -29,9 +29,7 @@ def get_product_members() -> QuerySet[Product_Member]:
     if user is None:
         return Product_Member.objects.none()
 
-    product_members = Product_Member.objects.exclude(
-        user__username__startswith="-product-"
-    )
+    product_members = Product_Member.objects.exclude(user__username__startswith="-product-")
 
     if user.is_superuser:
         return product_members
@@ -44,24 +42,18 @@ def get_product_authorization_group_member(
     product: Product, authorization_group: Authorization_Group
 ) -> Optional[Product_Authorization_Group_Member]:
     try:
-        return Product_Authorization_Group_Member.objects.get(
-            product=product, authorization_group=authorization_group
-        )
+        return Product_Authorization_Group_Member.objects.get(product=product, authorization_group=authorization_group)
     except Product_Authorization_Group_Member.DoesNotExist:
         return None
 
 
-def get_product_authorization_group_members() -> (
-    QuerySet[Product_Authorization_Group_Member]
-):
+def get_product_authorization_group_members() -> QuerySet[Product_Authorization_Group_Member]:
     user = get_current_user()
 
     if user is None:
         return Product_Authorization_Group_Member.objects.none()
 
-    product_authorization_group_members = (
-        Product_Authorization_Group_Member.objects.all()
-    )
+    product_authorization_group_members = Product_Authorization_Group_Member.objects.all()
 
     if user.is_superuser:
         return product_authorization_group_members
@@ -70,9 +62,7 @@ def get_product_authorization_group_members() -> (
     return product_authorization_group_members.filter(product__in=products)
 
 
-def get_highest_role_of_product_authorization_group_members_for_user(
-    product: Product, user: User = None
-) -> int:
+def get_highest_role_of_product_authorization_group_members_for_user(product: Product, user: User = None) -> int:
     if not user:
         user = get_current_user()
 

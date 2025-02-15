@@ -21,9 +21,7 @@ from application.issue_tracker.issue_trackers.jira_issue_tracker import JiraIssu
 from application.issue_tracker.types import Issue_Tracker
 
 
-def push_observations_to_issue_tracker(
-    product: Product, observations: set[Observation]
-) -> None:
+def push_observations_to_issue_tracker(product: Product, observations: set[Observation]) -> None:
     if product.issue_tracker_active:
         for observation in observations:
             push_observation_to_issue_tracker(observation, get_current_user())
@@ -74,9 +72,7 @@ def push_observation_to_issue_tracker(observation: Observation, user: User) -> N
 
 
 @task()
-def push_deleted_observation_to_issue_tracker(
-    product: Product, issue_id: Optional[str], user: User
-) -> None:
+def push_deleted_observation_to_issue_tracker(product: Product, issue_id: Optional[str], user: User) -> None:
     try:
         if product.issue_tracker_active and issue_id:
             issue_tracker = issue_tracker_factory(product)
@@ -87,9 +83,7 @@ def push_deleted_observation_to_issue_tracker(
         handle_task_exception(e, user)
 
 
-def issue_tracker_factory(
-    product: Product, with_communication: bool = True
-) -> BaseIssueTracker:
+def issue_tracker_factory(product: Product, with_communication: bool = True) -> BaseIssueTracker:
     if product.issue_tracker_type == Issue_Tracker.ISSUE_TRACKER_GITHUB:
         return GitHubIssueTracker()
 
@@ -102,13 +96,9 @@ def issue_tracker_factory(
     raise ValueError(f"Unknown issue tracker type: {product.issue_tracker_type}")
 
 
-def _get_issue(
-    observation: Observation, issue_tracker: BaseIssueTracker
-) -> Optional[Issue]:
+def _get_issue(observation: Observation, issue_tracker: BaseIssueTracker) -> Optional[Issue]:
     if observation.issue_tracker_issue_id:
-        issue = issue_tracker.get_issue(
-            observation.product, observation.issue_tracker_issue_id
-        )
+        issue = issue_tracker.get_issue(observation.product, observation.issue_tracker_issue_id)
     else:
         issue = None
     return issue

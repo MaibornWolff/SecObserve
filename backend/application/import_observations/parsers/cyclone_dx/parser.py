@@ -59,9 +59,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             return True
         return False
 
-    def get_observations(
-        self, data: dict, product: Product, branch: Optional[Branch]
-    ) -> list[Observation]:
+    def get_observations(self, data: dict, product: Product, branch: Optional[Branch]) -> list[Observation]:
         self.components = self._get_components(data)
         self.metadata = self._get_metadata(data)
         self.dependencies = self._get_dependencies(data)
@@ -138,9 +136,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
 
         return self._get_sbom_component_with_subs(metadata_component)
 
-    def _get_sbom_component_with_subs(
-        self, component_data: dict[str, Any]
-    ) -> list[Component]:
+    def _get_sbom_component_with_subs(self, component_data: dict[str, Any]) -> list[Component]:
         components: list[Component] = []
         component = self._get_component(component_data)
         if component:
@@ -180,9 +176,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             unsaved_license=", ".join(cyclonedx_licenses),
         )
 
-    def _create_observations(  # pylint: disable=too-many-locals
-        self, data: dict
-    ) -> list[Observation]:
+    def _create_observations(self, data: dict) -> list[Observation]:  # pylint: disable=too-many-locals
         observations = []
 
         for vulnerability in data.get("vulnerabilities", []):
@@ -205,10 +199,8 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                     if component:
                         title = vulnerability_id
 
-                        observation_component_dependencies = (
-                            self._get_component_dependencies(
-                                ref, self.components, self.dependencies
-                            )
+                        observation_component_dependencies = self._get_component_dependencies(
+                            ref, self.components, self.dependencies
                         )
 
                         observation = Observation(
@@ -273,9 +265,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
 
         component_type = data.get("metadata", {}).get("component", {}).get("type")
         component_name = data.get("metadata", {}).get("component", {}).get("name", "")
-        component_version = (
-            data.get("metadata", {}).get("component", {}).get("version", "")
-        )
+        component_version = data.get("metadata", {}).get("component", {}).get("version", "")
         if component_type == "container":
             container_name = component_name
             if component_version and component_version.startswith("sha256:"):
@@ -293,9 +283,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             file=file,
         )
 
-    def _get_cvss(
-        self, vulnerability: dict, version: int
-    ) -> tuple[Optional[float], str]:
+    def _get_cvss(self, vulnerability: dict, version: int) -> tuple[Optional[float], str]:
         ratings = vulnerability.get("ratings", [])
         if ratings:
             cvss_score = 0
@@ -317,9 +305,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         ratings = vulnerability.get("ratings", [])
         if ratings:
             for rating in ratings:
-                severity = rating.get(
-                    "severity", Severity.SEVERITY_UNKNOWN
-                ).capitalize()
+                severity = rating.get("severity", Severity.SEVERITY_UNKNOWN).capitalize()
                 numerical_severity = Severity.NUMERICAL_SEVERITIES.get(severity, 99)
                 if numerical_severity < current_numerical_severity:
                     current_severity = severity
@@ -383,9 +369,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         dependency_dict: dict[str, list[str]],
     ) -> str:
         dependencies: list[str] = []
-        self._get_dependencies_recursive(
-            component_bom_ref, component_dict, dependency_dict, dependencies
-        )
+        self._get_dependencies_recursive(component_bom_ref, component_dict, dependency_dict, dependencies)
 
         dependencies.sort()
         return "\n".join(dependencies)
@@ -399,22 +383,14 @@ class CycloneDXParser(BaseParser, BaseFileParser):
     ) -> None:
         if component_bom_ref in dependency_dict.keys():
             for dependency_id in dependency_dict[component_bom_ref]:
-                translated_dependency_id = self._translate_package_id(
-                    dependency_id, component_dict
-                )
-                translated_package_id = self._translate_package_id(
-                    component_bom_ref, component_dict
-                )
+                translated_dependency_id = self._translate_package_id(dependency_id, component_dict)
+                translated_package_id = self._translate_package_id(component_bom_ref, component_dict)
                 dependency = f"{translated_dependency_id} --> {translated_package_id}"
                 if dependency not in dependencies:
                     dependencies.append(dependency)
-                    self._get_dependencies_recursive(
-                        dependency_id, component_dict, dependency_dict, dependencies
-                    )
+                    self._get_dependencies_recursive(dependency_id, component_dict, dependency_dict, dependencies)
 
-    def _translate_package_id(
-        self, component_bom_ref: str, component_dict: dict[str, Component]
-    ) -> str:
+    def _translate_package_id(self, component_bom_ref: str, component_dict: dict[str, Component]) -> str:
         component = component_dict.get(component_bom_ref)
         if not component:
             logger.warning("Component with BOM ref %s not found", component_bom_ref)

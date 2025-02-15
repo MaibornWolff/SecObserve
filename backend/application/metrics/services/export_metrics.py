@@ -12,14 +12,10 @@ from application.metrics.queries.product_metrics import get_product_metrics
 
 def export_product_metrics_excel(product: Optional[Product]) -> Workbook:
     product_metrics = _get_product_metrics(product)
-    return export_excel(
-        product_metrics, "Product Metrics", _get_excludes(), _get_foreign_keys()
-    )
+    return export_excel(product_metrics, "Product Metrics", _get_excludes(), _get_foreign_keys())
 
 
-def export_product_metrics_csv(
-    response: HttpResponse, product: Optional[Product]
-) -> None:
+def export_product_metrics_csv(response: HttpResponse, product: Optional[Product]) -> None:
     product_metrics = _get_product_metrics(product)
     return export_csv(
         response,

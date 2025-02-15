@@ -17,9 +17,7 @@ def get_parser_by_name(name: str) -> Optional[Parser]:
         return None
 
 
-def get_parser_by_module_and_class(
-    module_name: str, class_name: str
-) -> Optional[Parser]:
+def get_parser_by_module_and_class(module_name: str, class_name: str) -> Optional[Parser]:
     try:
         return Parser.objects.get(module_name=module_name, class_name=class_name)
     except Parser.DoesNotExist:

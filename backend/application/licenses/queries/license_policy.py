@@ -29,8 +29,5 @@ def get_license_policies() -> QuerySet[License_Policy]:
     products = get_products(is_product_group=False)
 
     return license_policies.filter(
-        Q(users=user)
-        | Q(authorization_groups__users=user)
-        | Q(is_public=True)
-        | Q(product__in=products)
+        Q(users=user) | Q(authorization_groups__users=user) | Q(is_public=True) | Q(product__in=products)
     ).distinct()

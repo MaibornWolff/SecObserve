@@ -25,17 +25,13 @@ def get_license_policy_authorization_group_member(
         return None
 
 
-def get_license_policy_authorization_group_members() -> (
-    QuerySet[License_Policy_Authorization_Group_Member]
-):
+def get_license_policy_authorization_group_members() -> QuerySet[License_Policy_Authorization_Group_Member]:
     user = get_current_user()
 
     if user is None:
         return License_Policy_Authorization_Group_Member.objects.none()
 
-    license_policy_authorization_group_members = (
-        License_Policy_Authorization_Group_Member.objects.all().order_by("id")
-    )
+    license_policy_authorization_group_members = License_Policy_Authorization_Group_Member.objects.all().order_by("id")
 
     if user.is_superuser:
         return license_policy_authorization_group_members

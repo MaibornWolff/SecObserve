@@ -46,9 +46,7 @@ class TestAuthorizationLicensePolicyMembers(TestAuthorizationBase):
                 no_second_user=True,
             )
         )
-        expected_data = (
-            "{'message': 'No License_Policy_Member matches the given query.'}"
-        )
+        expected_data = "{'message': 'No License_Policy_Member matches the given query.'}"
         self._test_api(
             APITest(
                 "db_internal_write",
@@ -87,9 +85,7 @@ class TestAuthorizationLicensePolicyMembers(TestAuthorizationBase):
         )
 
         post_data = {"license_policy": 1000, "user": 6, "is_manager": False}
-        expected_data = (
-            "{'message': 'You do not have permission to perform this action.'}"
-        )
+        expected_data = "{'message': 'You do not have permission to perform this action.'}"
         self._test_api(
             APITest(
                 "db_internal_write",
@@ -128,9 +124,7 @@ class TestAuthorizationLicensePolicyMembers(TestAuthorizationBase):
             )
         )
 
-        expected_data = (
-            "{'message': 'You do not have permission to perform this action.'}"
-        )
+        expected_data = "{'message': 'You do not have permission to perform this action.'}"
         self._test_api(
             APITest(
                 "db_internal_read",

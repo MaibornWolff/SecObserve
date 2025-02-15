@@ -28,9 +28,7 @@ class TestExceptionHandler(BaseTestCase):
         response = custom_exception_handler(exception, None)
 
         self.assertEqual(HTTP_409_CONFLICT, response.status_code)
-        data = {
-            "message": "Cannot delete Product because it still has Services, Observations."
-        }
+        data = {"message": "Cannot delete Product because it still has Services, Observations."}
         self.assertEqual(data, response.data)
 
     def test_protected_error_raw(self):

@@ -107,11 +107,7 @@ class Migration(migrations.Migration):
                 ),
             ],
             options={
-                "indexes": [
-                    models.Index(
-                        fields=["product_purl"], name="vex_vex_sta_product_990b30_idx"
-                    )
-                ],
+                "indexes": [models.Index(fields=["product_purl"], name="vex_vex_sta_product_990b30_idx")],
             },
         ),
     ]

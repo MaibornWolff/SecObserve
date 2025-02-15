@@ -88,9 +88,7 @@ class StatusSettingsView(APIView):
         }
 
         if request.user.is_authenticated:
-            content["risk_acceptance_expiry_days"] = (
-                settings.risk_acceptance_expiry_days
-            )
+            content["risk_acceptance_expiry_days"] = settings.risk_acceptance_expiry_days
 
         return Response(content)
 
@@ -100,18 +98,14 @@ class SettingsView(APIView):
     permission_classes = (IsAuthenticated, UserHasSuperuserPermission)
 
     @action(detail=True, methods=["get"], url_name="settings")
-    def get(
-        self, request: Request, pk: int = None  # pylint: disable=unused-argument
-    ) -> Response:
+    def get(self, request: Request, pk: int = None) -> Response:  # pylint: disable=unused-argument
         # pk is needed for the API signature but we don't need it
         settings = Settings.load()
         response_serializer = SettingsSerializer(settings)
         return Response(response_serializer.data)
 
     @action(detail=True, methods=["patch"], url_name="settings")
-    def patch(
-        self, request: Request, pk: int = None  # pylint: disable=unused-argument
-    ) -> Response:
+    def patch(self, request: Request, pk: int = None) -> Response:  # pylint: disable=unused-argument
         # pk is needed for the API signature but we don't need it
         request_serializer = SettingsSerializer(data=request.data)
         if not request_serializer.is_valid():
@@ -124,9 +118,7 @@ class SettingsView(APIView):
         return Response(response_serializer.data)
 
 
-class NotificationViewSet(
-    GenericViewSet, DestroyModelMixin, ListModelMixin, RetrieveModelMixin
-):
+class NotificationViewSet(GenericViewSet, DestroyModelMixin, ListModelMixin, RetrieveModelMixin):
     serializer_class = NotificationSerializer
     filterset_class = NotificationFilter
     permission_classes = (IsAuthenticated, UserHasNotificationPermission)

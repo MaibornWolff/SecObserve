@@ -43,9 +43,7 @@ class JWTAuthentication(BaseAuthentication):
             raise AuthenticationFailed("Invalid token header: No credentials provided.")
 
         if len(auth) > 2:
-            raise AuthenticationFailed(
-                "Invalid token header: Token string should not contain spaces."
-            )
+            raise AuthenticationFailed("Invalid token header: Token string should not contain spaces.")
 
         auth_prefix = auth[0].decode("UTF-8")
         auth_token = auth[1].decode("UTF-8")
@@ -68,9 +66,7 @@ class JWTAuthentication(BaseAuthentication):
 
     def _validate_jwt(self, token: str) -> Optional[User]:
         try:
-            payload = jwt.decode(
-                token, JWT_Secret.load().secret, algorithms=[ALGORITHM]
-            )
+            payload = jwt.decode(token, JWT_Secret.load().secret, algorithms=[ALGORITHM])
             username = payload.get("username")
             if not username:
                 raise AuthenticationFailed("No username in JWT")

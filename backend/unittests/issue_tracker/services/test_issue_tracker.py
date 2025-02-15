@@ -29,21 +29,15 @@ class TestIssueTracker(BaseTestCase):
 
     # --- push_observations_to_issue_tracker ---
 
-    @patch(
-        "application.issue_tracker.services.issue_tracker.push_observation_to_issue_tracker"
-    )
+    @patch("application.issue_tracker.services.issue_tracker.push_observation_to_issue_tracker")
     def test_push_observations_to_issue_tracker_not_active(self, mock):
         product = Product.objects.get(pk=1)
         push_observations_to_issue_tracker(product, False)
         mock.assert_not_called()
 
-    @patch(
-        "application.issue_tracker.services.issue_tracker.push_observation_to_issue_tracker"
-    )
+    @patch("application.issue_tracker.services.issue_tracker.push_observation_to_issue_tracker")
     @patch("application.issue_tracker.services.issue_tracker.get_current_user")
-    def test_push_observations_to_issue_tracker(
-        self, mock_current_user, mock_issue_tracker
-    ):
+    def test_push_observations_to_issue_tracker(self, mock_current_user, mock_issue_tracker):
         product = Product.objects.get(pk=1)
         product.issue_tracker_active = True
         observation = Observation.objects.get(pk=1)
@@ -74,9 +68,7 @@ class TestIssueTracker(BaseTestCase):
 
     @patch("application.issue_tracker.services.issue_tracker.issue_tracker_factory")
     @patch("application.core.models.Observation.save")
-    def test_push_observation_to_issue_tracker_open_no_id_no_issue(
-        self, observation_mock, mock
-    ):
+    def test_push_observation_to_issue_tracker_open_no_id_no_issue(self, observation_mock, mock):
         mock.return_value.get_issue.return_value = None
 
         observation = Observation.objects.get(pk=1)
@@ -91,9 +83,7 @@ class TestIssueTracker(BaseTestCase):
 
     @patch("application.issue_tracker.services.issue_tracker.issue_tracker_factory")
     @patch("application.core.models.Observation.save")
-    def test_push_observation_to_issue_tracker_open_with_id_with_issue(
-        self, observation_mock, factory_mock
-    ):
+    def test_push_observation_to_issue_tracker_open_with_id_with_issue(self, observation_mock, factory_mock):
         issue = Issue(id=1, title="title", description="description", labels="labels")
         factory_mock.return_value.get_issue.return_value = issue
 
@@ -114,9 +104,7 @@ class TestIssueTracker(BaseTestCase):
 
     @patch("application.issue_tracker.services.issue_tracker.issue_tracker_factory")
     @patch("application.core.models.Observation.save")
-    def test_push_observation_to_issue_tracker_closed_no_id_no_issue(
-        self, observation_mock, factory_mock
-    ):
+    def test_push_observation_to_issue_tracker_closed_no_id_no_issue(self, observation_mock, factory_mock):
         factory_mock.return_value.get_issue.return_value = None
 
         observation = Observation.objects.get(pk=1)
@@ -131,9 +119,7 @@ class TestIssueTracker(BaseTestCase):
 
     @patch("application.issue_tracker.services.issue_tracker.issue_tracker_factory")
     @patch("application.core.models.Observation.save")
-    def test_push_observation_to_issue_tracker_closed_with_id_with_issue(
-        self, observation_mock, factory_mock
-    ):
+    def test_push_observation_to_issue_tracker_closed_with_id_with_issue(self, observation_mock, factory_mock):
         issue = Issue(id=1, title="title", description="description", labels="labels")
         factory_mock.return_value.get_issue.return_value = issue
 
@@ -154,9 +140,7 @@ class TestIssueTracker(BaseTestCase):
 
     @patch("application.issue_tracker.services.issue_tracker.issue_tracker_factory")
     @patch("application.issue_tracker.services.issue_tracker.handle_task_exception")
-    def test_push_observation_to_issue_tracker_exception(
-        self, exception_mock, factory_mock
-    ):
+    def test_push_observation_to_issue_tracker_exception(self, exception_mock, factory_mock):
         exception = Exception("error")
         factory_mock.side_effect = exception
 
@@ -170,9 +154,7 @@ class TestIssueTracker(BaseTestCase):
 
     @patch("application.issue_tracker.services.issue_tracker.issue_tracker_factory")
     @patch("application.core.models.Observation.save")
-    def test_push_observation_to_issue_tracker_with_issue_higher_than_minimum(
-        self, observation_mock, factory_mock
-    ):
+    def test_push_observation_to_issue_tracker_with_issue_higher_than_minimum(self, observation_mock, factory_mock):
         issue = Issue(id=1, title="title", description="description", labels="labels")
         factory_mock.return_value.get_issue.return_value = issue
 
@@ -181,9 +163,7 @@ class TestIssueTracker(BaseTestCase):
         observation.product.issue_tracker_minimum_severity = Severity.SEVERITY_HIGH
         observation.current_status = Status.STATUS_OPEN
         observation.current_severity = Severity.SEVERITY_HIGH
-        observation.numerical_severity = Severity.NUMERICAL_SEVERITIES.get(
-            observation.current_severity, 99
-        )
+        observation.numerical_severity = Severity.NUMERICAL_SEVERITIES.get(observation.current_severity, 99)
         observation.issue_tracker_issue_id = "123"
 
         push_observation_to_issue_tracker(observation, None)
@@ -198,9 +178,7 @@ class TestIssueTracker(BaseTestCase):
 
     @patch("application.issue_tracker.services.issue_tracker.issue_tracker_factory")
     @patch("application.core.models.Observation.save")
-    def test_push_observation_to_issue_tracker_with_issue_higher_than_minimum(
-        self, observation_mock, factory_mock
-    ):
+    def test_push_observation_to_issue_tracker_with_issue_higher_than_minimum(self, observation_mock, factory_mock):
         issue = Issue(id=1, title="title", description="description", labels="labels")
         factory_mock.return_value.get_issue.return_value = issue
 
@@ -209,9 +187,7 @@ class TestIssueTracker(BaseTestCase):
         observation.product.issue_tracker_minimum_severity = Severity.SEVERITY_HIGH
         observation.current_status = Status.STATUS_OPEN
         observation.current_severity = Severity.SEVERITY_HIGH
-        observation.numerical_severity = Severity.NUMERICAL_SEVERITIES.get(
-            observation.current_severity, 99
-        )
+        observation.numerical_severity = Severity.NUMERICAL_SEVERITIES.get(observation.current_severity, 99)
         observation.issue_tracker_issue_id = "123"
 
         push_observation_to_issue_tracker(observation, None)
@@ -228,9 +204,7 @@ class TestIssueTracker(BaseTestCase):
 
     @patch("application.issue_tracker.services.issue_tracker.issue_tracker_factory")
     @patch("application.core.models.Observation.save")
-    def test_push_observation_to_issue_tracker_no_issue_lower_than_minimum(
-        self, observation_mock, factory_mock
-    ):
+    def test_push_observation_to_issue_tracker_no_issue_lower_than_minimum(self, observation_mock, factory_mock):
         factory_mock.return_value.get_issue.return_value = None
 
         observation = Observation.objects.get(pk=1)
@@ -238,9 +212,7 @@ class TestIssueTracker(BaseTestCase):
         observation.product.issue_tracker_minimum_severity = Severity.SEVERITY_HIGH
         observation.current_status = Status.STATUS_OPEN
         observation.current_severity = Severity.SEVERITY_MEDIUM
-        observation.numerical_severity = Severity.NUMERICAL_SEVERITIES.get(
-            observation.current_severity, 99
-        )
+        observation.numerical_severity = Severity.NUMERICAL_SEVERITIES.get(observation.current_severity, 99)
 
         push_observation_to_issue_tracker(observation, None)
 
@@ -263,9 +235,7 @@ class TestIssueTracker(BaseTestCase):
         observation.product.issue_tracker_minimum_severity = Severity.SEVERITY_HIGH
         observation.current_status = Status.STATUS_OPEN
         observation.current_severity = Severity.SEVERITY_MEDIUM
-        observation.numerical_severity = Severity.NUMERICAL_SEVERITIES.get(
-            observation.current_severity, 99
-        )
+        observation.numerical_severity = Severity.NUMERICAL_SEVERITIES.get(observation.current_severity, 99)
         observation.issue_tracker_issue_id = "123"
 
         push_observation_to_issue_tracker(observation, None)
@@ -291,9 +261,7 @@ class TestIssueTracker(BaseTestCase):
         observation.product.issue_tracker_minimum_severity = Severity.SEVERITY_HIGH
         observation.current_status = Status.STATUS_OPEN
         observation.current_severity = Severity.SEVERITY_MEDIUM
-        observation.numerical_severity = Severity.NUMERICAL_SEVERITIES.get(
-            observation.current_severity, 99
-        )
+        observation.numerical_severity = Severity.NUMERICAL_SEVERITIES.get(observation.current_severity, 99)
         observation.issue_tracker_issue_id = "123"
         observation.issue_tracker_issue_closed = True
 

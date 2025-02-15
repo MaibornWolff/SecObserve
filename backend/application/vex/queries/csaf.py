@@ -17,34 +17,24 @@ def get_csafs() -> QuerySet[CSAF]:
     csafs = CSAF.objects.all()
 
     if not user.is_superuser:
-        product_members = Product_Member.objects.filter(
-            product=OuterRef("product_id"), user=user
-        )
-        product_group_members = Product_Member.objects.filter(
-            product=OuterRef("product__product_group"), user=user
+        product_members = Product_Member.objects.filter(product=OuterRef("product_id"), user=user)
+        product_group_members = Product_Member.objects.filter(product=OuterRef("product__product_group"), user=user)
+
+        product_authorization_group_members = Product_Authorization_Group_Member.objects.filter(
+            product=OuterRef("product_id"),
+            authorization_group__users=user,
         )
 
-        product_authorization_group_members = (
-            Product_Authorization_Group_Member.objects.filter(
-                product=OuterRef("product_id"),
-                authorization_group__users=user,
-            )
-        )
-
-        product_group_authorization_group_members = (
-            Product_Authorization_Group_Member.objects.filter(
-                product=OuterRef("product__product_group"),
-                authorization_group__users=user,
-            )
+        product_group_authorization_group_members = Product_Authorization_Group_Member.objects.filter(
+            product=OuterRef("product__product_group"),
+            authorization_group__users=user,
         )
 
         csafs = csafs.annotate(
             product__member=Exists(product_members),
             product__product_group__member=Exists(product_group_members),
             authorization_group_member=Exists(product_authorization_group_members),
-            product_group_authorization_group_member=Exists(
-                product_group_authorization_group_members
-            ),
+            product_group_authorization_group_member=Exists(product_group_authorization_group_members),
         )
 
         csafs = csafs.filter(
@@ -58,18 +48,14 @@ def get_csafs() -> QuerySet[CSAF]:
     return csafs
 
 
-def get_csaf_by_document_id(
-    document_id_prefix: str, document_base_id: str
-) -> Optional[CSAF]:
+def get_csaf_by_document_id(document_id_prefix: str, document_base_id: str) -> Optional[CSAF]:
     user = get_current_user()
 
     if user is None:
         return None
 
     try:
-        csaf = CSAF.objects.get(
-            document_id_prefix=document_id_prefix, document_base_id=document_base_id
-        )
+        csaf = CSAF.objects.get(document_id_prefix=document_id_prefix, document_base_id=document_base_id)
         if not user.is_superuser and csaf not in get_csafs():
             return None
         return csaf

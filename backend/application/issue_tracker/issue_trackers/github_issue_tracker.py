@@ -96,9 +96,7 @@ class GitHubIssueTracker(BaseIssueTracker):
         )
         response.raise_for_status()
 
-    def close_issue_for_deleted_observation(
-        self, product: Product, issue: Issue
-    ) -> None:
+    def close_issue_for_deleted_observation(self, product: Product, issue: Issue) -> None:
         data: dict[str, Any] = {
             "body": self._get_description_for_deleted_observation(issue.description),
             "state": "closed",
@@ -115,9 +113,7 @@ class GitHubIssueTracker(BaseIssueTracker):
         response.raise_for_status()
 
     def get_frontend_issue_url(self, product: Product, issue_id: str) -> str:
-        return (
-            f"https://github.com/{product.issue_tracker_project_id}/issues/{issue_id}"
-        )
+        return f"https://github.com/{product.issue_tracker_project_id}/issues/{issue_id}"
 
     def _get_issue_tracker_base_url(self, product: Product) -> str:
         return f"https://api.github.com/repos/{product.issue_tracker_project_id}/issues"

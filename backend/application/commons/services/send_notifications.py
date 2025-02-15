@@ -197,20 +197,10 @@ def send_task_exception_notification(
         )
 
 
-def _ratelimit_exception(
-    exception: Exception, function: str = None, arguments: dict = None
-) -> bool:
+def _ratelimit_exception(exception: Exception, function: str = None, arguments: dict = None) -> bool:
     settings = Settings.load()
 
-    key = (
-        get_classname(exception)
-        + "/"
-        + str(exception)
-        + "/"
-        + str(function)
-        + "/"
-        + _get_arguments_string(arguments)
-    )
+    key = get_classname(exception) + "/" + str(exception) + "/" + str(function) + "/" + _get_arguments_string(arguments)
     now = datetime.now()
 
     if key in LAST_EXCEPTIONS:

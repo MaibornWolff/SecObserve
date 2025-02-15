@@ -115,9 +115,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "product",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.PROTECT, to="core.product"
-                    ),
+                    models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to="core.product"),
                 ),
             ],
         ),
@@ -138,9 +136,7 @@ class Migration(migrations.Migration):
                 ("is_public", models.BooleanField(default=False)),
                 (
                     "licenses",
-                    models.ManyToManyField(
-                        related_name="license_groups", to="licenses.license"
-                    ),
+                    models.ManyToManyField(related_name="license_groups", to="licenses.license"),
                 ),
             ],
         ),

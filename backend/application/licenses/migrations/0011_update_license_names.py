@@ -4,9 +4,7 @@ from django.db import migrations
 
 def update_license_names(apps, schema_editor):
     License_Component = apps.get_model("licenses", "License_Component")
-    license_components = License_Component.objects.filter(license_name="").order_by(
-        "id"
-    )
+    license_components = License_Component.objects.filter(license_name="").order_by("id")
 
     paginator = Paginator(license_components, 1000)
     for page_number in paginator.page_range:
