@@ -1,6 +1,6 @@
 import json
 from dataclasses import dataclass
-from typing import Optional
+from typing import Any, Optional
 
 import requests
 
@@ -22,7 +22,7 @@ class KubernetesResource:
 
 
 class TrivyOperatorPrometheus(BaseParser, BaseAPIParser):
-    def __init__(self):
+    def __init__(self) -> None:
         self.api_configuration: Optional[Api_Configuration] = None
 
     @classmethod
@@ -78,7 +78,7 @@ class TrivyOperatorPrometheus(BaseParser, BaseAPIParser):
 
         return True, [], response.json()
 
-    def check_format(self, import_data) -> tuple[bool, list[str], dict]:
+    def check_format(self, import_data: Any) -> tuple[bool, list[str], dict]:
         try:
             data = json.load(import_data)
         except Exception:
@@ -160,7 +160,7 @@ class TrivyOperatorPrometheus(BaseParser, BaseAPIParser):
 
         return observations
 
-    def _create_compliance_observation(self, finding) -> Observation:
+    def _create_compliance_observation(self, finding: dict) -> Observation:
         title = finding.get("metric", {}).get("title", "")
         compliance_name = finding.get("metric", {}).get("compliance_name", "")
         compliance_id = finding.get("metric", {}).get("compliance_id", "")
@@ -175,7 +175,7 @@ class TrivyOperatorPrometheus(BaseParser, BaseAPIParser):
             ),
         )
 
-    def _create_config_audit_observation(self, finding) -> Observation:
+    def _create_config_audit_observation(self, finding: dict) -> Observation:
         config_audit_title = finding.get("metric", {}).get("config_audit_title", "")
         config_audit_description = finding.get("metric", {}).get(
             "config_audit_description", ""
@@ -191,7 +191,7 @@ class TrivyOperatorPrometheus(BaseParser, BaseAPIParser):
             ),
         )
 
-    def _create_exposedsecrets_observation(self, finding) -> Observation:
+    def _create_exposedsecrets_observation(self, finding: dict) -> Observation:
         image_registry = finding.get("metric", {}).get("image_registry", "")
         image_repository = finding.get("metric", {}).get("image_repository", "")
         image_tag = finding.get("metric", {}).get("image_tag", "")
@@ -207,7 +207,7 @@ class TrivyOperatorPrometheus(BaseParser, BaseAPIParser):
             origin_source_file=secret_target,
         )
 
-    def _create_rbac_assessment_observation(self, finding) -> Observation:
+    def _create_rbac_assessment_observation(self, finding: dict) -> Observation:
         rbac_assessment_title = finding.get("metric", {}).get(
             "rbac_assessment_title", ""
         )
@@ -225,7 +225,7 @@ class TrivyOperatorPrometheus(BaseParser, BaseAPIParser):
             ),
         )
 
-    def _create_vulnerability_observation(self, finding) -> Observation:
+    def _create_vulnerability_observation(self, finding: dict) -> Observation:
         origin_component_name = finding.get("metric", {}).get("resource", "")
         vuln_title = finding.get("metric", {}).get("vuln_title", "")
         vulnerability_id = finding.get("metric", {}).get("vuln_id", "")
@@ -264,8 +264,8 @@ class TrivyOperatorPrometheus(BaseParser, BaseAPIParser):
 
     def _get_vulnerability_recommendation(
         self,
-        fixed_version,
-        origin_component_version,
+        fixed_version: str,
+        origin_component_version: str,
     ) -> str:
         recommendation = ""
         if fixed_version:
@@ -308,7 +308,7 @@ class TrivyOperatorPrometheus(BaseParser, BaseAPIParser):
 
         return Severity.SEVERITY_UNKNOWN
 
-    def _get_kubernetes_resource(self, finding) -> KubernetesResource:
+    def _get_kubernetes_resource(self, finding: dict) -> KubernetesResource:
         return KubernetesResource(
             namespace=finding.get("metric", {}).get("namespace", ""),
             resource_kind=finding.get("metric", {}).get("resource_kind", ""),

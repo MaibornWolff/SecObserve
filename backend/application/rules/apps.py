@@ -6,7 +6,7 @@ class RulesConfig(AppConfig):
     name = "application.rules"
     verbose_name = _("Rules")
 
-    def ready(self):
+    def ready(self) -> None:
         try:
             import application.rules.signals  # noqa F401 pylint: disable=import-outside-toplevel,unused-import
         except ImportError:

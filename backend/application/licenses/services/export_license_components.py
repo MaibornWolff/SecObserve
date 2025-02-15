@@ -41,7 +41,7 @@ def _get_license_components(product: Product) -> QuerySet:
     return license_components
 
 
-def _get_excludes():
+def _get_excludes() -> list[str]:
     return [
         "identity_hash",
         "pk",
@@ -51,5 +51,5 @@ def _get_excludes():
     ]
 
 
-def _get_foreign_keys():
+def _get_foreign_keys() -> list[str]:
     return ["branch", "license", "product"]

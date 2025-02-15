@@ -246,14 +246,16 @@ def get_observation_logs() -> QuerySet[Observation_Log]:
     return observation_logs
 
 
-def get_current_observation_log(observation: Observation):
+def get_current_observation_log(observation: Observation) -> Optional[Observation_Log]:
     try:
         return Observation_Log.objects.filter(observation=observation).latest("created")
     except Observation_Log.DoesNotExist:
         return None
 
 
-def get_current_modifying_observation_log(observation: Observation):
+def get_current_modifying_observation_log(
+    observation: Observation,
+) -> Optional[Observation_Log]:
     try:
         return Observation_Log.objects.filter(
             Q(observation_id=observation.id)

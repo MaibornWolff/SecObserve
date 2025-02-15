@@ -1,6 +1,9 @@
+from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import BasePermission
+from rest_framework.request import Request
+from rest_framework.views import APIView
 
 from application.access_control.queries.authorization_group import (
     get_authorization_groups,
@@ -16,13 +19,22 @@ from application.licenses.models import (
 
 
 class UserHasLicenseGroupPermission(BasePermission):
-    def has_permission(self, request, view):
+    def has_permission(self, request: Request, view: APIView) -> bool:
         if request.method == "POST":
-            return not request.user.is_external
+            user = request.user
+            if not user:
+                return False
+
+            if isinstance(user, AnonymousUser):
+                return False
+
+            return not user.is_external
 
         return True
 
-    def has_object_permission(self, request, view, obj: License_Group):
+    def has_object_permission(
+        self, request: Request, view: APIView, obj: License_Group
+    ) -> bool:
         if request.method != "GET":
             return _has_license_group_manage_permission(request, obj)
 
@@ -30,7 +42,7 @@ class UserHasLicenseGroupPermission(BasePermission):
 
 
 class UserHasLicenseGroupMemberPermission(BasePermission):
-    def has_permission(self, request, view):
+    def has_permission(self, request: Request, view: APIView) -> bool:
         if request.method == "POST":
             license_group = get_object_or_404(
                 License_Group, pk=request.data.get("license_group")
@@ -39,7 +51,9 @@ class UserHasLicenseGroupMemberPermission(BasePermission):
 
         return True
 
-    def has_object_permission(self, request, view, obj: License_Group_Member):
+    def has_object_permission(
+        self, request: Request, view: APIView, obj: License_Group_Member
+    ) -> bool:
         if request.method != "GET":
             return _has_license_group_manage_permission(request, obj.license_group)
 
@@ -47,23 +61,32 @@ class UserHasLicenseGroupMemberPermission(BasePermission):
 
 
 class UserHasLicenseGroupAuthenticationGroupMemberPermission(BasePermission):
-    def has_permission(self, request, view):
+    def has_permission(self, request: Request, view: APIView) -> bool:
         if request.method == "POST":
             license_group = get_object_or_404(
                 License_Group, pk=request.data.get("license_group")
             )
 
+            authorization_group = request.data.get("authorization_group")
+            if not authorization_group:
+                raise ValueError("No Authorization_Group provided")
+
+            if not isinstance(authorization_group, int):
+                raise ValueError("Authorization_Group must be an integer")
+
             authorization_groups = get_authorization_groups().values_list(
                 "id", flat=True
             )
-            if request.data.get("authorization_group") not in authorization_groups:
+            if authorization_group not in authorization_groups:
                 raise NotFound("Authorization_Group not found.")
 
             return _has_license_group_manage_permission(request, license_group)
 
         return True
 
-    def has_object_permission(self, request, view, obj: License_Group_Member):
+    def has_object_permission(
+        self, request: Request, view: APIView, obj: License_Group_Member
+    ) -> bool:
         if request.method != "GET":
             return _has_license_group_manage_permission(request, obj.license_group)
 
@@ -71,13 +94,22 @@ class UserHasLicenseGroupAuthenticationGroupMemberPermission(BasePermission):
 
 
 class UserHasLicensePolicyPermission(BasePermission):
-    def has_permission(self, request, view):
+    def has_permission(self, request: Request, view: APIView) -> bool:
         if request.method == "POST":
-            return not request.user.is_external
+            user = request.user
+            if not user:
+                return False
+
+            if isinstance(user, AnonymousUser):
+                return False
+
+            return not user.is_external
 
         return True
 
-    def has_object_permission(self, request, view, obj: License_Policy):
+    def has_object_permission(
+        self, request: Request, view: APIView, obj: License_Policy
+    ) -> bool:
         if request.method != "GET":
             return _has_license_policy_manage_permission(request, obj)
 
@@ -85,7 +117,7 @@ class UserHasLicensePolicyPermission(BasePermission):
 
 
 class UserHasLicensePolicyItemMemberPermission(BasePermission):
-    def has_permission(self, request, view):
+    def has_permission(self, request: Request, view: APIView) -> bool:
         if request.method == "POST":
             license_policy = get_object_or_404(
                 License_Policy, pk=request.data.get("license_policy")
@@ -94,7 +126,9 @@ class UserHasLicensePolicyItemMemberPermission(BasePermission):
 
         return True
 
-    def has_object_permission(self, request, view, obj: License_Policy_Member):
+    def has_object_permission(
+        self, request: Request, view: APIView, obj: License_Policy_Member
+    ) -> bool:
         if request.method != "GET":
             return _has_license_policy_manage_permission(request, obj.license_policy)
 
@@ -102,32 +136,50 @@ class UserHasLicensePolicyItemMemberPermission(BasePermission):
 
 
 class UserHasLicensePolicyAuthorizationGroupMemberPermission(BasePermission):
-    def has_permission(self, request, view):
+    def has_permission(self, request: Request, view: APIView) -> bool:
         if request.method == "POST":
             license_policy = get_object_or_404(
                 License_Policy, pk=request.data.get("license_policy")
             )
 
+            authorization_group = request.data.get("authorization_group")
+            if not authorization_group:
+                raise ValueError("No Authorization_Group provided")
+
+            if not isinstance(authorization_group, int):
+                raise ValueError("Authorization_Group must be an integer")
+
             authorization_groups = get_authorization_groups().values_list(
                 "id", flat=True
             )
-            if request.data.get("authorization_group") not in authorization_groups:
+            if authorization_group not in authorization_groups:
                 raise NotFound("Authorization_Group not found.")
 
             return _has_license_policy_manage_permission(request, license_policy)
 
         return True
 
-    def has_object_permission(self, request, view, obj: License_Policy_Member):
+    def has_object_permission(
+        self, request: Request, view: APIView, obj: License_Policy_Member
+    ) -> bool:
         if request.method != "GET":
             return _has_license_policy_manage_permission(request, obj.license_policy)
 
         return True
 
 
-def _has_license_group_manage_permission(request, license_group: License_Group) -> bool:
+def _has_license_group_manage_permission(
+    request: Request, license_group: License_Group
+) -> bool:
     user = request.user
-    if user and user.is_superuser:
+
+    if not user:
+        return False
+
+    if isinstance(user, AnonymousUser):
+        return False
+
+    if user.is_superuser:
         return True
 
     if License_Group_Member.objects.filter(
@@ -144,10 +196,17 @@ def _has_license_group_manage_permission(request, license_group: License_Group) 
 
 
 def _has_license_policy_manage_permission(
-    request, license_policy: License_Policy
+    request: Request, license_policy: License_Policy
 ) -> bool:
     user = request.user
-    if user and user.is_superuser:
+
+    if not user:
+        return False
+
+    if isinstance(user, AnonymousUser):
+        return False
+
+    if user.is_superuser:
         return True
 
     if License_Policy_Member.objects.filter(

@@ -37,7 +37,7 @@ class Metadata:
 
 
 class CycloneDXParser(BaseParser, BaseFileParser):
-    def __init__(self):
+    def __init__(self) -> None:
         self.metadata = Metadata("", "", "", "", "")
         self.components: dict[str, Component] = {}
         self.dependencies: dict[str, list[str]] = {}
@@ -70,7 +70,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
 
         return observations
 
-    def get_license_components(self, data) -> list[License_Component]:
+    def get_license_components(self, data: dict) -> list[License_Component]:
         if not self.components:
             self.components = self._get_components(data)
         if not self.metadata:
@@ -293,23 +293,25 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             file=file,
         )
 
-    def _get_cvss(self, vulnerability: dict, version: int):
+    def _get_cvss(
+        self, vulnerability: dict, version: int
+    ) -> tuple[Optional[float], str]:
         ratings = vulnerability.get("ratings", [])
         if ratings:
             cvss_score = 0
-            cvss_vector = None
+            cvss_vector = ""
             for rating in ratings:
                 method = rating.get("method")
                 if method and method.lower().startswith(f"cvssv{str(version)}"):
                     current_cvss_score = rating.get("score", 0)
                     if current_cvss_score > cvss_score:
                         cvss_score = current_cvss_score
-                        cvss_vector = rating.get("vector")
+                        cvss_vector = str(rating.get("vector"))
             if cvss_score > 0:
                 return cvss_score, cvss_vector
-        return None, None
+        return None, ""
 
-    def _get_highest_severity(self, vulnerability):
+    def _get_highest_severity(self, vulnerability: dict) -> str:
         current_severity = Severity.SEVERITY_UNKNOWN
         current_numerical_severity = 999
         ratings = vulnerability.get("ratings", [])
@@ -323,7 +325,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                     current_severity = severity
         return current_severity
 
-    def _get_cwe(self, vulnerability):
+    def _get_cwe(self, vulnerability: dict) -> Optional[str]:
         cwes = vulnerability.get("cwes", [])
         if len(cwes) >= 1:
             return cwes[0]
@@ -351,7 +353,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         vulnerability: dict,
         component: Component,
         observation: Observation,
-    ):
+    ) -> None:
         evidence = []
         evidence.append("Vulnerability")
         evidence.append(dumps(vulnerability))

@@ -23,7 +23,7 @@ STATUS_MAPPING = {
 
 
 class DependencyTrack(BaseParser, BaseAPIParser):
-    def __init__(self):
+    def __init__(self) -> None:
         self.api_configuration: Optional[Api_Configuration] = None
 
     @classmethod

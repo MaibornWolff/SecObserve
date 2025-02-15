@@ -86,7 +86,7 @@ class ApiConfigurationSerializer(ModelSerializer):
         model = Api_Configuration
         fields = "__all__"
 
-    def to_representation(self, instance):
+    def to_representation(self, instance: Api_Configuration) -> dict:
         # Only users who can edit an API Configuration are allowed to see the API key
         data = super().to_representation(instance)
 
@@ -96,7 +96,7 @@ class ApiConfigurationSerializer(ModelSerializer):
 
         return data
 
-    def validate(self, attrs: dict):
+    def validate(self, attrs: dict) -> dict:
         self.instance: Api_Configuration
         if attrs.pop("test_connection", False):
             if self.instance is not None:

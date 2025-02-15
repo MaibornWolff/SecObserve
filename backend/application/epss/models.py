@@ -1,5 +1,6 @@
 from datetime import date
 from decimal import Decimal
+from typing import Any
 
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import CharField, DateField, DecimalField, Model
@@ -24,12 +25,12 @@ class EPSS_Score(Model):
 class EPSS_Status(Model):
     score_date = DateField(default=date.today)
 
-    def save(self, *args, **kwargs):
+    def save(self, *args: Any, **kwargs: Any) -> None:
         self.pk = 1
         super().save(*args, **kwargs)
 
-    def delete(self, *args, **kwargs):
-        pass
+    def delete(self, *args: Any, **kwargs: Any) -> tuple[int, dict[str, int]]:
+        return 0, {}
 
     @classmethod
     def load(cls) -> "EPSS_Status":

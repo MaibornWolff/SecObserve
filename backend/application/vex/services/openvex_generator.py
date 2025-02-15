@@ -391,7 +391,9 @@ def get_openvex_product_by_id(
     return None
 
 
-def _add_subcomponent(observation: Observation, existing_product: OpenVEXProduct):
+def _add_subcomponent(
+    observation: Observation, existing_product: OpenVEXProduct
+) -> None:
     if get_component_id(observation):
         openvex_subcomponent = OpenVEXSubcomponent(id=get_component_id(observation))
         if openvex_subcomponent not in existing_product.subcomponents:

@@ -1,6 +1,7 @@
 from datetime import timedelta
+from typing import Any
 
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 from django.utils import timezone
 from django_filters import (
     BooleanFilter,
@@ -56,7 +57,12 @@ class ProductFilter(FilterSet):
         ),
     )
 
-    def get_age(self, queryset, field_name, value):  # pylint: disable=unused-argument
+    def get_age(
+        self,
+        queryset: QuerySet,
+        name: Any,  # pylint: disable=unused-argument
+        value: Any,
+    ) -> QuerySet:
         # field_name is used as a positional argument
 
         days = Age_Choices.get_days_from_age(value)
@@ -118,8 +124,11 @@ class BranchFilter(FilterSet):
     )
 
     def get_for_observations(
-        self, queryset, field_name, value
-    ):  # pylint: disable=unused-argument
+        self,
+        queryset: QuerySet,
+        name: Any,  # pylint: disable=unused-argument
+        value: Any,
+    ) -> QuerySet:
         # field_name is used as a positional argument
         if value:
             product_data = self.data.get("product")
@@ -146,8 +155,11 @@ class BranchFilter(FilterSet):
         return queryset
 
     def get_for_license_components(
-        self, queryset, field_name, value
-    ):  # pylint: disable=unused-argument
+        self,
+        queryset: QuerySet,
+        name: Any,  # pylint: disable=unused-argument
+        value: Any,
+    ) -> QuerySet:
         # field_name is used as a positional argument
         if value:
             product_data = self.data.get("product")
@@ -282,7 +294,12 @@ class ObservationFilter(FilterSet):
             "origin_component_purl_type",
         ]
 
-    def get_age(self, queryset, field_name, value):  # pylint: disable=unused-argument
+    def get_age(
+        self,
+        queryset: QuerySet,
+        name: Any,  # pylint: disable=unused-argument
+        value: Any,
+    ) -> QuerySet:
         # field_name is used as a positional argument
 
         days = Age_Choices.get_days_from_age(value)
@@ -387,7 +404,12 @@ class ObservationLogFilter(FilterSet):
         model = Observation_Log
         fields = ["observation", "user", "assessment_status", "status", "severity"]
 
-    def get_age(self, queryset, field_name, value):  # pylint: disable=unused-argument
+    def get_age(
+        self,
+        queryset: QuerySet,
+        name: Any,  # pylint: disable=unused-argument
+        value: Any,
+    ) -> QuerySet:
         # field_name is used as a positional argument
 
         days = Age_Choices.get_days_from_age(value)
