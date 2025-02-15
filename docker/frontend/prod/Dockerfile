@@ -24,7 +24,7 @@ WORKDIR /app/lib/runtime-env-cra
 RUN npm ci
 
 # production environment
-FROM nginx:stable-alpine-slim@sha256:e22e10bd833136245b39ffeb1a0d7c672f5597c18df4c462f327cc44fe0aa7a8
+FROM nginx:stable-alpine-slim@sha256:b72dec66dea425356956e863bfbccca6c1f8748f5913e094d4ca20b71e4ba2c3
 
 USER root
 
