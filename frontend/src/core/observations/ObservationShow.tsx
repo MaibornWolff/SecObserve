@@ -183,6 +183,7 @@ const ObservationShowComponent = () => {
                                                             label="CWE"
                                                             text={observation.cvss4_vector}
                                                             url={get_cvss4_url(observation.cvss4_vector)}
+                                                            new_tab={true}
                                                         />
                                                     </Labeled>
                                                 )}
@@ -201,6 +202,7 @@ const ObservationShowComponent = () => {
                                                             label="CWE"
                                                             text={observation.cvss3_vector}
                                                             url={get_cvss3_url(observation.cvss3_vector)}
+                                                            new_tab={true}
                                                         />
                                                     </Labeled>
                                                 )}
@@ -214,6 +216,7 @@ const ObservationShowComponent = () => {
                                             label="CWE"
                                             text={observation.cwe}
                                             url={get_cwe_url(observation.cwe)}
+                                            new_tab={true}
                                         />
                                     </Labeled>
                                 )}

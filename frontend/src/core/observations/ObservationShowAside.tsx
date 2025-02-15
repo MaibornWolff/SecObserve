@@ -91,6 +91,7 @@ const MetaData = () => {
                                         observation.issue_tracker_issue_id
                                     }
                                     url={observation.issue_tracker_issue_url}
+                                    new_tab={true}
                                 />
                             </Labeled>
                         )}

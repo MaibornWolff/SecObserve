@@ -90,7 +90,7 @@ const LicensePolicyItemEmbeddedList = ({ license_policy }: LicensePolicyItemEmbe
                                     label="License group"
                                     render={(license_group) => (
                                         <TextUrlField
-                                            label="SPDX Id"
+                                            label="License group"
                                             text={license_group.license_group_name}
                                             url={showLicenseGroup(license_group.license_group)}
                                         />
@@ -100,7 +100,7 @@ const LicensePolicyItemEmbeddedList = ({ license_policy }: LicensePolicyItemEmbe
                                     label="License"
                                     render={(license_group) => (
                                         <TextUrlField
-                                            label="SPDX Id"
+                                            label="License"
                                             text={license_group.license_spdx_id}
                                             url={showLicense(license_group.license)}
                                         />

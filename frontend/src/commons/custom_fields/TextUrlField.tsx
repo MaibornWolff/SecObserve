@@ -9,6 +9,7 @@ interface TextUrlFieldProps {
     text: string | number;
     url: string;
     label?: string | undefined;
+    new_tab?: boolean | undefined;
 }
 
 function is_valid_url(urlString: string): boolean {
@@ -42,14 +43,19 @@ const TextUrlField = (props: TextUrlFieldProps) => {
 
     return (
         <Fragment>
-            {is_valid_url(props.url) && (
+            {props.new_tab === true && is_valid_url(props.url) && (
                 <Link variant="body2" href={props.url} target="_blank" rel="noreferrer" className={classes.link}>
                     {props.text} &nbsp;
                     <LaunchIcon sx={{ fontSize: "0.8rem" }} />
                 </Link>
             )}
+            {props.new_tab !== true && is_valid_url(props.url) && (
+                <Link variant="body2" href={props.url} className={classes.link}>
+                    {props.text}
+                </Link>
+            )}
             {is_valid_relative_url(props.url) && (
-                <Link variant="body2" href={props.url} target="_blank" rel="noreferrer" className={classes.link}>
+                <Link variant="body2" href={props.url} className={classes.link}>
                     {props.text}
                 </Link>
             )}

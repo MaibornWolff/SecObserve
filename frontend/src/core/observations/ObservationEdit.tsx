@@ -150,7 +150,11 @@ const ObservationEditForm = () => {
                         sx={{ width: "10em" }}
                     />
                     <TextInputWide source="cvss4_vector" label="CVSS 4 vector" validate={validate_255} />
-                    <TextUrlField url="https://www.first.org/cvss/calculator/4.0" text="CVSS 4 calculator" />
+                    <TextUrlField
+                        url="https://www.first.org/cvss/calculator/4.0"
+                        text="CVSS 4 calculator"
+                        new_tab={true}
+                    />
                 </Stack>
                 <Stack direction="row" spacing={2} alignItems="center">
                     <NumberInput
@@ -162,7 +166,11 @@ const ObservationEditForm = () => {
                         sx={{ width: "10em" }}
                     />
                     <TextInputWide source="cvss3_vector" label="CVSS 3 vector" validate={validate_255} />
-                    <TextUrlField url="https://www.first.org/cvss/calculator/3.1" text="CVSS 3.1 calculator" />
+                    <TextUrlField
+                        url="https://www.first.org/cvss/calculator/3.1"
+                        text="CVSS 3.1 calculator"
+                        new_tab={true}
+                    />
                 </Stack>
                 <NumberInput
                     source="cwe"

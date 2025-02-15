@@ -206,6 +206,7 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
                                     <TextUrlField
                                         url="https://www.first.org/cvss/calculator/4.0"
                                         text="CVSS 4 calculator"
+                                        new_tab={true}
                                     />
                                 </Stack>
                                 <Stack direction="row" spacing={2} alignItems="center">
@@ -225,6 +226,7 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
                                     <TextUrlField
                                         url="https://www.first.org/cvss/calculator/3.1"
                                         text="CVSS 3.1 calculator"
+                                        new_tab={true}
                                     />
                                 </Stack>
                                 <NumberInput
