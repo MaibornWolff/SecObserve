@@ -1,4 +1,5 @@
 import { Paper, Stack, Typography } from "@mui/material";
+import { Fragment } from "react";
 import {
     ChipField,
     DateField,
@@ -9,6 +10,7 @@ import {
     useRecordContext,
 } from "react-admin";
 
+import observations from ".";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { useStyles } from "../../commons/layout/themes";
 import ObservationShowDescriptionRecommendation from "./ObservationShowDescriptionRecommendation";
@@ -32,8 +34,14 @@ const ObservationShowHeader = ({ observation }: ObservationShowHeaderProps) => {
         <RecordContextProvider value={observation}>
             {observation && (
                 <Paper sx={{ marginBottom: 2, padding: 2 }}>
-                    <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                        Observation
+                    <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
+                        {!in_observation_log && (
+                            <Fragment>
+                                <observations.icon />
+                                &nbsp;&nbsp;Observation
+                            </Fragment>
+                        )}
+                        {in_observation_log && <Fragment>Observation</Fragment>}
                     </Typography>
                     {in_observation_log && (
                         <Stack direction="row" spacing={4} sx={{ marginBottom: 1 }}>

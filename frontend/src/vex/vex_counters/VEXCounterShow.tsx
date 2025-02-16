@@ -1,6 +1,7 @@
 import { Stack, Typography } from "@mui/material";
 import { EditButton, NumberField, PrevNextButtons, Show, SimpleShowLayout, TextField, TopToolbar } from "react-admin";
 
+import vex_counters from ".";
 import { is_superuser } from "../../commons/functions";
 
 const ShowActions = () => {
@@ -22,8 +23,9 @@ const VEXCounterShow = () => {
     return (
         <Show actions={<ShowActions />}>
             <SimpleShowLayout>
-                <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                    VEX Counter
+                <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
+                    <vex_counters.icon />
+                    &nbsp;&nbsp;VEX Counter
                 </Typography>
                 <TextField source="document_id_prefix" label="Document ID prefix" />
                 <NumberField source="year" options={{ useGrouping: false }} />

@@ -12,6 +12,7 @@ import {
     useRecordContext,
 } from "react-admin";
 
+import license_groups from ".";
 import MarkdownField from "../../commons/custom_fields/MarkdownField";
 import { is_external, is_superuser } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
@@ -49,7 +50,10 @@ const LicenseGroupComponent = () => {
                 <Stack spacing={2} sx={{ marginBottom: 1, width: "100%" }}>
                     <Paper sx={{ marginBottom: 1, padding: 2 }}>
                         <Stack spacing={1}>
-                            <Typography variant="h6">License Group</Typography>
+                            <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
+                                <license_groups.icon />
+                                &nbsp;&nbsp;License Group
+                            </Typography>
                             <Labeled>
                                 <TextField source="name" className={classes.fontBigBold} />
                             </Labeled>

@@ -2,6 +2,7 @@ import { Divider, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import { BooleanInput, Create, ReferenceInput, SimpleForm } from "react-admin";
 
+import general_rules from ".";
 import {
     validate_255,
     validate_513,
@@ -69,8 +70,9 @@ const GeneralRuleCreate = () => {
     return (
         <Create redirect="show" transform={transform}>
             <SimpleForm warnWhenUnsavedChanges validate={validateRuleForm}>
-                <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                    General Rule
+                <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
+                    <general_rules.icon />
+                    &nbsp;&nbsp;General Rule
                 </Typography>
                 <Stack>
                     <TextInputWide autoFocus source="name" validate={validate_required_255} />

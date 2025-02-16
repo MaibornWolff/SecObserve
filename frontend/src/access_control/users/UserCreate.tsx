@@ -1,6 +1,7 @@
 import { Divider, Typography } from "@mui/material";
 import { BooleanInput, Create, SimpleForm } from "react-admin";
 
+import users from ".";
 import { validate_150, validate_255, validate_required_150 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 
@@ -24,8 +25,9 @@ const UserCreate = () => {
     return (
         <Create redirect="show" transform={transform}>
             <SimpleForm warnWhenUnsavedChanges>
-                <Typography variant="h6" sx={{ marginBottom: 2 }}>
-                    User
+                <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
+                    <users.icon />
+                    &nbsp;&nbsp;User
                 </Typography>
                 <TextInputWide autoFocus source="username" validate={validate_required_150} />
                 <TextInputWide source="full_name" validate={validate_255} />

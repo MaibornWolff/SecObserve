@@ -15,6 +15,7 @@ import {
     useRecordContext,
 } from "react-admin";
 
+import observations from ".";
 import { PERMISSION_OBSERVATION_DELETE } from "../../access_control/types";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import {
@@ -55,8 +56,9 @@ const ObservationEditForm = () => {
 
     return (
         <SimpleForm warnWhenUnsavedChanges toolbar={<CustomToolbar />}>
-            <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                Observation
+            <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
+                <observations.icon />
+                &nbsp;&nbsp;Observation
             </Typography>
             <Stack>
                 <TextInputWide autoFocus source="title" validate={validate_required_255} />

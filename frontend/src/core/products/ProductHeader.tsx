@@ -2,6 +2,7 @@ import { Box, Paper, Stack, Typography } from "@mui/material";
 import { Labeled, RecordContextProvider, TextField, useGetOne } from "react-admin";
 import { useParams } from "react-router-dom";
 
+import products from ".";
 import LicensesCountField from "../../commons/custom_fields/LicensesCountField";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
 import { SecurityGateTextField } from "../../commons/custom_fields/SecurityGateTextField";
@@ -35,8 +36,9 @@ const ProductHeader = () => {
                     marginTop: 2,
                 }}
             >
-                <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                    Product
+                <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
+                    <products.icon />
+                    &nbsp;&nbsp;Product
                 </Typography>
                 <Box
                     sx={{

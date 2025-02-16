@@ -13,6 +13,7 @@ import {
     useRecordContext,
 } from "react-admin";
 
+import users from ".";
 import { is_superuser } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
 import UserProductMemberEmbeddedList from "../../core/product_members/UserProductMemberEmbeddedList";
@@ -77,8 +78,9 @@ const UserComponent = () => {
                     <Stack direction="row" spacing={2} sx={{ marginBottom: 1 }}>
                         <Stack sx={{ width: userWidth(user) }}>
                             <Paper sx={{ marginBottom: 1, padding: 2, height: "100%" }}>
-                                <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                                    User
+                                <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
+                                    <users.icon />
+                                    &nbsp;&nbsp;User
                                 </Typography>
                                 <Stack spacing={1}>
                                     <Labeled label="Username">
@@ -122,7 +124,7 @@ const UserComponent = () => {
                         </Stack>
                         {showFullInformation(user) && (
                             <Stack sx={{ width: "50%" }}>
-                                <Paper sx={{ marginBottom: 1, padding: 2, width: "100%" }}>
+                                <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
                                     <Typography variant="h6" sx={{ marginBottom: 1 }}>
                                         Permissions
                                     </Typography>

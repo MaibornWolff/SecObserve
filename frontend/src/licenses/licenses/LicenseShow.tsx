@@ -2,6 +2,7 @@ import { Paper, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
 import { BooleanField, Labeled, PrevNextButtons, Show, TextField, TopToolbar, WithRecord } from "react-admin";
 
+import licenses from ".";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import { useStyles } from "../../commons/layout/themes";
 import LicenseGroupEmbeddedList from "../license_groups/LicenseGroupEmbeddedList";
@@ -24,7 +25,10 @@ const LicenseComponent = () => {
                 <Stack spacing={2} sx={{ marginBottom: 1, width: "100%" }}>
                     <Paper sx={{ marginBottom: 1, padding: 2 }}>
                         <Stack spacing={1}>
-                            <Typography variant="h6">License</Typography>
+                            <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
+                                <licenses.icon />
+                                &nbsp;&nbsp;License
+                            </Typography>
                             <Labeled label="SPDX Id">
                                 <TextField source="spdx_id" className={classes.fontBigBold} />
                             </Labeled>

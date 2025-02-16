@@ -16,6 +16,7 @@ import {
     useRecordContext,
 } from "react-admin";
 
+import products from ".";
 import { PERMISSION_PRODUCT_DELETE } from "../../access_control/types";
 import OSVLinuxDistributionInput from "../../commons/custom_fields/OSVLinuxDistributionInput";
 import { validate_0_999999, validate_255, validate_2048, validate_required_255 } from "../../commons/custom_validators";
@@ -163,8 +164,9 @@ const ProductEdit = () => {
     return (
         <Edit redirect="show" mutationMode="pessimistic" transform={transform}>
             <SimpleForm warnWhenUnsavedChanges toolbar={<CustomToolbar />}>
-                <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                    Product
+                <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
+                    <products.icon />
+                    &nbsp;&nbsp;Product
                 </Typography>
                 <TextInputWide autoFocus source="name" validate={validate_required_255} />
                 <RichTextInput source="description" validate={validate_2048} />
