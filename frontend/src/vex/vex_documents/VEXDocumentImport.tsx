@@ -1,28 +1,19 @@
 import UploadIcon from "@mui/icons-material/Upload";
 import { Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
-import { ChangeEvent, Fragment, useState } from "react";
-import { SaveButton, SimpleForm, useNotify, useRefresh } from "react-admin";
-import { makeStyles } from "tss-react/mui";
+import { Fragment, useState } from "react";
+import { FileField, FileInput, SaveButton, SimpleForm, useNotify, useRefresh } from "react-admin";
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
 import SmallButton from "../../commons/custom_fields/SmallButton";
 import Toolbar from "../../commons/custom_fields/Toolbar";
+import { validate_required } from "../../commons/custom_validators";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
 const VEXDocumentImport = () => {
-    const useStyles = makeStyles()({
-        input: {
-            marginTop: "2em",
-            marginBottom: "2em",
-        },
-    });
-
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const refresh = useRefresh();
     const notify = useNotify();
-    const [fileSelected, setFileSelected] = useState<File>();
-    const { classes } = useStyles();
     const handleOpen = () => setOpen(true);
     const handleCancel = () => {
         setOpen(false);
@@ -34,39 +25,31 @@ const VEXDocumentImport = () => {
         setLoading(false);
     };
 
-    const handleFileChange = function (e: ChangeEvent<HTMLInputElement>) {
-        const fileList = e.target.files;
-        if (!fileList) return;
-        setFileSelected(fileList[0]);
-    };
+    const vexImport = async (data: any) => {
+        setLoading(true);
 
-    const vexImport = async () => {
-        if (fileSelected) {
-            setLoading(true);
+        const formData = new FormData();
+        formData.append("file", data.file.rawFile, data.file.title);
 
-            const formData = new FormData();
-            formData.append("file", fileSelected, fileSelected.name);
-
-            httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/vex/vex_import/", {
-                method: "POST",
-                body: formData,
-            })
-                .then(() => {
-                    refresh();
-                    setLoading(false);
-                    setOpen(false);
-                    notify("VEX document imported", {
-                        type: "success",
-                    });
-                })
-                .catch((error) => {
-                    setLoading(false);
-                    setOpen(false);
-                    notify(error.message, {
-                        type: "warning",
-                    });
+        httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/vex/vex_import/", {
+            method: "POST",
+            body: formData,
+        })
+            .then(() => {
+                refresh();
+                setLoading(false);
+                setOpen(false);
+                notify("VEX document imported", {
+                    type: "success",
                 });
-        }
+            })
+            .catch((error) => {
+                setLoading(false);
+                setOpen(false);
+                notify(error.message, {
+                    type: "warning",
+                });
+            });
     };
 
     const CustomToolbar = () => (
@@ -82,13 +65,14 @@ const VEXDocumentImport = () => {
                 <DialogTitle>Import VEX document</DialogTitle>
                 <DialogContent>
                     <SimpleForm onSubmit={vexImport} toolbar={<CustomToolbar />}>
-                        <input
-                            id="vex-input"
-                            className={classes.input}
-                            type="file"
-                            onChange={handleFileChange}
-                            accept=".json"
-                        />
+                        <FileInput
+                            source="file"
+                            label="VEX document"
+                            accept={{ "application/octet-stream": [".json"] }}
+                            validate={validate_required}
+                        >
+                            <FileField source="src" title="title" />
+                        </FileInput>
                     </SimpleForm>
                 </DialogContent>
             </Dialog>

@@ -11,6 +11,7 @@ import {
     useRecordContext,
 } from "react-admin";
 
+import vex_statements from ".";
 import { useStyles } from "../../commons/layout/themes";
 
 const ShowActions = () => {
@@ -38,8 +39,9 @@ const VEXStatementShow = () => {
             <WithRecord
                 render={(vex_statement) => (
                     <SimpleShowLayout>
-                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                            Imported VEX Statement
+                        <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
+                            <vex_statements.icon />
+                            &nbsp;&nbsp;Imported VEX Statement
                         </Typography>
                         <ReferenceField
                             source="document"
