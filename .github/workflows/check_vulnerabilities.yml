@@ -14,7 +14,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       -
         name: Run vulnerability scanners for code
-        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@a8344daa56598a80c2c80081974a0468dd29d086 # main
+        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@b7132036f4970c237bf85b56d0033fd5f6726ab7 # main
         with:
           so_configuration: 'so_configuration_code.yml'
           SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
