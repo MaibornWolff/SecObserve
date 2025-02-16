@@ -4,7 +4,6 @@ import ChecklistIcon from "@mui/icons-material/Checklist";
 import UploadIcon from "@mui/icons-material/CloudUpload";
 import ConstructionIcon from "@mui/icons-material/Construction";
 import FactCheckIcon from "@mui/icons-material/FactCheck";
-import GradingIcon from "@mui/icons-material/Grading";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import SettingsIcon from "@mui/icons-material/Settings";
 import TokenIcon from "@mui/icons-material/Token";
@@ -43,6 +42,7 @@ import ApiConfigurationCreate from "../../import_observations/api_configurations
 import ApiConfigurationEmbeddedList from "../../import_observations/api_configurations/ApiConfigurationEmbeddedList";
 import ImportMenu from "../../import_observations/import/ImportMenu";
 import VulnerabilityCheckEmbeddedList from "../../import_observations/vulnerability_checks/VulnerabilityCheckEmbeddedList";
+import license_components from "../../licenses/license_components";
 import ProductShowLicenseComponents from "../../licenses/license_components/ProductShowLicenseComponents";
 import MetricsHeader from "../../metrics/MetricsHeader";
 import MetricsSeveritiesCurrent from "../../metrics/MetricsSeveritiesCurrent";
@@ -230,7 +230,12 @@ const ProductShow = () => {
                                 </Tab>
                             )}
                             {feature_license_management() && product.has_licenses && (
-                                <Tab label="Licenses" path="licenses" icon={<GradingIcon />} onClick={hideSettingsTabs}>
+                                <Tab
+                                    label="Licenses"
+                                    path="licenses"
+                                    icon={<license_components.icon />}
+                                    onClick={hideSettingsTabs}
+                                >
                                     <ProductShowLicenseComponents product={product} />
                                 </Tab>
                             )}

@@ -16,6 +16,7 @@ import {
     useRecordContext,
 } from "react-admin";
 
+import csafs from ".";
 import { delete_permission, update_permission } from "../functions";
 import CSAFUpdate from "./CSAFUpdate";
 
@@ -42,8 +43,9 @@ const CSAFComponent = () => {
             render={(csaf) => (
                 <Box width={"100%"}>
                     <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
-                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                            Exported CSAF document
+                        <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
+                            <csafs.icon />
+                            &nbsp;&nbsp;Exported CSAF document
                         </Typography>
                         <Stack spacing={1}>
                             {csaf && csaf.product_data && csaf.product_data.name && (

@@ -11,6 +11,7 @@ import {
     useRecordContext,
 } from "react-admin";
 
+import authorization_groups from ".";
 import { is_superuser } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
 import UserProductAuthorizationGroupMemberEmbeddedList from "../../core/product_authorization_group_members/UserProductAuthorizationGroupMemberEmbeddedList";
@@ -41,8 +42,9 @@ const AuthorizationGroupComponent = () => {
             render={(authorization_group) => (
                 <Box width={"100%"}>
                     <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
-                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                            Authorization Group
+                        <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
+                            <authorization_groups.icon />
+                            &nbsp;&nbsp;Authorization Group
                         </Typography>
                         <Stack spacing={1}>
                             <Labeled label="Name">

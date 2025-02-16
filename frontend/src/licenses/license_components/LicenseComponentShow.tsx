@@ -11,6 +11,7 @@ import {
     useRecordContext,
 } from "react-admin";
 
+import license_components from ".";
 import { EvaluationResultField } from "../../commons/custom_fields/EvaluationResultField";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import { get_component_purl_url } from "../../commons/functions";
@@ -66,8 +67,9 @@ export const LicenseComponentComponent = () => {
             render={(component) => (
                 <Box width={"100%"}>
                     <Paper sx={{ marginBottom: 2, padding: 2 }}>
-                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                            License
+                        <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
+                            <license_components.icon />
+                            &nbsp;&nbsp;License
                         </Typography>
                         <Stack spacing={1}>
                             {component.license && (

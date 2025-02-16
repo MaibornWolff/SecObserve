@@ -12,6 +12,7 @@ import {
     WithRecord,
 } from "react-admin";
 
+import vex_documents from ".";
 import { useStyles } from "../../commons/layout/themes";
 import VEXStatementEmbeddedList from "../vex_statements/VEXStatementEmbeddedList";
 
@@ -38,8 +39,9 @@ const VEXDocumentComponent = () => {
             render={(vex_document) => (
                 <Box width={"100%"}>
                     <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
-                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                            Imported VEX document
+                        <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
+                            <vex_documents.icon />
+                            &nbsp;&nbsp;Imported VEX document
                         </Typography>
                         <Stack spacing={1}>
                             <Labeled label="Type">

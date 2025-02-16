@@ -2,6 +2,7 @@ import { Box, Paper, Stack, Typography } from "@mui/material";
 import { Labeled, RecordContextProvider, TextField, useGetOne } from "react-admin";
 import { useParams } from "react-router-dom";
 
+import product_groups from ".";
 import LicensesCountField from "../../commons/custom_fields/LicensesCountField";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
 import { useStyles } from "../../commons/layout/themes";
@@ -20,8 +21,9 @@ const ProductGroupHeader = () => {
                     marginTop: 2,
                 }}
             >
-                <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                    Product Group
+                <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
+                    <product_groups.icon />
+                    &nbsp;&nbsp;Product Group
                 </Typography>
                 <Box
                     sx={{

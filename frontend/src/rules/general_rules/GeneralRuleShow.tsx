@@ -15,6 +15,7 @@ import {
     useRecordContext,
 } from "react-admin";
 
+import general_rules from ".";
 import MarkdownField from "../../commons/custom_fields/MarkdownField";
 import { feature_vex_enabled } from "../../commons/functions";
 import { is_superuser } from "../../commons/functions";
@@ -47,8 +48,9 @@ const GeneralRuleComponent = () => {
             render={(rule) => (
                 <Box width={"100%"}>
                     <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
-                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                            General Rule
+                        <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
+                            <general_rules.icon />
+                            &nbsp;&nbsp;General Rule
                         </Typography>
                         <Stack spacing={1}>
                             <Labeled label="Name">

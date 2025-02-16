@@ -16,6 +16,7 @@ import {
     useRecordContext,
 } from "react-admin";
 
+import product_rules from ".";
 import { PERMISSION_PRODUCT_RULE_APPROVAL, PERMISSION_PRODUCT_RULE_EDIT } from "../../access_control/types";
 import MarkdownField from "../../commons/custom_fields/MarkdownField";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
@@ -84,8 +85,9 @@ const ProductRuleComponent = () => {
             render={(rule) => (
                 <Box width={"100%"}>
                     <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
-                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                            Product Rule
+                        <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
+                            <product_rules.icon />
+                            &nbsp;&nbsp;Product Rule
                         </Typography>
                         <Stack spacing={1}>
                             <Labeled>
