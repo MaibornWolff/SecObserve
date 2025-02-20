@@ -11,6 +11,7 @@ from rest_framework.serializers import (
 )
 
 from application.core.api.serializers_product import NestedProductSerializer
+from application.core.models import Product
 from application.rules.models import Rule
 from application.rules.types import Rule_Status
 
@@ -40,7 +41,7 @@ class GeneralRuleSerializer(ModelSerializer):
 
         return None
 
-    def validate(self, attrs):
+    def validate(self, attrs: dict) -> dict:
         if not attrs.get("parser") and not attrs.get("scanner_prefix"):
             raise ValidationError("Either Parser or Scanner Prefix must be set")
 
@@ -77,14 +78,14 @@ class ProductRuleSerializer(ModelSerializer):
 
         return None
 
-    def validate_product(self, value):
+    def validate_product(self, value: Product) -> Product:
         self.instance: Rule
         if self.instance and self.instance.product != value:
             raise ValidationError("Product cannot be changed")
 
         return value
 
-    def validate(self, attrs):
+    def validate(self, attrs: dict) -> dict:
         if not attrs.get("parser") and not attrs.get("scanner_prefix"):
             raise ValidationError("Either Parser or Scanner Prefix must be set")
 
@@ -96,7 +97,5 @@ class ProductRuleSerializer(ModelSerializer):
 
 
 class RuleApprovalSerializer(Serializer):
-    approval_status = ChoiceField(
-        choices=Rule_Status.RULE_STATUS_CHOICES_APPROVAL, required=True
-    )
+    approval_status = ChoiceField(choices=Rule_Status.RULE_STATUS_CHOICES_APPROVAL, required=True)
     approval_remark = CharField(max_length=255, required=True)

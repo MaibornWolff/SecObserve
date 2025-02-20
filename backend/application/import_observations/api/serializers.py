@@ -86,7 +86,7 @@ class ApiConfigurationSerializer(ModelSerializer):
         model = Api_Configuration
         fields = "__all__"
 
-    def to_representation(self, instance):
+    def to_representation(self, instance: Api_Configuration) -> dict:
         # Only users who can edit an API Configuration are allowed to see the API key
         data = super().to_representation(instance)
 
@@ -96,7 +96,7 @@ class ApiConfigurationSerializer(ModelSerializer):
 
         return data
 
-    def validate(self, attrs: dict):
+    def validate(self, attrs: dict) -> dict:
         self.instance: Api_Configuration
         if attrs.pop("test_connection", False):
             if self.instance is not None:
@@ -107,15 +107,9 @@ class ApiConfigurationSerializer(ModelSerializer):
                 project_key = attrs.get("project_key", self.instance.project_key)
                 api_key = attrs.get("api_key", self.instance.api_key)
                 query = attrs.get("query", self.instance.query)
-                basic_auth_enabled = attrs.get(
-                    "basic_auth_enabled", self.instance.basic_auth_enabled
-                )
-                basic_auth_username = attrs.get(
-                    "basic_auth_username", self.instance.basic_auth_username
-                )
-                basic_auth_password = attrs.get(
-                    "basic_auth_password", self.instance.basic_auth_password
-                )
+                basic_auth_enabled = attrs.get("basic_auth_enabled", self.instance.basic_auth_enabled)
+                basic_auth_username = attrs.get("basic_auth_username", self.instance.basic_auth_username)
+                basic_auth_password = attrs.get("basic_auth_password", self.instance.basic_auth_password)
                 verify_ssl = attrs.get("verify_ssl", self.instance.verify_ssl)
             else:
                 product = attrs.get("product")
@@ -148,23 +142,15 @@ class ApiConfigurationSerializer(ModelSerializer):
                 raise ValidationError("\n".join(errors))
 
         data_product = attrs.get("product")
-        if (
-            self.instance is not None
-            and data_product
-            and data_product != self.instance.product
-        ):
+        if self.instance is not None and data_product and data_product != self.instance.product:
             raise ValidationError("Product cannot be changed")
 
         return attrs
 
     def validate_automatic_import_branch(self, branch: Branch) -> Branch:
-        product_id = (
-            self.instance.product.pk if self.instance else self.initial_data["product"]
-        )
+        product_id = self.instance.product.pk if self.instance else self.initial_data["product"]
         if branch and branch.product.pk != product_id:
-            raise ValidationError(
-                "Branch does not belong to the same product as the API Configuration"
-            )
+            raise ValidationError("Branch does not belong to the same product as the API Configuration")
 
         return branch
 

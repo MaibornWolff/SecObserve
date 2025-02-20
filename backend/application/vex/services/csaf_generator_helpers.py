@@ -63,9 +63,7 @@ def get_product_id(product: Product, branch: Optional[Branch]) -> str:
 def get_relationship_name(observation: Observation) -> str:
     relationship_name = f"{observation.origin_component_name_version}@"
     relationship_name += (
-        f"{observation.product.name}:{observation.branch.name}"
-        if observation.branch
-        else observation.product.name
+        f"{observation.product.name}:{observation.branch.name}" if observation.branch else observation.product.name
     )
     return relationship_name
 

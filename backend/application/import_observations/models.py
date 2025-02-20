@@ -30,7 +30,7 @@ class Parser(Model):
             Index(fields=["name"]),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -61,7 +61,7 @@ class Api_Configuration(Model):
             "name",
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.product.name} / {self.name}"
 
 
@@ -73,24 +73,16 @@ class Vulnerability_Check(Model):
     scanner = CharField(max_length=255, blank=True)
     first_import = DateTimeField(auto_now_add=True)
     last_import = DateTimeField(auto_now=True)
-    last_import_observations_new = IntegerField(
-        null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]
-    )
+    last_import_observations_new = IntegerField(null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)])
     last_import_observations_updated = IntegerField(
         null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]
     )
     last_import_observations_resolved = IntegerField(
         null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]
     )
-    last_import_licenses_new = IntegerField(
-        null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]
-    )
-    last_import_licenses_updated = IntegerField(
-        null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]
-    )
-    last_import_licenses_deleted = IntegerField(
-        null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]
-    )
+    last_import_licenses_new = IntegerField(null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)])
+    last_import_licenses_updated = IntegerField(null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)])
+    last_import_licenses_deleted = IntegerField(null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)])
 
     class Meta:
         unique_together = (
@@ -106,5 +98,5 @@ class OSV_Cache(Model):
     data = TextField()
     modified = DateTimeField()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.osv_id

@@ -14,9 +14,7 @@ logger = logging.getLogger("secobserve.migration")
 def convert_origin_component_dependencies(apps, schema_editor):
     Observation = apps.get_model("core", "Observation")
 
-    observations = Observation.objects.exclude(
-        origin_component_dependencies=""
-    ).order_by("id")
+    observations = Observation.objects.exclude(origin_component_dependencies="").order_by("id")
 
     paginator = Paginator(observations, 1000)
     for page_number in paginator.page_range:
@@ -29,9 +27,7 @@ def convert_origin_component_dependencies(apps, schema_editor):
             dependencies = list(dict.fromkeys(dependencies))
 
             mermaid_dependencies = _parse_mermaid_graph_content(dependencies)
-            observation.origin_component_dependencies = (
-                _generate_dependency_list_as_text(mermaid_dependencies)
-            )
+            observation.origin_component_dependencies = _generate_dependency_list_as_text(mermaid_dependencies)
 
             updates.append(observation)
 

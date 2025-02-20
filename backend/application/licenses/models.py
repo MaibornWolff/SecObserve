@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import (
     CASCADE,
@@ -31,7 +33,7 @@ class License(Model):
             Index(fields=["name"]),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.spdx_id
 
 
@@ -53,14 +55,12 @@ class License_Group(Model):
         blank=True,
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
 class License_Group_Member(Model):
-    license_group = ForeignKey(
-        License_Group, related_name="license_group_members", on_delete=CASCADE
-    )
+    license_group = ForeignKey(License_Group, related_name="license_group_members", on_delete=CASCADE)
     user = ForeignKey(User, related_name="license_group_members", on_delete=CASCADE)
     is_manager = BooleanField(default=False)
 
@@ -70,7 +70,7 @@ class License_Group_Member(Model):
             "user",
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.license_group} / {self.user}"
 
 
@@ -93,7 +93,7 @@ class License_Group_Authorization_Group_Member(Model):
             "authorization_group",
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.license_group} / {self.authorization_group}"
 
 
@@ -101,9 +101,7 @@ class License_Component(Model):
     identity_hash = CharField(max_length=64)
 
     product = ForeignKey(Product, related_name="license_components", on_delete=PROTECT)
-    branch = ForeignKey(
-        Branch, related_name="license_components", on_delete=CASCADE, null=True
-    )
+    branch = ForeignKey(Branch, related_name="license_components", on_delete=CASCADE, null=True)
     upload_filename = CharField(max_length=255, blank=True)
 
     component_name = CharField(max_length=255)
@@ -129,36 +127,30 @@ class License_Component(Model):
         choices=License_Policy_Evaluation_Result.RESULT_CHOICES,
         blank=True,
     )
-    numerical_evaluation_result = IntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(5)]
-    )
+    numerical_evaluation_result = IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
 
     created = DateTimeField(auto_now_add=True)
     import_last_seen = DateTimeField(default=timezone.now)
     last_change = DateTimeField(default=timezone.now)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
         self.unsaved_license = ""
-        self.unsaved_evidences = []
+        self.unsaved_evidences: list[list[str]] = []
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.component_name_version
 
-    def save(self, *args, **kwargs) -> None:
-        self.numerical_evaluation_result = (
-            License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
-                self.evaluation_result, 3
-            )
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        self.numerical_evaluation_result = License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
+            self.evaluation_result, 3
         )
         return super().save(*args, **kwargs)
 
 
 class License_Component_Evidence(Model):
-    license_component = ForeignKey(
-        License_Component, related_name="evidences", on_delete=CASCADE
-    )
+    license_component = ForeignKey(License_Component, related_name="evidences", on_delete=CASCADE)
     name = CharField(max_length=255)
     evidence = TextField()
 
@@ -169,9 +161,7 @@ class License_Component_Evidence(Model):
 
 
 class License_Policy(Model):
-    parent = ForeignKey(
-        "self", on_delete=PROTECT, related_name="children", null=True, blank=True
-    )
+    parent = ForeignKey("self", on_delete=PROTECT, related_name="children", null=True, blank=True)
     name = CharField(max_length=255, unique=True)
     description = TextField(max_length=2048, blank=True)
     is_public = BooleanField(default=False)
@@ -189,14 +179,12 @@ class License_Policy(Model):
         blank=True,
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
 class License_Policy_Item(Model):
-    license_policy = ForeignKey(
-        License_Policy, related_name="license_policy_items", on_delete=CASCADE
-    )
+    license_policy = ForeignKey(License_Policy, related_name="license_policy_items", on_delete=CASCADE)
     license_group = ForeignKey(
         License_Group,
         related_name="license_policy_items",
@@ -213,28 +201,20 @@ class License_Policy_Item(Model):
     )
     license_expression = CharField(max_length=255, blank=True)
     non_spdx_license = CharField(max_length=255, blank=True)
-    evaluation_result = CharField(
-        max_length=16, choices=License_Policy_Evaluation_Result.RESULT_CHOICES
-    )
-    numerical_evaluation_result = IntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(5)]
-    )
+    evaluation_result = CharField(max_length=16, choices=License_Policy_Evaluation_Result.RESULT_CHOICES)
+    numerical_evaluation_result = IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     comment = CharField(max_length=255, blank=True)
 
-    def save(self, *args, **kwargs) -> None:
-        self.numerical_evaluation_result = (
-            License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
-                self.evaluation_result, License_Policy_Evaluation_Result.RESULT_UNKNOWN
-            )
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        self.numerical_evaluation_result = License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
+            self.evaluation_result, License_Policy_Evaluation_Result.RESULT_UNKNOWN
         )
 
         return super().save(*args, **kwargs)
 
 
 class License_Policy_Member(Model):
-    license_policy = ForeignKey(
-        License_Policy, related_name="license_policy_members", on_delete=CASCADE
-    )
+    license_policy = ForeignKey(License_Policy, related_name="license_policy_members", on_delete=CASCADE)
     user = ForeignKey(User, related_name="license_policy_members", on_delete=CASCADE)
     is_manager = BooleanField(default=False)
 
@@ -244,7 +224,7 @@ class License_Policy_Member(Model):
             "user",
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.license_policy} / {self.user}"
 
 
@@ -267,5 +247,5 @@ class License_Policy_Authorization_Group_Member(Model):
             "authorization_group",
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.license_policy} / {self.authorization_group}"

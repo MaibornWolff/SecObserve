@@ -6,6 +6,7 @@ from packageurl import PackageURL
 
 from application.core.types import Severity, Status
 
+# mypy: disallow_untyped_defs = False
 # Parameter observation cannot be typed, because some methods are used in the model class
 
 
@@ -199,42 +200,30 @@ def normalize_description(observation):
             observation.description = observation.description[:-1]
 
         # \u0000 can lead to SQL exceptions
-        observation.description = observation.description.replace(
-            "\u0000", "REDACTED_NULL"
-        )
+        observation.description = observation.description.replace("\u0000", "REDACTED_NULL")
 
 
 def normalize_origin_component(observation):  # pylint: disable=too-many-branches
     if not observation.origin_component_name_version:
         if observation.origin_component_name and observation.origin_component_version:
             observation.origin_component_name_version = (
-                observation.origin_component_name
-                + ":"
-                + observation.origin_component_version
+                observation.origin_component_name + ":" + observation.origin_component_version
             )
         elif observation.origin_component_name:
-            observation.origin_component_name_version = (
-                observation.origin_component_name
-            )
+            observation.origin_component_name_version = observation.origin_component_name
     else:
         component_parts = observation.origin_component_name_version.split(":")
         if len(component_parts) == 3:
             if component_parts[0] == observation.origin_component_name:
-                observation.origin_component_version = (
-                    f"{component_parts[1]}:{component_parts[2]}"
-                )
+                observation.origin_component_version = f"{component_parts[1]}:{component_parts[2]}"
             else:
-                observation.origin_component_name = (
-                    f"{component_parts[0]}:{component_parts[1]}"
-                )
+                observation.origin_component_name = f"{component_parts[0]}:{component_parts[1]}"
                 observation.origin_component_version = component_parts[2]
         elif len(component_parts) == 2:
             observation.origin_component_name = component_parts[0]
             observation.origin_component_version = component_parts[1]
         elif len(component_parts) == 1:
-            observation.origin_component_name = (
-                observation.origin_component_name_version
-            )
+            observation.origin_component_name = observation.origin_component_name_version
             observation.origin_component_version = None
 
     if observation.origin_component_name_version is None:
@@ -269,14 +258,10 @@ def normalize_origin_docker(observation):
         _normalize_origin_docker_image_name_tag(observation)
 
     if observation.origin_docker_image_name_tag:
-        origin_docker_image_name_tag_parts = (
-            observation.origin_docker_image_name_tag.split("/")
-        )
-        observation.origin_docker_image_name_tag_short = (
-            origin_docker_image_name_tag_parts[
-                len(origin_docker_image_name_tag_parts) - 1
-            ].strip()
-        )
+        origin_docker_image_name_tag_parts = observation.origin_docker_image_name_tag.split("/")
+        observation.origin_docker_image_name_tag_short = origin_docker_image_name_tag_parts[
+            len(origin_docker_image_name_tag_parts) - 1
+        ].strip()
     else:
         observation.origin_docker_image_name_tag_short = ""
 
@@ -299,9 +284,7 @@ def _normalize_origin_docker_image_name(observation):
 
     if observation.origin_docker_image_name and observation.origin_docker_image_tag:
         observation.origin_docker_image_name_tag = (
-            observation.origin_docker_image_name
-            + ":"
-            + observation.origin_docker_image_tag
+            observation.origin_docker_image_name + ":" + observation.origin_docker_image_tag
         )
     else:
         observation.origin_docker_image_name_tag = observation.origin_docker_image_name
@@ -368,10 +351,7 @@ def normalize_origin_cloud(observation):
             if len(observation.origin_cloud_account_subscription_project) > 122
             else observation.origin_cloud_account_subscription_project
         )
-    if (
-        observation.origin_cloud_account_subscription_project
-        and observation.origin_cloud_resource
-    ):
+    if observation.origin_cloud_account_subscription_project and observation.origin_cloud_resource:
         observation.origin_cloud_qualified_resource += " / "
     if observation.origin_cloud_resource:
         observation.origin_cloud_qualified_resource += (
@@ -434,9 +414,7 @@ def normalize_severity(observation):
 
     observation.current_severity = get_current_severity(observation)
 
-    observation.numerical_severity = Severity.NUMERICAL_SEVERITIES.get(
-        observation.current_severity
-    )
+    observation.numerical_severity = Severity.NUMERICAL_SEVERITIES.get(observation.current_severity)
 
 
 def normalize_status(observation):
@@ -472,24 +450,15 @@ def normalize_vex_justification(observation):
 def set_product_flags(observation) -> None:
     product_changed = False
 
-    if (
-        observation.origin_cloud_qualified_resource
-        and not observation.product.has_cloud_resource
-    ):
+    if observation.origin_cloud_qualified_resource and not observation.product.has_cloud_resource:
         observation.product.has_cloud_resource = True
         product_changed = True
 
-    if (
-        observation.origin_component_name_version
-        and not observation.product.has_component
-    ):
+    if observation.origin_component_name_version and not observation.product.has_component:
         observation.product.has_component = True
         product_changed = True
 
-    if (
-        observation.origin_docker_image_name_tag
-        and not observation.product.has_docker_image
-    ):
+    if observation.origin_docker_image_name_tag and not observation.product.has_docker_image:
         observation.product.has_docker_image = True
         product_changed = True
 
@@ -497,10 +466,7 @@ def set_product_flags(observation) -> None:
         observation.product.has_endpoint = True
         product_changed = True
 
-    if (
-        observation.origin_kubernetes_qualified_resource
-        and not observation.product.has_kubernetes_resource
-    ):
+    if observation.origin_kubernetes_qualified_resource and not observation.product.has_kubernetes_resource:
         observation.product.has_kubernetes_resource = True
         product_changed = True
 
@@ -508,10 +474,7 @@ def set_product_flags(observation) -> None:
         observation.product.has_source = True
         product_changed = True
 
-    if (
-        observation.has_potential_duplicates
-        and not observation.product.has_potential_duplicates
-    ):
+    if observation.has_potential_duplicates and not observation.product.has_potential_duplicates:
         observation.product.has_potential_duplicates = True
         product_changed = True
 

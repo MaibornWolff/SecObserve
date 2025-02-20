@@ -88,6 +88,7 @@ const ObservationShowOrigins = ({ observation, showDependencies, elevated }: Obs
                                                             observation.origin_component_purl_namespace
                                                         )
                                                     }
+                                                    new_tab={true}
                                                 />
                                             </Labeled>
                                         )}
@@ -139,6 +140,7 @@ const ObservationShowOrigins = ({ observation, showDependencies, elevated }: Obs
                                             label="Endpoint URL"
                                             text={observation.origin_endpoint_url}
                                             url={observation.origin_endpoint_url}
+                                            new_tab={true}
                                         />
                                     </Labeled>
                                 )}
@@ -173,6 +175,7 @@ const ObservationShowOrigins = ({ observation, showDependencies, elevated }: Obs
                                                 text={observation.origin_source_file}
                                                 url={observation.origin_source_file_url}
                                                 label="Source file"
+                                                new_tab={true}
                                             />
                                         </Labeled>
                                     )}

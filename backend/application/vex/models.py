@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import (
     CASCADE,
@@ -62,7 +64,7 @@ class OpenVEX(VEX_Base):
 
     # Make sure that timestamp and last updated date are exactly the
     # same when creating a new CSAF record
-    def save(self, *args, **kwargs):
+    def save(self, *args: Any, **kwargs: Any) -> None:
         now = timezone.now()
         if not self.timestamp:
             self.timestamp = now
@@ -85,18 +87,14 @@ class CSAF(VEX_Base):
     tlp_label = CharField(max_length=16, choices=CSAF_TLP_Label.CSAF_TLP_LABEL_CHOICES)
     tracking_initial_release_date = DateTimeField()
     tracking_current_release_date = DateTimeField()
-    tracking_status = CharField(
-        max_length=16, choices=CSAF_Tracking_Status.CSAF_TRACKING_STATUS_CHOICES
-    )
+    tracking_status = CharField(max_length=16, choices=CSAF_Tracking_Status.CSAF_TRACKING_STATUS_CHOICES)
     publisher_name = CharField(max_length=255)
-    publisher_category = CharField(
-        max_length=16, choices=CSAF_Publisher_Category.CSAF_PUBLISHER_CATEGORY_CHOICES
-    )
+    publisher_category = CharField(max_length=16, choices=CSAF_Publisher_Category.CSAF_PUBLISHER_CATEGORY_CHOICES)
     publisher_namespace = CharField(max_length=255)
 
     # Make sure that initial release date and current release date are exactly the
     # same when creating a new CSAF record
-    def save(self, *args, **kwargs):
+    def save(self, *args: Any, **kwargs: Any) -> None:
         now = timezone.now()
         if not self.tracking_initial_release_date:
             self.tracking_initial_release_date = now
@@ -142,9 +140,7 @@ class VEX_Statement(Model):
     vulnerability_id = CharField(max_length=255)
     description = TextField(max_length=2048, blank=True)
     status = CharField(max_length=24, choices=VEX_Status.VEX_STATUS_CHOICES)
-    justification = CharField(
-        max_length=64, choices=VEX_Justification.VEX_JUSTIFICATION_CHOICES, blank=True
-    )
+    justification = CharField(max_length=64, choices=VEX_Justification.VEX_JUSTIFICATION_CHOICES, blank=True)
     impact = CharField(max_length=255, blank=True)
     remediation = CharField(max_length=255, blank=True)
     product_purl = CharField(max_length=255, blank=True)

@@ -1,4 +1,8 @@
+from typing import Any
+
 from rest_framework.permissions import BasePermission
+from rest_framework.request import Request
+from rest_framework.views import APIView
 
 from application.access_control.api.permissions_base import (
     check_object_permission,
@@ -9,12 +13,10 @@ from application.core.models import Product
 
 
 class UserHasApiConfigurationPermission(BasePermission):
-    def has_permission(self, request, view):
-        return check_post_permission(
-            request, Product, "product", Permissions.Api_Configuration_Create
-        )
+    def has_permission(self, request: Request, view: APIView) -> bool:
+        return check_post_permission(request, Product, "product", Permissions.Api_Configuration_Create)
 
-    def has_object_permission(self, request, view, obj):
+    def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool:
         return check_object_permission(
             request=request,
             object_to_check=obj,
@@ -25,7 +27,7 @@ class UserHasApiConfigurationPermission(BasePermission):
 
 
 class UserHasVulnerabilityCheckPermission(BasePermission):
-    def has_object_permission(self, request, view, obj):
+    def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool:
         return check_object_permission(
             request=request,
             object_to_check=obj,

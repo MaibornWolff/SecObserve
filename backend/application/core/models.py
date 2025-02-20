@@ -1,4 +1,5 @@
 from decimal import Decimal
+from typing import Any
 
 from django.apps import apps
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -42,9 +43,7 @@ class Product(Model):
     description = TextField(max_length=2048, blank=True)
 
     is_product_group = BooleanField(default=False)
-    product_group = ForeignKey(
-        "self", on_delete=PROTECT, related_name="products", null=True, blank=True
-    )
+    product_group = ForeignKey("self", on_delete=PROTECT, related_name="products", null=True, blank=True)
     purl = CharField(max_length=255, blank=True)
     cpe23 = CharField(max_length=255, blank=True)
 
@@ -59,27 +58,19 @@ class Product(Model):
     repository_branch_housekeeping_keep_inactive_days = IntegerField(
         null=True, validators=[MinValueValidator(1), MaxValueValidator(999999)]
     )
-    repository_branch_housekeeping_exempt_branches = CharField(
-        max_length=255, blank=True
-    )
+    repository_branch_housekeeping_exempt_branches = CharField(max_length=255, blank=True)
 
     security_gate_passed = BooleanField(null=True)
     security_gate_active = BooleanField(null=True)
     security_gate_threshold_critical = IntegerField(
         null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]
     )
-    security_gate_threshold_high = IntegerField(
-        null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]
-    )
+    security_gate_threshold_high = IntegerField(null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)])
     security_gate_threshold_medium = IntegerField(
         null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]
     )
-    security_gate_threshold_low = IntegerField(
-        null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]
-    )
-    security_gate_threshold_none = IntegerField(
-        null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]
-    )
+    security_gate_threshold_low = IntegerField(null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)])
+    security_gate_threshold_none = IntegerField(null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)])
     security_gate_threshold_unknown = IntegerField(
         null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]
     )
@@ -101,9 +92,7 @@ class Product(Model):
     notification_email_to = CharField(max_length=255, blank=True)
 
     issue_tracker_active = BooleanField(default=False)
-    issue_tracker_type = CharField(
-        max_length=12, choices=Issue_Tracker.ISSUE_TRACKER_TYPE_CHOICES, blank=True
-    )
+    issue_tracker_type = CharField(max_length=12, choices=Issue_Tracker.ISSUE_TRACKER_TYPE_CHOICES, blank=True)
     issue_tracker_base_url = CharField(max_length=255, blank=True)
     issue_tracker_username = CharField(max_length=255, blank=True)
     issue_tracker_api_key = CharField(max_length=255, blank=True)
@@ -111,9 +100,7 @@ class Product(Model):
     issue_tracker_labels = CharField(max_length=255, blank=True)
     issue_tracker_issue_type = CharField(max_length=255, blank=True)
     issue_tracker_status_closed = CharField(max_length=255, blank=True)
-    issue_tracker_minimum_severity = CharField(
-        max_length=12, choices=Severity.SEVERITY_CHOICES, blank=True
-    )
+    issue_tracker_minimum_severity = CharField(max_length=12, choices=Severity.SEVERITY_CHOICES, blank=True)
 
     last_observation_change = DateTimeField(default=timezone.now)
 
@@ -158,7 +145,7 @@ class Product(Model):
             Index(fields=["name"]),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -185,11 +172,11 @@ class Branch(Model):
             Index(fields=["name"]),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     @property
-    def open_critical_observation_count(self):
+    def open_critical_observation_count(self) -> int:
         return Observation.objects.filter(
             branch=self,
             current_severity=Severity.SEVERITY_CRITICAL,
@@ -197,7 +184,7 @@ class Branch(Model):
         ).count()
 
     @property
-    def open_high_observation_count(self):
+    def open_high_observation_count(self) -> int:
         return Observation.objects.filter(
             branch=self,
             current_severity=Severity.SEVERITY_HIGH,
@@ -205,7 +192,7 @@ class Branch(Model):
         ).count()
 
     @property
-    def open_medium_observation_count(self):
+    def open_medium_observation_count(self) -> int:
         return Observation.objects.filter(
             branch=self,
             current_severity=Severity.SEVERITY_MEDIUM,
@@ -213,7 +200,7 @@ class Branch(Model):
         ).count()
 
     @property
-    def open_low_observation_count(self):
+    def open_low_observation_count(self) -> int:
         return Observation.objects.filter(
             branch=self,
             current_severity=Severity.SEVERITY_LOW,
@@ -221,7 +208,7 @@ class Branch(Model):
         ).count()
 
     @property
-    def open_none_observation_count(self):
+    def open_none_observation_count(self) -> int:
         return Observation.objects.filter(
             branch=self,
             current_severity=Severity.SEVERITY_NONE,
@@ -229,7 +216,7 @@ class Branch(Model):
         ).count()
 
     @property
-    def open_unknown_observation_count(self):
+    def open_unknown_observation_count(self) -> int:
         return Observation.objects.filter(
             branch=self,
             current_severity=Severity.SEVERITY_UNKNOWN,
@@ -237,7 +224,7 @@ class Branch(Model):
         ).count()
 
     @property
-    def forbidden_licenses_count(self):
+    def forbidden_licenses_count(self) -> int:
         License_Component = apps.get_model("licenses", "License_Component")
         return License_Component.objects.filter(
             branch=self,
@@ -245,7 +232,7 @@ class Branch(Model):
         ).count()
 
     @property
-    def review_required_licenses_count(self):
+    def review_required_licenses_count(self) -> int:
         License_Component = apps.get_model("licenses", "License_Component")
         return License_Component.objects.filter(
             branch=self,
@@ -253,7 +240,7 @@ class Branch(Model):
         ).count()
 
     @property
-    def unknown_licenses_count(self):
+    def unknown_licenses_count(self) -> int:
         License_Component = apps.get_model("licenses", "License_Component")
         return License_Component.objects.filter(
             branch=self,
@@ -261,7 +248,7 @@ class Branch(Model):
         ).count()
 
     @property
-    def allowed_licenses_count(self):
+    def allowed_licenses_count(self) -> int:
         License_Component = apps.get_model("licenses", "License_Component")
         return License_Component.objects.filter(
             branch=self,
@@ -269,7 +256,7 @@ class Branch(Model):
         ).count()
 
     @property
-    def ignored_licenses_count(self):
+    def ignored_licenses_count(self) -> int:
         License_Component = apps.get_model("licenses", "License_Component")
         return License_Component.objects.filter(
             branch=self,
@@ -290,11 +277,11 @@ class Service(Model):
             Index(fields=["name"]),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     @property
-    def open_critical_observation_count(self):
+    def open_critical_observation_count(self) -> int:
         return Observation.objects.filter(
             origin_service=self,
             branch=self.product.repository_default_branch,
@@ -303,7 +290,7 @@ class Service(Model):
         ).count()
 
     @property
-    def open_high_observation_count(self):
+    def open_high_observation_count(self) -> int:
         return Observation.objects.filter(
             origin_service=self,
             branch=self.product.repository_default_branch,
@@ -312,7 +299,7 @@ class Service(Model):
         ).count()
 
     @property
-    def open_medium_observation_count(self):
+    def open_medium_observation_count(self) -> int:
         return Observation.objects.filter(
             origin_service=self,
             branch=self.product.repository_default_branch,
@@ -321,7 +308,7 @@ class Service(Model):
         ).count()
 
     @property
-    def open_low_observation_count(self):
+    def open_low_observation_count(self) -> int:
         return Observation.objects.filter(
             origin_service=self,
             branch=self.product.repository_default_branch,
@@ -330,7 +317,7 @@ class Service(Model):
         ).count()
 
     @property
-    def open_none_observation_count(self):
+    def open_none_observation_count(self) -> int:
         return Observation.objects.filter(
             origin_service=self,
             branch=self.product.repository_default_branch,
@@ -339,7 +326,7 @@ class Service(Model):
         ).count()
 
     @property
-    def open_unknown_observation_count(self):
+    def open_unknown_observation_count(self) -> int:
         return Observation.objects.filter(
             origin_service=self,
             branch=self.product.repository_default_branch,
@@ -359,7 +346,7 @@ class Product_Member(Model):
             "user",
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.product} / {self.user}"
 
 
@@ -374,7 +361,7 @@ class Product_Authorization_Group_Member(Model):
             "authorization_group",
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.product} / {self.authorization_group}"
 
 
@@ -386,25 +373,15 @@ class Observation(Model):
     description = TextField(max_length=2048, blank=True)
     recommendation = TextField(max_length=2048, blank=True)
     current_severity = CharField(max_length=12, choices=Severity.SEVERITY_CHOICES)
-    numerical_severity = IntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(6)]
-    )
-    parser_severity = CharField(
-        max_length=12, choices=Severity.SEVERITY_CHOICES, blank=True
-    )
-    rule_severity = CharField(
-        max_length=12, choices=Severity.SEVERITY_CHOICES, blank=True
-    )
-    assessment_severity = CharField(
-        max_length=12, choices=Severity.SEVERITY_CHOICES, blank=True
-    )
+    numerical_severity = IntegerField(validators=[MinValueValidator(1), MaxValueValidator(6)])
+    parser_severity = CharField(max_length=12, choices=Severity.SEVERITY_CHOICES, blank=True)
+    rule_severity = CharField(max_length=12, choices=Severity.SEVERITY_CHOICES, blank=True)
+    assessment_severity = CharField(max_length=12, choices=Severity.SEVERITY_CHOICES, blank=True)
     current_status = CharField(max_length=16, choices=Status.STATUS_CHOICES)
     parser_status = CharField(max_length=16, choices=Status.STATUS_CHOICES, blank=True)
     vex_status = CharField(max_length=16, choices=Status.STATUS_CHOICES, blank=True)
     rule_status = CharField(max_length=16, choices=Status.STATUS_CHOICES, blank=True)
-    assessment_status = CharField(
-        max_length=16, choices=Status.STATUS_CHOICES, blank=True
-    )
+    assessment_status = CharField(max_length=16, choices=Status.STATUS_CHOICES, blank=True)
     scanner_observation_id = CharField(max_length=255, blank=True)
     vulnerability_id = CharField(max_length=255, blank=True)
     vulnerability_id_aliases = CharField(max_length=512, blank=True)
@@ -423,9 +400,7 @@ class Observation(Model):
     origin_endpoint_url = TextField(max_length=2048, blank=True)
     origin_endpoint_scheme = CharField(max_length=255, blank=True)
     origin_endpoint_hostname = CharField(max_length=255, blank=True)
-    origin_endpoint_port = IntegerField(
-        null=True, validators=[MinValueValidator(0), MaxValueValidator(65535)]
-    )
+    origin_endpoint_port = IntegerField(null=True, validators=[MinValueValidator(0), MaxValueValidator(65535)])
     origin_endpoint_path = TextField(max_length=2048, blank=True)
     origin_endpoint_params = TextField(max_length=2048, blank=True)
     origin_endpoint_query = TextField(max_length=2048, blank=True)
@@ -433,12 +408,8 @@ class Observation(Model):
     origin_service_name = CharField(max_length=255, blank=True)
     origin_service = ForeignKey(Service, on_delete=PROTECT, null=True)
     origin_source_file = CharField(max_length=255, blank=True)
-    origin_source_line_start = IntegerField(
-        null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]
-    )
-    origin_source_line_end = IntegerField(
-        null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)]
-    )
+    origin_source_line_start = IntegerField(null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)])
+    origin_source_line_end = IntegerField(null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)])
     origin_cloud_provider = CharField(max_length=255, blank=True)
     origin_cloud_account_subscription_project = CharField(max_length=255, blank=True)
     origin_cloud_resource = CharField(max_length=255, blank=True)
@@ -453,9 +424,7 @@ class Observation(Model):
     cvss3_vector = CharField(max_length=255, blank=True)
     cvss4_score = DecimalField(max_digits=3, decimal_places=1, null=True)
     cvss4_vector = CharField(max_length=255, blank=True)
-    cwe = IntegerField(
-        null=True, validators=[MinValueValidator(1), MaxValueValidator(999999)]
-    )
+    cwe = IntegerField(null=True, validators=[MinValueValidator(1), MaxValueValidator(999999)])
     epss_score = DecimalField(
         max_digits=6,
         decimal_places=3,
@@ -495,18 +464,10 @@ class Observation(Model):
     issue_tracker_issue_closed = BooleanField(default=False)
     issue_tracker_jira_initial_status = CharField(max_length=255, blank=True)
     has_potential_duplicates = BooleanField(default=False)
-    current_vex_justification = CharField(
-        max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True
-    )
-    parser_vex_justification = CharField(
-        max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True
-    )
-    vex_vex_justification = CharField(
-        max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True
-    )
-    rule_vex_justification = CharField(
-        max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True
-    )
+    current_vex_justification = CharField(max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True)
+    parser_vex_justification = CharField(max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True)
+    vex_vex_justification = CharField(max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True)
+    rule_vex_justification = CharField(max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True)
     assessment_vex_justification = CharField(
         max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True
     )
@@ -539,16 +500,16 @@ class Observation(Model):
             Index(fields=["scanner"]),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.product} / {self.title}"
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
-        self.unsaved_references = []
-        self.unsaved_evidences = []
+        self.unsaved_references: list[str] = []
+        self.unsaved_evidences: list[list[str]] = []
 
-    def save(self, *args, **kwargs) -> None:
+    def save(self, *args: Any, **kwargs: Any) -> None:
         normalize_observation_fields(self)
         self.identity_hash = get_identity_hash(self)
         set_product_flags(self)
@@ -557,19 +518,13 @@ class Observation(Model):
 
 
 class Observation_Log(Model):
-    observation = ForeignKey(
-        Observation, related_name="observation_logs", on_delete=CASCADE
-    )
-    user = ForeignKey(
-        "access_control.User", related_name="observation_logs", on_delete=PROTECT
-    )
+    observation = ForeignKey(Observation, related_name="observation_logs", on_delete=CASCADE)
+    user = ForeignKey("access_control.User", related_name="observation_logs", on_delete=PROTECT)
     severity = CharField(max_length=12, choices=Severity.SEVERITY_CHOICES, blank=True)
     status = CharField(max_length=16, choices=Status.STATUS_CHOICES, blank=True)
     comment = TextField(max_length=4096)
     created = DateTimeField(auto_now_add=True)
-    vex_justification = CharField(
-        max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True
-    )
+    vex_justification = CharField(max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True)
     assessment_status = CharField(
         max_length=16,
         choices=Assessment_Status.ASSESSMENT_STATUS_CHOICES,
@@ -639,9 +594,7 @@ class Potential_Duplicate(Model):
         (POTENTIAL_DUPLICATE_TYPE_SOURCE, POTENTIAL_DUPLICATE_TYPE_SOURCE),
     ]
 
-    observation = ForeignKey(
-        Observation, related_name="potential_duplicates", on_delete=CASCADE
-    )
+    observation = ForeignKey(Observation, related_name="potential_duplicates", on_delete=CASCADE)
     potential_duplicate_observation = ForeignKey(Observation, on_delete=CASCADE)
     type = CharField(max_length=12, choices=POTENTIAL_DUPLICATE_TYPES)
 

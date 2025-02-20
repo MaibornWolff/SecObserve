@@ -35,12 +35,8 @@ class TestPushNotifications(BaseTestCase):
     @patch("application.commons.services.send_notifications.send_email_notification")
     @patch("application.commons.services.send_notifications.get_current_user")
     @patch("application.commons.services.send_notifications._get_notification_email_to")
-    @patch(
-        "application.commons.services.send_notifications._get_notification_slack_webhook"
-    )
-    @patch(
-        "application.commons.services.send_notifications._get_notification_ms_teams_webhook"
-    )
+    @patch("application.commons.services.send_notifications._get_notification_slack_webhook")
+    @patch("application.commons.services.send_notifications._get_notification_ms_teams_webhook")
     @patch("application.commons.models.Notification.objects.create")
     def test_send_product_security_gate_notification_no_webhook_no_email(
         self,
@@ -81,12 +77,8 @@ class TestPushNotifications(BaseTestCase):
     @patch("application.commons.services.send_notifications._get_first_name")
     @patch("application.commons.services.send_notifications.get_current_user")
     @patch("application.commons.services.send_notifications._get_notification_email_to")
-    @patch(
-        "application.commons.services.send_notifications._get_notification_slack_webhook"
-    )
-    @patch(
-        "application.commons.services.send_notifications._get_notification_ms_teams_webhook"
-    )
+    @patch("application.commons.services.send_notifications._get_notification_slack_webhook")
+    @patch("application.commons.services.send_notifications._get_notification_ms_teams_webhook")
     @patch("application.commons.models.Notification.objects.create")
     def test_send_product_security_gate_notification_security_gate_none(
         self,
@@ -108,15 +100,9 @@ class TestPushNotifications(BaseTestCase):
         mock_base_url.return_value = "https://secobserve.com/"
         mock_get_first_name.return_value = "first_name"
         mock_current_user.return_value = self.user_internal
-        mock_get_notification_email_to.return_value = (
-            "test1@example.com, test2@example.com"
-        )
-        mock_get_notification_ms_teams_webhook.return_value = (
-            "https://msteams.microsoft.com"
-        )
-        mock_get_notification_slack_webhook.return_value = (
-            "https://secobserve.slack.com"
-        )
+        mock_get_notification_email_to.return_value = "test1@example.com, test2@example.com"
+        mock_get_notification_ms_teams_webhook.return_value = "https://msteams.microsoft.com"
+        mock_get_notification_slack_webhook.return_value = "https://secobserve.slack.com"
         self.product_1.security_gate_passed = None
         self.product_1.pk = 1
 
@@ -180,12 +166,8 @@ class TestPushNotifications(BaseTestCase):
     @patch("application.commons.services.send_notifications._get_first_name")
     @patch("application.commons.services.send_notifications.get_current_user")
     @patch("application.commons.services.send_notifications._get_notification_email_to")
-    @patch(
-        "application.commons.services.send_notifications._get_notification_slack_webhook"
-    )
-    @patch(
-        "application.commons.services.send_notifications._get_notification_ms_teams_webhook"
-    )
+    @patch("application.commons.services.send_notifications._get_notification_slack_webhook")
+    @patch("application.commons.services.send_notifications._get_notification_ms_teams_webhook")
     @patch("application.commons.models.Notification.objects.create")
     def test_send_product_security_gate_notification_security_gate_passed(
         self,
@@ -207,15 +189,9 @@ class TestPushNotifications(BaseTestCase):
         mock_base_url.return_value = "https://secobserve.com/"
         mock_get_first_name.return_value = "first_name"
         mock_current_user.return_value = self.user_internal
-        mock_get_notification_email_to.return_value = (
-            "test1@example.com, test2@example.com"
-        )
-        mock_get_notification_ms_teams_webhook.return_value = (
-            "https://msteams.microsoft.com"
-        )
-        mock_get_notification_slack_webhook.return_value = (
-            "https://secobserve.slack.com"
-        )
+        mock_get_notification_email_to.return_value = "test1@example.com, test2@example.com"
+        mock_get_notification_ms_teams_webhook.return_value = "https://msteams.microsoft.com"
+        mock_get_notification_slack_webhook.return_value = "https://secobserve.slack.com"
         self.product_1.security_gate_passed = True
         self.product_1.pk = 1
 
@@ -279,12 +255,8 @@ class TestPushNotifications(BaseTestCase):
     @patch("application.commons.services.send_notifications._get_first_name")
     @patch("application.commons.services.send_notifications.get_current_user")
     @patch("application.commons.services.send_notifications._get_notification_email_to")
-    @patch(
-        "application.commons.services.send_notifications._get_notification_slack_webhook"
-    )
-    @patch(
-        "application.commons.services.send_notifications._get_notification_ms_teams_webhook"
-    )
+    @patch("application.commons.services.send_notifications._get_notification_slack_webhook")
+    @patch("application.commons.services.send_notifications._get_notification_ms_teams_webhook")
     @patch("application.commons.models.Notification.objects.create")
     def test_send_product_security_gate_notification_security_gate_failed(
         self,
@@ -306,15 +278,9 @@ class TestPushNotifications(BaseTestCase):
         mock_base_url.return_value = "https://secobserve.com/"
         mock_get_first_name.return_value = "first_name"
         mock_current_user.return_value = self.user_internal
-        mock_get_notification_email_to.return_value = (
-            "test1@example.com, test2@example.com"
-        )
-        mock_get_notification_ms_teams_webhook.return_value = (
-            "https://msteams.microsoft.com"
-        )
-        mock_get_notification_slack_webhook.return_value = (
-            "https://secobserve.slack.com"
-        )
+        mock_get_notification_email_to.return_value = "test1@example.com, test2@example.com"
+        mock_get_notification_ms_teams_webhook.return_value = "https://msteams.microsoft.com"
+        mock_get_notification_slack_webhook.return_value = "https://secobserve.slack.com"
         self.product_1.security_gate_passed = False
         self.product_1.pk = 1
 
@@ -695,9 +661,7 @@ class TestPushNotifications(BaseTestCase):
 
     @patch("application.commons.tasks._create_notification_message")
     @patch("application.commons.tasks.send_mail")
-    def test_send_email_notification_empty_message(
-        self, mock_send_email, mock_create_message
-    ):
+    def test_send_email_notification_empty_message(self, mock_send_email, mock_create_message):
         mock_create_message.return_value = None
 
         send_email_notification("test@example.com", "subject", "test_template")
@@ -772,9 +736,7 @@ class TestPushNotifications(BaseTestCase):
 
     @patch("application.commons.tasks._create_notification_message")
     @patch("application.commons.tasks.requests.request")
-    def test_send_msteams_notification_empty_message(
-        self, mock_request, mock_create_message
-    ):
+    def test_send_msteams_notification_empty_message(self, mock_request, mock_create_message):
         mock_create_message.return_value = None
 
         send_msteams_notification("test_webhook", "test_template")
@@ -786,18 +748,14 @@ class TestPushNotifications(BaseTestCase):
     @patch("application.commons.tasks.requests.request")
     @patch("application.commons.tasks.logger.error")
     @patch("application.commons.tasks.format_log_message")
-    def test_send_msteams_notification_exception(
-        self, mock_format, mock_logger, mock_request, mock_create_message
-    ):
+    def test_send_msteams_notification_exception(self, mock_format, mock_logger, mock_request, mock_create_message):
         mock_create_message.return_value = "test_message"
         mock_request.side_effect = Exception("test_exception")
 
         send_msteams_notification("test_webhook", "test_template")
 
         mock_create_message.assert_called_with("test_template")
-        mock_request.assert_called_with(
-            method="POST", url="test_webhook", data="test_message", timeout=60
-        )
+        mock_request.assert_called_with(method="POST", url="test_webhook", data="test_message", timeout=60)
         mock_logger.assert_called_once()
         mock_format.assert_called_once()
 
@@ -805,9 +763,7 @@ class TestPushNotifications(BaseTestCase):
     @patch("application.commons.tasks.requests.request")
     @patch("application.commons.tasks.logger.error")
     @patch("application.commons.tasks.format_log_message")
-    def test_send_msteams_notification_not_ok(
-        self, mock_format, mock_logger, mock_request, mock_create_message
-    ):
+    def test_send_msteams_notification_not_ok(self, mock_format, mock_logger, mock_request, mock_create_message):
         mock_create_message.return_value = "test_message"
         response = Response()
         response.status_code = 400
@@ -816,9 +772,7 @@ class TestPushNotifications(BaseTestCase):
         send_msteams_notification("test_webhook", "test_template")
 
         mock_create_message.assert_called_with("test_template")
-        mock_request.assert_called_with(
-            method="POST", url="test_webhook", data="test_message", timeout=60
-        )
+        mock_request.assert_called_with(method="POST", url="test_webhook", data="test_message", timeout=60)
         mock_logger.assert_called_once()
         mock_format.assert_called_once()
 
@@ -826,9 +780,7 @@ class TestPushNotifications(BaseTestCase):
     @patch("application.commons.tasks.requests.request")
     @patch("application.commons.tasks.logger.error")
     @patch("application.commons.tasks.format_log_message")
-    def test_send_msteams_notification_success(
-        self, mock_format, mock_logger, mock_request, mock_create_message
-    ):
+    def test_send_msteams_notification_success(self, mock_format, mock_logger, mock_request, mock_create_message):
         mock_create_message.return_value = "test_message"
         response = Response()
         response.status_code = 200
@@ -837,9 +789,7 @@ class TestPushNotifications(BaseTestCase):
         send_msteams_notification("test_webhook", "test_template")
 
         mock_create_message.assert_called_with("test_template")
-        mock_request.assert_called_with(
-            method="POST", url="test_webhook", data="test_message", timeout=60
-        )
+        mock_request.assert_called_with(method="POST", url="test_webhook", data="test_message", timeout=60)
         mock_logger.assert_not_called()
         mock_format.assert_not_called()
 
@@ -847,9 +797,7 @@ class TestPushNotifications(BaseTestCase):
 
     @patch("application.commons.tasks._create_notification_message")
     @patch("application.commons.tasks.requests.request")
-    def test_send_slack_notification_empty_message(
-        self, mock_request, mock_create_message
-    ):
+    def test_send_slack_notification_empty_message(self, mock_request, mock_create_message):
         mock_create_message.return_value = None
 
         send_slack_notification("test_webhook", "test_template")
@@ -861,18 +809,14 @@ class TestPushNotifications(BaseTestCase):
     @patch("application.commons.tasks.requests.request")
     @patch("application.commons.tasks.logger.error")
     @patch("application.commons.tasks.format_log_message")
-    def test_send_slack_notification_exception(
-        self, mock_format, mock_logger, mock_request, mock_create_message
-    ):
+    def test_send_slack_notification_exception(self, mock_format, mock_logger, mock_request, mock_create_message):
         mock_create_message.return_value = "test_message"
         mock_request.side_effect = Exception("test_exception")
 
         send_slack_notification("test_webhook", "test_template")
 
         mock_create_message.assert_called_with("test_template")
-        mock_request.assert_called_with(
-            method="POST", url="test_webhook", data="test_message", timeout=60
-        )
+        mock_request.assert_called_with(method="POST", url="test_webhook", data="test_message", timeout=60)
         mock_logger.assert_called_once()
         mock_format.assert_called_once()
 
@@ -880,9 +824,7 @@ class TestPushNotifications(BaseTestCase):
     @patch("application.commons.tasks.requests.request")
     @patch("application.commons.tasks.logger.error")
     @patch("application.commons.tasks.format_log_message")
-    def test_send_slack_notification_not_ok(
-        self, mock_format, mock_logger, mock_request, mock_create_message
-    ):
+    def test_send_slack_notification_not_ok(self, mock_format, mock_logger, mock_request, mock_create_message):
         mock_create_message.return_value = "test_message"
         response = Response()
         response.status_code = 400
@@ -891,9 +833,7 @@ class TestPushNotifications(BaseTestCase):
         send_slack_notification("test_webhook", "test_template")
 
         mock_create_message.assert_called_with("test_template")
-        mock_request.assert_called_with(
-            method="POST", url="test_webhook", data="test_message", timeout=60
-        )
+        mock_request.assert_called_with(method="POST", url="test_webhook", data="test_message", timeout=60)
         mock_logger.assert_called_once()
         mock_format.assert_called_once()
 
@@ -901,9 +841,7 @@ class TestPushNotifications(BaseTestCase):
     @patch("application.commons.tasks.requests.request")
     @patch("application.commons.tasks.logger.error")
     @patch("application.commons.tasks.format_log_message")
-    def test_send_slack_notification_success(
-        self, mock_format, mock_logger, mock_request, mock_create_message
-    ):
+    def test_send_slack_notification_success(self, mock_format, mock_logger, mock_request, mock_create_message):
         mock_create_message.return_value = "test_message"
         response = Response()
         response.status_code = 200
@@ -912,9 +850,7 @@ class TestPushNotifications(BaseTestCase):
         send_slack_notification("test_webhook", "test_template")
 
         mock_create_message.assert_called_with("test_template")
-        mock_request.assert_called_with(
-            method="POST", url="test_webhook", data="test_message", timeout=60
-        )
+        mock_request.assert_called_with(method="POST", url="test_webhook", data="test_message", timeout=60)
         mock_logger.assert_not_called()
         mock_format.assert_not_called()
 
@@ -1018,9 +954,7 @@ class TestPushNotifications(BaseTestCase):
         self.assertTrue(_ratelimit_exception(exception))
         self.assertEqual(1, len(LAST_EXCEPTIONS.keys()))
 
-        difference: timedelta = (
-            datetime.now() - LAST_EXCEPTIONS["builtins.Exception/test_exception/None/"]
-        )
+        difference: timedelta = datetime.now() - LAST_EXCEPTIONS["builtins.Exception/test_exception/None/"]
         self.assertGreater(difference.microseconds, 0)
         self.assertLess(difference.microseconds, 999)
 
@@ -1031,14 +965,12 @@ class TestPushNotifications(BaseTestCase):
         mock_settings_load.return_value = settings
 
         LAST_EXCEPTIONS.clear()
-        LAST_EXCEPTIONS[
-            "builtins.Exception/test_exception/test_function/test_arguments"
-        ] = datetime.now() - timedelta(seconds=11)
+        LAST_EXCEPTIONS["builtins.Exception/test_exception/test_function/test_arguments"] = datetime.now() - timedelta(
+            seconds=11
+        )
         exception = Exception("test_exception")
 
-        self.assertTrue(
-            _ratelimit_exception(exception, "test_function", "test_arguments")
-        )
+        self.assertTrue(_ratelimit_exception(exception, "test_function", "test_arguments"))
         self.assertEqual(1, len(LAST_EXCEPTIONS.keys()))
 
     @patch("application.commons.models.Settings.load")
@@ -1048,14 +980,12 @@ class TestPushNotifications(BaseTestCase):
         mock_settings_load.return_value = settings
 
         LAST_EXCEPTIONS.clear()
-        LAST_EXCEPTIONS[
-            "builtins.Exception/test_exception/test_function/test_arguments"
-        ] = datetime.now() - timedelta(seconds=9)
+        LAST_EXCEPTIONS["builtins.Exception/test_exception/test_function/test_arguments"] = datetime.now() - timedelta(
+            seconds=9
+        )
         exception = Exception("test_exception")
 
-        self.assertFalse(
-            _ratelimit_exception(exception, "test_function", "test_arguments")
-        )
+        self.assertFalse(_ratelimit_exception(exception, "test_function", "test_arguments"))
         self.assertEqual(1, len(LAST_EXCEPTIONS.keys()))
 
     ## --- _get_user_first_name ---
@@ -1117,16 +1047,12 @@ class TestPushNotifications(BaseTestCase):
 
     def test_get_notification_ms_teams_webhook_product_webhook(self):
         self.product_1.notification_ms_teams_webhook = "test@example.com"
-        self.assertEqual(
-            "test@example.com", _get_notification_ms_teams_webhook(self.product_1)
-        )
+        self.assertEqual("test@example.com", _get_notification_ms_teams_webhook(self.product_1))
 
     def test_get_notification_ms_teams_webhook_product_group_webhook(self):
         self.product_group_1.notification_ms_teams_webhook = "test@example.com"
         self.product_1.product_group = self.product_group_1
-        self.assertEqual(
-            "test@example.com", _get_notification_ms_teams_webhook(self.product_1)
-        )
+        self.assertEqual("test@example.com", _get_notification_ms_teams_webhook(self.product_1))
 
     def test_get_notification_ms_teams_webhook_product_group_webhook_empty(self):
         self.product_1.product_group = self.product_group_1
@@ -1139,16 +1065,12 @@ class TestPushNotifications(BaseTestCase):
 
     def test_get_notification_slack_webhook_product_webhook(self):
         self.product_1.notification_slack_webhook = "test@example.com"
-        self.assertEqual(
-            "test@example.com", _get_notification_slack_webhook(self.product_1)
-        )
+        self.assertEqual("test@example.com", _get_notification_slack_webhook(self.product_1))
 
     def test_get_notification_slack_webhook_product_group_webhook(self):
         self.product_group_1.notification_slack_webhook = "test@example.com"
         self.product_1.product_group = self.product_group_1
-        self.assertEqual(
-            "test@example.com", _get_notification_slack_webhook(self.product_1)
-        )
+        self.assertEqual("test@example.com", _get_notification_slack_webhook(self.product_1))
 
     def test_get_notification_slack_webhook_product_group_webhook_empty(self):
         self.product_1.product_group = self.product_group_1

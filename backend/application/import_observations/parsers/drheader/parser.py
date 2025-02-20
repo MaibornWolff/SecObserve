@@ -112,9 +112,7 @@ class DrHEADerParser(BaseParser, BaseFileParser):
             return True
         return False
 
-    def get_observations(
-        self, data: list, product: Product, branch: Optional[Branch]
-    ) -> list[Observation]:
+    def get_observations(self, data: list, product: Product, branch: Optional[Branch]) -> list[Observation]:
         observations = []
 
         for drheader_observation in data:
@@ -148,9 +146,7 @@ class DrHEADerParser(BaseParser, BaseFileParser):
                 else:
                     description += "**Expected:** " + str(expected)
 
-            observation = Observation(
-                title=title, parser_severity=severity.title(), description=description
-            )
+            observation = Observation(title=title, parser_severity=severity.title(), description=description)
 
             evidence = []
             evidence.append("Result")

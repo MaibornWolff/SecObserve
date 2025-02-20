@@ -35,18 +35,12 @@ class VEX_Engine:
         except ValueError:
             return
 
-        search_purl = PackageURL(
-            type=purl.type, namespace=purl.namespace, name=purl.name
-        ).to_string()
+        search_purl = PackageURL(type=purl.type, namespace=purl.namespace, name=purl.name).to_string()
 
-        self.vex_statements = list(
-            VEX_Statement.objects.filter(product_purl__startswith=search_purl)
-        )
+        self.vex_statements = list(VEX_Statement.objects.filter(product_purl__startswith=search_purl))
 
     def apply_vex_statements_for_observation(self, observation: Observation) -> None:
-        previous_vex_statement = (
-            observation.vex_statement if observation.vex_statement else None
-        )
+        previous_vex_statement = observation.vex_statement if observation.vex_statement else None
         observation.vex_statement = None
 
         vex_statement_found = False
@@ -58,10 +52,7 @@ class VEX_Engine:
                 break
 
         # Write observation and observation log if no vex_statement was found but there was one before
-        if not vex_statement_found and (
-            previous_vex_statement != observation.vex_statement
-            or observation.vex_status
-        ):
+        if not vex_statement_found and (previous_vex_statement != observation.vex_statement or observation.vex_status):
             write_observation_log_no_vex_statement(observation, previous_vex_statement)
 
 
@@ -70,9 +61,7 @@ def apply_vex_statement_for_observation(
     observation: Observation,
     previous_vex_statement: Optional[VEX_Statement],
 ) -> bool:
-    if vex_statement.vulnerability_id == observation.vulnerability_id and _match_purls(
-        vex_statement, observation
-    ):
+    if vex_statement.vulnerability_id == observation.vulnerability_id and _match_purls(vex_statement, observation):
         previous_current_status = observation.current_status
         previous_vex_status = observation.vex_status
         observation.vex_status = _get_secobserve_status(vex_statement.status)
@@ -81,9 +70,7 @@ def apply_vex_statement_for_observation(
         previous_current_vex_justification = observation.current_vex_justification
         previous_vex_vex_justification = observation.vex_vex_justification
         observation.vex_vex_justification = vex_statement.justification
-        observation.current_vex_justification = get_current_vex_justification(
-            observation
-        )
+        observation.current_vex_justification = get_current_vex_justification(observation)
 
         observation.vex_statement = vex_statement
 
@@ -94,8 +81,7 @@ def apply_vex_statement_for_observation(
                 or previous_vex_status != observation.vex_status
                 or previous_vex_statement != observation.vex_statement
                 or previous_vex_vex_justification != observation.vex_vex_justification
-                or previous_current_vex_justification
-                != observation.current_vex_justification
+                or previous_current_vex_justification != observation.current_vex_justification
             )
             and not previous_vex_status == Status.STATUS_OPEN
             and not observation.vex_status == Status.STATUS_OPEN
@@ -115,9 +101,7 @@ def apply_vex_statement_for_observation(
 
 def _match_purls(vex_statement: VEX_Statement, observation: Observation) -> bool:
     product_purl = (
-        observation.branch.purl
-        if observation.branch and observation.branch.purl
-        else observation.product.purl
+        observation.branch.purl if observation.branch and observation.branch.purl else observation.product.purl
     )
     if not _match_purl(vex_statement.product_purl, product_purl):
         return False
@@ -126,9 +110,7 @@ def _match_purls(vex_statement: VEX_Statement, observation: Observation) -> bool
     return _match_purl(vex_statement.component_purl, observation.origin_component_purl)
 
 
-def _match_purl(
-    vex_purl_str: Optional[str], observation_purl_str: Optional[str]
-) -> bool:
+def _match_purl(vex_purl_str: Optional[str], observation_purl_str: Optional[str]) -> bool:
     if not vex_purl_str and not observation_purl_str:
         return True
 
@@ -145,16 +127,8 @@ def _match_purl(
         vex_purl.type != observation_purl.type
         or vex_purl.namespace != observation_purl.namespace
         or vex_purl.name != observation_purl.name
-        or (
-            vex_purl.version
-            and observation_purl.version
-            and vex_purl.version != observation_purl.version
-        )
-        or (
-            vex_purl.subpath
-            and observation_purl.subpath
-            and vex_purl.subpath != observation_purl.subpath
-        )
+        or (vex_purl.version and observation_purl.version and vex_purl.version != observation_purl.version)
+        or (vex_purl.subpath and observation_purl.subpath and vex_purl.subpath != observation_purl.subpath)
         or not _check_qualifiers(vex_purl.qualifiers, observation_purl.qualifiers)
     ):
         return False
@@ -162,9 +136,7 @@ def _match_purl(
     return True
 
 
-def _check_qualifiers(
-    vex_qualifiers: Optional[str | dict], observation_qualifiers: Optional[str | dict]
-) -> bool:
+def _check_qualifiers(vex_qualifiers: Optional[str | dict], observation_qualifiers: Optional[str | dict]) -> bool:
     if not vex_qualifiers and not observation_qualifiers:
         return True
 
@@ -176,10 +148,7 @@ def _check_qualifiers(
 
     if isinstance(vex_qualifiers, dict) and isinstance(observation_qualifiers, dict):
         for key, value in vex_qualifiers.items():
-            if (
-                observation_qualifiers.get(key) is not None
-                and observation_qualifiers.get(key) != value
-            ):
+            if observation_qualifiers.get(key) is not None and observation_qualifiers.get(key) != value:
                 return False
         for key, value in observation_qualifiers.items():
             if vex_qualifiers.get(key) is not None and vex_qualifiers.get(key) != value:
@@ -221,9 +190,7 @@ def _write_observation_log(
         comment = f"{comment}\n\n{vex_statement.impact}"
 
     risk_acceptance_expiry_date = (
-        calculate_risk_acceptance_expiry_date(observation.product)
-        if status == Status.STATUS_RISK_ACCEPTED
-        else None
+        calculate_risk_acceptance_expiry_date(observation.product) if status == Status.STATUS_RISK_ACCEPTED else None
     )
 
     create_observation_log(
@@ -249,11 +216,7 @@ def write_observation_log_no_vex_statement(
     previous_vex_justification = observation.current_vex_justification
     observation.current_vex_justification = get_current_vex_justification(observation)
 
-    log_status = (
-        observation.current_status
-        if previous_status != observation.current_status
-        else ""
-    )
+    log_status = observation.current_status if previous_status != observation.current_status else ""
     log_vex_justification = (
         observation.current_vex_justification
         if previous_vex_justification != observation.current_vex_justification
@@ -261,9 +224,7 @@ def write_observation_log_no_vex_statement(
     )
 
     if previous_vex_statement:
-        log_comment = (
-            f"Removed VEX statement from {previous_vex_statement.document.document_id}"
-        )
+        log_comment = f"Removed VEX statement from {previous_vex_statement.document.document_id}"
     else:
         log_comment = "Removed unknown VEX statement"
 
@@ -284,18 +245,14 @@ def write_observation_log_no_vex_statement(
     )
 
 
-def apply_vex_statements_after_import(
-    product_purls: set[str], vex_statements: set[VEX_Statement]
-) -> None:
+def apply_vex_statements_after_import(product_purls: set[str], vex_statements: set[VEX_Statement]) -> None:
     for product_purl in product_purls:
         try:
             purl = PackageURL.from_string(product_purl)
         except ValueError:
             continue
 
-        search_purl = PackageURL(
-            type=purl.type, namespace=purl.namespace, name=purl.name
-        ).to_string()
+        search_purl = PackageURL(type=purl.type, namespace=purl.namespace, name=purl.name).to_string()
 
         products = set(Product.objects.filter(purl__startswith=search_purl))
         branches = Branch.objects.filter(purl__startswith=search_purl)
@@ -306,6 +263,4 @@ def apply_vex_statements_after_import(
             observations = Observation.objects.filter(product=product)
             for observation in observations:
                 for vex_statement in vex_statements:
-                    apply_vex_statement_for_observation(
-                        vex_statement, observation, observation.vex_statement
-                    )
+                    apply_vex_statement_for_observation(vex_statement, observation, observation.vex_statement)

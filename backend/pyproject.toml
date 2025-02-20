@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "SecObserve"
-version = "1.28.0"
+version = "1.28.1"
 description = "SecObserve is an open source vulnerability management system for software development and cloud environments."
 license = "BSD-3-Clause"
 authors = [
@@ -14,7 +14,7 @@ python = ">= 3.10, < 3.13"
 gunicorn = "23.0.0"  # https://github.com/benoitc/gunicorn
 django = "5.1.6"  # https://www.djangoproject.com/
 django-environ = "0.12.0"  # https://github.com/joke2k/django-environ
-django-filter = "24.3"  # https://github.com/carltongibson/django-filter 
+django-filter = "25.1"  # https://github.com/carltongibson/django-filter 
 django-csp = "3.8"  # https://github.com/mozilla/django-csp
 django-picklefield = "3.2"  # https://github.com/gintas/django-picklefield 
 django-encrypted-model-fields = "0.6.5"  # https://gitlab.com/lansharkconsulting/django/django-encrypted-model-fields
@@ -42,12 +42,12 @@ psycopg = { version = "3.2.4", extras = ["binary"] }  # https://github.com/psyco
 # ------------------------------------------------------------------------------
 defusedcsv = "2.0.0"  # https://github.com/raphaelm/defusedcsv
 openpyxl = "3.1.5"  # https://foss.heptapod.net/openpyxl/openpyxl
-jsonpickle = "4.0.1"  # https://github.com/jsonpickle/jsonpickle
+jsonpickle = "4.0.2"  # https://github.com/jsonpickle/jsonpickle
 pyyaml = "6.0.2"  # https://github.com/yaml/pyyaml
 # Field specifications
 # ------------------------------------------------------------------------------
 packageurl-python = "0.16.0"  # https://github.com/package-url/packageurl-python
-cvss = "3.3"  # https://github.com/RedHatProductSecurity/cvss
+cvss = "3.4"  # https://github.com/RedHatProductSecurity/cvss
 semver = "3.0.4"  # https://github.com/python-semver/python-semver
 license-expression = "30.4.1"  # https://github.com/aboutcode-org/license-expression
 # Task queue
@@ -60,7 +60,7 @@ jira = "3.8.0"  # https://github.com/pycontribs/jira
 # ------------------------------------------------------------------------------
 inflect = "7.5.0"  # https://github.com/jaraco/inflect
 validators = "0.34.0"  # https://github.com/python-validators/validators
-py-ocsf-models = "0.3.0"  # https://github.com/prowler-cloud/py-ocsf-models
+py-ocsf-models = "0.3.1"  # https://github.com/prowler-cloud/py-ocsf-models
 spdx-tools = "0.8.3"  # https://github.com/spdx/tools-python
 
 # Development dependencies
@@ -73,12 +73,12 @@ django-extensions = { version = "3.2.3", optional = true }  # https://github.com
 
 # Unittest dependencies
 # ------------------------------------------------------------------------------
-coverage = { version = "7.6.11", optional = true }  # https://github.com/nedbat/coveragepy
+coverage = { version = "7.6.12", optional = true }  # https://github.com/nedbat/coveragepy
 django-coverage-plugin = { version = "3.1.0", optional = true }  # https://github.com/nedbat/django_coverage_plugin
 
 # Code quality dependencies
 # ------------------------------------------------------------------------------
-flake8 = { version = "7.1.1", optional = true }  # https://github.com/PyCQA/flake8
+flake8 = { version = "7.1.2", optional = true }  # https://github.com/PyCQA/flake8
 flake8-isort = { version = "6.1.2", optional = true }  # https://github.com/gforcada/flake8-isort
 black = { version = "25.1.0", optional = true }  # https://github.com/psf/black
 pylint = { version = "3.3.4", optional = true }  # https://github.com/pylint-dev/pylint
@@ -93,3 +93,7 @@ types-PyMySQL = { version = "1.1.0.20241103", optional = true }  # https://githu
 dev = ["Werkzeug", "ipdb", "watchgod", "django-extensions"]
 unittests = ["coverage", "django-extensions", "django-coverage-plugin"]
 code_quality = ["flake8", "flake8-isort", "black", "pylint", "pylint-django", "pre-commit", "mypy", "django-stubs", "djangorestframework-stubs", "types-PyMySQL"]
+
+[tool.black]
+line-length = 120
+target-version = ['py312']

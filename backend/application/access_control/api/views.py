@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from django.contrib.auth import authenticate as django_authenticate
+from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.password_validation import (
     CommonPasswordValidator,
     MinimumLengthValidator,
@@ -12,6 +13,7 @@ from django.contrib.auth.password_validation import (
     validate_password,
 )
 from django.core.exceptions import ValidationError as DjangoValidationError
+from django.db.models import QuerySet
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import status
@@ -20,7 +22,9 @@ from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.filters import SearchFilter
 from rest_framework.mixins import ListModelMixin
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.serializers import BaseSerializer
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ModelViewSet, ViewSet
 
@@ -96,13 +100,13 @@ class UserViewSet(ModelViewSet):
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["full_name"]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[User]:
         if self.action == "list":
             return get_users_without_api_tokens()
 
         return get_users()
 
-    def get_serializer_class(self):
+    def get_serializer_class(self) -> type[BaseSerializer[Any]]:
         if self.action == "list":
             return UserListSerializer
         if self.action in ["create", "update", "partial_update"]:
@@ -110,7 +114,7 @@ class UserViewSet(ModelViewSet):
 
         return super().get_serializer_class()
 
-    def destroy(self, request, *args, **kwargs) -> Response:
+    def destroy(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         instance: User = self.get_object()
         if instance == request.user:
             raise ValidationError("You cannot delete yourself")
@@ -119,7 +123,7 @@ class UserViewSet(ModelViewSet):
 
     @extend_schema(methods=["GET"], responses={status.HTTP_200_OK: UserSerializer})
     @action(detail=False, methods=["get"])
-    def me(self, request):
+    def me(self, request: Request) -> Response:
         serializer = UserSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -129,17 +133,18 @@ class UserViewSet(ModelViewSet):
         responses={status.HTTP_200_OK: UserSerializer},
     )
     @action(detail=False, methods=["patch"])
-    def my_settings(self, request):
+    def my_settings(self, request: Request) -> Response:
         request_serializer = UserSettingsSerializer(data=request.data)
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
 
         setting_theme = request_serializer.validated_data.get("setting_theme")
         setting_list_size = request_serializer.validated_data.get("setting_list_size")
-        setting_list_properties = request_serializer.validated_data.get(
-            "setting_list_properties"
-        )
-        user: User = request.user
+        setting_list_properties = request_serializer.validated_data.get("setting_list_properties")
+        user = request.user
+        if isinstance(user, AnonymousUser):
+            raise PermissionDenied("You must be authenticated to change settings")
+
         if setting_theme:
             user.setting_theme = setting_theme
         if setting_list_size:
@@ -157,7 +162,7 @@ class UserViewSet(ModelViewSet):
         responses={status.HTTP_204_NO_CONTENT: None},
     )
     @action(detail=True, methods=["patch"])
-    def change_password(self, request, pk=None):  # pylint: disable=unused-argument
+    def change_password(self, request: Request, pk: int = None) -> Response:  # pylint: disable=unused-argument
         # pk is not used, but it is required to match the action signature
         request_serializer = UserPasswordSerializer(data=request.data)
         if not request_serializer.is_valid():
@@ -169,9 +174,7 @@ class UserViewSet(ModelViewSet):
         new_password_2 = request_serializer.validated_data.get("new_password_2")
 
         if not request.user.is_superuser and request.user.pk != instance.pk:
-            raise PermissionDenied(
-                "You are not allowed to change other users' passwords"
-            )
+            raise PermissionDenied("You are not allowed to change other users' passwords")
 
         if not instance.has_usable_password() or instance.is_oidc_user:
             raise ValidationError("User's password cannot be changed")
@@ -202,15 +205,13 @@ class UserViewSet(ModelViewSet):
         responses={status.HTTP_200_OK: UserPasswortRulesSerializer},
     )
     @action(detail=False, methods=["get"])
-    def password_rules(self, request):
+    def password_rules(self, request: Request) -> Response:
 
         @dataclass
         class PasswordRules:
             password_rules: str
 
-        password_rules_text = password_validators_help_texts(
-            self._get_password_validators()
-        )
+        password_rules_text = password_validators_help_texts(self._get_password_validators())
         password_rules = PasswordRules("- " + "\n- ".join(password_rules_text))
         response_serializer = UserPasswortRulesSerializer(password_rules)
         return Response(response_serializer.data, status=status.HTTP_200_OK)
@@ -218,11 +219,7 @@ class UserViewSet(ModelViewSet):
     def _get_password_validators(self) -> list[Any]:
         validators: list[Any] = []
         settings = Settings.load()
-        validators.append(
-            MinimumLengthValidator(
-                min_length=settings.password_validator_minimum_length
-            )
-        )
+        validators.append(MinimumLengthValidator(min_length=settings.password_validator_minimum_length))
         if settings.password_validator_common_passwords:
             validators.append(CommonPasswordValidator())
         if settings.password_validator_attribute_similarity:
@@ -241,7 +238,7 @@ class AuthorizationGroupViewSet(ModelViewSet):
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["name"]
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Authorization_Group]:
         return get_authorization_groups()
 
 
@@ -251,7 +248,7 @@ class AuthorizationGroupMemberViewSet(ModelViewSet):
     queryset = Authorization_Group_Member.objects.none()
     permission_classes = (IsAuthenticated, UserHasAuthorizationGroupMemberPermission)
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Authorization_Group_Member]:
         return get_authorization_group_members()
 
 
@@ -270,23 +267,17 @@ class CreateUserAPITokenView(APIView):
         request=AuthenticationRequestSerializer,
         responses={status.HTTP_201_CREATED: CreateApiTokenResponseSerializer},
     )
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         user = _get_authenticated_user(request.data)
         try:
             token = create_user_api_token(user)
         except ValidationError as e:
             response = Response(status=status.HTTP_400_BAD_REQUEST)
-            logger.warning(
-                format_log_message(message=str(e), user=user, response=response)
-            )
+            logger.warning(format_log_message(message=str(e), user=user, response=response))
             raise
 
         response = Response({"token": token}, status=status.HTTP_201_CREATED)
-        logger.info(
-            format_log_message(
-                message="API token created", user=user, response=response
-            )
-        )
+        logger.info(format_log_message(message="API token created", user=user, response=response))
         return response
 
 
@@ -298,15 +289,11 @@ class RevokeUserAPITokenView(APIView):
         request=AuthenticationRequestSerializer,
         responses={status.HTTP_204_NO_CONTENT: None},
     )
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         user = _get_authenticated_user(request.data)
         revoke_user_api_token(user)
         response = Response(status=status.HTTP_204_NO_CONTENT)
-        logger.info(
-            format_log_message(
-                message="API token revoked", user=user, response=response
-            )
-        )
+        logger.info(format_log_message(message="API token revoked", user=user, response=response))
         return response
 
 
@@ -315,13 +302,17 @@ class ProductApiTokenViewset(ViewSet):
 
     @extend_schema(
         parameters=[
-            OpenApiParameter(
-                name="product", location=OpenApiParameter.QUERY, required=True, type=int
-            ),
+            OpenApiParameter(name="product", location=OpenApiParameter.QUERY, required=True, type=int),
         ],
     )
-    def list(self, request):
-        product = _get_product(request.query_params.get("product"))
+    def list(self, request: Request) -> Response:
+        product_id = str(request.query_params.get("product", ""))
+        if not product_id:
+            raise ValidationError("Product is required")
+        if not product_id.isdigit():
+            raise ValidationError("Product id must be an integer")
+
+        product = _get_product(int(str(product_id)))
         user_has_permission_or_403(product, Permissions.Product_View)
         tokens = get_product_api_tokens(product)
         serializer = ProductApiTokenSerializer(tokens, many=True)
@@ -332,7 +323,7 @@ class ProductApiTokenViewset(ViewSet):
         request=ProductApiTokenSerializer,
         responses={status.HTTP_200_OK: CreateApiTokenResponseSerializer},
     )
-    def create(self, request):
+    def create(self, request: Request) -> Response:
         request_serializer = ProductApiTokenSerializer(data=request.data)
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
@@ -341,29 +332,23 @@ class ProductApiTokenViewset(ViewSet):
 
         user_has_permission_or_403(product, Permissions.Product_Api_Token_Create)
 
-        token = create_product_api_token(
-            product, request_serializer.validated_data.get("role")
-        )
+        token = create_product_api_token(product, request_serializer.validated_data.get("role"))
 
         response = Response({"token": token}, status=status.HTTP_201_CREATED)
-        logger.info(
-            format_log_message(message="Product API token created", response=response)
-        )
+        logger.info(format_log_message(message="Product API token created", response=response))
         return response
 
     @extend_schema(
         responses={status.HTTP_204_NO_CONTENT: None},
     )
-    def destroy(self, request, pk=None):
+    def destroy(self, request: Request, pk: int) -> Response:
         product = _get_product(pk)
         user_has_permission_or_403(product, Permissions.Product_Api_Token_Revoke)
 
         revoke_product_api_token(product)
 
         response = Response(status=status.HTTP_204_NO_CONTENT)
-        logger.info(
-            format_log_message(message="Product API token revoked", response=response)
-        )
+        logger.info(format_log_message(message="Product API token revoked", response=response))
         return response
 
 
@@ -375,18 +360,14 @@ class AuthenticateView(APIView):
         request=AuthenticationRequestSerializer,
         responses={status.HTTP_200_OK: AuthenticationResponseSerializer},
     )
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         user = _get_authenticated_user(request.data)
 
         jwt = create_jwt(user)
 
         user_serializer = UserSerializer(user)
         response = Response({"jwt": jwt, "user": user_serializer.data})
-        logger.info(
-            format_log_message(
-                message="User authenticated", user=user, response=response
-            )
-        )
+        logger.info(format_log_message(message="User authenticated", user=user, response=response))
         return response
 
 
@@ -397,7 +378,7 @@ class JWTSecretResetView(APIView):
         request=None,
         responses={status.HTTP_204_NO_CONTENT: None},
     )
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         jwt_secret = JWT_Secret(secret=create_secret())
         jwt_secret.save()
         return Response(status=status.HTTP_204_NO_CONTENT)

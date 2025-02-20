@@ -40,24 +40,12 @@ class TestImportObservations(BaseTestCase):
         super().setUp()
 
     @patch("application.commons.services.global_request.get_current_request")
-    @patch(
-        "application.import_observations.services.import_observations.check_security_gate"
-    )
-    @patch(
-        "application.import_observations.services.import_observations.set_repository_default_branch"
-    )
-    @patch(
-        "application.import_observations.services.import_observations.push_observations_to_issue_tracker"
-    )
-    @patch(
-        "application.import_observations.services.import_observations.epss_apply_observation"
-    )
-    @patch(
-        "application.import_observations.services.import_observations.find_potential_duplicates"
-    )
-    @patch(
-        "application.vex.services.vex_engine.VEX_Engine.apply_vex_statements_for_observation"
-    )
+    @patch("application.import_observations.services.import_observations.check_security_gate")
+    @patch("application.import_observations.services.import_observations.set_repository_default_branch")
+    @patch("application.import_observations.services.import_observations.push_observations_to_issue_tracker")
+    @patch("application.import_observations.services.import_observations.epss_apply_observation")
+    @patch("application.import_observations.services.import_observations.find_potential_duplicates")
+    @patch("application.vex.services.vex_engine.VEX_Engine.apply_vex_statements_for_observation")
     def test_file_upload_observations_with_branch(
         self,
         mock_apply_vex_statements_for_observation,
@@ -80,33 +68,19 @@ class TestImportObservations(BaseTestCase):
 
         product = Product.objects.get(id=1)
         mock_check_security_gate.assert_has_calls([call(product), call(product)])
-        mock_set_repository_default_branch.assert_has_calls(
-            [call(product), call(product)]
-        )
+        mock_set_repository_default_branch.assert_has_calls([call(product), call(product)])
         self.assertEqual(mock_push_observations_to_issue_tracker.call_count, 2)
         self.assertEqual(mock_epss_apply_observation.call_count, 4)
         self.assertEqual(mock_find_potential_duplicates.call_count, 2)
         self.assertEqual(mock_apply_vex_statements_for_observation.call_count, 4)
 
     @patch("application.commons.services.global_request.get_current_request")
-    @patch(
-        "application.import_observations.services.import_observations.check_security_gate"
-    )
-    @patch(
-        "application.import_observations.services.import_observations.set_repository_default_branch"
-    )
-    @patch(
-        "application.import_observations.services.import_observations.push_observations_to_issue_tracker"
-    )
-    @patch(
-        "application.import_observations.services.import_observations.epss_apply_observation"
-    )
-    @patch(
-        "application.import_observations.services.import_observations.find_potential_duplicates"
-    )
-    @patch(
-        "application.vex.services.vex_engine.VEX_Engine.apply_vex_statements_for_observation"
-    )
+    @patch("application.import_observations.services.import_observations.check_security_gate")
+    @patch("application.import_observations.services.import_observations.set_repository_default_branch")
+    @patch("application.import_observations.services.import_observations.push_observations_to_issue_tracker")
+    @patch("application.import_observations.services.import_observations.epss_apply_observation")
+    @patch("application.import_observations.services.import_observations.find_potential_duplicates")
+    @patch("application.vex.services.vex_engine.VEX_Engine.apply_vex_statements_for_observation")
     def test_file_upload_observations_without_branch(
         self,
         mock_apply_vex_statements_for_observation,
@@ -122,17 +96,13 @@ class TestImportObservations(BaseTestCase):
 
         product = Product.objects.get(id=1)
         mock_check_security_gate.assert_has_calls([call(product), call(product)])
-        mock_set_repository_default_branch.assert_has_calls(
-            [call(product), call(product)]
-        )
+        mock_set_repository_default_branch.assert_has_calls([call(product), call(product)])
         self.assertEqual(mock_push_observations_to_issue_tracker.call_count, 2)
         self.assertEqual(mock_epss_apply_observation.call_count, 4)
         self.assertEqual(mock_find_potential_duplicates.call_count, 2)
         self.assertEqual(mock_apply_vex_statements_for_observation.call_count, 4)
 
-    def _file_upload_observations(
-        self, branch, service, docker_image_name_tag, endpoint_url, kubernetes_cluster
-    ):
+    def _file_upload_observations(self, branch, service, docker_image_name_tag, endpoint_url, kubernetes_cluster):
         # --- First import ---
 
         file_upload_parameters = FileUploadParameters(
@@ -174,9 +144,7 @@ class TestImportObservations(BaseTestCase):
         else:
             self.assertEqual(observations[0].origin_service_name, "")
         if docker_image_name_tag:
-            self.assertEqual(
-                observations[0].origin_docker_image_name_tag, docker_image_name_tag
-            )
+            self.assertEqual(observations[0].origin_docker_image_name_tag, docker_image_name_tag)
         else:
             self.assertEqual(observations[0].origin_docker_image_name_tag, "")
         if endpoint_url:
@@ -184,9 +152,7 @@ class TestImportObservations(BaseTestCase):
         else:
             self.assertEqual(observations[0].origin_endpoint_url, "")
         if kubernetes_cluster:
-            self.assertEqual(
-                observations[0].origin_kubernetes_cluster, kubernetes_cluster
-            )
+            self.assertEqual(observations[0].origin_kubernetes_cluster, kubernetes_cluster)
         else:
             self.assertEqual(observations[0].origin_kubernetes_cluster, "")
 
@@ -194,9 +160,7 @@ class TestImportObservations(BaseTestCase):
         self.assertEqual(observations[1].current_status, Status.STATUS_OPEN)
         self.assertEqual(observations[2].current_status, Status.STATUS_NOT_AFFECTED)
 
-        observation_logs = Observation_Log.objects.filter(
-            observation__product=1
-        ).order_by("id")
+        observation_logs = Observation_Log.objects.filter(observation__product=1).order_by("id")
         self.assertEqual(len(observation_logs), 4)
 
         self.assertEqual(observation_logs[0].observation, observations[0])
@@ -215,9 +179,7 @@ class TestImportObservations(BaseTestCase):
             "Updated by product rule db_product_rule_import",
         )
 
-        references = Reference.objects.filter(observation__product=product).order_by(
-            "id"
-        )
+        references = Reference.objects.filter(observation__product=product).order_by("id")
         self.assertEqual(len(references), 3)
 
         self.assertEqual(references[0].observation, observations[0])
@@ -277,9 +239,7 @@ class TestImportObservations(BaseTestCase):
         self.assertEqual(observations[1].current_status, Status.STATUS_OPEN)
         self.assertEqual(observations[2].current_status, Status.STATUS_RESOLVED)
 
-        observation_logs = Observation_Log.objects.filter(
-            observation__product=1
-        ).order_by("id")
+        observation_logs = Observation_Log.objects.filter(observation__product=1).order_by("id")
         self.assertEqual(len(observation_logs), 7)
 
         self.assertEqual(observation_logs[4].observation, observations[1])
@@ -290,20 +250,14 @@ class TestImportObservations(BaseTestCase):
         self.assertEqual(observation_logs[5].observation, observations[0])
         self.assertEqual(observation_logs[5].severity, "")
         self.assertEqual(observation_logs[5].status, Status.STATUS_RESOLVED)
-        self.assertEqual(
-            observation_logs[5].comment, "Observation not found in latest scan"
-        )
+        self.assertEqual(observation_logs[5].comment, "Observation not found in latest scan")
 
         self.assertEqual(observation_logs[6].observation, observations[2])
         self.assertEqual(observation_logs[6].severity, "")
         self.assertEqual(observation_logs[6].status, Status.STATUS_RESOLVED)
-        self.assertEqual(
-            observation_logs[6].comment, "Observation not found in latest scan"
-        )
+        self.assertEqual(observation_logs[6].comment, "Observation not found in latest scan")
 
-        references = Reference.objects.filter(observation__product=product).order_by(
-            "id"
-        )
+        references = Reference.objects.filter(observation__product=product).order_by("id")
         self.assertEqual(len(references), 3)
 
         evidences = Evidence.objects.filter(observation__product=product).order_by("id")
@@ -322,30 +276,14 @@ class TestImportObservations(BaseTestCase):
         self.assertEqual(vulnerability_checks[0].last_import_observations_resolved, 1)
 
     @patch("application.commons.services.global_request.get_current_request")
-    @patch(
-        "application.import_observations.services.import_observations.check_security_gate"
-    )
-    @patch(
-        "application.import_observations.services.import_observations.set_repository_default_branch"
-    )
-    @patch(
-        "application.import_observations.services.import_observations.push_observations_to_issue_tracker"
-    )
-    @patch(
-        "application.import_observations.services.import_observations.epss_apply_observation"
-    )
-    @patch(
-        "application.import_observations.services.import_observations.find_potential_duplicates"
-    )
-    @patch(
-        "application.vex.services.vex_engine.VEX_Engine.apply_vex_statements_for_observation"
-    )
-    @patch(
-        "application.import_observations.parsers.cyclone_dx.parser.CycloneDXParser.get_license_components"
-    )
-    @patch(
-        "application.import_observations.services.import_observations.process_license_components"
-    )
+    @patch("application.import_observations.services.import_observations.check_security_gate")
+    @patch("application.import_observations.services.import_observations.set_repository_default_branch")
+    @patch("application.import_observations.services.import_observations.push_observations_to_issue_tracker")
+    @patch("application.import_observations.services.import_observations.epss_apply_observation")
+    @patch("application.import_observations.services.import_observations.find_potential_duplicates")
+    @patch("application.vex.services.vex_engine.VEX_Engine.apply_vex_statements_for_observation")
+    @patch("application.import_observations.parsers.cyclone_dx.parser.CycloneDXParser.get_license_components")
+    @patch("application.import_observations.services.import_observations.process_license_components")
     def test_file_upload_licenses_feature_false(
         self,
         mock_process_license_components,
@@ -381,30 +319,14 @@ class TestImportObservations(BaseTestCase):
         settings.save()
 
     @patch("application.commons.services.global_request.get_current_request")
-    @patch(
-        "application.import_observations.services.import_observations.check_security_gate"
-    )
-    @patch(
-        "application.import_observations.services.import_observations.set_repository_default_branch"
-    )
-    @patch(
-        "application.import_observations.services.import_observations.push_observations_to_issue_tracker"
-    )
-    @patch(
-        "application.import_observations.services.import_observations.epss_apply_observation"
-    )
-    @patch(
-        "application.import_observations.services.import_observations.find_potential_duplicates"
-    )
-    @patch(
-        "application.vex.services.vex_engine.VEX_Engine.apply_vex_statements_for_observation"
-    )
-    @patch(
-        "application.import_observations.parsers.cyclone_dx.parser.CycloneDXParser.get_license_components"
-    )
-    @patch(
-        "application.import_observations.services.import_observations.process_license_components"
-    )
+    @patch("application.import_observations.services.import_observations.check_security_gate")
+    @patch("application.import_observations.services.import_observations.set_repository_default_branch")
+    @patch("application.import_observations.services.import_observations.push_observations_to_issue_tracker")
+    @patch("application.import_observations.services.import_observations.epss_apply_observation")
+    @patch("application.import_observations.services.import_observations.find_potential_duplicates")
+    @patch("application.vex.services.vex_engine.VEX_Engine.apply_vex_statements_for_observation")
+    @patch("application.import_observations.parsers.cyclone_dx.parser.CycloneDXParser.get_license_components")
+    @patch("application.import_observations.services.import_observations.process_license_components")
     def test_file_upload_suppress_licenses_true(
         self,
         mock_process_license_components,
@@ -432,24 +354,12 @@ class TestImportObservations(BaseTestCase):
         self.assertEqual(mock_process_license_components.call_count, 0)
 
     @patch("application.commons.services.global_request.get_current_request")
-    @patch(
-        "application.import_observations.services.import_observations.check_security_gate"
-    )
-    @patch(
-        "application.import_observations.services.import_observations.set_repository_default_branch"
-    )
-    @patch(
-        "application.import_observations.services.import_observations.push_observations_to_issue_tracker"
-    )
-    @patch(
-        "application.import_observations.services.import_observations.epss_apply_observation"
-    )
-    @patch(
-        "application.import_observations.services.import_observations.find_potential_duplicates"
-    )
-    @patch(
-        "application.vex.services.vex_engine.VEX_Engine.apply_vex_statements_for_observation"
-    )
+    @patch("application.import_observations.services.import_observations.check_security_gate")
+    @patch("application.import_observations.services.import_observations.set_repository_default_branch")
+    @patch("application.import_observations.services.import_observations.push_observations_to_issue_tracker")
+    @patch("application.import_observations.services.import_observations.epss_apply_observation")
+    @patch("application.import_observations.services.import_observations.find_potential_duplicates")
+    @patch("application.vex.services.vex_engine.VEX_Engine.apply_vex_statements_for_observation")
     def test_file_upload_licenses_feature_true(
         self,
         mock_apply_vex_statements_for_observation,
@@ -522,16 +432,12 @@ class TestImportObservations(BaseTestCase):
             self.assertEqual(updated_license_objects, 0)
             self.assertEqual(deleted_license_objects, 0)
 
-            license_components = License_Component.objects.filter(product=1).order_by(
-                "id"
-            )
+            license_components = License_Component.objects.filter(product=1).order_by("id")
             self.assertEqual(len(license_components), 67)
 
             self.assertEqual(license_components[1].branch, branch)
             self.assertEqual(license_components[1].upload_filename, "licenses_1.json")
-            self.assertEqual(
-                license_components[1].component_name, "argon2-cffi-bindings"
-            )
+            self.assertEqual(license_components[1].component_name, "argon2-cffi-bindings")
             self.assertEqual(license_components[1].component_version, "21.2.0")
             self.assertEqual(
                 license_components[1].component_name_version,
@@ -543,12 +449,10 @@ class TestImportObservations(BaseTestCase):
             )
             self.assertEqual(license_components[1].component_purl_type, "pypi")
             self.assertEqual(license_components[1].component_cpe, "")
-            dependencies = """SecObserve:1.28.0 --> argon2-cffi:23.1.0
+            dependencies = """SecObserve:1.28.1 --> argon2-cffi:23.1.0
 argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             self.assertEqual(license_components[1].component_dependencies, dependencies)
-            self.assertEqual(
-                license_components[1].license, License.objects.get(spdx_id="MIT")
-            )
+            self.assertEqual(license_components[1].license, License.objects.get(spdx_id="MIT"))
             self.assertEqual(license_components[1].non_spdx_license, "")
             self.assertEqual(
                 license_components[1].evaluation_result,
@@ -561,13 +465,9 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 ),
             )
 
-            self.assertEqual(
-                license_components[3].component_name_version, "asgiref:3.8.1"
-            )
+            self.assertEqual(license_components[3].component_name_version, "asgiref:3.8.1")
             self.assertEqual(license_components[3].license, None)
-            self.assertEqual(
-                license_components[3].non_spdx_license, "0BSD, BSD-3-Clause"
-            )
+            self.assertEqual(license_components[3].non_spdx_license, "0BSD, BSD-3-Clause")
             self.assertEqual(
                 license_components[3].evaluation_result,
                 License_Policy_Evaluation_Result.RESULT_UNKNOWN,
@@ -579,9 +479,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 ),
             )
 
-            self.assertEqual(
-                license_components[24].component_name_version, "email-validator:2.1.1"
-            )
+            self.assertEqual(license_components[24].component_name_version, "email-validator:2.1.1")
             self.assertEqual(
                 license_components[24].license_expression,
                 "GPL-2.0-or-later WITH Bison-exception-2.2",
@@ -647,18 +545,14 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             self.assertEqual(updated_license_objects, 67)
             self.assertEqual(deleted_license_objects, 0)
 
-            license_components = License_Component.objects.filter(product=1).order_by(
-                "id"
-            )
+            license_components = License_Component.objects.filter(product=1).order_by("id")
             self.assertEqual(len(license_components), 67)
 
             self.assertEqual(
                 license_components[1].component_name_version,
                 "argon2-cffi-bindings:21.2.0",
             )
-            self.assertEqual(
-                license_components[1].license, License.objects.get(spdx_id="MIT")
-            )
+            self.assertEqual(license_components[1].license, License.objects.get(spdx_id="MIT"))
             self.assertEqual(license_components[1].non_spdx_license, "")
             self.assertEqual(
                 license_components[1].evaluation_result,
@@ -671,13 +565,9 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 ),
             )
 
-            self.assertEqual(
-                license_components[3].component_name_version, "asgiref:3.8.1"
-            )
+            self.assertEqual(license_components[3].component_name_version, "asgiref:3.8.1")
             self.assertEqual(license_components[3].license, None)
-            self.assertEqual(
-                license_components[3].non_spdx_license, "0BSD, BSD-3-Clause"
-            )
+            self.assertEqual(license_components[3].non_spdx_license, "0BSD, BSD-3-Clause")
             self.assertEqual(
                 license_components[3].evaluation_result,
                 License_Policy_Evaluation_Result.RESULT_UNKNOWN,
@@ -689,9 +579,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 ),
             )
 
-            self.assertEqual(
-                license_components[9].component_name_version, "cryptography:43.0.1"
-            )
+            self.assertEqual(license_components[9].component_name_version, "cryptography:43.0.1")
             self.assertEqual(license_components[9].license, None)
             self.assertEqual(
                 license_components[9].license_expression,
@@ -725,9 +613,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 ),
             )
 
-            self.assertEqual(
-                license_components[11].component_name_version, "defusedcsv:2.0.0"
-            )
+            self.assertEqual(license_components[11].component_name_version, "defusedcsv:2.0.0")
             self.assertEqual(license_components[11].license, None)
             self.assertEqual(
                 license_components[11].license_expression,
@@ -744,9 +630,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 ),
             )
 
-            self.assertEqual(
-                license_components[24].component_name_version, "email-validator:2.1.1"
-            )
+            self.assertEqual(license_components[24].component_name_version, "email-validator:2.1.1")
             self.assertEqual(
                 license_components[24].license_expression,
                 "GPL-2.0-or-later WITH Bison-exception-2.2",
@@ -829,18 +713,14 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             self.assertEqual(updated_license_objects, 64)
             self.assertEqual(deleted_license_objects, 3)
 
-            license_components = License_Component.objects.filter(product=1).order_by(
-                "id"
-            )
+            license_components = License_Component.objects.filter(product=1).order_by("id")
             self.assertEqual(len(license_components), 67)
 
             self.assertEqual(
                 license_components[64].component_name_version,
                 "argon2-cffi-bindings:21.2.1",
             )
-            self.assertEqual(
-                license_components[64].license, License.objects.get(spdx_id="MIT")
-            )
+            self.assertEqual(license_components[64].license, License.objects.get(spdx_id="MIT"))
             self.assertEqual(license_components[64].non_spdx_license, "")
             self.assertEqual(
                 license_components[64].evaluation_result,
@@ -853,13 +733,9 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 ),
             )
 
-            self.assertEqual(
-                license_components[2].component_name_version, "asgiref:3.8.1"
-            )
+            self.assertEqual(license_components[2].component_name_version, "asgiref:3.8.1")
             self.assertEqual(license_components[2].license, None)
-            self.assertEqual(
-                license_components[2].non_spdx_license, "0BSD, BSD-3-Clause"
-            )
+            self.assertEqual(license_components[2].non_spdx_license, "0BSD, BSD-3-Clause")
             self.assertEqual(
                 license_components[2].evaluation_result,
                 License_Policy_Evaluation_Result.RESULT_REVIEW_REQUIRED,
@@ -871,9 +747,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 ),
             )
 
-            self.assertEqual(
-                license_components[7].component_name_version, "cryptography:43.0.1"
-            )
+            self.assertEqual(license_components[7].component_name_version, "cryptography:43.0.1")
             self.assertEqual(license_components[7].license, None)
             self.assertEqual(
                 license_components[7].license_expression,
@@ -907,9 +781,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 ),
             )
 
-            self.assertEqual(
-                license_components[9].component_name_version, "defusedcsv:2.0.0"
-            )
+            self.assertEqual(license_components[9].component_name_version, "defusedcsv:2.0.0")
             self.assertEqual(license_components[9].license, None)
             self.assertEqual(
                 license_components[9].license_expression,
@@ -926,9 +798,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 ),
             )
 
-            self.assertEqual(
-                license_components[22].component_name_version, "email-validator:2.1.1"
-            )
+            self.assertEqual(license_components[22].component_name_version, "email-validator:2.1.1")
             self.assertEqual(
                 license_components[22].license_expression,
                 "GPL-3.0-or-later WITH Bison-exception-2.2",
@@ -984,18 +854,14 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             self.assertEqual(updated_license_objects, 67)
             self.assertEqual(deleted_license_objects, 0)
 
-            license_components = License_Component.objects.filter(product=1).order_by(
-                "id"
-            )
+            license_components = License_Component.objects.filter(product=1).order_by("id")
             self.assertEqual(len(license_components), 67)
 
             self.assertEqual(
                 license_components[64].component_name_version,
                 "argon2-cffi-bindings:21.2.1",
             )
-            self.assertEqual(
-                license_components[64].license, License.objects.get(spdx_id="MIT")
-            )
+            self.assertEqual(license_components[64].license, License.objects.get(spdx_id="MIT"))
             self.assertEqual(license_components[64].non_spdx_license, "")
             self.assertEqual(
                 license_components[64].evaluation_result,
@@ -1008,13 +874,9 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                 ),
             )
 
-            self.assertEqual(
-                license_components[2].component_name_version, "asgiref:3.8.1"
-            )
+            self.assertEqual(license_components[2].component_name_version, "asgiref:3.8.1")
             self.assertEqual(license_components[2].license, None)
-            self.assertEqual(
-                license_components[2].non_spdx_license, "0BSD, BSD-3-Clause"
-            )
+            self.assertEqual(license_components[2].non_spdx_license, "0BSD, BSD-3-Clause")
             self.assertEqual(
                 license_components[2].evaluation_result,
                 License_Policy_Evaluation_Result.RESULT_IGNORED,

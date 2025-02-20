@@ -13,6 +13,7 @@ import {
     useRecordContext,
 } from "react-admin";
 
+import license_policies from ".";
 import MarkdownField from "../../commons/custom_fields/MarkdownField";
 import { is_external, is_superuser } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
@@ -57,8 +58,9 @@ const LicensePolicyComponent = () => {
             render={(license_policy) => (
                 <Box width={"100%"}>
                     <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
-                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                            License Policy
+                        <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
+                            <license_policies.icon />
+                            &nbsp;&nbsp;License Policy
                         </Typography>
                         <Stack spacing={1}>
                             <Labeled label="Name">

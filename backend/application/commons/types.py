@@ -1,3 +1,6 @@
+from typing import Optional
+
+
 class Age_Choices:
     AGE_DAY = "Today"
     AGE_WEEK = "Past 7 days"
@@ -14,7 +17,7 @@ class Age_Choices:
     ]
 
     @classmethod
-    def get_days_from_age(cls, value):
+    def get_days_from_age(cls, value: "Age_Choices") -> Optional[int]:
         if value == cls.AGE_DAY:
             days = 0
         elif value == cls.AGE_WEEK:

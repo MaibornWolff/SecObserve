@@ -1,5 +1,8 @@
-from django.db.models import Exists
+from typing import Any, Optional
+
+from django.db.models import Exists, QuerySet
 from django_filters import CharFilter, FilterSet, NumberFilter, OrderingFilter
+from rest_framework.request import Request
 
 from application.access_control.models import (
     API_Token,
@@ -17,40 +20,46 @@ class UserFilter(FilterSet):
         field_name="exclude_authorization_group",
         method="get_exclude_authorization_group",
     )
-    exclude_license_group = NumberFilter(
-        field_name="exclude_license_group", method="get_exclude_license_group"
-    )
-    exclude_license_policy = NumberFilter(
-        field_name="exclude_license_policy", method="get_exclude_license_policy"
-    )
-    exclude_product = NumberFilter(
-        field_name="exclude_product", method="get_exclude_product"
-    )
+    exclude_license_group = NumberFilter(field_name="exclude_license_group", method="get_exclude_license_group")
+    exclude_license_policy = NumberFilter(field_name="exclude_license_policy", method="get_exclude_license_policy")
+    exclude_product = NumberFilter(field_name="exclude_product", method="get_exclude_product")
 
     def get_exclude_authorization_group(
-        self, queryset, field_name, value
-    ):  # pylint: disable=unused-argument
+        self,
+        queryset: QuerySet,
+        name: Any,  # pylint: disable=unused-argument
+        value: Any,
+    ) -> QuerySet:
         if value is not None:
             return queryset.exclude(authorization_groups__id=value)
         return queryset
 
     def get_exclude_license_group(
-        self, queryset, field_name, value
-    ):  # pylint: disable=unused-argument
+        self,
+        queryset: QuerySet,
+        name: Any,  # pylint: disable=unused-argument
+        value: Any,
+    ) -> QuerySet:
         if value is not None:
             return queryset.exclude(license_groups__id=value)
         return queryset
 
     def get_exclude_license_policy(
-        self, queryset, field_name, value
-    ):  # pylint: disable=unused-argument
+        self,
+        queryset: QuerySet,
+        name: Any,  # pylint: disable=unused-argument
+        value: Any,
+    ) -> QuerySet:
         if value is not None:
             return queryset.exclude(license_policies__id=value)
         return queryset
 
     def get_exclude_product(
-        self, queryset, field_name, value
-    ):  # pylint: disable=unused-argument
+        self,
+        queryset: QuerySet,
+        name: Any,  # pylint: disable=unused-argument
+        value: Any,
+    ) -> QuerySet:
         if value is not None:
             return queryset.exclude(product_members__id=value)
         return queryset
@@ -78,9 +87,16 @@ class UserFilter(FilterSet):
             "is_external",
         ]
 
-    def __init__(self, data=None, queryset=None, *, request=None, prefix=None):
+    def __init__(
+        self,
+        data: Optional[Any] = None,
+        queryset: Optional[QuerySet] = None,
+        *,
+        request: Optional[Request] = None,
+        prefix: Optional[Any] = None,
+    ):
         super().__init__(data, queryset, request=request, prefix=prefix)
-        if not request.user.is_superuser:
+        if request and not request.user.is_superuser:
             self.filters.pop("is_oidc_user")
             self.filters.pop("is_active")
             self.filters.pop("is_superuser")
@@ -97,33 +113,36 @@ class AuthorizationGroupFilter(FilterSet):
     name = CharFilter(field_name="name", lookup_expr="icontains")
     oidc_group = CharFilter(field_name="oidc_group", lookup_expr="icontains")
     user = NumberFilter(field_name="users")
-    exclude_license_group = NumberFilter(
-        field_name="exclude_license_group", method="get_exclude_license_group"
-    )
-    exclude_license_policy = NumberFilter(
-        field_name="exclude_license_policy", method="get_exclude_license_policy"
-    )
-    exclude_product = NumberFilter(
-        field_name="exclude_product", method="get_exclude_product"
-    )
+    exclude_license_group = NumberFilter(field_name="exclude_license_group", method="get_exclude_license_group")
+    exclude_license_policy = NumberFilter(field_name="exclude_license_policy", method="get_exclude_license_policy")
+    exclude_product = NumberFilter(field_name="exclude_product", method="get_exclude_product")
 
     def get_exclude_license_group(
-        self, queryset, field_name, value
-    ):  # pylint: disable=unused-argument
+        self,
+        queryset: QuerySet,
+        name: Any,  # pylint: disable=unused-argument
+        value: Any,
+    ) -> QuerySet:
         if value is not None:
             return queryset.exclude(license_groups__id=value)
         return queryset
 
     def get_exclude_license_policy(
-        self, queryset, field_name, value
-    ):  # pylint: disable=unused-argument
+        self,
+        queryset: QuerySet,
+        name: Any,  # pylint: disable=unused-argument
+        value: Any,
+    ) -> QuerySet:
         if value is not None:
             return queryset.exclude(license_policies__id=value)
         return queryset
 
     def get_exclude_product(
-        self, queryset, field_name, value
-    ):  # pylint: disable=unused-argument
+        self,
+        queryset: QuerySet,
+        name: Any,  # pylint: disable=unused-argument
+        value: Any,
+    ) -> QuerySet:
         if value is not None:
             return queryset.exclude(authorization_groups__id=value)
         return queryset
@@ -137,12 +156,15 @@ class AuthorizationGroupFilter(FilterSet):
         model = Authorization_Group
         fields = ["name", "oidc_group"]
 
-    def get_user(self, queryset, name, value):  # pylint: disable=unused-argument
+    def get_user(
+        self,
+        queryset: QuerySet,
+        name: Any,  # pylint: disable=unused-argument
+        value: Any,
+    ) -> QuerySet:
         # field_name is used as a positional argument
 
-        authorization_group_members = Authorization_Group_Member.objects.filter(
-            user__id=value
-        )
+        authorization_group_members = Authorization_Group_Member.objects.filter(user__id=value)
         queryset = queryset.annotate(
             member=Exists(authorization_group_members),
         )

@@ -11,6 +11,7 @@ import {
     SimpleForm,
 } from "react-admin";
 
+import product_groups from ".";
 import { validate_0_999999, validate_255, validate_2048, validate_required_255 } from "../../commons/custom_validators";
 import { feature_license_management } from "../../commons/functions";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
@@ -95,8 +96,9 @@ const ProductGroupCreate = () => {
     return (
         <Create redirect="show" transform={transform}>
             <SimpleForm warnWhenUnsavedChanges>
-                <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                    Product Group
+                <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
+                    <product_groups.icon />
+                    &nbsp;&nbsp;Product Group
                 </Typography>
                 <TextInputWide autoFocus source="name" validate={validate_required_255} />
                 <RichTextInput source="description" validate={validate_2048} />

@@ -29,12 +29,8 @@ class TestHousekeeping(BaseTestCase):
 
         return super().setUp()
 
-    @patch(
-        "application.core.services.housekeeping.delete_inactive_branches_for_product"
-    )
-    def test_delete_inactive_branches(
-        self, mock_delete_inactive_branches_for_product: Mock
-    ):
+    @patch("application.core.services.housekeeping.delete_inactive_branches_for_product")
+    def test_delete_inactive_branches(self, mock_delete_inactive_branches_for_product: Mock):
         delete_inactive_branches_and_set_flags()
 
         expected_calls = [
@@ -114,9 +110,7 @@ class TestHousekeeping(BaseTestCase):
             self.fail("Branch should not have been deleted")
 
     @patch("application.commons.models.Settings.load")
-    def test_delete_inactive_branches_for_product_product_not_active(
-        self, mock_settings_load
-    ):
+    def test_delete_inactive_branches_for_product_product_not_active(self, mock_settings_load):
         settings = Settings()
         settings.branch_housekeeping_keep_inactive_days = 9
         mock_settings_load.return_value = settings
@@ -134,9 +128,7 @@ class TestHousekeeping(BaseTestCase):
             self.fail("Branch should not have been deleted")
 
     @patch("application.commons.models.Settings.load")
-    def test_delete_inactive_branches_for_product_product_specific_delete(
-        self, mock_settings_load
-    ):
+    def test_delete_inactive_branches_for_product_product_specific_delete(self, mock_settings_load):
         settings = Settings()
         settings.branch_housekeeping_active = False
         mock_settings_load.return_value = settings
@@ -160,9 +152,7 @@ class TestHousekeeping(BaseTestCase):
             pass
 
     @patch("application.commons.models.Settings.load")
-    def test_delete_inactive_branches_for_product_product_specific_too_early(
-        self, mock_settings_load
-    ):
+    def test_delete_inactive_branches_for_product_product_specific_too_early(self, mock_settings_load):
         settings = Settings()
         settings.branch_housekeeping_active = False
         mock_settings_load.return_value = settings
@@ -181,9 +171,7 @@ class TestHousekeeping(BaseTestCase):
             self.fail("Branch should not have been deleted")
 
     @patch("application.commons.models.Settings.load")
-    def test_delete_inactive_branches_for_product_product_specific_exempt(
-        self, mock_settings_load
-    ):
+    def test_delete_inactive_branches_for_product_product_specific_exempt(self, mock_settings_load):
         settings = Settings()
         settings.branch_housekeeping_active = False
         mock_settings_load.return_value = settings
@@ -191,9 +179,7 @@ class TestHousekeeping(BaseTestCase):
         product = Product.objects.get(name="db_product_internal")
         product.repository_branch_housekeeping_active = True
         product.repository_branch_housekeeping_keep_inactive_days = 9
-        product.repository_branch_housekeeping_exempt_branches = (
-            "db_branch_internal_m.*"
-        )
+        product.repository_branch_housekeeping_exempt_branches = "db_branch_internal_m.*"
         product.save()
 
         delete_inactive_branches_for_product(product)
@@ -205,9 +191,7 @@ class TestHousekeeping(BaseTestCase):
             self.fail("Branch should not have been deleted")
 
     @patch("application.commons.models.Settings.load")
-    def test_delete_inactive_branches_for_product_product_specific_protected(
-        self, mock_settings_load
-    ):
+    def test_delete_inactive_branches_for_product_product_specific_protected(self, mock_settings_load):
         settings = Settings()
         settings.branch_housekeeping_active = False
         mock_settings_load.return_value = settings
@@ -229,9 +213,7 @@ class TestHousekeeping(BaseTestCase):
             self.fail("Branch should not have been deleted")
 
     @patch("application.commons.models.Settings.load")
-    def test_delete_inactive_branches_for_product_product_group_not_active(
-        self, mock_settings_load
-    ):
+    def test_delete_inactive_branches_for_product_product_group_not_active(self, mock_settings_load):
         settings = Settings()
         settings.branch_housekeeping_active = False
         mock_settings_load.return_value = settings
@@ -254,9 +236,7 @@ class TestHousekeeping(BaseTestCase):
             self.fail("Branch should not have been deleted")
 
     @patch("application.commons.models.Settings.load")
-    def test_delete_inactive_branches_for_product_product_group_too_early(
-        self, mock_settings_load
-    ):
+    def test_delete_inactive_branches_for_product_product_group_too_early(self, mock_settings_load):
         settings = Settings()
         settings.branch_housekeeping_active = False
         mock_settings_load.return_value = settings
@@ -280,9 +260,7 @@ class TestHousekeeping(BaseTestCase):
             self.fail("Branch should not have been deleted")
 
     @patch("application.commons.models.Settings.load")
-    def test_delete_inactive_branches_for_product_product_group_exempt(
-        self, mock_settings_load
-    ):
+    def test_delete_inactive_branches_for_product_product_group_exempt(self, mock_settings_load):
         settings = Settings()
         settings.branch_housekeeping_active = False
         mock_settings_load.return_value = settings
@@ -290,9 +268,7 @@ class TestHousekeeping(BaseTestCase):
         product_group = Product.objects.get(name="db_product_group")
         product_group.repository_branch_housekeeping_active = True
         product_group.repository_branch_housekeeping_keep_inactive_days = 9
-        product_group.repository_branch_housekeeping_exempt_branches = (
-            "db_branch_internal_m.*"
-        )
+        product_group.repository_branch_housekeeping_exempt_branches = "db_branch_internal_m.*"
         product_group.save()
         product = Product.objects.get(name="db_product_internal")
         product.product_group = product_group
@@ -309,9 +285,7 @@ class TestHousekeeping(BaseTestCase):
             self.fail("Branch should not have been deleted")
 
     @patch("application.commons.models.Settings.load")
-    def test_delete_inactive_branches_for_product_product_group_delete(
-        self, mock_settings_load
-    ):
+    def test_delete_inactive_branches_for_product_product_group_delete(self, mock_settings_load):
         settings = Settings()
         settings.branch_housekeeping_active = False
         mock_settings_load.return_value = settings

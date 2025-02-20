@@ -32,9 +32,7 @@ def get_origin_component_name_version(observation: Observation) -> str:
 
     origin_component_name_version_with_type = observation.origin_component_name_version
     if observation.origin_component_purl_type:
-        origin_component_name_version_with_type += (
-            f" ({observation.origin_component_purl_type})"
-        )
+        origin_component_name_version_with_type += f" ({observation.origin_component_purl_type})"
 
     return origin_component_name_version_with_type
 
@@ -70,7 +68,7 @@ def validate_cvss4_vector(cvss4_vector: str) -> str:
     return cvss4_vector
 
 
-def validate_cvss_and_severity(attrs):
+def validate_cvss_and_severity(attrs: dict) -> None:
     cvss3_severity = _validate_cvss3(attrs)
     cvss4_severity = _validate_cvss4(attrs)
 
@@ -88,9 +86,7 @@ def validate_cvss_and_severity(attrs):
             )
     else:
         if not cvss_severity:
-            raise ValidationError(
-                "Either Severity, CVSS3/4 score or CVSS3/4 vector has to be set"
-            )
+            raise ValidationError("Either Severity, CVSS3/4 score or CVSS3/4 vector has to be set")
 
 
 def _validate_cvss3(attrs: dict) -> Optional[str]:

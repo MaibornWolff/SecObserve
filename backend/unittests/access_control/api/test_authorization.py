@@ -44,34 +44,22 @@ class TestAuthorizationBase(BaseTestCase):
         )
 
         product_metrics = Product_Metrics.objects.get(pk=1)
-        product_metrics.date = timezone.now().replace(
-            hour=0, minute=0, second=0, microsecond=0
-        ) - timedelta(days=1)
+        product_metrics.date = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=1)
         product_metrics.save()
         product_metrics = Product_Metrics.objects.get(pk=2)
-        product_metrics.date = timezone.now().replace(
-            hour=0, minute=0, second=0, microsecond=0
-        )
+        product_metrics.date = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
         product_metrics.save()
         product_metrics = Product_Metrics.objects.get(pk=3)
-        product_metrics.date = timezone.now().replace(
-            hour=0, minute=0, second=0, microsecond=0
-        ) - timedelta(days=1)
+        product_metrics.date = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=1)
         product_metrics.save()
         product_metrics = Product_Metrics.objects.get(pk=4)
-        product_metrics.date = timezone.now().replace(
-            hour=0, minute=0, second=0, microsecond=0
-        )
+        product_metrics.date = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
         product_metrics.save()
 
         super().setUpClass()
 
-    @patch(
-        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
-    )
-    @patch(
-        "application.core.api.serializers_product.calculate_risk_acceptance_expiry_date"
-    )
+    @patch("application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate")
+    @patch("application.core.api.serializers_product.calculate_risk_acceptance_expiry_date")
     def _test_api(self, data: APITest, mock_product_expiry_date, mock_authentication):
         user = User.objects.get(username=data.username)
         mock_authentication.return_value = user, None

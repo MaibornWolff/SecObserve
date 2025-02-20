@@ -14,9 +14,7 @@ class TestProwlerParser(TestCase):
             self.assertEqual("Prowler 3", parser.name)
             self.assertTrue(isinstance(parser_instance, ProwlerParser))
 
-            observations = parser_instance.get_observations(
-                data, Product(name="product"), None
-            )
+            observations = parser_instance.get_observations(data, Product(name="product"), None)
             self.assertEqual(1, len(observations))
 
             observation = observations[0]
@@ -42,9 +40,7 @@ Auto Minor Version Upgrade is a feature that you can enable to have your databas
                 observation.recommendation,
             )
             self.assertEqual("AWS", observation.origin_cloud_provider)
-            self.assertEqual(
-                "ACCOUNT_ID", observation.origin_cloud_account_subscription_project
-            )
+            self.assertEqual("ACCOUNT_ID", observation.origin_cloud_account_subscription_project)
             self.assertEqual("rds-instance-id", observation.origin_cloud_resource)
             self.assertEqual("AwsRdsDbInstance", observation.origin_cloud_resource_type)
             self.assertEqual(
@@ -60,9 +56,7 @@ Auto Minor Version Upgrade is a feature that you can enable to have your databas
             self.assertEqual("Prowler 3", parser.name)
             self.assertTrue(isinstance(parser_instance, ProwlerParser))
 
-            observations = parser_instance.get_observations(
-                data, Product(name="product"), None
-            )
+            observations = parser_instance.get_observations(data, Product(name="product"), None)
             self.assertEqual(2, len(observations))
 
             observation = observations[0]
@@ -88,12 +82,8 @@ Turning on Microsoft Defender for App Service enables threat detection for App S
                 "Example_Subscription - XAKS",
                 observation.origin_cloud_account_subscription_project,
             )
-            self.assertEqual(
-                "Defender plan App Services", observation.origin_cloud_resource
-            )
-            self.assertEqual(
-                "AzureDefenderPlan", observation.origin_cloud_resource_type
-            )
+            self.assertEqual("Defender plan App Services", observation.origin_cloud_resource)
+            self.assertEqual("AzureDefenderPlan", observation.origin_cloud_resource_type)
             self.assertEqual("Result", observation.unsaved_evidences[0][0])
             self.assertIn(
                 "defender_ensure_defender_for_app_services_is_on",

@@ -101,9 +101,7 @@ class TestAuthorizationLicensePolicyAuthorizationGroupMembers(TestAuthorizationB
             "authorization_group": 2,
             "is_manager": False,
         }
-        expected_data = (
-            "{'message': 'You do not have permission to perform this action.'}"
-        )
+        expected_data = "{'message': 'You do not have permission to perform this action.'}"
         self._test_api(
             APITest(
                 "db_product_group_user",
@@ -146,9 +144,7 @@ class TestAuthorizationLicensePolicyAuthorizationGroupMembers(TestAuthorizationB
             )
         )
 
-        expected_data = (
-            "{'message': 'You do not have permission to perform this action.'}"
-        )
+        expected_data = "{'message': 'You do not have permission to perform this action.'}"
         self._test_api(
             APITest(
                 "db_product_group_user",

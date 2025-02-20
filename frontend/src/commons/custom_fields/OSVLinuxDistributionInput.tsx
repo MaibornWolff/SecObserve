@@ -29,6 +29,7 @@ const OSVLinuxDistributionInput = () => {
             <TextUrlField
                 url="https://ossf.github.io/osv-schema/#affectedpackage-field"
                 text="OSV affected package specification"
+                new_tab={true}
             />
         </Fragment>
     );

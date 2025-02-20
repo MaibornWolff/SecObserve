@@ -10,7 +10,7 @@ class Roles(IntEnum):
     Owner = 5
 
     @classmethod
-    def has_value(cls, value):
+    def has_value(cls, value: int) -> bool:
         try:
             Roles(value)
             return True
@@ -80,7 +80,7 @@ class Permissions(IntEnum):
     License_Component_Delete = 6003
 
     @classmethod
-    def has_value(cls, value):
+    def has_value(cls, value: int) -> bool:
         try:
             Permissions(value)
             return True
@@ -88,7 +88,7 @@ class Permissions(IntEnum):
             return False
 
     @classmethod
-    def get_product_group_permissions(cls):
+    def get_product_group_permissions(cls) -> set["Permissions"]:
         return {
             Permissions.Product_Group_View,
             Permissions.Product_Group_Edit,
@@ -97,7 +97,7 @@ class Permissions(IntEnum):
         }
 
     @classmethod
-    def get_observation_permissions(cls):
+    def get_observation_permissions(cls) -> set["Permissions"]:
         return {
             Permissions.Observation_View,
             Permissions.Observation_Edit,
@@ -107,13 +107,13 @@ class Permissions(IntEnum):
         }
 
     @classmethod
-    def get_observation_log_permissions(cls):
+    def get_observation_log_permissions(cls) -> set["Permissions"]:
         return {
             Permissions.Observation_Log_Approval,
         }
 
     @classmethod
-    def get_product_member_permissions(cls):
+    def get_product_member_permissions(cls) -> set["Permissions"]:
         return {
             Permissions.Product_Member_View,
             Permissions.Product_Member_Edit,
@@ -121,7 +121,7 @@ class Permissions(IntEnum):
         }
 
     @classmethod
-    def get_product_authorization_group_member_permissions(cls):
+    def get_product_authorization_group_member_permissions(cls) -> set["Permissions"]:
         return {
             Permissions.Product_Authorization_Group_Member_View,
             Permissions.Product_Authorization_Group_Member_Edit,
@@ -129,7 +129,7 @@ class Permissions(IntEnum):
         }
 
     @classmethod
-    def get_product_rule_permissions(cls):
+    def get_product_rule_permissions(cls) -> set["Permissions"]:
         return {
             Permissions.Product_Rule_View,
             Permissions.Product_Rule_Edit,
@@ -140,7 +140,7 @@ class Permissions(IntEnum):
         }
 
     @classmethod
-    def get_branch_permissions(cls):
+    def get_branch_permissions(cls) -> set["Permissions"]:
         return {
             Permissions.Branch_View,
             Permissions.Branch_Edit,
@@ -149,14 +149,14 @@ class Permissions(IntEnum):
         }
 
     @classmethod
-    def get_service_permissions(cls):
+    def get_service_permissions(cls) -> set["Permissions"]:
         return {
             Permissions.Service_View,
             Permissions.Service_Delete,
         }
 
     @classmethod
-    def get_api_configuration_permissions(cls):
+    def get_api_configuration_permissions(cls) -> set["Permissions"]:
         return {
             Permissions.Api_Configuration_View,
             Permissions.Api_Configuration_Edit,
@@ -165,7 +165,7 @@ class Permissions(IntEnum):
         }
 
     @classmethod
-    def get_vex_permissions(cls):
+    def get_vex_permissions(cls) -> set["Permissions"]:
         return {
             Permissions.VEX_View,
             Permissions.VEX_Edit,
@@ -174,19 +174,19 @@ class Permissions(IntEnum):
         }
 
     @classmethod
-    def get_vulnerability_check_permissions(cls):
+    def get_vulnerability_check_permissions(cls) -> set["Permissions"]:
         return {
             Permissions.Product_View,
         }
 
     @classmethod
-    def get_component_license_permissions(cls):
+    def get_component_license_permissions(cls) -> set["Permissions"]:
         return {
             Permissions.License_Component_Delete,
         }
 
 
-def get_roles_with_permissions():
+def get_roles_with_permissions() -> dict[Roles, set[Permissions]]:
     return {
         Roles.Reader: {
             Permissions.Product_Group_View,
@@ -313,7 +313,7 @@ def get_roles_with_permissions():
     }
 
 
-def get_permissions_for_role(role: Optional[int]) -> list[Permissions]:
+def get_permissions_for_role(role: Optional[Roles]) -> Optional[set[Permissions]]:
     if not role:
-        return []
+        return set()
     return get_roles_with_permissions().get(role)

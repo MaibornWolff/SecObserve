@@ -26,9 +26,7 @@ class TestOpenVEX(TestCase):
         self.maxDiff = None
 
     @patch("django.utils.timezone.now")
-    @patch(
-        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
-    )
+    @patch("application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate")
     @patch("application.vex.services.openvex_generator.user_has_permission_or_403")
     @patch("application.vex.services.openvex_generator.get_current_user")
     @patch("application.core.queries.observation.get_current_user")
@@ -57,9 +55,7 @@ class TestOpenVEX(TestCase):
         }
 
         api_client = APIClient()
-        response = api_client.post(
-            "/api/vex/openvex_document/create/", parameters, format="json"
-        )
+        response = api_client.post("/api/vex/openvex_document/create/", parameters, format="json")
 
         self.assertEqual(200, response.status_code)
         self.assertEqual("application/json", response.headers["Content-Type"])
@@ -67,14 +63,10 @@ class TestOpenVEX(TestCase):
             "attachment; filename=OpenVEX_2020_0001_0001.json",
             response.headers["Content-Disposition"],
         )
-        with open(
-            path.dirname(__file__) + "/files/openvex_product_no_branch.json", "r"
-        ) as testfile:
+        with open(path.dirname(__file__) + "/files/openvex_product_no_branch.json", "r") as testfile:
             self.assertEqual(testfile.read(), response._container[0].decode("utf-8"))
 
-        openvex = OpenVEX.objects.get(
-            document_id_prefix="OpenVEX", document_base_id="2020_0001"
-        )
+        openvex = OpenVEX.objects.get(document_id_prefix="OpenVEX", document_base_id="2020_0001")
         self.assertEqual(vex_user, openvex.user)
         self.assertEqual(Product.objects.get(id=1), openvex.product)
         self.assertEqual(1, openvex.version)
@@ -147,14 +139,10 @@ class TestOpenVEX(TestCase):
             "attachment; filename=OpenVEX_2020_0001_0002.json",
             response.headers["Content-Disposition"],
         )
-        with open(
-            path.dirname(__file__) + "/files/openvex_product_no_branch_update.json", "r"
-        ) as testfile:
+        with open(path.dirname(__file__) + "/files/openvex_product_no_branch_update.json", "r") as testfile:
             self.assertEqual(testfile.read(), response._container[0].decode("utf-8"))
 
-        openvex = OpenVEX.objects.get(
-            document_id_prefix="OpenVEX", document_base_id="2020_0001"
-        )
+        openvex = OpenVEX.objects.get(document_id_prefix="OpenVEX", document_base_id="2020_0001")
         self.assertEqual(vex_user, openvex.user)
         self.assertEqual(Product.objects.get(id=1), openvex.product)
         self.assertEqual(2, openvex.version)
@@ -181,9 +169,7 @@ class TestOpenVEX(TestCase):
         self.assertEqual(0, len(openvex_vulnerabilities))
 
     @patch("django.utils.timezone.now")
-    @patch(
-        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
-    )
+    @patch("application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate")
     @patch("application.vex.services.openvex_generator.user_has_permission_or_403")
     @patch("application.vex.services.openvex_generator.get_current_user")
     @patch("application.core.queries.observation.get_current_user")
@@ -210,9 +196,7 @@ class TestOpenVEX(TestCase):
         }
 
         api_client = APIClient()
-        response = api_client.post(
-            "/api/vex/openvex_document/create/", parameters, format="json"
-        )
+        response = api_client.post("/api/vex/openvex_document/create/", parameters, format="json")
 
         self.assertEqual(200, response.status_code)
         self.assertEqual("application/json", response.headers["Content-Type"])
@@ -220,14 +204,10 @@ class TestOpenVEX(TestCase):
             "attachment; filename=OpenVEX_2020_0001_0001.json",
             response.headers["Content-Disposition"],
         )
-        with open(
-            path.dirname(__file__) + "/files/openvex_product_branches.json", "r"
-        ) as testfile:
+        with open(path.dirname(__file__) + "/files/openvex_product_branches.json", "r") as testfile:
             self.assertEqual(testfile.read(), response._container[0].decode("utf-8"))
 
-        openvex = OpenVEX.objects.get(
-            document_id_prefix="OpenVEX", document_base_id="2020_0001"
-        )
+        openvex = OpenVEX.objects.get(document_id_prefix="OpenVEX", document_base_id="2020_0001")
         self.assertEqual(vex_user, openvex.user)
         self.assertEqual(Product.objects.get(id=2), openvex.product)
         self.assertEqual(1, openvex.version)
@@ -254,9 +234,7 @@ class TestOpenVEX(TestCase):
         self.assertEqual(0, len(openvex_vulnerabilities))
 
     @patch("django.utils.timezone.now")
-    @patch(
-        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
-    )
+    @patch("application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate")
     @patch("application.vex.services.openvex_generator.user_has_permission_or_403")
     @patch("application.vex.services.openvex_generator.get_current_user")
     @patch("application.core.queries.observation.get_current_user")
@@ -284,9 +262,7 @@ class TestOpenVEX(TestCase):
         }
 
         api_client = APIClient()
-        response = api_client.post(
-            "/api/vex/openvex_document/create/", parameters, format="json"
-        )
+        response = api_client.post("/api/vex/openvex_document/create/", parameters, format="json")
 
         self.assertEqual(200, response.status_code)
         self.assertEqual("application/json", response.headers["Content-Type"])
@@ -294,14 +270,10 @@ class TestOpenVEX(TestCase):
             "attachment; filename=OpenVEX_2020_0001_0001.json",
             response.headers["Content-Disposition"],
         )
-        with open(
-            path.dirname(__file__) + "/files/openvex_product_given_branch.json", "r"
-        ) as testfile:
+        with open(path.dirname(__file__) + "/files/openvex_product_given_branch.json", "r") as testfile:
             self.assertEqual(testfile.read(), response._container[0].decode("utf-8"))
 
-        openvex = OpenVEX.objects.get(
-            document_id_prefix="OpenVEX", document_base_id="2020_0001"
-        )
+        openvex = OpenVEX.objects.get(document_id_prefix="OpenVEX", document_base_id="2020_0001")
         self.assertEqual(vex_user, openvex.user)
         self.assertEqual(Product.objects.get(id=2), openvex.product)
         self.assertEqual(1, openvex.version)
@@ -329,9 +301,7 @@ class TestOpenVEX(TestCase):
         self.assertEqual(0, len(openvex_vulnerabilities))
 
     @patch("django.utils.timezone.now")
-    @patch(
-        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
-    )
+    @patch("application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate")
     @patch("application.vex.services.openvex_generator.user_has_permission_or_403")
     @patch("application.vex.services.openvex_generator.get_current_user")
     @patch("application.core.queries.observation.get_current_user")
@@ -358,9 +328,7 @@ class TestOpenVEX(TestCase):
         }
 
         api_client = APIClient()
-        response = api_client.post(
-            "/api/vex/openvex_document/create/", parameters, format="json"
-        )
+        response = api_client.post("/api/vex/openvex_document/create/", parameters, format="json")
 
         self.assertEqual(200, response.status_code)
         self.assertEqual("application/json", response.headers["Content-Type"])
@@ -368,14 +336,10 @@ class TestOpenVEX(TestCase):
             "attachment; filename=OpenVEX_2020_0001_0001.json",
             response.headers["Content-Disposition"],
         )
-        with open(
-            path.dirname(__file__) + "/files/openvex_given_vulnerability.json", "r"
-        ) as testfile:
+        with open(path.dirname(__file__) + "/files/openvex_given_vulnerability.json", "r") as testfile:
             self.assertEqual(testfile.read(), response._container[0].decode("utf-8"))
 
-        openvex = OpenVEX.objects.get(
-            document_id_prefix="OpenVEX", document_base_id="2020_0001"
-        )
+        openvex = OpenVEX.objects.get(document_id_prefix="OpenVEX", document_base_id="2020_0001")
         self.assertEqual(vex_user, openvex.user)
         self.assertEqual(None, openvex.product)
         self.assertEqual(1, openvex.version)
@@ -451,9 +415,7 @@ class TestOpenVEX(TestCase):
         ) as testfile:
             self.assertEqual(testfile.read(), response._container[0].decode("utf-8"))
 
-        openvex = OpenVEX.objects.get(
-            document_id_prefix="OpenVEX", document_base_id="2020_0001"
-        )
+        openvex = OpenVEX.objects.get(document_id_prefix="OpenVEX", document_base_id="2020_0001")
         self.assertEqual(vex_user, openvex.user)
         self.assertEqual(None, openvex.product)
         self.assertEqual(2, openvex.version)

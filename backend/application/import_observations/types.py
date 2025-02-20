@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Optional
 
 from semver import Version
 
@@ -47,7 +47,7 @@ class Parser_Filetype:
 
 
 class ExtendedSemVer:
-    def __init__(self):
+    def __init__(self) -> None:
         self.prefix: Optional[int] = None
         self.semver: Version
 
@@ -102,16 +102,14 @@ class ExtendedSemVer:
 
         return Version.parse(suffix)
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: Any) -> bool:
         return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
 
-    def __gt__(self, other) -> bool:
+    def __gt__(self, other: Any) -> bool:
         if not isinstance(other, self.__class__):
             return False
 
-        if (self.prefix is None and other.prefix is not None) or (
-            self.prefix is not None and other.prefix is None
-        ):
+        if (self.prefix is None and other.prefix is not None) or (self.prefix is not None and other.prefix is None):
             return False
 
         if self.prefix is not None and other.prefix is not None:
@@ -122,13 +120,11 @@ class ExtendedSemVer:
 
         return self.semver > other.semver
 
-    def __ge__(self, other) -> bool:
+    def __ge__(self, other: Any) -> bool:
         if not isinstance(other, self.__class__):
             return False
 
-        if (self.prefix is None and other.prefix is not None) or (
-            self.prefix is not None and other.prefix is None
-        ):
+        if (self.prefix is None and other.prefix is not None) or (self.prefix is not None and other.prefix is None):
             return False
 
         if self.prefix is not None and other.prefix is not None:
@@ -139,13 +135,11 @@ class ExtendedSemVer:
 
         return self.semver >= other.semver
 
-    def __lt__(self, other) -> bool:
+    def __lt__(self, other: Any) -> bool:
         if not isinstance(other, self.__class__):
             return False
 
-        if (self.prefix is None and other.prefix is not None) or (
-            self.prefix is not None and other.prefix is None
-        ):
+        if (self.prefix is None and other.prefix is not None) or (self.prefix is not None and other.prefix is None):
             return False
 
         if self.prefix is not None and other.prefix is not None:
@@ -156,13 +150,11 @@ class ExtendedSemVer:
 
         return self.semver < other.semver
 
-    def __le__(self, other) -> bool:
+    def __le__(self, other: Any) -> bool:
         if not isinstance(other, self.__class__):
             return False
 
-        if (self.prefix is None and other.prefix is not None) or (
-            self.prefix is not None and other.prefix is None
-        ):
+        if (self.prefix is None and other.prefix is not None) or (self.prefix is not None and other.prefix is None):
             return False
 
         if self.prefix is not None and other.prefix is not None:

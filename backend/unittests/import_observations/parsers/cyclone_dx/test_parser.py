@@ -14,9 +14,7 @@ class TestCycloneDXParser(TestCase):
             self.assertEqual("CycloneDX", parser.name)
             self.assertTrue(isinstance(parser_instance, CycloneDXParser))
 
-            observations = parser_instance.get_observations(
-                data, Product(name="product"), None
-            )
+            observations = parser_instance.get_observations(data, Product(name="product"), None)
             self.assertEqual(8, len(observations))
 
             observation = observations[0]
@@ -31,16 +29,12 @@ class TestCycloneDXParser(TestCase):
             self.assertEqual(Severity.SEVERITY_MEDIUM, observation.parser_severity)
             self.assertEqual("python", observation.origin_component_name)
             self.assertEqual("3.11.3", observation.origin_component_version)
-            self.assertEqual(
-                "pkg:generic/python@3.11.3", observation.origin_component_purl
-            )
+            self.assertEqual("pkg:generic/python@3.11.3", observation.origin_component_purl)
             self.assertEqual(
                 "cpe:2.3:a:python_software_foundation:python:3.11.3:*:*:*:*:*:*:*",
                 observation.origin_component_cpe,
             )
-            self.assertEqual(
-                "example/example:dev", observation.origin_docker_image_name
-            )
+            self.assertEqual("example/example:dev", observation.origin_docker_image_name)
             self.assertEqual("", observation.origin_docker_image_tag)
             self.assertEqual(
                 "sha256:88901af20b50287be153ec4f20ed78f947eb5fa0d0a52432ced6e261b66b6cbc",
@@ -72,9 +66,7 @@ class TestCycloneDXParser(TestCase):
             self.assertEqual("CVE-2022-47015", observation.vulnerability_id)
             self.assertEqual("", observation.parser_severity)
             self.assertEqual(6.5, observation.cvss3_score)
-            self.assertEqual(
-                "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H", observation.cvss3_vector
-            )
+            self.assertEqual("CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H", observation.cvss3_vector)
             self.assertEqual("mariadb-client", observation.origin_component_name)
             self.assertEqual("10.6.12-r0", observation.origin_component_version)
             self.assertEqual(
@@ -85,9 +77,7 @@ class TestCycloneDXParser(TestCase):
                 "cpe:2.3:a:mariadb-client:mariadb-client:10.6.12-r0:*:*:*:*:*:*:*",
                 observation.origin_component_cpe,
             )
-            self.assertEqual(
-                "example/example:dev", observation.origin_docker_image_name
-            )
+            self.assertEqual("example/example:dev", observation.origin_docker_image_name)
             self.assertEqual("", observation.origin_docker_image_tag)
             self.assertEqual(
                 "sha256:88901af20b50287be153ec4f20ed78f947eb5fa0d0a52432ced6e261b66b6cbc",
@@ -118,17 +108,13 @@ class TestCycloneDXParser(TestCase):
             self.assertEqual("CycloneDX", parser.name)
             self.assertTrue(isinstance(parser_instance, CycloneDXParser))
 
-            observations = parser_instance.get_observations(
-                data, Product(name="product"), None
-            )
+            observations = parser_instance.get_observations(data, Product(name="product"), None)
             self.assertEqual(1, len(observations))
 
             observation = observations[0]
             self.assertEqual("CVE-2018-20225", observation.vulnerability_id)
             self.assertEqual("grype / 0.65.1", observation.scanner)
-            self.assertEqual(
-                "example/example-backend", observation.origin_docker_image_name
-            )
+            self.assertEqual("example/example-backend", observation.origin_docker_image_name)
             self.assertEqual("dev", observation.origin_docker_image_tag)
             self.assertEqual("", observation.origin_docker_image_digest)
 
@@ -138,17 +124,13 @@ class TestCycloneDXParser(TestCase):
             self.assertEqual("CycloneDX", parser.name)
             self.assertTrue(isinstance(parser_instance, CycloneDXParser))
 
-            observations = parser_instance.get_observations(
-                data, Product(name="product"), None
-            )
+            observations = parser_instance.get_observations(data, Product(name="product"), None)
             self.assertEqual(1, len(observations))
 
             observation = observations[0]
             self.assertEqual("CVE-2023-42363", observation.vulnerability_id)
             self.assertEqual("grype / 0.73.5", observation.scanner)
-            self.assertEqual(
-                "example/example-backend", observation.origin_docker_image_name
-            )
+            self.assertEqual("example/example-backend", observation.origin_docker_image_name)
             self.assertEqual("dev", observation.origin_docker_image_tag)
             self.assertEqual("", observation.origin_docker_image_digest)
 
@@ -160,9 +142,7 @@ class TestCycloneDXParser(TestCase):
             self.assertEqual("CycloneDX", parser.name)
             self.assertTrue(isinstance(parser_instance, CycloneDXParser))
 
-            observations = parser_instance.get_observations(
-                data, Product(name="product"), None
-            )
+            observations = parser_instance.get_observations(data, Product(name="product"), None)
             self.assertEqual(2, len(observations))
 
             observation = observations[0]
@@ -171,30 +151,22 @@ class TestCycloneDXParser(TestCase):
             description = """No description is available for this CVE."""
             self.assertEqual(description, observation.description)
             self.assertEqual("CVE-2023-29469", observation.vulnerability_id)
-            self.assertEqual(
-                "GHSA-35m5-8cvj-8783, alias 2", observation.vulnerability_id_aliases
-            )
+            self.assertEqual("GHSA-35m5-8cvj-8783, alias 2", observation.vulnerability_id_aliases)
             self.assertEqual("", observation.parser_severity)
             self.assertEqual(5.9, observation.cvss3_score)
-            self.assertEqual(
-                "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H", observation.cvss3_vector
-            )
+            self.assertEqual("CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H", observation.cvss3_vector)
             self.assertEqual("libxml2", observation.origin_component_name)
             self.assertEqual("2.10.3-r1", observation.origin_component_version)
             self.assertEqual(
                 "pkg:apk/alpine/libxml2@2.10.3-r1?distro=3.17.3",
                 observation.origin_component_purl,
             )
-            self.assertEqual(
-                "example/example-frontend:dev", observation.origin_docker_image_name
-            )
+            self.assertEqual("example/example-frontend:dev", observation.origin_docker_image_name)
             self.assertEqual("", observation.origin_docker_image_tag)
             self.assertEqual("", observation.origin_docker_image_digest)
             expected_dependencies = """alpine:3.17.3 --> libxml2:2.10.3-r1
 example/example-frontend:dev --> alpine:3.17.3"""
-            self.assertEqual(
-                expected_dependencies, observation.origin_component_dependencies
-            )
+            self.assertEqual(expected_dependencies, observation.origin_component_dependencies)
             self.assertEqual(
                 "https://access.redhat.com/security/cve/CVE-2023-29469",
                 observation.unsaved_references[0],
@@ -227,9 +199,7 @@ icu-data-en:72.1-r1 --> icu-libs:72.1-r1"""
             )
             self.assertEqual("", observation.parser_severity)
             self.assertEqual(5.9, observation.cvss3_score)
-            self.assertEqual(
-                "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H", observation.cvss3_vector
-            )
+            self.assertEqual("CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H", observation.cvss3_vector)
             self.assertEqual(8.8, observation.cvss4_score)
             self.assertEqual(
                 "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:L/VA:L/SC:L/SI:L/SA:N",

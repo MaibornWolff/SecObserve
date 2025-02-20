@@ -41,9 +41,7 @@ class Migration(migrations.Migration):
                 ("risk_accepted", models.IntegerField(default=0)),
                 (
                     "product",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to="core.product"
-                    ),
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="core.product"),
                 ),
             ],
             options={

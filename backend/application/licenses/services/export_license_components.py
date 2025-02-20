@@ -9,9 +9,7 @@ from application.licenses.models import License_Component
 
 def export_license_components_excel(product: Product) -> Workbook:
     license_components = _get_license_components(product)
-    return export_excel(
-        license_components, "License Components", _get_excludes(), _get_foreign_keys()
-    )
+    return export_excel(license_components, "License Components", _get_excludes(), _get_foreign_keys())
 
 
 def export_license_components_csv(response: HttpResponse, product: Product) -> None:
@@ -26,9 +24,7 @@ def export_license_components_csv(response: HttpResponse, product: Product) -> N
 
 def _get_license_components(product: Product) -> QuerySet:
     if product.is_product_group:
-        license_components = License_Component.objects.filter(
-            product__product_group=product
-        )
+        license_components = License_Component.objects.filter(product__product_group=product)
     else:
         license_components = License_Component.objects.filter(product=product)
 
@@ -41,7 +37,7 @@ def _get_license_components(product: Product) -> QuerySet:
     return license_components
 
 
-def _get_excludes():
+def _get_excludes() -> list[str]:
     return [
         "identity_hash",
         "pk",
@@ -51,5 +47,5 @@ def _get_excludes():
     ]
 
 
-def _get_foreign_keys():
+def _get_foreign_keys() -> list[str]:
     return ["branch", "license", "product"]

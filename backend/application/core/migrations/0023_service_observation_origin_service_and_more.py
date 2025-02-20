@@ -25,9 +25,7 @@ class Migration(migrations.Migration):
                 ("name", models.CharField(max_length=255)),
                 (
                     "product",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to="core.product"
-                    ),
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="core.product"),
                 ),
             ],
         ),

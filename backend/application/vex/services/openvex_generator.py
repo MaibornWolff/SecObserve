@@ -60,9 +60,7 @@ class OpenVEXUpdateParameters:
 def create_openvex_document(
     parameters: OpenVEXCreateParameters,
 ) -> Optional[OpenVEXDocument]:
-    check_product_or_vulnerabilities(
-        parameters.product_id, parameters.vulnerability_names
-    )
+    check_product_or_vulnerabilities(parameters.product_id, parameters.vulnerability_names)
     product = check_and_get_product(parameters.product_id)
     if product:
         user_has_permission_or_403(product, Permissions.VEX_Create)
@@ -94,9 +92,7 @@ def create_openvex_document(
     for branch in branches:
         OpenVEX_Branch.objects.create(openvex=openvex, branch=branch)
 
-    document_id = _get_document_id(
-        parameters.id_namespace, parameters.document_id_prefix, document_base_id
-    )
+    document_id = _get_document_id(parameters.id_namespace, parameters.document_id_prefix, document_base_id)
     openvex_document = OpenVEXDocument(
         context="https://openvex.dev/ns/v0.2.0",
         id=document_id,
@@ -111,9 +107,7 @@ def create_openvex_document(
 
     statements = []
     if product:
-        statements = _get_statements_for_product(
-            product, parameters.vulnerability_names, branches
-        )
+        statements = _get_statements_for_product(product, parameters.vulnerability_names, branches)
     else:
         statements = _get_statements_for_vulnerabilities(parameters.vulnerability_names)
 
@@ -122,9 +116,7 @@ def create_openvex_document(
         return None
 
     statements_json = jsonpickle.encode(statements, unpicklable=False)
-    statements_hash = hashlib.sha256(
-        statements_json.casefold().encode("utf-8").strip()
-    ).hexdigest()
+    statements_hash = hashlib.sha256(statements_json.casefold().encode("utf-8").strip()).hexdigest()
     openvex.content_hash = statements_hash
     openvex.save()
 
@@ -137,9 +129,7 @@ def create_openvex_document(
 def update_openvex_document(
     parameters: OpenVEXUpdateParameters,
 ) -> Optional[OpenVEXDocument]:
-    openvex = get_openvex_by_document_id(
-        parameters.document_id_prefix, parameters.document_base_id
-    )
+    openvex = get_openvex_by_document_id(parameters.document_id_prefix, parameters.document_base_id)
     if not openvex:
         raise NotFound(
             f"OpenVEX document with ids {parameters.document_id_prefix}"
@@ -149,28 +139,20 @@ def update_openvex_document(
     user_has_permission_or_403(openvex, Permissions.VEX_Edit)
 
     openvex_vulnerability_names = list(
-        OpenVEX_Vulnerability.objects.filter(openvex=openvex).values_list(
-            "name", flat=True
-        )
+        OpenVEX_Vulnerability.objects.filter(openvex=openvex).values_list("name", flat=True)
     )
 
-    openvex_branch_ids = OpenVEX_Branch.objects.filter(openvex=openvex).values_list(
-        "branch", flat=True
-    )
+    openvex_branch_ids = OpenVEX_Branch.objects.filter(openvex=openvex).values_list("branch", flat=True)
     openvex_branches = list(Branch.objects.filter(id__in=openvex_branch_ids))
 
     statements = []
     if openvex.product:
-        statements = _get_statements_for_product(
-            openvex.product, openvex_vulnerability_names, openvex_branches
-        )
+        statements = _get_statements_for_product(openvex.product, openvex_vulnerability_names, openvex_branches)
     else:
         statements = _get_statements_for_vulnerabilities(openvex_vulnerability_names)
 
     statements_json = jsonpickle.encode(statements, unpicklable=False)
-    statements_hash = hashlib.sha256(
-        statements_json.casefold().encode("utf-8").strip()
-    ).hexdigest()
+    statements_hash = hashlib.sha256(statements_json.casefold().encode("utf-8").strip()).hexdigest()
 
     if statements_hash == openvex.content_hash:
         return None
@@ -183,9 +165,7 @@ def update_openvex_document(
     openvex.content_hash = statements_hash
     openvex.save()
 
-    document_id = _get_document_id(
-        openvex.id_namespace, openvex.document_id_prefix, parameters.document_base_id
-    )
+    document_id = _get_document_id(openvex.id_namespace, openvex.document_id_prefix, parameters.document_base_id)
     openvex_document = OpenVEXDocument(
         context="https://openvex.dev/ns/v0.2.0",
         id=document_id,
@@ -204,9 +184,7 @@ def update_openvex_document(
     return openvex_document
 
 
-def _get_document_id(
-    id_namespace: str, document_id_prefix: str, document_base_id: str
-) -> str:
+def _get_document_id(id_namespace: str, document_id_prefix: str, document_base_id: str) -> str:
     if not id_namespace.endswith("/"):
         id_namespace += "/"
 
@@ -237,15 +215,11 @@ def _get_statements_for_vulnerabilities(
                 + str(prepared_statement.action_statement)
                 + str(prepared_statement.impact_statement)
             )
-            hashed_string = hashlib.sha256(
-                string_to_hash.casefold().encode("utf-8").strip()
-            ).hexdigest()
+            hashed_string = hashlib.sha256(string_to_hash.casefold().encode("utf-8").strip()).hexdigest()
 
             existing_statement = statements.get(hashed_string)
             if existing_statement:
-                existing_product = get_openvex_product_by_id(
-                    existing_statement.products, get_product_id(observation)
-                )
+                existing_product = get_openvex_product_by_id(existing_statement.products, get_product_id(observation))
                 if existing_product:
                     _add_subcomponent(observation, existing_product)
                 else:
@@ -275,9 +249,7 @@ def _get_statements_for_product(
         if not prepared_statement:
             continue
 
-        openvex_vulnerability = vulnerability_cache.get_vulnerability(
-            observation.vulnerability_id
-        )
+        openvex_vulnerability = vulnerability_cache.get_vulnerability(observation.vulnerability_id)
         if not openvex_vulnerability:
             openvex_vulnerability = OpenVEXVulnerability(
                 name=observation.vulnerability_id,
@@ -294,21 +266,15 @@ def _get_statements_for_product(
             + str(prepared_statement.action_statement)
             + str(prepared_statement.impact_statement)
         )
-        hashed_string = hashlib.sha256(
-            string_to_hash.casefold().encode("utf-8").strip()
-        ).hexdigest()
+        hashed_string = hashlib.sha256(string_to_hash.casefold().encode("utf-8").strip()).hexdigest()
 
         existing_statement = statements.get(hashed_string)
         if existing_statement:
-            existing_product = get_openvex_product_by_id(
-                existing_statement.products, get_product_id(observation)
-            )
+            existing_product = get_openvex_product_by_id(existing_statement.products, get_product_id(observation))
             if existing_product:
                 _add_subcomponent(observation, existing_product)
             else:
-                raise ValueError(
-                    f"Product {product.name} not found in existing statement"
-                )
+                raise ValueError(f"Product {product.name} not found in existing statement")
         else:
             prepared_statement.vulnerability = openvex_vulnerability
             openvex_product = _create_product(observation)
@@ -332,9 +298,7 @@ def _prepare_statement(observation: Observation) -> Optional[OpenVEXStatement]:
         if observation.recommendation:
             openvex_action_statement = observation.recommendation
         else:
-            openvex_action_statement = (
-                "No recommendation for remediation or mitigation available"
-            )
+            openvex_action_statement = "No recommendation for remediation or mitigation available"
     else:
         observation_log = get_current_modifying_observation_log(observation)
         if openvex_status == OpenVEX_Status.OPENVEX_STATUS_NOT_AFFECTED:
@@ -382,22 +346,18 @@ def _map_status(secobserve_status: str) -> Optional[str]:
     raise ValueError(f"Invalid status {secobserve_status}")
 
 
-def get_openvex_product_by_id(
-    openvex_products: list[OpenVEXProduct], product_id: str
-) -> Optional[OpenVEXProduct]:
+def get_openvex_product_by_id(openvex_products: list[OpenVEXProduct], product_id: str) -> Optional[OpenVEXProduct]:
     for openvex_product in openvex_products:
         if openvex_product.id == product_id:
             return openvex_product
     return None
 
 
-def _add_subcomponent(observation: Observation, existing_product: OpenVEXProduct):
+def _add_subcomponent(observation: Observation, existing_product: OpenVEXProduct) -> None:
     if get_component_id(observation):
         openvex_subcomponent = OpenVEXSubcomponent(id=get_component_id(observation))
         if openvex_subcomponent not in existing_product.subcomponents:
-            existing_product.subcomponents.append(
-                OpenVEXSubcomponent(id=get_component_id(observation))
-            )
+            existing_product.subcomponents.append(OpenVEXSubcomponent(id=get_component_id(observation)))
 
 
 def _create_product(observation: Observation) -> OpenVEXProduct:
@@ -406,16 +366,12 @@ def _create_product(observation: Observation) -> OpenVEXProduct:
         if observation.branch.purl or observation.branch.cpe23:
             purl = observation.branch.purl if observation.branch.purl else None
             cpe23 = observation.branch.cpe23 if observation.branch.cpe23 else None
-            openvex_product_identifiers = OpenVEXProductIdentifiers(
-                cpe23=cpe23, purl=purl
-            )
+            openvex_product_identifiers = OpenVEXProductIdentifiers(cpe23=cpe23, purl=purl)
     else:
         if observation.product.purl or observation.product.cpe23:
             purl = observation.product.purl if observation.product.purl else None
             cpe23 = observation.product.cpe23 if observation.product.cpe23 else None
-            openvex_product_identifiers = OpenVEXProductIdentifiers(
-                cpe23=cpe23, purl=purl
-            )
+            openvex_product_identifiers = OpenVEXProductIdentifiers(cpe23=cpe23, purl=purl)
 
     openvex_product = OpenVEXProduct(
         id=get_product_id(observation),

@@ -14,9 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="settings",
             name="feature_license_management",
-            field=models.BooleanField(
-                default=True, help_text="Enable license management"
-            ),
+            field=models.BooleanField(default=True, help_text="Enable license management"),
         ),
         migrations.AddField(
             model_name="settings",

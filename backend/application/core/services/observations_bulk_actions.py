@@ -73,13 +73,9 @@ def observations_bulk_mark_duplicates(
     try:
         observation = Observation.objects.get(pk=observation_id)
         if observation.product != product:
-            raise ValidationError(
-                f"Observation {observation.pk} does not belong to product {product.pk}"
-            )
+            raise ValidationError(f"Observation {observation.pk} does not belong to product {product.pk}")
     except Observation.DoesNotExist:
-        raise ValidationError(  # pylint: disable=raise-missing-from
-            "Observation does not exist"
-        )
+        raise ValidationError("Observation does not exist")  # pylint: disable=raise-missing-from
         # The DoesNotExist exception itself is not relevant and must not be re-raised
 
     observation_ids = []
@@ -88,14 +84,9 @@ def observations_bulk_mark_duplicates(
         observation_ids.append(potential_duplicate.potential_duplicate_observation.id)
     duplicates = _check_observations(product, observation_ids)
 
-    if (
-        potential_duplicate.type
-        == Potential_Duplicate.POTENTIAL_DUPLICATE_TYPE_COMPONENT
-    ):
+    if potential_duplicate.type == Potential_Duplicate.POTENTIAL_DUPLICATE_TYPE_COMPONENT:
         comment = f"Duplicate of {observation.origin_component_name_version}"
-    elif (
-        potential_duplicate.type == Potential_Duplicate.POTENTIAL_DUPLICATE_TYPE_SOURCE
-    ):
+    elif potential_duplicate.type == Potential_Duplicate.POTENTIAL_DUPLICATE_TYPE_SOURCE:
         comment = f"Duplicate of {observation.title} from scanner {observation.scanner}"
     else:
         raise ValidationError("Invalid potential duplicate type")
@@ -114,9 +105,7 @@ def observations_bulk_mark_duplicates(
     set_potential_duplicate(observation)
 
 
-def _check_observations(
-    product: Optional[Product], observation_ids: list[int]
-) -> QuerySet[Observation]:
+def _check_observations(product: Optional[Product], observation_ids: list[int]) -> QuerySet[Observation]:
     observations = Observation.objects.filter(id__in=observation_ids)
     if len(observations) != len(observation_ids):
         raise ValidationError("Some observations do not exist")
@@ -124,24 +113,17 @@ def _check_observations(
     for observation in observations:
         if product:
             if observation.product != product:
-                raise ValidationError(
-                    f"Observation {observation.pk} does not belong to product {product.pk}"
-                )
+                raise ValidationError(f"Observation {observation.pk} does not belong to product {product.pk}")
         else:
             if not user_has_permission(observation, Permissions.Observation_Assessment):
-                raise ValidationError(
-                    f"First observation without assessment permission: {observation}"
-                )
+                raise ValidationError(f"First observation without assessment permission: {observation}")
 
         current_observation_log = get_current_observation_log(observation)
         if (
             current_observation_log
-            and current_observation_log.assessment_status
-            == Assessment_Status.ASSESSMENT_STATUS_NEEDS_APPROVAL
+            and current_observation_log.assessment_status == Assessment_Status.ASSESSMENT_STATUS_NEEDS_APPROVAL
         ):
-            raise ValidationError(
-                "Cannot create new assessment while last assessment still needs approval"
-            )
+            raise ValidationError("Cannot create new assessment while last assessment still needs approval")
 
     return observations
 
@@ -157,9 +139,7 @@ def observation_logs_bulk_approval(
         set_potential_duplicate_both_ways(observation_log.observation)
 
 
-def _check_observation_logs(
-    product: Optional[Product], observation_log_ids: list[int]
-) -> QuerySet[Observation_Log]:
+def _check_observation_logs(product: Optional[Product], observation_log_ids: list[int]) -> QuerySet[Observation_Log]:
     observation_logs = Observation_Log.objects.filter(id__in=observation_log_ids)
     if len(observation_logs) != len(observation_log_ids):
         raise ValidationError("Some observation logs do not exist")
@@ -167,23 +147,12 @@ def _check_observation_logs(
     for observation_log in observation_logs:
         if product:
             if observation_log.observation.product != product:
-                raise ValidationError(
-                    f"Observation log {observation_log.pk} does not belong to product {product.pk}"
-                )
+                raise ValidationError(f"Observation log {observation_log.pk} does not belong to product {product.pk}")
         else:
-            if not user_has_permission(
-                observation_log, Permissions.Observation_Log_Approval
-            ):
-                raise ValidationError(
-                    f"First observation log without approval permission: {observation_log.pk}"
-                )
-            if (
-                not observation_log.assessment_status
-                == Assessment_Status.ASSESSMENT_STATUS_NEEDS_APPROVAL
-            ):
-                raise ValidationError(
-                    f"First observation log that does not need approval: {observation_log.pk}"
-                )
+            if not user_has_permission(observation_log, Permissions.Observation_Log_Approval):
+                raise ValidationError(f"First observation log without approval permission: {observation_log.pk}")
+            if not observation_log.assessment_status == Assessment_Status.ASSESSMENT_STATUS_NEEDS_APPROVAL:
+                raise ValidationError(f"First observation log that does not need approval: {observation_log.pk}")
             if get_current_user() == observation_log.user:
                 raise ValidationError(
                     f"First observation log where user cannot approve their own assessment: {observation_log.pk}"

@@ -4,7 +4,7 @@ from django.utils.functional import LazyObject
 
 
 class LazyConfig(LazyObject):
-    def _setup(self):
+    def _setup(self) -> None:
         from application.commons.models import (  # pylint: disable=import-outside-toplevel
             Settings,
         )

@@ -61,9 +61,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "parser",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to="core.parser"
-                    ),
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="core.parser"),
                 ),
                 (
                     "product",

@@ -21,14 +21,14 @@ from application.licenses.services.license_policy import (
 )
 
 
-def get_identity_hash(observation) -> str:
-    hash_string = _get_string_to_hash(observation)
+def get_identity_hash(license_component: License_Component) -> str:
+    hash_string = _get_string_to_hash(license_component)
     return hashlib.sha256(hash_string.casefold().encode("utf-8").strip()).hexdigest()
 
 
 def _get_string_to_hash(
     license_component: License_Component,
-):  # pylint: disable=too-many-branches
+) -> str:  # pylint: disable=too-many-branches
     hash_string = license_component.component_name_version
     if license_component.component_purl:
         hash_string += license_component.component_purl
@@ -56,25 +56,19 @@ def process_license_components(
     for existing_component in existing_components:
         existing_components_dict[existing_component.identity_hash] = existing_component
 
-    license_evaluation_results = get_license_evaluation_results_for_product(
-        vulnerability_check.product
-    )
+    license_evaluation_results = get_license_evaluation_results_for_product(vulnerability_check.product)
 
     components_new = 0
     components_updated = 0
 
     license_policy = vulnerability_check.product.license_policy
     ignore_component_types = (
-        get_comma_separated_as_list(license_policy.ignore_component_types)
-        if license_policy
-        else []
+        get_comma_separated_as_list(license_policy.ignore_component_types) if license_policy else []
     )
 
     for unsaved_component in license_components:
         _prepare_component(unsaved_component)
-        existing_component = existing_components_dict.get(
-            unsaved_component.identity_hash
-        )
+        existing_component = existing_components_dict.get(unsaved_component.identity_hash)
         if existing_component:
             license_before = existing_component.license
             non_spdx_license_before = existing_component.non_spdx_license
@@ -82,13 +76,9 @@ def process_license_components(
             existing_component.component_name = unsaved_component.component_name
             existing_component.component_version = unsaved_component.component_version
             existing_component.component_purl = unsaved_component.component_purl
-            existing_component.component_purl_type = (
-                unsaved_component.component_purl_type
-            )
+            existing_component.component_purl_type = unsaved_component.component_purl_type
             existing_component.component_cpe = unsaved_component.component_cpe
-            existing_component.component_dependencies = (
-                unsaved_component.component_dependencies
-            )
+            existing_component.component_dependencies = unsaved_component.component_dependencies
             existing_component.license_name = unsaved_component.license_name
             existing_component.license = unsaved_component.license
             existing_component.license_expression = unsaved_component.license_expression
@@ -139,15 +129,13 @@ def process_license_components(
     return components_new, components_updated, components_deleted
 
 
-def _process_evidences(
-    source_component: License_Component, target_component: License_Component
-) -> None:
+def _process_evidences(source_component: License_Component, target_component: License_Component) -> None:
     if source_component.unsaved_evidences:
-        for evidence in source_component.unsaved_evidences:
+        for unsaved_evidence in source_component.unsaved_evidences:
             evidence = License_Component_Evidence(
                 license_component=target_component,
-                name=evidence[0],
-                evidence=evidence[1],
+                name=unsaved_evidence[0],
+                evidence=unsaved_evidence[1],
             )
             clip_fields("licenses", "License_Component_Evidence", evidence)
             evidence.save()
@@ -188,9 +176,7 @@ def _prepare_component(component: License_Component) -> None:
 def _prepare_name_version(component: License_Component) -> None:
     if not component.component_name_version:
         if component.component_name and component.component_version:
-            component.component_name_version = (
-                component.component_name + ":" + component.component_version
-            )
+            component.component_name_version = component.component_name + ":" + component.component_version
         elif component.component_name:
             component.component_name_version = component.component_name
     else:
@@ -217,9 +203,7 @@ def _prepare_license(component: License_Component) -> None:
         if not component.license:
             licensing = get_spdx_licensing()
             try:
-                expression_info = licensing.validate(
-                    component.unsaved_license, strict=True
-                )
+                expression_info = licensing.validate(component.unsaved_license, strict=True)
                 if not expression_info.errors:
                     component.license_expression = expression_info.normalized_expression
                     component.license_name = component.license_expression
@@ -237,17 +221,13 @@ def license_components_bulk_delete(product: Product, component_ids: list[int]) -
     components.delete()
 
 
-def _check_components(
-    product: Product, component_ids: list[int]
-) -> QuerySet[License_Component]:
+def _check_components(product: Product, component_ids: list[int]) -> QuerySet[License_Component]:
     components = License_Component.objects.filter(id__in=component_ids)
     if len(components) != len(component_ids):
         raise ValidationError("Some components do not exist")
 
     for component in components:
         if component.product != product:
-            raise ValidationError(
-                f"Component {component.pk} does not belong to product {product.pk}"
-            )
+            raise ValidationError(f"Component {component.pk} does not belong to product {product.pk}")
 
     return components

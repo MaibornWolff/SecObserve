@@ -15,6 +15,7 @@ import {
     useRecordContext,
 } from "react-admin";
 
+import observations from ".";
 import { PERMISSION_OBSERVATION_DELETE } from "../../access_control/types";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import {
@@ -55,8 +56,9 @@ const ObservationEditForm = () => {
 
     return (
         <SimpleForm warnWhenUnsavedChanges toolbar={<CustomToolbar />}>
-            <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                Observation
+            <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
+                <observations.icon />
+                &nbsp;&nbsp;Observation
             </Typography>
             <Stack>
                 <TextInputWide autoFocus source="title" validate={validate_required_255} />
@@ -150,7 +152,11 @@ const ObservationEditForm = () => {
                         sx={{ width: "10em" }}
                     />
                     <TextInputWide source="cvss4_vector" label="CVSS 4 vector" validate={validate_255} />
-                    <TextUrlField url="https://www.first.org/cvss/calculator/4.0" text="CVSS 4 calculator" />
+                    <TextUrlField
+                        url="https://www.first.org/cvss/calculator/4.0"
+                        text="CVSS 4 calculator"
+                        new_tab={true}
+                    />
                 </Stack>
                 <Stack direction="row" spacing={2} alignItems="center">
                     <NumberInput
@@ -162,7 +168,11 @@ const ObservationEditForm = () => {
                         sx={{ width: "10em" }}
                     />
                     <TextInputWide source="cvss3_vector" label="CVSS 3 vector" validate={validate_255} />
-                    <TextUrlField url="https://www.first.org/cvss/calculator/3.1" text="CVSS 3.1 calculator" />
+                    <TextUrlField
+                        url="https://www.first.org/cvss/calculator/3.1"
+                        text="CVSS 3.1 calculator"
+                        new_tab={true}
+                    />
                 </Stack>
                 <NumberInput
                     source="cwe"

@@ -36,42 +36,26 @@ from application.vex.types import (
 
 class CSAFDocumentCreateSerializer(Serializer):
     product = IntegerField(validators=[MinValueValidator(0)], required=False)
-    vulnerability_names = ListField(
-        child=CharField(max_length=255), min_length=0, max_length=20, required=False
-    )
-    branch_names = ListField(
-        child=CharField(max_length=255), min_length=0, max_length=20, required=False
-    )
+    vulnerability_names = ListField(child=CharField(max_length=255), min_length=0, max_length=20, required=False)
+    branch_names = ListField(child=CharField(max_length=255), min_length=0, max_length=20, required=False)
     document_id_prefix = CharField(max_length=200, required=True)
     title = CharField(max_length=255, required=True)
     publisher_name = CharField(max_length=255, required=True)
-    publisher_category = ChoiceField(
-        choices=CSAF_Publisher_Category.CSAF_PUBLISHER_CATEGORY_CHOICES, required=True
-    )
+    publisher_category = ChoiceField(choices=CSAF_Publisher_Category.CSAF_PUBLISHER_CATEGORY_CHOICES, required=True)
     publisher_namespace = CharField(max_length=255, required=True)
-    tracking_status = ChoiceField(
-        choices=CSAF_Tracking_Status.CSAF_TRACKING_STATUS_CHOICES, required=True
-    )
-    tlp_label = ChoiceField(
-        choices=CSAF_TLP_Label.CSAF_TLP_LABEL_CHOICES, required=True
-    )
+    tracking_status = ChoiceField(choices=CSAF_Tracking_Status.CSAF_TRACKING_STATUS_CHOICES, required=True)
+    tlp_label = ChoiceField(choices=CSAF_TLP_Label.CSAF_TLP_LABEL_CHOICES, required=True)
 
     def validate_publisher_namespace(self, publisher_namespace: str) -> str:
         return _validate_url(publisher_namespace)
 
 
 class CSAFDocumentUpdateSerializer(Serializer):
-    tlp_label = ChoiceField(
-        choices=CSAF_TLP_Label.CSAF_TLP_LABEL_CHOICES, required=True
-    )
+    tlp_label = ChoiceField(choices=CSAF_TLP_Label.CSAF_TLP_LABEL_CHOICES, required=True)
     publisher_name = CharField(max_length=255, required=False)
-    publisher_category = ChoiceField(
-        choices=CSAF_Publisher_Category.CSAF_PUBLISHER_CATEGORY_CHOICES, required=False
-    )
+    publisher_category = ChoiceField(choices=CSAF_Publisher_Category.CSAF_PUBLISHER_CATEGORY_CHOICES, required=False)
     publisher_namespace = CharField(max_length=255, required=False)
-    tracking_status = ChoiceField(
-        choices=CSAF_Tracking_Status.CSAF_TRACKING_STATUS_CHOICES, required=False
-    )
+    tracking_status = ChoiceField(choices=CSAF_Tracking_Status.CSAF_TRACKING_STATUS_CHOICES, required=False)
 
     def validate_publisher_namespace(self, publisher_namespace: str) -> str:
         return _validate_url(publisher_namespace)
@@ -132,12 +116,8 @@ class CSAFBranchSerializer(ModelSerializer):
 
 class OpenVEXDocumentCreateSerializer(Serializer):
     product = IntegerField(validators=[MinValueValidator(0)], required=False)
-    vulnerability_names = ListField(
-        child=CharField(max_length=255), min_length=0, max_length=20, required=False
-    )
-    branch_names = ListField(
-        child=CharField(max_length=255), min_length=0, max_length=20, required=False
-    )
+    vulnerability_names = ListField(child=CharField(max_length=255), min_length=0, max_length=20, required=False)
+    branch_names = ListField(child=CharField(max_length=255), min_length=0, max_length=20, required=False)
     id_namespace = CharField(max_length=255, required=True)
     document_id_prefix = CharField(max_length=255, required=True)
     author = CharField(max_length=255, required=True)

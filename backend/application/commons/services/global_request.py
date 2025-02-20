@@ -1,15 +1,16 @@
 from threading import current_thread
-from typing import Optional
+from typing import Any, Optional
 
 from django.contrib.auth.models import AnonymousUser
-from django.http.request import HttpRequest
+from rest_framework.request import Request
+from rest_framework.response import Response
 
 from application.access_control.models import User
 
-_requests: dict[str, HttpRequest] = {}
+_requests: dict[str, Request] = {}
 
 
-def get_current_request() -> Optional[HttpRequest]:
+def get_current_request() -> Optional[Request]:
     return _requests.get(current_thread().name)
 
 
@@ -22,11 +23,11 @@ def get_current_user() -> Optional[User]:
 
 
 class GlobalRequestMiddleware:
-    def __init__(self, get_response):
+    def __init__(self, get_response: Any) -> None:
         self.get_response = get_response
         # One-time configuration and initialization.
 
-    def __call__(self, request):
+    def __call__(self, request: Request) -> Response:
         # Code to be executed for each request before
         # the view (and later middleware) are called.
         _requests[current_thread().name] = request

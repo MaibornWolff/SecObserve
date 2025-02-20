@@ -286,9 +286,7 @@ class TestGitHubIssueTracker(BaseTestCase):
                 description="description_1",
                 labels="label_1,label_2",
             )
-            issue_tracker.close_issue_for_deleted_observation(
-                self.observation_1.product, issue
-            )
+            issue_tracker.close_issue_for_deleted_observation(self.observation_1.product, issue)
 
         self.assertEqual(
             "404 Client Error: unknown reason for url: https://api.github.com/repos/gh_project_1/issues/gh_1",
@@ -316,9 +314,7 @@ class TestGitHubIssueTracker(BaseTestCase):
             labels="label_1,label_2",
         )
 
-        issue_tracker.close_issue_for_deleted_observation(
-            self.observation_1.product, issue
-        )
+        issue_tracker.close_issue_for_deleted_observation(self.observation_1.product, issue)
 
         patch_mock.assert_called_once_with(
             url="https://api.github.com/repos/gh_project_1/issues/gh_1",
@@ -332,9 +328,5 @@ class TestGitHubIssueTracker(BaseTestCase):
 
     def test_get_frontend_issue_url(self):
         issue_tracker = GitHubIssueTracker()
-        frontend_issue_url = issue_tracker.get_frontend_issue_url(
-            self.observation_1.product, "gh_1"
-        )
-        self.assertEqual(
-            "https://github.com/gh_project_1/issues/gh_1", frontend_issue_url
-        )
+        frontend_issue_url = issue_tracker.get_frontend_issue_url(self.observation_1.product, "gh_1")
+        self.assertEqual("https://github.com/gh_project_1/issues/gh_1", frontend_issue_url)

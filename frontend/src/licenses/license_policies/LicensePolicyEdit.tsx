@@ -11,6 +11,7 @@ import {
     WithRecord,
 } from "react-admin";
 
+import license_policies from ".";
 import { validate_255, validate_2048, validate_required_255 } from "../../commons/custom_validators";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 
@@ -37,8 +38,9 @@ const LicensePolicyEdit = () => {
     return (
         <Edit redirect="show" mutationMode="pessimistic" transform={transform}>
             <SimpleForm warnWhenUnsavedChanges toolbar={<CustomToolbar />}>
-                <Typography variant="h6" sx={{ marginBottom: 2 }}>
-                    License Policy
+                <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
+                    <license_policies.icon />
+                    &nbsp;&nbsp;License Policy
                 </Typography>
                 <TextInputWide autoFocus source="name" validate={validate_required_255} />
                 <TextInputWide

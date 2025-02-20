@@ -1,5 +1,5 @@
-from django.http import HttpResponse
+from django.http import HttpRequest, HttpResponse
 
 
-def empty_view(request):
+def empty_view(request: HttpRequest) -> HttpResponse:
     return HttpResponse(status=204)

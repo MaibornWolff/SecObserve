@@ -32,34 +32,24 @@ def get_observations() -> QuerySet[Observation]:
     observations = Observation.objects.all()
 
     if not user.is_superuser:
-        product_members = Product_Member.objects.filter(
-            product=OuterRef("product_id"), user=user
-        )
-        product_group_members = Product_Member.objects.filter(
-            product=OuterRef("product__product_group"), user=user
+        product_members = Product_Member.objects.filter(product=OuterRef("product_id"), user=user)
+        product_group_members = Product_Member.objects.filter(product=OuterRef("product__product_group"), user=user)
+
+        product_authorization_group_members = Product_Authorization_Group_Member.objects.filter(
+            product=OuterRef("product_id"),
+            authorization_group__users=user,
         )
 
-        product_authorization_group_members = (
-            Product_Authorization_Group_Member.objects.filter(
-                product=OuterRef("product_id"),
-                authorization_group__users=user,
-            )
-        )
-
-        product_group_authorization_group_members = (
-            Product_Authorization_Group_Member.objects.filter(
-                product=OuterRef("product__product_group"),
-                authorization_group__users=user,
-            )
+        product_group_authorization_group_members = Product_Authorization_Group_Member.objects.filter(
+            product=OuterRef("product__product_group"),
+            authorization_group__users=user,
         )
 
         observations = observations.annotate(
             product__member=Exists(product_members),
             product__product_group__member=Exists(product_group_members),
             authorization_group_member=Exists(product_authorization_group_members),
-            product_group_authorization_group_member=Exists(
-                product_group_authorization_group_members
-            ),
+            product_group_authorization_group_member=Exists(product_group_authorization_group_members),
         )
 
         observations = observations.filter(
@@ -95,33 +85,25 @@ def get_evidences() -> QuerySet[Evidence]:
     evidences = Evidence.objects.all()
 
     if not user.is_superuser:
-        product_members = Product_Member.objects.filter(
-            product=OuterRef("observation__product_id"), user=user
-        )
+        product_members = Product_Member.objects.filter(product=OuterRef("observation__product_id"), user=user)
         product_group_members = Product_Member.objects.filter(
             product=OuterRef("observation__product__product_group"), user=user
         )
 
-        product_authorization_group_members = (
-            Product_Authorization_Group_Member.objects.filter(
-                product=OuterRef("observation__product_id"),
-                authorization_group__users=user,
-            )
+        product_authorization_group_members = Product_Authorization_Group_Member.objects.filter(
+            product=OuterRef("observation__product_id"),
+            authorization_group__users=user,
         )
 
-        product_group_authorization_group_members = (
-            Product_Authorization_Group_Member.objects.filter(
-                product=OuterRef("observation__product__product_group"),
-                authorization_group__users=user,
-            )
+        product_group_authorization_group_members = Product_Authorization_Group_Member.objects.filter(
+            product=OuterRef("observation__product__product_group"),
+            authorization_group__users=user,
         )
 
         evidences = evidences.annotate(
             observation__product__member=Exists(product_members),
             observation__product__product_group__member=Exists(product_group_members),
-            observation__product__authorization_group_member=Exists(
-                product_authorization_group_members
-            ),
+            observation__product__authorization_group_member=Exists(product_authorization_group_members),
             observation__product__product_group_authorization_group_member=Exists(
                 product_group_authorization_group_members
             ),
@@ -146,33 +128,25 @@ def get_potential_duplicates() -> QuerySet[Potential_Duplicate]:
     potential_duplicates = Potential_Duplicate.objects.all()
 
     if not user.is_superuser:
-        product_members = Product_Member.objects.filter(
-            product=OuterRef("observation__product_id"), user=user
-        )
+        product_members = Product_Member.objects.filter(product=OuterRef("observation__product_id"), user=user)
         product_group_members = Product_Member.objects.filter(
             product=OuterRef("observation__product__product_group"), user=user
         )
 
-        product_authorization_group_members = (
-            Product_Authorization_Group_Member.objects.filter(
-                product=OuterRef("observation__product_id"),
-                authorization_group__users=user,
-            )
+        product_authorization_group_members = Product_Authorization_Group_Member.objects.filter(
+            product=OuterRef("observation__product_id"),
+            authorization_group__users=user,
         )
 
-        product_group_authorization_group_members = (
-            Product_Authorization_Group_Member.objects.filter(
-                product=OuterRef("observation__product__product_group"),
-                authorization_group__users=user,
-            )
+        product_group_authorization_group_members = Product_Authorization_Group_Member.objects.filter(
+            product=OuterRef("observation__product__product_group"),
+            authorization_group__users=user,
         )
 
         potential_duplicates = potential_duplicates.annotate(
             observation__product__member=Exists(product_members),
             observation__product__product_group__member=Exists(product_group_members),
-            observation__product__authorization_group_member=Exists(
-                product_authorization_group_members
-            ),
+            observation__product__authorization_group_member=Exists(product_authorization_group_members),
             observation__product__product_group_authorization_group_member=Exists(
                 product_group_authorization_group_members
             ),
@@ -204,33 +178,25 @@ def get_observation_logs() -> QuerySet[Observation_Log]:
     observation_logs = Observation_Log.objects.all()
 
     if not user.is_superuser:
-        product_members = Product_Member.objects.filter(
-            product=OuterRef("observation__product_id"), user=user
-        )
+        product_members = Product_Member.objects.filter(product=OuterRef("observation__product_id"), user=user)
         product_group_members = Product_Member.objects.filter(
             product=OuterRef("observation__product__product_group"), user=user
         )
 
-        product_authorization_group_members = (
-            Product_Authorization_Group_Member.objects.filter(
-                product=OuterRef("observation__product_id"),
-                authorization_group__users=user,
-            )
+        product_authorization_group_members = Product_Authorization_Group_Member.objects.filter(
+            product=OuterRef("observation__product_id"),
+            authorization_group__users=user,
         )
 
-        product_group_authorization_group_members = (
-            Product_Authorization_Group_Member.objects.filter(
-                product=OuterRef("observation__product__product_group"),
-                authorization_group__users=user,
-            )
+        product_group_authorization_group_members = Product_Authorization_Group_Member.objects.filter(
+            product=OuterRef("observation__product__product_group"),
+            authorization_group__users=user,
         )
 
         observation_logs = observation_logs.annotate(
             observation__product__member=Exists(product_members),
             observation__product__product_group__member=Exists(product_group_members),
-            observation__product__authorization_group_member=Exists(
-                product_authorization_group_members
-            ),
+            observation__product__authorization_group_member=Exists(product_authorization_group_members),
             observation__product__product_group_authorization_group_member=Exists(
                 product_group_authorization_group_members
             ),
@@ -246,18 +212,19 @@ def get_observation_logs() -> QuerySet[Observation_Log]:
     return observation_logs
 
 
-def get_current_observation_log(observation: Observation):
+def get_current_observation_log(observation: Observation) -> Optional[Observation_Log]:
     try:
         return Observation_Log.objects.filter(observation=observation).latest("created")
     except Observation_Log.DoesNotExist:
         return None
 
 
-def get_current_modifying_observation_log(observation: Observation):
+def get_current_modifying_observation_log(
+    observation: Observation,
+) -> Optional[Observation_Log]:
     try:
         return Observation_Log.objects.filter(
-            Q(observation_id=observation.id)
-            & (~Q(status="") | ~Q(severity="") | ~Q(vex_justification=""))
+            Q(observation_id=observation.id) & (~Q(status="") | ~Q(severity="") | ~Q(vex_justification=""))
         ).latest("created")
     except Observation_Log.DoesNotExist:
         return None

@@ -42,9 +42,7 @@ class TestObservationLog(BaseTestCase):
         )
         self.assertEqual(date(2024, 7, 1), observation_log.risk_acceptance_expiry_date)
 
-        self.assertEqual(
-            self.observation_1.last_observation_log, observation_log.created
-        )
+        self.assertEqual(self.observation_1.last_observation_log, observation_log.created)
 
         observation_log.save.assert_called_once()
         self.observation_1.save.assert_called_once()

@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AnonymousUser
+from rest_framework.request import Request
 from rest_framework.response import Response
 
 from application.access_control.models import User
@@ -55,7 +56,7 @@ def format_log_message(  # pylint: disable=too-many-branches
     return str(message_dict)
 
 
-def __get_client_ip(request):
+def __get_client_ip(request: Request) -> str:
     x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
     if x_forwarded_for:
         ip = x_forwarded_for.split(",")[0]

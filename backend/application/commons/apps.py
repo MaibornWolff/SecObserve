@@ -8,16 +8,14 @@ class UtilsConfig(AppConfig):
     name = "application.commons"
     verbose_name = "Commons"
 
-    def ready(self):
+    def ready(self) -> None:
         try:
             import application.commons.signals  # noqa F401 pylint: disable=import-outside-toplevel, unused-import
         except ImportError:
             pass
 
         if os.path.isfile("/sys/fs/cgroup/memory/memory.limit_in_bytes"):
-            with open(
-                "/sys/fs/cgroup/memory/memory.limit_in_bytes", encoding="utf-8"
-            ) as limit:
+            with open("/sys/fs/cgroup/memory/memory.limit_in_bytes", encoding="utf-8") as limit:
                 mem = int(limit.read())
                 resource.setrlimit(resource.RLIMIT_AS, (mem, mem))
 

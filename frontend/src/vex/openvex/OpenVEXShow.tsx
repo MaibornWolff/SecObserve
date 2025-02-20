@@ -16,6 +16,7 @@ import {
 } from "react-admin";
 import { Fragment } from "react/jsx-runtime";
 
+import openvexs from ".";
 import { delete_permission, update_permission } from "../functions";
 import OpenVEXUpdate from "./OpenVEXUpdate";
 
@@ -39,8 +40,9 @@ const OpenVEXComponent = () => {
                 <Box width={"100%"}>
                     <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
                         <Stack spacing={1}>
-                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                                Exported OpenVEX document
+                            <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
+                                <openvexs.icon />
+                                &nbsp;&nbsp;Exported OpenVEX document
                             </Typography>
                             {openvex && openvex.product_data && openvex.product_data.name && (
                                 <Labeled>

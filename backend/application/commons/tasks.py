@@ -1,5 +1,5 @@
 import logging
-from typing import Optional
+from typing import Any, Optional
 
 import requests
 from django.core.mail import send_mail
@@ -13,9 +13,7 @@ logger = logging.getLogger("secobserve.tasks")
 
 
 @db_task()
-def send_email_notification(
-    notification_email_to: str, subject: str, template: str, **kwargs
-) -> None:
+def send_email_notification(notification_email_to: str, subject: str, template: str, **kwargs: Any) -> None:
     settings = Settings.load()
     notification_message = _create_notification_message(template, **kwargs)
     if notification_message:
@@ -37,7 +35,7 @@ def send_email_notification(
 
 
 @task()
-def send_msteams_notification(webhook: str, template: str, **kwargs) -> None:
+def send_msteams_notification(webhook: str, template: str, **kwargs: Any) -> None:
     notification_message = _create_notification_message(template, **kwargs)
     if notification_message:
         notification_message = notification_message.replace("&quot;", '\\"')
@@ -59,7 +57,7 @@ def send_msteams_notification(webhook: str, template: str, **kwargs) -> None:
 
 
 @task()
-def send_slack_notification(webhook: str, template: str, **kwargs) -> None:
+def send_slack_notification(webhook: str, template: str, **kwargs: Any) -> None:
     notification_message = _create_notification_message(template, **kwargs)
     if notification_message:
         notification_message = notification_message.replace("&#x27;", "\\'")
@@ -81,7 +79,7 @@ def send_slack_notification(webhook: str, template: str, **kwargs) -> None:
             )
 
 
-def _create_notification_message(template: str, **kwargs) -> Optional[str]:
+def _create_notification_message(template: str, **kwargs: Any) -> Optional[str]:
     try:
         return render_to_string(template, kwargs)
     except Exception as e:

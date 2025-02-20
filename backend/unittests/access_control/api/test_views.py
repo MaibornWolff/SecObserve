@@ -18,9 +18,7 @@ class TestAPIToken(BaseTestCase):
 
         api_client = APIClient()
         request_data = {"username": "user@example.com", "password": "not-so-secret"}
-        response = api_client.post(
-            reverse("create_user_api_token"), request_data, "json"
-        )
+        response = api_client.post(reverse("create_user_api_token"), request_data, "json")
 
         self.assertEqual(403, response.status_code)
         self.assertEqual("Invalid credentials", response.data["message"])
@@ -29,21 +27,15 @@ class TestAPIToken(BaseTestCase):
     @patch("application.access_control.api.views._get_authenticated_user")
     @patch("application.access_control.api.views.create_user_api_token")
     def test_create_api_token_view_validation_error(self, api_mock, user_mock):
-        api_mock.side_effect = ValidationError(
-            "Only one API token per user is allowed."
-        )
+        api_mock.side_effect = ValidationError("Only one API token per user is allowed.")
         user_mock.return_value = self.user_internal
 
         api_client = APIClient()
         request_data = {"username": "user@example.com", "password": "not-so-secret"}
-        response = api_client.post(
-            reverse("create_user_api_token"), request_data, "json"
-        )
+        response = api_client.post(reverse("create_user_api_token"), request_data, "json")
 
         self.assertEqual(400, response.status_code)
-        self.assertEqual(
-            "Only one API token per user is allowed.", response.data["message"]
-        )
+        self.assertEqual("Only one API token per user is allowed.", response.data["message"])
         user_mock.assert_called_with(request_data)
         api_mock.assert_called_with(self.user_internal)
 
@@ -55,9 +47,7 @@ class TestAPIToken(BaseTestCase):
 
         api_client = APIClient()
         request_data = {"username": "user@example.com", "password": "not-so-secret"}
-        response = api_client.post(
-            reverse("create_user_api_token"), request_data, "json"
-        )
+        response = api_client.post(reverse("create_user_api_token"), request_data, "json")
         self.assertEqual(201, response.status_code)
         self.assertEqual("api_token", response.data["token"])
         user_mock.assert_called_with(request_data)
@@ -71,9 +61,7 @@ class TestAPIToken(BaseTestCase):
 
         api_client = APIClient()
         request_data = {"username": "user@example.com", "password": "not-so-secret"}
-        response = api_client.post(
-            reverse("revoke_user_api_token"), request_data, "json"
-        )
+        response = api_client.post(reverse("revoke_user_api_token"), request_data, "json")
 
         self.assertEqual(403, response.status_code)
         self.assertEqual("Invalid credentials", response.data["message"])
@@ -86,9 +74,7 @@ class TestAPIToken(BaseTestCase):
 
         api_client = APIClient()
         request_data = {"username": "user@example.com", "password": "not-so-secret"}
-        response = api_client.post(
-            reverse("revoke_user_api_token"), request_data, "json"
-        )
+        response = api_client.post(reverse("revoke_user_api_token"), request_data, "json")
 
         self.assertEqual(204, response.status_code)
         user_mock.assert_called_with(request_data)
@@ -157,9 +143,7 @@ class TestGetAuthenticatedUser(BaseTestCase):
 
 
 class TestChangePassword(BaseTestCase):
-    @patch(
-        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
-    )
+    @patch("application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate")
     @patch("application.access_control.api.views.UserViewSet.get_object")
     @patch("application.access_control.models.User.set_password")
     @patch("application.access_control.models.User.save")
@@ -176,24 +160,18 @@ class TestChangePassword(BaseTestCase):
             "new_password_1": "new",
             "new_password_2": "new",
         }
-        response = api_client.patch(
-            "/api/users/123/change_password/", request_data, "json"
-        )
+        response = api_client.patch("/api/users/123/change_password/", request_data, "json")
 
         self.assertEqual(400, response.status_code)
         self.assertEqual("User's password cannot be changed", response.data["message"])
         save_mock.assert_not_called()
         set_password_mock.assert_not_called()
 
-    @patch(
-        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
-    )
+    @patch("application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate")
     @patch("application.access_control.api.views.UserViewSet.get_object")
     @patch("application.access_control.models.User.set_password")
     @patch("application.access_control.models.User.save")
-    def test_change_password_oidc_user(
-        self, save_mock, set_password_mock, get_object_mock, authentication_mock
-    ):
+    def test_change_password_oidc_user(self, save_mock, set_password_mock, get_object_mock, authentication_mock):
         self.user_internal.is_oidc_user = True
         get_object_mock.return_value = self.user_internal
         authentication_mock.return_value = self.user_admin, None
@@ -204,24 +182,18 @@ class TestChangePassword(BaseTestCase):
             "new_password_1": "new",
             "new_password_2": "new",
         }
-        response = api_client.patch(
-            "/api/users/123/change_password/", request_data, "json"
-        )
+        response = api_client.patch("/api/users/123/change_password/", request_data, "json")
 
         self.assertEqual(400, response.status_code)
         self.assertEqual("User's password cannot be changed", response.data["message"])
         save_mock.assert_not_called()
         set_password_mock.assert_not_called()
 
-    @patch(
-        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
-    )
+    @patch("application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate")
     @patch("application.access_control.api.views.UserViewSet.get_object")
     @patch("application.access_control.models.User.set_password")
     @patch("application.access_control.models.User.save")
-    def test_change_password_do_not_match(
-        self, save_mock, set_password_mock, get_object_mock, authentication_mock
-    ):
+    def test_change_password_do_not_match(self, save_mock, set_password_mock, get_object_mock, authentication_mock):
         get_object_mock.return_value = self.user_internal
         authentication_mock.return_value = self.user_admin, None
 
@@ -231,18 +203,14 @@ class TestChangePassword(BaseTestCase):
             "new_password_1": "new_1",
             "new_password_2": "new_2",
         }
-        response = api_client.patch(
-            "/api/users/123/change_password/", request_data, "json"
-        )
+        response = api_client.patch("/api/users/123/change_password/", request_data, "json")
 
         self.assertEqual(400, response.status_code)
         self.assertEqual("The new passwords do not match", response.data["message"])
         save_mock.assert_not_called()
         set_password_mock.assert_not_called()
 
-    @patch(
-        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
-    )
+    @patch("application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate")
     @patch("application.access_control.api.views.UserViewSet.get_object")
     @patch("application.access_control.models.User.set_password")
     @patch("application.access_control.models.User.save")
@@ -265,21 +233,15 @@ class TestChangePassword(BaseTestCase):
             "new_password_1": "new",
             "new_password_2": "new",
         }
-        response = api_client.patch(
-            "/api/users/123/change_password/", request_data, "json"
-        )
+        response = api_client.patch("/api/users/123/change_password/", request_data, "json")
 
         self.assertEqual(400, response.status_code)
         self.assertEqual("Current password is incorrect", response.data["message"])
-        django_authenticate_mock.assert_called_with(
-            username="user_admin@example.com", password="current"
-        )
+        django_authenticate_mock.assert_called_with(username="user_admin@example.com", password="current")
         save_mock.assert_not_called()
         set_password_mock.assert_not_called()
 
-    @patch(
-        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
-    )
+    @patch("application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate")
     @patch("application.access_control.api.views.UserViewSet.get_object")
     @patch("application.access_control.models.User.set_password")
     @patch("application.access_control.models.User.save")
@@ -297,9 +259,7 @@ class TestChangePassword(BaseTestCase):
         get_object_mock.return_value = self.user_internal
         authentication_mock.return_value = self.user_admin, None
         django_authenticate_mock.return_value = self.user_admin
-        validate_password_mock.side_effect = DjangoValidationError(
-            ["too_short", "too_common"]
-        )
+        validate_password_mock.side_effect = DjangoValidationError(["too_short", "too_common"])
 
         api_client = APIClient()
         request_data = {
@@ -307,21 +267,15 @@ class TestChangePassword(BaseTestCase):
             "new_password_1": "new",
             "new_password_2": "new",
         }
-        response = api_client.patch(
-            "/api/users/123/change_password/", request_data, "json"
-        )
+        response = api_client.patch("/api/users/123/change_password/", request_data, "json")
 
         self.assertEqual(400, response.status_code)
         self.assertEqual("too_short / too_common", response.data["message"])
-        django_authenticate_mock.assert_called_with(
-            username="user_admin@example.com", password="current"
-        )
+        django_authenticate_mock.assert_called_with(username="user_admin@example.com", password="current")
         save_mock.assert_not_called()
         set_password_mock.assert_not_called()
 
-    @patch(
-        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
-    )
+    @patch("application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate")
     @patch("application.access_control.api.views.UserViewSet.get_object")
     @patch("application.access_control.models.User.set_password")
     @patch("application.access_control.models.User.save")
@@ -347,14 +301,10 @@ class TestChangePassword(BaseTestCase):
             "new_password_1": "new",
             "new_password_2": "new",
         }
-        response = api_client.patch(
-            "/api/users/123/change_password/", request_data, "json"
-        )
+        response = api_client.patch("/api/users/123/change_password/", request_data, "json")
 
         self.assertEqual(204, response.status_code)
         self.assertEqual(None, response.data)
-        django_authenticate_mock.assert_called_with(
-            username="user_admin@example.com", password="current"
-        )
+        django_authenticate_mock.assert_called_with(username="user_admin@example.com", password="current")
         save_mock.assert_called()
         set_password_mock.assert_called_with("new")

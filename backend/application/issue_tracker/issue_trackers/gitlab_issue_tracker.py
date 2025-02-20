@@ -90,13 +90,9 @@ class GitLabIssueTracker(BaseIssueTracker):
         )
         response.raise_for_status()
 
-    def close_issue_for_deleted_observation(
-        self, product: Product, issue: Issue
-    ) -> None:
+    def close_issue_for_deleted_observation(self, product: Product, issue: Issue) -> None:
         data = {
-            "description": self._get_description_for_deleted_observation(
-                issue.description
-            ),
+            "description": self._get_description_for_deleted_observation(issue.description),
             "confidential": True,
             "state_event": "close",
         }

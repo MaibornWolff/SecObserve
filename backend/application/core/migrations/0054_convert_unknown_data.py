@@ -65,9 +65,7 @@ def convert_unknown_data(apps, schema_editor):
         )
 
     Product = apps.get_model("core", "Product")
-    products = Product.objects.filter(issue_tracker_minimum_severity="Unkown").order_by(
-        "id"
-    )
+    products = Product.objects.filter(issue_tracker_minimum_severity="Unkown").order_by("id")
 
     paginator = Paginator(products, 1000)
     for page_number in paginator.page_range:

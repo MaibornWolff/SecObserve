@@ -9,6 +9,7 @@ from django.core.cache import cache
 from django.db import IntegrityError, transaction
 from rest_framework.authentication import BaseAuthentication, get_authorization_header
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.request import Request
 
 from application.access_control.models import Authorization_Group, User
 from application.access_control.queries.user import get_user_by_username
@@ -19,7 +20,7 @@ ALGORITHMS = ["RS256", "RS384", "RS512", "ES256 ", "ES384", "ES512", "EdDSA"]
 
 
 class OIDCAuthentication(BaseAuthentication):
-    def authenticate(self, request):
+    def authenticate(self, request: Request) -> Optional[tuple[User, None]]:
         auth = get_authorization_header(request).split()
         if not auth:
             return None
@@ -28,9 +29,7 @@ class OIDCAuthentication(BaseAuthentication):
             raise AuthenticationFailed("Invalid token header: No credentials provided.")
 
         if len(auth) > 2:
-            raise AuthenticationFailed(
-                "Invalid token header: Token string should not contain spaces."
-            )
+            raise AuthenticationFailed("Invalid token header: Token string should not contain spaces.")
 
         auth_prefix = auth[0].decode("UTF-8")
         auth_token = auth[1].decode("UTF-8")
@@ -48,7 +47,7 @@ class OIDCAuthentication(BaseAuthentication):
 
         return (user, None)
 
-    def authenticate_header(self, request):
+    def authenticate_header(self, request: Request) -> str:
         return OIDC_PREFIX
 
     def _validate_jwt(self, token: str) -> Optional[User]:
@@ -81,7 +80,7 @@ class OIDCAuthentication(BaseAuthentication):
         except jwt.PyJWTError as e:
             raise AuthenticationFailed(str(e)) from e
 
-    def _get_jwks_uri(self):
+    def _get_jwks_uri(self) -> str:
         jwks_uri = cache.get("jwks_uri")
         if not jwks_uri:
             response = requests.request(
@@ -134,28 +133,16 @@ class OIDCAuthentication(BaseAuthentication):
 
     def _check_user_change(self, user: User, payload: dict) -> User:
         user_changed = False
-        if (
-            os.environ.get("OIDC_EMAIL")
-            and user.email != payload[os.environ["OIDC_EMAIL"]]
-        ):
+        if os.environ.get("OIDC_EMAIL") and user.email != payload[os.environ["OIDC_EMAIL"]]:
             user.email = payload[os.environ["OIDC_EMAIL"]]
             user_changed = True
-        if (
-            os.environ.get("OIDC_FULL_NAME")
-            and user.full_name != payload[os.environ["OIDC_FULL_NAME"]]
-        ):
+        if os.environ.get("OIDC_FULL_NAME") and user.full_name != payload[os.environ["OIDC_FULL_NAME"]]:
             user.full_name = payload[os.environ["OIDC_FULL_NAME"]]
             user_changed = True
-        if (
-            os.environ.get("OIDC_FIRST_NAME")
-            and user.first_name != payload[os.environ["OIDC_FIRST_NAME"]]
-        ):
+        if os.environ.get("OIDC_FIRST_NAME") and user.first_name != payload[os.environ["OIDC_FIRST_NAME"]]:
             user.first_name = payload[os.environ["OIDC_FIRST_NAME"]]
             user_changed = True
-        if (
-            os.environ.get("OIDC_LAST_NAME")
-            and user.last_name != payload[os.environ["OIDC_LAST_NAME"]]
-        ):
+        if os.environ.get("OIDC_LAST_NAME") and user.last_name != payload[os.environ["OIDC_LAST_NAME"]]:
             user.last_name = payload[os.environ["OIDC_LAST_NAME"]]
             user_changed = True
         groups_hash = self._get_groups_hash(payload)
@@ -197,14 +184,12 @@ class OIDCAuthentication(BaseAuthentication):
             return hashlib.sha256("".join(groups).encode("UTF-8")).hexdigest()
         return ""
 
-    def _synchronize_groups(self, user: User, payload: dict):
+    def _synchronize_groups(self, user: User, payload: dict) -> None:
         groups = Authorization_Group.objects.exclude(oidc_group="")
         for group in groups:
             group.users.remove(user)
 
         oidc_groups = self._get_groups_from_token(payload)
-        authorization_groups = Authorization_Group.objects.filter(
-            oidc_group__in=oidc_groups
-        )
+        authorization_groups = Authorization_Group.objects.filter(oidc_group__in=oidc_groups)
         for authorization_group in authorization_groups:
             user.authorization_groups.add(authorization_group)

@@ -12,6 +12,7 @@ import {
     useGetRecordId,
 } from "react-admin";
 
+import notifications from ".";
 import { httpClient } from "../ra-data-django-rest-framework";
 import { update_notification_count } from "./notification_count";
 
@@ -44,7 +45,10 @@ const NotificationShow = () => {
             <WithRecord
                 render={(notification) => (
                     <SimpleShowLayout>
-                        <Typography variant="h6">Notification</Typography>
+                        <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
+                            <notifications.icon />
+                            &nbsp;&nbsp;Notification
+                        </Typography>
                         <TextField source="type" />
                         <TextField source="name" />
                         <DateField source="created" showTime={true} />
@@ -68,7 +72,9 @@ const NotificationShow = () => {
                                 sx={{ "& a": { textDecoration: "none" } }}
                             />
                         )}
-                        <TextField source="user_full_name" label="User" />
+                        {notification && notification.user_full_name && (
+                            <TextField source="user_full_name" label="User" />
+                        )}
                     </SimpleShowLayout>
                 )}
             />

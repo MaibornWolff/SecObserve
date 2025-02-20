@@ -71,9 +71,7 @@ class Assessment_Status:
 class VexJustification:
     STATUS_COMPONENT_NOT_PRESENT = "component_not_present"
     STATUS_VULNERABLE_CODE_NOT_PRESENT = "vulnerable_code_not_present"
-    STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY = (
-        "vulnerable_code_cannot_be_controlled_by_adversary"
-    )
+    STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY = "vulnerable_code_cannot_be_controlled_by_adversary"
     STATUS_VULNERABLE_CODE_NOT_IN_EXECUTE_PATH = "vulnerable_code_not_in_execute_path"
     STATUS_INLINE_MITIGATIONS_ALREADY_EXIST = "inline_mitigations_already_exist"
 

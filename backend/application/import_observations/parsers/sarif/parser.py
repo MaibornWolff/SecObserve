@@ -55,26 +55,18 @@ class SARIFParser(BaseParser, BaseFileParser):
         return Parser_Type.TYPE_SAST
 
     def check_format(self, data: Any) -> bool:
-        if (
-            isinstance(data, dict)
-            and "sarif" in data.get("$schema", "").lower()
-            and data.get("version") == "2.1.0"
-        ):
+        if isinstance(data, dict) and "sarif" in data.get("$schema", "").lower() and data.get("version") == "2.1.0":
             return True
         return False
 
-    def get_observations(
-        self, data: dict, product: Product, branch: Optional[Branch]
-    ) -> list[Observation]:
+    def get_observations(self, data: dict, product: Product, branch: Optional[Branch]) -> list[Observation]:
         observations: list[Observation] = []
 
         for run in data.get("runs", []):
             sarif_scanner = run.get("tool", {}).get("driver", {}).get("name")
             sarif_version = run.get("tool", {}).get("driver", {}).get("version")
             if not sarif_version:
-                sarif_version = (
-                    run.get("tool", {}).get("driver", {}).get("semanticVersion")
-                )
+                sarif_version = run.get("tool", {}).get("driver", {}).get("semanticVersion")
             if sarif_version:
                 sarif_scanner += " / " + sarif_version
 
@@ -117,7 +109,7 @@ class SARIFParser(BaseParser, BaseFileParser):
         sarif_scanner: str,
         sarif_rules: dict[str, Rule],
         sarif_location: Optional[dict],
-    ):
+    ) -> None:
         location = self.get_location_data(sarif_location)
 
         sarif_rule_id = result.get("ruleId", "")
@@ -125,12 +117,8 @@ class SARIFParser(BaseParser, BaseFileParser):
 
         parser_severity = self.get_parser_severity(result, sarif_scanner, sarif_rule)
 
-        parser_cvss3_score, parser_cvss3_vector = self.get_dependency_check_cvss(
-            sarif_scanner, sarif_rule, 3
-        )
-        parser_cvss4_score, parser_cvss4_vector = self.get_dependency_check_cvss(
-            sarif_scanner, sarif_rule, 4
-        )
+        parser_cvss3_score, parser_cvss3_vector = self.get_dependency_check_cvss(sarif_scanner, sarif_rule, 3)
+        parser_cvss4_score, parser_cvss4_vector = self.get_dependency_check_cvss(sarif_scanner, sarif_rule, 4)
         if parser_cvss3_score or parser_cvss4_score:
             parser_severity = ""
 
@@ -148,17 +136,11 @@ class SARIFParser(BaseParser, BaseFileParser):
         if sarif_rule.properties and isinstance(sarif_rule.properties, dict):
             sarif_cwe = self.get_cwe(sarif_rule.properties.get("tags", []))
 
-        parser_vulnerability_id = self.get_dependency_check_vulnerability_id(
-            sarif_scanner, title
-        )
+        parser_vulnerability_id = self.get_dependency_check_vulnerability_id(sarif_scanner, title)
 
-        origin_component_purl = self.get_dependency_check_origin_component_purl(
-            sarif_scanner, sarif_location
-        )
+        origin_component_purl = self.get_dependency_check_origin_component_purl(sarif_scanner, sarif_location)
         if origin_component_purl:
-            origin_component_name, origin_component_version = self.extract_component(
-                origin_component_purl
-            )
+            origin_component_name, origin_component_version = self.extract_component(origin_component_purl)
             location.uri = ""
         else:
             origin_component_name = ""
@@ -199,9 +181,7 @@ class SARIFParser(BaseParser, BaseFileParser):
 
         observations.append(observation)
 
-    def get_title(
-        self, sarif_scanner: str, sarif_rule_id: str, sarif_rule: Rule
-    ) -> str:
+    def get_title(self, sarif_scanner: str, sarif_rule_id: str, sarif_rule: Rule) -> str:
         if sarif_rule.name:
             title = sarif_rule.name
         else:
@@ -220,38 +200,19 @@ class SARIFParser(BaseParser, BaseFileParser):
     def get_location_data(self, sarif_location: Optional[dict]) -> Location:
         location = Location()
         if sarif_location:
-            location.uri = (
-                sarif_location.get("physicalLocation", {})
-                .get("artifactLocation", {})
-                .get("uri", "")
-            )
-            location.start_line = (
-                sarif_location.get("physicalLocation", {})
-                .get("region", {})
-                .get("startLine")
-            )
-            location.end_line = (
-                sarif_location.get("physicalLocation", {})
-                .get("region", {})
-                .get("endLine")
-            )
+            location.uri = sarif_location.get("physicalLocation", {}).get("artifactLocation", {}).get("uri", "")
+            location.start_line = sarif_location.get("physicalLocation", {}).get("region", {}).get("startLine")
+            location.end_line = sarif_location.get("physicalLocation", {}).get("region", {}).get("endLine")
             location.snippet = (
-                sarif_location.get("physicalLocation", {})
-                .get("region", {})
-                .get("snippet", {})
-                .get("text")
+                sarif_location.get("physicalLocation", {}).get("region", {}).get("snippet", {}).get("text")
             )
 
         return location
 
-    def get_parser_severity(
-        self, result: dict, sarif_scanner: str, sarif_rule: Rule
-    ) -> str:
+    def get_parser_severity(self, result: dict, sarif_scanner: str, sarif_rule: Rule) -> str:
         sarif_level = result.get("level")
         if sarif_level:
-            parser_severity = SEVERITIES.get(
-                sarif_level.lower(), Severity.SEVERITY_UNKNOWN
-            )
+            parser_severity = SEVERITIES.get(sarif_level.lower(), Severity.SEVERITY_UNKNOWN)
         elif sarif_rule.default_level:
             parser_severity = SEVERITIES.get(
                 sarif_rule.default_level.lower(),
@@ -287,13 +248,9 @@ class SARIFParser(BaseParser, BaseFileParser):
             and not sarif_scanner.lower().startswith("semgrep")
         ):
             # Rule short description of some scanners have only redundant information
-            description += (
-                f"**Rule short description:** {sarif_rule.short_description}\n\n"
-            )
+            description += f"**Rule short description:** {sarif_rule.short_description}\n\n"
 
-        rule_short_description = (
-            sarif_rule.short_description if sarif_rule.short_description else ""
-        )
+        rule_short_description = sarif_rule.short_description if sarif_rule.short_description else ""
         if (
             sarif_rule.full_description
             and sarif_rule.full_description not in sarif_message_text
@@ -301,9 +258,7 @@ class SARIFParser(BaseParser, BaseFileParser):
             and not sarif_scanner.lower().startswith("semgrep")
         ):
             # Rule short description of some scanners have only redundant information
-            description += (
-                f"**Rule full description:** {sarif_rule.full_description}\n\n"
-            )
+            description += f"**Rule full description:** {sarif_rule.full_description}\n\n"
 
         if (  # pylint: disable=too-many-boolean-expressions
             sarif_rule.help
@@ -400,22 +355,20 @@ class SARIFParser(BaseParser, BaseFileParser):
 
     def get_dependency_check_cvss(
         self, sarif_scanner: str, sarif_rule: Rule, version: int
-    ):
+    ) -> Tuple[Optional[float], str]:
         # Dependency Check SARIF has no proper level, but stores the severity in a property
         if (
             sarif_scanner.lower().startswith("dependency-check")
             and sarif_rule.properties
             and isinstance(sarif_rule.properties, dict)
         ):
-            return sarif_rule.properties.get(
-                f"cvssv{version}_baseScore"
-            ), sarif_rule.properties.get(f"cvssv{version}_vector")
+            return sarif_rule.properties.get(f"cvssv{version}_baseScore"), sarif_rule.properties.get(
+                f"cvssv{version}_vector"
+            )
 
-        return None, None
+        return None, ""
 
-    def get_dependency_check_vulnerability_id(
-        self, sarif_scanner: str, title: str
-    ) -> str:
+    def get_dependency_check_vulnerability_id(self, sarif_scanner: str, title: str) -> str:
         # Dependency Check sets the title with a vulnerability
         if sarif_scanner.lower().startswith("dependency-check") and (
             title.startswith("CVE-") or title.startswith("GHSA-")
@@ -424,15 +377,10 @@ class SARIFParser(BaseParser, BaseFileParser):
 
         return ""
 
-    def get_dependency_check_origin_component_purl(
-        self, sarif_scanner: str, location: Optional[dict]
-    ) -> str:
+    def get_dependency_check_origin_component_purl(self, sarif_scanner: str, location: Optional[dict]) -> str:
         if location:
             logicalLocations = location.get("logicalLocations")
-            if (
-                sarif_scanner.lower().startswith("dependency-check")
-                and logicalLocations
-            ):
+            if sarif_scanner.lower().startswith("dependency-check") and logicalLocations:
                 fully_qualified_name = logicalLocations[0].get("fullyQualifiedName")
                 if fully_qualified_name and fully_qualified_name.startswith("pkg:"):
                     return fully_qualified_name

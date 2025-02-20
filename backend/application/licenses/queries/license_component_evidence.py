@@ -24,28 +24,20 @@ def get_license_component_evidences() -> QuerySet[License_Component_Evidence]:
             user=user,
         )
 
-        product_authorization_group_members = (
-            Product_Authorization_Group_Member.objects.filter(
-                product=OuterRef("license_component__product_id"),
-                authorization_group__users=user,
-            )
+        product_authorization_group_members = Product_Authorization_Group_Member.objects.filter(
+            product=OuterRef("license_component__product_id"),
+            authorization_group__users=user,
         )
 
-        product_group_authorization_group_members = (
-            Product_Authorization_Group_Member.objects.filter(
-                product=OuterRef("license_component__product__product_group"),
-                authorization_group__users=user,
-            )
+        product_group_authorization_group_members = Product_Authorization_Group_Member.objects.filter(
+            product=OuterRef("license_component__product__product_group"),
+            authorization_group__users=user,
         )
 
         components = components.annotate(
             license_component__product__member=Exists(product_members),
-            license_component__product__product_group__member=Exists(
-                product_group_members
-            ),
-            license_component__product__authorization_group_member=Exists(
-                product_authorization_group_members
-            ),
+            license_component__product__product_group__member=Exists(product_group_members),
+            license_component__product__authorization_group_member=Exists(product_authorization_group_members),
             license_component__product__product_group_authorization_group_member=Exists(
                 product_group_authorization_group_members
             ),
@@ -55,9 +47,7 @@ def get_license_component_evidences() -> QuerySet[License_Component_Evidence]:
             Q(license_component__product__member=True)
             | Q(license_component__product__product_group__member=True)
             | Q(license_component__product__authorization_group_member=True)
-            | Q(
-                license_component__product__product_group_authorization_group_member=True
-            )
+            | Q(license_component__product__product_group_authorization_group_member=True)
         )
 
     return components

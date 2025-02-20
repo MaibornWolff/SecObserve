@@ -121,9 +121,7 @@ class TestProductApiToken(BaseTestCase):
 
     @patch("application.access_control.services.product_api_token.get_user_by_username")
     @patch("application.access_control.services.product_api_token.get_product_member")
-    def test_get_product_api_tokens_no_product_member(
-        self, product_member_mock, user_mock
-    ):
+    def test_get_product_api_tokens_no_product_member(self, product_member_mock, user_mock):
         user = User()
         user_mock.return_value = user
 

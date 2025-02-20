@@ -52,15 +52,9 @@ class TestPermissions(BaseTestCase):
         request.method = "POST"
         request.data = {"product": 1}
 
-        self.assertTrue(
-            check_post_permission(
-                request, Product, "product", Permissions.Product_Member_Create
-            )
-        )
+        self.assertTrue(check_post_permission(request, Product, "product", Permissions.Product_Member_Create))
         get_mock.assert_called_with(Product, pk=1)
-        permission_mock.assert_called_with(
-            self.product_1, Permissions.Product_Member_Create
-        )
+        permission_mock.assert_called_with(self.product_1, Permissions.Product_Member_Create)
 
     # --- check_object_permission ---
 

@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.contrib.auth.models import AbstractUser
 from django.db.models import (
     CASCADE,
@@ -33,14 +35,12 @@ class User(AbstractUser):
     full_name = CharField(max_length=301, blank=True)
     is_external = BooleanField(default=False)
     setting_theme = CharField(max_length=5, choices=THEME_CHOICES, default=THEME_LIGHT)
-    setting_list_size = CharField(
-        max_length=6, choices=LIST_SIZE_CHOICES, default=LIST_SIZE_MEDIUM
-    )
+    setting_list_size = CharField(max_length=6, choices=LIST_SIZE_CHOICES, default=LIST_SIZE_MEDIUM)
     setting_list_properties = TextField(max_length=2048, blank=True)
     oidc_groups_hash = CharField(max_length=64, blank=True)
     is_oidc_user = BooleanField(default=False)
 
-    def save(self, *args, **kwargs):
+    def save(self, *args: Any, **kwargs: Any) -> None:
         if self.first_name and self.last_name:
             self.full_name = f"{self.first_name} {self.last_name}"
         elif self.first_name:
@@ -70,7 +70,7 @@ class Authorization_Group(Model):
             Index(fields=["oidc_group"]),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -85,7 +85,7 @@ class Authorization_Group_Member(Model):
             "user",
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.authorization_group} / {self.user}"
 
 
@@ -95,7 +95,7 @@ class JWT_Secret(Model):
     class Meta:
         verbose_name = "JWT secret"
 
-    def save(self, *args, **kwargs):
+    def save(self, *args: Any, **kwargs: Any) -> None:
         """
         Save object to the database. Removes all other entries if there
         are any.
@@ -104,7 +104,7 @@ class JWT_Secret(Model):
         super().save(*args, **kwargs)
 
     @classmethod
-    def load(cls):
+    def load(cls) -> "JWT_Secret":
         """
         Load object from the database. Failing that, create a new empty
         (default) instance of the object and return it (without saving it

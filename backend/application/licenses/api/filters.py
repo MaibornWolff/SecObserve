@@ -1,5 +1,7 @@
 from datetime import timedelta
+from typing import Any
 
+from django.db.models import QuerySet
 from django.utils import timezone
 from django_filters import (
     BooleanFilter,
@@ -29,26 +31,21 @@ from application.licenses.queries.license_group import get_license_groups
 
 
 class LicenseComponentFilter(FilterSet):
-    component_name_version = CharFilter(
-        field_name="component_name_version", lookup_expr="icontains"
-    )
+    component_name_version = CharFilter(field_name="component_name_version", lookup_expr="icontains")
     license_name = CharFilter(field_name="license_name", lookup_expr="icontains")
     license_name_exact = CharFilter(field_name="license_name")
     license_spdx_id = CharFilter(field_name="license__spdx_id", lookup_expr="icontains")
-    license_expression = CharFilter(
-        field_name="license_expression", lookup_expr="icontains"
-    )
-    non_spdx_license = CharFilter(
-        field_name="non_spdx_license", lookup_expr="icontains"
-    )
-    age = ChoiceFilter(
-        field_name="age", method="get_age", choices=Age_Choices.AGE_CHOICES
-    )
+    license_expression = CharFilter(field_name="license_expression", lookup_expr="icontains")
+    non_spdx_license = CharFilter(field_name="non_spdx_license", lookup_expr="icontains")
+    age = ChoiceFilter(field_name="age", method="get_age", choices=Age_Choices.AGE_CHOICES)
     branch_name_exact = CharFilter(field_name="branch__name")
 
-    def get_age(self, queryset, field_name, value):  # pylint: disable=unused-argument
-        # field_name is used as a positional argument
-
+    def get_age(
+        self,
+        queryset: QuerySet,
+        name: Any,  # pylint: disable=unused-argument
+        value: Any,
+    ) -> QuerySet:
         days = Age_Choices.get_days_from_age(value)
 
         if days is None:
@@ -135,24 +132,26 @@ class LicenseComponentEvidenceFilter(FilterSet):
 class LicenseFilter(FilterSet):
     spdx_id = CharFilter(field_name="spdx_id", lookup_expr="icontains")
     name = CharFilter(field_name="name", lookup_expr="icontains")
-    exclude_license_group = NumberFilter(
-        field_name="exclude_license_group", method="get_exclude_license_group"
-    )
-    exclude_license_policy = NumberFilter(
-        field_name="exclude_license_policy", method="get_exclude_license_policy"
-    )
+    exclude_license_group = NumberFilter(field_name="exclude_license_group", method="get_exclude_license_group")
+    exclude_license_policy = NumberFilter(field_name="exclude_license_policy", method="get_exclude_license_policy")
     license_groups = ModelMultipleChoiceFilter(queryset=License.objects.none())
 
     def get_exclude_license_group(
-        self, queryset, field_name, value
-    ):  # pylint: disable=unused-argument
+        self,
+        queryset: QuerySet,
+        name: Any,  # pylint: disable=unused-argument
+        value: Any,
+    ) -> QuerySet:
         if value is not None:
             return queryset.exclude(license_groups__id=value)
         return queryset
 
     def get_exclude_license_policy(
-        self, queryset, field_name, value
-    ):  # pylint: disable=unused-argument
+        self,
+        queryset: QuerySet,
+        name: Any,  # pylint: disable=unused-argument
+        value: Any,
+    ) -> QuerySet:
         if value is not None:
             return queryset.exclude(license_policy_items__license_policy__id=value)
         return queryset
@@ -167,7 +166,7 @@ class LicenseFilter(FilterSet):
         ),
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.filters["license_groups"].queryset = get_license_groups()
 
@@ -184,13 +183,14 @@ class LicenseFilter(FilterSet):
 
 class LicenseGroupFilter(FilterSet):
     name = CharFilter(field_name="name", lookup_expr="icontains")
-    exclude_license_policy = NumberFilter(
-        field_name="exclude_license_policy", method="get_exclude_license_policy"
-    )
+    exclude_license_policy = NumberFilter(field_name="exclude_license_policy", method="get_exclude_license_policy")
 
     def get_exclude_license_policy(
-        self, queryset, field_name, value
-    ):  # pylint: disable=unused-argument
+        self,
+        queryset: QuerySet,
+        name: Any,  # pylint: disable=unused-argument
+        value: Any,
+    ) -> QuerySet:
         if value is not None:
             return queryset.exclude(license_policy_items__license_policy__id=value)
         return queryset
@@ -249,32 +249,40 @@ class LicensePolicyFilter(FilterSet):
     name = CharFilter(field_name="name", lookup_expr="icontains")
     is_child = BooleanFilter(field_name="is_child", method="get_is_child")
     is_not_id = NumberFilter(field_name="is_not_id", method="get_is_not_id")
-    license = NumberFilter(
-        field_name="license", method="get_license_policies_with_license"
-    )
-    license_group = NumberFilter(
-        field_name="license_group", method="get_license_policies_with_license_group"
-    )
+    license = NumberFilter(field_name="license", method="get_license_policies_with_license")
+    license_group = NumberFilter(field_name="license_group", method="get_license_policies_with_license_group")
 
     def get_is_child(
-        self, queryset, field_name, value  # pylint: disable=unused-argument
-    ) -> bool:
+        self,
+        queryset: QuerySet,
+        name: Any,  # pylint: disable=unused-argument
+        value: Any,
+    ) -> QuerySet:
         parent_null = not value
         return queryset.filter(parent__isnull=parent_null)
 
     def get_is_not_id(
-        self, queryset, field_name, value  # pylint: disable=unused-argument
-    ) -> bool:
+        self,
+        queryset: QuerySet,
+        name: Any,  # pylint: disable=unused-argument
+        value: Any,
+    ) -> QuerySet:
         return queryset.exclude(pk=value)
 
     def get_license_policies_with_license(
-        self, queryset, field_name, value  # pylint: disable=unused-argument
-    ) -> bool:
+        self,
+        queryset: QuerySet,
+        name: Any,  # pylint: disable=unused-argument
+        value: Any,
+    ) -> QuerySet:
         return queryset.filter(license_policy_items__license=value)
 
     def get_license_policies_with_license_group(
-        self, queryset, field_name, value  # pylint: disable=unused-argument
-    ) -> bool:
+        self,
+        queryset: QuerySet,
+        name: Any,  # pylint: disable=unused-argument
+        value: Any,
+    ) -> QuerySet:
         return queryset.filter(license_policy_items__license_group=value)
 
     ordering = ExtendedOrderingFilter(
@@ -292,16 +300,10 @@ class LicensePolicyFilter(FilterSet):
 
 
 class LicensePolicyItemFilter(FilterSet):
-    license_group_name = CharFilter(
-        field_name="license_group__name", lookup_expr="icontains"
-    )
+    license_group_name = CharFilter(field_name="license_group__name", lookup_expr="icontains")
     license_spdx_id = CharFilter(field_name="license__spdx_id", lookup_expr="icontains")
-    license_expression = CharFilter(
-        field_name="license_expression", lookup_expr="icontains"
-    )
-    non_spdx_license = CharFilter(
-        field_name="non_spdx_license", lookup_expr="icontains"
-    )
+    license_expression = CharFilter(field_name="license_expression", lookup_expr="icontains")
+    non_spdx_license = CharFilter(field_name="non_spdx_license", lookup_expr="icontains")
 
     ordering = ExtendedOrderingFilter(
         # tuple-mapping retains order

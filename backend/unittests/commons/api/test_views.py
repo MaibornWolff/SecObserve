@@ -15,9 +15,7 @@ from unittests.base_test_case import BaseTestCase
 
 
 class TestViews(BaseTestCase):
-    @patch(
-        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
-    )
+    @patch("application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate")
     def test_version(self, mock_authentication):
         mock_authentication.return_value = self.user_internal, None
 
@@ -42,9 +40,7 @@ class TestViews(BaseTestCase):
 
     # --- NotificationViewSet ---
 
-    @patch(
-        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
-    )
+    @patch("application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate")
     def test_notification_bulk_mark_as_viewed_no_list(self, mock_authentication):
         mock_authentication.return_value = self.user_internal, None
 
@@ -52,13 +48,9 @@ class TestViews(BaseTestCase):
         response = api_client.post("/api/notifications/bulk_mark_as_viewed/")
 
         self.assertEqual(HTTP_400_BAD_REQUEST, response.status_code)
-        self.assertEqual(
-            {"message": "Notifications: This field is required."}, response.data
-        )
+        self.assertEqual({"message": "Notifications: This field is required."}, response.data)
 
-    @patch(
-        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
-    )
+    @patch("application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate")
     def test_notification_bulk_mark_as_viewed_successful(self, mock_authentication):
         call_command("loaddata", "unittests/fixtures/unittests_fixtures.json")
         # mock_authentication.return_value = self.user_internal, None
@@ -67,25 +59,17 @@ class TestViews(BaseTestCase):
 
         data = {"notifications": [3, 5]}
         api_client = APIClient()
-        response = api_client.post(
-            "/api/notifications/bulk_mark_as_viewed/", data=data, format="json"
-        )
+        response = api_client.post("/api/notifications/bulk_mark_as_viewed/", data=data, format="json")
 
         self.assertEqual(HTTP_204_NO_CONTENT, response.status_code)
 
-        notification_viewed = Notification_Viewed.objects.get(
-            notification_id=3, user=user
-        )
+        notification_viewed = Notification_Viewed.objects.get(notification_id=3, user=user)
         self.assertIsNotNone(notification_viewed)
 
-        notification_viewed = Notification_Viewed.objects.get(
-            notification_id=5, user=user
-        )
+        notification_viewed = Notification_Viewed.objects.get(notification_id=5, user=user)
         self.assertIsNotNone(notification_viewed)
 
-    @patch(
-        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
-    )
+    @patch("application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate")
     def test_notification_mark_as_viewed_not_found(self, mock_authentication):
         mock_authentication.return_value = self.user_internal, None
 
@@ -94,9 +78,7 @@ class TestViews(BaseTestCase):
 
         self.assertEqual(HTTP_404_NOT_FOUND, response.status_code)
 
-    @patch(
-        "application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate"
-    )
+    @patch("application.access_control.services.api_token_authentication.APITokenAuthentication.authenticate")
     def test_notification_mark_as_viewed_successful(self, mock_authentication):
         call_command("loaddata", "unittests/fixtures/unittests_fixtures.json")
 
@@ -107,7 +89,5 @@ class TestViews(BaseTestCase):
 
         self.assertEqual(HTTP_204_NO_CONTENT, response.status_code)
 
-        notification_viewed = Notification_Viewed.objects.get(
-            notification_id=1, user=self.user_internal
-        )
+        notification_viewed = Notification_Viewed.objects.get(notification_id=1, user=self.user_internal)
         self.assertIsNotNone(notification_viewed)

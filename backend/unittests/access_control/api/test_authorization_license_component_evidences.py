@@ -52,9 +52,7 @@ class TestAuthorizationLicenseComponentEvidences(TestAuthorizationBase):
                 expected_data,
             )
         )
-        expected_data = (
-            "{'message': 'No License_Component_Evidence matches the given query.'}"
-        )
+        expected_data = "{'message': 'No License_Component_Evidence matches the given query.'}"
         self._test_api(
             APITest(
                 "db_internal_write",

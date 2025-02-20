@@ -13,8 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="settings",
             name="feature_general_rules_need_approval",
-            field=models.BooleanField(
-                default=False, help_text="General rules need approval"
-            ),
+            field=models.BooleanField(default=False, help_text="General rules need approval"),
         ),
     ]

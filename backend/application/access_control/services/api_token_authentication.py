@@ -3,6 +3,7 @@ from typing import Optional
 from argon2 import PasswordHasher
 from rest_framework.authentication import BaseAuthentication, get_authorization_header
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.request import Request
 
 from application.access_control.models import API_Token, User
 
@@ -10,7 +11,7 @@ API_TOKEN_PREFIX = "APIToken"  # nosec B105
 
 
 class APITokenAuthentication(BaseAuthentication):
-    def authenticate(self, request):
+    def authenticate(self, request: Request) -> Optional[tuple[User, None]]:
         authentication_header = get_authorization_header(request).split()
 
         if not authentication_header:
@@ -20,9 +21,7 @@ class APITokenAuthentication(BaseAuthentication):
             raise AuthenticationFailed("Invalid token header: No credentials provided.")
 
         if len(authentication_header) > 2:
-            raise AuthenticationFailed(
-                "Invalid token header: Token string should not contain spaces."
-            )
+            raise AuthenticationFailed("Invalid token header: Token string should not contain spaces.")
 
         auth_prefix = authentication_header[0].decode("UTF-8")
         auth_token = authentication_header[1].decode("UTF-8")
@@ -40,7 +39,7 @@ class APITokenAuthentication(BaseAuthentication):
 
         return (user, None)
 
-    def authenticate_header(self, request):
+    def authenticate_header(self, request: Request) -> str:
         return API_TOKEN_PREFIX
 
     def _validate_api_token(self, api_token: str) -> Optional[User]:

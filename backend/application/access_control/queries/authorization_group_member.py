@@ -17,9 +17,7 @@ def get_authorization_group_member(
     authorization_group: Authorization_Group, user: User
 ) -> Optional[Authorization_Group_Member]:
     try:
-        return Authorization_Group_Member.objects.get(
-            authorization_group=authorization_group, user=user
-        )
+        return Authorization_Group_Member.objects.get(authorization_group=authorization_group, user=user)
     except Authorization_Group_Member.DoesNotExist:
         return None
 
@@ -36,6 +34,4 @@ def get_authorization_group_members() -> QuerySet[Authorization_Group_Member]:
         return authorization_group_members
 
     authorization_groups = get_authorization_groups()
-    return authorization_group_members.filter(
-        authorization_group__in=authorization_groups
-    )
+    return authorization_group_members.filter(authorization_group__in=authorization_groups)

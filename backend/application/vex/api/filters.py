@@ -117,9 +117,7 @@ class OpenVEXBranchFilter(FilterSet):
 
 
 class VEXCounterFilter(FilterSet):
-    document_id_prefix = CharFilter(
-        field_name="document_id_prefix", lookup_expr="icontains", distinct=True
-    )
+    document_id_prefix = CharFilter(field_name="document_id_prefix", lookup_expr="icontains", distinct=True)
 
     ordering = OrderingFilter(
         # tuple-mapping retains order
@@ -138,9 +136,7 @@ class VEXCounterFilter(FilterSet):
 
 
 class VEXDocumentFilter(FilterSet):
-    document_id = CharFilter(
-        field_name="document_id", lookup_expr="icontains", distinct=True
-    )
+    document_id = CharFilter(field_name="document_id", lookup_expr="icontains", distinct=True)
     author = CharFilter(field_name="author", lookup_expr="icontains", distinct=True)
     ordering = OrderingFilter(
         # tuple-mapping retains order
@@ -161,9 +157,7 @@ class VEXDocumentFilter(FilterSet):
 
 
 class VEXStatementFilter(FilterSet):
-    vulnerability_id = CharFilter(
-        field_name="vulnerability_id", lookup_expr="icontains", distinct=True
-    )
+    vulnerability_id = CharFilter(field_name="vulnerability_id", lookup_expr="icontains", distinct=True)
 
     ordering = OrderingFilter(
         # tuple-mapping retains order

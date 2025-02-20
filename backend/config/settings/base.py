@@ -25,9 +25,7 @@ DEBUG = env.bool("DJANGO_DEBUG", False)
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"] + [
-    x.strip() for x in env("ALLOWED_HOSTS").split(",")
-]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"] + [x.strip() for x in env("ALLOWED_HOSTS").split(",")]
 
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -83,13 +81,9 @@ else:
     if env("DATABASE_ENGINE") == "django.db.backends.mysql":
         DATABASES["default"]["OPTIONS"] = {"charset": "utf8mb4"}
         if env("MYSQL_AZURE", default="false") == "single":
-            DATABASES["default"]["OPTIONS"]["ssl"] = {
-                "ca": "/app/BaltimoreCyberTrustRoot_combined.crt.pem"
-            }
+            DATABASES["default"]["OPTIONS"]["ssl"] = {"ca": "/app/BaltimoreCyberTrustRoot_combined.crt.pem"}
         if env("MYSQL_AZURE", default="false") == "flexible":
-            DATABASES["default"]["OPTIONS"]["ssl"] = {
-                "ca": "/app/DigiCertGlobalRootCA.crt.pem"
-            }
+            DATABASES["default"]["OPTIONS"]["ssl"] = {"ca": "/app/DigiCertGlobalRootCA.crt.pem"}
 
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -160,9 +154,7 @@ PASSWORD_HASHERS = [
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -204,7 +196,7 @@ STATICFILES_FINDERS = [
 ]
 
 
-def whitenoise_security_headers(headers, path, url):
+def whitenoise_security_headers(headers: dict, path: str, url: str) -> None:
     headers["Permissions-Policy"] = "geolocation=() camera=(), microphone=()"
 
 
@@ -290,9 +282,7 @@ SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 # EMAIL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-EMAIL_BACKEND = env(
-    "EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend"
-)
+EMAIL_BACKEND = env("EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend")
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-host
 EMAIL_HOST = env("EMAIL_HOST", default="localhost")
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-port
@@ -322,10 +312,7 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "verbose": {
-            "format": "%(levelname)s | %(asctime)s | %(name)s | "
-            "%(process)d %(thread)d | %(message)s"
-        }
+        "verbose": {"format": "%(levelname)s | %(asctime)s | %(name)s | " "%(process)d %(thread)d | %(message)s"}
     },
     "handlers": {
         "console": {

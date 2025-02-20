@@ -375,9 +375,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "product",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to="core.product"
-                    ),
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="core.product"),
                 ),
                 (
                     "user",
@@ -467,15 +465,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="observation",
             name="parser",
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.PROTECT, to="core.parser"
-            ),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to="core.parser"),
         ),
         migrations.AddField(
             model_name="observation",
             name="product",
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.PROTECT, to="core.product"
-            ),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to="core.product"),
         ),
     ]

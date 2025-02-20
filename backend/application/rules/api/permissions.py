@@ -1,4 +1,7 @@
+from django.contrib.auth.models import AnonymousUser
 from rest_framework.permissions import BasePermission
+from rest_framework.request import Request
+from rest_framework.views import APIView
 
 from application.access_control.api.permissions_base import (
     check_object_permission,
@@ -6,23 +9,28 @@ from application.access_control.api.permissions_base import (
 )
 from application.access_control.services.roles_permissions import Permissions
 from application.core.models import Product
+from application.rules.models import Rule
 
 
 class UserHasGeneralRulePermission(BasePermission):
-    def has_permission(self, request, view):
+    def has_permission(self, request: Request, view: APIView) -> bool:
         if request.method == "GET":
             return True
 
-        return request.user and request.user.is_superuser
+        if not request.user:
+            return False
+
+        if isinstance(request.user, AnonymousUser):
+            return False
+
+        return request.user.is_superuser
 
 
 class UserHasProductRulePermission(BasePermission):
-    def has_permission(self, request, view):
-        return check_post_permission(
-            request, Product, "product", Permissions.Product_Rule_Create
-        )
+    def has_permission(self, request: Request, view: APIView) -> bool:
+        return check_post_permission(request, Product, "product", Permissions.Product_Rule_Create)
 
-    def has_object_permission(self, request, view, obj):
+    def has_object_permission(self, request: Request, view: APIView, obj: Rule) -> bool:
         return check_object_permission(
             request=request,
             object_to_check=obj,

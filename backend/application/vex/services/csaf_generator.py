@@ -70,9 +70,7 @@ class CSAFContent:
 
 
 def create_csaf_document(parameters: CSAFCreateParameters) -> Optional[CSAFRoot]:
-    check_product_or_vulnerabilities(
-        parameters.product_id, parameters.vulnerability_names
-    )
+    check_product_or_vulnerabilities(parameters.product_id, parameters.vulnerability_names)
     product = check_and_get_product(parameters.product_id)
     if product:
         user_has_permission_or_403(product, Permissions.VEX_Create)
@@ -119,13 +117,9 @@ def create_csaf_document(parameters: CSAFCreateParameters) -> Optional[CSAFRoot]
     product_tree = CSAFProductTree(branches=[], relationships=[])
 
     if product:
-        vulnerabilities, product_tree = _get_content_for_product(
-            product, parameters.vulnerability_names, branches
-        )
+        vulnerabilities, product_tree = _get_content_for_product(product, parameters.vulnerability_names, branches)
     else:
-        vulnerabilities, product_tree = _get_content_for_vulnerabilities(
-            parameters.vulnerability_names
-        )
+        vulnerabilities, product_tree = _get_content_for_vulnerabilities(parameters.vulnerability_names)
 
     if not vulnerabilities:
         csaf.delete()
@@ -133,9 +127,7 @@ def create_csaf_document(parameters: CSAFCreateParameters) -> Optional[CSAFRoot]
 
     csaf_content = CSAFContent(vulnerabilities, product_tree)
     content_json = jsonpickle.encode(csaf_content, unpicklable=False)
-    content_hash = hashlib.sha256(
-        content_json.casefold().encode("utf-8").strip()
-    ).hexdigest()
+    content_hash = hashlib.sha256(content_json.casefold().encode("utf-8").strip()).hexdigest()
     csaf.content_hash = content_hash
     csaf.save()
 
@@ -146,9 +138,7 @@ def create_csaf_document(parameters: CSAFCreateParameters) -> Optional[CSAFRoot]
 
 
 def update_csaf_document(parameters: CSAFUpdateParameters) -> Optional[CSAFRoot]:
-    csaf = get_csaf_by_document_id(
-        parameters.document_id_prefix, parameters.document_base_id
-    )
+    csaf = get_csaf_by_document_id(parameters.document_id_prefix, parameters.document_base_id)
     if not csaf:
         raise NotFound(
             f"CSAF document with ids {parameters.document_id_prefix} and {parameters.document_base_id} does not exist"
@@ -156,32 +146,22 @@ def update_csaf_document(parameters: CSAFUpdateParameters) -> Optional[CSAFRoot]
 
     user_has_permission_or_403(csaf, Permissions.VEX_Edit)
 
-    csaf_vulnerability_names = list(
-        CSAF_Vulnerability.objects.filter(csaf=csaf).values_list("name", flat=True)
-    )
+    csaf_vulnerability_names = list(CSAF_Vulnerability.objects.filter(csaf=csaf).values_list("name", flat=True))
 
-    csaf_branch_ids = CSAF_Branch.objects.filter(csaf=csaf).values_list(
-        "branch", flat=True
-    )
+    csaf_branch_ids = CSAF_Branch.objects.filter(csaf=csaf).values_list("branch", flat=True)
     csaf_branches = list(Branch.objects.filter(id__in=csaf_branch_ids))
 
     vulnerabilities = []
     product_tree = CSAFProductTree(branches=[], relationships=[])
 
     if csaf.product:
-        vulnerabilities, product_tree = _get_content_for_product(
-            csaf.product, csaf_vulnerability_names, csaf_branches
-        )
+        vulnerabilities, product_tree = _get_content_for_product(csaf.product, csaf_vulnerability_names, csaf_branches)
     else:
-        vulnerabilities, product_tree = _get_content_for_vulnerabilities(
-            csaf_vulnerability_names
-        )
+        vulnerabilities, product_tree = _get_content_for_vulnerabilities(csaf_vulnerability_names)
 
     csaf_content = CSAFContent(vulnerabilities, product_tree)
     content_json = jsonpickle.encode(csaf_content, unpicklable=False)
-    content_hash = hashlib.sha256(
-        content_json.casefold().encode("utf-8").strip()
-    ).hexdigest()
+    content_hash = hashlib.sha256(content_json.casefold().encode("utf-8").strip()).hexdigest()
 
     if content_hash == csaf.content_hash:
         return None
@@ -229,9 +209,7 @@ def _get_content_for_vulnerabilities(vulnerability_names: list[str]) -> tuple:
             current_vulnerability_description = set_vulnerability_description(
                 vulnerability, observation, current_vulnerability_description
             )
-            append_product_to_product_tree(
-                product_tree, observation.product, observation.branch
-            )
+            append_product_to_product_tree(product_tree, observation.product, observation.branch)
 
             set_product_status(vulnerability, observation)
             remove_conflicting_product_status(vulnerability)
@@ -241,9 +219,7 @@ def _get_content_for_vulnerabilities(vulnerability_names: list[str]) -> tuple:
     return vulnerabilities, product_tree
 
 
-def _get_content_for_product(
-    product: Product, vulnerability_names: list[str], branches: list[Branch]
-) -> tuple:
+def _get_content_for_product(product: Product, vulnerability_names: list[str], branches: list[Branch]) -> tuple:
     vulnerabilities: dict[str, CSAFVulnerability] = {}
     product_tree = CSAFProductTree(branches=[], relationships=[])
 

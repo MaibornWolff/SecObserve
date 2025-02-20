@@ -5,7 +5,7 @@ class VEXConfig(AppConfig):
     name = "application.vex"
     verbose_name = "Vulnerability Exploitability eXchange"
 
-    def ready(self):
+    def ready(self) -> None:
         try:
             import application.vex.signals  # noqa F401 pylint: disable=import-outside-toplevel, unused-import
         except ImportError:

@@ -25,9 +25,7 @@ class Migration(migrations.Migration):
                 ("name", models.CharField(max_length=255, unique=True)),
                 (
                     "product",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to="core.product"
-                    ),
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="core.product"),
                 ),
             ],
             options={
@@ -37,9 +35,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="observation",
             name="branch",
-            field=models.ForeignKey(
-                null=True, on_delete=django.db.models.deletion.PROTECT, to="core.branch"
-            ),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to="core.branch"),
         ),
         migrations.AddField(
             model_name="product",

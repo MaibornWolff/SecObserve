@@ -92,7 +92,7 @@ class ObservationSerializer(ModelSerializer):
         model = Observation
         exclude = ["numerical_severity", "issue_tracker_jira_initial_status"]
 
-    def to_representation(self, instance):
+    def to_representation(self, instance: Observation) -> dict:
         response = super().to_representation(instance)
         response["evidences"] = sorted(response["evidences"], key=lambda x: x["name"])
         return response
@@ -115,19 +115,13 @@ class ObservationSerializer(ModelSerializer):
             if origin_source_file_url.endswith("/"):
                 origin_source_file_url = origin_source_file_url[:-1]
             if parsed_url.netloc == "dev.azure.com":
-                origin_source_file_url = self._create_azure_devops_url(
-                    observation, origin_source_file_url
-                )
+                origin_source_file_url = self._create_azure_devops_url(observation, origin_source_file_url)
             else:
-                origin_source_file_url = self._create_common_url(
-                    observation, origin_source_file_url
-                )
+                origin_source_file_url = self._create_common_url(observation, origin_source_file_url)
 
         return origin_source_file_url
 
-    def get_origin_component_purl_namespace(
-        self, observation: Observation
-    ) -> Optional[str]:
+    def get_origin_component_purl_namespace(self, observation: Observation) -> Optional[str]:
         if observation.origin_component_purl:
             try:
                 purl = PackageURL.from_string(observation.origin_component_purl)
@@ -136,9 +130,7 @@ class ObservationSerializer(ModelSerializer):
                 return ""
         return ""
 
-    def _create_azure_devops_url(
-        self, observation: Observation, origin_source_file_url: str
-    ) -> str:
+    def _create_azure_devops_url(self, observation: Observation, origin_source_file_url: str) -> str:
         origin_source_file_url += f"?path={observation.origin_source_file}"
         if observation.branch:
             origin_source_file_url += f"&version=GB{observation.branch.name}"
@@ -146,19 +138,13 @@ class ObservationSerializer(ModelSerializer):
             origin_source_file_url += f"&line={observation.origin_source_line_start}"
             origin_source_file_url += "&lineStartColumn=1&lineEndColumn=1"
             if observation.origin_source_line_end:
-                origin_source_file_url += (
-                    f"&lineEnd={observation.origin_source_line_end+1}"
-                )
+                origin_source_file_url += f"&lineEnd={observation.origin_source_line_end+1}"
             else:
-                origin_source_file_url += (
-                    f"&lineEnd={observation.origin_source_line_start+1}"
-                )
+                origin_source_file_url += f"&lineEnd={observation.origin_source_line_start+1}"
 
         return origin_source_file_url
 
-    def _create_common_url(
-        self, observation: Observation, origin_source_file_url: str
-    ) -> str:
+    def _create_common_url(self, observation: Observation, origin_source_file_url: str) -> str:
         if observation.branch:
             origin_source_file_url += f"/{observation.branch.name}"
         origin_source_file_url += f"/{observation.origin_source_file}"
@@ -173,12 +159,8 @@ class ObservationSerializer(ModelSerializer):
         issue_url = None
 
         if observation.issue_tracker_issue_id:
-            issue_tracker = issue_tracker_factory(
-                observation.product, with_communication=False
-            )
-            issue_url = issue_tracker.get_frontend_issue_url(
-                observation.product, observation.issue_tracker_issue_id
-            )
+            issue_tracker = issue_tracker_factory(observation.product, with_communication=False)
+            issue_url = issue_tracker.get_frontend_issue_url(observation.product, observation.issue_tracker_issue_id)
 
         return issue_url
 
@@ -186,15 +168,12 @@ class ObservationSerializer(ModelSerializer):
         current_observation_log = get_current_observation_log(observation)
         if (
             current_observation_log
-            and current_observation_log.assessment_status
-            == Assessment_Status.ASSESSMENT_STATUS_NEEDS_APPROVAL
+            and current_observation_log.assessment_status == Assessment_Status.ASSESSMENT_STATUS_NEEDS_APPROVAL
         ):
             return current_observation_log.pk
         return None
 
-    def get_vulnerability_id_aliases(
-        self, observation: Observation
-    ) -> list[dict[str, str]]:
+    def get_vulnerability_id_aliases(self, observation: Observation) -> list[dict[str, str]]:
         return _get_vulnerability_id_aliases(observation)
 
     def validate_product(self, product: Product) -> Product:
@@ -235,14 +214,12 @@ class ObservationListSerializer(ModelSerializer):
     def get_origin_component_name_version(self, observation: Observation) -> str:
         return get_origin_component_name_version(observation)
 
-    def get_vulnerability_id_aliases(
-        self, observation: Observation
-    ) -> list[dict[str, str]]:
+    def get_vulnerability_id_aliases(self, observation: Observation) -> list[dict[str, str]]:
         return _get_vulnerability_id_aliases(observation)
 
 
 class ObservationUpdateSerializer(ModelSerializer):
-    def validate(self, attrs: dict):
+    def validate(self, attrs: dict) -> dict:
         self.instance: Observation
         if self.instance and self.instance.parser.type != Parser_Type.TYPE_MANUAL:
             raise ValidationError("Only manual observations can be updated")
@@ -255,17 +232,13 @@ class ObservationUpdateSerializer(ModelSerializer):
 
     def validate_branch(self, branch: Branch) -> Branch:
         if branch and branch.product != self.instance.product:
-            raise ValidationError(
-                "Branch does not belong to the same product as the observation"
-            )
+            raise ValidationError("Branch does not belong to the same product as the observation")
 
         return branch
 
     def validate_origin_service(self, service: Service) -> Service:
         if service and service.product != self.instance.product:
-            raise ValidationError(
-                "Service does not belong to the same product as the observation"
-            )
+            raise ValidationError("Service does not belong to the same product as the observation")
 
         return service
 
@@ -275,7 +248,7 @@ class ObservationUpdateSerializer(ModelSerializer):
     def validate_cvss4_vector(self, cvss4_vector: str) -> str:
         return validate_cvss4_vector(cvss4_vector)
 
-    def update(self, instance: Observation, validated_data: dict):
+    def update(self, instance: Observation, validated_data: dict) -> Observation:
         actual_severity = instance.current_severity
         actual_status = instance.current_status
         actual_vex_justification = instance.current_vex_justification
@@ -296,17 +269,9 @@ class ObservationUpdateSerializer(ModelSerializer):
 
         observation: Observation = super().update(instance, validated_data)
 
-        log_severity = (
-            observation.current_severity
-            if actual_severity != observation.current_severity
-            else ""
-        )
+        log_severity = observation.current_severity if actual_severity != observation.current_severity else ""
 
-        log_status = (
-            observation.current_status
-            if actual_status != observation.current_status
-            else ""
-        )
+        log_status = observation.current_status if actual_status != observation.current_status else ""
 
         log_vex_justification = (
             observation.current_vex_justification
@@ -316,17 +281,11 @@ class ObservationUpdateSerializer(ModelSerializer):
 
         log_risk_acceptance_expiry_date = (
             observation.risk_acceptance_expiry_date
-            if actual_risk_acceptance_expiry_date
-            != observation.risk_acceptance_expiry_date
+            if actual_risk_acceptance_expiry_date != observation.risk_acceptance_expiry_date
             else None
         )
 
-        if (
-            log_severity
-            or log_status
-            or log_vex_justification
-            or log_risk_acceptance_expiry_date
-        ):
+        if log_severity or log_status or log_vex_justification or log_risk_acceptance_expiry_date:
             create_observation_log(
                 observation=observation,
                 severity=log_severity,
@@ -345,7 +304,7 @@ class ObservationUpdateSerializer(ModelSerializer):
 
         return observation
 
-    def to_representation(self, instance):
+    def to_representation(self, instance: Observation) -> dict:
         serializer = ObservationSerializer(instance)
         return serializer.data
 
@@ -389,22 +348,18 @@ class ObservationUpdateSerializer(ModelSerializer):
 
 
 class ObservationCreateSerializer(ModelSerializer):
-    def validate(self, attrs):
+    def validate(self, attrs: dict) -> dict:
         attrs["parser"] = Parser.objects.get(type=Parser_Type.TYPE_MANUAL)
         attrs["scanner"] = Parser_Type.TYPE_MANUAL
         attrs["import_last_seen"] = timezone.now()
 
         if attrs.get("branch"):
             if attrs["branch"].product != attrs["product"]:
-                raise ValidationError(
-                    "Branch does not belong to the same product as the observation"
-                )
+                raise ValidationError("Branch does not belong to the same product as the observation")
 
         if attrs.get("service"):
             if attrs["service"].product != attrs["product"]:
-                raise ValidationError(
-                    "Service does not belong to the same product as the observation"
-                )
+                raise ValidationError("Service does not belong to the same product as the observation")
 
         validate_cvss_and_severity(attrs)
 
@@ -416,7 +371,7 @@ class ObservationCreateSerializer(ModelSerializer):
     def validate_cvss4_vector(self, cvss4_vector: str) -> str:
         return validate_cvss4_vector(cvss4_vector)
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict) -> Observation:
         if validated_data.get("origin_service"):
             service = Service.objects.get(pk=validated_data["origin_service"].id)
             validated_data["origin_service_name"] = service.name
@@ -443,7 +398,7 @@ class ObservationCreateSerializer(ModelSerializer):
 
         return observation
 
-    def to_representation(self, instance):
+    def to_representation(self, instance: Observation) -> dict:
         serializer = ObservationSerializer(instance)
         return serializer.data
 
@@ -504,18 +459,14 @@ class ObservationRemoveAssessmentSerializer(Serializer):
 
 
 class ObservationBulkDeleteSerializer(Serializer):
-    observations = ListField(
-        child=IntegerField(min_value=1), min_length=0, max_length=250, required=True
-    )
+    observations = ListField(child=IntegerField(min_value=1), min_length=0, max_length=250, required=True)
 
 
 class ObservationBulkAssessmentSerializer(Serializer):
     severity = ChoiceField(choices=Severity.SEVERITY_CHOICES, required=False)
     status = ChoiceField(choices=Status.STATUS_CHOICES, required=False)
     comment = CharField(max_length=4096, required=True)
-    observations = ListField(
-        child=IntegerField(min_value=1), min_length=0, max_length=250, required=True
-    )
+    observations = ListField(child=IntegerField(min_value=1), min_length=0, max_length=250, required=True)
     vex_justification = ChoiceField(
         choices=VexJustification.VEX_JUSTIFICATION_CHOICES,
         required=False,
@@ -526,9 +477,7 @@ class ObservationBulkAssessmentSerializer(Serializer):
 
 class ObservationBulkMarkDuplicatesSerializer(Serializer):
     observation_id = IntegerField(min_value=1, required=True)
-    potential_duplicates = ListField(
-        child=IntegerField(min_value=1), min_length=0, max_length=250, required=True
-    )
+    potential_duplicates = ListField(child=IntegerField(min_value=1), min_length=0, max_length=250, required=True)
 
 
 class NestedObservationSerializer(ModelSerializer):
@@ -599,26 +548,18 @@ class ObservationLogListSerializer(ModelSerializer):
 
 
 class ObservationLogApprovalSerializer(Serializer):
-    assessment_status = ChoiceField(
-        choices=Assessment_Status.ASSESSMENT_STATUS_CHOICES_APPROVAL, required=False
-    )
+    assessment_status = ChoiceField(choices=Assessment_Status.ASSESSMENT_STATUS_CHOICES_APPROVAL, required=False)
     approval_remark = CharField(max_length=255, required=True)
 
 
 class ObservationLogBulkApprovalSerializer(Serializer):
-    assessment_status = ChoiceField(
-        choices=Assessment_Status.ASSESSMENT_STATUS_CHOICES_APPROVAL, required=False
-    )
+    assessment_status = ChoiceField(choices=Assessment_Status.ASSESSMENT_STATUS_CHOICES_APPROVAL, required=False)
     approval_remark = CharField(max_length=255, required=True)
-    observation_logs = ListField(
-        child=IntegerField(min_value=1), min_length=0, max_length=250, required=True
-    )
+    observation_logs = ListField(child=IntegerField(min_value=1), min_length=0, max_length=250, required=True)
 
 
 class ObservationLogBulkDeleteSerializer(Serializer):
-    observation_logs = ListField(
-        child=IntegerField(min_value=1), min_length=0, max_length=250, required=True
-    )
+    observation_logs = ListField(child=IntegerField(min_value=1), min_length=0, max_length=250, required=True)
 
 
 class PotentialDuplicateSerializer(ModelSerializer):
