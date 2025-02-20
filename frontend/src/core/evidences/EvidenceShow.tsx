@@ -12,6 +12,7 @@ import {
     useRecordContext,
 } from "react-admin";
 
+import evidences from ".";
 import { useStyles } from "../../commons/layout/themes";
 import { getSettingTheme } from "../../commons/user_settings/functions";
 
@@ -35,8 +36,9 @@ const EvidenceShow = () => {
     return (
         <Show actions={<ShowActions />}>
             <SimpleShowLayout>
-                <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                    Evidence
+                <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
+                    <evidences.icon />
+                    &nbsp;&nbsp;Evidence
                 </Typography>
                 <ReferenceField
                     source="product"
