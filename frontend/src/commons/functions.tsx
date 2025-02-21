@@ -155,7 +155,11 @@ export function get_component_purl_url(
     }
 
     let component_purl_url = "https://deps.dev/" + deps_dev_type + "/";
-    if (!component_name.includes(":") && component_purl_namespace !== null) {
+    if (
+        !component_name.includes(":") &&
+        component_purl_namespace !== null &&
+        !component_name.startsWith(component_purl_namespace)
+    ) {
         component_purl_url =
             component_purl_url + encodeURIComponent(component_purl_namespace) + encodeURIComponent(namespace_separator);
     }
