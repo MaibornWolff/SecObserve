@@ -35,6 +35,7 @@ services:
       # --- Gunicorn ---
       GUNICORN_WORKERS: 3
       GUNICORN_THREADS: 10
+      GUNICORN_LIMIT_REQUEST_FIELD_SIZE: 16380
       # --- Database ---
       DATABASE_ENGINE: django.db.backends.sqlite3
       # --- Security ---
