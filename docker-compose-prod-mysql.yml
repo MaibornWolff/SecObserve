@@ -70,6 +70,7 @@ services:
       # --- Gunicorn ---
       GUNICORN_WORKERS: ${SO_GUNICORN_WORKERS:-3}
       GUNICORN_THREADS: ${SO_GUNICORN_THREADS:-10}
+      GUNICORN_LIMIT_REQUEST_FIELD_SIZE: ${SO_GUNICORN_LIMIT_REQUEST_FIELD_SIZE:-16380}
       # --- Database ---
       DATABASE_ENGINE: ${SO_DATABASE_ENGINE:-django.db.backends.mysql}
       DATABASE_HOST: ${SO_DATABASE_HOST:-mysql}
