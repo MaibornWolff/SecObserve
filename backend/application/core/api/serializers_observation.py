@@ -101,59 +101,10 @@ class ObservationSerializer(ModelSerializer):
         return get_branch_name(observation)
 
     def get_origin_source_file_url(self, observation: Observation) -> Optional[str]:
-        origin_source_file_url = None
-
-        if observation.product.repository_prefix and observation.origin_source_file:
-            if not validators.url(observation.product.repository_prefix):
-                return None
-
-            parsed_url = urlparse(observation.product.repository_prefix)
-            if parsed_url.scheme not in ["http", "https"]:
-                return None
-
-            origin_source_file_url = observation.product.repository_prefix
-            if origin_source_file_url.endswith("/"):
-                origin_source_file_url = origin_source_file_url[:-1]
-            if parsed_url.netloc == "dev.azure.com":
-                origin_source_file_url = self._create_azure_devops_url(observation, origin_source_file_url)
-            else:
-                origin_source_file_url = self._create_common_url(observation, origin_source_file_url)
-
-        return origin_source_file_url
+        return _get_origin_source_file_url(observation)
 
     def get_origin_component_purl_namespace(self, observation: Observation) -> Optional[str]:
-        if observation.origin_component_purl:
-            try:
-                purl = PackageURL.from_string(observation.origin_component_purl)
-                return purl.namespace
-            except ValueError:
-                return ""
-        return ""
-
-    def _create_azure_devops_url(self, observation: Observation, origin_source_file_url: str) -> str:
-        origin_source_file_url += f"?path={observation.origin_source_file}"
-        if observation.branch:
-            origin_source_file_url += f"&version=GB{observation.branch.name}"
-        if observation.origin_source_line_start:
-            origin_source_file_url += f"&line={observation.origin_source_line_start}"
-            origin_source_file_url += "&lineStartColumn=1&lineEndColumn=1"
-            if observation.origin_source_line_end:
-                origin_source_file_url += f"&lineEnd={observation.origin_source_line_end+1}"
-            else:
-                origin_source_file_url += f"&lineEnd={observation.origin_source_line_start+1}"
-
-        return origin_source_file_url
-
-    def _create_common_url(self, observation: Observation, origin_source_file_url: str) -> str:
-        if observation.branch:
-            origin_source_file_url += f"/{observation.branch.name}"
-        origin_source_file_url += f"/{observation.origin_source_file}"
-        if observation.origin_source_line_start:
-            origin_source_file_url += "#L" + str(observation.origin_source_line_start)
-        if observation.origin_source_line_end:
-            origin_source_file_url += "-" + str(observation.origin_source_line_end)
-
-        return origin_source_file_url
+        return _get_origin_component_purl_namespace(observation)
 
     def get_issue_tracker_issue_url(self, observation: Observation) -> Optional[str]:
         issue_url = None
@@ -195,6 +146,8 @@ class ObservationListSerializer(ModelSerializer):
     parser_data = ParserSerializer(source="parser")
     scanner_name = SerializerMethodField()
     origin_component_name_version = SerializerMethodField()
+    origin_source_file_url = SerializerMethodField()
+    origin_component_purl_namespace = SerializerMethodField()
     vulnerability_id_aliases = SerializerMethodField()
 
     class Meta:
@@ -214,8 +167,81 @@ class ObservationListSerializer(ModelSerializer):
     def get_origin_component_name_version(self, observation: Observation) -> str:
         return get_origin_component_name_version(observation)
 
+    def get_origin_source_file_url(self, observation: Observation) -> Optional[str]:
+        return _get_origin_source_file_url(observation)
+
+    def get_origin_component_purl_namespace(self, observation: Observation) -> Optional[str]:
+        return _get_origin_component_purl_namespace(observation)
+
     def get_vulnerability_id_aliases(self, observation: Observation) -> list[dict[str, str]]:
         return _get_vulnerability_id_aliases(observation)
+
+
+def _get_origin_source_file_url(observation: Observation) -> Optional[str]:
+    origin_source_file_url = None
+
+    if observation.product.repository_prefix and observation.origin_source_file:
+        if not validators.url(observation.product.repository_prefix):
+            return None
+
+        parsed_url = urlparse(observation.product.repository_prefix)
+        if parsed_url.scheme not in ["http", "https"]:
+            return None
+
+        origin_source_file_url = observation.product.repository_prefix
+        if origin_source_file_url.endswith("/"):
+            origin_source_file_url = origin_source_file_url[:-1]
+        if parsed_url.netloc == "dev.azure.com":
+            origin_source_file_url = _create_azure_devops_url(observation, origin_source_file_url)
+        else:
+            origin_source_file_url = _create_common_url(observation, origin_source_file_url)
+
+    return origin_source_file_url
+
+
+def _create_azure_devops_url(observation: Observation, origin_source_file_url: str) -> str:
+    origin_source_file_url += f"?path={observation.origin_source_file}"
+    if observation.branch:
+        origin_source_file_url += f"&version=GB{observation.branch.name}"
+    if observation.origin_source_line_start:
+        origin_source_file_url += f"&line={observation.origin_source_line_start}"
+        origin_source_file_url += "&lineStartColumn=1&lineEndColumn=1"
+        if observation.origin_source_line_end:
+            origin_source_file_url += f"&lineEnd={observation.origin_source_line_end+1}"
+        else:
+            origin_source_file_url += f"&lineEnd={observation.origin_source_line_start+1}"
+
+    return origin_source_file_url
+
+
+def _create_common_url(observation: Observation, origin_source_file_url: str) -> str:
+    if observation.branch:
+        origin_source_file_url += f"/{observation.branch.name}"
+    origin_source_file_url += f"/{observation.origin_source_file}"
+    if observation.origin_source_line_start:
+        origin_source_file_url += "#L" + str(observation.origin_source_line_start)
+    if observation.origin_source_line_end:
+        origin_source_file_url += "-" + str(observation.origin_source_line_end)
+
+    return origin_source_file_url
+
+
+def _get_origin_component_purl_namespace(observation: Observation) -> Optional[str]:
+    if observation.origin_component_purl:
+        try:
+            purl = PackageURL.from_string(observation.origin_component_purl)
+            return purl.namespace
+        except ValueError:
+            return ""
+    return ""
+
+
+def _get_vulnerability_id_aliases(observation: Observation) -> list[dict[str, str]]:
+    aliases_list = get_comma_separated_as_list(observation.vulnerability_id_aliases)
+    return_list = []
+    for alias in aliases_list:
+        return_list.append({"alias": alias})
+    return return_list
 
 
 class ObservationUpdateSerializer(ModelSerializer):
@@ -493,14 +519,6 @@ class NestedObservationSerializer(ModelSerializer):
 
     def get_origin_component_name_version(self, observation: Observation) -> str:
         return get_origin_component_name_version(observation)
-
-
-def _get_vulnerability_id_aliases(observation: Observation) -> list[dict[str, str]]:
-    aliases_list = get_comma_separated_as_list(observation.vulnerability_id_aliases)
-    return_list = []
-    for alias in aliases_list:
-        return_list.append({"alias": alias})
-    return return_list
 
 
 class ObservationLogSerializer(ModelSerializer):
