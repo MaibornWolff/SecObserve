@@ -108,8 +108,9 @@ const LicenseGroupMemberAdd = ({ id }: LicenseGroupMemberAddProps) => {
                             />
                         </ReferenceInput>
                         <BooleanInput
-                            source="is_manager"
+                            source="dummy_is_manager"
                             label="Manager"
+                            defaultValue={false}
                             onChange={(e) => setIsManager(e.target.checked)}
                         />
                     </SimpleForm>
