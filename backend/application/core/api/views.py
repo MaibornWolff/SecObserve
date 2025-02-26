@@ -218,14 +218,14 @@ class ProductViewSet(ModelViewSet):
         ],
     )
     @action(detail=True, methods=["get"])
-    def export_observations_csv(self, request: Request, pk: int) -> Response:
+    def export_observations_csv(self, request: Request, pk: int) -> HttpResponse:
         product = self.__get_product(pk)
 
         status = self.request.query_params.get("status")
         if status and (status, status) not in Status.STATUS_CHOICES:
             raise ValidationError(f"Status {status} is not a valid choice")
 
-        response = Response(content_type="text/csv")
+        response = HttpResponse(content_type="text/csv")
         response["Content-Disposition"] = "attachment; filename=observations.csv"
 
         export_observations_csv(response, product, status)
@@ -257,10 +257,10 @@ class ProductViewSet(ModelViewSet):
         responses={200: None},
     )
     @action(detail=True, methods=["get"])
-    def export_license_components_csv(self, request: Request, pk: int) -> Response:
+    def export_license_components_csv(self, request: Request, pk: int) -> HttpResponse:
         product = self.__get_product(pk)
 
-        response = Response(content_type="text/csv")
+        response = HttpResponse(content_type="text/csv")
         response["Content-Disposition"] = "attachment; filename=license_observations.csv"
 
         export_license_components_csv(response, product)
