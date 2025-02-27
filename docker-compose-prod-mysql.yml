@@ -10,7 +10,7 @@ networks:
 services:
 
   traefik:
-    image: "traefik:v3.3.3"
+    image: "traefik:v3.3.4"
     container_name: "prod_traefik"
     command:
       - "--log.level=INFO"
@@ -35,7 +35,7 @@ services:
       - traefik
 
   frontend:
-    image: maibornwolff/secobserve-frontend:1.28.1
+    image: maibornwolff/secobserve-frontend:1.28.2
     container_name: "prod_secobserve_frontend"
     labels:
       - "traefik.enable=true"
@@ -54,7 +54,7 @@ services:
       - traefik
 
   backend:
-    image: maibornwolff/secobserve-backend:1.28.1
+    image: maibornwolff/secobserve-backend:1.28.2
     container_name: "prod_secobserve_backend"
     labels:
       - "traefik.enable=true"
@@ -70,6 +70,7 @@ services:
       # --- Gunicorn ---
       GUNICORN_WORKERS: ${SO_GUNICORN_WORKERS:-3}
       GUNICORN_THREADS: ${SO_GUNICORN_THREADS:-10}
+      GUNICORN_LIMIT_REQUEST_FIELD_SIZE: ${SO_GUNICORN_LIMIT_REQUEST_FIELD_SIZE:-16380}
       # --- Database ---
       DATABASE_ENGINE: ${SO_DATABASE_ENGINE:-django.db.backends.mysql}
       DATABASE_HOST: ${SO_DATABASE_HOST:-mysql}

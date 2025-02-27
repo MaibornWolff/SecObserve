@@ -24,6 +24,7 @@ A part of the configuration is done with environment variables, which need to be
 | `FIELD_ENCRYPTION_KEY` | mandatory   | Key to encrypt fields like the JWT secret. See [Generating an Encryption Key](https://gitlab.com/lansharkconsulting/django/django-encrypted-model-fields#generating-an-encryption-key) how to generate the key. |
 | `GUNICORN_WORKERS`     | optional   | Number of worker processes for the Gunicorn web server, see [Gunicorn documentation](https://docs.gunicorn.org/en/stable/design.html#how-many-workers). Default is 3. |
 | `GUNICORN_THREADS`     | optional   | Number of worker threads for the Gunicorn web server, default is 10. |
+| `GUNICORN_LIMIT_REQUEST_FIELD_SIZE` | optional | Limits the allowed size of an HTTP request header field, default is 16380. |
 | `OIDC_AUTHORITY`       | mandatory   | The authority is a URL that hosts the OpenID configuration well-known endpoint.  |
 | `OIDC_CLIENT_ID`       | mandatory   | The client ID is the unique *Application (client) ID* assigned to your app by the OpenID Connect provider when the app was registered. |
 | `OIDC_USERNAME`        | mandatory   | The claim that contains the username to find or create the user. |

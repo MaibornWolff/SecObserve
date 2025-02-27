@@ -12,6 +12,7 @@ import {
     useRecordContext,
 } from "react-admin";
 
+import license_component_evidences from ".";
 import { useStyles } from "../../commons/layout/themes";
 import { getSettingTheme } from "../../commons/user_settings/functions";
 
@@ -35,7 +36,10 @@ const LicenseComponentEvidenceShow = () => {
     return (
         <Show actions={<ShowActions />}>
             <SimpleShowLayout>
-                <Typography variant="h6">License Component Evidence</Typography>
+                <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
+                    <license_component_evidences.icon />
+                    &nbsp;&nbsp;License Component Evidence
+                </Typography>
                 <ReferenceField
                     source="product"
                     reference="products"
