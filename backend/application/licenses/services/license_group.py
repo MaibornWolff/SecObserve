@@ -55,10 +55,12 @@ def _add_license_to_group(license_groups: dict[str, License_Group], category: st
         if not license_group:
             license_group, _ = License_Group.objects.get_or_create(
                 name=f"{category} (ScanCode LicenseDB)",
-                description="Do not edit! "
-                + "Imported from [ScanCode LicenseDB](https://scancode-licensedb.aboutcode.org/) "
-                + "under the CC-BY-4.0 license.",
-                is_public=True,
+                defaults={
+                    "description": "Do not edit! "
+                    + "Imported from [ScanCode LicenseDB](https://scancode-licensedb.aboutcode.org/) "
+                    + "under the CC-BY-4.0 license.",
+                    "is_public": True,
+                },
             )
             license_groups[category] = license_group
             license_group.licenses.clear()
