@@ -1,1 +1,1 @@
-mkdocs-material==9.6.5  # https://github.com/squidfunk/mkdocs-material
+mkdocs-material==9.6.6  # https://github.com/squidfunk/mkdocs-material
