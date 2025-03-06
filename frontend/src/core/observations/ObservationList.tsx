@@ -21,6 +21,7 @@ import observations from ".";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { humanReadableDate } from "../../commons/functions";
+import { feature_cvss_enrichment } from "../../commons/functions";
 import ListHeader from "../../commons/layout/ListHeader";
 import { AutocompleteInputMedium, AutocompleteInputWide } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/user_settings/functions";
@@ -36,56 +37,75 @@ import ObservationBulkAssessment from "./ObservationBulkAssessment";
 import ObservationExpand from "./ObservationExpand";
 import { IDENTIFIER_OBSERVATION_LIST, setListIdentifier } from "./functions";
 
-const listFilters = [
-    <ReferenceInput
-        source="product"
-        reference="products"
-        sort={{ field: "name", order: "ASC" }}
-        queryOptions={{ meta: { api_resource: "product_names" } }}
-        alwaysOn
-    >
-        <AutocompleteInputMedium optionText="name" />
-    </ReferenceInput>,
-    <ReferenceInput
-        source="product_group"
-        reference="product_groups"
-        sort={{ field: "name", order: "ASC" }}
-        queryOptions={{ meta: { api_resource: "product_group_names" } }}
-        alwaysOn
-    >
-        <AutocompleteInputMedium optionText="name" />
-    </ReferenceInput>,
-    <ReferenceInput
-        source="branch"
-        reference="branches"
-        sort={{ field: "name", order: "ASC" }}
-        queryOptions={{ meta: { api_resource: "branch_names" } }}
-        alwaysOn
-    >
-        <AutocompleteInputWide optionText="name_with_product" label="Branch / Version" />
-    </ReferenceInput>,
-    <TextInput source="title" alwaysOn />,
-    <AutocompleteInput source="current_severity" label="Severity" choices={OBSERVATION_SEVERITY_CHOICES} alwaysOn />,
-    <AutocompleteInput source="current_status" label="Status" choices={OBSERVATION_STATUS_CHOICES} alwaysOn />,
-    <ReferenceInput label="Service" source="origin_service" reference="services" sort={{ field: "name", order: "ASC" }}>
-        <AutocompleteInputWide label="Service" optionText="name_with_product" />
-    </ReferenceInput>,
-    <TextInput source="origin_component_name_version" label="Component" />,
-    <TextInput source="origin_docker_image_name_tag_short" label="Container" />,
-    <TextInput source="origin_endpoint_hostname" label="Host" />,
-    <TextInput source="origin_source_file" label="Source" />,
-    <TextInput source="origin_cloud_qualified_resource" label="Cloud resource" />,
-    <TextInput source="origin_kubernetes_qualified_resource" label="Kubernetes resource" />,
-    <TextInput source="scanner" alwaysOn />,
-    <AutocompleteInputMedium source="age" choices={AGE_CHOICES} alwaysOn />,
-    <NullableBooleanInput source="has_potential_duplicates" label="Duplicates" alwaysOn />,
-    <AutocompleteInput
-        source="origin_component_purl_type"
-        label="Component type"
-        choices={PURL_TYPE_CHOICES}
-        alwaysOn
-    />,
-];
+function listFilters() {
+    const filters = [];
+    filters.push(
+        <ReferenceInput
+            source="product"
+            reference="products"
+            sort={{ field: "name", order: "ASC" }}
+            queryOptions={{ meta: { api_resource: "product_names" } }}
+            alwaysOn
+        >
+            <AutocompleteInputMedium optionText="name" />
+        </ReferenceInput>,
+        <ReferenceInput
+            source="product_group"
+            reference="product_groups"
+            sort={{ field: "name", order: "ASC" }}
+            queryOptions={{ meta: { api_resource: "product_group_names" } }}
+            alwaysOn
+        >
+            <AutocompleteInputMedium optionText="name" />
+        </ReferenceInput>,
+        <ReferenceInput
+            source="branch"
+            reference="branches"
+            sort={{ field: "name", order: "ASC" }}
+            queryOptions={{ meta: { api_resource: "branch_names" } }}
+            alwaysOn
+        >
+            <AutocompleteInputWide optionText="name_with_product" label="Branch / Version" />
+        </ReferenceInput>,
+        <TextInput source="title" alwaysOn />,
+        <AutocompleteInput
+            source="current_severity"
+            label="Severity"
+            choices={OBSERVATION_SEVERITY_CHOICES}
+            alwaysOn
+        />,
+        <AutocompleteInput source="current_status" label="Status" choices={OBSERVATION_STATUS_CHOICES} alwaysOn />,
+        <ReferenceInput
+            label="Service"
+            source="origin_service"
+            reference="services"
+            sort={{ field: "name", order: "ASC" }}
+        >
+            <AutocompleteInputWide label="Service" optionText="name_with_product" />
+        </ReferenceInput>,
+        <TextInput source="origin_component_name_version" label="Component" />
+    );
+    if (feature_cvss_enrichment()) {
+        filters.push(<NullableBooleanInput source="cve_known_exploited" label="CVE exploited" />);
+    }
+    filters.push(
+        <TextInput source="origin_docker_image_name_tag_short" label="Container" />,
+        <TextInput source="origin_endpoint_hostname" label="Host" />,
+        <TextInput source="origin_source_file" label="Source" />,
+        <TextInput source="origin_cloud_qualified_resource" label="Cloud resource" />,
+        <TextInput source="origin_kubernetes_qualified_resource" label="Kubernetes resource" />,
+        <TextInput source="scanner" alwaysOn />,
+        <AutocompleteInputMedium source="age" choices={AGE_CHOICES} alwaysOn />,
+        <NullableBooleanInput source="has_potential_duplicates" label="Duplicates" alwaysOn />,
+        <AutocompleteInput
+            source="origin_component_purl_type"
+            label="Component type"
+            choices={PURL_TYPE_CHOICES}
+            alwaysOn
+        />
+    );
+    return filters;
+}
 
 const ListActions = () => (
     <TopToolbar>
@@ -111,7 +131,7 @@ const ObservationList = () => {
             <List
                 perPage={25}
                 pagination={<CustomPagination />}
-                filters={listFilters}
+                filters={listFilters()}
                 sort={{ field: "current_severity", order: "ASC" }}
                 filterDefaultValues={{ current_status: OBSERVATION_STATUS_OPEN }}
                 disableSyncWithLocation={false}

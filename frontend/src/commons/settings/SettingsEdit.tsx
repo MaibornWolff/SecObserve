@@ -110,6 +110,10 @@ const SettingsEdit = () => {
                                     source="feature_general_rules_need_approval"
                                     label="General rules need approval"
                                 />
+                                <BooleanInput
+                                    source="feature_cvss_enrichment"
+                                    label="Enable CVSS enrichment from cvss-bt"
+                                />
                             </Stack>
                         </Grid>
                         <Grid size={3}>
@@ -123,6 +127,19 @@ const SettingsEdit = () => {
                                     label="Enable automatic OSV scanning"
                                 />
                                 <BooleanInput source="feature_license_management" label="Enable license management" />
+                                <FormDataConsumer>
+                                    {({ formData }) =>
+                                        formData.feature_cvss_enrichment && (
+                                            <NumberInput
+                                                source="cvss_enrichment_max_age_years"
+                                                label="Maximum age of CVEs for enrichment in years"
+                                                min={0}
+                                                step={1}
+                                                validate={validate_0_999999}
+                                            />
+                                        )
+                                    }
+                                </FormDataConsumer>
                             </Stack>
                         </Grid>
                     </Grid>

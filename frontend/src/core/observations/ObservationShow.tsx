@@ -8,6 +8,7 @@ import {
     NumberField,
     PrevNextButtons,
     Show,
+    TextField,
     TopToolbar,
     WithRecord,
     useRecordContext,
@@ -180,7 +181,7 @@ const ObservationShowComponent = () => {
                                                 {observation.cvss4_vector != "" && (
                                                     <Labeled label="CVSS 4 vector">
                                                         <TextUrlField
-                                                            label="CWE"
+                                                            label="CVSS 4 vector"
                                                             text={observation.cvss4_vector}
                                                             url={get_cvss4_url(observation.cvss4_vector)}
                                                             new_tab={true}
@@ -199,7 +200,7 @@ const ObservationShowComponent = () => {
                                                 {observation.cvss3_vector != "" && (
                                                     <Labeled label="CVSS 3 vector">
                                                         <TextUrlField
-                                                            label="CWE"
+                                                            label="CVSS 3 vector"
                                                             text={observation.cvss3_vector}
                                                             url={get_cvss3_url(observation.cvss3_vector)}
                                                             new_tab={true}
@@ -207,6 +208,44 @@ const ObservationShowComponent = () => {
                                                     </Labeled>
                                                 )}
                                             </Stack>
+                                        )}
+                                        {(observation.enriched_cvss_score != null ||
+                                            (observation.enriched_cvss_vector &&
+                                                observation.enriched_cvss_vector != "")) && (
+                                            <Stack direction="row" spacing={2}>
+                                                {observation.enriched_cvss_score != null && (
+                                                    <Labeled label="Enriched CVSS score">
+                                                        <NumberField source="enriched_cvss_score" />
+                                                    </Labeled>
+                                                )}
+                                                {observation.enriched_cvss_vector &&
+                                                    observation.enriched_cvss_vector.startsWith("CVSS:3") && (
+                                                        <Labeled label="Enriched CVSS vector">
+                                                            <TextUrlField
+                                                                label="Enriched CVSS vector"
+                                                                text={observation.enriched_cvss_vector}
+                                                                url={get_cvss3_url(observation.enriched_cvss_vector)}
+                                                                new_tab={true}
+                                                            />
+                                                        </Labeled>
+                                                    )}
+                                                {observation.enriched_cvss_vector &&
+                                                    observation.enriched_cvss_vector.startsWith("CVSS:4") && (
+                                                        <Labeled label="Enriched CVSS vector">
+                                                            <TextUrlField
+                                                                label="Enriched CVSS vector"
+                                                                text={observation.enriched_cvss_vector}
+                                                                url={get_cvss4_url(observation.enriched_cvss_vector)}
+                                                                new_tab={true}
+                                                            />
+                                                        </Labeled>
+                                                    )}
+                                            </Stack>
+                                        )}
+                                        {observation.cve_found_in && observation.cve_found_in != "" && (
+                                            <Labeled label="CVE found in">
+                                                <TextField source="cve_found_in" />
+                                            </Labeled>
                                         )}
                                     </Stack>
                                 )}

@@ -63,6 +63,9 @@ const SettingsShowComponent = () => {
                                     <Labeled label="General rules need approval">
                                         <BooleanField source="feature_general_rules_need_approval" />
                                     </Labeled>
+                                    <Labeled label="Enable CVSS enrichment from cvss-bt">
+                                        <BooleanField source="feature_cvss_enrichment" />
+                                    </Labeled>
                                 </Stack>
                             </Grid>
                             <Grid size={3}>
@@ -76,6 +79,11 @@ const SettingsShowComponent = () => {
                                     <Labeled label="Enable license management">
                                         <BooleanField source="feature_license_management" />
                                     </Labeled>
+                                    {settings.feature_cvss_enrichment && (
+                                        <Labeled label="Maximum age of CVEs for enrichment in years">
+                                            <NumberField source="cvss_enrichment_max_age_years" />
+                                        </Labeled>
+                                    )}
                                 </Stack>
                             </Grid>
                         </Grid>

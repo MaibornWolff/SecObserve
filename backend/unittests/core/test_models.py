@@ -1,4 +1,5 @@
-from unittest.mock import patch
+from django.core.management import call_command
+from django.utils import timezone
 
 from application.core.models import Observation, Product
 from application.import_observations.models import Parser
@@ -17,17 +18,27 @@ class TestObservation(BaseTestCase):
         observation = Observation(title="observation_title", product=product)
         self.assertEqual("product_name / observation_title", str(observation))
 
-    @patch("application.core.models.normalize_observation_fields")
-    @patch("application.core.models.get_identity_hash")
-    @patch("django.db.models.Model.save")
-    def test_save(self, save_mock, hash_mock, normalize_mock):
-        hash_mock.return_value = "hash"
+    def test_save(self):
+        call_command(
+            "loaddata",
+            [
+                "unittests/fixtures/unittests_fixtures.json",
+            ],
+        )
+        product = Product.objects.get(pk=1)
 
-        product = Product(name="product_name")
-        observation = Observation(title="observation_title", product=product)
+        observation = Observation(
+            title="observation_title",
+            product=product,
+            import_last_seen=timezone.now(),
+            parser=Parser.objects.get(pk=1),
+            origin_component_name="component",
+            origin_component_version="1.0.0",
+        )
         observation.save()
 
-        self.assertEqual("hash", observation.identity_hash)
-        save_mock.assert_called()
-        hash_mock.assert_called_with(observation)
-        normalize_mock.assert_called_with(observation)
+        # check if pre_save signal is working
+        self.assertEqual("4d0ea3fe1e7e00756da57c54073dd41e2e140ecf6b139d0780c3dedecd08db75", observation.identity_hash)
+        self.assertEqual("component:1.0.0", observation.origin_component_name_version)
+        product.refresh_from_db()
+        self.assertTrue(1, product.has_component)

@@ -222,6 +222,12 @@ class Settings(Model):
         help_text="Hour crontab expression for importing licenses (UTC)",
     )
     feature_automatic_osv_scanning = BooleanField(default=True, help_text="Enable automatic OSV scanning")
+    feature_cvss_enrichment = BooleanField(default=True, help_text="Enable CVSS enrichment")
+    cvss_enrichment_max_age_years = IntegerField(
+        default=10,
+        validators=[MinValueValidator(0), MaxValueValidator(999999)],
+        help_text="Maximum age of CVEs for enrichment in years",
+    )
 
     def save(self, *args: Any, **kwargs: Any) -> None:
         """
