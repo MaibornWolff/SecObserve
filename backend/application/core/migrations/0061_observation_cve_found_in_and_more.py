@@ -15,14 +15,4 @@ class Migration(migrations.Migration):
             name="cve_found_in",
             field=models.CharField(blank=True, max_length=255),
         ),
-        migrations.AddField(
-            model_name="observation",
-            name="enriched_cvss_score",
-            field=models.DecimalField(decimal_places=1, max_digits=3, null=True),
-        ),
-        migrations.AddField(
-            model_name="observation",
-            name="enriched_cvss_vector",
-            field=models.CharField(blank=True, max_length=255),
-        ),
     ]

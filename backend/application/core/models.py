@@ -430,8 +430,6 @@ class Observation(Model):
     cvss3_vector = CharField(max_length=255, blank=True)
     cvss4_score = DecimalField(max_digits=3, decimal_places=1, null=True)
     cvss4_vector = CharField(max_length=255, blank=True)
-    enriched_cvss_score = DecimalField(max_digits=3, decimal_places=1, null=True)
-    enriched_cvss_vector = CharField(max_length=255, blank=True)
     cve_found_in = CharField(max_length=255, blank=True)
 
     cwe = IntegerField(null=True, validators=[MinValueValidator(1), MaxValueValidator(999999)])

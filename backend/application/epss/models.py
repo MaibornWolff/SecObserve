@@ -40,7 +40,6 @@ class EPSS_Status(Model):
 
 class Enriched_CVSS(Model):
     cve = CharField(max_length=255, unique=True)
-    enriched_cvss_vector = CharField(max_length=255, blank=True)
     base_cvss_vector = CharField(max_length=255, blank=True)
     cisa_kev = BooleanField(default=False)
     vulncheck_kev = BooleanField(default=False)

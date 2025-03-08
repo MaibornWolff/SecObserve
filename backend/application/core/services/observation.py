@@ -78,9 +78,6 @@ def get_current_severity(observation: Observation) -> str:
     if observation.parser_severity:
         return observation.parser_severity
 
-    if observation.enriched_cvss_score is not None:
-        return get_cvss_severity(observation.enriched_cvss_score)
-
     if observation.cvss4_score is not None:
         return get_cvss_severity(observation.cvss4_score)
 
@@ -191,8 +188,6 @@ def normalize_cvss_vectors(observation: Observation) -> None:
         observation.cvss3_vector = ""
     if observation.cvss4_vector is None:
         observation.cvss4_vector = ""
-    if observation.enriched_cvss_vector is None:
-        observation.enriched_cvss_vector = ""
     if observation.cve_found_in is None:
         observation.cve_found_in = ""
 

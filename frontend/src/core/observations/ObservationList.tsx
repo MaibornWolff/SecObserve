@@ -86,7 +86,7 @@ function listFilters() {
         <TextInput source="origin_component_name_version" label="Component" />
     );
     if (feature_cvss_enrichment()) {
-        filters.push(<NullableBooleanInput source="cve_known_exploited" label="CVE exploited" />);
+        filters.push(<NullableBooleanInput source="cve_known_exploited" label="CVE exploited" alwaysOn />);
     }
     filters.push(
         <TextInput source="origin_docker_image_name_tag_short" label="Container" />,

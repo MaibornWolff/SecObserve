@@ -46,13 +46,9 @@ def import_cvss_bt() -> None:
         settings = Settings.load()
         if int(cve_year) <= current_year - settings.cvss_enrichment_max_age_years:
             continue
-        enriched_cvss_vector = row.get("cvss-bt_vector", "")
-        if not enriched_cvss_vector.startswith("CVSS:3") and not enriched_cvss_vector.startswith("CVSS:4"):
-            continue
 
         enriched_cvss = Enriched_CVSS(
             cve=cve,
-            enriched_cvss_vector=enriched_cvss_vector,
             base_cvss_vector=row.get("base_vector", ""),
             cisa_kev=row.get("cisa_kev", "").lower() == "true",
             vulncheck_kev=row.get("vulncheck_kev", "").lower() == "true",
@@ -97,8 +93,6 @@ def enriched_cvss_apply_observations(settings: Settings) -> None:
                 "cvss3_vector",
                 "cvss4_score",
                 "cvss4_vector",
-                "enriched_cvss_score",
-                "enriched_cvss_vector",
                 "cve_found_in",
                 "current_severity",
             ],
@@ -115,23 +109,14 @@ def apply_enriched_cvss(observation: Observation, settings: Settings) -> bool:
         if not enriched_cvss:
             return False
 
-        if observation.cvss3_vector and not enriched_cvss.enriched_cvss_vector.startswith(observation.cvss3_vector):
-            return False
-        if observation.cvss4_vector and not enriched_cvss.enriched_cvss_vector.startswith(observation.cvss4_vector):
-            return False
-
-        observation.enriched_cvss_vector = enriched_cvss.enriched_cvss_vector
-        if enriched_cvss.enriched_cvss_vector.startswith("CVSS:3"):
-            cvss = CVSS3(observation.enriched_cvss_vector)
-            observation.enriched_cvss_score = cvss.temporal_score
-        else:
-            cvss = CVSS4(observation.enriched_cvss_vector)
-            observation.enriched_cvss_score = cvss.base_score
+        cvss3_vector_before = observation.cvss3_vector
+        cvss4_vector_before = observation.cvss4_vector
+        cve_found_in_before = observation.cve_found_in
 
         if not observation.cvss3_vector and enriched_cvss.base_cvss_vector.startswith("CVSS:3"):
             observation.cvss3_vector = enriched_cvss.base_cvss_vector
             cvss = CVSS3(observation.cvss3_vector)
-            observation.cvss3_score = cvss.temporal_score
+            observation.cvss3_score = cvss.base_score
         if not observation.cvss4_vector and enriched_cvss.base_cvss_vector.startswith("CVSS:4"):
             observation.cvss4_vector = enriched_cvss.base_cvss_vector
             cvss = CVSS4(observation.cvss4_vector)
@@ -139,13 +124,17 @@ def apply_enriched_cvss(observation: Observation, settings: Settings) -> bool:
 
         _add_cve_found_in(observation, enriched_cvss)
 
-        observation.current_severity = get_current_severity(observation)
+        if (
+            observation.cvss3_vector != cvss3_vector_before
+            or observation.cvss4_vector != cvss4_vector_before
+            or observation.cve_found_in != cve_found_in_before
+        ):
+            observation.current_severity = get_current_severity(observation)
+            return True
 
-        return True
+        return False
     else:
-        if observation.enriched_cvss_score or observation.enriched_cvss_vector or observation.cve_found_in:
-            observation.enriched_cvss_score = None
-            observation.enriched_cvss_vector = ""
+        if observation.cve_found_in:
             observation.cve_found_in = ""
             observation.current_severity = get_current_severity(observation)
             return True
@@ -157,8 +146,6 @@ def _add_cve_found_in(observation: Observation, enriched_cvss: Enriched_CVSS) ->
     cve_found_in = []
     if enriched_cvss.cisa_kev:
         cve_found_in.append("CISA KEV")
-    if enriched_cvss.vulncheck_kev:
-        cve_found_in.append("VulnCheck KEV")
     if enriched_cvss.exploitdb:
         cve_found_in.append("ExploitDB")
     if enriched_cvss.metasploit:
@@ -167,4 +154,6 @@ def _add_cve_found_in(observation: Observation, enriched_cvss: Enriched_CVSS) ->
         cve_found_in.append("Nuclei")
     if enriched_cvss.poc_github:
         cve_found_in.append("PoC GitHub")
+    if enriched_cvss.vulncheck_kev:
+        cve_found_in.append("VulnCheck KEV")
     observation.cve_found_in = ", ".join(cve_found_in)

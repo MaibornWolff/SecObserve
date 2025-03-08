@@ -8,7 +8,6 @@ import {
     NumberField,
     PrevNextButtons,
     Show,
-    TextField,
     TopToolbar,
     WithRecord,
     useRecordContext,
@@ -19,6 +18,7 @@ import {
     PERMISSION_OBSERVATION_EDIT,
     PERMISSION_OBSERVATION_LOG_APPROVAL,
 } from "../../access_control/types";
+import CVEFoundInField from "../../commons/custom_fields/CVEFoundInField";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import VulnerabilityIdField from "../../commons/custom_fields/VulnerabilityIdField";
 import { get_cvss3_url, get_cvss4_url, get_cwe_url } from "../../commons/functions";
@@ -149,6 +149,9 @@ const ObservationShowComponent = () => {
                                                                 sx={{
                                                                     "& .RaDatagrid-rowCell": {
                                                                         paddingLeft: 0,
+                                                                        borderBottom: 0,
+                                                                        paddingBottom: "1px",
+                                                                        paddingTop: "1px",
                                                                     },
                                                                 }}
                                                             >
@@ -209,42 +212,12 @@ const ObservationShowComponent = () => {
                                                 )}
                                             </Stack>
                                         )}
-                                        {(observation.enriched_cvss_score != null ||
-                                            (observation.enriched_cvss_vector &&
-                                                observation.enriched_cvss_vector != "")) && (
-                                            <Stack direction="row" spacing={2}>
-                                                {observation.enriched_cvss_score != null && (
-                                                    <Labeled label="Enriched CVSS score">
-                                                        <NumberField source="enriched_cvss_score" />
-                                                    </Labeled>
-                                                )}
-                                                {observation.enriched_cvss_vector &&
-                                                    observation.enriched_cvss_vector.startsWith("CVSS:3") && (
-                                                        <Labeled label="Enriched CVSS vector">
-                                                            <TextUrlField
-                                                                label="Enriched CVSS vector"
-                                                                text={observation.enriched_cvss_vector}
-                                                                url={get_cvss3_url(observation.enriched_cvss_vector)}
-                                                                new_tab={true}
-                                                            />
-                                                        </Labeled>
-                                                    )}
-                                                {observation.enriched_cvss_vector &&
-                                                    observation.enriched_cvss_vector.startsWith("CVSS:4") && (
-                                                        <Labeled label="Enriched CVSS vector">
-                                                            <TextUrlField
-                                                                label="Enriched CVSS vector"
-                                                                text={observation.enriched_cvss_vector}
-                                                                url={get_cvss4_url(observation.enriched_cvss_vector)}
-                                                                new_tab={true}
-                                                            />
-                                                        </Labeled>
-                                                    )}
-                                            </Stack>
-                                        )}
-                                        {observation.cve_found_in && observation.cve_found_in != "" && (
-                                            <Labeled label="CVE found in">
-                                                <TextField source="cve_found_in" />
+                                        {observation.cve_found_in && observation.cve_found_in.length > 0 && (
+                                            <Labeled label="Vulnerability Id found in">
+                                                <CVEFoundInField
+                                                    cve_found_in={observation.cve_found_in}
+                                                    vulnerability_id={observation.vulnerability_id}
+                                                />
                                             </Labeled>
                                         )}
                                     </Stack>
