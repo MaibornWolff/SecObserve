@@ -23,7 +23,7 @@ import { PERMISSION_OBSERVATION_ASSESSMENT, PERMISSION_OBSERVATION_DELETE } from
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { humanReadableDate } from "../../commons/functions";
-import { feature_cvss_enrichment } from "../../commons/functions";
+import { feature_exploit_information } from "../../commons/functions";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/user_settings/functions";
 import {
@@ -91,7 +91,7 @@ function listFilters(product: Product) {
                 <AutocompleteInputMedium optionText="name" label="Component type" />
             </ReferenceInput>
         );
-        if (feature_cvss_enrichment()) {
+        if (feature_exploit_information()) {
             filters.push(<NullableBooleanInput source="cve_known_exploited" label="CVE exploited" alwaysOn />);
         }
     }

@@ -64,7 +64,7 @@ const SettingsShowComponent = () => {
                                         <BooleanField source="feature_general_rules_need_approval" />
                                     </Labeled>
                                     <Labeled label="Enable exploit enrichment from cvss-bt">
-                                        <BooleanField source="feature_cvss_enrichment" />
+                                        <BooleanField source="feature_exploit_information" />
                                     </Labeled>
                                 </Stack>
                             </Grid>
@@ -79,9 +79,9 @@ const SettingsShowComponent = () => {
                                     <Labeled label="Enable license management">
                                         <BooleanField source="feature_license_management" />
                                     </Labeled>
-                                    {settings.feature_cvss_enrichment && (
+                                    {settings.feature_exploit_information && (
                                         <Labeled label="Maximum age of CVEs for enrichment in years">
-                                            <NumberField source="cvss_enrichment_max_age_years" />
+                                            <NumberField source="exploit_information_max_age_years" />
                                         </Labeled>
                                     )}
                                 </Stack>

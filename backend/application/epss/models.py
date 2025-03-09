@@ -38,7 +38,7 @@ class EPSS_Status(Model):
         return obj
 
 
-class Enriched_CVSS(Model):
+class Exploit_Information(Model):
     cve = CharField(max_length=255, unique=True)
     base_cvss_vector = CharField(max_length=255, blank=True)
     cisa_kev = BooleanField(default=False)

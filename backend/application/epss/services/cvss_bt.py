@@ -10,8 +10,8 @@ from application.commons.models import Settings
 from application.core.models import Observation
 from application.core.services.observation import get_current_severity
 from application.core.types import Status
-from application.epss.models import Enriched_CVSS
-from application.epss.queries.enriched_cvss import get_enriched_cvss_by_cve
+from application.epss.models import Exploit_Information
+from application.epss.queries.exploit_information import get_exploit_information_by_cve
 
 
 def import_cvss_bt() -> None:
@@ -28,10 +28,10 @@ def import_cvss_bt() -> None:
         raise ValueError("File is not valid CSV")  # pylint: disable=raise-missing-from
         # The Exception itself is not relevant and must not be re-raised
 
-    Enriched_CVSS.objects.all().delete()
+    Exploit_Information.objects.all().delete()
 
     counter = 0
-    enriched_cvss_s = []
+    exploit_information_list = []
     for row in reader:
         cve = row.get("cve", "")
         if not cve.startswith("CVE-"):
@@ -44,10 +44,10 @@ def import_cvss_bt() -> None:
             continue
         current_year = datetime.datetime.now().year
         settings = Settings.load()
-        if int(cve_year) <= current_year - settings.cvss_enrichment_max_age_years:
+        if int(cve_year) <= current_year - settings.exploit_information_max_age_years:
             continue
 
-        enriched_cvss = Enriched_CVSS(
+        exploit_information = Exploit_Information(
             cve=cve,
             base_cvss_vector=row.get("base_vector", ""),
             cisa_kev=row.get("cisa_kev", "").lower() == "true",
@@ -57,20 +57,20 @@ def import_cvss_bt() -> None:
             nuclei=row.get("nuclei", "").lower() == "true",
             poc_github=row.get("poc_github", "").lower() == "true",
         )
-        enriched_cvss_s.append(enriched_cvss)
+        exploit_information_list.append(exploit_information)
         counter += 1
         if counter == 1000:
-            Enriched_CVSS.objects.bulk_create(enriched_cvss_s)
+            Exploit_Information.objects.bulk_create(exploit_information_list)
             counter = 0
-            enriched_cvss_s = []
+            exploit_information_list = []
 
-    if enriched_cvss_s:
-        Enriched_CVSS.objects.bulk_create(enriched_cvss_s)
+    if exploit_information_list:
+        Exploit_Information.objects.bulk_create(exploit_information_list)
 
-    enriched_cvss_apply_observations(settings)
+    exploit_information_apply_observations(settings)
 
 
-def enriched_cvss_apply_observations(settings: Settings) -> None:
+def exploit_information_apply_observations(settings: Settings) -> None:
     observations = (
         Observation.objects.filter(vulnerability_id__startswith="CVE-")
         .exclude(current_status=Status.STATUS_RESOLVED)
@@ -83,7 +83,7 @@ def enriched_cvss_apply_observations(settings: Settings) -> None:
         updates = []
 
         for observation in page.object_list:
-            if apply_enriched_cvss(observation, settings):
+            if apply_exploit_information(observation, settings):
                 updates.append(observation)
 
         Observation.objects.bulk_update(
@@ -99,30 +99,30 @@ def enriched_cvss_apply_observations(settings: Settings) -> None:
         )
 
 
-def apply_enriched_cvss(observation: Observation, settings: Settings) -> bool:
+def apply_exploit_information(observation: Observation, settings: Settings) -> bool:
     if not observation.vulnerability_id.startswith("CVE-"):
         return False
 
-    if settings.feature_cvss_enrichment:  # pylint: disable=no-else-return
+    if settings.feature_exploit_information:  # pylint: disable=no-else-return
         # else shall stay for clarity and just in case a return would be forgotten
-        enriched_cvss = get_enriched_cvss_by_cve(observation.vulnerability_id)
-        if not enriched_cvss:
+        exploit_information = get_exploit_information_by_cve(observation.vulnerability_id)
+        if not exploit_information:
             return False
 
         cvss3_vector_before = observation.cvss3_vector
         cvss4_vector_before = observation.cvss4_vector
         cve_found_in_before = observation.cve_found_in
 
-        if not observation.cvss3_vector and enriched_cvss.base_cvss_vector.startswith("CVSS:3"):
-            observation.cvss3_vector = enriched_cvss.base_cvss_vector
+        if not observation.cvss3_vector and exploit_information.base_cvss_vector.startswith("CVSS:3"):
+            observation.cvss3_vector = exploit_information.base_cvss_vector
             cvss = CVSS3(observation.cvss3_vector)
             observation.cvss3_score = cvss.base_score
-        if not observation.cvss4_vector and enriched_cvss.base_cvss_vector.startswith("CVSS:4"):
-            observation.cvss4_vector = enriched_cvss.base_cvss_vector
+        if not observation.cvss4_vector and exploit_information.base_cvss_vector.startswith("CVSS:4"):
+            observation.cvss4_vector = exploit_information.base_cvss_vector
             cvss = CVSS4(observation.cvss4_vector)
             observation.cvss4_score = cvss.base_score
 
-        _add_cve_found_in(observation, enriched_cvss)
+        _add_cve_found_in(observation, exploit_information)
 
         if (
             observation.cvss3_vector != cvss3_vector_before
@@ -142,18 +142,18 @@ def apply_enriched_cvss(observation: Observation, settings: Settings) -> bool:
         return False
 
 
-def _add_cve_found_in(observation: Observation, enriched_cvss: Enriched_CVSS) -> None:
+def _add_cve_found_in(observation: Observation, exploit_information: Exploit_Information) -> None:
     cve_found_in = []
-    if enriched_cvss.cisa_kev:
+    if exploit_information.cisa_kev:
         cve_found_in.append("CISA KEV")
-    if enriched_cvss.exploitdb:
-        cve_found_in.append("ExploitDB")
-    if enriched_cvss.metasploit:
+    if exploit_information.exploitdb:
+        cve_found_in.append("Exploit-DB")
+    if exploit_information.metasploit:
         cve_found_in.append("Metasploit")
-    if enriched_cvss.nuclei:
+    if exploit_information.nuclei:
         cve_found_in.append("Nuclei")
-    if enriched_cvss.poc_github:
+    if exploit_information.poc_github:
         cve_found_in.append("PoC GitHub")
-    if enriched_cvss.vulncheck_kev:
+    if exploit_information.vulncheck_kev:
         cve_found_in.append("VulnCheck KEV")
     observation.cve_found_in = ", ".join(cve_found_in)

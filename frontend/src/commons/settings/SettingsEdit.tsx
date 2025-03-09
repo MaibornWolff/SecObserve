@@ -111,7 +111,7 @@ const SettingsEdit = () => {
                                     label="General rules need approval"
                                 />
                                 <BooleanInput
-                                    source="feature_cvss_enrichment"
+                                    source="feature_exploit_information"
                                     label="Enable exploit enrichment from cvss-bt"
                                 />
                             </Stack>
@@ -129,9 +129,9 @@ const SettingsEdit = () => {
                                 <BooleanInput source="feature_license_management" label="Enable license management" />
                                 <FormDataConsumer>
                                     {({ formData }) =>
-                                        formData.feature_cvss_enrichment && (
+                                        formData.feature_exploit_information && (
                                             <NumberInput
-                                                source="cvss_enrichment_max_age_years"
+                                                source="exploit_information_max_age_years"
                                                 label="Maximum age of CVEs for enrichment in years"
                                                 min={0}
                                                 step={1}

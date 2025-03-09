@@ -8,9 +8,9 @@ from huey.contrib.djhuey import db_task, lock_task
 from application.commons.models import Settings
 from application.core.models import Product
 from application.core.services.security_gate import check_security_gate
-from application.epss.models import Enriched_CVSS
+from application.epss.models import Exploit_Information
 from application.epss.services.cvss_bt import (
-    enriched_cvss_apply_observations,
+    exploit_information_apply_observations,
     import_cvss_bt,
 )
 
@@ -31,9 +31,9 @@ def settings_post_save_task(settings: Settings) -> None:
     for product in Product.objects.filter(is_product_group=False):
         check_security_gate(product)
 
-    if settings.feature_cvss_enrichment and not Enriched_CVSS.objects.exists():
+    if settings.feature_exploit_information and not Exploit_Information.objects.exists():
         import_cvss_bt()
 
-    if not settings.feature_cvss_enrichment and Enriched_CVSS.objects.exists():
-        Enriched_CVSS.objects.all().delete()
-        enriched_cvss_apply_observations(settings)
+    if not settings.feature_exploit_information and Exploit_Information.objects.exists():
+        Exploit_Information.objects.all().delete()
+        exploit_information_apply_observations(settings)

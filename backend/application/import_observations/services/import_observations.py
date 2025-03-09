@@ -33,7 +33,7 @@ from application.core.services.risk_acceptance_expiry import (
 )
 from application.core.services.security_gate import check_security_gate
 from application.core.types import Assessment_Status, Status
-from application.epss.services.cvss_bt import apply_enriched_cvss
+from application.epss.services.cvss_bt import apply_exploit_information
 from application.epss.services.epss import apply_epss
 from application.import_observations.exceptions import ParserError
 from application.import_observations.models import (
@@ -363,7 +363,7 @@ def _process_current_observation(
         observation_before.risk_acceptance_expiry_date = None
 
     apply_epss(observation_before)
-    apply_enriched_cvss(observation_before, settings)
+    apply_exploit_information(observation_before, settings)
     observation_before.import_last_seen = timezone.now()
     observation_before.save()
 
@@ -423,7 +423,7 @@ def _process_new_observation(imported_observation: Observation, settings: Settin
 
     # Observation has not been imported before, so it is a new one
     apply_epss(imported_observation)
-    apply_enriched_cvss(imported_observation, settings)
+    apply_exploit_information(imported_observation, settings)
     imported_observation.save()
 
     if imported_observation.unsaved_references:

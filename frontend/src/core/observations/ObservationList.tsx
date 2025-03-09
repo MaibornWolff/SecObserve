@@ -21,7 +21,7 @@ import observations from ".";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { humanReadableDate } from "../../commons/functions";
-import { feature_cvss_enrichment } from "../../commons/functions";
+import { feature_exploit_information } from "../../commons/functions";
 import ListHeader from "../../commons/layout/ListHeader";
 import { AutocompleteInputMedium, AutocompleteInputWide } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/user_settings/functions";
@@ -85,7 +85,7 @@ function listFilters() {
         </ReferenceInput>,
         <TextInput source="origin_component_name_version" label="Component" />
     );
-    if (feature_cvss_enrichment()) {
+    if (feature_exploit_information()) {
         filters.push(<NullableBooleanInput source="cve_known_exploited" label="CVE exploited" alwaysOn />);
     }
     filters.push(

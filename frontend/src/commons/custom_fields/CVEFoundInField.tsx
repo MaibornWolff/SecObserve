@@ -25,7 +25,7 @@ const CVEFoundInField = ({ cve_found_in, vulnerability_id }: CVEFoundInFieldProp
                     vulnerability_id;
                 break;
             }
-            case "ExploitDB": {
+            case "Exploit-DB": {
                 exploit_db_url = "https://gitlab.com/exploit-database/exploitdb/-/raw/main/files_exploits.csv";
                 break;
             }
@@ -61,7 +61,7 @@ const CVEFoundInField = ({ cve_found_in, vulnerability_id }: CVEFoundInFieldProp
         <Stack direction="row" spacing={0}>
             {cisa_url && <TextUrlField text="CISA KEV" url={cisa_url} label="Source" new_tab={true} />}
             {cisa_url && (exploit_db_url || metasploit_url || nuclei_url || poc_github_url || vulncheck_url) && Divider}
-            {exploit_db_url && <TextUrlField text="ExploitDB" url={exploit_db_url} label="Source" new_tab={true} />}
+            {exploit_db_url && <TextUrlField text="Exploit-DB" url={exploit_db_url} label="Source" new_tab={true} />}
             {exploit_db_url && (metasploit_url || nuclei_url || poc_github_url || vulncheck_url) && Divider}
             {metasploit_url && <TextUrlField text="Metasploit" url={metasploit_url} label="Source" new_tab={true} />}
             {metasploit_url && (nuclei_url || poc_github_url || vulncheck_url) && Divider}
