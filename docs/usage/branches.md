@@ -50,6 +50,8 @@ The parameters are set globally in the [Settings](../getting_started/configurati
 
 Per default the task to delete inactive branches / version including their observations is scheduled to run every night at 02:00 UTC time. This default can be changed by administrators via the **Background tasks** section in the [Settings](../getting_started/configuration.md#admininistration-in-secobserve). Hours are always in UTC time.
 
+![Settings housekeeping](../assets/images/settings_cron_housekeeping.png){ width="80%" style="display: block; margin: 0 auto" }
+
 #### Product specific settings
 
 A product can override the housekeeping behaviour by setting the `Housekeeping` attribute:

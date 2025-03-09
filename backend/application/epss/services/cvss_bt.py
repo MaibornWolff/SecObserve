@@ -1,6 +1,7 @@
 import datetime
 from csv import DictReader
 from io import StringIO
+from typing import Optional
 
 import requests
 from cvss import CVSS3, CVSS4
@@ -15,7 +16,8 @@ from application.epss.queries.exploit_information import get_exploit_information
 
 
 def import_cvss_bt() -> None:
-    response = requests.get(
+    response = requests.get(  # nosec B113
+        # This is a false positive, there is a timeout of 5 minutes
         "https://raw.githubusercontent.com/t0sche/cvss-bt/refs/heads/main/cvss-bt.csv",
         timeout=5 * 60,
         stream=True,
@@ -34,13 +36,8 @@ def import_cvss_bt() -> None:
     exploit_information_list = []
     for row in reader:
         cve = row.get("cve", "")
-        if not cve.startswith("CVE-"):
-            continue
-        cve_parts = cve.split("-")
-        if len(cve_parts) != 3:
-            continue
-        cve_year = cve.split("-")[1]
-        if not cve_year.isdigit():
+        cve_year = _get_year_from_cve(cve)
+        if cve_year is None:
             continue
         current_year = datetime.datetime.now().year
         settings = Settings.load()
@@ -68,6 +65,18 @@ def import_cvss_bt() -> None:
         Exploit_Information.objects.bulk_create(exploit_information_list)
 
     exploit_information_apply_observations(settings)
+
+
+def _get_year_from_cve(cve: str) -> Optional[int]:
+    if not cve.startswith("CVE-"):
+        return None
+    cve_parts = cve.split("-")
+    if len(cve_parts) != 3:
+        return None
+    cve_year = cve.split("-")[1]
+    if not cve_year.isdigit():
+        return None
+    return int(cve_year)
 
 
 def exploit_information_apply_observations(settings: Settings) -> None:
