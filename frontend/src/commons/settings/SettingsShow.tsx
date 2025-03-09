@@ -63,7 +63,7 @@ const SettingsShowComponent = () => {
                                     <Labeled label="General rules need approval">
                                         <BooleanField source="feature_general_rules_need_approval" />
                                     </Labeled>
-                                    <Labeled label="Enable CVSS enrichment from cvss-bt">
+                                    <Labeled label="Enable exploit enrichment from cvss-bt">
                                         <BooleanField source="feature_cvss_enrichment" />
                                     </Labeled>
                                 </Stack>
@@ -244,7 +244,7 @@ const SettingsShowComponent = () => {
                                     <Labeled label="Branch housekeeping crontab (hour/UTC)">
                                         <NumberField source="branch_housekeeping_crontab_hour" />
                                     </Labeled>
-                                    <Labeled label="EPSS import crontab (hour/UTC)">
+                                    <Labeled label="EPSS and exploit import crontab (hour/UTC)">
                                         <NumberField source="background_epss_import_crontab_hour" />
                                     </Labeled>
                                     {(settings.feature_automatic_api_import ||
@@ -268,7 +268,7 @@ const SettingsShowComponent = () => {
                                     <Labeled label="Branch housekeeping crontab (minute)">
                                         <NumberField source="branch_housekeeping_crontab_minute" />
                                     </Labeled>
-                                    <Labeled label="EPSS import crontab (minutes)">
+                                    <Labeled label="EPSS and exploit import crontab (minutes)">
                                         <NumberField source="background_epss_import_crontab_minute" />
                                     </Labeled>
                                     {(settings.feature_automatic_api_import ||

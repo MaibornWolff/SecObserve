@@ -81,6 +81,7 @@ nav:
     - GitHub actions and GitLab CI templates: integrations/github_actions_and_templates.md
     - OpenID Connect: integrations/oidc_authentication.md
     - Exploit Prediction Scoring System (EPSS): integrations/epss.md
+    - Exploits (from cvss-bt): integrations/exploits.md
     - License data: integrations/license_data.md
     - Source code repositories: integrations/source_code_repositories.md
     - Issue trackers: integrations/issue_trackers.md

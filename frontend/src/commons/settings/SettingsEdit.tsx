@@ -112,7 +112,7 @@ const SettingsEdit = () => {
                                 />
                                 <BooleanInput
                                     source="feature_cvss_enrichment"
-                                    label="Enable CVSS enrichment from cvss-bt"
+                                    label="Enable exploit enrichment from cvss-bt"
                                 />
                             </Stack>
                         </Grid>
@@ -417,7 +417,7 @@ const SettingsEdit = () => {
                                 />
                                 <NumberInput
                                     source="background_epss_import_crontab_hour"
-                                    label="EPSS import crontab (hour)"
+                                    label="EPSS and exploit import crontab (hour)"
                                     min={0}
                                     step={1}
                                     validate={validate_0_23}
@@ -476,7 +476,7 @@ const SettingsEdit = () => {
                                 />
                                 <NumberInput
                                     source="background_epss_import_crontab_minute"
-                                    label="EPSS import crontab (minute)"
+                                    label="EPSS and exploit import crontab (minute)"
                                     min={0}
                                     step={1}
                                     validate={validate_0_59}

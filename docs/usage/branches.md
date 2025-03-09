@@ -48,15 +48,7 @@ The parameters are set globally in the [Settings](../getting_started/configurati
 | **BRANCH_HOUSEKEEPING_KEEP_INACTIVE_DAYS** | Days before incative branches / versions and their observations are deleted |
 | **BRANCH_HOUSEKEEPING_EXEMPT_BRANCHES** | Regular expression which branches / versions to exempt from deletion |
 
-Per default the task to delete inactive branches / version including their observations is scheduled to run every night at 02:00 UTC time. This default can be changed by administrators via the [Settings](../getting_started/configuration.md#admininistration-in-secobserve). The expressions for `BRANCH_HOUSEKEEPING_CRONTAB_MINUTE` and `BRANCH_HOUSEKEEPING_CRONTAB_HOUR` have to be valid values according to [https://huey.readthedocs.io/en/latest/api.html#crontab](https://huey.readthedocs.io/en/latest/api.html#crontab):
-
-* `*` = every distinct value (every minute, every hour)
-* `*/n` = run every `n` times, i.e. hours=’*/4’ == 0, 4, 8, 12, 16, 20
-* `n` = run every `n` (minutes 0 - 60, hours 0 - 24)
-* `m-n` = run every time m..n
-* `m,n` = run on m and n
-
-Hours are always in UTC time.
+Per default the task to delete inactive branches / version including their observations is scheduled to run every night at 02:00 UTC time. This default can be changed by administrators via the **Background tasks** section in the [Settings](../getting_started/configuration.md#admininistration-in-secobserve). Hours are always in UTC time.
 
 #### Product specific settings
 
