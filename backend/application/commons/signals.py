@@ -10,7 +10,7 @@ from application.core.models import Product
 from application.core.services.security_gate import check_security_gate
 from application.epss.models import Exploit_Information
 from application.epss.services.cvss_bt import (
-    exploit_information_apply_observations,
+    apply_exploit_information_observations,
     import_cvss_bt,
 )
 
@@ -36,4 +36,4 @@ def settings_post_save_task(settings: Settings) -> None:
 
     if not settings.feature_exploit_information and Exploit_Information.objects.exists():
         Exploit_Information.objects.all().delete()
-        exploit_information_apply_observations(settings)
+        apply_exploit_information_observations(settings)

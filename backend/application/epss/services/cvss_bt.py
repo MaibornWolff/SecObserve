@@ -1,11 +1,12 @@
-import datetime
 from csv import DictReader
 from io import StringIO
 from typing import Optional
 
 import requests
 from cvss import CVSS3, CVSS4
+from cvss.exceptions import CVSSError
 from django.core.paginator import Paginator
+from django.utils import timezone
 
 from application.commons.models import Settings
 from application.core.models import Observation
@@ -39,9 +40,9 @@ def import_cvss_bt() -> None:
         cve_year = _get_year_from_cve(cve)
         if cve_year is None:
             continue
-        current_year = datetime.datetime.now().year
+        current_year = timezone.now().year
         settings = Settings.load()
-        if int(cve_year) <= current_year - settings.exploit_information_max_age_years:
+        if cve_year <= current_year - settings.exploit_information_max_age_years:
             continue
 
         exploit_information = Exploit_Information(
@@ -64,7 +65,7 @@ def import_cvss_bt() -> None:
     if exploit_information_list:
         Exploit_Information.objects.bulk_create(exploit_information_list)
 
-    exploit_information_apply_observations(settings)
+    apply_exploit_information_observations(settings)
 
 
 def _get_year_from_cve(cve: str) -> Optional[int]:
@@ -79,7 +80,7 @@ def _get_year_from_cve(cve: str) -> Optional[int]:
     return int(cve_year)
 
 
-def exploit_information_apply_observations(settings: Settings) -> None:
+def apply_exploit_information_observations(settings: Settings) -> None:
     observations = (
         Observation.objects.filter(vulnerability_id__startswith="CVE-")
         .exclude(current_status=Status.STATUS_RESOLVED)
@@ -123,13 +124,20 @@ def apply_exploit_information(observation: Observation, settings: Settings) -> b
         cve_found_in_before = observation.cve_found_in
 
         if not observation.cvss3_vector and exploit_information.base_cvss_vector.startswith("CVSS:3"):
-            observation.cvss3_vector = exploit_information.base_cvss_vector
-            cvss = CVSS3(observation.cvss3_vector)
-            observation.cvss3_score = cvss.base_score
+            try:
+                cvss = CVSS3(exploit_information.base_cvss_vector)
+                observation.cvss3_vector = exploit_information.base_cvss_vector
+                observation.cvss3_score = cvss.base_score
+            except CVSSError:
+                pass
+
         if not observation.cvss4_vector and exploit_information.base_cvss_vector.startswith("CVSS:4"):
-            observation.cvss4_vector = exploit_information.base_cvss_vector
-            cvss = CVSS4(observation.cvss4_vector)
-            observation.cvss4_score = cvss.base_score
+            try:
+                cvss = CVSS4(exploit_information.base_cvss_vector)
+                observation.cvss4_vector = exploit_information.base_cvss_vector
+                observation.cvss4_score = cvss.base_score
+            except CVSSError:
+                pass
 
         _add_cve_found_in(observation, exploit_information)
 
@@ -138,6 +146,10 @@ def apply_exploit_information(observation: Observation, settings: Settings) -> b
             or observation.cvss4_vector != cvss4_vector_before
             or observation.cve_found_in != cve_found_in_before
         ):
+
+            if observation.title == "no change":
+                print(vars(observation))
+
             observation.current_severity = get_current_severity(observation)
             return True
 
@@ -145,7 +157,6 @@ def apply_exploit_information(observation: Observation, settings: Settings) -> b
     else:
         if observation.cve_found_in:
             observation.cve_found_in = ""
-            observation.current_severity = get_current_severity(observation)
             return True
 
         return False

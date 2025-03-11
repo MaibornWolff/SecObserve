@@ -31,7 +31,7 @@ class TestObservation(BaseTestCase):
             title="observation_title",
             product=product,
             import_last_seen=timezone.now(),
-            parser=Parser.objects.get(pk=1),
+            parser=Parser.objects.first(),
             origin_component_name="component",
             origin_component_version="1.0.0",
         )
