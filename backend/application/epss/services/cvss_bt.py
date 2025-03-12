@@ -17,12 +17,18 @@ from application.epss.queries.exploit_information import get_exploit_information
 
 
 def import_cvss_bt() -> None:
+
+    print("--- import_cvss_bt ---")
+
     response = requests.get(  # nosec B113
         # This is a false positive, there is a timeout of 5 minutes
         "https://raw.githubusercontent.com/t0sche/cvss-bt/refs/heads/main/cvss-bt.csv",
         timeout=5 * 60,
         stream=True,
     )
+
+    print("--- after requests.get ---")
+
     response.raise_for_status()
     try:
         content = response.content.decode("utf-8")
