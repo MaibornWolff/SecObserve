@@ -146,10 +146,6 @@ def apply_exploit_information(observation: Observation, settings: Settings) -> b
             or observation.cvss4_vector != cvss4_vector_before
             or observation.cve_found_in != cve_found_in_before
         ):
-
-            if observation.title == "no change":
-                print(vars(observation))
-
             observation.current_severity = get_current_severity(observation)
             return True
 

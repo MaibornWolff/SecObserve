@@ -1,6 +1,6 @@
 from datetime import timezone as datetime_timezone
 from os import path
-from unittest.mock import call, patch
+from unittest.mock import patch
 
 from django.utils import timezone
 
@@ -21,9 +21,9 @@ class TestCVSS_BT(BaseTestCase):
 
     @patch("requests.get")
     @patch("epss.services.cvss_bt.timezone.now")
-    def test_import_cvss_bt(self, mock_now, mock_request) -> None:
+    def test_import_cvss_bt(self, mock_now, mock_requests_get) -> None:
         mock_now.return_value = timezone.datetime(2025, 1, 1, 0, 0, 0, 452618, datetime_timezone.utc)
-        mock_request.return_value = MockResponse()
+        mock_requests_get.return_value = MockResponse()
 
         parser = Parser(name="Parser", type=Parser_Type.TYPE_OTHER, source=Parser_Source.SOURCE_OTHER)
         parser.save()
@@ -123,6 +123,10 @@ class TestCVSS_BT(BaseTestCase):
         # with feature_exploit_information = True
 
         import_cvss_bt()
+
+        mock_requests_get.assert_called_with(
+            "https://raw.githubusercontent.com/t0sche/cvss-bt/refs/heads/main/cvss-bt.csv", timeout=300, stream=True
+        )
 
         self.assertEqual(9, Exploit_Information.objects.count())
 

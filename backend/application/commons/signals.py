@@ -20,20 +20,18 @@ def settings_post_save(  # pylint: disable=unused-argument
     sender: Any, instance: Settings, created: bool, **kwargs: Any
 ) -> None:
     # parameters are needed according to Django documentation
-    env = environ.Env()
-    if not env.bool("SO_UNITTESTS", False):
-        settings_post_save_task(instance)
+    settings_post_save_task(instance, created)
 
 
 @db_task()
 @lock_task("settings_post_save_task_lock")
-def settings_post_save_task(settings: Settings) -> None:
+def settings_post_save_task(settings: Settings, created: bool) -> None:
     for product in Product.objects.filter(is_product_group=False):
         check_security_gate(product)
 
-    if settings.feature_exploit_information and not Exploit_Information.objects.exists():
-        import_cvss_bt()
-
-    if not settings.feature_exploit_information and Exploit_Information.objects.exists():
-        Exploit_Information.objects.all().delete()
-        apply_exploit_information_observations(settings)
+    if not created:
+        if settings.feature_exploit_information and not Exploit_Information.objects.exists():
+            import_cvss_bt()
+        if not settings.feature_exploit_information and Exploit_Information.objects.exists():
+            Exploit_Information.objects.all().delete()
+            apply_exploit_information_observations(settings)
