@@ -33,7 +33,8 @@ from application.core.services.risk_acceptance_expiry import (
 )
 from application.core.services.security_gate import check_security_gate
 from application.core.types import Assessment_Status, Status
-from application.epss.services.epss import epss_apply_observation
+from application.epss.services.cvss_bt import apply_exploit_information
+from application.epss.services.epss import apply_epss
 from application.import_observations.exceptions import ParserError
 from application.import_observations.models import (
     Api_Configuration,
@@ -113,7 +114,8 @@ def file_upload_observations(
         imported_observations=imported_observations,
     )
 
-    numbers_observations: Tuple[int, int, int, str] = _process_data(import_parameters)
+    settings = Settings.load()
+    numbers_observations: Tuple[int, int, int, str] = _process_data(import_parameters, settings)
 
     vulnerability_check, _ = Vulnerability_Check.objects.update_or_create(
         product=import_parameters.product,
@@ -129,7 +131,6 @@ def file_upload_observations(
     )
 
     numbers_license_components = (0, 0, 0)
-    settings = Settings.load()
     if settings.feature_license_management and not file_upload_parameters.suppress_licenses:
         imported_license_components = parser_instance.get_license_components(data)
         numbers_license_components = process_license_components(imported_license_components, vulnerability_check)
@@ -188,7 +189,7 @@ def api_import_observations(
         imported_observations=imported_observations,
     )
 
-    numbers: Tuple[int, int, int, str] = _process_data(import_parameters)
+    numbers: Tuple[int, int, int, str] = _process_data(import_parameters, Settings.load())
 
     Vulnerability_Check.objects.update_or_create(
         product=import_parameters.product,
@@ -219,7 +220,7 @@ def api_check_connection(
     return format_valid, errors
 
 
-def _process_data(import_parameters: ImportParameters) -> Tuple[int, int, int, str]:
+def _process_data(import_parameters: ImportParameters, settings: Settings) -> Tuple[int, int, int, str]:
     observations_new = 0
     observations_updated = 0
 
@@ -257,7 +258,7 @@ def _process_data(import_parameters: ImportParameters) -> Tuple[int, int, int, s
             # Check if new observation is already there in the same check
             observation_before = observations_before.get(imported_observation.identity_hash)
             if observation_before:
-                _process_current_observation(imported_observation, observation_before)
+                _process_current_observation(imported_observation, observation_before, settings)
 
                 rule_engine.apply_rules_for_observation(observation_before)
                 vex_engine.apply_vex_statements_for_observation(observation_before)
@@ -271,7 +272,7 @@ def _process_data(import_parameters: ImportParameters) -> Tuple[int, int, int, s
                 observations_this_run.add(observation_before.identity_hash)
                 vulnerability_check_observations.add(observation_before)
             else:
-                _process_new_observation(imported_observation)
+                _process_new_observation(imported_observation, settings)
 
                 rule_engine.apply_rules_for_observation(imported_observation)
                 vex_engine.apply_vex_statements_for_observation(imported_observation)
@@ -319,7 +320,9 @@ def _prepare_imported_observation(import_parameters: ImportParameters, imported_
         imported_observation.origin_kubernetes_cluster = import_parameters.kubernetes_cluster
 
 
-def _process_current_observation(imported_observation: Observation, observation_before: Observation) -> None:
+def _process_current_observation(
+    imported_observation: Observation, observation_before: Observation, settings: Settings
+) -> None:
     # Set data in the current observation from the new observation
     observation_before.title = imported_observation.title
     observation_before.description = imported_observation.description
@@ -359,7 +362,8 @@ def _process_current_observation(imported_observation: Observation, observation_
     else:
         observation_before.risk_acceptance_expiry_date = None
 
-    epss_apply_observation(observation_before)
+    apply_epss(observation_before)
+    apply_exploit_information(observation_before, settings)
     observation_before.import_last_seen = timezone.now()
     observation_before.save()
 
@@ -403,7 +407,7 @@ def _process_current_observation(imported_observation: Observation, observation_
         )
 
 
-def _process_new_observation(imported_observation: Observation) -> None:
+def _process_new_observation(imported_observation: Observation, settings: Settings) -> None:
     imported_observation.current_severity = get_current_severity(imported_observation)
 
     if not imported_observation.parser_status:
@@ -418,7 +422,8 @@ def _process_new_observation(imported_observation: Observation) -> None:
     )
 
     # Observation has not been imported before, so it is a new one
-    epss_apply_observation(imported_observation)
+    apply_epss(imported_observation)
+    apply_exploit_information(imported_observation, settings)
     imported_observation.save()
 
     if imported_observation.unsaved_references:

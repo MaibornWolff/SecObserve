@@ -67,7 +67,6 @@ class StatusSettingsView(APIView):
         features = []
 
         settings = Settings.load()
-
         if settings.feature_disable_user_login:
             features.append("feature_disable_user_login")
 
@@ -82,6 +81,8 @@ class StatusSettingsView(APIView):
                 features.append("feature_automatic_api_import")
             if settings.feature_automatic_osv_scanning:
                 features.append("feature_automatic_osv_scanning")
+            if settings.feature_exploit_information:
+                features.append("feature_exploit_information")
 
         content: dict[str, Union[int, list[str]]] = {
             "features": features,
@@ -111,8 +112,8 @@ class SettingsView(APIView):
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
 
-        settings = request_serializer.create(request_serializer.validated_data)
-        settings.save()
+        settings = Settings.load()
+        request_serializer.update(settings, request_serializer.validated_data)
 
         response_serializer = SettingsSerializer(settings)
         return Response(response_serializer.data)

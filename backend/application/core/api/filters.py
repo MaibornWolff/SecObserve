@@ -1,5 +1,5 @@
 from datetime import timedelta
-from typing import Any
+from typing import Any, Optional
 
 from django.db.models import Q, QuerySet
 from django.utils import timezone
@@ -216,6 +216,7 @@ class ObservationFilter(FilterSet):
         field_name="product__product_group",
         queryset=Product.objects.filter(is_product_group=True),
     )
+    cve_known_exploited = BooleanFilter(field_name="cve_known_exploited", method="get_cve_known_exploited")
 
     ordering = OrderingFilter(
         # tuple-mapping retains order
@@ -283,6 +284,19 @@ class ObservationFilter(FilterSet):
         today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
         time_threshold = today - timedelta(days=int(days))
         return queryset.filter(last_observation_log__gte=time_threshold)
+
+    def get_cve_known_exploited(
+        self,
+        queryset: QuerySet,
+        name: Any,  # pylint: disable=unused-argument
+        value: Optional[bool],
+    ) -> QuerySet:
+        # name is used as a positional argument
+        if value is True:
+            return queryset.exclude(cve_found_in="")
+        if value is False:
+            return queryset.filter(cve_found_in="")
+        return queryset
 
 
 class ObservationLogFilter(FilterSet):

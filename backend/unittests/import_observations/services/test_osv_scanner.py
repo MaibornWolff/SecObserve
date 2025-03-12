@@ -4,6 +4,7 @@ from unittest.mock import call, patch
 
 from django.core.management import call_command
 
+from application.commons.models import Settings
 from application.core.models import Branch, Product
 from application.import_observations.models import Parser
 from application.import_observations.parsers.osv.parser import (
@@ -265,7 +266,8 @@ class TestImportObservations(BaseTestCase):
                 endpoint_url="",
                 kubernetes_cluster="",
                 imported_observations=mock_get_observations.return_value,
-            )
+            ),
+            Settings.load(),
         )
         mock_vulnerability_check.assert_called_with(
             product=product,

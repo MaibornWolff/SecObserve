@@ -1,0 +1,14 @@
+cve,cvss-bt_score,cvss-bt_severity,cvss-bt_vector,cvss_version,base_score,base_severity,base_vector,assigner,published_date,epss,cisa_kev,vulncheck_kev,exploitdb,metasploit,nuclei,poc_github
+CVE-2015-0001,9.0,HIGH,AV:N/AC:L/Au:N/C:C/I:C/A:C/E:POC,2.0,10,HIGH,1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H,cve@mitre.org,1988-10-01T04:00Z,0.07764,True,True,True,True,True,True
+CVE-2025-0001,9.0,HIGH,AV:N/AC:L/Au:N/C:C/I:C/A:C/E:POC,2.0,10,HIGH,CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H,cve@mitre.org,1988-10-01T04:00Z,0.07764,True,True,True,True,True,True
+CVE-2025-0002,9.0,HIGH,AV:N/AC:L/Au:N/C:C/I:C/A:C/E:POC,2.0,10,HIGH,CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:N/VA:N/SC:N/SI:N/SA:N/E:P,cve@mitre.org,1988-10-01T04:00Z,0.07764,True,False,False,False,False,False
+CVE-2025-0003,9.0,HIGH,AV:N/AC:L/Au:N/C:C/I:C/A:C/E:POC,2.0,10,HIGH,CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H,cve@mitre.org,1988-10-01T04:00Z,0.07764,False,True,False,False,False,False
+CVE-2025-0004,9.0,HIGH,AV:N/AC:L/Au:N/C:C/I:C/A:C/E:POC,2.0,10,HIGH,CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:N/VA:N/SC:N/SI:N/SA:N/E:P,cve@mitre.org,1988-10-01T04:00Z,0.07764,False,False,True,False,False,False
+CVE-2025-0005,9.0,HIGH,AV:N/AC:L/Au:N/C:C/I:C/A:C/E:POC,2.0,10,HIGH,CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H,cve@mitre.org,1988-10-01T04:00Z,0.07764,False,False,False,True,False,False
+CVE-2025-0006,9.0,HIGH,AV:N/AC:L/Au:N/C:C/I:C/A:C/E:POC,2.0,10,HIGH,CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H,cve@mitre.org,1988-10-01T04:00Z,0.07764,False,False,False,False,True,False
+CVE-2025-0007,9.0,HIGH,AV:N/AC:L/Au:N/C:C/I:C/A:C/E:POC,2.0,10,HIGH,CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H,cve@mitre.org,1988-10-01T04:00Z,0.07764,False,False,False,False,False,True
+CVE-2025-0008,9.0,HIGH,AV:N/AC:L/Au:N/C:C/I:C/A:C/E:POC,2.0,10,HIGH,CVSS:3.1/invalid,cve@mitre.org,1988-10-01T04:00Z,0.07764,True,False,False,False,False,True
+CVE-2025-0009,9.0,HIGH,AV:N/AC:L/Au:N/C:C/I:C/A:C/E:POC,2.0,10,HIGH,CVSS:4.0/invalid,cve@mitre.org,1988-10-01T04:00Z,0.07764,False,True,True,False,False,False
+GHSA-2015-0001,9.0,HIGH,AV:N/AC:L/Au:N/C:C/I:C/A:C/E:POC,2.0,10,HIGH,1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H,cve@mitre.org,1988-10-01T04:00Z,0.07764,True,True,True,True,True,True
+CVE-abcd-0001,9.0,HIGH,AV:N/AC:L/Au:N/C:C/I:C/A:C/E:POC,2.0,10,HIGH,1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H,cve@mitre.org,1988-10-01T04:00Z,0.07764,True,True,True,True,True,True
+CVE-abcd,9.0,HIGH,AV:N/AC:L/Au:N/C:C/I:C/A:C/E:POC,2.0,10,HIGH,1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H,cve@mitre.org,1988-10-01T04:00Z,0.07764,True,True,True,True,True,True

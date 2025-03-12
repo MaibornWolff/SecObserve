@@ -3,11 +3,11 @@ from decimal import Decimal
 from typing import Any
 
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.db.models import CharField, DateField, DecimalField, Model
+from django.db.models import BooleanField, CharField, DateField, DecimalField, Model
 
 
 class EPSS_Score(Model):
-    cve = CharField(max_length=20, unique=True)
+    cve = CharField(max_length=255, unique=True)
     epss_score = DecimalField(
         max_digits=6,
         decimal_places=5,
@@ -36,3 +36,14 @@ class EPSS_Status(Model):
     def load(cls) -> "EPSS_Status":
         obj, _ = cls.objects.get_or_create(pk=1)
         return obj
+
+
+class Exploit_Information(Model):
+    cve = CharField(max_length=255, unique=True)
+    base_cvss_vector = CharField(max_length=255, blank=True)
+    cisa_kev = BooleanField(default=False)
+    vulncheck_kev = BooleanField(default=False)
+    exploitdb = BooleanField(default=False)
+    metasploit = BooleanField(default=False)
+    nuclei = BooleanField(default=False)
+    poc_github = BooleanField(default=False)

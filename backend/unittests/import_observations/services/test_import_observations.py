@@ -14,7 +14,7 @@ from application.core.models import (
     Reference,
 )
 from application.core.types import Severity, Status
-from application.import_observations.models import Parser, Vulnerability_Check
+from application.import_observations.models import Vulnerability_Check
 from application.import_observations.services.import_observations import (
     FileUploadParameters,
     file_upload_observations,
@@ -43,14 +43,16 @@ class TestImportObservations(BaseTestCase):
     @patch("application.import_observations.services.import_observations.check_security_gate")
     @patch("application.import_observations.services.import_observations.set_repository_default_branch")
     @patch("application.import_observations.services.import_observations.push_observations_to_issue_tracker")
-    @patch("application.import_observations.services.import_observations.epss_apply_observation")
+    @patch("application.import_observations.services.import_observations.apply_epss")
+    @patch("application.import_observations.services.import_observations.apply_exploit_information")
     @patch("application.import_observations.services.import_observations.find_potential_duplicates")
     @patch("application.vex.services.vex_engine.VEX_Engine.apply_vex_statements_for_observation")
     def test_file_upload_observations_with_branch(
         self,
         mock_apply_vex_statements_for_observation,
         mock_find_potential_duplicates,
-        mock_epss_apply_observation,
+        mock_apply_exploit_information,
+        mock_apply_epss,
         mock_push_observations_to_issue_tracker,
         mock_set_repository_default_branch,
         mock_check_security_gate,
@@ -70,7 +72,8 @@ class TestImportObservations(BaseTestCase):
         mock_check_security_gate.assert_has_calls([call(product), call(product)])
         mock_set_repository_default_branch.assert_has_calls([call(product), call(product)])
         self.assertEqual(mock_push_observations_to_issue_tracker.call_count, 2)
-        self.assertEqual(mock_epss_apply_observation.call_count, 4)
+        self.assertEqual(mock_apply_epss.call_count, 4)
+        self.assertEqual(mock_apply_exploit_information.call_count, 4)
         self.assertEqual(mock_find_potential_duplicates.call_count, 2)
         self.assertEqual(mock_apply_vex_statements_for_observation.call_count, 4)
 
@@ -78,14 +81,16 @@ class TestImportObservations(BaseTestCase):
     @patch("application.import_observations.services.import_observations.check_security_gate")
     @patch("application.import_observations.services.import_observations.set_repository_default_branch")
     @patch("application.import_observations.services.import_observations.push_observations_to_issue_tracker")
-    @patch("application.import_observations.services.import_observations.epss_apply_observation")
+    @patch("application.import_observations.services.import_observations.apply_epss")
+    @patch("application.import_observations.services.import_observations.apply_exploit_information")
     @patch("application.import_observations.services.import_observations.find_potential_duplicates")
     @patch("application.vex.services.vex_engine.VEX_Engine.apply_vex_statements_for_observation")
     def test_file_upload_observations_without_branch(
         self,
         mock_apply_vex_statements_for_observation,
         mock_find_potential_duplicates,
-        mock_epss_apply_observation,
+        mock_apply_exploit_information,
+        mock_apply_epss,
         mock_push_observations_to_issue_tracker,
         mock_set_repository_default_branch,
         mock_check_security_gate,
@@ -98,7 +103,8 @@ class TestImportObservations(BaseTestCase):
         mock_check_security_gate.assert_has_calls([call(product), call(product)])
         mock_set_repository_default_branch.assert_has_calls([call(product), call(product)])
         self.assertEqual(mock_push_observations_to_issue_tracker.call_count, 2)
-        self.assertEqual(mock_epss_apply_observation.call_count, 4)
+        self.assertEqual(mock_apply_epss.call_count, 4)
+        self.assertEqual(mock_apply_exploit_information.call_count, 4)
         self.assertEqual(mock_find_potential_duplicates.call_count, 2)
         self.assertEqual(mock_apply_vex_statements_for_observation.call_count, 4)
 
@@ -279,7 +285,8 @@ class TestImportObservations(BaseTestCase):
     @patch("application.import_observations.services.import_observations.check_security_gate")
     @patch("application.import_observations.services.import_observations.set_repository_default_branch")
     @patch("application.import_observations.services.import_observations.push_observations_to_issue_tracker")
-    @patch("application.import_observations.services.import_observations.epss_apply_observation")
+    @patch("application.import_observations.services.import_observations.apply_epss")
+    @patch("application.import_observations.services.import_observations.apply_exploit_information")
     @patch("application.import_observations.services.import_observations.find_potential_duplicates")
     @patch("application.vex.services.vex_engine.VEX_Engine.apply_vex_statements_for_observation")
     @patch("application.import_observations.parsers.cyclone_dx.parser.CycloneDXParser.get_license_components")
@@ -290,7 +297,8 @@ class TestImportObservations(BaseTestCase):
         mock_get_license_components,
         mock_apply_vex_statements_for_observation,
         mock_find_potential_duplicates,
-        mock_epss_apply_observation,
+        mock_apply_exploit_information,
+        mock_apply_epss,
         mock_push_observations_to_issue_tracker,
         mock_set_repository_default_branch,
         mock_check_security_gate,
@@ -322,7 +330,8 @@ class TestImportObservations(BaseTestCase):
     @patch("application.import_observations.services.import_observations.check_security_gate")
     @patch("application.import_observations.services.import_observations.set_repository_default_branch")
     @patch("application.import_observations.services.import_observations.push_observations_to_issue_tracker")
-    @patch("application.import_observations.services.import_observations.epss_apply_observation")
+    @patch("application.import_observations.services.import_observations.apply_epss")
+    @patch("application.import_observations.services.import_observations.apply_exploit_information")
     @patch("application.import_observations.services.import_observations.find_potential_duplicates")
     @patch("application.vex.services.vex_engine.VEX_Engine.apply_vex_statements_for_observation")
     @patch("application.import_observations.parsers.cyclone_dx.parser.CycloneDXParser.get_license_components")
@@ -333,7 +342,8 @@ class TestImportObservations(BaseTestCase):
         mock_get_license_components,
         mock_apply_vex_statements_for_observation,
         mock_find_potential_duplicates,
-        mock_epss_apply_observation,
+        mock_apply_exploit_information,
+        mock_apply_epss,
         mock_push_observations_to_issue_tracker,
         mock_set_repository_default_branch,
         mock_check_security_gate,
@@ -357,14 +367,16 @@ class TestImportObservations(BaseTestCase):
     @patch("application.import_observations.services.import_observations.check_security_gate")
     @patch("application.import_observations.services.import_observations.set_repository_default_branch")
     @patch("application.import_observations.services.import_observations.push_observations_to_issue_tracker")
-    @patch("application.import_observations.services.import_observations.epss_apply_observation")
+    @patch("application.import_observations.services.import_observations.apply_epss")
+    @patch("application.import_observations.services.import_observations.apply_exploit_information")
     @patch("application.import_observations.services.import_observations.find_potential_duplicates")
     @patch("application.vex.services.vex_engine.VEX_Engine.apply_vex_statements_for_observation")
     def test_file_upload_licenses_feature_true(
         self,
         mock_apply_vex_statements_for_observation,
         mock_find_potential_duplicates,
-        mock_epss_apply_observation,
+        mock_apply_exploit_information,
+        mock_apply_epss,
         mock_push_observations_to_issue_tracker,
         mock_set_repository_default_branch,
         mock_check_security_gate,
