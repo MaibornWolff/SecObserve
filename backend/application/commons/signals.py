@@ -1,5 +1,6 @@
 from typing import Any
 
+import environ
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from huey.contrib.djhuey import db_task, lock_task
@@ -19,7 +20,9 @@ def settings_post_save(  # pylint: disable=unused-argument
     sender: Any, instance: Settings, created: bool, **kwargs: Any
 ) -> None:
     # parameters are needed according to Django documentation
-    settings_post_save_task(instance, created)
+    env = environ.Env()
+    if not env.bool("SO_UNITTESTS", False):
+        settings_post_save_task(instance, created)
 
 
 @db_task()
