@@ -1,5 +1,5 @@
-from csv import DictReader
-from io import StringIO
+import csv
+import logging
 from typing import Optional
 
 import requests
@@ -15,34 +15,40 @@ from application.core.types import Status
 from application.epss.models import Exploit_Information
 from application.epss.queries.exploit_information import get_exploit_information_by_cve
 
+logger = logging.getLogger("secobserve.epss")
+
 
 def import_cvss_bt() -> None:
-
-    print("--- import_cvss_bt ---")
-
     response = requests.get(  # nosec B113
         # This is a false positive, there is a timeout of 5 minutes
         "https://raw.githubusercontent.com/t0sche/cvss-bt/refs/heads/main/cvss-bt.csv",
         timeout=5 * 60,
         stream=True,
     )
-
-    print("--- after requests.get ---")
-
     response.raise_for_status()
-    try:
-        content = response.content.decode("utf-8")
-        reader = DictReader(StringIO(content), delimiter=",", quotechar='"')
-    except Exception:
-        raise ValueError("File is not valid CSV")  # pylint: disable=raise-missing-from
-        # The Exception itself is not relevant and must not be re-raised
 
-    Exploit_Information.objects.all().delete()
+    line = (line.decode("utf-8") for line in response.iter_lines())
+    reader = csv.reader(line, delimiter=",", quotechar='"')
 
+    first_row = True
     counter = 0
     exploit_information_list = []
+
     for row in reader:
-        cve = row.get("cve", "")
+        if first_row:
+            if not _check_first_row(row):
+                return
+
+            Exploit_Information.objects.all().delete()
+
+            first_row = False
+            continue
+
+        if len(row) != 17:
+            logger.warning("Row doesn't have 17 elements: %s", row)
+            continue
+
+        cve = row[0]
         cve_year = _get_year_from_cve(cve)
         if cve_year is None:
             continue
@@ -53,13 +59,13 @@ def import_cvss_bt() -> None:
 
         exploit_information = Exploit_Information(
             cve=cve,
-            base_cvss_vector=row.get("base_vector", ""),
-            cisa_kev=row.get("cisa_kev", "").lower() == "true",
-            vulncheck_kev=row.get("vulncheck_kev", "").lower() == "true",
-            exploitdb=row.get("exploitdb", "").lower() == "true",
-            metasploit=row.get("metasploit", "").lower() == "true",
-            nuclei=row.get("nuclei", "").lower() == "true",
-            poc_github=row.get("poc_github", "").lower() == "true",
+            base_cvss_vector=row[7],
+            cisa_kev=row[11].lower() == "true",
+            vulncheck_kev=row[12].lower() == "true",
+            exploitdb=row[13].lower() == "true",
+            metasploit=row[14].lower() == "true",
+            nuclei=row[15].lower() == "true",
+            poc_github=row[16].lower() == "true",
         )
         exploit_information_list.append(exploit_information)
         counter += 1
@@ -72,6 +78,36 @@ def import_cvss_bt() -> None:
         Exploit_Information.objects.bulk_create(exploit_information_list)
 
     apply_exploit_information_observations(settings)
+
+
+def _check_first_row(row: list[str]) -> bool:
+    if len(row) != 17:
+        logger.error("First row doesn't have 17 elements: %s", row)
+        return False
+
+    errors = []
+    if row[0] != "cve":
+        errors.append("First element of first row is not 'cve'")
+    if row[7] != "base_vector":
+        errors.append("Eigth element of first row is not 'base_vector'")
+    if row[11] != "cisa_kev":
+        errors.append("Twelfth element of first row is not 'cisa_kev'")
+    if row[12] != "vulncheck_kev":
+        errors.append("Thirteenth element of first row is not 'vulncheck_kev'")
+    if row[13] != "exploitdb":
+        errors.append("Fourteenth element of first row is not 'exploitdb'")
+    if row[14] != "metasploit":
+        errors.append("Fifteenth element of first row is not 'metasploit'")
+    if row[15] != "nuclei":
+        errors.append("Sixteenth element of first row is not 'nuclei'")
+    if row[16] != "poc_github":
+        errors.append("Seventeenth element of first row is not 'poc_github'")
+
+    if errors:
+        logger.error("%s: %s", ", ".join(errors), row)
+        return False
+
+    return True
 
 
 def _get_year_from_cve(cve: str) -> Optional[int]:
