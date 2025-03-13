@@ -205,12 +205,14 @@ class TestCVSS_BT(BaseTestCase):
 
 class MockResponse:
     def __init__(self):
+        self.in_file = open(path.dirname(__file__) + "/files/cvss_bt.csv", "rb")
         self.raise_for_status_called = False
-        self.content = self._get_content()
 
     def raise_for_status(self):
         self.raise_for_status_called = True
 
-    def _get_content(self):
-        with open(path.dirname(__file__) + "/files/cvss_bt.csv", "rb") as in_file:
-            return in_file.read()
+    def iter_lines(self):
+        lines = []
+        for line in self.in_file.readlines():
+            lines.append(line)
+        return lines
