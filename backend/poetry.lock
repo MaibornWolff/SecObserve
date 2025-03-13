@@ -766,18 +766,18 @@ Django = ">=4.2"
 
 [[package]]
 name = "django-picklefield"
-version = "3.2"
+version = "3.3"
 description = "Pickled object field for Django"
 optional = false
-python-versions = ">=3"
+python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "django-picklefield-3.2.tar.gz", hash = "sha256:aa463f5d79d497dbe789f14b45180f00a51d0d670067d0729f352a3941cdfa4d"},
-    {file = "django_picklefield-3.2-py3-none-any.whl", hash = "sha256:e9a73539d110f69825d9320db18bcb82e5189ff48dbed41821c026a20497764c"},
+    {file = "django-picklefield-3.3.tar.gz", hash = "sha256:4e76dd20f2e95ffdaf18d641226ccecc169ff0473b0d6bec746f3ab97c26b8cb"},
+    {file = "django_picklefield-3.3-py3-none-any.whl", hash = "sha256:d6f6fd94a17177fe0d16b0b452a9860b8a1da97b6e70633ab53ade4975f1ce9a"},
 ]
 
 [package.dependencies]
-Django = ">=3.2"
+Django = ">=4.2"
 
 [package.extras]
 tests = ["tox"]
@@ -2780,4 +2780,4 @@ unittests = ["coverage", "django-coverage-plugin", "django-extensions"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">= 3.10, < 3.13"
-content-hash = "eaa356fb5ee874c4357be407c52bbfd0150f02535269adf50a663aa492759188"
+content-hash = "05f6ed9faae0f333e92b573c097ad5558fee98d0b34106e33b85825025648164"
