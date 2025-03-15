@@ -3,7 +3,7 @@
         "model": "licenses.license_component",
         "pk": 1,
         "fields": {
-            "identity_hash": "6eef8088480aa2523aeeb64ad35f876a942cc3172cfb36752f3a052a4f88642c",
+            "identity_hash": "12b30c8b800bd9607d01a3cd2f1cd72af4b8c948b2e7831a48bfc2589616f0be",
             "product": 1,
             "upload_filename": "",
             "component_name": "internal_component",
@@ -26,7 +26,7 @@
         "model": "licenses.license_component",
         "pk": 2,
         "fields": {
-            "identity_hash": "bc8e59b7687fe3533616b3914c636389c131eac3bdbda1b67d8d26f890a74007",
+            "identity_hash": "da3a81cebbfa79d18f0c0ba0046edacb2428d23a93f4b561ddd54b0478d16cb9",
             "product": 2,
             "upload_filename": "",
             "component_name": "external_component",

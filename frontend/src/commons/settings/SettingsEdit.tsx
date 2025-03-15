@@ -110,6 +110,10 @@ const SettingsEdit = () => {
                                     source="feature_general_rules_need_approval"
                                     label="General rules need approval"
                                 />
+                                <BooleanInput
+                                    source="feature_exploit_information"
+                                    label="Enable exploit enrichment from cvss-bt"
+                                />
                             </Stack>
                         </Grid>
                         <Grid size={3}>
@@ -123,6 +127,19 @@ const SettingsEdit = () => {
                                     label="Enable automatic OSV scanning"
                                 />
                                 <BooleanInput source="feature_license_management" label="Enable license management" />
+                                <FormDataConsumer>
+                                    {({ formData }) =>
+                                        formData.feature_exploit_information && (
+                                            <NumberInput
+                                                source="exploit_information_max_age_years"
+                                                label="Maximum age of CVEs for enrichment in years"
+                                                min={0}
+                                                step={1}
+                                                validate={validate_0_999999}
+                                            />
+                                        )
+                                    }
+                                </FormDataConsumer>
                             </Stack>
                         </Grid>
                     </Grid>
@@ -400,7 +417,7 @@ const SettingsEdit = () => {
                                 />
                                 <NumberInput
                                     source="background_epss_import_crontab_hour"
-                                    label="EPSS import crontab (hour)"
+                                    label="EPSS and exploit import crontab (hour)"
                                     min={0}
                                     step={1}
                                     validate={validate_0_23}
@@ -459,7 +476,7 @@ const SettingsEdit = () => {
                                 />
                                 <NumberInput
                                     source="background_epss_import_crontab_minute"
-                                    label="EPSS import crontab (minute)"
+                                    label="EPSS and exploit import crontab (minute)"
                                     min={0}
                                     step={1}
                                     validate={validate_0_59}

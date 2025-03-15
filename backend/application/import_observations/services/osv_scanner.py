@@ -5,6 +5,7 @@ from typing import Optional, Tuple
 import jsonpickle
 import requests
 
+from application.commons.models import Settings
 from application.core.models import Branch, Product
 from application.import_observations.models import Vulnerability_Check
 from application.import_observations.parsers.osv.parser import (
@@ -152,7 +153,7 @@ def scan_license_components(
         kubernetes_cluster="",
         imported_observations=observations,
     )
-    numbers: Tuple[int, int, int, str] = _process_data(import_parameters)
+    numbers: Tuple[int, int, int, str] = _process_data(import_parameters, Settings.load())
 
     Vulnerability_Check.objects.update_or_create(
         product=import_parameters.product,

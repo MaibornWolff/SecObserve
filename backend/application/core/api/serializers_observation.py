@@ -87,6 +87,7 @@ class ObservationSerializer(ModelSerializer):
     issue_tracker_issue_url = SerializerMethodField()
     assessment_needs_approval = SerializerMethodField()
     vulnerability_id_aliases = SerializerMethodField()
+    cve_found_in = SerializerMethodField()
 
     class Meta:
         model = Observation
@@ -127,6 +128,9 @@ class ObservationSerializer(ModelSerializer):
     def get_vulnerability_id_aliases(self, observation: Observation) -> list[dict[str, str]]:
         return _get_vulnerability_id_aliases(observation)
 
+    def get_cve_found_in(self, observation: Observation) -> list[dict[str, str]]:
+        return _get_cve_found_in_sources(observation)
+
     def validate_product(self, product: Product) -> Product:
         if product and product.is_product_group:
             raise ValidationError("Product must not be a product group")
@@ -149,6 +153,7 @@ class ObservationListSerializer(ModelSerializer):
     origin_source_file_url = SerializerMethodField()
     origin_component_purl_namespace = SerializerMethodField()
     vulnerability_id_aliases = SerializerMethodField()
+    cve_found_in = SerializerMethodField()
 
     class Meta:
         model = Observation
@@ -175,6 +180,9 @@ class ObservationListSerializer(ModelSerializer):
 
     def get_vulnerability_id_aliases(self, observation: Observation) -> list[dict[str, str]]:
         return _get_vulnerability_id_aliases(observation)
+
+    def get_cve_found_in(self, observation: Observation) -> list[dict[str, str]]:
+        return _get_cve_found_in_sources(observation)
 
 
 def _get_origin_source_file_url(observation: Observation) -> Optional[str]:
@@ -241,6 +249,14 @@ def _get_vulnerability_id_aliases(observation: Observation) -> list[dict[str, st
     return_list = []
     for alias in aliases_list:
         return_list.append({"alias": alias})
+    return return_list
+
+
+def _get_cve_found_in_sources(observation: Observation) -> list[dict[str, str]]:
+    sources_list = get_comma_separated_as_list(observation.cve_found_in)
+    return_list = []
+    for source in sources_list:
+        return_list.append({"source": source})
     return return_list
 
 
@@ -509,6 +525,7 @@ class ObservationBulkMarkDuplicatesSerializer(Serializer):
 class NestedObservationSerializer(ModelSerializer):
     scanner_name = SerializerMethodField()
     origin_component_name_version = SerializerMethodField()
+    cve_found_in = SerializerMethodField()
 
     class Meta:
         model = Observation
@@ -519,6 +536,9 @@ class NestedObservationSerializer(ModelSerializer):
 
     def get_origin_component_name_version(self, observation: Observation) -> str:
         return get_origin_component_name_version(observation)
+
+    def get_cve_found_in(self, observation: Observation) -> list[dict[str, str]]:
+        return _get_cve_found_in_sources(observation)
 
 
 class ObservationLogSerializer(ModelSerializer):

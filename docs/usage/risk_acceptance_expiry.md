@@ -20,5 +20,4 @@ The number of `Risk acceptance expiry (days)` will be used to set a default for 
 
 ---
 
-The [Settings](../getting_started/configuration.md#admininistration-in-secobserve) have to additional parameters, `Risk acceptance expiry crontab (hours/UTC)` and `Risk acceptance expiry crontab (minutes)` to control, when the expiry date for the Observations is checked. The backend server will need to be restarted after changing these parameters for the changes to take effect.
- 
+Per default the task to check the risk acceptance expiry is scheduled to run every night at 01:00 UTC time. This default can be changed by administrators via the **Background tasks** section in the [Settings](../getting_started/configuration.md#admininistration-in-secobserve).  Hours are always in UTC time.

@@ -23,6 +23,7 @@ import { PERMISSION_OBSERVATION_ASSESSMENT, PERMISSION_OBSERVATION_DELETE } from
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { humanReadableDate } from "../../commons/functions";
+import { feature_exploit_information } from "../../commons/functions";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/user_settings/functions";
 import {
@@ -54,11 +55,14 @@ function listFilters(product: Product) {
             </ReferenceInput>
         );
     }
-    filters.push(<TextInput source="title" alwaysOn />);
     filters.push(
-        <AutocompleteInput source="current_severity" label="Severity" choices={OBSERVATION_SEVERITY_CHOICES} alwaysOn />
-    );
-    filters.push(
+        <TextInput source="title" alwaysOn />,
+        <AutocompleteInput
+            source="current_severity"
+            label="Severity"
+            choices={OBSERVATION_SEVERITY_CHOICES}
+            alwaysOn
+        />,
         <AutocompleteInput source="current_status" label="Status" choices={OBSERVATION_STATUS_CHOICES} alwaysOn />
     );
     if (product && product.has_services) {
@@ -76,8 +80,8 @@ function listFilters(product: Product) {
     }
 
     if (product && product.has_component) {
-        filters.push(<TextInput source="origin_component_name_version" label="Component" alwaysOn />);
         filters.push(
+            <TextInput source="origin_component_name_version" label="Component" alwaysOn />,
             <ReferenceInput
                 source="origin_component_purl_type"
                 reference="purl_types"
@@ -87,6 +91,9 @@ function listFilters(product: Product) {
                 <AutocompleteInputMedium optionText="name" label="Component type" />
             </ReferenceInput>
         );
+        if (feature_exploit_information()) {
+            filters.push(<NullableBooleanInput source="cve_known_exploited" label="CVE exploited" alwaysOn />);
+        }
     }
     if (product && product.has_docker_image) {
         filters.push(<TextInput source="origin_docker_image_name_tag_short" label="Container" alwaysOn />);
@@ -104,10 +111,12 @@ function listFilters(product: Product) {
         filters.push(<TextInput source="origin_kubernetes_qualified_resource" label="Kubernetes resource" alwaysOn />);
     }
 
-    filters.push(<TextInput source="scanner" alwaysOn />);
-    filters.push(<AutocompleteInputMedium source="age" choices={AGE_CHOICES} alwaysOn />);
-    filters.push(<TextInput source="upload_filename" label="Filename" />);
-    filters.push(<TextInput source="api_configuration_name" label="API configuration" />);
+    filters.push(
+        <TextInput source="scanner" alwaysOn />,
+        <AutocompleteInputMedium source="age" choices={AGE_CHOICES} alwaysOn />,
+        <TextInput source="upload_filename" label="Filename" />,
+        <TextInput source="api_configuration_name" label="API configuration" />
+    );
     if (product && product.has_potential_duplicates) {
         filters.push(<NullableBooleanInput source="has_potential_duplicates" label="Duplicates" alwaysOn />);
     }

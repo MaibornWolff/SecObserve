@@ -66,13 +66,13 @@ def epss_apply_observations() -> None:
         updates = []
 
         for observation in page.object_list:
-            if _epss_apply_score(observation):
+            if apply_epss(observation):
                 updates.append(observation)
 
         Observation.objects.bulk_update(updates, ["epss_score", "epss_percentile"])
 
 
-def _epss_apply_score(observation: Observation) -> bool:
+def apply_epss(observation: Observation) -> bool:
     if observation.vulnerability_id.startswith("CVE-"):
         try:
             epss_score = EPSS_Score.objects.get(cve=observation.vulnerability_id)
@@ -87,8 +87,3 @@ def _epss_apply_score(observation: Observation) -> bool:
             return True
 
     return False
-
-
-def epss_apply_observation(observation: Observation) -> None:
-    if _epss_apply_score(observation):
-        observation.save()

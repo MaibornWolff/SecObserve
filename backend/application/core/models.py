@@ -22,11 +22,6 @@ from django.db.models import (
 from django.utils import timezone
 
 from application.access_control.models import Authorization_Group, User
-from application.core.services.observation import (
-    get_identity_hash,
-    normalize_observation_fields,
-    set_product_flags,
-)
 from application.core.types import (
     Assessment_Status,
     OSVLinuxDistribution,
@@ -372,19 +367,23 @@ class Observation(Model):
     title = CharField(max_length=255)
     description = TextField(max_length=2048, blank=True)
     recommendation = TextField(max_length=2048, blank=True)
+
     current_severity = CharField(max_length=12, choices=Severity.SEVERITY_CHOICES)
     numerical_severity = IntegerField(validators=[MinValueValidator(1), MaxValueValidator(6)])
     parser_severity = CharField(max_length=12, choices=Severity.SEVERITY_CHOICES, blank=True)
     rule_severity = CharField(max_length=12, choices=Severity.SEVERITY_CHOICES, blank=True)
     assessment_severity = CharField(max_length=12, choices=Severity.SEVERITY_CHOICES, blank=True)
+
     current_status = CharField(max_length=16, choices=Status.STATUS_CHOICES)
     parser_status = CharField(max_length=16, choices=Status.STATUS_CHOICES, blank=True)
     vex_status = CharField(max_length=16, choices=Status.STATUS_CHOICES, blank=True)
     rule_status = CharField(max_length=16, choices=Status.STATUS_CHOICES, blank=True)
     assessment_status = CharField(max_length=16, choices=Status.STATUS_CHOICES, blank=True)
+
     scanner_observation_id = CharField(max_length=255, blank=True)
     vulnerability_id = CharField(max_length=255, blank=True)
     vulnerability_id_aliases = CharField(max_length=512, blank=True)
+
     origin_component_name = CharField(max_length=255, blank=True)
     origin_component_version = CharField(max_length=255, blank=True)
     origin_component_name_version = CharField(max_length=513, blank=True)
@@ -392,11 +391,13 @@ class Observation(Model):
     origin_component_purl_type = CharField(max_length=16, blank=True)
     origin_component_cpe = CharField(max_length=255, blank=True)
     origin_component_dependencies = TextField(max_length=32768, blank=True)
+
     origin_docker_image_name = CharField(max_length=255, blank=True)
     origin_docker_image_tag = CharField(max_length=255, blank=True)
     origin_docker_image_name_tag = CharField(max_length=513, blank=True)
     origin_docker_image_name_tag_short = CharField(max_length=513, blank=True)
     origin_docker_image_digest = CharField(max_length=255, blank=True)
+
     origin_endpoint_url = TextField(max_length=2048, blank=True)
     origin_endpoint_scheme = CharField(max_length=255, blank=True)
     origin_endpoint_hostname = CharField(max_length=255, blank=True)
@@ -405,26 +406,34 @@ class Observation(Model):
     origin_endpoint_params = TextField(max_length=2048, blank=True)
     origin_endpoint_query = TextField(max_length=2048, blank=True)
     origin_endpoint_fragment = TextField(max_length=2048, blank=True)
+
     origin_service_name = CharField(max_length=255, blank=True)
     origin_service = ForeignKey(Service, on_delete=PROTECT, null=True)
+
     origin_source_file = CharField(max_length=255, blank=True)
     origin_source_line_start = IntegerField(null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)])
     origin_source_line_end = IntegerField(null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)])
+
     origin_cloud_provider = CharField(max_length=255, blank=True)
     origin_cloud_account_subscription_project = CharField(max_length=255, blank=True)
     origin_cloud_resource = CharField(max_length=255, blank=True)
     origin_cloud_resource_type = CharField(max_length=255, blank=True)
     origin_cloud_qualified_resource = CharField(max_length=255, blank=True)
+
     origin_kubernetes_cluster = CharField(max_length=255, blank=True)
     origin_kubernetes_namespace = CharField(max_length=255, blank=True)
     origin_kubernetes_resource_type = CharField(max_length=255, blank=True)
     origin_kubernetes_resource_name = CharField(max_length=255, blank=True)
     origin_kubernetes_qualified_resource = CharField(max_length=255, blank=True)
+
     cvss3_score = DecimalField(max_digits=3, decimal_places=1, null=True)
     cvss3_vector = CharField(max_length=255, blank=True)
     cvss4_score = DecimalField(max_digits=3, decimal_places=1, null=True)
     cvss4_vector = CharField(max_length=255, blank=True)
+    cve_found_in = CharField(max_length=255, blank=True)
+
     cwe = IntegerField(null=True, validators=[MinValueValidator(1), MaxValueValidator(999999)])
+
     epss_score = DecimalField(
         max_digits=6,
         decimal_places=3,
@@ -437,6 +446,7 @@ class Observation(Model):
         null=True,
         validators=[MinValueValidator(Decimal(0)), MaxValueValidator(Decimal(100))],
     )
+
     found = DateField(null=True)
     scanner = CharField(max_length=255, blank=True)
     upload_filename = CharField(max_length=255, blank=True)
@@ -446,6 +456,7 @@ class Observation(Model):
     modified = DateTimeField(auto_now=True)
     last_observation_log = DateTimeField(default=timezone.now)
     identity_hash = CharField(max_length=64)
+
     general_rule = ForeignKey(
         "rules.Rule",
         related_name="general_rules",
@@ -460,10 +471,13 @@ class Observation(Model):
         null=True,
         on_delete=PROTECT,
     )
+
     issue_tracker_issue_id = CharField(max_length=255, blank=True)
     issue_tracker_issue_closed = BooleanField(default=False)
     issue_tracker_jira_initial_status = CharField(max_length=255, blank=True)
+
     has_potential_duplicates = BooleanField(default=False)
+
     current_vex_justification = CharField(max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True)
     parser_vex_justification = CharField(max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True)
     vex_vex_justification = CharField(max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True)
@@ -478,6 +492,7 @@ class Observation(Model):
         null=True,
         on_delete=SET_NULL,
     )
+
     risk_acceptance_expiry_date = DateField(null=True)
 
     class Meta:
@@ -508,13 +523,6 @@ class Observation(Model):
 
         self.unsaved_references: list[str] = []
         self.unsaved_evidences: list[list[str]] = []
-
-    def save(self, *args: Any, **kwargs: Any) -> None:
-        normalize_observation_fields(self)
-        self.identity_hash = get_identity_hash(self)
-        set_product_flags(self)
-
-        return super().save(*args, **kwargs)
 
 
 class Observation_Log(Model):
