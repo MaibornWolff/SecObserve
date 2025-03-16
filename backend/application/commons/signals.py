@@ -44,4 +44,4 @@ def settings_post_save_task(settings: Settings, created: bool) -> None:
             Exploit_Information.objects.all().delete()
             apply_exploit_information_observations(settings)
 
-    logger.info("--- Settings post_save_task - end ---")
+    logger.info("--- Settings post_save_task - finished ---")
