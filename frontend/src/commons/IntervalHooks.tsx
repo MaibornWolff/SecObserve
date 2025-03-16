@@ -5,7 +5,7 @@ type IntervalCallback = () => void;
 // Taken from https://stackoverflow.com/a/70935119
 
 function useDispatch(callback: IntervalCallback, delay: number): void {
-    const cachedCallback = React.useRef<IntervalCallback>();
+    const cachedCallback = React.useRef<IntervalCallback>(null);
 
     React.useEffect(() => {
         cachedCallback.current = callback;
