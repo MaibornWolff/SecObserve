@@ -184,7 +184,7 @@ def apply_exploit_information(observation: Observation, settings: Settings) -> b
         _add_cve_found_in(observation, exploit_information)
 
         if (
-            observation.cvss3_vector != cvss3_vector_before
+            observation.cvss3_vector != cvss3_vector_before  # pylint: disable=too-many-boolean-expressions
             or observation.cvss4_vector != cvss4_vector_before
             or observation.cve_found_in != cve_found_in_before
             or (
