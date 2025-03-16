@@ -98,13 +98,13 @@ jobs:
           ref: 'v${{ github.event.inputs.release }}'
       - 
         name: Run vulnerability scanners for images
-        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@b7132036f4970c237bf85b56d0033fd5f6726ab7 # main
+        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@2f7b500fde2de2bdea7eef3b6df5503c2476916f # main
         with:
           so_configuration: 'so_configuration_sca_current.yml'
           SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
       - 
         name: Run vulnerability scanners for endpoints
-        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@b7132036f4970c237bf85b56d0033fd5f6726ab7 # main
+        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@2f7b500fde2de2bdea7eef3b6df5503c2476916f # main
         with:
           so_configuration: 'so_configuration_endpoints.yml'
           SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
