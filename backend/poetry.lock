@@ -1047,13 +1047,13 @@ tornado = ["tornado (>=0.2)"]
 
 [[package]]
 name = "huey"
-version = "2.5.2"
+version = "2.5.3"
 description = "huey, a little task queue"
 optional = false
 python-versions = "*"
 groups = ["main"]
 files = [
-    {file = "huey-2.5.2.tar.gz", hash = "sha256:df33db474c05414ed40ee2110e9df692369871734da22d74ffb035a4bd74047f"},
+    {file = "huey-2.5.3.tar.gz", hash = "sha256:089fc72b97fd26a513f15b09925c56fad6abe4a699a1f0e902170b37e85163c7"},
 ]
 
 [package.extras]
@@ -2780,4 +2780,4 @@ unittests = ["coverage", "django-coverage-plugin", "django-extensions"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">= 3.10, < 3.13"
-content-hash = "eed063d42c622c258cff044d088becf59ab3ec0a29dd02eb24c92a05a1bec60a"
+content-hash = "ce4d2bb509a960f0dd70f04a386e6202769d3f1df4420156079a8675b8b204f6"
