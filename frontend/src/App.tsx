@@ -4,8 +4,7 @@ import { Route } from "react-router";
 
 import AccessControlAdministration from "./access_control/access_control_administration/AccessControlAdministration";
 import authProvider from "./access_control/auth_provider/authProvider";
-import { oidcConfig } from "./access_control/auth_provider/authProvider";
-import { updateRefreshToken } from "./access_control/auth_provider/functions";
+import { oidcConfig, updateRefreshToken } from "./access_control/auth_provider/oidc";
 import authorization_groups from "./access_control/authorization_groups";
 import { Login } from "./access_control/login";
 import users from "./access_control/users";

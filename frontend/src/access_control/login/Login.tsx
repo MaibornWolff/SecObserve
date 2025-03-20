@@ -8,9 +8,10 @@ import { Form, TextInput, required, useLogin, useNotify, useTheme } from "react-
 import { useAuth } from "react-oidc-context";
 import { Navigate, useLocation } from "react-router-dom";
 
+import { jwt_signed_in } from "../../access_control/auth_provider/authProvider";
+import { oidc_signed_in } from "../../access_control/auth_provider/oidc";
 import { getTheme } from "../../commons/user_settings/functions";
 import { OIDCSignInButton } from "../auth_provider/OIDCSignInButton";
-import { jwt_signed_in, oidc_signed_in } from "../auth_provider/authProvider";
 
 const Login = () => {
     const [loading, setLoading] = useState(false);
