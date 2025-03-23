@@ -11,7 +11,7 @@ from django.utils import timezone
 from application.commons.models import Settings
 from application.core.models import Observation
 from application.core.services.observation import get_current_severity
-from application.core.types import Status
+from application.core.types import Severity, Status
 from application.epss.models import Exploit_Information
 from application.epss.queries.exploit_information import get_exploit_information_by_cve
 
@@ -184,9 +184,13 @@ def apply_exploit_information(observation: Observation, settings: Settings) -> b
         _add_cve_found_in(observation, exploit_information)
 
         if (
-            observation.cvss3_vector != cvss3_vector_before
+            observation.cvss3_vector != cvss3_vector_before  # pylint: disable=too-many-boolean-expressions
             or observation.cvss4_vector != cvss4_vector_before
             or observation.cve_found_in != cve_found_in_before
+            or (
+                (observation.cvss3_vector or observation.cvss4_vector)
+                and observation.current_severity == Severity.SEVERITY_UNKNOWN
+            )
         ):
             observation.current_severity = get_current_severity(observation)
             return True

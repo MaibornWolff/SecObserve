@@ -35,6 +35,7 @@ class TestCVSS_BT(BaseTestCase):
             title="too old",
             vulnerability_id="CVE-2015-0001",
             product=product,
+            parser_severity=Severity.SEVERITY_UNKNOWN,
             import_last_seen=timezone.now(),
             parser=parser,
         ).save()
@@ -42,6 +43,7 @@ class TestCVSS_BT(BaseTestCase):
         observation = Observation(
             title="all",
             vulnerability_id="CVE-2025-0001",
+            parser_severity=Severity.SEVERITY_UNKNOWN,
             product=product,
             import_last_seen=timezone.now(),
             parser=parser,
