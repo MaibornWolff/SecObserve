@@ -1,4 +1,4 @@
-import { Admin, CustomRoutes, Resource, addRefreshAuthToDataProvider } from "react-admin";
+import { Admin, CustomRoutes, Resource, addRefreshAuthToAuthProvider, addRefreshAuthToDataProvider } from "react-admin";
 import { AuthProvider } from "react-oidc-context";
 import { Route } from "react-router";
 
@@ -48,7 +48,7 @@ const App = () => {
                 title=""
                 dataProvider={addRefreshAuthToDataProvider(drfProvider(), updateRefreshToken)}
                 queryClient={queryClient}
-                authProvider={authProvider}
+                authProvider={addRefreshAuthToAuthProvider(authProvider, updateRefreshToken)}
                 dashboard={Dashboard}
                 loginPage={Login}
                 layout={Layout}

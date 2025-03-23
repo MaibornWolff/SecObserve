@@ -62,7 +62,7 @@ export const updateRefreshToken = () => {
         if (expires_at < Date.now()) {
             localStorage.setItem("user_action", "refreshing token");
             const user_manager = new UserManager(oidcConfig);
-            user_manager
+            return user_manager
                 .signinSilent()
                 .then(() => {
                     return Promise.resolve();
