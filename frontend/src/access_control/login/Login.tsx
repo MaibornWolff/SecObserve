@@ -2,7 +2,6 @@ import LockIcon from "@mui/icons-material/Lock";
 import PersonIcon from "@mui/icons-material/Person";
 import { Avatar, Button, Card, CardActions, CircularProgress, Stack } from "@mui/material";
 import Box from "@mui/material/Box";
-import PropTypes from "prop-types";
 import { Fragment, useEffect, useState } from "react";
 import { Form, TextInput, required, useLogin, useNotify, useTheme } from "react-admin";
 import { useAuth } from "react-oidc-context";
@@ -21,6 +20,7 @@ const Login = () => {
     const notify = useNotify();
     const login = useLogin();
     const location = useLocation();
+    const [new_location, setNewLocation] = useState("/");
 
     const isAuthenticated = jwt_signed_in() || oidc_signed_in();
 
@@ -59,11 +59,26 @@ const Login = () => {
             });
     }
 
-    const handleSubmit = (auth: FormValues) => {
+    interface FormValues {
+        username?: string;
+        password?: string;
+    }
+
+    const handleSubmit = async (auth: FormValues) => {
         setLoading(true);
-        login(auth, location.state ? (location.state as any).nextPathname : "/")
+        login(auth)
             .then(() => {
                 setTheme(getTheme());
+                setNewLocation("/");
+                let last_location = localStorage.getItem("last_location");
+                if (last_location) {
+                    localStorage.removeItem("last_location");
+                    if (last_location.startsWith("#")) {
+                        setNewLocation(last_location.substring(1));
+                    } else {
+                        setNewLocation(last_location);
+                    }
+                }
             })
             .catch((error: Error) => {
                 setLoading(false);
@@ -81,6 +96,8 @@ const Login = () => {
                     }
                 );
             });
+
+        setLoading(false);
     };
 
     function show_user_login() {
@@ -93,7 +110,7 @@ const Login = () => {
 
     return (
         <Fragment>
-            {isAuthenticated && <Navigate to="/" replace={true} />}
+            {isAuthenticated && <Navigate to={new_location} replace={true} />}
             {!isAuthenticated && !auth.isLoading && (
                 <Form onSubmit={handleSubmit} noValidate>
                     <Box
@@ -170,14 +187,4 @@ const Login = () => {
     );
 };
 
-Login.propTypes = {
-    authProvider: PropTypes.func,
-    previousRoute: PropTypes.string,
-};
-
 export default Login;
-
-interface FormValues {
-    username?: string;
-    password?: string;
-}
