@@ -213,7 +213,7 @@ const ObservationShowComponent = () => {
                                             </Stack>
                                         )}
                                         {observation.cve_found_in && observation.cve_found_in.length > 0 && (
-                                            <Labeled label="Vulnerability Id found in">
+                                            <Labeled label="Exploit information found in">
                                                 <CVEFoundInField
                                                     cve_found_in={observation.cve_found_in}
                                                     vulnerability_id={observation.vulnerability_id}
