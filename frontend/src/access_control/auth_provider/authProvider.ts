@@ -7,7 +7,7 @@ import { saveSettingListProperties, setListProperties } from "../../commons/user
 import { oidcConfig, oidcStorageKey, oidc_signed_in } from "./oidc";
 
 const authProvider: AuthProvider = {
-    login: ({ username, password }) => {
+    login: async ({ username, password }) => {
         if (oidc_signed_in()) {
             return Promise.resolve();
         } else {
@@ -25,12 +25,12 @@ const authProvider: AuthProvider = {
                     }
                     return response.json();
                 })
-                .then((auth) => {
-                    localStorage.setItem("jwt", auth.jwt);
-                    setListProperties(auth.user.setting_list_properties);
-                    delete auth.user.setting_list_properties;
-                    localStorage.setItem("user", JSON.stringify(auth.user));
-                    localStorage.setItem("theme", auth.user.setting_theme);
+                .then((response) => {
+                    localStorage.setItem("jwt", response.jwt);
+                    setListProperties(response.user.setting_list_properties);
+                    delete response.user.setting_list_properties;
+                    localStorage.setItem("user", JSON.stringify(response.user));
+                    localStorage.setItem("theme", response.user.setting_theme);
                 })
                 .catch((error) => {
                     if (error.message == "Forbidden") {
@@ -70,6 +70,11 @@ const authProvider: AuthProvider = {
         if (oidc_signed_in() || jwt_signed_in()) {
             return Promise.resolve();
         }
+
+        if (location.hash != "" && !location.hash.startsWith("#/login")) {
+            localStorage.setItem("last_location", location.hash);
+        }
+
         return Promise.reject({ message: false });
     },
     getPermissions: () => Promise.reject(),
