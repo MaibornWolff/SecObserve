@@ -70,7 +70,7 @@ const Login = () => {
             .then(() => {
                 setTheme(getTheme());
                 setNewLocation("/");
-                let last_location = localStorage.getItem("last_location");
+                const last_location = localStorage.getItem("last_location");
                 if (last_location) {
                     localStorage.removeItem("last_location");
                     if (last_location.startsWith("#")) {
