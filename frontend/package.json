@@ -17,7 +17,7 @@
         "axios": "1.8.4",
         "chart.js": "4.4.8",
         "markdown-to-jsx": "7.7.4",
-        "mermaid": "11.5.0",
+        "mermaid": "11.6.0",
         "oidc-client-ts": "3.2.0",
         "prop-types": "15.8.1",
         "query-string": "9.1.1",
