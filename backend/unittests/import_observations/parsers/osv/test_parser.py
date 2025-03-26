@@ -257,7 +257,9 @@ A stack overflow in the XML.toJSONObject component of hutool-json v5.8.10 and or
     def test_get_linux_package_osv_ecosystem_already_set(self):
         parser = OSVParser()
         package_osv_ecosystem = parser._get_linux_package_osv_ecosystem(
-            PackageURL.from_string("pkg:apk/alpine/musl@1.2.5-r1?arch=x86_64&distro=alpine-3.20.6&distro_name=alpine-3.20"),
+            PackageURL.from_string(
+                "pkg:apk/alpine/musl@1.2.5-r1?arch=x86_64&distro=alpine-3.20.6&distro_name=alpine-3.20"
+            ),
             "Debian:12",
         )
         self.assertEqual("Debian:12", package_osv_ecosystem)
@@ -265,11 +267,12 @@ A stack overflow in the XML.toJSONObject component of hutool-json v5.8.10 and or
     def test_get_linux_package_osv_ecosystem_alpine(self):
         parser = OSVParser()
         package_osv_ecosystem = parser._get_linux_package_osv_ecosystem(
-            PackageURL.from_string("pkg:apk/alpine/musl@1.2.5-r1?arch=x86_64&distro=alpine-3.20.6&distro_name=alpine-3.20"),
+            PackageURL.from_string(
+                "pkg:apk/alpine/musl@1.2.5-r1?arch=x86_64&distro=alpine-3.20.6&distro_name=alpine-3.20"
+            ),
             None,
         )
         self.assertEqual("Alpine:v3.20", package_osv_ecosystem)
-
 
     def test_get_linux_package_osv_ecosystem_ubuntu_21_04(self):
         parser = OSVParser()
