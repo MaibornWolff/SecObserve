@@ -1,6 +1,8 @@
 from datetime import datetime, timezone
+from unittest.mock import patch
 
 from django.core.management import call_command
+from packageurl import PackageURL
 
 from application.import_observations.parsers.osv.parser import (
     OSV_Component,
@@ -186,7 +188,10 @@ A stack overflow in the XML.toJSONObject component of hutool-json v5.8.10 and or
 **Confidence: Low** (No information about affected versions or ranges)"""
         self.assertEqual(description, observation.description)
 
-    def test_linux_product_distribution(self):
+    @patch("application.import_observations.parsers.osv.parser.OSVParser._get_linux_package_osv_ecosystem")
+    def test_linux_product_distribution(self, mock_get_linux_package_osv_ecosystem):
+        mock_get_linux_package_osv_ecosystem.side_effect = self._side_effect_func
+
         call_command(
             "loaddata",
             [
@@ -200,6 +205,11 @@ A stack overflow in the XML.toJSONObject component of hutool-json v5.8.10 and or
 
         parser = OSVParser()
         observations = parser.get_observations(osv_components, self.product_1, None)
+
+        mock_get_linux_package_osv_ecosystem.assert_called_with(
+            PackageURL.from_string("pkg:deb/debian/vim@9.0.1378-2?arch=amd64&distro=debian-12.5&epoch=2"),
+            "Debian:12",
+        )
 
         self.assertEqual(len(observations), 1)
 
@@ -243,6 +253,53 @@ A stack overflow in the XML.toJSONObject component of hutool-json v5.8.10 and or
 
 * ECOSYSTEM: Introduced: 0 - Fixed: 2:8.0.0197-3"""
         self.assertEqual(description, observation.description)
+
+    def test_get_linux_package_osv_ecosystem_already_set(self):
+        parser = OSVParser()
+        package_osv_ecosystem = parser._get_linux_package_osv_ecosystem(
+            PackageURL.from_string(
+                "pkg:apk/alpine/musl@1.2.5-r1?arch=x86_64&distro=alpine-3.20.6&distro_name=alpine-3.20"
+            ),
+            "Debian:12",
+        )
+        self.assertEqual("Debian:12", package_osv_ecosystem)
+
+    def test_get_linux_package_osv_ecosystem_alpine(self):
+        parser = OSVParser()
+        package_osv_ecosystem = parser._get_linux_package_osv_ecosystem(
+            PackageURL.from_string(
+                "pkg:apk/alpine/musl@1.2.5-r1?arch=x86_64&distro=alpine-3.20.6&distro_name=alpine-3.20"
+            ),
+            None,
+        )
+        self.assertEqual("Alpine:v3.20", package_osv_ecosystem)
+
+    def test_get_linux_package_osv_ecosystem_ubuntu_21_04(self):
+        parser = OSVParser()
+        package_osv_ecosystem = parser._get_linux_package_osv_ecosystem(
+            PackageURL.from_string("pkg:deb/ubuntu/zlib1g@1.2.11.dfsg-2ubuntu9?arch=amd64&distro=ubuntu-21.04&epoch=1"),
+            None,
+        )
+        self.assertEqual("Ubuntu:21.04", package_osv_ecosystem)
+
+    def test_get_linux_package_osv_ecosystem_ubuntu_22_10(self):
+        parser = OSVParser()
+        package_osv_ecosystem = parser._get_linux_package_osv_ecosystem(
+            PackageURL.from_string("pkg:deb/ubuntu/zlib1g@1.2.11.dfsg-2ubuntu9?arch=amd64&distro=ubuntu-22.10&epoch=1"),
+            None,
+        )
+        self.assertEqual("Ubuntu:22.10", package_osv_ecosystem)
+
+    def test_get_linux_package_osv_ecosystem_ubuntu_lts(self):
+        parser = OSVParser()
+        package_osv_ecosystem = parser._get_linux_package_osv_ecosystem(
+            PackageURL.from_string("pkg:deb/ubuntu/zlib1g@1.2.11.dfsg-2ubuntu9?arch=amd64&distro=ubuntu-22.04&epoch=1"),
+            None,
+        )
+        self.assertEqual("Ubuntu:22.04:LTS", package_osv_ecosystem)
+
+    def _side_effect_func(self, parsed_purl, package_osv_ecosystem):
+        return package_osv_ecosystem
 
     def _get_osv_component_git(self):
         return OSV_Component(
