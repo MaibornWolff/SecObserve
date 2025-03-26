@@ -242,6 +242,8 @@ class OSVParser(BaseParser):
         if not package_osv_ecosystem and product.osv_linux_distribution:
             package_osv_ecosystem = product.osv_linux_distribution
 
+        package_osv_ecosystem = self._get_linux_package_osv_ecosystem(parsed_purl, package_osv_ecosystem)
+
         for affected_item in osv_vulnerability.get("affected", []):
             package = affected_item.get("package", {})
             affected_ecosystem = package.get("ecosystem")
@@ -250,6 +252,30 @@ class OSVParser(BaseParser):
                 affected.append(affected_item)
 
         return affected
+
+    def _get_linux_package_osv_ecosystem(
+        self, parsed_purl: PackageURL, package_osv_ecosystem: Optional[str]
+    ) -> Optional[str]:
+        package_type = parsed_purl.type
+        if not package_osv_ecosystem and parsed_purl.qualifiers and isinstance(parsed_purl.qualifiers, dict):
+            if package_type == "apk":
+                distro_name = parsed_purl.qualifiers.get("distro_name")
+                if distro_name and distro_name.startswith("alpine-"):
+                    package_osv_ecosystem = f"Alpine:v{distro_name[7:]}"
+            elif package_type == "deb" and parsed_purl.namespace == "ubuntu":
+                distro = parsed_purl.qualifiers.get("distro")
+                if distro and distro.startswith("ubuntu-"):
+                    distro_version = distro[7:]
+                    distro_version_parts = distro_version.split(".")
+                    if (
+                        len(distro_version_parts) == 2
+                        and distro_version_parts[0].isdigit()
+                        and int(distro_version_parts[0]) % 2 == 0
+                        and distro_version_parts[1] == "04"
+                    ):
+                        distro_version = f"{distro_version}:LTS"
+                    package_osv_ecosystem = f"Ubuntu:{distro_version}"
+        return package_osv_ecosystem
 
     def _get_package_name(self, parsed_purl: PackageURL) -> str:
         package_name = parsed_purl.name

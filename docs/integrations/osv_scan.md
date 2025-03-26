@@ -26,13 +26,15 @@ OSV delivers vulnerabilities for a component, without regard to the version of t
 * **gem:** RubyGems
 * **swift:** SwiftURL
 
-To correctly identify Linux packages, the Linux distribution and version has to be set in the product or branch settings according to [OSV affected package specification](https://ossf.github.io/osv-schema/#affectedpackage-field). If it is not set for a branch, the product settings are used. Examples are:
+For **Alpine** and **Ubuntu** (only the free version, not Pro) packages, the the Linux distribution and version are determined automatically by information from the PURL of the component.
+
+To correctly identify other Linux packages, the Linux distribution and version has to be set in the product or branch settings according to [OSV affected package specification](https://ossf.github.io/osv-schema/#affectedpackage-field). If it is not set for a branch, the product settings are used. Examples are:
 
 | Linux distribution | Version   |
 |--------------------|-----------|
-| Alpine             | v3.21     |
-| Ubuntu             | 22.04:LTS |
+| Debian             | 12        |
 | Red Hat            | rhel_aus:8.4::appstream |
+| Ubuntu             | Pro:24.04:LTS |
 
 
 ## Manual import
