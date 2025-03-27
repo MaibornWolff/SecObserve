@@ -257,8 +257,17 @@ class OSVParser(BaseParser):
     def _get_linux_package_osv_ecosystem(
         self, parsed_purl: PackageURL, package_osv_ecosystem: Optional[str]
     ) -> Optional[str]:
-        package_type = parsed_purl.type
-        if not package_osv_ecosystem and parsed_purl.qualifiers and isinstance(parsed_purl.qualifiers, dict):
+        if not package_osv_ecosystem:
+            package_osv_ecosystem = self._get_linux_package_osv_ecosystem_apk(parsed_purl)
+        if not package_osv_ecosystem:
+            package_osv_ecosystem = self._get_linux_package_osv_ecosystem_deb(parsed_purl)
+        return package_osv_ecosystem
+
+    def _get_linux_package_osv_ecosystem_apk(self, parsed_purl: PackageURL) -> Optional[str]:
+        package_osv_ecosystem = None
+
+        if parsed_purl.qualifiers and isinstance(parsed_purl.qualifiers, dict):
+            package_type = parsed_purl.type
             if package_type == "apk" and parsed_purl.namespace == "alpine":
                 distro = parsed_purl.qualifiers.get("distro")
                 if distro:
@@ -272,7 +281,15 @@ class OSVParser(BaseParser):
                 package_osv_ecosystem = OSVLinuxDistribution.DISTRIBUTION_CHAINGUARD
             elif package_type == "apk" and parsed_purl.namespace == "wolfi":
                 package_osv_ecosystem = OSVLinuxDistribution.DISTRIBUTION_WOLFI
-            elif package_type == "deb" and parsed_purl.namespace == "debian":
+
+        return package_osv_ecosystem
+
+    def _get_linux_package_osv_ecosystem_deb(self, parsed_purl: PackageURL) -> Optional[str]:
+        package_osv_ecosystem = None
+
+        if parsed_purl.qualifiers and isinstance(parsed_purl.qualifiers, dict):
+            package_type = parsed_purl.type
+            if package_type == "deb" and parsed_purl.namespace == "debian":
                 distro = parsed_purl.qualifiers.get("distro")
                 if distro:
                     if distro.startswith("debian-"):
@@ -295,6 +312,7 @@ class OSVParser(BaseParser):
                             package_osv_ecosystem = (
                                 f"{OSVLinuxDistribution.DISTRIBUTION_UBUNTU}:{distro_parts[0]}.{distro_parts[1]}"
                             )
+
         return package_osv_ecosystem
 
     def _get_package_name(self, parsed_purl: PackageURL) -> str:
