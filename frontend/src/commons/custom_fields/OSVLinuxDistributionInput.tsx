@@ -7,7 +7,7 @@ import TextUrlField from "./TextUrlField";
 const DISTRIBUTION_CHOICES = [
     { id: "AlmaLinux", name: "AlmaLinux" },
     { id: "Alpine", name: "Alpine" },
-    { id: "Chainguard", name: "Chainguard"},
+    { id: "Chainguard", name: "Chainguard" },
     { id: "Debian", name: "Debian" },
     { id: "Mageia", name: "Mageia" },
     { id: "openSUSE", name: "openSUSE" },
@@ -16,7 +16,7 @@ const DISTRIBUTION_CHOICES = [
     { id: "Rocky Linux", name: "Rocky Linux" },
     { id: "SUSE", name: "SUSE" },
     { id: "Ubuntu", name: "Ubuntu" },
-    { id: "Wolfi", name: "Wolfi"},
+    { id: "Wolfi", name: "Wolfi" },
 ];
 
 const OSVLinuxDistributionInput = () => {
