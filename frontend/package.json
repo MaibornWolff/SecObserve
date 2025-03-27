@@ -27,7 +27,7 @@
         "react-chartjs-2": "5.3.0",
         "react-dom": "19.0.0",
         "react-is": "19.0.0",
-        "react-oidc-context": "3.2.0",
+        "react-oidc-context": "3.3.0",
         "runtime-env-cra": "file:lib/runtime-env-cra",
         "tss-react": "4.9.15"
     },
