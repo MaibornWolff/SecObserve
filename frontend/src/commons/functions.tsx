@@ -102,33 +102,6 @@ export function get_cvss4_url(cvss_vector: string): string {
     return "";
 }
 
-const VULNERABILITY_URLS = {
-    ASB: "https://osv.dev/vulnerability/",
-    BIT: "https://osv.dev/vulnerability/",
-    CGA: "https://osv.dev/vulnerability/",
-    CVE: "https://nvd.nist.gov/vuln/detail/",
-    DLA: "https://security-tracker.debian.org/tracker/",
-    GHSA: "https://github.com/advisories/",
-    GO: "https://pkg.go.dev/vuln/",
-    OSV: "https://osv.dev/vulnerability/",
-    PYSEC: "https://osv.dev/vulnerability/",
-    SNYK: "https://snyk.io/vuln/",
-    RUSTSEC: "https://rustsec.org/advisories/",
-};
-
-export function get_vulnerability_url(vulnerability_id: string): string {
-    let return_value = "";
-
-    Object.entries(VULNERABILITY_URLS).forEach((entry) => {
-        const [key, value] = entry;
-        if (vulnerability_id.startsWith(key)) {
-            return_value = value + vulnerability_id;
-        }
-    });
-
-    return return_value;
-}
-
 export function get_component_purl_url(
     component_name: string,
     component_version: string | null,

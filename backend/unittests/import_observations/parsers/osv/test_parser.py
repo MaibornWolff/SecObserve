@@ -264,7 +264,7 @@ A stack overflow in the XML.toJSONObject component of hutool-json v5.8.10 and or
         )
         self.assertEqual("Debian:12", package_osv_ecosystem)
 
-    def test_get_linux_package_osv_ecosystem_alpine(self):
+    def test_get_linux_package_osv_ecosystem_alpine_1(self):
         parser = OSVParser()
         package_osv_ecosystem = parser._get_linux_package_osv_ecosystem(
             PackageURL.from_string(
@@ -273,6 +273,30 @@ A stack overflow in the XML.toJSONObject component of hutool-json v5.8.10 and or
             None,
         )
         self.assertEqual("Alpine:v3.20", package_osv_ecosystem)
+
+    def test_get_linux_package_osv_ecosystem_alpine_2(self):
+        parser = OSVParser()
+        package_osv_ecosystem = parser._get_linux_package_osv_ecosystem(
+            PackageURL.from_string("pkg:apk/alpine/busybox-binsh@1.37.0-r12?arch=x86_64&distro=3.21.3"),
+            None,
+        )
+        self.assertEqual("Alpine:v3.21", package_osv_ecosystem)
+
+    def test_get_linux_package_osv_ecosystem_chainguard(self):
+        parser = OSVParser()
+        package_osv_ecosystem = parser._get_linux_package_osv_ecosystem(
+            PackageURL.from_string("pkg:apk/chainguard/nri-kafka@3.10.2-r0?arch=x86_64&distro=20230201"),
+            None,
+        )
+        self.assertEqual("Chainguard", package_osv_ecosystem)
+
+    def test_get_linux_package_osv_ecosystem_wolfi(self):
+        parser = OSVParser()
+        package_osv_ecosystem = parser._get_linux_package_osv_ecosystem(
+            PackageURL.from_string("pkg:apk/wolfi/nri-kafka@3.10.2-r0?arch=x86_64&distro=20230201"),
+            None,
+        )
+        self.assertEqual("Wolfi", package_osv_ecosystem)
 
     def test_get_linux_package_osv_ecosystem_ubuntu_21_04(self):
         parser = OSVParser()
