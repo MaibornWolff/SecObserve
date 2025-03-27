@@ -7,6 +7,7 @@ from typing import Optional
 from packageurl import PackageURL
 
 from application.core.models import Branch, Observation, Product
+from application.core.types import OSVLinuxDistribution
 from application.import_observations.parsers.base_parser import BaseParser
 from application.import_observations.services.osv_cache import get_osv_vulnerability
 from application.import_observations.types import ExtendedSemVer, Parser_Type
@@ -256,25 +257,62 @@ class OSVParser(BaseParser):
     def _get_linux_package_osv_ecosystem(
         self, parsed_purl: PackageURL, package_osv_ecosystem: Optional[str]
     ) -> Optional[str]:
-        package_type = parsed_purl.type
-        if not package_osv_ecosystem and parsed_purl.qualifiers and isinstance(parsed_purl.qualifiers, dict):
-            if package_type == "apk":
-                distro_name = parsed_purl.qualifiers.get("distro_name")
-                if distro_name and distro_name.startswith("alpine-"):
-                    package_osv_ecosystem = f"Alpine:v{distro_name[7:]}"
+        if not package_osv_ecosystem:
+            package_osv_ecosystem = self._get_linux_package_osv_ecosystem_apk(parsed_purl)
+        if not package_osv_ecosystem:
+            package_osv_ecosystem = self._get_linux_package_osv_ecosystem_deb(parsed_purl)
+        return package_osv_ecosystem
+
+    def _get_linux_package_osv_ecosystem_apk(self, parsed_purl: PackageURL) -> Optional[str]:
+        package_osv_ecosystem = None
+
+        if parsed_purl.qualifiers and isinstance(parsed_purl.qualifiers, dict):
+            package_type = parsed_purl.type
+            if package_type == "apk" and parsed_purl.namespace == "alpine":
+                distro = parsed_purl.qualifiers.get("distro")
+                if distro:
+                    if distro.startswith("alpine-"):
+                        distro = distro[7:]
+                    distro_parts = distro.split(".")
+                    if len(distro_parts) >= 2 and distro_parts[0].isdigit() and distro_parts[1].isdigit():
+                        distro_version = f"{distro_parts[0]}.{distro_parts[1]}"
+                        package_osv_ecosystem = f"{OSVLinuxDistribution.DISTRIBUTION_ALPINE}:v{distro_version}"
+            elif package_type == "apk" and parsed_purl.namespace == "chainguard":
+                package_osv_ecosystem = OSVLinuxDistribution.DISTRIBUTION_CHAINGUARD
+            elif package_type == "apk" and parsed_purl.namespace == "wolfi":
+                package_osv_ecosystem = OSVLinuxDistribution.DISTRIBUTION_WOLFI
+
+        return package_osv_ecosystem
+
+    def _get_linux_package_osv_ecosystem_deb(self, parsed_purl: PackageURL) -> Optional[str]:
+        package_osv_ecosystem = None
+
+        if parsed_purl.qualifiers and isinstance(parsed_purl.qualifiers, dict):
+            package_type = parsed_purl.type
+            if package_type == "deb" and parsed_purl.namespace == "debian":
+                distro = parsed_purl.qualifiers.get("distro")
+                if distro:
+                    if distro.startswith("debian-"):
+                        distro = distro[7:]
+                    distro_parts = distro.split(".")
+                    if len(distro_parts) >= 1 and distro_parts[0].isdigit():
+                        package_osv_ecosystem = f"{OSVLinuxDistribution.DISTRIBUTION_DEBIAN}:{distro_parts[0]}"
             elif package_type == "deb" and parsed_purl.namespace == "ubuntu":
                 distro = parsed_purl.qualifiers.get("distro")
-                if distro and distro.startswith("ubuntu-"):
-                    distro_version = distro[7:]
-                    distro_version_parts = distro_version.split(".")
-                    if (
-                        len(distro_version_parts) == 2
-                        and distro_version_parts[0].isdigit()
-                        and int(distro_version_parts[0]) % 2 == 0
-                        and distro_version_parts[1] == "04"
-                    ):
-                        distro_version = f"{distro_version}:LTS"
-                    package_osv_ecosystem = f"Ubuntu:{distro_version}"
+                if distro:
+                    if distro.startswith("ubuntu-"):
+                        distro = distro[7:]
+                    distro_parts = distro.split(".")
+                    if len(distro_parts) >= 2:
+                        if distro_parts[0].isdigit() and int(distro_parts[0]) % 2 == 0 and distro_parts[1] == "04":
+                            package_osv_ecosystem = (
+                                f"{OSVLinuxDistribution.DISTRIBUTION_UBUNTU}:{distro_parts[0]}.{distro_parts[1]}:LTS"
+                            )
+                        else:
+                            package_osv_ecosystem = (
+                                f"{OSVLinuxDistribution.DISTRIBUTION_UBUNTU}:{distro_parts[0]}.{distro_parts[1]}"
+                            )
+
         return package_osv_ecosystem
 
     def _get_package_name(self, parsed_purl: PackageURL) -> str:
