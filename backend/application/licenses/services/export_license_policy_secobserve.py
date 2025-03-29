@@ -33,11 +33,11 @@ class License_Policy_Export:
     parent: Optional[str] = None
 
 
-def export_license_policy_yaml(license_policy: License_Policy) -> str:
-    return yaml.dump(json.loads(export_license_policy_json(license_policy)))
+def export_license_policy_secobserve_yaml(license_policy: License_Policy) -> str:
+    return yaml.dump(json.loads(export_license_policy_secobserve_json(license_policy)))
 
 
-def export_license_policy_json(license_policy: License_Policy) -> str:
+def export_license_policy_secobserve_json(license_policy: License_Policy) -> str:
     return object_to_json(_create_license_policy_export(license_policy))
 
 

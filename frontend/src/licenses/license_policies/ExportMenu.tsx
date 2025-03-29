@@ -33,18 +33,24 @@ const ExportMenu = ({ license_policy }: ExportMenuProps) => {
         exportLicensePolicy("yaml");
     };
 
+    const exportLicensePolicySBOMUtility = async () => {
+        exportLicensePolicy("sbom_utility");
+    };
+
     const exportLicensePolicy = async (format: string) => {
+        const type = format === "yaml" ? "yaml" : "json";
+
         axios_instance
             .get("/license_policies/" + license_policy.id + "/export_" + format + "/")
             .then(function (response) {
-                let blob = new Blob([response.data], { type: "application/" + format });
-                if (format === "json") {
-                    blob = new Blob([JSON.stringify(response.data, null, 4)], { type: "application/" + format });
+                let blob = new Blob([response.data], { type: "application/" + type });
+                if (format === "json" || format === "sbom_utility") {
+                    blob = new Blob([JSON.stringify(response.data, null, 4)], { type: "application/json" });
                 }
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement("a");
                 link.href = url;
-                link.download = "license_policy_" + license_policy.id + "." + format;
+                link.download = "license_policy_" + license_policy.id + "." + type;
                 link.click();
 
                 notify("License Policy downloaded", {
@@ -93,6 +99,12 @@ const ExportMenu = ({ license_policy }: ExportMenuProps) => {
                         <DescriptionIcon sx={{ color: getIconAndFontColor() }} />
                     </ListItemIcon>
                     YAML
+                </MenuItem>
+                <MenuItem onClick={exportLicensePolicySBOMUtility}>
+                    <ListItemIcon>
+                        <DescriptionIcon sx={{ color: getIconAndFontColor() }} />
+                    </ListItemIcon>
+                    sbom-utility
                 </MenuItem>
             </Menu>
         </Fragment>
