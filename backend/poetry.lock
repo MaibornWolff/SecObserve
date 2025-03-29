@@ -1250,14 +1250,14 @@ test = ["MarkupSafe (>=0.23)", "PyYAML (>=5.1)", "docutils (>=0.12)", "flaky", "
 
 [[package]]
 name = "jsonpickle"
-version = "4.0.3"
+version = "4.0.4"
 description = "jsonpickle encodes/decodes any Python object to/from JSON"
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
 files = [
-    {file = "jsonpickle-4.0.3-py3-none-any.whl", hash = "sha256:0d4d68eec89dbbaaa43d8b8fe200b361ebc31d9747299cfca37be2a382299118"},
-    {file = "jsonpickle-4.0.3.tar.gz", hash = "sha256:22d6998d6465d59ced223412a32eeca1425c959170e39203780216cdece184c9"},
+    {file = "jsonpickle-4.0.4-py3-none-any.whl", hash = "sha256:356c42ca5b03e371b6cf527d588bfddfe35109cdd1acbb455428f44cbc16a36e"},
+    {file = "jsonpickle-4.0.4.tar.gz", hash = "sha256:2ac818e5dfc316b57fb7a86641c1c84d21b8f355518054ffe7f697be078f2f63"},
 ]
 
 [package.extras]
@@ -2780,4 +2780,4 @@ unittests = ["coverage", "django-coverage-plugin", "django-extensions"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">= 3.10, < 3.13"
-content-hash = "e23f46f0fee8a2f7b6ed77f39a322b14c1e0f9aed1f6645f122c69b49bef6012"
+content-hash = "adab033fe8a9c147dfe62acda87459970522c07fcd46595d14ece6221cd27e1e"
