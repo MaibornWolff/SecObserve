@@ -54,7 +54,7 @@ def _create_license_policy_export(
     get_license_evaluation_results_for_license_policy(license_policy, False, license_evaluation_results)
 
     license_ids = set()
-    for license_string in license_evaluation_results.keys():
+    for license_string in license_evaluation_results:
         if license_string.startswith("spdx_"):
             license_ids.add(license_string.replace("spdx_", ""))
 
@@ -71,7 +71,7 @@ def _create_license_policy_export(
                 osi = spdx_license.is_osi_approved if spdx_license.is_osi_approved is not None else False
                 deprecated = spdx_license.is_deprecated if spdx_license.is_deprecated is not None else False
             else:
-                logger.warning(f"SPDX license {license_id} not found in database.")
+                logger.warning("SPDX license %s not found in database.", license_id)
                 continue
         else:
             license_name = license_string.replace("expression_", "") if license_string.startswith("expression_") else ""
@@ -85,19 +85,7 @@ def _create_license_policy_export(
         # replace everything that is not a letter, number or dash with a dash
         family = "".join(char if char.isalnum() or char == "-" else "-" for char in family)
         notes = [evaluation_result.comment] if evaluation_result.comment else None
-
-        if evaluation_result.evaluation_result == License_Policy_Evaluation_Result.RESULT_ALLOWED:
-            usagePolicy = USAGE_POLICY.POLICY_ALLOW
-        elif evaluation_result.evaluation_result == License_Policy_Evaluation_Result.RESULT_FORBIDDEN:
-            usagePolicy = USAGE_POLICY.POLICY_DENY
-        elif evaluation_result.evaluation_result == License_Policy_Evaluation_Result.RESULT_REVIEW_REQUIRED:
-            usagePolicy = USAGE_POLICY.POLICY_NEEDS_REVIEW
-        elif evaluation_result.evaluation_result == License_Policy_Evaluation_Result.RESULT_UNKNOWN:
-            usagePolicy = USAGE_POLICY.POLICY_NEEDS_REVIEW
-        elif evaluation_result.evaluation_result == License_Policy_Evaluation_Result.RESULT_IGNORED:
-            usagePolicy = USAGE_POLICY.POLICY_ALLOW
-        else:
-            usagePolicy = USAGE_POLICY.POLICY_NEEDS_REVIEW
+        usagePolicy = _get_usage_policy(evaluation_result)
         annotationRefs = [evaluation_result.evaluation_result.upper()]
 
         license_policy_export_item = License_Policy_Export_Item(
@@ -111,7 +99,22 @@ def _create_license_policy_export(
             annotationRefs=annotationRefs,
             notes=notes,
         )
-
         license_policy_export.policies.append(license_policy_export_item)
 
     return license_policy_export
+
+
+def _get_usage_policy(evaluation_result: LicensePolicyEvaluationResult) -> str:
+    if evaluation_result.evaluation_result == License_Policy_Evaluation_Result.RESULT_ALLOWED:
+        usagePolicy = USAGE_POLICY.POLICY_ALLOW
+    elif evaluation_result.evaluation_result == License_Policy_Evaluation_Result.RESULT_FORBIDDEN:
+        usagePolicy = USAGE_POLICY.POLICY_DENY
+    elif evaluation_result.evaluation_result == License_Policy_Evaluation_Result.RESULT_REVIEW_REQUIRED:
+        usagePolicy = USAGE_POLICY.POLICY_NEEDS_REVIEW
+    elif evaluation_result.evaluation_result == License_Policy_Evaluation_Result.RESULT_UNKNOWN:
+        usagePolicy = USAGE_POLICY.POLICY_NEEDS_REVIEW
+    elif evaluation_result.evaluation_result == License_Policy_Evaluation_Result.RESULT_IGNORED:
+        usagePolicy = USAGE_POLICY.POLICY_ALLOW
+    else:
+        usagePolicy = USAGE_POLICY.POLICY_NEEDS_REVIEW
+    return usagePolicy
