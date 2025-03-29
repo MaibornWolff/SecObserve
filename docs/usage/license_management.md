@@ -60,7 +60,7 @@ The attribute `Public` defines, if the License Policy is visible for all users o
 
 **Actions**
 
-* The `Export` button opens a sub-menu to exports the License Policy either as a JSON or a YAML file. The output format is specified as a [JSON schema](../specification/secobserve_license_policy_schema.json).
+* The `Export` button opens a sub-menu to exports the License Policy either as a SecObserve specific JSON or YAML file or in a format that can be used with [sbom-utility](https://github.com/CycloneDX/sbom-utility?tab=readme-ov-file#license-list-subcommand), using the `--config-license` parameter. The SecObserve specific output format is specified as a [JSON schema](../specification/secobserve_license_policy_schema.json).
 * With the `Apply` button the rules of the License Policy are applied to all products, that have this License Policy set.
 * The `Copy` button creates a new License Policy with the same rules, which can be adjusted for a specific Product.
 
