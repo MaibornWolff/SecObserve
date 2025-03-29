@@ -1,21 +1,23 @@
-import json
+import logging
 from dataclasses import dataclass
 from typing import Optional
 
-import yaml
-
 from application.commons.services.export import object_to_json
-from application.licenses.models import License_Policy, License
+from application.licenses.models import License, License_Policy
 from application.licenses.services.license_policy import (
     LicensePolicyEvaluationResult,
     get_license_evaluation_results_for_license_policy,
 )
 from application.licenses.types import License_Policy_Evaluation_Result
 
+logger = logging.getLogger("secobserve.licenses")
+
+
 class USAGE_POLICY:
     POLICY_ALLOW = "allow"
     POLICY_DENY = "deny"
     POLICY_NEEDS_REVIEW = "needs-review"
+
 
 @dataclass
 class License_Policy_Export_Item:
@@ -27,7 +29,7 @@ class License_Policy_Export_Item:
     deprecated: bool
     usagePolicy: str
     annotationRefs: list[str]
-    notes: str
+    notes: Optional[list[str]]
 
 
 @dataclass
@@ -62,10 +64,15 @@ def _create_license_policy_export(
     for license_string, evaluation_result in license_evaluation_results.items():
         license_id = license_string.replace("spdx_", "") if license_string.startswith("spdx_") else ""
         if license_id:
-            license_name = spdx_license_dict.get(license_id, "").name
-            reference = spdx_license_dict.get(license_id, "").reference
-            osi = spdx_license_dict.get(license_id, "").is_osi_approved
-            deprecated = spdx_license_dict.get(license_id, "").is_deprecated
+            spdx_license = spdx_license_dict.get(license_id)
+            if spdx_license:
+                license_name = spdx_license.name
+                reference = spdx_license.reference
+                osi = spdx_license.is_osi_approved if spdx_license.is_osi_approved is not None else False
+                deprecated = spdx_license.is_deprecated if spdx_license.is_deprecated is not None else False
+            else:
+                logger.warning(f"SPDX license {license_id} not found in database.")
+                continue
         else:
             license_name = license_string.replace("expression_", "") if license_string.startswith("expression_") else ""
             if not license_name:
@@ -77,6 +84,7 @@ def _create_license_policy_export(
         family = license_id if license_id else license_name
         # replace everything that is not a letter, number or dash with a dash
         family = "".join(char if char.isalnum() or char == "-" else "-" for char in family)
+        notes = [evaluation_result.comment] if evaluation_result.comment else None
 
         if evaluation_result.evaluation_result == License_Policy_Evaluation_Result.RESULT_ALLOWED:
             usagePolicy = USAGE_POLICY.POLICY_ALLOW
@@ -101,7 +109,7 @@ def _create_license_policy_export(
             deprecated=deprecated,
             usagePolicy=usagePolicy,
             annotationRefs=annotationRefs,
-            notes=[evaluation_result.comment],
+            notes=notes,
         )
 
         license_policy_export.policies.append(license_policy_export_item)

@@ -98,12 +98,12 @@ from application.licenses.queries.license_policy_member import (
     get_license_policy_member,
     get_license_policy_members,
 )
+from application.licenses.services.export_license_policy_sbom_utility import (
+    export_license_policy_sbom_utility,
+)
 from application.licenses.services.export_license_policy_secobserve import (
     export_license_policy_secobserve_json,
     export_license_policy_secobserve_yaml,
-)
-from application.licenses.services.export_license_policy_sbom_utility import (
-    export_license_policy_sbom_utility,
 )
 from application.licenses.services.license_group import (
     copy_license_group,
