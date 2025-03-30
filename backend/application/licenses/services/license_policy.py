@@ -14,6 +14,7 @@ from license_expression import (
 from application.commons.services.functions import get_comma_separated_as_list
 from application.core.models import Product
 from application.licenses.models import (
+    License,
     License_Component,
     License_Policy,
     License_Policy_Item,
@@ -174,6 +175,8 @@ def apply_license_policy_to_component(
         evaluation_result = _evaluate_license_expression(component.license_expression, evaluation_results)
     elif component.non_spdx_license:
         evaluation_result = _get_license_evaluation_result(f"non_spdx_{component.non_spdx_license}", evaluation_results)
+    elif component.multiple_licenses:
+        evaluation_result = _get_multiple_licenses_evaluation_result(component.multiple_licenses, evaluation_results)
     if not evaluation_result:
         evaluation_result = License_Policy_Evaluation_Result.RESULT_UNKNOWN
 
@@ -198,6 +201,22 @@ def _get_license_evaluation_result(
         return evaluation_result.evaluation_result
 
     return License_Policy_Evaluation_Result.RESULT_UNKNOWN
+
+
+def _get_multiple_licenses_evaluation_result(
+    multiple_licenses: str, evaluation_results: dict[str, LicensePolicyEvaluationResult]
+) -> str:
+    licenses = get_comma_separated_as_list(multiple_licenses)
+    spdx_licenses = License.objects.filter(spdx_id__in=licenses).values_list("spdx_id", flat=True)
+
+    evaluation_result_set = set()
+    for license_string in licenses:
+        if license_string in spdx_licenses:
+            evaluation_result_set.add(_get_license_evaluation_result(f"spdx_{license_string}", evaluation_results))
+        else:
+            evaluation_result_set.add(_get_license_evaluation_result(f"non_spdx_{license_string}", evaluation_results))
+
+    return _evaluate_and_expression(evaluation_result_set)
 
 
 def _evaluate_license_expression(

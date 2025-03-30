@@ -186,8 +186,7 @@
             "licenses": [
                 {
                     "license": {
-                        "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "name": "attrs non-standard license"
                     }
                 }
             ],
