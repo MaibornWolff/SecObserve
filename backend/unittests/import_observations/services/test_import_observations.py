@@ -406,6 +406,12 @@ class TestImportObservations(BaseTestCase):
         kubernetes_cluster,
         suppress_licenses,
     ):
+        try:
+            license_policy_standard = License_Policy.objects.get(name="Standard")
+        except License_Policy.DoesNotExist:
+            call_command("loaddata", "application/licenses/fixtures/initial_data.json")
+            license_policy_standard = License_Policy.objects.get(name="Standard")
+
         License_Component.objects.all().delete()
 
         # --- First import without license policy ---
@@ -479,13 +485,27 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
 
             self.assertEqual(license_components[3].component_name_version, "asgiref:3.8.1")
             self.assertEqual(license_components[3].license, None)
-            self.assertEqual(license_components[3].non_spdx_license, "0BSD, BSD-3-Clause")
+            self.assertEqual(license_components[3].multiple_licenses, "0BSD, BSD-3-Clause")
             self.assertEqual(
                 license_components[3].evaluation_result,
                 License_Policy_Evaluation_Result.RESULT_UNKNOWN,
             )
             self.assertEqual(
                 license_components[3].numerical_evaluation_result,
+                License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
+                    License_Policy_Evaluation_Result.RESULT_UNKNOWN,
+                ),
+            )
+
+            self.assertEqual(license_components[4].component_name_version, "attrs:24.2.0")
+            self.assertEqual(license_components[4].license, None)
+            self.assertEqual(license_components[4].non_spdx_license, "attrs non-standard license")
+            self.assertEqual(
+                license_components[4].evaluation_result,
+                License_Policy_Evaluation_Result.RESULT_UNKNOWN,
+            )
+            self.assertEqual(
+                license_components[4].numerical_evaluation_result,
                 License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
                     License_Policy_Evaluation_Result.RESULT_UNKNOWN,
                 ),
@@ -510,11 +530,11 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
         # --- Second import with license policy ---
 
         product = Product.objects.get(id=1)
-        product.license_policy = License_Policy.objects.get(name="Standard")
+        product.license_policy = license_policy_standard
         product.save()
 
         license_policy_item = License_Policy_Item(
-            license_policy=License_Policy.objects.get(name="Standard"),
+            license_policy=license_policy_standard,
             license_group=None,
             license=None,
             license_expression="GPL-2.0-or-later WITH Bison-exception-2.2",
@@ -579,13 +599,27 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
 
             self.assertEqual(license_components[3].component_name_version, "asgiref:3.8.1")
             self.assertEqual(license_components[3].license, None)
-            self.assertEqual(license_components[3].non_spdx_license, "0BSD, BSD-3-Clause")
+            self.assertEqual(license_components[3].multiple_licenses, "0BSD, BSD-3-Clause")
             self.assertEqual(
                 license_components[3].evaluation_result,
-                License_Policy_Evaluation_Result.RESULT_UNKNOWN,
+                License_Policy_Evaluation_Result.RESULT_ALLOWED,
             )
             self.assertEqual(
                 license_components[3].numerical_evaluation_result,
+                License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
+                    License_Policy_Evaluation_Result.RESULT_ALLOWED,
+                ),
+            )
+
+            self.assertEqual(license_components[4].component_name_version, "attrs:24.2.0")
+            self.assertEqual(license_components[4].license, None)
+            self.assertEqual(license_components[4].non_spdx_license, "attrs non-standard license")
+            self.assertEqual(
+                license_components[4].evaluation_result,
+                License_Policy_Evaluation_Result.RESULT_UNKNOWN,
+            )
+            self.assertEqual(
+                license_components[4].numerical_evaluation_result,
                 License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
                     License_Policy_Evaluation_Result.RESULT_UNKNOWN,
                 ),
@@ -660,20 +694,30 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
 
         # --- Third import with some changes ---
 
-        license_policy = License_Policy.objects.get(name="Standard")
+        license_policy = license_policy_standard
         license_policy.ignore_component_types = "npm"
         license_policy.save()
 
         license_policy_item = License_Policy_Item(
-            license_policy=License_Policy.objects.get(name="Standard"),
+            license_policy=license_policy_standard,
             license_group=None,
-            license=None,
-            non_spdx_license="0BSD, BSD-3-Clause",
-            evaluation_result=License_Policy_Evaluation_Result.RESULT_REVIEW_REQUIRED,
+            license=License.objects.get(spdx_id="0BSD"),
+            non_spdx_license="",
+            evaluation_result=License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
         )
         license_policy_item.save()
+
         license_policy_item = License_Policy_Item(
-            license_policy=License_Policy.objects.get(name="Standard"),
+            license_policy=license_policy_standard,
+            license_group=None,
+            license=None,
+            non_spdx_license="attrs non-standard license",
+            evaluation_result=License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
+        )
+        license_policy_item.save()
+
+        license_policy_item = License_Policy_Item(
+            license_policy=license_policy_standard,
             license_group=None,
             license=License.objects.get(spdx_id="MIT"),
             non_spdx_license="",
@@ -681,9 +725,8 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
         )
         license_policy_item.save()
 
-        license_policy_item.save()
         license_policy_item = License_Policy_Item(
-            license_policy=License_Policy.objects.get(name="Standard"),
+            license_policy=license_policy_standard,
             license_group=None,
             license=License.objects.get(spdx_id="Apache-2.0"),
             non_spdx_license="",
@@ -747,15 +790,29 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
 
             self.assertEqual(license_components[2].component_name_version, "asgiref:3.8.1")
             self.assertEqual(license_components[2].license, None)
-            self.assertEqual(license_components[2].non_spdx_license, "0BSD, BSD-3-Clause")
+            self.assertEqual(license_components[2].multiple_licenses, "0BSD, BSD-3-Clause")
             self.assertEqual(
                 license_components[2].evaluation_result,
-                License_Policy_Evaluation_Result.RESULT_REVIEW_REQUIRED,
+                License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
             )
             self.assertEqual(
                 license_components[2].numerical_evaluation_result,
                 License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
-                    License_Policy_Evaluation_Result.RESULT_REVIEW_REQUIRED,
+                    License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
+                ),
+            )
+
+            self.assertEqual(license_components[3].component_name_version, "attrs:24.2.0")
+            self.assertEqual(license_components[3].license, None)
+            self.assertEqual(license_components[3].non_spdx_license, "attrs non-standard license")
+            self.assertEqual(
+                license_components[3].evaluation_result,
+                License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
+            )
+            self.assertEqual(
+                license_components[3].numerical_evaluation_result,
+                License_Policy_Evaluation_Result.NUMERICAL_RESULTS.get(
+                    License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
                 ),
             )
 
@@ -828,7 +885,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
 
         # --- Fourth import with ignoring the PiPy packages ---
 
-        license_policy = License_Policy.objects.get(name="Standard")
+        license_policy = license_policy_standard
         license_policy.ignore_component_types = "npm, pypi"
         license_policy.save()
 
@@ -888,7 +945,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
 
             self.assertEqual(license_components[2].component_name_version, "asgiref:3.8.1")
             self.assertEqual(license_components[2].license, None)
-            self.assertEqual(license_components[2].non_spdx_license, "0BSD, BSD-3-Clause")
+            self.assertEqual(license_components[2].multiple_licenses, "0BSD, BSD-3-Clause")
             self.assertEqual(
                 license_components[2].evaluation_result,
                 License_Policy_Evaluation_Result.RESULT_IGNORED,

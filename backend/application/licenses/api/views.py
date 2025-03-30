@@ -189,6 +189,9 @@ class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
             elif element["non_spdx_license"]:
                 license_name = element["non_spdx_license"]
                 element_type = "Non-SPDX"
+            elif element["multiple_licenses"]:
+                license_name = element["multiple_licenses"]
+                element_type = "Multiple"
             else:
                 license_name = "No license information"
                 element_type = ""
