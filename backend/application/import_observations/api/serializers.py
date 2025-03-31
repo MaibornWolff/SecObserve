@@ -45,6 +45,18 @@ class FileUploadObservationsByNameRequestSerializer(Serializer):
     suppress_licenses = BooleanField(required=False)
 
 
+class FileUploadSBOMByIdRequestSerializer(Serializer):
+    file = FileField(max_length=255)
+    product = IntegerField(validators=[MinValueValidator(0)])
+    branch = IntegerField(validators=[MinValueValidator(0)], required=False)
+
+
+class FileUploadSBOMByNameRequestSerializer(Serializer):
+    file = FileField(max_length=255)
+    product_name = CharField(max_length=255)
+    branch_name = CharField(max_length=255, required=False)
+
+
 class ApiImportObservationsByIdRequestSerializer(Serializer):
     api_configuration = IntegerField(validators=[MinValueValidator(0)])
     branch = IntegerField(validators=[MinValueValidator(0)], required=False)
@@ -67,6 +79,12 @@ class FileImportObservationsResponseSerializer(Serializer):
     observations_new = IntegerField()
     observations_updated = IntegerField()
     observations_resolved = IntegerField()
+    license_components_new = IntegerField()
+    license_components_updated = IntegerField()
+    license_components_deleted = IntegerField()
+
+
+class FileImportSBOMResponseSerializer(Serializer):
     license_components_new = IntegerField()
     license_components_updated = IntegerField()
     license_components_deleted = IntegerField()

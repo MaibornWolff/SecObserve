@@ -120,6 +120,7 @@ class TestImportObservations(BaseTestCase):
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
             suppress_licenses=False,
+            sbom=False,
         )
 
         (
@@ -220,6 +221,7 @@ class TestImportObservations(BaseTestCase):
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
             suppress_licenses=False,
+            sbom=False,
         )
 
         (
@@ -317,6 +319,7 @@ class TestImportObservations(BaseTestCase):
             "test_endpoint_url",
             "test_kubernetes_cluster",
             suppress_licenses=False,
+            sbom=True,
         )
 
         self.assertEqual(mock_get_license_components.call_count, 0)
@@ -358,6 +361,7 @@ class TestImportObservations(BaseTestCase):
             "test_endpoint_url",
             "test_kubernetes_cluster",
             suppress_licenses=True,
+            sbom=False,
         )
 
         self.assertEqual(mock_get_license_components.call_count, 0)
@@ -395,6 +399,7 @@ class TestImportObservations(BaseTestCase):
             "test_endpoint_url",
             "test_kubernetes_cluster",
             suppress_licenses=False,
+            sbom=True,
         )
 
     def _file_upload_licenses(
@@ -405,6 +410,7 @@ class TestImportObservations(BaseTestCase):
         endpoint_url,
         kubernetes_cluster,
         suppress_licenses,
+        sbom,
     ):
         try:
             license_policy_standard = License_Policy.objects.get(name="Standard")
@@ -430,6 +436,7 @@ class TestImportObservations(BaseTestCase):
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
             suppress_licenses=suppress_licenses,
+            sbom=sbom,
         )
 
         (
@@ -557,6 +564,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
             suppress_licenses=suppress_licenses,
+            sbom=sbom,
         )
 
         (
@@ -748,6 +756,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
             suppress_licenses=suppress_licenses,
+            sbom=sbom,
         )
 
         (
@@ -903,6 +912,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
             suppress_licenses=suppress_licenses,
+            sbom=sbom,
         )
 
         (

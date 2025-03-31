@@ -29,6 +29,10 @@ class SPDXParser(BaseParser, BaseFileParser):
     def get_type(cls) -> str:
         return Parser_Type.TYPE_SCA
 
+    @classmethod
+    def sbom(cls) -> bool:
+        return True
+
     def check_format(self, data: Any) -> bool:
         if isinstance(data, dict) and data.get("SPDXID") and (data.get("SPDXVersion") or data.get("spdxVersion")):
             return True

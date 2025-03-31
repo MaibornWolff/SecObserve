@@ -14,12 +14,12 @@ import {
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
 import Toolbar from "../../commons/custom_fields/Toolbar";
-import { validate_255, validate_513, validate_2048, validate_required } from "../../commons/custom_validators";
+import { validate_required } from "../../commons/custom_validators";
 import { getIconAndFontColor } from "../../commons/functions";
-import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
-const FileUploadObservations = () => {
+const FileUploadSBOM = () => {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const refresh = useRefresh();
@@ -35,7 +35,7 @@ const FileUploadObservations = () => {
         setLoading(false);
     };
 
-    const observationUpdate = async (data: any) => {
+    const uploadSBOM = async (data: any) => {
         setLoading(true);
 
         const formData = new FormData();
@@ -44,54 +44,19 @@ const FileUploadObservations = () => {
         if (data.branch) {
             formData.append("branch", data.branch);
         }
-        if (data.service) {
-            formData.append("service", data.service);
-        }
-        if (data.docker_image_name_tag) {
-            formData.append("docker_image_name_tag", data.docker_image_name_tag);
-        }
-        if (data.endpoint_url) {
-            formData.append("endpoint_url", data.endpoint_url);
-        }
-        if (data.kubernetes_cluster) {
-            formData.append("kubernetes_cluster", data.kubernetes_cluster);
-        }
-        formData.append("suppress_licenses", "true");
 
-        httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/import/file_upload_observations_by_id/", {
+        httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/import/file_upload_sbom_by_id/", {
             method: "POST",
             body: formData,
         })
             .then((result) => {
-                const observations =
-                    result.json.observations_new +
-                        result.json.observations_updated +
-                        result.json.observations_resolved >
-                    0;
-                const license_components =
+                const message =
                     result.json.license_components_new +
-                        result.json.license_components_updated +
-                        result.json.license_components_deleted >
-                    0;
-                let message = "";
-                if (observations || !license_components)
-                    message +=
-                        result.json.observations_new +
-                        " new observations\n" +
-                        result.json.observations_updated +
-                        " updated observations\n" +
-                        result.json.observations_resolved +
-                        " resolved observations";
-                if (observations && license_components) message += "\n";
-                if (license_components) {
-                    message +=
-                        result.json.license_components_new +
-                        " new license components\n" +
-                        result.json.license_components_updated +
-                        " updated license components\n" +
-                        result.json.license_components_deleted +
-                        " deleted license components";
-                }
+                    " new license components\n" +
+                    result.json.license_components_updated +
+                    " updated license components\n" +
+                    result.json.license_components_deleted +
+                    " deleted license components";
                 refresh();
                 setLoading(false);
                 setOpen(false);
@@ -133,16 +98,16 @@ const FileUploadObservations = () => {
                 }}
                 startIcon={<UploadIcon sx={{ color: getIconAndFontColor() }} />}
             >
-                Upload observations from file
+                Upload SBOM from file
             </Button>
             <Dialog open={open && !loading} onClose={handleClose}>
-                <DialogTitle>Upload observations from file</DialogTitle>
+                <DialogTitle>Upload SBOM from file</DialogTitle>
                 <DialogContent>
-                    <SimpleForm onSubmit={observationUpdate} toolbar={<CustomToolbar />}>
+                    <SimpleForm onSubmit={uploadSBOM} toolbar={<CustomToolbar />}>
                         <FileInput
                             source="file"
-                            label="Scan report"
-                            accept={{ "application/octet-stream": [".csv, .json, .sarif"] }}
+                            label="SBOM"
+                            accept={{ "application/octet-stream": [".json"] }}
                             validate={validate_required}
                         >
                             <FileField source="src" title="title" />
@@ -169,14 +134,6 @@ const FileUploadObservations = () => {
                                 </Fragment>
                             )}
                         />
-                        <TextInputWide source="service" validate={validate_255} />
-                        <TextInputWide
-                            source="docker_image_name_tag"
-                            label="Docker image name:tag"
-                            validate={validate_513}
-                        />
-                        <TextInputWide label="Endpoint URL" source="endpoint_url" validate={validate_2048} />
-                        <TextInputWide source="kubernetes_cluster" validate={validate_255} />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>
@@ -189,4 +146,4 @@ const FileUploadObservations = () => {
     );
 };
 
-export default FileUploadObservations;
+export default FileUploadSBOM;

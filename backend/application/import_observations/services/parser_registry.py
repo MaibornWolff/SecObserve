@@ -21,6 +21,7 @@ def register_parser(module_name: str, class_name: str) -> None:
 
     name = parser_class.get_name()
     my_type = parser_class.get_type()
+    sbom = parser_class.sbom() if hasattr(parser_class, "sbom") else False
 
     source = Parser_Source.SOURCE_OTHER
     for base in parser_class.__bases__:
@@ -42,6 +43,9 @@ def register_parser(module_name: str, class_name: str) -> None:
             changed = True
         if parser.source != source:
             parser.source = source
+            changed = True
+        if hasattr(parser_class, "sbom") and parser.sbom != sbom:
+            parser.sbom = sbom
             changed = True
         if changed:
             parser.save()
