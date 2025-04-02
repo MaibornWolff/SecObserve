@@ -18,6 +18,15 @@ jobs:
         with:
           so_configuration: 'so_configuration_code.yml'
           SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
+
+  check_code_sonarqube_backend:
+    runs-on: ubuntu-latest
+    steps:
+      - 
+        name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0  
       - 
         name: Run SonarQube scan for backend
         uses: SonarSource/sonarqube-scan-action@v5
