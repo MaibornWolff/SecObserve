@@ -115,7 +115,10 @@ const MetricsSeveritiesCurrent = (props: MetricsSeveritiesCurrentProps) => {
                                     circular: true,
                                     color: getGridColor(),
                                 },
+                                min: 0,
+                                suggestedMax: 5,
                                 ticks: {
+                                    precision: 0,
                                     backdropColor: getBackgroundColor(),
                                     color: getFontColor(),
                                 },
