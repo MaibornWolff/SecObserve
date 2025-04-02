@@ -14,13 +14,15 @@ Alternatively observations can be imported via the user interface. When showing 
 
 ![Upload of files](../assets/images/screenshot_import_2.png){ width="50%" style="display: block; margin: 0 auto" }
 
-A file needs to be selected. The parser to interpret the content of the file will be detected automatically. Optional are attributes for the branch / version, the origin as service, docker image, endpoint URL and Kubernetes cluster. If `Supress licenses` is checked, no licenses will be imported, only observations.
+A file needs to be selected. The parser to interpret the content of the file will be detected automatically. Optional are attributes for the branch / version, service, docker image, endpoint URL and Kubernetes cluster.
+
+When uploading a CycloneDX file here, only the vulnerabilities will be imported. To import all components with their licenses, [Upload SBOM](../usage/upload_sbom.md) has to be used.
 
 #### API import
 
 ![API import](../assets/images/screenshot_import_3.png){ width="50%" style="display: block; margin: 0 auto" }
 
-Before importing observations from an API, an API configuration needs to be created for the product. This API configuration specifies how to access the API (URL, API key,Query, Basic Authentication, SSL Verify, ...). Optional for the import are attributes for the branch / version, the origin as service, docker image, endpoint URL and Kubernetes cluster.
+Before importing observations from an API, an API configuration needs to be created for the product. This API configuration specifies how to access the API (URL, API key,Query, Basic Authentication, SSL Verify, ...). Optional for the import are attributes for the branch / version, service, docker image, endpoint URL and Kubernetes cluster.
 
 ## Import algorithm
 

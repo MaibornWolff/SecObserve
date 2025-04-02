@@ -64,6 +64,7 @@ nav:
     - Upgrading: getting_started/upgrading.md
   - Usage:
     - Import observations: usage/import_observations.md
+    - Upload SBOM: usage/upload_sbom.md
     - Assess observations: usage/assess_observations.md
     - Product groups: usage/product_groups.md
     - Branches and Versions: usage/branches.md
