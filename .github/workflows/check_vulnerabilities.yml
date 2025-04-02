@@ -18,3 +18,10 @@ jobs:
         with:
           so_configuration: 'so_configuration_code.yml'
           SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
+      - 
+        name: Run SonarQube scan for backend
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: backend
