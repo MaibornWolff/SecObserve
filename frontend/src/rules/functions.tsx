@@ -3,8 +3,7 @@ import { BooleanField, ChipField, DateField, Labeled, ReferenceField, TextField 
 
 import MarkdownField from "../commons/custom_fields/MarkdownField";
 import TextUrlField from "../commons/custom_fields/TextUrlField";
-import { feature_vex_enabled } from "../commons/functions";
-import { feature_general_rules_need_approval_enabled } from "../commons/functions";
+import { feature_general_rules_need_approval_enabled, feature_vex_enabled } from "../commons/functions";
 import { useStyles } from "../commons/layout/themes";
 import general_rules from "./general_rules";
 import product_rules from "./product_rules";

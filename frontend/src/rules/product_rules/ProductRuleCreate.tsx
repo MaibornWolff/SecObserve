@@ -29,8 +29,7 @@ import {
     OBSERVATION_STATUS_OPEN,
     OBSERVATION_VEX_JUSTIFICATION_CHOICES,
 } from "../../core/types";
-import { validateRuleForm } from "../functions";
-import { non_duplicate_transform } from "../functions";
+import { non_duplicate_transform, validateRuleForm } from "../functions";
 
 export type ProductRuleCreateProps = {
     id: any;
