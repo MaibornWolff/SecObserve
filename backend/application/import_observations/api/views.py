@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.db.models import QuerySet
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
@@ -10,13 +12,14 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.serializers import Serializer
 from rest_framework.status import HTTP_404_NOT_FOUND
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from application.access_control.services.authorization import user_has_permission_or_403
 from application.access_control.services.roles_permissions import Permissions
-from application.core.models import Branch
+from application.core.models import Branch, Product
 from application.core.queries.branch import get_branch_by_id, get_branch_by_name
 from application.core.queries.product import get_product_by_id, get_product_by_name
 from application.import_observations.api.filters import (
@@ -184,8 +187,7 @@ class FileUploadObservationsById(APIView):
         request=FileUploadObservationsByIdRequestSerializer,
         responses={status.HTTP_200_OK: FileImportObservationsResponseSerializer},
     )
-    def post(self, request: Request) -> Response:  # pylint: disable=too-many-locals
-        # not too much we can do about this
+    def post(self, request: Request) -> Response:
         request_serializer = FileUploadObservationsByIdRequestSerializer(data=request.data)
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
@@ -204,47 +206,7 @@ class FileUploadObservationsById(APIView):
             if not branch:
                 raise ValidationError(f"Branch {branch_id} does not exist for product {product}")
 
-        file = request_serializer.validated_data.get("file")
-        service = request_serializer.validated_data.get("service")
-        docker_image_name_tag = request_serializer.validated_data.get("docker_image_name_tag")
-        endpoint_url = request_serializer.validated_data.get("endpoint_url")
-        kubernetes_cluster = request_serializer.validated_data.get("kubernetes_cluster")
-        suppress_licenses = request_serializer.validated_data.get("suppress_licenses", False)
-
-        file_upload_parameters = FileUploadParameters(
-            product=product,
-            branch=branch,
-            file=file,
-            service=service,
-            docker_image_name_tag=docker_image_name_tag,
-            endpoint_url=endpoint_url,
-            kubernetes_cluster=kubernetes_cluster,
-            suppress_licenses=suppress_licenses,
-            sbom=False,
-        )
-
-        (
-            observations_new,
-            observations_updated,
-            observations_resolved,
-            license_components_new,
-            license_components_updated,
-            license_components_deleted,
-        ) = file_upload_observations(file_upload_parameters)
-
-        num_observations = observations_new + observations_updated + observations_resolved
-        num_license_components = license_components_new + license_components_updated + license_components_deleted
-
-        response_data = {}
-        if num_observations > 0 or num_license_components == 0:
-            response_data["observations_new"] = observations_new
-            response_data["observations_updated"] = observations_updated
-            response_data["observations_resolved"] = observations_resolved
-        if num_license_components > 0:
-            response_data["license_components_new"] = license_components_new
-            response_data["license_components_updated"] = license_components_updated
-            response_data["license_components_deleted"] = license_components_deleted
-
+        response_data = _file_upload_observations(request_serializer, product, branch)
         return Response(response_data)
 
 
@@ -255,8 +217,7 @@ class FileUploadObservationsByName(APIView):
         request=FileUploadObservationsByNameRequestSerializer,
         responses={status.HTTP_200_OK: FileImportObservationsResponseSerializer},
     )
-    def post(self, request: Request) -> Response:  # pylint: disable=too-many-locals
-        # not too much we can do about this
+    def post(self, request: Request) -> Response:
         request_serializer = FileUploadObservationsByNameRequestSerializer(data=request.data)
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
@@ -275,48 +236,54 @@ class FileUploadObservationsByName(APIView):
             if not branch:
                 branch = Branch.objects.create(product=product, name=branch_name)
 
-        file = request_serializer.validated_data.get("file")
-        service = request_serializer.validated_data.get("service")
-        docker_image_name_tag = request_serializer.validated_data.get("docker_image_name_tag")
-        endpoint_url = request_serializer.validated_data.get("endpoint_url")
-        kubernetes_cluster = request_serializer.validated_data.get("kubernetes_cluster")
-        suppress_licenses = request_serializer.validated_data.get("suppress_licenses", False)
-
-        file_upload_parameters = FileUploadParameters(
-            product=product,
-            branch=branch,
-            file=file,
-            service=service,
-            docker_image_name_tag=docker_image_name_tag,
-            endpoint_url=endpoint_url,
-            kubernetes_cluster=kubernetes_cluster,
-            suppress_licenses=suppress_licenses,
-            sbom=False,
-        )
-
-        (
-            observations_new,
-            observations_updated,
-            observations_resolved,
-            license_components_new,
-            license_components_updated,
-            license_components_deleted,
-        ) = file_upload_observations(file_upload_parameters)
-
-        num_observations = observations_new + observations_updated + observations_resolved
-        num_license_components = license_components_new + license_components_updated + license_components_deleted
-
-        response_data = {}
-        if num_observations > 0 or num_license_components == 0:
-            response_data["observations_new"] = observations_new
-            response_data["observations_updated"] = observations_updated
-            response_data["observations_resolved"] = observations_resolved
-        if num_license_components > 0:
-            response_data["license_components_new"] = license_components_new
-            response_data["license_components_updated"] = license_components_updated
-            response_data["license_components_deleted"] = license_components_deleted
-
+        response_data = _file_upload_observations(request_serializer, product, branch)
         return Response(response_data)
+
+
+def _file_upload_observations(
+    request_serializer: Serializer, product: Product, branch: Optional[Branch]
+) -> dict[str, int]:
+    file = request_serializer.validated_data.get("file")
+    service = request_serializer.validated_data.get("service")
+    docker_image_name_tag = request_serializer.validated_data.get("docker_image_name_tag")
+    endpoint_url = request_serializer.validated_data.get("endpoint_url")
+    kubernetes_cluster = request_serializer.validated_data.get("kubernetes_cluster")
+    suppress_licenses = request_serializer.validated_data.get("suppress_licenses", False)
+
+    file_upload_parameters = FileUploadParameters(
+        product=product,
+        branch=branch,
+        file=file,
+        service=service,
+        docker_image_name_tag=docker_image_name_tag,
+        endpoint_url=endpoint_url,
+        kubernetes_cluster=kubernetes_cluster,
+        suppress_licenses=suppress_licenses,
+        sbom=False,
+    )
+
+    (
+        observations_new,
+        observations_updated,
+        observations_resolved,
+        license_components_new,
+        license_components_updated,
+        license_components_deleted,
+    ) = file_upload_observations(file_upload_parameters)
+
+    num_observations = observations_new + observations_updated + observations_resolved
+    num_license_components = license_components_new + license_components_updated + license_components_deleted
+
+    response_data = {}
+    if num_observations > 0 or num_license_components == 0:
+        response_data["observations_new"] = observations_new
+        response_data["observations_updated"] = observations_updated
+        response_data["observations_resolved"] = observations_resolved
+    if num_license_components > 0:
+        response_data["license_components_new"] = license_components_new
+        response_data["license_components_updated"] = license_components_updated
+        response_data["license_components_deleted"] = license_components_deleted
+    return response_data
 
 
 class FileUploadSBOMById(APIView):
@@ -326,8 +293,7 @@ class FileUploadSBOMById(APIView):
         request=FileUploadSBOMByIdRequestSerializer,
         responses={status.HTTP_200_OK: FileImportSBOMResponseSerializer},
     )
-    def post(self, request: Request) -> Response:  # pylint: disable=too-many-locals
-        # not too much we can do about this
+    def post(self, request: Request) -> Response:
         request_serializer = FileUploadSBOMByIdRequestSerializer(data=request.data)
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
@@ -346,37 +312,7 @@ class FileUploadSBOMById(APIView):
             if not branch:
                 raise ValidationError(f"Branch {branch_id} does not exist for product {product}")
 
-        file = request_serializer.validated_data.get("file")
-
-        file_upload_parameters = FileUploadParameters(
-            product=product,
-            branch=branch,
-            file=file,
-            service="",
-            docker_image_name_tag="",
-            endpoint_url="",
-            kubernetes_cluster="",
-            suppress_licenses=False,
-            sbom=True,
-        )
-
-        (
-            _,
-            _,
-            _,
-            license_components_new,
-            license_components_updated,
-            license_components_deleted,
-        ) = file_upload_observations(file_upload_parameters)
-
-        num_license_components = license_components_new + license_components_updated + license_components_deleted
-
-        response_data = {}
-        if num_license_components > 0:
-            response_data["license_components_new"] = license_components_new
-            response_data["license_components_updated"] = license_components_updated
-            response_data["license_components_deleted"] = license_components_deleted
-
+        response_data = _file_upload_sbom(request_serializer, product, branch)
         return Response(response_data)
 
 
@@ -387,8 +323,7 @@ class FileUploadSBOMByName(APIView):
         request=FileUploadSBOMByNameRequestSerializer,
         responses={status.HTTP_200_OK: FileImportSBOMResponseSerializer},
     )
-    def post(self, request: Request) -> Response:  # pylint: disable=too-many-locals
-        # not too much we can do about this
+    def post(self, request: Request) -> Response:
         request_serializer = FileUploadSBOMByNameRequestSerializer(data=request.data)
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
@@ -407,38 +342,42 @@ class FileUploadSBOMByName(APIView):
             if not branch:
                 branch = Branch.objects.create(product=product, name=branch_name)
 
-        file = request_serializer.validated_data.get("file")
-
-        file_upload_parameters = FileUploadParameters(
-            product=product,
-            branch=branch,
-            file=file,
-            service="",
-            docker_image_name_tag="",
-            endpoint_url="",
-            kubernetes_cluster="",
-            suppress_licenses=False,
-            sbom=True,
-        )
-
-        (
-            _,
-            _,
-            _,
-            license_components_new,
-            license_components_updated,
-            license_components_deleted,
-        ) = file_upload_observations(file_upload_parameters)
-
-        num_license_components = license_components_new + license_components_updated + license_components_deleted
-
-        response_data = {}
-        if num_license_components > 0:
-            response_data["license_components_new"] = license_components_new
-            response_data["license_components_updated"] = license_components_updated
-            response_data["license_components_deleted"] = license_components_deleted
-
+        response_data = _file_upload_sbom(request_serializer, product, branch)
         return Response(response_data)
+
+
+def _file_upload_sbom(request_serializer: Serializer, product: Product, branch: Optional[Branch]) -> dict[str, int]:
+    file = request_serializer.validated_data.get("file")
+
+    file_upload_parameters = FileUploadParameters(
+        product=product,
+        branch=branch,
+        file=file,
+        service="",
+        docker_image_name_tag="",
+        endpoint_url="",
+        kubernetes_cluster="",
+        suppress_licenses=False,
+        sbom=True,
+    )
+
+    (
+        _,
+        _,
+        _,
+        license_components_new,
+        license_components_updated,
+        license_components_deleted,
+    ) = file_upload_observations(file_upload_parameters)
+
+    num_license_components = license_components_new + license_components_updated + license_components_deleted
+
+    response_data = {}
+    if num_license_components > 0:
+        response_data["license_components_new"] = license_components_new
+        response_data["license_components_updated"] = license_components_updated
+        response_data["license_components_deleted"] = license_components_deleted
+    return response_data
 
 
 class ApiConfigurationViewSet(ModelViewSet):
