@@ -112,6 +112,9 @@ class SettingsView(APIView):
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
 
+        if request_serializer.validated_data.get("feature_automatic_osv_scanning"):
+            request_serializer.validated_data["feature_license_management"] = True
+
         settings = Settings.load()
         request_serializer.update(settings, request_serializer.validated_data)
 
