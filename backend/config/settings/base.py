@@ -5,6 +5,7 @@ Base settings to build other settings files upon.
 from pathlib import Path
 
 import environ
+from csp.constants import NONE, SELF
 
 from application.__init__ import __version__
 
@@ -266,11 +267,15 @@ SECURE_BROWSER_XSS_FILTER = False
 # https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options
 X_FRAME_OPTIONS = "DENY"
 # https://django-csp.readthedocs.io/en/latest/configuration.html
-CSP_SCRIPT_SRC = ("'self'",)
-CSP_OBJECT_SRC = ("'none'",)
-CSP_BASE_URI = ("'none'",)
-CSP_FRAME_ANCESTORS = ("'self'",)
-CSP_FORM_ACTION = ("'self'",)
+CONTENT_SECURITY_POLICY = {
+    "DIRECTIVES": {
+        "script-src": [SELF],
+        "object-src": [NONE],
+        "frame-ancestors": [SELF],
+        "form-action": [SELF],
+        "base-uri": [NONE],
+    },
+}
 # https://docs.djangoproject.com/en/dev/ref/middleware/#http-strict-transport-security
 SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_PRELOAD = True
