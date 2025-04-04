@@ -87,7 +87,7 @@ const BranchEdit = ({ product }: BranchEditProps) => {
                         <TextInputWide source="purl" label="PURL" validate={validate_255} />
                         <TextInputWide source="cpe23" label="CPE 2.3" validate={validate_255} />
                         <BooleanInput source="housekeeping_protect" label="Protect from housekeeping" />
-                        {product && product.osv_enabled && (
+                        {product?.osv_enabled && (
                             <Stack direction="row" spacing={2} alignItems="center">
                                 <OSVLinuxDistributionInput />
                             </Stack>

@@ -80,7 +80,7 @@ const BranchCreate = ({ product }: BranchCreateProps) => {
                                 label="Protect from housekeeping"
                                 defaultValue={false}
                             />
-                            {product && product.osv_enabled && (
+                            {product?.osv_enabled && (
                                 <Stack direction="row" spacing={2} alignItems="center">
                                     <OSVLinuxDistributionInput />
                                 </Stack>

@@ -39,7 +39,7 @@ const ShowActions = () => {
                     rule.product_data.permissions.includes(PERMISSION_PRODUCT_RULE_APPROVAL) && (
                         <RuleApproval rule_id={rule.id} class="product_rules" />
                     )}
-                {rule && rule.product_data.permissions.includes(PERMISSION_PRODUCT_RULE_EDIT) && <EditButton />}
+                {rule?.product_data.permissions.includes(PERMISSION_PRODUCT_RULE_EDIT) && <EditButton />}
             </Stack>
         </TopToolbar>
     );

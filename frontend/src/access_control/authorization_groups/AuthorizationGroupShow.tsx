@@ -28,7 +28,7 @@ const ShowActions = () => {
                     filterDefaultValues={{ is_active: true }}
                     storeKey="authorization_groups.embedded"
                 />
-                {((authorization_group && authorization_group.is_manager) || is_superuser()) && <EditButton />}
+                {(authorization_group?.is_manager || is_superuser()) && <EditButton />}
             </Stack>
         </TopToolbar>
     );

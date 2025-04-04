@@ -16,11 +16,11 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
     const [, setTheme] = useTheme();
     const auth = useAuth();
-    const [feature_disable_user_login, setFeatureDisableUserLogin] = useState(false);
+    const [featureDisableUserLogin, setFeatureDisableUserLogin] = useState(false);
     const notify = useNotify();
     const login = useLogin();
     const location = useLocation();
-    const [new_location, setNewLocation] = useState("/");
+    const [newLocation, setNewLocation] = useState("/");
 
     const isAuthenticated = jwt_signed_in() || oidc_signed_in();
 
@@ -103,14 +103,14 @@ const Login = () => {
     function show_user_login() {
         return (
             window.__RUNTIME_CONFIG__.OIDC_ENABLE == "false" ||
-            !feature_disable_user_login ||
+            !featureDisableUserLogin ||
             location.hash == "#force_user_login"
         );
     }
 
     return (
         <Fragment>
-            {isAuthenticated && <Navigate to={new_location} replace={true} />}
+            {isAuthenticated && <Navigate to={newLocation} replace={true} />}
             {!isAuthenticated && !auth.isLoading && (
                 <Form onSubmit={handleSubmit} noValidate>
                     <Box

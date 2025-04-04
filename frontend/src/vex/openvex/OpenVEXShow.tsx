@@ -44,7 +44,7 @@ const OpenVEXComponent = () => {
                                 <openvexs.icon />
                                 &nbsp;&nbsp;Exported OpenVEX document
                             </Typography>
-                            {openvex && openvex.product_data && openvex.product_data.name && (
+                            {openvex?.product_data?.name && (
                                 <Labeled>
                                     <ReferenceField
                                         source="product"
@@ -55,7 +55,7 @@ const OpenVEXComponent = () => {
                                     />
                                 </Labeled>
                             )}
-                            {openvex && openvex.vulnerability_names && (
+                            {openvex?.vulnerability_names && (
                                 <Labeled>
                                     <ReferenceManyField
                                         reference="vex/openvex_vulnerabilities"
@@ -68,7 +68,7 @@ const OpenVEXComponent = () => {
                                     </ReferenceManyField>
                                 </Labeled>
                             )}
-                            {openvex && openvex.branch_names && (
+                            {openvex?.branch_names && (
                                 <Labeled>
                                     <ReferenceManyField
                                         reference="vex/openvex_branches"

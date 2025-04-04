@@ -33,7 +33,7 @@ const ProductApiTokenEmbeddedList = ({ product }: ProductApiTokenEmbeddedListPro
                         rowClick={false}
                     >
                         <SelectField source="role" choices={ROLE_CHOICES} />
-                        {product && product.permissions.includes(PERMISSION_PRODUCT_API_TOKEN_REVOKE) && (
+                        {product?.permissions.includes(PERMISSION_PRODUCT_API_TOKEN_REVOKE) && (
                             <RevokeProductApiToken product={product} />
                         )}
                     </Datagrid>

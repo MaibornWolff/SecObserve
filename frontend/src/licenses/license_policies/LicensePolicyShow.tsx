@@ -44,7 +44,7 @@ const ShowActions = () => {
                 {license_policy && (!is_external() || is_superuser()) && (
                     <LicensePolicyCopy license_policy={license_policy} />
                 )}
-                {((license_policy && license_policy.is_manager) || is_superuser()) && <EditButton />}
+                {(license_policy?.is_manager || is_superuser()) && <EditButton />}
             </Stack>
         </TopToolbar>
     );

@@ -67,7 +67,7 @@ const VEXDocumentComponent = () => {
                             <Labeled label="Author">
                                 <TextField source="author" />
                             </Labeled>
-                            {vex_document && vex_document.role && (
+                            {vex_document?.role && (
                                 <Labeled label="Role">
                                     <TextField source="role" />
                                 </Labeled>

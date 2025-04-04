@@ -72,7 +72,7 @@ const BranchEmbeddedList = ({ product }: BranchEmbeddedListProps) => {
                                 !branch.is_default_branch && <BooleanField source="housekeeping_protect" />
                             }
                         />
-                        {product && product.osv_enabled && (
+                        {product?.osv_enabled && (
                             <WithRecord
                                 label="OSV Linux dist."
                                 render={(branch) => (
@@ -85,18 +85,17 @@ const BranchEmbeddedList = ({ product }: BranchEmbeddedListProps) => {
                             />
                         )}
                         <ObservationsCountField label="Open observations" withLabel={false} />
-                        {feature_license_management() && product.has_licenses && (
+                        {feature_license_management() && product?.has_licenses && (
                             <LicensesCountField label="Licenses" withLabel={false} />
                         )}
                         <DateField source="last_import" showTime />
                         <WithRecord
                             render={(branch) => (
                                 <Stack direction="row" spacing={4}>
-                                    {product && product.permissions.includes(PERMISSION_BRANCH_EDIT) && (
+                                    {product?.permissions.includes(PERMISSION_BRANCH_EDIT) && (
                                         <BranchEdit product={product} />
                                     )}
-                                    {product &&
-                                        product.permissions.includes(PERMISSION_BRANCH_DELETE) &&
+                                    {product?.permissions.includes(PERMISSION_BRANCH_DELETE) &&
                                         !branch.is_default_branch && <BranchDelete branch={branch} />}
                                 </Stack>
                             )}

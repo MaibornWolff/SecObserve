@@ -51,7 +51,7 @@ const ProductHeader = () => {
                     <Labeled label="Product name">
                         <TextField source="name" className={classes.fontBigBold} />
                     </Labeled>
-                    {product && product.security_gate_passed != undefined && (
+                    {product?.security_gate_passed != undefined && (
                         <Labeled>
                             <SecurityGateTextField label="Security gate" />
                         </Labeled>

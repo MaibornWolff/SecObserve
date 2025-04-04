@@ -52,10 +52,10 @@ const NotificationShow = () => {
                         <TextField source="type" />
                         <TextField source="name" />
                         <DateField source="created" showTime={true} />
-                        {notification && notification.message && <TextField source="message" />}
-                        {notification && notification.function && <TextField source="function" />}
-                        {notification && notification.arguments && <TextField source="arguments" />}
-                        {notification && notification.product && (
+                        {notification?.message && <TextField source="message" />}
+                        {notification?.function && <TextField source="function" />}
+                        {notification?.arguments && <TextField source="arguments" />}
+                        {notification?.product && (
                             <ReferenceField
                                 source="product"
                                 reference="products"
@@ -64,7 +64,7 @@ const NotificationShow = () => {
                                 sx={{ "& a": { textDecoration: "none" } }}
                             />
                         )}
-                        {notification && notification.observation && (
+                        {notification?.observation && (
                             <ReferenceField
                                 source="observation"
                                 reference="observations"
@@ -72,9 +72,7 @@ const NotificationShow = () => {
                                 sx={{ "& a": { textDecoration: "none" } }}
                             />
                         )}
-                        {notification && notification.user_full_name && (
-                            <TextField source="user_full_name" label="User" />
-                        )}
+                        {notification?.user_full_name && <TextField source="user_full_name" label="User" />}
                     </SimpleShowLayout>
                 )}
             />
