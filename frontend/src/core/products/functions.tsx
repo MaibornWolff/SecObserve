@@ -15,128 +15,34 @@ import OSVLinuxDistributionInput from "../../commons/custom_fields/OSVLinuxDistr
 import { validate_0_999999, validate_255, validate_2048, validate_required_255 } from "../../commons/custom_validators";
 import { feature_automatic_osv_scanning, feature_license_management } from "../../commons/functions";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
+import { transform_product_group_and_product } from "../functions";
 import { ISSUE_TRACKER_TYPE_CHOICES, OBSERVATION_SEVERITY_CHOICES } from "../types";
 
 export const transform = (data: any) => {
-    if (!data.description) {
-        data.description = "";
-    }
-    if (!data.purl) {
-        data.purl = "";
-    }
-    if (!data.cpe23) {
-        data.cpe23 = "";
-    }
-    if (!data.repository_prefix) {
-        data.repository_prefix = "";
-    }
-    if (data.repository_branch_housekeeping_active) {
-        if (data.repository_branch_housekeeping_keep_inactive_days == "") {
-            data.repository_branch_housekeeping_keep_inactive_days = 1;
-        }
-    } else {
-        if (data.repository_branch_housekeeping_keep_inactive_days == "") {
-            data.repository_branch_housekeeping_keep_inactive_days = null;
-        }
-    }
-    if (!data.repository_branch_housekeeping_exempt_branches) {
-        data.repository_branch_housekeeping_exempt_branches = "";
-    }
-    if (!data.notification_email_to) {
-        data.notification_email_to = "";
-    }
-    if (!data.notification_ms_teams_webhook) {
-        data.notification_ms_teams_webhook = "";
-    }
-    if (!data.notification_slack_webhook) {
-        data.notification_slack_webhook = "";
-    }
-    if (data.security_gate_active) {
-        if (data.security_gate_threshold_critical == "") {
-            data.security_gate_threshold_critical = 0;
-        }
-        if (data.security_gate_threshold_high == "") {
-            data.security_gate_threshold_high = 0;
-        }
-        if (data.security_gate_threshold_medium == "") {
-            data.security_gate_threshold_medium = 0;
-        }
-        if (data.security_gate_threshold_low == "") {
-            data.security_gate_threshold_low = 0;
-        }
-        if (data.security_gate_threshold_none == "") {
-            data.security_gate_threshold_none = 0;
-        }
-        if (data.security_gate_threshold_unknown == "") {
-            data.security_gate_threshold_unknown = 0;
-        }
-    } else {
-        if (data.security_gate_threshold_critical == "") {
-            data.security_gate_threshold_critical = null;
-        }
-        if (data.security_gate_threshold_high == "") {
-            data.security_gate_threshold_high = null;
-        }
-        if (data.security_gate_threshold_medium == "") {
-            data.security_gate_threshold_medium = null;
-        }
-        if (data.security_gate_threshold_low == "") {
-            data.security_gate_threshold_low = null;
-        }
-        if (data.security_gate_threshold_none == "") {
-            data.security_gate_threshold_none = null;
-        }
-        if (data.security_gate_threshold_unknown == "") {
-            data.security_gate_threshold_unknown = null;
-        }
-    }
-    if (!data.issue_tracker_type) {
-        data.issue_tracker_type = "";
-    }
-    if (!data.issue_tracker_base_url) {
-        data.issue_tracker_base_url = "";
-    }
-    if (!data.issue_tracker_api_key) {
-        data.issue_tracker_api_key = "";
-    }
-    if (!data.issue_tracker_project_id) {
-        data.issue_tracker_project_id = "";
-    }
-    if (!data.issue_tracker_labels) {
-        data.issue_tracker_labels = "";
-    }
-    if (!data.issue_tracker_username) {
-        data.issue_tracker_username = "";
-    }
-    if (!data.issue_tracker_issue_type) {
-        data.issue_tracker_issue_type = "";
-    }
-    if (!data.issue_tracker_status_closed) {
-        data.issue_tracker_status_closed = "";
-    }
-    if (!data.issue_tracker_minimum_severity) {
-        data.issue_tracker_minimum_severity = "";
-    }
-    if (data.risk_acceptance_expiry_active) {
-        if (data.risk_acceptance_expiry_days == "") {
-            data.risk_acceptance_expiry_days = 30;
-        }
-    } else {
-        if (data.risk_acceptance_expiry_days == "") {
-            data.risk_acceptance_expiry_days = null;
-        }
-    }
+    data = transform_product_group_and_product(data);
+
+    data.purl ??= "";
+    data.cpe23 ??= "";
+    data.repository_prefix ??= "";
+
+    data.issue_tracker_type ??= "";
+    data.issue_tracker_base_url ??= "";
+    data.issue_tracker_api_key ??= "";
+    data.issue_tracker_project_id ??= "";
+    data.issue_tracker_labels ??= "";
+    data.issue_tracker_username ??= "";
+    data.issue_tracker_issue_type ??= "";
+    data.issue_tracker_status_closed ??= "";
+    data.issue_tracker_minimum_severity ??= "";
+
     if (!data.osv_enabled) {
         data.osv_linux_distribution = "";
         data.osv_linux_release = "";
         data.automatic_osv_scanning_enabled = false;
     }
-    if (!data.osv_linux_distribution) {
-        data.osv_linux_distribution = "";
-    }
-    if (!data.osv_linux_release) {
-        data.osv_linux_release = "";
-    }
+    data.osv_linux_distribution ??= "";
+    data.osv_linux_release ??= "";
+
     return data;
 };
 

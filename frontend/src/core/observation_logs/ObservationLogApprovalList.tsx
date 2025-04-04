@@ -19,8 +19,7 @@ import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { feature_vex_enabled } from "../../commons/functions";
 import { AutocompleteInputMedium, AutocompleteInputWide } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/user_settings/functions";
-import { ASSESSMENT_STATUS_NEEDS_APPROVAL } from "../types";
-import { OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../types";
+import { ASSESSMENT_STATUS_NEEDS_APPROVAL, OBSERVATION_SEVERITY_CHOICES, OBSERVATION_STATUS_CHOICES } from "../types";
 import AssessmentBulkApproval from "./AssessmentBulkApproval";
 import AssessmentDeleteApproval from "./AssessmentDeleteApproval";
 import { commentShortened } from "./functions";
@@ -28,7 +27,7 @@ import { commentShortened } from "./functions";
 const BulkActionButtons = ({ product }: any) => {
     return (
         <Fragment>
-            {(!product || (product && product.permissions.includes(PERMISSION_OBSERVATION_LOG_APPROVAL))) && (
+            {(!product || product?.permissions.includes(PERMISSION_OBSERVATION_LOG_APPROVAL)) && (
                 <Stack direction="row" spacing={2} alignItems="center">
                     <AssessmentBulkApproval />
                     <AssessmentDeleteApproval />
@@ -50,11 +49,7 @@ function listFilters(product: any) {
                 alwaysOn
             >
                 <AutocompleteInputMedium optionText="name" />
-            </ReferenceInput>
-        );
-    }
-    if (!product) {
-        filters.push(
+            </ReferenceInput>,
             <ReferenceInput
                 source="product_group"
                 reference="product_groups"
@@ -63,11 +58,7 @@ function listFilters(product: any) {
                 alwaysOn
             >
                 <AutocompleteInputMedium optionText="name" />
-            </ReferenceInput>
-        );
-    }
-    if (!product) {
-        filters.push(
+            </ReferenceInput>,
             <ReferenceInput
                 source="branch"
                 reference="branches"
@@ -80,7 +71,7 @@ function listFilters(product: any) {
         );
     }
 
-    if (product && product.has_branches) {
+    if (product?.has_branches) {
         filters.push(
             <ReferenceInput
                 source="branch"
@@ -97,22 +88,22 @@ function listFilters(product: any) {
 
     filters.push(<TextInput source="observation_title" label="Observation title" alwaysOn />);
 
-    if (!product || (product && product.has_component)) {
+    if (!product || product?.has_component) {
         filters.push(<TextInput source="origin_component_name_version" label="Component" alwaysOn />);
     }
-    if (!product || (product && product.has_docker_image)) {
+    if (!product || product?.has_docker_image) {
         filters.push(<TextInput source="origin_docker_image_name_tag_short" label="Container" alwaysOn />);
     }
-    if (!product || (product && product.has_endpoint)) {
+    if (!product || product?.has_endpoint) {
         filters.push(<TextInput source="origin_endpoint_hostname" label="Host" alwaysOn />);
     }
-    if (!product || (product && product.has_source)) {
+    if (!product || product?.has_source) {
         filters.push(<TextInput source="origin_source_file" label="Source" alwaysOn />);
     }
-    if (!product || (product && product.has_cloud_resource)) {
+    if (!product || product?.has_cloud_resource) {
         filters.push(<TextInput source="origin_cloud_qualified_resource" label="Cloud resource" alwaysOn />);
     }
-    if (!product || (product && product.has_kubernetes_resource)) {
+    if (!product || product?.has_kubernetes_resource) {
         filters.push(<TextInput source="origin_kubernetes_qualified_resource" label="Kubernetes resource" alwaysOn />);
     }
 
@@ -175,8 +166,7 @@ const ObservationLogApprovalList = ({ product }: ObservationLogApprovalListProps
                         size={getSettingListSize()}
                         sx={{ width: "100%" }}
                         bulkActionButtons={
-                            !product ||
-                            (product && product.permissions.includes(PERMISSION_OBSERVATION_LOG_APPROVAL)) ? (
+                            !product || product?.permissions.includes(PERMISSION_OBSERVATION_LOG_APPROVAL) ? (
                                 <BulkActionButtons product={product} />
                             ) : (
                                 false
@@ -189,46 +179,46 @@ const ObservationLogApprovalList = ({ product }: ObservationLogApprovalListProps
                         {!product && (
                             <TextField source="observation_data.product_data.product_group_name" label="Group" />
                         )}
-                        {(!product || (product && product.has_branches)) && (
+                        {(!product || product?.has_branches) && (
                             <TextField source="observation_data.branch_name" label="Branch / Version" />
                         )}
                         <TextField source="observation_data.title" label="Observation" />
-                        {(!product || (product && product.has_component)) && (
+                        {(!product || product?.has_component) && (
                             <TextField
                                 source="observation_data.origin_component_name_version"
                                 label="Component"
                                 sx={{ wordBreak: "break-word" }}
                             />
                         )}
-                        {(!product || (product && product.has_docker_image)) && (
+                        {(!product || product?.has_docker_image) && (
                             <TextField
                                 source="observation_data.origin_docker_image_name_tag_short"
                                 label="Container"
                                 sx={{ wordBreak: "break-word" }}
                             />
                         )}
-                        {(!product || (product && product.has_endpoint)) && (
+                        {(!product || product?.has_endpoint) && (
                             <TextField
                                 source="observation_data.origin_endpoint_hostname"
                                 label="Host"
                                 sx={{ wordBreak: "break-word" }}
                             />
                         )}
-                        {(!product || (product && product.has_source)) && (
+                        {(!product || product?.has_source) && (
                             <TextField
                                 source="observation_data.origin_source_file"
                                 label="Source"
                                 sx={{ wordBreak: "break-word" }}
                             />
                         )}
-                        {(!product || (product && product.has_cloud_resource)) && (
+                        {(!product || product?.has_cloud_resource) && (
                             <TextField
                                 source="observation_data.origin_cloud_qualified_resource"
                                 label="Cloud res."
                                 sx={{ wordBreak: "break-word" }}
                             />
                         )}
-                        {(!product || (product && product.has_kubernetes_resource)) && (
+                        {(!product || product?.has_kubernetes_resource) && (
                             <TextField
                                 source="observation_data.origin_kubernetes_qualified_resource"
                                 label="Kube. res."
