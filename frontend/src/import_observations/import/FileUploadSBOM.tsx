@@ -24,7 +24,7 @@ interface CustomToolbarProps {
     handleCancel: () => void;
 }
 
-const CustomToolbar = ({handleCancel}: CustomToolbarProps) => (
+const CustomToolbar = ({ handleCancel }: CustomToolbarProps) => (
     <Toolbar>
         <CancelButton onClick={handleCancel} />
         <SaveButton label="Upload" icon={<UploadIcon />} />
