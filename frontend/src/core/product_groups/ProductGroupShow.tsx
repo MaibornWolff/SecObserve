@@ -279,7 +279,7 @@ const ProductGroupShow = () => {
                                 >
                                     {product_group &&
                                         product_group.permissions.includes(PERMISSION_PRODUCT_RULE_CREATE) && (
-                                            <ProductRuleCreate id={product_group.id} />
+                                            <ProductRuleCreate product={product_group} />
                                         )}
                                     {product_group &&
                                         product_group.permissions.includes(PERMISSION_PRODUCT_RULE_APPLY) && (
