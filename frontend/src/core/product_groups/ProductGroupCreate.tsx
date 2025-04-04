@@ -1,10 +1,11 @@
 import { Create, SimpleForm } from "react-admin";
 
-import { ProductGroupCreateEditComponent, transform } from "./functions";
+import { transform_product_group_and_product } from "../functions";
+import { ProductGroupCreateEditComponent } from "./functions";
 
 const ProductGroupCreate = () => {
     return (
-        <Create redirect="show" transform={transform}>
+        <Create redirect="show" transform={transform_product_group_and_product}>
             <SimpleForm warnWhenUnsavedChanges>
                 <ProductGroupCreateEditComponent />{" "}
             </SimpleForm>

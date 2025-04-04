@@ -15,37 +15,16 @@ import OSVLinuxDistributionInput from "../../commons/custom_fields/OSVLinuxDistr
 import { validate_0_999999, validate_255, validate_2048, validate_required_255 } from "../../commons/custom_validators";
 import { feature_automatic_osv_scanning, feature_license_management } from "../../commons/functions";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
+import { transform_product_group_and_product } from "../functions";
 import { ISSUE_TRACKER_TYPE_CHOICES, OBSERVATION_SEVERITY_CHOICES } from "../types";
 
 export const transform = (data: any) => {
-    data.description ??= "";
+    data = transform_product_group_and_product(data);
+
     data.purl ??= "";
     data.cpe23 ??= "";
     data.repository_prefix ??= "";
-    if (data.repository_branch_housekeeping_active) {
-        data.repository_branch_housekeeping_keep_inactive_days ||= 1;
-    } else {
-        data.repository_branch_housekeeping_keep_inactive_days ||= null;
-    }
-    data.repository_branch_housekeeping_exempt_branches ??= "";
-    data.notification_email_to ??= "";
-    data.notification_ms_teams_webhook ??= "";
-    data.notification_slack_webhook ??= "";
-    if (data.security_gate_active) {
-        data.security_gate_threshold_critical ||= 0;
-        data.security_gate_threshold_high ||= 0;
-        data.security_gate_threshold_medium ||= 0;
-        data.security_gate_threshold_low ||= 0;
-        data.security_gate_threshold_none ||= 0;
-        data.security_gate_threshold_unknown ||= 0;
-    } else {
-        data.security_gate_threshold_critical ||= null;
-        data.security_gate_threshold_high ||= null;
-        data.security_gate_threshold_medium ||= null;
-        data.security_gate_threshold_low ||= null;
-        data.security_gate_threshold_none ||= null;
-        data.security_gate_threshold_unknown ||= null;
-    }
+
     data.issue_tracker_type ??= "";
     data.issue_tracker_base_url ??= "";
     data.issue_tracker_api_key ??= "";
@@ -55,11 +34,7 @@ export const transform = (data: any) => {
     data.issue_tracker_issue_type ??= "";
     data.issue_tracker_status_closed ??= "";
     data.issue_tracker_minimum_severity ??= "";
-    if (data.risk_acceptance_expiry_active) {
-        data.risk_acceptance_expiry_days ||= 30;
-    } else {
-        data.risk_acceptance_expiry_days ||= null;
-    }
+
     if (!data.osv_enabled) {
         data.osv_linux_distribution = "";
         data.osv_linux_release = "";
@@ -67,6 +42,7 @@ export const transform = (data: any) => {
     }
     data.osv_linux_distribution ??= "";
     data.osv_linux_release ??= "";
+
     return data;
 };
 
