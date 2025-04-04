@@ -1,9 +1,10 @@
 import UploadIcon from "@mui/icons-material/CloudUpload";
-import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import { ReferenceInput, SaveButton, SimpleForm, WithRecord, useNotify, useRefresh } from "react-admin";
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
+import MenuButton from "../../commons/custom_fields/MenuButton";
 import Toolbar from "../../commons/custom_fields/Toolbar";
 import { getIconAndFontColor } from "../../commons/functions";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
@@ -76,23 +77,11 @@ const ScanOSV = ({ product }: ScanOSVProps) => {
 
     return (
         <Fragment>
-            <Button
+            <MenuButton
+                title="Scan vulnerabilities from OSV"
                 onClick={handleOpen}
-                size="small"
-                sx={{
-                    paddingTop: 0,
-                    paddingBottom: 0,
-                    paddingLeft: "5px",
-                    paddingRight: "5px",
-                    color: getIconAndFontColor(),
-                    textTransform: "none",
-                    fontWeight: "normal",
-                    fontSize: "1rem",
-                }}
-                startIcon={<UploadIcon sx={{ color: getIconAndFontColor() }} />}
-            >
-                Scan vulnerabilities from OSV
-            </Button>
+                icon={<UploadIcon sx={{ color: getIconAndFontColor() }} />}
+            />
             <Dialog open={open && !loading} onClose={handleClose}>
                 <DialogTitle>Scan vulnerabilities from OSV</DialogTitle>
                 <DialogContent>

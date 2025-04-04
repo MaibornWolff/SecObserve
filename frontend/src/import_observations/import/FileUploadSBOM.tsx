@@ -1,5 +1,5 @@
 import UploadIcon from "@mui/icons-material/Upload";
-import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import {
     FileField,
@@ -13,6 +13,7 @@ import {
 } from "react-admin";
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
+import MenuButton from "../../commons/custom_fields/MenuButton";
 import Toolbar from "../../commons/custom_fields/Toolbar";
 import { validate_required } from "../../commons/custom_validators";
 import { getIconAndFontColor } from "../../commons/functions";
@@ -83,23 +84,11 @@ const FileUploadSBOM = () => {
 
     return (
         <Fragment>
-            <Button
+            <MenuButton
+                title="Upload SBOM from file"
                 onClick={handleOpen}
-                size="small"
-                sx={{
-                    paddingTop: 0,
-                    paddingBottom: 0,
-                    paddingLeft: "5px",
-                    paddingRight: "5px",
-                    color: getIconAndFontColor(),
-                    textTransform: "none",
-                    fontWeight: "normal",
-                    fontSize: "1rem",
-                }}
-                startIcon={<UploadIcon sx={{ color: getIconAndFontColor() }} />}
-            >
-                Upload SBOM from file
-            </Button>
+                icon={<UploadIcon sx={{ color: getIconAndFontColor() }} />}
+            />
             <Dialog open={open && !loading} onClose={handleClose}>
                 <DialogTitle>Upload SBOM from file</DialogTitle>
                 <DialogContent>
