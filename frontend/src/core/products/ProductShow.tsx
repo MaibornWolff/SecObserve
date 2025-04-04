@@ -257,7 +257,7 @@ const ProductShow = () => {
                                         }}
                                     >
                                         {product && product.permissions.includes(PERMISSION_PRODUCT_RULE_CREATE) && (
-                                            <ProductRuleCreate id={product.id} />
+                                            <ProductRuleCreate product={product} />
                                         )}
                                         {product && product.permissions.includes(PERMISSION_PRODUCT_RULE_APPLY) && (
                                             <ProductRuleApply product={product} />
