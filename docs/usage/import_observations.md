@@ -22,7 +22,7 @@ When uploading a CycloneDX file here, only the vulnerabilities will be imported.
 
 ![API import](../assets/images/screenshot_import_3.png){ width="50%" style="display: block; margin: 0 auto" }
 
-Before importing observations from an API, an API configuration needs to be created for the product. This API configuration specifies how to access the API (URL, API key,Query, Basic Authentication, SSL Verify, ...). Optional for the import are attributes for the branch / version, service, docker image, endpoint URL and Kubernetes cluster.
+Before importing observations from an API, an [API configuration](../integrations/api_import.md#api-configuration) needs to be created for the product. This API configuration specifies how to access the API (URL, API key,Query, Basic Authentication, SSL Verify, ...). Optional for the import are attributes for the branch / version, service, docker image, endpoint URL and Kubernetes cluster.
 
 ## Import algorithm
 
