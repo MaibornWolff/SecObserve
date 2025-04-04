@@ -7,9 +7,7 @@ import { TextInputWide } from "../../commons/layout/themes";
 
 const AuthorizationGroupCreate = () => {
     const transform = (data: any) => {
-        if (!data.oidc_group) {
-            data.oidc_group = "";
-        }
+        data.oidc_group ??= "";
         return data;
     };
 
