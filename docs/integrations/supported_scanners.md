@@ -16,9 +16,7 @@ There are different types of vulnerability scans:
 
 While every vulnerability scanner writes its own format, there are 2 standardized formats that are implemented by several scanners:
 
-* **[CycloneDX](https://cyclonedx.org/)**: CycloneDX is a Software Bill of Material (SBOM), that contains information about components of a system and their vulnerabilities. It is typically used by SCA scanners.
-
-    If the SBOM contains licenses of components, they are imported into SecObserve as well for [license management](../usage/license_management.md/#managing-licenses-in-products).
+* **[CycloneDX](https://cyclonedx.org)**: CycloneDX is a Software Bill of Material (SBOM), that contains information about components of a system and their vulnerabilities. It is typically used by SCA scanners. A CycloneDX file can either be imported to get vulnerabilities ([Import vulnerabilities](../usage/import_observations.md)) or to get components with their licenses ([Upload SBOMs](../usage/upload_sbom.md)).
 
 * **[SARIF](https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=sarif)**: The Static Analysis Results Interchange Format is an OASIS standard which is implemented by a lot of SAST scanners.
 

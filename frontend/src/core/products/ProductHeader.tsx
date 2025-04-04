@@ -6,6 +6,7 @@ import products from ".";
 import LicensesCountField from "../../commons/custom_fields/LicensesCountField";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
 import { SecurityGateTextField } from "../../commons/custom_fields/SecurityGateTextField";
+import { feature_license_management } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
 import { Product } from "../types";
 
@@ -59,7 +60,8 @@ const ProductHeader = () => {
                         <Labeled>
                             <ObservationsCountField label={get_open_observations_label(product)} withLabel={true} />
                         </Labeled>
-                        {product &&
+                        {feature_license_management() &&
+                            product &&
                             product.forbidden_licenses_count +
                                 product.review_required_licenses_count +
                                 product.unknown_licenses_count +

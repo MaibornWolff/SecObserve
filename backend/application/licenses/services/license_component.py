@@ -131,6 +131,17 @@ def process_license_components(  # pylint: disable=too-many-statements
     for existing_component in existing_components_dict.values():
         existing_component.delete()
 
+    if components_new == 0 and components_updated == 0 and components_deleted == 0:
+        vulnerability_check.last_import_licenses_new = None
+        vulnerability_check.last_import_licenses_updated = None
+        vulnerability_check.last_import_licenses_deleted = None
+    else:
+        vulnerability_check.last_import_licenses_new = components_new
+        vulnerability_check.last_import_licenses_updated = components_updated
+        vulnerability_check.last_import_licenses_deleted = components_deleted
+
+    vulnerability_check.save()
+
     return components_new, components_updated, components_deleted
 
 

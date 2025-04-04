@@ -31,6 +31,7 @@ class BaseTestVEXImport(TestCase):
                 endpoint_url="",
                 kubernetes_cluster="",
                 suppress_licenses=False,
+                sbom=False,
             )
             file_upload_observations(file_upload_parameter)
 

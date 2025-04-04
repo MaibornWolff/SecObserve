@@ -1,8 +1,7 @@
 import UploadIcon from "@mui/icons-material/Upload";
-import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
 import {
-    BooleanInput,
     FileField,
     FileInput,
     ReferenceInput,
@@ -14,6 +13,7 @@ import {
 } from "react-admin";
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
+import MenuButton from "../../commons/custom_fields/MenuButton";
 import Toolbar from "../../commons/custom_fields/Toolbar";
 import { validate_255, validate_513, validate_2048, validate_required } from "../../commons/custom_validators";
 import { getIconAndFontColor } from "../../commons/functions";
@@ -57,7 +57,7 @@ const FileUploadObservations = () => {
         if (data.kubernetes_cluster) {
             formData.append("kubernetes_cluster", data.kubernetes_cluster);
         }
-        formData.append("suppress_licenses", data.suppress_licenses);
+        formData.append("suppress_licenses", "true");
 
         httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/import/file_upload_observations_by_id/", {
             method: "POST",
@@ -119,23 +119,11 @@ const FileUploadObservations = () => {
 
     return (
         <Fragment>
-            <Button
+            <MenuButton
+                title="Upload observations from file"
                 onClick={handleOpen}
-                size="small"
-                sx={{
-                    paddingTop: 0,
-                    paddingBottom: 0,
-                    paddingLeft: "5px",
-                    paddingRight: "5px",
-                    color: getIconAndFontColor(),
-                    textTransform: "none",
-                    fontWeight: "normal",
-                    fontSize: "1rem",
-                }}
-                startIcon={<UploadIcon sx={{ color: getIconAndFontColor() }} />}
-            >
-                Upload observations from file
-            </Button>
+                icon={<UploadIcon sx={{ color: getIconAndFontColor() }} />}
+            />
             <Dialog open={open && !loading} onClose={handleClose}>
                 <DialogTitle>Upload observations from file</DialogTitle>
                 <DialogContent>
@@ -178,7 +166,6 @@ const FileUploadObservations = () => {
                         />
                         <TextInputWide label="Endpoint URL" source="endpoint_url" validate={validate_2048} />
                         <TextInputWide source="kubernetes_cluster" validate={validate_255} />
-                        <BooleanInput source="suppress_licenses" label="Suppress licenses" />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>

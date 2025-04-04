@@ -4,8 +4,10 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Fragment, MouseEvent, useState } from "react";
 
+import { feature_license_management } from "../../commons/functions";
 import ApiImportObservations from "./ApiImportObservations";
 import FileUploadObservations from "./FileUploadObservations";
+import FileUploadSBOM from "./FileUploadSBOM";
 import ScanOSV from "./ScanOSV";
 
 interface ImportMenuProps {
@@ -48,6 +50,11 @@ const ImportMenu = ({ product }: ImportMenuProps) => {
                 <MenuItem onKeyDown={(e) => e.stopPropagation()}>
                     <FileUploadObservations />
                 </MenuItem>
+                {feature_license_management() && (
+                    <MenuItem onKeyDown={(e) => e.stopPropagation()}>
+                        <FileUploadSBOM />
+                    </MenuItem>
+                )}
                 <MenuItem onKeyDown={(e) => e.stopPropagation()}>
                     <ApiImportObservations product={product} />
                 </MenuItem>

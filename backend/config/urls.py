@@ -25,6 +25,8 @@ from application.import_observations.api.views import (
     ApiImportObservationsByName,
     FileUploadObservationsById,
     FileUploadObservationsByName,
+    FileUploadSBOMById,
+    FileUploadSBOMByName,
     ScanOSVBranchView,
     ScanOSVProductView,
 )
@@ -101,6 +103,14 @@ urlpatterns += [
     path(
         "api/import/file_upload_observations_by_id/",
         FileUploadObservationsById.as_view(),
+    ),
+    path(
+        "api/import/file_upload_sbom_by_name/",
+        FileUploadSBOMByName.as_view(),
+    ),
+    path(
+        "api/import/file_upload_sbom_by_id/",
+        FileUploadSBOMById.as_view(),
     ),
     path("api/metrics/product_metrics_timeline/", ProductMetricsTimelineView.as_view()),
     path("api/metrics/product_metrics_current/", ProductMetricsCurrentView.as_view()),

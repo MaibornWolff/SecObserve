@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import product_groups from ".";
 import LicensesCountField from "../../commons/custom_fields/LicensesCountField";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
+import { feature_license_management } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
 import { ProductGroup } from "../types";
 
@@ -39,7 +40,8 @@ const ProductGroupHeader = () => {
                         <Labeled>
                             <ObservationsCountField label="Open observations" withLabel={true} />
                         </Labeled>
-                        {product_group &&
+                        {feature_license_management() &&
+                            product_group &&
                             product_group.forbidden_licenses_count +
                                 product_group.review_required_licenses_count +
                                 product_group.unknown_licenses_count +
