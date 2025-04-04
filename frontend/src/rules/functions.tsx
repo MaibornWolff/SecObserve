@@ -260,45 +260,24 @@ export const RuleShowComponent = ({ rule }: any) => {
 };
 
 export const non_duplicate_transform = (data: any) => {
-    if (data.scanner_prefix == null) {
-        data.scanner_prefix = "";
-    }
-    if (data.title == null) {
-        data.title = "";
-    }
-    if (data.description_observation == null) {
-        data.description_observation = "";
-    }
-    if (data.origin_component_name_version == null) {
-        data.origin_component_name_version = "";
-    }
-    if (data.origin_docker_image_name_tag == null) {
-        data.origin_docker_image_name_tag = "";
-    }
-    if (data.origin_endpoint_url == null) {
-        data.origin_endpoint_url = "";
-    }
-    if (data.origin_service_name == null) {
-        data.origin_service_name = "";
-    }
-    if (data.origin_source_file == null) {
-        data.origin_source_file = "";
-    }
-    if (data.origin_cloud_qualified_resource == null) {
-        data.origin_cloud_qualified_resource = "";
-    }
-    if (data.origin_kubernetes_qualified_resource == null) {
-        data.origin_kubernetes_qualified_resource = "";
-    }
-    if (data.new_severity == null) {
-        data.new_severity = "";
-    }
-    if (data.new_status == null) {
-        data.new_status = "";
-    }
+    data.title ??= "";
+    data.description_observation ??= "";
+
+    data.new_severity ??= "";
+    data.new_status ??= "";
     if (!justificationIsEnabledForStatus(data.new_status) || data.new_vex_justification == null) {
         data.new_vex_justification = "";
     }
+
+    data.scanner_prefix ??= "";
+
+    data.origin_component_name_version ??= "";
+    data.origin_docker_image_name_tag ??= "";
+    data.origin_endpoint_url ??= "";
+    data.origin_service_name ??= "";
+    data.origin_source_file ??= "";
+    data.origin_cloud_qualified_resource ??= "";
+    data.origin_kubernetes_qualified_resource ??= "";
 
     return data;
 };
