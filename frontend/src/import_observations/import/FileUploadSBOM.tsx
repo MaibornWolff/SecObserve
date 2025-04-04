@@ -20,6 +20,17 @@ import { getIconAndFontColor } from "../../commons/functions";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
+interface CustomToolbarProps {
+    handleCancel: () => void;
+}
+
+const CustomToolbar = ({handleCancel}: CustomToolbarProps) => (
+    <Toolbar>
+        <CancelButton onClick={handleCancel} />
+        <SaveButton label="Upload" icon={<UploadIcon />} />
+    </Toolbar>
+);
+
 const FileUploadSBOM = () => {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -75,13 +86,6 @@ const FileUploadSBOM = () => {
             });
     };
 
-    const CustomToolbar = () => (
-        <Toolbar>
-            <CancelButton onClick={handleCancel} />
-            <SaveButton label="Upload" icon={<UploadIcon />} />
-        </Toolbar>
-    );
-
     return (
         <Fragment>
             <MenuButton
@@ -92,7 +96,7 @@ const FileUploadSBOM = () => {
             <Dialog open={open && !loading} onClose={handleClose}>
                 <DialogTitle>Upload SBOM from file</DialogTitle>
                 <DialogContent>
-                    <SimpleForm onSubmit={uploadSBOM} toolbar={<CustomToolbar />}>
+                    <SimpleForm onSubmit={uploadSBOM} toolbar={<CustomToolbar handleCancel={handleCancel} />}>
                         <FileInput
                             source="file"
                             label="SBOM"
