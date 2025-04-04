@@ -12,6 +12,7 @@ from application.import_observations.queries.parser import (
     get_parser_by_module_and_class,
 )
 from application.import_observations.types import Parser_Source, Parser_Type
+from application.import_observations.exceptions import ParserError
 
 logger = logging.getLogger("secobserve.import_observations")
 
@@ -23,14 +24,7 @@ def register_parser(module_name: str, class_name: str) -> None:
     my_type = parser_class.get_type()
     sbom = parser_class.sbom() if hasattr(parser_class, "sbom") else False
 
-    source = Parser_Source.SOURCE_OTHER
-    for base in parser_class.__bases__:
-        if base is BaseAPIParser:
-            source = Parser_Source.SOURCE_API
-            break
-        if base is BaseFileParser:
-            source = Parser_Source.SOURCE_FILE
-            break
+    source = _get_source(parser_class)
 
     parser = get_parser_by_module_and_class(module_name, class_name)
     if parser:
@@ -57,6 +51,18 @@ def register_parser(module_name: str, class_name: str) -> None:
             module_name=module_name,
             class_name=parser_class.__name__,
         ).save()
+
+
+def _get_source(parser_class: Type[BaseParser]) -> str:
+    source = Parser_Source.SOURCE_OTHER
+    for base in parser_class.__bases__:
+        if base is BaseAPIParser:
+            source = Parser_Source.SOURCE_API
+            break
+        if base is BaseFileParser:
+            source = Parser_Source.SOURCE_FILE
+            break
+    return source
 
 
 def create_manual_parser() -> None:
@@ -90,6 +96,6 @@ def get_parser_class_from_module_class_names(module_name: str, class_name: str) 
 
     parser_class = getattr(module, class_name)
     if not issubclass(parser_class, BaseParser):
-        raise Exception(f"{class_name} is not a subclass of BaseParser")  # pylint: disable=broad-exception-raised
+        raise ParserError(f"{class_name} is not a subclass of BaseParser")
 
     return parser_class
