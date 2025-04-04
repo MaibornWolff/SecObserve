@@ -22,8 +22,7 @@ import { useNavigate } from "react-router";
 import { PERMISSION_OBSERVATION_ASSESSMENT, PERMISSION_OBSERVATION_DELETE } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
-import { humanReadableDate } from "../../commons/functions";
-import { feature_exploit_information } from "../../commons/functions";
+import { feature_exploit_information, humanReadableDate } from "../../commons/functions";
 import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { getSettingListSize } from "../../commons/user_settings/functions";
 import {
@@ -41,7 +40,7 @@ import { IDENTIFIER_OBSERVATION_EMBEDDED_LIST, setListIdentifier } from "./funct
 
 function listFilters(product: Product) {
     const filters = [];
-    if (product && product.has_branches) {
+    if (product?.has_branches) {
         filters.push(
             <ReferenceInput
                 source="branch"
@@ -65,7 +64,7 @@ function listFilters(product: Product) {
         />,
         <AutocompleteInput source="current_status" label="Status" choices={OBSERVATION_STATUS_CHOICES} alwaysOn />
     );
-    if (product && product.has_services) {
+    if (product?.has_services) {
         filters.push(
             <ReferenceInput
                 source="origin_service"
@@ -79,7 +78,7 @@ function listFilters(product: Product) {
         );
     }
 
-    if (product && product.has_component) {
+    if (product?.has_component) {
         filters.push(
             <TextInput source="origin_component_name_version" label="Component" alwaysOn />,
             <ReferenceInput
@@ -95,19 +94,19 @@ function listFilters(product: Product) {
             filters.push(<NullableBooleanInput source="cve_known_exploited" label="CVE exploited" alwaysOn />);
         }
     }
-    if (product && product.has_docker_image) {
+    if (product?.has_docker_image) {
         filters.push(<TextInput source="origin_docker_image_name_tag_short" label="Container" alwaysOn />);
     }
-    if (product && product.has_endpoint) {
+    if (product?.has_endpoint) {
         filters.push(<TextInput source="origin_endpoint_hostname" label="Host" alwaysOn />);
     }
-    if (product && product.has_source) {
+    if (product?.has_source) {
         filters.push(<TextInput source="origin_source_file" label="Source" alwaysOn />);
     }
-    if (product && product.has_cloud_resource) {
+    if (product?.has_cloud_resource) {
         filters.push(<TextInput source="origin_cloud_qualified_resource" label="Cloud resource" alwaysOn />);
     }
-    if (product && product.has_kubernetes_resource) {
+    if (product?.has_kubernetes_resource) {
         filters.push(<TextInput source="origin_kubernetes_qualified_resource" label="Kubernetes resource" alwaysOn />);
     }
 
@@ -117,7 +116,7 @@ function listFilters(product: Product) {
         <TextInput source="upload_filename" label="Filename" />,
         <TextInput source="api_configuration_name" label="API configuration" />
     );
-    if (product && product.has_potential_duplicates) {
+    if (product?.has_potential_duplicates) {
         filters.push(<NullableBooleanInput source="has_potential_duplicates" label="Duplicates" alwaysOn />);
     }
 
@@ -196,44 +195,44 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
                         expand={<ObservationExpand />}
                         expandSingle
                     >
-                        {product && product.has_branches && <TextField source="branch_name" label="Branch / Version" />}
+                        {product?.has_branches && <TextField source="branch_name" label="Branch / Version" />}
                         <TextField source="title" />
                         <SeverityField label="Severity" source="current_severity" />
                         <ChipField source="current_status" label="Status" />
-                        {product && product.has_component && <NumberField source="epss_score" label="EPSS" />}
-                        {product && product.has_services && <TextField source="origin_service_name" label="Service" />}
-                        {product && product.has_component && (
+                        {product?.has_component && <NumberField source="epss_score" label="EPSS" />}
+                        {product?.has_services && <TextField source="origin_service_name" label="Service" />}
+                        {product?.has_component && (
                             <TextField
                                 source="origin_component_name_version"
                                 label="Component"
                                 sx={{ wordBreak: "break-word" }}
                             />
                         )}
-                        {product && product.has_docker_image && (
+                        {product?.has_docker_image && (
                             <TextField
                                 source="origin_docker_image_name_tag_short"
                                 label="Container"
                                 sx={{ wordBreak: "break-word" }}
                             />
                         )}
-                        {product && product.has_endpoint && (
+                        {product?.has_endpoint && (
                             <TextField
                                 source="origin_endpoint_hostname"
                                 label="Host"
                                 sx={{ wordBreak: "break-word" }}
                             />
                         )}
-                        {product && product.has_source && (
+                        {product?.has_source && (
                             <TextField source="origin_source_file" label="Source" sx={{ wordBreak: "break-word" }} />
                         )}
-                        {product && product.has_cloud_resource && (
+                        {product?.has_cloud_resource && (
                             <TextField
                                 source="origin_cloud_qualified_resource"
                                 label="Cloud resource"
                                 sx={{ wordBreak: "break-word" }}
                             />
                         )}
-                        {product && product.has_kubernetes_resource && (
+                        {product?.has_kubernetes_resource && (
                             <TextField
                                 source="origin_kubernetes_qualified_resource"
                                 label="Kubernetes resource"
@@ -246,7 +245,7 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
                             sortBy="last_observation_log"
                             render={(record) => (record ? humanReadableDate(record.last_observation_log) : "")}
                         />
-                        {product && product.has_potential_duplicates && (
+                        {product?.has_potential_duplicates && (
                             <BooleanField source="has_potential_duplicates" label="Dupl." />
                         )}
                     </Datagrid>
