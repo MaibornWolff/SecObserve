@@ -1,14 +1,17 @@
 export const transform_product_group_and_product = (data: any) => {
     data.description ??= "";
+
     if (data.repository_branch_housekeeping_active) {
         data.repository_branch_housekeeping_keep_inactive_days ||= 1;
     } else {
         data.repository_branch_housekeeping_keep_inactive_days ||= null;
     }
     data.repository_branch_housekeeping_exempt_branches ??= "";
+
     data.notification_email_to ??= "";
     data.notification_ms_teams_webhook ??= "";
     data.notification_slack_webhook ??= "";
+
     if (data.security_gate_active) {
         data.security_gate_threshold_critical ||= 0;
         data.security_gate_threshold_high ||= 0;
@@ -24,10 +27,12 @@ export const transform_product_group_and_product = (data: any) => {
         data.security_gate_threshold_none ||= null;
         data.security_gate_threshold_unknown ||= null;
     }
+
     if (data.risk_acceptance_expiry_active) {
         data.risk_acceptance_expiry_days ||= 30;
     } else {
         data.risk_acceptance_expiry_days ||= null;
     }
+
     return data;
 };

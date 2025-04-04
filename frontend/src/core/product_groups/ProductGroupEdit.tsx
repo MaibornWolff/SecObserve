@@ -10,9 +10,7 @@ const CustomToolbar = () => {
     return (
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
             <SaveButton />
-            {product?.permissions.includes(PERMISSION_PRODUCT_DELETE) && (
-                <DeleteButton mutationMode="pessimistic" />
-            )}
+            {product?.permissions.includes(PERMISSION_PRODUCT_DELETE) && <DeleteButton mutationMode="pessimistic" />}
         </Toolbar>
     );
 };
