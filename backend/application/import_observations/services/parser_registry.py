@@ -2,6 +2,7 @@ import importlib
 import logging
 from typing import Optional, Type
 
+from application.import_observations.exceptions import ParserError
 from application.import_observations.models import Parser
 from application.import_observations.parsers.base_parser import (
     BaseAPIParser,
@@ -12,7 +13,6 @@ from application.import_observations.queries.parser import (
     get_parser_by_module_and_class,
 )
 from application.import_observations.types import Parser_Source, Parser_Type
-from application.import_observations.exceptions import ParserError
 
 logger = logging.getLogger("secobserve.import_observations")
 
