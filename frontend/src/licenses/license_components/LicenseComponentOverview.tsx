@@ -41,7 +41,7 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
 
     function listFilters(product: any) {
         const filters = [];
-        if (product && product.has_branches) {
+        if (product?.has_branches) {
             filters.push(
                 <ReferenceInput
                     source="branch"
@@ -191,7 +191,7 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
                         }
                         expandSingle
                     >
-                        {product && product.has_branches && <TextField source="branch_name" label="Branch / Version" />}
+                        {product?.has_branches && <TextField source="branch_name" label="Branch / Version" />}
                         <FunctionField
                             label="License"
                             sortBy="license_name"

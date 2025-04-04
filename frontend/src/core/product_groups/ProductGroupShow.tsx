@@ -63,7 +63,7 @@ const ShowActions = () => {
                     queryOptions={{ meta: { api_resource: "product_group_names" } }}
                 />
                 <ExportMenu product={product_group} is_product_group={true} />
-                {product_group && product_group.permissions.includes(PERMISSION_PRODUCT_GROUP_EDIT) && <EditButton />}
+                {product_group?.permissions.includes(PERMISSION_PRODUCT_GROUP_EDIT) && <EditButton />}
             </Stack>
         </TopToolbar>
     );
@@ -135,14 +135,16 @@ const ProductGroupShow = () => {
                                                 valueLabelTrue="Product group specific"
                                             />
                                         </Labeled>
-                                        {product_group.repository_branch_housekeeping_active == true && (
+                                        {product_group.repository_branch_housekeeping_active && (
                                             <Stack spacing={1}>
                                                 <Labeled label="Keep inactive">
                                                     <NumberField source="repository_branch_housekeeping_keep_inactive_days" />
                                                 </Labeled>
-                                                <Labeled label="Exempt branches / versions">
-                                                    <TextField source="repository_branch_housekeeping_exempt_branches" />
-                                                </Labeled>
+                                                {product_group.repository_branch_housekeeping_exempt_branches && (
+                                                    <Labeled label="Exempt branches / versions">
+                                                        <TextField source="repository_branch_housekeeping_exempt_branches" />
+                                                    </Labeled>
+                                                )}
                                             </Stack>
                                         )}
                                     </Fragment>
@@ -187,7 +189,7 @@ const ProductGroupShow = () => {
                                                 valueLabelTrue="Product group specific"
                                             />
                                         </Labeled>
-                                        {product_group.security_gate_active == true && (
+                                        {product_group.security_gate_active && (
                                             <Stack spacing={1}>
                                                 <Labeled>
                                                     <NumberField source="security_gate_threshold_critical" />
@@ -241,7 +243,7 @@ const ProductGroupShow = () => {
                                                 valueLabelTrue="Product group specific"
                                             />
                                         </Labeled>
-                                        {product_group.risk_acceptance_expiry_active == true && (
+                                        {product_group.risk_acceptance_expiry_active && (
                                             <Stack spacing={1}>
                                                 <Labeled label="Risk acceptance expiry (days)">
                                                     <NumberField source="risk_acceptance_expiry_days" />
@@ -277,14 +279,12 @@ const ProductGroupShow = () => {
                                         alignItems: "center",
                                     }}
                                 >
-                                    {product_group &&
-                                        product_group.permissions.includes(PERMISSION_PRODUCT_RULE_CREATE) && (
-                                            <ProductRuleCreate product={product_group} />
-                                        )}
-                                    {product_group &&
-                                        product_group.permissions.includes(PERMISSION_PRODUCT_RULE_APPLY) && (
-                                            <ProductRuleApply product={product_group} />
-                                        )}
+                                    {product_group?.permissions.includes(PERMISSION_PRODUCT_RULE_CREATE) && (
+                                        <ProductRuleCreate product={product_group} />
+                                    )}
+                                    {product_group?.permissions.includes(PERMISSION_PRODUCT_RULE_APPLY) && (
+                                        <ProductRuleApply product={product_group} />
+                                    )}
                                 </Stack>
                                 <ProductRuleEmbeddedList product={product_group} />
                             </Tab>
@@ -292,27 +292,24 @@ const ProductGroupShow = () => {
                                 <Typography variant="h6" sx={{ marginBottom: 1 }}>
                                     User members
                                 </Typography>
-                                {product_group &&
-                                    product_group.permissions.includes(PERMISSION_PRODUCT_MEMBER_CREATE) && (
-                                        <ProductMemberAdd id={product_group.id} />
-                                    )}
+                                {product_group?.permissions.includes(PERMISSION_PRODUCT_MEMBER_CREATE) && (
+                                    <ProductMemberAdd id={product_group.id} />
+                                )}
                                 <ProductMemberEmbeddedList product={product_group} />
 
                                 <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
                                 <Typography variant="h6" sx={{ marginBottom: 1 }}>
                                     Authorization group members
                                 </Typography>
-                                {product_group &&
-                                    product_group.permissions.includes(
-                                        PERMISSION_PRODUCT_AUTHORIZATION_GROUP_MEMBER_CREATE
-                                    ) && <ProductAuthorizationGroupMemberAdd id={product_group.id} />}
+                                {product_group?.permissions.includes(
+                                    PERMISSION_PRODUCT_AUTHORIZATION_GROUP_MEMBER_CREATE
+                                ) && <ProductAuthorizationGroupMemberAdd id={product_group.id} />}
                                 <ProductAuthorizationGroupMemberEmbeddedList product={product_group} />
                             </Tab>
                             <Tab label="API Token" path="api_token" icon={<TokenIcon />}>
-                                {product_group &&
-                                    product_group.permissions.includes(PERMISSION_PRODUCT_API_TOKEN_CREATE) && (
-                                        <CreateProductApiToken product={product_group} />
-                                    )}
+                                {product_group?.permissions.includes(PERMISSION_PRODUCT_API_TOKEN_CREATE) && (
+                                    <CreateProductApiToken product={product_group} />
+                                )}
                                 <ProductApiTokenEmbeddedList product={product_group} />
                             </Tab>
                         </TabbedShowLayout>

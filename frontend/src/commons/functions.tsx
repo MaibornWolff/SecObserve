@@ -52,9 +52,9 @@ export function get_severity_color(severity: string): string {
     return backgroundColor;
 }
 
-export function get_evaluation_result_color(record: any | null, evaluation_result: string | null): string {
+export function get_evaluation_result_color(record: any, evaluation_result: string | null): string {
     if (!evaluation_result) {
-        if (record && record.component_license_data) {
+        if (record?.component_license_data) {
             evaluation_result = record.component_license_data.evaluation_result;
         } else {
             evaluation_result = record.evaluation_result;

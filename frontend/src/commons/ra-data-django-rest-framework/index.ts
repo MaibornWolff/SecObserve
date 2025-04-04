@@ -80,7 +80,7 @@ export default (): DataProvider => {
     return {
         getList: async (resource, params) => {
             let api_resource = resource;
-            if (params.meta && params.meta.api_resource) {
+            if (params?.meta?.api_resource) {
                 api_resource = params.meta.api_resource;
             }
 
@@ -109,7 +109,7 @@ export default (): DataProvider => {
 
         getMany: (resource, params) => {
             let api_resource = resource;
-            if (params.meta && params.meta.api_resource) {
+            if (params?.meta?.api_resource) {
                 api_resource = params.meta.api_resource;
             }
 
