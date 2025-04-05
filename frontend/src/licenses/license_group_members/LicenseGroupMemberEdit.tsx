@@ -1,10 +1,8 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { BooleanInput, SaveButton, SimpleForm, useNotify, useRefresh, useUpdate } from "react-admin";
+import { BooleanInput, SimpleForm, useNotify, useRefresh, useUpdate } from "react-admin";
 
-import CancelButton from "../../commons/custom_fields/CancelButton";
 import EditButton from "../../commons/custom_fields/EditButton";
-import Toolbar from "../../commons/custom_fields/Toolbar";
 import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
 import { TextInputWide } from "../../commons/layout/themes";
 

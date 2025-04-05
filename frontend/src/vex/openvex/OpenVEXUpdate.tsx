@@ -5,9 +5,9 @@ import { SimpleForm, useNotify, useRefresh } from "react-admin";
 
 import axios_instance from "../../access_control/auth_provider/axios_instance";
 import EditButton from "../../commons/custom_fields/EditButton";
+import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
 import { validate_required_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
-import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
 
 const OpenVEXUpdate = () => {
     const [open, setOpen] = useState(false);
@@ -67,14 +67,17 @@ const OpenVEXUpdate = () => {
             <Dialog open={open && !loading} onClose={handleClose} maxWidth={"lg"}>
                 <DialogTitle>Update OpenVEX document</DialogTitle>
                 <DialogContent>
-                    <SimpleForm onSubmit={update_openvex} toolbar={
+                    <SimpleForm
+                        onSubmit={update_openvex}
+                        toolbar={
                             <ToolbarCancelSave
                                 onClick={handleCancel}
                                 saveButtonLabel="Update"
                                 saveButtonIcon={<EditIcon />}
                                 alwaysEnable
                             />
-                        }>
+                        }
+                    >
                         <Typography variant="h6" sx={{ marginBottom: 1 }}>
                             Document
                         </Typography>
