@@ -1,11 +1,10 @@
 import { Dialog, DialogContent, DialogTitle, Stack } from "@mui/material";
 import { Fragment, useState } from "react";
-import { BooleanInput, SaveButton, SimpleForm, useNotify, useRefresh, useUpdate } from "react-admin";
+import { BooleanInput, SimpleForm, useNotify, useRefresh, useUpdate } from "react-admin";
 
-import CancelButton from "../../commons/custom_fields/CancelButton";
 import EditButton from "../../commons/custom_fields/EditButton";
 import OSVLinuxDistributionInput from "../../commons/custom_fields/OSVLinuxDistributionInput";
-import Toolbar from "../../commons/custom_fields/Toolbar";
+import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
 import { validate_255, validate_required_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 
@@ -70,19 +69,13 @@ const BranchEdit = ({ product }: BranchEditProps) => {
         );
     };
 
-    const CustomToolbar = () => (
-        <Toolbar>
-            <CancelButton onClick={handleCancel} />
-            <SaveButton />
-        </Toolbar>
-    );
     return (
         <Fragment>
             <EditButton title="Edit" onClick={handleOpen} />
             <Dialog open={open} onClose={handleClose} maxWidth={"lg"}>
                 <DialogTitle>Edit branch / version</DialogTitle>
                 <DialogContent>
-                    <SimpleForm onSubmit={branch_update} toolbar={<CustomToolbar />}>
+                    <SimpleForm onSubmit={branch_update} toolbar={<ToolbarCancelSave onClick={handleCancel} />}>
                         <TextInputWide source="name" validate={validate_required_255} />
                         <TextInputWide source="purl" label="PURL" validate={validate_255} />
                         <TextInputWide source="cpe23" label="CPE 2.3" validate={validate_255} />

@@ -1,10 +1,9 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { SaveButton, SimpleForm, useNotify, useRefresh } from "react-admin";
+import { SimpleForm, useNotify, useRefresh } from "react-admin";
 
-import CancelButton from "../../commons/custom_fields/CancelButton";
 import RemoveButton from "../../commons/custom_fields/RemoveButton";
-import Toolbar from "../../commons/custom_fields/Toolbar";
+import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
 import { validate_required_4096 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
@@ -44,20 +43,13 @@ const ObservationRemoveAssessment = () => {
         setOpen(false);
     };
 
-    const CustomToolbar = () => (
-        <Toolbar>
-            <CancelButton onClick={handleCancel} />
-            <SaveButton />
-        </Toolbar>
-    );
-
     return (
         <Fragment>
             <RemoveButton title="Remove Assessment" onClick={handleOpen} />
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Observation Remove Assessment</DialogTitle>
                 <DialogContent>
-                    <SimpleForm onSubmit={observationUpdate} toolbar={<CustomToolbar />}>
+                    <SimpleForm onSubmit={observationUpdate} toolbar={<ToolbarCancelSave onClick={handleCancel} />}>
                         <TextInputWide
                             source="comment"
                             validate={validate_required_4096}

@@ -30,11 +30,11 @@ const LicensePolicyItemAdd = ({ id }: LicensePolicyItemAddProps) => {
         setOpen(false);
     };
 
-    const [license_group, setLicenseGroup] = useState();
+    const [licenseGroup, setLicenseGroup] = useState();
     const [license, setLicense] = useState();
-    const [license_expression, setLicenseExpression] = useState();
-    const [non_spdx_license, setNonSPDXLicense] = useState();
-    const [evaluation_result, setEvaluationResult] = useState();
+    const [licenseExpression, setLicenseExpression] = useState();
+    const [nonSPDXLicense, setNonSPDXLicense] = useState();
+    const [evaluationResult, setEvaluationResult] = useState();
     const [comment, setComment] = useState();
 
     const resetState = () => {
@@ -61,11 +61,11 @@ const LicensePolicyItemAdd = ({ id }: LicensePolicyItemAddProps) => {
 
         const setData = () => {
             const data = {
-                license_group: license_group,
+                license_group: licenseGroup,
                 license: license,
-                license_expression: license_expression,
-                non_spdx_license: non_spdx_license,
-                evaluation_result: evaluation_result,
+                license_expression: licenseExpression,
+                non_spdx_license: nonSPDXLicense,
+                evaluation_result: evaluationResult,
                 comment: comment,
             };
             return data;

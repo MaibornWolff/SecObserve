@@ -1,14 +1,13 @@
 import EditIcon from "@mui/icons-material/Edit";
 import { Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
 import { Fragment, useState } from "react";
-import { SaveButton, SimpleForm, useNotify, useRefresh } from "react-admin";
+import { SimpleForm, useNotify, useRefresh } from "react-admin";
 
 import axios_instance from "../../access_control/auth_provider/axios_instance";
-import CancelButton from "../../commons/custom_fields/CancelButton";
 import EditButton from "../../commons/custom_fields/EditButton";
-import Toolbar from "../../commons/custom_fields/Toolbar";
 import { validate_required_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
+import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
 
 const OpenVEXUpdate = () => {
     const [open, setOpen] = useState(false);
@@ -25,13 +24,6 @@ const OpenVEXUpdate = () => {
         setOpen(false);
         setLoading(false);
     };
-
-    const CustomToolbar = () => (
-        <Toolbar>
-            <CancelButton onClick={handleCancel} />
-            <SaveButton label="Update" icon={<EditIcon />} alwaysEnable />
-        </Toolbar>
-    );
 
     const update_openvex = async (data: any) => {
         setLoading(true);
@@ -75,7 +67,14 @@ const OpenVEXUpdate = () => {
             <Dialog open={open && !loading} onClose={handleClose} maxWidth={"lg"}>
                 <DialogTitle>Update OpenVEX document</DialogTitle>
                 <DialogContent>
-                    <SimpleForm onSubmit={update_openvex} toolbar={<CustomToolbar />}>
+                    <SimpleForm onSubmit={update_openvex} toolbar={
+                            <ToolbarCancelSave
+                                onClick={handleCancel}
+                                saveButtonLabel="Update"
+                                saveButtonIcon={<EditIcon />}
+                                alwaysEnable
+                            />
+                        }>
                         <Typography variant="h6" sx={{ marginBottom: 1 }}>
                             Document
                         </Typography>

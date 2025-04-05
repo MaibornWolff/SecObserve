@@ -3,7 +3,6 @@ import { Fragment, useEffect, useState } from "react";
 import {
     BooleanInput,
     ReferenceInput,
-    SaveButton,
     SimpleForm,
     WithRecord,
     useDataProvider,
@@ -13,9 +12,8 @@ import {
 } from "react-admin";
 import { useWatch } from "react-hook-form";
 
-import CancelButton from "../../commons/custom_fields/CancelButton";
 import EditButton from "../../commons/custom_fields/EditButton";
-import Toolbar from "../../commons/custom_fields/Toolbar";
+import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
 import {
     validate_255,
     validate_513,
@@ -132,13 +130,6 @@ const ApiConfigurationEdit = () => {
         );
     };
 
-    const CustomToolbar = () => (
-        <Toolbar>
-            <CancelButton onClick={handleCancel} />
-            <SaveButton />
-        </Toolbar>
-    );
-
     const ParserInput = () => {
         const parserId = useWatch({ name: "parser" });
         const selectedParser = parsers.find((parser) => parser.id === parserId);
@@ -231,7 +222,10 @@ const ApiConfigurationEdit = () => {
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Edit API configuration</DialogTitle>
                 <DialogContent>
-                    <SimpleForm onSubmit={api_configuration_update} toolbar={<CustomToolbar />}>
+                    <SimpleForm
+                        onSubmit={api_configuration_update}
+                        toolbar={<ToolbarCancelSave onClick={handleCancel} />}
+                    >
                         <TextInputWide autoFocus source="name" validate={validate_required_255} />
                         <ReferenceInput
                             source="parser"

@@ -1,11 +1,10 @@
 import PasswordIcon from "@mui/icons-material/Password";
 import { Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
 import { Fragment, useEffect, useState } from "react";
-import { SaveButton, SimpleForm, WithRecord, useNotify, useRefresh } from "react-admin";
+import { SimpleForm, WithRecord, useNotify, useRefresh } from "react-admin";
 
-import CancelButton from "../../commons/custom_fields/CancelButton";
 import SmallButton from "../../commons/custom_fields/SmallButton";
-import Toolbar from "../../commons/custom_fields/Toolbar";
+import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
 import { validate_required_255 } from "../../commons/custom_validators";
 import { PasswordInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
@@ -14,7 +13,7 @@ const UserChangePassword = () => {
     const refresh = useRefresh();
     const [open, setOpen] = useState(false);
     const notify = useNotify();
-    const [password_rules, setPasswordRules] = useState("");
+    const [passwordRules, setPasswordRules] = useState("");
 
     useEffect(() => {
         get_password_rules();
@@ -59,15 +58,8 @@ const UserChangePassword = () => {
     };
 
     const handleCancel = () => setOpen(false);
-
     const handleOpen = () => setOpen(true);
 
-    const CustomToolbar = () => (
-        <Toolbar>
-            <CancelButton onClick={handleCancel} />
-            <SaveButton label="Change" />
-        </Toolbar>
-    );
     return (
         <Fragment>
             <SmallButton title="Change password" onClick={handleOpen} icon={<PasswordIcon />} />
@@ -76,7 +68,10 @@ const UserChangePassword = () => {
                     <Dialog open={open} onClose={handleClose}>
                         <DialogTitle>Change password for {user.full_name}</DialogTitle>
                         <DialogContent>
-                            <SimpleForm onSubmit={changePassword} toolbar={<CustomToolbar />}>
+                            <SimpleForm
+                                onSubmit={changePassword}
+                                toolbar={<ToolbarCancelSave onClick={handleCancel} saveButtonLabel="Change" />}
+                            >
                                 <PasswordInputWide
                                     source="current_password"
                                     label="Your current password"
@@ -85,7 +80,7 @@ const UserChangePassword = () => {
                                 <PasswordInputWide source="new_password_1" validate={validate_required_255} />
                                 <PasswordInputWide source="new_password_2" validate={validate_required_255} />
                                 <Typography sx={{ fontWeight: "bold" }}>Password rules:</Typography>
-                                <Typography sx={{ whiteSpace: "pre-line" }}>{password_rules}</Typography>
+                                <Typography sx={{ whiteSpace: "pre-line" }}>{passwordRules}</Typography>
                             </SimpleForm>
                         </DialogContent>
                     </Dialog>

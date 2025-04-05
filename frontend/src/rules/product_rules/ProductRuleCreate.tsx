@@ -1,23 +1,11 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { CreateBase, SaveButton, SimpleForm, useCreate, useNotify, useRefresh } from "react-admin";
+import { CreateBase, SimpleForm, useCreate, useNotify, useRefresh } from "react-admin";
 
 import AddButton from "../../commons/custom_fields/AddButton";
-import CancelButton from "../../commons/custom_fields/CancelButton";
-import Toolbar from "../../commons/custom_fields/Toolbar";
+import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
 import { OBSERVATION_STATUS_OPEN } from "../../core/types";
 import { RuleCreateEditComponent, non_duplicate_transform, validateRuleForm } from "../functions";
-
-interface CustomToolbarProps {
-    handleCancel: () => void;
-}
-
-const CustomToolbar = ({ handleCancel }: CustomToolbarProps) => (
-    <Toolbar>
-        <CancelButton onClick={handleCancel} />
-        <SaveButton />
-    </Toolbar>
-);
 
 export type ProductRuleCreateProps = {
     product: any;
@@ -65,7 +53,7 @@ const ProductRuleCreate = ({ product }: ProductRuleCreateProps) => {
                     <CreateBase resource="product_rules">
                         <SimpleForm
                             onSubmit={create_product_rule}
-                            toolbar={<CustomToolbar handleCancel={handleCancel} />}
+                            toolbar={<ToolbarCancelSave onClick={handleCancel} />}
                             validate={validateRuleForm}
                         >
                             <RuleCreateEditComponent product={product} initialStatus={OBSERVATION_STATUS_OPEN} />

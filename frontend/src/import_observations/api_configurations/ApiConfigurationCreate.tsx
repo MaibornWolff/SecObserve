@@ -4,7 +4,6 @@ import {
     BooleanInput,
     CreateBase,
     ReferenceInput,
-    SaveButton,
     SimpleForm,
     useCreate,
     useDataProvider,
@@ -14,8 +13,7 @@ import {
 import { useWatch } from "react-hook-form";
 
 import AddButton from "../../commons/custom_fields/AddButton";
-import CancelButton from "../../commons/custom_fields/CancelButton";
-import Toolbar from "../../commons/custom_fields/Toolbar";
+import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
 import {
     validate_255,
     validate_513,
@@ -60,13 +58,6 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
         if (reason && reason === "backdropClick") return;
         setOpen(false);
     };
-
-    const CustomToolbar = () => (
-        <Toolbar>
-            <CancelButton onClick={handleCancel} />
-            <SaveButton />
-        </Toolbar>
-    );
 
     const createApiConfiguration = (data: any) => {
         data.product = id;
@@ -207,7 +198,10 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
                 <DialogTitle>Add API configuration</DialogTitle>
                 <DialogContent>
                     <CreateBase resource="api_configurations">
-                        <SimpleForm onSubmit={createApiConfiguration} toolbar={<CustomToolbar />}>
+                        <SimpleForm
+                            onSubmit={createApiConfiguration}
+                            toolbar={<ToolbarCancelSave onClick={handleCancel} />}
+                        >
                             <TextInputWide autoFocus source="name" validate={validate_required_255} />
                             <ReferenceInput
                                 source="parser"

@@ -1,11 +1,10 @@
 import UploadIcon from "@mui/icons-material/CloudUpload";
 import { Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { ReferenceInput, SaveButton, SimpleForm, useNotify, useRefresh } from "react-admin";
+import { ReferenceInput, SimpleForm, useNotify, useRefresh } from "react-admin";
 
-import CancelButton from "../../commons/custom_fields/CancelButton";
 import MenuButton from "../../commons/custom_fields/MenuButton";
-import Toolbar from "../../commons/custom_fields/Toolbar";
+import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
 import { validate_255, validate_513, validate_2048, validate_required } from "../../commons/custom_validators";
 import { getIconAndFontColor } from "../../commons/functions";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
@@ -78,13 +77,6 @@ const ApiImportObservations = (product: any) => {
             });
     };
 
-    const CustomToolbar = () => (
-        <Toolbar>
-            <CancelButton onClick={handleCancel} />
-            <SaveButton label="Import" icon={<UploadIcon />} />
-        </Toolbar>
-    );
-
     return (
         <Fragment>
             <MenuButton
@@ -95,7 +87,16 @@ const ApiImportObservations = (product: any) => {
             <Dialog open={open && !loading} onClose={handleClose}>
                 <DialogTitle>Import observations from API</DialogTitle>
                 <DialogContent>
-                    <SimpleForm onSubmit={observationUpdate} toolbar={<CustomToolbar />}>
+                    <SimpleForm
+                        onSubmit={observationUpdate}
+                        toolbar={
+                            <ToolbarCancelSave
+                                onClick={handleCancel}
+                                saveButtonLabel="Import"
+                                saveButtonIcon={<UploadIcon />}
+                            />
+                        }
+                    >
                         <ReferenceInput
                             source="api_configuration"
                             reference="api_configurations"

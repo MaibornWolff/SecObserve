@@ -30,7 +30,7 @@ const LicensePolicyMemberAdd = ({ id }: LicensePolicyMemberAddProps) => {
     };
 
     const [user, setUser] = useState();
-    const [is_manager, setIsManager] = useState(false);
+    const [isManager, setIsManager] = useState(false);
     const resetState = () => {
         setUser(undefined);
         setIsManager(false);
@@ -43,7 +43,7 @@ const LicensePolicyMemberAdd = ({ id }: LicensePolicyMemberAddProps) => {
             e.preventDefault(); // necessary to prevent default SaveButton submit logic
             const data = {
                 user: user,
-                is_manager: is_manager,
+                is_manager: isManager,
             };
             add_user(data, false);
         };
@@ -52,7 +52,7 @@ const LicensePolicyMemberAdd = ({ id }: LicensePolicyMemberAddProps) => {
             e.preventDefault(); // necessary to prevent default SaveButton submit logic
             const data = {
                 user: user,
-                is_manager: is_manager,
+                is_manager: isManager,
             };
             add_user(data, true);
         };

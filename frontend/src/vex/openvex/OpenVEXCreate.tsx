@@ -6,7 +6,6 @@ import {
     CreateBase,
     FormDataConsumer,
     ReferenceInput,
-    SaveButton,
     SimpleForm,
     SimpleFormIterator,
     useNotify,
@@ -15,8 +14,7 @@ import {
 
 import axios_instance from "../../access_control/auth_provider/axios_instance";
 import AddButton from "../../commons/custom_fields/AddButton";
-import CancelButton from "../../commons/custom_fields/CancelButton";
-import Toolbar from "../../commons/custom_fields/Toolbar";
+import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
 import { validate_255, validate_required_255 } from "../../commons/custom_validators";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 
@@ -35,13 +33,6 @@ const OpenVEXCreate = () => {
         setOpen(false);
         setLoading(false);
     };
-
-    const CustomToolbar = () => (
-        <Toolbar>
-            <CancelButton onClick={handleCancel} />
-            <SaveButton label="Create" icon={<AddIcon />} />
-        </Toolbar>
-    );
 
     const create_openvex = async (data: any) => {
         setLoading(true);
@@ -94,7 +85,16 @@ const OpenVEXCreate = () => {
                 <DialogTitle>Create OpenVEX document</DialogTitle>
                 <DialogContent>
                     <CreateBase resource="openvex">
-                        <SimpleForm onSubmit={create_openvex} toolbar={<CustomToolbar />}>
+                        <SimpleForm
+                            onSubmit={create_openvex}
+                            toolbar={
+                                <ToolbarCancelSave
+                                    onClick={handleCancel}
+                                    saveButtonLabel="Create"
+                                    saveButtonIcon={<AddIcon />}
+                                />
+                            }
+                        >
                             <Typography variant="h6" sx={{ marginBottom: 1 }}>
                                 OpenVEX
                             </Typography>

@@ -1,13 +1,12 @@
 import UploadIcon from "@mui/icons-material/Upload";
 import { Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { FileField, FileInput, SaveButton, SimpleForm, useNotify, useRefresh } from "react-admin";
+import { FileField, FileInput, SimpleForm, useNotify, useRefresh } from "react-admin";
 
-import CancelButton from "../../commons/custom_fields/CancelButton";
 import SmallButton from "../../commons/custom_fields/SmallButton";
-import Toolbar from "../../commons/custom_fields/Toolbar";
 import { validate_required } from "../../commons/custom_validators";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
+import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
 
 const VEXDocumentImport = () => {
     const [open, setOpen] = useState(false);
@@ -52,19 +51,19 @@ const VEXDocumentImport = () => {
             });
     };
 
-    const CustomToolbar = () => (
-        <Toolbar>
-            <CancelButton onClick={handleCancel} />
-            <SaveButton label="Import" icon={<UploadIcon />} alwaysEnable />
-        </Toolbar>
-    );
     return (
         <Fragment>
             <SmallButton title="Import VEX document" onClick={handleOpen} icon={<UploadIcon />} />
             <Dialog open={open && !loading} onClose={handleClose}>
                 <DialogTitle>Import VEX document</DialogTitle>
                 <DialogContent>
-                    <SimpleForm onSubmit={vexImport} toolbar={<CustomToolbar />}>
+                    <SimpleForm onSubmit={vexImport} toolbar={
+                            <ToolbarCancelSave
+                                onClick={handleCancel}
+                                saveButtonLabel="Import"
+                                saveButtonIcon={<UploadIcon />}
+                            />
+                        }>
                         <FileInput
                             source="file"
                             label="VEX document"

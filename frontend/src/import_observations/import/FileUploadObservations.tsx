@@ -1,20 +1,10 @@
 import UploadIcon from "@mui/icons-material/Upload";
 import { Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import {
-    FileField,
-    FileInput,
-    ReferenceInput,
-    SaveButton,
-    SimpleForm,
-    WithRecord,
-    useNotify,
-    useRefresh,
-} from "react-admin";
+import { FileField, FileInput, ReferenceInput, SimpleForm, WithRecord, useNotify, useRefresh } from "react-admin";
 
-import CancelButton from "../../commons/custom_fields/CancelButton";
 import MenuButton from "../../commons/custom_fields/MenuButton";
-import Toolbar from "../../commons/custom_fields/Toolbar";
+import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
 import { validate_255, validate_513, validate_2048, validate_required } from "../../commons/custom_validators";
 import { getIconAndFontColor } from "../../commons/functions";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
@@ -110,13 +100,6 @@ const FileUploadObservations = () => {
             });
     };
 
-    const CustomToolbar = () => (
-        <Toolbar>
-            <CancelButton onClick={handleCancel} />
-            <SaveButton label="Upload" icon={<UploadIcon />} />
-        </Toolbar>
-    );
-
     return (
         <Fragment>
             <MenuButton
@@ -127,7 +110,16 @@ const FileUploadObservations = () => {
             <Dialog open={open && !loading} onClose={handleClose}>
                 <DialogTitle>Upload observations from file</DialogTitle>
                 <DialogContent>
-                    <SimpleForm onSubmit={observationUpdate} toolbar={<CustomToolbar />}>
+                    <SimpleForm
+                        onSubmit={observationUpdate}
+                        toolbar={
+                            <ToolbarCancelSave
+                                onClick={handleCancel}
+                                saveButtonLabel="Upload"
+                                saveButtonIcon={<UploadIcon />}
+                            />
+                        }
+                    >
                         <FileInput
                             source="file"
                             label="Scan report"
