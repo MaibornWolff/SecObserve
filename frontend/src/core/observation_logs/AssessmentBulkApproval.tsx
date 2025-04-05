@@ -1,11 +1,10 @@
 import ApprovalIcon from "@mui/icons-material/Approval";
 import { Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { SaveButton, SimpleForm, useListContext, useNotify, useRefresh, useUnselectAll } from "react-admin";
+import { SimpleForm, useListContext, useNotify, useRefresh, useUnselectAll } from "react-admin";
 
-import CancelButton from "../../commons/custom_fields/CancelButton";
 import SmallButton from "../../commons/custom_fields/SmallButton";
-import Toolbar from "../../commons/custom_fields/Toolbar";
+import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
 import { validate_required, validate_required_255 } from "../../commons/custom_validators";
 import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
@@ -58,12 +57,6 @@ const AssessmentBulkApproval = () => {
     const handleCancel = () => setOpen(false);
     const handleOpen = () => setOpen(true);
 
-    const CustomToolbar = () => (
-        <Toolbar>
-            <CancelButton onClick={handleCancel} />
-            <SaveButton />
-        </Toolbar>
-    );
     return (
         <Fragment>
             <SmallButton title="Approval" onClick={handleOpen} icon={<ApprovalIcon />} />
@@ -73,7 +66,7 @@ const AssessmentBulkApproval = () => {
                     &nbsp;&nbsp;Assessment approval
                 </DialogTitle>
                 <DialogContent>
-                    <SimpleForm onSubmit={assessmentUpdate} toolbar={<CustomToolbar />}>
+                    <SimpleForm onSubmit={assessmentUpdate} toolbar={<ToolbarCancelSave onClick={handleCancel} />}>
                         <AutocompleteInputMedium
                             source="assessment_status"
                             choices={ASSESSMENT_STATUS_CHOICES}

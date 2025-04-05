@@ -1,12 +1,11 @@
 import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { CreateBase, SaveButton, SimpleForm, useNotify, useRefresh } from "react-admin";
+import { CreateBase, SimpleForm, useNotify, useRefresh } from "react-admin";
 import { useNavigate } from "react-router";
 
-import CancelButton from "../../commons/custom_fields/CancelButton";
 import SmallButton from "../../commons/custom_fields/SmallButton";
-import Toolbar from "../../commons/custom_fields/Toolbar";
+import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
 import { validate_required } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
@@ -26,13 +25,6 @@ const LicensePolicyCopy = ({ license_policy }: LicensePolicyCopyProps) => {
         if (reason && reason == "backdropClick") return;
         setOpen(false);
     };
-
-    const CustomToolbar = () => (
-        <Toolbar>
-            <CancelButton onClick={handleCancel} />
-            <SaveButton label="Copy" icon={<LibraryAddIcon />} />
-        </Toolbar>
-    );
 
     const copyLicensePolicy = (data: any) => {
         const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/license_policies/" + license_policy.id + "/copy/";
@@ -58,7 +50,16 @@ const LicensePolicyCopy = ({ license_policy }: LicensePolicyCopyProps) => {
                 <DialogTitle>Copy license policy</DialogTitle>
                 <DialogContent>
                     <CreateBase resource="license_policy_members">
-                        <SimpleForm onSubmit={copyLicensePolicy} toolbar={<CustomToolbar />}>
+                        <SimpleForm
+                            onSubmit={copyLicensePolicy}
+                            toolbar={
+                                <ToolbarCancelSave
+                                    onClick={handleCancel}
+                                    saveButtonLabel="Copy"
+                                    saveButtonIcon={<LibraryAddIcon />}
+                                />
+                            }
+                        >
                             <TextInputWide source="new_name" label="Name" validate={validate_required} />
                         </SimpleForm>
                     </CreateBase>

@@ -1,12 +1,11 @@
 import EditIcon from "@mui/icons-material/Edit";
 import { Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle, Divider, Typography } from "@mui/material";
 import { Fragment, useState } from "react";
-import { SaveButton, SimpleForm, useNotify, useRefresh } from "react-admin";
+import { SimpleForm, useNotify, useRefresh } from "react-admin";
 
 import axios_instance from "../../access_control/auth_provider/axios_instance";
-import CancelButton from "../../commons/custom_fields/CancelButton";
 import EditButton from "../../commons/custom_fields/EditButton";
-import Toolbar from "../../commons/custom_fields/Toolbar";
+import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
 import { validate_required, validate_required_255 } from "../../commons/custom_validators";
 import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
 import { CSAF_PUBLISHER_CATEGORY_CHOICES, CSAF_TLP_LABEL_CHOICES, CSAF_TRACKING_STATUS_CHOICES } from "../types";
@@ -26,13 +25,6 @@ const CSAFUpdate = () => {
         setOpen(false);
         setLoading(false);
     };
-
-    const CustomToolbar = () => (
-        <Toolbar>
-            <CancelButton onClick={handleCancel} />
-            <SaveButton label="Update" icon={<EditIcon />} alwaysEnable />
-        </Toolbar>
-    );
 
     const update_csaf = async (data: any) => {
         setLoading(true);
@@ -76,7 +68,17 @@ const CSAFUpdate = () => {
             <Dialog open={open && !loading} onClose={handleClose} maxWidth={"lg"}>
                 <DialogTitle>Update CSAF document</DialogTitle>
                 <DialogContent>
-                    <SimpleForm onSubmit={update_csaf} toolbar={<CustomToolbar />}>
+                    <SimpleForm
+                        onSubmit={update_csaf}
+                        toolbar={
+                            <ToolbarCancelSave
+                                onClick={handleCancel}
+                                saveButtonLabel="Update"
+                                saveButtonIcon={<EditIcon />}
+                                alwaysEnable
+                            />
+                        }
+                    >
                         <Typography variant="h6" sx={{ marginBottom: 1 }}>
                             Document
                         </Typography>

@@ -1,35 +1,14 @@
 import UploadIcon from "@mui/icons-material/Upload";
 import { Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import {
-    FileField,
-    FileInput,
-    ReferenceInput,
-    SaveButton,
-    SimpleForm,
-    WithRecord,
-    useNotify,
-    useRefresh,
-} from "react-admin";
+import { FileField, FileInput, ReferenceInput, SimpleForm, WithRecord, useNotify, useRefresh } from "react-admin";
 
-import CancelButton from "../../commons/custom_fields/CancelButton";
 import MenuButton from "../../commons/custom_fields/MenuButton";
-import Toolbar from "../../commons/custom_fields/Toolbar";
+import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
 import { validate_required } from "../../commons/custom_validators";
 import { getIconAndFontColor } from "../../commons/functions";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
-
-interface CustomToolbarProps {
-    handleCancel: () => void;
-}
-
-const CustomToolbar = ({ handleCancel }: CustomToolbarProps) => (
-    <Toolbar>
-        <CancelButton onClick={handleCancel} />
-        <SaveButton label="Upload" icon={<UploadIcon />} />
-    </Toolbar>
-);
 
 const FileUploadSBOM = () => {
     const [open, setOpen] = useState(false);
@@ -96,7 +75,16 @@ const FileUploadSBOM = () => {
             <Dialog open={open && !loading} onClose={handleClose}>
                 <DialogTitle>Upload SBOM from file</DialogTitle>
                 <DialogContent>
-                    <SimpleForm onSubmit={uploadSBOM} toolbar={<CustomToolbar handleCancel={handleCancel} />}>
+                    <SimpleForm
+                        onSubmit={uploadSBOM}
+                        toolbar={
+                            <ToolbarCancelSave
+                                onClick={handleCancel}
+                                saveButtonLabel="Upload"
+                                saveButtonIcon={<UploadIcon />}
+                            />
+                        }
+                    >
                         <FileInput
                             source="file"
                             label="SBOM"

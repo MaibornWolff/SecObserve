@@ -6,7 +6,6 @@ import {
     CreateBase,
     FormDataConsumer,
     ReferenceInput,
-    SaveButton,
     SimpleForm,
     SimpleFormIterator,
     useNotify,
@@ -15,8 +14,7 @@ import {
 
 import axios_instance from "../../access_control/auth_provider/axios_instance";
 import AddButton from "../../commons/custom_fields/AddButton";
-import CancelButton from "../../commons/custom_fields/CancelButton";
-import Toolbar from "../../commons/custom_fields/Toolbar";
+import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
 import { validate_255, validate_required, validate_required_255 } from "../../commons/custom_validators";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { CSAF_PUBLISHER_CATEGORY_CHOICES, CSAF_TLP_LABEL_CHOICES, CSAF_TRACKING_STATUS_CHOICES } from "../types";
@@ -36,13 +34,6 @@ const CSAFCreate = () => {
         setOpen(false);
         setLoading(false);
     };
-
-    const CustomToolbar = () => (
-        <Toolbar>
-            <CancelButton onClick={handleCancel} />
-            <SaveButton label="Create" icon={<AddIcon />} />
-        </Toolbar>
-    );
 
     const create_csaf = async (data: any) => {
         setLoading(true);
@@ -95,7 +86,16 @@ const CSAFCreate = () => {
                 <DialogTitle>Create CSAF document</DialogTitle>
                 <DialogContent>
                     <CreateBase resource="csaf">
-                        <SimpleForm onSubmit={create_csaf} toolbar={<CustomToolbar />}>
+                        <SimpleForm
+                            onSubmit={create_csaf}
+                            toolbar={
+                                <ToolbarCancelSave
+                                    onClick={handleCancel}
+                                    saveButtonLabel="Create"
+                                    saveButtonIcon={<AddIcon />}
+                                />
+                            }
+                        >
                             <Typography variant="h6" sx={{ marginBottom: 1 }}>
                                 CSAF
                             </Typography>
