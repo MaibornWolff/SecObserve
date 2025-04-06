@@ -1,11 +1,10 @@
 import { Dialog, DialogContent, DialogTitle, Stack } from "@mui/material";
 import { Fragment, useState } from "react";
-import { BooleanInput, CreateBase, SaveButton, SimpleForm, useCreate, useNotify, useRefresh } from "react-admin";
+import { BooleanInput, CreateBase, SimpleForm, useCreate, useNotify, useRefresh } from "react-admin";
 
 import AddButton from "../../commons/custom_fields/AddButton";
-import CancelButton from "../../commons/custom_fields/CancelButton";
 import OSVLinuxDistributionInput from "../../commons/custom_fields/OSVLinuxDistributionInput";
-import Toolbar from "../../commons/custom_fields/Toolbar";
+import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
 import { validate_255, validate_required_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 
@@ -24,13 +23,6 @@ const BranchCreate = ({ product }: BranchCreateProps) => {
         if (reason && reason == "backdropClick") return;
         setOpen(false);
     };
-
-    const CustomToolbar = () => (
-        <Toolbar>
-            <CancelButton onClick={handleCancel} />
-            <SaveButton />
-        </Toolbar>
-    );
 
     const create_branch = (data: any) => {
         data.product = product.id;
@@ -71,7 +63,7 @@ const BranchCreate = ({ product }: BranchCreateProps) => {
                 <DialogTitle>Add branch / version</DialogTitle>
                 <DialogContent>
                     <CreateBase resource="branches">
-                        <SimpleForm onSubmit={create_branch} toolbar={<CustomToolbar />}>
+                        <SimpleForm onSubmit={create_branch} toolbar={<ToolbarCancelSave onClick={handleCancel} />}>
                             <TextInputWide source="name" validate={validate_required_255} />
                             <TextInputWide source="purl" label="PURL" validate={validate_255} />
                             <TextInputWide source="cpe23" label="CPE 2.3" validate={validate_255} />
@@ -80,7 +72,7 @@ const BranchCreate = ({ product }: BranchCreateProps) => {
                                 label="Protect from housekeeping"
                                 defaultValue={false}
                             />
-                            {product && product.osv_enabled && (
+                            {product?.osv_enabled && (
                                 <Stack direction="row" spacing={2} alignItems="center">
                                     <OSVLinuxDistributionInput />
                                 </Stack>

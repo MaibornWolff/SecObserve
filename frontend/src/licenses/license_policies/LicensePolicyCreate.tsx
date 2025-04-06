@@ -7,12 +7,8 @@ import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/theme
 
 const LicensePolicyCreate = () => {
     const transform = (data: any) => {
-        if (!data.description) {
-            data.description = "";
-        }
-        if (!data.ignore_component_types) {
-            data.ignore_component_types = "";
-        }
+        data.description ??= "";
+        data.ignore_component_types ??= "";
         return data;
     };
 

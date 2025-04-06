@@ -21,6 +21,7 @@ class Parser(Model):
     name = CharField(max_length=255, unique=True)
     type = CharField(max_length=16, choices=Parser_Type.TYPE_CHOICES)
     source = CharField(max_length=16, choices=Parser_Source.SOURCE_CHOICES)
+    sbom = BooleanField(default=False)
     module_name = CharField(max_length=255, blank=True)
     class_name = CharField(max_length=255, blank=True)
 

@@ -1,10 +1,10 @@
 import UploadIcon from "@mui/icons-material/CloudUpload";
-import { Backdrop, Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Fragment, useState } from "react";
-import { ReferenceInput, SaveButton, SimpleForm, WithRecord, useNotify, useRefresh } from "react-admin";
+import { ReferenceInput, SimpleForm, WithRecord, useNotify, useRefresh } from "react-admin";
 
-import CancelButton from "../../commons/custom_fields/CancelButton";
-import Toolbar from "../../commons/custom_fields/Toolbar";
+import MenuButton from "../../commons/custom_fields/MenuButton";
+import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
 import { getIconAndFontColor } from "../../commons/functions";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
@@ -67,36 +67,27 @@ const ScanOSV = ({ product }: ScanOSVProps) => {
             });
     };
 
-    const CustomToolbar = () => (
-        <Toolbar>
-            <CancelButton onClick={handleCancel} />
-            <SaveButton label="Scan" icon={<UploadIcon />} alwaysEnable />
-        </Toolbar>
-    );
-
     return (
         <Fragment>
-            <Button
+            <MenuButton
+                title="Scan vulnerabilities from OSV"
                 onClick={handleOpen}
-                size="small"
-                sx={{
-                    paddingTop: 0,
-                    paddingBottom: 0,
-                    paddingLeft: "5px",
-                    paddingRight: "5px",
-                    color: getIconAndFontColor(),
-                    textTransform: "none",
-                    fontWeight: "normal",
-                    fontSize: "1rem",
-                }}
-                startIcon={<UploadIcon sx={{ color: getIconAndFontColor() }} />}
-            >
-                Scan vulnerabilities from OSV
-            </Button>
+                icon={<UploadIcon sx={{ color: getIconAndFontColor() }} />}
+            />
             <Dialog open={open && !loading} onClose={handleClose}>
                 <DialogTitle>Scan vulnerabilities from OSV</DialogTitle>
                 <DialogContent>
-                    <SimpleForm onSubmit={scanOSV} toolbar={<CustomToolbar />}>
+                    <SimpleForm
+                        onSubmit={scanOSV}
+                        toolbar={
+                            <ToolbarCancelSave
+                                onClick={handleCancel}
+                                saveButtonLabel="Scan"
+                                saveButtonIcon={<UploadIcon />}
+                                alwaysEnable
+                            />
+                        }
+                    >
                         <TextInputWide source="name" defaultValue={product.name} disabled />
                         <WithRecord
                             render={(product) => (

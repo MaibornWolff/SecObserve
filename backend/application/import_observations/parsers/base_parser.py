@@ -41,5 +41,9 @@ class BaseFileParser:
     def get_filetype(cls) -> str:
         raise NotImplementedError("check_format() must be overridden")
 
+    @classmethod
+    def sbom(cls) -> bool:
+        return False
+
     def check_format(self, data: Any) -> bool:
         raise NotImplementedError("check_format() must be overridden")

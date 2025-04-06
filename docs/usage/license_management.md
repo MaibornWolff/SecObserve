@@ -44,6 +44,8 @@ If no License Policy is set, all licenses are evaluated as `Unknown`. If a Licen
 
 License expressions are evaluated by their included licenses, if the operators are all either `AND` or `OR`. If other operators are used, e.g. `WITH`, the expression is evaluated as `Unknown`, if there is no explicit rule for this license expression.
 
+If multiple licenses have been found for a component, they are evaluated like an `AND` expression. If for example one license is `Allowed` and the other one is `Forbidden`, the component is evaluated as `Forbidden`. 
+
 A good strategy is to start with an existing License Policy and when needed make a copy of it and adjust the rules to the needs of the Product.
 
 ## Managing License Policies
@@ -60,7 +62,7 @@ The attribute `Public` defines, if the License Policy is visible for all users o
 
 **Actions**
 
-* The `Export` button opens a sub-menu to exports the License Policy either as a JSON or a YAML file. The output format is specified as a [JSON schema](../specification/secobserve_license_policy_schema.json).
+* The `Export` button opens a sub-menu to exports the License Policy either as a SecObserve specific JSON or YAML file or in a format that can be used with [sbom-utility](https://github.com/CycloneDX/sbom-utility?tab=readme-ov-file#license-list-subcommand), using the `--config-license` parameter. The SecObserve specific output format is specified as a [JSON schema](../specification/secobserve_license_policy_schema.json).
 * With the `Apply` button the rules of the License Policy are applied to all products, that have this License Policy set.
 * The `Copy` button creates a new License Policy with the same rules, which can be adjusted for a specific Product.
 
@@ -75,6 +77,7 @@ A `License Policy` has a list of items, which are the rules of the policy. It ca
 * a rule for an **non-spdx license** string, e.g. a license that is not in the SPDX list or a license expression.
 
 ![License policy item](../assets/images/screenshot_license_policy_item.png){ width="60%" style="display: block; margin: 0 auto" }
+
 
 
 Additionally a `License Policy` has a list of user members and a list of authorization group members, which define who has access to a license policy, either read-only or as a manager. To define read-only members is not necessary, if the policy is defined as `Public`. Additionally, users can view all license policies that are assigned to a product, if they have access to the product.

@@ -7,18 +7,10 @@ import { TextInputWide } from "../../commons/layout/themes";
 
 const UserCreate = () => {
     const transform = (data: any) => {
-        if (!data.full_name) {
-            data.full_name = "";
-        }
-        if (!data.first_name) {
-            data.first_name = "";
-        }
-        if (!data.last_name) {
-            data.last_name = "";
-        }
-        if (!data.email) {
-            data.email = "";
-        }
+        data.full_name ??= "";
+        data.first_name ??= "";
+        data.last_name ??= "";
+        data.email ??= "";
         return data;
     };
 

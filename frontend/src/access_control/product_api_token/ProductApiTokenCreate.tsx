@@ -1,12 +1,11 @@
 import AddIcon from "@mui/icons-material/Add";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField } from "@mui/material";
 import { useState } from "react";
-import { SaveButton, SimpleForm, useNotify, useRefresh } from "react-admin";
+import { SimpleForm, useNotify, useRefresh } from "react-admin";
 
 import AddButton from "../../commons/custom_fields/AddButton";
-import CancelButton from "../../commons/custom_fields/CancelButton";
 import CopyToClipboardButton from "../../commons/custom_fields/CopyToClipboardButton";
-import Toolbar from "../../commons/custom_fields/Toolbar";
+import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
 import { validate_required } from "../../commons/custom_validators";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
@@ -43,13 +42,6 @@ const CreateProductApiToken = (props: CreateProductApiTokenProps) => {
         refresh();
     };
 
-    const CustomToolbar = () => (
-        <Toolbar>
-            <CancelButton onClick={handleRoleCancel} />
-            <SaveButton label="Create" icon={<AddIcon />} />
-        </Toolbar>
-    );
-
     const handleApiTokenCreate = async (data: any) => {
         const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/product_api_tokens/";
         const create_data = {
@@ -83,7 +75,16 @@ const CreateProductApiToken = (props: CreateProductApiTokenProps) => {
             <Dialog open={roleOpen} onClose={handleRoleClose}>
                 <DialogTitle>Create product API token</DialogTitle>
                 <DialogContent>
-                    <SimpleForm onSubmit={handleApiTokenCreate} toolbar={<CustomToolbar />}>
+                    <SimpleForm
+                        onSubmit={handleApiTokenCreate}
+                        toolbar={
+                            <ToolbarCancelSave
+                                onClick={handleRoleCancel}
+                                saveButtonLabel="Create"
+                                saveButtonIcon={<AddIcon />}
+                            />
+                        }
+                    >
                         <AutocompleteInputWide source="role" choices={ROLE_CHOICES} validate={validate_required} />
                     </SimpleForm>
                 </DialogContent>

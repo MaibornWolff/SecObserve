@@ -66,8 +66,7 @@ const ServiceEmbeddedList = ({ product }: ServiceEmbeddedListProps) => {
                         <WithRecord
                             render={(service) => (
                                 <Stack direction="row" spacing={4}>
-                                    {product &&
-                                        product.permissions.includes(PERMISSION_SERVICE_DELETE) &&
+                                    {product?.permissions.includes(PERMISSION_SERVICE_DELETE) &&
                                         !service.is_default_service && <ServiceDelete service={service} />}
                                 </Stack>
                             )}

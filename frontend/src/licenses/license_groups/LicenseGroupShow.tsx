@@ -35,7 +35,7 @@ const ShowActions = () => {
                 {license_group && (!is_external() || is_superuser()) && (
                     <LicenseGroupCopy license_group={license_group} />
                 )}
-                {((license_group && license_group.is_manager) || is_superuser()) && <EditButton />}
+                {(license_group?.is_manager || is_superuser()) && <EditButton />}
             </Stack>
         </TopToolbar>
     );

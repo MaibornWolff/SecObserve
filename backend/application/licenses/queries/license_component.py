@@ -77,6 +77,7 @@ def get_license_component_licenses(
         "license__name",
         "license_expression",
         "non_spdx_license",
+        "multiple_licenses",
         "evaluation_result",
     ).annotate(Count("id"))
 

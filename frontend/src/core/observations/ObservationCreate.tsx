@@ -6,7 +6,6 @@ import {
     FormDataConsumer,
     NumberInput,
     ReferenceInput,
-    SaveButton,
     SimpleForm,
     TextInput,
     useCreate,
@@ -15,9 +14,8 @@ import {
 } from "react-admin";
 
 import AddButton from "../../commons/custom_fields/AddButton";
-import CancelButton from "../../commons/custom_fields/CancelButton";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
-import Toolbar from "../../commons/custom_fields/Toolbar";
+import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
 import {
     validate_0_10,
     validate_0_999999,
@@ -56,13 +54,6 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
         setOpen(false);
     };
 
-    const CustomToolbar = () => (
-        <Toolbar>
-            <CancelButton onClick={handleCancel} />
-            <SaveButton />
-        </Toolbar>
-    );
-
     const create_observation = (data: any) => {
         data.product = id;
         if (!justificationEnabled) {
@@ -95,7 +86,10 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
                 <DialogTitle>Add observation</DialogTitle>
                 <DialogContent>
                     <CreateBase resource="observations">
-                        <SimpleForm onSubmit={create_observation} toolbar={<CustomToolbar />}>
+                        <SimpleForm
+                            onSubmit={create_observation}
+                            toolbar={<ToolbarCancelSave onClick={handleCancel} />}
+                        >
                             <Typography variant="h6" sx={{ marginBottom: 1 }}>
                                 Observation
                             </Typography>

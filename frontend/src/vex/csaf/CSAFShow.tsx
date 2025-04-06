@@ -48,7 +48,7 @@ const CSAFComponent = () => {
                             &nbsp;&nbsp;Exported CSAF document
                         </Typography>
                         <Stack spacing={1}>
-                            {csaf && csaf.product_data && csaf.product_data.name && (
+                            {csaf?.product_data?.name && (
                                 <Labeled>
                                     <ReferenceField
                                         source="product"
@@ -59,7 +59,7 @@ const CSAFComponent = () => {
                                     />
                                 </Labeled>
                             )}
-                            {csaf && csaf.vulnerability_names && (
+                            {csaf?.vulnerability_names && (
                                 <Labeled>
                                     <ReferenceManyField
                                         reference="vex/csaf_vulnerabilities"
@@ -72,7 +72,7 @@ const CSAFComponent = () => {
                                     </ReferenceManyField>
                                 </Labeled>
                             )}
-                            {csaf && csaf.branch_names && (
+                            {csaf?.branch_names && (
                                 <Labeled>
                                     <ReferenceManyField
                                         reference="vex/csaf_branches"

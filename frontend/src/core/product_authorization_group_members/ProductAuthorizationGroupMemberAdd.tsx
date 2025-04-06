@@ -30,7 +30,7 @@ const ProductAuthorizationGroupMemberAdd = ({ id }: ProductAuthorizationGroupMem
         setOpen(false);
     };
 
-    const [authorization_group, setAuthorizationGroup] = useState();
+    const [authorizationGroup, setAuthorizationGroup] = useState();
     const [role, setRole] = useState();
     const resetState = () => {
         setAuthorizationGroup(undefined);
@@ -43,7 +43,7 @@ const ProductAuthorizationGroupMemberAdd = ({ id }: ProductAuthorizationGroupMem
         const handleSaveContinue = (e: any) => {
             e.preventDefault(); // necessary to prevent default SaveButton submit logic
             const data = {
-                authorization_group: authorization_group,
+                authorization_group: authorizationGroup,
                 role: role,
             };
             add_product_authorization_group_member(data, false);
@@ -52,7 +52,7 @@ const ProductAuthorizationGroupMemberAdd = ({ id }: ProductAuthorizationGroupMem
         const handleSaveClose = (e: any) => {
             e.preventDefault(); // necessary to prevent default SaveButton submit logic
             const data = {
-                authorization_group: authorization_group,
+                authorization_group: authorizationGroup,
                 role: role,
             };
             add_product_authorization_group_member(data, true);

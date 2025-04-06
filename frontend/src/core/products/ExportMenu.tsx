@@ -240,7 +240,7 @@ const ExportMenu = (props: ExportMenuProps) => {
                 {!props.is_product_group && (
                     <MenuItem
                         onClick={exportCodeChartaMetrics}
-                        divider={showLicenseExport() || (props.product && props.product.issue_tracker_active)}
+                        divider={showLicenseExport() || props.product?.issue_tracker_active}
                     >
                         <ListItemIcon>
                             <ViewQuiltIcon sx={{ color: getIconAndFontColor() }} />
@@ -257,17 +257,14 @@ const ExportMenu = (props: ExportMenuProps) => {
                     </MenuItem>
                 )}
                 {showLicenseExport() && (
-                    <MenuItem
-                        onClick={exportLicenseComponentsCsv}
-                        divider={props.product && props.product.issue_tracker_active}
-                    >
+                    <MenuItem onClick={exportLicenseComponentsCsv} divider={props.product?.issue_tracker_active}>
                         <ListItemIcon>
                             <FontAwesomeIcon icon={faFileCsv} color={getIconAndFontColor()} />
                         </ListItemIcon>
                         Licenses / CSV
                     </MenuItem>
                 )}
-                {!props.is_product_group && props.product && props.product.issue_tracker_active && (
+                {!props.is_product_group && props.product?.issue_tracker_active && (
                     <MenuItem onClick={synchronizeIssues}>
                         <ListItemIcon>
                             <SyncIcon sx={{ color: getIconAndFontColor() }} />

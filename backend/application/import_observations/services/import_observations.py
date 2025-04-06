@@ -41,7 +41,10 @@ from application.import_observations.models import (
     Parser,
     Vulnerability_Check,
 )
-from application.import_observations.parsers.base_parser import BaseAPIParser
+from application.import_observations.parsers.base_parser import (
+    BaseAPIParser,
+    BaseFileParser,
+)
 from application.import_observations.services.parser_detector import (
     detect_parser,
     instanciate_parser,
@@ -78,6 +81,7 @@ class FileUploadParameters:
     endpoint_url: str
     kubernetes_cluster: str
     suppress_licenses: bool
+    sbom: bool
 
 
 @dataclass
@@ -94,59 +98,63 @@ def file_upload_observations(
     file_upload_parameters: FileUploadParameters,
 ) -> Tuple[int, int, int, int, int, int]:
 
+    settings = Settings.load()
     parser, parser_instance, data = detect_parser(file_upload_parameters.file)
-    imported_observations = parser_instance.get_observations(
-        data, file_upload_parameters.product, file_upload_parameters.branch
-    )
-
     filename = os.path.basename(file_upload_parameters.file.name) if file_upload_parameters.file.name else ""
 
-    import_parameters = ImportParameters(
-        product=file_upload_parameters.product,
-        branch=file_upload_parameters.branch,
-        parser=parser,
-        filename=filename,
-        api_configuration_name="",
-        service=file_upload_parameters.service,
-        docker_image_name_tag=file_upload_parameters.docker_image_name_tag,
-        endpoint_url=file_upload_parameters.endpoint_url,
-        kubernetes_cluster=file_upload_parameters.kubernetes_cluster,
-        imported_observations=imported_observations,
-    )
+    numbers_observations: Tuple[int, int, int, str] = 0, 0, 0, ""
+    new_observations = None
+    updated_observations = None
+    resolved_observations = None
 
-    settings = Settings.load()
-    numbers_observations: Tuple[int, int, int, str] = _process_data(import_parameters, settings)
+    if not file_upload_parameters.sbom:
+        imported_observations = parser_instance.get_observations(
+            data, file_upload_parameters.product, file_upload_parameters.branch
+        )
+
+        import_parameters = ImportParameters(
+            product=file_upload_parameters.product,
+            branch=file_upload_parameters.branch,
+            parser=parser,
+            filename=filename,
+            api_configuration_name="",
+            service=file_upload_parameters.service,
+            docker_image_name_tag=file_upload_parameters.docker_image_name_tag,
+            endpoint_url=file_upload_parameters.endpoint_url,
+            kubernetes_cluster=file_upload_parameters.kubernetes_cluster,
+            imported_observations=imported_observations,
+        )
+
+        numbers_observations = _process_data(import_parameters, settings)
+        new_observations = numbers_observations[0]
+        updated_observations = numbers_observations[1]
+        resolved_observations = numbers_observations[2]
+    else:
+        if not isinstance(parser_instance, BaseFileParser) or not parser_instance.sbom():
+            raise ValidationError(f"{parser.name} is not a SBOM parser")
 
     vulnerability_check, _ = Vulnerability_Check.objects.update_or_create(
-        product=import_parameters.product,
-        branch=import_parameters.branch,
-        filename=import_parameters.filename,
+        product=file_upload_parameters.product,
+        branch=file_upload_parameters.branch,
+        filename=filename,
         api_configuration_name="",
         defaults={
-            "last_import_observations_new": numbers_observations[0],
-            "last_import_observations_updated": numbers_observations[1],
-            "last_import_observations_resolved": numbers_observations[2],
+            "last_import_observations_new": new_observations,
+            "last_import_observations_updated": updated_observations,
+            "last_import_observations_resolved": resolved_observations,
+            "last_import_licenses_new": None,
+            "last_import_licenses_updated": None,
+            "last_import_licenses_deleted": None,
             "scanner": numbers_observations[3],
         },
     )
 
     numbers_license_components = (0, 0, 0)
-    if settings.feature_license_management and not file_upload_parameters.suppress_licenses:
+    if settings.feature_license_management and (
+        not file_upload_parameters.suppress_licenses or file_upload_parameters.sbom
+    ):
         imported_license_components = parser_instance.get_license_components(data)
         numbers_license_components = process_license_components(imported_license_components, vulnerability_check)
-        if numbers_license_components != (0, 0, 0):
-            vulnerability_check.last_import_licenses_new = numbers_license_components[0]
-            vulnerability_check.last_import_licenses_updated = numbers_license_components[1]
-            vulnerability_check.last_import_licenses_deleted = numbers_license_components[2]
-            if numbers_observations[0] == 0 and numbers_observations[1] == 0 and numbers_observations[2] == 0:
-                vulnerability_check.last_import_observations_new = None
-                vulnerability_check.last_import_observations_updated = None
-                vulnerability_check.last_import_observations_resolved = None
-        else:
-            vulnerability_check.last_import_licenses_new = None
-            vulnerability_check.last_import_licenses_updated = None
-            vulnerability_check.last_import_licenses_deleted = None
-        vulnerability_check.save()
 
     return (
         numbers_observations[0],

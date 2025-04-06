@@ -99,7 +99,7 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                                     valueLabelTrue="Product specific"
                                 />
                             </Labeled>
-                            {product.repository_branch_housekeeping_active == true && (
+                            {product.repository_branch_housekeeping_active && (
                                 <Fragment>
                                     <Labeled label="Keep inactive">
                                         <NumberField source="repository_branch_housekeeping_keep_inactive_days" />
@@ -167,7 +167,7 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                             valueLabelTrue="Product specific"
                         />
                     </Labeled>
-                    {product.security_gate_active == true && (
+                    {product.security_gate_active && (
                         <Stack spacing={1}>
                             <Labeled>
                                 <NumberField source="security_gate_threshold_critical" />
@@ -229,7 +229,7 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                     <Labeled>
                         <TextField source="issue_tracker_labels" label="Labels" />
                     </Labeled>
-                    {product && product.issue_tracker_minimum_severity && (
+                    {product.issue_tracker_minimum_severity && (
                         <Labeled>
                             <SeverityField source="issue_tracker_minimum_severity" label="Minimum severity" />
                         </Labeled>
@@ -298,7 +298,7 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                                 valueLabelTrue="Product specific"
                             />
                         </Labeled>
-                        {product.risk_acceptance_expiry_active == true && (
+                        {product.risk_acceptance_expiry_active && (
                             <Labeled label="Risk acceptance expiry (days)">
                                 <NumberField source="risk_acceptance_expiry_days" />
                             </Labeled>

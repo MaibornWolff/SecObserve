@@ -200,7 +200,7 @@ const Menu = ({ dense = false }: MenuProps) => {
                 }}
             >
                 <a href="https://www.maibornwolff.de" target="_blank" rel="noreferrer">
-                    <img src="maibornwolff.svg" height={"24px"} />
+                    <img src="maibornwolff.svg" alt="MaibornWolff logo" height={"24px"} />
                 </a>
             </Box>
         </Fragment>

@@ -36,7 +36,7 @@ const BulkActionButtons = (product: any) => (
 );
 
 const licenseNameStyle = (type: string): string => {
-    if (type === "" || type === "Non-SPDX") {
+    if (type === "" || type === "Non-SPDX" || type === "Multiple") {
         return "italic";
     }
     return "normal";
@@ -51,7 +51,7 @@ const LicenseComponentEmbeddedList = ({ product, expand, component_purl_type }: 
 
     function listFilters() {
         const filters = [];
-        if (product && product.has_branches) {
+        if (product?.has_branches) {
             filters.push(
                 <ReferenceInput
                     source="branch"
@@ -65,17 +65,15 @@ const LicenseComponentEmbeddedList = ({ product, expand, component_purl_type }: 
                 </ReferenceInput>
             );
         }
-        filters.push(<TextInput source="license_name" label="License" alwaysOn />);
         filters.push(
+            <TextInput source="license_name" label="License" alwaysOn />,
             <AutocompleteInputMedium
                 source="evaluation_result"
                 label="Evaluation result"
                 choices={EVALUATION_RESULT_CHOICES}
                 alwaysOn
-            />
-        );
-        filters.push(<TextInput source="component_name_version" label="Component" alwaysOn />);
-        filters.push(
+            />,
+            <TextInput source="component_name_version" label="Component" alwaysOn />,
             <ReferenceInput
                 source="component_purl_type"
                 reference="purl_types"
@@ -98,13 +96,13 @@ const LicenseComponentEmbeddedList = ({ product, expand, component_purl_type }: 
             localStorage.removeItem("RaStore.license_components.embedded");
             setInitialExpand(false);
         }
-        if (record && record.branch_name) {
+        if (record?.branch_name) {
             filter = { ...filter, branch_name_exact: record.branch_name };
         }
-        if (record && record.license_name) {
+        if (record?.license_name) {
             filter = { ...filter, license_name_exact: record.license_name };
         }
-        if (record && record.evaluation_result) {
+        if (record?.evaluation_result) {
             filter = { ...filter, evaluation_result: record.evaluation_result };
         }
         if (component_purl_type) {
@@ -147,14 +145,13 @@ const LicenseComponentEmbeddedList = ({ product, expand, component_purl_type }: 
                         size={getSettingListSize()}
                         rowClick={showLicenseComponent}
                         bulkActionButtons={
-                            product &&
-                            product.permissions.includes(PERMISSION_COMPONENT_LICENSE_DELETE) && (
+                            product?.permissions.includes(PERMISSION_COMPONENT_LICENSE_DELETE) && (
                                 <BulkActionButtons product={product} />
                             )
                         }
                         resource="license_components"
                     >
-                        {!expand && product && product.has_branches && (
+                        {!expand && product?.has_branches && (
                             <TextField source="branch_name" label="Branch / Version" />
                         )}
                         <FunctionField

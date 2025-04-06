@@ -42,7 +42,7 @@ def _get_string_to_hash(
     return hash_string
 
 
-def process_license_components(
+def process_license_components(  # pylint: disable=too-many-statements
     license_components: list[License_Component],
     vulnerability_check: Vulnerability_Check,
 ) -> Tuple[int, int, int]:
@@ -72,6 +72,8 @@ def process_license_components(
         if existing_component:
             license_before = existing_component.license
             non_spdx_license_before = existing_component.non_spdx_license
+            license_expression_before = existing_component.license_expression
+            multiple_licenses_before = existing_component.multiple_licenses
             evaluation_result_before = existing_component.evaluation_result
             existing_component.component_name = unsaved_component.component_name
             existing_component.component_version = unsaved_component.component_version
@@ -83,6 +85,7 @@ def process_license_components(
             existing_component.license = unsaved_component.license
             existing_component.license_expression = unsaved_component.license_expression
             existing_component.non_spdx_license = unsaved_component.non_spdx_license
+            existing_component.multiple_licenses = unsaved_component.multiple_licenses
             apply_license_policy_to_component(
                 existing_component,
                 license_evaluation_results,
@@ -92,6 +95,8 @@ def process_license_components(
             if (
                 license_before != existing_component.license
                 or non_spdx_license_before != existing_component.non_spdx_license
+                or license_expression_before != existing_component.license_expression
+                or multiple_licenses_before != existing_component.multiple_licenses
                 or evaluation_result_before != existing_component.evaluation_result
             ):
                 existing_component.last_change = timezone.now()
@@ -125,6 +130,17 @@ def process_license_components(
     components_deleted = len(existing_components_dict)
     for existing_component in existing_components_dict.values():
         existing_component.delete()
+
+    if components_new == 0 and components_updated == 0 and components_deleted == 0:
+        vulnerability_check.last_import_licenses_new = None
+        vulnerability_check.last_import_licenses_updated = None
+        vulnerability_check.last_import_licenses_deleted = None
+    else:
+        vulnerability_check.last_import_licenses_new = components_new
+        vulnerability_check.last_import_licenses_updated = components_updated
+        vulnerability_check.last_import_licenses_deleted = components_deleted
+
+    vulnerability_check.save()
 
     return components_new, components_updated, components_deleted
 
@@ -195,12 +211,16 @@ def _prepare_name_version(component: License_Component) -> None:
 def _prepare_license(component: License_Component) -> None:
     component.license_expression = ""
     component.non_spdx_license = ""
+    component.multiple_licenses = ""
 
     component.license_name = component.unsaved_license
-
     if component.unsaved_license:
-        component.license = get_license_by_spdx_id(component.unsaved_license)
-        if not component.license:
+        if component.unsaved_license.startswith("[") and component.unsaved_license.endswith("]"):
+            component.multiple_licenses = component.unsaved_license[1:-1]
+            component.license_name = component.multiple_licenses
+        if not component.multiple_licenses:
+            component.license = get_license_by_spdx_id(component.unsaved_license)
+        if not component.multiple_licenses and not component.license:
             licensing = get_spdx_licensing()
             try:
                 expression_info = licensing.validate(component.unsaved_license, strict=True)

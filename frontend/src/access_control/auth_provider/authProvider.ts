@@ -58,13 +58,17 @@ const authProvider: AuthProvider = {
         return Promise.resolve();
     },
     checkError: async (error) => {
-        if (error.status === 401 && oidc_signed_in()) {
-            const user_manager = new UserManager(oidcConfig);
-            localStorage.setItem("last_location", location.hash);
-            localStorage.removeItem(oidcStorageKey);
-            return user_manager.signinRedirect();
+        if (error.status === 401) {
+            if (location.hash !== "#/login") {
+                localStorage.setItem("last_location", location.hash);
+            }
+            if (oidc_signed_in()) {
+                const user_manager = new UserManager(oidcConfig);
+                localStorage.removeItem(oidcStorageKey);
+                return user_manager.signinRedirect();
+            }
+            throw error;
         }
-        throw error;
     },
     checkAuth: () => {
         if (oidc_signed_in() || jwt_signed_in()) {

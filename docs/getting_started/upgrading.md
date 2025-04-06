@@ -10,6 +10,13 @@
 
 * There will be specific upgrade instructions if necessary, e.g. when there are new configuration parameters.
 
+## Release 1.30.0
+
+**Noteable change**
+
+* If multiple licenses have been found for a component, they are now evaluated like an `AND` expression. If for example one license is `Allowed` and the other one is `Forbidden`, the component is evaluated as `Forbidden`. An explicit rule in a License Policy is not necessary anymore. This new behaviour comes into effect with the next import of components.
+* There is now an explicit menu in the UI and an API endpoint to import SBOMs to get all components with their licenses and dependencies, see [Upload SBOMs](../usage/upload_sbom.md).
+
 ## Release 1.26.0
 
 **Breaking changes**

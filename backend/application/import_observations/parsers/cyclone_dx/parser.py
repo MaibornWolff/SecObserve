@@ -54,6 +54,10 @@ class CycloneDXParser(BaseParser, BaseFileParser):
     def get_type(cls) -> str:
         return Parser_Type.TYPE_SCA
 
+    @classmethod
+    def sbom(cls) -> bool:
+        return True
+
     def check_format(self, data: Any) -> bool:
         if isinstance(data, dict) and data.get("bomFormat") == "CycloneDX":
             return True
@@ -151,7 +155,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         if not component_data.get("bom-ref"):
             return None
 
-        cyclonedx_licenses = []
+        cyclonedx_licenses: list[str] = []
         licenses = component_data.get("licenses", [])
         if licenses and licenses[0].get("expression"):
             cyclonedx_licenses.append(licenses[0].get("expression"))
@@ -165,6 +169,14 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                 if component_license and component_license not in cyclonedx_licenses:
                     cyclonedx_licenses.append(component_license)
 
+        if len(cyclonedx_licenses) > 1:
+            cyclonedx_licenses = [license.replace(",", "") for license in cyclonedx_licenses]
+            unsaved_license = "[" + ", ".join(cyclonedx_licenses) + "]"
+        elif cyclonedx_licenses:
+            unsaved_license = cyclonedx_licenses[0]
+        else:
+            unsaved_license = ""
+
         return Component(
             bom_ref=component_data.get("bom-ref", ""),
             name=component_data.get("name", ""),
@@ -173,7 +185,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             purl=component_data.get("purl", ""),
             cpe=component_data.get("cpe", ""),
             json=component_data,
-            unsaved_license=", ".join(cyclonedx_licenses),
+            unsaved_license=unsaved_license,
         )
 
     def _create_observations(self, data: dict) -> list[Observation]:  # pylint: disable=too-many-locals

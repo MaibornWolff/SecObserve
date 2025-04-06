@@ -79,24 +79,17 @@ const ShowActions = () => {
                         storeKey={storeKey}
                     />
                 )}
-                {observation &&
-                    observation.product_data.permissions &&
-                    observation.product_data.permissions.includes(PERMISSION_OBSERVATION_ASSESSMENT) && (
-                        <ObservationAssessment />
-                    )}
-                {observation &&
-                    observation.product_data.permissions &&
-                    observation.product_data.permissions.includes(PERMISSION_OBSERVATION_ASSESSMENT) &&
-                    (observation.assessment_severity || observation.assessment_status) && (
+                {observation?.product_data?.permissions?.includes(PERMISSION_OBSERVATION_ASSESSMENT) && (
+                    <ObservationAssessment />
+                )}
+                {observation?.product_data?.permissions?.includes(PERMISSION_OBSERVATION_ASSESSMENT) &&
+                    (observation?.assessment_severity || observation?.assessment_status) && (
                         <ObservationRemoveAssessment />
                     )}
-                {observation &&
-                    observation.product_data.permissions &&
-                    observation.parser_data.type == "Manual" &&
-                    observation.product_data.permissions.includes(PERMISSION_OBSERVATION_EDIT) && <EditButton />}
-                {observation &&
-                    observation.assessment_needs_approval &&
-                    observation.product_data.permissions.includes(PERMISSION_OBSERVATION_LOG_APPROVAL) && (
+                {observation?.parser_data?.type == "Manual" &&
+                    observation?.product_data?.permissions?.includes(PERMISSION_OBSERVATION_EDIT) && <EditButton />}
+                {observation?.assessment_needs_approval &&
+                    observation?.product_data?.permissions?.includes(PERMISSION_OBSERVATION_LOG_APPROVAL) && (
                         <AssessmentApproval observation_log_id={observation.assessment_needs_approval} />
                     )}
             </Stack>
@@ -255,7 +248,7 @@ const ObservationShowComponent = () => {
                         <ObservationLogEmbeddedList observation={observation} />
                     </Paper>
 
-                    {observation && observation.has_potential_duplicates && (
+                    {observation?.has_potential_duplicates && (
                         <Paper sx={{ marginBottom: 2, paddingTop: 2, paddingLeft: 2, paddingRight: 2 }}>
                             <Typography variant="h6" sx={{ paddingBottom: 1, marginBottom: 1 }}>
                                 Potential Duplicates

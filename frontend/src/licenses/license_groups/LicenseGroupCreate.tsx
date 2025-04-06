@@ -7,9 +7,7 @@ import { TextInputWide } from "../../commons/layout/themes";
 
 const LicenseGroupCreate = () => {
     const transform = (data: any) => {
-        if (!data.description) {
-            data.description = "";
-        }
+        data.description ??= "";
         return data;
     };
 

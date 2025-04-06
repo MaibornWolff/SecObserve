@@ -56,7 +56,7 @@ const ProductShowLicenseComponents = ({ product }: ProductShowLicenseComponentsP
                     helperText={false}
                     sx={{ width: "fit-content", margin: 0 }}
                 />
-                {product && product.license_policy && (
+                {product?.license_policy && (
                     <Labeled label="License policy (product)">
                         <ReferenceField
                             source="license_policy"
@@ -83,9 +83,7 @@ const ProductShowLicenseComponents = ({ product }: ProductShowLicenseComponentsP
                             </ReferenceField>
                         </Labeled>
                     )}
-                {product && product.permissions.includes(PERMISSION_PRODUCT_EDIT) && (
-                    <LicensePolicyApply product={product} />
-                )}
+                {product?.permissions.includes(PERMISSION_PRODUCT_EDIT) && <LicensePolicyApply product={product} />}
                 {product && !product.permissions.includes(PERMISSION_PRODUCT_EDIT) && (
                     <Typography variant="body1" sx={{ width: "15em" }} />
                 )}
