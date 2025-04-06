@@ -1,4 +1,4 @@
-__version__ = "1.29.2"
+__version__ = "1.30.0"
 
 import pymysql
 
