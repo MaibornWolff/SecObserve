@@ -21,7 +21,7 @@ jobs:
       - 
         name: Install programs
         env:
-          CDXGEN_VERSION: 10.10.6
+          CDXGEN_VERSION: 11.2.3
         run: |
           npm install -g @cyclonedx/cdxgen@"$CDXGEN_VERSION"
       - 
