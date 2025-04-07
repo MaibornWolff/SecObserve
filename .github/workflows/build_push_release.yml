@@ -126,7 +126,7 @@ jobs:
       - 
         name: Install programs
         env:
-          CDXGEN_VERSION: 10.9.4
+          CDXGEN_VERSION: 11.2.3
           SBOM_UTILITY_VERSION: 0.16.0
           CYCLONE_DX_CLI_VERSION: 0.25.1
         run: |
