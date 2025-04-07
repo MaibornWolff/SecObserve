@@ -29,9 +29,9 @@ jobs:
         env:
           FETCH_LICENSE: 1
         run: |
-          mv ../backend/poetry_requirements.txt ../backend/poetry_requirements.sic
+          mv ./backend/poetry_requirements.txt ./backend/poetry_requirements.sic
           cdxgen ./backend --type python --required-only --profile license-compliance --no-auto-compositions --output sbom_backend_application.json
-          mv ../backend/poetry_requirements.sic ../backend/poetry_requirements.txt
+          mv ./backend/poetry_requirements.sic ./backend/poetry_requirements.txt
       - 
         name: Generate SBOM for frontend application
         run: |
