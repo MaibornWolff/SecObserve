@@ -56,14 +56,14 @@ jobs:
           so_api_token: ${{ secrets.SO_API_TOKEN }}
       - 
         name: Check licenses for backend application
-        uses: MaibornWolff/purl-patrol@v1
+        uses: action/purl-patrol@v1
         with:
           SBOM_PATH: 'sbom_backend_application.json' # Required: The path to your SBOM in the repository
           LICENSE_POLICY_PATH: 'sbom/configuration/license_policy.json' # Optional: The path to your license policy
           BREAK_ENABLED: false # Optional: Whether to break the pipeline, by exiting with an error, in case of license non-compliance. Default: true
       - 
         name: Check licenses for frontend application
-        uses: MaibornWolff/purl-patrol@v1
+        uses: action/purl-patrol@v1
         with:
           SBOM_PATH: 'sbom_frontend_application.json' # Required: The path to your SBOM in the repository
           LICENSE_POLICY_PATH: 'sbom/configuration/license_policy.json' # Optional: The path to your license policy
