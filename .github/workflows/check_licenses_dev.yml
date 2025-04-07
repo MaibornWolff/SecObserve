@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - dev
+      - chore/purl-patrol
 
 permissions: read-all
 
