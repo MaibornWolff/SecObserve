@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - dev
-      - chore/purl-patrol
 
 permissions: read-all
 
@@ -60,13 +59,13 @@ jobs:
         name: Check licenses for backend application
         uses: MaibornWolff/purl-patrol@04bf67d65b6dc2cf395ada722ec242ce48c93247 # v1.6.0
         with:
-          SBOM_PATH: 'sbom_backend_application.json' # Required: The path to your SBOM in the repository
-          LICENSE_POLICY_PATH: 'sbom/configuration/license_policy.json' # Optional: The path to your license policy
-          BREAK_ENABLED: false # Optional: Whether to break the pipeline, by exiting with an error, in case of license non-compliance. Default: true
+          SBOM_PATH: 'sbom_backend_application.json'
+          LICENSE_POLICY_PATH: 'sbom/configuration/license_policy.json'
+          BREAK_ENABLED: true
       - 
         name: Check licenses for frontend application
         uses: MaibornWolff/purl-patrol@04bf67d65b6dc2cf395ada722ec242ce48c93247 # v1.6.0
         with:
-          SBOM_PATH: 'sbom_frontend_application.json' # Required: The path to your SBOM in the repository
-          LICENSE_POLICY_PATH: 'sbom/configuration/license_policy.json' # Optional: The path to your license policy
-          BREAK_ENABLED: false # Optional: Whether to break the pipeline, by exiting with an error, in case of license non-compliance. Default: true
+          SBOM_PATH: 'sbom_frontend_application.json'
+          LICENSE_POLICY_PATH: 'sbom/configuration/license_policy.json'
+          BREAK_ENABLED: true
