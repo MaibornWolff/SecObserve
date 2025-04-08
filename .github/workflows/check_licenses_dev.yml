@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - 
-        uses: actions/setup-python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - 
@@ -28,7 +28,7 @@ jobs:
           POETRY_CACHE_DIR: "/tmp/poetry_cache"
         working-directory: ./backend
         run: |
-          pip install --no-cache -r ./poetry_requirements.txt
+          pip install --no-cache -r poetry_requirements.txt
           poetry install --extras "sbom" --no-root 
           rm -rf $POETRY_CACHE_DIR
       - 
@@ -36,16 +36,16 @@ jobs:
         working-directory: ./backend
         run: |
           cyclonedx-py poetry --schema-version 1.6 --output-format json --output-file sbom_backend_application.json
-      # -
-      #   name: Import backend SBOM
-      #   uses: MaibornWolff/secobserve_actions_templates/actions/importer@2f7b500fde2de2bdea7eef3b6df5503c2476916f # main
-      #   with:
-      #     so_product_name: 'SecObserve'
-      #     so_file_name: 'sbom_backend_application.json'
-      #     so_parser_name: 'CycloneDX'
-      #     so_branch_name: 'dev'
-      #     so_api_base_url: "https://secobserve-backend.maibornwolff.de"
-      #     so_api_token: ${{ secrets.SO_API_TOKEN }}
+      -
+        name: Import backend SBOM
+        uses: MaibornWolff/secobserve_actions_templates/actions/importer@2f7b500fde2de2bdea7eef3b6df5503c2476916f # main
+        with:
+          so_product_name: 'SecObserve'
+          so_file_name: 'sbom_backend_application.json'
+          so_parser_name: 'CycloneDX'
+          so_branch_name: 'dev-2'
+          so_api_base_url: "https://secobserve-backend.maibornwolff.de"
+          so_api_token: ${{ secrets.SO_API_TOKEN }}
       - 
         name: Check licenses for backend application
         uses: MaibornWolff/purl-patrol@04bf67d65b6dc2cf395ada722ec242ce48c93247 # v1.6.0
