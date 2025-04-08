@@ -10,7 +10,7 @@ permissions: read-all
 
 jobs:
   scan_licenses_backend:
-    if: github.event.repository.url == 'https://github.com/MaibornWolff/SecObserve'
+    # if: github.event.repository.url == 'https://github.com/MaibornWolff/SecObserve'
     runs-on: ubuntu-latest
     steps:
       - 
