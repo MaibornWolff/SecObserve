@@ -35,7 +35,7 @@ jobs:
         name: Generate SBOM for backend application
         working-directory: ./backend
         run: |
-          cyclonedx-py poetry --schema-version 1.6 --output-format json --output-file sbom_backend_application.json
+          ./.venv/bin/cyclonedx-py poetry --schema-version 1.6 --output-format json --output-file sbom_backend_application.json
       -
         name: Import backend SBOM
         uses: MaibornWolff/secobserve_actions_templates/actions/importer@2f7b500fde2de2bdea7eef3b6df5503c2476916f # main
