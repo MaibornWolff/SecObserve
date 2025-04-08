@@ -4,57 +4,48 @@ on:
   push:
     branches:
       - dev
+      - chore/check_licenses_dev
 
 permissions: read-all
 
 jobs:
-  scan_licenses:
+  scan_licenses_backend:
+    if: github.event.repository.url == 'https://github.com/MaibornWolff/SecObserve'
     runs-on: ubuntu-latest
     steps:
       - 
-        uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4.3.0
+        uses: actions/setup-python
         with:
-          node-version: 20
+          python-version: '3.12'
       - 
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - 
         name: Install programs
         env:
-          CDXGEN_VERSION: 11.2.3
+          POETRY_NO_INTERACTION: 1
+          POETRY_VIRTUALENVS_IN_PROJECT: 1
+          POETRY_VIRTUALENVS_CREATE: 1
+          POETRY_CACHE_DIR: "/tmp/poetry_cache"
+        working-directory: ./backend
         run: |
-          npm install -g @cyclonedx/cdxgen@"$CDXGEN_VERSION"
+          pip install --no-cache -r ./poetry_requirements.txt
+          poetry install --extras "sbom" --no-root 
+          rm -rf $POETRY_CACHE_DIR
       - 
         name: Generate SBOM for backend application
-        env:
-          FETCH_LICENSE: 1
+        working-directory: ./backend
         run: |
-          mv ./backend/poetry_requirements.txt ./backend/poetry_requirements.sic
-          cdxgen ./backend --type python --required-only --profile license-compliance --no-auto-compositions --output sbom_backend_application.json
-          mv ./backend/poetry_requirements.sic ./backend/poetry_requirements.txt
-      - 
-        name: Generate SBOM for frontend application
-        run: |
-          cdxgen ./frontend --type npm --no-babel --required-only --profile license-compliance --no-auto-compositions --project-name secobserve --output sbom_frontend_application.json
-      -
-        name: Import backend SBOM
-        uses: MaibornWolff/secobserve_actions_templates/actions/importer@2f7b500fde2de2bdea7eef3b6df5503c2476916f # main
-        with:
-          so_product_name: 'SecObserve'
-          so_file_name: 'sbom_backend_application.json'
-          so_parser_name: 'CycloneDX'
-          so_branch_name: 'dev'
-          so_api_base_url: "https://secobserve-backend.maibornwolff.de"
-          so_api_token: ${{ secrets.SO_API_TOKEN }}
-      -
-        name: Import frontend SBOM
-        uses: MaibornWolff/secobserve_actions_templates/actions/importer@2f7b500fde2de2bdea7eef3b6df5503c2476916f # main
-        with:
-          so_product_name: 'SecObserve'
-          so_file_name: 'sbom_frontend_application.json'
-          so_parser_name: 'CycloneDX'
-          so_branch_name: 'dev'
-          so_api_base_url: "https://secobserve-backend.maibornwolff.de"
-          so_api_token: ${{ secrets.SO_API_TOKEN }}
+          cyclonedx-py poetry --schema-version 1.6 --output-format json --output-file sbom_backend_application.json
+      # -
+      #   name: Import backend SBOM
+      #   uses: MaibornWolff/secobserve_actions_templates/actions/importer@2f7b500fde2de2bdea7eef3b6df5503c2476916f # main
+      #   with:
+      #     so_product_name: 'SecObserve'
+      #     so_file_name: 'sbom_backend_application.json'
+      #     so_parser_name: 'CycloneDX'
+      #     so_branch_name: 'dev'
+      #     so_api_base_url: "https://secobserve-backend.maibornwolff.de"
+      #     so_api_token: ${{ secrets.SO_API_TOKEN }}
       - 
         name: Check licenses for backend application
         uses: MaibornWolff/purl-patrol@04bf67d65b6dc2cf395ada722ec242ce48c93247 # v1.6.0
@@ -62,10 +53,66 @@ jobs:
           SBOM_PATH: 'sbom_backend_application.json'
           LICENSE_POLICY_PATH: 'sbom/configuration/license_policy.json'
           BREAK_ENABLED: false
-      - 
-        name: Check licenses for frontend application
-        uses: MaibornWolff/purl-patrol@04bf67d65b6dc2cf395ada722ec242ce48c93247 # v1.6.0
-        with:
-          SBOM_PATH: 'sbom_frontend_application.json'
-          LICENSE_POLICY_PATH: 'sbom/configuration/license_policy.json'
-          BREAK_ENABLED: false
+
+  # scan_licenses_frontend:
+  #   if: github.event.repository.url == 'https://github.com/MaibornWolff/SecObserve'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - 
+  #       uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4.3.0
+  #       with:
+  #         node-version: 20
+  #     - 
+  #       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+  #     - 
+  #       name: Install programs
+  #       env:
+  #         CDXGEN_VERSION: 11.2.3
+  #       run: |
+  #         npm install -g @cyclonedx/cdxgen@"$CDXGEN_VERSION"
+  #     - 
+  #       name: Generate SBOM for backend application
+  #       env:
+  #         FETCH_LICENSE: 1
+  #       run: |
+  #         mv ./backend/poetry_requirements.txt ./backend/poetry_requirements.sic
+  #         cdxgen ./backend --type python --required-only --profile license-compliance --no-auto-compositions --output sbom_backend_application.json
+  #         mv ./backend/poetry_requirements.sic ./backend/poetry_requirements.txt
+  #     - 
+  #       name: Generate SBOM for frontend application
+  #       run: |
+  #         cdxgen ./frontend --type npm --no-babel --required-only --profile license-compliance --no-auto-compositions --project-name secobserve --output sbom_frontend_application.json
+  #     -
+  #       name: Import backend SBOM
+  #       uses: MaibornWolff/secobserve_actions_templates/actions/importer@2f7b500fde2de2bdea7eef3b6df5503c2476916f # main
+  #       with:
+  #         so_product_name: 'SecObserve'
+  #         so_file_name: 'sbom_backend_application.json'
+  #         so_parser_name: 'CycloneDX'
+  #         so_branch_name: 'dev'
+  #         so_api_base_url: "https://secobserve-backend.maibornwolff.de"
+  #         so_api_token: ${{ secrets.SO_API_TOKEN }}
+  #     -
+  #       name: Import frontend SBOM
+  #       uses: MaibornWolff/secobserve_actions_templates/actions/importer@2f7b500fde2de2bdea7eef3b6df5503c2476916f # main
+  #       with:
+  #         so_product_name: 'SecObserve'
+  #         so_file_name: 'sbom_frontend_application.json'
+  #         so_parser_name: 'CycloneDX'
+  #         so_branch_name: 'dev'
+  #         so_api_base_url: "https://secobserve-backend.maibornwolff.de"
+  #         so_api_token: ${{ secrets.SO_API_TOKEN }}
+  #     - 
+  #       name: Check licenses for backend application
+  #       uses: MaibornWolff/purl-patrol@04bf67d65b6dc2cf395ada722ec242ce48c93247 # v1.6.0
+  #       with:
+  #         SBOM_PATH: 'sbom_backend_application.json'
+  #         LICENSE_POLICY_PATH: 'sbom/configuration/license_policy.json'
+  #         BREAK_ENABLED: false
+  #     - 
+  #       name: Check licenses for frontend application
+  #       uses: MaibornWolff/purl-patrol@04bf67d65b6dc2cf395ada722ec242ce48c93247 # v1.6.0
+  #       with:
+  #         SBOM_PATH: 'sbom_frontend_application.json'
+  #         LICENSE_POLICY_PATH: 'sbom/configuration/license_policy.json'
+  #         BREAK_ENABLED: false
