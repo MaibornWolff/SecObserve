@@ -31,7 +31,7 @@ jobs:
         run: |
           pip install --no-cache -r poetry_requirements.txt
           pip install --no-cache cyclonedx-bom=="$CYCLONEDX_BOM_VERSION"
-          poetry install  
+          poetry install --no-root
           rm -rf $POETRY_CACHE_DIR
       - 
         name: Generate SBOM for backend application
