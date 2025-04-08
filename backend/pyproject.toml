@@ -89,15 +89,10 @@ djangorestframework-stubs = { version = "3.15.3", optional = true }  # https://g
 types-PyMySQL = { version = "1.1.0.20241103", optional = true }  # https://github.com/python/typeshed
 # import-linter = "2.0"  # https://github.com/seddonym/import-linter --> Cannot be build with Docker
 
-# SBOM geneneration
-# ------------------------------------------------------------------------------
-cyclonedx-bom = { version = "5.3.0", optional = true }  # https://github.com/CycloneDX/cyclonedx-python
-
 [tool.poetry.extras]
 dev = ["Werkzeug", "ipdb", "watchgod", "django-extensions"]
 unittests = ["coverage", "django-extensions", "django-coverage-plugin"]
 code_quality = ["flake8", "flake8-isort", "black", "pylint", "pylint-django", "pre-commit", "mypy", "django-stubs", "djangorestframework-stubs", "types-PyMySQL"]
-sbom = ["cyclonedx-bom"]
 
 [tool.black]
 line-length = 120
