@@ -48,6 +48,7 @@ from application.core.services.risk_acceptance_expiry import (
     calculate_risk_acceptance_expiry_date,
 )
 from application.core.types import Assessment_Status, Severity, Status
+from application.import_observations.models import Api_Configuration
 from application.issue_tracker.types import Issue_Tracker
 from application.licenses.models import License_Component
 from application.licenses.types import License_Policy_Evaluation_Result
@@ -244,6 +245,7 @@ class ProductSerializer(ProductCoreSerializer):  # pylint: disable=too-many-publ
     has_branches = SerializerMethodField()
     has_licenses = SerializerMethodField()
     product_group_license_policy = SerializerMethodField()
+    has_api_configurations = SerializerMethodField()
 
     class Meta:
         model = Product
@@ -326,6 +328,9 @@ class ProductSerializer(ProductCoreSerializer):  # pylint: disable=too-many-publ
         if not obj.product_group or not obj.product_group.license_policy:
             return None
         return obj.product_group.license_policy.id
+
+    def get_has_api_configurations(self, obj: Product) -> bool:
+        return Api_Configuration.objects.filter(product=obj).exists()
 
     def validate(self, attrs: dict) -> dict:  # pylint: disable=too-many-branches
         # There are quite a lot of branches, but at least they are not nested too much
