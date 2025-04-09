@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import {
     Datagrid,
     FilterForm,
@@ -131,6 +131,13 @@ const LicenseComponentEmbeddedList = ({ product, expand, component_purl_type }: 
         disableSyncWithLocation: true,
         storeKey: "license_components.embedded",
     });
+
+    useEffect(() => {
+        const storage = localStorage.getItem("RaStore.license_components.embedded");
+        if (storage) {
+            localStorage.setItem("RaStore.license_components.overview", storage);
+        }
+    }, [listContext.filterValues, listContext.sort]);
 
     if (listContext.isLoading) {
         return <div>Loading...</div>;
