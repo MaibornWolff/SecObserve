@@ -66,8 +66,8 @@ export const updateRefreshToken = () => {
                 .then(() => {
                     return Promise.resolve();
                 })
-                .catch(() => {
-                    return Promise.reject();
+                .catch((error: Error) => {
+                    return Promise.reject(error);
                 });
         }
     }
