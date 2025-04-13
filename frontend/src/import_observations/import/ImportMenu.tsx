@@ -55,9 +55,11 @@ const ImportMenu = ({ product }: ImportMenuProps) => {
                         <FileUploadSBOM />
                     </MenuItem>
                 )}
-                <MenuItem onKeyDown={(e) => e.stopPropagation()}>
-                    <ApiImportObservations product={product} />
-                </MenuItem>
+                {product.has_api_configurations && (
+                    <MenuItem onKeyDown={(e) => e.stopPropagation()}>
+                        <ApiImportObservations product={product} />
+                    </MenuItem>
+                )}
                 {product.osv_enabled && product.has_licenses && (
                     <MenuItem onKeyDown={(e) => e.stopPropagation()}>
                         <ScanOSV product={product} />

@@ -119,6 +119,7 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
             filterStorage["order"] = listContext.sort.order;
         }
         localStorage.setItem("RaStore.license_components.overview", JSON.stringify(filterStorage));
+        localStorage.setItem("RaStore.license_components.embedded", JSON.stringify(filterStorage));
     }
 
     function get_data() {
