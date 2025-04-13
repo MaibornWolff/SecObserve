@@ -46,7 +46,7 @@ jobs:
         run: |
           mv ../backend/poetry_requirements.txt ../backend/poetry_requirements.sic
           sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_backend_application.json
-          cdxgen ../backend --type python --required-only --profile license-compliance --no-auto-compositions --output sbom_backend_application.json
+          cdxgen ../backend --type python --required-only --profile license-compliance --no-auto-compositions --output sbom_backend_application.json --spec-version 1.5
           sbom-utility trim --keys=externalReferences,properties,evidence,authors,lifecycles --quiet --input-file sbom_backend_application.json \
             | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_backend_application.json --quiet --input-file - --output-file sbom_backend_application_"$VERSION".json
@@ -60,7 +60,7 @@ jobs:
         working-directory: ./sbom
         run: |
           sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_frontend_application.json
-          cdxgen ../frontend --type npm --no-babel --required-only --profile license-compliance --no-auto-compositions --project-name secobserve --output sbom_frontend_application.json
+          cdxgen ../frontend --type npm --no-babel --required-only --profile license-compliance --no-auto-compositions --project-name secobserve --output sbom_frontend_application.json --spec-version 1.5
           sbom-utility trim --keys=externalReferences,properties,evidence,authors,lifecycles --quiet --input-file sbom_frontend_application.json \
             | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_frontend_application.json --quiet --input-file - --output-file sbom_frontend_application_"$VERSION".json
@@ -73,7 +73,7 @@ jobs:
         working-directory: ./sbom
         run: |
           sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_backend_container.json
-          cdxgen maibornwolff/secobserve-backend:$VERSION --type container --exclude-type python --exclude-type ruby --profile license-compliance --no-auto-compositions --output sbom_backend_container.json
+          cdxgen maibornwolff/secobserve-backend:$VERSION --type container --exclude-type python --exclude-type ruby --profile license-compliance --no-auto-compositions --output sbom_backend_container.json --spec-version 1.5
           sbom-utility trim --keys=externalReferences,properties,evidence,authors,lifecycles,services --quiet --input-file sbom_backend_container.json \
             | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_backend_container.json --quiet --input-file - --output-file sbom_backend_container_"$VERSION".json
@@ -86,7 +86,7 @@ jobs:
         working-directory: ./sbom
         run: |
           sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_frontend_container.json
-          cdxgen maibornwolff/secobserve-frontend:$VERSION --type container --exclude-type npm --exclude-type ruby --profile license-compliance --no-auto-compositions --output sbom_frontend_container.json
+          cdxgen maibornwolff/secobserve-frontend:$VERSION --type container --exclude-type npm --exclude-type ruby --profile license-compliance --no-auto-compositions --output sbom_frontend_container.json --spec-version 1.5
           sbom-utility trim --keys=externalReferences,properties,evidence,authors,lifecycles,services --quiet --input-file sbom_frontend_container.json \
             | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_frontend_container.json --quiet --input-file - --output-file sbom_frontend_container_"$VERSION".json
