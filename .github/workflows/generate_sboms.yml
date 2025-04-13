@@ -92,17 +92,17 @@ jobs:
             | sbom-utility patch --patch-file ./configuration/patch_frontend_container.json --quiet --input-file - --output-file sbom_frontend_container_"$VERSION".json
           sbom-utility validate --input-file sbom_frontend_container_"$VERSION".json
           rm sbom_frontend_container.json
-      # - 
-      #   name: Merge SBOMs
-      #   env:
-      #     VERSION: ${{ github.event.inputs.release }}
-      #   working-directory: ./sbom
-      #   run: |
-      #     sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_complete.json
-      #     cyclonedx merge --hierarchical --name "SecObserve" --version "$VERSION" --input-files sbom_backend_application_"$VERSION".json sbom_frontend_application_"$VERSION".json sbom_backend_container_"$VERSION".json sbom_frontend_container_"$VERSION".json --output-format json \
-      #       | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
-      #       | sbom-utility patch --patch-file ./configuration/patch_complete.json --quiet --input-file - --output-file sbom_"$VERSION".json
-      #     sbom-utility validate --input-file sbom_"$VERSION".json
+      - 
+        name: Merge SBOMs
+        env:
+          VERSION: ${{ github.event.inputs.release }}
+        working-directory: ./sbom
+        run: |
+          sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_complete.json
+          cyclonedx merge --hierarchical --name "SecObserve" --version "$VERSION" --input-files sbom_backend_application_"$VERSION".json sbom_frontend_application_"$VERSION".json sbom_backend_container_"$VERSION".json sbom_frontend_container_"$VERSION".json --output-format json \
+            | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
+            | sbom-utility patch --patch-file ./configuration/patch_complete.json --quiet --input-file - --output-file sbom_"$VERSION".json
+          sbom-utility validate --input-file sbom_"$VERSION".json
       - 
         name: Commit SBOMs
         uses: stefanzweifel/git-auto-commit-action@e348103e9026cc0eee72ae06630dbe30c8bf7a79 # v5
