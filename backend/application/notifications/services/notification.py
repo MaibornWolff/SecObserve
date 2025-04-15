@@ -1,9 +1,9 @@
 from django.db.models.query import QuerySet
 from rest_framework.exceptions import ValidationError
 
-from application.commons.models import Notification, Notification_Viewed
-from application.commons.queries.notification import get_notifications
 from application.commons.services.global_request import get_current_user
+from application.notifications.models import Notification, Notification_Viewed
+from application.notifications.queries.notification import get_notifications
 
 
 def bulk_mark_as_viewed(notification_ids: list[int]) -> None:

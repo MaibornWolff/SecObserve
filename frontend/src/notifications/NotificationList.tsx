@@ -15,12 +15,12 @@ import {
 } from "react-admin";
 
 import notifications from ".";
-import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
-import ListHeader from "../../commons/layout/ListHeader";
-import { AutocompleteInputMedium } from "../layout/themes";
-import { TYPE_CHOICES } from "../types";
-import { getSettingListSize } from "../user_settings/functions";
+import { CustomPagination } from "../commons/custom_fields/CustomPagination";
+import ListHeader from "../commons/layout/ListHeader";
+import { AutocompleteInputMedium } from "../commons/layout/themes";
+import { getSettingListSize } from "../commons/user_settings/functions";
 import NotificationBulkMarkAsViewedButton from "./NotificationBulkMarkAsViewedButton";
+import { TYPE_CHOICES } from "./types";
 
 const messageShortened = (message: string | null) => {
     if (message && message.length > 255) {

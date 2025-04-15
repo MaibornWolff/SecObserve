@@ -10,7 +10,7 @@ import { Login } from "./access_control/login";
 import users from "./access_control/users";
 import { Layout } from "./commons/layout";
 import { darkTheme, lightTheme } from "./commons/layout/themes";
-import notifications from "./commons/notifications";
+import notifications from "./notifications";
 import { queryClient } from "./commons/queryClient";
 import drfProvider from "./commons/ra-data-django-rest-framework";
 import settings from "./commons/settings";

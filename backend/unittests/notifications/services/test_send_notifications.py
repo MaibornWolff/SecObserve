@@ -3,9 +3,10 @@ from unittest.mock import ANY, call, patch
 
 from requests import Response
 
-from application.commons.models import Notification, Settings
+from application.commons.models import Settings
 from application.commons.services.functions import get_classname
-from application.commons.services.send_notifications import (
+from application.notifications.models import Notification
+from application.notifications.services.send_notifications import (
     LAST_EXCEPTIONS,
     _get_first_name,
     _get_notification_email_to,
@@ -18,7 +19,7 @@ from application.commons.services.send_notifications import (
     send_product_security_gate_notification,
     send_task_exception_notification,
 )
-from application.commons.tasks import (
+from application.notifications.tasks import (
     _create_notification_message,
     send_email_notification,
     send_msteams_notification,
@@ -30,14 +31,14 @@ from unittests.base_test_case import BaseTestCase
 class TestPushNotifications(BaseTestCase):
     # --- send_product_security_gate_notification ---
 
-    @patch("application.commons.services.send_notifications.send_slack_notification")
-    @patch("application.commons.services.send_notifications.send_msteams_notification")
-    @patch("application.commons.services.send_notifications.send_email_notification")
-    @patch("application.commons.services.send_notifications.get_current_user")
-    @patch("application.commons.services.send_notifications._get_notification_email_to")
-    @patch("application.commons.services.send_notifications._get_notification_slack_webhook")
-    @patch("application.commons.services.send_notifications._get_notification_ms_teams_webhook")
-    @patch("application.commons.models.Notification.objects.create")
+    @patch("application.notifications.services.send_notifications.send_slack_notification")
+    @patch("application.notifications.services.send_notifications.send_msteams_notification")
+    @patch("application.notifications.services.send_notifications.send_email_notification")
+    @patch("application.notifications.services.send_notifications.get_current_user")
+    @patch("application.notifications.services.send_notifications._get_notification_email_to")
+    @patch("application.notifications.services.send_notifications._get_notification_slack_webhook")
+    @patch("application.notifications.services.send_notifications._get_notification_ms_teams_webhook")
+    @patch("application.notifications.models.Notification.objects.create")
     def test_send_product_security_gate_notification_no_webhook_no_email(
         self,
         mock_notification_create,
@@ -70,16 +71,16 @@ class TestPushNotifications(BaseTestCase):
         )
 
     @patch("application.commons.models.Settings.load")
-    @patch("application.commons.services.send_notifications.send_slack_notification")
-    @patch("application.commons.services.send_notifications.send_msteams_notification")
-    @patch("application.commons.services.send_notifications.send_email_notification")
-    @patch("application.commons.services.send_notifications.get_base_url_frontend")
-    @patch("application.commons.services.send_notifications._get_first_name")
-    @patch("application.commons.services.send_notifications.get_current_user")
-    @patch("application.commons.services.send_notifications._get_notification_email_to")
-    @patch("application.commons.services.send_notifications._get_notification_slack_webhook")
-    @patch("application.commons.services.send_notifications._get_notification_ms_teams_webhook")
-    @patch("application.commons.models.Notification.objects.create")
+    @patch("application.notifications.services.send_notifications.send_slack_notification")
+    @patch("application.notifications.services.send_notifications.send_msteams_notification")
+    @patch("application.notifications.services.send_notifications.send_email_notification")
+    @patch("application.notifications.services.send_notifications.get_base_url_frontend")
+    @patch("application.notifications.services.send_notifications._get_first_name")
+    @patch("application.notifications.services.send_notifications.get_current_user")
+    @patch("application.notifications.services.send_notifications._get_notification_email_to")
+    @patch("application.notifications.services.send_notifications._get_notification_slack_webhook")
+    @patch("application.notifications.services.send_notifications._get_notification_ms_teams_webhook")
+    @patch("application.notifications.models.Notification.objects.create")
     def test_send_product_security_gate_notification_security_gate_none(
         self,
         mock_notification_create,
@@ -159,16 +160,16 @@ class TestPushNotifications(BaseTestCase):
         )
 
     @patch("application.commons.models.Settings.load")
-    @patch("application.commons.services.send_notifications.send_slack_notification")
-    @patch("application.commons.services.send_notifications.send_msteams_notification")
-    @patch("application.commons.services.send_notifications.send_email_notification")
-    @patch("application.commons.services.send_notifications.get_base_url_frontend")
-    @patch("application.commons.services.send_notifications._get_first_name")
-    @patch("application.commons.services.send_notifications.get_current_user")
-    @patch("application.commons.services.send_notifications._get_notification_email_to")
-    @patch("application.commons.services.send_notifications._get_notification_slack_webhook")
-    @patch("application.commons.services.send_notifications._get_notification_ms_teams_webhook")
-    @patch("application.commons.models.Notification.objects.create")
+    @patch("application.notifications.services.send_notifications.send_slack_notification")
+    @patch("application.notifications.services.send_notifications.send_msteams_notification")
+    @patch("application.notifications.services.send_notifications.send_email_notification")
+    @patch("application.notifications.services.send_notifications.get_base_url_frontend")
+    @patch("application.notifications.services.send_notifications._get_first_name")
+    @patch("application.notifications.services.send_notifications.get_current_user")
+    @patch("application.notifications.services.send_notifications._get_notification_email_to")
+    @patch("application.notifications.services.send_notifications._get_notification_slack_webhook")
+    @patch("application.notifications.services.send_notifications._get_notification_ms_teams_webhook")
+    @patch("application.notifications.models.Notification.objects.create")
     def test_send_product_security_gate_notification_security_gate_passed(
         self,
         mock_notification_create,
@@ -248,16 +249,16 @@ class TestPushNotifications(BaseTestCase):
         )
 
     @patch("application.commons.models.Settings.load")
-    @patch("application.commons.services.send_notifications.send_slack_notification")
-    @patch("application.commons.services.send_notifications.send_msteams_notification")
-    @patch("application.commons.services.send_notifications.send_email_notification")
-    @patch("application.commons.services.send_notifications.get_base_url_frontend")
-    @patch("application.commons.services.send_notifications._get_first_name")
-    @patch("application.commons.services.send_notifications.get_current_user")
-    @patch("application.commons.services.send_notifications._get_notification_email_to")
-    @patch("application.commons.services.send_notifications._get_notification_slack_webhook")
-    @patch("application.commons.services.send_notifications._get_notification_ms_teams_webhook")
-    @patch("application.commons.models.Notification.objects.create")
+    @patch("application.notifications.services.send_notifications.send_slack_notification")
+    @patch("application.notifications.services.send_notifications.send_msteams_notification")
+    @patch("application.notifications.services.send_notifications.send_email_notification")
+    @patch("application.notifications.services.send_notifications.get_base_url_frontend")
+    @patch("application.notifications.services.send_notifications._get_first_name")
+    @patch("application.notifications.services.send_notifications.get_current_user")
+    @patch("application.notifications.services.send_notifications._get_notification_email_to")
+    @patch("application.notifications.services.send_notifications._get_notification_slack_webhook")
+    @patch("application.notifications.services.send_notifications._get_notification_ms_teams_webhook")
+    @patch("application.notifications.models.Notification.objects.create")
     def test_send_product_security_gate_notification_security_gate_failed(
         self,
         mock_notification_create,
@@ -339,12 +340,12 @@ class TestPushNotifications(BaseTestCase):
     # --- send_exception_notification ---
 
     @patch("application.commons.models.Settings.load")
-    @patch("application.commons.services.send_notifications._ratelimit_exception")
-    @patch("application.commons.services.send_notifications.send_msteams_notification")
-    @patch("application.commons.services.send_notifications.send_slack_notification")
-    @patch("application.commons.services.send_notifications.send_email_notification")
-    @patch("application.commons.services.send_notifications.get_current_user")
-    @patch("application.commons.models.Notification.objects.create")
+    @patch("application.notifications.services.send_notifications._ratelimit_exception")
+    @patch("application.notifications.services.send_notifications.send_msteams_notification")
+    @patch("application.notifications.services.send_notifications.send_slack_notification")
+    @patch("application.notifications.services.send_notifications.send_email_notification")
+    @patch("application.notifications.services.send_notifications.get_current_user")
+    @patch("application.notifications.models.Notification.objects.create")
     def test_send_exception_notification_no_webhook_no_email(
         self,
         mock_notification_create,
@@ -372,10 +373,10 @@ class TestPushNotifications(BaseTestCase):
         )
 
     @patch("application.commons.models.Settings.load")
-    @patch("application.commons.services.send_notifications._ratelimit_exception")
-    @patch("application.commons.services.send_notifications.send_msteams_notification")
-    @patch("application.commons.services.send_notifications.send_slack_notification")
-    @patch("application.commons.services.send_notifications.send_email_notification")
+    @patch("application.notifications.services.send_notifications._ratelimit_exception")
+    @patch("application.notifications.services.send_notifications.send_msteams_notification")
+    @patch("application.notifications.services.send_notifications.send_slack_notification")
+    @patch("application.notifications.services.send_notifications.send_email_notification")
     def test_send_exception_notification_no_ratelimit(
         self,
         mock_send_email,
@@ -399,13 +400,13 @@ class TestPushNotifications(BaseTestCase):
         mock_send_email.assert_not_called()
 
     @patch("application.commons.models.Settings.load")
-    @patch("application.commons.services.send_notifications._ratelimit_exception")
-    @patch("application.commons.services.send_notifications.send_msteams_notification")
-    @patch("application.commons.services.send_notifications.send_slack_notification")
-    @patch("application.commons.services.send_notifications.send_email_notification")
-    @patch("application.commons.services.send_notifications._get_first_name")
-    @patch("application.commons.services.send_notifications.get_current_user")
-    @patch("application.commons.models.Notification.objects.create")
+    @patch("application.notifications.services.send_notifications._ratelimit_exception")
+    @patch("application.notifications.services.send_notifications.send_msteams_notification")
+    @patch("application.notifications.services.send_notifications.send_slack_notification")
+    @patch("application.notifications.services.send_notifications.send_email_notification")
+    @patch("application.notifications.services.send_notifications._get_first_name")
+    @patch("application.notifications.services.send_notifications.get_current_user")
+    @patch("application.notifications.models.Notification.objects.create")
     def test_send_exception_notification_success(
         self,
         mock_notification_create,
@@ -485,11 +486,11 @@ class TestPushNotifications(BaseTestCase):
     # --- send_task_exception_notification ---
 
     @patch("application.commons.models.Settings.load")
-    @patch("application.commons.services.send_notifications._ratelimit_exception")
-    @patch("application.commons.services.send_notifications.send_msteams_notification")
-    @patch("application.commons.services.send_notifications.send_slack_notification")
-    @patch("application.commons.services.send_notifications.send_email_notification")
-    @patch("application.commons.models.Notification.objects.create")
+    @patch("application.notifications.services.send_notifications._ratelimit_exception")
+    @patch("application.notifications.services.send_notifications.send_msteams_notification")
+    @patch("application.notifications.services.send_notifications.send_slack_notification")
+    @patch("application.notifications.services.send_notifications.send_email_notification")
+    @patch("application.notifications.models.Notification.objects.create")
     def test_send_task_exception_notification_no_webhook_no_email(
         self,
         mock_notification_create,
@@ -523,10 +524,10 @@ class TestPushNotifications(BaseTestCase):
         )
 
     @patch("application.commons.models.Settings.load")
-    @patch("application.commons.services.send_notifications._ratelimit_exception")
-    @patch("application.commons.services.send_notifications.send_msteams_notification")
-    @patch("application.commons.services.send_notifications.send_slack_notification")
-    @patch("application.commons.services.send_notifications.send_email_notification")
+    @patch("application.notifications.services.send_notifications._ratelimit_exception")
+    @patch("application.notifications.services.send_notifications.send_msteams_notification")
+    @patch("application.notifications.services.send_notifications.send_slack_notification")
+    @patch("application.notifications.services.send_notifications.send_email_notification")
     def test_send_task_exception_notification_no_ratelimit(
         self,
         mock_send_email,
@@ -555,12 +556,12 @@ class TestPushNotifications(BaseTestCase):
         mock_send_email.assert_not_called()
 
     @patch("application.commons.models.Settings.load")
-    @patch("application.commons.services.send_notifications._ratelimit_exception")
-    @patch("application.commons.services.send_notifications.send_msteams_notification")
-    @patch("application.commons.services.send_notifications.send_slack_notification")
-    @patch("application.commons.services.send_notifications.send_email_notification")
-    @patch("application.commons.services.send_notifications._get_first_name")
-    @patch("application.commons.models.Notification.objects.create")
+    @patch("application.notifications.services.send_notifications._ratelimit_exception")
+    @patch("application.notifications.services.send_notifications.send_msteams_notification")
+    @patch("application.notifications.services.send_notifications.send_slack_notification")
+    @patch("application.notifications.services.send_notifications.send_email_notification")
+    @patch("application.notifications.services.send_notifications._get_first_name")
+    @patch("application.notifications.models.Notification.objects.create")
     def test_send_task_exception_notification_success(
         self,
         mock_notification_create,
@@ -659,8 +660,8 @@ class TestPushNotifications(BaseTestCase):
 
     # --- send_email_notification ---
 
-    @patch("application.commons.tasks._create_notification_message")
-    @patch("application.commons.tasks.send_mail")
+    @patch("application.notifications.tasks._create_notification_message")
+    @patch("application.notifications.tasks.send_mail")
     def test_send_email_notification_empty_message(self, mock_send_email, mock_create_message):
         mock_create_message.return_value = None
 
@@ -670,10 +671,10 @@ class TestPushNotifications(BaseTestCase):
         mock_send_email.assert_not_called()
 
     @patch("application.commons.models.Settings.load")
-    @patch("application.commons.tasks._create_notification_message")
-    @patch("application.commons.tasks.send_mail")
-    @patch("application.commons.tasks.logger.error")
-    @patch("application.commons.tasks.format_log_message")
+    @patch("application.notifications.tasks._create_notification_message")
+    @patch("application.notifications.tasks.send_mail")
+    @patch("application.notifications.tasks.logger.error")
+    @patch("application.notifications.tasks.format_log_message")
     def test_send_email_notification_exception(
         self,
         mock_format,
@@ -702,10 +703,10 @@ class TestPushNotifications(BaseTestCase):
         mock_format.assert_called_once()
 
     @patch("application.commons.models.Settings.load")
-    @patch("application.commons.tasks._create_notification_message")
-    @patch("application.commons.tasks.send_mail")
-    @patch("application.commons.tasks.logger.error")
-    @patch("application.commons.tasks.format_log_message")
+    @patch("application.notifications.tasks._create_notification_message")
+    @patch("application.notifications.tasks.send_mail")
+    @patch("application.notifications.tasks.logger.error")
+    @patch("application.notifications.tasks.format_log_message")
     def test_send_msteams_notification_success(
         self,
         mock_format,
@@ -734,8 +735,8 @@ class TestPushNotifications(BaseTestCase):
 
     # --- send_msteams_notification ---
 
-    @patch("application.commons.tasks._create_notification_message")
-    @patch("application.commons.tasks.requests.request")
+    @patch("application.notifications.tasks._create_notification_message")
+    @patch("application.notifications.tasks.requests.request")
     def test_send_msteams_notification_empty_message(self, mock_request, mock_create_message):
         mock_create_message.return_value = None
 
@@ -744,10 +745,10 @@ class TestPushNotifications(BaseTestCase):
         mock_create_message.assert_called_with("test_template")
         mock_request.assert_not_called()
 
-    @patch("application.commons.tasks._create_notification_message")
-    @patch("application.commons.tasks.requests.request")
-    @patch("application.commons.tasks.logger.error")
-    @patch("application.commons.tasks.format_log_message")
+    @patch("application.notifications.tasks._create_notification_message")
+    @patch("application.notifications.tasks.requests.request")
+    @patch("application.notifications.tasks.logger.error")
+    @patch("application.notifications.tasks.format_log_message")
     def test_send_msteams_notification_exception(self, mock_format, mock_logger, mock_request, mock_create_message):
         mock_create_message.return_value = "test_message"
         mock_request.side_effect = Exception("test_exception")
@@ -759,10 +760,10 @@ class TestPushNotifications(BaseTestCase):
         mock_logger.assert_called_once()
         mock_format.assert_called_once()
 
-    @patch("application.commons.tasks._create_notification_message")
-    @patch("application.commons.tasks.requests.request")
-    @patch("application.commons.tasks.logger.error")
-    @patch("application.commons.tasks.format_log_message")
+    @patch("application.notifications.tasks._create_notification_message")
+    @patch("application.notifications.tasks.requests.request")
+    @patch("application.notifications.tasks.logger.error")
+    @patch("application.notifications.tasks.format_log_message")
     def test_send_msteams_notification_not_ok(self, mock_format, mock_logger, mock_request, mock_create_message):
         mock_create_message.return_value = "test_message"
         response = Response()
@@ -776,10 +777,10 @@ class TestPushNotifications(BaseTestCase):
         mock_logger.assert_called_once()
         mock_format.assert_called_once()
 
-    @patch("application.commons.tasks._create_notification_message")
-    @patch("application.commons.tasks.requests.request")
-    @patch("application.commons.tasks.logger.error")
-    @patch("application.commons.tasks.format_log_message")
+    @patch("application.notifications.tasks._create_notification_message")
+    @patch("application.notifications.tasks.requests.request")
+    @patch("application.notifications.tasks.logger.error")
+    @patch("application.notifications.tasks.format_log_message")
     def test_send_msteams_notification_success(self, mock_format, mock_logger, mock_request, mock_create_message):
         mock_create_message.return_value = "test_message"
         response = Response()
@@ -795,8 +796,8 @@ class TestPushNotifications(BaseTestCase):
 
     # --- send_slack_notification ---
 
-    @patch("application.commons.tasks._create_notification_message")
-    @patch("application.commons.tasks.requests.request")
+    @patch("application.notifications.tasks._create_notification_message")
+    @patch("application.notifications.tasks.requests.request")
     def test_send_slack_notification_empty_message(self, mock_request, mock_create_message):
         mock_create_message.return_value = None
 
@@ -805,10 +806,10 @@ class TestPushNotifications(BaseTestCase):
         mock_create_message.assert_called_with("test_template")
         mock_request.assert_not_called()
 
-    @patch("application.commons.tasks._create_notification_message")
-    @patch("application.commons.tasks.requests.request")
-    @patch("application.commons.tasks.logger.error")
-    @patch("application.commons.tasks.format_log_message")
+    @patch("application.notifications.tasks._create_notification_message")
+    @patch("application.notifications.tasks.requests.request")
+    @patch("application.notifications.tasks.logger.error")
+    @patch("application.notifications.tasks.format_log_message")
     def test_send_slack_notification_exception(self, mock_format, mock_logger, mock_request, mock_create_message):
         mock_create_message.return_value = "test_message"
         mock_request.side_effect = Exception("test_exception")
@@ -820,10 +821,10 @@ class TestPushNotifications(BaseTestCase):
         mock_logger.assert_called_once()
         mock_format.assert_called_once()
 
-    @patch("application.commons.tasks._create_notification_message")
-    @patch("application.commons.tasks.requests.request")
-    @patch("application.commons.tasks.logger.error")
-    @patch("application.commons.tasks.format_log_message")
+    @patch("application.notifications.tasks._create_notification_message")
+    @patch("application.notifications.tasks.requests.request")
+    @patch("application.notifications.tasks.logger.error")
+    @patch("application.notifications.tasks.format_log_message")
     def test_send_slack_notification_not_ok(self, mock_format, mock_logger, mock_request, mock_create_message):
         mock_create_message.return_value = "test_message"
         response = Response()
@@ -837,10 +838,10 @@ class TestPushNotifications(BaseTestCase):
         mock_logger.assert_called_once()
         mock_format.assert_called_once()
 
-    @patch("application.commons.tasks._create_notification_message")
-    @patch("application.commons.tasks.requests.request")
-    @patch("application.commons.tasks.logger.error")
-    @patch("application.commons.tasks.format_log_message")
+    @patch("application.notifications.tasks._create_notification_message")
+    @patch("application.notifications.tasks.requests.request")
+    @patch("application.notifications.tasks.logger.error")
+    @patch("application.notifications.tasks.format_log_message")
     def test_send_slack_notification_success(self, mock_format, mock_logger, mock_request, mock_create_message):
         mock_create_message.return_value = "test_message"
         response = Response()
@@ -856,8 +857,8 @@ class TestPushNotifications(BaseTestCase):
 
     # --- _create_notification_message ---
 
-    @patch("application.commons.tasks.logger.error")
-    @patch("application.commons.tasks.format_log_message")
+    @patch("application.notifications.tasks.logger.error")
+    @patch("application.notifications.tasks.format_log_message")
     def test_create_notification_message_not_found(self, mock_format, mock_logging):
         message = _create_notification_message("invalid_template_name.tpl")
         self.assertIsNone(message)
@@ -990,19 +991,19 @@ class TestPushNotifications(BaseTestCase):
 
     ## --- _get_user_first_name ---
 
-    @patch("application.commons.services.send_notifications.get_user_by_email")
+    @patch("application.notifications.services.send_notifications.get_user_by_email")
     def test_get_user_first_name_no_user(self, mock_get_user):
         mock_get_user.return_value = None
         self.assertEqual("", _get_first_name("test@example.com"))
         mock_get_user.assert_called_once_with("test@example.com")
 
-    @patch("application.commons.services.send_notifications.get_user_by_email")
+    @patch("application.notifications.services.send_notifications.get_user_by_email")
     def test_get_user_first_name_no_first_name(self, mock_get_user):
         mock_get_user.return_value = self.user_internal
         self.assertEqual("", _get_first_name("test@example.com"))
         mock_get_user.assert_called_once_with("test@example.com")
 
-    @patch("application.commons.services.send_notifications.get_user_by_email")
+    @patch("application.notifications.services.send_notifications.get_user_by_email")
     def test_get_user_first_name_success(self, mock_get_user):
         mock_get_user.return_value = self.user_internal
         self.user_internal.first_name = "first_name"
@@ -1011,14 +1012,14 @@ class TestPushNotifications(BaseTestCase):
 
     ## --- _get_stack_trace ---
 
-    @patch("application.commons.services.send_notifications.traceback.format_tb")
+    @patch("application.notifications.services.send_notifications.traceback.format_tb")
     def test_get_stack_trace_format_as_code(self, mock_format):
         mock_format.return_value = ["line1", "line2"]
         exception = Exception("test_exception")
         self.assertEqual("```\nline1line2\n```", _get_stack_trace(exception, True))
         mock_format.assert_called_once()
 
-    @patch("application.commons.services.send_notifications.traceback.format_tb")
+    @patch("application.notifications.services.send_notifications.traceback.format_tb")
     def test_get_stack_trace_plain(self, mock_format):
         mock_format.return_value = ["line1", "line2"]
         exception = Exception("test_exception")

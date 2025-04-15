@@ -125,6 +125,7 @@ LOCAL_APPS = [
     "application.issue_tracker",
     "application.licenses",
     "application.metrics",
+    "application.notifications",
     "application.rules",
     "application.vex",
 ]

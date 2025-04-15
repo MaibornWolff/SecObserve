@@ -733,7 +733,7 @@
         }
     },
     {
-        "model": "commons.notification",
+        "model": "notifications.notification",
         "pk": 1,
         "fields": {
             "type": "Exception",
@@ -746,7 +746,7 @@
         }
     },
     {
-        "model": "commons.notification",
+        "model": "notifications.notification",
         "pk": 2,
         "fields": {
             "type": "Exception",
@@ -759,7 +759,7 @@
         }
     },
     {
-        "model": "commons.notification",
+        "model": "notifications.notification",
         "pk": 3,
         "fields": {
             "type": "Security gate",
@@ -771,7 +771,7 @@
         }
     },
     {
-        "model": "commons.notification",
+        "model": "notifications.notification",
         "pk": 4,
         "fields": {
             "type": "Security gate",
@@ -783,7 +783,7 @@
         }
     },
     {
-        "model": "commons.notification",
+        "model": "notifications.notification",
         "pk": 5,
         "fields": {
             "type": "Task",
@@ -798,7 +798,7 @@
         }
     },
     {
-        "model": "commons.notification",
+        "model": "notifications.notification",
         "pk": 6,
         "fields": {
             "type": "Task",
