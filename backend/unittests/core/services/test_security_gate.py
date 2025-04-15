@@ -52,7 +52,7 @@ class TestSecurityGate(BaseTestCase):
 
     @patch("application.core.models.Observation.objects.filter")
     @patch("application.core.models.Product.save")
-    @patch("application.commons.models.Notification.save")
+    @patch("application.notifications.models.Notification.save")
     def test_check_security_gate_true_critical_product_group(
         self, notification_save_mock, product_save_mock, filter_mock
     ):
@@ -86,7 +86,7 @@ class TestSecurityGate(BaseTestCase):
 
     @patch("application.core.models.Observation.objects.filter")
     @patch("application.core.models.Product.save")
-    @patch("application.commons.models.Notification.save")
+    @patch("application.notifications.models.Notification.save")
     def test_check_security_gate_true_high_product_group(self, notification_save_mock, product_save_mock, filter_mock):
         filter_mock.return_value.count.return_value = 2
         product_group = Product(
@@ -120,7 +120,7 @@ class TestSecurityGate(BaseTestCase):
 
     @patch("application.core.models.Observation.objects.filter")
     @patch("application.core.models.Product.save")
-    @patch("application.commons.models.Notification.save")
+    @patch("application.notifications.models.Notification.save")
     def test_check_security_gate_true_medium_product_group(
         self, notification_save_mock, product_save_mock, filter_mock
     ):
@@ -158,7 +158,7 @@ class TestSecurityGate(BaseTestCase):
 
     @patch("application.core.models.Observation.objects.filter")
     @patch("application.core.models.Product.save")
-    @patch("application.commons.models.Notification.save")
+    @patch("application.notifications.models.Notification.save")
     def test_check_security_gate_true_low_product_group(self, notification_save_mock, product_save_mock, filter_mock):
         filter_mock.return_value.count.return_value = 2
         product_group = Product(
@@ -196,7 +196,7 @@ class TestSecurityGate(BaseTestCase):
 
     @patch("application.core.models.Observation.objects.filter")
     @patch("application.core.models.Product.save")
-    @patch("application.commons.models.Notification.save")
+    @patch("application.notifications.models.Notification.save")
     def test_check_security_gate_true_none_product_group(self, notification_save_mock, product_save_mock, filter_mock):
         filter_mock.return_value.count.return_value = 2
         product_group = Product(
@@ -236,7 +236,7 @@ class TestSecurityGate(BaseTestCase):
 
     @patch("application.core.models.Observation.objects.filter")
     @patch("application.core.models.Product.save")
-    @patch("application.commons.models.Notification.save")
+    @patch("application.notifications.models.Notification.save")
     def test_check_security_gate_true_unknown_product_group(
         self, notification_save_mock, product_save_mock, filter_mock
     ):

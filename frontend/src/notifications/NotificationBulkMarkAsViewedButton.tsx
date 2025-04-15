@@ -3,8 +3,8 @@ import { Backdrop, CircularProgress } from "@mui/material";
 import { useState } from "react";
 import { Confirm, useListContext, useNotify, useRefresh, useUnselectAll } from "react-admin";
 
-import { httpClient } from "../../commons/ra-data-django-rest-framework";
-import SmallButton from "../custom_fields/SmallButton";
+import SmallButton from "../commons/custom_fields/SmallButton";
+import { httpClient } from "../commons/ra-data-django-rest-framework";
 import { update_notification_count } from "./notification_count";
 
 const NotificationBulkMarkAsViewedButton = () => {

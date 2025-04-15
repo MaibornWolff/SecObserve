@@ -15,7 +15,9 @@ from rest_framework.status import (
 from rest_framework.views import exception_handler
 
 from application.commons.services.log_message import format_log_message
-from application.commons.services.send_notifications import send_exception_notification
+from application.notifications.services.send_notifications import (
+    send_exception_notification,
+)
 
 logger = logging.getLogger("secobserve.exception_handler")
 

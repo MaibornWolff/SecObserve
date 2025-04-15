@@ -13,7 +13,7 @@ import {
 } from "react-admin";
 
 import notifications from ".";
-import { httpClient } from "../ra-data-django-rest-framework";
+import { httpClient } from "../commons/ra-data-django-rest-framework";
 import { update_notification_count } from "./notification_count";
 
 const ShowActions = () => {

@@ -7,7 +7,6 @@ from application.access_control.api.views import (
     ProductApiTokenViewset,
     UserViewSet,
 )
-from application.commons.api.views import NotificationViewSet
 from application.core.api.views import (
     BranchNameViewSet,
     BranchViewSet,
@@ -42,6 +41,7 @@ from application.licenses.api.views import (
     LicensePolicyViewSet,
     LicenseViewSet,
 )
+from application.notifications.api.views import NotificationViewSet
 from application.rules.api.views import GeneralRuleViewSet, ProductRuleViewSet
 from application.vex.api.views import (
     CSAFBranchViewSet,

@@ -3,8 +3,8 @@ from typing import Any
 from django.db.models import QuerySet, Subquery
 from django_filters import BooleanFilter, CharFilter, FilterSet, OrderingFilter
 
-from application.commons.models import Notification, Notification_Viewed
 from application.commons.services.global_request import get_current_user
+from application.notifications.models import Notification, Notification_Viewed
 
 
 class NotificationFilter(FilterSet):
