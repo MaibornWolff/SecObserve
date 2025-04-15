@@ -6,7 +6,7 @@ permissions: read-all
 
 jobs:
   check_code_vulnerabilities:
-    if: github.event.repository.url == 'https://github.com/MaibornWolff/SecObserve'
+    if: github.repository == 'MaibornWolff/SecObserve'
     runs-on: ubuntu-latest
     steps:
       - 
@@ -20,6 +20,7 @@ jobs:
           SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
 
   check_code_sonarqube_backend:
+    if: github.repository == 'MaibornWolff/SecObserve'
     runs-on: ubuntu-latest
     steps:
       - 
@@ -36,6 +37,7 @@ jobs:
           projectBaseDir: backend
 
   check_code_sonarqube_frontend:
+    if: github.repository == 'MaibornWolff/SecObserve'
     runs-on: ubuntu-latest
     steps:
       - 

@@ -74,6 +74,7 @@ jobs:
             VERSION=dev
 
   sca_dev:
+    if: github.repository == 'MaibornWolff/SecObserve'
     runs-on: ubuntu-latest
     needs: [docker_backend_dev, docker_frontend_dev]
     steps:
