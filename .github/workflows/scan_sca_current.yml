@@ -9,6 +9,7 @@ permissions: read-all
 
 jobs:
   docker:
+    if: github.repository == 'MaibornWolff/SecObserve'
     runs-on: ubuntu-latest
     steps:
       -
