@@ -58,15 +58,15 @@ from application.import_observations.queries.api_configuration import (
 from application.import_observations.queries.vulnerability_check import (
     get_vulnerability_checks,
 )
+from application.import_observations.scanners.osv_scanner import (
+    scan_branch,
+    scan_product,
+)
 from application.import_observations.services.import_observations import (
     ApiImportParameters,
     FileUploadParameters,
     api_import_observations,
     file_upload_observations,
-)
-from application.import_observations.services.osv_scanner import (
-    scan_branch,
-    scan_product,
 )
 
 

@@ -11,13 +11,13 @@ from application.import_observations.parsers.osv.parser import (
     OSV_Component,
     OSV_Vulnerability,
 )
-from application.import_observations.services.import_observations import (
-    ImportParameters,
-)
-from application.import_observations.services.osv_scanner import (
+from application.import_observations.scanners.osv_scanner import (
     scan_branch,
     scan_license_components,
     scan_product,
+)
+from application.import_observations.services.import_observations import (
+    ImportParameters,
 )
 from application.licenses.models import License_Component
 from unittests.base_test_case import BaseTestCase
@@ -47,9 +47,9 @@ class TestImportObservations(BaseTestCase):
         )
         Parser.objects.create(name="OSV (Open Source Vulnerabilities)", type="SCA", source="Other")
 
-    @patch("application.import_observations.services.osv_scanner.scan_branch")
-    @patch("application.import_observations.services.osv_scanner.get_license_components_no_branch")
-    @patch("application.import_observations.services.osv_scanner.scan_license_components")
+    @patch("application.import_observations.scanners.osv_scanner.scan_branch")
+    @patch("application.import_observations.scanners.osv_scanner.get_license_components_no_branch")
+    @patch("application.import_observations.scanners.osv_scanner.scan_license_components")
     def test_scan_product_no_branch(
         self,
         mock_scan_license_components,
@@ -69,9 +69,9 @@ class TestImportObservations(BaseTestCase):
         mock_get_license_components_no_branch.assert_called_with(product)
         mock_scan_license_components.assert_called_with(license_components, product, None)
 
-    @patch("application.import_observations.services.osv_scanner.scan_branch")
-    @patch("application.import_observations.services.osv_scanner.get_license_components_no_branch")
-    @patch("application.import_observations.services.osv_scanner.scan_license_components")
+    @patch("application.import_observations.scanners.osv_scanner.scan_branch")
+    @patch("application.import_observations.scanners.osv_scanner.get_license_components_no_branch")
+    @patch("application.import_observations.scanners.osv_scanner.scan_license_components")
     def test_scan_product_with_branches(
         self,
         mock_scan_license_components,
@@ -92,8 +92,8 @@ class TestImportObservations(BaseTestCase):
         mock_get_license_components_no_branch.assert_called_with(product)
         mock_scan_license_components.assert_called_with(license_components, product, None)
 
-    @patch("application.import_observations.services.osv_scanner.get_license_components_for_branch")
-    @patch("application.import_observations.services.osv_scanner.scan_license_components")
+    @patch("application.import_observations.scanners.osv_scanner.get_license_components_for_branch")
+    @patch("application.import_observations.scanners.osv_scanner.scan_license_components")
     def test_scan_branch(self, mock_scan_license_components, mock_get_license_components_for_branch):
         product = Product.objects.get(id=1)
         branch = Branch.objects.filter(product=product).first()
@@ -108,8 +108,8 @@ class TestImportObservations(BaseTestCase):
         mock_scan_license_components.assert_called_with(license_components, product, branch)
 
     @patch("requests.post")
-    @patch("application.import_observations.services.osv_scanner.OSVParser.get_observations")
-    @patch("application.import_observations.services.osv_scanner._process_data")
+    @patch("application.import_observations.scanners.osv_scanner.OSVParser.get_observations")
+    @patch("application.import_observations.scanners.osv_scanner._process_data")
     def test_scan_license_components_no_license_components(
         self, mock_process_data, mock_get_observations, mock_requests_post
     ):
@@ -123,9 +123,9 @@ class TestImportObservations(BaseTestCase):
         mock_process_data.assert_not_called()
 
     @patch("requests.post")
-    @patch("application.import_observations.services.osv_scanner.OSVParser.get_observations")
-    @patch("application.import_observations.services.osv_scanner._process_data")
-    @patch("application.import_observations.services.osv_scanner.Vulnerability_Check.objects.update_or_create")
+    @patch("application.import_observations.scanners.osv_scanner.OSVParser.get_observations")
+    @patch("application.import_observations.scanners.osv_scanner._process_data")
+    @patch("application.import_observations.scanners.osv_scanner.Vulnerability_Check.objects.update_or_create")
     def test_scan_license_components_error_length(
         self,
         mock_vulnerability_check,
@@ -161,9 +161,9 @@ class TestImportObservations(BaseTestCase):
         mock_vulnerability_check.assert_not_called()
 
     @patch("requests.post")
-    @patch("application.import_observations.services.osv_scanner.OSVParser.get_observations")
-    @patch("application.import_observations.services.osv_scanner._process_data")
-    @patch("application.import_observations.services.osv_scanner.Vulnerability_Check.objects.update_or_create")
+    @patch("application.import_observations.scanners.osv_scanner.OSVParser.get_observations")
+    @patch("application.import_observations.scanners.osv_scanner._process_data")
+    @patch("application.import_observations.scanners.osv_scanner.Vulnerability_Check.objects.update_or_create")
     def test_scan_license_components_error_next_page_token(
         self,
         mock_vulnerability_check,
@@ -199,9 +199,9 @@ class TestImportObservations(BaseTestCase):
         mock_vulnerability_check.assert_not_called()
 
     @patch("requests.post")
-    @patch("application.import_observations.services.osv_scanner.OSVParser.get_observations")
-    @patch("application.import_observations.services.osv_scanner._process_data")
-    @patch("application.import_observations.services.osv_scanner.Vulnerability_Check.objects.update_or_create")
+    @patch("application.import_observations.scanners.osv_scanner.OSVParser.get_observations")
+    @patch("application.import_observations.scanners.osv_scanner._process_data")
+    @patch("application.import_observations.scanners.osv_scanner.Vulnerability_Check.objects.update_or_create")
     def test_scan_license_components_success(
         self,
         mock_vulnerability_check,
