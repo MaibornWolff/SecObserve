@@ -1,15 +1,16 @@
 import logging
 from dataclasses import dataclass
 from datetime import datetime
-from json import dumps
+from json import dumps, loads
 from typing import Optional
 
+import requests
 from packageurl import PackageURL
 
 from application.core.models import Branch, Observation, Product
 from application.core.types import OSVLinuxDistribution
+from application.import_observations.models import OSV_Cache
 from application.import_observations.parsers.base_parser import BaseParser
-from application.import_observations.services.osv_cache import get_osv_vulnerability
 from application.import_observations.types import ExtendedSemVer, Parser_Type
 from application.licenses.models import License_Component
 
@@ -71,7 +72,7 @@ class OSVParser(BaseParser):
             ordered_vulnerabilities = sorted(osv_component.vulnerabilities, key=lambda x: x.id)
 
             for vulnerability in ordered_vulnerabilities:
-                osv_vulnerability = get_osv_vulnerability(osv_id=vulnerability.id, modified=vulnerability.modified)
+                osv_vulnerability = _get_osv_vulnerability(osv_id=vulnerability.id, modified=vulnerability.modified)
 
                 if osv_vulnerability is None:
                     logger.warning("OSV vulnerability %s not found", vulnerability.id)
@@ -394,3 +395,18 @@ class OSVParser(BaseParser):
                     events.append(event)
                     event = Event(osv_range.get("type", ""), introduced="", fixed="")
         return events
+
+
+def _get_osv_vulnerability(osv_id: str, modified: datetime) -> dict:
+    osv_vulnerability = OSV_Cache.objects.filter(osv_id=osv_id).first()
+    if osv_vulnerability is None or osv_vulnerability.modified < modified:
+        response = requests.get(
+            url=f"https://api.osv.dev/v1/vulns/{osv_id}",
+            timeout=60,
+        )
+        response.raise_for_status()
+        osv_vulnerability, _ = OSV_Cache.objects.update_or_create(
+            osv_id=osv_id, defaults={"modified": modified, "data": response.text}
+        )
+
+    return loads(osv_vulnerability.data)

@@ -7,11 +7,11 @@ from application.commons import settings_static
 from application.commons.models import Settings
 from application.commons.services.tasks import handle_task_exception
 from application.import_observations.models import Api_Configuration, Product
+from application.import_observations.scanners.osv_scanner import scan_product
 from application.import_observations.services.import_observations import (
     ApiImportParameters,
     api_import_observations,
 )
-from application.import_observations.services.osv_scanner import scan_product
 
 logger = logging.getLogger("secobserve.import_observations")
 
