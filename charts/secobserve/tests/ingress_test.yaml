@@ -1,0 +1,16 @@
+suite: test ingress
+templates:
+  - ingress.yaml
+release:
+  name: test-release
+  namespace: test-namespace
+tests:
+  - it: check manifest with custom host
+    set:
+      ingress:
+        enabled: true
+        ingressClassName: alb
+        hostname: test.example.com
+    asserts:
+    - matchSnapshot: {}
+
