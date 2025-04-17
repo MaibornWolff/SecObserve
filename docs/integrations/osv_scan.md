@@ -26,25 +26,30 @@ OSV delivers vulnerabilities for a component, without regard to the version of t
 * **gem:** RubyGems
 * **swift:** SwiftURL
 
-For **Alpine** and **Ubuntu** (only the free version, not Pro) packages, the the Linux distribution and version are determined automatically by information from the PURL of the component.
+Some Linux distribution and version can be determined automatically by information from the PURL of the component:
+
+* Alpine
+* Chainguard
+* Debian
+* Ubuntu (only the free version, not Pro)
+* Wolfi
 
 To correctly identify other Linux packages, the Linux distribution and version has to be set in the product or branch settings according to [OSV affected package specification](https://ossf.github.io/osv-schema/#affectedpackage-field). If it is not set for a branch, the product settings are used. Examples are:
 
 | Linux distribution | Version   |
 |--------------------|-----------|
-| Debian             | 12        |
 | Red Hat            | rhel_aus:8.4::appstream |
 | Ubuntu             | Pro:24.04:LTS |
 
 
-## Manual import
+## Manual scan
 
 If both preconditions are met, the OSV scan can be started manually from the `Import` menu. If a branch is selected, the scan will be performed on the components of the branch. If no branch is selected, the scan will be performed on the components of all branches and components without a branch.
 
 ![OSV scanning import](../assets/images/screenshot_osv_scanning_import.png){ width="40%" style="display: block; margin: 0 auto" }
 
 
-## Automatic import
+## Automatic scan
 
 OSV scanning can be configured to run automatically at a specific time. There is a general setting and a setting per API configuration.
 
