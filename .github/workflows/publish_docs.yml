@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - chore/documentation_sbom
+      - chore/osv_documentation
 
 permissions: read-all
 
