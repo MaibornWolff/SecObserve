@@ -8,6 +8,7 @@ from application.commons.services.functions import get_classname
 from application.notifications.models import Notification
 from application.notifications.services.send_notifications import (
     LAST_EXCEPTIONS,
+    _create_notification_message,
     _get_first_name,
     _get_notification_email_to,
     _get_notification_ms_teams_webhook,
@@ -15,15 +16,12 @@ from application.notifications.services.send_notifications import (
     _get_stack_trace,
     _ratelimit_exception,
     get_base_url_frontend,
-    send_exception_notification,
-    send_product_security_gate_notification,
-    send_task_exception_notification,
-)
-from application.notifications.tasks import (
-    _create_notification_message,
     send_email_notification,
+    send_exception_notification,
     send_msteams_notification,
+    send_product_security_gate_notification,
     send_slack_notification,
+    send_task_exception_notification,
 )
 from unittests.base_test_case import BaseTestCase
 
@@ -660,8 +658,8 @@ class TestPushNotifications(BaseTestCase):
 
     # --- send_email_notification ---
 
-    @patch("application.notifications.tasks._create_notification_message")
-    @patch("application.notifications.tasks.send_mail")
+    @patch("application.notifications.services.send_notifications._create_notification_message")
+    @patch("application.notifications.services.send_notifications.send_mail")
     def test_send_email_notification_empty_message(self, mock_send_email, mock_create_message):
         mock_create_message.return_value = None
 
@@ -671,10 +669,10 @@ class TestPushNotifications(BaseTestCase):
         mock_send_email.assert_not_called()
 
     @patch("application.commons.models.Settings.load")
-    @patch("application.notifications.tasks._create_notification_message")
-    @patch("application.notifications.tasks.send_mail")
-    @patch("application.notifications.tasks.logger.error")
-    @patch("application.notifications.tasks.format_log_message")
+    @patch("application.notifications.services.send_notifications._create_notification_message")
+    @patch("application.notifications.services.send_notifications.send_mail")
+    @patch("application.notifications.services.send_notifications.logger.error")
+    @patch("application.notifications.services.send_notifications.format_log_message")
     def test_send_email_notification_exception(
         self,
         mock_format,
@@ -703,10 +701,10 @@ class TestPushNotifications(BaseTestCase):
         mock_format.assert_called_once()
 
     @patch("application.commons.models.Settings.load")
-    @patch("application.notifications.tasks._create_notification_message")
-    @patch("application.notifications.tasks.send_mail")
-    @patch("application.notifications.tasks.logger.error")
-    @patch("application.notifications.tasks.format_log_message")
+    @patch("application.notifications.services.send_notifications._create_notification_message")
+    @patch("application.notifications.services.send_notifications.send_mail")
+    @patch("application.notifications.services.send_notifications.logger.error")
+    @patch("application.notifications.services.send_notifications.format_log_message")
     def test_send_msteams_notification_success(
         self,
         mock_format,
@@ -735,8 +733,8 @@ class TestPushNotifications(BaseTestCase):
 
     # --- send_msteams_notification ---
 
-    @patch("application.notifications.tasks._create_notification_message")
-    @patch("application.notifications.tasks.requests.request")
+    @patch("application.notifications.services.send_notifications._create_notification_message")
+    @patch("application.notifications.services.send_notifications.requests.request")
     def test_send_msteams_notification_empty_message(self, mock_request, mock_create_message):
         mock_create_message.return_value = None
 
@@ -745,10 +743,10 @@ class TestPushNotifications(BaseTestCase):
         mock_create_message.assert_called_with("test_template")
         mock_request.assert_not_called()
 
-    @patch("application.notifications.tasks._create_notification_message")
-    @patch("application.notifications.tasks.requests.request")
-    @patch("application.notifications.tasks.logger.error")
-    @patch("application.notifications.tasks.format_log_message")
+    @patch("application.notifications.services.send_notifications._create_notification_message")
+    @patch("application.notifications.services.send_notifications.requests.request")
+    @patch("application.notifications.services.send_notifications.logger.error")
+    @patch("application.notifications.services.send_notifications.format_log_message")
     def test_send_msteams_notification_exception(self, mock_format, mock_logger, mock_request, mock_create_message):
         mock_create_message.return_value = "test_message"
         mock_request.side_effect = Exception("test_exception")
@@ -760,10 +758,10 @@ class TestPushNotifications(BaseTestCase):
         mock_logger.assert_called_once()
         mock_format.assert_called_once()
 
-    @patch("application.notifications.tasks._create_notification_message")
-    @patch("application.notifications.tasks.requests.request")
-    @patch("application.notifications.tasks.logger.error")
-    @patch("application.notifications.tasks.format_log_message")
+    @patch("application.notifications.services.send_notifications._create_notification_message")
+    @patch("application.notifications.services.send_notifications.requests.request")
+    @patch("application.notifications.services.send_notifications.logger.error")
+    @patch("application.notifications.services.send_notifications.format_log_message")
     def test_send_msteams_notification_not_ok(self, mock_format, mock_logger, mock_request, mock_create_message):
         mock_create_message.return_value = "test_message"
         response = Response()
@@ -777,10 +775,10 @@ class TestPushNotifications(BaseTestCase):
         mock_logger.assert_called_once()
         mock_format.assert_called_once()
 
-    @patch("application.notifications.tasks._create_notification_message")
-    @patch("application.notifications.tasks.requests.request")
-    @patch("application.notifications.tasks.logger.error")
-    @patch("application.notifications.tasks.format_log_message")
+    @patch("application.notifications.services.send_notifications._create_notification_message")
+    @patch("application.notifications.services.send_notifications.requests.request")
+    @patch("application.notifications.services.send_notifications.logger.error")
+    @patch("application.notifications.services.send_notifications.format_log_message")
     def test_send_msteams_notification_success(self, mock_format, mock_logger, mock_request, mock_create_message):
         mock_create_message.return_value = "test_message"
         response = Response()
@@ -796,8 +794,8 @@ class TestPushNotifications(BaseTestCase):
 
     # --- send_slack_notification ---
 
-    @patch("application.notifications.tasks._create_notification_message")
-    @patch("application.notifications.tasks.requests.request")
+    @patch("application.notifications.services.send_notifications._create_notification_message")
+    @patch("application.notifications.services.send_notifications.requests.request")
     def test_send_slack_notification_empty_message(self, mock_request, mock_create_message):
         mock_create_message.return_value = None
 
@@ -806,10 +804,10 @@ class TestPushNotifications(BaseTestCase):
         mock_create_message.assert_called_with("test_template")
         mock_request.assert_not_called()
 
-    @patch("application.notifications.tasks._create_notification_message")
-    @patch("application.notifications.tasks.requests.request")
-    @patch("application.notifications.tasks.logger.error")
-    @patch("application.notifications.tasks.format_log_message")
+    @patch("application.notifications.services.send_notifications._create_notification_message")
+    @patch("application.notifications.services.send_notifications.requests.request")
+    @patch("application.notifications.services.send_notifications.logger.error")
+    @patch("application.notifications.services.send_notifications.format_log_message")
     def test_send_slack_notification_exception(self, mock_format, mock_logger, mock_request, mock_create_message):
         mock_create_message.return_value = "test_message"
         mock_request.side_effect = Exception("test_exception")
@@ -821,10 +819,10 @@ class TestPushNotifications(BaseTestCase):
         mock_logger.assert_called_once()
         mock_format.assert_called_once()
 
-    @patch("application.notifications.tasks._create_notification_message")
-    @patch("application.notifications.tasks.requests.request")
-    @patch("application.notifications.tasks.logger.error")
-    @patch("application.notifications.tasks.format_log_message")
+    @patch("application.notifications.services.send_notifications._create_notification_message")
+    @patch("application.notifications.services.send_notifications.requests.request")
+    @patch("application.notifications.services.send_notifications.logger.error")
+    @patch("application.notifications.services.send_notifications.format_log_message")
     def test_send_slack_notification_not_ok(self, mock_format, mock_logger, mock_request, mock_create_message):
         mock_create_message.return_value = "test_message"
         response = Response()
@@ -838,10 +836,10 @@ class TestPushNotifications(BaseTestCase):
         mock_logger.assert_called_once()
         mock_format.assert_called_once()
 
-    @patch("application.notifications.tasks._create_notification_message")
-    @patch("application.notifications.tasks.requests.request")
-    @patch("application.notifications.tasks.logger.error")
-    @patch("application.notifications.tasks.format_log_message")
+    @patch("application.notifications.services.send_notifications._create_notification_message")
+    @patch("application.notifications.services.send_notifications.requests.request")
+    @patch("application.notifications.services.send_notifications.logger.error")
+    @patch("application.notifications.services.send_notifications.format_log_message")
     def test_send_slack_notification_success(self, mock_format, mock_logger, mock_request, mock_create_message):
         mock_create_message.return_value = "test_message"
         response = Response()
@@ -857,8 +855,8 @@ class TestPushNotifications(BaseTestCase):
 
     # --- _create_notification_message ---
 
-    @patch("application.notifications.tasks.logger.error")
-    @patch("application.notifications.tasks.format_log_message")
+    @patch("application.notifications.services.send_notifications.logger.error")
+    @patch("application.notifications.services.send_notifications.format_log_message")
     def test_create_notification_message_not_found(self, mock_format, mock_logging):
         message = _create_notification_message("invalid_template_name.tpl")
         self.assertIsNone(message)
