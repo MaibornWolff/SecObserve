@@ -17,7 +17,7 @@ from application.commons.services.log_message import format_log_message
 from application.core.models import Product
 from application.notifications.models import Notification
 
-logger = logging.getLogger("secobserve.tasks")
+logger = logging.getLogger("secobserve.notifications")
 
 
 LAST_EXCEPTIONS: dict[str, datetime] = {}
