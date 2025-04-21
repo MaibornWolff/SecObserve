@@ -154,14 +154,10 @@ const ObservationList = () => {
                     <ChipField source="current_status" label="Status" />
                     <NumberField source="epss_score" label="EPSS" />
                     <TextField source="origin_service_name" label="Service" />
-                    <TextField
-                        source="origin_component_name_version"
-                        label="Component"
-                        sx={{ wordBreak: "break-word" }}
-                    />
+                    <TextField source="origin_component_name_version" label="Comp." sx={{ wordBreak: "break-word" }} />
                     <TextField
                         source="origin_docker_image_name_tag_short"
-                        label="Container"
+                        label="Cont."
                         sx={{ wordBreak: "break-word" }}
                     />
                     <TextField source="origin_endpoint_hostname" label="Host" sx={{ wordBreak: "break-word" }} />
