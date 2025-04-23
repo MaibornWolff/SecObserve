@@ -16,7 +16,7 @@
         "@textea/json-viewer": "4.0.1",
         "axios": "1.8.4",
         "chart.js": "4.4.9",
-        "markdown-to-jsx": "7.7.4",
+        "markdown-to-jsx": "7.7.6",
         "mermaid": "11.6.0",
         "oidc-client-ts": "3.2.0",
         "prop-types": "15.8.1",
