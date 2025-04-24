@@ -2,7 +2,7 @@ import logging
 from dataclasses import dataclass
 from datetime import datetime
 from json import dumps, loads
-from typing import Optional
+from typing import Callable, Optional
 
 import requests
 from packageurl import PackageURL
@@ -11,6 +11,7 @@ from application.core.models import Branch, Observation, Product
 from application.core.types import OSVLinuxDistribution
 from application.import_observations.models import OSV_Cache
 from application.import_observations.parsers.base_parser import BaseParser
+from application.import_observations.rpm import RpmVersion
 from application.import_observations.types import ExtendedSemVer, Parser_Type
 from application.licenses.models import License_Component
 
@@ -83,6 +84,7 @@ class OSVParser(BaseParser):
 
                 vulnerability_id, vulnerability_id_aliases = self._get_osv_ids(osv_vulnerability)
                 osv_cvss3_vector, osv_cvss4_vector = self._get_cvss(osv_vulnerability)
+                parsed_component_purl = PackageURL.from_string(osv_component.license_component.component_purl)
 
                 affected = self._get_affected(
                     osv_component.license_component.component_purl,
@@ -101,6 +103,7 @@ class OSVParser(BaseParser):
                         osv_component.license_component.component_version, affected_item
                     )
                     component_in_ranges, fixed_version, affected_events = self._is_version_in_ranges(
+                        parsed_component_purl,
                         osv_component.license_component.component_version,
                         affected_item,
                     )
@@ -347,24 +350,30 @@ class OSVParser(BaseParser):
         versions = affected.get("versions", [])
         return version in versions
 
-    def _is_version_in_ranges(self, version: str, affected: dict) -> tuple[Optional[bool], Optional[str], list[Event]]:
+    def _is_version_in_ranges(
+        self, parsed_purl: PackageURL, version: str, affected: dict
+    ) -> tuple[Optional[bool], Optional[str], list[Event]]:
         if not version:
             return None, None, []
 
+        version_parser: Callable[[str | None], ExtendedSemVer | RpmVersion | None] = ExtendedSemVer.parse
+        if parsed_purl.type == "rpm":
+            version_parser = RpmVersion.parse
+
         events = self._get_events(affected)
 
-        version_semver = ExtendedSemVer.parse(version)
+        version_semver = version_parser(version)
         if not version_semver:
             return None, None, events
 
         num_rejected_events = 0
         for event in events:
             if event.type in ("ECOSYSTEM", "SEMVER"):
-                introduced_semver = ExtendedSemVer.parse(event.introduced)
-                fixed_semver = ExtendedSemVer.parse(event.fixed)
+                introduced_semver = version_parser(event.introduced)
+                fixed_semver = version_parser(event.fixed)
 
                 if not introduced_semver:
-                    introduced_semver = ExtendedSemVer.parse("0.0.0")
+                    introduced_semver = version_parser("0.0.0")
                 if not fixed_semver:
                     continue
 
