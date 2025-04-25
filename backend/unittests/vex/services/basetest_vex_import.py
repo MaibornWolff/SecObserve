@@ -7,9 +7,10 @@ from application.import_observations.services.import_observations import (
     FileUploadParameters,
     file_upload_observations,
 )
+from application.licenses.models import License_Component
 from application.vex.models import VEX_Document, VEX_Statement
 from application.vex.types import VEX_Document_Type, VEX_Justification, VEX_Status
-from application.licenses.models import License_Component
+
 
 class BaseTestVEXImport(TestCase):
     def load_vex_test(self, short: bool = False) -> None:
