@@ -14,7 +14,7 @@
         "@mui/icons-material": "6.4.11",
         "@mui/material": "6.4.11",
         "@textea/json-viewer": "4.0.1",
-        "axios": "1.8.4",
+        "axios": "1.9.0",
         "chart.js": "4.4.9",
         "markdown-to-jsx": "7.7.6",
         "mermaid": "11.6.0",
