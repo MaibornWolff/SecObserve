@@ -7,6 +7,8 @@
 # stripped down and significantly modified from the original at python-rpm-vercmp
 # Also includes updates from Facebook antlir merged in.
 #
+# Fetched from https://github.com/google/osv.dev/blob/master/osv/third_party/univers/rpm.py
+#
 # Visit https://aboutcode.org and https://github.com/nexB/univers for support and download.
 
 import re

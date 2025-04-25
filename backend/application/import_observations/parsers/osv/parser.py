@@ -11,7 +11,7 @@ from application.core.models import Branch, Observation, Product
 from application.core.types import OSVLinuxDistribution
 from application.import_observations.models import OSV_Cache
 from application.import_observations.parsers.base_parser import BaseParser
-from application.import_observations.rpm import RpmVersion
+from application.import_observations.parsers.osv.rpm import RpmVersion
 from application.import_observations.types import ExtendedSemVer, Parser_Type
 from application.licenses.models import License_Component
 
