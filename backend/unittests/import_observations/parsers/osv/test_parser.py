@@ -257,6 +257,32 @@ A stack overflow in the XML.toJSONObject component of hutool-json v5.8.10 and or
 * ECOSYSTEM: Introduced: 0 - Fixed: 2:8.0.0197-3"""
         self.assertEqual(description, observation.description)
 
+    def test_linux_rpm(self):
+        call_command(
+            "loaddata",
+            [
+                "unittests/import_observations/parsers/osv/files/fixtures_osv_cache_rpm.json",
+            ],
+        )
+
+        self.product_1.osv_linux_distribution = ""
+        self.product_1.osv_linux_release = ""
+        self.branch_1.osv_linux_distribution = "Red Hat"
+        self.branch_1.osv_linux_release = "enterprise_linux:9::appstream"
+        osv_components = [self._get_osv_component_rpm()]
+
+        parser = OSVParser()
+        observations = parser.get_observations(osv_components, self.product_1, self.branch_1)
+
+        self.assertEqual(len(observations), 1)
+
+        observation = observations[0]
+        self.assertEqual("RHSA-2023:6738", observation.title)
+        description = """Red Hat Security Advisory: java-21-openjdk security and bug fix update
+
+**Confidence: High** (Component found in affected ranges)"""
+        self.assertEqual(description, observation.description)
+
     def test_get_linux_package_osv_ecosystem_already_set(self):
         parser = OSVParser()
         package_osv_ecosystem = parser._get_linux_package_osv_ecosystem(
@@ -379,6 +405,26 @@ A stack overflow in the XML.toJSONObject component of hutool-json v5.8.10 and or
             vulnerabilities={
                 OSV_Vulnerability(
                     id="CVE-2017-6349",
+                    modified=datetime(2024, 8, 7, 20, 1, 58, 452618, timezone.utc),
+                ),
+            },
+        )
+
+    def _get_osv_component_rpm(self):
+        return OSV_Component(
+            license_component=License_Component(
+                product=self.product_1,
+                branch=self.branch_1,
+                component_name="java-21-openjdk-devel",
+                component_version="21.0.7.0.6-1.el9",
+                component_name_version="java-21-openjdk-devel:21.0.7.0.6-1.el9",
+                component_purl="pkg:rpm/redhat/java-21-openjdk-devel@21.0.7.0.6-1.el9",
+                component_purl_type="rpm",
+                component_dependencies="",
+            ),
+            vulnerabilities={
+                OSV_Vulnerability(
+                    id="RHSA-2023:6738",
                     modified=datetime(2024, 8, 7, 20, 1, 58, 452618, timezone.utc),
                 ),
             },
