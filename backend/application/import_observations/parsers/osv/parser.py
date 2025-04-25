@@ -84,14 +84,14 @@ class OSVParser(BaseParser):
 
                 vulnerability_id, vulnerability_id_aliases = self._get_osv_ids(osv_vulnerability)
                 osv_cvss3_vector, osv_cvss4_vector = self._get_cvss(osv_vulnerability)
-                parsed_component_purl = PackageURL.from_string(osv_component.license_component.component_purl)
 
-                affected = self._get_affected(
-                    osv_component.license_component.component_purl,
-                    osv_vulnerability,
-                    product,
-                    branch,
-                )
+                try:
+                    parsed_purl = PackageURL.from_string(osv_component.license_component.component_purl)
+                except ValueError as e:
+                    logger.error("Invalid PURL %s: %s", osv_component.license_component.component_purl, str(e))
+                    continue
+
+                affected = self._get_affected(parsed_purl, osv_vulnerability, product, branch)
 
                 component_in_versions = None
                 component_in_ranges = None
@@ -103,7 +103,7 @@ class OSVParser(BaseParser):
                         osv_component.license_component.component_version, affected_item
                     )
                     component_in_ranges, fixed_version, affected_events = self._is_version_in_ranges(
-                        parsed_component_purl,
+                        parsed_purl,
                         osv_component.license_component.component_version,
                         affected_item,
                     )
@@ -219,16 +219,11 @@ class OSVParser(BaseParser):
 
     def _get_affected(
         self,
-        purl: str,
+        parsed_purl: PackageURL,
         osv_vulnerability: dict,
         product: Product,
         branch: Optional[Branch],
     ) -> list[dict]:
-        try:
-            parsed_purl = PackageURL.from_string(purl)
-        except ValueError as e:
-            logger.error("Invalid PURL %s: %s", purl, str(e))
-            return []
 
         affected = []
 
