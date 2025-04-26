@@ -1,12 +1,12 @@
 from typing import Optional
 
 from application.commons.models import Settings
-from application.commons.services.send_notifications import (
-    send_product_security_gate_notification,
-)
 from application.core.models import Product
 from application.core.services.product import get_product_observation_count
 from application.core.types import Severity
+from application.notifications.services.send_notifications import (
+    send_product_security_gate_notification,
+)
 
 
 def check_security_gate(product: Product) -> None:

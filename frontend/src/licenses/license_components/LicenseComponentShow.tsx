@@ -32,7 +32,7 @@ const ShowActions = () => {
         const storedFilters = license_component_expand_filters ? JSON.parse(license_component_expand_filters) : {};
         if (storedFilters.storedFilters) {
             if (storedFilters.storedFilters.branch_name) {
-                filter["branch_name"] = storedFilters.storedFilters.branch_name;
+                filter["branch_name_exact"] = storedFilters.storedFilters.branch_name;
             }
             if (storedFilters.storedFilters.license_name) {
                 filter["license_name_exact"] = storedFilters.storedFilters.license_name;

@@ -11,6 +11,8 @@ import product_groups from "../../core/product_groups";
 import products from "../../core/products";
 import parsers from "../../import_observations/parsers";
 import licenses from "../../licenses/licenses";
+import notifications from "../../notifications";
+import { get_notification_count, update_notification_count } from "../../notifications/notification_count";
 import general_rules from "../../rules/general_rules";
 import csaf from "../../vex/csaf";
 import openvex from "../../vex/openvex";
@@ -19,8 +21,6 @@ import vex_documents from "../../vex/vex_documents";
 import { IntervalHooks } from "../IntervalHooks";
 import { feature_license_management, feature_vex_enabled } from "../functions";
 import { is_superuser } from "../functions";
-import notifications from "../notifications";
-import { get_notification_count, update_notification_count } from "../notifications/notification_count";
 import settings from "../settings";
 import SubMenu from "./SubMenu";
 

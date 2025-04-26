@@ -3,11 +3,11 @@ from unittest import TestCase
 
 from application.core.models import Observation, Product
 from application.core.types import Status
-from application.import_observations.models import Parser
 from application.import_observations.services.import_observations import (
     FileUploadParameters,
     file_upload_observations,
 )
+from application.licenses.models import License_Component
 from application.vex.models import VEX_Document, VEX_Statement
 from application.vex.types import VEX_Document_Type, VEX_Justification, VEX_Status
 
@@ -39,6 +39,7 @@ class BaseTestVEXImport(TestCase):
         VEX_Statement.objects.all().delete()
         VEX_Document.objects.all().delete()
         Observation.objects.filter(product__name="VEX_Test").delete()
+        License_Component.objects.filter(product__name="VEX_Test").delete()
         Product.objects.filter(name="VEX_Test").delete()
 
     def check_vex_document(self, vex_document: VEX_Document, document_type: str, short: bool = False) -> None:

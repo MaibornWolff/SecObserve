@@ -6,7 +6,7 @@ permissions: read-all
 
 jobs:
   check_code_vulnerabilities:
-    if: github.event.repository.url == 'https://github.com/MaibornWolff/SecObserve'
+    if: github.repository == 'MaibornWolff/SecObserve'
     runs-on: ubuntu-latest
     steps:
       - 
@@ -14,12 +14,13 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       -
         name: Run vulnerability scanners for code
-        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@2f7b500fde2de2bdea7eef3b6df5503c2476916f # main
+        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@32595f58f393dbc99507c7ec574e47c3443808f1 # main
         with:
           so_configuration: 'so_configuration_code.yml'
           SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
 
   check_code_sonarqube_backend:
+    if: github.repository == 'MaibornWolff/SecObserve'
     runs-on: ubuntu-latest
     steps:
       - 
@@ -29,13 +30,14 @@ jobs:
           fetch-depth: 0  
       - 
         name: Run SonarQube scan for backend
-        uses: SonarSource/sonarqube-scan-action@v5
+        uses: SonarSource/sonarqube-scan-action@aa494459d7c39c106cc77b166de8b4250a32bb97 # v5.1.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           projectBaseDir: backend
 
   check_code_sonarqube_frontend:
+    if: github.repository == 'MaibornWolff/SecObserve'
     runs-on: ubuntu-latest
     steps:
       - 
@@ -45,7 +47,7 @@ jobs:
           fetch-depth: 0  
       - 
         name: Run SonarQube scan for frontend
-        uses: SonarSource/sonarqube-scan-action@v5
+        uses: SonarSource/sonarqube-scan-action@aa494459d7c39c106cc77b166de8b4250a32bb97 # v5.1.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FRONTEND }}
         with:

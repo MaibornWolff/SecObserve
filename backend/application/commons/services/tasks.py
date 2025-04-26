@@ -5,10 +5,10 @@ from typing import Any
 
 from application.access_control.models import User
 from application.commons.services.log_message import format_log_message
-from application.commons.services.send_notifications import (
+from application.core.models import Product
+from application.notifications.services.send_notifications import (
     send_task_exception_notification,
 )
-from application.core.models import Product
 
 logger = logging.getLogger("secobserve.tasks")
 

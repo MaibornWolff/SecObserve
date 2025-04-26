@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - 
-        uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4.3.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 20
       - 
@@ -37,34 +37,32 @@ jobs:
           cdxgen ./frontend --type npm --no-babel --required-only --profile license-compliance --no-auto-compositions --project-name secobserve --output sbom_frontend_application.json
       -
         name: Import backend SBOM
-        uses: MaibornWolff/secobserve_actions_templates/actions/importer@2f7b500fde2de2bdea7eef3b6df5503c2476916f # main
+        uses: MaibornWolff/secobserve_actions_templates/actions/upload_sbom@32595f58f393dbc99507c7ec574e47c3443808f1 # main
         with:
           so_product_name: 'SecObserve'
           so_file_name: 'sbom_backend_application.json'
-          so_parser_name: 'CycloneDX'
           so_branch_name: 'dev'
           so_api_base_url: "https://secobserve-backend.maibornwolff.de"
           so_api_token: ${{ secrets.SO_API_TOKEN }}
       -
         name: Import frontend SBOM
-        uses: MaibornWolff/secobserve_actions_templates/actions/importer@2f7b500fde2de2bdea7eef3b6df5503c2476916f # main
+        uses: MaibornWolff/secobserve_actions_templates/actions/upload_sbom@32595f58f393dbc99507c7ec574e47c3443808f1 # main
         with:
           so_product_name: 'SecObserve'
           so_file_name: 'sbom_frontend_application.json'
-          so_parser_name: 'CycloneDX'
           so_branch_name: 'dev'
           so_api_base_url: "https://secobserve-backend.maibornwolff.de"
           so_api_token: ${{ secrets.SO_API_TOKEN }}
       - 
         name: Check licenses for backend application
-        uses: MaibornWolff/purl-patrol@04bf67d65b6dc2cf395ada722ec242ce48c93247 # v1.6.0
+        uses: MaibornWolff/purl-patrol@c11a9181b28143386d730aef6e1fed9aef51e2e6 # v1.6.1
         with:
           SBOM_PATH: 'sbom_backend_application.json'
           LICENSE_POLICY_PATH: 'sbom/configuration/license_policy.json'
           BREAK_ENABLED: false
       - 
         name: Check licenses for frontend application
-        uses: MaibornWolff/purl-patrol@04bf67d65b6dc2cf395ada722ec242ce48c93247 # v1.6.0
+        uses: MaibornWolff/purl-patrol@c11a9181b28143386d730aef6e1fed9aef51e2e6 # v1.6.1
         with:
           SBOM_PATH: 'sbom_frontend_application.json'
           LICENSE_POLICY_PATH: 'sbom/configuration/license_policy.json'
