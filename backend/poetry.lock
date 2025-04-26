@@ -805,41 +805,41 @@ tests = ["tox"]
 
 [[package]]
 name = "django-stubs"
-version = "5.1.3"
+version = "5.2.0"
 description = "Mypy stubs for Django"
 optional = true
-python-versions = ">=3.8"
+python-versions = ">=3.10"
 groups = ["main"]
 markers = "extra == \"code-quality\""
 files = [
-    {file = "django_stubs-5.1.3-py3-none-any.whl", hash = "sha256:716758ced158b439213062e52de6df3cff7c586f9f9ad7ab59210efbea5dfe78"},
-    {file = "django_stubs-5.1.3.tar.gz", hash = "sha256:8c230bc5bebee6da282ba8a27ad1503c84a0c4cd2f46e63d149e76d2a63e639a"},
+    {file = "django_stubs-5.2.0-py3-none-any.whl", hash = "sha256:cd52da033489afc1357d6245f49e3cc57bf49015877253fb8efc6722ea3d2d2b"},
+    {file = "django_stubs-5.2.0.tar.gz", hash = "sha256:07e25c2d3cbff5be540227ff37719cc89f215dfaaaa5eb038a75b01bbfbb2722"},
 ]
 
 [package.dependencies]
 asgiref = "*"
 django = "*"
-django-stubs-ext = ">=5.1.3"
+django-stubs-ext = ">=5.2.0"
 tomli = {version = "*", markers = "python_version < \"3.11\""}
 types-PyYAML = "*"
 typing-extensions = ">=4.11.0"
 
 [package.extras]
-compatible-mypy = ["mypy (>=1.12,<1.16)"]
+compatible-mypy = ["mypy (>=1.13,<1.16)"]
 oracle = ["oracledb"]
 redis = ["redis"]
 
 [[package]]
 name = "django-stubs-ext"
-version = "5.1.3"
+version = "5.2.0"
 description = "Monkey-patching and extensions for django-stubs"
 optional = true
-python-versions = ">=3.8"
+python-versions = ">=3.10"
 groups = ["main"]
 markers = "extra == \"code-quality\""
 files = [
-    {file = "django_stubs_ext-5.1.3-py3-none-any.whl", hash = "sha256:64561fbc53e963cc1eed2c8eb27e18b8e48dcb90771205180fe29fc8a59e55fd"},
-    {file = "django_stubs_ext-5.1.3.tar.gz", hash = "sha256:3e60f82337f0d40a362f349bf15539144b96e4ceb4dbd0239be1cd71f6a74ad0"},
+    {file = "django_stubs_ext-5.2.0-py3-none-any.whl", hash = "sha256:b27ae0aab970af4894ba4e9b3fcd3e03421dc8731516669659ee56122d148b23"},
+    {file = "django_stubs_ext-5.2.0.tar.gz", hash = "sha256:00c4ae307b538f5643af761a914c3f8e4e3f25f4e7c6d7098f1906c0d8f2aac9"},
 ]
 
 [package.dependencies]
@@ -2905,4 +2905,4 @@ unittests = ["coverage", "django-coverage-plugin", "django-extensions"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">= 3.10, < 3.13"
-content-hash = "0332bac2c6808927457973260683f2b4bfdd2f74d5891a8fc2d7bcd59209d9a1"
+content-hash = "69f1491de9e26b6ad173b0385a19c5c9caf0203abe1a8c84e3912ab24c9df7f0"
