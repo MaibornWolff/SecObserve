@@ -75,22 +75,22 @@ const About = () => {
                         tools and makes them available for assessment and reporting.
                     </Typography>
                     <Grid container spacing={2}>
-                        <Grid item xs={4}>
+                        <Grid size={4}>
                             <Typography>Backend version:</Typography>
                         </Grid>
-                        <Grid item xs={8}>
+                        <Grid size={8}>
                             <Typography>{backendVersion}</Typography>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid size={4}>
                             <Typography>Frontend version:</Typography>
                         </Grid>
-                        <Grid item xs={8}>
+                        <Grid size={8}>
                             <Typography>{get_version}</Typography>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid size={4}>
                             <Typography>Copyright:</Typography>
                         </Grid>
-                        <Grid item xs={8}>
+                        <Grid size={8}>
                             <Link
                                 href="https://www.maibornwolff.de"
                                 target="_blank"
@@ -100,10 +100,10 @@ const About = () => {
                                 MaibornWolff GmbH
                             </Link>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid size={4}>
                             <Typography>License:</Typography>
                         </Grid>
-                        <Grid item xs={8}>
+                        <Grid size={8}>
                             <Link
                                 href="https://github.com/MaibornWolff/SecObserve/blob/dev/LICENSE.txt"
                                 target="_blank"
@@ -113,10 +113,10 @@ const About = () => {
                                 BSD 3-Clause
                             </Link>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid size={4}>
                             <Typography>Source code: </Typography>
                         </Grid>
-                        <Grid item xs={8}>
+                        <Grid size={8}>
                             <Link
                                 href="https://github.com/MaibornWolff/SecObserve"
                                 target="_blank"
