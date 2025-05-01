@@ -1,5 +1,4 @@
-import { Box, Paper, Stack, Typography } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import { Box, Grid, Paper, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
 import { BooleanField, EditButton, Labeled, NumberField, Show, TextField, TopToolbar, WithRecord } from "react-admin";
 
