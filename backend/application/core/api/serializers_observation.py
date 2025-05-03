@@ -16,8 +16,8 @@ from rest_framework.serializers import (
     ValidationError,
 )
 
+from application.access_control.services.current_user import get_current_user
 from application.commons.services.functions import get_comma_separated_as_list
-from application.commons.services.global_request import get_current_user
 from application.core.api.serializers_helpers import (
     get_branch_name,
     get_origin_component_name_version,

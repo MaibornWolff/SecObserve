@@ -18,8 +18,8 @@ from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CON
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from application.access_control.services.authorization import user_has_permission_or_403
+from application.access_control.services.current_user import get_current_user
 from application.access_control.services.roles_permissions import Permissions
-from application.commons.services.global_request import get_current_user
 from application.core.models import Branch, Product
 from application.core.queries.branch import get_branch_by_id
 from application.core.queries.product import get_product_by_id

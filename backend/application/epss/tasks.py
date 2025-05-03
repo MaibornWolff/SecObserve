@@ -4,9 +4,9 @@ from huey import crontab
 from huey.contrib.djhuey import db_periodic_task, lock_task
 
 from application.commons import settings_static
-from application.commons.services.tasks import handle_task_exception
 from application.epss.services.cvss_bt import import_cvss_bt
 from application.epss.services.epss import epss_apply_observations, import_epss
+from application.notifications.services.tasks import handle_task_exception
 
 logger = logging.getLogger("secobserve.epss")
 

@@ -1,7 +1,7 @@
 from django.db.models.query import QuerySet
 
 from application.access_control.models import Authorization_Group
-from application.commons.services.global_request import get_current_user
+from application.access_control.services.current_user import get_current_user
 
 
 def get_authorization_groups() -> QuerySet[Authorization_Group]:

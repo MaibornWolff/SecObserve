@@ -4,13 +4,13 @@ from huey import crontab
 from huey.contrib.djhuey import db_periodic_task, lock_task
 
 from application.commons import settings_static
-from application.commons.services.tasks import handle_task_exception
 from application.core.services.housekeeping import (
     delete_inactive_branches_and_set_flags,
 )
 from application.core.services.risk_acceptance_expiry_task import (
     expire_risk_acceptances,
 )
+from application.notifications.services.tasks import handle_task_exception
 
 logger = logging.getLogger("secobserve.core")
 

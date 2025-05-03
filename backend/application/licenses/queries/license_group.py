@@ -3,7 +3,7 @@ from typing import Optional
 from django.db.models import Q
 from django.db.models.query import QuerySet
 
-from application.commons.services.global_request import get_current_user
+from application.access_control.services.current_user import get_current_user
 from application.licenses.models import License_Group
 from application.licenses.queries.license_policy_item import get_license_policy_items
 

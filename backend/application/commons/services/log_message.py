@@ -1,20 +1,15 @@
-from django.contrib.auth.models import AnonymousUser
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from application.access_control.models import User
 from application.commons.services.functions import get_classname
-from application.commons.services.global_request import (
-    get_current_request,
-    get_current_user,
-)
+from application.commons.services.global_request import get_current_request
 
 
 def format_log_message(  # pylint: disable=too-many-branches
     # There are quite a lot of branches, but at least they are not nested too much
     message: str = None,
     data: dict = None,
-    user: User = None,
+    username: str = None,
     response: Response = None,
     exception: Exception = None,
 ) -> str:
@@ -30,15 +25,10 @@ def format_log_message(  # pylint: disable=too-many-branches
         for key in data.keys():
             message_dict[f"data_{str(key)}"] = str(data[key])
 
-    current_user = get_current_user()
+    if username:
+        message_dict["user"] = username
+
     current_request = get_current_request()
-
-    if user:
-        message_dict["user"] = user.username
-    elif current_user:
-        if not isinstance(current_user, AnonymousUser):
-            message_dict["user"] = current_user.username
-
     if current_request:
         if current_request.method:
             message_dict["request_method"] = current_request.method

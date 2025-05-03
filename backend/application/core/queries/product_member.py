@@ -4,7 +4,7 @@ from django.db.models import Max
 from django.db.models.query import QuerySet
 
 from application.access_control.models import Authorization_Group, User
-from application.commons.services.global_request import get_current_user
+from application.access_control.services.current_user import get_current_user
 from application.core.models import (
     Product,
     Product_Authorization_Group_Member,

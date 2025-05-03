@@ -10,9 +10,9 @@ from huey.contrib.djhuey import db_task, task
 
 from application.access_control.models import User
 from application.access_control.queries.user import get_user_by_email
+from application.access_control.services.current_user import get_current_user
 from application.commons.models import Settings
 from application.commons.services.functions import get_base_url_frontend, get_classname
-from application.commons.services.global_request import get_current_user
 from application.commons.services.log_message import format_log_message
 from application.core.models import Product
 from application.notifications.models import Notification

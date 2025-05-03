@@ -14,6 +14,7 @@ from rest_framework.status import (
 )
 from rest_framework.views import exception_handler
 
+from application.access_control.services.current_user import get_current_username
 from application.commons.services.log_message import format_log_message
 from application.notifications.services.send_notifications import (
     send_exception_notification,
@@ -43,13 +44,15 @@ def custom_exception_handler(exc: Exception, context: dict) -> Response:
             response.status_code = HTTP_500_INTERNAL_SERVER_ERROR
             response.data = {}
             response.data["message"] = "Internal server error, check logs for details"
-            logger.error(format_log_message(response=response, exception=exc))
+            logger.error(format_log_message(response=response, exception=exc, username=get_current_username()))
             logger.error(traceback.format_exc())
             send_exception_notification(exc)
         else:
             if response.status_code < 500:
                 if response.status_code in (HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN):
-                    logger.warning(format_log_message(response=response, exception=exc))
+                    logger.warning(
+                        format_log_message(response=response, exception=exc, username=get_current_username())
+                    )
 
                 # HTTP status codes lower than 500 are no technical errors.
                 # They need not to be logged and we provide the exception
@@ -60,7 +63,7 @@ def custom_exception_handler(exc: Exception, context: dict) -> Response:
                 # HTTP status code 500 or higher are technical errors.
                 # They get logged but no details are given to the user,
                 # to avoid leaking internal technical information.
-                logger.error(format_log_message(response=response, exception=exc))
+                logger.error(format_log_message(response=response, exception=exc, username=get_current_username()))
                 logger.error(traceback.format_exc())
                 send_exception_notification(exc)
                 response.data = {}
