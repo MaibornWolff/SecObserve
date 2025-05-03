@@ -47,7 +47,7 @@
     "devDependencies": {
         "@eslint/compat": "1.2.9",
         "@eslint/eslintrc": "3.3.1",
-        "@eslint/js": "9.25.1",
+        "@eslint/js": "9.26.0",
         "@microsoft/eslint-formatter-sarif": "3.1.0",
         "@trivago/prettier-plugin-sort-imports": "5.2.2",
         "@types/node": "22.15.3",
@@ -57,7 +57,7 @@
         "@typescript-eslint/eslint-plugin": "8.31.1",
         "@typescript-eslint/parser": "8.31.1",
         "@vitejs/plugin-react": "4.4.1",
-        "eslint": "9.25.1",
+        "eslint": "9.26.0",
         "eslint-plugin-react": "7.37.5",
         "eslint-plugin-react-hooks": "5.2.0",
         "eslint-plugin-security": "3.0.1",
