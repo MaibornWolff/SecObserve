@@ -184,7 +184,7 @@ class TestAuthentication(BaseTestCase):
         self._check_oidc_not_authenticated(methods, url)
         self._check_oidc_authenticated(methods, url)
 
-    @patch("application.commons.services.global_request.get_current_user")
+    @patch("application.access_control.services.current_user.get_current_user")
     def test_authentication(self, mock_user):
         mock_user.return_value = self.user_admin
 

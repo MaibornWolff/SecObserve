@@ -1,4 +1,4 @@
-from unittest.mock import ANY, call, patch
+from unittest.mock import patch
 
 from application.notifications.services.tasks import handle_task_exception
 from unittests.base_test_case import BaseTestCase
@@ -25,7 +25,7 @@ class TestTasks(BaseTestCase):
             message="Error while executing background task",
             data={},
             exception=exception,
-            user=self.user_internal,
+            username="user_internal@example.com",
         )
         mock_send_task_exception_notification.assert_called_with(
             function=None,
