@@ -14,7 +14,7 @@ from application.access_control.models import (
     Authorization_Group_Member,
     User,
 )
-from application.commons.services.global_request import get_current_user
+from application.access_control.services.current_user import get_current_user
 from application.commons.services.log_message import format_log_message
 
 logger = logging.getLogger("secobserve.access_control")

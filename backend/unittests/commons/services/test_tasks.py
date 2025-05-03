@@ -1,14 +1,14 @@
 from unittest.mock import ANY, call, patch
 
-from application.commons.services.tasks import handle_task_exception
+from application.notifications.services.tasks import handle_task_exception
 from unittests.base_test_case import BaseTestCase
 
 
 class TestTasks(BaseTestCase):
     @patch("inspect.currentframe")
-    @patch("application.commons.services.tasks.send_task_exception_notification")
-    @patch("application.commons.services.tasks.format_log_message")
-    @patch("application.commons.services.tasks.logger.error")
+    @patch("application.notifications.services.tasks.send_task_exception_notification")
+    @patch("application.notifications.services.tasks.format_log_message")
+    @patch("application.notifications.services.tasks.logger.error")
     def test_handle_task_exception_without_frame(
         self,
         mock_logger,

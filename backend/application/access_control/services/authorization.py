@@ -3,12 +3,12 @@ from typing import Any, Optional
 from rest_framework.exceptions import PermissionDenied
 
 from application.access_control.models import User
+from application.access_control.services.current_user import get_current_user
 from application.access_control.services.roles_permissions import (
     Permissions,
     Roles,
     get_roles_with_permissions,
 )
-from application.commons.services.global_request import get_current_user
 from application.core.models import (
     Branch,
     Observation,

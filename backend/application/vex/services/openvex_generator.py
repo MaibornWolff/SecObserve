@@ -7,8 +7,8 @@ from rest_framework.exceptions import NotFound
 
 from application.__init__ import __version__
 from application.access_control.services.authorization import user_has_permission_or_403
+from application.access_control.services.current_user import get_current_user
 from application.access_control.services.roles_permissions import Permissions
-from application.commons.services.global_request import get_current_user
 from application.core.models import Branch, Observation, Product
 from application.core.queries.observation import get_current_modifying_observation_log
 from application.core.types import Status

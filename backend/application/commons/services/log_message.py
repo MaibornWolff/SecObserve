@@ -3,11 +3,9 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from application.access_control.models import User
+from application.access_control.services.current_user import get_current_user
 from application.commons.services.functions import get_classname
-from application.commons.services.global_request import (
-    get_current_request,
-    get_current_user,
-)
+from application.commons.services.global_request import get_current_request
 
 
 def format_log_message(  # pylint: disable=too-many-branches
@@ -31,14 +29,12 @@ def format_log_message(  # pylint: disable=too-many-branches
             message_dict[f"data_{str(key)}"] = str(data[key])
 
     current_user = get_current_user()
-    current_request = get_current_request()
-
     if user:
         message_dict["user"] = user.username
-    elif current_user:
-        if not isinstance(current_user, AnonymousUser):
-            message_dict["user"] = current_user.username
+    elif current_user and not isinstance(current_user, AnonymousUser):
+        message_dict["user"] = current_user.username
 
+    current_request = get_current_request()
     if current_request:
         if current_request.method:
             message_dict["request_method"] = current_request.method

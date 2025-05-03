@@ -4,7 +4,7 @@ from django.db.models.query import QuerySet
 
 from application.access_control.models import User
 from application.access_control.queries.user import get_users
-from application.commons.services.global_request import get_current_user
+from application.access_control.services.current_user import get_current_user
 from application.licenses.models import License_Policy, License_Policy_Member
 from application.licenses.queries.license_policy import get_license_policies
 

@@ -4,7 +4,7 @@ from django.db.models import Count, Exists, F, IntegerField, OuterRef, Q, Subque
 from django.db.models.functions import Coalesce
 from django.db.models.query import QuerySet
 
-from application.commons.services.global_request import get_current_user
+from application.access_control.services.current_user import get_current_user
 from application.core.models import (
     Observation,
     Product,

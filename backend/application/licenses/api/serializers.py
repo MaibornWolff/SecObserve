@@ -16,8 +16,8 @@ from application.access_control.api.serializers import (
     AuthorizationGroupListSerializer,
     UserListSerializer,
 )
+from application.access_control.services.current_user import get_current_user
 from application.commons.services.functions import get_comma_separated_as_list
-from application.commons.services.global_request import get_current_user
 from application.core.queries.product import get_products
 from application.core.types import PURL_Type
 from application.licenses.models import (

@@ -7,8 +7,6 @@ from django.dispatch import receiver
 from huey.contrib.djhuey import db_task, lock_task
 
 from application.commons.models import Settings
-from application.core.models import Product
-from application.core.services.security_gate import check_security_gate
 from application.epss.models import Exploit_Information
 from application.epss.services.cvss_bt import (
     apply_exploit_information_observations,
@@ -29,13 +27,10 @@ def settings_post_save(  # pylint: disable=unused-argument
 
 
 @db_task()
-@lock_task("settings_post_save_task_lock")
+@lock_task("epss_settings_post_save_task_lock")
 def settings_post_save_task(settings: Settings, created: bool) -> None:
 
     logger.info("--- Settings post_save_task - start ---")
-
-    for product in Product.objects.filter(is_product_group=False):
-        check_security_gate(product)
 
     if not created:
         if settings.feature_exploit_information and not Exploit_Information.objects.exists():

@@ -20,8 +20,8 @@ from application.access_control.queries.authorization_group_member import (
     get_authorization_group_member,
 )
 from application.access_control.services.authorization import get_user_permissions
+from application.access_control.services.current_user import get_current_user
 from application.access_control.services.roles_permissions import Permissions
-from application.commons.services.global_request import get_current_user
 from application.core.models import Product_Authorization_Group_Member, Product_Member
 
 

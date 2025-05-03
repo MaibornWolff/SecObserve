@@ -16,12 +16,12 @@ from application.access_control.api.serializers import (
     UserListSerializer,
 )
 from application.access_control.services.authorization import get_highest_user_role
+from application.access_control.services.current_user import get_current_user
 from application.access_control.services.roles_permissions import (
     Permissions,
     Roles,
     get_permissions_for_role,
 )
-from application.commons.services.global_request import get_current_user
 from application.core.api.serializers_helpers import (
     validate_cpe23,
     validate_purl,

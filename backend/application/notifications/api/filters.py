@@ -3,7 +3,7 @@ from typing import Any
 from django.db.models import QuerySet, Subquery
 from django_filters import BooleanFilter, CharFilter, FilterSet, OrderingFilter
 
-from application.commons.services.global_request import get_current_user
+from application.access_control.services.current_user import get_current_user
 from application.notifications.models import Notification, Notification_Viewed
 
 
