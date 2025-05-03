@@ -17,7 +17,6 @@ from application.access_control.services.current_user import get_current_user
 from application.commons.models import Settings
 from application.core.models import Product
 from application.core.types import Severity, Status, VexJustification
-from application.import_observations.models import Parser
 from application.rules.types import Rule_Status
 
 
@@ -25,7 +24,7 @@ class Rule(Model):
     name = CharField(max_length=255)
     description = TextField(max_length=2048, blank=True)
     product = ForeignKey(Product, blank=True, null=True, on_delete=CASCADE)
-    parser = ForeignKey(Parser, null=True, on_delete=CASCADE)
+    parser = ForeignKey("import_observations.Parser", null=True, on_delete=CASCADE)
     scanner_prefix = CharField(max_length=255, blank=True)
     title = CharField(max_length=255, blank=True)
     description_observation = CharField(max_length=255, blank=True)
