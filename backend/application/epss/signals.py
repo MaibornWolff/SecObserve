@@ -13,7 +13,7 @@ from application.epss.services.cvss_bt import (
     import_cvss_bt,
 )
 
-logger = logging.getLogger("secobserve.commons")
+logger = logging.getLogger("secobserve.epss")
 
 
 @receiver(post_save, sender=Settings)
