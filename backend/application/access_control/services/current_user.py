@@ -12,3 +12,10 @@ def get_current_user() -> Optional[User]:
         return request.user
 
     return None
+
+
+def get_current_username() -> Optional[str]:
+    user = get_current_user()
+    if user:
+        return user.username
+    return None

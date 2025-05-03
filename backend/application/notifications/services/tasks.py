@@ -35,7 +35,7 @@ def handle_task_exception(e: Exception, user: User = None, product: Product = No
             message="Error while executing background task",
             data=data,
             exception=e,
-            user=user,
+            username=user.username if user else None,
         )
     )
     logger.error(traceback.format_exc())

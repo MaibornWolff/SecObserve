@@ -273,11 +273,11 @@ class CreateUserAPITokenView(APIView):
             token = create_user_api_token(user)
         except ValidationError as e:
             response = Response(status=status.HTTP_400_BAD_REQUEST)
-            logger.warning(format_log_message(message=str(e), user=user, response=response))
+            logger.warning(format_log_message(message=str(e), username=user.username, response=response))
             raise
 
         response = Response({"token": token}, status=status.HTTP_201_CREATED)
-        logger.info(format_log_message(message="API token created", user=user, response=response))
+        logger.info(format_log_message(message="API token created", username=user.username, response=response))
         return response
 
 
@@ -293,7 +293,7 @@ class RevokeUserAPITokenView(APIView):
         user = _get_authenticated_user(request.data)
         revoke_user_api_token(user)
         response = Response(status=status.HTTP_204_NO_CONTENT)
-        logger.info(format_log_message(message="API token revoked", user=user, response=response))
+        logger.info(format_log_message(message="API token revoked", username=user.username, response=response))
         return response
 
 
@@ -367,7 +367,7 @@ class AuthenticateView(APIView):
 
         user_serializer = UserSerializer(user)
         response = Response({"jwt": jwt, "user": user_serializer.data})
-        logger.info(format_log_message(message="User authenticated", user=user, response=response))
+        logger.info(format_log_message(message="User authenticated", username=user.username, response=response))
         return response
 
 

@@ -14,7 +14,10 @@ from application.access_control.models import (
     Authorization_Group_Member,
     User,
 )
-from application.access_control.services.current_user import get_current_user
+from application.access_control.services.current_user import (
+    get_current_user,
+    get_current_username,
+)
 from application.commons.services.log_message import format_log_message
 
 logger = logging.getLogger("secobserve.access_control")
@@ -23,21 +26,21 @@ logger = logging.getLogger("secobserve.access_control")
 @receiver(user_logged_in)
 def signal_user_logged_in(sender: Any, user: User, **kwargs: Any) -> None:  # pylint: disable=unused-argument
     # sender is needed according to Django documentation
-    logger.info(format_log_message(message="User logged in", user=user))
+    logger.info(format_log_message(message="User logged in", username=user.username))
 
 
 @receiver(user_logged_out)
 def signal_user_logged_out(sender: Any, user: User, **kwargs: Any) -> None:  # pylint: disable=unused-argument
     # sender is needed according to Django documentation
 
-    logger.info(format_log_message(message="User logged out", user=user))
+    logger.info(format_log_message(message="User logged out", username=user.username))
 
 
 @receiver(user_login_failed)
 def signal_user_login_failed(sender: Any, credentials: dict, **kwargs: Any) -> None:  # pylint: disable=unused-argument
     # sender is needed according to Django documentation
 
-    logger.info(format_log_message(message="User login failed: ", data=credentials))
+    logger.info(format_log_message(message="User login failed: ", data=credentials, username=get_current_username()))
 
 
 @receiver(post_save, sender=Authorization_Group)
