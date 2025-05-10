@@ -67,13 +67,9 @@ const LicenseGroupLicenseEmbeddedList = ({ license_group }: LicenseGroupLicenseE
                                 resource="users"
                             >
                                 <WithRecord
-                                    label="Full name"
+                                    label="SPDX Id"
                                     render={(license) => (
-                                        <TextUrlField
-                                            label="SPDX Id"
-                                            text={license.spdx_id}
-                                            url={showLicense(license.id)}
-                                        />
+                                        <TextUrlField text={license.spdx_id} url={showLicense(license.id)} />
                                     )}
                                 />
                                 <TextField source="name" label="Name" />

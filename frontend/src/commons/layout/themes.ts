@@ -53,6 +53,12 @@ export const useStyles = tss.create({
         fontWeight: "bold",
         fontSize: "1rem",
     },
+    tabFont: {
+        fontSize: "0.875rem",
+        fontWeight: 500,
+        lineHeight: 1.25,
+        letterSpacing: "0.02857em",
+    },
 });
 
 export const darkTheme = {

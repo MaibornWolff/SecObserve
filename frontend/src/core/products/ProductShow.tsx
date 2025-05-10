@@ -37,6 +37,7 @@ import {
     PERMISSION_PRODUCT_RULE_CREATE,
 } from "../../access_control/types";
 import { feature_license_management } from "../../commons/functions";
+import { useStyles } from "../../commons/layout/themes";
 import observations from "../../core/observations";
 import ApiConfigurationCreate from "../../import_observations/api_configurations/ApiConfigurationCreate";
 import ApiConfigurationEmbeddedList from "../../import_observations/api_configurations/ApiConfigurationEmbeddedList";
@@ -95,6 +96,7 @@ const ShowActions = (props: ShowActionsProps) => {
 };
 
 const ProductShow = () => {
+    const { classes } = useStyles();
     const [settingsTabsShow, setSettingsTabsShow] = useState(false);
     const [tabsChanged, setTabsChanged] = useState(false);
     function showSettingsTabs() {
@@ -209,7 +211,12 @@ const ProductShow = () => {
                                 <VulnerabilityCheckEmbeddedList product={product} long_list={true} />
                             </Tab>
                             <Tab
-                                label="Branches / Versions"
+                                label={
+                                    <Fragment>
+                                        <Typography className={classes.tabFont}>Branches</Typography>
+                                        <Typography className={classes.tabFont}>Versions</Typography>
+                                    </Fragment>
+                                }
                                 path="branches"
                                 icon={<AccountTreeIcon />}
                                 onClick={hideSettingsTabs}
@@ -231,7 +238,12 @@ const ProductShow = () => {
                             )}
                             {feature_license_management() && product.has_licenses && (
                                 <Tab
-                                    label="Licenses"
+                                    label={
+                                        <Fragment>
+                                            <Typography className={classes.tabFont}>Licenses</Typography>
+                                            <Typography className={classes.tabFont}>Components</Typography>
+                                        </Fragment>
+                                    }
                                     path="licenses"
                                     icon={<license_components.icon />}
                                     onClick={hideSettingsTabs}

@@ -88,11 +88,10 @@ const LicensePolicyItemEdit = ({ license_policy_id, license_policy_item_id }: Li
                         <ReferenceInput
                             source="license"
                             reference="licenses"
-                            label="License"
                             filter={{ exclude_license_policy: license_policy_id }}
                             sort={{ field: "spdx_id", order: "ASC" }}
                         >
-                            <AutocompleteInputExtraWide optionText="spdx_id_name" />
+                            <AutocompleteInputExtraWide label="SPDX License" optionText="spdx_id_name" />
                         </ReferenceInput>
                         <TextInputExtraWide
                             source="license_expression"
