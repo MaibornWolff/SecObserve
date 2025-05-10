@@ -24,9 +24,9 @@ const ProductHeader = () => {
 
     function get_licenses_label(product: Product | undefined) {
         if (!product || product.repository_default_branch == null) {
-            return "Licenses";
+            return "Licenses / Components";
         }
-        return "Licenses (" + product.repository_default_branch_name + ")";
+        return "Licenses / Components (" + product.repository_default_branch_name + ")";
     }
 
     return (

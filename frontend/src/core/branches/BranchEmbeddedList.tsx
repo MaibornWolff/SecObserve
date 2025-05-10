@@ -87,7 +87,7 @@ const BranchEmbeddedList = ({ product }: BranchEmbeddedListProps) => {
                         )}
                         <ObservationsCountField label="Open observations" withLabel={false} />
                         {feature_license_management() && product?.has_licenses && (
-                            <LicensesCountField label="Licenses" withLabel={false} />
+                            <LicensesCountField label="Licenses / Components" withLabel={false} />
                         )}
                         <DateField source="last_import" showTime />
                         <WithRecord

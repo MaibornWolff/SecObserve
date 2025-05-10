@@ -88,7 +88,9 @@ const ProductEmbeddedList = ({ product_group, license_policy }: ProductEmbeddedL
                                     product_group.allowed_licenses_count +
                                     product_group.ignored_licenses_count >
                                     0) ||
-                                license_policy) && <LicensesCountField label="Licenses" withLabel={false} />}
+                                license_policy) && (
+                                <LicensesCountField label="Licenses / Components" withLabel={false} />
+                            )}
                         <FunctionField<Product>
                             label="Last observation change"
                             sortBy="last_observation_change"

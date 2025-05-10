@@ -77,7 +77,7 @@ export default function LicenseAdministration() {
             <Paper sx={{ marginTop: 2 }}>
                 <Tabs value={currentTab()} variant="scrollable" scrollButtons="auto">
                     <Tab
-                        label="Licenses"
+                        label="SPDX Licenses"
                         icon={<licenses.icon />}
                         to="/license/licenses"
                         component={Link}
