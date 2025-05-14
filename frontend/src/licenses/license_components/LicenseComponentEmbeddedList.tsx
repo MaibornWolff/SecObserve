@@ -25,7 +25,7 @@ type LicenseComponentEmbeddedListProps = {
     product: any;
     expand?: boolean;
     component_purl_type?: string;
-    origin_service: number;
+    origin_service?: number;
 };
 
 const BulkActionButtons = (product: any) => (
