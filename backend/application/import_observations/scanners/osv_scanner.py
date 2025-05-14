@@ -75,6 +75,28 @@ def scan_product(product: Product) -> Tuple[int, int, int]:
     return numbers
 
 
+def scan_branch(branch: Branch) -> Tuple[int, int, int]:
+    numbers: Tuple[int, int, int] = (0, 0, 0)
+
+    new, updated, resolved = scan_branch_no_service(branch)
+    numbers = (
+        numbers[0] + new,
+        numbers[1] + updated,
+        numbers[2] + resolved,
+    )
+
+    services = Service.objects.filter(product=branch.product)
+    for service in services:
+        new, updated, resolved = scan_branch_and_service(branch, service)
+        numbers = (
+            numbers[0] + new,
+            numbers[1] + updated,
+            numbers[2] + resolved,
+        )
+
+    return numbers
+
+
 def scan_no_branch_no_service(product: Product) -> Tuple[int, int, int]:
     license_components = list(
         License_Component.objects.filter(product=product, branch__isnull=True, origin_service__isnull=True).exclude(

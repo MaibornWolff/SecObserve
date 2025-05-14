@@ -12,6 +12,7 @@ from application.import_observations.parsers.osv.parser import (
     OSV_Vulnerability,
 )
 from application.import_observations.scanners.osv_scanner import (
+    scan_branch,
     scan_license_components,
     scan_product,
 )
@@ -154,6 +155,25 @@ class TestImportObservations(BaseTestCase):
             call([], self.product, self.branch_main, "db_service_internal_backend"),
             call([], self.product, None, "db_service_internal_frontend"),
             call([], self.product, self.branch_dev, "db_service_internal_frontend"),
+            call([self.license_component], self.product, self.branch_main, "db_service_internal_frontend"),
+        ]
+        mock_scan_license_components.assert_has_calls(expected_calls)
+
+    @patch("application.import_observations.scanners.osv_scanner.scan_license_components")
+    def test_scan_branch(
+        self,
+        mock_scan_license_components,
+    ):
+        self.license_component.branch = self.branch_main
+        self.license_component.origin_service = self.service
+        self.license_component.save()
+
+        mock_scan_license_components.return_value = (0, 0, 0)
+        scan_branch(self.branch_main)
+
+        expected_calls = [
+            call([], self.product, self.branch_main, ""),
+            call([], self.product, self.branch_main, "db_service_internal_backend"),
             call([self.license_component], self.product, self.branch_main, "db_service_internal_frontend"),
         ]
         mock_scan_license_components.assert_has_calls(expected_calls)

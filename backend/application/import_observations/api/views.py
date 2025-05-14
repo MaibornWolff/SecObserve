@@ -59,7 +59,7 @@ from application.import_observations.queries.vulnerability_check import (
     get_vulnerability_checks,
 )
 from application.import_observations.scanners.osv_scanner import (
-    scan_branch_no_service,
+    scan_branch,
     scan_product,
 )
 from application.import_observations.services.import_observations import (
@@ -418,7 +418,7 @@ class ScanOSVBranchView(APIView):
         if not branch:
             return Response(status=HTTP_404_NOT_FOUND)
 
-        observations_new, observations_updated, observations_resolved = scan_branch_no_service(branch)
+        observations_new, observations_updated, observations_resolved = scan_branch(branch)
         response_data = {
             "observations_new": observations_new,
             "observations_updated": observations_updated,
