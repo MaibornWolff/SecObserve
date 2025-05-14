@@ -77,7 +77,7 @@ class TestImport(BaseTestCase):
                         product=product,
                         branch=branch,
                         file=ANY,
-                        service=data.post_data.get("service", ""),
+                        service=data.post_data.get("service", None),
                         docker_image_name_tag=data.post_data.get("docker_image_name_tag", ""),
                         endpoint_url=data.post_data.get("endpoint_url", ""),
                         kubernetes_cluster=data.post_data.get("kubernetes_cluster", ""),

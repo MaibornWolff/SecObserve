@@ -245,6 +245,10 @@ class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
         if filter_component_purl_type:
             license_overview_elements = license_overview_elements.filter(component_purl_type=filter_component_purl_type)
 
+        filter_origin_service = request.query_params.get("origin_service")
+        if filter_origin_service:
+            license_overview_elements = license_overview_elements.filter(origin_service=filter_origin_service)
+
         return license_overview_elements
 
     def _get_branch(self, product: Product, pk: int) -> Branch:

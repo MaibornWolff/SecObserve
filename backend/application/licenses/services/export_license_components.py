@@ -48,4 +48,4 @@ def _get_excludes() -> list[str]:
 
 
 def _get_foreign_keys() -> list[str]:
-    return ["branch", "license", "product"]
+    return ["branch", "license", "product", "origin_service"]

@@ -195,6 +195,7 @@ const ObservationEditForm = () => {
                         <ReferenceInput
                             source="origin_service"
                             reference="services"
+                            queryOptions={{ meta: { api_resource: "service_names" } }}
                             sort={{ field: "name", order: "ASC" }}
                             filter={{ product: service.product_data.id }}
                         >

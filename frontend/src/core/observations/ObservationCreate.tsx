@@ -242,6 +242,7 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
                                 <ReferenceInput
                                     source="origin_service"
                                     reference="services"
+                                    queryOptions={{ meta: { api_resource: "service_names" } }}
                                     sort={{ field: "name", order: "ASC" }}
                                     filter={{ product: id }}
                                 >
