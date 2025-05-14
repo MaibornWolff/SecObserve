@@ -17,7 +17,7 @@ from django.db.models import (
 from django.utils import timezone
 
 from application.access_control.models import Authorization_Group, User
-from application.core.models import Branch, Product
+from application.core.models import Branch, Product, Service
 from application.licenses.types import License_Policy_Evaluation_Result
 
 
@@ -129,6 +129,8 @@ class License_Component(Model):
         blank=True,
     )
     numerical_evaluation_result = IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+
+    origin_service = ForeignKey(Service, on_delete=PROTECT, null=True)
 
     created = DateTimeField(auto_now_add=True)
     import_last_seen = DateTimeField(default=timezone.now)

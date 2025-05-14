@@ -154,7 +154,9 @@ def file_upload_observations(
         not file_upload_parameters.suppress_licenses or file_upload_parameters.sbom
     ):
         imported_license_components = parser_instance.get_license_components(data)
-        numbers_license_components = process_license_components(imported_license_components, vulnerability_check)
+        numbers_license_components = process_license_components(
+            imported_license_components, vulnerability_check, file_upload_parameters.service
+        )
 
     return (
         numbers_observations[0],
@@ -244,6 +246,7 @@ def _process_data(import_parameters: ImportParameters, settings: Settings) -> Tu
         import_parameters.branch,
         import_parameters.filename,
         import_parameters.api_configuration_name,
+        import_parameters.service,
     ):
         observations_before[observation_before_for_dict.identity_hash] = observation_before_for_dict
         scanner = observation_before_for_dict.scanner

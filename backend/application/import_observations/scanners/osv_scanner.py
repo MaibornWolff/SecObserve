@@ -6,7 +6,7 @@ import jsonpickle
 import requests
 
 from application.commons.models import Settings
-from application.core.models import Branch, Product
+from application.core.models import Branch, Product, Service
 from application.import_observations.models import Vulnerability_Check
 from application.import_observations.parsers.osv.parser import (
     OSV_Component,
@@ -39,43 +39,76 @@ class Request_Queries:
 def scan_product(product: Product) -> Tuple[int, int, int]:
     numbers: Tuple[int, int, int] = (0, 0, 0)
 
-    branches = Branch.objects.filter(product=product)
-    for branch in branches:
-        (new, updated, resolved) = scan_branch(branch)
-        numbers = (
-            numbers[0] + new,
-            numbers[1] + updated,
-            numbers[2] + resolved,
-        )
-
-    license_components = get_license_components_no_branch(product)
-    new, updated, resolved = scan_license_components(license_components, product, None)
+    new, updated, resolved = scan_no_branch_no_service(product)
     numbers = (
         numbers[0] + new,
         numbers[1] + updated,
         numbers[2] + resolved,
     )
 
+    branches = Branch.objects.filter(product=product)
+    for branch in branches:
+        new, updated, resolved = scan_branch_no_service(branch)
+        numbers = (
+            numbers[0] + new,
+            numbers[1] + updated,
+            numbers[2] + resolved,
+        )
+
+    services = Service.objects.filter(product=product)
+    for service in services:
+        new, updated, resolved = scan_no_branch_but_service(product, service)
+        numbers = (
+            numbers[0] + new,
+            numbers[1] + updated,
+            numbers[2] + resolved,
+        )
+
+        for branch in branches:
+            new, updated, resolved = scan_branch_and_service(branch, service)
+            numbers = (
+                numbers[0] + new,
+                numbers[1] + updated,
+                numbers[2] + resolved,
+            )
+
     return numbers
 
 
-def scan_branch(branch: Branch) -> Tuple[int, int, int]:
-    license_components = get_license_components_for_branch(branch)
-    return scan_license_components(license_components, branch.product, branch)
+def scan_no_branch_no_service(product: Product) -> Tuple[int, int, int]:
+    license_components = list(
+        License_Component.objects.filter(product=product, branch__isnull=True, origin_service__isnull=True).exclude(
+            component_purl=""
+        )
+    )
+    return scan_license_components(license_components, product, None, "")
 
 
-def get_license_components_for_branch(branch: Branch) -> list[License_Component]:
-    return list(License_Component.objects.filter(branch=branch).exclude(component_purl=""))
+def scan_branch_no_service(branch: Branch) -> Tuple[int, int, int]:
+    license_components = list(
+        License_Component.objects.filter(branch=branch, origin_service__isnull=True).exclude(component_purl="")
+    )
+    return scan_license_components(license_components, branch.product, branch, "")
 
 
-def get_license_components_no_branch(product: Product) -> list[License_Component]:
-    return list(License_Component.objects.filter(product=product, branch__isnull=True).exclude(component_purl=""))
+def scan_no_branch_but_service(product: Product, service: Service) -> Tuple[int, int, int]:
+    license_components = list(
+        License_Component.objects.filter(product=product, branch__isnull=True, origin_service=service).exclude(
+            component_purl=""
+        )
+    )
+    return scan_license_components(license_components, product, None, service.name)
+
+
+def scan_branch_and_service(branch: Branch, service: Service) -> Tuple[int, int, int]:
+    license_components = list(
+        License_Component.objects.filter(branch=branch, origin_service=service).exclude(component_purl="")
+    )
+    return scan_license_components(license_components, branch.product, branch, service.name)
 
 
 def scan_license_components(
-    license_components: list[License_Component],
-    product: Product,
-    branch: Optional[Branch],
+    license_components: list[License_Component], product: Product, branch: Optional[Branch], service: str
 ) -> Tuple[int, int, int]:
     if not license_components:
         return 0, 0, 0
@@ -147,7 +180,7 @@ def scan_license_components(
         parser=parser,
         filename="",
         api_configuration_name="",
-        service="",
+        service=service,
         docker_image_name_tag="",
         endpoint_url="",
         kubernetes_cluster="",

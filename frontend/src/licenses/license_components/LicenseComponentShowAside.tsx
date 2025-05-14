@@ -48,6 +48,11 @@ const MetaData = () => {
                                 <TextField source="branch_name" />
                             </Labeled>
                         )}
+                        {component.origin_service_name && (
+                            <Labeled label="Service">
+                                <TextField source="origin_service_name" />
+                            </Labeled>
+                        )}
                         {component.upload_filename != "" && (
                             <Labeled label="Upload filename">
                                 <TextField source="upload_filename" />

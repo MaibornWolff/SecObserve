@@ -6,8 +6,10 @@ import { FileField, FileInput, ReferenceInput, SimpleForm, WithRecord, useNotify
 import MenuButton from "../../commons/custom_fields/MenuButton";
 import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
 import { validate_required } from "../../commons/custom_validators";
+import { validate_255 } from "../../commons/custom_validators";
 import { getIconAndFontColor } from "../../commons/functions";
 import { AutocompleteInputWide } from "../../commons/layout/themes";
+import { TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
 const FileUploadSBOM = () => {
@@ -34,6 +36,9 @@ const FileUploadSBOM = () => {
         formData.append("product", data.id);
         if (data.branch) {
             formData.append("branch", data.branch);
+        }
+        if (data.service) {
+            formData.append("service", data.service);
         }
 
         httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/import/file_upload_sbom_by_id/", {
@@ -115,6 +120,7 @@ const FileUploadSBOM = () => {
                                 </Fragment>
                             )}
                         />
+                        <TextInputWide source="service" validate={validate_255} />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>

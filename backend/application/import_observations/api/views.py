@@ -59,7 +59,7 @@ from application.import_observations.queries.vulnerability_check import (
     get_vulnerability_checks,
 )
 from application.import_observations.scanners.osv_scanner import (
-    scan_branch,
+    scan_branch_no_service,
     scan_product,
 )
 from application.import_observations.services.import_observations import (
@@ -309,12 +309,13 @@ def _file_upload_observations(
 
 def _file_upload_sbom(request_serializer: Serializer, product: Product, branch: Optional[Branch]) -> dict[str, int]:
     file = request_serializer.validated_data.get("file")
+    service = request_serializer.validated_data.get("service")
 
     file_upload_parameters = FileUploadParameters(
         product=product,
         branch=branch,
         file=file,
-        service="",
+        service=service,
         docker_image_name_tag="",
         endpoint_url="",
         kubernetes_cluster="",
@@ -417,7 +418,7 @@ class ScanOSVBranchView(APIView):
         if not branch:
             return Response(status=HTTP_404_NOT_FOUND)
 
-        observations_new, observations_updated, observations_resolved = scan_branch(branch)
+        observations_new, observations_updated, observations_resolved = scan_branch_no_service(branch)
         response_data = {
             "observations_new": observations_new,
             "observations_updated": observations_updated,

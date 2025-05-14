@@ -97,6 +97,15 @@ class LicenseComponentFilter(FilterSet):
                 ),
                 "component_purl_type",
             ),
+            (
+                (
+                    "origin_service__name",
+                    "license_name",
+                    "numerical_evaluation_result",
+                    "component_name_version",
+                ),
+                "origin_service_name",
+            ),
             ("last_change", "last_change"),
         ),
     )
@@ -113,6 +122,7 @@ class LicenseComponentFilter(FilterSet):
             "evaluation_result",
             "component_name_version",
             "component_purl_type",
+            "origin_service",
         ]
 
 
