@@ -1,4 +1,4 @@
-FROM node:22.15.1-alpine@sha256:531a3ef72c17c2e618c33d193fb3f0780b420a11c8aa0edb4a337f5b7dc3f813 AS build
+FROM node:22.15.1-alpine@sha256:152270cd4bd094d216a84cbc3c5eb1791afb05af00b811e2f0f04bdc6c473602 AS build
 
 WORKDIR /app
 EXPOSE 3000
