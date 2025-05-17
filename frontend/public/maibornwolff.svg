@@ -1,108 +1,27 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Generator: Adobe Illustrator 26.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 196.8 173.2">
+  <!-- Generator: Adobe Illustrator 29.3.1, SVG Export Plug-In . SVG Version: 2.1.0 Build 151)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: url(#Unbenannter_Verlauf);
+      }
 
-<svg
-   version="1.1"
-   id="Ebene_1"
-   x="0px"
-   y="0px"
-   viewBox="0 0 155.49 136.8"
-   xml:space="preserve"
-   sodipodi:docname="maibornwolff.svg"
-   width="155.49001"
-   height="136.8"
-   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg"><defs
-   id="defs35" /><sodipodi:namedview
-   id="namedview33"
-   pagecolor="#ffffff"
-   bordercolor="#666666"
-   borderopacity="1.0"
-   inkscape:showpageshadow="2"
-   inkscape:pageopacity="0.0"
-   inkscape:pagecheckerboard="0"
-   inkscape:deskcolor="#d1d1d1"
-   showgrid="false"
-   inkscape:zoom="0.28032165"
-   inkscape:cx="-39.240636"
-   inkscape:cy="144.47689"
-   inkscape:current-layer="Ebene_1" />
-<style
-   type="text/css"
-   id="style2">
-	.st0{fill:url(#SVGID_1_);}
-	.st1{fill:url(#SVGID_00000009592109681628415510000013281149196712310160_);}
-</style>
-<g
-   id="g30"
-   transform="translate(-226.56,-276.81)">
-	<g
-   id="g15">
-		<linearGradient
-   id="SVGID_1_"
-   gradientUnits="userSpaceOnUse"
-   x1="227.8045"
-   y1="338.91739"
-   x2="281.68161"
-   y2="351.73001">
-			<stop
-   offset="0"
-   style="stop-color:#FF2CA4"
-   id="stop4" />
-			<stop
-   offset="0.2451"
-   style="stop-color:#FF219D"
-   id="stop6" />
-			<stop
-   offset="0.6806"
-   style="stop-color:#FF028C"
-   id="stop8" />
-			<stop
-   offset="0.708"
-   style="stop-color:#FF008B"
-   id="stop10" />
-		</linearGradient>
-		<path
-   class="st0"
-   d="m 282.9,326.14 h 0.01 c 0.09,-16.8 8.54,-31.61 21.4,-40.52 -8,-5.54 -17.7,-8.81 -28.17,-8.81 -27.3,0 -49.43,22.06 -49.57,49.33 h -0.01 v 87.47 h 42.82 v -86.58 c 0,0 0,-0.42 0,-0.64 v 0 c 0,-3.73 3.03,-6.76 6.76,-6.76 3.73,0 6.75,3.02 6.76,6.74 z"
-   id="path13"
-   style="fill:url(#SVGID_1_)" />
-	</g>
-	
-		<linearGradient
-   id="SVGID_00000062178070126036257250000008573380487841155473_"
-   gradientUnits="userSpaceOnUse"
-   x1="286.93259"
-   y1="345.20541"
-   x2="383.26749"
-   y2="345.22531">
-		<stop
-   offset="0"
-   style="stop-color:#37D4FF"
-   id="stop17" />
-		<stop
-   offset="0.1433"
-   style="stop-color:#31D9EC"
-   id="stop19" />
-		<stop
-   offset="0.4326"
-   style="stop-color:#22E4BC"
-   id="stop21" />
-		<stop
-   offset="0.8378"
-   style="stop-color:#0AF770"
-   id="stop23" />
-		<stop
-   offset="1"
-   style="stop-color:#00FF4F"
-   id="stop25" />
-	</linearGradient>
-	<path
-   style="fill:url(#SVGID_00000062178070126036257250000008573380487841155473_)"
-   d="m 382.04,326.14 c -0.14,-27.26 -22.27,-49.33 -49.57,-49.33 -27.3,0 -49.43,22.06 -49.57,49.33 h -0.01 v 87.47 h 42.82 v -86.58 c 0,0 0,-0.42 0,-0.64 v -0.02 c 0,-2.62 1.44,-5.12 3.85,-6.14 4.93,-2.08 9.67,1.48 9.67,6.15 v 0 c 0,0.22 0,0.64 0,0.64 v 86.58 h 42.82 v -87.47 h -0.01 z"
-   id="path28" />
-</g>
+      .st1 {
+        fill: #e6007e;
+      }
+    </style>
+    <linearGradient id="Unbenannter_Verlauf" data-name="Unbenannter Verlauf" x1="71.4" y1="96.2" x2="240.8" y2="62.3" gradientTransform="translate(0 175.9) scale(1 -1)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#008cff"/>
+      <stop offset=".2" stop-color="#0086ff"/>
+      <stop offset=".5" stop-color="#0078ff"/>
+      <stop offset=".7" stop-color="#0060ff"/>
+      <stop offset=".8" stop-color="#005fff"/>
+      <stop offset=".8" stop-color="#0056ff"/>
+      <stop offset=".9" stop-color="#003eff"/>
+      <stop offset=".9" stop-color="#0030ff"/>
+    </linearGradient>
+  </defs>
+  <path class="st1" d="M71.3,62.4h0c.1-21.3,10.8-40,27.1-51.3C88.3,4.1,76,0,62.8,0,28.2,0,.2,27.9,0,62.4h0v110.7h54.2V62.8h0c0-4.7,3.8-8.6,8.6-8.6s8.5,3.8,8.6,8.5v-.3h0Z"/>
+  <path class="st0" d="M196.8,62.4c-.2-34.5-28.2-62.4-62.8-62.4s-62.6,27.9-62.8,62.4h0v110.7h54.2V62.8h0c0-3.3,1.8-6.5,4.9-7.8,6.2-2.6,12.2,1.9,12.2,7.8h0v110.4h54.2V62.4h0Z"/>
 </svg>
