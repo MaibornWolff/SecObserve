@@ -3,6 +3,7 @@ import traceback
 from datetime import datetime, timedelta
 from typing import Any, Optional
 
+import environ
 import requests
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
@@ -286,7 +287,8 @@ def _get_arguments_string(arguments: Optional[dict]) -> str:
 def send_email_notification(notification_email_to: str, subject: str, template: str, **kwargs: Any) -> None:
     settings = Settings.load()
     notification_message = _create_notification_message(template, **kwargs)
-    if notification_message:
+    env = environ.Env()
+    if (env("EMAIL_HOST", default="") or env("EMAIL_PORT", default="")) and notification_message:
         try:
             send_mail(
                 subject=subject,

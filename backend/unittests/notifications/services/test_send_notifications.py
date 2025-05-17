@@ -687,7 +687,13 @@ class TestPushNotifications(BaseTestCase):
         mock_create_message.return_value = "test_message"
         mock_send_email.side_effect = Exception("test_exception")
 
-        send_email_notification("test@example.com", "subject", "test_template")
+        with patch.dict(
+            "os.environ",
+            {
+                "EMAIL_HOST": "mail.example.com",
+            },
+        ):
+            send_email_notification("test@example.com", "subject", "test_template")
 
         mock_create_message.assert_called_with("test_template")
         mock_send_email.assert_called_with(

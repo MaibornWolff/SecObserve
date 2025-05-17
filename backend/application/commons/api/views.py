@@ -1,5 +1,6 @@
 from typing import Union
 
+import environ
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
@@ -65,6 +66,10 @@ class StatusSettingsView(APIView):
                 features.append("feature_automatic_osv_scanning")
             if settings.feature_exploit_information:
                 features.append("feature_exploit_information")
+
+            env = environ.Env()
+            if env("EMAIL_HOST", default="") or env("EMAIL_PORT", default=""):
+                features.append("feature_email")
 
         content: dict[str, Union[int, list[str]]] = {
             "features": features,

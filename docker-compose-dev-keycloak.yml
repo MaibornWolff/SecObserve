@@ -56,6 +56,9 @@ services:
       OIDC_FULL_NAME: ${SO_OIDC_FULL_NAME:-}
       OIDC_EMAIL: ${SO_OIDC_EMAIL:-email}
       OIDC_GROUPS: ${SO_OIDC_GROUPS:-groups}
+      # --- Email ---
+      EMAIL_HOST: mailhog
+      EMAIL_PORT: 1025
       # --- Development ---
       USE_DOCKER: yes
     volumes:
