@@ -90,6 +90,8 @@ services:
       - KEYCLOAK_ADMIN_PASSWORD=admin
       - KC_HTTPS_ENABLED=false
       - KC_HOSTNAME_STRICT_HTTPS=false
+      - KC_DB_USERNAME=sa
+      - KC_DB_PASSWORD=password
     volumes:
       - ./keycloak:/opt/keycloak/data/
     ports:
