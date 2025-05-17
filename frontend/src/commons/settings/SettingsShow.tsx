@@ -4,6 +4,7 @@ import { BooleanField, EditButton, Labeled, NumberField, Show, TextField, TopToo
 
 import settings from ".";
 import ListHeader from "../../commons/layout/ListHeader";
+import { feature_email } from "../functions";
 import JWTSecretReset from "./JWTSecretReset";
 
 const ShowActions = () => {
@@ -126,12 +127,12 @@ const SettingsShowComponent = () => {
                                     <TextField source="base_url_frontend" />
                                 </Labeled>
                             )}
-                            {settings.email_from && (
+                            {feature_email() && settings.email_from && (
                                 <Labeled label="Email from">
                                     <TextField source="email_from" />
                                 </Labeled>
                             )}
-                            {settings.exception_email_to && (
+                            {feature_email() && settings.exception_email_to && (
                                 <Labeled label="Exception email to">
                                     <TextField source="exception_email_to" />
                                 </Labeled>

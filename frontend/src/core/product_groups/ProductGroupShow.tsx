@@ -33,6 +33,7 @@ import {
     PERMISSION_PRODUCT_RULE_APPLY,
     PERMISSION_PRODUCT_RULE_CREATE,
 } from "../../access_control/types";
+import { feature_email } from "../../commons/functions";
 import MetricsHeader from "../../metrics/MetricsHeader";
 import MetricsSeveritiesCurrent from "../../metrics/MetricsSeveritiesCurrent";
 import MetricsSeveritiesTimeline from "../../metrics/MetricsSeveritiesTimeLine";
@@ -158,7 +159,7 @@ const ProductGroupShow = () => {
                                             Notifications (for products)
                                         </Typography>
                                         <Stack spacing={1}>
-                                            {product_group.notification_email_to && (
+                                            {feature_email() && product_group.notification_email_to && (
                                                 <Labeled label="Email">
                                                     <TextField source="notification_email_to" />
                                                 </Labeled>
