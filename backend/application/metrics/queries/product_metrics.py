@@ -2,7 +2,7 @@ from django.db.models import Exists, OuterRef, Q
 from django.db.models.query import QuerySet
 from django.utils import timezone
 
-from application.commons.services.global_request import get_current_user
+from application.access_control.services.current_user import get_current_user
 from application.core.models import Product_Authorization_Group_Member, Product_Member
 from application.metrics.models import Product_Metrics
 

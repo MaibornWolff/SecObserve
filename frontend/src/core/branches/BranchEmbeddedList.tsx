@@ -10,7 +10,7 @@ import {
     useListController,
 } from "react-admin";
 
-import { PERMISSION_BRANCH_DELETE, PERMISSION_BRANCH_EDIT } from "../../access_control/types";
+import { PERMISSION_BRANCH_DELETE, PERMISSION_BRANCH_EDIT, PERMISSION_PRODUCT_EDIT } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import LicensesCountField from "../../commons/custom_fields/LicensesCountField";
 import OSVLinuxDistributionField from "../../commons/custom_fields/OSVLinuxDistributionField";
@@ -20,6 +20,7 @@ import { feature_license_management } from "../../commons/functions";
 import { getSettingListSize } from "../../commons/user_settings/functions";
 import BranchDelete from "./BranchDelete";
 import BranchEdit from "./BranchEdit";
+import DefaultBranch from "./DefaultBranch";
 
 type BranchEmbeddedListProps = {
     product: any;
@@ -86,7 +87,7 @@ const BranchEmbeddedList = ({ product }: BranchEmbeddedListProps) => {
                         )}
                         <ObservationsCountField label="Open observations" withLabel={false} />
                         {feature_license_management() && product?.has_licenses && (
-                            <LicensesCountField label="Licenses" withLabel={false} />
+                            <LicensesCountField label="Licenses / Components" withLabel={false} />
                         )}
                         <DateField source="last_import" showTime />
                         <WithRecord
@@ -95,6 +96,8 @@ const BranchEmbeddedList = ({ product }: BranchEmbeddedListProps) => {
                                     {product?.permissions.includes(PERMISSION_BRANCH_EDIT) && (
                                         <BranchEdit product={product} />
                                     )}
+                                    {product?.permissions.includes(PERMISSION_PRODUCT_EDIT) &&
+                                        !branch.is_default_branch && <DefaultBranch branch={branch} />}
                                     {product?.permissions.includes(PERMISSION_BRANCH_DELETE) &&
                                         !branch.is_default_branch && <BranchDelete branch={branch} />}
                                 </Stack>

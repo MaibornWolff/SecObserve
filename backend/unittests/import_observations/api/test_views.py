@@ -1,8 +1,8 @@
 from dataclasses import dataclass
-from io import FileIO
 from os import path
 from unittest.mock import ANY, patch
 
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.management import call_command
 from rest_framework.test import APIClient
 
@@ -45,12 +45,11 @@ class TestImport(BaseTestCase):
         mock_authenticate.return_value = user, None
         mock_file_upload_observations.return_value = 1, 2, 3, 4, 5, 6
 
-        with open(path.dirname(__file__) + "/test_views.py") as fp:
-            fio = FileIO(fp.fileno())
-            fio.name = "file.txt"
+        with open(path.dirname(__file__) + "/test_views.py", "rb") as file:
+            uploaded_file = SimpleUploadedFile("file.txt", file.read(), content_type="multipart/form-data")
 
             post_data = {
-                "file": fio,
+                "file": uploaded_file,
             }
             post_data.update(data.post_data)
 
@@ -77,7 +76,7 @@ class TestImport(BaseTestCase):
                         product=product,
                         branch=branch,
                         file=ANY,
-                        service=data.post_data.get("service", ""),
+                        service=data.post_data.get("service", None),
                         docker_image_name_tag=data.post_data.get("docker_image_name_tag", ""),
                         endpoint_url=data.post_data.get("endpoint_url", ""),
                         kubernetes_cluster=data.post_data.get("kubernetes_cluster", ""),

@@ -164,6 +164,17 @@ export function set_settings_in_local_storage() {
     });
 }
 
+export const feature_email = () => {
+    try {
+        const settings = JSON.parse(localStorage.getItem("settings") || "{}");
+        const features = settings.features || [];
+        const feature_vex_position = features.indexOf("feature_email");
+        return feature_vex_position !== -1;
+    } catch {
+        return false;
+    }
+};
+
 export const feature_vex_enabled = () => {
     try {
         const settings = JSON.parse(localStorage.getItem("settings") || "{}");

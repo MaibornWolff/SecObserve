@@ -25,6 +25,7 @@ type LicenseComponentEmbeddedListProps = {
     product: any;
     expand?: boolean;
     component_purl_type?: string;
+    origin_service?: number;
 };
 
 const BulkActionButtons = (product: any) => (
@@ -42,7 +43,12 @@ const licenseNameStyle = (type: string): string => {
     return "normal";
 };
 
-const LicenseComponentEmbeddedList = ({ product, expand, component_purl_type }: LicenseComponentEmbeddedListProps) => {
+const LicenseComponentEmbeddedList = ({
+    product,
+    expand,
+    component_purl_type,
+    origin_service,
+}: LicenseComponentEmbeddedListProps) => {
     const [initialExpand, setInitialExpand] = useState(true);
 
     const showLicenseComponent = (id: any) => {
@@ -83,6 +89,20 @@ const LicenseComponentEmbeddedList = ({ product, expand, component_purl_type }: 
                 <AutocompleteInputMedium optionText="name" label="Component type" />
             </ReferenceInput>
         );
+        if (product?.has_services) {
+            filters.push(
+                <ReferenceInput
+                    source="origin_service"
+                    reference="services"
+                    queryOptions={{ meta: { api_resource: "service_names" } }}
+                    sort={{ field: "name", order: "ASC" }}
+                    filter={{ product: product.id }}
+                    alwaysOn
+                >
+                    <AutocompleteInputMedium label="Service" optionText="name" />
+                </ReferenceInput>
+            );
+        }
 
         return filters;
     }
@@ -108,12 +128,16 @@ const LicenseComponentEmbeddedList = ({ product, expand, component_purl_type }: 
         if (component_purl_type) {
             filter = { ...filter, component_purl_type: component_purl_type };
         }
+        if (origin_service) {
+            filter = { ...filter, origin_service: origin_service };
+        }
         if (record) {
             const storedFilters = {
                 branch_name: record.branch_name,
                 license_name: record.license_name,
                 evaluation_result: record.evaluation_result,
                 component_purl_type: component_purl_type,
+                origin_service: origin_service,
             };
             localStorage.setItem("license_component_expand_filters", JSON.stringify({ storedFilters }));
         }
@@ -176,6 +200,7 @@ const LicenseComponentEmbeddedList = ({ product, expand, component_purl_type }: 
                             />
                         )}
                         <TextField source="component_name_version_type" label="Component" />
+                        {product?.has_services && <TextField source="origin_service_name" label="Service" />}
                     </Datagrid>
                     <WithListContext
                         render={({ total }) => (

@@ -3,8 +3,7 @@ from typing import Optional
 from huey.contrib.djhuey import db_task, task
 
 from application.access_control.models import User
-from application.commons.services.global_request import get_current_user
-from application.commons.services.tasks import handle_task_exception
+from application.access_control.services.current_user import get_current_user
 from application.core.models import Observation, Product
 from application.core.types import Severity, Status
 from application.issue_tracker.issue_trackers.base_issue_tracker import (
@@ -19,6 +18,7 @@ from application.issue_tracker.issue_trackers.gitlab_issue_tracker import (
 )
 from application.issue_tracker.issue_trackers.jira_issue_tracker import JiraIssueTracker
 from application.issue_tracker.types import Issue_Tracker
+from application.notifications.services.tasks import handle_task_exception
 
 
 def push_observations_to_issue_tracker(product: Product, observations: set[Observation]) -> None:

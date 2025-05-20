@@ -56,6 +56,9 @@ services:
       OIDC_FULL_NAME: ${SO_OIDC_FULL_NAME:-}
       OIDC_EMAIL: ${SO_OIDC_EMAIL:-email}
       OIDC_GROUPS: ${SO_OIDC_GROUPS:-groups}
+      # --- Email ---
+      EMAIL_HOST: mailhog
+      EMAIL_PORT: 1025
       # --- Development ---
       USE_DOCKER: yes
     volumes:
@@ -66,7 +69,7 @@ services:
     command: /start
 
   postgres:
-    image: postgres:15.12-alpine
+    image: postgres:15.13-alpine
     volumes:
       - dev_postgres_data:/var/lib/postgresql/data
     environment:
@@ -84,12 +87,14 @@ services:
       - "8025:8025"
 
   keycloak:
-    image: keycloak/keycloak:26.2.1
+    image: keycloak/keycloak:26.2.4
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
       - KC_HTTPS_ENABLED=false
       - KC_HOSTNAME_STRICT_HTTPS=false
+      - KC_DB_USERNAME=sa
+      - KC_DB_PASSWORD=password
     volumes:
       - ./keycloak:/opt/keycloak/data/
     ports:

@@ -4,6 +4,7 @@ import { BooleanField, Labeled, NumberField, ReferenceField, RichTextField, Text
 
 import OSVLinuxDistributionField from "../../commons/custom_fields/OSVLinuxDistributionField";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
+import { feature_email } from "../../commons/functions";
 import { Product } from "../types";
 
 type ProductShowProductProps = {
@@ -132,7 +133,7 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                         Notifications
                     </Typography>
                     <Stack spacing={1}>
-                        {product.notification_email_to && (
+                        {feature_email() && product.notification_email_to && (
                             <Labeled label="Email">
                                 <TextField source="notification_email_to" />
                             </Labeled>

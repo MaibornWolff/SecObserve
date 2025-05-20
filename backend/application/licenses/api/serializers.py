@@ -16,8 +16,8 @@ from application.access_control.api.serializers import (
     AuthorizationGroupListSerializer,
     UserListSerializer,
 )
+from application.access_control.services.current_user import get_current_user
 from application.commons.services.functions import get_comma_separated_as_list
-from application.commons.services.global_request import get_current_user
 from application.core.queries.product import get_products
 from application.core.types import PURL_Type
 from application.licenses.models import (
@@ -102,6 +102,7 @@ class LicenseComponentSerializer(ModelSerializer):
     component_name_version_type = SerializerMethodField()
     component_purl_namespace = SerializerMethodField()
     branch_name = SerializerMethodField()
+    origin_service_name = SerializerMethodField()
     license_policy_name: Optional[SerializerMethodField] = SerializerMethodField()
     license_policy_id: Optional[SerializerMethodField] = SerializerMethodField()
     evidences: Optional[NestedLicenseComponentEvidenceSerializer] = NestedLicenseComponentEvidenceSerializer(many=True)
@@ -134,6 +135,12 @@ class LicenseComponentSerializer(ModelSerializer):
     def get_branch_name(self, obj: License_Component) -> str:
         if obj.branch:
             return obj.branch.name
+
+        return ""
+
+    def get_origin_service_name(self, obj: License_Component) -> str:
+        if obj.origin_service:
+            return obj.origin_service.name
 
         return ""
 

@@ -10,7 +10,7 @@ from application.access_control.models import (
 from application.access_control.queries.authorization_group import (
     get_authorization_groups,
 )
-from application.commons.services.global_request import get_current_user
+from application.access_control.services.current_user import get_current_user
 
 
 def get_authorization_group_member(

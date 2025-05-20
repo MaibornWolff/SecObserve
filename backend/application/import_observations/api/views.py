@@ -309,12 +309,13 @@ def _file_upload_observations(
 
 def _file_upload_sbom(request_serializer: Serializer, product: Product, branch: Optional[Branch]) -> dict[str, int]:
     file = request_serializer.validated_data.get("file")
+    service = request_serializer.validated_data.get("service")
 
     file_upload_parameters = FileUploadParameters(
         product=product,
         branch=branch,
         file=file,
-        service="",
+        service=service,
         docker_image_name_tag="",
         endpoint_url="",
         kubernetes_cluster="",

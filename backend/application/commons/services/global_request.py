@@ -1,25 +1,14 @@
 from threading import current_thread
 from typing import Any, Optional
 
-from django.contrib.auth.models import AnonymousUser
 from rest_framework.request import Request
 from rest_framework.response import Response
-
-from application.access_control.models import User
 
 _requests: dict[str, Request] = {}
 
 
 def get_current_request() -> Optional[Request]:
     return _requests.get(current_thread().name)
-
-
-def get_current_user() -> Optional[User]:
-    request = get_current_request()
-    if request and request.user and not isinstance(request.user, AnonymousUser):
-        return request.user
-
-    return None
 
 
 class GlobalRequestMiddleware:

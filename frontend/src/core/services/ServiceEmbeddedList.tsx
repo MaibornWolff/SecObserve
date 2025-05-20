@@ -3,8 +3,10 @@ import { Datagrid, ListContextProvider, ResourceContextProvider, WithRecord, use
 
 import { PERMISSION_SERVICE_DELETE } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
+import LicensesCountField from "../../commons/custom_fields/LicensesCountField";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
+import { feature_license_management } from "../../commons/functions";
 import { getSettingListSize } from "../../commons/user_settings/functions";
 import ServiceDelete from "./ServiceDelete";
 
@@ -63,6 +65,9 @@ const ServiceEmbeddedList = ({ product }: ServiceEmbeddedListProps) => {
                             )}
                         />
                         <ObservationsCountField label="Open observations" withLabel={false} />
+                        {feature_license_management() && product?.has_licenses && (
+                            <LicensesCountField label="Licenses / Components" withLabel={false} />
+                        )}
                         <WithRecord
                             render={(service) => (
                                 <Stack direction="row" spacing={4}>

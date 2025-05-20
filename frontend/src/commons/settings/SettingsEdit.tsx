@@ -1,5 +1,4 @@
-import { Divider, Stack, Typography } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import { Divider, Grid, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
 import { BooleanInput, Edit, FormDataConsumer, NumberInput, SaveButton, SimpleForm, Toolbar } from "react-admin";
 
@@ -13,6 +12,7 @@ import {
 } from "../../commons/custom_validators";
 import ListHeader from "../../commons/layout/ListHeader";
 import { TextInputExtraWide, TextInputWide } from "../../commons/layout/themes";
+import { feature_email } from "../functions";
 
 const CustomToolbar = () => {
     return (
@@ -190,20 +190,24 @@ const SettingsEdit = () => {
                         helperText="Base URL of the frontend, used to set links in notifications correctly"
                         sx={{ marginBottom: 2 }}
                     />
-                    <TextInputWide
-                        source="email_from"
-                        label="Email from"
-                        validate={validate_255}
-                        helperText="From address for sending email notifications"
-                        sx={{ marginBottom: 2 }}
-                    />
-                    <TextInputExtraWide
-                        source="exception_email_to"
-                        label="Exception email to"
-                        validate={validate_255}
-                        helperText="Comma separated email addresses to send exception notifications"
-                        sx={{ marginBottom: 2 }}
-                    />
+                    {feature_email() && (
+                        <TextInputWide
+                            source="email_from"
+                            label="Email from"
+                            validate={validate_255}
+                            helperText="From address for sending email notifications"
+                            sx={{ marginBottom: 2 }}
+                        />
+                    )}
+                    {feature_email() && (
+                        <TextInputExtraWide
+                            source="exception_email_to"
+                            label="Exception email to"
+                            validate={validate_255}
+                            helperText="Comma separated email addresses to send exception notifications"
+                            sx={{ marginBottom: 2 }}
+                        />
+                    )}
                     <TextInputExtraWide
                         source="exception_ms_teams_webhook"
                         label="Exception MS Teams webhook"

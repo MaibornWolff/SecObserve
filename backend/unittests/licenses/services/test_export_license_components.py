@@ -32,7 +32,7 @@ class TestLicenseGroupMemberSerializer(BaseTestCase):
         i = 0
         for row in worksheet.rows:
             i += 1
-            self.assertEqual(24, len(row))
+            self.assertEqual(26, len(row))
         self.assertEqual(2, i)
 
         actual_values = []
@@ -61,6 +61,8 @@ class TestLicenseGroupMemberSerializer(BaseTestCase):
             "Multiple licenses",
             "Non spdx license",
             "Numerical evaluation result",
+            "Origin service",
+            "Origin service id",
             "Product",
             "Product id",
             "Upload filename",
@@ -85,6 +87,8 @@ class TestLicenseGroupMemberSerializer(BaseTestCase):
             "",
             "internal license",
             1,
+            None,
+            None,
             "db_product_internal",
             1,
             "",

@@ -16,12 +16,12 @@ from application.access_control.api.serializers import (
     UserListSerializer,
 )
 from application.access_control.services.authorization import get_highest_user_role
+from application.access_control.services.current_user import get_current_user
 from application.access_control.services.roles_permissions import (
     Permissions,
     Roles,
     get_permissions_for_role,
 )
-from application.commons.services.global_request import get_current_user
 from application.core.api.serializers_helpers import (
     validate_cpe23,
     validate_purl,
@@ -606,7 +606,7 @@ class BranchNameSerializer(ModelSerializer):
         model = Branch
         fields = ["id", "name", "name_with_product"]
 
-    def get_name_with_product(self, obj: Service) -> str:
+    def get_name_with_product(self, obj: Branch) -> str:
         return f"{obj.name} ({obj.product.name})"
 
 
@@ -618,6 +618,11 @@ class ServiceSerializer(ModelSerializer):
     open_low_observation_count = SerializerMethodField()
     open_none_observation_count = SerializerMethodField()
     open_unknown_observation_count = SerializerMethodField()
+    forbidden_licenses_count = SerializerMethodField()
+    review_required_licenses_count = SerializerMethodField()
+    unknown_licenses_count = SerializerMethodField()
+    allowed_licenses_count = SerializerMethodField()
+    ignored_licenses_count = SerializerMethodField()
 
     class Meta:
         model = Service
@@ -643,6 +648,32 @@ class ServiceSerializer(ModelSerializer):
 
     def get_open_unknown_observation_count(self, obj: Service) -> int:
         return obj.open_unknown_observation_count
+
+    def get_forbidden_licenses_count(self, obj: Branch) -> int:
+        return obj.forbidden_licenses_count
+
+    def get_review_required_licenses_count(self, obj: Branch) -> int:
+        return obj.review_required_licenses_count
+
+    def get_unknown_licenses_count(self, obj: Branch) -> int:
+        return obj.unknown_licenses_count
+
+    def get_allowed_licenses_count(self, obj: Branch) -> int:
+        return obj.allowed_licenses_count
+
+    def get_ignored_licenses_count(self, obj: Branch) -> int:
+        return obj.ignored_licenses_count
+
+
+class ServiceNameSerializer(ModelSerializer):
+    name_with_product = SerializerMethodField()
+
+    class Meta:
+        model = Branch
+        fields = ["id", "name", "name_with_product"]
+
+    def get_name_with_product(self, obj: Service) -> str:
+        return f"{obj.name} ({obj.product.name})"
 
 
 class PURLTypeElementSerializer(Serializer):

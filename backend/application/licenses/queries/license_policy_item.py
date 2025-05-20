@@ -1,6 +1,6 @@
 from django.db.models.query import QuerySet
 
-from application.commons.services.global_request import get_current_user
+from application.access_control.services.current_user import get_current_user
 from application.licenses.models import License_Policy_Item
 from application.licenses.queries.license_policy import get_license_policies
 

@@ -5,8 +5,8 @@ from huey.contrib.djhuey import db_periodic_task, lock_task
 
 from application.commons import settings_static
 from application.commons.models import Settings
-from application.commons.services.tasks import handle_task_exception
 from application.licenses.services.license import import_licenses
+from application.notifications.services.tasks import handle_task_exception
 
 logger = logging.getLogger("secobserve.import_licenses")
 

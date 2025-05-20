@@ -22,8 +22,8 @@ from application.access_control.services.authorization import (
     user_has_permission,
     user_has_permission_or_403,
 )
+from application.access_control.services.current_user import get_current_user
 from application.access_control.services.roles_permissions import Permissions
-from application.commons.services.global_request import get_current_user
 from application.core.api.filters import (
     BranchFilter,
     EvidenceFilter,
@@ -75,6 +75,7 @@ from application.core.api.serializers_product import (
     ProductSerializer,
     PURLTypeElementSerializer,
     PURLTypeSerializer,
+    ServiceNameSerializer,
     ServiceSerializer,
 )
 from application.core.models import (
@@ -462,6 +463,18 @@ class ServiceViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin, Destroy
     serializer_class = ServiceSerializer
     filterset_class = ServiceFilter
     permission_classes = (IsAuthenticated, UserHasServicePermission)
+    queryset = Service.objects.none()
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ["name"]
+
+    def get_queryset(self) -> QuerySet[Service]:
+        return get_services().select_related("product")
+
+
+class ServiceNameViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
+    serializer_class = ServiceNameSerializer
+    filterset_class = ServiceFilter
+    permission_classes = (IsAuthenticated, UserHasBranchPermission)
     queryset = Service.objects.none()
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["name"]

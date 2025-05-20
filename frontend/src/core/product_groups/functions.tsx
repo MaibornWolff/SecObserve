@@ -6,6 +6,7 @@ import { BooleanInput, FormDataConsumer, NullableBooleanInput, NumberInput, Refe
 import product_groups from ".";
 import { validate_0_999999, validate_255, validate_2048, validate_required_255 } from "../../commons/custom_validators";
 import { feature_license_management } from "../../commons/functions";
+import { feature_email } from "../../commons/functions";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 
 export const ProductGroupCreateEditComponent = () => {
@@ -62,12 +63,14 @@ export const ProductGroupCreateEditComponent = () => {
                 Notifications (for products)
             </Typography>
             <Stack spacing={2}>
-                <TextInputWide
-                    source="notification_email_to"
-                    label="Email"
-                    helperText="Comma separated email to addresses to send notifications via email"
-                    validate={validate_255}
-                />
+                {feature_email() && (
+                    <TextInputWide
+                        source="notification_email_to"
+                        label="Email"
+                        helperText="Comma separated email to addresses to send notifications via email"
+                        validate={validate_255}
+                    />
+                )}
                 <TextInputWide
                     source="notification_ms_teams_webhook"
                     label="MS Teams"
