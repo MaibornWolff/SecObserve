@@ -1914,14 +1914,14 @@ tests = ["pytest"]
 
 [[package]]
 name = "py-ocsf-models"
-version = "0.4.0"
+version = "0.5.0"
 description = "This is a Python implementation of the OCSF models. The models are used to represent the data of the OCSF Schema defined in https://schema.ocsf.io/."
 optional = false
 python-versions = "<3.14,>3.9.1"
 groups = ["main"]
 files = [
-    {file = "py_ocsf_models-0.4.0-py3-none-any.whl", hash = "sha256:58927e97a48cd9ccf09e0c697ebd2dac01ead79aea6415ced3d3758aaddda463"},
-    {file = "py_ocsf_models-0.4.0.tar.gz", hash = "sha256:6b949753fd2f89653abe3d503bc3d9ab58c7edf293fc302d6cf30b28d54ec07a"},
+    {file = "py_ocsf_models-0.5.0-py3-none-any.whl", hash = "sha256:7933253f56782c04c412d976796db429577810b951fe4195351794500b5962d8"},
+    {file = "py_ocsf_models-0.5.0.tar.gz", hash = "sha256:bf05e955809d1ec3ab1007e4a4b2a8a0afa74b6e744ea8ffbf386e46b3af0a76"},
 ]
 
 [package.dependencies]
@@ -2908,4 +2908,4 @@ unittests = ["coverage", "django-coverage-plugin", "django-extensions"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">= 3.10, < 3.13"
-content-hash = "7b8c884c88bc53a5c0ef46bcef11630c530e8cef1f9051101df706689c7f3b5a"
+content-hash = "cc6829d94675dd957832b4aca639a420884085cdb68a510ca927ac2d9de5350f"
