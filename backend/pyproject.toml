@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "SecObserve"
-version = "1.32.0"
+version = "1.32.1"
 description = "SecObserve is an open source vulnerability management system for software development and cloud environments."
 license = "BSD-3-Clause"
 authors = [
@@ -42,7 +42,7 @@ psycopg = { version = "3.2.9", extras = ["binary"] }  # https://github.com/psyco
 # ------------------------------------------------------------------------------
 defusedcsv = "2.0.0"  # https://github.com/raphaelm/defusedcsv
 openpyxl = "3.1.5"  # https://foss.heptapod.net/openpyxl/openpyxl
-jsonpickle = "4.0.5"  # https://github.com/jsonpickle/jsonpickle
+jsonpickle = "4.1.0"  # https://github.com/jsonpickle/jsonpickle
 pyyaml = "6.0.2"  # https://github.com/yaml/pyyaml
 # Field specifications
 # ------------------------------------------------------------------------------
@@ -60,7 +60,7 @@ jira = "3.8.0"  # https://github.com/pycontribs/jira
 # ------------------------------------------------------------------------------
 inflect = "7.5.0"  # https://github.com/jaraco/inflect
 validators = "0.35.0"  # https://github.com/python-validators/validators
-py-ocsf-models = "0.4.0"  # https://github.com/prowler-cloud/py-ocsf-models
+py-ocsf-models = "0.5.0"  # https://github.com/prowler-cloud/py-ocsf-models
 spdx-tools = "0.8.3"  # https://github.com/spdx/tools-python
 
 # Development dependencies
@@ -73,7 +73,7 @@ django-extensions = { version = "4.1", optional = true }  # https://github.com/d
 
 # Unittest dependencies
 # ------------------------------------------------------------------------------
-coverage = { version = "7.8.0", optional = true }  # https://github.com/nedbat/coveragepy
+coverage = { version = "7.8.1", optional = true }  # https://github.com/nedbat/coveragepy
 django-coverage-plugin = { version = "3.1.0", optional = true }  # https://github.com/nedbat/django_coverage_plugin
 
 # Code quality dependencies
