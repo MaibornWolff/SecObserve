@@ -474,7 +474,7 @@ class ServiceViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin, Destroy
 class ServiceNameViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     serializer_class = ServiceNameSerializer
     filterset_class = ServiceFilter
-    permission_classes = (IsAuthenticated, UserHasBranchPermission)
+    permission_classes = (IsAuthenticated, UserHasServicePermission)
     queryset = Service.objects.none()
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["name"]
