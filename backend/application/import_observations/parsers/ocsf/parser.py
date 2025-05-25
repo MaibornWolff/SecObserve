@@ -46,7 +46,7 @@ class OCSFParser(BaseParser, BaseFileParser):
 
         return False
 
-    def get_observations(self, data: list, product: Product, branch: Optional[Branch]) -> list[Observation]:
+    def get_observations(self, data: list, product: Product, branch: Optional[Branch]) -> tuple[list[Observation], str]:
         observations = []
 
         for element in data:
@@ -98,7 +98,8 @@ class OCSFParser(BaseParser, BaseFileParser):
             except Exception as e:
                 raise ValidationError(f"Error parsing OCSF finding: {str(e)}") from e
 
-        return observations
+        scanner = observations[0].scanner if observations else self.get_name()
+        return observations, scanner
 
 
 def get_origins(finding: DetectionFinding) -> list[Origin]:

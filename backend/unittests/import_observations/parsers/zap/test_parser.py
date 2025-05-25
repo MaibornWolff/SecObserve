@@ -8,13 +8,15 @@ from application.import_observations.services.parser_detector import detect_pars
 
 
 class TestZAPParserParser(TestCase):
-    def test_owasp_zap(self):
+    def test_zap(self):
         with open(path.dirname(__file__) + "/files/owasp_zap.json") as testfile:
             parser, parser_instance, data = detect_parser(testfile)
             self.assertEqual("ZAP", parser.name)
-            self.assertTrue(isinstance(parser_instance, ZAPParser))
+            self.assertIsInstance(parser_instance, ZAPParser)
 
-            observations = parser_instance.get_observations(data, Product(name="product"), None)
+            observations, scanner = parser_instance.get_observations(data, Product(name="product"), None)
+
+            self.assertEqual("OWASP ZAP / 2.12.0", scanner)
             self.assertEqual(5, len(observations))
 
             observation = observations[0]

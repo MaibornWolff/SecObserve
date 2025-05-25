@@ -12,9 +12,11 @@ class TestProwlerParser(TestCase):
         with open(path.dirname(__file__) + "/files/prowler_aws.json") as testfile:
             parser, parser_instance, data = detect_parser(testfile)
             self.assertEqual("Prowler 3", parser.name)
-            self.assertTrue(isinstance(parser_instance, ProwlerParser))
+            self.assertIsInstance(parser_instance, ProwlerParser)
 
-            observations = parser_instance.get_observations(data, Product(name="product"), None)
+            observations, scanner = parser_instance.get_observations(data, Product(name="product"), None)
+
+            self.assertEqual("Prowler 3", scanner)
             self.assertEqual(1, len(observations))
 
             observation = observations[0]
@@ -54,9 +56,11 @@ Auto Minor Version Upgrade is a feature that you can enable to have your databas
         with open(path.dirname(__file__) + "/files/prowler_azure.json") as testfile:
             parser, parser_instance, data = detect_parser(testfile)
             self.assertEqual("Prowler 3", parser.name)
-            self.assertTrue(isinstance(parser_instance, ProwlerParser))
+            self.assertIsInstance(parser_instance, ProwlerParser)
 
-            observations = parser_instance.get_observations(data, Product(name="product"), None)
+            observations, scanner = parser_instance.get_observations(data, Product(name="product"), None)
+
+            self.assertEqual("Prowler 3", scanner)
             self.assertEqual(2, len(observations))
 
             observation = observations[0]

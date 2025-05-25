@@ -137,7 +137,7 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
             return True
         return False
 
-    def get_observations(self, data: dict, product: Product, branch: Optional[Branch]) -> list[Observation]:
+    def get_observations(self, data: dict, product: Product, branch: Optional[Branch]) -> tuple[list[Observation], str]:
         observations = []
 
         observation = self.check_weak_protocols(data)
@@ -159,7 +159,7 @@ class CryptoLyzerParser(BaseParser, BaseFileParser):
         if observation:
             observations.append(observation)
 
-        return observations
+        return observations, self.get_name()
 
     def check_weak_protocols(self, data: dict) -> Optional[Observation]:
         endpoint_url = self.get_endpoint_url(data.get("versions", {}).get("target", {}))

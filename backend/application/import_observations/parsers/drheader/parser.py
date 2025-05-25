@@ -112,7 +112,7 @@ class DrHEADerParser(BaseParser, BaseFileParser):
             return True
         return False
 
-    def get_observations(self, data: list, product: Product, branch: Optional[Branch]) -> list[Observation]:
+    def get_observations(self, data: list, product: Product, branch: Optional[Branch]) -> tuple[list[Observation], str]:
         observations = []
 
         for drheader_observation in data:
@@ -158,4 +158,4 @@ class DrHEADerParser(BaseParser, BaseFileParser):
                 observation.unsaved_references = references
 
             observations.append(observation)
-        return observations
+        return observations, self.get_name()

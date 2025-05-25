@@ -14,12 +14,14 @@ class BaseParser:
     def get_type(cls) -> str:
         raise NotImplementedError("get_type() must be overridden")
 
-    def get_observations(self, data: Any, product: Product, branch: Optional[Branch]) -> list[Observation]:
+    def get_observations(self, data: Any, product: Product, branch: Optional[Branch]) -> tuple[list[Observation], str]:
         raise NotImplementedError("get_observations() must be overridden")
 
-    def get_license_components(self, data: Any) -> list[License_Component]:  # pylint: disable=unused-argument
+    def get_license_components(
+        self, data: Any  # pylint: disable=unused-argument
+    ) -> tuple[list[License_Component], str]:
         # data is used in the child classes
-        return []
+        return [], ""
 
     def get_int_or_none(self, value: Optional[str]) -> int | None:
         if value:
