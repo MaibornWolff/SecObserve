@@ -20,6 +20,26 @@
         }
     },
     {
+        "model": "access_control.user",
+        "pk": 2,
+        "fields": {
+            "password": "",
+            "last_login": null,
+            "is_superuser": true,
+            "username": "admin",
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-12-12T18:48:08.514Z",
+            "full_name": "Administrator",
+            "is_external": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
         "model": "access_control.api_token",
         "pk": 1,
         "fields": {
@@ -86,6 +106,17 @@
             "source": "File",
             "module_name": "cyclone_dx",
             "class_name": "CycloneDXParser"
+        }
+    },
+    {
+        "model": "import_observations.parser",
+        "pk": 3,
+        "fields": {
+            "name": "Dependency Track",
+            "type": "SCA",
+            "source": "API",
+            "module_name": "dependency_track",
+            "class_name": "DependencyTrack"
         }
     },
     {

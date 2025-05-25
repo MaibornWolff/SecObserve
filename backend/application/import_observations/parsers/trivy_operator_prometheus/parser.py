@@ -84,7 +84,7 @@ class TrivyOperatorPrometheus(BaseParser, BaseAPIParser):
 
         return True, [], data
 
-    def get_observations(self, data: dict, product: Product, branch: Optional[Branch]) -> list[Observation]:
+    def get_observations(self, data: dict, product: Product, branch: Optional[Branch]) -> tuple[list[Observation], str]:
         observations = []
         for finding in data.get("data", {}).get("result"):
             if (
@@ -130,7 +130,7 @@ class TrivyOperatorPrometheus(BaseParser, BaseAPIParser):
 
             observations.append(observation)
 
-        return observations
+        return observations, self.get_name()
 
     def _create_compliance_observation(self, finding: dict) -> Observation:
         title = finding.get("metric", {}).get("title", "")

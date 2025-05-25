@@ -7,14 +7,16 @@ from application.import_observations.parsers.drheader.parser import DrHEADerPars
 from application.import_observations.services.parser_detector import detect_parser
 
 
-class TestCycloneDXParser(TestCase):
+class TestDrHeaderParser(TestCase):
     def test_drheader(self):
         with open(path.dirname(__file__) + "/files/drheader.json") as testfile:
             parser, parser_instance, data = detect_parser(testfile)
             self.assertEqual("DrHeader", parser.name)
-            self.assertTrue(isinstance(parser_instance, DrHEADerParser))
+            self.assertIsInstance(parser_instance, DrHEADerParser)
 
-            observations = parser_instance.get_observations(data, Product(name="product"), None)
+            observations, scanner = parser_instance.get_observations(data, Product(name="product"), None)
+
+            self.assertEqual("DrHeader", scanner)
             self.assertEqual(6, len(observations))
 
             observation = observations[1]

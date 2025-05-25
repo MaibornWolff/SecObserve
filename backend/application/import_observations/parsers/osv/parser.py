@@ -66,7 +66,7 @@ class OSVParser(BaseParser):
 
     def get_observations(  # pylint: disable=too-many-locals
         self, data: list[OSV_Component], product: Product, branch: Optional[Branch]
-    ) -> list[Observation]:
+    ) -> tuple[list[Observation], str]:
         observations = []
 
         for osv_component in data:
@@ -155,7 +155,7 @@ class OSVParser(BaseParser):
                     evidence.append(dumps(osv_vulnerability))
                     observation.unsaved_evidences.append(evidence)
 
-        return observations
+        return observations, self.get_name()
 
     def _get_osv_ids(self, osv_vulnerability: dict) -> tuple[str, str]:
         osv_id = str(osv_vulnerability.get("id", ""))

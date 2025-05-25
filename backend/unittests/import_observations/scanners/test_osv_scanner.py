@@ -5,7 +5,7 @@ from unittest.mock import call, patch
 from django.core.management import call_command
 
 from application.commons.models import Settings
-from application.core.models import Branch, Product, Service
+from application.core.models import Branch, Observation, Product, Service
 from application.import_observations.models import Parser
 from application.import_observations.parsers.osv.parser import (
     OSV_Component,
@@ -286,14 +286,17 @@ class TestImportObservations(BaseTestCase):
         product = Product.objects.get(id=1)
         branch = Branch.objects.get(id=1)
         service = Service.objects.get(id=1)
+        observation = Observation.objects.get(id=1)
 
         response = MockResponse("osv_querybatch_success.json")
         mock_requests_post.return_value = response
-        mock_process_data.return_value = (1, 2, 3, "OSV (Open Source Vulnerabilities)")
+        mock_process_data.return_value = (1, 2, 3)
+        mock_get_observations.return_value = [observation], "OSV (Open Source Vulnerabilities)"
 
         numbers = scan_license_components(license_components, product, branch, service.name)
 
         self.assertEqual((1, 2, 3), numbers)
+
         mock_requests_post.assert_called_with(
             url="https://api.osv.dev/v1/querybatch",
             data='{"queries": [{"package": {"purl": "pkg:pypi/django@4.2.11"}}, {"package": {"purl": "pkg:golang/golang.org/x/net@v0.25.1-0.20240603202750-6249541f2a6c"}}]}',
@@ -337,7 +340,7 @@ class TestImportObservations(BaseTestCase):
                 docker_image_name_tag="",
                 endpoint_url="",
                 kubernetes_cluster="",
-                imported_observations=mock_get_observations.return_value,
+                imported_observations=[observation],
             ),
             Settings.load(),
         )

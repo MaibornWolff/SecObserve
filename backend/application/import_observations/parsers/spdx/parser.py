@@ -38,15 +38,17 @@ class SPDXParser(BaseParser, BaseFileParser):
             return True
         return False
 
-    def get_observations(self, data: dict, product: Product, branch: Optional[Branch]) -> list[Observation]:
-        return []
+    def get_observations(self, data: dict, product: Product, branch: Optional[Branch]) -> tuple[list[Observation], str]:
+        return [], ""
 
-    def get_license_components(self, data: dict) -> list[License_Component]:
+    def get_license_components(self, data: dict) -> tuple[list[License_Component], str]:
         try:
             document: Document = JsonLikeDictParser().parse(data)
         except SPDXParsingError as e:
             raise ValidationError(e.get_messages())  # pylint: disable=raise-missing-from
-            # The DjangoValidationError itself is not relevant and must not be re-raised
+            # The ValidationError itself is not relevant and must not be re-raised
+
+        scanner = self._get_scanner(data)
 
         observations = []
 
@@ -99,7 +101,19 @@ class SPDXParser(BaseParser, BaseFileParser):
 
             observations.append(license_component)
 
-        return observations
+        return observations, scanner
+
+    def _get_scanner(self, data: dict) -> str:
+        scanner = ""
+
+        creators = data.get("creationInfo", {}).get("creators", [])
+        for creator in creators:
+            creator_elements = creator.split(":")
+            if len(creator_elements) == 2 and creator_elements[0].strip() == "Tool":
+                scanner = creator_elements[1].strip()
+                break
+
+        return scanner
 
     def _create_package_dict(self, data: dict) -> dict[str, dict]:
         package_dict = {}

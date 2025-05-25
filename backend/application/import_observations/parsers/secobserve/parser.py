@@ -26,8 +26,8 @@ class SecObserveParser(BaseParser, BaseFileParser):
             return True
         return False
 
-    def get_observations(self, data: dict, product: Product, branch: Optional[Branch]) -> list[Observation]:
-        observations = []
+    def get_observations(self, data: dict, product: Product, branch: Optional[Branch]) -> tuple[list[Observation], str]:
+        observations: list[Observation] = []
 
         for uploaded_observation in data.get("observations", []):
             observation = Observation(
@@ -59,4 +59,6 @@ class SecObserveParser(BaseParser, BaseFileParser):
             if reference:
                 observation.unsaved_references = [reference]
             observations.append(observation)
-        return observations
+
+        scanner = observations[0].scanner if observations else self.get_name()
+        return observations, scanner

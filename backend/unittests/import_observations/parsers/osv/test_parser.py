@@ -16,7 +16,9 @@ from unittests.base_test_case import BaseTestCase
 class TestOSVParser(BaseTestCase):
     def test_no_observations(self):
         parser = OSVParser()
-        observations = parser.get_observations([], self.product_1, self.branch_1)
+        observations, scanner = parser.get_observations([], self.product_1, self.branch_1)
+
+        self.assertEqual("OSV (Open Source Vulnerabilities)", scanner)
         self.assertEqual(observations, [])
 
     def test_java_and_python_open(self):
@@ -76,8 +78,9 @@ class TestOSVParser(BaseTestCase):
         ]
 
         parser = OSVParser()
-        observations = parser.get_observations(osv_components, self.product_1, self.branch_1)
+        observations, scanner = parser.get_observations(osv_components, self.product_1, self.branch_1)
 
+        self.assertEqual("OSV (Open Source Vulnerabilities)", scanner)
         self.assertEqual(len(observations), 3)
 
         observation = observations[0]
@@ -153,8 +156,9 @@ A stack overflow in the XML.toJSONObject component of hutool-json v5.8.10 and or
         ]
 
         parser = OSVParser()
-        observations = parser.get_observations(osv_components, self.product_1, self.branch_1)
+        observations, scanner = parser.get_observations(osv_components, self.product_1, self.branch_1)
 
+        self.assertEqual("OSV (Open Source Vulnerabilities)", scanner)
         self.assertEqual(len(observations), 0)
 
     @patch("application.import_observations.parsers.osv.parser.OSVParser._get_linux_package_osv_ecosystem")
@@ -173,8 +177,9 @@ A stack overflow in the XML.toJSONObject component of hutool-json v5.8.10 and or
         osv_components = [self._get_osv_component_git(), self._get_osv_component_vim()]
 
         parser = OSVParser()
-        observations = parser.get_observations(osv_components, self.product_1, None)
+        observations, scanner = parser.get_observations(osv_components, self.product_1, None)
 
+        self.assertEqual("OSV (Open Source Vulnerabilities)", scanner)
         self.assertEqual(len(observations), 2)
 
         observation = observations[0]
@@ -207,7 +212,9 @@ A stack overflow in the XML.toJSONObject component of hutool-json v5.8.10 and or
         osv_components = [self._get_osv_component_git(), self._get_osv_component_vim()]
 
         parser = OSVParser()
-        observations = parser.get_observations(osv_components, self.product_1, None)
+        observations, scanner = parser.get_observations(osv_components, self.product_1, None)
+
+        self.assertEqual("OSV (Open Source Vulnerabilities)", scanner)
 
         mock_get_linux_package_osv_ecosystem.assert_called_with(
             PackageURL.from_string("pkg:deb/debian/vim@9.0.1378-2?arch=amd64&distro=debian-12.5&epoch=2"),
@@ -242,8 +249,9 @@ A stack overflow in the XML.toJSONObject component of hutool-json v5.8.10 and or
         osv_components = [self._get_osv_component_git(), self._get_osv_component_vim()]
 
         parser = OSVParser()
-        observations = parser.get_observations(osv_components, self.product_1, self.branch_1)
+        observations, scanner = parser.get_observations(osv_components, self.product_1, self.branch_1)
 
+        self.assertEqual("OSV (Open Source Vulnerabilities)", scanner)
         self.assertEqual(len(observations), 1)
 
         observation = observations[0]
@@ -272,8 +280,9 @@ A stack overflow in the XML.toJSONObject component of hutool-json v5.8.10 and or
         osv_components = [self._get_osv_component_rpm()]
 
         parser = OSVParser()
-        observations = parser.get_observations(osv_components, self.product_1, self.branch_1)
+        observations, scanner = parser.get_observations(osv_components, self.product_1, self.branch_1)
 
+        self.assertEqual("OSV (Open Source Vulnerabilities)", scanner)
         self.assertEqual(len(observations), 1)
 
         observation = observations[0]

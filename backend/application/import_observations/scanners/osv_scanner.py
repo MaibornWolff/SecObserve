@@ -190,7 +190,7 @@ def scan_license_components(
             )
 
     osv_parser = OSVParser()
-    observations = osv_parser.get_observations(osv_components, product, branch)
+    observations, scanner = osv_parser.get_observations(osv_components, product, branch)
 
     parser = get_parser_by_name(osv_parser.get_name())
     if parser is None:
@@ -208,7 +208,7 @@ def scan_license_components(
         kubernetes_cluster="",
         imported_observations=observations,
     )
-    numbers: Tuple[int, int, int, str] = _process_data(import_parameters, Settings.load())
+    numbers: Tuple[int, int, int] = _process_data(import_parameters, Settings.load())
 
     Vulnerability_Check.objects.update_or_create(
         product=import_parameters.product,
@@ -219,7 +219,7 @@ def scan_license_components(
             "last_import_observations_new": numbers[0],
             "last_import_observations_updated": numbers[1],
             "last_import_observations_resolved": numbers[2],
-            "scanner": numbers[3],
+            "scanner": scanner,
         },
     )
 
