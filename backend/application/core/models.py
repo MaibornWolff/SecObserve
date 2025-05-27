@@ -459,6 +459,8 @@ class Observation(Model):
     origin_source_line_start = IntegerField(null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)])
     origin_source_line_end = IntegerField(null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)])
 
+    origin_source_file_link = CharField(max_length=2048, blank=True)
+
     origin_cloud_provider = CharField(max_length=255, blank=True)
     origin_cloud_account_subscription_project = CharField(max_length=255, blank=True)
     origin_cloud_resource = CharField(max_length=255, blank=True)

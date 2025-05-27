@@ -17,7 +17,7 @@ class TestRegisterParsers(TestCase):
         command.handle()
 
         parsers = Parser.objects.all().order_by("name")
-        self.assertEqual(14, len(parsers))
+        self.assertEqual(15, len(parsers))
 
         parser = parsers[0]
         self.assertEqual("Azure Defender", parser.name)
@@ -33,14 +33,14 @@ class TestRegisterParsers(TestCase):
         self.assertEqual("cryptolyzer", parser.module_name)
         self.assertEqual("CryptoLyzerParser", parser.class_name)
 
-        parser = parsers[5]
+        parser = parsers[6]
         self.assertEqual("Manual", parser.name)
         self.assertEqual("Manual", parser.type)
         self.assertEqual("Manual", parser.source)
         self.assertEqual("", parser.module_name)
         self.assertEqual("", parser.class_name)
 
-        parser = parsers[12]
+        parser = parsers[13]
         self.assertEqual("Trivy Operator Prometheus", parser.name)
         self.assertEqual("Other", parser.type)
         self.assertEqual("API", parser.source)
