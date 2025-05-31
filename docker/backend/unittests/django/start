@@ -11,5 +11,4 @@ python manage.py register_parsers
 coverage run /app/manage.py test unittests
 # coverage run /app/manage.py test unittests.import_observations.scanners.test_osv_scanner
 coverage report
-coverage xml
-# sed -i "s|/app|/|g" /home/coverage.xml
+coverage xml -o /home/coverage.xml
