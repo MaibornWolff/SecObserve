@@ -12,3 +12,4 @@ coverage run --branch /app/manage.py test unittests
 # coverage run --branch /app/manage.py test unittests.import_observations.scanners.test_osv_scanner
 coverage report --skip-empty --show-missing
 coverage xml -o /home/coverage.xml
+sed -i "s|/app|/|g" /home/coverage.xml
