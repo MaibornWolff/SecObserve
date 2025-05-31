@@ -77,6 +77,6 @@ RUN addgroup -g 1001 -S ${group} \
     && chown -R ${user}:${group} /var/lib/sqlite \
     && chmod ugo+rw /var/lib/sqlite
 
-USER ${user}
+# USER ${user}
 
 ENTRYPOINT ["/entrypoint"]

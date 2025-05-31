@@ -62,12 +62,12 @@ jobs:
       - name: Unittests
         run: |
           docker build -f docker/backend/unittests/django/Dockerfile -t secobserve_backend_unittests:latest .
-          docker run --rm --env-file docker/backend/unittests/envs/django --env-file docker/backend/unittests/envs/sqlite secobserve_backend_unittests:latest /start
+          docker run --rm --volume $(pwd):/home --env-file docker/backend/unittests/envs/django --env-file docker/backend/unittests/envs/sqlite secobserve_backend_unittests:latest /start
       - name: "Upload coverage report"
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: coverage-report
-          path: backend/coverage.xml
+          path: coverage.xml
           retention-days: 1
 
   check_code_sonarqube_backend:
