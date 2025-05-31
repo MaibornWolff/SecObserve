@@ -41,10 +41,6 @@ ENV BUILD_ENV=${BUILD_ENVIRONMENT}
 
 WORKDIR ${APP_HOME}
 
-# Add user and group to avoid running as root
-ARG user=django
-ARG group=django
-
 # copy dependencies from build stage
 ENV VIRTUAL_ENV=/.venv \
     PATH="/.venv/bin:$PATH"
@@ -59,10 +55,7 @@ COPY ./backend ${APP_HOME}
 # use prod settings
 COPY ./backend/config/settings/unittests.py ${APP_HOME}/config/settings/dist.py
 
-RUN addgroup -g 1001 -S ${group} \
-    && adduser -u 1001 -S ${user} -G ${group} \
-    # make startup scripts executable
-    && chmod +x /entrypoint \
+RUN chmod +x /entrypoint \
     && chmod +x /start \
     # insert commit id for status endpoint
     && sed -i 's/version_unknown/'"${VERSION}"'/g' ${APP_HOME}/application/commons/api/views.py \
@@ -71,12 +64,8 @@ RUN addgroup -g 1001 -S ${group} \
     && chmod ugo+w ${APP_HOME} \
     # create directory for huey task queue
     && mkdir /var/lib/huey \
-    && chown -R ${user}:${group} /var/lib/huey \
     # create directory for sqlite db
     && mkdir /var/lib/sqlite \
-    && chown -R ${user}:${group} /var/lib/sqlite \
     && chmod ugo+rw /var/lib/sqlite
-
-USER ${user}
 
 ENTRYPOINT ["/entrypoint"]
