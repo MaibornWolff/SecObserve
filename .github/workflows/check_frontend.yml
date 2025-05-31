@@ -40,3 +40,20 @@ jobs:
           cd ..
           docker compose -f docker-compose-playwright.yml build
           docker compose -f docker-compose-playwright.yml up --abort-on-container-exit --exit-code-from playwright
+
+  check_code_sonarqube_frontend:
+    if: github.repository == 'MaibornWolff/SecObserve'
+    runs-on: ubuntu-latest
+    steps:
+      - 
+        name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0  
+      - 
+        name: Run SonarQube scan for frontend
+        uses: SonarSource/sonarqube-scan-action@2500896589ef8f7247069a56136f8dc177c27ccf # v5.2.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FRONTEND }}
+        with:
+          projectBaseDir: frontend
