@@ -223,45 +223,42 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                     <Labeled label="Active">
                         <BooleanField source="issue_tracker_active" />
                     </Labeled>
-                    {product.issue_tracker_active && (
-                        <Stack spacing={1}>
-                            <Labeled>
-                                <TextField source="issue_tracker_type" label="Type" />
-                            </Labeled>
-                            <Labeled>
-                                <TextField source="issue_tracker_base_url" label="Base URL" />
-                            </Labeled>
-                            <Labeled>
-                                <TextField source="issue_tracker_project_id" label="Project id" />
-                            </Labeled>
+                    <Stack spacing={1}>
+                        <Labeled>
+                            <TextField source="issue_tracker_type" label="Type" />
+                        </Labeled>
+                        <Labeled>
+                            <TextField source="issue_tracker_base_url" label="Base URL" />
+                        </Labeled>
+                        <Labeled>
+                            <TextField source="issue_tracker_project_id" label="Project id" />
+                        </Labeled>
+                        {product.issue_tracker_labels && (
                             <Labeled>
                                 <TextField source="issue_tracker_labels" label="Labels" />
                             </Labeled>
-                            {product.issue_tracker_minimum_severity && (
-                                <Labeled>
-                                    <SeverityField source="issue_tracker_minimum_severity" label="Minimum severity" />
-                                </Labeled>
-                            )}
-                            {product.issue_tracker_username && (
-                                <Labeled>
-                                    <TextField source="issue_tracker_username" label="Username (only for Jira)" />
-                                </Labeled>
-                            )}
-                            {product.issue_tracker_issue_type && (
-                                <Labeled>
-                                    <TextField source="issue_tracker_issue_type" label="Issue type (only for Jira)" />
-                                </Labeled>
-                            )}
-                            {product.issue_tracker_status_closed && (
-                                <Labeled>
-                                    <TextField
-                                        source="issue_tracker_status_closed"
-                                        label="Closed status (only for Jira)"
-                                    />
-                                </Labeled>
-                            )}
-                        </Stack>
-                    )}
+                        )}
+                        {product.issue_tracker_minimum_severity && (
+                            <Labeled>
+                                <SeverityField source="issue_tracker_minimum_severity" label="Minimum severity" />
+                            </Labeled>
+                        )}
+                        {product.issue_tracker_username && (
+                            <Labeled>
+                                <TextField source="issue_tracker_username" label="Username (only for Jira)" />
+                            </Labeled>
+                        )}
+                        {product.issue_tracker_issue_type && (
+                            <Labeled>
+                                <TextField source="issue_tracker_issue_type" label="Issue type (only for Jira)" />
+                            </Labeled>
+                        )}
+                        {product.issue_tracker_status_closed && (
+                            <Labeled>
+                                <TextField source="issue_tracker_status_closed" label="Closed status (only for Jira)" />
+                            </Labeled>
+                        )}
+                    </Stack>
                 </Fragment>
             )}
 
