@@ -126,37 +126,39 @@ const ProductGroupShow = () => {
                                     <Fragment>
                                         <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
                                         <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                                            Housekeeping (for products)
+                                            Housekeeping
                                         </Typography>
 
-                                        <Labeled label="Housekeeping">
-                                            <BooleanField
-                                                source="repository_branch_housekeeping_active"
-                                                valueLabelFalse="Disabled"
-                                                valueLabelTrue="Product group specific"
-                                            />
-                                        </Labeled>
-                                        {product_group.repository_branch_housekeeping_active && (
-                                            <Stack spacing={1}>
-                                                <Labeled label="Keep inactive">
-                                                    <NumberField source="repository_branch_housekeeping_keep_inactive_days" />
-                                                </Labeled>
-                                                {product_group.repository_branch_housekeeping_exempt_branches && (
+                                        <Stack direction="row" spacing={4} sx={{ marginTop: 1 }}>
+                                            <Labeled label="Housekeeping">
+                                                <BooleanField
+                                                    source="repository_branch_housekeeping_active"
+                                                    valueLabelFalse="Disabled"
+                                                    valueLabelTrue="Product group specific"
+                                                />
+                                            </Labeled>
+                                            {product_group.repository_branch_housekeeping_active &&
+                                                product_group.repository_branch_housekeeping_keep_inactive_days && (
+                                                    <Labeled label="Keep inactive">
+                                                        <NumberField source="repository_branch_housekeeping_keep_inactive_days" />
+                                                    </Labeled>
+                                                )}
+                                            {product_group.repository_branch_housekeeping_active &&
+                                                product_group.repository_branch_housekeeping_exempt_branches && (
                                                     <Labeled label="Exempt branches / versions">
                                                         <TextField source="repository_branch_housekeeping_exempt_branches" />
                                                     </Labeled>
                                                 )}
-                                            </Stack>
-                                        )}
+                                        </Stack>
                                     </Fragment>
                                 )}
-                                {(product_group.notification_email_to ||
+                                {((feature_email() && product_group.notification_email_to) ||
                                     product_group.notification_ms_teams_webhook ||
                                     product_group.notification_slack_webhook) && (
                                     <Fragment>
                                         <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
                                         <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                                            Notifications (for products)
+                                            Notifications
                                         </Typography>
                                         <Stack spacing={1}>
                                             {feature_email() && product_group.notification_email_to && (
@@ -181,7 +183,7 @@ const ProductGroupShow = () => {
                                     <Fragment>
                                         <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
                                         <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                                            Security Gate (for products)
+                                            Security Gate
                                         </Typography>
                                         <Labeled label="Security gate">
                                             <BooleanField
@@ -215,21 +217,34 @@ const ProductGroupShow = () => {
                                     </Fragment>
                                 )}
 
-                                <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-                                <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                                    Review
-                                </Typography>
-                                <Stack spacing={1}>
-                                    <Labeled label="Assessments need approval">
-                                        <BooleanField source="assessments_need_approval" />
-                                    </Labeled>
-                                    <Labeled label="Rules need approval">
-                                        <BooleanField source="product_rules_need_approval" />
-                                    </Labeled>
-                                    <Labeled label='Status "In review" for new observations'>
-                                        <BooleanField source="new_observations_in_review" />
-                                    </Labeled>
-                                </Stack>
+                                {(product_group.assessments_need_approval ||
+                                    product_group.product_rules_need_approval ||
+                                    product_group.new_observations_in_review) && (
+                                    <Fragment>
+                                        <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+                                        <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                            Review
+                                        </Typography>
+                                        <Stack spacing={1}>
+                                            {product_group.assessments_need_approval && (
+                                                <Labeled label="Assessments need approval">
+                                                    <BooleanField source="assessments_need_approval" />
+                                                </Labeled>
+                                            )}
+                                            {product_group.product_rules_need_approval && (
+                                                <Labeled label="Rules need approval">
+                                                    <BooleanField source="product_rules_need_approval" />
+                                                </Labeled>
+                                            )}
+                                            {product_group.new_observations_in_review && (
+                                                <Labeled label='Status "In review" for new observations'>
+                                                    <BooleanField source="new_observations_in_review" />
+                                                </Labeled>
+                                            )}
+                                        </Stack>
+                                    </Fragment>
+                                )}
+
                                 {product_group.risk_acceptance_expiry_active != null && (
                                     <Fragment>
                                         <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
@@ -253,6 +268,7 @@ const ProductGroupShow = () => {
                                         )}
                                     </Fragment>
                                 )}
+
                                 {product_group.license_policy && (
                                     <Fragment>
                                         <Divider sx={{ marginTop: 2, marginBottom: 2 }} />

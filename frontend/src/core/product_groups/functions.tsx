@@ -26,7 +26,7 @@ export const ProductGroupCreateEditComponent = () => {
             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
             <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                Housekeeping (for products)
+                Housekeeping
             </Typography>
             <NullableBooleanInput
                 source="repository_branch_housekeeping_active"
@@ -64,7 +64,7 @@ export const ProductGroupCreateEditComponent = () => {
             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
             <Typography variant="h6" sx={{ marginBottom: 2 }}>
-                Notifications (for products)
+                Notifications
             </Typography>
             <Stack spacing={2}>
                 {feature_email() && (
@@ -92,7 +92,7 @@ export const ProductGroupCreateEditComponent = () => {
             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
             <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                Security Gate (for products)
+                Security Gate
             </Typography>
             <NullableBooleanInput
                 source="security_gate_active"
