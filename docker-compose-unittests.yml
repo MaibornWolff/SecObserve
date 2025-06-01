@@ -29,4 +29,3 @@ services:
       OIDC_GROUPS: groups
     volumes:
       - ./backend:/home
-    command: /start
