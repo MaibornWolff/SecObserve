@@ -65,15 +65,15 @@ const BranchEmbeddedList = ({ product }: BranchEmbeddedListProps) => {
                             )}
                         />
                         <BooleanField source="is_default_branch" label="Default branch / version" sortable={false} />
-                        <TextField source="purl" label="PURL" />
-                        <TextField source="cpe23" label="CPE 2.3" />
+                        {product?.has_branch_purls && <TextField source="purl" label="PURL" />}
+                        {product?.has_branch_cpe23s && <TextField source="cpe23" label="CPE 2.3" />}
                         <WithRecord
                             label="Protect"
                             render={(branch) =>
                                 !branch.is_default_branch && <BooleanField source="housekeeping_protect" />
                             }
                         />
-                        {product?.osv_enabled && (
+                        {product?.has_branch_osv_linux_distribution && (
                             <WithRecord
                                 label="OSV Linux dist."
                                 render={(branch) => (
