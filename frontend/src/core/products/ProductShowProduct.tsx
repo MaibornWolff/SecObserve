@@ -51,14 +51,17 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                 )}
             </Stack>
 
-            <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-
-            <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                Rules
-            </Typography>
-            <Labeled label="Apply general rules">
-                <BooleanField source="apply_general_rules" />
-            </Labeled>
+            {product.apply_general_rules && (
+                <Fragment>
+                    <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+                    <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                        Rules
+                    </Typography>
+                    <Labeled label="Apply general rules">
+                        <BooleanField source="apply_general_rules" />
+                    </Labeled>
+                </Fragment>
+            )}
 
             {(product.repository_prefix ||
                 product.repository_default_branch ||
@@ -66,7 +69,7 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                 <Fragment>
                     <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
                     <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                        Source code repository
+                        Source code repository and housekeeping
                     </Typography>
                     <Stack spacing={1}>
                         {product.repository_prefix && (
@@ -100,16 +103,18 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                                     valueLabelTrue="Product specific"
                                 />
                             </Labeled>
-                            {product.repository_branch_housekeeping_active && (
-                                <Fragment>
+                            {product.repository_branch_housekeeping_active &&
+                                product.repository_branch_housekeeping_keep_inactive_days != null && (
                                     <Labeled label="Keep inactive">
                                         <NumberField source="repository_branch_housekeeping_keep_inactive_days" />
                                     </Labeled>
+                                )}
+                            {product.repository_branch_housekeeping_active &&
+                                product.repository_branch_housekeeping_exempt_branches != "" && (
                                     <Labeled label="Exempt branches / versions">
                                         <TextField source="repository_branch_housekeeping_exempt_branches" />
                                     </Labeled>
-                                </Fragment>
-                            )}
+                                )}
                         </Stack>
                     )}
                     {product.product_group && product.product_group_repository_branch_housekeeping_active != null && (
@@ -124,7 +129,7 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                 </Fragment>
             )}
 
-            {(product.notification_email_to ||
+            {((feature_email() && product.notification_email_to) ||
                 product.notification_ms_teams_webhook ||
                 product.notification_slack_webhook) && (
                 <Fragment>
@@ -209,80 +214,96 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                 </Fragment>
             )}
 
-            <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-            <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                Issue Tracker
-            </Typography>
-            <Labeled label="Active">
-                <BooleanField source="issue_tracker_active" />
-            </Labeled>
             {product.issue_tracker_active && (
-                <Stack spacing={1}>
-                    <Labeled>
-                        <TextField source="issue_tracker_type" label="Type" />
+                <Fragment>
+                    <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+                    <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                        Issue Tracker
+                    </Typography>
+                    <Labeled label="Active">
+                        <BooleanField source="issue_tracker_active" />
                     </Labeled>
-                    <Labeled>
-                        <TextField source="issue_tracker_base_url" label="Base URL" />
-                    </Labeled>
-                    <Labeled>
-                        <TextField source="issue_tracker_project_id" label="Project id" />
-                    </Labeled>
-                    <Labeled>
-                        <TextField source="issue_tracker_labels" label="Labels" />
-                    </Labeled>
-                    {product.issue_tracker_minimum_severity && (
-                        <Labeled>
-                            <SeverityField source="issue_tracker_minimum_severity" label="Minimum severity" />
-                        </Labeled>
+                    {product.issue_tracker_active && (
+                        <Stack spacing={1}>
+                            <Labeled>
+                                <TextField source="issue_tracker_type" label="Type" />
+                            </Labeled>
+                            <Labeled>
+                                <TextField source="issue_tracker_base_url" label="Base URL" />
+                            </Labeled>
+                            <Labeled>
+                                <TextField source="issue_tracker_project_id" label="Project id" />
+                            </Labeled>
+                            <Labeled>
+                                <TextField source="issue_tracker_labels" label="Labels" />
+                            </Labeled>
+                            {product.issue_tracker_minimum_severity && (
+                                <Labeled>
+                                    <SeverityField source="issue_tracker_minimum_severity" label="Minimum severity" />
+                                </Labeled>
+                            )}
+                            {product.issue_tracker_username && (
+                                <Labeled>
+                                    <TextField source="issue_tracker_username" label="Username (only for Jira)" />
+                                </Labeled>
+                            )}
+                            {product.issue_tracker_issue_type && (
+                                <Labeled>
+                                    <TextField source="issue_tracker_issue_type" label="Issue type (only for Jira)" />
+                                </Labeled>
+                            )}
+                            {product.issue_tracker_status_closed && (
+                                <Labeled>
+                                    <TextField
+                                        source="issue_tracker_status_closed"
+                                        label="Closed status (only for Jira)"
+                                    />
+                                </Labeled>
+                            )}
+                        </Stack>
                     )}
-                    {product.issue_tracker_username && (
-                        <Labeled>
-                            <TextField source="issue_tracker_username" label="Username (only for Jira)" />
-                        </Labeled>
-                    )}
-                    {product.issue_tracker_issue_type && (
-                        <Labeled>
-                            <TextField source="issue_tracker_issue_type" label="Issue type (only for Jira)" />
-                        </Labeled>
-                    )}
-                    {product.issue_tracker_status_closed && (
-                        <Labeled>
-                            <TextField source="issue_tracker_status_closed" label="Closed status (only for Jira)" />
-                        </Labeled>
-                    )}
-                </Stack>
+                </Fragment>
             )}
 
-            <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-            <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                Review
-            </Typography>
-            <Stack spacing={1}>
-                <Labeled label="Assessments need approval">
-                    <BooleanField source="assessments_need_approval" />
-                </Labeled>
-                {product.product_group_assessments_need_approval && (
-                    <Labeled label="Assessments need approval (from product group)">
-                        <BooleanField source="product_group_assessments_need_approval" />
-                    </Labeled>
-                )}
-                <Labeled label="Rules need approval">
-                    <BooleanField source="product_rules_need_approval" />
-                </Labeled>
-                {product.product_group_product_rules_need_approval && (
-                    <Labeled label="Rules need approval (from product group)">
-                        <BooleanField source="product_group_product_rules_need_approval" />
-                    </Labeled>
-                )}
-                <Labeled label='Status "In review" for new observations'>
-                    <BooleanField source="new_observations_in_review" />
-                </Labeled>
-                {product.product_group_new_observations_in_review && (
-                    <Labeled label='Status "In review" for new observations (from product group)'>
-                        <BooleanField source="product_group_new_observations_in_review" />
-                    </Labeled>
-                )}
-            </Stack>
+            {(product.assessments_need_approval ||
+                product.product_group_assessments_need_approval ||
+                product.product_rules_need_approval ||
+                product.product_group_product_rules_need_approval ||
+                product.new_observations_in_review ||
+                product.product_group_new_observations_in_review) && (
+                <Fragment>
+                    <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+                    <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                        Review
+                    </Typography>
+                    <Stack spacing={1}>
+                        <Labeled label="Assessments need approval">
+                            <BooleanField source="assessments_need_approval" />
+                        </Labeled>
+                        {product.product_group_assessments_need_approval && (
+                            <Labeled label="Assessments need approval (from product group)">
+                                <BooleanField source="product_group_assessments_need_approval" />
+                            </Labeled>
+                        )}
+                        <Labeled label="Rules need approval">
+                            <BooleanField source="product_rules_need_approval" />
+                        </Labeled>
+                        {product.product_group_product_rules_need_approval && (
+                            <Labeled label="Rules need approval (from product group)">
+                                <BooleanField source="product_group_product_rules_need_approval" />
+                            </Labeled>
+                        )}
+                        <Labeled label='Status "In review" for new observations'>
+                            <BooleanField source="new_observations_in_review" />
+                        </Labeled>
+                        {product.product_group_new_observations_in_review && (
+                            <Labeled label='Status "In review" for new observations (from product group)'>
+                                <BooleanField source="product_group_new_observations_in_review" />
+                            </Labeled>
+                        )}
+                    </Stack>
+                </Fragment>
+            )}
 
             {product.risk_acceptance_expiry_active != null && (
                 <Fragment>
@@ -326,32 +347,39 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                 </Fragment>
             )}
 
-            <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-            <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                Vulnerability scanning
-            </Typography>
-            <Stack direction="row" spacing={4}>
-                <Labeled label="OSV scanning enabled">
-                    <BooleanField source="osv_enabled" sx={{ marginBottom: 2 }} />
-                </Labeled>
-                {product.osv_linux_distribution && (
-                    <Labeled label="OSV Linux distribution">
-                        <WithRecord
-                            render={(record) => (
-                                <OSVLinuxDistributionField
-                                    osv_linux_distribution={record.osv_linux_distribution}
-                                    osv_linux_release={record.osv_linux_release}
-                                    label="OSV Linux distribution"
-                                />
-                            )}
-                        />
-                    </Labeled>
-                )}
-            </Stack>
             {product.osv_enabled && (
-                <Labeled>
-                    <BooleanField source="automatic_osv_scanning_enabled" label="Automatic OSV scanning enabled" />
-                </Labeled>
+                <Fragment>
+                    <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+                    <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                        Vulnerability scanning
+                    </Typography>
+                    <Stack direction="row" spacing={4}>
+                        <Labeled label="OSV scanning enabled">
+                            <BooleanField source="osv_enabled" sx={{ marginBottom: 2 }} />
+                        </Labeled>
+                        {product.osv_linux_distribution && (
+                            <Labeled label="OSV Linux distribution">
+                                <WithRecord
+                                    render={(record) => (
+                                        <OSVLinuxDistributionField
+                                            osv_linux_distribution={record.osv_linux_distribution}
+                                            osv_linux_release={record.osv_linux_release}
+                                            label="OSV Linux distribution"
+                                        />
+                                    )}
+                                />
+                            </Labeled>
+                        )}
+                    </Stack>
+                    {product.automatic_osv_scanning_enabled && (
+                        <Labeled>
+                            <BooleanField
+                                source="automatic_osv_scanning_enabled"
+                                label="Automatic OSV scanning enabled"
+                            />
+                        </Labeled>
+                    )}
+                </Fragment>
             )}
         </Fragment>
     );
