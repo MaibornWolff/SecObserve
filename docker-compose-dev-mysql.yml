@@ -46,7 +46,6 @@ services:
       - dev_huey_data:/var/lib/huey
     ports:
       - "8000:8000"
-    command: /start
 
   mysql:
     image: mysql:8.4.5

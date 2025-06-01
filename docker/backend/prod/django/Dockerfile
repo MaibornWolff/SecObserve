@@ -9,7 +9,7 @@ ARG BUILD_ENVIRONMENT=prod
 # kics-scan ignore-block
 # versions of dependencies from distribution are ok
 RUN apk add --no-cache --virtual .build-deps \
-    ca-certificates gcc postgresql-dev linux-headers musl-dev libffi-dev mariadb-dev
+    ca-certificates gcc libffi-dev linux-headers mariadb-dev musl-dev postgresql-dev
 
 # install dependencies with poetry
 COPY ./backend/poetry_requirements.txt ./
@@ -23,7 +23,7 @@ ENV POETRY_NO_INTERACTION=1 \
 WORKDIR /
 
 COPY backend/pyproject.toml backend/poetry.lock ./
-RUN poetry install --no-root && rm -rf $POETRY_CACHE_DIR
+RUN poetry install --no-root && rm -rf "$POETRY_CACHE_DIR"
 
 
 # Python 'run' stage
@@ -83,7 +83,7 @@ COPY ./docker/backend/prod/database/DigiCertGlobalRootCA.crt.pem ${APP_HOME}/Dig
 RUN addgroup -g 1001 -S ${group} \
     && adduser -u 1001 -S ${user} -G ${group} \
     # Install binaries and libs for PostgreSQL
-    && apk add --no-cache --virtual postgresql-libs postgresql-client mariadb-dev mysql-client bash \
+    && apk add --no-cache --virtual bash mariadb-dev mysql-client postgresql-client postgresql-libs \
     # make startup scripts executable
     && chmod +x /entrypoint \
     && chmod +x /wait-for-it.sh \
