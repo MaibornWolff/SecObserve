@@ -83,7 +83,7 @@ COPY ./docker/backend/prod/database/DigiCertGlobalRootCA.crt.pem ${APP_HOME}/Dig
 RUN addgroup -g 1001 -S ${group} \
     && adduser -u 1001 -S ${user} -G ${group} \
     # Install binaries and libs for PostgreSQL
-    && apk add --no-cache --virtual bash mariadb-dev mysql-client postgresql-client postgresql-libs \
+    && apk add --no-cache --virtual postgresql-libs postgresql-client mariadb-dev mysql-client bash \
     # make startup scripts executable
     && chmod +x /entrypoint \
     && chmod +x /wait-for-it.sh \

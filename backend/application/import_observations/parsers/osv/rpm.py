@@ -18,7 +18,6 @@ from typing import (
     Optional,
     Tuple,
     TypeVar,
-    Union,
     no_type_check,
 )
 
@@ -111,7 +110,7 @@ def from_evr(s: str) -> Tuple[int, str, str]:
     return ie, v, r
 
 
-def compare_rpm_versions(a: Union[RpmVersion, str], b: Union[RpmVersion, str]) -> int:
+def compare_rpm_versions(a: RpmVersion | str, b: RpmVersion | str) -> int:
     """
     Compare two RPM versions ``a`` and ``b`` and return:
     -  1 if the version of a is newer than b
