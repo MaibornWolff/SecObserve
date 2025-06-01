@@ -1,5 +1,3 @@
-from typing import Union
-
 from django.contrib.auth.models import AnonymousUser
 from rest_framework.permissions import BasePermission
 from rest_framework.request import Request
@@ -11,7 +9,7 @@ from application.vex.models import CSAF, OpenVEX
 
 
 class UserHasVEXPermission(BasePermission):
-    def has_object_permission(self, request: Request, view: APIView, obj: Union[CSAF, OpenVEX]) -> bool:
+    def has_object_permission(self, request: Request, view: APIView, obj: CSAF | OpenVEX) -> bool:
         return check_object_permission(
             request=request,
             object_to_check=obj,

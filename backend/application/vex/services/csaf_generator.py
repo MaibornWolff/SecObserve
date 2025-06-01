@@ -114,7 +114,6 @@ def create_csaf_document(parameters: CSAFCreateParameters) -> Optional[CSAFRoot]
     csaf_root = create_csaf_root(csaf)
 
     vulnerabilities = []
-    product_tree = CSAFProductTree(branches=[], relationships=[])
 
     if product:
         vulnerabilities, product_tree = _get_content_for_product(product, parameters.vulnerability_names, branches)
@@ -152,7 +151,6 @@ def update_csaf_document(parameters: CSAFUpdateParameters) -> Optional[CSAFRoot]
     csaf_branches = list(Branch.objects.filter(id__in=csaf_branch_ids))
 
     vulnerabilities = []
-    product_tree = CSAFProductTree(branches=[], relationships=[])
 
     if csaf.product:
         vulnerabilities, product_tree = _get_content_for_product(csaf.product, csaf_vulnerability_names, csaf_branches)

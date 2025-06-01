@@ -410,12 +410,15 @@ def normalize_severity(observation: Observation) -> None:
         observation.rule_severity = ""
     if observation.parser_severity is None:
         observation.parser_severity = ""
-    if observation.parser_severity:
-        if (
+    if (
+        observation.parser_severity
+        and (
             observation.parser_severity,
             observation.parser_severity,
-        ) not in Severity.SEVERITY_CHOICES:
-            observation.parser_severity = Severity.SEVERITY_UNKNOWN
+        )
+        not in Severity.SEVERITY_CHOICES
+    ):
+        observation.parser_severity = Severity.SEVERITY_UNKNOWN
 
     observation.current_severity = get_current_severity(observation)
 
