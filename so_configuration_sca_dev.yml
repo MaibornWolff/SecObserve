@@ -4,7 +4,6 @@ trivy_image_backend_current:
   FURTHER_PARAMETERS: "--pkg-types os --db-repository public.ecr.aws/aquasecurity/trivy-db:2" 
   REPORT_NAME: "trivy_backend_image.json"
   SO_ORIGIN_SERVICE: "backend"
-  SO_SUPPRESS_LICENSES: "false"
   SO_BRANCH_NAME: "dev"
 
 trivy_image_frontend_current:
@@ -13,7 +12,6 @@ trivy_image_frontend_current:
   FURTHER_PARAMETERS: "--pkg-types os --db-repository public.ecr.aws/aquasecurity/trivy-db:2"
   REPORT_NAME: "trivy_frontend_image.json"
   SO_ORIGIN_SERVICE: "frontend"
-  SO_SUPPRESS_LICENSES: "false"
   SO_BRANCH_NAME: "dev"
 
 trivy_filesystem_backend_current:
@@ -23,7 +21,6 @@ trivy_filesystem_backend_current:
   FURTHER_PARAMETERS: "--db-repository public.ecr.aws/aquasecurity/trivy-db:2"
   REPORT_NAME: "trivy_backend_poetry.json"
   SO_ORIGIN_SERVICE: "backend"
-  SO_SUPPRESS_LICENSES: "false"
   SO_BRANCH_NAME: "dev"
 
 trivy_filesystem_frontend_current:
@@ -33,7 +30,6 @@ trivy_filesystem_frontend_current:
   FURTHER_PARAMETERS: "--db-repository public.ecr.aws/aquasecurity/trivy-db:2"
   REPORT_NAME: "trivy_frontend_npm.json"
   SO_ORIGIN_SERVICE: "frontend"
-  SO_SUPPRESS_LICENSES: "false"
   SO_BRANCH_NAME: "dev"
 
 importer:
