@@ -65,7 +65,7 @@ class DependencyTrack(BaseParser, BaseAPIParser):
 
     def get_observations(  # pylint: disable=too-many-locals
         self, data: list[dict], product: Product, branch: Optional[Branch]
-    ) -> list[Observation]:
+    ) -> tuple[list[Observation], str]:
         observations = []
 
         scanner, version = self.get_about()
@@ -114,7 +114,7 @@ class DependencyTrack(BaseParser, BaseAPIParser):
 
             observations.append(observation)
 
-        return observations
+        return observations, scanner
 
     def get_status(self, state: str) -> str:
         if not state:

@@ -1,13 +1,17 @@
 import { Divider, Stack, Typography } from "@mui/material";
-import { RichTextInput } from "ra-input-rich-text";
-import { Fragment } from "react";
+import React, { Fragment } from "react";
 import { BooleanInput, FormDataConsumer, NullableBooleanInput, NumberInput, ReferenceInput } from "react-admin";
 
 import product_groups from ".";
 import { validate_0_999999, validate_255, validate_2048, validate_required_255 } from "../../commons/custom_validators";
-import { feature_license_management } from "../../commons/functions";
-import { feature_email } from "../../commons/functions";
+import { feature_email, feature_license_management } from "../../commons/functions";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
+
+const RichTextInput = React.lazy(() =>
+    import("ra-input-rich-text").then((module) => ({
+        default: module.RichTextInput,
+    }))
+);
 
 export const ProductGroupCreateEditComponent = () => {
     return (
@@ -22,7 +26,7 @@ export const ProductGroupCreateEditComponent = () => {
             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
             <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                Housekeeping (for products)
+                Housekeeping
             </Typography>
             <NullableBooleanInput
                 source="repository_branch_housekeeping_active"
@@ -60,7 +64,7 @@ export const ProductGroupCreateEditComponent = () => {
             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
             <Typography variant="h6" sx={{ marginBottom: 2 }}>
-                Notifications (for products)
+                Notifications
             </Typography>
             <Stack spacing={2}>
                 {feature_email() && (
@@ -88,7 +92,7 @@ export const ProductGroupCreateEditComponent = () => {
             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 
             <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                Security Gate (for products)
+                Security Gate
             </Typography>
             <NullableBooleanInput
                 source="security_gate_active"

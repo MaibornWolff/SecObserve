@@ -211,8 +211,9 @@ class UserViewSet(ModelViewSet):
         class PasswordRules:
             password_rules: str
 
-        password_rules_text = password_validators_help_texts(self._get_password_validators())
-        password_rules = PasswordRules("- " + "\n- ".join(password_rules_text))
+        password_rules_list = password_validators_help_texts(self._get_password_validators())
+        password_rules_list = list(map(lambda s: s.replace("Your password", "The password"), password_rules_list))
+        password_rules = PasswordRules("- " + "\n- ".join(password_rules_list))
         response_serializer = UserPasswortRulesSerializer(password_rules)
         return Response(response_serializer.data, status=status.HTTP_200_OK)
 

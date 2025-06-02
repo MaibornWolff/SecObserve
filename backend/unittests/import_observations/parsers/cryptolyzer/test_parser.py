@@ -12,9 +12,11 @@ class TestCryptolyzeParser(TestCase):
         with open(path.dirname(__file__) + "/files/no_observations.json") as testfile:
             parser, parser_instance, data = detect_parser(testfile)
             self.assertEqual("CryptoLyzer", parser.name)
-            self.assertTrue(isinstance(parser_instance, CryptoLyzerParser))
+            self.assertIsInstance(parser_instance, CryptoLyzerParser)
 
-            observations = parser_instance.get_observations(data, Product(name="product"), None)
+            observations, scanner = parser_instance.get_observations(data, Product(name="product"), None)
+
+            self.assertEqual("CryptoLyzer", scanner)
             self.assertEqual(0, len(observations))
 
     def test_multiple_observations(self):
@@ -22,9 +24,11 @@ class TestCryptolyzeParser(TestCase):
             parser = CryptoLyzerParser()
             parser, parser_instance, data = detect_parser(testfile)
             self.assertEqual("CryptoLyzer", parser.name)
-            self.assertTrue(isinstance(parser_instance, CryptoLyzerParser))
+            self.assertIsInstance(parser_instance, CryptoLyzerParser)
 
-            observations = parser_instance.get_observations(data, Product(name="product"), None)
+            observations, scanner = parser_instance.get_observations(data, Product(name="product"), None)
+
+            self.assertEqual("CryptoLyzer", scanner)
             self.assertEqual(4, len(observations))
 
             observation = observations[0]
@@ -98,9 +102,11 @@ class TestCryptolyzeParser(TestCase):
         with open(path.dirname(__file__) + "/files/tls10.json") as testfile:
             parser, parser_instance, data = detect_parser(testfile)
             self.assertEqual("CryptoLyzer", parser.name)
-            self.assertTrue(isinstance(parser_instance, CryptoLyzerParser))
+            self.assertIsInstance(parser_instance, CryptoLyzerParser)
 
-            observations = parser_instance.get_observations(data, Product(name="product"), None)
+            observations, scanner = parser_instance.get_observations(data, Product(name="product"), None)
+
+            self.assertEqual("CryptoLyzer", scanner)
             self.assertEqual(3, len(observations))
 
             observation = observations[0]

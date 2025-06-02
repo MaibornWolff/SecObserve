@@ -36,7 +36,7 @@ class ProwlerParser(BaseParser, BaseFileParser):
 
     def get_observations(  # pylint: disable=too-many-locals
         self, data: list[dict], product: Product, branch: Optional[Branch]
-    ) -> list[Observation]:
+    ) -> tuple[list[Observation], str]:
         observations = []
 
         for prowler_observation in data:
@@ -98,7 +98,7 @@ class ProwlerParser(BaseParser, BaseFileParser):
 
                 observations.append(observation)
 
-        return observations
+        return observations, self.get_name()
 
     def get_description(self, prowler_observation: dict) -> str:
         check_title = prowler_observation.get("CheckTitle")

@@ -185,9 +185,8 @@ def send_task_exception_notification(
                 product = arguments.get("product")
 
             observation = arguments.get("observation")
-            if observation:
-                if not product:
-                    product = observation.product
+            if observation and not product:
+                product = observation.product
 
         Notification.objects.create(
             name=f'Exception "{get_classname(exception)}" has occured',

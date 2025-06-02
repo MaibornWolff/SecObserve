@@ -246,6 +246,9 @@ class ProductSerializer(ProductCoreSerializer):  # pylint: disable=too-many-publ
     has_licenses = SerializerMethodField()
     product_group_license_policy = SerializerMethodField()
     has_api_configurations = SerializerMethodField()
+    has_branch_purls = SerializerMethodField()
+    has_branch_cpe23s = SerializerMethodField()
+    has_branch_osv_linux_distribution = SerializerMethodField()
 
     class Meta:
         model = Product
@@ -331,6 +334,15 @@ class ProductSerializer(ProductCoreSerializer):  # pylint: disable=too-many-publ
 
     def get_has_api_configurations(self, obj: Product) -> bool:
         return Api_Configuration.objects.filter(product=obj).exists()
+
+    def get_has_branch_purls(self, obj: Product) -> bool:
+        return Branch.objects.filter(product=obj).exclude(purl="").exists()
+
+    def get_has_branch_cpe23s(self, obj: Product) -> bool:
+        return Branch.objects.filter(product=obj).exclude(cpe23="").exists()
+
+    def get_has_branch_osv_linux_distribution(self, obj: Product) -> bool:
+        return Branch.objects.filter(product=obj).exclude(osv_linux_distribution="").exists()
 
     def validate(self, attrs: dict) -> dict:  # pylint: disable=too-many-branches
         # There are quite a lot of branches, but at least they are not nested too much
@@ -460,21 +472,26 @@ class ProductMemberSerializer(ModelSerializer):
         data_product: Optional[Product] = attrs.get("product")
         data_user = attrs.get("user")
 
-        if self.instance is not None and (
-            (data_product and data_product != self.instance.product) or (data_user and data_user != self.instance.user)
-        ):
-            raise ValidationError("Product and user cannot be changed")
+        current_user = get_current_user()
 
         if self.instance is None:
+            if data_product is None:
+                raise ValidationError("Product must be set")
+            if data_user is None:
+                raise ValidationError("User must be set")
+
             product_member = get_product_member(data_product, data_user)
             if product_member:
                 raise ValidationError(f"Product member {data_product} / {data_user} already exists")
 
-        current_user = get_current_user()
-        if self.instance is not None:
-            highest_user_role = get_highest_user_role(self.instance.product, current_user)
-        else:
             highest_user_role = get_highest_user_role(data_product, current_user)
+        else:
+            if (data_product and data_product != self.instance.product) or (
+                data_user and data_user != self.instance.user
+            ):
+                raise ValidationError("Product and user cannot be changed")
+
+            highest_user_role = get_highest_user_role(self.instance.product, current_user)
 
         if highest_user_role != Roles.Owner and not (current_user and current_user.is_superuser):
             if attrs.get("role") == Roles.Owner:
@@ -498,13 +515,14 @@ class ProductAuthorizationGroupMemberSerializer(ModelSerializer):
         data_product: Optional[Product] = attrs.get("product")
         data_authorization_group = attrs.get("authorization_group")
 
-        if self.instance is not None and (
-            (data_product and data_product != self.instance.product)
-            or (data_authorization_group and data_authorization_group != self.instance.authorization_group)
-        ):
-            raise ValidationError("Product and authorization group cannot be changed")
+        current_user = get_current_user()
 
         if self.instance is None:
+            if data_product is None:
+                raise ValidationError("Product must be set")
+            if data_authorization_group is None:
+                raise ValidationError("Authorization group must be set")
+
             product_authorization_group_member = get_product_authorization_group_member(
                 data_product, data_authorization_group
             )
@@ -512,12 +530,13 @@ class ProductAuthorizationGroupMemberSerializer(ModelSerializer):
                 raise ValidationError(
                     f"Product authorization group member {data_product} / {data_authorization_group} already exists"
                 )
-
-        current_user = get_current_user()
-        if self.instance is not None:
-            highest_user_role = get_highest_user_role(self.instance.product, current_user)
-        else:
             highest_user_role = get_highest_user_role(data_product, current_user)
+        else:
+            if (data_product and data_product != self.instance.product) or (
+                data_authorization_group and data_authorization_group != self.instance.authorization_group
+            ):
+                raise ValidationError("Product and authorization group cannot be changed")
+            highest_user_role = get_highest_user_role(self.instance.product, current_user)
 
         if highest_user_role != Roles.Owner and not (current_user and current_user.is_superuser):
             if attrs.get("role") == Roles.Owner:

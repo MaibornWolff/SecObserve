@@ -91,7 +91,7 @@ class ObservationSerializer(ModelSerializer):
 
     class Meta:
         model = Observation
-        exclude = ["numerical_severity", "issue_tracker_jira_initial_status"]
+        exclude = ["numerical_severity", "issue_tracker_jira_initial_status", "origin_source_file_link"]
 
     def to_representation(self, instance: Observation) -> dict:
         response = super().to_representation(instance)
@@ -162,6 +162,7 @@ class ObservationListSerializer(ModelSerializer):
             "numerical_severity",
             "issue_tracker_jira_initial_status",
             "origin_component_dependencies",
+            "origin_source_file_link",
         ]
 
     def get_branch_name(self, observation: Observation) -> str:
@@ -195,6 +196,9 @@ class ObservationListSerializer(ModelSerializer):
 
 def _get_origin_source_file_url(observation: Observation) -> Optional[str]:
     origin_source_file_url = None
+
+    if observation.origin_source_file_link:
+        return observation.origin_source_file_link
 
     if observation.product.repository_prefix and observation.origin_source_file:
         if not validators.url(observation.product.repository_prefix):
@@ -403,13 +407,11 @@ class ObservationCreateSerializer(ModelSerializer):
         attrs["scanner"] = Parser_Type.TYPE_MANUAL
         attrs["import_last_seen"] = timezone.now()
 
-        if attrs.get("branch"):
-            if attrs["branch"].product != attrs["product"]:
-                raise ValidationError("Branch does not belong to the same product as the observation")
+        if attrs.get("branch") and attrs["branch"].product != attrs["product"]:
+            raise ValidationError("Branch does not belong to the same product as the observation")
 
-        if attrs.get("service"):
-            if attrs["service"].product != attrs["product"]:
-                raise ValidationError("Service does not belong to the same product as the observation")
+        if attrs.get("service") and attrs["service"].product != attrs["product"]:
+            raise ValidationError("Service does not belong to the same product as the observation")
 
         validate_cvss_and_severity(attrs)
 
@@ -537,7 +539,7 @@ class NestedObservationSerializer(ModelSerializer):
 
     class Meta:
         model = Observation
-        exclude = ["numerical_severity", "issue_tracker_jira_initial_status"]
+        exclude = ["numerical_severity", "issue_tracker_jira_initial_status", "origin_source_file_link"]
 
     def get_scanner_name(self, observation: Observation) -> str:
         return get_scanner_name(observation)

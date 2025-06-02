@@ -232,6 +232,11 @@ class AuthorizationGroupMemberSerializer(ModelSerializer):
             raise ValidationError("Authorization group and user cannot be changed")
 
         if self.instance is None:
+            if data_authorization_group is None:
+                raise ValidationError("Authorization group is required")
+            if data_user is None:
+                raise ValidationError("User is required")
+
             authorization_group_member = get_authorization_group_member(data_authorization_group, data_user)
             if authorization_group_member:
                 raise ValidationError(

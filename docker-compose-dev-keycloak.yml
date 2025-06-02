@@ -66,7 +66,6 @@ services:
       - dev_huey_data:/var/lib/huey
     ports:
       - "8000:8000"
-    command: /start
 
   postgres:
     image: postgres:15.13-alpine
@@ -87,7 +86,7 @@ services:
       - "8025:8025"
 
   keycloak:
-    image: keycloak/keycloak:26.2.4
+    image: keycloak/keycloak:26.2.5
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin

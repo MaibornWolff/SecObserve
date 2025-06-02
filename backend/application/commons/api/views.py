@@ -1,5 +1,3 @@
-from typing import Union
-
 import environ
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
@@ -71,7 +69,7 @@ class StatusSettingsView(APIView):
             if env("EMAIL_HOST", default="") or env("EMAIL_PORT", default=""):
                 features.append("feature_email")
 
-        content: dict[str, Union[int, list[str]]] = {
+        content: dict[str, (int | list[str])] = {
             "features": features,
         }
 

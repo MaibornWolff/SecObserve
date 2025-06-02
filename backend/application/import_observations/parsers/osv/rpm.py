@@ -18,7 +18,6 @@ from typing import (
     Optional,
     Tuple,
     TypeVar,
-    Union,
     no_type_check,
 )
 
@@ -56,7 +55,7 @@ class RpmVersion(NamedTuple):
 
     @classmethod
     def from_string(cls, s: str) -> "RpmVersion":
-        s.strip()
+        s = s.strip()
         e, v, r = from_evr(s)
         return cls(e, v, r)
 
@@ -111,7 +110,7 @@ def from_evr(s: str) -> Tuple[int, str, str]:
     return ie, v, r
 
 
-def compare_rpm_versions(a: Union[RpmVersion, str], b: Union[RpmVersion, str]) -> int:
+def compare_rpm_versions(a: RpmVersion | str, b: RpmVersion | str) -> int:
     """
     Compare two RPM versions ``a`` and ``b`` and return:
     -  1 if the version of a is newer than b
@@ -156,9 +155,11 @@ def compare_rpm_versions(a: Union[RpmVersion, str], b: Union[RpmVersion, str]) -
 
 
 class Vercmp:
-    R_NONALNUMTILDE_CARET = re.compile(rb"^([^a-zA-Z0-9~\^]*)(.*)$")
-    R_NUM = re.compile(rb"^([\d]+)(.*)$")
-    R_ALPHA = re.compile(rb"^([a-zA-Z]+)(.*)$")
+    R_NONALNUMTILDE_CARET = re.compile(rb"^([^a-zA-Z0-9~\^]*)(.*)$")  # NOSONAR
+    R_NUM = re.compile(rb"^([\d]+)(.*)$")  # NOSONAR
+    R_ALPHA = re.compile(rb"^([a-zA-Z]+)(.*)$")  # NOSONAR
+    # The risk of a DDOS attack on these regular expressions is very low here. Attackers would need to provide
+    # a specially crafted SBOM and SecObserve typically would not have very high availability requirements.
 
     @classmethod
     @no_type_check

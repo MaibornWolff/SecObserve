@@ -1,6 +1,6 @@
 import json
 import re
-from typing import Any, Optional, Union
+from typing import Any, Optional
 from urllib.parse import urlparse
 
 import jsonpickle
@@ -90,6 +90,8 @@ from application.vex.services.vex_import import import_vex
 VEX_TYPE_CSAF = "csaf"
 VEX_TYPE_OPENVEX = "openvex"
 
+APPLICATION_JSON = "application/json"
+
 
 class CSAFDocumentCreateView(APIView):
     @extend_schema(
@@ -136,7 +138,7 @@ class CSAFDocumentCreateView(APIView):
         response = HttpResponse(  # pylint: disable=http-response-with-content-type-json
             # HTTPResponse gives more control about JSON serialization
             content=_object_to_json(csaf_document, VEX_TYPE_CSAF),
-            content_type="application/json",
+            content_type=APPLICATION_JSON,
         )
         response["Content-Disposition"] = (
             f"attachment; filename={_get_csaf_filename(csaf_document.document.tracking.id)}.json"
@@ -173,7 +175,7 @@ class CSAFDocumentUpdateView(APIView):
         response = HttpResponse(  # pylint: disable=http-response-with-content-type-json
             # HTTPResponse gives more control about JSON serialization
             content=_object_to_json(csaf_document, VEX_TYPE_CSAF),
-            content_type="application/json",
+            content_type=APPLICATION_JSON,
         )
         response["Content-Disposition"] = (
             f"attachment; filename={_get_csaf_filename(csaf_document.document.tracking.id)}.json"
@@ -254,7 +256,7 @@ class OpenVEXDocumentCreateView(APIView):
         response = HttpResponse(  # pylint: disable=http-response-with-content-type-json
             # HTTPResponse gives more control about JSON serialization
             content=_object_to_json(openvex_document, VEX_TYPE_OPENVEX),
-            content_type="application/json",
+            content_type=APPLICATION_JSON,
         )
         response["Content-Disposition"] = "attachment; filename=" + _get_openvex_filename(
             openvex_document.id, openvex_document.version
@@ -289,7 +291,7 @@ class OpenVEXDocumentUpdateView(APIView):
         response = HttpResponse(  # pylint: disable=http-response-with-content-type-json
             # HTTPResponse gives more control about JSON serialization
             content=_object_to_json(openvex_document, VEX_TYPE_OPENVEX),
-            content_type="application/json",
+            content_type=APPLICATION_JSON,
         )
         response["Content-Disposition"] = "attachment; filename=" + _get_openvex_filename(
             openvex_document.id, openvex_document.version
@@ -389,10 +391,10 @@ def _object_to_json(object_to_encode: Any, vex_type: str) -> str:
     return json.dumps(json_dict, indent=4, sort_keys=True, ensure_ascii=False)
 
 
-def _remove_empty_elements(d: dict) -> dict:
+def _remove_empty_elements(d: dict | list) -> dict | list:
     """recursively remove empty lists, empty dicts, or None elements from a dictionary"""
 
-    def empty(x: Optional[Union[dict | list]]) -> bool:
+    def empty(x: Optional[(dict | list)]) -> bool:
         return x is None or x == {} or x == []
 
     if not isinstance(d, (dict, list)):
@@ -405,7 +407,7 @@ def _remove_empty_elements(d: dict) -> dict:
 
 # Change all keys with the value 'id' to '@id' and
 # all keys with the value 'context' to '@context' in a dictionary recursively
-def _change_keys_context(d: dict) -> dict:
+def _change_keys_context(d: dict | list) -> dict | list:
     if not isinstance(d, (dict, list)):
         return d
     if isinstance(d, list):
@@ -416,7 +418,7 @@ def _change_keys_context(d: dict) -> dict:
 
 # Change all keys with the value 'id' to '@id' and
 # all keys with the value 'context' to '@context' in a dictionary recursively
-def _change_keys_id(d: dict) -> dict:
+def _change_keys_id(d: dict | list) -> dict | list:
     if not isinstance(d, (dict, list)):
         return d
     if isinstance(d, list):

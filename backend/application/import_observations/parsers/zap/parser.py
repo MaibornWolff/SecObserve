@@ -36,7 +36,7 @@ class ZAPParser(BaseParser, BaseFileParser):
             return True
         return False
 
-    def get_observations(self, data: dict, product: Product, branch: Optional[Branch]) -> list[Observation]:
+    def get_observations(self, data: dict, product: Product, branch: Optional[Branch]) -> tuple[list[Observation], str]:
         observations = []
 
         data_scanner = self.get_scanner(data)
@@ -73,7 +73,7 @@ class ZAPParser(BaseParser, BaseFileParser):
 
                 observations.append(observation)
 
-        return observations
+        return observations, data_scanner
 
     def get_scanner(self, data: dict) -> str:
         data_program_name = data.get("@programName")

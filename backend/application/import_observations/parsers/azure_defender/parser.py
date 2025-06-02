@@ -28,7 +28,9 @@ class AzureDefenderParser(BaseParser, BaseFileParser):
             return True
         return False
 
-    def get_observations(self, data: list[dict], product: Product, branch: Optional[Branch]) -> list[Observation]:
+    def get_observations(
+        self, data: list[dict], product: Product, branch: Optional[Branch]
+    ) -> tuple[list[Observation], str]:
         observations = []
 
         for row in data:
@@ -64,7 +66,7 @@ class AzureDefenderParser(BaseParser, BaseFileParser):
 
                 observations.append(observation)
 
-        return observations
+        return observations, self.get_name()
 
     def format_markdown(self, string: str) -> str:
         string = self.replace_string_with_newlines(string, r"\.[A-Z]")

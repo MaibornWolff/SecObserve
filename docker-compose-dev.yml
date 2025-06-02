@@ -46,8 +46,7 @@ services:
       - dev_huey_data:/var/lib/huey
     ports:
       - "8000:8000"
-    command: /start
-
+    
   postgres:
     image: postgres:15.13-alpine
     volumes:

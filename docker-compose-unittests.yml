@@ -27,4 +27,5 @@ services:
       OIDC_FULL_NAME: name
       OIDC_EMAIL: email
       OIDC_GROUPS: groups
-    command: /start
+    volumes:
+      - ./backend:/home

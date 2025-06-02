@@ -42,6 +42,8 @@ def _get_string_to_hash(observation: Observation) -> str:  # pylint: disable=too
         hash_string += str(observation.origin_source_line_start)
     if observation.origin_source_line_end:
         hash_string += str(observation.origin_source_line_end)
+    if observation.origin_source_file_link:
+        hash_string += observation.origin_source_file_link
 
     if observation.origin_cloud_provider:
         hash_string += observation.origin_cloud_provider
@@ -164,6 +166,8 @@ def normalize_observation_fields(observation: Observation) -> None:
         observation.origin_service_name = ""
     if observation.origin_source_file is None:
         observation.origin_source_file = ""
+    if observation.origin_source_file_link is None:
+        observation.origin_source_file_link = ""
     if observation.scanner is None:
         observation.scanner = ""
     if observation.api_configuration_name is None:
@@ -406,12 +410,15 @@ def normalize_severity(observation: Observation) -> None:
         observation.rule_severity = ""
     if observation.parser_severity is None:
         observation.parser_severity = ""
-    if observation.parser_severity:
-        if (
+    if (
+        observation.parser_severity
+        and (
             observation.parser_severity,
             observation.parser_severity,
-        ) not in Severity.SEVERITY_CHOICES:
-            observation.parser_severity = Severity.SEVERITY_UNKNOWN
+        )
+        not in Severity.SEVERITY_CHOICES
+    ):
+        observation.parser_severity = Severity.SEVERITY_UNKNOWN
 
     observation.current_severity = get_current_severity(observation)
 

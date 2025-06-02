@@ -44,6 +44,7 @@ def _get_string_to_hash(
 
 def process_license_components(  # pylint: disable=too-many-statements
     license_components: list[License_Component],
+    scanner: str,
     vulnerability_check: Vulnerability_Check,
     service_name: str,
 ) -> Tuple[int, int, int]:
@@ -147,6 +148,8 @@ def process_license_components(  # pylint: disable=too-many-statements
         vulnerability_check.last_import_licenses_updated = components_updated
         vulnerability_check.last_import_licenses_deleted = components_deleted
 
+    if scanner:
+        vulnerability_check.scanner = scanner
     vulnerability_check.save()
 
     return components_new, components_updated, components_deleted

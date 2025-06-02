@@ -12,18 +12,22 @@ class TestOCSFParser(TestCase):
         with open(path.dirname(__file__) + "/files/other_finding.json") as testfile:
             parser, parser_instance, data = detect_parser(testfile)
             self.assertEqual("OCSF (Open Cybersecurity Schema Framework)", parser.name)
-            self.assertTrue(isinstance(parser_instance, OCSFParser))
+            self.assertIsInstance(parser_instance, OCSFParser)
 
-            observations = parser_instance.get_observations(data, Product(name="product"), None)
+            observations, scanner = parser_instance.get_observations(data, Product(name="product"), None)
+
+            self.assertEqual("OCSF (Open Cybersecurity Schema Framework)", scanner)
             self.assertEqual(0, len(observations))
 
     def test_prowler_multiple_findings(self):
         with open(path.dirname(__file__) + "/files/prowler_multiple_findings.json") as testfile:
             parser, parser_instance, data = detect_parser(testfile)
             self.assertEqual("OCSF (Open Cybersecurity Schema Framework)", parser.name)
-            self.assertTrue(isinstance(parser_instance, OCSFParser))
+            self.assertIsInstance(parser_instance, OCSFParser)
 
-            observations = parser_instance.get_observations(data, Product(name="product"), None)
+            observations, scanner = parser_instance.get_observations(data, Product(name="product"), None)
+
+            self.assertEqual("Prowler / 4.5.0", scanner)
             self.assertEqual(2, len(observations))
 
             observation = observations[0]
