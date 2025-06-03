@@ -205,7 +205,7 @@ jobs:
             | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_complete.json --quiet --input-file - --output-file sbom_"$VERSION".json
           sbom-utility validate --input-file sbom_"$VERSION".json
-      - 
+      -
         name: Commit SBOMs
         uses: stefanzweifel/git-auto-commit-action@b863ae1933cb653a53c021fe36dbb774e1fb9403 # v5
         with:
@@ -214,3 +214,95 @@ jobs:
           commit_message: "chore: generate SBOMs for release ${{ github.event.inputs.release }}"
           branch: "chore/sboms_release_${{ github.event.inputs.release }}"
           file_pattern: "sbom/sbom*.json"
+      -
+        name: Merge SBOM branch into main and delete branch
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        env:
+          VERSION: ${{ github.event.inputs.release }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const sbomBranch = `chore/sboms_release_${process.env.VERSION}`;
+            const targetBranch = 'main';
+            
+            console.log(`Merging branch ${sbomBranch} into ${targetBranch}`);
+            
+            try {
+              // Merge the SBOM branch into main
+              await github.rest.repos.merge({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                base: targetBranch,
+                head: sbomBranch,
+                commit_message: `chore: merge SBOM files for release ${process.env.VERSION}`
+              });
+              
+              console.log(`Successfully merged ${sbomBranch} into ${targetBranch}`);
+              
+              // Delete the SBOM branch after successful merge
+              console.log(`Deleting branch ${sbomBranch}`);
+              await github.rest.git.deleteRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: `heads/${sbomBranch}`
+              });
+              
+              console.log(`Successfully deleted branch ${sbomBranch}`);
+            } catch (error) {
+              console.error(`Error during merge or branch deletion: ${error.message}`);
+              core.setFailed(error.message);
+            }
+      -
+        name: Add SBOMs to GitHub Release
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        env:
+          VERSION: ${{ github.event.inputs.release }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const version = process.env.VERSION;
+            const releaseTag = `v${version}`;
+            
+            console.log(`Adding SBOMs to GitHub release ${releaseTag}`);
+            
+            try {
+              // Get the release by tag
+              const { data: release } = await github.rest.repos.getReleaseByTag({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                tag: releaseTag
+              });
+              
+              // SBOM files to upload
+              const sbomFiles = [
+                `sbom_backend_application_${version}.json`,
+                `sbom_frontend_application_${version}.json`,
+                `sbom_backend_container_${version}.json`,
+                `sbom_frontend_container_${version}.json`,
+                `sbom_${version}.json`
+              ];
+              
+              // Upload each SBOM file to the release
+              for (const file of sbomFiles) {
+                const filePath = path.join('./sbom', file);
+                
+                console.log(`Uploading ${filePath} to release ${releaseTag}`);
+                
+                const fileContent = fs.readFileSync(filePath);
+                
+                await github.rest.repos.uploadReleaseAsset({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  release_id: release.id,
+                  name: file,
+                  data: fileContent
+                });
+                
+                console.log(`Successfully uploaded ${file} to release ${releaseTag}`);
+              }
+            } catch (error) {
+              console.error(`Error adding SBOMs to release: ${error.message}`);
+              core.setFailed(error.message);
+            }
