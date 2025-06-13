@@ -102,6 +102,7 @@ class TestExtendedSemVer(TestCase):
 
         ext_semver1 = ExtendedSemVer.parse("1:1.2.3-beta")
         ext_semver2 = ExtendedSemVer.parse("1:1.2.3-alpha")
+        self.assertTrue(ext_semver1 > ext_semver2)
 
     def test_ge(self):
         ext_semver1 = ExtendedSemVer.parse("1.2.3-alpha")

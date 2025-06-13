@@ -1,6 +1,5 @@
 import { Divider, Stack, Typography } from "@mui/material";
-import { RichTextInput } from "ra-input-rich-text";
-import { Fragment } from "react";
+import React, { Fragment } from "react";
 import {
     BooleanInput,
     FormDataConsumer,
@@ -13,10 +12,16 @@ import {
 import products from ".";
 import OSVLinuxDistributionInput from "../../commons/custom_fields/OSVLinuxDistributionInput";
 import { validate_0_999999, validate_255, validate_2048, validate_required_255 } from "../../commons/custom_validators";
-import { feature_automatic_osv_scanning, feature_license_management } from "../../commons/functions";
+import { feature_automatic_osv_scanning, feature_email, feature_license_management } from "../../commons/functions";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { transform_product_group_and_product } from "../functions";
 import { ISSUE_TRACKER_TYPE_CHOICES, OBSERVATION_SEVERITY_CHOICES } from "../types";
+
+const RichTextInput = React.lazy(() =>
+    import("ra-input-rich-text").then((module) => ({
+        default: module.RichTextInput,
+    }))
+);
 
 export const transform = (data: any) => {
     data = transform_product_group_and_product(data);
@@ -147,12 +152,14 @@ export const ProductCreateEditComponent = ({ edit }: ProductCreateEditComponentP
                 Notifications
             </Typography>
             <Stack spacing={2}>
-                <TextInputWide
-                    source="notification_email_to"
-                    label="Email"
-                    helperText="Comma separated email to addresses"
-                    validate={validate_255}
-                />
+                {feature_email() && (
+                    <TextInputWide
+                        source="notification_email_to"
+                        label="Email"
+                        helperText="Comma separated email to addresses"
+                        validate={validate_255}
+                    />
+                )}
                 <TextInputWide
                     source="notification_ms_teams_webhook"
                     label="MS Teams"

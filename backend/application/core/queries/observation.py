@@ -3,7 +3,7 @@ from typing import Optional
 from django.db.models import Exists, OuterRef, Q
 from django.db.models.query import QuerySet
 
-from application.commons.services.global_request import get_current_user
+from application.access_control.services.current_user import get_current_user
 from application.core.models import (
     Branch,
     Evidence,
@@ -67,12 +67,31 @@ def get_observations_for_vulnerability_check(
     branch: Optional[Branch],
     filename: str,
     api_configuration_name: str,
+    service: Optional[str],
 ) -> QuerySet[Observation]:
+    if filename or api_configuration_name:
+        return Observation.objects.filter(
+            product=product,
+            branch=branch,
+            upload_filename=filename,
+            api_configuration_name=api_configuration_name,
+        )
+
+    if service:
+        return Observation.objects.filter(
+            product=product,
+            branch=branch,
+            upload_filename="",
+            api_configuration_name="",
+            origin_service__name=service,
+        )
+
     return Observation.objects.filter(
         product=product,
         branch=branch,
-        upload_filename=filename,
-        api_configuration_name=api_configuration_name,
+        upload_filename="",
+        api_configuration_name="",
+        origin_service__isnull=True,
     )
 
 

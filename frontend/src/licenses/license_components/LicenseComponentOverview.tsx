@@ -74,6 +74,20 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
                 <AutocompleteInputMedium optionText="name" label="Component type" />
             </ReferenceInput>
         );
+        if (product?.has_services) {
+            filters.push(
+                <ReferenceInput
+                    source="origin_service"
+                    reference="services"
+                    queryOptions={{ meta: { api_resource: "service_names" } }}
+                    sort={{ field: "name", order: "ASC" }}
+                    filter={{ product: product.id }}
+                    alwaysOn
+                >
+                    <AutocompleteInputMedium label="Service" optionText="name" />
+                </ReferenceInput>
+            );
+        }
         return filters;
     }
 
@@ -112,6 +126,7 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
             license_name: listContext.filterValues.license_name,
             evaluation_result: listContext.filterValues.evaluation_result,
             component_purl_type: listContext.filterValues.component_purl_type,
+            origin_service: listContext.filterValues.origin_service,
         };
         filterStorage["filter"] = filter;
         if (listContext.sort.field) {
@@ -141,6 +156,9 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
         }
         if (filter.component_purl_type) {
             url += "&component_purl_type=" + encodeURIComponent(filter.component_purl_type);
+        }
+        if (filter.origin_service) {
+            url += "&origin_service=" + encodeURIComponent(filter.origin_service);
         }
 
         if (listContext.sort.field) {
@@ -187,6 +205,7 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
                                     product={product}
                                     expand={true}
                                     component_purl_type={listContext.filterValues.component_purl_type}
+                                    origin_service={listContext.filterValues.origin_service}
                                 />
                             </Paper>
                         }

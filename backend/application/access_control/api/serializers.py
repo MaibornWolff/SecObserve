@@ -20,8 +20,8 @@ from application.access_control.queries.authorization_group_member import (
     get_authorization_group_member,
 )
 from application.access_control.services.authorization import get_user_permissions
+from application.access_control.services.current_user import get_current_user
 from application.access_control.services.roles_permissions import Permissions
-from application.commons.services.global_request import get_current_user
 from application.core.models import Product_Authorization_Group_Member, Product_Member
 
 
@@ -232,6 +232,11 @@ class AuthorizationGroupMemberSerializer(ModelSerializer):
             raise ValidationError("Authorization group and user cannot be changed")
 
         if self.instance is None:
+            if data_authorization_group is None:
+                raise ValidationError("Authorization group is required")
+            if data_user is None:
+                raise ValidationError("User is required")
+
             authorization_group_member = get_authorization_group_member(data_authorization_group, data_user)
             if authorization_group_member:
                 raise ValidationError(

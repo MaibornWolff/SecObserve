@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from typing import Any, Optional, Union
+from typing import Any, Optional
 
 import jsonpickle
 from defusedcsv import csv
@@ -94,13 +94,13 @@ def object_to_json(object_to_encode: Any) -> str:
     return json.dumps(json_dict, indent=4, sort_keys=True, ensure_ascii=False)
 
 
-def _remove_empty_elements(d: dict) -> dict:
+def _remove_empty_elements(d: dict | list) -> dict | list:
     """recursively remove empty lists, empty dicts, or None elements from a dictionary"""
 
-    def empty(x: Optional[Union[dict | list]]) -> bool:
+    def empty(x: Optional[(dict | list)]) -> bool:
         return x is None or x == {} or x == []
 
-    if not isinstance(d, (dict, list)):
+    if not isinstance(d, (dict | list)):
         return d
     if isinstance(d, list):
         return [v for v in (_remove_empty_elements(v) for v in d) if not empty(v)]

@@ -12,9 +12,11 @@ class TestCycloneDXParser(TestCase):
         with open(path.dirname(__file__) + "/files/grype.json") as testfile:
             parser, parser_instance, data = detect_parser(testfile)
             self.assertEqual("CycloneDX", parser.name)
-            self.assertTrue(isinstance(parser_instance, CycloneDXParser))
+            self.assertIsInstance(parser_instance, CycloneDXParser)
 
-            observations = parser_instance.get_observations(data, Product(name="product"), None)
+            observations, scanner = parser_instance.get_observations(data, Product(name="product"), None)
+
+            self.assertEqual("grype / 0.59.1", scanner)
             self.assertEqual(8, len(observations))
 
             observation = observations[0]
@@ -106,9 +108,11 @@ class TestCycloneDXParser(TestCase):
         with open(path.dirname(__file__) + "/files/grype_2.json") as testfile:
             parser, parser_instance, data = detect_parser(testfile)
             self.assertEqual("CycloneDX", parser.name)
-            self.assertTrue(isinstance(parser_instance, CycloneDXParser))
+            self.assertIsInstance(parser_instance, CycloneDXParser)
 
-            observations = parser_instance.get_observations(data, Product(name="product"), None)
+            observations, scanner = parser_instance.get_observations(data, Product(name="product"), None)
+
+            self.assertEqual("grype / 0.65.1", scanner)
             self.assertEqual(1, len(observations))
 
             observation = observations[0]
@@ -122,9 +126,11 @@ class TestCycloneDXParser(TestCase):
         with open(path.dirname(__file__) + "/files/grype_3.json") as testfile:
             parser, parser_instance, data = detect_parser(testfile)
             self.assertEqual("CycloneDX", parser.name)
-            self.assertTrue(isinstance(parser_instance, CycloneDXParser))
+            self.assertIsInstance(parser_instance, CycloneDXParser)
 
-            observations = parser_instance.get_observations(data, Product(name="product"), None)
+            observations, scanner = parser_instance.get_observations(data, Product(name="product"), None)
+
+            self.assertEqual("grype / 0.73.5", scanner)
             self.assertEqual(1, len(observations))
 
             observation = observations[0]
@@ -134,15 +140,17 @@ class TestCycloneDXParser(TestCase):
             self.assertEqual("dev", observation.origin_docker_image_tag)
             self.assertEqual("", observation.origin_docker_image_digest)
 
-    def test_trivy(self):
+    def test_trivy_observations(self):
         self.maxDiff = None
 
         with open(path.dirname(__file__) + "/files/trivy.json") as testfile:
             parser, parser_instance, data = detect_parser(testfile)
             self.assertEqual("CycloneDX", parser.name)
-            self.assertTrue(isinstance(parser_instance, CycloneDXParser))
+            self.assertIsInstance(parser_instance, CycloneDXParser)
 
-            observations = parser_instance.get_observations(data, Product(name="product"), None)
+            observations, scanner = parser_instance.get_observations(data, Product(name="product"), None)
+
+            self.assertEqual("trivy / 0.38.3", scanner)
             self.assertEqual(2, len(observations))
 
             observation = observations[0]
@@ -204,4 +212,33 @@ icu-data-en:72.1-r1 --> icu-libs:72.1-r1"""
             self.assertEqual(
                 "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:L/VA:L/SC:L/SI:L/SA:N",
                 observation.cvss4_vector,
+            )
+
+    def test_trivy_license_components(self):
+        self.maxDiff = None
+
+        with open(path.dirname(__file__) + "/files/trivy.json") as testfile:
+            parser, parser_instance, data = detect_parser(testfile)
+            self.assertEqual("CycloneDX", parser.name)
+            self.assertIsInstance(parser_instance, CycloneDXParser)
+
+            license_components, scanner = parser_instance.get_license_components(data)
+
+            self.assertEqual("trivy / 0.38.3", scanner)
+            self.assertEqual(87, len(license_components))
+
+            license_component = license_components[10]
+
+            self.assertEqual("c-ares", license_component.component_name)
+            self.assertEqual("1.18.1-r1", license_component.component_version)
+            self.assertEqual("pkg:apk/alpine/c-ares@1.18.1-r1?distro=3.17.3", license_component.component_purl)
+            self.assertEqual("", license_component.component_cpe)
+            dependencies = """alpine:3.17.3 --> c-ares:1.18.1-r1
+example/example-frontend:dev --> alpine:3.17.3"""
+            self.assertEqual(dependencies, license_component.component_dependencies)
+            self.assertEqual("MIT", license_component.unsaved_license)
+            self.assertEqual("Component", license_component.unsaved_evidences[0][0])
+            self.assertIn(
+                '"bom-ref": "pkg:apk/alpine/c-ares@1.18.1-r1?distro=3.17.3"',
+                license_component.unsaved_evidences[0][1],
             )

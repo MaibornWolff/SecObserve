@@ -12,9 +12,11 @@ class TestSarifParser(TestCase):
         with open(path.dirname(__file__) + "/files/checkov.sarif") as testfile:
             parser, parser_instance, data = detect_parser(testfile)
             self.assertEqual("SARIF", parser.name)
-            self.assertTrue(isinstance(parser_instance, SARIFParser))
+            self.assertIsInstance(parser_instance, SARIFParser)
 
-            observations = parser_instance.get_observations(data, Product(name="product"), None)
+            observations, scanner = parser_instance.get_observations(data, Product(name="product"), None)
+
+            self.assertEqual("Checkov / 2.1.277", scanner)
             self.assertEqual(4, len(observations))
 
             observation = observations[0]
@@ -44,9 +46,11 @@ class TestSarifParser(TestCase):
         with open(path.dirname(__file__) + "/files/eslint.sarif") as testfile:
             parser, parser_instance, data = detect_parser(testfile)
             self.assertEqual("SARIF", parser.name)
-            self.assertTrue(isinstance(parser_instance, SARIFParser))
+            self.assertIsInstance(parser_instance, SARIFParser)
 
-            observations = parser_instance.get_observations(data, Product(name="product"), None)
+            observations, scanner = parser_instance.get_observations(data, Product(name="product"), None)
+
+            self.assertEqual("ESLint / 8.25.0", scanner)
             self.assertEqual(5, len(observations))
 
             observation = observations[0]
@@ -84,9 +88,11 @@ class TestSarifParser(TestCase):
         with open(path.dirname(__file__) + "/files/bandit.sarif") as testfile:
             parser, parser_instance, data = detect_parser(testfile)
             self.assertEqual("SARIF", parser.name)
-            self.assertTrue(isinstance(parser_instance, SARIFParser))
+            self.assertIsInstance(parser_instance, SARIFParser)
 
-            observations = parser_instance.get_observations(data, Product(name="product"), None)
+            observations, scanner = parser_instance.get_observations(data, Product(name="product"), None)
+
+            self.assertEqual("Bandit", scanner)
             self.assertEqual(2, len(observations))
 
             observation = observations[0]
@@ -119,9 +125,11 @@ class TestSarifParser(TestCase):
         with open(path.dirname(__file__) + "/files/kics.sarif") as testfile:
             parser, parser_instance, data = detect_parser(testfile)
             self.assertEqual("SARIF", parser.name)
-            self.assertTrue(isinstance(parser_instance, SARIFParser))
+            self.assertIsInstance(parser_instance, SARIFParser)
 
-            observations = parser_instance.get_observations(data, Product(name="product"), None)
+            observations, scanner = parser_instance.get_observations(data, Product(name="product"), None)
+
+            self.assertEqual("KICS / development", scanner)
             self.assertEqual(2, len(observations))
 
             observation = observations[0]
@@ -156,9 +164,11 @@ class TestSarifParser(TestCase):
         with open(path.dirname(__file__) + "/files/trivy_config.sarif") as testfile:
             parser, parser_instance, data = detect_parser(testfile)
             self.assertEqual("SARIF", parser.name)
-            self.assertTrue(isinstance(parser_instance, SARIFParser))
+            self.assertIsInstance(parser_instance, SARIFParser)
 
-            observations = parser_instance.get_observations(data, Product(name="product"), None)
+            observations, scanner = parser_instance.get_observations(data, Product(name="product"), None)
+
+            self.assertEqual("Trivy / 0.47.0", scanner)
             self.assertEqual(1, len(observations))
 
             observation = observations[0]
@@ -199,9 +209,11 @@ Set when the resource will be become inactive.
         with open(path.dirname(__file__) + "/files/dependency-check.sarif") as testfile:
             parser, parser_instance, data = detect_parser(testfile)
             self.assertEqual("SARIF", parser.name)
-            self.assertTrue(isinstance(parser_instance, SARIFParser))
+            self.assertIsInstance(parser_instance, SARIFParser)
 
-            observations = parser_instance.get_observations(data, Product(name="product"), None)
+            observations, scanner = parser_instance.get_observations(data, Product(name="product"), None)
+
+            self.assertEqual("dependency-check / 8.0.1", scanner)
             self.assertEqual(3, len(observations))
 
             observation = observations[0]
@@ -234,9 +246,11 @@ Set when the resource will be become inactive.
         with open(path.dirname(__file__) + "/files/semgrep.sarif") as testfile:
             parser, parser_instance, data = detect_parser(testfile)
             self.assertEqual("SARIF", parser.name)
-            self.assertTrue(isinstance(parser_instance, SARIFParser))
+            self.assertIsInstance(parser_instance, SARIFParser)
 
-            observations = parser_instance.get_observations(data, Product(name="product"), None)
+            observations, scanner = parser_instance.get_observations(data, Product(name="product"), None)
+
+            self.assertEqual("semgrep / 1.16.0", scanner)
             self.assertEqual(4, len(observations))
 
             observation = observations[0]

@@ -1,6 +1,7 @@
 volumes:
   dev_huey_data:
   dev_mysql_data:
+  dev_node_modules:
 
 services:
   frontend:
@@ -12,7 +13,6 @@ services:
       - "3000:3000"
     volumes:
       - ./frontend/:/app
-      - /app/node_modules
     command : sh -c "npm run start -- --host"
 
   backend:
@@ -46,7 +46,6 @@ services:
       - dev_huey_data:/var/lib/huey
     ports:
       - "8000:8000"
-    command: /start
 
   mysql:
     image: mysql:8.4.5

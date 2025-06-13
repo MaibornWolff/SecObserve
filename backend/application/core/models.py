@@ -329,6 +329,51 @@ class Service(Model):
             current_status=Status.STATUS_OPEN,
         ).count()
 
+    @property
+    def forbidden_licenses_count(self) -> int:
+        License_Component = apps.get_model("licenses", "License_Component")
+        return License_Component.objects.filter(
+            origin_service=self,
+            branch=self.product.repository_default_branch,
+            evaluation_result=License_Policy_Evaluation_Result.RESULT_FORBIDDEN,
+        ).count()
+
+    @property
+    def review_required_licenses_count(self) -> int:
+        License_Component = apps.get_model("licenses", "License_Component")
+        return License_Component.objects.filter(
+            origin_service=self,
+            branch=self.product.repository_default_branch,
+            evaluation_result=License_Policy_Evaluation_Result.RESULT_REVIEW_REQUIRED,
+        ).count()
+
+    @property
+    def unknown_licenses_count(self) -> int:
+        License_Component = apps.get_model("licenses", "License_Component")
+        return License_Component.objects.filter(
+            origin_service=self,
+            branch=self.product.repository_default_branch,
+            evaluation_result=License_Policy_Evaluation_Result.RESULT_UNKNOWN,
+        ).count()
+
+    @property
+    def allowed_licenses_count(self) -> int:
+        License_Component = apps.get_model("licenses", "License_Component")
+        return License_Component.objects.filter(
+            origin_service=self,
+            branch=self.product.repository_default_branch,
+            evaluation_result=License_Policy_Evaluation_Result.RESULT_ALLOWED,
+        ).count()
+
+    @property
+    def ignored_licenses_count(self) -> int:
+        License_Component = apps.get_model("licenses", "License_Component")
+        return License_Component.objects.filter(
+            origin_service=self,
+            branch=self.product.repository_default_branch,
+            evaluation_result=License_Policy_Evaluation_Result.RESULT_IGNORED,
+        ).count()
+
 
 class Product_Member(Model):
     product = ForeignKey(Product, on_delete=CASCADE)
@@ -413,6 +458,8 @@ class Observation(Model):
     origin_source_file = CharField(max_length=255, blank=True)
     origin_source_line_start = IntegerField(null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)])
     origin_source_line_end = IntegerField(null=True, validators=[MinValueValidator(0), MaxValueValidator(999999)])
+
+    origin_source_file_link = CharField(max_length=2048, blank=True)
 
     origin_cloud_provider = CharField(max_length=255, blank=True)
     origin_cloud_account_subscription_project = CharField(max_length=255, blank=True)

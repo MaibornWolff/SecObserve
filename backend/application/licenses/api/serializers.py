@@ -16,8 +16,8 @@ from application.access_control.api.serializers import (
     AuthorizationGroupListSerializer,
     UserListSerializer,
 )
+from application.access_control.services.current_user import get_current_user
 from application.commons.services.functions import get_comma_separated_as_list
-from application.commons.services.global_request import get_current_user
 from application.core.queries.product import get_products
 from application.core.types import PURL_Type
 from application.licenses.models import (
@@ -102,6 +102,7 @@ class LicenseComponentSerializer(ModelSerializer):
     component_name_version_type = SerializerMethodField()
     component_purl_namespace = SerializerMethodField()
     branch_name = SerializerMethodField()
+    origin_service_name = SerializerMethodField()
     license_policy_name: Optional[SerializerMethodField] = SerializerMethodField()
     license_policy_id: Optional[SerializerMethodField] = SerializerMethodField()
     evidences: Optional[NestedLicenseComponentEvidenceSerializer] = NestedLicenseComponentEvidenceSerializer(many=True)
@@ -134,6 +135,12 @@ class LicenseComponentSerializer(ModelSerializer):
     def get_branch_name(self, obj: License_Component) -> str:
         if obj.branch:
             return obj.branch.name
+
+        return ""
+
+    def get_origin_service_name(self, obj: License_Component) -> str:
+        if obj.origin_service:
+            return obj.origin_service.name
 
         return ""
 
@@ -267,6 +274,11 @@ class LicenseGroupAuthorizationGroupMemberSerializer(ModelSerializer):
             raise ValidationError("License group and authorization group cannot be changed")
 
         if self.instance is None:
+            if data_license_group is None:
+                raise ValidationError("License group is required")
+            if data_authorization_group is None:
+                raise ValidationError("Authorization group is required")
+
             license_group_authorization_group_member = get_license_group_authorization_group_member(
                 data_license_group, data_authorization_group
             )
@@ -302,6 +314,11 @@ class LicenseGroupMemberSerializer(ModelSerializer):
             raise ValidationError("License group and user cannot be changed")
 
         if self.instance is None:
+            if data_license_group is None:
+                raise ValidationError("License group is required")
+            if data_user is None:
+                raise ValidationError("User is required")
+
             license_group_member = get_license_group_member(data_license_group, data_user)
             if license_group_member:
                 raise ValidationError(f"License group member {data_license_group} / {data_user} already exists")
@@ -509,6 +526,11 @@ class LicensePolicyMemberSerializer(ModelSerializer):
             raise ValidationError("License policy and user cannot be changed")
 
         if self.instance is None:
+            if data_license_policy is None:
+                raise ValidationError("License policy is required")
+            if data_user is None:
+                raise ValidationError("User is required")
+
             license_group_member = get_license_policy_member(data_license_policy, data_user)
             if license_group_member:
                 raise ValidationError(f"License policy member {data_license_policy} / {data_user} already exists")
@@ -539,6 +561,11 @@ class LicensePolicyAuthorizationGroupMemberSerializer(ModelSerializer):
             raise ValidationError("License policy and authorization group cannot be changed")
 
         if self.instance is None:
+            if data_license_policy is None:
+                raise ValidationError("License policy is required")
+            if data_authorization_group is None:
+                raise ValidationError("Authorization group is required")
+
             license_policy_authorization_group_member = get_license_policy_authorization_group_member(
                 data_license_policy, data_authorization_group
             )

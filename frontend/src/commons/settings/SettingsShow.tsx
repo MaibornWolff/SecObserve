@@ -1,10 +1,10 @@
-import { Box, Paper, Stack, Typography } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import { Box, Grid, Paper, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
 import { BooleanField, EditButton, Labeled, NumberField, Show, TextField, TopToolbar, WithRecord } from "react-admin";
 
 import settings from ".";
 import ListHeader from "../../commons/layout/ListHeader";
+import { feature_email } from "../functions";
 import JWTSecretReset from "./JWTSecretReset";
 
 const ShowActions = () => {
@@ -127,12 +127,12 @@ const SettingsShowComponent = () => {
                                     <TextField source="base_url_frontend" />
                                 </Labeled>
                             )}
-                            {settings.email_from && (
+                            {feature_email() && settings.email_from && (
                                 <Labeled label="Email from">
                                     <TextField source="email_from" />
                                 </Labeled>
                             )}
-                            {settings.exception_email_to && (
+                            {feature_email() && settings.exception_email_to && (
                                 <Labeled label="Exception email to">
                                     <TextField source="exception_email_to" />
                                 </Labeled>

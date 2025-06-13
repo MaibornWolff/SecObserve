@@ -2,6 +2,7 @@ from unittest.mock import call, patch
 
 from django.core.files.base import File
 from django.core.management import call_command
+from rest_framework.exceptions import ValidationError
 
 from application.access_control.models import User
 from application.commons.models import Settings
@@ -14,9 +15,18 @@ from application.core.models import (
     Reference,
 )
 from application.core.types import Severity, Status
-from application.import_observations.models import Vulnerability_Check
+from application.import_observations.models import (
+    Api_Configuration,
+    Parser,
+    Vulnerability_Check,
+)
+from application.import_observations.parsers.dependency_track.parser import (
+    DependencyTrack,
+)
 from application.import_observations.services.import_observations import (
+    ApiImportParameters,
     FileUploadParameters,
+    api_import_observations,
     file_upload_observations,
 )
 from application.licenses.models import (
@@ -30,7 +40,7 @@ from application.rules.models import Rule
 from unittests.base_test_case import BaseTestCase
 
 
-class TestImportObservations(BaseTestCase):
+class TestFileUploadObservations(BaseTestCase):
     def setUp(self):
         Observation.objects.all().delete()
         Observation_Log.objects.all().delete()
@@ -474,7 +484,7 @@ class TestImportObservations(BaseTestCase):
             )
             self.assertEqual(license_components[1].component_purl_type, "pypi")
             self.assertEqual(license_components[1].component_cpe, "")
-            dependencies = """SecObserve:1.30.1 --> argon2-cffi:23.1.0
+            dependencies = """SecObserve:1.33.0 --> argon2-cffi:23.1.0
 argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             self.assertEqual(license_components[1].component_dependencies, dependencies)
             self.assertEqual(license_components[1].license, License.objects.get(spdx_id="MIT"))
@@ -976,6 +986,83 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
 
             license_components = License_Component.objects.filter(product=1)
             self.assertEqual(len(license_components), 0)
+
+
+class APIImportObservation(BaseTestCase):
+    def setUp(self):
+        Observation.objects.all().delete()
+        Observation_Log.objects.all().delete()
+        Rule.objects.all().delete()
+        Vulnerability_Check.objects.all().delete()
+        call_command("loaddata", "unittests/fixtures/import_observations_fixtures.json")
+        super().setUp()
+
+    @patch("application.import_observations.parsers.dependency_track.parser.DependencyTrack.check_connection")
+    def test_api_import_no_connection(self, mock_check_connection):
+        mock_check_connection.return_value = False, ["error_1", "error_2"], {}
+
+        api_configuration = Api_Configuration(product=self.product_1, parser=Parser.objects.get(id=3))
+        parameters = ApiImportParameters(
+            api_configuration=api_configuration,
+            branch=None,
+            service="",
+            docker_image_name_tag="",
+            endpoint_url="",
+            kubernetes_cluster="",
+        )
+
+        with self.assertRaises(ValidationError) as e:
+            api_import_observations(parameters)
+
+        self.assertEqual(
+            "[ErrorDetail(string=\"Connection couldn't be established: error_1 / error_2\", code='invalid')]",
+            str(e.exception),
+        )
+        mock_check_connection.assert_called_with(api_configuration)
+
+    @patch("application.import_observations.parsers.dependency_track.parser.DependencyTrack.check_connection")
+    @patch("application.import_observations.parsers.dependency_track.parser.DependencyTrack.get_observations")
+    @patch("application.import_observations.services.import_observations._process_data")
+    @patch("application.import_observations.models.Vulnerability_Check.objects.update_or_create")
+    def test_api_import_success(
+        self, mock_update_or_create, mock_process_data, mock_get_observations, mock_check_connection
+    ):
+        mock_check_connection.return_value = True, [], {"data": "data"}
+        mock_get_observations.return_value = [self.observation_1], "test_scanner"
+        mock_process_data.return_value = 1, 2, 3
+
+        api_configuration = Api_Configuration(
+            name="test_configuration", product=self.product_1, parser=Parser.objects.get(id=3)
+        )
+        parameters = ApiImportParameters(
+            api_configuration=api_configuration,
+            branch=self.branch_1,
+            service="",
+            docker_image_name_tag="",
+            endpoint_url="",
+            kubernetes_cluster="",
+        )
+
+        numbers = api_import_observations(parameters)
+
+        self.assertEqual(1, numbers[0])
+        self.assertEqual(2, numbers[1])
+        self.assertEqual(3, numbers[2])
+
+        mock_check_connection.assert_called_with(api_configuration)
+        mock_get_observations.assert_called_with({"data": "data"}, self.product_1, self.branch_1)
+        mock_update_or_create.assert_called_with(
+            product=self.product_1,
+            branch=self.branch_1,
+            filename="",
+            api_configuration_name="test_configuration",
+            defaults={
+                "last_import_observations_new": 1,
+                "last_import_observations_updated": 2,
+                "last_import_observations_resolved": 3,
+                "scanner": "test_scanner",
+            },
+        )
 
 
 class RequestMock:

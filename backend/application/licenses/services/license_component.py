@@ -11,7 +11,7 @@ from application.commons.services.functions import (
     clip_fields,
     get_comma_separated_as_list,
 )
-from application.core.models import Product
+from application.core.models import Product, Service
 from application.import_observations.models import Vulnerability_Check
 from application.licenses.models import License_Component, License_Component_Evidence
 from application.licenses.queries.license import get_license_by_spdx_id
@@ -44,7 +44,9 @@ def _get_string_to_hash(
 
 def process_license_components(  # pylint: disable=too-many-statements
     license_components: list[License_Component],
+    scanner: str,
     vulnerability_check: Vulnerability_Check,
+    service_name: str,
 ) -> Tuple[int, int, int]:
     existing_components = License_Component.objects.filter(
         product=vulnerability_check.product,
@@ -66,6 +68,10 @@ def process_license_components(  # pylint: disable=too-many-statements
         get_comma_separated_as_list(license_policy.ignore_component_types) if license_policy else []
     )
 
+    service = None
+    if service_name:
+        service = Service.objects.get_or_create(product=vulnerability_check.product, name=service_name)[0]
+
     for unsaved_component in license_components:
         _prepare_component(unsaved_component)
         existing_component = existing_components_dict.get(unsaved_component.identity_hash)
@@ -86,6 +92,7 @@ def process_license_components(  # pylint: disable=too-many-statements
             existing_component.license_expression = unsaved_component.license_expression
             existing_component.non_spdx_license = unsaved_component.non_spdx_license
             existing_component.multiple_licenses = unsaved_component.multiple_licenses
+            existing_component.origin_service = service
             apply_license_policy_to_component(
                 existing_component,
                 license_evaluation_results,
@@ -111,6 +118,7 @@ def process_license_components(  # pylint: disable=too-many-statements
         else:
             unsaved_component.product = vulnerability_check.product
             unsaved_component.branch = vulnerability_check.branch
+            unsaved_component.origin_service = service
             unsaved_component.upload_filename = vulnerability_check.filename
             apply_license_policy_to_component(
                 unsaved_component,
@@ -140,6 +148,8 @@ def process_license_components(  # pylint: disable=too-many-statements
         vulnerability_check.last_import_licenses_updated = components_updated
         vulnerability_check.last_import_licenses_deleted = components_deleted
 
+    if scanner:
+        vulnerability_check.scanner = scanner
     vulnerability_check.save()
 
     return components_new, components_updated, components_deleted

@@ -58,15 +58,15 @@ from application.import_observations.queries.api_configuration import (
 from application.import_observations.queries.vulnerability_check import (
     get_vulnerability_checks,
 )
+from application.import_observations.scanners.osv_scanner import (
+    scan_branch,
+    scan_product,
+)
 from application.import_observations.services.import_observations import (
     ApiImportParameters,
     FileUploadParameters,
     api_import_observations,
     file_upload_observations,
-)
-from application.import_observations.services.osv_scanner import (
-    scan_branch,
-    scan_product,
 )
 
 
@@ -309,12 +309,13 @@ def _file_upload_observations(
 
 def _file_upload_sbom(request_serializer: Serializer, product: Product, branch: Optional[Branch]) -> dict[str, int]:
     file = request_serializer.validated_data.get("file")
+    service = request_serializer.validated_data.get("service")
 
     file_upload_parameters = FileUploadParameters(
         product=product,
         branch=branch,
         file=file,
-        service="",
+        service=service,
         docker_image_name_tag="",
         endpoint_url="",
         kubernetes_cluster="",

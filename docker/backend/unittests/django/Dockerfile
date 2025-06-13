@@ -1,4 +1,4 @@
-FROM python:3.12-alpine@sha256:c08bfdbffc9184cdfd225497bac12b2c0dac1d24bbe13287cfb7d99f1116cf43 AS python-base
+FROM python:3.12-alpine@sha256:c610e4a94a0e8b888b4b225bfc0e6b59dee607b1e61fb63ff3926083ff617216 AS python-base
 
 # Python build stage
 FROM python-base AS python-build-stage
@@ -9,7 +9,7 @@ ARG BUILD_ENVIRONMENT=unittests
 # kics-scan ignore-block
 # versions of dependencies from distribution are ok
 RUN apk add --no-cache --virtual .build-deps \
-    ca-certificates gcc postgresql-dev linux-headers musl-dev libffi-dev mariadb-dev
+    ca-certificates gcc libffi-dev linux-headers mariadb-dev musl-dev postgresql-dev
 
 # install dependencies with poetry
 COPY ./backend/poetry_requirements.txt ./
@@ -23,7 +23,7 @@ ENV POETRY_NO_INTERACTION=1 \
 WORKDIR /
 
 COPY backend/pyproject.toml backend/poetry.lock ./
-RUN poetry install --extras "unittests" --no-root && rm -rf $POETRY_CACHE_DIR
+RUN poetry install --extras "unittests" --no-root && rm -rf "$POETRY_CACHE_DIR"
 
 
 # Python 'run' stage
@@ -41,10 +41,6 @@ ENV BUILD_ENV=${BUILD_ENVIRONMENT}
 
 WORKDIR ${APP_HOME}
 
-# Add user and group to avoid running as root
-ARG user=django
-ARG group=django
-
 # copy dependencies from build stage
 ENV VIRTUAL_ENV=/.venv \
     PATH="/.venv/bin:$PATH"
@@ -52,18 +48,13 @@ COPY --from=python-build-stage ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
 # copy startup scripts
 COPY ./docker/backend/unittests/django/entrypoint /entrypoint
-COPY ./docker/backend/unittests/django/start /start
 
 # copy application code to WORKDIR
 COPY ./backend ${APP_HOME}
 # use prod settings
 COPY ./backend/config/settings/unittests.py ${APP_HOME}/config/settings/dist.py
 
-RUN addgroup -g 1001 -S ${group} \
-    && adduser -u 1001 -S ${user} -G ${group} \
-    # make startup scripts executable
-    && chmod +x /entrypoint \
-    && chmod +x /start \
+RUN chmod +x /entrypoint \
     # insert commit id for status endpoint
     && sed -i 's/version_unknown/'"${VERSION}"'/g' ${APP_HOME}/application/commons/api/views.py \
     # make staticfiles writeable
@@ -71,12 +62,8 @@ RUN addgroup -g 1001 -S ${group} \
     && chmod ugo+w ${APP_HOME} \
     # create directory for huey task queue
     && mkdir /var/lib/huey \
-    && chown -R ${user}:${group} /var/lib/huey \
     # create directory for sqlite db
     && mkdir /var/lib/sqlite \
-    && chown -R ${user}:${group} /var/lib/sqlite \
     && chmod ugo+rw /var/lib/sqlite
-
-USER ${user}
 
 ENTRYPOINT ["/entrypoint"]

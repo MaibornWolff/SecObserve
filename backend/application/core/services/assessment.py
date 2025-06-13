@@ -4,7 +4,7 @@ from typing import Optional
 from django.utils import timezone
 from rest_framework.exceptions import ValidationError
 
-from application.commons.services.global_request import get_current_user
+from application.access_control.services.current_user import get_current_user
 from application.core.models import Observation, Observation_Log, Product
 from application.core.services.observation import (
     get_current_severity,

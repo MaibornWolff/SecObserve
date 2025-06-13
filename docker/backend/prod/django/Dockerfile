@@ -1,4 +1,4 @@
-FROM python:3.12-alpine@sha256:c08bfdbffc9184cdfd225497bac12b2c0dac1d24bbe13287cfb7d99f1116cf43 AS python-base
+FROM python:3.12-alpine@sha256:c610e4a94a0e8b888b4b225bfc0e6b59dee607b1e61fb63ff3926083ff617216 AS python-base
 
 # Python build stage
 FROM python-base AS python-build-stage
@@ -9,7 +9,7 @@ ARG BUILD_ENVIRONMENT=prod
 # kics-scan ignore-block
 # versions of dependencies from distribution are ok
 RUN apk add --no-cache --virtual .build-deps \
-    ca-certificates gcc postgresql-dev linux-headers musl-dev libffi-dev mariadb-dev
+    ca-certificates gcc libffi-dev linux-headers mariadb-dev musl-dev postgresql-dev
 
 # install dependencies with poetry
 COPY ./backend/poetry_requirements.txt ./
@@ -23,7 +23,7 @@ ENV POETRY_NO_INTERACTION=1 \
 WORKDIR /
 
 COPY backend/pyproject.toml backend/poetry.lock ./
-RUN poetry install --no-root && rm -rf $POETRY_CACHE_DIR
+RUN poetry install --no-root && rm -rf "$POETRY_CACHE_DIR"
 
 
 # Python 'run' stage

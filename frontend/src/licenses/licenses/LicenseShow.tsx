@@ -27,7 +27,7 @@ const LicenseComponent = () => {
                         <Stack spacing={1}>
                             <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
                                 <licenses.icon />
-                                &nbsp;&nbsp;License
+                                &nbsp;&nbsp;SPDX License
                             </Typography>
                             <Labeled label="SPDX Id">
                                 <TextField source="spdx_id" className={classes.fontBigBold} />

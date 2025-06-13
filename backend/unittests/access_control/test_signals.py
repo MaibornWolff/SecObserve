@@ -14,7 +14,7 @@ class TestSignals(BaseTestCase):
     def test_signal_user_logged_in(self, mock_format, mock_logging):
         signal_user_logged_in(None, user=self.user_internal)
 
-        mock_format.assert_called_with(message="User logged in", user=self.user_internal)
+        mock_format.assert_called_with(message="User logged in", username="user_internal@example.com")
         mock_logging.assert_called_once()
 
     @patch("application.access_control.signals.logger.info")
@@ -22,7 +22,7 @@ class TestSignals(BaseTestCase):
     def test_signal_user_logged_out(self, mock_format, mock_logging):
         signal_user_logged_out(None, user=self.user_internal)
 
-        mock_format.assert_called_with(message="User logged out", user=self.user_internal)
+        mock_format.assert_called_with(message="User logged out", username="user_internal@example.com")
         mock_logging.assert_called_once()
 
     @patch("application.access_control.signals.logger.info")
@@ -31,5 +31,7 @@ class TestSignals(BaseTestCase):
         credentials = {"user": "test_user", "password": "*****"}
         signal_user_login_failed(None, credentials=credentials)
 
-        mock_format.assert_called_with(message="User login failed: ", data=credentials)
+        mock_format.assert_called_with(
+            message="User login failed: ", data=credentials, username="user_admin@example.com"
+        )
         mock_logging.assert_called_once()

@@ -37,34 +37,32 @@ jobs:
           cdxgen ./frontend --type npm --no-babel --required-only --profile license-compliance --no-auto-compositions --project-name secobserve --output sbom_frontend_application.json
       -
         name: Import backend SBOM
-        uses: MaibornWolff/secobserve_actions_templates/actions/importer@2f7b500fde2de2bdea7eef3b6df5503c2476916f # main
+        uses: MaibornWolff/secobserve_actions_templates/actions/upload_sbom@03881bede1d05a40887bf26d8dfd7a1a37be892d # main
         with:
           so_product_name: 'SecObserve'
           so_file_name: 'sbom_backend_application.json'
-          so_parser_name: 'CycloneDX'
           so_branch_name: 'dev'
           so_api_base_url: "https://secobserve-backend.maibornwolff.de"
           so_api_token: ${{ secrets.SO_API_TOKEN }}
       -
         name: Import frontend SBOM
-        uses: MaibornWolff/secobserve_actions_templates/actions/importer@2f7b500fde2de2bdea7eef3b6df5503c2476916f # main
+        uses: MaibornWolff/secobserve_actions_templates/actions/upload_sbom@03881bede1d05a40887bf26d8dfd7a1a37be892d # main
         with:
           so_product_name: 'SecObserve'
           so_file_name: 'sbom_frontend_application.json'
-          so_parser_name: 'CycloneDX'
           so_branch_name: 'dev'
           so_api_base_url: "https://secobserve-backend.maibornwolff.de"
           so_api_token: ${{ secrets.SO_API_TOKEN }}
       - 
         name: Check licenses for backend application
-        uses: MaibornWolff/purl-patrol@04bf67d65b6dc2cf395ada722ec242ce48c93247 # v1.6.0
+        uses: MaibornWolff/purl-patrol@fe0da8d7c02235dfdf3c52ec936873e57e37203d # v1.6.2
         with:
           SBOM_PATH: 'sbom_backend_application.json'
           LICENSE_POLICY_PATH: 'sbom/configuration/license_policy.json'
           BREAK_ENABLED: false
       - 
         name: Check licenses for frontend application
-        uses: MaibornWolff/purl-patrol@04bf67d65b6dc2cf395ada722ec242ce48c93247 # v1.6.0
+        uses: MaibornWolff/purl-patrol@fe0da8d7c02235dfdf3c52ec936873e57e37203d # v1.6.2
         with:
           SBOM_PATH: 'sbom_frontend_application.json'
           LICENSE_POLICY_PATH: 'sbom/configuration/license_policy.json'

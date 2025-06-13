@@ -1,15 +1,17 @@
 import logging
 from dataclasses import dataclass
 from datetime import datetime
-from json import dumps
-from typing import Optional
+from json import dumps, loads
+from typing import Callable, Optional
 
+import requests
 from packageurl import PackageURL
 
 from application.core.models import Branch, Observation, Product
 from application.core.types import OSVLinuxDistribution
+from application.import_observations.models import OSV_Cache
 from application.import_observations.parsers.base_parser import BaseParser
-from application.import_observations.services.osv_cache import get_osv_vulnerability
+from application.import_observations.parsers.osv.rpm import RpmVersion
 from application.import_observations.types import ExtendedSemVer, Parser_Type
 from application.licenses.models import License_Component
 
@@ -64,14 +66,14 @@ class OSVParser(BaseParser):
 
     def get_observations(  # pylint: disable=too-many-locals
         self, data: list[OSV_Component], product: Product, branch: Optional[Branch]
-    ) -> list[Observation]:
+    ) -> tuple[list[Observation], str]:
         observations = []
 
         for osv_component in data:
             ordered_vulnerabilities = sorted(osv_component.vulnerabilities, key=lambda x: x.id)
 
             for vulnerability in ordered_vulnerabilities:
-                osv_vulnerability = get_osv_vulnerability(osv_id=vulnerability.id, modified=vulnerability.modified)
+                osv_vulnerability = _get_osv_vulnerability(osv_id=vulnerability.id, modified=vulnerability.modified)
 
                 if osv_vulnerability is None:
                     logger.warning("OSV vulnerability %s not found", vulnerability.id)
@@ -83,12 +85,13 @@ class OSVParser(BaseParser):
                 vulnerability_id, vulnerability_id_aliases = self._get_osv_ids(osv_vulnerability)
                 osv_cvss3_vector, osv_cvss4_vector = self._get_cvss(osv_vulnerability)
 
-                affected = self._get_affected(
-                    osv_component.license_component.component_purl,
-                    osv_vulnerability,
-                    product,
-                    branch,
-                )
+                try:
+                    parsed_purl = PackageURL.from_string(osv_component.license_component.component_purl)
+                except ValueError as e:
+                    logger.error("Invalid PURL %s: %s", osv_component.license_component.component_purl, str(e))
+                    continue
+
+                affected = self._get_affected(parsed_purl, osv_vulnerability, product, branch)
 
                 component_in_versions = None
                 component_in_ranges = None
@@ -100,6 +103,7 @@ class OSVParser(BaseParser):
                         osv_component.license_component.component_version, affected_item
                     )
                     component_in_ranges, fixed_version, affected_events = self._is_version_in_ranges(
+                        parsed_purl,
                         osv_component.license_component.component_version,
                         affected_item,
                     )
@@ -151,7 +155,7 @@ class OSVParser(BaseParser):
                     evidence.append(dumps(osv_vulnerability))
                     observation.unsaved_evidences.append(evidence)
 
-        return observations
+        return observations, self.get_name()
 
     def _get_osv_ids(self, osv_vulnerability: dict) -> tuple[str, str]:
         osv_id = str(osv_vulnerability.get("id", ""))
@@ -215,16 +219,11 @@ class OSVParser(BaseParser):
 
     def _get_affected(
         self,
-        purl: str,
+        parsed_purl: PackageURL,
         osv_vulnerability: dict,
         product: Product,
         branch: Optional[Branch],
     ) -> list[dict]:
-        try:
-            parsed_purl = PackageURL.from_string(purl)
-        except ValueError as e:
-            logger.error("Invalid PURL %s: %s", purl, str(e))
-            return []
 
         affected = []
 
@@ -346,24 +345,30 @@ class OSVParser(BaseParser):
         versions = affected.get("versions", [])
         return version in versions
 
-    def _is_version_in_ranges(self, version: str, affected: dict) -> tuple[Optional[bool], Optional[str], list[Event]]:
+    def _is_version_in_ranges(
+        self, parsed_purl: PackageURL, version: str, affected: dict
+    ) -> tuple[Optional[bool], Optional[str], list[Event]]:
         if not version:
             return None, None, []
 
+        version_parser: Callable[[str | None], ExtendedSemVer | RpmVersion | None] = ExtendedSemVer.parse
+        if parsed_purl.type == "rpm":
+            version_parser = RpmVersion.parse
+
         events = self._get_events(affected)
 
-        version_semver = ExtendedSemVer.parse(version)
+        version_semver = version_parser(version)
         if not version_semver:
             return None, None, events
 
         num_rejected_events = 0
         for event in events:
             if event.type in ("ECOSYSTEM", "SEMVER"):
-                introduced_semver = ExtendedSemVer.parse(event.introduced)
-                fixed_semver = ExtendedSemVer.parse(event.fixed)
+                introduced_semver = version_parser(event.introduced)
+                fixed_semver = version_parser(event.fixed)
 
                 if not introduced_semver:
-                    introduced_semver = ExtendedSemVer.parse("0.0.0")
+                    introduced_semver = version_parser("0.0.0")
                 if not fixed_semver:
                     continue
 
@@ -394,3 +399,18 @@ class OSVParser(BaseParser):
                     events.append(event)
                     event = Event(osv_range.get("type", ""), introduced="", fixed="")
         return events
+
+
+def _get_osv_vulnerability(osv_id: str, modified: datetime) -> dict:
+    osv_vulnerability = OSV_Cache.objects.filter(osv_id=osv_id).first()
+    if osv_vulnerability is None or osv_vulnerability.modified < modified:
+        response = requests.get(
+            url=f"https://api.osv.dev/v1/vulns/{osv_id}",
+            timeout=60,
+        )
+        response.raise_for_status()
+        osv_vulnerability, _ = OSV_Cache.objects.update_or_create(
+            osv_id=osv_id, defaults={"modified": modified, "data": response.text}
+        )
+
+    return loads(osv_vulnerability.data)

@@ -11,18 +11,22 @@ class TestSecObserveParser(TestCase):
         with open(path.dirname(__file__) + "/files/no_observation.json") as testfile:
             parser, parser_instance, data = detect_parser(testfile)
             self.assertEqual("SecObserve", parser.name)
-            self.assertTrue(isinstance(parser_instance, SecObserveParser))
+            self.assertIsInstance(parser_instance, SecObserveParser)
 
-            observations = parser_instance.get_observations(data, Product(name="product"), None)
+            observations, scanner = parser_instance.get_observations(data, Product(name="product"), None)
+
+            self.assertEqual("SecObserve", scanner)
             self.assertEqual(0, len(observations))
 
     def test_multiple_observations(self):
         with open(path.dirname(__file__) + "/files/multiple_observations.json") as testfile:
             parser, parser_instance, data = detect_parser(testfile)
             self.assertEqual("SecObserve", parser.name)
-            self.assertTrue(isinstance(parser_instance, SecObserveParser))
+            self.assertIsInstance(parser_instance, SecObserveParser)
 
-            observations = parser_instance.get_observations(data, Product(name="product"), None)
+            observations, scanner = parser_instance.get_observations(data, Product(name="product"), None)
+
+            self.assertEqual("scanner_1", scanner)
             self.assertEqual(2, len(observations))
 
             observation = observations[0]

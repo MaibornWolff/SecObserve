@@ -2,7 +2,7 @@ from typing import Optional
 
 from packageurl import PackageURL
 
-from application.commons.services.global_request import get_current_user
+from application.access_control.services.current_user import get_current_user
 from application.core.models import Branch, Observation, Product
 from application.core.services.observation import (
     get_current_status,

@@ -128,7 +128,7 @@ export function get_component_purl_url(
     }
 
     let component_purl_url = "https://deps.dev/" + deps_dev_type + "/";
-    if (component_purl_namespace !== null) {
+    if (component_purl_namespace !== null && !component_name.startsWith(component_purl_namespace)) {
         component_purl_url =
             component_purl_url + encodeURIComponent(component_purl_namespace) + encodeURIComponent(namespace_separator);
     }
@@ -163,6 +163,17 @@ export function set_settings_in_local_storage() {
         localStorage.setItem("settings", JSON.stringify(response.json));
     });
 }
+
+export const feature_email = () => {
+    try {
+        const settings = JSON.parse(localStorage.getItem("settings") || "{}");
+        const features = settings.features || [];
+        const feature_vex_position = features.indexOf("feature_email");
+        return feature_vex_position !== -1;
+    } catch {
+        return false;
+    }
+};
 
 export const feature_vex_enabled = () => {
     try {

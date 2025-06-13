@@ -27,7 +27,7 @@ import LicensePolicyItemRemove from "./LicensePolicyItemRemove";
 function listFilters() {
     return [
         <TextInput source="license_group_name" label="License group" alwaysOn />,
-        <TextInput source="license_spdx_id" label="License" alwaysOn />,
+        <TextInput source="license_spdx_id" label="SPDX License" alwaysOn />,
         <TextInput source="license_expression" label="License expression" alwaysOn />,
         <TextInput source="non_spdx_license" label="Non-SPDX license" alwaysOn />,
         <AutocompleteInputMedium
@@ -97,10 +97,9 @@ const LicensePolicyItemEmbeddedList = ({ license_policy }: LicensePolicyItemEmbe
                                     )}
                                 />
                                 <WithRecord
-                                    label="License"
+                                    label="SPDX License"
                                     render={(license_group) => (
                                         <TextUrlField
-                                            label="License"
                                             text={license_group.license_spdx_id}
                                             url={showLicense(license_group.license)}
                                         />

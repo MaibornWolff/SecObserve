@@ -63,48 +63,40 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             return True
         return False
 
-    def get_observations(self, data: dict, product: Product, branch: Optional[Branch]) -> list[Observation]:
+    def get_observations(self, data: dict, product: Product, branch: Optional[Branch]) -> tuple[list[Observation], str]:
         self.components = self._get_components(data)
         self.metadata = self._get_metadata(data)
         self.dependencies = self._get_dependencies(data)
 
         observations = self._create_observations(data)
 
-        return observations
+        return observations, self.metadata.scanner
 
-    def get_license_components(self, data: dict) -> list[License_Component]:
+    def get_license_components(self, data: dict) -> tuple[list[License_Component], str]:
+        self.metadata = self._get_metadata(data)
         if not self.components:
             self.components = self._get_components(data)
-        if not self.metadata:
-            self.metadata = self._get_metadata(data)
         if not self.dependencies:
             self.dependencies = self._get_dependencies(data)
 
         components = []
 
-        licenses_exist = False
         for component in self.components.values():
-            if component.unsaved_license:
-                licenses_exist = True
-                break
+            observation_component_dependencies = self._get_component_dependencies(
+                component.bom_ref, self.components, self.dependencies
+            )
+            model_component = License_Component(
+                component_name=component.name,
+                component_version=component.version,
+                component_purl=component.purl,
+                component_cpe=component.cpe,
+                component_dependencies=observation_component_dependencies,
+            )
+            model_component.unsaved_license = component.unsaved_license
+            self._add_license_component_evidence(component, model_component)
+            components.append(model_component)
 
-        if licenses_exist:
-            for component in self.components.values():
-                observation_component_dependencies = self._get_component_dependencies(
-                    component.bom_ref, self.components, self.dependencies
-                )
-                model_component = License_Component(
-                    component_name=component.name,
-                    component_version=component.version,
-                    component_purl=component.purl,
-                    component_cpe=component.cpe,
-                    component_dependencies=observation_component_dependencies,
-                )
-                model_component.unsaved_license = component.unsaved_license
-                self._add_license_component_evidence(component, model_component)
-                components.append(model_component)
-
-        return components
+        return components, self.metadata.scanner
 
     def _add_license_component_evidence(
         self,
@@ -269,6 +261,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                     version = components_or_services[0].get("version")
                     if version:
                         scanner += " / " + version
+
             if isinstance(tools, list):
                 scanner = tools[0].get("name", "")
                 version = tools[0].get("version")

@@ -15,3 +15,4 @@ keycloak/h2/keycloakdb.trace.db
 keycloak/h2/keycloakdb.lock.db
 keycloak/h2/keycloakdb.mv.db
 backend/application/import_observations/parsers/trivy_operator_prometheus_file
+coverage.xml

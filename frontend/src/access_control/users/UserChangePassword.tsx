@@ -74,7 +74,7 @@ const UserChangePassword = () => {
                             >
                                 <PasswordInputWide
                                     source="current_password"
-                                    label="Your current password"
+                                    label="Password of currently logged in user"
                                     validate={validate_required_255}
                                 />
                                 <PasswordInputWide source="new_password_1" validate={validate_required_255} />

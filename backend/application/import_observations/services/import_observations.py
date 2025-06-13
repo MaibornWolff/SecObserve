@@ -102,13 +102,15 @@ def file_upload_observations(
     parser, parser_instance, data = detect_parser(file_upload_parameters.file)
     filename = os.path.basename(file_upload_parameters.file.name) if file_upload_parameters.file.name else ""
 
-    numbers_observations: Tuple[int, int, int, str] = 0, 0, 0, ""
+    numbers_observations: Tuple[int, int, int] = 0, 0, 0
     new_observations = None
     updated_observations = None
     resolved_observations = None
 
+    scanner = ""
+
     if not file_upload_parameters.sbom:
-        imported_observations = parser_instance.get_observations(
+        imported_observations, scanner = parser_instance.get_observations(
             data, file_upload_parameters.product, file_upload_parameters.branch
         )
 
@@ -145,7 +147,7 @@ def file_upload_observations(
             "last_import_licenses_new": None,
             "last_import_licenses_updated": None,
             "last_import_licenses_deleted": None,
-            "scanner": numbers_observations[3],
+            "scanner": scanner,
         },
     )
 
@@ -153,8 +155,10 @@ def file_upload_observations(
     if settings.feature_license_management and (
         not file_upload_parameters.suppress_licenses or file_upload_parameters.sbom
     ):
-        imported_license_components = parser_instance.get_license_components(data)
-        numbers_license_components = process_license_components(imported_license_components, vulnerability_check)
+        imported_license_components, scanner = parser_instance.get_license_components(data)
+        numbers_license_components = process_license_components(
+            imported_license_components, scanner, vulnerability_check, file_upload_parameters.service
+        )
 
     return (
         numbers_observations[0],
@@ -178,7 +182,7 @@ def api_import_observations(
     if not format_valid:
         raise ValidationError("Connection couldn't be established: " + " / ".join(errors))
 
-    imported_observations = parser_instance.get_observations(
+    imported_observations, scanner = parser_instance.get_observations(
         data,
         api_import_parameters.api_configuration.product,
         api_import_parameters.branch,
@@ -197,7 +201,7 @@ def api_import_observations(
         imported_observations=imported_observations,
     )
 
-    numbers: Tuple[int, int, int, str] = _process_data(import_parameters, Settings.load())
+    numbers: Tuple[int, int, int] = _process_data(import_parameters, Settings.load())
 
     Vulnerability_Check.objects.update_or_create(
         product=import_parameters.product,
@@ -208,7 +212,7 @@ def api_import_observations(
             "last_import_observations_new": numbers[0],
             "last_import_observations_updated": numbers[1],
             "last_import_observations_resolved": numbers[2],
-            "scanner": numbers[3],
+            "scanner": scanner,
         },
     )
 
@@ -228,11 +232,9 @@ def api_check_connection(
     return format_valid, errors
 
 
-def _process_data(import_parameters: ImportParameters, settings: Settings) -> Tuple[int, int, int, str]:
+def _process_data(import_parameters: ImportParameters, settings: Settings) -> Tuple[int, int, int]:
     observations_new = 0
     observations_updated = 0
-
-    scanner = ""
 
     rule_engine = Rule_Engine(product=import_parameters.product)
     vex_engine = VEX_Engine(import_parameters.product, import_parameters.branch)
@@ -244,9 +246,9 @@ def _process_data(import_parameters: ImportParameters, settings: Settings) -> Tu
         import_parameters.branch,
         import_parameters.filename,
         import_parameters.api_configuration_name,
+        import_parameters.service,
     ):
         observations_before[observation_before_for_dict.identity_hash] = observation_before_for_dict
-        scanner = observation_before_for_dict.scanner
 
     observations_this_run: set[str] = set()
     vulnerability_check_observations: set[Observation] = set()
@@ -292,8 +294,6 @@ def _process_data(import_parameters: ImportParameters, settings: Settings) -> Tu
                 observations_this_run.add(imported_observation.identity_hash)
                 vulnerability_check_observations.add(imported_observation)
 
-        scanner = imported_observation.scanner
-
     observations_resolved = _resolve_unimported_observations(observations_before)
     vulnerability_check_observations.update(observations_resolved)
     check_security_gate(import_parameters.product)
@@ -304,7 +304,7 @@ def _process_data(import_parameters: ImportParameters, settings: Settings) -> Tu
     push_observations_to_issue_tracker(import_parameters.product, vulnerability_check_observations)
     find_potential_duplicates(import_parameters.product, import_parameters.branch, import_parameters.service)
 
-    return observations_new, observations_updated, len(observations_resolved), scanner
+    return observations_new, observations_updated, len(observations_resolved)
 
 
 def _prepare_imported_observation(import_parameters: ImportParameters, imported_observation: Observation) -> None:

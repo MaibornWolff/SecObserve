@@ -49,7 +49,7 @@ const ProductGroupHeader = () => {
                                 product_group.ignored_licenses_count >
                                 0 && (
                                 <Labeled>
-                                    <LicensesCountField label="Licenses" withLabel={true} />
+                                    <LicensesCountField label="Licenses / Components" withLabel={true} />
                                 </Labeled>
                             )}
                     </Stack>

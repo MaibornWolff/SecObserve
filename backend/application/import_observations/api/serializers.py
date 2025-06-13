@@ -49,12 +49,14 @@ class FileUploadSBOMByIdRequestSerializer(Serializer):
     file = FileField(max_length=255)
     product = IntegerField(validators=[MinValueValidator(0)])
     branch = IntegerField(validators=[MinValueValidator(0)], required=False)
+    service = CharField(max_length=255, required=False)
 
 
 class FileUploadSBOMByNameRequestSerializer(Serializer):
     file = FileField(max_length=255)
     product_name = CharField(max_length=255)
     branch_name = CharField(max_length=255, required=False)
+    service = CharField(max_length=255, required=False)
 
 
 class ApiImportObservationsByIdRequestSerializer(Serializer):

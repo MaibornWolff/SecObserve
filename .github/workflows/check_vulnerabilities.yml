@@ -14,41 +14,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       -
         name: Run vulnerability scanners for code
-        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@2f7b500fde2de2bdea7eef3b6df5503c2476916f # main
+        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@03881bede1d05a40887bf26d8dfd7a1a37be892d # main
         with:
           so_configuration: 'so_configuration_code.yml'
           SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
-
-  check_code_sonarqube_backend:
-    if: github.repository == 'MaibornWolff/SecObserve'
-    runs-on: ubuntu-latest
-    steps:
-      - 
-        name: Checkout code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          fetch-depth: 0  
-      - 
-        name: Run SonarQube scan for backend
-        uses: SonarSource/sonarqube-scan-action@v5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          projectBaseDir: backend
-
-  check_code_sonarqube_frontend:
-    if: github.repository == 'MaibornWolff/SecObserve'
-    runs-on: ubuntu-latest
-    steps:
-      - 
-        name: Checkout code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          fetch-depth: 0  
-      - 
-        name: Run SonarQube scan for frontend
-        uses: SonarSource/sonarqube-scan-action@v5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FRONTEND }}
-        with:
-          projectBaseDir: frontend

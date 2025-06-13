@@ -7,7 +7,7 @@ from requests import Response
 from requests.exceptions import HTTPError
 
 from application.import_observations.models import OSV_Cache
-from application.import_observations.services.osv_cache import get_osv_vulnerability
+from application.import_observations.parsers.osv.parser import _get_osv_vulnerability
 from unittests.base_test_case import BaseTestCase
 
 
@@ -36,7 +36,7 @@ class TestImportObservations(BaseTestCase):
         response.url = "https://api.osv.dev/v1/vulns/CVE-2021-1234"
         mock_requests_get.return_value = response
         with self.assertRaises(HTTPError) as e:
-            get_osv_vulnerability("CVE-2021-1234", timezone.now())
+            _get_osv_vulnerability("CVE-2021-1234", timezone.now())
 
         self.assertEqual(
             "500 Server Error: unknown reason for url: https://api.osv.dev/v1/vulns/CVE-2021-1234",
@@ -51,7 +51,7 @@ class TestImportObservations(BaseTestCase):
     def test_osv_cache_from_database(self, mock_requests_get):
         OSV_Cache(osv_id=self.osv_id, modified=self.osv_modified, data=self.osv_data).save()
 
-        data = get_osv_vulnerability(self.osv_id, self.osv_modified)
+        data = _get_osv_vulnerability(self.osv_id, self.osv_modified)
 
         self.assertEqual(loads(self.osv_data), data)
         mock_requests_get.assert_not_called()
@@ -61,7 +61,7 @@ class TestImportObservations(BaseTestCase):
         response = MockResponse(self.osv_data)
         mock_requests_get.return_value = response
 
-        data = get_osv_vulnerability(self.osv_id, self.osv_modified)
+        data = _get_osv_vulnerability(self.osv_id, self.osv_modified)
 
         self.assertEqual(loads(self.osv_data), data)
         mock_requests_get.assert_called_once_with(
@@ -80,7 +80,7 @@ class TestImportObservations(BaseTestCase):
 
         modified_now = timezone.now()
 
-        data = get_osv_vulnerability(self.osv_id, modified_now)
+        data = _get_osv_vulnerability(self.osv_id, modified_now)
 
         self.assertEqual(loads(self.osv_data), data)
         mock_requests_get.assert_called_once_with(

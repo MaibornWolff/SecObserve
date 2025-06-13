@@ -84,11 +84,11 @@ const LicenseGroupLicenseAdd = ({ id }: LicenseGroupLicenseAddProps) => {
                         <ReferenceInput
                             source="license"
                             reference="licenses"
-                            label="License"
                             filter={{ exclude_license_group: id }}
                             sort={{ field: "spdx_id", order: "ASC" }}
                         >
                             <AutocompleteInputExtraWide
+                                label="SPDX License"
                                 optionText="spdx_id_name"
                                 validate={validate_required}
                                 onChange={(e) => setLicense(e)}

@@ -21,6 +21,7 @@ from application.core.api.views import (
     ProductMemberViewSet,
     ProductNameViewSet,
     ProductViewSet,
+    ServiceNameViewSet,
     ServiceViewSet,
 )
 from application.import_observations.api.views import (
@@ -79,6 +80,7 @@ router.register(
 router.register("branches", BranchViewSet, basename="branches")
 router.register("branch_names", BranchNameViewSet, basename="branch_names")
 router.register("services", ServiceViewSet, basename="services")
+router.register("service_names", ServiceNameViewSet, basename="service_names")
 router.register("parsers", ParserViewSet, basename="parsers")
 router.register("observations", ObservationViewSet, basename="observations")
 router.register("observation_titles", ObservationTitleViewSet, basename="observation_titles")

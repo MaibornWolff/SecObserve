@@ -6,8 +6,8 @@ import jsonpickle
 from rest_framework.exceptions import NotFound
 
 from application.access_control.services.authorization import user_has_permission_or_403
+from application.access_control.services.current_user import get_current_user
 from application.access_control.services.roles_permissions import Permissions
-from application.commons.services.global_request import get_current_user
 from application.core.models import Branch, Product
 from application.vex.models import CSAF, CSAF_Branch, CSAF_Revision, CSAF_Vulnerability
 from application.vex.queries.csaf import get_csaf_by_document_id
@@ -114,7 +114,6 @@ def create_csaf_document(parameters: CSAFCreateParameters) -> Optional[CSAFRoot]
     csaf_root = create_csaf_root(csaf)
 
     vulnerabilities = []
-    product_tree = CSAFProductTree(branches=[], relationships=[])
 
     if product:
         vulnerabilities, product_tree = _get_content_for_product(product, parameters.vulnerability_names, branches)
@@ -152,7 +151,6 @@ def update_csaf_document(parameters: CSAFUpdateParameters) -> Optional[CSAFRoot]
     csaf_branches = list(Branch.objects.filter(id__in=csaf_branch_ids))
 
     vulnerabilities = []
-    product_tree = CSAFProductTree(branches=[], relationships=[])
 
     if csaf.product:
         vulnerabilities, product_tree = _get_content_for_product(csaf.product, csaf_vulnerability_names, csaf_branches)

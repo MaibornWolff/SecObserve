@@ -59,7 +59,7 @@ class SARIFParser(BaseParser, BaseFileParser):
             return True
         return False
 
-    def get_observations(self, data: dict, product: Product, branch: Optional[Branch]) -> list[Observation]:
+    def get_observations(self, data: dict, product: Product, branch: Optional[Branch]) -> tuple[list[Observation], str]:
         observations: list[Observation] = []
 
         for run in data.get("runs", []):
@@ -99,7 +99,7 @@ class SARIFParser(BaseParser, BaseFileParser):
                         sarif_location=None,
                     )
 
-        return observations
+        return observations, sarif_scanner
 
     def create_observation(  # pylint: disable=too-many-locals
         self,

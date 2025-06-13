@@ -16,8 +16,8 @@ from rest_framework.serializers import (
     ValidationError,
 )
 
+from application.access_control.services.current_user import get_current_user
 from application.commons.services.functions import get_comma_separated_as_list
-from application.commons.services.global_request import get_current_user
 from application.core.api.serializers_helpers import (
     get_branch_name,
     get_origin_component_name_version,
@@ -91,7 +91,7 @@ class ObservationSerializer(ModelSerializer):
 
     class Meta:
         model = Observation
-        exclude = ["numerical_severity", "issue_tracker_jira_initial_status"]
+        exclude = ["numerical_severity", "issue_tracker_jira_initial_status", "origin_source_file_link"]
 
     def to_representation(self, instance: Observation) -> dict:
         response = super().to_representation(instance)
@@ -150,6 +150,7 @@ class ObservationListSerializer(ModelSerializer):
     parser_data = ParserSerializer(source="parser")
     scanner_name = SerializerMethodField()
     origin_component_name_version = SerializerMethodField()
+    origin_source_file = SerializerMethodField()
     origin_source_file_url = SerializerMethodField()
     origin_component_purl_namespace = SerializerMethodField()
     vulnerability_id_aliases = SerializerMethodField()
@@ -161,6 +162,7 @@ class ObservationListSerializer(ModelSerializer):
             "numerical_severity",
             "issue_tracker_jira_initial_status",
             "origin_component_dependencies",
+            "origin_source_file_link",
         ]
 
     def get_branch_name(self, observation: Observation) -> str:
@@ -171,6 +173,13 @@ class ObservationListSerializer(ModelSerializer):
 
     def get_origin_component_name_version(self, observation: Observation) -> str:
         return get_origin_component_name_version(observation)
+
+    def get_origin_source_file(self, observation: Observation) -> Optional[str]:
+        if observation.origin_source_file:
+            source_file_parts = observation.origin_source_file.split("/")
+            if len(source_file_parts) > 2:
+                return f"{source_file_parts[0]}/.../{source_file_parts[-1]}"
+        return observation.origin_source_file
 
     def get_origin_source_file_url(self, observation: Observation) -> Optional[str]:
         return _get_origin_source_file_url(observation)
@@ -187,6 +196,9 @@ class ObservationListSerializer(ModelSerializer):
 
 def _get_origin_source_file_url(observation: Observation) -> Optional[str]:
     origin_source_file_url = None
+
+    if observation.origin_source_file_link:
+        return observation.origin_source_file_link
 
     if observation.product.repository_prefix and observation.origin_source_file:
         if not validators.url(observation.product.repository_prefix):
@@ -395,13 +407,11 @@ class ObservationCreateSerializer(ModelSerializer):
         attrs["scanner"] = Parser_Type.TYPE_MANUAL
         attrs["import_last_seen"] = timezone.now()
 
-        if attrs.get("branch"):
-            if attrs["branch"].product != attrs["product"]:
-                raise ValidationError("Branch does not belong to the same product as the observation")
+        if attrs.get("branch") and attrs["branch"].product != attrs["product"]:
+            raise ValidationError("Branch does not belong to the same product as the observation")
 
-        if attrs.get("service"):
-            if attrs["service"].product != attrs["product"]:
-                raise ValidationError("Service does not belong to the same product as the observation")
+        if attrs.get("service") and attrs["service"].product != attrs["product"]:
+            raise ValidationError("Service does not belong to the same product as the observation")
 
         validate_cvss_and_severity(attrs)
 
@@ -529,7 +539,7 @@ class NestedObservationSerializer(ModelSerializer):
 
     class Meta:
         model = Observation
-        exclude = ["numerical_severity", "issue_tracker_jira_initial_status"]
+        exclude = ["numerical_severity", "issue_tracker_jira_initial_status", "origin_source_file_link"]
 
     def get_scanner_name(self, observation: Observation) -> str:
         return get_scanner_name(observation)
