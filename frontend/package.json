@@ -15,7 +15,7 @@
         "@mui/material": "7.1.1",
         "@textea/json-viewer": "4.0.1",
         "axios": "1.10.0",
-        "chart.js": "4.4.9",
+        "chart.js": "4.5.0",
         "markdown-to-jsx": "7.7.6",
         "mermaid": "11.6.0",
         "oidc-client-ts": "3.2.1",
