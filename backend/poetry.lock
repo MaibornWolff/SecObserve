@@ -683,15 +683,15 @@ django = ">=4.2"
 
 [[package]]
 name = "django-coverage-plugin"
-version = "3.1.0"
+version = "3.1.1"
 description = "Django template coverage.py plugin"
 optional = true
-python-versions = "*"
+python-versions = ">=3.9"
 groups = ["main"]
 markers = "extra == \"unittests\""
 files = [
-    {file = "django_coverage_plugin-3.1.0-py3-none-any.whl", hash = "sha256:eb0ea8ffdb0db11a02994fc99be6500550efb496c350d709f418ff3d8e553a67"},
-    {file = "django_coverage_plugin-3.1.0.tar.gz", hash = "sha256:223d34bf92bebadcb8b7b89932480e41c7bd98b44a8156934488fbe7f4a71f99"},
+    {file = "django_coverage_plugin-3.1.1-py3-none-any.whl", hash = "sha256:5e6437f24aef66e36edb912f5992954cef9f8088b75227bcb73270128a7069fc"},
+    {file = "django_coverage_plugin-3.1.1.tar.gz", hash = "sha256:d30334c3cb00ab65449ce779ed7c4cd1263331becf4440e03f8b287203a81d41"},
 ]
 
 [package.dependencies]
@@ -2910,4 +2910,4 @@ unittests = ["coverage", "django-coverage-plugin", "django-extensions"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">= 3.10, < 3.13"
-content-hash = "3d67c40a300873bf355ebd9183b9d61dc3a6e50e2065d6b02099bdf3049ec616"
+content-hash = "3ee7ee8267d7eb33b3d0fa4730e0a692cc5f91608091f76b04594a16b0aa5702"
