@@ -1327,22 +1327,20 @@ referencing = ">=0.31.0"
 
 [[package]]
 name = "license-expression"
-version = "30.4.1"
+version = "30.4.2"
 description = "license-expression is a comprehensive utility library to parse, compare, simplify and normalize license expressions (such as SPDX license expressions) using boolean logic."
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "license_expression-30.4.1-py3-none-any.whl", hash = "sha256:679646bc3261a17690494a3e1cada446e5ee342dbd87dcfa4a0c24cc5dce13ee"},
-    {file = "license_expression-30.4.1.tar.gz", hash = "sha256:9f02105f9e0fcecba6a85dfbbed7d94ea1c3a70cf23ddbfb5adf3438a6f6fce0"},
+    {file = "license_expression-30.4.2.tar.gz", hash = "sha256:0b6e67dab0e7047c5ae61124d003baf86bd13ff9523e09c1ca81a504d8a444f9"},
 ]
 
 [package.dependencies]
 "boolean.py" = ">=4.0"
 
 [package.extras]
-docs = ["Sphinx (>=5.0.2)", "doc8 (>=0.11.2)", "sphinx-autobuild", "sphinx-copybutton", "sphinx-reredirects (>=0.1.2)", "sphinx-rtd-dark-mode (>=1.3.0)", "sphinx-rtd-theme (>=1.0.0)", "sphinxcontrib-apidoc (>=0.4.0)"]
-testing = ["black", "isort", "pytest (>=6,!=7.0.0)", "pytest-xdist (>=2)", "twine"]
+dev = ["Sphinx (>=5.0.2)", "doc8 (>=0.11.2)", "pytest (>=7.0.1)", "pytest-xdist (>=2)", "ruff", "sphinx-autobuild", "sphinx-copybutton", "sphinx-reredirects (>=0.1.2)", "sphinx-rtd-dark-mode (>=1.3.0)", "sphinx-rtd-theme (>=1.0.0)", "sphinxcontrib-apidoc (>=0.4.0)", "twine"]
 
 [[package]]
 name = "markupsafe"
@@ -2909,4 +2907,4 @@ unittests = ["coverage", "django-coverage-plugin", "django-extensions"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">= 3.10, < 3.13"
-content-hash = "dfa08eeb52a80b4360d9a617e9e6022d8315b08d7e4d865b295fd0342990e48a"
+content-hash = "fc3c9f4275cc0ead75232aa9613c23e4558ff1e27c56922e87ff4ff18467cff0"
