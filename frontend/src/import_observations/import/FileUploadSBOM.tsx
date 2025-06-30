@@ -5,11 +5,9 @@ import { FileField, FileInput, ReferenceInput, SimpleForm, WithRecord, useNotify
 
 import MenuButton from "../../commons/custom_fields/MenuButton";
 import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
-import { validate_required } from "../../commons/custom_validators";
-import { validate_255 } from "../../commons/custom_validators";
+import { validate_255, validate_required } from "../../commons/custom_validators";
 import { getIconAndFontColor } from "../../commons/functions";
-import { AutocompleteInputWide } from "../../commons/layout/themes";
-import { TextInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
 const FileUploadSBOM = () => {
@@ -31,54 +29,75 @@ const FileUploadSBOM = () => {
     const uploadSBOM = async (data: any) => {
         setLoading(true);
 
-        const formData = new FormData();
-        formData.append("file", data.file.rawFile, data.file.title);
-        formData.append("product", data.id);
-        if (data.branch) {
-            formData.append("branch", data.branch);
-        }
-        if (data.service) {
-            formData.append("service", data.service);
+        let new_license_components = 0;
+        let updated_license_components = 0;
+        let deleted_license_components = 0;
+
+        let upload_error = false;
+        let error_message = "";
+        let error_sbom = "";
+
+        for (const file of data.file) {
+            const formData = new FormData();
+            formData.append("file", file.rawFile, file.title);
+            formData.append("product", data.id);
+            if (data.branch) {
+                formData.append("branch", data.branch);
+            }
+            if (data.service) {
+                formData.append("service", data.service);
+            }
+
+            await httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/import/file_upload_sbom_by_id/", {
+                method: "POST",
+                body: formData,
+            })
+                .then((result) => {
+                    new_license_components += result.json.license_components_new;
+                    updated_license_components += result.json.license_components_updated;
+                    deleted_license_components += result.json.license_components_deleted;
+                })
+                .catch((error) => {
+                    upload_error = true;
+                    error_message = error.message;
+                    error_sbom = file.title;
+                });
+
+            if (upload_error) {
+                break;
+            }
         }
 
-        httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/import/file_upload_sbom_by_id/", {
-            method: "POST",
-            body: formData,
-        })
-            .then((result) => {
-                const message =
-                    result.json.license_components_new +
-                    " new license components\n" +
-                    result.json.license_components_updated +
-                    " updated license components\n" +
-                    result.json.license_components_deleted +
-                    " deleted license components";
-                refresh();
-                setLoading(false);
-                setOpen(false);
-                notify(message, {
-                    type: "success",
-                    multiLine: true,
-                });
-            })
-            .catch((error) => {
-                setLoading(false);
-                setOpen(false);
-                notify(error.message, {
-                    type: "warning",
-                });
+        setLoading(false);
+        setOpen(false);
+        refresh();
+
+        if (upload_error) {
+            notify("Error '" + error_message + "' while processing '" + error_sbom + "'", { type: "warning" });
+        } else {
+            const message =
+                new_license_components +
+                " new license components\n" +
+                updated_license_components +
+                " updated license components\n" +
+                deleted_license_components +
+                " deleted license components";
+            notify(message, {
+                type: "success",
+                multiLine: true,
             });
+        }
     };
 
     return (
         <Fragment>
             <MenuButton
-                title="Upload SBOM from file"
+                title="Upload SBOMs from files"
                 onClick={handleOpen}
                 icon={<UploadIcon sx={{ color: getIconAndFontColor() }} />}
             />
             <Dialog open={open && !loading} onClose={handleClose}>
-                <DialogTitle>Upload SBOM from file</DialogTitle>
+                <DialogTitle>Upload SBOMs from files</DialogTitle>
                 <DialogContent>
                     <SimpleForm
                         onSubmit={uploadSBOM}
@@ -92,9 +111,12 @@ const FileUploadSBOM = () => {
                     >
                         <FileInput
                             source="file"
-                            label="SBOM"
+                            label="SBOMs (max 10 files)"
                             accept={{ "application/octet-stream": [".json"] }}
                             validate={validate_required}
+                            multiple={true}
+                            options={{ maxFiles: 10 }}
+                            placeholder={<p>Drop some files to upload, or click to select some.</p>}
                         >
                             <FileField source="src" title="title" />
                         </FileInput>

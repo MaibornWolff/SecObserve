@@ -38,15 +38,7 @@ const ImportMenu = ({ product }: ImportMenuProps) => {
             >
                 import
             </Button>
-            <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                    "aria-labelledby": "basic-button",
-                }}
-            >
+            <Menu id="basic-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
                 <MenuItem onKeyDown={(e) => e.stopPropagation()}>
                     <FileUploadObservations />
                 </MenuItem>
