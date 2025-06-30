@@ -60,7 +60,7 @@ function createOptionsFromTokenOIDC() {
     }
 }
 
-export function httpClient(url: string, options?: fetchUtils.Options | undefined) {
+export async function httpClient(url: string, options?: fetchUtils.Options | undefined) {
     if (oidc_signed_in()) {
         return updateRefreshToken()
             .then(() => {
