@@ -2903,5 +2903,5 @@ unittests = ["coverage", "django-coverage-plugin", "django-extensions"]
 
 [metadata]
 lock-version = "2.1"
-python-versions = ">= 3.10, < 3.13"
-content-hash = "be024355b4d1884f5cfded12cd7f23aa69b350dc353f7a7eb61ea3eefffbb550"
+python-versions = ">= 3.10, < 3.14"
+content-hash = "72d2a31971ddbbfba922b5539f995761eeb08c27558893ac885fe9a5a0740a04"
