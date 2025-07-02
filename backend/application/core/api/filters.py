@@ -34,7 +34,7 @@ class ProductGroupFilter(FilterSet):
 
     ordering = OrderingFilter(
         # tuple-mapping retains order
-        fields=(("name", "name")),
+        fields=(("name", "name"),),
     )
 
     class Meta:
@@ -190,7 +190,7 @@ class BranchFilter(FilterSet):
 class ServiceFilter(FilterSet):
     ordering = OrderingFilter(
         # tuple-mapping retains order
-        fields=(("name", "name")),
+        fields=(("name", "name"),),
     )
 
     class Meta:

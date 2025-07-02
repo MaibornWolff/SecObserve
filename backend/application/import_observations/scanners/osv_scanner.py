@@ -22,18 +22,24 @@ from application.licenses.models import License_Component
 
 
 @dataclass
-class Request_PURL:
+class RequestPURL:
     purl: str
 
 
 @dataclass
-class Request_Package:
-    package: Request_PURL
+class RequestPackage:
+    package: RequestPURL
 
 
 @dataclass
-class Request_Queries:
-    queries: list[Request_Package]
+class RequestQueries:
+    queries: list[RequestPackage]
+
+
+class OSVException(Exception):
+    def __init__(self, message: str):
+        super().__init__(message)
+        self.message = message
 
 
 def scan_product(product: Product) -> Tuple[int, int, int]:
@@ -150,9 +156,9 @@ def scan_license_components(
     results = []
 
     while slice_actual * slice_size < len(license_components):
-        queries = Request_Queries(
+        queries = RequestQueries(
             queries=[
-                Request_Package(Request_PURL(purl=license_component.component_purl))
+                RequestPackage(RequestPURL(purl=license_component.component_purl))
                 for license_component in license_components[
                     (slice_actual * slice_size) : ((slice_actual + 1) * slice_size)  # noqa: E203
                 ]
@@ -172,13 +178,13 @@ def scan_license_components(
         slice_actual += 1
 
     if len(osv_components) != len(results):
-        raise Exception(  # pylint: disable=broad-exception-raised
+        raise OSVException(  # pylint: disable=broad-exception-raised
             "Number of results is different than number of components"
         )
 
     for result in results:
         if result.get("next_page_token"):
-            raise Exception("Next page token is not yet supported")  # pylint: disable=broad-exception-raised
+            raise OSVException("Next page token is not yet supported")  # pylint: disable=broad-exception-raised
 
     for i, result in enumerate(results):
         for vuln in result.get("vulns", []):
@@ -194,7 +200,7 @@ def scan_license_components(
 
     parser = get_parser_by_name(osv_parser.get_name())
     if parser is None:
-        raise Exception(f"Parser {osv_parser.get_name()} not found")  # pylint: disable=broad-exception-raised
+        raise OSVException(f"Parser {osv_parser.get_name()} not found")  # pylint: disable=broad-exception-raised
 
     import_parameters = ImportParameters(
         product=product,
