@@ -77,8 +77,10 @@ class GitleaksParser(BaseParser, BaseFileParser):
 
             evidence = []
             evidence.append("Entry")
+
             evidence_string = dumps(entry)
             if secret:
+                secret = secret.replace("\r", "\\r").replace("\n", "\\n")
                 evidence_string = evidence_string.replace(secret, "REDACTED")
             evidence.append(evidence_string)
 
