@@ -19,7 +19,11 @@ from application.vex.types import (
 
 
 def get_component_id(component_name_version: str, purl: Optional[str], cpe: Optional[str]) -> str:
-    return purl if purl else cpe if cpe else component_name_version
+    if purl:
+        return purl
+    if cpe:
+        return cpe
+    return component_name_version
 
 
 def append_component_to_product_tree(
