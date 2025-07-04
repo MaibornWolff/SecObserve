@@ -6,13 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('access_control', '0010_authorization_group_member_and_more'),
+        ("access_control", "0010_authorization_group_member_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='setting_package_info_preference',
-            field=models.CharField(choices=[('open/source/insights', 'open/source/insights'), ('ecosyste.ms', 'ecosyste.ms')], default='open/source/insights', max_length=20),
+            model_name="user",
+            name="setting_package_info_preference",
+            field=models.CharField(
+                choices=[("open/source/insights", "open/source/insights"), ("ecosyste.ms", "ecosyste.ms")],
+                default="open/source/insights",
+                max_length=20,
+            ),
         ),
     ]
