@@ -50,6 +50,7 @@ class UserListSerializer(ModelSerializer):
             "is_external",
             "setting_theme",
             "setting_list_size",
+            "setting_package_info_preference",
             "permissions",
             "setting_list_properties",
             "oidc_groups_hash",
@@ -71,6 +72,7 @@ class UserListSerializer(ModelSerializer):
             data.pop("is_external")
             data.pop("setting_theme")
             data.pop("setting_list_size")
+            data.pop("setting_package_info_preference")
             data.pop("setting_list_properties")
             data.pop("permissions")
             data.pop("oidc_groups_hash")
@@ -114,6 +116,7 @@ class UserSerializer(UserListSerializer):
             "is_external",
             "setting_theme",
             "setting_list_size",
+            "setting_package_info_preference",
             "permissions",
             "setting_list_properties",
             "oidc_groups_hash",
@@ -252,6 +255,7 @@ class UserSettingsSerializer(ModelSerializer):
         fields = [
             "setting_theme",
             "setting_list_size",
+            "setting_package_info_preference",
             "setting_list_properties",
         ]
 

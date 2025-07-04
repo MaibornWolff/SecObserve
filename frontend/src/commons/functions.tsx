@@ -17,7 +17,7 @@ import {
     EVALUATION_RESULT_REVIEW_REQUIRED,
     EVALUATION_RESULT_UNKNOWN,
 } from "../licenses/types";
-import { getSettingTheme } from "./user_settings/functions";
+import { getSettingPackageInfoPreference, getSettingTheme } from "./user_settings/functions";
 
 export function getIconAndFontColor() {
     if (getSettingTheme() == "dark") {
@@ -112,29 +112,102 @@ export function get_component_purl_url(
         return null;
     }
 
-    const typeArray: string[] = ["cargo", "golang", "maven", "npm", "nuget", "pypi"];
-    if (!typeArray.includes(component_purl_type)) {
-        return null;
-    }
-
-    let deps_dev_type = component_purl_type;
-    if (component_purl_type === "golang") {
-        deps_dev_type = "go";
-    }
+    let package_info_preference = getSettingPackageInfoPreference();
+    package_info_preference ??= "open/source/insights";
 
     let namespace_separator = "/";
     if (component_purl_type === "maven") {
         namespace_separator = ":";
     }
 
-    let component_purl_url = "https://deps.dev/" + deps_dev_type + "/";
-    if (component_purl_namespace !== null && !component_name.startsWith(component_purl_namespace)) {
-        component_purl_url =
-            component_purl_url + encodeURIComponent(component_purl_namespace) + encodeURIComponent(namespace_separator);
+    let component_purl_url: string | null = null;
+
+    if (package_info_preference === "open/source/insights") {
+        component_purl_url = get_purl_url_deps_dev(
+            component_name,
+            component_version,
+            component_purl_type,
+            component_purl_namespace,
+            namespace_separator
+        );
     }
-    component_purl_url = component_purl_url + encodeURIComponent(component_name);
-    if (component_version !== null) {
-        component_purl_url = component_purl_url + "/" + component_version;
+
+    component_purl_url ??= get_purl_url_ecosyste_ms(
+        component_name,
+        component_purl_type,
+        component_purl_namespace,
+        namespace_separator
+    );
+
+    return component_purl_url;
+}
+
+function get_purl_url_deps_dev(
+    component_name: string,
+    component_version: string | null,
+    component_purl_type: string | null,
+    component_purl_namespace: string | null,
+    namespace_separator: string
+): string | null {
+    let component_purl_url: string | null = null;
+
+    const typeArray: string[] = ["cargo", "golang", "maven", "npm", "nuget", "pypi"];
+    if (component_purl_type !== null && typeArray.includes(component_purl_type)) {
+        let deps_dev_type = component_purl_type;
+        if (component_purl_type === "golang") {
+            deps_dev_type = "go";
+        }
+
+        component_purl_url = "https://deps.dev/" + deps_dev_type + "/";
+        if (component_purl_namespace !== null && !component_name.startsWith(component_purl_namespace)) {
+            component_purl_url =
+                component_purl_url +
+                encodeURIComponent(component_purl_namespace) +
+                encodeURIComponent(namespace_separator);
+        }
+        component_purl_url = component_purl_url + encodeURIComponent(component_name);
+        if (component_version !== null) {
+            component_purl_url = component_purl_url + "/" + component_version;
+        }
+    }
+
+    return component_purl_url;
+}
+
+function get_purl_url_ecosyste_ms(
+    component_name: string,
+    component_purl_type: string | null,
+    component_purl_namespace: string | null,
+    namespace_separator: string
+): string | null {
+    let component_purl_url: string | null = null;
+
+    const types: Record<string, string> = {
+        npm: "npmjs.org",
+        golang: "proxy.golang.org",
+        nuget: "nuget.org",
+        maven: "repo1.maven.org",
+        pypi: "pypi.org",
+        composer: "packagist.org",
+        gem: "rubygems.org",
+        cargo: "crates.io",
+        cocoapods: "cocoapods.org",
+        cpan: "cpan.org",
+        cran: "cran.r-project.org",
+        hackage: "hackage.haskell.org",
+    };
+
+    if (component_purl_type !== null && Object.keys(types).includes(component_purl_type)) {
+        const ecosystems_type = types[component_purl_type]; // eslint-disable-line security/detect-object-injection
+
+        component_purl_url = "https://packages.ecosyste.ms/registries/" + ecosystems_type + "/packages/";
+        if (component_purl_namespace !== null && !component_name.startsWith(component_purl_namespace)) {
+            component_purl_url =
+                component_purl_url +
+                encodeURIComponent(component_purl_namespace) +
+                encodeURIComponent(namespace_separator);
+        }
+        component_purl_url = component_purl_url + encodeURIComponent(component_name);
     }
 
     return component_purl_url;
@@ -166,8 +239,8 @@ export function set_settings_in_local_storage() {
 
 export const feature_email = () => {
     try {
-        const settings = JSON.parse(localStorage.getItem("settings") || "{}");
-        const features = settings.features || [];
+        const settings = JSON.parse(localStorage.getItem("settings") ?? "{}");
+        const features = settings.features ?? [];
         const feature_vex_position = features.indexOf("feature_email");
         return feature_vex_position !== -1;
     } catch {
@@ -177,8 +250,8 @@ export const feature_email = () => {
 
 export const feature_vex_enabled = () => {
     try {
-        const settings = JSON.parse(localStorage.getItem("settings") || "{}");
-        const features = settings.features || [];
+        const settings = JSON.parse(localStorage.getItem("settings") ?? "{}");
+        const features = settings.features ?? [];
         const feature_vex_position = features.indexOf("feature_vex");
         return feature_vex_position !== -1;
     } catch {
@@ -188,8 +261,8 @@ export const feature_vex_enabled = () => {
 
 export function settings_risk_acceptance_expiry_date(): string | null {
     try {
-        const settings = JSON.parse(localStorage.getItem("settings") || "{}");
-        const risk_acceptance_expiry_days = settings.risk_acceptance_expiry_days || null;
+        const settings = JSON.parse(localStorage.getItem("settings") ?? "{}");
+        const risk_acceptance_expiry_days = settings.risk_acceptance_expiry_days ?? null;
         if (risk_acceptance_expiry_days === null) {
             return null;
         }
@@ -203,8 +276,8 @@ export function settings_risk_acceptance_expiry_date(): string | null {
 
 export const feature_general_rules_need_approval_enabled = () => {
     try {
-        const settings = JSON.parse(localStorage.getItem("settings") || "{}");
-        const features = settings.features || [];
+        const settings = JSON.parse(localStorage.getItem("settings") ?? "{}");
+        const features = settings.features ?? [];
         const feature_general_rules_need_approval = features.indexOf("feature_general_rules_need_approval");
         return feature_general_rules_need_approval !== -1;
     } catch {
@@ -214,8 +287,8 @@ export const feature_general_rules_need_approval_enabled = () => {
 
 export const feature_license_management = () => {
     try {
-        const settings = JSON.parse(localStorage.getItem("settings") || "{}");
-        const features = settings.features || [];
+        const settings = JSON.parse(localStorage.getItem("settings") ?? "{}");
+        const features = settings.features ?? [];
         const feature_vex_position = features.indexOf("feature_license_management");
         return feature_vex_position !== -1;
     } catch {
@@ -225,8 +298,8 @@ export const feature_license_management = () => {
 
 export const feature_automatic_api_import = () => {
     try {
-        const settings = JSON.parse(localStorage.getItem("settings") || "{}");
-        const features = settings.features || [];
+        const settings = JSON.parse(localStorage.getItem("settings") ?? "{}");
+        const features = settings.features ?? [];
         const feature_vex_position = features.indexOf("feature_automatic_api_import");
         return feature_vex_position !== -1;
     } catch {
@@ -236,8 +309,8 @@ export const feature_automatic_api_import = () => {
 
 export const feature_automatic_osv_scanning = () => {
     try {
-        const settings = JSON.parse(localStorage.getItem("settings") || "{}");
-        const features = settings.features || [];
+        const settings = JSON.parse(localStorage.getItem("settings") ?? "{}");
+        const features = settings.features ?? [];
         const feature_vex_position = features.indexOf("feature_automatic_osv_scanning");
         return feature_vex_position !== -1;
     } catch {
@@ -247,8 +320,8 @@ export const feature_automatic_osv_scanning = () => {
 
 export const feature_exploit_information = () => {
     try {
-        const settings = JSON.parse(localStorage.getItem("settings") || "{}");
-        const features = settings.features || [];
+        const settings = JSON.parse(localStorage.getItem("settings") ?? "{}");
+        const features = settings.features ?? [];
         const feature_vex_position = features.indexOf("feature_exploit_information");
         return feature_vex_position !== -1;
     } catch {
