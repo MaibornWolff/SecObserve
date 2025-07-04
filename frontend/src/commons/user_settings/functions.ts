@@ -27,16 +27,36 @@ export function saveSettingListSize(list_size: string) {
     saveSetting({ setting_list_size: list_size });
 }
 
-export function getSettingListSize(): "small" | "medium" | undefined {
-    let list_size: "small" | "medium" | undefined = "medium";
+type ListSize = "small" | "medium" | undefined;
+
+export function getSettingListSize(): ListSize {
+    let list_size: ListSize = "medium";
 
     const user = localStorage.getItem("user");
     if (user) {
         const user_json = JSON.parse(user);
-        list_size = user_json.setting_list_size as "small" | "medium" | undefined;
+        list_size = user_json.setting_list_size as ListSize;
     }
 
     return list_size;
+}
+
+export function saveSettingPackageInfoPreference(package_info_preference: string) {
+    saveSetting({ setting_package_info_preference: package_info_preference });
+}
+
+type PackageInfoPreference = "open/source/insights" | "ecosyste.ms" | undefined;
+
+export function getSettingPackageInfoPreference(): PackageInfoPreference {
+    let package_info_preference: PackageInfoPreference = "open/source/insights";
+
+    const user = localStorage.getItem("user");
+    if (user) {
+        const user_json = JSON.parse(user);
+        package_info_preference = user_json.setting_package_info_preference as PackageInfoPreference;
+    }
+
+    return package_info_preference;
 }
 
 export function getTheme(): ThemeType {
