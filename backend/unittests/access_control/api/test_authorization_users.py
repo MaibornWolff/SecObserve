@@ -205,8 +205,12 @@ class TestAuthorizationUsers(TestAuthorizationBase):
             )
         )
 
-        post_data = {"setting_theme": "dark"}
-        expected_data = "{'id': 2, 'username': 'db_internal_write', 'first_name': '', 'last_name': '', 'full_name': 'db_internal_write', 'email': '', 'is_active': True, 'is_superuser': False, 'is_external': False, 'setting_theme': 'dark', 'setting_list_size': 'medium', 'setting_package_info_preference': 'open/source/insights', 'permissions': [<Permissions.Product_Create: 1104>, <Permissions.Product_Group_Create: 1004>], 'setting_list_properties': '', 'oidc_groups_hash': '', 'is_oidc_user': False, 'date_joined': '2022-12-07T20:24:53+01:00', 'has_password': False, 'has_authorization_groups': True, 'has_product_group_members': False, 'has_product_members': True}"
+        post_data = {
+            "setting_theme": "dark",
+            "setting_list_size": "small",
+            "setting_package_info_preference": "ecosyste.ms",
+        }
+        expected_data = "{'id': 2, 'username': 'db_internal_write', 'first_name': '', 'last_name': '', 'full_name': 'db_internal_write', 'email': '', 'is_active': True, 'is_superuser': False, 'is_external': False, 'setting_theme': 'dark', 'setting_list_size': 'small', 'setting_package_info_preference': 'ecosyste.ms', 'permissions': [<Permissions.Product_Create: 1104>, <Permissions.Product_Group_Create: 1004>], 'setting_list_properties': '', 'oidc_groups_hash': '', 'is_oidc_user': False, 'date_joined': '2022-12-07T20:24:53+01:00', 'has_password': False, 'has_authorization_groups': True, 'has_product_group_members': False, 'has_product_members': True}"
         self._test_api(
             APITest(
                 "db_internal_write",
