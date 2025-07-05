@@ -4,7 +4,6 @@ from application.access_control.api.views import (
     ApiTokenViewSet,
     AuthorizationGroupMemberViewSet,
     AuthorizationGroupViewSet,
-    ProductApiTokenViewset,
     UserViewSet,
 )
 from application.core.api.views import (
@@ -15,6 +14,7 @@ from application.core.api.views import (
     ObservationTitleViewSet,
     ObservationViewSet,
     PotentialDuplicateViewSet,
+    ProductApiTokenViewset,
     ProductAuthorizationGroupMemberViewSet,
     ProductGroupNameViewSet,
     ProductGroupViewSet,

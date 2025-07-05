@@ -1,6 +1,7 @@
 from datetime import date
 from typing import Optional
 
+from django.core.validators import MaxValueValidator, MinValueValidator
 from rest_framework.serializers import (
     CharField,
     IntegerField,
@@ -545,6 +546,11 @@ class ProductAuthorizationGroupMemberSerializer(ModelSerializer):
                 raise ValidationError("You are not permitted to change the Owner role")
 
         return attrs
+
+
+class ProductApiTokenSerializer(Serializer):
+    id = IntegerField(validators=[MinValueValidator(0)])
+    role = IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
 
 
 class BranchSerializer(ModelSerializer):

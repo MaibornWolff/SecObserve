@@ -1,9 +1,7 @@
 from typing import Any, Optional
 
-from django.core.validators import MaxValueValidator, MinValueValidator
 from rest_framework.serializers import (
     CharField,
-    IntegerField,
     ModelSerializer,
     Serializer,
     SerializerMethodField,
@@ -63,7 +61,7 @@ class UserListSerializer(ModelSerializer):
         data = super().to_representation(instance)
 
         user = get_current_user()
-        if user and not user.is_superuser and not user.pk == instance.pk:
+        if user and not user.is_superuser and user.pk != instance.pk:
             data.pop("email")
             data.pop("first_name")
             data.pop("last_name")
@@ -132,7 +130,7 @@ class UserSerializer(UserListSerializer):
         data = super().to_representation(instance)
 
         user = get_current_user()
-        if user and not user.is_superuser and not user.pk == instance.pk:
+        if user and not user.is_superuser and user.pk != instance.pk:
             data.pop("has_authorization_groups")
             data.pop("has_product_group_members")
             data.pop("has_product_members")
@@ -268,11 +266,6 @@ class AuthenticationRequestSerializer(Serializer):
 class AuthenticationResponseSerializer(Serializer):
     jwt = CharField()
     user = UserSerializer()
-
-
-class ProductApiTokenSerializer(Serializer):
-    id = IntegerField(validators=[MinValueValidator(0)])
-    role = IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
 
 
 class ApiTokenSerializer(ModelSerializer):
