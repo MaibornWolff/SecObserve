@@ -1,24 +1,13 @@
 import hashlib
-from typing import Optional, Tuple
 
 from django.db.models.query import QuerySet
-from django.utils import timezone
 from license_expression import get_spdx_licensing
 from packageurl import PackageURL
 from rest_framework.exceptions import ValidationError
 
-from application.commons.services.functions import (
-    clip_fields,
-    get_comma_separated_as_list,
-)
-from application.core.models import Product, Service
-from application.import_observations.models import Vulnerability_Check
-from application.licenses.models import License_Component, License_Component_Evidence
+from application.core.models import Product
+from application.licenses.models import License_Component
 from application.licenses.queries.license import get_license_by_spdx_id
-from application.licenses.services.license_policy import (
-    apply_license_policy_to_component,
-    get_license_evaluation_results_for_product,
-)
 
 
 def get_identity_hash(license_component: License_Component) -> str:
@@ -42,132 +31,7 @@ def _get_string_to_hash(
     return hash_string
 
 
-def process_license_components(  # pylint: disable=too-many-statements
-    license_components: list[License_Component],
-    scanner: str,
-    vulnerability_check: Vulnerability_Check,
-    service_name: str,
-) -> Tuple[int, int, int]:
-    existing_components = License_Component.objects.filter(
-        product=vulnerability_check.product,
-        branch=vulnerability_check.branch,
-        upload_filename=vulnerability_check.filename,
-    )
-    existing_component: Optional[License_Component] = None
-    existing_components_dict: dict[str, License_Component] = {}
-    for existing_component in existing_components:
-        existing_components_dict[existing_component.identity_hash] = existing_component
-
-    license_evaluation_results = get_license_evaluation_results_for_product(vulnerability_check.product)
-
-    components_new = 0
-    components_updated = 0
-
-    license_policy = vulnerability_check.product.license_policy
-    ignore_component_types = (
-        get_comma_separated_as_list(license_policy.ignore_component_types) if license_policy else []
-    )
-
-    service = None
-    if service_name:
-        service = Service.objects.get_or_create(product=vulnerability_check.product, name=service_name)[0]
-
-    for unsaved_component in license_components:
-        _prepare_component(unsaved_component)
-        existing_component = existing_components_dict.get(unsaved_component.identity_hash)
-        if existing_component:
-            license_before = existing_component.license
-            non_spdx_license_before = existing_component.non_spdx_license
-            license_expression_before = existing_component.license_expression
-            multiple_licenses_before = existing_component.multiple_licenses
-            evaluation_result_before = existing_component.evaluation_result
-            existing_component.component_name = unsaved_component.component_name
-            existing_component.component_version = unsaved_component.component_version
-            existing_component.component_purl = unsaved_component.component_purl
-            existing_component.component_purl_type = unsaved_component.component_purl_type
-            existing_component.component_cpe = unsaved_component.component_cpe
-            existing_component.component_dependencies = unsaved_component.component_dependencies
-            existing_component.license_name = unsaved_component.license_name
-            existing_component.license = unsaved_component.license
-            existing_component.license_expression = unsaved_component.license_expression
-            existing_component.non_spdx_license = unsaved_component.non_spdx_license
-            existing_component.multiple_licenses = unsaved_component.multiple_licenses
-            existing_component.origin_service = service
-            apply_license_policy_to_component(
-                existing_component,
-                license_evaluation_results,
-                ignore_component_types,
-            )
-            existing_component.import_last_seen = timezone.now()
-            if (
-                license_before != existing_component.license
-                or non_spdx_license_before != existing_component.non_spdx_license
-                or license_expression_before != existing_component.license_expression
-                or multiple_licenses_before != existing_component.multiple_licenses
-                or evaluation_result_before != existing_component.evaluation_result
-            ):
-                existing_component.last_change = timezone.now()
-            clip_fields("licenses", "License_Component", existing_component)
-            existing_component.save()
-
-            existing_component.evidences.all().delete()
-            _process_evidences(unsaved_component, existing_component)
-
-            existing_components_dict.pop(unsaved_component.identity_hash)
-            components_updated += 1
-        else:
-            unsaved_component.product = vulnerability_check.product
-            unsaved_component.branch = vulnerability_check.branch
-            unsaved_component.origin_service = service
-            unsaved_component.upload_filename = vulnerability_check.filename
-            apply_license_policy_to_component(
-                unsaved_component,
-                license_evaluation_results,
-                ignore_component_types,
-            )
-
-            unsaved_component.import_last_seen = timezone.now()
-            unsaved_component.last_change = timezone.now()
-            clip_fields("licenses", "License_Component", unsaved_component)
-            unsaved_component.save()
-
-            _process_evidences(unsaved_component, unsaved_component)
-
-            components_new += 1
-
-    components_deleted = len(existing_components_dict)
-    for existing_component in existing_components_dict.values():
-        existing_component.delete()
-
-    if components_new == 0 and components_updated == 0 and components_deleted == 0:
-        vulnerability_check.last_import_licenses_new = None
-        vulnerability_check.last_import_licenses_updated = None
-        vulnerability_check.last_import_licenses_deleted = None
-    else:
-        vulnerability_check.last_import_licenses_new = components_new
-        vulnerability_check.last_import_licenses_updated = components_updated
-        vulnerability_check.last_import_licenses_deleted = components_deleted
-
-    if scanner:
-        vulnerability_check.scanner = scanner
-    vulnerability_check.save()
-
-    return components_new, components_updated, components_deleted
-
-
-def _process_evidences(source_component: License_Component, target_component: License_Component) -> None:
-    if source_component.unsaved_evidences:
-        for unsaved_evidence in source_component.unsaved_evidences:
-            evidence = License_Component_Evidence(
-                license_component=target_component,
-                name=unsaved_evidence[0],
-                evidence=unsaved_evidence[1],
-            )
-            clip_fields("licenses", "License_Component_Evidence", evidence)
-            evidence.save()
-
-
-def _prepare_component(component: License_Component) -> None:
+def prepare_license_component(component: License_Component) -> None:
     _prepare_name_version(component)
 
     if component.component_name_version is None:
