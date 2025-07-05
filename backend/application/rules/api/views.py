@@ -10,8 +10,8 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from application.access_control.services.authorization import user_has_permission_or_403
-from application.access_control.services.roles_permissions import Permissions
+from application.authorization.services.authorization import user_has_permission_or_403
+from application.authorization.services.roles_permissions import Permissions
 from application.rules.api.filters import GeneralRuleFilter, ProductRuleFilter
 from application.rules.api.permissions import (
     UserHasGeneralRulePermission,

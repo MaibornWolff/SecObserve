@@ -10,7 +10,7 @@ from rest_framework.serializers import (
     ValidationError,
 )
 
-from application.access_control.services.roles_permissions import Permissions
+from application.authorization.services.roles_permissions import Permissions
 from application.core.api.serializers_product import NestedProductSerializer
 from application.core.models import Branch
 from application.import_observations.models import (

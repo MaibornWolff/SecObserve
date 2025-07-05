@@ -4,8 +4,8 @@ from rest_framework.permissions import BasePermission
 from rest_framework.request import Request
 from rest_framework.views import APIView
 
-from application.access_control.api.permissions_base import check_object_permission
-from application.access_control.services.roles_permissions import Permissions
+from application.authorization.api.permissions_base import check_object_permission
+from application.authorization.services.roles_permissions import Permissions
 
 
 class UserHasNotificationPermission(BasePermission):

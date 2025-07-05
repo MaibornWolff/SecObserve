@@ -7,7 +7,7 @@ from django.dispatch import receiver
 from huey.contrib.djhuey import db_task, lock_task
 
 from application.access_control.services.current_user import get_current_user
-from application.access_control.services.roles_permissions import Roles
+from application.authorization.services.roles_permissions import Roles
 from application.commons.models import Settings
 from application.core.models import Branch, Observation, Product, Product_Member
 from application.core.services.observation import (
