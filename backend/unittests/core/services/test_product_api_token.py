@@ -3,7 +3,7 @@ from unittest.mock import patch
 from rest_framework.exceptions import ValidationError
 
 from application.access_control.models import API_Token, User
-from application.access_control.services.roles_permissions import Roles
+from application.authorization.services.roles_permissions import Roles
 from application.core.models import Product_Member
 from application.core.services.product_api_token import (
     create_product_api_token,

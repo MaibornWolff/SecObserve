@@ -16,9 +16,9 @@ from application.access_control.api.serializers import (
     NestedAuthorizationGroupSerializer,
     UserListSerializer,
 )
-from application.access_control.services.authorization import get_highest_user_role
 from application.access_control.services.current_user import get_current_user
-from application.access_control.services.roles_permissions import (
+from application.authorization.services.authorization import get_highest_user_role
+from application.authorization.services.roles_permissions import (
     Permissions,
     Roles,
     get_permissions_for_role,

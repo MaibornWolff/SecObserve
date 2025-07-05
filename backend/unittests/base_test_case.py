@@ -5,7 +5,7 @@ from application.access_control.models import (
     Authorization_Group_Member,
     User,
 )
-from application.access_control.services.roles_permissions import Roles
+from application.authorization.services.roles_permissions import Roles
 from application.core.models import (
     Branch,
     Observation,

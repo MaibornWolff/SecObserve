@@ -27,12 +27,12 @@ from rest_framework.viewsets import GenericViewSet, ModelViewSet, ViewSet
 from application.access_control.api.serializers import (
     CreateApiTokenResponseSerializer,
 )
-from application.access_control.services.authorization import (
+from application.access_control.services.current_user import get_current_user
+from application.authorization.services.authorization import (
     user_has_permission,
     user_has_permission_or_403,
 )
-from application.access_control.services.current_user import get_current_user
-from application.access_control.services.roles_permissions import Permissions
+from application.authorization.services.roles_permissions import Permissions
 from application.commons.services.log_message import format_log_message
 from application.core.api.filters import (
     BranchFilter,

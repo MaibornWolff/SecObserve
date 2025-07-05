@@ -4,8 +4,8 @@ from rest_framework.exceptions import ValidationError
 
 from application.access_control.models import API_Token, User
 from application.access_control.queries.user import get_user_by_username
-from application.access_control.services.roles_permissions import Roles
 from application.access_control.services.user_api_token import generate_api_token_hash
+from application.authorization.services.roles_permissions import Roles
 from application.core.models import Product, Product_Member
 from application.core.queries.product_member import get_product_member
 

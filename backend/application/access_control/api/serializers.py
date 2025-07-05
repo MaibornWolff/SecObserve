@@ -17,9 +17,8 @@ from application.access_control.models import (
 from application.access_control.queries.authorization_group_member import (
     get_authorization_group_member,
 )
-from application.access_control.services.authorization import get_user_permissions
 from application.access_control.services.current_user import get_current_user
-from application.access_control.services.roles_permissions import Permissions
+from application.authorization.services.roles_permissions import Permissions
 from application.core.models import Product_Authorization_Group_Member, Product_Member
 
 
@@ -87,11 +86,24 @@ class UserListSerializer(ModelSerializer):
         return obj.full_name
 
     def get_permissions(self, obj: User) -> list[Permissions]:
-        return get_user_permissions(obj)
+        return _get_user_permissions(obj)
 
     def get_has_password(self, obj: User) -> bool:
         return bool(obj.password and obj.password != "" and obj.has_usable_password())  # nosec B105
         # eliminate false positive, password is not hardcoded
+
+
+def _get_user_permissions(user: User = None) -> list[Permissions]:
+    if not user:
+        user = get_current_user()
+
+    permissions = []
+
+    if user and not user.is_external:
+        permissions.append(Permissions.Product_Create)
+        permissions.append(Permissions.Product_Group_Create)
+
+    return permissions
 
 
 class UserSerializer(UserListSerializer):

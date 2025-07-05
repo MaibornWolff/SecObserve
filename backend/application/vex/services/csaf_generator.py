@@ -5,9 +5,9 @@ from typing import Optional
 import jsonpickle
 from rest_framework.exceptions import NotFound
 
-from application.access_control.services.authorization import user_has_permission_or_403
 from application.access_control.services.current_user import get_current_user
-from application.access_control.services.roles_permissions import Permissions
+from application.authorization.services.authorization import user_has_permission_or_403
+from application.authorization.services.roles_permissions import Permissions
 from application.core.models import Branch, Product
 from application.vex.models import CSAF, CSAF_Branch, CSAF_Revision, CSAF_Vulnerability
 from application.vex.queries.csaf import get_csaf_by_document_id
