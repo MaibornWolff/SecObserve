@@ -1,13 +1,16 @@
 import { Typography } from "@mui/material";
+import { useState } from "react";
 import { BooleanInput, Create, ReferenceInput, SimpleForm } from "react-admin";
 
 import license_policies from ".";
-import { validate_255, validate_2048, validate_required_255 } from "../../commons/custom_validators";
+import MarkdownEdit from "../../commons/custom_fields/MarkdownEdit";
+import { validate_255, validate_required_255 } from "../../commons/custom_validators";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 
 const LicensePolicyCreate = () => {
+    const [description, setDescription] = useState("");
     const transform = (data: any) => {
-        data.description ??= "";
+        data.description = description;
         data.ignore_component_types ??= "";
         return data;
     };
@@ -20,13 +23,7 @@ const LicensePolicyCreate = () => {
                     &nbsp;&nbsp;License Policy
                 </Typography>
                 <TextInputWide autoFocus source="name" validate={validate_required_255} />
-                <TextInputWide
-                    source="description"
-                    multiline
-                    minRows={3}
-                    validate={validate_2048}
-                    helperText="Markdown supported."
-                />
+                <MarkdownEdit initialValue="" setValue={setDescription} label="Description" maxLength={2048} />
                 <ReferenceInput
                     source="parent"
                     reference="license_policies"

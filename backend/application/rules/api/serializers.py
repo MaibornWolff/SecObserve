@@ -41,6 +41,12 @@ class GeneralRuleSerializer(ModelSerializer):
 
         return None
 
+    def validate_description(self, value: str) -> str:
+        if not value:
+            raise ValidationError("Must be set")
+
+        return value
+
     def validate(self, attrs: dict) -> dict:
         if not attrs.get("parser") and not attrs.get("scanner_prefix"):
             raise ValidationError("Either Parser or Scanner Prefix must be set")
@@ -77,6 +83,12 @@ class ProductRuleSerializer(ModelSerializer):
             return obj.approval_user.full_name
 
         return None
+
+    def validate_description(self, value: str) -> str:
+        if not value:
+            raise ValidationError("Must be set")
+
+        return value
 
     def validate_product(self, value: Product) -> Product:
         self.instance: Rule

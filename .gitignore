@@ -16,3 +16,4 @@ keycloak/h2/keycloakdb.lock.db
 keycloak/h2/keycloakdb.mv.db
 backend/application/import_observations/parsers/trivy_operator_prometheus_file
 coverage.xml
+docker-compose-dev-metabase.yml
