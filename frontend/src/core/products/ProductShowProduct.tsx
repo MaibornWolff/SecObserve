@@ -1,7 +1,8 @@
 import { Divider, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
-import { BooleanField, Labeled, NumberField, ReferenceField, RichTextField, TextField, WithRecord } from "react-admin";
+import { BooleanField, Labeled, NumberField, ReferenceField, TextField, WithRecord } from "react-admin";
 
+import MarkdownField from "../../commons/custom_fields/MarkdownField";
 import OSVLinuxDistributionField from "../../commons/custom_fields/OSVLinuxDistributionField";
 import { SeverityField } from "../../commons/custom_fields/SeverityField";
 import { feature_email } from "../../commons/functions";
@@ -23,7 +24,7 @@ const ProductShowProduct = ({ product }: ProductShowProductProps) => {
                 </Labeled>
                 {product.description && (
                     <Labeled>
-                        <RichTextField source="description" />
+                        <MarkdownField content={product.description} label="Description" />
                     </Labeled>
                 )}
                 {product.product_group && (
