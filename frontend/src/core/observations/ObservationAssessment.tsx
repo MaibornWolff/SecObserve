@@ -1,13 +1,14 @@
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
-import { Fragment, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { DateInput, FormDataConsumer, SimpleForm, useNotify, useRefresh } from "react-admin";
 
+import MarkdownEdit from "../../commons/custom_fields/MarkdownEdit";
 import SmallButton from "../../commons/custom_fields/SmallButton";
 import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
-import { validate_after_today, validate_required, validate_required_4096 } from "../../commons/custom_validators";
+import { validate_after_today, validate_required } from "../../commons/custom_validators";
 import { justificationIsEnabledForStatus } from "../../commons/functions";
-import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 import {
     OBSERVATION_SEVERITY_CHOICES,
@@ -18,17 +19,27 @@ import {
 } from "../types";
 
 const ObservationAssessment = () => {
+    const dialogRef = useRef<HTMLDivElement>(null);
+    const [comment, setComment] = useState("");
     const [open, setOpen] = useState(false);
     const [status, setStatus] = useState(OBSERVATION_STATUS_OPEN);
     const justificationEnabled = justificationIsEnabledForStatus(status);
     const refresh = useRefresh();
     const notify = useNotify();
+
     const observationUpdate = async (data: any) => {
+        if (comment === "") {
+            notify("Comment is required", {
+                type: "warning",
+            });
+            return;
+        }
+
         const patch = {
             severity: data.current_severity,
             status: data.current_status,
             vex_justification: justificationEnabled ? data.current_vex_justification : "",
-            comment: data.comment,
+            comment: comment,
             risk_acceptance_expiry_date: data.risk_acceptance_expiry_date,
         };
 
@@ -62,10 +73,13 @@ const ObservationAssessment = () => {
     return (
         <Fragment>
             <SmallButton title="Assessment" onClick={handleOpen} icon={<PlaylistAddCheckIcon />} />
-            <Dialog open={open} onClose={handleClose}>
+            <Dialog ref={dialogRef} open={open} onClose={handleClose} maxWidth={"lg"}>
                 <DialogTitle>Observation Assessment</DialogTitle>
                 <DialogContent>
-                    <SimpleForm onSubmit={observationUpdate} toolbar={<ToolbarCancelSave onClick={handleCancel} />}>
+                    <SimpleForm
+                        onSubmit={observationUpdate}
+                        toolbar={<ToolbarCancelSave onClick={handleCancel} alwaysEnable={true} />}
+                    >
                         <AutocompleteInputMedium
                             source="current_severity"
                             choices={OBSERVATION_SEVERITY_CHOICES}
@@ -100,11 +114,12 @@ const ObservationAssessment = () => {
                                 )
                             }
                         </FormDataConsumer>
-                        <TextInputWide
-                            multiline={true}
-                            source="comment"
-                            validate={validate_required_4096}
-                            minRows={3}
+                        <MarkdownEdit
+                            initialValue=""
+                            setValue={setComment}
+                            label="Comment *"
+                            overlayContainer={dialogRef.current ?? null}
+                            maxLength={4096}
                         />
                     </SimpleForm>
                 </DialogContent>

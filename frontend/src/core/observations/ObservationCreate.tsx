@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogTitle, Divider, Stack, Typography } from "@mui/material";
-import { Fragment, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import {
     CreateBase,
     DateInput,
@@ -14,6 +14,7 @@ import {
 } from "react-admin";
 
 import AddButton from "../../commons/custom_fields/AddButton";
+import MarkdownEdit from "../../commons/custom_fields/MarkdownEdit";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
 import {
@@ -41,6 +42,9 @@ export type ObservationCreateProps = {
 };
 
 const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: ObservationCreateProps) => {
+    const dialogRef = useRef<HTMLDivElement>(null);
+    const [description, setDescription] = useState("");
+    const [recommendation, setRecommendation] = useState("");
     const [open, setOpen] = useState(false);
     const [status, setStatus] = useState(OBSERVATION_STATUS_OPEN);
     const justificationEnabled = justificationIsEnabledForStatus(status);
@@ -62,6 +66,8 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
         if (data.parser_status != OBSERVATION_STATUS_RISK_ACCEPTED) {
             data.risk_acceptance_expiry_date = null;
         }
+        data.description = description;
+        data.recommendation = recommendation;
 
         create(
             "observations",
@@ -82,7 +88,7 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
     return (
         <Fragment>
             <AddButton title="Add observation" onClick={handleOpen} />
-            <Dialog open={open} onClose={handleClose} maxWidth={"lg"}>
+            <Dialog ref={dialogRef} open={open} onClose={handleClose} maxWidth={"lg"}>
                 <DialogTitle>Add observation</DialogTitle>
                 <DialogContent>
                     <CreateBase resource="observations">
@@ -131,19 +137,19 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
                                         />
                                     )}
                                 </Stack>
-                                <TextInputWide
-                                    source="description"
-                                    multiline
-                                    minRows={3}
-                                    validate={validate_2048}
-                                    helperText="Markdown is supported when showing the observation"
+                                <MarkdownEdit
+                                    initialValue=""
+                                    setValue={setDescription}
+                                    label="Description"
+                                    overlayContainer={dialogRef.current ?? null}
+                                    maxLength={2048}
                                 />
-                                <TextInputWide
-                                    source="recommendation"
-                                    multiline
-                                    minRows={3}
-                                    validate={validate_2048}
-                                    helperText="Markdown is supported when showing the observation"
+                                <MarkdownEdit
+                                    initialValue=""
+                                    setValue={setRecommendation}
+                                    label="Recommendation"
+                                    overlayContainer={dialogRef.current ?? null}
+                                    maxLength={2048}
                                 />
                             </Stack>
 

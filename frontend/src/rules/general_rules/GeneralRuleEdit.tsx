@@ -1,19 +1,22 @@
+import { useState } from "react";
 import { DeleteButton, Edit, SaveButton, SimpleForm, Toolbar, WithRecord } from "react-admin";
 
-import { RuleCreateEditComponent, non_duplicate_transform, validateRuleForm } from "../functions";
+import { RuleEditComponent, non_duplicate_transform, validateRuleForm } from "../functions";
 
 const CustomToolbar = () => {
     return (
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-            <SaveButton />
+            <SaveButton alwaysEnable />
             <DeleteButton mutationMode="pessimistic" />
         </Toolbar>
     );
 };
 
 const GeneralRuleEdit = () => {
+    const [description, setDescription] = useState("");
+
     const transform = (data: any) => {
-        return non_duplicate_transform(data);
+        return non_duplicate_transform(data, description);
     };
 
     return (
@@ -21,9 +24,10 @@ const GeneralRuleEdit = () => {
             <SimpleForm warnWhenUnsavedChanges toolbar={<CustomToolbar />} validate={validateRuleForm}>
                 <WithRecord
                     render={(general_rule) => (
-                        <RuleCreateEditComponent
+                        <RuleEditComponent
                             product={null}
                             initialStatus={general_rule ? general_rule.new_status : ""}
+                            setDescription={setDescription}
                         />
                     )}
                 />

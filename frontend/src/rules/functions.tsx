@@ -9,17 +9,13 @@ import {
     ReferenceField,
     ReferenceInput,
     TextField,
+    useRecordContext,
 } from "react-admin";
 
+import MarkdownEdit from "../commons/custom_fields/MarkdownEdit";
 import MarkdownField from "../commons/custom_fields/MarkdownField";
 import TextUrlField from "../commons/custom_fields/TextUrlField";
-import {
-    validate_255,
-    validate_513,
-    validate_2048,
-    validate_required_255,
-    validate_required_2048,
-} from "../commons/custom_validators";
+import { validate_255, validate_513, validate_2048, validate_required_255 } from "../commons/custom_validators";
 import {
     feature_general_rules_need_approval_enabled,
     feature_vex_enabled,
@@ -39,10 +35,6 @@ export const validateRuleForm = (values: any) => {
 
     if (!values.name) {
         errors.name = "Title is required";
-    }
-
-    if (!values.description) {
-        errors.description = "Description is required";
     }
 
     if (!values.new_severity && !values.new_status) {
@@ -259,7 +251,8 @@ export const RuleShowComponent = ({ rule }: any) => {
     );
 };
 
-export const non_duplicate_transform = (data: any) => {
+export const non_duplicate_transform = (data: any, description: string) => {
+    data.description = description;
     data.title ??= "";
     data.description_observation ??= "";
 
@@ -285,9 +278,18 @@ export const non_duplicate_transform = (data: any) => {
 interface RuleCreateEditComponentProps {
     product: any;
     initialStatus: string;
+    initialDescription: string;
+    setDescription: (value: string) => void;
+    dialogRef?: React.RefObject<HTMLDivElement | null> | null;
 }
 
-export const RuleCreateEditComponent = ({ product, initialStatus }: RuleCreateEditComponentProps) => {
+export const RuleCreateEditComponent = ({
+    product,
+    initialStatus,
+    initialDescription,
+    setDescription,
+    dialogRef = null,
+}: RuleCreateEditComponentProps) => {
     const [status, setStatus] = useState(initialStatus);
     const justificationEnabled = justificationIsEnabledForStatus(status);
 
@@ -310,12 +312,12 @@ export const RuleCreateEditComponent = ({ product, initialStatus }: RuleCreateEd
                     <TextInputWide source="product_name" defaultValue={product.name} label="Product" disabled />
                 )}
                 <TextInputWide autoFocus source="name" validate={validate_required_255} />
-                <TextInputWide
-                    source="description"
-                    multiline
-                    minRows={3}
-                    helperText="Markdown supported. Description will be copied into the Observation Log."
-                    validate={validate_required_2048}
+                <MarkdownEdit
+                    initialValue={initialDescription}
+                    setValue={setDescription}
+                    label="Description"
+                    maxLength={2048}
+                    overlayContainer={dialogRef?.current ?? null}
                 />
                 <AutocompleteInputMedium source="new_severity" choices={OBSERVATION_SEVERITY_CHOICES} />
                 <AutocompleteInputMedium
@@ -407,5 +409,32 @@ export const RuleCreateEditComponent = ({ product, initialStatus }: RuleCreateEd
                 />
             </Stack>
         </Fragment>
+    );
+};
+
+interface RuleEditComponentProps {
+    product: any;
+    initialStatus: string;
+    setDescription: (value: string) => void;
+}
+
+export const RuleEditComponent = ({ product, initialStatus, setDescription }: RuleEditComponentProps) => {
+    const rule = useRecordContext();
+    const [descriptionSet, setDescriptionSet] = useState(false);
+    const [initialDescription, setInitialDescription] = useState("");
+
+    if (!descriptionSet && rule) {
+        setInitialDescription(rule.description || "");
+        setDescription(rule.description);
+        setDescriptionSet(true);
+    }
+
+    return (
+        <RuleCreateEditComponent
+            product={product}
+            initialStatus={initialStatus}
+            initialDescription={initialDescription}
+            setDescription={setDescription}
+        />
     );
 };

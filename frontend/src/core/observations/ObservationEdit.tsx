@@ -17,6 +17,7 @@ import {
 
 import observations from ".";
 import { PERMISSION_OBSERVATION_DELETE } from "../../access_control/types";
+import MarkdownEdit from "../../commons/custom_fields/MarkdownEdit";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import {
     validate_0_10,
@@ -41,7 +42,7 @@ const CustomToolbar = () => {
 
     return (
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-            <SaveButton />
+            <SaveButton alwaysEnable />
             {observation?.product_data.permissions.includes(PERMISSION_OBSERVATION_DELETE) && (
                 <DeleteButton mutationMode="pessimistic" />
             )}
@@ -49,10 +50,26 @@ const CustomToolbar = () => {
     );
 };
 
-const ObservationEditForm = () => {
+interface ObservationEditFormProps {
+    setDescription: (value: string) => void;
+    setRecommendation: (value: string) => void;
+}
+
+const ObservationEditForm = ({ setDescription, setRecommendation }: ObservationEditFormProps) => {
     const observation = useRecordContext();
     const [status, setStatus] = useState(observation ? observation.parser_status : "");
     const justificationEnabled = justificationIsEnabledForStatus(status);
+    const [descriptionSet, setDescriptionSet] = useState(false);
+    const [recommendationSet, setRecommendationSet] = useState(false);
+
+    if (!descriptionSet && observation) {
+        setDescription(observation.description);
+        setDescriptionSet(true);
+    }
+    if (!recommendationSet && observation) {
+        setRecommendation(observation.recommendation);
+        setRecommendationSet(true);
+    }
 
     return (
         <SimpleForm warnWhenUnsavedChanges toolbar={<CustomToolbar />}>
@@ -97,19 +114,17 @@ const ObservationEditForm = () => {
                         />
                     )}
                 </Stack>
-                <TextInputWide
-                    source="description"
-                    multiline
-                    minRows={3}
-                    helperText="Markdown is supported when showing the observation"
-                    validate={validate_2048}
+                <MarkdownEdit
+                    initialValue={observation ? observation.description : ""}
+                    setValue={setDescription}
+                    label="Description"
+                    maxLength={2048}
                 />
-                <TextInputWide
-                    source="recommendation"
-                    multiline
-                    minRows={3}
-                    helperText="Markdown is supported when showing the observation"
-                    validate={validate_2048}
+                <MarkdownEdit
+                    initialValue={observation ? observation.recommendation : ""}
+                    setValue={setRecommendation}
+                    label="Recommendation"
+                    maxLength={2048}
                 />
             </Stack>
 
@@ -271,10 +286,14 @@ const ObservationEditForm = () => {
 };
 
 const ObservationEdit = () => {
+    const [description, setDescription] = useState("");
+    const [recommendation, setRecommendation] = useState("");
+
     const transform = (data: any) => {
+        data.description = description;
+        data.recommendation = recommendation;
+
         data.parser_severity ??= "";
-        data.description ??= "";
-        data.recommendation ??= "";
         data.origin_component_name ??= "";
         data.origin_component_version ??= "";
         data.origin_docker_image_name ??= "";
@@ -305,7 +324,7 @@ const ObservationEdit = () => {
 
     return (
         <Edit redirect="show" mutationMode="pessimistic" transform={transform}>
-            <ObservationEditForm />
+            <ObservationEditForm setDescription={setDescription} setRecommendation={setRecommendation} />
         </Edit>
     );
 };
