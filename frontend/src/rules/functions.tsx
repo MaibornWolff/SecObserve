@@ -1,5 +1,5 @@
 import { Box, Divider, Paper, Stack, Typography } from "@mui/material";
-import { Fragment, useState, RefObject } from "react";
+import { Fragment, useState } from "react";
 import {
     BooleanField,
     BooleanInput,
