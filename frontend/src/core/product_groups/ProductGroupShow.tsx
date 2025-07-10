@@ -12,7 +12,6 @@ import {
     NumberField,
     PrevNextButtons,
     ReferenceField,
-    RichTextField,
     Show,
     Tab,
     TabbedShowLayout,
@@ -33,6 +32,7 @@ import {
     PERMISSION_PRODUCT_RULE_APPLY,
     PERMISSION_PRODUCT_RULE_CREATE,
 } from "../../access_control/types";
+import MarkdownField from "../../commons/custom_fields/MarkdownField";
 import { feature_email } from "../../commons/functions";
 import MetricsHeader from "../../metrics/MetricsHeader";
 import MetricsSeveritiesCurrent from "../../metrics/MetricsSeveritiesCurrent";
@@ -118,7 +118,7 @@ const ProductGroupShow = () => {
                                     </Labeled>
                                     {product_group.description && (
                                         <Labeled>
-                                            <RichTextField source="description" label="Description" />
+                                            <MarkdownField content={product_group.description} label="Description" />
                                         </Labeled>
                                     )}
                                 </Stack>

@@ -19,9 +19,7 @@ import { transform_product_group_and_product } from "../functions";
 import { ISSUE_TRACKER_TYPE_CHOICES, OBSERVATION_SEVERITY_CHOICES } from "../types";
 
 export const transform = (data: any, description: string) => {
-    data = transform_product_group_and_product(data);
-
-    data.description = description;
+    data = transform_product_group_and_product(data, description);
 
     data.purl ??= "";
     data.cpe23 ??= "";
