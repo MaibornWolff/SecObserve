@@ -1,19 +1,22 @@
 import { Divider, Stack, Typography } from "@mui/material";
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import { BooleanInput, FormDataConsumer, NullableBooleanInput, NumberInput, ReferenceInput } from "react-admin";
 
 import product_groups from ".";
-import { validate_0_999999, validate_255, validate_2048, validate_required_255 } from "../../commons/custom_validators";
+import MarkdownEdit from "../../commons/custom_fields/MarkdownEdit";
+import { validate_0_999999, validate_255, validate_required_255 } from "../../commons/custom_validators";
 import { feature_email, feature_license_management } from "../../commons/functions";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 
-const RichTextInput = React.lazy(() =>
-    import("ra-input-rich-text").then((module) => ({
-        default: module.RichTextInput,
-    }))
-);
+export type ProductGroupCreateEditComponentProps = {
+    initialDescription: string;
+    setDescription: (value: string) => void;
+};
 
-export const ProductGroupCreateEditComponent = () => {
+export const ProductGroupCreateEditComponent = ({
+    initialDescription,
+    setDescription,
+}: ProductGroupCreateEditComponentProps) => {
     return (
         <Fragment>
             <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
@@ -21,7 +24,12 @@ export const ProductGroupCreateEditComponent = () => {
                 &nbsp;&nbsp;Product Group
             </Typography>
             <TextInputWide autoFocus source="name" validate={validate_required_255} />
-            <RichTextInput source="description" validate={validate_2048} />
+            <MarkdownEdit
+                initialValue={initialDescription}
+                setValue={setDescription}
+                label="Description"
+                maxLength={2048}
+            />
 
             <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
 

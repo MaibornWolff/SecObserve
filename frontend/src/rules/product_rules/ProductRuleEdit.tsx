@@ -1,14 +1,15 @@
+import { useState } from "react";
 import { DeleteButton, Edit, SaveButton, SimpleForm, Toolbar, WithRecord, useRecordContext } from "react-admin";
 
 import { PERMISSION_PRODUCT_RULE_DELETE } from "../../access_control/types";
-import { RuleCreateEditComponent, non_duplicate_transform, validateRuleForm } from "../functions";
+import { RuleEditComponent, non_duplicate_transform, validateRuleForm } from "../functions";
 
 const CustomToolbar = () => {
     const rule = useRecordContext();
 
     return (
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-            <SaveButton />
+            <SaveButton alwaysEnable />
             {rule?.product_data.permissions.includes(PERMISSION_PRODUCT_RULE_DELETE) && (
                 <DeleteButton
                     mutationMode="pessimistic"
@@ -19,28 +20,26 @@ const CustomToolbar = () => {
     );
 };
 const ProductRuleEdit = () => {
+    const [description, setDescription] = useState("");
+
     const transform = (data: any) => {
-        return non_duplicate_transform(data);
+        return non_duplicate_transform(data, description);
     };
 
     return (
         <Edit redirect="show" mutationMode="pessimistic" transform={transform}>
-            <ProductRuleEditForm />
+            <SimpleForm warnWhenUnsavedChanges toolbar={<CustomToolbar />} validate={validateRuleForm}>
+                <WithRecord
+                    render={(product_rule) => (
+                        <RuleEditComponent
+                            product={product_rule.product_data}
+                            initialStatus={product_rule ? product_rule.new_status : ""}
+                            setDescription={setDescription}
+                        />
+                    )}
+                />
+            </SimpleForm>
         </Edit>
-    );
-};
-const ProductRuleEditForm = () => {
-    return (
-        <SimpleForm warnWhenUnsavedChanges toolbar={<CustomToolbar />} validate={validateRuleForm}>
-            <WithRecord
-                render={(product_rule) => (
-                    <RuleCreateEditComponent
-                        product={product_rule.product_data}
-                        initialStatus={product_rule ? product_rule.new_status : ""}
-                    />
-                )}
-            />
-        </SimpleForm>
     );
 };
 

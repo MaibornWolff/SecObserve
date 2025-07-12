@@ -1,6 +1,7 @@
 from datetime import date
 from typing import Optional
 
+from django.core.validators import MaxValueValidator, MinValueValidator
 from rest_framework.serializers import (
     CharField,
     IntegerField,
@@ -15,9 +16,9 @@ from application.access_control.api.serializers import (
     NestedAuthorizationGroupSerializer,
     UserListSerializer,
 )
-from application.access_control.services.authorization import get_highest_user_role
 from application.access_control.services.current_user import get_current_user
-from application.access_control.services.roles_permissions import (
+from application.authorization.services.authorization import get_highest_user_role
+from application.authorization.services.roles_permissions import (
     Permissions,
     Roles,
     get_permissions_for_role,
@@ -545,6 +546,11 @@ class ProductAuthorizationGroupMemberSerializer(ModelSerializer):
                 raise ValidationError("You are not permitted to change the Owner role")
 
         return attrs
+
+
+class ProductApiTokenSerializer(Serializer):
+    id = IntegerField(validators=[MinValueValidator(0)])
+    role = IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
 
 
 class BranchSerializer(ModelSerializer):

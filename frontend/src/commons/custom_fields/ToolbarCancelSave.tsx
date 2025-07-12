@@ -25,6 +25,7 @@ export const ToolbarCancelSave = ({
         {saveButtonLabel && saveButtonIcon && alwaysEnable && (
             <SaveButton label={saveButtonLabel} icon={saveButtonIcon} alwaysEnable />
         )}
-        {!saveButtonLabel && <SaveButton />}
+        {!saveButtonLabel && alwaysEnable && <SaveButton alwaysEnable />}
+        {!saveButtonLabel && !alwaysEnable && <SaveButton />}
     </Toolbar>
 );

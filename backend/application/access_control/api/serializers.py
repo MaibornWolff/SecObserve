@@ -1,9 +1,7 @@
 from typing import Any, Optional
 
-from django.core.validators import MaxValueValidator, MinValueValidator
 from rest_framework.serializers import (
     CharField,
-    IntegerField,
     ModelSerializer,
     Serializer,
     SerializerMethodField,
@@ -19,9 +17,8 @@ from application.access_control.models import (
 from application.access_control.queries.authorization_group_member import (
     get_authorization_group_member,
 )
-from application.access_control.services.authorization import get_user_permissions
 from application.access_control.services.current_user import get_current_user
-from application.access_control.services.roles_permissions import Permissions
+from application.authorization.services.roles_permissions import Permissions
 from application.core.models import Product_Authorization_Group_Member, Product_Member
 
 
@@ -50,6 +47,7 @@ class UserListSerializer(ModelSerializer):
             "is_external",
             "setting_theme",
             "setting_list_size",
+            "setting_package_info_preference",
             "permissions",
             "setting_list_properties",
             "oidc_groups_hash",
@@ -62,7 +60,7 @@ class UserListSerializer(ModelSerializer):
         data = super().to_representation(instance)
 
         user = get_current_user()
-        if user and not user.is_superuser and not user.pk == instance.pk:
+        if user and not user.is_superuser and user.pk != instance.pk:
             data.pop("email")
             data.pop("first_name")
             data.pop("last_name")
@@ -71,6 +69,7 @@ class UserListSerializer(ModelSerializer):
             data.pop("is_external")
             data.pop("setting_theme")
             data.pop("setting_list_size")
+            data.pop("setting_package_info_preference")
             data.pop("setting_list_properties")
             data.pop("permissions")
             data.pop("oidc_groups_hash")
@@ -87,11 +86,24 @@ class UserListSerializer(ModelSerializer):
         return obj.full_name
 
     def get_permissions(self, obj: User) -> list[Permissions]:
-        return get_user_permissions(obj)
+        return _get_user_permissions(obj)
 
     def get_has_password(self, obj: User) -> bool:
         return bool(obj.password and obj.password != "" and obj.has_usable_password())  # nosec B105
         # eliminate false positive, password is not hardcoded
+
+
+def _get_user_permissions(user: User = None) -> list[Permissions]:
+    if not user:
+        user = get_current_user()
+
+    permissions = []
+
+    if user and not user.is_external:
+        permissions.append(Permissions.Product_Create)
+        permissions.append(Permissions.Product_Group_Create)
+
+    return permissions
 
 
 class UserSerializer(UserListSerializer):
@@ -114,6 +126,7 @@ class UserSerializer(UserListSerializer):
             "is_external",
             "setting_theme",
             "setting_list_size",
+            "setting_package_info_preference",
             "permissions",
             "setting_list_properties",
             "oidc_groups_hash",
@@ -129,7 +142,7 @@ class UserSerializer(UserListSerializer):
         data = super().to_representation(instance)
 
         user = get_current_user()
-        if user and not user.is_superuser and not user.pk == instance.pk:
+        if user and not user.is_superuser and user.pk != instance.pk:
             data.pop("has_authorization_groups")
             data.pop("has_product_group_members")
             data.pop("has_product_members")
@@ -252,6 +265,7 @@ class UserSettingsSerializer(ModelSerializer):
         fields = [
             "setting_theme",
             "setting_list_size",
+            "setting_package_info_preference",
             "setting_list_properties",
         ]
 
@@ -264,11 +278,6 @@ class AuthenticationRequestSerializer(Serializer):
 class AuthenticationResponseSerializer(Serializer):
     jwt = CharField()
     user = UserSerializer()
-
-
-class ProductApiTokenSerializer(Serializer):
-    id = IntegerField(validators=[MinValueValidator(0)])
-    role = IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
 
 
 class ApiTokenSerializer(ModelSerializer):

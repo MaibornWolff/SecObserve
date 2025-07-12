@@ -1,4 +1,4 @@
-from application.access_control.services.roles_permissions import (
+from application.authorization.services.roles_permissions import (
     Permissions,
     Roles,
     get_permissions_for_role,

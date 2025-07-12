@@ -162,7 +162,7 @@ const ObservationList = () => {
                         sx={{ wordBreak: "break-word" }}
                     />
                     <TextField source="origin_endpoint_hostname" label="Host" sx={{ wordBreak: "break-word" }} />
-                    <TextField source="origin_source_file" label="Source" sx={{ wordBreak: "break-word" }} />
+                    <TextField source="origin_source_file_short" label="Source" sx={{ wordBreak: "break-word" }} />
                     <TextField
                         source="origin_cloud_qualified_resource"
                         label="Cloud res."

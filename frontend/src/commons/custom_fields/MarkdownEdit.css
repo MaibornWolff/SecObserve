@@ -1,0 +1,50 @@
+.prose {
+    font-family: "Roboto", sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.3;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+:root,
+.light,
+.light-theme {
+    --border: #c4c4c4;
+    --border-hover: #000000;
+    --border-focus-within: #000000;
+}
+
+:root,
+.dark,
+.dark-theme {
+    --border: #676767;
+    --border-hover: #ffffff;
+    --border-focus-within: #6ed3f1;
+}
+
+.mdxeditor {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+.mdxeditor:hover {
+    border: 1px solid var(--border-hover);
+    border-radius: 10px;
+}
+
+.mdxeditor:focus-within {
+    border: 2px solid var(--border-focus-within);
+    border-radius: 10px;
+}
+
+.mdxeditor-toolbar {
+    border-radius: 10px;
+}
+
+.cm-editor {
+    border-radius: 10px;
+}
+.cm-content {
+    font-size: 1rem;
+}

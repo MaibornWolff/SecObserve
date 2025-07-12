@@ -1,3 +1,4 @@
+import logging
 from tempfile import NamedTemporaryFile
 from typing import Any
 
@@ -14,16 +15,25 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import BaseSerializer
-from rest_framework.status import HTTP_200_OK, HTTP_204_NO_CONTENT, HTTP_404_NOT_FOUND
+from rest_framework.status import (
+    HTTP_200_OK,
+    HTTP_201_CREATED,
+    HTTP_204_NO_CONTENT,
+    HTTP_404_NOT_FOUND,
+)
 from rest_framework.views import APIView
-from rest_framework.viewsets import GenericViewSet, ModelViewSet
+from rest_framework.viewsets import GenericViewSet, ModelViewSet, ViewSet
 
-from application.access_control.services.authorization import (
+from application.access_control.api.serializers import (
+    CreateApiTokenResponseSerializer,
+)
+from application.access_control.services.current_user import get_current_user
+from application.authorization.services.authorization import (
     user_has_permission,
     user_has_permission_or_403,
 )
-from application.access_control.services.current_user import get_current_user
-from application.access_control.services.roles_permissions import Permissions
+from application.authorization.services.roles_permissions import Permissions
+from application.commons.services.log_message import format_log_message
 from application.core.api.filters import (
     BranchFilter,
     EvidenceFilter,
@@ -68,6 +78,7 @@ from application.core.api.serializers_observation import (
 from application.core.api.serializers_product import (
     BranchNameSerializer,
     BranchSerializer,
+    ProductApiTokenSerializer,
     ProductAuthorizationGroupMemberSerializer,
     ProductGroupSerializer,
     ProductMemberSerializer,
@@ -123,6 +134,11 @@ from application.core.services.observations_bulk_actions import (
 from application.core.services.potential_duplicates import (
     set_potential_duplicate_both_ways,
 )
+from application.core.services.product_api_token import (
+    create_product_api_token,
+    get_product_api_tokens,
+    revoke_product_api_token,
+)
 from application.core.services.purl_type import get_purl_type, get_purl_types
 from application.core.services.security_gate import check_security_gate
 from application.core.types import Assessment_Status, Status
@@ -139,6 +155,8 @@ from application.licenses.services.license_component import (
     license_components_bulk_delete,
 )
 from application.rules.services.rule_engine import Rule_Engine
+
+logger = logging.getLogger("secobserve.core")
 
 
 class ProductGroupViewSet(ModelViewSet):
@@ -796,3 +814,66 @@ class PURLTypeManyView(APIView):
             status=HTTP_200_OK,
             data=response_serializer.data,
         )
+
+
+class ProductApiTokenViewset(ViewSet):
+    serializer_class = ProductApiTokenSerializer
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(name="product", location=OpenApiParameter.QUERY, required=True, type=int),
+        ],
+    )
+    def list(self, request: Request) -> Response:
+        product_id = str(request.query_params.get("product", ""))
+        if not product_id:
+            raise ValidationError("Product is required")
+        if not product_id.isdigit():
+            raise ValidationError("Product id must be an integer")
+
+        product = _get_product(int(str(product_id)))
+        user_has_permission_or_403(product, Permissions.Product_View)
+        tokens = get_product_api_tokens(product)
+        serializer = ProductApiTokenSerializer(tokens, many=True)
+        response_data = {"results": serializer.data}
+        return Response(response_data)
+
+    @extend_schema(
+        request=ProductApiTokenSerializer,
+        responses={HTTP_200_OK: CreateApiTokenResponseSerializer},
+    )
+    def create(self, request: Request) -> Response:
+        request_serializer = ProductApiTokenSerializer(data=request.data)
+        if not request_serializer.is_valid():
+            raise ValidationError(request_serializer.errors)
+
+        product = _get_product(request_serializer.validated_data.get("id"))
+
+        user_has_permission_or_403(product, Permissions.Product_Api_Token_Create)
+
+        token = create_product_api_token(product, request_serializer.validated_data.get("role"))
+
+        response = Response({"token": token}, status=HTTP_201_CREATED)
+        logger.info(format_log_message(message="Product API token created", response=response))
+        return response
+
+    @extend_schema(
+        responses={HTTP_204_NO_CONTENT: None},
+    )
+    def destroy(self, request: Request, pk: int) -> Response:
+        product = _get_product(pk)
+        user_has_permission_or_403(product, Permissions.Product_Api_Token_Revoke)
+
+        revoke_product_api_token(product)
+
+        response = Response(status=HTTP_204_NO_CONTENT)
+        logger.info(format_log_message(message="Product API token revoked", response=response))
+        return response
+
+
+def _get_product(product_id: int) -> Product:
+    product = get_product_by_id(product_id)
+    if not product:
+        raise ValidationError(f"Product {product_id} does not exist")
+
+    return product

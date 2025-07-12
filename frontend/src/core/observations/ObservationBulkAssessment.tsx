@@ -1,6 +1,6 @@
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import { Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
-import { Fragment, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import {
     DateInput,
     FormDataConsumer,
@@ -11,11 +11,12 @@ import {
     useUnselectAll,
 } from "react-admin";
 
+import MarkdownEdit from "../../commons/custom_fields/MarkdownEdit";
 import SmallButton from "../../commons/custom_fields/SmallButton";
 import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
-import { validate_after_today, validate_required_4096 } from "../../commons/custom_validators";
+import { validate_after_today } from "../../commons/custom_validators";
 import { justificationIsEnabledForStatus, settings_risk_acceptance_expiry_date } from "../../commons/functions";
-import { AutocompleteInputMedium, TextInputWide } from "../../commons/layout/themes";
+import { AutocompleteInputMedium } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 import {
     OBSERVATION_SEVERITY_CHOICES,
@@ -30,6 +31,8 @@ type ObservationBulkAssessmentButtonProps = {
 };
 
 const ObservationBulkAssessment = (props: ObservationBulkAssessmentButtonProps) => {
+    const dialogRef = useRef<HTMLDivElement>(null);
+    const [comment, setComment] = useState("");
     const [open, setOpen] = useState(false);
     const [status, setStatus] = useState(OBSERVATION_STATUS_OPEN);
     const justificationEnabled = justificationIsEnabledForStatus(status);
@@ -40,6 +43,12 @@ const ObservationBulkAssessment = (props: ObservationBulkAssessmentButtonProps) 
     const unselectAll = useUnselectAll("observations");
 
     const observationUpdate = async (data: any) => {
+        if (comment === "") {
+            notify("Comment is required", {
+                type: "warning",
+            });
+            return;
+        }
         setLoading(true);
         let url = "";
         if (props.product) {
@@ -54,7 +63,7 @@ const ObservationBulkAssessment = (props: ObservationBulkAssessmentButtonProps) 
         const assessment_data = {
             severity: data.current_severity,
             status: data.current_status,
-            comment: data.comment,
+            comment: comment,
             vex_justification: justificationEnabled ? data.current_vex_justification : "",
             observations: selectedIds,
             risk_acceptance_expiry_date: data.risk_acceptance_expiry_date,
@@ -94,10 +103,13 @@ const ObservationBulkAssessment = (props: ObservationBulkAssessmentButtonProps) 
     return (
         <Fragment>
             <SmallButton title="Assessment" onClick={handleOpen} icon={<PlaylistAddCheckIcon />} />
-            <Dialog open={open && !loading} onClose={handleClose}>
+            <Dialog ref={dialogRef} open={open && !loading} onClose={handleClose} maxWidth={"lg"}>
                 <DialogTitle>Bulk Observation Assessment</DialogTitle>
                 <DialogContent>
-                    <SimpleForm onSubmit={observationUpdate} toolbar={<ToolbarCancelSave onClick={handleCancel} />}>
+                    <SimpleForm
+                        onSubmit={observationUpdate}
+                        toolbar={<ToolbarCancelSave onClick={handleCancel} alwaysEnable={true} />}
+                    >
                         <AutocompleteInputMedium
                             source="current_severity"
                             label="Severity"
@@ -135,11 +147,12 @@ const ObservationBulkAssessment = (props: ObservationBulkAssessmentButtonProps) 
                                 )
                             }
                         </FormDataConsumer>
-                        <TextInputWide
-                            source="comment"
-                            validate={validate_required_4096}
-                            multiline={true}
-                            minRows={3}
+                        <MarkdownEdit
+                            initialValue=""
+                            setValue={setComment}
+                            label="Comment *"
+                            overlayContainer={dialogRef.current ?? null}
+                            maxLength={4096}
                         />
                     </SimpleForm>
                 </DialogContent>

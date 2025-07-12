@@ -1,14 +1,15 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
-import { Fragment, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { SimpleForm, useNotify, useRefresh } from "react-admin";
 
+import MarkdownEdit from "../../commons/custom_fields/MarkdownEdit";
 import RemoveButton from "../../commons/custom_fields/RemoveButton";
 import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
-import { validate_required_4096 } from "../../commons/custom_validators";
-import { TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 
 const ObservationRemoveAssessment = () => {
+    const dialogRef = useRef<HTMLDivElement>(null);
+    const [comment, setComment] = useState("");
     const [open, setOpen] = useState(false);
     const refresh = useRefresh();
     const notify = useNotify();
@@ -20,8 +21,15 @@ const ObservationRemoveAssessment = () => {
     };
 
     const observationUpdate = async (data: any) => {
+        if (comment === "") {
+            notify("Comment is required", {
+                type: "warning",
+            });
+            return;
+        }
+
         const patch = {
-            comment: data.comment,
+            comment: comment,
         };
 
         httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/observations/" + data.id + "/remove_assessment/", {
@@ -46,15 +54,19 @@ const ObservationRemoveAssessment = () => {
     return (
         <Fragment>
             <RemoveButton title="Remove Assessment" onClick={handleOpen} />
-            <Dialog open={open} onClose={handleClose}>
+            <Dialog ref={dialogRef} open={open} onClose={handleClose} maxWidth={"lg"}>
                 <DialogTitle>Observation Remove Assessment</DialogTitle>
                 <DialogContent>
-                    <SimpleForm onSubmit={observationUpdate} toolbar={<ToolbarCancelSave onClick={handleCancel} />}>
-                        <TextInputWide
-                            source="comment"
-                            validate={validate_required_4096}
-                            multiline={true}
-                            minRows={3}
+                    <SimpleForm
+                        onSubmit={observationUpdate}
+                        toolbar={<ToolbarCancelSave onClick={handleCancel} alwaysEnable={true} />}
+                    >
+                        <MarkdownEdit
+                            initialValue=""
+                            setValue={setComment}
+                            label="Comment *"
+                            overlayContainer={dialogRef.current ?? null}
+                            maxLength={4096}
                         />
                     </SimpleForm>
                 </DialogContent>

@@ -1,5 +1,5 @@
-export const transform_product_group_and_product = (data: any) => {
-    data.description ??= "";
+export const transform_product_group_and_product = (data: any, description: string) => {
+    data.description = description;
 
     if (data.repository_branch_housekeeping_active) {
         data.repository_branch_housekeeping_keep_inactive_days ||= 1;
