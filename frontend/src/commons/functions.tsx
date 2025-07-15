@@ -159,7 +159,10 @@ function get_purl_url_deps_dev(
         }
 
         component_purl_url = "https://deps.dev/" + deps_dev_type + "/";
-        if (component_purl_namespace !== null && !component_name.startsWith(component_purl_namespace)) {
+        if (
+            component_purl_namespace !== null &&
+            !(component_purl_type === "golang" && component_name.startsWith(component_purl_namespace))
+        ) {
             component_purl_url =
                 component_purl_url +
                 encodeURIComponent(component_purl_namespace) +
@@ -201,7 +204,10 @@ function get_purl_url_ecosyste_ms(
         const ecosystems_type = types[component_purl_type]; // eslint-disable-line security/detect-object-injection
 
         component_purl_url = "https://packages.ecosyste.ms/registries/" + ecosystems_type + "/packages/";
-        if (component_purl_namespace !== null && !component_name.startsWith(component_purl_namespace)) {
+        if (
+            component_purl_namespace !== null &&
+            !(component_purl_type === "golang" && component_name.startsWith(component_purl_namespace))
+        ) {
             component_purl_url =
                 component_purl_url +
                 encodeURIComponent(component_purl_namespace) +
