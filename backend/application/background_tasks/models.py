@@ -1,4 +1,4 @@
-from django.db.models import CharField, DateTimeField, Index, BigIntegerField, Model
+from django.db.models import BigIntegerField, CharField, DateTimeField, Index, Model
 
 from application.background_tasks.types import Status
 
