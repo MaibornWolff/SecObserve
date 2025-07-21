@@ -9,7 +9,7 @@ export const SecurityGateTextField = (props: SecurityGateTextProps) => {
 
     function get_severity_color() {
         if (record?.security_gate_passed) {
-            return "#0a0";
+            return "#00aa00";
         } else {
             return "#d4333f";
         }
