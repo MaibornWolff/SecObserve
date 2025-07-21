@@ -14,7 +14,8 @@ class TestTaskBase(BaseTestCase):
 
     @patch("application.background_tasks.services.task_base.lock_task")
     @patch("application.background_tasks.services.task_base.logger")
-    def test_so_periodic_task_successful_execution(self, mock_logger, mock_lock_task):
+    @patch("application.background_tasks.models.Periodic_Task.save")
+    def test_so_periodic_task_successful_execution(self, mock_save, mock_logger, mock_lock_task):
         # Setup
         mock_lock_task.return_value = lambda func: func
         test_function = MagicMock()
@@ -29,12 +30,14 @@ class TestTaskBase(BaseTestCase):
             [call("--- %s - start ---", "test_task"), call("--- %s - finished ---", "test_task")]
         )
         test_function.assert_called_once()
+        mock_save.assert_has_calls([call(), call()])
         mock_lock_task.assert_called_once_with("test_task")
 
     @patch("application.background_tasks.services.task_base.handle_periodic_task_exception")
     @patch("application.background_tasks.services.task_base.lock_task")
     @patch("application.background_tasks.services.task_base.logger")
-    def test_so_periodic_task_exception_handling(self, mock_logger, mock_lock_task, mock_handle_exception):
+    @patch("application.background_tasks.models.Periodic_Task.save")
+    def test_so_periodic_task_exception_handling(self, mock_save, mock_logger, mock_lock_task, mock_handle_exception):
         # Setup
         mock_lock_task.return_value = lambda func: func
         test_exception = Exception("Test exception")
@@ -49,6 +52,8 @@ class TestTaskBase(BaseTestCase):
         mock_logger.info.assert_called_once_with("--- %s - start ---", "test_task")
         test_function.assert_called_once()
         mock_handle_exception.assert_called_once_with(test_exception)
+        mock_save.assert_has_calls([call(), call()])
+
         # Verify that the "finished" log is not called when an exception occurs
         self.assertEqual(mock_logger.info.call_count, 1)
 
