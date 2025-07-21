@@ -1,8 +1,9 @@
-from unittest.mock import MagicMock, call, patch
+from unittest.mock import MagicMock, patch
 
 from application.background_tasks.periodic_tasks.import_observations_tasks import (
     task_api_import,
 )
+from application.commons.models import Settings
 from unittests.base_test_case import BaseTestCase
 
 
@@ -26,10 +27,10 @@ class TestImportObservationsTasks(BaseTestCase):
     ):
         # Setup
         # Mock settings
-        mock_settings = MagicMock()
-        mock_settings.feature_automatic_api_import = True
-        mock_settings.feature_automatic_osv_scanning = True
-        mock_settings_load.return_value = mock_settings
+        settings = Settings()
+        settings.feature_automatic_api_import = True
+        settings.feature_automatic_osv_scanning = True
+        mock_settings_load.return_value = settings
 
         # Mock API configurations
         mock_api_config = MagicMock()
@@ -52,8 +53,8 @@ class TestImportObservationsTasks(BaseTestCase):
         task_api_import()
 
         # Assert
-        # Check settings were loaded twice (once for API import, once for OSV)
-        self.assertEqual(mock_settings_load.call_count, 2)
+        # Check settings were loaded 3 times (once for API import, once for OSV and once for deleting old entries)
+        self.assertEqual(mock_settings_load.call_count, 3)
 
         # Check API import was called with correct parameters
         mock_api_config_filter.assert_called_once_with(automatic_import_enabled=True)
@@ -87,10 +88,10 @@ class TestImportObservationsTasks(BaseTestCase):
     ):
         # Setup
         # Mock settings
-        mock_settings = MagicMock()
-        mock_settings.feature_automatic_api_import = False
-        mock_settings.feature_automatic_osv_scanning = True
-        mock_settings_load.return_value = mock_settings
+        settings = Settings()
+        settings.feature_automatic_api_import = False
+        settings.feature_automatic_osv_scanning = True
+        mock_settings_load.return_value = settings
 
         # Mock products
         mock_product = MagicMock()
@@ -126,10 +127,10 @@ class TestImportObservationsTasks(BaseTestCase):
     ):
         # Setup
         # Mock settings
-        mock_settings = MagicMock()
-        mock_settings.feature_automatic_api_import = True
-        mock_settings.feature_automatic_osv_scanning = False
-        mock_settings_load.return_value = mock_settings
+        settings = Settings()
+        settings.feature_automatic_api_import = True
+        settings.feature_automatic_osv_scanning = False
+        mock_settings_load.return_value = settings
 
         # Mock API configurations
         mock_api_config = MagicMock()
@@ -163,10 +164,10 @@ class TestImportObservationsTasks(BaseTestCase):
     ):
         # Setup
         # Mock settings
-        mock_settings = MagicMock()
-        mock_settings.feature_automatic_api_import = True
-        mock_settings.feature_automatic_osv_scanning = False
-        mock_settings_load.return_value = mock_settings
+        settings = Settings()
+        settings.feature_automatic_api_import = True
+        settings.feature_automatic_osv_scanning = False
+        mock_settings_load.return_value = settings
 
         # Mock API configurations
         mock_api_config = MagicMock()
@@ -196,10 +197,10 @@ class TestImportObservationsTasks(BaseTestCase):
     ):
         # Setup
         # Mock settings
-        mock_settings = MagicMock()
-        mock_settings.feature_automatic_api_import = False
-        mock_settings.feature_automatic_osv_scanning = True
-        mock_settings_load.return_value = mock_settings
+        settings = Settings()
+        settings.feature_automatic_api_import = False
+        settings.feature_automatic_osv_scanning = True
+        mock_settings_load.return_value = settings
 
         # Mock products
         mock_product = MagicMock()

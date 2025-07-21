@@ -11,6 +11,7 @@ from huey.contrib.djhuey import lock_task
 
 from application.background_tasks.models import Periodic_Task
 from application.background_tasks.types import Status
+from application.commons.models import Settings
 from application.commons.services.log_message import format_log_message
 from application.notifications.services.send_notifications import (
     send_task_exception_notification,
@@ -33,6 +34,8 @@ def so_periodic_task(name: str) -> Callable:
             )
             periodic_task.save()
 
+            _delete_older_entries(name)
+
             try:
                 message = func()
 
@@ -46,7 +49,7 @@ def so_periodic_task(name: str) -> Callable:
                 periodic_task.message = str(e)
                 periodic_task.save()
 
-                handle_periodic_task_exception(e)
+                _handle_periodic_task_exception(e)
                 return
 
             logger.info("--- %s - finished ---", name)
@@ -56,7 +59,7 @@ def so_periodic_task(name: str) -> Callable:
     return decorator
 
 
-def handle_periodic_task_exception(e: Exception) -> None:
+def _handle_periodic_task_exception(e: Exception) -> None:
     data: dict[str, Any] = {}
     function = None
 
@@ -77,3 +80,13 @@ def handle_periodic_task_exception(e: Exception) -> None:
     logger.error(traceback.format_exc())
 
     send_task_exception_notification(function=function, arguments=None, user=None, exception=e, product=None)
+
+
+def _delete_older_entries(name: str) -> None:
+    settings = Settings.load()
+    recent_task_ids = list(
+        Periodic_Task.objects.filter(task=name)
+        .order_by("-start_time")
+        .values_list("id", flat=True)[: settings.periodic_task_max_entries]
+    )
+    Periodic_Task.objects.filter(task=name).exclude(id__in=recent_task_ids).delete()
