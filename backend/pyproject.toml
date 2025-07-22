@@ -49,7 +49,7 @@ pyyaml = "6.0.2"  # https://github.com/yaml/pyyaml
 packageurl-python = "0.17.1"  # https://github.com/package-url/packageurl-python
 cvss = "3.4"  # https://github.com/RedHatProductSecurity/cvss
 semver = "3.0.4"  # https://github.com/python-semver/python-semver
-license-expression = "30.4.3"  # https://github.com/aboutcode-org/license-expression
+license-expression = "30.4.4"  # https://github.com/aboutcode-org/license-expression
 # Task queue
 # ------------------------------------------------------------------------------
 huey = "2.5.3"  # https://github.com/coleifer/huey
