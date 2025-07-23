@@ -13,10 +13,11 @@ from application.licenses.services.license import import_licenses
         hour=settings_static.license_import_crontab_hour,
     )
 )
-@so_periodic_task("Import_SPDX licenses")
-def task_spdx_license_import() -> None:
+@so_periodic_task("Import SPDX licenses")
+def task_spdx_license_import() -> str:
     settings = Settings.load()
     if not settings.feature_license_management:
-        return
+        return "License management feature is disabled."
 
-    import_licenses()
+    message = import_licenses()
+    return message

@@ -5,7 +5,11 @@ import requests
 from application.licenses.models import License
 
 
-def import_licenses() -> None:
+def import_licenses() -> str:
+
+    licenses_updated = 0
+    licenses_created = 0
+
     response = requests.get(
         "https://raw.githubusercontent.com/spdx/license-list-data/refs/heads/main/json/licenses.json",
         timeout=60,
@@ -34,6 +38,7 @@ def import_licenses() -> None:
                 license_changed = True
             if license_changed:
                 secobserve_license.save()
+                licenses_updated += 1
         except License.DoesNotExist:
             License.objects.create(
                 spdx_id=spdx_id,
@@ -42,3 +47,6 @@ def import_licenses() -> None:
                 is_osi_approved=spdx_license.get("isOsiApproved"),
                 is_deprecated=spdx_license.get("isDeprecatedLicenseId"),
             )
+            licenses_created += 1
+
+    return f"Licenses updated: {licenses_updated}, licenses created: {licenses_created}"

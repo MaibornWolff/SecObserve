@@ -10,8 +10,8 @@ import { getSettingListSize } from "../../commons/user_settings/functions";
 import { PERIODIC_TASKS_STATUS_CHOICES } from "../types";
 
 const listFilters = [
-    <TextInput source="task" alwaysOn />,
-    <AutocompleteInput source="status" choices={PERIODIC_TASKS_STATUS_CHOICES} alwaysOn />,
+    <TextInput key="task-filter" source="task" alwaysOn />,
+    <AutocompleteInput key="status-filter" source="status" choices={PERIODIC_TASKS_STATUS_CHOICES} alwaysOn />,
 ];
 
 const PeriodicTaskList = () => {
@@ -31,7 +31,7 @@ const PeriodicTaskList = () => {
                     <DateField source="start_time" showTime />
                     <FunctionField source="duration" render={(record) => `${humanizeDuration(record.duration)}`} />
                     <PeriodicTaskStatusField label="Status" />
-                    <TextField source="message" sortable={false} />
+                    <TextField source="message" sortable={false} sx={{ whiteSpace: "pre-line" }} />
                 </Datagrid>
             </List>
         </Fragment>

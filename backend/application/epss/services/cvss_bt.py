@@ -18,7 +18,7 @@ from application.epss.queries.exploit_information import get_exploit_information
 logger = logging.getLogger("secobserve.epss")
 
 
-def import_cvss_bt() -> None:
+def import_cvss_bt() -> str:
     response = requests.get(  # nosec B113
         # This is a false positive, there is a timeout of 5 minutes
         "https://raw.githubusercontent.com/t0sche/cvss-bt/refs/heads/main/cvss-bt.csv",
@@ -33,11 +33,12 @@ def import_cvss_bt() -> None:
     first_row = True
     counter = 0
     exploit_information_list = []
+    num_exploit_informations = 0
 
     for row in reader:
         if first_row:
             if not _check_first_row(row):
-                return
+                return "Error: First row of cvss-bt CSV is not valid."
 
             Exploit_Information.objects.all().delete()
 
@@ -67,6 +68,7 @@ def import_cvss_bt() -> None:
             nuclei=row[15].lower() == "true",
             poc_github=row[16].lower() == "true",
         )
+        num_exploit_informations += 1
         exploit_information_list.append(exploit_information)
         counter += 1
         if counter == 1000:
@@ -77,7 +79,12 @@ def import_cvss_bt() -> None:
     if exploit_information_list:
         Exploit_Information.objects.bulk_create(exploit_information_list)
 
-    apply_exploit_information_observations(settings)
+    num_observations = apply_exploit_information_observations(settings)
+
+    return (
+        f"Imported {num_exploit_informations} exploit information entries.\n"
+        + f"Applied exploit information to {num_observations} observations."
+    )
 
 
 def _check_first_row(row: list[str]) -> bool:
@@ -122,7 +129,9 @@ def _get_year_from_cve(cve: str) -> Optional[int]:
     return int(cve_year)
 
 
-def apply_exploit_information_observations(settings: Settings) -> None:
+def apply_exploit_information_observations(settings: Settings) -> int:
+    num_observations = 0
+
     observations = (
         Observation.objects.filter(vulnerability_id__startswith="CVE-")
         .exclude(current_status=Status.STATUS_RESOLVED)
@@ -137,6 +146,7 @@ def apply_exploit_information_observations(settings: Settings) -> None:
         for observation in page.object_list:
             if apply_exploit_information(observation, settings):
                 updates.append(observation)
+                num_observations += 1
 
         Observation.objects.bulk_update(
             updates,
@@ -149,6 +159,8 @@ def apply_exploit_information_observations(settings: Settings) -> None:
                 "current_severity",
             ],
         )
+
+    return num_observations
 
 
 def apply_exploit_information(observation: Observation, settings: Settings) -> bool:

@@ -8,5 +8,6 @@ from application.metrics.services.metrics import calculate_product_metrics
 
 @db_periodic_task(crontab(minute=f"*/{settings_static.background_product_metrics_interval_minutes}"))
 @so_periodic_task("Calculate product metrics")
-def task_calculate_product_metrics() -> None:
-    calculate_product_metrics()
+def task_calculate_product_metrics() -> str:
+    message = calculate_product_metrics()
+    return message

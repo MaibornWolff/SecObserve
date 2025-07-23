@@ -13,8 +13,10 @@ from application.epss.services.epss import epss_apply_observations, import_epss
         hour=settings_static.background_epss_import_crontab_hour,
     )
 )
-@so_periodic_task("Import_EPSS and cvss-bt")
-def task_import_epss() -> None:
-    import_epss()
-    epss_apply_observations()
-    import_cvss_bt()
+@so_periodic_task("Import EPSS and cvss-bt")
+def task_import_epss() -> str:
+    message = import_epss() + "\n"
+    message += epss_apply_observations() + "\n"
+    message += import_cvss_bt()
+
+    return message

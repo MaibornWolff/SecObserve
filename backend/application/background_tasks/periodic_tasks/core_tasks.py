@@ -18,8 +18,9 @@ from application.core.services.risk_acceptance_expiry_task import (
     )
 )
 @so_periodic_task("Branch housekeeping")
-def task_branch_housekeeping() -> None:
-    delete_inactive_branches_and_set_flags()
+def task_branch_housekeeping() -> str:
+    message = delete_inactive_branches_and_set_flags()
+    return message
 
 
 @db_periodic_task(
@@ -29,5 +30,6 @@ def task_branch_housekeeping() -> None:
     )
 )
 @so_periodic_task("Expire risk acceptances")
-def task_expire_risk_acceptances() -> None:
-    expire_risk_acceptances()
+def task_expire_risk_acceptances() -> str:
+    message = expire_risk_acceptances()
+    return message

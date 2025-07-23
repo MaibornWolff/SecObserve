@@ -24,14 +24,21 @@ logger = logging.getLogger("secobserve.import_observations")
     )
 )
 @so_periodic_task("Import observations from API configurations and OSV")
-def task_api_import() -> None:
+def task_api_import() -> str:
+    message = ""
+
     # 1. Import observations from API configurations
     settings = Settings.load()
     if not settings.feature_automatic_api_import:
         logger.info("API import is disabled in settings")
+        message += "API import is disabled in settings."
     else:
+        product_set = set()
+        api_imports_failed = 0
+
         api_configurations = Api_Configuration.objects.filter(automatic_import_enabled=True)
         for api_configuration in api_configurations:
+            product_set.add(api_configuration.product)
             try:
                 api_import_parameters = ApiImportParameters(
                     api_configuration=api_configuration,
@@ -54,15 +61,21 @@ def task_api_import() -> None:
                     observations_resolved,
                 )
             except Exception as e:
+                api_imports_failed += 1
                 logger.warning("API import - %s: failed with exception", api_configuration)
                 handle_task_exception(e, product=api_configuration.product)
+
+        message += f" Imported observations for {len(product_set)} products from API configurations."
+        if api_imports_failed > 0:
+            message += f" API import failed for {api_imports_failed} configurations."
 
     # 2. Scan products for OSV vulnerabilities
     settings = Settings.load()
     if not settings.feature_automatic_osv_scanning:
         logger.info("OSV scanning is disabled in settings")
-        return
+        return message + "\nOSV scanning is disabled in settings."
 
+    osv_imports_failed = 0
     products = Product.objects.filter(osv_enabled=True, automatic_osv_scanning_enabled=True)
     for product in products:
         try:
@@ -79,5 +92,12 @@ def task_api_import() -> None:
                 observations_resolved,
             )
         except Exception as e:
+            osv_imports_failed += 1
             logger.warning("OSV scanning - %s: failed with exception", product)
             handle_task_exception(e, product=product)
+
+    message += f"\nImported observations for {len(products)} products from OSV scanning."
+    if osv_imports_failed > 0:
+        message += f" OSV scanning failed for {osv_imports_failed} products."
+
+    return message
