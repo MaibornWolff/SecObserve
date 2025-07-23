@@ -13,20 +13,30 @@ from application.metrics.queries.product_metrics import (
 from application.metrics.services.age import get_days
 
 
-def calculate_product_metrics() -> None:
+def calculate_product_metrics() -> str:
+
+    num_products = 0
+
     for product in Product.objects.filter(is_product_group=False):
-        calculate_metrics_for_product(product)
+        if calculate_metrics_for_product(product):
+            num_products += 1
 
     product_metrics_status = Product_Metrics_Status.load()
     product_metrics_status.last_calculated = timezone.now()
     product_metrics_status.save()
 
+    if num_products == 1:
+        return "Calculated metrics for 1 product."
+
+    return f"Calculated metrics for {num_products} products."
+
 
 def calculate_metrics_for_product(  # pylint: disable=too-many-branches
     product: Product,
-) -> None:
+) -> bool:
     # There are quite a lot of branches, but at least they are not nested too much
 
+    metrics_calculated = False
     today = timezone.localdate()
 
     latest_product_metrics = _get_latest_product_metrics(product)
@@ -55,6 +65,7 @@ def calculate_metrics_for_product(  # pylint: disable=too-many-branches
                 risk_accepted=latest_product_metrics.risk_accepted,
             )
             iteration_date += timedelta(days=1)
+            metrics_calculated = True
     else:
         # Either there are relevant changes of observations today or there are no metrics yet at all,
         # so we need to calculate the metrics for today.
@@ -115,6 +126,9 @@ def calculate_metrics_for_product(  # pylint: disable=too-many-branches
                 todays_product_metrics.risk_accepted += 1
 
         todays_product_metrics.save()
+        metrics_calculated = True
+
+    return metrics_calculated
 
 
 def _get_latest_product_metrics(product: Product) -> Optional[Product_Metrics]:

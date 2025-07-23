@@ -327,6 +327,9 @@ class TestAuthentication(BaseTestCase):
             "/api/license_policy_authorization_group_members/1001/",
         )
 
+        self._check_authentication(["get"], "/api/periodic_tasks/")
+        self._check_authentication(["get"], "/api/periodic_tasks/1/")
+
     def test_authentication_users(self):
         self._check_authentication(["get"], "/api/users/me/")
         self._check_authentication(["get"], "/api/users/")

@@ -1,3 +1,5 @@
+from typing import Optional
+
 from rest_framework.request import Request
 from rest_framework.response import Response
 
@@ -9,7 +11,7 @@ def format_log_message(  # pylint: disable=too-many-branches
     # There are quite a lot of branches, but at least they are not nested too much
     message: str = None,
     data: dict = None,
-    username: str = None,
+    username: Optional[str] = None,
     response: Response = None,
     exception: Exception = None,
 ) -> str:

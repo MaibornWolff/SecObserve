@@ -8,6 +8,7 @@ import {
     validate_0_59,
     validate_0_999999,
     validate_1_4096,
+    validate_1_999999,
     validate_255,
 } from "../../commons/custom_validators";
 import ListHeader from "../../commons/layout/ListHeader";
@@ -428,6 +429,13 @@ const SettingsEdit = () => {
                                         )
                                     }
                                 </FormDataConsumer>
+                                <NumberInput
+                                    source="periodic_task_max_entries"
+                                    label="Number of entries of Periodic Task to keep per task"
+                                    min={1}
+                                    step={1}
+                                    validate={validate_1_999999}
+                                />
                             </Stack>
                         </Grid>
 

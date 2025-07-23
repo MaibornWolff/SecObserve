@@ -31,8 +31,11 @@ class TestHousekeeping(BaseTestCase):
 
     @patch("application.core.services.housekeeping.delete_inactive_branches_for_product")
     def test_delete_inactive_branches(self, mock_delete_inactive_branches_for_product: Mock):
-        delete_inactive_branches_and_set_flags()
+        mock_delete_inactive_branches_for_product.return_value = 2
 
+        message = delete_inactive_branches_and_set_flags()
+
+        self.assertEqual(message, "Deleted 4 inactive branches in 2 products.")
         expected_calls = [
             call(Product.objects.get(name="db_product_internal")),
             call(Product.objects.get(name="db_product_external")),

@@ -6,6 +6,7 @@ import { Fragment, useEffect, useState } from "react";
 import { DashboardMenuItem, MenuItemLink, MenuProps, useSidebarState } from "react-admin";
 
 import administration from "../../access_control/access_control_administration";
+import periodic_tasks from "../../background_tasks/periodic_tasks";
 import observations from "../../core/observations";
 import product_groups from "../../core/product_groups";
 import products from "../../core/products";
@@ -160,6 +161,15 @@ const Menu = ({ dense = false }: MenuProps) => {
                             state={{ _scrollToTop: true }}
                             primaryText="Settings"
                             leftIcon={<settings.icon />}
+                            dense={dense}
+                        />
+                    )}
+                    {is_superuser() && (
+                        <MenuItemLink
+                            to="/periodic_tasks"
+                            state={{ _scrollToTop: true }}
+                            primaryText="Periodic Tasks"
+                            leftIcon={<periodic_tasks.icon />}
                             dense={dense}
                         />
                     )}

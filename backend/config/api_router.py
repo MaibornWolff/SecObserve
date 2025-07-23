@@ -6,6 +6,7 @@ from application.access_control.api.views import (
     AuthorizationGroupViewSet,
     UserViewSet,
 )
+from application.background_tasks.api.views import PeriodicTaskViewSet
 from application.core.api.views import (
     BranchNameViewSet,
     BranchViewSet,
@@ -137,6 +138,6 @@ router.register(
     LicensePolicyAuthorizationGroupMemberViewSet,
     basename="license_policy_authorization_group_members",
 )
-
+router.register("periodic_tasks", PeriodicTaskViewSet, basename="periodic_tasks")
 app_name = "api"
 urlpatterns = router.urls
