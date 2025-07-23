@@ -17,7 +17,7 @@ from application.notifications.services.send_notifications import (
     send_task_exception_notification,
 )
 
-logger = logging.getLogger("secobserve.task")
+logger = logging.getLogger("secobserve.background_tasks")
 
 
 def so_periodic_task(name: str) -> Callable:
