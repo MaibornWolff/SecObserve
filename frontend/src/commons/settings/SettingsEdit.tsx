@@ -358,8 +358,12 @@ const SettingsEdit = () => {
                     </Grid>
 
                     <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
-                    <Typography variant="h6" sx={{ marginBottom: 2 }}>
-                        Background tasks (restart needed)
+                    <Typography variant="h6" sx={{ marginBottom: 3 }}>
+                        Background tasks
+                    </Typography>
+
+                    <Typography variant="body2" sx={{ marginBottom: 3 }}>
+                        The settings in this section require a restart of the SecObserve backend to take effect.
                     </Typography>
 
                     <NumberInput
