@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "SecObserve"
-version = "1.34.1"
+version = "1.35.0"
 description = "SecObserve is an open source vulnerability management system for software development and cloud environments."
 license = "BSD-3-Clause"
 authors = [
@@ -49,7 +49,7 @@ pyyaml = "6.0.2"  # https://github.com/yaml/pyyaml
 packageurl-python = "0.17.1"  # https://github.com/package-url/packageurl-python
 cvss = "3.4"  # https://github.com/RedHatProductSecurity/cvss
 semver = "3.0.4"  # https://github.com/python-semver/python-semver
-license-expression = "30.4.3"  # https://github.com/aboutcode-org/license-expression
+license-expression = "30.4.4"  # https://github.com/aboutcode-org/license-expression
 # Task queue
 # ------------------------------------------------------------------------------
 huey = "2.5.3"  # https://github.com/coleifer/huey
@@ -74,7 +74,7 @@ django-extensions = { version = "4.1", optional = true }  # https://github.com/d
 
 # Unittest dependencies
 # ------------------------------------------------------------------------------
-coverage = { version = "7.9.2", optional = true }  # https://github.com/nedbat/coveragepy
+coverage = { version = "7.10.0", optional = true }  # https://github.com/nedbat/coveragepy
 django-coverage-plugin = { version = "3.1.1", optional = true }  # https://github.com/nedbat/django_coverage_plugin
 
 # Code quality dependencies
@@ -84,9 +84,9 @@ flake8-isort = { version = "6.1.2", optional = true }  # https://github.com/gfor
 black = { version = "25.1.0", optional = true }  # https://github.com/psf/black
 pylint = { version = "3.3.7", optional = true }  # https://github.com/pylint-dev/pylint
 pylint-django = { version = "2.6.1", optional = true }  # https://github.com/PyCQA/pylint-django
-mypy = { version = "1.16.1", optional = true }  # https://github.com/python/mypy
-django-stubs = { version = "5.2.1", optional = true }  # https://github.com/typeddjango/django-stubs
-djangorestframework-stubs = { version = "3.16.0", optional = true }  # https://github.com/typeddjango/djangorestframework-stubs
+mypy = { version = "1.17.0", optional = true }  # https://github.com/python/mypy
+django-stubs = { version = "5.2.2", optional = true }  # https://github.com/typeddjango/django-stubs
+djangorestframework-stubs = { version = "3.16.1", optional = true }  # https://github.com/typeddjango/djangorestframework-stubs
 types-PyMySQL = { version = "1.1.0.20250711", optional = true }  # https://github.com/python/typeshed
 # import-linter = "2.0"  # https://github.com/seddonym/import-linter --> Cannot be build with Docker
 

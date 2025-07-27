@@ -253,6 +253,9 @@ const SettingsShowComponent = () => {
                                             <NumberField source="api_import_crontab_hour" />
                                         </Labeled>
                                     )}
+                                    <Labeled label="Number of entries of Periodic Task to keep per task">
+                                        <NumberField source="periodic_task_max_entries" />
+                                    </Labeled>
                                 </Stack>
                             </Grid>
                             <Grid size={3}>

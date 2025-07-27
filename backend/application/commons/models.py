@@ -194,6 +194,11 @@ class Settings(Model):
         validators=[MinValueValidator(0), MaxValueValidator(999999)],
         help_text="Maximum age of CVEs for enrichment in years",
     )
+    periodic_task_max_entries = IntegerField(
+        default=10,
+        validators=[MinValueValidator(1), MaxValueValidator(999999)],
+        help_text="Maximum number of entries to keep per periodic task",
+    )
 
     def save(self, *args: Any, **kwargs: Any) -> None:
         """

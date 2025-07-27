@@ -1047,5 +1047,27 @@
             "counter": 2
 
         }
+    },
+    {
+        "model": "background_tasks.periodic_task",
+        "pk": 1,
+        "fields": {
+            "task": "Calculate product metrics",
+            "start_time": "2022-12-15T16:10:35.513Z",
+            "duration": 1234,
+            "status": "Success",
+            "message": "Task completed successfully"
+        }
+    },
+    {
+        "model": "background_tasks.periodic_task",
+        "pk": 2,
+        "fields": {
+            "task": "Calculate product metrics",
+            "start_time": "2022-12-16T16:10:35.513Z",
+            "duration": 5678,
+            "status": "Failure",
+            "message": "Exception has occurred"
+        }
     }
 ]

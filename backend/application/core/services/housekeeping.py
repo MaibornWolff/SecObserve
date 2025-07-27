@@ -10,14 +10,21 @@ from application.core.models import Branch, Observation, Product
 logger = logging.getLogger("secobserve.core")
 
 
-def delete_inactive_branches_and_set_flags() -> None:
+def delete_inactive_branches_and_set_flags() -> str:
+    num_products = 0
+    num_deleted_branches = 0
     products = Product.objects.filter(is_product_group=False)
     for product in products:
-        delete_inactive_branches_for_product(product)
+        deleted_branches = delete_inactive_branches_for_product(product)
+        num_deleted_branches += deleted_branches
+        if deleted_branches > 0:
+            num_products += 1
         set_product_flags(product)
 
+    return f"Deleted {num_deleted_branches} inactive branches in {num_products} products."
 
-def delete_inactive_branches_for_product(product: Product) -> None:
+
+def delete_inactive_branches_for_product(product: Product) -> int:
     product_group_specific = False
     keep_inactive_days = None
     exempt_branches = None
@@ -25,7 +32,7 @@ def delete_inactive_branches_for_product(product: Product) -> None:
         product_group: Product = product.product_group
         if product_group.repository_branch_housekeeping_active is False:
             # Branch housekeeping is disabled for this product group
-            return
+            return 0
         if product_group.repository_branch_housekeeping_active is True:
             # Branch housekeeping is product group specific
             product_group_specific = True
@@ -35,7 +42,7 @@ def delete_inactive_branches_for_product(product: Product) -> None:
     if not product_group_specific:
         if product.repository_branch_housekeeping_active is False:
             # Branch housekeeping is disabled for this product
-            return
+            return 0
 
         if product.repository_branch_housekeeping_active is True:
             # Branch housekeeping is product specific
@@ -47,14 +54,14 @@ def delete_inactive_branches_for_product(product: Product) -> None:
             # Branch housekeeping is standard
             if not settings.branch_housekeeping_active:
                 # Branch housekeeping is disabled
-                return
+                return 0
 
             keep_inactive_days = settings.branch_housekeeping_keep_inactive_days
             exempt_branches = settings.branch_housekeeping_exempt_branches
 
     if not keep_inactive_days:
         # Branch housekeeping has no inactive days configured
-        return
+        return 0
 
     inactive_date = timezone.now() - timedelta(days=keep_inactive_days)
 
@@ -62,6 +69,7 @@ def delete_inactive_branches_for_product(product: Product) -> None:
     if exempt_branches:
         compiled_exempt_branches = re.compile(exempt_branches, re.IGNORECASE)
 
+    num_deleted_branches = 0
     branches = Branch.objects.filter(product=product, housekeeping_protect=False, last_import__lte=inactive_date)
 
     for branch in branches:
@@ -74,6 +82,9 @@ def delete_inactive_branches_for_product(product: Product) -> None:
             f"Deleting branch {branch.name} for product {product.name}"
         )
         branch.delete()
+        num_deleted_branches += 1
+
+    return num_deleted_branches
 
 
 def set_product_flags(product: Product) -> None:

@@ -8,6 +8,7 @@ import { oidcConfig, updateRefreshToken } from "./access_control/auth_provider/o
 import authorization_groups from "./access_control/authorization_groups";
 import { Login } from "./access_control/login";
 import users from "./access_control/users";
+import periodic_tasks from "./background_tasks/periodic_tasks";
 import { Layout } from "./commons/layout";
 import { darkTheme, lightTheme } from "./commons/layout/themes";
 import { queryClient } from "./commons/queryClient";
@@ -191,6 +192,11 @@ const App = () => {
                 <Resource
                     name="license_policies"
                     {...license_policies} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                    // nosemgrep because the props are well defined in the import
+                />
+                <Resource
+                    name="periodic_tasks"
+                    {...periodic_tasks} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
                     // nosemgrep because the props are well defined in the import
                 />
             </Admin>

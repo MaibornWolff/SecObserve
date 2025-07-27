@@ -1,0 +1,10 @@
+class Status:
+    STATUS_RUNNING = "Running"
+    STATUS_SUCCESS = "Success"
+    STATUS_FAILURE = "Failure"
+
+    STATUS_CHOICES = [
+        (STATUS_RUNNING, STATUS_RUNNING),
+        (STATUS_SUCCESS, STATUS_SUCCESS),
+        (STATUS_FAILURE, STATUS_FAILURE),
+    ]

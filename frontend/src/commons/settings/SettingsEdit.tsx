@@ -8,6 +8,7 @@ import {
     validate_0_59,
     validate_0_999999,
     validate_1_4096,
+    validate_1_999999,
     validate_255,
 } from "../../commons/custom_validators";
 import ListHeader from "../../commons/layout/ListHeader";
@@ -357,8 +358,12 @@ const SettingsEdit = () => {
                     </Grid>
 
                     <Divider flexItem sx={{ marginTop: 2, marginBottom: 2 }} />
-                    <Typography variant="h6" sx={{ marginBottom: 2 }}>
-                        Background tasks (restart needed)
+                    <Typography variant="h6" sx={{ marginBottom: 3 }}>
+                        Background tasks
+                    </Typography>
+
+                    <Typography variant="body2" sx={{ marginBottom: 3 }}>
+                        The settings in this section require a restart of the SecObserve backend to take effect.
                     </Typography>
 
                     <NumberInput
@@ -428,6 +433,13 @@ const SettingsEdit = () => {
                                         )
                                     }
                                 </FormDataConsumer>
+                                <NumberInput
+                                    source="periodic_task_max_entries"
+                                    label="Number of entries of Periodic Task to keep per task"
+                                    min={1}
+                                    step={1}
+                                    validate={validate_1_999999}
+                                />
                             </Stack>
                         </Grid>
 
