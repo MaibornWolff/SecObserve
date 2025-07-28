@@ -1306,14 +1306,14 @@ testing = ["Django", "attrs", "colorama", "docopt", "pytest (<9.0.0)"]
 
 [[package]]
 name = "jira"
-version = "3.10.4"
+version = "3.10.5"
 description = "Python library for interacting with JIRA via REST APIs."
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "jira-3.10.4-py3-none-any.whl", hash = "sha256:5fe2e490ac3ecb7b7f99a874f383f83a870437e4cd17d1570b8701f78f65e684"},
-    {file = "jira-3.10.4.tar.gz", hash = "sha256:76ab091da01c432896ccba516a5c57fb3662db03ec1f0c3c56f269ceea21b7b7"},
+    {file = "jira-3.10.5-py3-none-any.whl", hash = "sha256:d4da1385c924ee693d6cc9838e56a34e31d74f0d6899934ef35bbd0d2d33997f"},
+    {file = "jira-3.10.5.tar.gz", hash = "sha256:2d09ae3bf4741a2787dd889dfea5926a5d509aac3b28ab3b98c098709e6ee72d"},
 ]
 
 [package.dependencies]
@@ -2939,4 +2939,4 @@ unittests = ["coverage", "django-coverage-plugin", "django-extensions"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">= 3.10, < 3.13"
-content-hash = "d92d20ef7ba8dcde9cee7c38c7a59a85a03bf35da173c413914209b714a8e441"
+content-hash = "3e05d6c585057b0e0392cc55a95f2a215a60d3ea3442796bc318fde0841668b4"
