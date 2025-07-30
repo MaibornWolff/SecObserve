@@ -45,25 +45,19 @@ class BaseTestVEXImport(TestCase):
     def check_vex_document(self, vex_document: VEX_Document, document_type: str, short: bool = False) -> None:
         self.assertEqual(document_type, vex_document.type)
         self.assertEqual("1", vex_document.version)
-        self.assertEqual("vendor", vex_document.role)
+
         if document_type == VEX_Document_Type.VEX_DOCUMENT_TYPE_CSAF:
-            self.assertEqual(
-                "2024-07-14T11:12:19.671904+00:00",
-                vex_document.initial_release_date.isoformat(),
-            )
-            self.assertEqual(
-                "2024-07-14T11:12:19.671919+00:00",
-                vex_document.current_release_date.isoformat(),
-            )
-        else:
-            self.assertEqual(
-                "2024-07-14T11:17:57.668593+00:00",
-                vex_document.initial_release_date.isoformat(),
-            )
-            self.assertEqual(
-                "2024-07-14T11:17:57.668609+00:00",
-                vex_document.current_release_date.isoformat(),
-            )
+            self.assertEqual("vendor", vex_document.role)
+            self.assertEqual("2024-07-14T11:12:19.671904+00:00", vex_document.initial_release_date.isoformat())
+            self.assertEqual("2024-07-14T11:12:19.671919+00:00", vex_document.current_release_date.isoformat())
+        elif document_type == VEX_Document_Type.VEX_DOCUMENT_TYPE_OPENVEX:
+            self.assertEqual("vendor", vex_document.role)
+            self.assertEqual("2024-07-14T11:17:57.668593+00:00", vex_document.initial_release_date.isoformat())
+            self.assertEqual("2024-07-14T11:17:57.668609+00:00", vex_document.current_release_date.isoformat())
+        elif document_type == VEX_Document_Type.VEX_DOCUMENT_TYPE_CYCLONEDX:
+            self.assertEqual("", vex_document.role)
+            self.assertEqual("2024-07-14T11:17:57.668593+00:00", vex_document.initial_release_date.isoformat())
+            self.assertEqual("2024-07-14T11:17:57.668593+00:00", vex_document.current_release_date.isoformat())
 
         vex_statements = VEX_Statement.objects.filter(document=vex_document)
         self.assertEqual(13, len(vex_statements))

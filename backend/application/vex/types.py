@@ -5,10 +5,12 @@ from typing import Optional
 class VEX_Document_Type:
     VEX_DOCUMENT_TYPE_CSAF = "CSAF"
     VEX_DOCUMENT_TYPE_OPENVEX = "OpenVEX"
+    VEX_DOCUMENT_TYPE_CYCLONEDX = "CycloneDX"
 
     VEX_DOCUMENT_TYPE_CHOICES = [
         (VEX_DOCUMENT_TYPE_CSAF, VEX_DOCUMENT_TYPE_CSAF),
         (VEX_DOCUMENT_TYPE_OPENVEX, VEX_DOCUMENT_TYPE_OPENVEX),
+        (VEX_DOCUMENT_TYPE_CYCLONEDX, VEX_DOCUMENT_TYPE_CYCLONEDX),
     ]
 
 
@@ -273,6 +275,27 @@ class OpenVEX_Status:
     OPENVEX_STATUS_AFFECTED = "affected"
     OPENVEX_STATUS_FIXED = "fixed"
     OPENVEX_STATUS_UNDER_INVESTIGATION = "under_investigation"
+
+
+class CycloneDX_Analysis_State:
+    CYCLONEDX_STATE_RESOLVED = "resolved"
+    CYCLONEDX_STATE_RESOLVED_WITH_PEDIGREE = "resolved_with_pedigree"
+    CYCLONEDX_STATE_EXPLOITABLE = "exploitable"
+    CYCLONEDX_STATE_IN_TRIAGE = "in_triage"
+    CYCLONEDX_STATE_FALSE_POSITIVE = "false_positive"
+    CYCLONEDX_STATE_NOT_AFFECTED = "not_affected"
+
+
+class CycloneDX_Analysis_Justification:
+    CYCLONEDX_JUSTIFICATION_CODE_NOT_PRESENT = "code_not_present"
+    CYCLONEDX_JUSTIFICATION_CODE_NOT_REACHABLE = "code_not_reachable"
+    CYCLONEDX_JUSTIFICATION_REQUIRES_CONFIGURATION = "requires_configuration"
+    CYCLONEDX_JUSTIFICATION_REQUIRES_DEPENDENCY = "requires_dependency"
+    CYCLONEDX_JUSTIFICATION_REQUIRES_ENVIRONMENT = "requires_environment"
+    CYCLONEDX_JUSTIFICATION_PROTECTED_BY_COMPILER = "protected_by_compiler"
+    CYCLONEDX_JUSTIFICATION_PROTECTED_AT_RUNTIME = "protected_at_runtime"
+    CYCLONEDX_JUSTIFICATION_PROTECTED_AT_PERIMETER = "protected_at_perimeter"
+    CYCLONEDX_JUSTIFICATION_PROTECTED_BY_MITIGATING_CONTROL = "protected_by_mitigating_control"
 
 
 @dataclass(frozen=True)
