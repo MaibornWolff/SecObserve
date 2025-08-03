@@ -62,10 +62,11 @@ Most of the actions and templates use the same set of variables:
 | [DrHeader](https://github.com/Santandersecurityresearch/DrHeader) | `actions/DAST/drheader` | `templates/DAST/drheader.yml` | [MIT](https://github.com/Santandersecurityresearch/DrHeader/blob/master/LICENSE) |
 | [ZAP](https://github.com/zaproxy/zaproxy)                         | `actions/DAST/zap` | `templates/DAST/zap.yml` | [Apache 2.0](https://github.com/zaproxy/zaproxy/blob/main/LICENSE) |
 
-| Task                                  | GitHub Action             | GitLab CI Template              |
-|---------------------------------------|---------------------------|---------------------------------|
+| Task                                 | GitHub Action             | GitLab CI Template              |
+|--------------------------------------|---------------------------|---------------------------------|
 | Import existing file into SecObserve | `actions/importer` | `templates/importer.yml` |
 | Check security gate of a product (`exit code 1` if security gate **Failed**, `exit code 0` if security gate **Passed** or **Disabled**) | `actions/check_security_gate` | `templates/check_security_gate.yml` |
+| Upload SBOM into SecObserve          | `actions/upload_sbom`     | `templates/upload_sbom.yml`     |
 
 All GitHub actions and GitLab CI templates use a pre-built Docker image that contains all scanners and the SecObserve importer.
 
