@@ -109,14 +109,14 @@ def scan_no_branch_no_service(product: Product) -> Tuple[int, int, int]:
             component_purl=""
         )
     )
-    return scan_license_components(license_components, product, None, "")
+    return scan_license_components(license_components, product, None, None)
 
 
 def scan_branch_no_service(branch: Branch) -> Tuple[int, int, int]:
     license_components = list(
         License_Component.objects.filter(branch=branch, origin_service__isnull=True).exclude(component_purl="")
     )
-    return scan_license_components(license_components, branch.product, branch, "")
+    return scan_license_components(license_components, branch.product, branch, None)
 
 
 def scan_no_branch_but_service(product: Product, service: Service) -> Tuple[int, int, int]:
@@ -125,18 +125,18 @@ def scan_no_branch_but_service(product: Product, service: Service) -> Tuple[int,
             component_purl=""
         )
     )
-    return scan_license_components(license_components, product, None, service.name)
+    return scan_license_components(license_components, product, None, service)
 
 
 def scan_branch_and_service(branch: Branch, service: Service) -> Tuple[int, int, int]:
     license_components = list(
         License_Component.objects.filter(branch=branch, origin_service=service).exclude(component_purl="")
     )
-    return scan_license_components(license_components, branch.product, branch, service.name)
+    return scan_license_components(license_components, branch.product, branch, service)
 
 
 def scan_license_components(
-    license_components: list[License_Component], product: Product, branch: Optional[Branch], service: str
+    license_components: list[License_Component], product: Product, branch: Optional[Branch], service: Optional[Service]
 ) -> Tuple[int, int, int]:
     if not license_components:
         return 0, 0, 0
@@ -205,10 +205,10 @@ def scan_license_components(
     import_parameters = ImportParameters(
         product=product,
         branch=branch,
+        service=service,
         parser=parser,
         filename="",
         api_configuration_name="",
-        service=service,
         docker_image_name_tag="",
         endpoint_url="",
         kubernetes_cluster="",
@@ -219,6 +219,7 @@ def scan_license_components(
     Vulnerability_Check.objects.update_or_create(
         product=import_parameters.product,
         branch=import_parameters.branch,
+        service=import_parameters.service,
         filename="",
         api_configuration_name="",
         defaults={
