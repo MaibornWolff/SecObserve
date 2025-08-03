@@ -13,6 +13,7 @@ from application.core.models import (
     Product,
     Product_Authorization_Group_Member,
     Product_Member,
+    Service,
 )
 
 
@@ -65,14 +66,15 @@ def get_observations() -> QuerySet[Observation]:
 def get_observations_for_vulnerability_check(
     product: Product,
     branch: Optional[Branch],
+    service: Optional[Service],
     filename: str,
     api_configuration_name: str,
-    service: Optional[str],
 ) -> QuerySet[Observation]:
     if filename or api_configuration_name:
         return Observation.objects.filter(
             product=product,
             branch=branch,
+            origin_service=service,
             upload_filename=filename,
             api_configuration_name=api_configuration_name,
         )
@@ -81,6 +83,7 @@ def get_observations_for_vulnerability_check(
         return Observation.objects.filter(
             product=product,
             branch=branch,
+            origin_service=service,
             upload_filename="",
             api_configuration_name="",
             origin_service__name=service,
@@ -89,6 +92,7 @@ def get_observations_for_vulnerability_check(
     return Observation.objects.filter(
         product=product,
         branch=branch,
+        origin_service=service,
         upload_filename="",
         api_configuration_name="",
         origin_service__isnull=True,

@@ -33,6 +33,7 @@ class VulnerabilityCheckFilter(FilterSet):
         fields=(
             ("product", "product"),
             ("branch", "branch_name"),
+            ("service", "service_name"),
             ("scanner", "scanner_name"),
             ("filename", "filename"),
             ("api_configuration_name", "api_configuration_name"),
@@ -45,7 +46,7 @@ class VulnerabilityCheckFilter(FilterSet):
 
     class Meta:
         model = Vulnerability_Check
-        fields = ["product", "branch", "scanner", "filename", "api_configuration_name"]
+        fields = ["product", "branch", "service", "scanner", "filename", "api_configuration_name"]
 
 
 class ParserFilter(FilterSet):
