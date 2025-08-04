@@ -33,7 +33,7 @@ There are 2 main workflows when working with SecObserve:
 
     This workflow can also be used in a CI/CD pipeline or manually.
 
-#### Consuming results of vulnerabilits scanners
+#### Consuming results of vulnerability scanners
 
 ``` mermaid
 sequenceDiagram

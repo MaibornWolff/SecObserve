@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - chore/docs_sbom_workflow
+      - fix/docs_typo
 
 permissions: read-all
 
