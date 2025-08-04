@@ -624,14 +624,14 @@ test-randomorder = ["pytest-randomly"]
 
 [[package]]
 name = "cvss"
-version = "3.4"
+version = "3.6"
 description = "CVSS2/3/4 library with interactive calculator for Python 2 and Python 3"
 optional = false
 python-versions = "*"
 groups = ["main"]
 files = [
-    {file = "cvss-3.4-py2.py3-none-any.whl", hash = "sha256:d9950613758e60820f7fac37ca5f35158712f8f2ea4f6629858a60c4984fe4ef"},
-    {file = "cvss-3.4.tar.gz", hash = "sha256:632353244ba3c58b53355466677edc968b9d7143c317b66271f9fd7939951ee8"},
+    {file = "cvss-3.6-py2.py3-none-any.whl", hash = "sha256:e342c6ad9c7eb69d2aebbbc2768a03cabd57eb947c806e145de5b936219833ea"},
+    {file = "cvss-3.6.tar.gz", hash = "sha256:f21d18224efcd3c01b44ff1b37dec2e3208d29a6d0ce6c87a599c73c21ee1a99"},
 ]
 
 [[package]]
@@ -2947,4 +2947,4 @@ unittests = ["coverage", "django-coverage-plugin", "django-extensions"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">= 3.10, < 3.13"
-content-hash = "abc48ca5745e427aa7d723f396379f9cff0460271bbf452ccfe66e868ecbfc79"
+content-hash = "9285c89f73c14cc48c49dd75869250300e1d15f40350c6eba37cfa9577516623"
