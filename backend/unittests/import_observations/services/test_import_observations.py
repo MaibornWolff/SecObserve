@@ -13,6 +13,7 @@ from application.core.models import (
     Observation_Log,
     Product,
     Reference,
+    Service,
 )
 from application.core.types import Severity, Status
 from application.import_observations.models import (
@@ -118,14 +119,14 @@ class TestFileUploadObservations(BaseTestCase):
         self.assertEqual(mock_find_potential_duplicates.call_count, 2)
         self.assertEqual(mock_apply_vex_statements_for_observation.call_count, 4)
 
-    def _file_upload_observations(self, branch, service, docker_image_name_tag, endpoint_url, kubernetes_cluster):
+    def _file_upload_observations(self, branch, service_name, docker_image_name_tag, endpoint_url, kubernetes_cluster):
         # --- First import ---
 
         file_upload_parameters = FileUploadParameters(
             product=Product.objects.get(id=1),
             branch=branch,
             file=File(open("unittests/fixtures/data_1/bandit.sarif", "r")),
-            service=service,
+            service=service_name,
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
@@ -156,9 +157,13 @@ class TestFileUploadObservations(BaseTestCase):
 
         self.assertEqual(observations[0].product, product)
         self.assertEqual(observations[0].branch, branch)
-        if service:
-            self.assertEqual(observations[0].origin_service_name, service)
+        service = None
+        if service_name:
+            service = Service.objects.get(product=product, name=service_name)
+            self.assertEqual(observations[0].origin_service, service)
+            self.assertEqual(observations[0].origin_service_name, service_name)
         else:
+            self.assertIsNone(observations[0].origin_service)
             self.assertEqual(observations[0].origin_service_name, "")
         if docker_image_name_tag:
             self.assertEqual(observations[0].origin_docker_image_name_tag, docker_image_name_tag)
@@ -213,6 +218,7 @@ class TestFileUploadObservations(BaseTestCase):
 
         self.assertEqual(vulnerability_checks[0].product, product)
         self.assertEqual(vulnerability_checks[0].branch, branch)
+        self.assertEqual(vulnerability_checks[0].service, service)
         self.assertEqual(vulnerability_checks[0].filename, "bandit.sarif")
         self.assertEqual(vulnerability_checks[0].api_configuration_name, "")
         self.assertEqual(vulnerability_checks[0].scanner, "Bandit")
@@ -226,7 +232,7 @@ class TestFileUploadObservations(BaseTestCase):
             product=Product.objects.get(id=1),
             branch=branch,
             file=File(open("unittests/fixtures/data_2/bandit.sarif", "r")),
-            service=service,
+            service=service_name,
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
@@ -286,6 +292,7 @@ class TestFileUploadObservations(BaseTestCase):
 
         self.assertEqual(vulnerability_checks[0].product, product)
         self.assertEqual(vulnerability_checks[0].branch, branch)
+        self.assertEqual(vulnerability_checks[0].service, service)
         self.assertEqual(vulnerability_checks[0].filename, "bandit.sarif")
         self.assertEqual(vulnerability_checks[0].api_configuration_name, "")
         self.assertEqual(vulnerability_checks[0].scanner, "Bandit")
@@ -1037,7 +1044,7 @@ class APIImportObservation(BaseTestCase):
         parameters = ApiImportParameters(
             api_configuration=api_configuration,
             branch=self.branch_1,
-            service="",
+            service=None,
             docker_image_name_tag="",
             endpoint_url="",
             kubernetes_cluster="",
@@ -1054,6 +1061,7 @@ class APIImportObservation(BaseTestCase):
         mock_update_or_create.assert_called_with(
             product=self.product_1,
             branch=self.branch_1,
+            service=None,
             filename="",
             api_configuration_name="test_configuration",
             defaults={
