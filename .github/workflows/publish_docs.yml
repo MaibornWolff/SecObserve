@@ -23,4 +23,8 @@ jobs:
           key: ${{ github.ref }}
           path: .cache
       - run: pip install -r mkdocs_requirements.txt
-      - run: mkdocs gh-deploy --force
+      # MkDocs does not support adding non-installed (local) plugins via configuration alone.
+      # By setting PYTHONPATH to mkdocs_plugins, we ensure MkDocs can import custom plugins from this directory.
+      - env:
+          PYTHONPATH: docs/mkdocs_plugins
+        run: mkdocs gh-deploy --force
