@@ -2,6 +2,9 @@ dev_addr: 127.0.0.1:9000
 
 site_name: SecObserve
 
+exclude_docs: |
+  /mkdocs_plugins/
+
 theme:
   name: material
   logo: assets/images/secobserve_white_icon.svg
