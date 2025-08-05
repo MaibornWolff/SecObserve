@@ -48,6 +48,7 @@ import ProductMemberAdd from "../product_members/ProductMemberAdd";
 import ProductMemberEmbeddedList from "../product_members/ProductMemberEmbeddedList";
 import product from "../products";
 import ExportMenu from "../products/ExportMenu";
+import ProductCreateDialog from "../products/ProductCreateDialog";
 import ProductEmbeddedList from "../products/ProductEmbeddedList";
 import ProductGroupHeader from "./ProductGroupHeader";
 import ProductGroupReviews from "./ProductGroupReviews";
@@ -79,6 +80,7 @@ const ProductGroupShow = () => {
                     render={(product_group) => (
                         <TabbedShowLayout tabs={<TabbedShowLayoutTabs variant="scrollable" scrollButtons="auto" />}>
                             <Tab label="Products" icon={<product.icon />}>
+                                <ProductCreateDialog productGroupId={product_group.id} />
                                 <ProductEmbeddedList product_group={product_group} />
                             </Tab>
                             <Tab label="Metrics" path="metrics" icon={<BarChartIcon />}>

@@ -1,5 +1,5 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
-import { Labeled, RecordContextProvider, TextField, useGetOne } from "react-admin";
+import { Labeled, RecordContextProvider, ReferenceField, TextField, useGetOne } from "react-admin";
 import { useParams } from "react-router-dom";
 
 import products from ".";
@@ -48,9 +48,24 @@ const ProductHeader = () => {
                         justifyContent: "space-between",
                     }}
                 >
-                    <Labeled label="Product name">
-                        <TextField source="name" className={classes.fontBigBold} />
-                    </Labeled>
+                    <Stack spacing={4} direction="row">
+                        {product?.product_group && (
+                            <Labeled label="Product group">
+                                <ReferenceField
+                                    source="product_group"
+                                    reference="product_groups"
+                                    queryOptions={{ meta: { api_resource: "product_group_names" } }}
+                                    link="show"
+                                    sx={{ "& a": { textDecoration: "none" } }}
+                                >
+                                    <TextField source="name" />
+                                </ReferenceField>
+                            </Labeled>
+                        )}
+                        <Labeled label="Product name">
+                            <TextField source="name" className={classes.fontBigBold} />
+                        </Labeled>
+                    </Stack>
                     {product?.security_gate_passed != undefined && (
                         <Labeled>
                             <SecurityGateTextField label="Security gate" />
