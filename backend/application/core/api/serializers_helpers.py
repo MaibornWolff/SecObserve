@@ -1,6 +1,7 @@
 import re
 from decimal import Decimal
 from typing import Optional
+from urllib.parse import urlsplit
 
 import validators
 from cvss import CVSS3, CVSS4, CVSSError
@@ -38,7 +39,15 @@ def get_origin_component_name_version(observation: Observation) -> str:
 
 
 def validate_url(url: str) -> str:
-    if url and not validators.url(url):
+    if not url:
+        return url
+
+    hostname = urlsplit(url).hostname
+    simple_host = hostname == "localhost"
+
+    scheme = urlsplit(url).scheme
+
+    if not (validators.url(url, simple_host=simple_host) and scheme in ["http", "https"]):
         raise ValidationError("Not a valid URL")
 
     return url

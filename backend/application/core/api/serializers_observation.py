@@ -1,7 +1,6 @@
 from typing import Optional
 from urllib.parse import urlparse
 
-import validators
 from django.utils import timezone
 from packageurl import PackageURL
 from rest_framework.serializers import (
@@ -25,6 +24,7 @@ from application.core.api.serializers_helpers import (
     validate_cvss3_vector,
     validate_cvss4_vector,
     validate_cvss_and_severity,
+    validate_url,
 )
 from application.core.api.serializers_product import (
     NestedProductListSerializer,
@@ -201,12 +201,10 @@ def _get_origin_source_file_url(observation: Observation) -> Optional[str]:
         return observation.origin_source_file_link
 
     if observation.product.repository_prefix and observation.origin_source_file:
-        if not validators.url(observation.product.repository_prefix):
+        if not validate_url(observation.product.repository_prefix):
             return None
 
         parsed_url = urlparse(observation.product.repository_prefix)
-        if parsed_url.scheme not in ["http", "https"]:
-            return None
 
         origin_source_file_url = observation.product.repository_prefix
         if origin_source_file_url.endswith("/"):
@@ -240,8 +238,11 @@ def _create_common_url(observation: Observation, origin_source_file_url: str) ->
     origin_source_file_url += f"/{observation.origin_source_file}"
     if observation.origin_source_line_start:
         origin_source_file_url += "#L" + str(observation.origin_source_line_start)
-    if observation.origin_source_line_end:
-        origin_source_file_url += "-" + str(observation.origin_source_line_end)
+        if (
+            observation.origin_source_line_end
+            and observation.origin_source_line_start != observation.origin_source_line_end
+        ):
+            origin_source_file_url += "-L" + str(observation.origin_source_line_end)
 
     return origin_source_file_url
 

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "SecObserve"
-version = "1.35.0"
+version = "1.36.0"
 description = "SecObserve is an open source vulnerability management system for software development and cloud environments."
 license = "BSD-3-Clause"
 authors = [
@@ -27,7 +27,7 @@ django-cors-headers = "4.7.0" # https://github.com/adamchainz/django-cors-header
 # OpenAPI 3
 # ------------------------------------------------------------------------------
 drf-spectacular = "0.28.0" # https://github.com/tfranzel/drf-spectacular
-drf-spectacular-sidecar = "2025.7.1"  # https://github.com/tfranzel/drf-spectacular-sidecar
+drf-spectacular-sidecar = "2025.8.1"  # https://github.com/tfranzel/drf-spectacular-sidecar
 # Token authentication
 # ------------------------------------------------------------------------------
 PyJWT = "2.10.1"  # https://github.com/jpadilla/pyjwt
@@ -46,8 +46,8 @@ jsonpickle = "4.1.1"  # https://github.com/jsonpickle/jsonpickle
 pyyaml = "6.0.2"  # https://github.com/yaml/pyyaml
 # Field specifications
 # ------------------------------------------------------------------------------
-packageurl-python = "0.17.1"  # https://github.com/package-url/packageurl-python
-cvss = "3.4"  # https://github.com/RedHatProductSecurity/cvss
+packageurl-python = "0.17.3"  # https://github.com/package-url/packageurl-python
+cvss = "3.6"  # https://github.com/RedHatProductSecurity/cvss
 semver = "3.0.4"  # https://github.com/python-semver/python-semver
 license-expression = "30.4.4"  # https://github.com/aboutcode-org/license-expression
 # Task queue
@@ -55,14 +55,14 @@ license-expression = "30.4.4"  # https://github.com/aboutcode-org/license-expres
 huey = "2.5.3"  # https://github.com/coleifer/huey
 # Issue tracker
 # ------------------------------------------------------------------------------
-jira = "3.8.0"  # https://github.com/pycontribs/jira
+jira = "3.10.5"  # https://github.com/pycontribs/jira
 # Others
 # ------------------------------------------------------------------------------
 inflect = "7.5.0"  # https://github.com/jaraco/inflect
 validators = "0.35.0"  # https://github.com/python-validators/validators
-py-ocsf-models = "0.7.0"  # https://github.com/prowler-cloud/py-ocsf-models
+py-ocsf-models = "0.7.1"  # https://github.com/prowler-cloud/py-ocsf-models
 spdx-tools = "0.8.3"  # https://github.com/spdx/tools-python
-html-to-markdown = "1.8.0"  # https://github.com/Goldziher/html-to-markdown
+html-to-markdown = "1.9.0"  # https://github.com/Goldziher/html-to-markdown
 
 # Development dependencies
 # ------------------------------------------------------------------------------
@@ -74,7 +74,7 @@ django-extensions = { version = "4.1", optional = true }  # https://github.com/d
 
 # Unittest dependencies
 # ------------------------------------------------------------------------------
-coverage = { version = "7.10.0", optional = true }  # https://github.com/nedbat/coveragepy
+coverage = { version = "7.10.2", optional = true }  # https://github.com/nedbat/coveragepy
 django-coverage-plugin = { version = "3.1.1", optional = true }  # https://github.com/nedbat/django_coverage_plugin
 
 # Code quality dependencies
@@ -84,7 +84,7 @@ flake8-isort = { version = "6.1.2", optional = true }  # https://github.com/gfor
 black = { version = "25.1.0", optional = true }  # https://github.com/psf/black
 pylint = { version = "3.3.7", optional = true }  # https://github.com/pylint-dev/pylint
 pylint-django = { version = "2.6.1", optional = true }  # https://github.com/PyCQA/pylint-django
-mypy = { version = "1.17.0", optional = true }  # https://github.com/python/mypy
+mypy = { version = "1.17.1", optional = true }  # https://github.com/python/mypy
 django-stubs = { version = "5.2.2", optional = true }  # https://github.com/typeddjango/django-stubs
 djangorestframework-stubs = { version = "3.16.1", optional = true }  # https://github.com/typeddjango/djangorestframework-stubs
 types-PyMySQL = { version = "1.1.0.20250711", optional = true }  # https://github.com/python/typeshed
