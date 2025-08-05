@@ -1,8 +1,9 @@
 import { Divider, Stack, Typography } from "@mui/material";
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import {
     BooleanInput,
     FormDataConsumer,
+    Identifier,
     NullableBooleanInput,
     NumberInput,
     ReferenceInput,
@@ -50,12 +51,14 @@ export type ProductCreateEditComponentProps = {
     edit: boolean;
     initialDescription: string;
     setDescription: (value: string) => void;
+    productGroupId?: Identifier;
 };
 
 export const ProductCreateEditComponent = ({
     edit,
     initialDescription,
     setDescription,
+    productGroupId,
 }: ProductCreateEditComponentProps) => {
     return (
         <Fragment>
@@ -70,14 +73,26 @@ export const ProductCreateEditComponent = ({
                 label="Description"
                 maxLength={2048}
             />
-            <ReferenceInput
-                source="product_group"
-                reference="product_groups"
-                queryOptions={{ meta: { api_resource: "product_group_names" } }}
-                sort={{ field: "name", order: "ASC" }}
-            >
-                <AutocompleteInputWide optionText="name" />
-            </ReferenceInput>
+            {!productGroupId && (
+                <ReferenceInput
+                    source="product_group"
+                    reference="product_groups"
+                    queryOptions={{ meta: { api_resource: "product_group_names" } }}
+                    sort={{ field: "name", order: "ASC" }}
+                >
+                    <AutocompleteInputWide optionText="name" />
+                </ReferenceInput>
+            )}
+            {productGroupId && (
+                <ReferenceInput
+                    source="product_group"
+                    reference="product_groups"
+                    queryOptions={{ meta: { api_resource: "product_group_names" } }}
+                    sort={{ field: "name", order: "ASC" }}
+                >
+                    <AutocompleteInputWide optionText="name" defaultValue={productGroupId} disabled={true} />
+                </ReferenceInput>
+            )}
             <Stack direction="row" spacing={4}>
                 <TextInputWide source="purl" validate={validate_255} label="PURL" />
                 <TextInputWide source="cpe23" validate={validate_255} label="CPE 2.3" />
