@@ -1664,14 +1664,14 @@ et-xmlfile = "*"
 
 [[package]]
 name = "packageurl-python"
-version = "0.17.3"
+version = "0.17.4"
 description = "A purl aka. Package URL parser and builder"
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
 files = [
-    {file = "packageurl_python-0.17.3-py3-none-any.whl", hash = "sha256:f51b5aab570159f07258c8e998e9972ff3bf060da16b7334a42bd9f9737777d9"},
-    {file = "packageurl_python-0.17.3.tar.gz", hash = "sha256:719995f0c7f706890277ba57ec95afcaa9696c836a7675770a1279b01a41f7be"},
+    {file = "packageurl_python-0.17.4-py3-none-any.whl", hash = "sha256:020df8f3ced4fc4a7973e6b5338e00b1b32c948a6fc6bf2c9bf89bda401cadf2"},
+    {file = "packageurl_python-0.17.4.tar.gz", hash = "sha256:d31e23495dd33efe8e1f9ad98d97af69a21e49e751684864d77a35814254a861"},
 ]
 
 [package.extras]
@@ -2948,4 +2948,4 @@ unittests = ["coverage", "django-coverage-plugin", "django-extensions"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">= 3.10, < 3.13"
-content-hash = "9285c89f73c14cc48c49dd75869250300e1d15f40350c6eba37cfa9577516623"
+content-hash = "f3fc274bf89726572f4a668179261b5de8da50329ee831d17692ce2357e47c84"
