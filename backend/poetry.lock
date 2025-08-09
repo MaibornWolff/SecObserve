@@ -2139,15 +2139,15 @@ tests = ["coverage[toml] (==5.0.4)", "pytest (>=6.0.0,<7.0.0)"]
 
 [[package]]
 name = "pylint"
-version = "3.3.7"
+version = "3.3.8"
 description = "python code static checker"
 optional = true
 python-versions = ">=3.9.0"
 groups = ["main"]
 markers = "extra == \"code-quality\""
 files = [
-    {file = "pylint-3.3.7-py3-none-any.whl", hash = "sha256:43860aafefce92fca4cf6b61fe199cdc5ae54ea28f9bf4cd49de267b5195803d"},
-    {file = "pylint-3.3.7.tar.gz", hash = "sha256:2b11de8bde49f9c5059452e0c310c079c746a0a8eeaa789e5aa966ecc23e4559"},
+    {file = "pylint-3.3.8-py3-none-any.whl", hash = "sha256:7ef94aa692a600e82fabdd17102b73fc226758218c97473c7ad67bd4cb905d83"},
+    {file = "pylint-3.3.8.tar.gz", hash = "sha256:26698de19941363037e2937d3db9ed94fb3303fdadf7d98847875345a8bb6b05"},
 ]
 
 [package.dependencies]
@@ -2948,4 +2948,4 @@ unittests = ["coverage", "django-coverage-plugin", "django-extensions"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">= 3.10, < 3.13"
-content-hash = "1dbedba7784ae8e58a89afa970df459f634cbed4b2f23a486c80fed43fe3abd4"
+content-hash = "27aa30fd7d6d9ab3de0ac30934a3476cd3b592093fc905960eb4dcfccce0bcbb"
