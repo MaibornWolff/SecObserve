@@ -62,7 +62,7 @@ def copy_license_policy(source_license_policy: License_Policy, name: str) -> Lic
 
 
 def get_license_evaluation_results_for_product(product: Product) -> dict:
-    license_policy = _get_license_policy(product)
+    license_policy = get_license_policy(product)
     if not license_policy:
         return {}
 
@@ -137,11 +137,11 @@ def apply_license_policy_product(product: Product) -> None:
     license_evaluation_results = get_license_evaluation_results_for_product(product)
     components = License_Component.objects.filter(product=product)
     for component in components:
-        license_before = component.license
-        non_spdx_license_before = component.non_spdx_license
+        spdx_license_before = component.effective_spdx_license
+        non_spdx_license_before = component.effective_non_spdx_license
         evaluation_result_before = component.evaluation_result
 
-        license_policy = _get_license_policy(product)
+        license_policy = get_license_policy(product)
         if license_policy:
             apply_license_policy_to_component(
                 component,
@@ -152,8 +152,8 @@ def apply_license_policy_product(product: Product) -> None:
             component.evaluation_result = License_Policy_Evaluation_Result.RESULT_UNKNOWN
 
         if (
-            license_before != component.license
-            or non_spdx_license_before != component.non_spdx_license
+            spdx_license_before != component.effective_spdx_license
+            or non_spdx_license_before != component.effective_non_spdx_license
             or evaluation_result_before != component.evaluation_result
         ):
             component.last_change = timezone.now()
@@ -169,21 +169,27 @@ def apply_license_policy_to_component(
     evaluation_result = None
     if component.component_purl_type in ignore_component_types:
         evaluation_result = License_Policy_Evaluation_Result.RESULT_IGNORED
-    elif component.license:
-        evaluation_result = _get_license_evaluation_result(f"spdx_{component.license.spdx_id}", evaluation_results)
-    elif component.license_expression:
-        evaluation_result = _evaluate_license_expression(component.license_expression, evaluation_results)
-    elif component.non_spdx_license:
-        evaluation_result = _get_license_evaluation_result(f"non_spdx_{component.non_spdx_license}", evaluation_results)
-    elif component.multiple_licenses:
-        evaluation_result = _get_multiple_licenses_evaluation_result(component.multiple_licenses, evaluation_results)
+    elif component.effective_spdx_license:
+        evaluation_result = _get_license_evaluation_result(
+            f"spdx_{component.effective_spdx_license.spdx_id}", evaluation_results
+        )
+    elif component.effective_license_expression:
+        evaluation_result = _evaluate_license_expression(component.effective_license_expression, evaluation_results)
+    elif component.effective_non_spdx_license:
+        evaluation_result = _get_license_evaluation_result(
+            f"non_spdx_{component.effective_non_spdx_license}", evaluation_results
+        )
+    elif component.effective_multiple_licenses:
+        evaluation_result = _get_multiple_licenses_evaluation_result(
+            component.effective_multiple_licenses, evaluation_results
+        )
     if not evaluation_result:
         evaluation_result = License_Policy_Evaluation_Result.RESULT_UNKNOWN
 
     component.evaluation_result = evaluation_result
 
 
-def _get_license_policy(product: Product) -> Optional[License_Policy]:
+def get_license_policy(product: Product) -> Optional[License_Policy]:
     if product.license_policy:
         return product.license_policy
 

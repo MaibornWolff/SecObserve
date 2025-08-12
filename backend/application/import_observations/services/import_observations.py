@@ -56,7 +56,11 @@ from application.issue_tracker.services.issue_tracker import (
     push_observations_to_issue_tracker,
 )
 from application.licenses.models import License_Component, License_Component_Evidence
-from application.licenses.services.license_component import prepare_license_component
+from application.licenses.services.concluded_license import apply_concluded_license
+from application.licenses.services.license_component import (
+    prepare_license_component,
+    set_effective_license,
+)
 from application.licenses.services.license_policy import (
     apply_license_policy_to_component,
     get_license_evaluation_results_for_product,
@@ -358,10 +362,10 @@ def process_license_components(  # pylint: disable=too-many-statements
         prepare_license_component(unsaved_component)
         existing_component = existing_components_dict.get(unsaved_component.identity_hash)
         if existing_component:
-            license_before = existing_component.license
-            non_spdx_license_before = existing_component.non_spdx_license
-            license_expression_before = existing_component.license_expression
-            multiple_licenses_before = existing_component.multiple_licenses
+            effective_spdx_license_before = existing_component.effective_spdx_license
+            effective_non_spdx_license_before = existing_component.effective_non_spdx_license
+            effective_license_expression_before = existing_component.effective_license_expression
+            effective_multiple_licenses_before = existing_component.effective_multiple_licenses
             evaluation_result_before = existing_component.evaluation_result
             existing_component.component_name = unsaved_component.component_name
             existing_component.component_version = unsaved_component.component_version
@@ -369,11 +373,27 @@ def process_license_components(  # pylint: disable=too-many-statements
             existing_component.component_purl_type = unsaved_component.component_purl_type
             existing_component.component_cpe = unsaved_component.component_cpe
             existing_component.component_dependencies = unsaved_component.component_dependencies
-            existing_component.license_name = unsaved_component.license_name
-            existing_component.license = unsaved_component.license
-            existing_component.license_expression = unsaved_component.license_expression
-            existing_component.non_spdx_license = unsaved_component.non_spdx_license
-            existing_component.multiple_licenses = unsaved_component.multiple_licenses
+            existing_component.imported_declared_license_name = unsaved_component.imported_declared_license_name
+            existing_component.imported_declared_spdx_license = unsaved_component.imported_declared_spdx_license
+            existing_component.imported_declared_non_spdx_license = unsaved_component.imported_declared_non_spdx_license
+            existing_component.imported_declared_license_expression = (
+                unsaved_component.imported_declared_license_expression
+            )
+            existing_component.imported_declared_multiple_licenses = (
+                unsaved_component.imported_declared_multiple_licenses
+            )
+            existing_component.imported_concluded_license_name = unsaved_component.imported_concluded_license_name
+            existing_component.imported_concluded_spdx_license = unsaved_component.imported_concluded_spdx_license
+            existing_component.imported_concluded_non_spdx_license = (
+                unsaved_component.imported_concluded_non_spdx_license
+            )
+            existing_component.imported_concluded_license_expression = (
+                unsaved_component.imported_concluded_license_expression
+            )
+            existing_component.imported_concluded_multiple_licenses = (
+                unsaved_component.imported_concluded_multiple_licenses
+            )
+            set_effective_license(existing_component)
             existing_component.origin_service = vulnerability_check.service
             apply_license_policy_to_component(
                 existing_component,
@@ -382,10 +402,10 @@ def process_license_components(  # pylint: disable=too-many-statements
             )
             existing_component.import_last_seen = timezone.now()
             if (
-                license_before != existing_component.license
-                or non_spdx_license_before != existing_component.non_spdx_license
-                or license_expression_before != existing_component.license_expression
-                or multiple_licenses_before != existing_component.multiple_licenses
+                effective_spdx_license_before != existing_component.effective_spdx_license
+                or effective_non_spdx_license_before != existing_component.effective_non_spdx_license
+                or effective_license_expression_before != existing_component.effective_license_expression
+                or effective_multiple_licenses_before != existing_component.effective_multiple_licenses
                 or evaluation_result_before != existing_component.evaluation_result
             ):
                 existing_component.last_change = timezone.now()
@@ -402,6 +422,11 @@ def process_license_components(  # pylint: disable=too-many-statements
             unsaved_component.branch = vulnerability_check.branch
             unsaved_component.origin_service = vulnerability_check.service
             unsaved_component.upload_filename = vulnerability_check.filename
+
+            set_effective_license(unsaved_component)
+            apply_concluded_license(unsaved_component)
+            set_effective_license(unsaved_component)
+
             apply_license_policy_to_component(
                 unsaved_component,
                 license_evaluation_results,

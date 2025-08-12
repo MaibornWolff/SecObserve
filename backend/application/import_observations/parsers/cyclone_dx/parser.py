@@ -24,7 +24,8 @@ class Component:
     purl: str
     cpe: str
     json: dict[str, str]
-    unsaved_license: str
+    unsaved_declared_licenses: list[str]
+    unsaved_concluded_licenses: list[str]
 
 
 @dataclass
@@ -92,7 +93,9 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                 component_cpe=component.cpe,
                 component_dependencies=observation_component_dependencies,
             )
-            model_component.unsaved_license = component.unsaved_license
+            model_component.unsaved_declared_licenses = component.unsaved_declared_licenses
+            model_component.unsaved_concluded_licenses = component.unsaved_concluded_licenses
+
             self._add_license_component_evidence(component, model_component)
             components.append(model_component)
 
@@ -147,27 +150,30 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         if not component_data.get("bom-ref"):
             return None
 
-        cyclonedx_licenses: list[str] = []
+        declared_licenses: list[str] = []
+        concluded_licenses: list[str] = []
         licenses = component_data.get("licenses", [])
         if licenses and licenses[0].get("expression"):
-            cyclonedx_licenses.append(licenses[0].get("expression"))
+            acknowledgement = licenses[0].get("acknowledgement")
+            if acknowledgement == "concluded":
+                concluded_licenses.append(licenses[0].get("expression"))
+            else:
+                declared_licenses.append(licenses[0].get("expression"))
         else:
             for my_license in licenses:
                 component_license = my_license.get("license", {}).get("id")
-                if component_license and component_license not in cyclonedx_licenses:
-                    cyclonedx_licenses.append(component_license)
+                if not component_license:
+                    component_license = my_license.get("license", {}).get("name")
+                if not component_license:
+                    continue
 
-                component_license = my_license.get("license", {}).get("name")
-                if component_license and component_license not in cyclonedx_licenses:
-                    cyclonedx_licenses.append(component_license)
-
-        if len(cyclonedx_licenses) > 1:
-            cyclonedx_licenses = [license.replace(",", "") for license in cyclonedx_licenses]
-            unsaved_license = "[" + ", ".join(cyclonedx_licenses) + "]"
-        elif cyclonedx_licenses:
-            unsaved_license = cyclonedx_licenses[0]
-        else:
-            unsaved_license = ""
+                acknowledgement = my_license.get("license", {}).get("acknowledgement")
+                if acknowledgement == "concluded":
+                    if component_license and component_license not in concluded_licenses:
+                        concluded_licenses.append(component_license)
+                else:
+                    if component_license and component_license not in declared_licenses:
+                        declared_licenses.append(component_license)
 
         return Component(
             bom_ref=component_data.get("bom-ref", ""),
@@ -177,7 +183,8 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             purl=component_data.get("purl", ""),
             cpe=component_data.get("cpe", ""),
             json=component_data,
-            unsaved_license=unsaved_license,
+            unsaved_declared_licenses=declared_licenses,
+            unsaved_concluded_licenses=concluded_licenses,
         )
 
     def _create_observations(self, data: dict) -> list[Observation]:  # pylint: disable=too-many-locals

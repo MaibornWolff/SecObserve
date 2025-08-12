@@ -59,7 +59,8 @@
             ],
             "licenses": [
                 {
-                    "expression": "MIT"
+                    "expression": "MIT",
+                    "acknowledgement": "concluded"
                 }
             ],
             "purl": "pkg:pypi/argon2-cffi-bindings@21.2.1",
@@ -101,7 +102,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -138,13 +140,15 @@
                 {
                     "license": {
                         "id": "0BSD",
-                        "url": "https://opensource.org/licenses/0BSD"
+                        "url": "https://opensource.org/licenses/0BSD",
+                        "acknowledgement": "concluded"
                     }
                 },
                 {
                     "license": {
                         "id": "BSD-3-Clause",
-                        "url": "https://opensource.org/licenses/BSD-3-Clause"
+                        "url": "https://opensource.org/licenses/BSD-3-Clause",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -186,7 +190,8 @@
             "licenses": [
                 {
                     "license": {
-                        "name": "attrs non-standard license"
+                        "name": "attrs non-standard license",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -223,7 +228,8 @@
                 {
                     "license": {
                         "id": "Apache-2.0",
-                        "url": "https://opensource.org/licenses/Apache-2.0"
+                        "url": "https://opensource.org/licenses/Apache-2.0",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -266,7 +272,8 @@
                 {
                     "license": {
                         "id": "MPL-2.0",
-                        "url": "https://opensource.org/licenses/MPL-2.0"
+                        "url": "https://opensource.org/licenses/MPL-2.0",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -309,7 +316,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -352,7 +360,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -393,7 +402,8 @@
             ],
             "licenses": [
                 {
-                    "expression": "LGPL-3.0-or-later OR GPL-3.0-or-later"
+                    "expression": "LGPL-3.0-or-later OR GPL-3.0-or-later",
+                    "acknowledgement": "concluded"
                 }
             ],
             "purl": "pkg:pypi/cryptography@43.0.1",
@@ -437,7 +447,8 @@
             ],
             "licenses": [
                 {
-                    "expression": "LGPL-3.0-or-later AND BSD-3-Clause"
+                    "expression": "LGPL-3.0-or-later AND BSD-3-Clause",
+                    "acknowledgement": "concluded"
                 }
             ],
             "purl": "pkg:pypi/cvss@3.2",
@@ -477,7 +488,8 @@
             ],
             "licenses": [
                 {
-                    "expression": "Apache-2.0 AND (BSD-3-Clause OR MIT)"
+                    "expression": "Apache-2.0 AND (BSD-3-Clause OR MIT)",
+                    "acknowledgement": "concluded"
                 }
             ],
             "purl": "pkg:pypi/defusedcsv@2.0.0",
@@ -519,7 +531,8 @@
                 {
                     "license": {
                         "id": "PSF-2.0",
-                        "url": "https://opensource.org/licenses/PSF-2.0"
+                        "url": "https://opensource.org/licenses/PSF-2.0",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -562,7 +575,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -599,7 +613,8 @@
                 {
                     "license": {
                         "id": "0BSD",
-                        "url": "https://opensource.org/licenses/0BSD"
+                        "url": "https://opensource.org/licenses/0BSD",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -636,7 +651,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -679,7 +695,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -759,7 +776,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -802,13 +820,15 @@
                 {
                     "license": {
                         "id": "0BSD",
-                        "url": "https://opensource.org/licenses/0BSD"
+                        "url": "https://opensource.org/licenses/0BSD",
+                        "acknowledgement": "concluded"
                     }
                 },
                 {
                     "license": {
                         "id": "BSD-3-Clause",
-                        "url": "https://opensource.org/licenses/BSD-3-Clause"
+                        "url": "https://opensource.org/licenses/BSD-3-Clause",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -845,7 +865,8 @@
                 {
                     "license": {
                         "id": "0BSD",
-                        "url": "https://opensource.org/licenses/0BSD"
+                        "url": "https://opensource.org/licenses/0BSD",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -888,7 +909,8 @@
                 {
                     "license": {
                         "id": "ISC",
-                        "url": "https://opensource.org/licenses/ISC"
+                        "url": "https://opensource.org/licenses/ISC",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -925,7 +947,8 @@
                 {
                     "license": {
                         "id": "0BSD",
-                        "url": "https://opensource.org/licenses/0BSD"
+                        "url": "https://opensource.org/licenses/0BSD",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -968,7 +991,8 @@
                 {
                     "license": {
                         "id": "0BSD",
-                        "url": "https://opensource.org/licenses/0BSD"
+                        "url": "https://opensource.org/licenses/0BSD",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -1009,7 +1033,8 @@
             ],
             "licenses": [
                 {
-                    "expression": "GPL-3.0-or-later WITH Bison-exception-2.2"
+                    "expression": "GPL-3.0-or-later WITH Bison-exception-2.2",
+                    "acknowledgement": "concluded"
                 }
             ],
             "purl": "pkg:pypi/email-validator@2.1.1",
@@ -1061,7 +1086,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -1104,7 +1130,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -1141,7 +1168,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -1184,7 +1212,8 @@
                 {
                     "license": {
                         "id": "0BSD",
-                        "url": "https://opensource.org/licenses/0BSD"
+                        "url": "https://opensource.org/licenses/0BSD",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -1221,7 +1250,8 @@
                 {
                     "license": {
                         "id": "Apache-2.0",
-                        "url": "https://opensource.org/licenses/Apache-2.0"
+                        "url": "https://opensource.org/licenses/Apache-2.0",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -1264,7 +1294,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -1301,7 +1332,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -1344,13 +1376,15 @@
                 {
                     "license": {
                         "id": "0BSD",
-                        "url": "https://opensource.org/licenses/0BSD"
+                        "url": "https://opensource.org/licenses/0BSD",
+                        "acknowledgement": "concluded"
                     }
                 },
                 {
                     "license": {
                         "id": "BSD-2-Clause",
-                        "url": "https://opensource.org/licenses/BSD-2-Clause"
+                        "url": "https://opensource.org/licenses/BSD-2-Clause",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -1393,7 +1427,8 @@
                 {
                     "license": {
                         "id": "0BSD",
-                        "url": "https://opensource.org/licenses/0BSD"
+                        "url": "https://opensource.org/licenses/0BSD",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -1436,7 +1471,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -1473,7 +1509,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -1510,7 +1547,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -1547,7 +1585,8 @@
                 {
                     "license": {
                         "id": "Apache-2.0",
-                        "url": "https://opensource.org/licenses/Apache-2.0"
+                        "url": "https://opensource.org/licenses/Apache-2.0",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -1588,7 +1627,8 @@
             ],
             "licenses": [
                 {
-                    "expression": "OSI Approved"
+                    "expression": "OSI Approved",
+                    "acknowledgement": "concluded"
                 }
             ],
             "purl": "pkg:pypi/oauthlib@3.2.2",
@@ -1630,7 +1670,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -1673,7 +1714,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -1716,13 +1758,15 @@
                 {
                     "license": {
                         "id": "Apache-2.0",
-                        "url": "https://opensource.org/licenses/Apache-2.0"
+                        "url": "https://opensource.org/licenses/Apache-2.0",
+                        "acknowledgement": "concluded"
                     }
                 },
                 {
                     "license": {
                         "id": "0BSD",
-                        "url": "https://opensource.org/licenses/0BSD"
+                        "url": "https://opensource.org/licenses/0BSD",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -1757,7 +1801,8 @@
             ],
             "licenses": [
                 {
-                    "expression": "CMU License (MIT-CMU)"
+                    "expression": "CMU License (MIT-CMU)",
+                    "acknowledgement": "concluded"
                 }
             ],
             "purl": "pkg:pypi/pillow@10.4.0",
@@ -1803,7 +1848,8 @@
                 {
                     "license": {
                         "id": "LGPL-3.0-only",
-                        "url": "https://opensource.org/licenses/LGPL-3.0-only"
+                        "url": "https://opensource.org/licenses/LGPL-3.0-only",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -1846,7 +1892,8 @@
                 {
                     "license": {
                         "id": "LGPL-3.0-only",
-                        "url": "https://opensource.org/licenses/LGPL-3.0-only"
+                        "url": "https://opensource.org/licenses/LGPL-3.0-only",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -1889,7 +1936,8 @@
                 {
                     "license": {
                         "id": "Apache-2.0",
-                        "url": "https://opensource.org/licenses/Apache-2.0"
+                        "url": "https://opensource.org/licenses/Apache-2.0",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -1936,13 +1984,15 @@
                 {
                     "license": {
                         "id": "0BSD",
-                        "url": "https://opensource.org/licenses/0BSD"
+                        "url": "https://opensource.org/licenses/0BSD",
+                        "acknowledgement": "concluded"
                     }
                 },
                 {
                     "license": {
                         "id": "BSD-3-Clause",
-                        "url": "https://opensource.org/licenses/BSD-3-Clause"
+                        "url": "https://opensource.org/licenses/BSD-3-Clause",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -1985,7 +2035,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -2032,7 +2083,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -2075,7 +2127,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -2112,7 +2165,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -2155,7 +2209,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -2198,7 +2253,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -2241,7 +2297,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -2278,13 +2335,15 @@
                 {
                     "license": {
                         "id": "0BSD",
-                        "url": "https://opensource.org/licenses/0BSD"
+                        "url": "https://opensource.org/licenses/0BSD",
+                        "acknowledgement": "concluded"
                     }
                 },
                 {
                     "license": {
                         "id": "ISC",
-                        "url": "https://opensource.org/licenses/ISC"
+                        "url": "https://opensource.org/licenses/ISC",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -2327,7 +2386,8 @@
                 {
                     "license": {
                         "id": "Apache-2.0",
-                        "url": "https://opensource.org/licenses/Apache-2.0"
+                        "url": "https://opensource.org/licenses/Apache-2.0",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -2370,7 +2430,8 @@
                 {
                     "license": {
                         "id": "Apache-2.0",
-                        "url": "https://opensource.org/licenses/Apache-2.0"
+                        "url": "https://opensource.org/licenses/Apache-2.0",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -2413,7 +2474,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -2450,7 +2512,8 @@
                 {
                     "license": {
                         "id": "0BSD",
-                        "url": "https://opensource.org/licenses/0BSD"
+                        "url": "https://opensource.org/licenses/0BSD",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -2487,7 +2550,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -2524,7 +2588,8 @@
                 {
                     "license": {
                         "id": "PSF-2.0",
-                        "url": "https://opensource.org/licenses/PSF-2.0"
+                        "url": "https://opensource.org/licenses/PSF-2.0",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -2561,7 +2626,8 @@
                 {
                     "license": {
                         "id": "Apache-2.0",
-                        "url": "https://opensource.org/licenses/Apache-2.0"
+                        "url": "https://opensource.org/licenses/Apache-2.0",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -2602,7 +2668,8 @@
             ],
             "licenses": [
                 {
-                    "expression": "OSI Approved OR BSD 3-Clause License or Apache License, Version 2.0"
+                    "expression": "OSI Approved OR BSD 3-Clause License or Apache License, Version 2.0",
+                    "acknowledgement": "concluded"
                 }
             ],
             "purl": "pkg:pypi/uritemplate@4.1.1",
@@ -2644,7 +2711,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -2681,7 +2749,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -2718,7 +2787,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
@@ -2755,7 +2825,8 @@
                 {
                     "license": {
                         "id": "MIT",
-                        "url": "https://opensource.org/licenses/MIT"
+                        "url": "https://opensource.org/licenses/MIT",
+                        "acknowledgement": "concluded"
                     }
                 }
             ],
