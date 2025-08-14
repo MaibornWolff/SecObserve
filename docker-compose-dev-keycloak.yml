@@ -68,7 +68,7 @@ services:
       - "8000:8000"
 
   postgres:
-    image: postgres:15.13-alpine
+    image: postgres:15.14-alpine
     volumes:
       - dev_postgres_data:/var/lib/postgresql/data
     environment:
