@@ -37,7 +37,7 @@ After selecting the entry of either a CSAF or OpenVEX document from the respecti
 
 ## Import VEX documents
 
-VEX documents can be imported in CSAF or OpenVEX format. After importing the file, the document will be parsed and the VEX statements will be applied to the referenced observations. A user needs to be `superuser` to import VEX documents. 
+VEX documents can be imported in CSAF, OpenVEX and CycloneDX format. After importing the file, the document will be parsed and the VEX statements will be applied to the referenced observations. A user needs to be `superuser` to import VEX documents. 
 
 When observations are imported, the VEX statements will be applied to the referenced observations as well.
 
