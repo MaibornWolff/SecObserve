@@ -18,7 +18,10 @@ from django.utils import timezone
 
 from application.access_control.models import Authorization_Group, User
 from application.core.models import Branch, Product, Service
-from application.licenses.types import License_Policy_Evaluation_Result
+from application.licenses.types import (
+    NO_LICENSE_INFORMATION,
+    License_Policy_Evaluation_Result,
+)
 
 
 class License(Model):
@@ -112,17 +115,54 @@ class License_Component(Model):
     component_cpe = CharField(max_length=255, blank=True)
     component_dependencies = TextField(max_length=32768, blank=True)
 
-    license_name = CharField(max_length=255, blank=True)
-    license = ForeignKey(
+    imported_declared_license_name = CharField(max_length=255, blank=True, default=NO_LICENSE_INFORMATION)
+    imported_declared_spdx_license = ForeignKey(
         License,
-        related_name="license_components",
-        on_delete=CASCADE,
+        related_name="imported_declared_license_components",
+        on_delete=PROTECT,
         blank=True,
         null=True,
     )
-    license_expression = CharField(max_length=255, blank=True)
-    non_spdx_license = CharField(max_length=255, blank=True)
-    multiple_licenses = CharField(max_length=512, blank=True)
+    imported_declared_license_expression = CharField(max_length=255, blank=True)
+    imported_declared_non_spdx_license = CharField(max_length=255, blank=True)
+    imported_declared_multiple_licenses = CharField(max_length=512, blank=True)
+
+    imported_concluded_license_name = CharField(max_length=255, blank=True, default=NO_LICENSE_INFORMATION)
+    imported_concluded_spdx_license = ForeignKey(
+        License,
+        related_name="imported_concluded_license_components",
+        on_delete=PROTECT,
+        blank=True,
+        null=True,
+    )
+    imported_concluded_license_expression = CharField(max_length=255, blank=True)
+    imported_concluded_non_spdx_license = CharField(max_length=255, blank=True)
+    imported_concluded_multiple_licenses = CharField(max_length=512, blank=True)
+
+    manual_concluded_license_name = CharField(max_length=255, blank=True, default=NO_LICENSE_INFORMATION)
+    manual_concluded_spdx_license = ForeignKey(
+        License,
+        related_name="manual_concluded_license_components",
+        on_delete=PROTECT,
+        blank=True,
+        null=True,
+    )
+    manual_concluded_license_expression = CharField(max_length=255, blank=True)
+    manual_concluded_non_spdx_license = CharField(max_length=255, blank=True)
+    manual_concluded_comment = CharField(max_length=255, blank=True)
+
+    effective_license_name = CharField(max_length=255, blank=True, default=NO_LICENSE_INFORMATION)
+    effective_spdx_license = ForeignKey(
+        License,
+        related_name="effective_license_components",
+        on_delete=PROTECT,
+        blank=True,
+        null=True,
+    )
+    effective_license_expression = CharField(max_length=255, blank=True)
+    effective_non_spdx_license = CharField(max_length=255, blank=True)
+    effective_multiple_licenses = CharField(max_length=512, blank=True)
+
     evaluation_result = CharField(
         max_length=16,
         choices=License_Policy_Evaluation_Result.RESULT_CHOICES,
@@ -139,7 +179,8 @@ class License_Component(Model):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
-        self.unsaved_license = ""
+        self.unsaved_declared_licenses: list[str] = []
+        self.unsaved_concluded_licenses: list[str] = []
         self.unsaved_evidences: list[list[str]] = []
 
     def __str__(self) -> str:
@@ -161,6 +202,42 @@ class License_Component_Evidence(Model):
         indexes = [
             Index(fields=["name"]),
         ]
+
+
+class Concluded_License(Model):
+    product = ForeignKey(
+        Product,
+        related_name="concluded_licenses",
+        on_delete=CASCADE,
+    )
+    component_purl_type = CharField(max_length=16, blank=True)
+    component_name = CharField(max_length=255)
+    component_version = CharField(max_length=255, blank=True)
+
+    manual_concluded_spdx_license = ForeignKey(
+        License,
+        related_name="manual_concluded_licenses",
+        on_delete=CASCADE,
+        blank=True,
+        null=True,
+    )
+    manual_concluded_license_expression = CharField(max_length=255, blank=True)
+    manual_concluded_non_spdx_license = CharField(max_length=255, blank=True)
+
+    user = ForeignKey(
+        User,
+        related_name="concluded_licenses",
+        on_delete=PROTECT,
+    )
+    last_updated = DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = (
+            "product",
+            "component_purl_type",
+            "component_name",
+            "component_version",
+        )
 
 
 class License_Policy(Model):

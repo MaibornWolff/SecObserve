@@ -72,7 +72,7 @@ const LicenseComponentEmbeddedList = ({
             );
         }
         filters.push(
-            <TextInput source="license_name" label="License" alwaysOn />,
+            <TextInput source="effective_license_name" label="License" alwaysOn />,
             <AutocompleteInputMedium
                 source="evaluation_result"
                 label="Evaluation result"
@@ -103,7 +103,9 @@ const LicenseComponentEmbeddedList = ({
                 </ReferenceInput>
             );
         }
-
+        if (product?.has_concluded_comments) {
+            filters.push(<TextInput source="concluded_comment" alwaysOn />);
+        }
         return filters;
     }
 
@@ -119,8 +121,8 @@ const LicenseComponentEmbeddedList = ({
         if (record?.branch_name) {
             filter = { ...filter, branch_name_exact: record.branch_name };
         }
-        if (record?.license_name) {
-            filter = { ...filter, license_name_exact: record.license_name };
+        if (record?.effective_license_name) {
+            filter = { ...filter, effective_license_name_exact: record.effective_license_name };
         }
         if (record?.evaluation_result) {
             filter = { ...filter, evaluation_result: record.evaluation_result };
@@ -134,7 +136,7 @@ const LicenseComponentEmbeddedList = ({
         if (record) {
             const storedFilters = {
                 branch_name: record.branch_name,
-                license_name: record.license_name,
+                effective_license_name: record.effective_license_name,
                 evaluation_result: record.evaluation_result,
                 component_purl_type: component_purl_type,
                 origin_service: origin_service,
@@ -187,9 +189,11 @@ const LicenseComponentEmbeddedList = ({
                         )}
                         <FunctionField
                             label="License"
-                            sortBy="license_name"
+                            sortBy="effective_license_name"
                             render={(record: any) => (
-                                <span style={{ fontStyle: licenseNameStyle(record.type) }}>{record.license_name}</span>
+                                <span style={{ fontStyle: licenseNameStyle(record.effective_license_type) }}>
+                                    {record.effective_license_name}
+                                </span>
                             )}
                         />
                         {!expand && (
@@ -201,6 +205,7 @@ const LicenseComponentEmbeddedList = ({
                         )}
                         <TextField source="component_name_version_type" label="Component" />
                         {product?.has_services && <TextField source="origin_service_name" label="Service" />}
+                        {product?.has_concluded_comments && <TextField source="concluded_comment" />}
                     </Datagrid>
                     <WithListContext
                         render={({ total }) => (

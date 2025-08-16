@@ -2,8 +2,7 @@ from json import dumps
 from typing import Any, Optional
 
 from rest_framework.exceptions import ValidationError
-from spdx_tools.spdx.model.document import Document
-from spdx_tools.spdx.model.relationship import RelationshipType
+from spdx_tools.spdx.model import Document, RelationshipType, SpdxNoAssertion, SpdxNone
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.jsonlikedict.json_like_dict_parser import JsonLikeDictParser
 
@@ -61,19 +60,21 @@ class SPDXParser(BaseParser, BaseFileParser):
             if package.version is not None:
                 version = str(package.version)
 
-            unsaved_license = None
+            concluded_licenses: list[str] = []
             if (
                 package.license_concluded is not None
-                and str(package.license_concluded) != ""
-                and str(package.license_concluded) != "NOASSERTION"
+                and not isinstance(package.license_concluded, SpdxNoAssertion)
+                and not isinstance(package.license_concluded, SpdxNone)
             ):
-                unsaved_license = package.license_concluded
-            elif (
+                concluded_licenses.append(str(package.license_concluded))
+
+            declared_licenses: list[str] = []
+            if (
                 package.license_declared is not None
-                and str(package.license_declared) != ""
-                and str(package.license_declared) != "NOASSERTION"
+                and not isinstance(package.license_declared, SpdxNoAssertion)
+                and not isinstance(package.license_declared, SpdxNone)
             ):
-                unsaved_license = package.license_declared
+                declared_licenses.append(str(package.license_declared))
 
             purl = ""
             for external_reference in package.external_references:
@@ -89,8 +90,9 @@ class SPDXParser(BaseParser, BaseFileParser):
                 component_purl=purl,
                 component_dependencies=dependencies,
             )
-            if unsaved_license is not None:
-                license_component.unsaved_license = str(unsaved_license)
+
+            license_component.unsaved_declared_licenses = declared_licenses
+            license_component.unsaved_concluded_licenses = concluded_licenses
 
             evidence = []
             package_json = packages.get(package.spdx_id)

@@ -44,6 +44,7 @@ from application.licenses.api.permissions import (
     UserHasLicensePolicyPermission,
 )
 from application.licenses.api.serializers import (
+    ConcludedLicenseSerializer,
     LicenseComponentEvidenceSerializer,
     LicenseComponentIdSerializer,
     LicenseComponentListSerializer,
@@ -75,6 +76,7 @@ from application.licenses.models import (
 )
 from application.licenses.queries.license import get_license
 from application.licenses.queries.license_component import (
+    get_license_component,
     get_license_component_licenses,
     get_license_components,
 )
@@ -105,6 +107,7 @@ from application.licenses.services.export_license_policy_secobserve import (
     export_license_policy_secobserve_json,
     export_license_policy_secobserve_yaml,
 )
+from application.licenses.services.license_component import save_concluded_license
 from application.licenses.services.license_group import (
     copy_license_group,
     import_scancode_licensedb,
@@ -114,13 +117,14 @@ from application.licenses.services.license_policy import (
     apply_license_policy_product,
     copy_license_policy,
 )
+from application.licenses.types import NO_LICENSE_INFORMATION
 
 
 @dataclass
 class LicenseComponentOverviewElement:
     branch_name: Optional[str]
-    license_name: str
-    type: str
+    effective_license_name: str
+    effective_license_type: str
     evaluation_result: str
     num_components: int
 
@@ -145,7 +149,42 @@ class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
         return super().get_serializer_class()
 
     def get_queryset(self) -> QuerySet[License_Component]:
-        return get_license_components().select_related("branch").select_related("license")
+        return get_license_components().select_related("branch").select_related("origin_service")
+
+    @extend_schema(
+        methods=["PATCH"],
+        request=ConcludedLicenseSerializer,
+        responses={200: None},
+    )
+    @action(detail=True, methods=["patch"])
+    def concluded_license(self, request: Request, pk: int) -> Response:
+        request_serializer = ConcludedLicenseSerializer(data=request.data)
+        if not request_serializer.is_valid():
+            raise ValidationError(request_serializer.errors)
+
+        license_component = get_license_component(pk)
+        if not license_component:
+            raise NotFound(f"License component {pk} not found.")
+
+        user_has_permission_or_403(license_component, Permissions.License_Component_Edit)
+
+        manual_concluded_spdx_license_id = request_serializer.validated_data.get("manual_concluded_spdx_license")
+        if manual_concluded_spdx_license_id:
+            license_component.manual_concluded_spdx_license = get_license(manual_concluded_spdx_license_id)
+            if not license_component.manual_concluded_spdx_license:
+                raise ValidationError(f"SPDX license {manual_concluded_spdx_license_id} not found.")
+        else:
+            license_component.manual_concluded_spdx_license = None
+        license_component.manual_concluded_non_spdx_license = request_serializer.validated_data.get(
+            "manual_concluded_non_spdx_license", ""
+        )
+        license_component.manual_concluded_license_expression = request_serializer.validated_data.get(
+            "manual_concluded_license_expression", ""
+        )
+
+        save_concluded_license(license_component)
+
+        return Response()
 
     @extend_schema(
         methods=["GET"],
@@ -180,25 +219,25 @@ class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
 
         results = []
         for element in license_overview_elements:
-            if element["license__spdx_id"]:
-                license_name = element["license__spdx_id"]
+            if element["effective_spdx_license__spdx_id"]:
+                effective_license_name = element["effective_spdx_license__spdx_id"]
                 element_type = "SPDX"
-            elif element["license_expression"]:
-                license_name = element["license_expression"]
+            elif element["effective_license_expression"]:
+                effective_license_name = element["effective_license_expression"]
                 element_type = "Expression"
-            elif element["non_spdx_license"]:
-                license_name = element["non_spdx_license"]
+            elif element["effective_non_spdx_license"]:
+                effective_license_name = element["effective_non_spdx_license"]
                 element_type = "Non-SPDX"
-            elif element["multiple_licenses"]:
-                license_name = element["multiple_licenses"]
+            elif element["effective_multiple_licenses"]:
+                effective_license_name = element["effective_multiple_licenses"]
                 element_type = "Multiple"
             else:
-                license_name = "No license information"
+                effective_license_name = NO_LICENSE_INFORMATION
                 element_type = ""
             license_component_overview_element = LicenseComponentOverviewElement(
                 branch_name=element["branch__name"],
-                license_name=license_name,
-                type=element_type,
+                effective_license_name=effective_license_name,
+                effective_license_type=element_type,
                 evaluation_result=element["evaluation_result"],
                 num_components=element["id__count"],
             )
@@ -218,24 +257,26 @@ class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
 
     def _get_ordering(self, ordering: Optional[str]) -> Tuple[str, str, str]:
         if ordering and ordering == "-branch_name":
-            return "-branch__name", "-license_name", "-numerical_evaluation_result"
+            return "-branch__name", "-effective_license_name", "-numerical_evaluation_result"
         if ordering and ordering == "branch_name":
-            return "branch__name", "license_name", "numerical_evaluation_result"
+            return "branch__name", "effective_license_name", "numerical_evaluation_result"
 
-        if ordering and ordering == "-license_name":
-            return "-license_name", "-numerical_evaluation_result", "-branch__name"
-        if ordering and ordering == "license_name":
-            return "license_name", "numerical_evaluation_result", "branch__name"
+        if ordering and ordering == "-effective_license_name":
+            return "-effective_license_name", "-numerical_evaluation_result", "-branch__name"
+        if ordering and ordering == "effective_license_name":
+            return "effective_license_name", "numerical_evaluation_result", "branch__name"
 
         if ordering and ordering == "-evaluation_result":
-            return "-numerical_evaluation_result", "-license_name", "-branch__name"
+            return "-numerical_evaluation_result", "-effective_license_name", "-branch__name"
 
-        return "numerical_evaluation_result", "license_name", "branch__name"
+        return "numerical_evaluation_result", "effective_license_name", "branch__name"
 
     def _filter_data(self, request: Request, license_overview_elements: QuerySet) -> QuerySet:
-        filter_license_name = request.query_params.get("license_name")
-        if filter_license_name:
-            license_overview_elements = license_overview_elements.filter(license_name__icontains=filter_license_name)
+        filter_effective_license_name = request.query_params.get("effective_license_name")
+        if filter_effective_license_name:
+            license_overview_elements = license_overview_elements.filter(
+                effective_license_name__icontains=filter_effective_license_name
+            )
 
         filter_evaluation_result = request.query_params.get("evaluation_result")
         if filter_evaluation_result:

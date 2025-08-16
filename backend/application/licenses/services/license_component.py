@@ -5,9 +5,17 @@ from license_expression import get_spdx_licensing
 from packageurl import PackageURL
 from rest_framework.exceptions import ValidationError
 
+from application.commons.services.functions import get_comma_separated_as_list
 from application.core.models import Product
 from application.licenses.models import License_Component
 from application.licenses.queries.license import get_license_by_spdx_id
+from application.licenses.services.concluded_license import update_concluded_license
+from application.licenses.services.license_policy import (
+    apply_license_policy_to_component,
+    get_license_evaluation_results_for_product,
+    get_license_policy,
+)
+from application.licenses.types import NO_LICENSE_INFORMATION
 
 
 def get_identity_hash(license_component: License_Component) -> str:
@@ -19,15 +27,10 @@ def _get_string_to_hash(
     license_component: License_Component,
 ) -> str:  # pylint: disable=too-many-branches
     hash_string = license_component.component_name_version
-    if license_component.component_purl:
-        hash_string += license_component.component_purl
     if license_component.component_dependencies:
         hash_string += license_component.component_dependencies
-    if license_component.license:
-        hash_string += license_component.license.spdx_id
-    if license_component.non_spdx_license:
-        hash_string += license_component.non_spdx_license
-
+    if license_component.origin_service:
+        hash_string += license_component.origin_service.name
     return hash_string
 
 
@@ -83,31 +86,92 @@ def _prepare_name_version(component: License_Component) -> None:
 
 
 def _prepare_license(component: License_Component) -> None:
-    component.license_expression = ""
-    component.non_spdx_license = ""
-    component.multiple_licenses = ""
+    _prepare_imported_declared_license(component)
+    _prepare_imported_concluded_license(component)
+    set_effective_license(component)
 
-    component.license_name = component.unsaved_license
-    if component.unsaved_license:
-        if component.unsaved_license.startswith("[") and component.unsaved_license.endswith("]"):
-            component.multiple_licenses = component.unsaved_license[1:-1]
-            component.license_name = component.multiple_licenses
-        if not component.multiple_licenses:
-            component.license = get_license_by_spdx_id(component.unsaved_license)
-        if not component.multiple_licenses and not component.license:
+
+def _prepare_imported_declared_license(component: License_Component) -> None:
+    component.imported_declared_spdx_license = None
+    component.imported_declared_license_expression = ""
+    component.imported_declared_non_spdx_license = ""
+    component.imported_declared_multiple_licenses = ""
+
+    if not component.unsaved_declared_licenses:
+        component.imported_declared_license_name = NO_LICENSE_INFORMATION
+    elif len(component.unsaved_declared_licenses) == 1:
+        component.imported_declared_spdx_license = get_license_by_spdx_id(component.unsaved_declared_licenses[0])
+        if component.imported_declared_spdx_license:
+            component.imported_declared_license_name = component.imported_declared_spdx_license.spdx_id
+        else:
             licensing = get_spdx_licensing()
             try:
-                expression_info = licensing.validate(component.unsaved_license, strict=True)
+                expression_info = licensing.validate(component.unsaved_declared_licenses[0], strict=True)
                 if not expression_info.errors:
-                    component.license_expression = expression_info.normalized_expression
-                    component.license_name = component.license_expression
+                    component.imported_declared_license_expression = expression_info.normalized_expression
+                    component.imported_declared_license_name = component.imported_declared_license_expression
                 else:
-                    component.non_spdx_license = component.unsaved_license
+                    component.imported_declared_non_spdx_license = component.unsaved_declared_licenses[0]
+                    component.imported_declared_license_name = component.imported_declared_non_spdx_license
             except Exception:
-                component.non_spdx_license = component.unsaved_license
+                component.imported_declared_non_spdx_license = component.unsaved_declared_licenses[0]
+                component.imported_declared_license_name = component.imported_declared_non_spdx_license
 
-    if not component.license_name:
-        component.license_name = "No license information"
+    else:
+        component.imported_declared_multiple_licenses = ", ".join(component.unsaved_declared_licenses)
+        component.imported_declared_license_name = component.imported_declared_multiple_licenses
+
+
+def _prepare_imported_concluded_license(component: License_Component) -> None:
+    if not component.unsaved_concluded_licenses:
+        component.imported_concluded_license_name = NO_LICENSE_INFORMATION
+    elif len(component.unsaved_concluded_licenses) == 1:
+        component.imported_concluded_spdx_license = get_license_by_spdx_id(component.unsaved_concluded_licenses[0])
+        if component.imported_concluded_spdx_license:
+            component.imported_concluded_license_name = component.imported_concluded_spdx_license.spdx_id
+        else:
+            licensing = get_spdx_licensing()
+            try:
+                expression_info = licensing.validate(component.unsaved_concluded_licenses[0], strict=True)
+                if not expression_info.errors:
+                    component.imported_concluded_license_expression = expression_info.normalized_expression
+                    component.imported_concluded_license_name = component.imported_concluded_license_expression
+                else:
+                    component.imported_concluded_non_spdx_license = component.unsaved_concluded_licenses[0]
+                    component.imported_concluded_license_name = component.imported_concluded_non_spdx_license
+            except Exception:
+                component.imported_concluded_non_spdx_license = component.unsaved_concluded_licenses[0]
+                component.imported_concluded_license_name = component.imported_concluded_non_spdx_license
+
+    else:
+        component.imported_concluded_multiple_licenses = ", ".join(component.unsaved_concluded_licenses)
+        component.imported_concluded_license_name = component.imported_concluded_multiple_licenses
+
+
+def set_effective_license(component: License_Component) -> None:
+    component.effective_license_name = NO_LICENSE_INFORMATION
+    component.effective_spdx_license = None
+    component.effective_license_expression = ""
+    component.effective_non_spdx_license = ""
+    component.effective_multiple_licenses = ""
+
+    if component.manual_concluded_license_name != NO_LICENSE_INFORMATION:
+        component.effective_license_name = component.manual_concluded_license_name
+        component.effective_spdx_license = component.manual_concluded_spdx_license
+        component.effective_license_expression = component.manual_concluded_license_expression
+        component.effective_non_spdx_license = component.manual_concluded_non_spdx_license
+    elif component.imported_concluded_license_name != NO_LICENSE_INFORMATION:
+        component.effective_license_name = component.imported_concluded_license_name
+        component.effective_spdx_license = component.imported_concluded_spdx_license
+        component.effective_license_expression = component.imported_concluded_license_expression
+        component.effective_non_spdx_license = component.imported_concluded_non_spdx_license
+        component.effective_multiple_licenses = component.imported_concluded_multiple_licenses
+    elif component.imported_declared_license_name != NO_LICENSE_INFORMATION:
+        component.effective_license_name = component.imported_declared_license_name
+        component.effective_spdx_license = component.imported_declared_spdx_license
+        component.effective_license_expression = component.imported_declared_license_expression
+        component.effective_non_spdx_license = component.imported_declared_non_spdx_license
+        component.effective_multiple_licenses = component.imported_declared_multiple_licenses
 
 
 def license_components_bulk_delete(product: Product, component_ids: list[int]) -> None:
@@ -125,3 +189,31 @@ def _check_components(product: Product, component_ids: list[int]) -> QuerySet[Li
             raise ValidationError(f"Component {component.pk} does not belong to product {product.pk}")
 
     return components
+
+
+def save_concluded_license(component: License_Component) -> None:
+    component.manual_concluded_license_name = NO_LICENSE_INFORMATION
+
+    if component.manual_concluded_spdx_license:
+        component.manual_concluded_license_name = component.manual_concluded_spdx_license.spdx_id
+    elif component.manual_concluded_license_expression:
+        licensing = get_spdx_licensing()
+        expression_info = licensing.validate(component.manual_concluded_license_expression, strict=True)
+        if not expression_info.errors:
+            component.manual_concluded_license_name = component.manual_concluded_license_expression
+        else:
+            raise ValidationError("Invalid concluded license expression")
+    elif component.manual_concluded_non_spdx_license:
+        component.manual_concluded_license_name = component.manual_concluded_non_spdx_license
+
+    set_effective_license(component)
+    update_concluded_license(component)
+
+    license_policy = get_license_policy(component.product)
+    if license_policy:
+        license_evaluation_results = get_license_evaluation_results_for_product(component.product)
+        apply_license_policy_to_component(
+            component, license_evaluation_results, get_comma_separated_as_list(license_policy.ignore_component_types)
+        )
+
+    component.save()

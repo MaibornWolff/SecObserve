@@ -431,10 +431,16 @@
       "version": "20220614-r4",
       "licenses": [
         {
-          "expression": "MPL-2.0"
+          "license": {
+            "id": "MPL-2.0",
+            "acknowledgement": "declared"
+          }
         },
         {
-          "expression": "MIT"
+          "license": {
+            "name": "MIT",
+            "acknowledgement": "declard"
+          }
         }
       ],
       "purl": "pkg:apk/alpine/ca-certificates@20220614-r4?distro=3.17.3",
@@ -468,10 +474,16 @@
       "version": "20220614-r4",
       "licenses": [
         {
-          "expression": "MPL-2.0"
+          "license": {
+            "name": "MPL-2.0",
+            "acknowledgement": "concluded"
+          }
         },
         {
-          "expression": "MIT"
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "concluded"
+          }
         }
       ],
       "purl": "pkg:apk/alpine/ca-certificates-bundle@20220614-r4?distro=3.17.3",
