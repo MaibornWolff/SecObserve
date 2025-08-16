@@ -137,8 +137,6 @@ def apply_license_policy_product(product: Product) -> None:
     license_evaluation_results = get_license_evaluation_results_for_product(product)
     components = License_Component.objects.filter(product=product)
     for component in components:
-        spdx_license_before = component.effective_spdx_license
-        non_spdx_license_before = component.effective_non_spdx_license
         evaluation_result_before = component.evaluation_result
 
         license_policy = get_license_policy(product)
@@ -151,11 +149,7 @@ def apply_license_policy_product(product: Product) -> None:
         else:
             component.evaluation_result = License_Policy_Evaluation_Result.RESULT_UNKNOWN
 
-        if (
-            spdx_license_before != component.effective_spdx_license
-            or non_spdx_license_before != component.effective_non_spdx_license
-            or evaluation_result_before != component.evaluation_result
-        ):
+        if evaluation_result_before != component.evaluation_result:
             component.last_change = timezone.now()
 
         component.save()
