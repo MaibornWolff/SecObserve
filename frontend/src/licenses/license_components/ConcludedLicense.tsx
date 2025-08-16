@@ -16,17 +16,17 @@ const ConcludedLicense = () => {
     const notify = useNotify();
 
     const concludedLicenseUpdate = async (data: any) => {
-        if (!data.concluded_license_expression) {
-            data.concluded_license_expression = "";
+        if (!data.manual_concluded_license_expression) {
+            data.manual_concluded_license_expression = "";
         }
-        if (!data.concluded_non_spdx_license) {
-            data.concluded_non_spdx_license = "";
+        if (!data.manual_concluded_non_spdx_license) {
+            data.manual_concluded_non_spdx_license = "";
         }
 
         const patch = {
-            concluded_spdx_license: data.concluded_spdx_license,
-            concluded_license_expression: data.concluded_license_expression,
-            concluded_non_spdx_license: data.concluded_non_spdx_license,
+            manual_concluded_spdx_license: data.manual_concluded_spdx_license,
+            manual_concluded_license_expression: data.manual_concluded_license_expression,
+            manual_concluded_non_spdx_license: data.manual_concluded_non_spdx_license,
         };
 
         httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/license_components/" + data.id + "/concluded_license/", {
@@ -60,20 +60,20 @@ const ConcludedLicense = () => {
 
         // check if only one field is set
         const fields = [
-            values.concluded_spdx_license,
-            values.concluded_license_expression,
-            values.concluded_non_spdx_license,
+            values.manual_concluded_spdx_license,
+            values.manual_concluded_license_expression,
+            values.manual_concluded_non_spdx_license,
         ];
         const filledFields = fields.filter(Boolean);
         if (filledFields.length > 1) {
-            if (values.concluded_spdx_license) {
-                errors.concluded_spdx_license = "Only one field must be set";
+            if (values.manual_concluded_spdx_license) {
+                errors.manual_concluded_spdx_license = "Only one field must be set";
             }
-            if (values.concluded_license_expression) {
-                errors.concluded_license_expression = "Only one field must be set";
+            if (values.manual_concluded_license_expression) {
+                errors.manual_concluded_license_expression = "Only one field must be set";
             }
-            if (values.concluded_non_spdx_license) {
-                errors.concluded_non_spdx_license = "Only one field must be set";
+            if (values.manual_concluded_non_spdx_license) {
+                errors.manual_concluded_non_spdx_license = "Only one field must be set";
             }
         }
 
@@ -92,19 +92,19 @@ const ConcludedLicense = () => {
                         validate={validateFields}
                     >
                         <ReferenceInput
-                            source="concluded_spdx_license"
+                            source="manual_concluded_spdx_license"
                             reference="licenses"
                             sort={{ field: "spdx_id", order: "ASC" }}
                         >
                             <AutocompleteInputExtraWide label="Concluded SPDX License" optionText="spdx_id_name" />
                         </ReferenceInput>
                         <TextInputExtraWide
-                            source="concluded_license_expression"
+                            source="manual_concluded_license_expression"
                             label="Concluded license expression"
                             validate={validate_255}
                         />
                         <TextInputExtraWide
-                            source="concluded_non_spdx_license"
+                            source="manual_concluded_non_spdx_license"
                             label="Concluded Non-SPDX license"
                             validate={validate_255}
                         />

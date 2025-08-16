@@ -54,7 +54,7 @@ class TestConcludedLicense(BaseTestCase):
             component_purl_type="npm",
             component_name="test_component",
             component_version="1.0.0",
-            concluded_spdx_license=self.license_obj,
+            manual_concluded_spdx_license=self.license_obj,
             user=self.db_user,
         )
 
@@ -62,11 +62,11 @@ class TestConcludedLicense(BaseTestCase):
         apply_concluded_license(self.component)
 
         # Assert
-        self.assertEqual(self.component.concluded_spdx_license, self.license_obj)
-        self.assertEqual(self.component.concluded_license_name, self.license_obj.spdx_id)
-        self.assertEqual(self.component.concluded_comment, f"Set manually by {str(concluded_license.user)}")
-        self.assertEqual(self.component.concluded_license_expression, "")
-        self.assertEqual(self.component.concluded_non_spdx_license, "")
+        self.assertEqual(self.component.manual_concluded_spdx_license, self.license_obj)
+        self.assertEqual(self.component.manual_concluded_license_name, self.license_obj.spdx_id)
+        self.assertEqual(self.component.manual_concluded_comment, f"Set manually by {str(concluded_license.user)}")
+        self.assertEqual(self.component.manual_concluded_license_expression, "")
+        self.assertEqual(self.component.manual_concluded_non_spdx_license, "")
 
         # Clean up
         concluded_license.delete()
@@ -82,7 +82,7 @@ class TestConcludedLicense(BaseTestCase):
             component_purl_type="npm",
             component_name="test_component",
             component_version="1.0.0",
-            concluded_license_expression="MIT OR Apache-2.0",
+            manual_concluded_license_expression="MIT OR Apache-2.0",
             user=self.db_user,
         )
 
@@ -90,11 +90,11 @@ class TestConcludedLicense(BaseTestCase):
         apply_concluded_license(self.component)
 
         # Assert
-        self.assertIsNone(self.component.concluded_spdx_license)
-        self.assertEqual(self.component.concluded_license_name, "MIT OR Apache-2.0")
-        self.assertEqual(self.component.concluded_license_expression, "MIT OR Apache-2.0")
-        self.assertEqual(self.component.concluded_comment, f"Set manually by {str(concluded_license.user)}")
-        self.assertEqual(self.component.concluded_non_spdx_license, "")
+        self.assertIsNone(self.component.manual_concluded_spdx_license)
+        self.assertEqual(self.component.manual_concluded_license_name, "MIT OR Apache-2.0")
+        self.assertEqual(self.component.manual_concluded_license_expression, "MIT OR Apache-2.0")
+        self.assertEqual(self.component.manual_concluded_comment, f"Set manually by {str(concluded_license.user)}")
+        self.assertEqual(self.component.manual_concluded_non_spdx_license, "")
 
         # Clean up
         concluded_license.delete()
@@ -110,7 +110,7 @@ class TestConcludedLicense(BaseTestCase):
             component_purl_type="npm",
             component_name="test_component",
             component_version="1.0.0",
-            concluded_non_spdx_license="Custom License",
+            manual_concluded_non_spdx_license="Custom License",
             user=self.db_user,
         )
 
@@ -118,11 +118,11 @@ class TestConcludedLicense(BaseTestCase):
         apply_concluded_license(self.component)
 
         # Assert
-        self.assertIsNone(self.component.concluded_spdx_license)
-        self.assertEqual(self.component.concluded_license_name, "Custom License")
-        self.assertEqual(self.component.concluded_non_spdx_license, "Custom License")
-        self.assertEqual(self.component.concluded_comment, f"Set manually by {str(concluded_license.user)}")
-        self.assertEqual(self.component.concluded_license_expression, "")
+        self.assertIsNone(self.component.manual_concluded_spdx_license)
+        self.assertEqual(self.component.manual_concluded_license_name, "Custom License")
+        self.assertEqual(self.component.manual_concluded_non_spdx_license, "Custom License")
+        self.assertEqual(self.component.manual_concluded_comment, f"Set manually by {str(concluded_license.user)}")
+        self.assertEqual(self.component.manual_concluded_license_expression, "")
 
         # Clean up
         concluded_license.delete()
@@ -137,7 +137,7 @@ class TestConcludedLicense(BaseTestCase):
             component_purl_type="npm",
             component_name="test_component",
             component_version="2.0.0",  # Different version
-            concluded_spdx_license=self.license_obj,
+            manual_concluded_spdx_license=self.license_obj,
             user=self.db_user,
         )
 
@@ -145,14 +145,14 @@ class TestConcludedLicense(BaseTestCase):
         apply_concluded_license(self.component)
 
         # Assert
-        self.assertEqual(self.component.concluded_spdx_license, self.license_obj)
-        self.assertEqual(self.component.concluded_license_name, self.license_obj.spdx_id)
+        self.assertEqual(self.component.manual_concluded_spdx_license, self.license_obj)
+        self.assertEqual(self.component.manual_concluded_license_name, self.license_obj.spdx_id)
         self.assertEqual(
-            self.component.concluded_comment,
+            self.component.manual_concluded_comment,
             f"Copied from version {concluded_license.component_version}, set by {str(concluded_license.user)}",
         )
-        self.assertEqual(self.component.concluded_license_expression, "")
-        self.assertEqual(self.component.concluded_non_spdx_license, "")
+        self.assertEqual(self.component.manual_concluded_license_expression, "")
+        self.assertEqual(self.component.manual_concluded_non_spdx_license, "")
 
         # Clean up
         concluded_license.delete()
@@ -165,11 +165,11 @@ class TestConcludedLicense(BaseTestCase):
         apply_concluded_license(self.component)
 
         # Assert
-        self.assertIsNone(self.component.concluded_spdx_license)
-        self.assertEqual(self.component.concluded_license_name, NO_LICENSE_INFORMATION)
-        self.assertEqual(self.component.concluded_comment, "")
-        self.assertEqual(self.component.concluded_license_expression, "")
-        self.assertEqual(self.component.concluded_non_spdx_license, "")
+        self.assertIsNone(self.component.manual_concluded_spdx_license)
+        self.assertEqual(self.component.manual_concluded_license_name, NO_LICENSE_INFORMATION)
+        self.assertEqual(self.component.manual_concluded_comment, "")
+        self.assertEqual(self.component.manual_concluded_license_expression, "")
+        self.assertEqual(self.component.manual_concluded_non_spdx_license, "")
 
     def test_apply_concluded_license_no_change_needed(self):
         """
@@ -183,7 +183,7 @@ class TestConcludedLicense(BaseTestCase):
             component_purl_type="npm",
             component_name="test_component",
             component_version="1.0.0",
-            concluded_spdx_license=self.license_obj,
+            manual_concluded_spdx_license=self.license_obj,
             user=self.db_user,
         )
 
@@ -191,11 +191,11 @@ class TestConcludedLicense(BaseTestCase):
         apply_concluded_license(self.component)
 
         # Assert - No changes should be made
-        self.assertIsNone(self.component.concluded_spdx_license)
-        self.assertEqual(self.component.concluded_license_name, NO_LICENSE_INFORMATION)
-        self.assertEqual(self.component.concluded_comment, "")
-        self.assertEqual(self.component.concluded_license_expression, "")
-        self.assertEqual(self.component.concluded_non_spdx_license, "")
+        self.assertIsNone(self.component.manual_concluded_spdx_license)
+        self.assertEqual(self.component.manual_concluded_license_name, NO_LICENSE_INFORMATION)
+        self.assertEqual(self.component.manual_concluded_comment, "")
+        self.assertEqual(self.component.manual_concluded_license_expression, "")
+        self.assertEqual(self.component.manual_concluded_non_spdx_license, "")
 
         # Clean up
         concluded_license.delete()
@@ -209,14 +209,14 @@ class TestConcludedLicense(BaseTestCase):
         # Arrange
         mock_get_current_user.return_value = self.db_user
 
-        self.component.concluded_license_name = NO_LICENSE_INFORMATION
+        self.component.manual_concluded_license_name = NO_LICENSE_INFORMATION
 
         concluded_license = Concluded_License.objects.create(
             product=self.product,
             component_purl_type="npm",
             component_name="test_component",
             component_version="1.0.0",
-            concluded_spdx_license=self.license_obj,
+            manual_concluded_spdx_license=self.license_obj,
             user=self.db_user,
         )
 
@@ -241,7 +241,7 @@ class TestConcludedLicense(BaseTestCase):
         # Arrange
         mock_get_current_user.return_value = self.db_user
 
-        self.component.concluded_license_name = NO_LICENSE_INFORMATION
+        self.component.manual_concluded_license_name = NO_LICENSE_INFORMATION
 
         # Act - This should not raise an exception
         update_concluded_license(self.component)
@@ -266,10 +266,10 @@ class TestConcludedLicense(BaseTestCase):
         # Arrange
         mock_get_current_user.return_value = self.db_user
 
-        self.component.concluded_license_name = "MIT"
-        self.component.concluded_spdx_license = self.license_obj
-        self.component.concluded_license_expression = ""
-        self.component.concluded_non_spdx_license = ""
+        self.component.manual_concluded_license_name = "MIT"
+        self.component.manual_concluded_spdx_license = self.license_obj
+        self.component.manual_concluded_license_expression = ""
+        self.component.manual_concluded_non_spdx_license = ""
 
         # Act
         update_concluded_license(self.component)
@@ -282,11 +282,11 @@ class TestConcludedLicense(BaseTestCase):
             component_version="1.0.0",
         )
 
-        self.assertEqual(concluded_license.concluded_spdx_license, self.license_obj)
-        self.assertEqual(concluded_license.concluded_license_expression, "")
-        self.assertEqual(concluded_license.concluded_non_spdx_license, "")
+        self.assertEqual(concluded_license.manual_concluded_spdx_license, self.license_obj)
+        self.assertEqual(concluded_license.manual_concluded_license_expression, "")
+        self.assertEqual(concluded_license.manual_concluded_non_spdx_license, "")
         self.assertEqual(concluded_license.user, self.db_user)
-        self.assertEqual(self.component.concluded_comment, f"Set manually by {str(self.db_user)}")
+        self.assertEqual(self.component.manual_concluded_comment, f"Set manually by {str(self.db_user)}")
 
         # Clean up
         concluded_license.delete()
@@ -300,10 +300,10 @@ class TestConcludedLicense(BaseTestCase):
         # Arrange
         mock_get_current_user.return_value = self.db_user
 
-        self.component.concluded_license_name = "MIT"
-        self.component.concluded_spdx_license = self.license_obj
-        self.component.concluded_license_expression = ""
-        self.component.concluded_non_spdx_license = ""
+        self.component.manual_concluded_license_name = "MIT"
+        self.component.manual_concluded_spdx_license = self.license_obj
+        self.component.manual_concluded_license_expression = ""
+        self.component.manual_concluded_non_spdx_license = ""
 
         # Create an existing concluded license with different values
         concluded_license = Concluded_License.objects.create(
@@ -311,7 +311,7 @@ class TestConcludedLicense(BaseTestCase):
             component_purl_type="npm",
             component_name="test_component",
             component_version="1.0.0",
-            concluded_license_expression="Apache-2.0",  # Different from component
+            manual_concluded_license_expression="Apache-2.0",  # Different from component
             user=self.user_admin,  # Different user
         )
 
@@ -326,11 +326,11 @@ class TestConcludedLicense(BaseTestCase):
             component_version="1.0.0",
         )
 
-        self.assertEqual(updated_license.concluded_spdx_license, self.license_obj)
-        self.assertEqual(updated_license.concluded_license_expression, "")
-        self.assertEqual(updated_license.concluded_non_spdx_license, "")
+        self.assertEqual(updated_license.manual_concluded_spdx_license, self.license_obj)
+        self.assertEqual(updated_license.manual_concluded_license_expression, "")
+        self.assertEqual(updated_license.manual_concluded_non_spdx_license, "")
         self.assertEqual(updated_license.user, self.db_user)  # Should be updated to current user
-        self.assertEqual(self.component.concluded_comment, f"Set manually by {str(self.db_user)}")
+        self.assertEqual(self.component.manual_concluded_comment, f"Set manually by {str(self.db_user)}")
 
         # Clean up
         updated_license.delete()

@@ -41,10 +41,10 @@ class TestLicenseComponent(BaseTestCase):
             component_version="1.0.0",
             component_name_version="test_component:1.0.0",
             # Set concluded license fields
-            concluded_license_name="MIT",
-            concluded_spdx_license=license_obj,
-            concluded_license_expression="MIT expression",
-            concluded_non_spdx_license="MIT non-spdx",
+            manual_concluded_license_name="MIT",
+            manual_concluded_spdx_license=license_obj,
+            manual_concluded_license_expression="MIT expression",
+            manual_concluded_non_spdx_license="MIT non-spdx",
             # Set imported concluded license fields (should be ignored)
             imported_concluded_license_name="Apache-2.0",
             imported_concluded_spdx_license=None,
@@ -83,10 +83,10 @@ class TestLicenseComponent(BaseTestCase):
             component_version="1.0.0",
             component_name_version="test_component:1.0.0",
             # Set concluded license fields to NO_LICENSE_INFORMATION
-            concluded_license_name=NO_LICENSE_INFORMATION,
-            concluded_spdx_license=None,
-            concluded_license_expression="",
-            concluded_non_spdx_license="",
+            manual_concluded_license_name=NO_LICENSE_INFORMATION,
+            manual_concluded_spdx_license=None,
+            manual_concluded_license_expression="",
+            manual_concluded_non_spdx_license="",
             # Set imported concluded license fields
             imported_concluded_license_name="Apache-2.0",
             imported_concluded_spdx_license=license_obj,
@@ -125,10 +125,10 @@ class TestLicenseComponent(BaseTestCase):
             component_version="1.0.0",
             component_name_version="test_component:1.0.0",
             # Set concluded license fields to NO_LICENSE_INFORMATION
-            concluded_license_name=NO_LICENSE_INFORMATION,
-            concluded_spdx_license=None,
-            concluded_license_expression="",
-            concluded_non_spdx_license="",
+            manual_concluded_license_name=NO_LICENSE_INFORMATION,
+            manual_concluded_spdx_license=None,
+            manual_concluded_license_expression="",
+            manual_concluded_non_spdx_license="",
             # Set imported concluded license fields to NO_LICENSE_INFORMATION
             imported_concluded_license_name=NO_LICENSE_INFORMATION,
             imported_concluded_spdx_license=None,
@@ -165,10 +165,10 @@ class TestLicenseComponent(BaseTestCase):
             component_version="1.0.0",
             component_name_version="test_component:1.0.0",
             # Set all license fields to NO_LICENSE_INFORMATION
-            concluded_license_name=NO_LICENSE_INFORMATION,
-            concluded_spdx_license=None,
-            concluded_license_expression="",
-            concluded_non_spdx_license="",
+            manual_concluded_license_name=NO_LICENSE_INFORMATION,
+            manual_concluded_spdx_license=None,
+            manual_concluded_license_expression="",
+            manual_concluded_non_spdx_license="",
             imported_concluded_license_name=NO_LICENSE_INFORMATION,
             imported_concluded_spdx_license=None,
             imported_concluded_license_expression="",
@@ -205,7 +205,7 @@ class TestLicenseComponent(BaseTestCase):
             component_name="test_component",
             component_version="1.0.0",
             component_name_version="test_component:1.0.0",
-            concluded_spdx_license=license_obj,
+            manual_concluded_spdx_license=license_obj,
         )
 
         # Act
@@ -213,7 +213,7 @@ class TestLicenseComponent(BaseTestCase):
             save_concluded_license(component)
 
         # Assert
-        self.assertEqual(component.concluded_license_name, license_obj.spdx_id)
+        self.assertEqual(component.manual_concluded_license_name, license_obj.spdx_id)
         mock_update_concluded_license.assert_called_once_with(component)
         mock_get_license_policy.assert_called_once_with(component.product)
         mock_save.assert_called_once()
@@ -243,7 +243,7 @@ class TestLicenseComponent(BaseTestCase):
             component_name="test_component",
             component_version="1.0.0",
             component_name_version="test_component:1.0.0",
-            concluded_license_expression="MIT OR Apache-2.0",
+            manual_concluded_license_expression="MIT OR Apache-2.0",
         )
 
         # Act
@@ -251,7 +251,7 @@ class TestLicenseComponent(BaseTestCase):
             save_concluded_license(component)
 
         # Assert
-        self.assertEqual(component.concluded_license_name, "MIT OR Apache-2.0")
+        self.assertEqual(component.manual_concluded_license_name, "MIT OR Apache-2.0")
         mock_licensing.validate.assert_called_once_with("MIT OR Apache-2.0", strict=True)
         mock_update_concluded_license.assert_called_once_with(component)
         mock_get_license_policy.assert_called_once_with(component.product)
@@ -279,7 +279,7 @@ class TestLicenseComponent(BaseTestCase):
             component_name="test_component",
             component_version="1.0.0",
             component_name_version="test_component:1.0.0",
-            concluded_license_expression="INVALID-LICENSE",
+            manual_concluded_license_expression="INVALID-LICENSE",
         )
 
         # Act & Assert
@@ -305,7 +305,7 @@ class TestLicenseComponent(BaseTestCase):
             component_name="test_component",
             component_version="1.0.0",
             component_name_version="test_component:1.0.0",
-            concluded_non_spdx_license="Custom License",
+            manual_concluded_non_spdx_license="Custom License",
         )
 
         # Act
@@ -313,7 +313,7 @@ class TestLicenseComponent(BaseTestCase):
             save_concluded_license(component)
 
         # Assert
-        self.assertEqual(component.concluded_license_name, "Custom License")
+        self.assertEqual(component.manual_concluded_license_name, "Custom License")
         mock_update_concluded_license.assert_called_once_with(component)
         mock_get_license_policy.assert_called_once_with(component.product)
         mock_save.assert_called_once()
@@ -338,7 +338,7 @@ class TestLicenseComponent(BaseTestCase):
             save_concluded_license(component)
 
         # Assert
-        self.assertEqual(component.concluded_license_name, NO_LICENSE_INFORMATION)
+        self.assertEqual(component.manual_concluded_license_name, NO_LICENSE_INFORMATION)
         mock_update_concluded_license.assert_called_once_with(component)
         mock_get_license_policy.assert_called_once_with(component.product)
         mock_save.assert_called_once()
@@ -374,7 +374,7 @@ class TestLicenseComponent(BaseTestCase):
             component_name="test_component",
             component_version="1.0.0",
             component_name_version="test_component:1.0.0",
-            concluded_non_spdx_license="Custom License",
+            manual_concluded_non_spdx_license="Custom License",
         )
 
         # Act
@@ -382,7 +382,7 @@ class TestLicenseComponent(BaseTestCase):
             save_concluded_license(component)
 
         # Assert
-        self.assertEqual(component.concluded_license_name, "Custom License")
+        self.assertEqual(component.manual_concluded_license_name, "Custom License")
         mock_update_concluded_license.assert_called_once_with(component)
         mock_get_license_policy.assert_called_once_with(component.product)
         mock_get_results.assert_called_once_with(component.product)

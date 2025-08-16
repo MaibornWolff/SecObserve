@@ -25,7 +25,10 @@ class TestImport(BaseTestCase):
         user = User.objects.get(username="db_admin")
         mock_authenticate.return_value = user, None
 
-        patch_data = {"concluded_non_spdx_license": "Non SPDX", "concluded_license_expression": "Expression"}
+        patch_data = {
+            "manual_concluded_non_spdx_license": "Non SPDX",
+            "manual_concluded_license_expression": "Expression",
+        }
         api_client = APIClient()
         response = api_client.patch("/api/license_components/1/concluded_license/", patch_data, format="json")
 
@@ -39,7 +42,7 @@ class TestImport(BaseTestCase):
         user = User.objects.get(username="db_admin")
         mock_authenticate.return_value = user, None
 
-        patch_data = {"concluded_non_spdx_license": "Non SPDX"}
+        patch_data = {"manual_concluded_non_spdx_license": "Non SPDX"}
         api_client = APIClient()
         response = api_client.patch("/api/license_components/99999/concluded_license/", patch_data, format="json")
 
@@ -51,7 +54,7 @@ class TestImport(BaseTestCase):
         user = User.objects.get(username="db_admin")
         mock_authenticate.return_value = user, None
 
-        patch_data = {"concluded_spdx_license": 99999}
+        patch_data = {"manual_concluded_spdx_license": 99999}
         api_client = APIClient()
         response = api_client.patch("/api/license_components/1/concluded_license/", patch_data, format="json")
 
@@ -64,7 +67,7 @@ class TestImport(BaseTestCase):
         user = User.objects.get(username="db_admin")
         mock_authenticate.return_value = user, None
 
-        patch_data = {"concluded_spdx_license": 1}
+        patch_data = {"manual_concluded_spdx_license": 1}
         api_client = APIClient()
         response = api_client.patch("/api/license_components/1/concluded_license/", patch_data, format="json")
 

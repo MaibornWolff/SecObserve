@@ -12,7 +12,7 @@ def apply_concluded_license(component: License_Component) -> None:
             component_name=component.component_name,
             component_version=component.component_version,
         )
-        concluded_comment = f"Set manually by {str(concluded_license.user)}"
+        manual_concluded_comment = f"Set manually by {str(concluded_license.user)}"
     except Concluded_License.DoesNotExist:
         concluded_license = (
             Concluded_License.objects.filter(
@@ -24,36 +24,37 @@ def apply_concluded_license(component: License_Component) -> None:
             .first()
         )
         if concluded_license:
-            concluded_comment = (
+            manual_concluded_comment = (
                 f"Copied from version {concluded_license.component_version}, set by {str(concluded_license.user)}"
             )
 
     if concluded_license:
         if (
-            concluded_license.concluded_spdx_license
-            and component.effective_spdx_license != concluded_license.concluded_spdx_license
+            concluded_license.manual_concluded_spdx_license
+            and component.effective_spdx_license != concluded_license.manual_concluded_spdx_license
         ):
-            component.concluded_spdx_license = concluded_license.concluded_spdx_license
-            component.concluded_license_name = concluded_license.concluded_spdx_license.spdx_id
-            component.concluded_comment = concluded_comment
+            component.manual_concluded_spdx_license = concluded_license.manual_concluded_spdx_license
+            component.manual_concluded_license_name = concluded_license.manual_concluded_spdx_license.spdx_id
+            component.manual_concluded_comment = manual_concluded_comment
         elif (
-            concluded_license.concluded_license_expression
-            and component.effective_license_expression != concluded_license.concluded_license_expression
+            concluded_license.manual_concluded_license_expression
+            and component.effective_license_expression != concluded_license.manual_concluded_license_expression
         ):
-            component.concluded_license_expression = concluded_license.concluded_license_expression
-            component.concluded_license_name = concluded_license.concluded_license_expression
-            component.concluded_comment = concluded_comment
+            component.manual_concluded_license_expression = concluded_license.manual_concluded_license_expression
+            component.manual_concluded_license_name = concluded_license.manual_concluded_license_expression
+            component.manual_concluded_comment = manual_concluded_comment
         elif (
-            concluded_license.concluded_non_spdx_license
-            and component.effective_non_spdx_license != concluded_license.concluded_non_spdx_license
+            concluded_license.manual_concluded_non_spdx_license
+            and component.effective_non_spdx_license != concluded_license.manual_concluded_non_spdx_license
         ):
-            component.concluded_non_spdx_license = concluded_license.concluded_non_spdx_license
-            component.concluded_license_name = concluded_license.concluded_non_spdx_license
-            component.concluded_comment = concluded_comment
+            component.manual_concluded_non_spdx_license = concluded_license.manual_concluded_non_spdx_license
+            component.manual_concluded_license_name = concluded_license.manual_concluded_non_spdx_license
+            component.manual_concluded_comment = manual_concluded_comment
 
 
 def update_concluded_license(component: License_Component) -> None:
-    if component.concluded_license_name == NO_LICENSE_INFORMATION:
+    if component.manual_concluded_license_name == NO_LICENSE_INFORMATION:
+        component.manual_concluded_comment = ""
         try:
             concluded_license = Concluded_License.objects.get(
                 product=component.product,
@@ -62,6 +63,7 @@ def update_concluded_license(component: License_Component) -> None:
                 component_version=component.component_version,
             )
             concluded_license.delete()
+
         except Concluded_License.DoesNotExist:
             pass
     else:
@@ -71,10 +73,10 @@ def update_concluded_license(component: License_Component) -> None:
             component_name=component.component_name,
             component_version=component.component_version,
             defaults={
-                "concluded_spdx_license": component.concluded_spdx_license,
-                "concluded_license_expression": component.concluded_license_expression,
-                "concluded_non_spdx_license": component.concluded_non_spdx_license,
+                "manual_concluded_spdx_license": component.manual_concluded_spdx_license,
+                "manual_concluded_license_expression": component.manual_concluded_license_expression,
+                "manual_concluded_non_spdx_license": component.manual_concluded_non_spdx_license,
                 "user": get_current_user(),
             },
         )
-        component.concluded_comment = f"Set manually by {str(concluded_license.user)}"
+        component.manual_concluded_comment = f"Set manually by {str(concluded_license.user)}"

@@ -139,17 +139,17 @@ class License_Component(Model):
     imported_concluded_non_spdx_license = CharField(max_length=255, blank=True)
     imported_concluded_multiple_licenses = CharField(max_length=512, blank=True)
 
-    concluded_license_name = CharField(max_length=255, blank=True, default=NO_LICENSE_INFORMATION)
-    concluded_spdx_license = ForeignKey(
+    manual_concluded_license_name = CharField(max_length=255, blank=True, default=NO_LICENSE_INFORMATION)
+    manual_concluded_spdx_license = ForeignKey(
         License,
-        related_name="concluded_license_components",
+        related_name="manual_concluded_license_components",
         on_delete=PROTECT,
         blank=True,
         null=True,
     )
-    concluded_license_expression = CharField(max_length=255, blank=True)
-    concluded_non_spdx_license = CharField(max_length=255, blank=True)
-    concluded_comment = CharField(max_length=255, blank=True)
+    manual_concluded_license_expression = CharField(max_length=255, blank=True)
+    manual_concluded_non_spdx_license = CharField(max_length=255, blank=True)
+    manual_concluded_comment = CharField(max_length=255, blank=True)
 
     effective_license_name = CharField(max_length=255, blank=True, default=NO_LICENSE_INFORMATION)
     effective_spdx_license = ForeignKey(
@@ -214,15 +214,15 @@ class Concluded_License(Model):
     component_name = CharField(max_length=255)
     component_version = CharField(max_length=255, blank=True)
 
-    concluded_spdx_license = ForeignKey(
+    manual_concluded_spdx_license = ForeignKey(
         License,
-        related_name="concluded_licenses",
+        related_name="manual_concluded_licenses",
         on_delete=CASCADE,
         blank=True,
         null=True,
     )
-    concluded_license_expression = CharField(max_length=255, blank=True)
-    concluded_non_spdx_license = CharField(max_length=255, blank=True)
+    manual_concluded_license_expression = CharField(max_length=255, blank=True)
+    manual_concluded_non_spdx_license = CharField(max_length=255, blank=True)
 
     user = ForeignKey(
         User,

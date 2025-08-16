@@ -168,18 +168,18 @@ class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
 
         user_has_permission_or_403(license_component, Permissions.License_Component_Edit)
 
-        concluded_spdx_license_id = request_serializer.validated_data.get("concluded_spdx_license")
-        if concluded_spdx_license_id:
-            license_component.concluded_spdx_license = get_license(concluded_spdx_license_id)
-            if not license_component.concluded_spdx_license:
-                raise ValidationError(f"SPDX license {concluded_spdx_license_id} not found.")
+        manual_concluded_spdx_license_id = request_serializer.validated_data.get("manual_concluded_spdx_license")
+        if manual_concluded_spdx_license_id:
+            license_component.manual_concluded_spdx_license = get_license(manual_concluded_spdx_license_id)
+            if not license_component.manual_concluded_spdx_license:
+                raise ValidationError(f"SPDX license {manual_concluded_spdx_license_id} not found.")
         else:
-            license_component.concluded_spdx_license = None
-        license_component.concluded_non_spdx_license = request_serializer.validated_data.get(
-            "concluded_non_spdx_license", ""
+            license_component.manual_concluded_spdx_license = None
+        license_component.manual_concluded_non_spdx_license = request_serializer.validated_data.get(
+            "manual_concluded_non_spdx_license", ""
         )
-        license_component.concluded_license_expression = request_serializer.validated_data.get(
-            "concluded_license_expression", ""
+        license_component.manual_concluded_license_expression = request_serializer.validated_data.get(
+            "manual_concluded_license_expression", ""
         )
 
         save_concluded_license(license_component)

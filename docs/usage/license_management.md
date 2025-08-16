@@ -26,6 +26,28 @@ After clicking on an entry, the details of the component and its license are sho
 ![License component show](../assets/images/screenshot_license_component_show.png)
 
 
+#### Declared and concluded licenses
+
+> Declared licenses and concluded licenses represent two different stages in the licensing process within software development.
+
+> * **Declared licenses** refer to the initial intention of the software authors regarding the licensing terms under which their code is released. 
+> * **Concluded licenses** on the other hand, are the result of a comprehensive analysis of the project's codebase to identify and confirm the actual licenses of the components used, which may differ from the initially declared licenses. 
+
+> While declared licenses provide an upfront indication of the licensing intentions, concluded licenses offer a more thorough understanding of the actual licensing within a project, facilitating proper compliance and risk management.
+
+*(Copied from the [CycloneDX specification](https://cyclonedx.org/docs/1.6/json/#components_items_licenses_oneOf_i0_items_license_acknowledgement))*
+
+Both types of acknowledgement are imported from an SBOM and shown in the UI. If a CycloneDX SBOM doesn't include a license acknowledgement, it will be treated as `Declared`.
+
+Additionally, a user can manually add a concluded license, with the button `ADD / EDIT CONCLUDED LICENSE`, for example when there was no license or there was a wrong license in the SBOM.
+
+There is a priority for the license acknowledgement. 
+
+1. If a **manual concluded license** has been set, this is used for the evaluation of the license and is shown in lists.
+2. The **imported concluded license** is used, if it is available and no manual concluded license is set.
+3. Otherwise the **imported declared license** is used for evaluation and lists if it was in the SBOM.
+
+
 #### Evaluation of licenses
 
 A License Policy for the Product can be set, when editing the product settings.

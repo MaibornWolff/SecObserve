@@ -88,28 +88,28 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name="license_component",
-            name="concluded_spdx_license",
+            name="manual_concluded_spdx_license",
             field=models.ForeignKey(
                 blank=True,
                 null=True,
                 on_delete=django.db.models.deletion.PROTECT,
-                related_name="concluded_license_components",
+                related_name="manual_concluded_license_components",
                 to="licenses.license",
             ),
         ),
         migrations.AddField(
             model_name="license_component",
-            name="concluded_license_expression",
+            name="manual_concluded_license_expression",
             field=models.CharField(blank=True, max_length=255),
         ),
         migrations.AddField(
             model_name="license_component",
-            name="concluded_license_name",
+            name="manual_concluded_license_name",
             field=models.CharField(blank=True, default="No license information", max_length=255),
         ),
         migrations.AddField(
             model_name="license_component",
-            name="concluded_non_spdx_license",
+            name="manual_concluded_non_spdx_license",
             field=models.CharField(blank=True, max_length=255),
         ),
         migrations.AddField(
@@ -145,7 +145,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name="license_component",
-            name="concluded_comment",
+            name="manual_concluded_comment",
             field=models.CharField(blank=True, max_length=255),
         ),
         migrations.CreateModel(
@@ -155,16 +155,16 @@ class Migration(migrations.Migration):
                 ("component_purl_type", models.CharField(blank=True, max_length=16)),
                 ("component_name", models.CharField(max_length=255)),
                 ("component_version", models.CharField(blank=True, max_length=255)),
-                ("concluded_license_expression", models.CharField(blank=True, max_length=255)),
-                ("concluded_non_spdx_license", models.CharField(blank=True, max_length=255)),
+                ("manual_concluded_license_expression", models.CharField(blank=True, max_length=255)),
+                ("manual_concluded_non_spdx_license", models.CharField(blank=True, max_length=255)),
                 ("last_updated", models.DateTimeField(auto_now=True)),
                 (
-                    "concluded_spdx_license",
+                    "manual_concluded_spdx_license",
                     models.ForeignKey(
                         blank=True,
                         null=True,
                         on_delete=django.db.models.deletion.CASCADE,
-                        related_name="concluded_licenses",
+                        related_name="manual_concluded_licenses",
                         to="licenses.license",
                     ),
                 ),

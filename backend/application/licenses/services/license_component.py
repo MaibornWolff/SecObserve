@@ -155,11 +155,11 @@ def set_effective_license(component: License_Component) -> None:
     component.effective_non_spdx_license = ""
     component.effective_multiple_licenses = ""
 
-    if component.concluded_license_name != NO_LICENSE_INFORMATION:
-        component.effective_license_name = component.concluded_license_name
-        component.effective_spdx_license = component.concluded_spdx_license
-        component.effective_license_expression = component.concluded_license_expression
-        component.effective_non_spdx_license = component.concluded_non_spdx_license
+    if component.manual_concluded_license_name != NO_LICENSE_INFORMATION:
+        component.effective_license_name = component.manual_concluded_license_name
+        component.effective_spdx_license = component.manual_concluded_spdx_license
+        component.effective_license_expression = component.manual_concluded_license_expression
+        component.effective_non_spdx_license = component.manual_concluded_non_spdx_license
     elif component.imported_concluded_license_name != NO_LICENSE_INFORMATION:
         component.effective_license_name = component.imported_concluded_license_name
         component.effective_spdx_license = component.imported_concluded_spdx_license
@@ -192,19 +192,19 @@ def _check_components(product: Product, component_ids: list[int]) -> QuerySet[Li
 
 
 def save_concluded_license(component: License_Component) -> None:
-    component.concluded_license_name = NO_LICENSE_INFORMATION
+    component.manual_concluded_license_name = NO_LICENSE_INFORMATION
 
-    if component.concluded_spdx_license:
-        component.concluded_license_name = component.concluded_spdx_license.spdx_id
-    elif component.concluded_license_expression:
+    if component.manual_concluded_spdx_license:
+        component.manual_concluded_license_name = component.manual_concluded_spdx_license.spdx_id
+    elif component.manual_concluded_license_expression:
         licensing = get_spdx_licensing()
-        expression_info = licensing.validate(component.concluded_license_expression, strict=True)
+        expression_info = licensing.validate(component.manual_concluded_license_expression, strict=True)
         if not expression_info.errors:
-            component.concluded_license_name = component.concluded_license_expression
+            component.manual_concluded_license_name = component.manual_concluded_license_expression
         else:
             raise ValidationError("Invalid concluded license expression")
-    elif component.concluded_non_spdx_license:
-        component.concluded_license_name = component.concluded_non_spdx_license
+    elif component.manual_concluded_non_spdx_license:
+        component.manual_concluded_license_name = component.manual_concluded_non_spdx_license
 
     set_effective_license(component)
     update_concluded_license(component)

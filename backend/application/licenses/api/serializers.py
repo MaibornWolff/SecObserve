@@ -208,13 +208,13 @@ class LicenseComponentOverviewSerializer(Serializer):
 
 
 class ConcludedLicenseSerializer(Serializer):
-    concluded_spdx_license = IntegerField(validators=[MinValueValidator(1)], required=False, allow_null=True)
-    concluded_non_spdx_license = CharField(max_length=255, required=False, allow_blank=True)
-    concluded_license_expression = CharField(max_length=255, required=False, allow_blank=True)
+    manual_concluded_spdx_license = IntegerField(validators=[MinValueValidator(1)], required=False, allow_null=True)
+    manual_concluded_non_spdx_license = CharField(max_length=255, required=False, allow_blank=True)
+    manual_concluded_license_expression = CharField(max_length=255, required=False, allow_blank=True)
 
     def validate(self, attrs: dict) -> dict:
         # check exactly one attribute is set
-        if sum(1 for key in attrs if key.startswith("concluded_") and attrs[key]) > 1:
+        if sum(1 for key in attrs if key.startswith("manual_concluded_") and attrs[key]) > 1:
             raise ValidationError("Only one concluded license field may be set.")
 
         return attrs

@@ -347,7 +347,7 @@ class ProductSerializer(ProductCoreSerializer):  # pylint: disable=too-many-publ
         return Branch.objects.filter(product=obj).exclude(osv_linux_distribution="").exists()
 
     def get_has_concluded_comments(self, obj: Product) -> bool:
-        return License_Component.objects.filter(product=obj).exclude(concluded_comment="").exists()
+        return License_Component.objects.filter(product=obj).exclude(manual_concluded_comment="").exists()
 
     def validate(self, attrs: dict) -> dict:  # pylint: disable=too-many-branches
         # There are quite a lot of branches, but at least they are not nested too much

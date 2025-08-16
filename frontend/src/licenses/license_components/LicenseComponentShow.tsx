@@ -80,7 +80,7 @@ export const LicenseComponentComponent = () => {
                             <Stack spacing={8} direction="row">
                                 {component.imported_declared_license_name === "No license information" &&
                                     component.imported_concluded_license_name === "No license information" &&
-                                    component.concluded_license_name === "No license information" && (
+                                    component.manual_concluded_license_name === "No license information" && (
                                         <Labeled label="Effective license">
                                             <TextField
                                                 source="effective_license_name"
@@ -192,10 +192,10 @@ export const LicenseComponentComponent = () => {
                                         </Labeled>
                                     )}
                                 <Stack spacing={1}>
-                                    {component.concluded_spdx_license && (
-                                        <Labeled label="Concluded SPDX Id">
+                                    {component.manual_concluded_spdx_license && (
+                                        <Labeled label="Manual concluded SPDX Id">
                                             <ReferenceField
-                                                source="concluded_spdx_license"
+                                                source="manual_concluded_spdx_license"
                                                 reference="licenses"
                                                 link="show"
                                                 sx={{ "& a": { textDecoration: "none" } }}
@@ -204,38 +204,38 @@ export const LicenseComponentComponent = () => {
                                             </ReferenceField>
                                         </Labeled>
                                     )}
-                                    {component.concluded_license_expression && (
-                                        <Labeled label="Concluded license expression">
+                                    {component.manual_concluded_license_expression && (
+                                        <Labeled label="Manual concluded license expression">
                                             <TextField
-                                                source="concluded_license_expression"
+                                                source="manual_concluded_license_expression"
                                                 className={classes.fontBigBold}
                                             />
                                         </Labeled>
                                     )}
-                                    {component.concluded_non_spdx_license && (
-                                        <Labeled label="Concluded Non-SPDX license">
+                                    {component.manual_concluded_non_spdx_license && (
+                                        <Labeled label="Manual concluded non-SPDX license">
                                             <TextField
-                                                source="concluded_non_spdx_license"
+                                                source="manual_concluded_non_spdx_license"
                                                 sx={{ fontStyle: "italic" }}
                                                 className={classes.fontBigBold}
                                             />
                                         </Labeled>
                                     )}
-                                    {!component.concluded_spdx_license &&
-                                        !component.concluded_license_expression &&
-                                        !component.concluded_non_spdx_license &&
-                                        component.concluded_license_name !== "No license information" && (
-                                            <Labeled label="Concluded license">
+                                    {!component.manual_concluded_spdx_license &&
+                                        !component.manual_concluded_license_expression &&
+                                        !component.manual_concluded_non_spdx_license &&
+                                        component.manual_concluded_license_name !== "No license information" && (
+                                            <Labeled label="Manual concluded license">
                                                 <TextField
-                                                    source="concluded_license_name"
+                                                    source="manual_concluded_license_name"
                                                     sx={{ fontStyle: "italic" }}
                                                     className={classes.fontBigBold}
                                                 />
                                             </Labeled>
                                         )}
-                                    {component.concluded_comment && (
-                                        <Labeled label="Concluded comment">
-                                            <TextField source="concluded_comment" />
+                                    {component.manual_concluded_comment && (
+                                        <Labeled label="Manual concluded comment">
+                                            <TextField source="manual_concluded_comment" />
                                         </Labeled>
                                     )}
                                 </Stack>
