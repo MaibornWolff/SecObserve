@@ -33,7 +33,7 @@ drf-spectacular-sidecar = "2025.8.1"  # https://github.com/tfranzel/drf-spectacu
 PyJWT = "2.10.1"  # https://github.com/jpadilla/pyjwt
 # HTTP requests
 # ------------------------------------------------------------------------------
-requests = "2.32.4"  # https://github.com/psf/requests
+requests = "2.32.5"  # https://github.com/psf/requests
 # Database
 # ------------------------------------------------------------------------------
 pymysql = "1.1.1"  # https://github.com/PyMySQL/PyMySQL
