@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional
 
+from django.utils import timezone
 from rest_framework.exceptions import ValidationError
 
 from application.core.api.serializers_helpers import validate_purl
@@ -35,6 +36,7 @@ class VexStatementData:
     remediation: str
     product_purl: str
     component_purl: str = ""
+    component_cyclonedx_bom_link: str = ""
 
 
 def parse_cyclonedx_data(data: dict) -> None:
@@ -50,16 +52,13 @@ def _create_cyclonedx_document(data: dict) -> VEX_Document:
     if not document_id:
         raise ValidationError("serialNumber is missing")
 
-    version_value = data.get("version")
-    if version_value is None:
-        raise ValidationError("version is missing")
-    version = str(version_value)
+    version = str(data.get("version", 1))
 
     metadata = data.get("metadata", {})
 
     timestamp = metadata.get("timestamp")
     if not timestamp:
-        raise ValidationError("metadata/timestamp is missing")
+        timestamp = timezone.now()
 
     author = None
     # Prefer authors list if available
@@ -76,7 +75,7 @@ def _create_cyclonedx_document(data: dict) -> VEX_Document:
         author = metadata.get("manufacturer", {}).get("name") or metadata.get("supplier", {}).get("name")
 
     if not author:
-        raise ValidationError("author is missing")
+        author = "Unknown"
 
     try:
         cyclonedx_document = VEX_Document.objects.get(document_id=document_id, author=author)
@@ -107,9 +106,8 @@ def _process_vex_statements(data: dict, cyclonedx_document: VEX_Document) -> tup
     components_map = _build_components_map(data)
 
     product_purl = data.get("metadata", {}).get("component", {}).get("purl", "")
-    if not product_purl:
-        raise ValidationError("metadata/component/purl is missing")
-    validate_purl(product_purl)
+    if product_purl:
+        validate_purl(product_purl)
 
     product_purls: set[str] = set()
     vex_statements: set[VEX_Statement] = set()
@@ -288,18 +286,27 @@ def _process_affected_components(
         if not ref:
             raise ValidationError(f"affects[{vulnerability_counter}][{affected_counter}]/ref is missing")
 
-        component = components_map.get(ref)
-        if not component:
-            raise ValidationError(
-                f"affects[{vulnerability_counter}][{affected_counter}]/ref '{ref}' not found in components"
-            )
+        if ref.startswith("urn:cdx:"):
+            component_purl = ""
+            vex_data.product_purl = ""
+            component_cyclonedx_bom_link = ref
+        else:
+            component_cyclonedx_bom_link = ""
+            component = components_map.get(ref)
+            if not component:
+                raise ValidationError(
+                    f"affects[{vulnerability_counter}][{affected_counter}]/ref '{ref}' not found in components"
+                )
 
-        component_purl = component.get("purl", "")
-        if not component_purl:
-            raise ValidationError(
-                f"affects[{vulnerability_counter}][{affected_counter}]/ref '{ref}' component is missing purl"
-            )
-        validate_purl(component_purl)
+            component_purl = component.get("purl", "")
+            if not component_purl:
+                raise ValidationError(
+                    f"affects[{vulnerability_counter}][{affected_counter}]/ref '{ref}' component is missing PURL"
+                )
+            validate_purl(component_purl)
+
+            if not vex_data.product_purl:
+                raise ValidationError("metadata/component/purl is missing for VEX data inside an SBOM")
 
         _create_vex_statement(
             document,
@@ -314,6 +321,7 @@ def _process_affected_components(
                 remediation=vex_data.remediation,
                 product_purl=vex_data.product_purl,
                 component_purl=component_purl,
+                component_cyclonedx_bom_link=component_cyclonedx_bom_link,
             ),
         )
 
@@ -336,6 +344,7 @@ def _create_vex_statement(
         remediation=data.remediation,
         product_purl=data.product_purl,
         component_purl=data.component_purl,
+        component_cyclonedx_bom_link=data.component_cyclonedx_bom_link,
     )
     vex_statement.save()
     vex_statements.add(vex_statement)

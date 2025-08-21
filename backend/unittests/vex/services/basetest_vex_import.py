@@ -71,7 +71,17 @@ class BaseTestVEXImport(TestCase):
         purl_sqlparse = "pkg:pypi/sqlparse" if short else "pkg:pypi/sqlparse@0.4.4"
 
         for vex_statement in vex_statements:
-            if vex_statement.vulnerability_id == "CVE-2023-49083" and vex_statement.component_purl == purl_cryptography:
+            if vex_statement.vulnerability_id == "CVE-2023-49083" and (
+                (
+                    vex_statement.component_purl
+                    and vex_statement.component_purl == purl_cryptography
+                    or (
+                        vex_statement.component_cyclonedx_bom_link
+                        and vex_statement.component_cyclonedx_bom_link
+                        == "urn:cdx:aebccdfe-fab4-4210-acce-bac771d4842d/1#pkg:pypi/cryptography@41.0.5"
+                    )
+                )
+            ):
                 found_49083 = True
                 self.assertTrue(
                     vex_statement.description.startswith(
@@ -89,12 +99,22 @@ class BaseTestVEXImport(TestCase):
                     self.assertEqual("Not affected for VEX test case", vex_statement.impact)
 
                 self.assertEqual("", vex_statement.remediation)
-                self.assertEqual(
-                    purl_vex_test,
-                    vex_statement.product_purl,
-                )
+                if vex_statement.component_cyclonedx_bom_link:
+                    self.assertEqual("", vex_statement.product_purl)
+                else:
+                    self.assertEqual(
+                        purl_vex_test,
+                        vex_statement.product_purl,
+                    )
 
-            if vex_statement.vulnerability_id == "CVE-2024-0727" and vex_statement.component_purl == purl_cryptography:
+            if vex_statement.vulnerability_id == "CVE-2024-0727" and (
+                (vex_statement.component_purl and vex_statement.component_purl == purl_cryptography)
+                or (
+                    vex_statement.component_cyclonedx_bom_link
+                    and vex_statement.component_cyclonedx_bom_link
+                    == "urn:cdx:aebccdfe-fab4-4210-acce-bac771d4842d/1#pkg:pypi/cryptography@41.0.5"
+                )
+            ):
                 found_0727 = True
                 self.assertTrue(
                     vex_statement.description.startswith(
@@ -108,12 +128,22 @@ class BaseTestVEXImport(TestCase):
                 )
                 self.assertEqual("", vex_statement.impact)
                 self.assertEqual("Upgrade cryptography to version 42.0.2", vex_statement.remediation)
-                self.assertEqual(
-                    purl_vex_test,
-                    vex_statement.product_purl,
-                )
+                if vex_statement.component_cyclonedx_bom_link:
+                    self.assertEqual("", vex_statement.product_purl)
+                else:
+                    self.assertEqual(
+                        purl_vex_test,
+                        vex_statement.product_purl,
+                    )
 
-            if vex_statement.vulnerability_id == "CVE-2024-4340" and vex_statement.component_purl == purl_sqlparse:
+            if vex_statement.vulnerability_id == "CVE-2024-4340" and (
+                (vex_statement.component_purl and vex_statement.component_purl == purl_sqlparse)
+                or (
+                    vex_statement.component_cyclonedx_bom_link
+                    and vex_statement.component_cyclonedx_bom_link
+                    == "urn:cdx:aebccdfe-fab4-4210-acce-bac771d4842d/1#pkg:pypi/sqlparse@0.4.4"
+                )
+            ):
                 found_4340 = True
                 self.assertTrue(
                     vex_statement.description.startswith("Passing a heavily nested list to sqlparse.parse()")
@@ -125,10 +155,13 @@ class BaseTestVEXImport(TestCase):
                 )
                 self.assertEqual("", vex_statement.impact)
                 self.assertEqual("", vex_statement.remediation)
-                self.assertEqual(
-                    purl_vex_test,
-                    vex_statement.product_purl,
-                )
+                if vex_statement.component_cyclonedx_bom_link:
+                    self.assertEqual("", vex_statement.product_purl)
+                else:
+                    self.assertEqual(
+                        purl_vex_test,
+                        vex_statement.product_purl,
+                    )
 
         self.assertTrue(found_49083)
         self.assertTrue(found_0727)

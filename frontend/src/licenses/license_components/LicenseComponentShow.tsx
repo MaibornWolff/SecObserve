@@ -15,7 +15,7 @@ import license_components from ".";
 import { PERMISSION_COMPONENT_LICENSE_EDIT } from "../../access_control/types";
 import { EvaluationResultField } from "../../commons/custom_fields/EvaluationResultField";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
-import { get_component_purl_url } from "../../commons/functions";
+import { feature_vex_enabled, get_component_purl_url } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
 import MermaidDependencies from "../../core/observations/Mermaid_Dependencies";
 import ConcludedLicense from "./ConcludedLicense";
@@ -253,7 +253,7 @@ export const LicenseComponentComponent = () => {
                                     <Labeled>
                                         <TextField
                                             source="component_name"
-                                            label="Component name"
+                                            label="Name"
                                             className={classes.fontBigBold}
                                         />
                                     </Labeled>
@@ -262,7 +262,7 @@ export const LicenseComponentComponent = () => {
                                     <Labeled>
                                         <TextField
                                             source="component_version"
-                                            label="Component version"
+                                            label="Version"
                                             className={classes.fontBigBold}
                                         />
                                     </Labeled>
@@ -288,7 +288,7 @@ export const LicenseComponentComponent = () => {
                                 ) != null && (
                                     <Labeled>
                                         <TextUrlField
-                                            label="Component PURL"
+                                            label="PURL"
                                             text={component.component_purl}
                                             url={
                                                 component.component_purl &&
@@ -305,7 +305,12 @@ export const LicenseComponentComponent = () => {
                                 )}
                             {component.component_cpe != "" && (
                                 <Labeled>
-                                    <TextField source="component_cpe" label="Component CPE" />
+                                    <TextField source="component_cpe" label="CPE" />
+                                </Labeled>
+                            )}
+                            {feature_vex_enabled() && component.component_ccomponent_cyclonedx_bom_link != "" && (
+                                <Labeled>
+                                    <TextField source="component_cyclonedx_bom_link" label="CycloneDX BOM Link" />
                                 </Labeled>
                             )}
                             {component.component_dependencies && component.component_dependencies != "" && (

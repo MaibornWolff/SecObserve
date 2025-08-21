@@ -145,6 +145,7 @@ class VEX_Statement(Model):
     remediation = CharField(max_length=255, blank=True)
     product_purl = CharField(max_length=255, blank=True)
     component_purl = CharField(max_length=255, blank=True)
+    component_cyclonedx_bom_link = CharField(max_length=512, blank=True)
 
     class Meta:
         indexes = [
