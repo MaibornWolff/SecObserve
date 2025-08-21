@@ -6,17 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('vex', '0008_alter_vex_document_type'),
+        ("vex", "0008_alter_vex_document_type"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='vex_statement',
-            name='component_cyclonedx_bom_link',
+            model_name="vex_statement",
+            name="component_cyclonedx_bom_link",
             field=models.CharField(blank=True, max_length=512),
         ),
         migrations.AddIndex(
-            model_name='vex_statement',
-            index=models.Index(fields=['component_cyclonedx_bom_link'], name='vex_vex_sta_compone_83cdc6_idx'),
+            model_name="vex_statement",
+            index=models.Index(fields=["component_cyclonedx_bom_link"], name="vex_vex_sta_compone_83cdc6_idx"),
         ),
     ]

@@ -6,20 +6,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0064_product_description_markdown'),
-        ('import_observations', '0013_alter_vulnerability_check_unique_together_and_more'),
-        ('rules', '0015_convert_unknown_data'),
-        ('vex', '0009_vex_statement_component_cyclonedx_bom_link_and_more'),
+        ("core", "0064_product_description_markdown"),
+        ("import_observations", "0013_alter_vulnerability_check_unique_together_and_more"),
+        ("rules", "0015_convert_unknown_data"),
+        ("vex", "0009_vex_statement_component_cyclonedx_bom_link_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='observation',
-            name='origin_component_cyclonedx_bom_link',
+            model_name="observation",
+            name="origin_component_cyclonedx_bom_link",
             field=models.CharField(blank=True, max_length=512),
         ),
         migrations.AddIndex(
-            model_name='observation',
-            index=models.Index(fields=['origin_component_cyclonedx_bom_link'], name='core_observ_origin__952ded_idx'),
+            model_name="observation",
+            index=models.Index(fields=["origin_component_cyclonedx_bom_link"], name="core_observ_origin__952ded_idx"),
         ),
     ]
