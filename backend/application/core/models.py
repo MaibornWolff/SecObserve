@@ -552,6 +552,7 @@ class Observation(Model):
             Index(fields=["current_status"]),
             Index(fields=["vulnerability_id"]),
             Index(fields=["origin_component_name_version"]),
+            Index(fields=["origin_component_cyclonedx_bom_link"]),
             Index(fields=["origin_docker_image_name_tag_short"]),
             Index(fields=["origin_service_name"]),
             Index(fields=["origin_endpoint_hostname"]),

@@ -150,4 +150,5 @@ class VEX_Statement(Model):
     class Meta:
         indexes = [
             Index(fields=["product_purl"]),
+            Index(fields=["component_cyclonedx_bom_link"]),
         ]
