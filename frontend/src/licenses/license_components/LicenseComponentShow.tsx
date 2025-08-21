@@ -308,7 +308,7 @@ export const LicenseComponentComponent = () => {
                                     <TextField source="component_cpe" label="CPE" />
                                 </Labeled>
                             )}
-                            {feature_vex_enabled() && component.component_ccomponent_cyclonedx_bom_link != "" && (
+                            {feature_vex_enabled() && component.component_cyclonedx_bom_link != "" && (
                                 <Labeled>
                                     <TextField source="component_cyclonedx_bom_link" label="CycloneDX BOM Link" />
                                 </Labeled>
