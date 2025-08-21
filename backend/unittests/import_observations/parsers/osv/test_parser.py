@@ -38,6 +38,7 @@ class TestOSVParser(BaseTestCase):
             component_purl="pkg:maven/org.json/json@20190722?type=jar",
             component_purl_type="maven",
             component_cpe="cpe:/a:org.json:json:20190722",
+            component_cyclonedx_bom_link="urn:cdx:a/1#b",
             component_dependencies="json_dependencies",
         )
 
@@ -103,6 +104,7 @@ A stack overflow in the XML.toJSONObject component of hutool-json v5.8.10 and or
             observation.origin_component_purl,
         )
         self.assertEqual("cpe:/a:org.json:json:20190722", observation.origin_component_cpe)
+        self.assertEqual("urn:cdx:a/1#b", observation.origin_component_cyclonedx_bom_link)
         self.assertEqual("json_dependencies", observation.origin_component_dependencies)
 
         unsaved_references = observation.unsaved_references

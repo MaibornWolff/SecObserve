@@ -32,7 +32,7 @@ class TestLicenseGroupMemberSerializer(BaseTestCase):
         i = 0
         for row in worksheet.rows:
             i += 1
-            self.assertEqual(44, len(row))
+            self.assertEqual(45, len(row))
         self.assertEqual(2, i)
 
         actual_values = []
@@ -43,6 +43,7 @@ class TestLicenseGroupMemberSerializer(BaseTestCase):
             "Branch",
             "Branch id",
             "Component cpe",
+            "Component cyclonedx bom link",
             "Component dependencies",
             "Component name",
             "Component name version",
@@ -86,6 +87,7 @@ class TestLicenseGroupMemberSerializer(BaseTestCase):
             "Upload filename",
             None,
             None,
+            "",
             "",
             "",
             "internal_component",

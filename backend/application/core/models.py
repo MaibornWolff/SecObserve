@@ -436,6 +436,7 @@ class Observation(Model):
     origin_component_purl_type = CharField(max_length=16, blank=True)
     origin_component_cpe = CharField(max_length=255, blank=True)
     origin_component_dependencies = TextField(max_length=32768, blank=True)
+    origin_component_cyclonedx_bom_link = CharField(max_length=512, blank=True)
 
     origin_docker_image_name = CharField(max_length=255, blank=True)
     origin_docker_image_tag = CharField(max_length=255, blank=True)
@@ -551,6 +552,7 @@ class Observation(Model):
             Index(fields=["current_status"]),
             Index(fields=["vulnerability_id"]),
             Index(fields=["origin_component_name_version"]),
+            Index(fields=["origin_component_cyclonedx_bom_link"]),
             Index(fields=["origin_docker_image_name_tag_short"]),
             Index(fields=["origin_service_name"]),
             Index(fields=["origin_endpoint_hostname"]),

@@ -114,6 +114,7 @@ class License_Component(Model):
     component_purl_type = CharField(max_length=16, blank=True)
     component_cpe = CharField(max_length=255, blank=True)
     component_dependencies = TextField(max_length=32768, blank=True)
+    component_cyclonedx_bom_link = CharField(max_length=512, blank=True)
 
     imported_declared_license_name = CharField(max_length=255, blank=True, default=NO_LICENSE_INFORMATION)
     imported_declared_spdx_license = ForeignKey(

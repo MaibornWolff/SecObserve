@@ -58,6 +58,7 @@ const VEXStatementEmbeddedList = ({ vex_document }: VEXStatementEmbeddedListProp
                         <ChipField source="status" />
                         <TextField source="product_purl" label="Product" />
                         <TextField source="component_purl" label="Component" />
+                        <TextField source="component_cyclonedx_bom_link" label="CycloneDX BOM Link" />
                     </Datagrid>
                     <CustomPagination />
                 </div>
