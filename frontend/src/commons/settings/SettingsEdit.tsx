@@ -86,7 +86,7 @@ const SettingsEdit = () => {
                                 <BooleanInput
                                     source="feature_vex"
                                     label="VEX"
-                                    helperText="Generate VEX documents in OpenVEX and CSAF format"
+                                    helperText="Export and import VEX documents in various formats"
                                 />
                                 <BooleanInput
                                     source="feature_disable_user_login"

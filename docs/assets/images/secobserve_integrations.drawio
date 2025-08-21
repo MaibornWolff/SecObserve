@@ -1,11 +1,11 @@
-<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.0.6 Chrome/138.0.7204.100 Electron/37.2.3 Safari/537.36" version="28.0.6">
   <diagram name="Page-1" id="VX-3E3aqqD7pf1Rg54WV">
     <mxGraphModel dx="1426" dy="1362" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="nvJj6j3gVg4nusngmV69-1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CCCCD0;arcSize=6;fontColor=#333333;strokeColor=none;" parent="1" vertex="1">
-          <mxGeometry x="760" y="-100" width="300" height="100" as="geometry" />
+          <mxGeometry x="760" y="-180" width="300" height="180" as="geometry" />
         </mxCell>
         <mxCell id="thoTgJwvwBRAFEuy037D-26" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CCCCD0;arcSize=6;fontColor=#333333;strokeColor=none;" parent="1" vertex="1">
           <mxGeometry x="760" y="20" width="300" height="180" as="geometry" />
@@ -53,13 +53,13 @@
           <mxGeometry x="780" y="440" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="NQz_Nwzh-ESSq-r7xiTD-4" value="Email" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
-          <mxGeometry x="850" y="520" width="120" height="60" as="geometry" />
+          <mxGeometry x="780" y="520" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="NQz_Nwzh-ESSq-r7xiTD-5" value="GitLab" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="920" y="240" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="NQz_Nwzh-ESSq-r7xiTD-10" value="CodeCharta" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
-          <mxGeometry x="850" y="120" width="120" height="60" as="geometry" />
+          <mxGeometry x="780" y="120" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="NQz_Nwzh-ESSq-r7xiTD-11" value="Microsoft Excel" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="780" y="40" width="120" height="60" as="geometry" />
@@ -99,11 +99,11 @@
         <mxCell id="thoTgJwvwBRAFEuy037D-37" value="open/source/&lt;br&gt;insights" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="780" y="720" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="qOO4yE6-o5YvLIt4YbO8-1" value="CSAF&amp;nbsp; (VEX)" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
+        <mxCell id="qOO4yE6-o5YvLIt4YbO8-1" value="CycloneDX&amp;nbsp; (VEX)&lt;div&gt;&lt;i&gt;[import only]&lt;/i&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="780" y="-80" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="qOO4yE6-o5YvLIt4YbO8-2" value="OpenVEX" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
-          <mxGeometry x="920" y="-80" width="120" height="60" as="geometry" />
+          <mxGeometry x="920" y="-160" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="nvJj6j3gVg4nusngmV69-2" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.25;exitDx=0;exitDy=0;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;startArrow=classic;startFill=1;" parent="1" source="NQz_Nwzh-ESSq-r7xiTD-1" target="nvJj6j3gVg4nusngmV69-1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
@@ -189,7 +189,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="txpyq0Q0yciagI06FU9S-1" value="FIRST.org&lt;br&gt;CVSS calculator" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
-          <mxGeometry x="850" y="800" width="120" height="60" as="geometry" />
+          <mxGeometry x="780" y="800" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="--HBhNgYsgPL_KuHosSr-1" value="cvss-bt" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="270" y="380" width="120" height="60" as="geometry" />
@@ -218,8 +218,11 @@
             <mxPoint x="530" y="305" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="AHC2kW-Rb-wY8LM5nEDL-1" value="ecosyste.ms" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
+        <mxCell id="AHC2kW-Rb-wY8LM5nEDL-1" value="ecosyste.ms" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="920" y="720" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="tgnb8spmxpV9_iQ_0n24-1" value="CSAF&amp;nbsp; (VEX)" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Poppins;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DPoppins;fillColor=#00B3F0;strokeColor=none;fontColor=#ffffff;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="780" y="-160" width="120" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

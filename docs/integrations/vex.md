@@ -37,15 +37,18 @@ After selecting the entry of either a CSAF or OpenVEX document from the respecti
 
 ## Import VEX documents
 
-VEX documents can be imported in CSAF, OpenVEX and CycloneDX format. After importing the file, the document will be parsed and the VEX statements will be applied to the referenced observations. A user needs to be `superuser` to import VEX documents. 
+VEX documents can be imported in CSAF, OpenVEX and CycloneDX (integrated and dedicated) format. After importing the file, the document will be parsed and the VEX statements will be applied to the referenced observations. A user needs to be `superuser` to import VEX documents. 
 
 When observations are imported, the VEX statements will be applied to the referenced observations as well.
 
-**How are the referened observations determined?**
+**How are the referenced observations determined?**
 
-First, the relevant products are determined by the product PURL. The PURL of the product or the PURL of a branch must match the product PURL in the VEX statements.  
+For **CSAF**, **OpenVEX** and **CycloneDX integrated** VEX documents, the reference is determined by PURLs. 
 
-Second, the relevant observations are determined by their Vulnerability ID and optionally the component PURL. The Vulnerability ID of the observation must be the same as the Vulnerability ID of the VEX statements. If the VEX statement contains a component PURL, this must match the vulnerability PURL in the component PURL of the observation.
+* First, the relevant products are determined by the product PURL. The PURL of the product or the PURL of a branch must match the product PURL in the VEX statements.  
+* Second, the relevant observations are determined by their Vulnerability ID and optionally the component PURL. The Vulnerability ID of the observation must be the same as the Vulnerability ID of the VEX statements. If the VEX statement contains a component PURL, this must match the vulnerability PURL in the component PURL of the observation.
+
+For **CycloneDX dedicated** VEX documents, the reference is determined by a [BOM-link](https://cyclonedx.org/capabilities/bomlink/). These documents contain only vulnerability and VEX information with references to components in a separate SBOM. Therefore it is a precondition to have imported the corresponding SBOM before. Then the observations are determined by the Vulnerability ID and the BOM-link.
 
 **When do PURLs match?**
 
