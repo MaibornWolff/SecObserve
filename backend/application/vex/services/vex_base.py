@@ -17,8 +17,8 @@ def create_document_base_id(document_id_prefix: str) -> str:
     return f"{counter.year}_{counter.counter:04d}"
 
 
-def check_product_or_vulnerabilities(product_id: int, vulnerability_names: list[str]) -> None:
-    if not product_id and not vulnerability_names:
+def check_product_or_vulnerabilities(product: Optional[Product], vulnerability_names: list[str]) -> None:
+    if not product and not vulnerability_names:
         raise ValidationError("Either product or vulnerabilities or both must be set")
 
 
@@ -40,6 +40,20 @@ def check_vulnerability_names(vulnerability_names: list[str]) -> None:
     for vulnerability_name in vulnerability_names:
         if not Observation.objects.filter(vulnerability_id=vulnerability_name).exists():
             raise ValidationError(f"Vulnerability with name {vulnerability_name} does not exist")
+
+
+def check_branches(branches: list[int], product: Optional[Product]) -> list[Branch]:
+    if not branches:
+        return []
+
+    if not product:
+        raise ValidationError("Product must be set when using branch_names")
+
+    product_branches = Branch.objects.filter(id__in=branches, product=product)
+    if len(product_branches) != len(branches):
+        raise ValidationError(f"Some of the branches do not exist for product {product.name}")
+
+    return list(product_branches)
 
 
 def check_branch_names(branch_names: list[str], product: Optional[Product]) -> list[Branch]:
