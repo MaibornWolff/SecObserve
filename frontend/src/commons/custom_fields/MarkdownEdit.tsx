@@ -24,7 +24,9 @@ import {
     toolbarPlugin,
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
+// @ts-ignore
 import { basicDark } from "cm6-theme-basic-dark";
+// @ts-ignore
 import { basicLight } from "cm6-theme-basic-light";
 import { Labeled } from "react-admin";
 
