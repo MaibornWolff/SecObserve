@@ -41,9 +41,9 @@ const CSAFCreate = () => {
         data.vulnerability_names = data.vulnerability_names.map((v: any) => v.name);
         data.vulnerability_names = data.vulnerability_names.filter((v: any) => v != null);
 
-        if (data.branch_names) {
-            data.branch_names = data.branch_names.map((v: any) => v.name);
-            data.branch_names = data.branch_names.filter((v: any) => v != null);
+        if (data.branches) {
+            data.branches = data.branches.map((v: any) => v.branch);
+            data.branches = data.branches.filter((v: any) => v != null);
         }
 
         const url = "vex/csaf_document/create/";
@@ -115,10 +115,9 @@ const CSAFCreate = () => {
                             <FormDataConsumer>
                                 {({ formData }) =>
                                     formData.product && (
-                                        <ArrayInput source="branch_names" defaultValue={""} label="Branches / Versions">
+                                        <ArrayInput source="branches" defaultValue={""} label="Branches / Versions">
                                             <SimpleFormIterator disableReordering inline>
-                                                <TextInputWide source="name" validate={validate_255} />
-                                                {/* <ReferenceInput
+                                                <ReferenceInput
                                                     source="branch"
                                                     reference="branches"
                                                     sort={{ field: "name", order: "ASC" }}
@@ -126,7 +125,7 @@ const CSAFCreate = () => {
                                                     alwaysOn
                                                 >
                                                     <AutocompleteInputWide optionText="name" label="Name" />
-                                                </ReferenceInput> */}
+                                                </ReferenceInput>
                                             </SimpleFormIterator>
                                         </ArrayInput>
                                     )

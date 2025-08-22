@@ -19,6 +19,8 @@ from rest_framework.status import HTTP_200_OK, HTTP_204_NO_CONTENT
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
+from application.authorization.services.authorization import user_has_permission_or_403
+from application.authorization.services.roles_permissions import Permissions
 from application.commons.api.permissions import UserHasSuperuserPermission
 from application.vex.api.filters import (
     CSAFBranchFilter,
@@ -85,6 +87,11 @@ from application.vex.services.openvex_generator import (
     create_openvex_document,
     update_openvex_document,
 )
+from application.vex.services.vex_base import (
+    check_and_get_product,
+    check_branch_names,
+    check_branches,
+)
 from application.vex.services.vex_import import import_vex
 
 VEX_TYPE_CSAF = "csaf"
@@ -105,6 +112,10 @@ class CSAFDocumentCreateView(APIView):
         if not serializer.is_valid():
             raise ValidationError(serializer.errors)
 
+        product = check_and_get_product(serializer.validated_data.get("product"))
+        if product:
+            user_has_permission_or_403(product, Permissions.VEX_Create)
+
         unique_vulnerability_names = []
         if serializer.validated_data.get("vulnerability_names"):
             unique_vulnerability_names = _remove_duplicates_keep_order(
@@ -117,10 +128,21 @@ class CSAFDocumentCreateView(APIView):
             else []
         )
 
+        unique_branches = (
+            _remove_duplicates_keep_order(serializer.validated_data.get("branches"))
+            if serializer.validated_data.get("branches")
+            else []
+        )
+
+        if unique_branches:
+            branches = check_branches(unique_branches, product)
+        else:
+            branches = check_branch_names(unique_branch_names, product)
+
         csaf_create_parameters = CSAFCreateParameters(
-            product_id=serializer.validated_data.get("product"),
+            product=product,
             vulnerability_names=unique_vulnerability_names,
-            branch_names=unique_branch_names,
+            branches=branches,
             document_id_prefix=serializer.validated_data.get("document_id_prefix"),
             title=serializer.validated_data.get("title"),
             publisher_name=serializer.validated_data.get("publisher_name"),
@@ -226,6 +248,10 @@ class OpenVEXDocumentCreateView(APIView):
         if not serializer.is_valid():
             raise ValidationError(serializer.errors)
 
+        product = check_and_get_product(serializer.validated_data.get("product"))
+        if product:
+            user_has_permission_or_403(product, Permissions.VEX_Create)
+
         unique_vulnerability_names = (
             _remove_duplicates_keep_order(serializer.validated_data.get("vulnerability_names"))
             if serializer.validated_data.get("vulnerability_names")
@@ -238,10 +264,21 @@ class OpenVEXDocumentCreateView(APIView):
             else []
         )
 
+        unique_branches = (
+            _remove_duplicates_keep_order(serializer.validated_data.get("branches"))
+            if serializer.validated_data.get("branches")
+            else []
+        )
+
+        if unique_branches:
+            branches = check_branches(unique_branches, product)
+        else:
+            branches = check_branch_names(unique_branch_names, product)
+
         parameters = OpenVEXCreateParameters(
-            product_id=serializer.validated_data.get("product"),
+            product=product,
             vulnerability_names=unique_vulnerability_names,
-            branch_names=unique_branch_names,
+            branches=branches,
             id_namespace=serializer.validated_data.get("id_namespace"),
             document_id_prefix=serializer.validated_data.get("document_id_prefix"),
             author=serializer.validated_data.get("author"),
