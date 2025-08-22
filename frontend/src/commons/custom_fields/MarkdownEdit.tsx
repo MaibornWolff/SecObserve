@@ -24,9 +24,9 @@ import {
     toolbarPlugin,
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
-// @ts-ignore
+// @ts-expect-error Types are expected but none could be found
 import { basicDark } from "cm6-theme-basic-dark";
-// @ts-ignore
+// @ts-expect-error Types are expected but none could be found
 import { basicLight } from "cm6-theme-basic-light";
 import { Labeled } from "react-admin";
 
