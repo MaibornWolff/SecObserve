@@ -66,7 +66,11 @@ const CycloneDXList = () => {
                             <ChipField source="name" />
                         </SingleFieldList>
                     </ReferenceManyField>
-                    <ReferenceManyField reference="vex/cyclonedx_branches" target="cyclonedx" label="Branches / Versions">
+                    <ReferenceManyField
+                        reference="vex/cyclonedx_branches"
+                        target="cyclonedx"
+                        label="Branches / Versions"
+                    >
                         <SingleFieldList linkType={false}>
                             <ChipField source="name" />
                         </SingleFieldList>

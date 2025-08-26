@@ -25,7 +25,11 @@ const ShowActions = () => {
     return (
         <TopToolbar>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
-                <PrevNextButtons linkType="show" sort={{ field: "first_issued", order: "DESC" }} storeKey="cyclonedx.list" />
+                <PrevNextButtons
+                    linkType="show"
+                    sort={{ field: "first_issued", order: "DESC" }}
+                    storeKey="cyclonedx.list"
+                />
                 {update_permission(cyclonedx) && <CycloneDXUpdate />}
                 {delete_permission(cyclonedx) && <DeleteWithConfirmButton />}
             </Stack>
@@ -88,28 +92,34 @@ const CycloneDXComponent = () => {
                     </Paper>
 
                     <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
-                        <WithRecord render={(cyclonedx) => (
-                        <Stack spacing={1}>
-                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                                Document
-                            </Typography>{" "}
-                            <Labeled>
-                                <TextField source="document_id_prefix" label="ID prefix" />
-                            </Labeled>
-                            <Labeled>
-                                <TextField source="document_base_id" label="Base ID" />
-                            </Labeled>
-                            <Labeled>
-                                <TextField source="version" />
-                            </Labeled>
-                            {cyclonedx.author && <Labeled>
-                                <TextField source="author" />
-                            </Labeled>}
-                            {cyclonedx.manufacturer && <Labeled>
-                                <TextField source="manufacturer" />
-                            </Labeled>}
-                        </Stack>
-                        )} />
+                        <WithRecord
+                            render={(cyclonedx) => (
+                                <Stack spacing={1}>
+                                    <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                        Document
+                                    </Typography>{" "}
+                                    <Labeled>
+                                        <TextField source="document_id_prefix" label="ID prefix" />
+                                    </Labeled>
+                                    <Labeled>
+                                        <TextField source="document_base_id" label="Base ID" />
+                                    </Labeled>
+                                    <Labeled>
+                                        <TextField source="version" />
+                                    </Labeled>
+                                    {cyclonedx.author && (
+                                        <Labeled>
+                                            <TextField source="author" />
+                                        </Labeled>
+                                    )}
+                                    {cyclonedx.manufacturer && (
+                                        <Labeled>
+                                            <TextField source="manufacturer" />
+                                        </Labeled>
+                                    )}
+                                </Stack>
+                            )}
+                        />
                     </Paper>
 
                     <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
