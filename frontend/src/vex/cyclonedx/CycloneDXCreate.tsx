@@ -18,7 +18,7 @@ import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave
 import { validate_255, validate_required_255 } from "../../commons/custom_validators";
 import { AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 
-const OpenVEXCreate = () => {
+const CycloneDXCreate = () => {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const refresh = useRefresh();
@@ -34,7 +34,7 @@ const OpenVEXCreate = () => {
         setLoading(false);
     };
 
-    const create_openvex = async (data: any) => {
+    const create_cyclonedx = async (data: any) => {
         setLoading(true);
 
         data.vulnerability_names = data.vulnerability_names.map((v: any) => v.name);
@@ -45,13 +45,16 @@ const OpenVEXCreate = () => {
             data.branches = data.branches.filter((v: any) => v != null);
         }
 
-        const url = "vex/openvex_document/create/";
+        data.author ??= "";
+        data.manufacturer ??= "";
+
+        const url = "vex/cyclonedx_document/create/";
         axios_instance
             .post(url, data, { responseType: "blob" })
             .then(function (response) {
                 if (response.status == 204) {
                     setLoading(false);
-                    notify("No vulnerabilities found to create OpenVEX document", {
+                    notify("No vulnerabilities found to create CycloneDX document", {
                         type: "warning",
                     });
                 } else {
@@ -64,7 +67,7 @@ const OpenVEXCreate = () => {
 
                     refresh();
                     setLoading(false);
-                    notify("OpenVEX document created", {
+                    notify("CycloneDX document created", {
                         type: "success",
                     });
                 }
@@ -80,13 +83,13 @@ const OpenVEXCreate = () => {
 
     return (
         <Fragment>
-            <AddButton title="Create OpenVEX document" onClick={handleOpen} />
+            <AddButton title="Create CycloneDX document" onClick={handleOpen} />
             <Dialog open={open && !loading} onClose={handleClose} maxWidth={"lg"}>
-                <DialogTitle>Create OpenVEX document</DialogTitle>
+                <DialogTitle>Create CycloneDX document</DialogTitle>
                 <DialogContent>
-                    <CreateBase resource="openvex">
+                    <CreateBase resource="cyclonedx">
                         <SimpleForm
-                            onSubmit={create_openvex}
+                            onSubmit={create_cyclonedx}
                             toolbar={
                                 <ToolbarCancelSave
                                     onClick={handleCancel}
@@ -96,7 +99,7 @@ const OpenVEXCreate = () => {
                             }
                         >
                             <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                                OpenVEX
+                                CycloneDX
                             </Typography>
                             <ReferenceInput
                                 source="product"
@@ -135,17 +138,12 @@ const OpenVEXCreate = () => {
                                 Document
                             </Typography>
                             <TextInputWide
-                                source="id_namespace"
-                                label="ID namespace"
-                                validate={validate_required_255}
-                            />
-                            <TextInputWide
                                 source="document_id_prefix"
                                 label="ID prefix"
                                 validate={validate_required_255}
                             />
-                            <TextInputWide source="author" validate={validate_required_255} />
-                            <TextInputWide source="role" validate={validate_required_255} />
+                            <TextInputWide source="author" validate={validate_255} />
+                            <TextInputWide source="manufacturer" validate={validate_255} />
                         </SimpleForm>
                     </CreateBase>
                 </DialogContent>
@@ -159,4 +157,4 @@ const OpenVEXCreate = () => {
     );
 };
 
-export default OpenVEXCreate;
+export default CycloneDXCreate;

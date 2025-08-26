@@ -20,6 +20,9 @@ from application.vex.models import (
     CSAF_Branch,
     CSAF_Revision,
     CSAF_Vulnerability,
+    CycloneDX,
+    CycloneDX_Branch,
+    CycloneDX_Vulnerability,
     OpenVEX,
     OpenVEX_Branch,
     OpenVEX_Vulnerability,
@@ -174,6 +177,82 @@ class OpenVEXBranchSerializer(ModelSerializer):
 
     class Meta:
         model = OpenVEX_Branch
+        fields = "__all__"
+
+    def get_name(self, obj: OpenVEX_Branch) -> str:
+        return obj.branch.name
+
+
+class CycloneDXDocumentCreateSerializer(Serializer):
+    product = IntegerField(validators=[MinValueValidator(0)], required=False)
+    vulnerability_names = ListField(child=CharField(max_length=255), min_length=0, max_length=20, required=False)
+    branches = ListField(child=IntegerField(min_value=1), min_length=0, max_length=20, required=False)
+    document_id_prefix = CharField(max_length=255, required=False)
+    author = CharField(max_length=255, required=False, allow_blank=True)
+    manufacturer = CharField(max_length=255, required=False, allow_blank=True)
+
+    def validate(self, attrs: dict) -> dict:
+        if not attrs.get("author") and not attrs.get("manufacturer"):
+            raise ValidationError("Either author or manufacturer must be set")
+        if attrs.get("author") and attrs.get("manufacturer"):
+            raise ValidationError("Only one of author or manufacturer must be set")
+
+        return super().validate(attrs)
+
+
+class CycloneDXDocumentUpdateSerializer(Serializer):
+    author = CharField(max_length=255, required=False, allow_blank=True)
+    manufacturer = CharField(max_length=255, required=False, allow_blank=True)
+
+    def validate(self, attrs: dict) -> dict:
+        if not attrs.get("author") and not attrs.get("manufacturer"):
+            raise ValidationError("Either author or manufacturer must be set")
+        if attrs.get("author") and attrs.get("manufacturer"):
+            raise ValidationError("Only one of author or manufacturer must be set")
+
+        return super().validate(attrs)
+
+
+class CycloneDXSerializer(ModelSerializer):
+    product_data = NestedProductSerializer(source="product")
+    vulnerability_names = SerializerMethodField()
+    branch_names = SerializerMethodField()
+    user_full_name = SerializerMethodField()
+
+    class Meta:
+        model = CycloneDX
+        fields = "__all__"
+
+    def get_vulnerability_names(self, obj: CycloneDX) -> Optional[str]:
+        vulnerabilities = [v.name for v in obj.vulnerability_names.all()]
+        if vulnerabilities:
+            return ", ".join(vulnerabilities)
+        return None
+
+    def get_branch_names(self, obj: CycloneDX) -> Optional[str]:
+        branches = [b.branch.name for b in obj.branches.all()]
+        if branches:
+            return ", ".join(branches)
+        return None
+
+    def get_user_full_name(self, obj: CycloneDX) -> Optional[str]:
+        if obj.user:
+            return obj.user.full_name
+
+        return None
+
+
+class CycloneDXVulnerabilitySerializer(ModelSerializer):
+    class Meta:
+        model = CycloneDX_Vulnerability
+        fields = "__all__"
+
+
+class CycloneDXBranchSerializer(ModelSerializer):
+    name = SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = CycloneDX_Branch
         fields = "__all__"
 
     def get_name(self, obj: OpenVEX_Branch) -> str:

@@ -4,6 +4,9 @@ from application.vex.models import (
     CSAF,
     CSAF_Branch,
     CSAF_Vulnerability,
+    CycloneDX,
+    CycloneDX_Branch,
+    CycloneDX_Vulnerability,
     OpenVEX,
     OpenVEX_Branch,
     OpenVEX_Vulnerability,
@@ -112,6 +115,53 @@ class OpenVEXBranchFilter(FilterSet):
         model = OpenVEX_Branch
         fields = [
             "openvex",
+            "branch__name",
+        ]
+
+
+class CycloneDXFilter(FilterSet):
+    vulnerability_names__name = CharFilter(
+        field_name="vulnerability_names__name", lookup_expr="icontains", distinct=True
+    )
+
+    ordering = OrderingFilter(
+        # tuple-mapping retains order
+        fields=(
+            ("user__full_name", "user_full_name"),
+            ("product__name", "product_name"),
+            ("document_id_prefix", "document_id_prefix"),
+            ("version", "version"),
+            ("content_hash", "content_hash"),
+            ("author", "author"),
+            ("first_issued", "first_issued"),
+            ("last_updated", "last_updated"),
+        ),
+    )
+
+    class Meta:
+        model = CycloneDX
+        fields = [
+            "product",
+            "vulnerability_names__name",
+            "document_id_prefix",
+            "author",
+        ]
+
+
+class CycloneDXVulnerabilityFilter(FilterSet):
+    class Meta:
+        model = CycloneDX_Vulnerability
+        fields = [
+            "cyclonedx",
+            "name",
+        ]
+
+
+class CycloneDXBranchFilter(FilterSet):
+    class Meta:
+        model = CycloneDX_Branch
+        fields = [
+            "cyclonedx",
             "branch__name",
         ]
 

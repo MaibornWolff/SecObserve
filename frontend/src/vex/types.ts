@@ -56,6 +56,19 @@ export interface OpenVEX extends RaRecord {
     last_updated: string;
 }
 
+export interface CycloneDX extends RaRecord {
+    id: Identifier;
+    user: Identifier;
+    product: Identifier;
+    vulnerablity_names: string;
+    document_id_prefix: string;
+    version: number;
+    content_hash: string;
+    author: string;
+    first_issued: string;
+    last_updated: string;
+}
+
 export const VEX_STATUS_CHOICES = [
     { id: "not_affected", name: "not_affected" },
     { id: "affected", name: "affected" },

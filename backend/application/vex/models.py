@@ -119,6 +119,23 @@ class CSAF_Revision(Model):
     summary = TextField(max_length=255)
 
 
+class CycloneDX(VEX_Base):
+    author = CharField(max_length=255, blank=True)
+    manufacturer = CharField(max_length=255, blank=True)
+    first_issued = DateTimeField()
+    last_updated = DateTimeField()
+
+
+class CycloneDX_Branch(Model):
+    cyclonedx = ForeignKey(CycloneDX, related_name="branches", on_delete=CASCADE)
+    branch = ForeignKey(Branch, related_name="cyclonedxes", on_delete=CASCADE)
+
+
+class CycloneDX_Vulnerability(Model):
+    cyclonedx = ForeignKey(CycloneDX, related_name="vulnerability_names", on_delete=CASCADE)
+    name = CharField(max_length=255)
+
+
 class VEX_Document(Model):
     type = CharField(max_length=16, choices=VEX_Document_Type.VEX_DOCUMENT_TYPE_CHOICES)
     document_id = CharField(max_length=255)

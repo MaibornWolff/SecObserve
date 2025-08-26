@@ -49,6 +49,9 @@ from application.vex.api.views import (
     CSAFBranchViewSet,
     CSAFViewSet,
     CSAFVulnerabilityViewSet,
+    CycloneDXBranchViewSet,
+    CycloneDXViewSet,
+    CycloneDXVulnerabilityViewSet,
     OpenVEXBranchViewSet,
     OpenVEXViewSet,
     OpenVEXVulnerabilityViewSet,
@@ -107,6 +110,13 @@ router.register(
     basename="openvex_vulnerabilities",
 )
 router.register("vex/openvex_branches", OpenVEXBranchViewSet, basename="openvex_branches")
+router.register("vex/cyclonedx", CycloneDXViewSet, basename="cyclonedx")
+router.register(
+    "vex/cyclonedx_vulnerabilities",
+    CycloneDXVulnerabilityViewSet,
+    basename="cyclonedx_vulnerabilities",
+)
+router.register("vex/cyclonedx_branches", CycloneDXBranchViewSet, basename="cyclonedx_branches")
 router.register("vex/vex_counters", VEXCounterViewSet, basename="vex_counters")
 router.register("vex/vex_documents", VEXDocumentViewSet, basename="vex_documents")
 router.register("vex/vex_statements", VEXStatementViewSet, basename="vex_statements")

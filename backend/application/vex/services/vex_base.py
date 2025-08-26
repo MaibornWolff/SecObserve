@@ -76,6 +76,12 @@ def get_observations_for_vulnerability(
     return list(get_observations().filter(vulnerability_id=vulnerability_name).order_by("id"))
 
 
+def get_observations_for_vulnerabilities(
+    vulnerability_names: list[str],
+) -> list[Observation]:
+    return list(get_observations().filter(vulnerability_id__in=vulnerability_names).order_by("id"))
+
+
 def get_observations_for_product(
     product: Product, vulnerability_names: list[str], branches: list[Branch]
 ) -> list[Observation]:
