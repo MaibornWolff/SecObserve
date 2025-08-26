@@ -27,7 +27,7 @@ from application.core.types import (
     OSVLinuxDistribution,
     Severity,
     Status,
-    VexJustification,
+    VEX_Justification,
 )
 from application.issue_tracker.types import Issue_Tracker
 from application.licenses.types import License_Policy_Evaluation_Result
@@ -526,12 +526,14 @@ class Observation(Model):
 
     has_potential_duplicates = BooleanField(default=False)
 
-    current_vex_justification = CharField(max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True)
-    parser_vex_justification = CharField(max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True)
-    vex_vex_justification = CharField(max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True)
-    rule_vex_justification = CharField(max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True)
+    current_vex_justification = CharField(
+        max_length=64, choices=VEX_Justification.VEX_JUSTIFICATION_CHOICES, blank=True
+    )
+    parser_vex_justification = CharField(max_length=64, choices=VEX_Justification.VEX_JUSTIFICATION_CHOICES, blank=True)
+    vex_vex_justification = CharField(max_length=64, choices=VEX_Justification.VEX_JUSTIFICATION_CHOICES, blank=True)
+    rule_vex_justification = CharField(max_length=64, choices=VEX_Justification.VEX_JUSTIFICATION_CHOICES, blank=True)
     assessment_vex_justification = CharField(
-        max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True
+        max_length=64, choices=VEX_Justification.VEX_JUSTIFICATION_CHOICES, blank=True
     )
     vex_statement = ForeignKey(
         "vex.VEX_Statement",
@@ -581,7 +583,7 @@ class Observation_Log(Model):
     status = CharField(max_length=16, choices=Status.STATUS_CHOICES, blank=True)
     comment = TextField(max_length=4096)
     created = DateTimeField(auto_now_add=True)
-    vex_justification = CharField(max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True)
+    vex_justification = CharField(max_length=64, choices=VEX_Justification.VEX_JUSTIFICATION_CHOICES, blank=True)
     assessment_status = CharField(
         max_length=16,
         choices=Assessment_Status.ASSESSMENT_STATUS_CHOICES,

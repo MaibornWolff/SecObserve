@@ -15,12 +15,12 @@ from django.utils import timezone
 
 from application.access_control.models import User
 from application.core.models import Branch, Product
+from application.core.types import VEX_Justification
 from application.vex.types import (
     CSAF_Publisher_Category,
     CSAF_TLP_Label,
     CSAF_Tracking_Status,
     VEX_Document_Type,
-    VEX_Justification,
     VEX_Status,
 )
 

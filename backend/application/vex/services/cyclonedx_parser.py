@@ -5,13 +5,13 @@ from django.utils import timezone
 from rest_framework.exceptions import ValidationError
 
 from application.core.api.serializers_helpers import validate_purl
+from application.core.types import VEX_Justification
 from application.vex.models import VEX_Document, VEX_Statement
 from application.vex.services.vex_engine import apply_vex_statements_after_import
 from application.vex.types import (
     CycloneDX_Analysis_Justification,
     CycloneDX_Analysis_State,
     VEX_Document_Type,
-    VEX_Justification,
     VEX_Status,
 )
 

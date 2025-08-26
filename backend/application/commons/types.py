@@ -31,3 +31,13 @@ class Age_Choices:
         else:
             days = None
         return days
+
+
+class VEX_Justification_Styles:
+    STYLE_CSAF_OPENVEX = "CSAF/OpenVEX"
+    STYLE_CYCLONEDX = "CycloneDX"
+
+    STYLE_CHOICES = [
+        (STYLE_CSAF_OPENVEX, STYLE_CSAF_OPENVEX),
+        (STYLE_CYCLONEDX, STYLE_CYCLONEDX),
+    ]

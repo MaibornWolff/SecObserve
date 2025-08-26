@@ -280,6 +280,19 @@ export function settings_risk_acceptance_expiry_date(): string | null {
     }
 }
 
+export function settings_vex_justification_style(): string | null {
+    try {
+        const settings = JSON.parse(localStorage.getItem("settings") ?? "{}");
+        const vex_justification_style = settings.vex_justification_style ?? null;
+        if (vex_justification_style === null) {
+            return null;
+        }
+        return vex_justification_style;
+    } catch {
+        return null;
+    }
+}
+
 export const feature_general_rules_need_approval_enabled = () => {
     try {
         const settings = JSON.parse(localStorage.getItem("settings") ?? "{}");

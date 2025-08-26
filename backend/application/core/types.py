@@ -68,25 +68,73 @@ class Assessment_Status:
     ]
 
 
-class VexJustification:
+class VEX_Justification:
     STATUS_COMPONENT_NOT_PRESENT = "component_not_present"
     STATUS_VULNERABLE_CODE_NOT_PRESENT = "vulnerable_code_not_present"
     STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY = "vulnerable_code_cannot_be_controlled_by_adversary"
     STATUS_VULNERABLE_CODE_NOT_IN_EXECUTE_PATH = "vulnerable_code_not_in_execute_path"
     STATUS_INLINE_MITIGATIONS_ALREADY_EXIST = "inline_mitigations_already_exist"
+    STATUS_CYCLONEDX_CODE_NOT_PRESENT = "code_not_present"
+    STATUS_CYCLONEDX_CODE_NOT_REACHABLE = "code_not_reachable"
+    STATUS_CYCLONEDX_REQUIRES_CONFIGURATION = "requires_configuration"
+    STATUS_CYCLONEDX_REQUIRES_DEPENDENCY = "requires_dependency"
+    STATUS_CYCLONEDX_REQUIRES_ENVIRONMENT = "requires_environment"
+    STATUS_CYCLONEDX_PROTECTED_BY_COMPILER = "protected_by_compiler"
+    STATUS_CYCLONEDX_PROTECTED_AT_RUNTIME = "protected_at_runtime"
+    STATUS_CYCLONEDX_PROTECTED_AT_PERIMETER = "protected_at_perimeter"
+    STATUS_CYCLONEDX_PROTECTED_BY_MITIGATING_CONTROL = "protected_by_mitigating_control"
 
     VEX_JUSTIFICATION_CHOICES = [
-        (STATUS_COMPONENT_NOT_PRESENT, "Component not present"),
-        (STATUS_VULNERABLE_CODE_NOT_PRESENT, "Vulnerable code not present"),
+        (STATUS_COMPONENT_NOT_PRESENT, STATUS_COMPONENT_NOT_PRESENT),
+        (STATUS_VULNERABLE_CODE_NOT_PRESENT, STATUS_VULNERABLE_CODE_NOT_PRESENT),
         (
             STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,
-            "Vulnerable code cannot be controlled by adversary",
+            STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,
         ),
         (
             STATUS_VULNERABLE_CODE_NOT_IN_EXECUTE_PATH,
-            "Vulnerable code not in execute path",
+            STATUS_VULNERABLE_CODE_NOT_IN_EXECUTE_PATH,
         ),
-        (STATUS_INLINE_MITIGATIONS_ALREADY_EXIST, "Inline mitigations already exist"),
+        (
+            STATUS_INLINE_MITIGATIONS_ALREADY_EXIST,
+            STATUS_INLINE_MITIGATIONS_ALREADY_EXIST,
+        ),
+        (
+            STATUS_CYCLONEDX_CODE_NOT_PRESENT,
+            STATUS_CYCLONEDX_CODE_NOT_PRESENT,
+        ),
+        (
+            STATUS_CYCLONEDX_CODE_NOT_REACHABLE,
+            STATUS_CYCLONEDX_CODE_NOT_REACHABLE,
+        ),
+        (
+            STATUS_CYCLONEDX_REQUIRES_CONFIGURATION,
+            STATUS_CYCLONEDX_REQUIRES_CONFIGURATION,
+        ),
+        (
+            STATUS_CYCLONEDX_REQUIRES_DEPENDENCY,
+            STATUS_CYCLONEDX_REQUIRES_DEPENDENCY,
+        ),
+        (
+            STATUS_CYCLONEDX_REQUIRES_ENVIRONMENT,
+            STATUS_CYCLONEDX_REQUIRES_ENVIRONMENT,
+        ),
+        (
+            STATUS_CYCLONEDX_PROTECTED_BY_COMPILER,
+            STATUS_CYCLONEDX_PROTECTED_BY_COMPILER,
+        ),
+        (
+            STATUS_CYCLONEDX_PROTECTED_AT_RUNTIME,
+            STATUS_CYCLONEDX_PROTECTED_AT_RUNTIME,
+        ),
+        (
+            STATUS_CYCLONEDX_PROTECTED_AT_PERIMETER,
+            STATUS_CYCLONEDX_PROTECTED_AT_PERIMETER,
+        ),
+        (
+            STATUS_CYCLONEDX_PROTECTED_BY_MITIGATING_CONTROL,
+            STATUS_CYCLONEDX_PROTECTED_BY_MITIGATING_CONTROL,
+        ),
     ]
 
 

@@ -14,31 +14,6 @@ class VEX_Document_Type:
     ]
 
 
-class VEX_Justification:
-    STATUS_COMPONENT_NOT_PRESENT = "component_not_present"
-    STATUS_VULNERABLE_CODE_NOT_PRESENT = "vulnerable_code_not_present"
-    STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY = "vulnerable_code_cannot_be_controlled_by_adversary"
-    STATUS_VULNERABLE_CODE_NOT_IN_EXECUTE_PATH = "vulnerable_code_not_in_execute_path"
-    STATUS_INLINE_MITIGATIONS_ALREADY_EXIST = "inline_mitigations_already_exist"
-
-    VEX_JUSTIFICATION_CHOICES = [
-        (STATUS_COMPONENT_NOT_PRESENT, STATUS_COMPONENT_NOT_PRESENT),
-        (STATUS_VULNERABLE_CODE_NOT_PRESENT, STATUS_VULNERABLE_CODE_NOT_PRESENT),
-        (
-            STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,
-            STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,
-        ),
-        (
-            STATUS_VULNERABLE_CODE_NOT_IN_EXECUTE_PATH,
-            STATUS_VULNERABLE_CODE_NOT_IN_EXECUTE_PATH,
-        ),
-        (
-            STATUS_INLINE_MITIGATIONS_ALREADY_EXIST,
-            STATUS_INLINE_MITIGATIONS_ALREADY_EXIST,
-        ),
-    ]
-
-
 class CSAF_Tracking_Status:
     CSAF_TRACKING_STATUS_DRAFT = "draft"
     CSAF_TRACKING_STATUS_FINAL = "final"
