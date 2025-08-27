@@ -30,7 +30,7 @@ def _get_license_components(product: Product) -> QuerySet:
 
     license_components = license_components.order_by(
         "numerical_evaluation_result",
-        "license_name",
+        "effective_license_name",
         "component_name_version",
     )
 
@@ -42,10 +42,11 @@ def _get_excludes() -> list[str]:
         "identity_hash",
         "pk",
         "objects",
-        "unsaved_license",
+        "unsaved_declared_licenses",
+        "unsaved_concluded_licenses",
         "unsaved_evidences",
     ]
 
 
 def _get_foreign_keys() -> list[str]:
-    return ["branch", "license", "product", "origin_service"]
+    return ["branch", "declared_spdx_license", "concluded_spdx_license", "product", "origin_service"]

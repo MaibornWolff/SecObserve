@@ -8,7 +8,7 @@ from application.import_observations.services.parser_detector import detect_pars
 
 
 class TestCycloneDXParser(TestCase):
-    def test_grype(self):
+    def test_grype_no_bom_link(self):
         with open(path.dirname(__file__) + "/files/grype.json") as testfile:
             parser, parser_instance, data = detect_parser(testfile)
             self.assertEqual("CycloneDX", parser.name)
@@ -36,6 +36,7 @@ class TestCycloneDXParser(TestCase):
                 "cpe:2.3:a:python_software_foundation:python:3.11.3:*:*:*:*:*:*:*",
                 observation.origin_component_cpe,
             )
+            self.assertEqual("", observation.origin_component_cyclonedx_bom_link)
             self.assertEqual("example/example:dev", observation.origin_docker_image_name)
             self.assertEqual("", observation.origin_docker_image_tag)
             self.assertEqual(
@@ -169,6 +170,10 @@ class TestCycloneDXParser(TestCase):
                 "pkg:apk/alpine/libxml2@2.10.3-r1?distro=3.17.3",
                 observation.origin_component_purl,
             )
+            self.assertEqual(
+                "urn:cdx:fa9f9148-2935-422a-b058-20afa8cafa82/99#pkg:apk/alpine/libxml2@2.10.3-r1?distro=3.17.3",
+                observation.origin_component_cyclonedx_bom_link,
+            )
             self.assertEqual("example/example-frontend:dev", observation.origin_docker_image_name)
             self.assertEqual("", observation.origin_docker_image_tag)
             self.assertEqual("", observation.origin_docker_image_digest)
@@ -228,17 +233,30 @@ icu-data-en:72.1-r1 --> icu-libs:72.1-r1"""
             self.assertEqual(87, len(license_components))
 
             license_component = license_components[10]
-
             self.assertEqual("c-ares", license_component.component_name)
             self.assertEqual("1.18.1-r1", license_component.component_version)
             self.assertEqual("pkg:apk/alpine/c-ares@1.18.1-r1?distro=3.17.3", license_component.component_purl)
             self.assertEqual("", license_component.component_cpe)
+            self.assertEqual(
+                "urn:cdx:fa9f9148-2935-422a-b058-20afa8cafa82/99#pkg:apk/alpine/c-ares@1.18.1-r1?distro=3.17.3",
+                license_component.component_cyclonedx_bom_link,
+            )
             dependencies = """alpine:3.17.3 --> c-ares:1.18.1-r1
 example/example-frontend:dev --> alpine:3.17.3"""
             self.assertEqual(dependencies, license_component.component_dependencies)
-            self.assertEqual("MIT", license_component.unsaved_license)
+            self.assertEqual(["MIT"], license_component.unsaved_declared_licenses)
             self.assertEqual("Component", license_component.unsaved_evidences[0][0])
             self.assertIn(
                 '"bom-ref": "pkg:apk/alpine/c-ares@1.18.1-r1?distro=3.17.3"',
                 license_component.unsaved_evidences[0][1],
             )
+
+            license_component = license_components[11]
+            self.assertEqual("ca-certificates", license_component.component_name)
+            self.assertEqual("20220614-r4", license_component.component_version)
+            self.assertEqual(["MPL-2.0", "MIT"], license_component.unsaved_declared_licenses)
+
+            license_component = license_components[12]
+            self.assertEqual("ca-certificates-bundle", license_component.component_name)
+            self.assertEqual("20220614-r4", license_component.component_version)
+            self.assertEqual(["MPL-2.0", "MIT"], license_component.unsaved_concluded_licenses)

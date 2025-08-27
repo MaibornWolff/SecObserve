@@ -16,6 +16,7 @@ import notifications from "../../notifications";
 import { get_notification_count, update_notification_count } from "../../notifications/notification_count";
 import general_rules from "../../rules/general_rules";
 import csaf from "../../vex/csaf";
+import cyclonedx from "../../vex/cyclonedx";
 import openvex from "../../vex/openvex";
 import vex_counters from "../../vex/vex_counters";
 import vex_documents from "../../vex/vex_documents";
@@ -112,6 +113,13 @@ const Menu = ({ dense = false }: MenuProps) => {
                             state={{ _scrollToTop: true }}
                             primaryText="CSAF"
                             leftIcon={<csaf.icon />}
+                            dense={dense}
+                        />
+                        <MenuItemLink
+                            to="/vex/cyclonedx"
+                            state={{ _scrollToTop: true }}
+                            primaryText="CycloneDX"
+                            leftIcon={<cyclonedx.icon />}
                             dense={dense}
                         />
                         <MenuItemLink

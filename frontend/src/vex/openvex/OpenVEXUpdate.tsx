@@ -47,7 +47,7 @@ const OpenVEXUpdate = () => {
 
                     refresh();
                     setLoading(false);
-                    notify("CASF document updated", {
+                    notify("OpenVEX document updated", {
                         type: "success",
                     });
                 }

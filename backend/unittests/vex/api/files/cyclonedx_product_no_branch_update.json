@@ -1,0 +1,78 @@
+{
+  "metadata": {
+    "manufacturer": {
+      "name": "New manufacturer"
+    },
+    "properties": [
+      {
+        "name": "prefix",
+        "value": "CycloneDX"
+      }
+    ],
+    "timestamp": "2020-02-01T04:30:00+00:00",
+    "tools": {
+      "components": [
+        {
+          "name": "SecObserve / 1.37.0",
+          "type": "application"
+        }
+      ]
+    }
+  },
+  "serialNumber": "urn:uuid:e8d7b87f-83ec-4e41-af84-25f2b1d2739d",
+  "version": 2,
+  "vulnerabilities": [
+    {
+      "affects": [
+        {
+          "ref": "urn:cdx:2/vex_comp_2:2.0.0"
+        }
+      ],
+      "analysis": {
+        "firstIssued": "2020-01-01T04:30:00+00:00",
+        "lastUpdated": "2020-02-01T04:30:00+00:00",
+        "state": "exploitable"
+      },
+      "bom-ref": "6629b2c10f4c07ee383dfeaa72d40522ca364d082975d540ae2a24dbde09ef8b",
+      "description": "description 2",
+      "id": "CVE-vulnerability_2",
+      "recommendation": "Upgrade to release 2.1.0"
+    },
+    {
+      "affects": [
+        {
+          "ref": "urn:cdx:1/vex_comp_1:1.0.0"
+        }
+      ],
+      "analysis": {
+        "firstIssued": "2020-01-01T04:30:00+00:00",
+        "lastUpdated": "2020-02-01T04:30:00+00:00",
+        "state": "exploitable"
+      },
+      "bom-ref": "914227c039f64674d20d3ccc87837b3a3f4677c69a608fbb8479662b188e0868",
+      "description": "new description",
+      "id": "GHSA-vulnerability_1",
+      "recommendation": "Upgrade to release 1.1.0"
+    },
+    {
+      "affects": [
+        {
+          "ref": "urn:cdx:3/vex_comp_3:3.0.0"
+        }
+      ],
+      "analysis": {
+        "detail": "Should be no problem",
+        "firstIssued": "2020-01-01T04:30:00+00:00",
+        "justification": "code_not_reachable",
+        "lastUpdated": "2020-02-01T04:30:00+00:00",
+        "state": "not_affected"
+      },
+      "bom-ref": "49f4e05fb18b3629a44b087ed362270c5d385694507197d05e100555238d5971",
+      "description": "description 3",
+      "id": "vex_vulnerability_3"
+    }
+  ],
+  "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6"
+}

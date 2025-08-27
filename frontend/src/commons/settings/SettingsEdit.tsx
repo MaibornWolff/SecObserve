@@ -1,6 +1,15 @@
 import { Divider, Grid, Stack, Typography } from "@mui/material";
 import { Fragment } from "react";
-import { BooleanInput, Edit, FormDataConsumer, NumberInput, SaveButton, SimpleForm, Toolbar } from "react-admin";
+import {
+    BooleanInput,
+    Edit,
+    FormDataConsumer,
+    NumberInput,
+    RadioButtonGroupInput,
+    SaveButton,
+    SimpleForm,
+    Toolbar,
+} from "react-admin";
 
 import settings from ".";
 import {
@@ -14,6 +23,7 @@ import {
 import ListHeader from "../../commons/layout/ListHeader";
 import { TextInputExtraWide, TextInputWide } from "../../commons/layout/themes";
 import { feature_email } from "../functions";
+import { VEX_JUSTIFICATION_TYPE_CHOICES } from "../types";
 
 const CustomToolbar = () => {
     return (
@@ -86,8 +96,29 @@ const SettingsEdit = () => {
                                 <BooleanInput
                                     source="feature_vex"
                                     label="VEX"
-                                    helperText="Generate VEX documents in OpenVEX and CSAF format"
+                                    helperText="Export and import VEX documents in various formats"
                                 />
+                            </Stack>
+                        </Grid>
+                        <Grid size={3}>
+                            <Stack spacing={2}>
+                                <FormDataConsumer>
+                                    {({ formData }) =>
+                                        formData.feature_vex && (
+                                            <RadioButtonGroupInput
+                                                source="vex_justification_style"
+                                                label="VEX justification style"
+                                                choices={VEX_JUSTIFICATION_TYPE_CHOICES}
+                                            />
+                                        )
+                                    }
+                                </FormDataConsumer>
+                            </Stack>
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={2} width={"100%"}>
+                        <Grid size={3}>
+                            <Stack spacing={2}>
                                 <BooleanInput
                                     source="feature_disable_user_login"
                                     label="Disable user login"
@@ -97,10 +128,7 @@ const SettingsEdit = () => {
                                     source="feature_general_rules_need_approval"
                                     label="General rules need approval"
                                 />
-                                <BooleanInput
-                                    source="feature_exploit_information"
-                                    label="Enable exploit enrichment from cvss-bt"
-                                />
+                                <BooleanInput source="feature_license_management" label="Enable license management" />
                             </Stack>
                         </Grid>
                         <Grid size={3}>
@@ -113,7 +141,20 @@ const SettingsEdit = () => {
                                     source="feature_automatic_osv_scanning"
                                     label="Enable automatic OSV scanning"
                                 />
-                                <BooleanInput source="feature_license_management" label="Enable license management" />
+                            </Stack>
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={2} width={"100%"}>
+                        <Grid size={3}>
+                            <Stack spacing={2}>
+                                <BooleanInput
+                                    source="feature_exploit_information"
+                                    label="Enable exploit enrichment from cvss-bt"
+                                />
+                            </Stack>
+                        </Grid>
+                        <Grid size={3}>
+                            <Stack spacing={2}>
                                 <FormDataConsumer>
                                     {({ formData }) =>
                                         formData.feature_exploit_information && (

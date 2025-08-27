@@ -144,6 +144,7 @@ class OSVParser(BaseParser):
                         origin_component_version=osv_component.license_component.component_version,
                         origin_component_purl=osv_component.license_component.component_purl,
                         origin_component_cpe=osv_component.license_component.component_cpe,
+                        origin_component_cyclonedx_bom_link=osv_component.license_component.component_cyclonedx_bom_link,  # noqa: E501 pylint: disable=line-too-long
                         origin_component_dependencies=osv_component.license_component.component_dependencies,
                     )
                     observations.append(observation)

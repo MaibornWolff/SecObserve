@@ -4,6 +4,8 @@ from typing import Any, Optional
 from urllib.parse import urlparse
 
 import jsonpickle
+from cyclonedx.model.bom import Bom
+from cyclonedx.output.json import JsonV1Dot6
 from django.db.models import QuerySet
 from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
@@ -19,11 +21,16 @@ from rest_framework.status import HTTP_200_OK, HTTP_204_NO_CONTENT
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
+from application.authorization.services.authorization import user_has_permission_or_403
+from application.authorization.services.roles_permissions import Permissions
 from application.commons.api.permissions import UserHasSuperuserPermission
 from application.vex.api.filters import (
     CSAFBranchFilter,
     CSAFFilter,
     CSAFVulnerabilityFilter,
+    CycloneDXBranchFilter,
+    CycloneDXFilter,
+    CycloneDXVulnerabilityFilter,
     OpenVEXBranchFilter,
     OpenVEXFilter,
     OpenVEXVulnerabilityFilter,
@@ -41,6 +48,11 @@ from application.vex.api.serializers import (
     CSAFDocumentUpdateSerializer,
     CSAFSerializer,
     CSAFVulnerabilitySerializer,
+    CycloneDXBranchSerializer,
+    CycloneDXDocumentCreateSerializer,
+    CycloneDXDocumentUpdateSerializer,
+    CycloneDXSerializer,
+    CycloneDXVulnerabilitySerializer,
     OpenVEXBranchSerializer,
     OpenVEXDocumentCreateSerializer,
     OpenVEXDocumentUpdateSerializer,
@@ -55,6 +67,9 @@ from application.vex.models import (
     CSAF,
     CSAF_Branch,
     CSAF_Vulnerability,
+    CycloneDX,
+    CycloneDX_Branch,
+    CycloneDX_Vulnerability,
     OpenVEX,
     OpenVEX_Branch,
     OpenVEX_Vulnerability,
@@ -66,6 +81,11 @@ from application.vex.queries.csaf import (
     get_csaf_branches,
     get_csaf_vulnerabilities,
     get_csafs,
+)
+from application.vex.queries.cyclonedx import (
+    get_cyclonedx_branches,
+    get_cyclonedx_s,
+    get_cyclonedx_vulnerabilities,
 )
 from application.vex.queries.openvex import (
     get_openvex_branches,
@@ -79,16 +99,28 @@ from application.vex.services.csaf_generator import (
     create_csaf_document,
     update_csaf_document,
 )
+from application.vex.services.cyclonedx_generator import (
+    CycloneDXCreateParameters,
+    CycloneDXUpdateParameters,
+    create_cyclonedx_document,
+    update_cyclonedx_document,
+)
 from application.vex.services.openvex_generator import (
     OpenVEXCreateParameters,
     OpenVEXUpdateParameters,
     create_openvex_document,
     update_openvex_document,
 )
+from application.vex.services.vex_base import (
+    check_and_get_product,
+    check_branch_names,
+    check_branches,
+)
 from application.vex.services.vex_import import import_vex
 
 VEX_TYPE_CSAF = "csaf"
 VEX_TYPE_OPENVEX = "openvex"
+VEX_TYPE_CYCLONEDX_VEX = "cdx_vex"
 
 APPLICATION_JSON = "application/json"
 
@@ -105,6 +137,10 @@ class CSAFDocumentCreateView(APIView):
         if not serializer.is_valid():
             raise ValidationError(serializer.errors)
 
+        product = check_and_get_product(serializer.validated_data.get("product"))
+        if product:
+            user_has_permission_or_403(product, Permissions.VEX_Create)
+
         unique_vulnerability_names = []
         if serializer.validated_data.get("vulnerability_names"):
             unique_vulnerability_names = _remove_duplicates_keep_order(
@@ -117,10 +153,21 @@ class CSAFDocumentCreateView(APIView):
             else []
         )
 
+        unique_branches = (
+            _remove_duplicates_keep_order(serializer.validated_data.get("branches"))
+            if serializer.validated_data.get("branches")
+            else []
+        )
+
+        if unique_branches:
+            branches = check_branches(unique_branches, product)
+        else:
+            branches = check_branch_names(unique_branch_names, product)
+
         csaf_create_parameters = CSAFCreateParameters(
-            product_id=serializer.validated_data.get("product"),
+            product=product,
             vulnerability_names=unique_vulnerability_names,
-            branch_names=unique_branch_names,
+            branches=branches,
             document_id_prefix=serializer.validated_data.get("document_id_prefix"),
             title=serializer.validated_data.get("title"),
             publisher_name=serializer.validated_data.get("publisher_name"),
@@ -226,6 +273,10 @@ class OpenVEXDocumentCreateView(APIView):
         if not serializer.is_valid():
             raise ValidationError(serializer.errors)
 
+        product = check_and_get_product(serializer.validated_data.get("product"))
+        if product:
+            user_has_permission_or_403(product, Permissions.VEX_Create)
+
         unique_vulnerability_names = (
             _remove_duplicates_keep_order(serializer.validated_data.get("vulnerability_names"))
             if serializer.validated_data.get("vulnerability_names")
@@ -238,10 +289,21 @@ class OpenVEXDocumentCreateView(APIView):
             else []
         )
 
+        unique_branches = (
+            _remove_duplicates_keep_order(serializer.validated_data.get("branches"))
+            if serializer.validated_data.get("branches")
+            else []
+        )
+
+        if unique_branches:
+            branches = check_branches(unique_branches, product)
+        else:
+            branches = check_branch_names(unique_branch_names, product)
+
         parameters = OpenVEXCreateParameters(
-            product_id=serializer.validated_data.get("product"),
+            product=product,
             vulnerability_names=unique_vulnerability_names,
-            branch_names=unique_branch_names,
+            branches=branches,
             id_namespace=serializer.validated_data.get("id_namespace"),
             document_id_prefix=serializer.validated_data.get("document_id_prefix"),
             author=serializer.validated_data.get("author"),
@@ -328,6 +390,129 @@ class OpenVEXBranchViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
 
     def get_queryset(self) -> QuerySet[OpenVEX_Branch]:
         return get_openvex_branches()
+
+
+class CycloneDXDocumentCreateView(APIView):
+    @extend_schema(
+        methods=["POST"],
+        request=CycloneDXDocumentCreateSerializer,
+        responses={HTTP_200_OK: bytes},
+    )
+    @action(detail=True, methods=["post"])
+    def post(self, request: Request) -> HttpResponse:
+        serializer = CycloneDXDocumentCreateSerializer(data=request.data)
+        if not serializer.is_valid():
+            raise ValidationError(serializer.errors)
+
+        product = check_and_get_product(serializer.validated_data.get("product"))
+        if product:
+            user_has_permission_or_403(product, Permissions.VEX_Create)
+
+        unique_vulnerability_names = (
+            _remove_duplicates_keep_order(serializer.validated_data.get("vulnerability_names"))
+            if serializer.validated_data.get("vulnerability_names")
+            else []
+        )
+
+        unique_branches = (
+            _remove_duplicates_keep_order(serializer.validated_data.get("branches"))
+            if serializer.validated_data.get("branches")
+            else []
+        )
+
+        branches = check_branches(unique_branches, product)
+
+        parameters = CycloneDXCreateParameters(
+            product=product,
+            vulnerability_names=unique_vulnerability_names,
+            branches=branches,
+            document_id_prefix=serializer.validated_data.get("document_id_prefix"),
+            author=serializer.validated_data.get("author"),
+            manufacturer=serializer.validated_data.get("manufacturer"),
+        )
+
+        cyclonedx_bom = create_cyclonedx_document(parameters)
+
+        if not cyclonedx_bom:
+            return Response(status=HTTP_204_NO_CONTENT)
+
+        json_outputter = JsonV1Dot6(cyclonedx_bom)
+        serialized_json = json_outputter.output_as_string(indent=2)
+
+        response = HttpResponse(  # pylint: disable=http-response-with-content-type-json
+            # HTTPResponse gives more control about JSON serialization
+            content=serialized_json,
+            content_type=APPLICATION_JSON,
+        )
+        response["Content-Disposition"] = "attachment; filename=" + _get_cyclonedx_vex_filename(cyclonedx_bom)
+        return response
+
+
+class CycloneDXDocumentUpdateView(APIView):
+    @extend_schema(
+        methods=["POST"],
+        request=CycloneDXDocumentUpdateSerializer,
+        responses={HTTP_200_OK: bytes},
+    )
+    @action(detail=True, methods=["post"])
+    def post(self, request: Request, document_id_prefix: str, document_base_id: str) -> HttpResponse:
+        serializer = CycloneDXDocumentUpdateSerializer(data=request.data)
+        if not serializer.is_valid():
+            raise ValidationError(serializer.errors)
+
+        parameters = CycloneDXUpdateParameters(
+            document_id_prefix=document_id_prefix,
+            document_base_id=document_base_id,
+            author=serializer.validated_data.get("author"),
+            manufacturer=serializer.validated_data.get("manufacturer"),
+        )
+
+        cyclonedx_bom = update_cyclonedx_document(parameters)
+
+        if not cyclonedx_bom:
+            return Response(status=HTTP_204_NO_CONTENT)
+
+        json_outputter = JsonV1Dot6(cyclonedx_bom)
+        serialized_json = json_outputter.output_as_string(indent=2)
+
+        response = HttpResponse(  # pylint: disable=http-response-with-content-type-json
+            # HTTPResponse gives more control about JSON serialization
+            content=serialized_json,
+            content_type=APPLICATION_JSON,
+        )
+        response["Content-Disposition"] = "attachment; filename=" + _get_cyclonedx_vex_filename(cyclonedx_bom)
+        return response
+
+
+class CycloneDXViewSet(GenericViewSet, DestroyModelMixin, ListModelMixin, RetrieveModelMixin):
+    serializer_class = CycloneDXSerializer
+    queryset = CycloneDX.objects.none()
+    filterset_class = CycloneDXFilter
+    filter_backends = [DjangoFilterBackend]
+    permission_classes = (IsAuthenticated, UserHasVEXPermission)
+
+    def get_queryset(self) -> QuerySet[CycloneDX]:
+        return get_cyclonedx_s()
+
+
+class CycloneDXVulnerabilityViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
+    serializer_class = CycloneDXVulnerabilitySerializer
+    queryset = CycloneDX_Vulnerability.objects.none()
+    filterset_class = CycloneDXVulnerabilityFilter
+    filter_backends = [DjangoFilterBackend]
+
+    def get_queryset(self) -> QuerySet[CycloneDX_Vulnerability]:
+        return get_cyclonedx_vulnerabilities()
+
+
+class CycloneDXBranchViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
+    serializer_class = CycloneDXBranchSerializer
+    queryset = CycloneDX_Branch.objects.none()
+    filterset_class = CycloneDXBranchFilter
+    filter_backends = [DjangoFilterBackend]
+
+    def get_queryset(self) -> QuerySet[CycloneDX_Branch]:
+        return get_cyclonedx_branches()
 
 
 class VEXCounterViewSet(ModelViewSet):
@@ -450,3 +635,16 @@ def _get_openvex_filename(document_id: str, version: int) -> str:
     path = path.split("/")[-1]
 
     return f"{path}_{version:04d}.json"
+
+
+def _get_cyclonedx_vex_filename(bom: Bom) -> str:
+    prefix = None
+    for bom_property in bom.metadata.properties:
+        if bom_property.name == "prefix":
+            prefix = bom_property.value
+            break
+
+    if prefix:
+        return f"{prefix}_{bom.serial_number}_{bom.version:04d}.json"
+
+    return f"{bom.serial_number}_{bom.version:04d}.json"

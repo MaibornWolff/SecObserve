@@ -69,12 +69,13 @@ class StatusSettingsView(APIView):
             if env("EMAIL_HOST", default="") or env("EMAIL_PORT", default=""):
                 features.append("feature_email")
 
-        content: dict[str, (int | list[str])] = {
+        content: dict[str, (int | list[str]) | str] = {
             "features": features,
         }
 
         if request.user.is_authenticated:
             content["risk_acceptance_expiry_days"] = settings.risk_acceptance_expiry_days
+            content["vex_justification_style"] = settings.vex_justification_style
 
         return Response(content)
 

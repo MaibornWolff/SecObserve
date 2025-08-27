@@ -6,6 +6,7 @@ from rest_framework.exceptions import ValidationError
 from application.core.models import Branch, Observation, Product
 from application.core.queries.observation import get_observations
 from application.core.queries.product import get_product_by_id
+from application.core.types import VEX_Justification
 from application.vex.models import VEX_Counter
 
 
@@ -17,8 +18,8 @@ def create_document_base_id(document_id_prefix: str) -> str:
     return f"{counter.year}_{counter.counter:04d}"
 
 
-def check_product_or_vulnerabilities(product_id: int, vulnerability_names: list[str]) -> None:
-    if not product_id and not vulnerability_names:
+def check_product_or_vulnerabilities(product: Optional[Product], vulnerability_names: list[str]) -> None:
+    if not product and not vulnerability_names:
         raise ValidationError("Either product or vulnerabilities or both must be set")
 
 
@@ -42,6 +43,20 @@ def check_vulnerability_names(vulnerability_names: list[str]) -> None:
             raise ValidationError(f"Vulnerability with name {vulnerability_name} does not exist")
 
 
+def check_branches(branches: list[int], product: Optional[Product]) -> list[Branch]:
+    if not branches:
+        return []
+
+    if not product:
+        raise ValidationError("Product must be set when using branch_names")
+
+    product_branches = Branch.objects.filter(id__in=branches, product=product)
+    if len(product_branches) != len(branches):
+        raise ValidationError(f"Some of the branches do not exist for product {product.name}")
+
+    return list(product_branches)
+
+
 def check_branch_names(branch_names: list[str], product: Optional[Product]) -> list[Branch]:
     if not branch_names:
         return []
@@ -60,6 +75,12 @@ def get_observations_for_vulnerability(
     vulnerability_name: str,
 ) -> list[Observation]:
     return list(get_observations().filter(vulnerability_id=vulnerability_name).order_by("id"))
+
+
+def get_observations_for_vulnerabilities(
+    vulnerability_names: list[str],
+) -> list[Observation]:
+    return list(get_observations().filter(vulnerability_id__in=vulnerability_names).order_by("id"))
 
 
 def get_observations_for_product(
@@ -116,3 +137,23 @@ def get_vulnerability_url(vulnerability_name: str) -> Optional[str]:
         if vulnerability_name.startswith(key):
             return value + vulnerability_name
     return None
+
+
+def map_vex_justification_to_csaf_openvex_justification(justification: str) -> str:
+    mapping = {
+        VEX_Justification.JUSTIFICATION_COMPONENT_NOT_PRESENT: VEX_Justification.JUSTIFICATION_COMPONENT_NOT_PRESENT,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_NOT_PRESENT: VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_NOT_PRESENT,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_NOT_IN_EXECUTE_PATH: VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_NOT_IN_EXECUTE_PATH,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY: VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_INLINE_MITIGATIONS_ALREADY_EXIST: VEX_Justification.JUSTIFICATION_INLINE_MITIGATIONS_ALREADY_EXIST,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_CODE_NOT_PRESENT: VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_NOT_PRESENT,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_CODE_NOT_REACHABLE: VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_NOT_IN_EXECUTE_PATH,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_REQUIRES_CONFIGURATION: VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_REQUIRES_DEPENDENCY: VEX_Justification.JUSTIFICATION_COMPONENT_NOT_PRESENT,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_REQUIRES_ENVIRONMENT: VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_PROTECTED_BY_COMPILER: VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_PROTECTED_AT_RUNTIME: VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_PROTECTED_AT_PERIMETER: VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_PROTECTED_BY_MITIGATING_CONTROL: VEX_Justification.JUSTIFICATION_INLINE_MITIGATIONS_ALREADY_EXIST,  # noqa: E501 pylint: disable=line-too-long
+    }
+    return mapping.get(justification, "")

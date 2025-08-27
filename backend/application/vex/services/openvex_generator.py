@@ -16,8 +16,6 @@ from application.vex.models import OpenVEX, OpenVEX_Branch, OpenVEX_Vulnerabilit
 from application.vex.queries.openvex import get_openvex_by_document_id
 from application.vex.services.openvex_generator_helpers import OpenVEXVulnerabilityCache
 from application.vex.services.vex_base import (
-    check_and_get_product,
-    check_branch_names,
     check_product_or_vulnerabilities,
     check_vulnerability_names,
     create_document_base_id,
@@ -26,6 +24,7 @@ from application.vex.services.vex_base import (
     get_observations_for_vulnerability,
     get_product_id,
     get_vulnerability_url,
+    map_vex_justification_to_csaf_openvex_justification,
 )
 from application.vex.types import (
     OpenVEX_Status,
@@ -40,9 +39,9 @@ from application.vex.types import (
 
 @dataclass()
 class OpenVEXCreateParameters:
-    product_id: int
+    product: Optional[Product]
     vulnerability_names: list[str]
-    branch_names: list[str]
+    branches: list[Branch]
     id_namespace: str
     document_id_prefix: str
     author: str
@@ -60,13 +59,8 @@ class OpenVEXUpdateParameters:
 def create_openvex_document(
     parameters: OpenVEXCreateParameters,
 ) -> Optional[OpenVEXDocument]:
-    check_product_or_vulnerabilities(parameters.product_id, parameters.vulnerability_names)
-    product = check_and_get_product(parameters.product_id)
-    if product:
-        user_has_permission_or_403(product, Permissions.VEX_Create)
-
+    check_product_or_vulnerabilities(parameters.product, parameters.vulnerability_names)
     check_vulnerability_names(parameters.vulnerability_names)
-    branches = check_branch_names(parameters.branch_names, product)
 
     user = get_current_user()
     if not user:
@@ -75,7 +69,7 @@ def create_openvex_document(
     document_base_id = create_document_base_id(parameters.document_id_prefix)
 
     openvex = OpenVEX.objects.create(
-        product=product,
+        product=parameters.product,
         id_namespace=parameters.id_namespace,
         document_id_prefix=parameters.document_id_prefix,
         document_base_id=document_base_id,
@@ -89,7 +83,7 @@ def create_openvex_document(
             vulnerability_name = ""
         OpenVEX_Vulnerability.objects.create(openvex=openvex, name=vulnerability_name)
 
-    for branch in branches:
+    for branch in parameters.branches:
         OpenVEX_Branch.objects.create(openvex=openvex, branch=branch)
 
     document_id = _get_document_id(parameters.id_namespace, parameters.document_id_prefix, document_base_id)
@@ -106,8 +100,10 @@ def create_openvex_document(
     )
 
     statements = []
-    if product:
-        statements = _get_statements_for_product(product, parameters.vulnerability_names, branches)
+    if parameters.product:
+        statements = _get_statements_for_product(
+            parameters.product, parameters.vulnerability_names, parameters.branches
+        )
     else:
         statements = _get_statements_for_vulnerabilities(parameters.vulnerability_names)
 
@@ -304,7 +300,9 @@ def _prepare_statement(observation: Observation) -> Optional[OpenVEXStatement]:
         if openvex_status == OpenVEX_Status.OPENVEX_STATUS_NOT_AFFECTED:
             if observation_log:
                 if observation_log.vex_justification:
-                    openvex_justification = observation_log.vex_justification
+                    openvex_justification = map_vex_justification_to_csaf_openvex_justification(
+                        observation_log.vex_justification
+                    )
                 openvex_impact_statement = observation_log.comment
             else:
                 openvex_impact_statement = "No impact statement available"

@@ -311,7 +311,7 @@ class TestCSAF(TestCase):
 
         parameters = {
             "product": 2,
-            "branch_names": ["main"],
+            "branches": [2],
             "document_id_prefix": "CSAF",
             "title": "Title",
             "publisher_name": "Publisher",

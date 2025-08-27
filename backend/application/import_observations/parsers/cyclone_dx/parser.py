@@ -23,12 +23,16 @@ class Component:
     type: str
     purl: str
     cpe: str
+    cyclonedx_bom_link: str
     json: dict[str, str]
-    unsaved_license: str
+    unsaved_declared_licenses: list[str]
+    unsaved_concluded_licenses: list[str]
 
 
 @dataclass
 class Metadata:
+    serial_number: str
+    version: int
     scanner: str
     container_name: str
     container_tag: str
@@ -38,7 +42,7 @@ class Metadata:
 
 class CycloneDXParser(BaseParser, BaseFileParser):
     def __init__(self) -> None:
-        self.metadata = Metadata("", "", "", "", "")
+        self.metadata = Metadata("", 1, "", "", "", "", "")
         self.components: dict[str, Component] = {}
         self.dependencies: dict[str, list[str]] = {}
 
@@ -64,8 +68,8 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         return False
 
     def get_observations(self, data: dict, product: Product, branch: Optional[Branch]) -> tuple[list[Observation], str]:
-        self.components = self._get_components(data)
         self.metadata = self._get_metadata(data)
+        self.components = self._get_components(data)
         self.dependencies = self._get_dependencies(data)
 
         observations = self._create_observations(data)
@@ -90,9 +94,12 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                 component_version=component.version,
                 component_purl=component.purl,
                 component_cpe=component.cpe,
+                component_cyclonedx_bom_link=component.cyclonedx_bom_link,
                 component_dependencies=observation_component_dependencies,
             )
-            model_component.unsaved_license = component.unsaved_license
+            model_component.unsaved_declared_licenses = component.unsaved_declared_licenses
+            model_component.unsaved_concluded_licenses = component.unsaved_concluded_licenses
+
             self._add_license_component_evidence(component, model_component)
             components.append(model_component)
 
@@ -144,40 +151,51 @@ class CycloneDXParser(BaseParser, BaseFileParser):
         return components
 
     def _get_component(self, component_data: dict[str, Any]) -> Optional[Component]:
-        if not component_data.get("bom-ref"):
+
+        bom_ref = component_data.get("bom-ref")
+        if not bom_ref:
             return None
 
-        cyclonedx_licenses: list[str] = []
+        declared_licenses: list[str] = []
+        concluded_licenses: list[str] = []
         licenses = component_data.get("licenses", [])
         if licenses and licenses[0].get("expression"):
-            cyclonedx_licenses.append(licenses[0].get("expression"))
+            acknowledgement = licenses[0].get("acknowledgement")
+            if acknowledgement == "concluded":
+                concluded_licenses.append(licenses[0].get("expression"))
+            else:
+                declared_licenses.append(licenses[0].get("expression"))
         else:
             for my_license in licenses:
                 component_license = my_license.get("license", {}).get("id")
-                if component_license and component_license not in cyclonedx_licenses:
-                    cyclonedx_licenses.append(component_license)
+                if not component_license:
+                    component_license = my_license.get("license", {}).get("name")
+                if not component_license:
+                    continue
 
-                component_license = my_license.get("license", {}).get("name")
-                if component_license and component_license not in cyclonedx_licenses:
-                    cyclonedx_licenses.append(component_license)
+                acknowledgement = my_license.get("license", {}).get("acknowledgement")
+                if acknowledgement == "concluded":
+                    if component_license and component_license not in concluded_licenses:
+                        concluded_licenses.append(component_license)
+                else:
+                    if component_license and component_license not in declared_licenses:
+                        declared_licenses.append(component_license)
 
-        if len(cyclonedx_licenses) > 1:
-            cyclonedx_licenses = [license.replace(",", "") for license in cyclonedx_licenses]
-            unsaved_license = "[" + ", ".join(cyclonedx_licenses) + "]"
-        elif cyclonedx_licenses:
-            unsaved_license = cyclonedx_licenses[0]
-        else:
-            unsaved_license = ""
+        bom_link = ""
+        if self.metadata.serial_number:
+            bom_link = f"urn:cdx:{self.metadata.serial_number}/{str(self.metadata.version)}#{bom_ref}"
 
         return Component(
-            bom_ref=component_data.get("bom-ref", ""),
+            bom_ref=bom_ref,
             name=component_data.get("name", ""),
             version=component_data.get("version", ""),
             type=component_data.get("type", ""),
             purl=component_data.get("purl", ""),
             cpe=component_data.get("cpe", ""),
+            cyclonedx_bom_link=bom_link,
             json=component_data,
-            unsaved_license=unsaved_license,
+            unsaved_declared_licenses=declared_licenses,
+            unsaved_concluded_licenses=concluded_licenses,
         )
 
     def _create_observations(self, data: dict) -> list[Observation]:  # pylint: disable=too-many-locals
@@ -218,6 +236,7 @@ class CycloneDXParser(BaseParser, BaseFileParser):
                             origin_component_version=component.version,
                             origin_component_purl=component.purl,
                             origin_component_cpe=component.cpe,
+                            origin_component_cyclonedx_bom_link=component.cyclonedx_bom_link,
                             origin_component_dependencies=observation_component_dependencies,
                             cvss3_score=cvss3_score,
                             cvss3_vector=cvss3_vector,
@@ -243,12 +262,18 @@ class CycloneDXParser(BaseParser, BaseFileParser):
 
         return observations
 
-    def _get_metadata(self, data: dict) -> Metadata:
+    def _get_metadata(self, data: dict) -> Metadata:  # pylint: disable=too-many-branches
         scanner = ""
         container_name = ""
         container_tag = ""
         container_digest = ""
         file = ""
+
+        serial_number = data.get("serialNumber", "")
+        if serial_number.startswith("urn:uuid:"):
+            serial_number = serial_number.replace("urn:uuid:", "")
+        else:
+            serial_number = ""
 
         tools = data.get("metadata", {}).get("tools")
         if tools:
@@ -281,6 +306,8 @@ class CycloneDXParser(BaseParser, BaseFileParser):
             file = component_name
 
         return Metadata(
+            serial_number=serial_number,
+            version=data.get("version", 1),
             scanner=scanner,
             container_name=container_name,
             container_tag=container_tag,

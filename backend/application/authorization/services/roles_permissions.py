@@ -77,6 +77,7 @@ class Permissions(IntEnum):
     VEX_Delete = 5003
     VEX_Create = 5004
 
+    License_Component_Edit = 6002
     License_Component_Delete = 6003
 
     @classmethod
@@ -182,6 +183,7 @@ class Permissions(IntEnum):
     @classmethod
     def get_component_license_permissions(cls) -> set["Permissions"]:
         return {
+            Permissions.License_Component_Edit,
             Permissions.License_Component_Delete,
         }
 
@@ -220,6 +222,7 @@ def get_roles_with_permissions() -> dict[Roles, set[Permissions]]:
             Permissions.Observation_Assessment,
             Permissions.Api_Configuration_View,
             Permissions.VEX_View,
+            Permissions.License_Component_Edit,
         },
         Roles.Maintainer: {
             Permissions.Product_Group_View,
@@ -261,6 +264,7 @@ def get_roles_with_permissions() -> dict[Roles, set[Permissions]]:
             Permissions.VEX_Edit,
             Permissions.VEX_Create,
             Permissions.VEX_Delete,
+            Permissions.License_Component_Edit,
             Permissions.License_Component_Delete,
         },
         Roles.Owner: {
@@ -308,6 +312,7 @@ def get_roles_with_permissions() -> dict[Roles, set[Permissions]]:
             Permissions.VEX_Edit,
             Permissions.VEX_Create,
             Permissions.VEX_Delete,
+            Permissions.License_Component_Edit,
             Permissions.License_Component_Delete,
         },
     }

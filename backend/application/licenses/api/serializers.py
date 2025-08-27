@@ -1,5 +1,6 @@
 from typing import Optional
 
+from django.core.validators import MinValueValidator
 from license_expression import get_spdx_licensing
 from packageurl import PackageURL
 from rest_framework.serializers import (
@@ -17,6 +18,11 @@ from application.access_control.api.serializers import (
     UserListSerializer,
 )
 from application.access_control.services.current_user import get_current_user
+from application.authorization.services.authorization import get_highest_user_role
+from application.authorization.services.roles_permissions import (
+    Permissions,
+    get_permissions_for_role,
+)
 from application.commons.services.functions import get_comma_separated_as_list
 from application.core.queries.product import get_products
 from application.core.types import PURL_Type
@@ -61,7 +67,7 @@ class LicenseSerializer(ModelSerializer):
         fields = "__all__"
 
     def get_spdx_id_name(self, obj: License) -> str:
-        return f"{obj.spdx_id} ({obj.name})"
+        return f"{obj.spdx_id} / {obj.name}"
 
     def get_is_in_license_group(self, obj: License) -> bool:
         return License_Group.objects.filter(licenses=obj).exists()
@@ -76,13 +82,6 @@ class LicenseComponentEvidenceSerializer(ModelSerializer):
     def get_product(self, evidence: License_Component_Evidence) -> int:
         return evidence.license_component.product.pk
 
-    def get_license_component_title(self, evidence: License_Component_Evidence) -> str:
-        if evidence.license_component.license:
-            return f"{evidence.license_component.license.spdx_id} ({evidence.license_component.license.name})"
-        if evidence.license_component.non_spdx_license:
-            return evidence.license_component.non_spdx_license
-        return "No license"
-
     class Meta:
         model = License_Component_Evidence
         fields = "__all__"
@@ -95,10 +94,6 @@ class NestedLicenseComponentEvidenceSerializer(ModelSerializer):
 
 
 class LicenseComponentSerializer(ModelSerializer):
-    license_data = LicenseSerializer(
-        source="license",
-        read_only=True,
-    )
     component_name_version_type = SerializerMethodField()
     component_purl_namespace = SerializerMethodField()
     branch_name = SerializerMethodField()
@@ -106,8 +101,9 @@ class LicenseComponentSerializer(ModelSerializer):
     license_policy_name: Optional[SerializerMethodField] = SerializerMethodField()
     license_policy_id: Optional[SerializerMethodField] = SerializerMethodField()
     evidences: Optional[NestedLicenseComponentEvidenceSerializer] = NestedLicenseComponentEvidenceSerializer(many=True)
-    type = SerializerMethodField()
+    effective_license_type = SerializerMethodField()
     title = SerializerMethodField()
+    permissions = SerializerMethodField()
 
     class Meta:
         model = License_Component
@@ -162,17 +158,20 @@ class LicenseComponentSerializer(ModelSerializer):
 
         return 0
 
-    def get_type(self, obj: License_Component) -> str:
-        if obj.license:
+    def get_effective_license_type(self, obj: License_Component) -> str:
+        if obj.effective_spdx_license:
             return "SPDX"
-        if obj.license_expression:
+        if obj.effective_license_expression:
             return "Expression"
-        if obj.non_spdx_license:
+        if obj.effective_non_spdx_license:
             return "Non-SPDX"
         return ""
 
     def get_title(self, obj: License_Component) -> str:
-        return f"{obj.license_name} / {obj.component_name_version}"
+        return f"{obj.effective_license_name} / {obj.component_name_version}"
+
+    def get_permissions(self, obj: License_Component) -> Optional[set[Permissions]]:
+        return get_permissions_for_role(get_highest_user_role(obj.product))
 
 
 class LicenseComponentListSerializer(LicenseComponentSerializer):
@@ -197,8 +196,8 @@ class LicenseComponentBulkDeleteSerializer(Serializer):
 
 class LicenseComponentOverviewElementSerializer(Serializer):
     branch_name = CharField()
-    license_name = CharField()
-    type = CharField()
+    effective_license_name = CharField()
+    effective_license_type = CharField()
     evaluation_result = CharField()
     num_components = IntegerField()
 
@@ -206,6 +205,19 @@ class LicenseComponentOverviewElementSerializer(Serializer):
 class LicenseComponentOverviewSerializer(Serializer):
     count = IntegerField()
     results = ListField(child=LicenseComponentOverviewElementSerializer())
+
+
+class ConcludedLicenseSerializer(Serializer):
+    manual_concluded_spdx_license = IntegerField(validators=[MinValueValidator(1)], required=False, allow_null=True)
+    manual_concluded_non_spdx_license = CharField(max_length=255, required=False, allow_blank=True)
+    manual_concluded_license_expression = CharField(max_length=255, required=False, allow_blank=True)
+
+    def validate(self, attrs: dict) -> dict:
+        # check exactly one attribute is set
+        if sum(1 for key in attrs if key.startswith("manual_concluded_") and attrs[key]) > 1:
+            raise ValidationError("Only one concluded license field may be set.")
+
+        return attrs
 
 
 class LicenseGroupSerializer(ModelSerializer):

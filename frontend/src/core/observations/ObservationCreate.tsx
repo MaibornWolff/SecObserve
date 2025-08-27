@@ -26,9 +26,11 @@ import {
     validate_required,
     validate_required_255,
 } from "../../commons/custom_validators";
-import { justificationIsEnabledForStatus } from "../../commons/functions";
+import { justificationIsEnabledForStatus, settings_vex_justification_style } from "../../commons/functions";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
+import { VEX_JUSTIFICATION_TYPE_CSAF_OPENVEX, VEX_JUSTIFICATION_TYPE_CYCLONEDX } from "../../commons/types";
 import {
+    OBSERVATION_CYCLONEDX_VEX_JUSTIFICATION_CHOICES,
     OBSERVATION_SEVERITY_CHOICES,
     OBSERVATION_STATUS_CHOICES,
     OBSERVATION_STATUS_OPEN,
@@ -129,13 +131,22 @@ const ObservationCreate = ({ id, risk_acceptance_expiry_date_calculated }: Obser
                                             )
                                         }
                                     </FormDataConsumer>
-                                    {justificationEnabled && (
-                                        <AutocompleteInputMedium
-                                            source="parser_vex_justification"
-                                            label="VEX Justification"
-                                            choices={OBSERVATION_VEX_JUSTIFICATION_CHOICES}
-                                        />
-                                    )}
+                                    {justificationEnabled &&
+                                        settings_vex_justification_style() === VEX_JUSTIFICATION_TYPE_CSAF_OPENVEX && (
+                                            <AutocompleteInputWide
+                                                source="parser_vex_justification"
+                                                label="VEX justification"
+                                                choices={OBSERVATION_VEX_JUSTIFICATION_CHOICES}
+                                            />
+                                        )}
+                                    {justificationEnabled &&
+                                        settings_vex_justification_style() === VEX_JUSTIFICATION_TYPE_CYCLONEDX && (
+                                            <AutocompleteInputWide
+                                                source="parser_vex_justification"
+                                                label="VEX justification"
+                                                choices={OBSERVATION_CYCLONEDX_VEX_JUSTIFICATION_CHOICES}
+                                            />
+                                        )}
                                 </Stack>
                                 <MarkdownEdit
                                     initialValue=""

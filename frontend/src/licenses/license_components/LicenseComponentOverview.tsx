@@ -55,7 +55,7 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
                 </ReferenceInput>
             );
         }
-        filters.push(<TextInput source="license_name" label="License" alwaysOn />);
+        filters.push(<TextInput source="effective_license_name" label="License" alwaysOn />);
         filters.push(
             <AutocompleteInputMedium
                 source="evaluation_result"
@@ -123,7 +123,7 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
         const filterStorage: { [key: string]: any } = {};
         const filter = {
             branch: listContext.filterValues.branch,
-            license_name: listContext.filterValues.license_name,
+            effective_license_name: listContext.filterValues.effective_license_name,
             evaluation_result: listContext.filterValues.evaluation_result,
             component_purl_type: listContext.filterValues.component_purl_type,
             origin_service: listContext.filterValues.origin_service,
@@ -148,8 +148,8 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
         if (filter.branch) {
             url += "&branch=" + filter.branch;
         }
-        if (filter.license_name) {
-            url += "&license_name=" + encodeURIComponent(filter.license_name);
+        if (filter.effective_license_name) {
+            url += "&effective_license_name=" + encodeURIComponent(filter.effective_license_name);
         }
         if (filter.evaluation_result) {
             url += "&evaluation_result=" + encodeURIComponent(filter.evaluation_result);
@@ -214,9 +214,11 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
                         {product?.has_branches && <TextField source="branch_name" label="Branch / Version" />}
                         <FunctionField
                             label="License"
-                            sortBy="license_name"
+                            sortBy="effective_license_name"
                             render={(record: any) => (
-                                <span style={{ fontStyle: licenseNameStyle(record.type) }}>{record.license_name}</span>
+                                <span style={{ fontStyle: licenseNameStyle(record.effective_license_type) }}>
+                                    {record.effective_license_name}
+                                </span>
                             )}
                         />
                         <EvaluationResultField source="evaluation_result" label="Evaluation result" />
