@@ -141,19 +141,19 @@ def get_vulnerability_url(vulnerability_name: str) -> Optional[str]:
 
 def map_vex_justification_to_csaf_openvex_justification(justification: str) -> str:
     mapping = {
-        VEX_Justification.STATUS_COMPONENT_NOT_PRESENT: VEX_Justification.STATUS_COMPONENT_NOT_PRESENT,  # noqa: E501 pylint: disable=line-too-long
-        VEX_Justification.STATUS_VULNERABLE_CODE_NOT_PRESENT: VEX_Justification.STATUS_VULNERABLE_CODE_NOT_PRESENT,  # noqa: E501 pylint: disable=line-too-long
-        VEX_Justification.STATUS_VULNERABLE_CODE_NOT_IN_EXECUTE_PATH: VEX_Justification.STATUS_VULNERABLE_CODE_NOT_IN_EXECUTE_PATH,  # noqa: E501 pylint: disable=line-too-long
-        VEX_Justification.STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY: VEX_Justification.STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,  # noqa: E501 pylint: disable=line-too-long
-        VEX_Justification.STATUS_INLINE_MITIGATIONS_ALREADY_EXIST: VEX_Justification.STATUS_INLINE_MITIGATIONS_ALREADY_EXIST,  # noqa: E501 pylint: disable=line-too-long
-        VEX_Justification.STATUS_CYCLONEDX_CODE_NOT_PRESENT: VEX_Justification.STATUS_VULNERABLE_CODE_NOT_PRESENT,  # noqa: E501 pylint: disable=line-too-long
-        VEX_Justification.STATUS_CYCLONEDX_CODE_NOT_REACHABLE: VEX_Justification.STATUS_VULNERABLE_CODE_NOT_IN_EXECUTE_PATH,  # noqa: E501 pylint: disable=line-too-long
-        VEX_Justification.STATUS_CYCLONEDX_REQUIRES_CONFIGURATION: VEX_Justification.STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,  # noqa: E501 pylint: disable=line-too-long
-        VEX_Justification.STATUS_CYCLONEDX_REQUIRES_DEPENDENCY: VEX_Justification.STATUS_COMPONENT_NOT_PRESENT,  # noqa: E501 pylint: disable=line-too-long
-        VEX_Justification.STATUS_CYCLONEDX_REQUIRES_ENVIRONMENT: VEX_Justification.STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,  # noqa: E501 pylint: disable=line-too-long
-        VEX_Justification.STATUS_CYCLONEDX_PROTECTED_BY_COMPILER: VEX_Justification.STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,  # noqa: E501 pylint: disable=line-too-long
-        VEX_Justification.STATUS_CYCLONEDX_PROTECTED_AT_RUNTIME: VEX_Justification.STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,  # noqa: E501 pylint: disable=line-too-long
-        VEX_Justification.STATUS_CYCLONEDX_PROTECTED_AT_PERIMETER: VEX_Justification.STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,  # noqa: E501 pylint: disable=line-too-long
-        VEX_Justification.STATUS_CYCLONEDX_PROTECTED_BY_MITIGATING_CONTROL: VEX_Justification.STATUS_INLINE_MITIGATIONS_ALREADY_EXIST,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_COMPONENT_NOT_PRESENT: VEX_Justification.JUSTIFICATION_COMPONENT_NOT_PRESENT,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_NOT_PRESENT: VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_NOT_PRESENT,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_NOT_IN_EXECUTE_PATH: VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_NOT_IN_EXECUTE_PATH,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY: VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_INLINE_MITIGATIONS_ALREADY_EXIST: VEX_Justification.JUSTIFICATION_INLINE_MITIGATIONS_ALREADY_EXIST,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_CODE_NOT_PRESENT: VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_NOT_PRESENT,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_CODE_NOT_REACHABLE: VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_NOT_IN_EXECUTE_PATH,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_REQUIRES_CONFIGURATION: VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_REQUIRES_DEPENDENCY: VEX_Justification.JUSTIFICATION_COMPONENT_NOT_PRESENT,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_REQUIRES_ENVIRONMENT: VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_PROTECTED_BY_COMPILER: VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_PROTECTED_AT_RUNTIME: VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_PROTECTED_AT_PERIMETER: VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_PROTECTED_BY_MITIGATING_CONTROL: VEX_Justification.JUSTIFICATION_INLINE_MITIGATIONS_ALREADY_EXIST,  # noqa: E501 pylint: disable=line-too-long
     }
     return mapping.get(justification, "")

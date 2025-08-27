@@ -31,7 +31,7 @@ class TestObservationsBulkActions(BaseTestCase):
             new_status=Status.STATUS_OPEN,
             comment="comment",
             observation_ids=[1, 2],
-            new_vex_justification=VEX_Justification.STATUS_COMPONENT_NOT_PRESENT,
+            new_vex_justification=VEX_Justification.JUSTIFICATION_COMPONENT_NOT_PRESENT,
             new_risk_acceptance_expiry_date=date(2024, 7, 1),
         )
 
@@ -42,7 +42,7 @@ class TestObservationsBulkActions(BaseTestCase):
                 new_severity=Severity.SEVERITY_CRITICAL,
                 new_status=Status.STATUS_OPEN,
                 comment="comment",
-                new_vex_justification=VEX_Justification.STATUS_COMPONENT_NOT_PRESENT,
+                new_vex_justification=VEX_Justification.JUSTIFICATION_COMPONENT_NOT_PRESENT,
                 new_risk_acceptance_expiry_date=date(2024, 7, 1),
             ),
             call(
@@ -50,7 +50,7 @@ class TestObservationsBulkActions(BaseTestCase):
                 new_severity=Severity.SEVERITY_CRITICAL,
                 new_status=Status.STATUS_OPEN,
                 comment="comment",
-                new_vex_justification=VEX_Justification.STATUS_COMPONENT_NOT_PRESENT,
+                new_vex_justification=VEX_Justification.JUSTIFICATION_COMPONENT_NOT_PRESENT,
                 new_risk_acceptance_expiry_date=date(2024, 7, 1),
             ),
         ]

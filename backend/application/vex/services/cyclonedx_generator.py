@@ -264,19 +264,19 @@ def _map_current_status_to_cyclonedx_state(current_status: str) -> Optional[Impa
 
 def _map_vex_justification_to_cyclonedx_justification(justification: str) -> Optional[ImpactAnalysisJustification]:
     mapping = {
-        VEX_Justification.STATUS_COMPONENT_NOT_PRESENT: ImpactAnalysisJustification.REQUIRES_DEPENDENCY,  # noqa: E501 pylint: disable=line-too-long
-        VEX_Justification.STATUS_VULNERABLE_CODE_NOT_PRESENT: ImpactAnalysisJustification.CODE_NOT_PRESENT,  # noqa: E501 pylint: disable=line-too-long
-        VEX_Justification.STATUS_VULNERABLE_CODE_NOT_IN_EXECUTE_PATH: ImpactAnalysisJustification.CODE_NOT_REACHABLE,  # noqa: E501 pylint: disable=line-too-long
-        VEX_Justification.STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY: ImpactAnalysisJustification.PROTECTED_BY_MITIGATING_CONTROL,  # noqa: E501 pylint: disable=line-too-long
-        VEX_Justification.STATUS_INLINE_MITIGATIONS_ALREADY_EXIST: ImpactAnalysisJustification.PROTECTED_BY_MITIGATING_CONTROL,  # noqa: E501 pylint: disable=line-too-long
-        VEX_Justification.STATUS_CYCLONEDX_CODE_NOT_PRESENT: ImpactAnalysisJustification.CODE_NOT_PRESENT,  # noqa: E501 pylint: disable=line-too-long
-        VEX_Justification.STATUS_CYCLONEDX_CODE_NOT_REACHABLE: ImpactAnalysisJustification.CODE_NOT_REACHABLE,  # noqa: E501 pylint: disable=line-too-long
-        VEX_Justification.STATUS_CYCLONEDX_REQUIRES_CONFIGURATION: ImpactAnalysisJustification.REQUIRES_CONFIGURATION,  # noqa: E501 pylint: disable=line-too-long
-        VEX_Justification.STATUS_CYCLONEDX_REQUIRES_DEPENDENCY: ImpactAnalysisJustification.REQUIRES_DEPENDENCY,  # noqa: E501 pylint: disable=line-too-long
-        VEX_Justification.STATUS_CYCLONEDX_REQUIRES_ENVIRONMENT: ImpactAnalysisJustification.REQUIRES_ENVIRONMENT,  # noqa: E501 pylint: disable=line-too-long
-        VEX_Justification.STATUS_CYCLONEDX_PROTECTED_BY_COMPILER: ImpactAnalysisJustification.PROTECTED_BY_COMPILER,  # noqa: E501 pylint: disable=line-too-long
-        VEX_Justification.STATUS_CYCLONEDX_PROTECTED_AT_RUNTIME: ImpactAnalysisJustification.PROTECTED_AT_RUNTIME,  # noqa: E501 pylint: disable=line-too-long
-        VEX_Justification.STATUS_CYCLONEDX_PROTECTED_AT_PERIMETER: ImpactAnalysisJustification.PROTECTED_AT_PERIMITER,  # noqa: E501 pylint: disable=line-too-long
-        VEX_Justification.STATUS_CYCLONEDX_PROTECTED_BY_MITIGATING_CONTROL: ImpactAnalysisJustification.PROTECTED_BY_MITIGATING_CONTROL,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_COMPONENT_NOT_PRESENT: ImpactAnalysisJustification.REQUIRES_DEPENDENCY,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_NOT_PRESENT: ImpactAnalysisJustification.CODE_NOT_PRESENT,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_NOT_IN_EXECUTE_PATH: ImpactAnalysisJustification.CODE_NOT_REACHABLE,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY: ImpactAnalysisJustification.PROTECTED_BY_MITIGATING_CONTROL,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_INLINE_MITIGATIONS_ALREADY_EXIST: ImpactAnalysisJustification.PROTECTED_BY_MITIGATING_CONTROL,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_CODE_NOT_PRESENT: ImpactAnalysisJustification.CODE_NOT_PRESENT,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_CODE_NOT_REACHABLE: ImpactAnalysisJustification.CODE_NOT_REACHABLE,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_REQUIRES_CONFIGURATION: ImpactAnalysisJustification.REQUIRES_CONFIGURATION,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_REQUIRES_DEPENDENCY: ImpactAnalysisJustification.REQUIRES_DEPENDENCY,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_REQUIRES_ENVIRONMENT: ImpactAnalysisJustification.REQUIRES_ENVIRONMENT,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_PROTECTED_BY_COMPILER: ImpactAnalysisJustification.PROTECTED_BY_COMPILER,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_PROTECTED_AT_RUNTIME: ImpactAnalysisJustification.PROTECTED_AT_RUNTIME,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_PROTECTED_AT_PERIMETER: ImpactAnalysisJustification.PROTECTED_AT_PERIMITER,  # noqa: E501 pylint: disable=line-too-long
+        VEX_Justification.JUSTIFICATION_CYCLONEDX_PROTECTED_BY_MITIGATING_CONTROL: ImpactAnalysisJustification.PROTECTED_BY_MITIGATING_CONTROL,  # noqa: E501 pylint: disable=line-too-long
     }
     return mapping.get(justification)

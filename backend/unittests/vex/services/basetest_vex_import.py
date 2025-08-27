@@ -92,8 +92,8 @@ class BaseTestVEXImport(TestCase):
                 self.assertIn(
                     vex_statement.justification,
                     [
-                        VEX_Justification.STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,
-                        VEX_Justification.STATUS_CYCLONEDX_REQUIRES_CONFIGURATION,
+                        VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,
+                        VEX_Justification.JUSTIFICATION_CYCLONEDX_REQUIRES_CONFIGURATION,
                     ],
                 )
                 if document_type == VEX_Document_Type.VEX_DOCUMENT_TYPE_CSAF:
@@ -189,15 +189,15 @@ class BaseTestVEXImport(TestCase):
         self.assertIn(
             observation.current_vex_justification,
             [
-                VEX_Justification.STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,
-                VEX_Justification.STATUS_CYCLONEDX_REQUIRES_CONFIGURATION,
+                VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,
+                VEX_Justification.JUSTIFICATION_CYCLONEDX_REQUIRES_CONFIGURATION,
             ],
         )
         self.assertIn(
             observation.vex_vex_justification,
             [
-                VEX_Justification.STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,
-                VEX_Justification.STATUS_CYCLONEDX_REQUIRES_CONFIGURATION,
+                VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,
+                VEX_Justification.JUSTIFICATION_CYCLONEDX_REQUIRES_CONFIGURATION,
             ],
         )
 
