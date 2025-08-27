@@ -24,6 +24,7 @@ from application.vex.services.vex_base import (
     get_observations_for_vulnerability,
     get_product_id,
     get_vulnerability_url,
+    map_vex_justification_to_csaf_openvex_justification,
 )
 from application.vex.types import (
     OpenVEX_Status,
@@ -299,7 +300,9 @@ def _prepare_statement(observation: Observation) -> Optional[OpenVEXStatement]:
         if openvex_status == OpenVEX_Status.OPENVEX_STATUS_NOT_AFFECTED:
             if observation_log:
                 if observation_log.vex_justification:
-                    openvex_justification = observation_log.vex_justification
+                    openvex_justification = map_vex_justification_to_csaf_openvex_justification(
+                        observation_log.vex_justification
+                    )
                 openvex_impact_statement = observation_log.comment
             else:
                 openvex_impact_statement = "No impact statement available"

@@ -6,10 +6,10 @@ import { SimpleForm, useNotify, useRefresh } from "react-admin";
 import axios_instance from "../../access_control/auth_provider/axios_instance";
 import EditButton from "../../commons/custom_fields/EditButton";
 import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
-import { validate_required_255 } from "../../commons/custom_validators";
+import { validate_255 } from "../../commons/custom_validators";
 import { TextInputWide } from "../../commons/layout/themes";
 
-const OpenVEXUpdate = () => {
+const CycloneDXUpdate = () => {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const refresh = useRefresh();
@@ -25,16 +25,19 @@ const OpenVEXUpdate = () => {
         setLoading(false);
     };
 
-    const update_openvex = async (data: any) => {
+    const update_cyclonedx = async (data: any) => {
         setLoading(true);
 
-        const url = "vex/openvex_document/update/" + data.document_id_prefix + "/" + data.document_base_id + "/";
+        data.author ??= "";
+        data.manufacturer ??= "";
+
+        const url = "vex/cyclonedx_document/update/" + data.document_id_prefix + "/" + data.document_base_id + "/";
         axios_instance
             .post(url, data, { responseType: "blob" })
             .then(function (response) {
                 if (response.status == 204) {
                     setLoading(false);
-                    notify("No changes in OpenVEX document", {
+                    notify("No changes in CycloneDX document", {
                         type: "warning",
                     });
                 } else {
@@ -47,7 +50,7 @@ const OpenVEXUpdate = () => {
 
                     refresh();
                     setLoading(false);
-                    notify("OpenVEX document updated", {
+                    notify("CycloneDX document updated", {
                         type: "success",
                     });
                 }
@@ -63,12 +66,12 @@ const OpenVEXUpdate = () => {
 
     return (
         <Fragment>
-            <EditButton title="Update OpenVEX document" onClick={handleOpen} />
+            <EditButton title="Update CycloneDX document" onClick={handleOpen} />
             <Dialog open={open && !loading} onClose={handleClose} maxWidth={"lg"}>
-                <DialogTitle>Update OpenVEX document</DialogTitle>
+                <DialogTitle>Update CycloneDX document</DialogTitle>
                 <DialogContent>
                     <SimpleForm
-                        onSubmit={update_openvex}
+                        onSubmit={update_cyclonedx}
                         toolbar={
                             <ToolbarCancelSave
                                 onClick={handleCancel}
@@ -81,8 +84,8 @@ const OpenVEXUpdate = () => {
                         <Typography variant="h6" sx={{ marginBottom: 1 }}>
                             Document
                         </Typography>
-                        <TextInputWide source="author" validate={validate_required_255} />
-                        <TextInputWide source="role" validate={validate_required_255} />
+                        <TextInputWide source="author" validate={validate_255} />
+                        <TextInputWide source="manufacturer" validate={validate_255} />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>
@@ -95,4 +98,4 @@ const OpenVEXUpdate = () => {
     );
 };
 
-export default OpenVEXUpdate;
+export default CycloneDXUpdate;

@@ -8,6 +8,8 @@ from django.db.models import (
     Model,
 )
 
+from application.commons.types import VEX_Justification_Styles
+
 
 class Settings(Model):
     security_gate_active = BooleanField(default=True, help_text="Is the security gate activated?")
@@ -128,7 +130,13 @@ class Settings(Model):
         help_text="Regular expression which branches to exempt from deletion",
     )
 
-    feature_vex = BooleanField(default=False, help_text="Generate VEX documents in OpenVEX and CSAF format")
+    feature_vex = BooleanField(default=False, help_text="Export and import VEX documents in various formats")
+    vex_justification_style = CharField(
+        max_length=16,
+        choices=VEX_Justification_Styles.STYLE_CHOICES,
+        default=VEX_Justification_Styles.STYLE_CSAF_OPENVEX,
+    )
+
     feature_disable_user_login = BooleanField(default=False, help_text="Disable user login")
     feature_general_rules_need_approval = BooleanField(default=False, help_text="General rules need approval")
 

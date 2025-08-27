@@ -8,10 +8,8 @@ from application.core.api.serializers_helpers import validate_purl
 from application.vex.models import VEX_Document, VEX_Statement
 from application.vex.services.vex_engine import apply_vex_statements_after_import
 from application.vex.types import (
-    CycloneDX_Analysis_Justification,
     CycloneDX_Analysis_State,
     VEX_Document_Type,
-    VEX_Justification,
     VEX_Status,
 )
 
@@ -207,8 +205,6 @@ def _parse_analysis(analysis: dict, vulnerability_counter: int) -> CycloneDX_Ana
         raise ValidationError(f"vulnerability[{vulnerability_counter}]/analysis/state is missing")
 
     justification = analysis.get("justification", "")
-    if justification:
-        justification = _map_cyclonedx_justification_to_vex_justification(justification) or ""
     response = analysis.get("response", [])
     if not isinstance(response, list):
         response = []
@@ -233,7 +229,7 @@ def _map_cyclonedx_state_to_vex_status(state: str) -> Optional[str]:
         CycloneDX_Analysis_State.CYCLONEDX_STATE_RESOLVED_WITH_PEDIGREE: VEX_Status.VEX_STATUS_FIXED,
         CycloneDX_Analysis_State.CYCLONEDX_STATE_EXPLOITABLE: VEX_Status.VEX_STATUS_AFFECTED,
         CycloneDX_Analysis_State.CYCLONEDX_STATE_IN_TRIAGE: VEX_Status.VEX_STATUS_UNDER_INVESTIGATION,
-        CycloneDX_Analysis_State.CYCLONEDX_STATE_FALSE_POSITIVE: VEX_Status.VEX_STATUS_NOT_AFFECTED,
+        CycloneDX_Analysis_State.CYCLONEDX_STATE_FALSE_POSITIVE: VEX_Status.VEX_STATUS_FALSE_POSITIVE,
         CycloneDX_Analysis_State.CYCLONEDX_STATE_NOT_AFFECTED: VEX_Status.VEX_STATUS_NOT_AFFECTED,
     }
     return mapping.get(state)
@@ -250,21 +246,6 @@ def _build_remediation_text(response: Optional[list[str]], recommendation: str) 
         remediation_parts.append(recommendation)
 
     return "; ".join(remediation_parts)
-
-
-def _map_cyclonedx_justification_to_vex_justification(justification: str) -> Optional[str]:
-    mapping = {
-        CycloneDX_Analysis_Justification.CYCLONEDX_JUSTIFICATION_CODE_NOT_PRESENT: VEX_Justification.STATUS_VULNERABLE_CODE_NOT_PRESENT,  # noqa: E501 pylint: disable=line-too-long
-        CycloneDX_Analysis_Justification.CYCLONEDX_JUSTIFICATION_CODE_NOT_REACHABLE: VEX_Justification.STATUS_VULNERABLE_CODE_NOT_IN_EXECUTE_PATH,  # noqa: E501 pylint: disable=line-too-long
-        CycloneDX_Analysis_Justification.CYCLONEDX_JUSTIFICATION_REQUIRES_CONFIGURATION: VEX_Justification.STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,  # noqa: E501 pylint: disable=line-too-long
-        CycloneDX_Analysis_Justification.CYCLONEDX_JUSTIFICATION_REQUIRES_DEPENDENCY: VEX_Justification.STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,  # noqa: E501 pylint: disable=line-too-long
-        CycloneDX_Analysis_Justification.CYCLONEDX_JUSTIFICATION_REQUIRES_ENVIRONMENT: VEX_Justification.STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,  # noqa: E501 pylint: disable=line-too-long
-        CycloneDX_Analysis_Justification.CYCLONEDX_JUSTIFICATION_PROTECTED_BY_COMPILER: VEX_Justification.STATUS_INLINE_MITIGATIONS_ALREADY_EXIST,  # noqa: E501 pylint: disable=line-too-long
-        CycloneDX_Analysis_Justification.CYCLONEDX_JUSTIFICATION_PROTECTED_AT_RUNTIME: VEX_Justification.STATUS_INLINE_MITIGATIONS_ALREADY_EXIST,  # noqa: E501 pylint: disable=line-too-long
-        CycloneDX_Analysis_Justification.CYCLONEDX_JUSTIFICATION_PROTECTED_AT_PERIMETER: VEX_Justification.STATUS_INLINE_MITIGATIONS_ALREADY_EXIST,  # noqa: E501 pylint: disable=line-too-long
-        CycloneDX_Analysis_Justification.CYCLONEDX_JUSTIFICATION_PROTECTED_BY_MITIGATING_CONTROL: VEX_Justification.STATUS_INLINE_MITIGATIONS_ALREADY_EXIST,  # noqa: E501 pylint: disable=line-too-long
-    }
-    return mapping.get(justification)
 
 
 def _process_affected_components(

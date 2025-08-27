@@ -31,13 +31,5 @@ class TestVEXImportCycloneDX(BaseTestVEXImport):
                 document_id="urn:uuid:fa9f9148-2935-422a-b058-20afa8cafa82",
                 author="SecObserve",
             )
-
-            vex_statements = VEX_Statement.objects.filter(document=vex_document)
-            for vex_statement in vex_statements:
-                print("--------------------------------------------")
-                print(vars(vex_statement))
-            print("--------------------------------------------")
-
             self.check_vex_document(vex_document, VEX_Document_Type.VEX_DOCUMENT_TYPE_CYCLONEDX)
-
             self.check_product()

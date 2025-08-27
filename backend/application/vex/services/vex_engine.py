@@ -187,6 +187,8 @@ def _get_secobserve_status(vex_status: str) -> str:
         return Status.STATUS_RESOLVED
     if vex_status == VEX_Status.VEX_STATUS_UNDER_INVESTIGATION:
         return Status.STATUS_IN_REVIEW
+    if vex_status == VEX_Status.VEX_STATUS_FALSE_POSITIVE:
+        return Status.STATUS_FALSE_POSITIVE
     return Status.STATUS_OPEN
 
 

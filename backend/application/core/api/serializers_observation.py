@@ -43,7 +43,12 @@ from application.core.models import (
 from application.core.queries.observation import get_current_observation_log
 from application.core.services.observation_log import create_observation_log
 from application.core.services.security_gate import check_security_gate
-from application.core.types import Assessment_Status, Severity, Status, VexJustification
+from application.core.types import (
+    Assessment_Status,
+    Severity,
+    Status,
+    VEX_Justification,
+)
 from application.import_observations.api.serializers import ParserSerializer
 from application.import_observations.models import Parser
 from application.import_observations.types import Parser_Type
@@ -499,7 +504,7 @@ class ObservationAssessmentSerializer(Serializer):
     severity = ChoiceField(choices=Severity.SEVERITY_CHOICES, required=False)
     status = ChoiceField(choices=Status.STATUS_CHOICES, required=False)
     vex_justification = ChoiceField(
-        choices=VexJustification.VEX_JUSTIFICATION_CHOICES,
+        choices=VEX_Justification.VEX_JUSTIFICATION_CHOICES,
         required=False,
         allow_blank=True,
     )
@@ -521,7 +526,7 @@ class ObservationBulkAssessmentSerializer(Serializer):
     comment = CharField(max_length=4096, required=True)
     observations = ListField(child=IntegerField(min_value=1), min_length=0, max_length=250, required=True)
     vex_justification = ChoiceField(
-        choices=VexJustification.VEX_JUSTIFICATION_CHOICES,
+        choices=VEX_Justification.VEX_JUSTIFICATION_CHOICES,
         required=False,
         allow_blank=True,
     )

@@ -34,6 +34,7 @@ import notifications from "./notifications";
 import general_rules from "./rules/general_rules";
 import product_rules from "./rules/product_rules";
 import csaf from "./vex/csaf";
+import cyclonedx from "./vex/cyclonedx";
 import openvex from "./vex/openvex";
 import vex_counters from "./vex/vex_counters";
 import vex_documents from "./vex/vex_documents";
@@ -146,11 +147,25 @@ const App = () => {
                     name="vex/csaf"
                     {...csaf} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
                     // nosemgrep because the props are well defined in the import
+                    recordRepresentation={(record) =>
+                        `${trim_string(record.document_id_prefix + " / " + record.document_base_id)}`
+                    }
                 />
                 <Resource
                     name="vex/openvex"
                     {...openvex} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
                     // nosemgrep because the props are well defined in the import
+                    recordRepresentation={(record) =>
+                        `${trim_string(record.document_id_prefix + " / " + record.document_base_id)}`
+                    }
+                />
+                <Resource
+                    name="vex/cyclonedx"
+                    {...cyclonedx} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                    // nosemgrep because the props are well defined in the import
+                    recordRepresentation={(record) =>
+                        `${trim_string(record.document_id_prefix + " / " + record.document_base_id)}`
+                    }
                 />
                 <Resource
                     name="vex/vex_counters"
