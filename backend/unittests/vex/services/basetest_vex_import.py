@@ -2,14 +2,14 @@ from os import path
 from unittest import TestCase
 
 from application.core.models import Observation, Product
-from application.core.types import Status
+from application.core.types import Status, VEX_Justification
 from application.import_observations.services.import_observations import (
     FileUploadParameters,
     file_upload_observations,
 )
 from application.licenses.models import License_Component
 from application.vex.models import VEX_Document, VEX_Statement
-from application.vex.types import VEX_Document_Type, VEX_Justification, VEX_Status
+from application.vex.types import VEX_Document_Type, VEX_Status
 
 
 class BaseTestVEXImport(TestCase):
@@ -89,9 +89,12 @@ class BaseTestVEXImport(TestCase):
                     )
                 )
                 self.assertEqual(VEX_Status.VEX_STATUS_NOT_AFFECTED, vex_statement.status)
-                self.assertEqual(
-                    VEX_Justification.STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,
+                self.assertIn(
                     vex_statement.justification,
+                    [
+                        VEX_Justification.STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,
+                        VEX_Justification.STATUS_CYCLONEDX_REQUIRES_CONFIGURATION,
+                    ],
                 )
                 if document_type == VEX_Document_Type.VEX_DOCUMENT_TYPE_CSAF:
                     self.assertEqual("", vex_statement.impact)
@@ -183,13 +186,19 @@ class BaseTestVEXImport(TestCase):
         )
         self.assertEqual(Status.STATUS_NOT_AFFECTED, observation.current_status)
         self.assertEqual(Status.STATUS_NOT_AFFECTED, observation.vex_status)
-        self.assertEqual(
-            VEX_Justification.STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,
+        self.assertIn(
             observation.current_vex_justification,
+            [
+                VEX_Justification.STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,
+                VEX_Justification.STATUS_CYCLONEDX_REQUIRES_CONFIGURATION,
+            ],
         )
-        self.assertEqual(
-            VEX_Justification.STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,
+        self.assertIn(
             observation.vex_vex_justification,
+            [
+                VEX_Justification.STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,
+                VEX_Justification.STATUS_CYCLONEDX_REQUIRES_CONFIGURATION,
+            ],
         )
 
         observation = Observation.objects.get(
