@@ -107,6 +107,7 @@ const SettingsEdit = () => {
                                         formData.feature_vex && (
                                             <RadioButtonGroupInput
                                                 source="vex_justification_style"
+                                                label="VEX justification style"
                                                 choices={VEX_JUSTIFICATION_TYPE_CHOICES}
                                             />
                                         )
