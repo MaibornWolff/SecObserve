@@ -661,14 +661,14 @@ files = [
 
 [[package]]
 name = "defusedcsv"
-version = "2.0.0"
+version = "3.0.0"
 description = "Drop-in replacement for Python's CSV library that tries to mitigate CSV injection attacks"
 optional = false
 python-versions = "*"
 groups = ["main"]
 files = [
-    {file = "defusedcsv-2.0.0-py3-none-any.whl", hash = "sha256:a7bc3b1ac1ce4f8c6c1e8740466b1b5789b51ca18d918b0099313dc0cdf2cef4"},
-    {file = "defusedcsv-2.0.0.tar.gz", hash = "sha256:7612228e54ef1690a19f7aef526709010608e987f9998c89588ef05d9ecfe4d6"},
+    {file = "defusedcsv-3.0.0-py3-none-any.whl", hash = "sha256:5e5f2e940cefb5ac60580c8009388bfb154b7853784d34a8f0ff3a52c6130e87"},
+    {file = "defusedcsv-3.0.0.tar.gz", hash = "sha256:018678533bc375f3bf2f70f9721e48daf3800a88320dc325c1dac67ee09e2a45"},
 ]
 
 [[package]]
@@ -3047,4 +3047,4 @@ unittests = ["coverage", "django-coverage-plugin", "django-extensions"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">= 3.10, < 3.14"
-content-hash = "923fb3b4833c986873beb7d15916a207cd0cbfc30e5752c2d2ffc5245ee6339f"
+content-hash = "f1fac7de654ae027b192cad2ca595ada38bb73fd352e4fb8cef94f9931586413"
