@@ -1124,22 +1124,22 @@ tornado = ["tornado (>=0.2)"]
 
 [[package]]
 name = "html-to-markdown"
-version = "1.9.0"
+version = "1.9.1"
 description = "A modern, type-safe Python library for converting HTML to Markdown with comprehensive tag support and customizable options"
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "html_to_markdown-1.9.0-py3-none-any.whl", hash = "sha256:00655a3b659440314a442d0467d185aa062103fd61564904b764fc692d91b8fc"},
-    {file = "html_to_markdown-1.9.0.tar.gz", hash = "sha256:9cd066d33612a0fc00119f65bee7b5da98093c2fdd10493694fb08d15d1b2a2c"},
+    {file = "html_to_markdown-1.9.1-py3-none-any.whl", hash = "sha256:4b770694a6bb68f5416ce0f6d0b36d2c28069d14a4f8f66c788e74832aee406f"},
+    {file = "html_to_markdown-1.9.1.tar.gz", hash = "sha256:ce1052f20b7147de7cf99e0833cc6ef25824b7e3b3a6c902f73d62fe0040c3db"},
 ]
 
 [package.dependencies]
-beautifulsoup4 = ">=4.13.4"
+beautifulsoup4 = ">=4.13.5"
 nh3 = ">=0.3"
 
 [package.extras]
-lxml = ["lxml (>=6)"]
+lxml = ["lxml (>=6.0.1)"]
 
 [[package]]
 name = "huey"
@@ -3047,4 +3047,4 @@ unittests = ["coverage", "django-coverage-plugin", "django-extensions"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">= 3.10, < 3.14"
-content-hash = "f1fac7de654ae027b192cad2ca595ada38bb73fd352e4fb8cef94f9931586413"
+content-hash = "4567ab143d4ec5e2d64566ed2225a9772502f191848640f59f3506e3e96134c2"
