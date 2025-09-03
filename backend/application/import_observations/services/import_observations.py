@@ -65,6 +65,7 @@ from application.licenses.services.license_policy import (
     apply_license_policy_to_component,
     get_license_evaluation_results_for_product,
 )
+from application.licenses.types import NO_LICENSE_INFORMATION
 from application.rules.services.rule_engine import Rule_Engine
 from application.vex.services.vex_engine import VEX_Engine
 
@@ -394,6 +395,12 @@ def process_license_components(  # pylint: disable=too-many-statements
                 unsaved_component.imported_concluded_multiple_licenses
             )
             set_effective_license(existing_component)
+            if (
+                not existing_component.manual_concluded_license_name
+                or existing_component.manual_concluded_license_name == NO_LICENSE_INFORMATION
+            ):
+                apply_concluded_license(existing_component)
+                set_effective_license(existing_component)
             existing_component.origin_service = vulnerability_check.service
             apply_license_policy_to_component(
                 existing_component,
