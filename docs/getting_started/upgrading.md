@@ -10,7 +10,7 @@
 
 * There will be specific upgrade instructions if necessary, e.g. when there are new configuration parameters.
 
-## Release 1.37.0
+## Release 1.37.1
 
 **Breaking changes**
 
