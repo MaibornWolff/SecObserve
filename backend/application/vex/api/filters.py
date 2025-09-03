@@ -25,7 +25,7 @@ class CSAFFilter(FilterSet):
         # tuple-mapping retains order
         fields=(
             ("user__full_name", "user_full_name"),
-            ("product__name", "product_name"),
+            ("product__name", "product_data.name"),
             ("document_id_prefix", "document_id_prefix"),
             ("document_base_id", "document_base_id"),
             ("version", "version"),
@@ -79,7 +79,7 @@ class OpenVEXFilter(FilterSet):
         # tuple-mapping retains order
         fields=(
             ("user__full_name", "user_full_name"),
-            ("product__name", "product_name"),
+            ("product__name", "product_data.name"),
             ("document_id_prefix", "document_id_prefix"),
             ("document_base_id", "document_base_id"),
             ("version", "version"),
@@ -128,11 +128,13 @@ class CycloneDXFilter(FilterSet):
         # tuple-mapping retains order
         fields=(
             ("user__full_name", "user_full_name"),
-            ("product__name", "product_name"),
+            ("product__name", "product_data.name"),
+            ("document_base_id", "document_base_id"),
             ("document_id_prefix", "document_id_prefix"),
             ("version", "version"),
             ("content_hash", "content_hash"),
             ("author", "author"),
+            ("manufacturer", "manufacturer"),
             ("first_issued", "first_issued"),
             ("last_updated", "last_updated"),
         ),
@@ -217,6 +219,8 @@ class VEXStatementFilter(FilterSet):
             ("justification", "justification"),
             ("impact", "impact"),
             ("remediation", "remediation"),
+            ("product_purl", "product_purl"),
+            ("component_cyclonedx_bom_link", "component_cyclonedx_bom_link"),
         )
     )
 
