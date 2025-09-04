@@ -37,7 +37,7 @@ jobs:
           cdxgen ./frontend --type npm --no-babel --required-only --profile license-compliance --no-auto-compositions --project-name secobserve --output sbom_frontend_application.json
       -
         name: Import backend SBOM
-        uses: MaibornWolff/secobserve_actions_templates/actions/upload_sbom@0ddd05df5a723a3e38cc2cff23c8653519289f13 # main
+        uses: MaibornWolff/secobserve_actions_templates/actions/upload_sbom@daafc3f4ed5f86128c5879b15a2d7890657bc909 # main
         with:
           so_product_name: 'SecObserve'
           so_file_name: 'sbom_backend_application.json'
@@ -46,7 +46,7 @@ jobs:
           so_api_token: ${{ secrets.SO_API_TOKEN }}
       -
         name: Import frontend SBOM
-        uses: MaibornWolff/secobserve_actions_templates/actions/upload_sbom@0ddd05df5a723a3e38cc2cff23c8653519289f13 # main
+        uses: MaibornWolff/secobserve_actions_templates/actions/upload_sbom@daafc3f4ed5f86128c5879b15a2d7890657bc909 # main
         with:
           so_product_name: 'SecObserve'
           so_file_name: 'sbom_frontend_application.json'
