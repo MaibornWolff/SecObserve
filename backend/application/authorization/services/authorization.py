@@ -26,7 +26,7 @@ from application.import_observations.models import (
     Api_Configuration,
     Vulnerability_Check,
 )
-from application.licenses.models import License_Component
+from application.licenses.models import Concluded_License, License_Component
 from application.rules.models import Rule
 from application.vex.models import VEX_Base
 
@@ -99,6 +99,9 @@ def user_has_permission(  # pylint: disable=too-many-return-statements,too-many-
         return user_has_permission(obj.product, permission, user)
 
     if isinstance(obj, License_Component) and permission in Permissions.get_component_license_permissions():
+        return user_has_permission(obj.product, permission, user)
+
+    if isinstance(obj, Concluded_License) and permission in Permissions.get_concluded_license_permissions():
         return user_has_permission(obj.product, permission, user)
 
     raise NoAuthorizationImplementedError(

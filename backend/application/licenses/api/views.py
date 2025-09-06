@@ -9,7 +9,7 @@ from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError
 from rest_framework.filters import SearchFilter
-from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
+from rest_framework.mixins import DestroyModelMixin, ListModelMixin, RetrieveModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -24,6 +24,7 @@ from application.core.models import Branch, Product
 from application.core.queries.branch import get_branch_by_id
 from application.core.queries.product import get_product_by_id
 from application.licenses.api.filters import (
+    ConcludedLicenseFilter,
     LicenseComponentEvidenceFilter,
     LicenseComponentFilter,
     LicenseFilter,
@@ -36,6 +37,7 @@ from application.licenses.api.filters import (
     LicensePolicyMemberFilter,
 )
 from application.licenses.api.permissions import (
+    UserHasConcludedLicensePermission,
     UserHasLicenseGroupAuthenticationGroupMemberPermission,
     UserHasLicenseGroupMemberPermission,
     UserHasLicenseGroupPermission,
@@ -44,6 +46,8 @@ from application.licenses.api.permissions import (
     UserHasLicensePolicyPermission,
 )
 from application.licenses.api.serializers import (
+    ConcludedLicenseCreateUpdateSerializer,
+    ConcludedLicenseListSerializer,
     ConcludedLicenseSerializer,
     LicenseComponentEvidenceSerializer,
     LicenseComponentIdSerializer,
@@ -63,6 +67,7 @@ from application.licenses.api.serializers import (
     LicenseSerializer,
 )
 from application.licenses.models import (
+    Concluded_License,
     License,
     License_Component,
     License_Component_Evidence,
@@ -74,6 +79,7 @@ from application.licenses.models import (
     License_Policy_Item,
     License_Policy_Member,
 )
+from application.licenses.queries.concluded_license import get_concluded_licenses
 from application.licenses.queries.license import get_license
 from application.licenses.queries.license_component import (
     get_license_component,
@@ -135,6 +141,24 @@ class LicenseComponentOverview:
     results: list[LicenseComponentOverviewElement]
 
 
+class ConcludedLicenseViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin, DestroyModelMixin):
+    serializer_class = ConcludedLicenseSerializer
+    filterset_class = ConcludedLicenseFilter
+    queryset = Concluded_License.objects.all()
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    permission_classes = [IsAuthenticated, UserHasConcludedLicensePermission]
+
+    def get_serializer_class(
+        self,
+    ) -> type[ConcludedLicenseListSerializer] | type[BaseSerializer]:
+        if self.action == "list":
+            return ConcludedLicenseListSerializer
+        return super().get_serializer_class()
+
+    def get_queryset(self) -> QuerySet[Concluded_License]:
+        return get_concluded_licenses().select_related("product").select_related("user")
+
+
 class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     serializer_class = LicenseComponentSerializer
     filterset_class = LicenseComponentFilter
@@ -153,12 +177,12 @@ class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
 
     @extend_schema(
         methods=["PATCH"],
-        request=ConcludedLicenseSerializer,
+        request=ConcludedLicenseCreateUpdateSerializer,
         responses={200: None},
     )
     @action(detail=True, methods=["patch"])
     def concluded_license(self, request: Request, pk: int) -> Response:
-        request_serializer = ConcludedLicenseSerializer(data=request.data)
+        request_serializer = ConcludedLicenseCreateUpdateSerializer(data=request.data)
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
 

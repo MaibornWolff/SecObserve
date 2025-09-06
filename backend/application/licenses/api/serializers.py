@@ -24,9 +24,14 @@ from application.authorization.services.roles_permissions import (
     get_permissions_for_role,
 )
 from application.commons.services.functions import get_comma_separated_as_list
+from application.core.api.serializers_product import (
+    NestedProductSerializer,
+    NestedProductSerializerSmall,
+)
 from application.core.queries.product import get_products
 from application.core.types import PURL_Type
 from application.licenses.models import (
+    Concluded_License,
     License,
     License_Component,
     License_Component_Evidence,
@@ -207,7 +212,7 @@ class LicenseComponentOverviewSerializer(Serializer):
     results = ListField(child=LicenseComponentOverviewElementSerializer())
 
 
-class ConcludedLicenseSerializer(Serializer):
+class ConcludedLicenseCreateUpdateSerializer(Serializer):
     manual_concluded_spdx_license = IntegerField(validators=[MinValueValidator(1)], required=False, allow_null=True)
     manual_concluded_non_spdx_license = CharField(max_length=255, required=False, allow_blank=True)
     manual_concluded_license_expression = CharField(max_length=255, required=False, allow_blank=True)
@@ -218,6 +223,37 @@ class ConcludedLicenseSerializer(Serializer):
             raise ValidationError("Only one concluded license field may be set.")
 
         return attrs
+
+
+class ConcludedLicenseSerializer(ModelSerializer):
+    product_data: NestedProductSerializer | NestedProductSerializerSmall = NestedProductSerializer(
+        source="product", read_only=True
+    )
+    user_data = UserListSerializer(source="user", read_only=True)
+    component_name_version = SerializerMethodField()
+    manual_concluded_spdx_license_id = SerializerMethodField()
+
+    def get_component_name_version(self, obj: Concluded_License) -> str:
+        component_name_version = obj.component_name
+        if obj.component_version:
+            component_name_version += f":{obj.component_version}"
+        if obj.component_purl_type:
+            component_name_version += f" ({obj.component_purl_type})"
+        return component_name_version
+
+    def get_manual_concluded_spdx_license_id(self, obj: Concluded_License) -> str:
+        if obj.manual_concluded_spdx_license:
+            return obj.manual_concluded_spdx_license.spdx_id
+
+        return ""
+
+    class Meta:
+        model = Concluded_License
+        fields = "__all__"
+
+
+class ConcludedLicenseListSerializer(ConcludedLicenseSerializer):
+    product_data = NestedProductSerializerSmall(source="product", read_only=True)
 
 
 class LicenseGroupSerializer(ModelSerializer):

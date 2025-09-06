@@ -24,6 +24,7 @@ import products from "./core/products";
 import Reviews from "./core/reviews/Reviews";
 import { Dashboard } from "./dashboard";
 import parsers from "./import_observations/parsers";
+import concluded_licenses from "./licenses/concluded_licenses";
 import LicenseAdministration from "./licenses/license_administration/LicenseAdministration";
 import license_component_evidences from "./licenses/license_component_evidences";
 import license_components from "./licenses/license_components";
@@ -67,6 +68,7 @@ const App = () => {
                     <Route path="/license/licenses" element={<LicenseAdministration />} />
                     <Route path="/license/license_groups" element={<LicenseAdministration />} />
                     <Route path="/license/license_policies" element={<LicenseAdministration />} />
+                    <Route path="/license/concluded_licenses" element={<LicenseAdministration />} />
                     <Route path="/reviews" element={<Reviews />} />
                     <Route path="/reviews/observation_reviews" element={<Reviews />} />
                     <Route path="/reviews/observation_log_approvals" element={<Reviews />} />
@@ -207,6 +209,11 @@ const App = () => {
                 <Resource
                     name="license_policies"
                     {...license_policies} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                    // nosemgrep because the props are well defined in the import
+                />
+                <Resource
+                    name="concluded_licenses"
+                    {...concluded_licenses} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
                     // nosemgrep because the props are well defined in the import
                 />
                 <Resource
