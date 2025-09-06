@@ -9,8 +9,8 @@ import {
     Show,
     TextField,
     TopToolbar,
-    useRecordContext,
     WithRecord,
+    useRecordContext,
 } from "react-admin";
 
 import concluded_licenses from ".";
@@ -22,13 +22,15 @@ const ShowActions = () => {
     return (
         <TopToolbar>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
-            <PrevNextButtons
-                linkType="show"
-                sort={{ field: "product_data.name", order: "ASC" }}
-                storeKey="concluded_licenses.embedded"
-            />
-                {concluded_license?.product_data?.permissions?.includes(PERMISSION_CONCLUDED_LICENSE_DELETE) && <DeleteWithConfirmButton />}
-                </Stack>
+                <PrevNextButtons
+                    linkType="show"
+                    sort={{ field: "product_data.name", order: "ASC" }}
+                    storeKey="concluded_licenses.embedded"
+                />
+                {concluded_license?.product_data?.permissions?.includes(PERMISSION_CONCLUDED_LICENSE_DELETE) && (
+                    <DeleteWithConfirmButton />
+                )}
+            </Stack>
         </TopToolbar>
     );
 };
