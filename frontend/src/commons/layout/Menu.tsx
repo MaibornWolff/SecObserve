@@ -21,8 +21,7 @@ import openvex from "../../vex/openvex";
 import vex_counters from "../../vex/vex_counters";
 import vex_documents from "../../vex/vex_documents";
 import { IntervalHooks } from "../IntervalHooks";
-import { feature_license_management, feature_vex_enabled } from "../functions";
-import { is_superuser } from "../functions";
+import { feature_license_management, feature_vex_enabled, is_superuser } from "../functions";
 import settings from "../settings";
 import SubMenu from "./SubMenu";
 
