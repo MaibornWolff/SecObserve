@@ -23,7 +23,7 @@ whitenoise = "6.9.0"  # https://github.com/evansd/whitenoise
 # Django REST Framework
 # ------------------------------------------------------------------------------
 djangorestframework = "3.16.1"  # https://github.com/encode/django-rest-framework
-django-cors-headers = "4.7.0" # https://github.com/adamchainz/django-cors-headers
+django-cors-headers = "4.8.0" # https://github.com/adamchainz/django-cors-headers
 # OpenAPI 3
 # ------------------------------------------------------------------------------
 drf-spectacular = "0.28.0" # https://github.com/tfranzel/drf-spectacular
