@@ -19,7 +19,7 @@ django-csp = "4.0"  # https://github.com/mozilla/django-csp
 django-picklefield = "3.3"  # https://github.com/gintas/django-picklefield 
 django-encrypted-model-fields = "0.6.5"  # https://gitlab.com/lansharkconsulting/django/django-encrypted-model-fields
 argon2-cffi = "25.1.0"  # https://github.com/hynek/argon2_cffi
-whitenoise = "6.9.0"  # https://github.com/evansd/whitenoise
+whitenoise = "6.10.0"  # https://github.com/evansd/whitenoise
 # Django REST Framework
 # ------------------------------------------------------------------------------
 djangorestframework = "3.16.1"  # https://github.com/encode/django-rest-framework
