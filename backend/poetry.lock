@@ -1125,14 +1125,14 @@ tornado = ["tornado (>=0.2)"]
 
 [[package]]
 name = "html-to-markdown"
-version = "1.11.0"
+version = "1.13.0"
 description = "A modern, type-safe Python library for converting HTML to Markdown with comprehensive tag support and customizable options"
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "html_to_markdown-1.11.0-py3-none-any.whl", hash = "sha256:cccf632d1ee05b1f136bc3034219d4cc0e480a318cb6d7fbac4032afb2828fd1"},
-    {file = "html_to_markdown-1.11.0.tar.gz", hash = "sha256:45a6b020e17ad98df1fcb2e12553a5897f78a2f6555b5a85756bde5942e14268"},
+    {file = "html_to_markdown-1.13.0-py3-none-any.whl", hash = "sha256:99067fcd8ecc1c50953e5e6d1294b640fdec65bd2f7e74a67c342f9618eab234"},
+    {file = "html_to_markdown-1.13.0.tar.gz", hash = "sha256:72c93594ec0b707307eade17ff2852e6cc52feb8d0ceb95f1b3fe6cce78eb48e"},
 ]
 
 [package.dependencies]
@@ -3061,4 +3061,4 @@ unittests = ["coverage", "django-coverage-plugin", "django-extensions"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">= 3.10, < 3.14"
-content-hash = "9687da112f06e9b14683bc20c1896261db91333f84a42a0c28ad6149901003cf"
+content-hash = "a335f957c38cef6ab089fcedb9672a8641174248cb069153826545fe41d7901e"
