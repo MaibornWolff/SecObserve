@@ -76,7 +76,7 @@ COPY ./backend/config/settings/prod.py ${APP_HOME}/config/settings/dist.py
 # single server
 COPY ./docker/backend/prod/database/BaltimoreCyberTrustRoot_combined.crt.pem ${APP_HOME}/BaltimoreCyberTrustRoot_combined.crt.pem
 # flexible server
-COPY ./docker/backend/prod/database/DigiCertGlobalRootCA.crt.pem ${APP_HOME}/DigiCertGlobalRootCA.crt.pem
+COPY ./docker/backend/prod/database/combined-ca-certificates.pem ${APP_HOME}/combined-ca-certificates.pem
 
 # kics-scan ignore-block
 # versions of dependencies from distribution are ok
