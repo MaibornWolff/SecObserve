@@ -10,11 +10,17 @@
 
 * There will be specific upgrade instructions if necessary, e.g. when there are new configuration parameters.
 
-## Release 1.37.1
+## Release 1.38.0
+
+**Noteable change**
+
+* Microsoft is rotating the root certificate for the flexible Azure Database for MySQL see [https://learn.microsoft.com/en-us/azure/mysql/flexible-server/concepts-root-certificate-rotation](https://learn.microsoft.com/en-us/azure/mysql/flexible-server/concepts-root-certificate-rotation). This release contains the new certificates.
+
+## Release 1.37.0
 
 **Breaking changes**
 
-* The API for `license_components` has been changed, due to the rename of the existing license fields to `imported_declared_license_...` in https://github.com/MaibornWolff/SecObserve/pull/3229
+* The API for `license_components` has been changed, due to the rename of the existing license fields to `imported_declared_license_...` in [https://github.com/MaibornWolff/SecObserve/pull/3229](https://github.com/MaibornWolff/SecObserve/pull/3229).
 
 ## Release 1.30.0
 
