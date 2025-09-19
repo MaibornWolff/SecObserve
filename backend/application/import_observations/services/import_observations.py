@@ -359,6 +359,14 @@ def process_license_components(  # pylint: disable=too-many-statements
         get_comma_separated_as_list(license_policy.ignore_component_types) if license_policy else []
     )
 
+    product_group_products = []
+    if vulnerability_check.product.product_group:
+        product_group_products = list(
+            Product.objects.filter(product_group=vulnerability_check.product.product_group).exclude(
+                pk=vulnerability_check.product.pk
+            )
+        )
+
     for unsaved_component in license_components:
         prepare_license_component(unsaved_component)
         existing_component = existing_components_dict.get(unsaved_component.identity_hash)
@@ -399,7 +407,7 @@ def process_license_components(  # pylint: disable=too-many-statements
                 not existing_component.manual_concluded_license_name
                 or existing_component.manual_concluded_license_name == NO_LICENSE_INFORMATION
             ):
-                apply_concluded_license(existing_component)
+                apply_concluded_license(existing_component, product_group_products)
                 set_effective_license(existing_component)
             existing_component.origin_service = vulnerability_check.service
             apply_license_policy_to_component(
@@ -431,7 +439,7 @@ def process_license_components(  # pylint: disable=too-many-statements
             unsaved_component.upload_filename = vulnerability_check.filename
 
             set_effective_license(unsaved_component)
-            apply_concluded_license(unsaved_component)
+            apply_concluded_license(unsaved_component, product_group_products)
             set_effective_license(unsaved_component)
 
             apply_license_policy_to_component(

@@ -80,6 +80,11 @@ class Permissions(IntEnum):
     License_Component_Edit = 6002
     License_Component_Delete = 6003
 
+    Concluded_License_View = 7001
+    Concluded_License_Edit = 7002
+    Concluded_License_Delete = 7003
+    Concluded_License_Create = 7004
+
     @classmethod
     def has_value(cls, value: int) -> bool:
         try:
@@ -187,6 +192,15 @@ class Permissions(IntEnum):
             Permissions.License_Component_Delete,
         }
 
+    @classmethod
+    def get_concluded_license_permissions(cls) -> set["Permissions"]:
+        return {
+            Permissions.Concluded_License_View,
+            Permissions.Concluded_License_Edit,
+            Permissions.Concluded_License_Delete,
+            Permissions.Concluded_License_Create,
+        }
+
 
 def get_roles_with_permissions() -> dict[Roles, set[Permissions]]:
     return {
@@ -201,6 +215,7 @@ def get_roles_with_permissions() -> dict[Roles, set[Permissions]]:
             Permissions.Observation_View,
             Permissions.Api_Configuration_View,
             Permissions.VEX_View,
+            Permissions.Concluded_License_View,
         },
         Roles.Upload: {
             Permissions.Product_Import_Observations,
@@ -223,6 +238,9 @@ def get_roles_with_permissions() -> dict[Roles, set[Permissions]]:
             Permissions.Api_Configuration_View,
             Permissions.VEX_View,
             Permissions.License_Component_Edit,
+            Permissions.Concluded_License_View,
+            Permissions.Concluded_License_Edit,
+            Permissions.Concluded_License_Create,
         },
         Roles.Maintainer: {
             Permissions.Product_Group_View,
@@ -266,6 +284,10 @@ def get_roles_with_permissions() -> dict[Roles, set[Permissions]]:
             Permissions.VEX_Delete,
             Permissions.License_Component_Edit,
             Permissions.License_Component_Delete,
+            Permissions.Concluded_License_View,
+            Permissions.Concluded_License_Edit,
+            Permissions.Concluded_License_Create,
+            Permissions.Concluded_License_Delete,
         },
         Roles.Owner: {
             Permissions.Product_Group_View,
@@ -314,6 +336,10 @@ def get_roles_with_permissions() -> dict[Roles, set[Permissions]]:
             Permissions.VEX_Delete,
             Permissions.License_Component_Edit,
             Permissions.License_Component_Delete,
+            Permissions.Concluded_License_View,
+            Permissions.Concluded_License_Edit,
+            Permissions.Concluded_License_Create,
+            Permissions.Concluded_License_Delete,
         },
     }
 

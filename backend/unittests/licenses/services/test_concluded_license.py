@@ -1,4 +1,4 @@
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 from django.core.management import call_command
 
@@ -30,9 +30,10 @@ class TestConcludedLicense(BaseTestCase):
     def setUp(self):
         super().setUp()
         self.license_obj = License.objects.first()
-        self.product = Product.objects.get(pk=1)
+        self.product_indirect = Product.objects.get(pk=2)
+        self.product_direct = Product.objects.get(pk=1)
         self.component = License_Component(
-            product=self.product,
+            product=self.product_direct,
             component_name="test_component",
             component_version="1.0.0",
             component_name_version="test_component:1.0.0",
@@ -43,14 +44,14 @@ class TestConcludedLicense(BaseTestCase):
         )
         self.db_user = User.objects.get(username="db_admin")
 
-    def test_apply_concluded_license_exact_match_spdx_license(self):
+    def test_apply_concluded_license_no_product_group_exact_match_spdx_license(self):
         """
         Test apply_concluded_license when there's an exact match for the component
         with a concluded_spdx_license.
         """
         # Arrange
         concluded_license = Concluded_License.objects.create(
-            product=self.product,
+            product=self.product_direct,
             component_purl_type="npm",
             component_name="test_component",
             component_version="1.0.0",
@@ -59,12 +60,43 @@ class TestConcludedLicense(BaseTestCase):
         )
 
         # Act
-        apply_concluded_license(self.component)
+        apply_concluded_license(self.component, [])
 
         # Assert
         self.assertEqual(self.component.manual_concluded_spdx_license, self.license_obj)
         self.assertEqual(self.component.manual_concluded_license_name, self.license_obj.spdx_id)
         self.assertEqual(self.component.manual_concluded_comment, f"Set manually by {str(concluded_license.user)}")
+        self.assertEqual(self.component.manual_concluded_license_expression, "")
+        self.assertEqual(self.component.manual_concluded_non_spdx_license, "")
+
+        # Clean up
+        concluded_license.delete()
+
+    def test_apply_concluded_license_with_product_group_exact_match_spdx_license(self):
+        """
+        Test apply_concluded_license when there's an exact match for the component
+        with a concluded_spdx_license for another product in the same product_group.
+        """
+        # Arrange
+        concluded_license = Concluded_License.objects.create(
+            product=self.product_indirect,
+            component_purl_type="npm",
+            component_name="test_component",
+            component_version="1.0.0",
+            manual_concluded_spdx_license=self.license_obj,
+            user=self.db_user,
+        )
+
+        # Act
+        apply_concluded_license(self.component, [self.product_indirect])
+
+        # Assert
+        self.assertEqual(self.component.manual_concluded_spdx_license, self.license_obj)
+        self.assertEqual(self.component.manual_concluded_license_name, self.license_obj.spdx_id)
+        self.assertEqual(
+            self.component.manual_concluded_comment,
+            f"Copied from product {self.product_indirect.name}, set by {str(concluded_license.user)}",
+        )
         self.assertEqual(self.component.manual_concluded_license_expression, "")
         self.assertEqual(self.component.manual_concluded_non_spdx_license, "")
 
@@ -78,7 +110,7 @@ class TestConcludedLicense(BaseTestCase):
         """
         # Arrange
         concluded_license = Concluded_License.objects.create(
-            product=self.product,
+            product=self.product_direct,
             component_purl_type="npm",
             component_name="test_component",
             component_version="1.0.0",
@@ -87,7 +119,7 @@ class TestConcludedLicense(BaseTestCase):
         )
 
         # Act
-        apply_concluded_license(self.component)
+        apply_concluded_license(self.component, [])
 
         # Assert
         self.assertIsNone(self.component.manual_concluded_spdx_license)
@@ -106,7 +138,7 @@ class TestConcludedLicense(BaseTestCase):
         """
         # Arrange
         concluded_license = Concluded_License.objects.create(
-            product=self.product,
+            product=self.product_direct,
             component_purl_type="npm",
             component_name="test_component",
             component_version="1.0.0",
@@ -115,7 +147,7 @@ class TestConcludedLicense(BaseTestCase):
         )
 
         # Act
-        apply_concluded_license(self.component)
+        apply_concluded_license(self.component, [])
 
         # Assert
         self.assertIsNone(self.component.manual_concluded_spdx_license)
@@ -127,13 +159,13 @@ class TestConcludedLicense(BaseTestCase):
         # Clean up
         concluded_license.delete()
 
-    def test_apply_concluded_license_name_match_different_version(self):
+    def test_apply_concluded_license_name_no_product_group_match_different_version(self):
         """
         Test apply_concluded_license when there's a match by name but not version.
         """
         # Arrange
         concluded_license = Concluded_License.objects.create(
-            product=self.product,
+            product=self.product_direct,
             component_purl_type="npm",
             component_name="test_component",
             component_version="2.0.0",  # Different version
@@ -142,7 +174,7 @@ class TestConcludedLicense(BaseTestCase):
         )
 
         # Act
-        apply_concluded_license(self.component)
+        apply_concluded_license(self.component, [])
 
         # Assert
         self.assertEqual(self.component.manual_concluded_spdx_license, self.license_obj)
@@ -157,12 +189,42 @@ class TestConcludedLicense(BaseTestCase):
         # Clean up
         concluded_license.delete()
 
-    def test_apply_concluded_license_no_match(self):
+    def test_apply_concluded_license_name_with_product_group_match_different_version(self):
+        """
+        Test apply_concluded_license when there's a match by name but not version.
+        """
+        # Arrange
+        concluded_license = Concluded_License.objects.create(
+            product=self.product_indirect,
+            component_purl_type="npm",
+            component_name="test_component",
+            component_version="2.0.0",  # Different version
+            manual_concluded_spdx_license=self.license_obj,
+            user=self.db_user,
+        )
+
+        # Act
+        apply_concluded_license(self.component, [self.product_indirect])
+
+        # Assert
+        self.assertEqual(self.component.manual_concluded_spdx_license, self.license_obj)
+        self.assertEqual(self.component.manual_concluded_license_name, self.license_obj.spdx_id)
+        self.assertEqual(
+            self.component.manual_concluded_comment,
+            f"Copied from product {self.product_indirect} and version {concluded_license.component_version}, set by {str(concluded_license.user)}",
+        )
+        self.assertEqual(self.component.manual_concluded_license_expression, "")
+        self.assertEqual(self.component.manual_concluded_non_spdx_license, "")
+
+        # Clean up
+        concluded_license.delete()
+
+    def test_apply_concluded_license_group_no_match(self):
         """
         Test apply_concluded_license when there's no match at all.
         """
         # Act
-        apply_concluded_license(self.component)
+        apply_concluded_license(self.component, [])
 
         # Assert
         self.assertIsNone(self.component.manual_concluded_spdx_license)
@@ -179,7 +241,7 @@ class TestConcludedLicense(BaseTestCase):
         self.component.effective_spdx_license = self.license_obj
 
         concluded_license = Concluded_License.objects.create(
-            product=self.product,
+            product=self.product_direct,
             component_purl_type="npm",
             component_name="test_component",
             component_version="1.0.0",
@@ -188,7 +250,7 @@ class TestConcludedLicense(BaseTestCase):
         )
 
         # Act
-        apply_concluded_license(self.component)
+        apply_concluded_license(self.component, [])
 
         # Assert - No changes should be made
         self.assertIsNone(self.component.manual_concluded_spdx_license)
@@ -212,7 +274,7 @@ class TestConcludedLicense(BaseTestCase):
         self.component.manual_concluded_license_name = NO_LICENSE_INFORMATION
 
         concluded_license = Concluded_License.objects.create(
-            product=self.product,
+            product=self.product_direct,
             component_purl_type="npm",
             component_name="test_component",
             component_version="1.0.0",
@@ -226,7 +288,7 @@ class TestConcludedLicense(BaseTestCase):
         # Assert
         with self.assertRaises(Concluded_License.DoesNotExist):
             Concluded_License.objects.get(
-                product=self.product,
+                product=self.product_direct,
                 component_purl_type="npm",
                 component_name="test_component",
                 component_version="1.0.0",
@@ -249,7 +311,7 @@ class TestConcludedLicense(BaseTestCase):
         # Assert
         self.assertEqual(
             Concluded_License.objects.filter(
-                product=self.product,
+                product=self.product_direct,
                 component_purl_type="npm",
                 component_name="test_component",
                 component_version="1.0.0",
@@ -276,7 +338,7 @@ class TestConcludedLicense(BaseTestCase):
 
         # Assert
         concluded_license = Concluded_License.objects.get(
-            product=self.product,
+            product=self.product_direct,
             component_purl_type="npm",
             component_name="test_component",
             component_version="1.0.0",
@@ -307,7 +369,7 @@ class TestConcludedLicense(BaseTestCase):
 
         # Create an existing concluded license with different values
         concluded_license = Concluded_License.objects.create(
-            product=self.product,
+            product=self.product_direct,
             component_purl_type="npm",
             component_name="test_component",
             component_version="1.0.0",
@@ -320,7 +382,7 @@ class TestConcludedLicense(BaseTestCase):
 
         # Assert
         updated_license = Concluded_License.objects.get(
-            product=self.product,
+            product=self.product_direct,
             component_purl_type="npm",
             component_name="test_component",
             component_version="1.0.0",

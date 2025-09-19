@@ -47,6 +47,8 @@ There is a priority for the license acknowledgement.
 2. The **imported concluded license** is used, if it is available and no manual concluded license is set.
 3. Otherwise the **imported declared license** is used for evaluation and lists if it was in the SBOM.
 
+Manually set concluded licenses are stored in a cache and will be set again for a component, when a new SBOM is imported for the same product or another product in the same product group.
+
 
 #### Evaluation of licenses
 

@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import NotFound
@@ -8,7 +10,13 @@ from rest_framework.views import APIView
 from application.access_control.queries.authorization_group import (
     get_authorization_groups,
 )
+from application.authorization.api.permissions_base import (
+    check_object_permission,
+    check_post_permission,
+)
+from application.authorization.services.roles_permissions import Permissions
 from application.licenses.models import (
+    Concluded_License,
     License_Group,
     License_Group_Authorization_Group_Member,
     License_Group_Member,
@@ -16,6 +24,20 @@ from application.licenses.models import (
     License_Policy_Authorization_Group_Member,
     License_Policy_Member,
 )
+
+
+class UserHasConcludedLicensePermission(BasePermission):
+    def has_permission(self, request: Request, view: APIView) -> bool:
+        return check_post_permission(request, Concluded_License, "product", Permissions.Concluded_License_Create)
+
+    def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool:
+        return check_object_permission(
+            request=request,
+            object_to_check=obj,
+            get_permission=Permissions.Concluded_License_View,
+            put_permission=Permissions.Concluded_License_Edit,
+            delete_permission=Permissions.Concluded_License_Delete,
+        )
 
 
 class UserHasLicenseGroupPermission(BasePermission):

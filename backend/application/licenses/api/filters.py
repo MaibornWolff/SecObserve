@@ -16,6 +16,7 @@ from django_filters import (
 from application.commons.api.extended_ordering_filter import ExtendedOrderingFilter
 from application.commons.types import Age_Choices
 from application.licenses.models import (
+    Concluded_License,
     License,
     License_Component,
     License_Component_Evidence,
@@ -28,6 +29,57 @@ from application.licenses.models import (
     License_Policy_Member,
 )
 from application.licenses.queries.license_group import get_license_groups
+
+
+class ConcludedLicenseFilter(FilterSet):
+    component_name = CharFilter(field_name="component_name", lookup_expr="icontains")
+    component_version = CharFilter(field_name="component_version", lookup_expr="icontains")
+    manual_concluded_license_expression = CharFilter(
+        field_name="manual_concluded_license_expression", lookup_expr="icontains"
+    )
+    manual_concluded_non_spdx_license = CharFilter(
+        field_name="manual_concluded_non_spdx_license", lookup_expr="icontains"
+    )
+    age = ChoiceFilter(field_name="age", method="get_age", choices=Age_Choices.AGE_CHOICES)
+
+    def get_age(
+        self,
+        queryset: QuerySet,
+        name: Any,  # pylint: disable=unused-argument
+        value: Any,
+    ) -> QuerySet:
+        days = Age_Choices.get_days_from_age(value)
+
+        if days is None:
+            return queryset
+
+        today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        time_threshold = today - timedelta(days=int(days))
+        return queryset.filter(last_updated__gte=time_threshold)
+
+    ordering = ExtendedOrderingFilter(
+        # tuple-mapping retains order
+        fields=(
+            ("product__name", "product_data.name"),
+            (
+                (
+                    "component_name",
+                    "component_version",
+                    "component_purl_type",
+                ),
+                "component_name_version",
+            ),
+            ("manual_concluded_spdx_license__spdx_id", "manual_concluded_spdx_license_id"),
+            ("manual_concluded_license_expression", "manual_concluded_license_expression"),
+            ("manual_concluded_non_spdx_license", "manual_concluded_non_spdx_license"),
+            ("user__full_name", "user_data.full_name"),
+            ("last_updated", "last_updated"),
+        ),
+    )
+
+    class Meta:
+        model = Concluded_License
+        fields = "__all__"
 
 
 class LicenseComponentFilter(FilterSet):

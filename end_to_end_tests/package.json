@@ -1,6 +1,6 @@
 {
   "name": "end_to_end_tests",
-  "version": "1.37.1",
+  "version": "1.38.0",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -9,6 +9,6 @@
   "author": "",
   "devDependencies": {
     "@playwright/test": "1.55.0",
-    "@types/node": "24.3.0"
+    "@types/node": "24.5.2"
   }
 }
