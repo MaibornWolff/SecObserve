@@ -10,6 +10,7 @@ from application.background_tasks.api.views import PeriodicTaskViewSet
 from application.core.api.views import (
     BranchNameViewSet,
     BranchViewSet,
+    ComponentViewSet,
     EvidenceViewSet,
     ObservationLogViewSet,
     ObservationTitleViewSet,
@@ -90,6 +91,7 @@ router.register("parsers", ParserViewSet, basename="parsers")
 router.register("observations", ObservationViewSet, basename="observations")
 router.register("observation_titles", ObservationTitleViewSet, basename="observation_titles")
 router.register("observation_logs", ObservationLogViewSet, basename="observation_logs")
+router.register("components", ComponentViewSet, basename="components")
 router.register("general_rules", GeneralRuleViewSet, basename="general_rules")
 router.register("api_configurations", ApiConfigurationViewSet, basename="api_configurations")
 router.register("product_rules", ProductRuleViewSet, basename="product_rules")

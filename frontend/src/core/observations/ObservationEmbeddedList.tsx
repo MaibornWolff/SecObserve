@@ -193,7 +193,7 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
                             )
                         }
                         resource="observations"
-                        expand={<ObservationExpand />}
+                        expand={<ObservationExpand showComponent={true} />}
                         expandSingle
                     >
                         {product?.has_branches && <TextField source="branch_name" label="Branch / Version" />}

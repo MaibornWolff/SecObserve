@@ -56,7 +56,7 @@ const ObservationDashboardList = () => {
                             rowClick={ShowObservations}
                             bulkActionButtons={false}
                             resource="observations"
-                            expand={<ObservationExpand />}
+                            expand={<ObservationExpand showComponent={true} />}
                             expandSingle
                         >
                             <TextField source="product_data.name" label="Product" />
