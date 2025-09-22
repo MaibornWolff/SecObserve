@@ -56,7 +56,10 @@ from application.core.api.permissions import (
     UserHasProductPermission,
     UserHasServicePermission,
 )
-from application.core.api.serializers_component import ComponentSerializer
+from application.core.api.serializers_component import (
+    ComponentNameSerializer,
+    ComponentSerializer,
+)
 from application.core.api.serializers_observation import (
     CountSerializer,
     EvidenceSerializer,
@@ -878,8 +881,25 @@ class ProductApiTokenViewset(ViewSet):
 class ComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     serializer_class = ComponentSerializer
     filterset_class = ComponentFilter
-    # permission_classes = (IsAuthenticated,)
-    permission_classes = []
+    permission_classes = (IsAuthenticated,)
+    queryset = Component.objects.none()
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ["name"]
+
+    def get_queryset(self) -> QuerySet[Component]:
+        return (
+            get_components()
+            .select_related("product")
+            .select_related("product__product_group")
+            .select_related("branch")
+            .select_related("origin_service")
+        )
+
+
+class ComponentNameViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
+    serializer_class = ComponentNameSerializer
+    filterset_class = ComponentFilter
+    permission_classes = (IsAuthenticated,)
     queryset = Component.objects.none()
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["name"]

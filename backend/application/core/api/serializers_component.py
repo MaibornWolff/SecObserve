@@ -56,3 +56,9 @@ class ComponentSerializer(ModelSerializer):
     class Meta:
         model = Component
         fields = "__all__"
+
+
+class ComponentNameSerializer(ModelSerializer):
+    class Meta:
+        model = Component
+        fields = ["id", "component_name_version"]

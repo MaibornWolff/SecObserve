@@ -22,7 +22,7 @@ def get_components() -> QuerySet[Component]:
     user = get_current_user()
 
     if user is None:
-        return Component.objects.all()
+        return Component.objects.none()
 
     components = Component.objects.all()
 

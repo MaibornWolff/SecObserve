@@ -12,6 +12,7 @@ const ShowActions = () => {
             <PrevNextButtons
                 linkType="show"
                 sort={{ field: "component_name_version_type", order: "ASC" }}
+                queryOptions={{ meta: { api_resource: "component_names" } }}
                 storeKey="components.list"
             />
         </TopToolbar>
