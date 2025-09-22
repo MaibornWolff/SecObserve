@@ -48,12 +48,12 @@ ObservationFlag AS (
 SELECT 
     MD5(
 		CONCAT(
-			CAST(COALESCE(cd.product_id, 0) as char),
-			CAST(COALESCE(cd.branch_id, 0) as char),
-			CAST(COALESCE(cd.origin_service_id, 0) as char),
-			COALESCE(cd.component_name_version, 'null'),
-			COALESCE(cd.component_purl_type, 'null'),
-			COALESCE(cd.component_dependencies, 'null')
+			CAST(COALESCE(cd.product_id, 111) as CHAR(255)),
+			CAST(COALESCE(cd.branch_id, 222) as CHAR(255)),
+			CAST(COALESCE(cd.origin_service_id, 333) as CHAR(255)),
+			COALESCE(cd.component_name_version, 'no_name_version'),
+			COALESCE(cd.component_purl_type, 'no_purl_type'),
+			COALESCE(cd.component_dependencies, 'no_dependencies')
 			)		
 		) AS id,
     cd.product_id as product_id,
@@ -71,10 +71,20 @@ SELECT
 FROM CombinedData cd
 LEFT JOIN ObservationFlag ON 
     cd.product_id = ObservationFlag.product_id
-	AND ((cd.branch_id = ObservationFlag.branch_id) IS TRUE OR (cd.branch_id IS NULL AND ObservationFlag.branch_id IS NULL))
-	AND ((cd.origin_service_id = ObservationFlag.origin_service_id) IS TRUE OR (cd.origin_service_id IS NULL AND ObservationFlag.origin_service_id IS NULL))
+	AND (
+        (cd.branch_id = ObservationFlag.branch_id) IS TRUE OR 
+        (cd.branch_id IS NULL AND ObservationFlag.branch_id IS NULL)
+        )
+	AND (
+        (cd.origin_service_id = ObservationFlag.origin_service_id) IS TRUE OR 
+        (cd.origin_service_id IS NULL AND ObservationFlag.origin_service_id IS NULL)
+        )
     AND cd.component_name_version = ObservationFlag.component_name_version 
-	AND ((cd.component_purl_type = ObservationFlag.component_purl_type) IS TRUE OR (cd.component_purl_type IS NULL AND ObservationFlag.component_purl_type IS NULL));
+	AND (
+        (cd.component_purl_type = ObservationFlag.component_purl_type) IS TRUE OR 
+        (cd.component_purl_type IS NULL AND ObservationFlag.component_purl_type IS NULL)
+        )
+;
 """
 
 DROP_SQL = "DROP VIEW IF EXISTS core_component;"
