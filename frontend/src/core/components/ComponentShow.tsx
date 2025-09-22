@@ -26,10 +26,12 @@ export const ComponentComponent = () => {
                     <Paper sx={{ marginBottom: 2, padding: 2 }}>
                         <ComponentShowComponent component={component} />
                     </Paper>
-                    {component?.has_observations && <Paper sx={{ marginBottom: 1, padding: 2 }}>
-                        <Typography variant="h6">Observations</Typography>
-                        <ObservationsComponentList component={component} />
-                    </Paper>}
+                    {component?.has_observations && (
+                        <Paper sx={{ marginBottom: 1, padding: 2 }}>
+                            <Typography variant="h6">Observations</Typography>
+                            <ObservationsComponentList component={component} />
+                        </Paper>
+                    )}
                 </Box>
             )}
         />

@@ -1,5 +1,14 @@
 import { Fragment } from "react";
-import { AutocompleteInput, BooleanField, Datagrid, List, NullableBooleanInput, ReferenceInput, TextField, TextInput } from "react-admin";
+import {
+    AutocompleteInput,
+    BooleanField,
+    Datagrid,
+    List,
+    NullableBooleanInput,
+    ReferenceInput,
+    TextField,
+    TextInput,
+} from "react-admin";
 
 import components from ".";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
@@ -20,15 +29,15 @@ const listFilters = [
     >
         <AutocompleteInputMedium optionText="name" />
     </ReferenceInput>,
-        <ReferenceInput
-            source="product_group"
-            reference="product_groups"
-            sort={{ field: "name", order: "ASC" }}
-            queryOptions={{ meta: { api_resource: "product_group_names" } }}
-            alwaysOn
-        >
-            <AutocompleteInputMedium optionText="name" />
-        </ReferenceInput>,
+    <ReferenceInput
+        source="product_group"
+        reference="product_groups"
+        sort={{ field: "name", order: "ASC" }}
+        queryOptions={{ meta: { api_resource: "product_group_names" } }}
+        alwaysOn
+    >
+        <AutocompleteInputMedium optionText="name" />
+    </ReferenceInput>,
     <ReferenceInput
         source="branch"
         reference="branches"
