@@ -884,7 +884,7 @@ class ComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     permission_classes = (IsAuthenticated,)
     queryset = Component.objects.none()
     filter_backends = [SearchFilter, DjangoFilterBackend]
-    search_fields = ["name"]
+    search_fields = ["component_name_version"]
 
     def get_queryset(self) -> QuerySet[Component]:
         return (
@@ -902,7 +902,7 @@ class ComponentNameViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     permission_classes = (IsAuthenticated,)
     queryset = Component.objects.none()
     filter_backends = [SearchFilter, DjangoFilterBackend]
-    search_fields = ["name"]
+    search_fields = ["component_name_version"]
 
     def get_queryset(self) -> QuerySet[Component]:
         return get_components()
