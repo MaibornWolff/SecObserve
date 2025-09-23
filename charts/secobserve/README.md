@@ -1,16 +1,16 @@
 # secobserve
 
-![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.30.1](https://img.shields.io/badge/AppVersion-1.30.1-informational?style=flat-square)
+![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.38.0](https://img.shields.io/badge/AppVersion-1.38.0-informational?style=flat-square)
 
 A Helm chart to deploy SecObserve, an open-source vulnerability and license management system designed for software development teams and cloud-native environments. SecObserve helps teams identify, manage, and remediate security vulnerabilities and license compliance issues across their software projects, enhancing visibility and improving DevSecOps workflows.
 
-**Homepage:** <https://stacktrack.com/>
+**Homepage:** <https://github.com/MaibornWolff/SecObserve>
 
 ## Maintainers
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Servana Support | <support@servanamanaged.com> |  |
+| SecObserve community |  |  |
 
 ## Source Code
 
@@ -72,7 +72,7 @@ A Helm chart to deploy SecObserve, an open-source vulnerability and license mana
 | backend.env[8].valueFrom.secretKeyRef.key | string | `"password"` |  |
 | backend.env[8].valueFrom.secretKeyRef.name | string | `"release-name-postgresql"` |  |
 | backend.env[9].name | string | `"ALLOWED_HOSTS"` |  |
-| backend.env[9].value | string | `"secobserve.dev"` |  |
+| backend.env[9].value | string | `"*"` |  |
 | backend.image.pullPolicy | string | `"IfNotPresent"` |  |
 | backend.image.registry | string | `"docker.io"` |  |
 | backend.image.repository | string | `"maibornwolff/secobserve-backend"` |  |
