@@ -62,7 +62,7 @@ backend:
           name: release-name-postgresql
           key: password
     - name: ALLOWED_HOSTS
-      value: "secobserve.dev"
+      value: "*" # For production, set this to your frontend domain, e.g. secobserve.dev
     - name: CORS_ALLOWED_ORIGINS
       value: https://secobserve.dev
     - name: DJANGO_SECRET_KEY
@@ -125,7 +125,7 @@ ingress:
   #   # Set the rewrite target for the ingress
   #   nginx.ingress.kubernetes.io/rewrite-target: /
   #   # Configure a custom timeout for the proxy
-  #   nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+  #   nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
   #   nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
   # # Define the hostname for the ingress
   # hostname: secobserve.dev

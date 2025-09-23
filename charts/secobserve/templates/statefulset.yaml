@@ -111,14 +111,14 @@ spec:
               containerPort: 5000
           livenessProbe:
             httpGet:
-              path: /
+              path: /api/status/health/
               port: 5000
             initialDelaySeconds: 300
             timeoutSeconds: 5
             failureThreshold: 12
           readinessProbe:
             httpGet:
-              path: /
+              path: /api/status/health/
               port: 5000
             initialDelaySeconds: 20
             timeoutSeconds: 5
