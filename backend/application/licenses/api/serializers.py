@@ -108,7 +108,7 @@ class LicenseComponentSerializer(ModelSerializer):
     evidences: Optional[NestedLicenseComponentEvidenceSerializer] = NestedLicenseComponentEvidenceSerializer(many=True)
     effective_license_type = SerializerMethodField()
     title = SerializerMethodField()
-    permissions:Optional[SerializerMethodField]  = SerializerMethodField()
+    permissions: Optional[SerializerMethodField] = SerializerMethodField()
 
     class Meta:
         model = License_Component
