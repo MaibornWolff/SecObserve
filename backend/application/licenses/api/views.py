@@ -18,7 +18,10 @@ from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CON
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from application.access_control.services.current_user import get_current_user
-from application.authorization.services.authorization import user_has_permission_or_403
+from application.authorization.services.authorization import (
+    user_has_permission,
+    user_has_permission_or_403,
+)
 from application.authorization.services.roles_permissions import Permissions
 from application.core.models import Branch, Product
 from application.core.queries.branch import get_branch_by_id
@@ -189,9 +192,8 @@ class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
         if not component_id:
             raise ValidationError("No component id provided")
         component = get_component_by_id(component_id)
-        if not component:
-            raise NotFound()
-        user_has_permission_or_403(component.product, Permissions.Product_View)
+        if not component or not user_has_permission(component.product, Permissions.Product_View):
+            raise NotFound("No Component matches the given query.")
         license_component = License_Component.objects.filter(
             product=component.product,
             branch=component.branch,
