@@ -25,7 +25,7 @@ export const ComponentComponent = () => {
             render={(component) => (
                 <Box width={"100%"}>
                     <Paper sx={{ marginBottom: 2, padding: 2 }}>
-                        <ComponentShowComponent component={component} />
+                        <ComponentShowComponent component={component} icon={true} />
                     </Paper>
                     {component?.has_observations && (
                         <Paper sx={{ marginBottom: 1, padding: 2 }}>

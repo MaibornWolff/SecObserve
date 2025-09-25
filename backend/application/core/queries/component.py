@@ -11,7 +11,7 @@ from application.core.models import (
 )
 
 
-def get_component_by_id(component_id: int) -> Optional[Component]:
+def get_component_by_id(component_id: str) -> Optional[Component]:
     try:
         return Component.objects.get(id=component_id)
     except Component.DoesNotExist:

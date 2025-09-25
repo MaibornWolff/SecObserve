@@ -1,10 +1,50 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
-import { Labeled, ReferenceField, TextField, WithRecord } from "react-admin";
+import { useEffect, useState } from "react";
+import { Identifier, Labeled, ReferenceField, TextField, WithRecord, useNotify, useRecordContext } from "react-admin";
+
+import { httpClient } from "../../commons/ra-data-django-rest-framework";
+import LicenseComponentShowLicense from "../../licenses/license_components/LicenseComponentShowLicense";
 
 const ComponentShowAside = () => {
+    const [licenseComponent, setLicenseComponent] = useState(undefined);
+    const notify = useNotify();
+    const component = useRecordContext();
+
+    useEffect(() => {
+        if (component) {
+            get_data(component.id);
+        }
+    }, [component]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    function get_data(component_id: Identifier) {
+        httpClient(
+            window.__RUNTIME_CONFIG__.API_BASE_URL + "/license_components/for_component/?component=" + component_id,
+            {
+                method: "GET",
+            }
+        )
+            .then((result) => {
+                if (result.status === 200) {
+                    setLicenseComponent(result.json);
+                }
+            })
+            .catch((error) => {
+                if (error !== undefined) {
+                    notify(error.message, {
+                        type: "warning",
+                    });
+                } else {
+                    notify("Error while loading License Component", {
+                        type: "warning",
+                    });
+                }
+            });
+    }
+
     return (
         <Box width={"33%"} marginLeft={2}>
             <MetaData />
+            {licenseComponent && <License licenseComponent={licenseComponent} />}
         </Box>
     );
 };
@@ -40,6 +80,18 @@ const MetaData = () => {
                 </Paper>
             )}
         />
+    );
+};
+
+type LicenseProps = {
+    licenseComponent?: any;
+};
+
+const License = ({ licenseComponent }: LicenseProps) => {
+    return (
+        <Paper sx={{ marginBottom: 2, padding: 2 }}>
+            <LicenseComponentShowLicense licenseComponent={licenseComponent} direction="column" />
+        </Paper>
     );
 };
 

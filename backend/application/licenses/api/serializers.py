@@ -183,6 +183,7 @@ class LicenseComponentListSerializer(LicenseComponentSerializer):
     license_policy_id = None
     license_policy_name = None
     evidences = None
+    permissions = []
 
     class Meta:
         model = License_Component

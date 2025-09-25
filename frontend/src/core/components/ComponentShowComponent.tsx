@@ -1,5 +1,5 @@
 import { Stack, Typography } from "@mui/material";
-import { Labeled, RecordContextProvider, TextField, useRecordContext } from "react-admin";
+import { Labeled, RecordContextProvider, TextField } from "react-admin";
 
 import components from ".";
 import TextUrlField from "../../commons/custom_fields/TextUrlField";
@@ -8,25 +8,24 @@ import { useStyles } from "../../commons/layout/themes";
 import MermaidDependencies from "../observations/Mermaid_Dependencies";
 
 type ComponentShowComponentProps = {
-    component?: any;
+    component: any;
+    icon: boolean;
 };
 
-const ComponentShowComponent = ({ component }: ComponentShowComponentProps) => {
+const ComponentShowComponent = ({ component, icon }: ComponentShowComponentProps) => {
     const { classes } = useStyles();
-
-    const component_record = useRecordContext();
-    if (!component) {
-        component = component_record;
-    }
 
     return (
         <RecordContextProvider value={component}>
             {component && (
                 <Stack spacing={1}>
-                    <Typography variant="h6">
-                        <components.icon />
-                        &nbsp;&nbsp;Component
-                    </Typography>
+                    {icon && (
+                        <Typography variant="h6">
+                            <components.icon />
+                            &nbsp;&nbsp;Component
+                        </Typography>
+                    )}
+                    {!icon && <Typography variant="h6">Component</Typography>}
                     <Stack direction="row" spacing={4}>
                         {component.component_name != "" && (
                             <Labeled>
