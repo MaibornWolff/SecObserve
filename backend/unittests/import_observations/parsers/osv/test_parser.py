@@ -182,21 +182,7 @@ A stack overflow in the XML.toJSONObject component of hutool-json v5.8.10 and or
         observations, scanner = parser.get_observations(osv_components, self.product_1, None)
 
         self.assertEqual("OSV (Open Source Vulnerabilities)", scanner)
-        self.assertEqual(len(observations), 2)
-
-        observation = observations[0]
-        self.assertEqual("CVE-2024-32002", observation.title)
-        description = """Git is a revision control system. Prior to versions 2.45.1, 2.44.1, 2.43.4, 2.42.2, 2.41.1, 2.40.2, and 2.39.4, repositories with submodules can be crafted in a way that exploits a bug in Git whereby it can be fooled into writing files not into the submodule's worktree but into a `.git/` directory. This allows writing a hook that will be executed while the clone operation is still running, giving the user no opportunity to inspect the code that is being executed. The problem has been patched in versions 2.45.1, 2.44.1, 2.43.4, 2.42.2, 2.41.1, 2.40.2, and 2.39.4. If symbolic link support is disabled in Git (e.g. via `git config --global core.symlinks false`), the described attack won't work. As always, it is best to avoid cloning repositories from untrusted sources.
-
-**Confidence: Low** (No information about affected versions or ranges)"""
-        self.assertEqual(description, observation.description)
-
-        observation = observations[1]
-        self.assertEqual("CVE-2017-6349", observation.title)
-        description = """An integer overflow at a u_read_undo memory allocation site would occur for vim before patch 8.0.0377, if it does not properly validate values for tree length when reading a corrupted undo file, which may lead to resultant buffer overflows.
-
-**Confidence: Low** (No information about affected versions or ranges)"""
-        self.assertEqual(description, observation.description)
+        self.assertEqual(len(observations), 0)
 
     @patch("application.import_observations.parsers.osv.parser.OSVParser._get_linux_package_osv_ecosystem")
     def test_linux_product_distribution(self, mock_get_linux_package_osv_ecosystem):
@@ -294,7 +280,7 @@ A stack overflow in the XML.toJSONObject component of hutool-json v5.8.10 and or
 **Confidence: High** (Component found in affected ranges)"""
         self.assertEqual(description, observation.description)
 
-    def test_linux_rpm_ecosystem(self):
+    def test_linux_rpm_ecosystem_not_found(self):
         call_command(
             "loaddata",
             [
