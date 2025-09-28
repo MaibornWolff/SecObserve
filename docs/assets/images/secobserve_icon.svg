@@ -3,7 +3,7 @@
    viewBox="0 0 448.00003 448"
    version="1.1"
    id="svg4"
-   sodipodi:docname="secobserve_white_icon.svg"
+   sodipodi:docname="secobserve_icon.svg"
    inkscape:export-filename="Font_Awesome_5_solid_binoculars.png"
    inkscape:export-xdpi="323.47"
    inkscape:export-ydpi="323.47"
@@ -27,35 +27,35 @@
      inkscape:deskcolor="#d1d1d1"
      showgrid="false"
      inkscape:zoom="0.4786668"
-     inkscape:cx="1094.7072"
+     inkscape:cx="3649.7204"
      inkscape:cy="480.50126"
      inkscape:current-layer="svg4" />
   <g
      id="g4"
      transform="scale(14.933334,15.033557)"
-     style="fill:#ffffff;fill-opacity:1">
+     style="fill:#1e194b;fill-opacity:1">
     <path
        d="m 18.7,17.9 c -0.5,0 -0.7,-0.4 -0.7,-1 V 6 h 8 l 4,15 v 1 6.8 c 0,0.5 -0.4,1 -1,1 h -8.4 c -0.5,0 -0.6,-0.4 -0.6,-1 V 17.9 Z"
        id="path1"
-       style="fill:#ffffff;fill-opacity:1" />
+       style="fill:#1e194b;fill-opacity:1" />
     <path
        d="m 11.3,17.9 c 0.5,0 0.7,-0.4 0.7,-1 V 6 H 4 L 0,21 v 1 6.8 c 0,0.5 0.4,1 1,1 h 8.4 c 0.5,0 0.7,-0.4 0.7,-1 V 17.9 Z"
        id="path2"
-       style="fill:#ffffff;fill-opacity:1" />
+       style="fill:#1e194b;fill-opacity:1" />
     <path
        d="M 7,4 V 1 C 7,0.5 7.4,0 8,0 h 3 c 0.5,0 1,0.4 1,1 v 3 z"
        id="path3"
-       style="fill:#ffffff;fill-opacity:1" />
+       style="fill:#1e194b;fill-opacity:1" />
     <path
        d="M 18,4 V 1 c 0,-0.5 0.4,-1 1,-1 h 3 c 0.5,0 1,0.4 1,1 v 3 z"
        id="path4"
-       style="fill:#ffffff;fill-opacity:1" />
+       style="fill:#1e194b;fill-opacity:1" />
     <rect
        x="14"
        y="6"
        width="2"
        height="11"
        id="rect4"
-       style="fill:#ffffff;fill-opacity:1" />
+       style="fill:#1e194b;fill-opacity:1" />
   </g>
 </svg>
