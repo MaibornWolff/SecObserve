@@ -69,6 +69,7 @@ nav:
     - Installation: getting_started/installation.md
     - Configuration: getting_started/configuration.md
     - Upgrading: getting_started/upgrading.md
+    - Acknowledgements: getting_started/acknowledgements.md
   - Usage:
     - Import observations: usage/import_observations.md
     - Upload SBOMs: usage/upload_sbom.md
