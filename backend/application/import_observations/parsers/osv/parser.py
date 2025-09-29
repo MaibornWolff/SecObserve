@@ -250,7 +250,12 @@ class OSVParser(BaseParser):
             affected_ecosystem = package.get("ecosystem")
             affected_name = package.get("name")
 
-            if package_osv_ecosystem == affected_ecosystem and package_name == affected_name:
+            if (
+                affected_ecosystem
+                and package_osv_ecosystem
+                and affected_ecosystem.startswith(package_osv_ecosystem)
+                and package_name == affected_name
+            ):
                 affected.append(affected_item)
 
         return affected
