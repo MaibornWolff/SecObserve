@@ -36,7 +36,8 @@ class TestSPDXParser(TestCase):
             self.assertEqual(124, len(license_components))
 
             license_component = license_components[1]
-            self.assertEqual("", license_component.unsaved_license)
+            self.assertEqual([], license_component.unsaved_declared_licenses)
+            self.assertEqual([], license_component.unsaved_concluded_licenses)
             self.assertEqual(".python-rundeps", license_component.component_name)
             self.assertEqual("20241001.223602", license_component.component_version)
             self.assertEqual(
@@ -54,7 +55,8 @@ maibornwolff/secobserve-backend:1.20.0 --> alpine:3.20.3"""
             )
 
             license_component = license_components[2]
-            self.assertEqual("BSD-3-Clause", license_component.unsaved_license)
+            self.assertEqual([], license_component.unsaved_declared_licenses)
+            self.assertEqual(["BSD-3-Clause"], license_component.unsaved_concluded_licenses)
             self.assertEqual("Django", license_component.component_name)
             self.assertEqual("", license_component.component_version)
             self.assertEqual(
@@ -71,19 +73,25 @@ maibornwolff/secobserve-backend:1.20.0 --> alpine:3.20.3"""
             )
 
             license_component = license_components[3]
-            self.assertEqual("MIT", license_component.unsaved_license)
+            self.assertEqual(["MIT"], license_component.unsaved_declared_licenses)
+            self.assertEqual([], license_component.unsaved_concluded_licenses)
             self.assertEqual("PyJWT", license_component.component_name)
             self.assertEqual("2.9.0", license_component.component_version)
 
             license_component = license_components[4]
-            self.assertEqual("", license_component.unsaved_license)
+            self.assertEqual([], license_component.unsaved_declared_licenses)
+            self.assertEqual([], license_component.unsaved_concluded_licenses)
             self.assertEqual("PyMySQL", license_component.component_name)
             self.assertEqual("1.1.1", license_component.component_version)
 
             license_component = license_components[89]
             self.assertEqual(
-                "Artistic-1.0-Perl AND GPL-1.0-or-later",
-                license_component.unsaved_license,
+                ["Artistic-1.0-Perl AND GPL-1.0-or-later"],
+                license_component.unsaved_declared_licenses,
+            )
+            self.assertEqual(
+                ["Artistic-1.0-Perl AND GPL-1.0-or-later"],
+                license_component.unsaved_concluded_licenses,
             )
             self.assertEqual("perl", license_component.component_name)
             self.assertEqual("5.38.2-r0", license_component.component_version)

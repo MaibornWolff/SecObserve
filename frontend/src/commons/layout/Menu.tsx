@@ -6,6 +6,8 @@ import { Fragment, useEffect, useState } from "react";
 import { DashboardMenuItem, MenuItemLink, MenuProps, useSidebarState } from "react-admin";
 
 import administration from "../../access_control/access_control_administration";
+import periodic_tasks from "../../background_tasks/periodic_tasks";
+import components from "../../core/components";
 import observations from "../../core/observations";
 import product_groups from "../../core/product_groups";
 import products from "../../core/products";
@@ -15,12 +17,12 @@ import notifications from "../../notifications";
 import { get_notification_count, update_notification_count } from "../../notifications/notification_count";
 import general_rules from "../../rules/general_rules";
 import csaf from "../../vex/csaf";
+import cyclonedx from "../../vex/cyclonedx";
 import openvex from "../../vex/openvex";
 import vex_counters from "../../vex/vex_counters";
 import vex_documents from "../../vex/vex_documents";
 import { IntervalHooks } from "../IntervalHooks";
-import { feature_license_management, feature_vex_enabled } from "../functions";
-import { is_superuser } from "../functions";
+import { feature_license_management, feature_vex_enabled, is_superuser } from "../functions";
 import settings from "../settings";
 import SubMenu from "./SubMenu";
 
@@ -81,6 +83,13 @@ const Menu = ({ dense = false }: MenuProps) => {
                     dense={dense}
                 />
                 <MenuItemLink
+                    to="/components"
+                    state={{ _scrollToTop: true }}
+                    primaryText="Components"
+                    leftIcon={<components.icon />}
+                    dense={dense}
+                />
+                <MenuItemLink
                     to="/reviews"
                     state={{ _scrollToTop: true }}
                     primaryText="Reviews"
@@ -111,6 +120,13 @@ const Menu = ({ dense = false }: MenuProps) => {
                             state={{ _scrollToTop: true }}
                             primaryText="CSAF"
                             leftIcon={<csaf.icon />}
+                            dense={dense}
+                        />
+                        <MenuItemLink
+                            to="/vex/cyclonedx"
+                            state={{ _scrollToTop: true }}
+                            primaryText="CycloneDX"
+                            leftIcon={<cyclonedx.icon />}
                             dense={dense}
                         />
                         <MenuItemLink
@@ -160,6 +176,15 @@ const Menu = ({ dense = false }: MenuProps) => {
                             state={{ _scrollToTop: true }}
                             primaryText="Settings"
                             leftIcon={<settings.icon />}
+                            dense={dense}
+                        />
+                    )}
+                    {is_superuser() && (
+                        <MenuItemLink
+                            to="/periodic_tasks"
+                            state={{ _scrollToTop: true }}
+                            primaryText="Periodic Tasks"
+                            leftIcon={<periodic_tasks.icon />}
                             dense={dense}
                         />
                     )}

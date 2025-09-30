@@ -12,7 +12,6 @@ import {
     NumberField,
     PrevNextButtons,
     ReferenceField,
-    RichTextField,
     Show,
     Tab,
     TabbedShowLayout,
@@ -33,6 +32,7 @@ import {
     PERMISSION_PRODUCT_RULE_APPLY,
     PERMISSION_PRODUCT_RULE_CREATE,
 } from "../../access_control/types";
+import MarkdownField from "../../commons/custom_fields/MarkdownField";
 import { feature_email } from "../../commons/functions";
 import MetricsHeader from "../../metrics/MetricsHeader";
 import MetricsSeveritiesCurrent from "../../metrics/MetricsSeveritiesCurrent";
@@ -48,6 +48,7 @@ import ProductMemberAdd from "../product_members/ProductMemberAdd";
 import ProductMemberEmbeddedList from "../product_members/ProductMemberEmbeddedList";
 import product from "../products";
 import ExportMenu from "../products/ExportMenu";
+import ProductCreateDialog from "../products/ProductCreateDialog";
 import ProductEmbeddedList from "../products/ProductEmbeddedList";
 import ProductGroupHeader from "./ProductGroupHeader";
 import ProductGroupReviews from "./ProductGroupReviews";
@@ -79,6 +80,7 @@ const ProductGroupShow = () => {
                     render={(product_group) => (
                         <TabbedShowLayout tabs={<TabbedShowLayoutTabs variant="scrollable" scrollButtons="auto" />}>
                             <Tab label="Products" icon={<product.icon />}>
+                                <ProductCreateDialog productGroupId={product_group.id} />
                                 <ProductEmbeddedList product_group={product_group} />
                             </Tab>
                             <Tab label="Metrics" path="metrics" icon={<BarChartIcon />}>
@@ -118,7 +120,7 @@ const ProductGroupShow = () => {
                                     </Labeled>
                                     {product_group.description && (
                                         <Labeled>
-                                            <RichTextField source="description" label="Description" />
+                                            <MarkdownField content={product_group.description} label="Description" />
                                         </Labeled>
                                     )}
                                 </Stack>

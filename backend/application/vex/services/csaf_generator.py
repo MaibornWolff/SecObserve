@@ -5,9 +5,9 @@ from typing import Optional
 import jsonpickle
 from rest_framework.exceptions import NotFound
 
-from application.access_control.services.authorization import user_has_permission_or_403
 from application.access_control.services.current_user import get_current_user
-from application.access_control.services.roles_permissions import Permissions
+from application.authorization.services.authorization import user_has_permission_or_403
+from application.authorization.services.roles_permissions import Permissions
 from application.core.models import Branch, Product
 from application.vex.models import CSAF, CSAF_Branch, CSAF_Revision, CSAF_Vulnerability
 from application.vex.queries.csaf import get_csaf_by_document_id
@@ -27,8 +27,6 @@ from application.vex.services.csaf_generator_vulnerability import (
     set_vulnerability_description,
 )
 from application.vex.services.vex_base import (
-    check_and_get_product,
-    check_branch_names,
     check_product_or_vulnerabilities,
     check_vulnerability_names,
     create_document_base_id,
@@ -40,9 +38,9 @@ from application.vex.types import CSAFProductTree, CSAFRoot, CSAFVulnerability
 
 @dataclass()
 class CSAFCreateParameters:
-    product_id: int
+    product: Optional[Product]
     vulnerability_names: list[str]
-    branch_names: list[str]
+    branches: list[Branch]
     document_id_prefix: str
     title: str
     publisher_name: str
@@ -70,13 +68,8 @@ class CSAFContent:
 
 
 def create_csaf_document(parameters: CSAFCreateParameters) -> Optional[CSAFRoot]:
-    check_product_or_vulnerabilities(parameters.product_id, parameters.vulnerability_names)
-    product = check_and_get_product(parameters.product_id)
-    if product:
-        user_has_permission_or_403(product, Permissions.VEX_Create)
-
+    check_product_or_vulnerabilities(parameters.product, parameters.vulnerability_names)
     check_vulnerability_names(parameters.vulnerability_names)
-    branches = check_branch_names(parameters.branch_names, product)
 
     user = get_current_user()
     if not user:
@@ -85,7 +78,7 @@ def create_csaf_document(parameters: CSAFCreateParameters) -> Optional[CSAFRoot]
     document_base_id = create_document_base_id(parameters.document_id_prefix)
 
     csaf = CSAF.objects.create(
-        product=product,
+        product=parameters.product,
         document_id_prefix=parameters.document_id_prefix,
         document_base_id=document_base_id,
         version=1,
@@ -108,15 +101,17 @@ def create_csaf_document(parameters: CSAFCreateParameters) -> Optional[CSAFRoot]
             vulnerability_name = ""
         CSAF_Vulnerability.objects.create(csaf=csaf, name=vulnerability_name)
 
-    for branch in branches:
+    for branch in parameters.branches:
         CSAF_Branch.objects.create(csaf=csaf, branch=branch)
 
     csaf_root = create_csaf_root(csaf)
 
     vulnerabilities = []
 
-    if product:
-        vulnerabilities, product_tree = _get_content_for_product(product, parameters.vulnerability_names, branches)
+    if parameters.product:
+        vulnerabilities, product_tree = _get_content_for_product(
+            parameters.product, parameters.vulnerability_names, parameters.branches
+        )
     else:
         vulnerabilities, product_tree = _get_content_for_vulnerabilities(parameters.vulnerability_names)
 

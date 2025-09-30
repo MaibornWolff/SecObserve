@@ -5,6 +5,7 @@ from django.apps import apps
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import (
     CASCADE,
+    DO_NOTHING,
     PROTECT,
     SET_NULL,
     BooleanField,
@@ -27,7 +28,7 @@ from application.core.types import (
     OSVLinuxDistribution,
     Severity,
     Status,
-    VexJustification,
+    VEX_Justification,
 )
 from application.issue_tracker.types import Issue_Tracker
 from application.licenses.types import License_Policy_Evaluation_Result
@@ -436,6 +437,7 @@ class Observation(Model):
     origin_component_purl_type = CharField(max_length=16, blank=True)
     origin_component_cpe = CharField(max_length=255, blank=True)
     origin_component_dependencies = TextField(max_length=32768, blank=True)
+    origin_component_cyclonedx_bom_link = CharField(max_length=512, blank=True)
 
     origin_docker_image_name = CharField(max_length=255, blank=True)
     origin_docker_image_tag = CharField(max_length=255, blank=True)
@@ -525,12 +527,14 @@ class Observation(Model):
 
     has_potential_duplicates = BooleanField(default=False)
 
-    current_vex_justification = CharField(max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True)
-    parser_vex_justification = CharField(max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True)
-    vex_vex_justification = CharField(max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True)
-    rule_vex_justification = CharField(max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True)
+    current_vex_justification = CharField(
+        max_length=64, choices=VEX_Justification.VEX_JUSTIFICATION_CHOICES, blank=True
+    )
+    parser_vex_justification = CharField(max_length=64, choices=VEX_Justification.VEX_JUSTIFICATION_CHOICES, blank=True)
+    vex_vex_justification = CharField(max_length=64, choices=VEX_Justification.VEX_JUSTIFICATION_CHOICES, blank=True)
+    rule_vex_justification = CharField(max_length=64, choices=VEX_Justification.VEX_JUSTIFICATION_CHOICES, blank=True)
     assessment_vex_justification = CharField(
-        max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True
+        max_length=64, choices=VEX_Justification.VEX_JUSTIFICATION_CHOICES, blank=True
     )
     vex_statement = ForeignKey(
         "vex.VEX_Statement",
@@ -551,6 +555,7 @@ class Observation(Model):
             Index(fields=["current_status"]),
             Index(fields=["vulnerability_id"]),
             Index(fields=["origin_component_name_version"]),
+            Index(fields=["origin_component_cyclonedx_bom_link"]),
             Index(fields=["origin_docker_image_name_tag_short"]),
             Index(fields=["origin_service_name"]),
             Index(fields=["origin_endpoint_hostname"]),
@@ -579,7 +584,7 @@ class Observation_Log(Model):
     status = CharField(max_length=16, choices=Status.STATUS_CHOICES, blank=True)
     comment = TextField(max_length=4096)
     created = DateTimeField(auto_now_add=True)
-    vex_justification = CharField(max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True)
+    vex_justification = CharField(max_length=64, choices=VEX_Justification.VEX_JUSTIFICATION_CHOICES, blank=True)
     assessment_status = CharField(
         max_length=16,
         choices=Assessment_Status.ASSESSMENT_STATUS_CHOICES,
@@ -658,3 +663,23 @@ class Potential_Duplicate(Model):
             "observation",
             "potential_duplicate_observation",
         )
+
+
+class Component(Model):
+    id = CharField(max_length=32, primary_key=True)
+    product = ForeignKey(Product, related_name="components", on_delete=DO_NOTHING)
+    branch = ForeignKey(Branch, related_name="components", on_delete=DO_NOTHING, null=True)
+    origin_service = ForeignKey(Service, on_delete=DO_NOTHING, null=True)
+    component_name = CharField(max_length=255)
+    component_version = CharField(max_length=255, blank=True)
+    component_name_version = CharField(max_length=513, blank=True)
+    component_purl = CharField(max_length=255, blank=True)
+    component_purl_type = CharField(max_length=16, blank=True)
+    component_cpe = CharField(max_length=255, blank=True)
+    component_dependencies = TextField(max_length=32768, blank=True)
+    component_cyclonedx_bom_link = CharField(max_length=512, blank=True)
+    has_observations = BooleanField()
+
+    class Meta:
+        db_table = "core_component"
+        managed = False

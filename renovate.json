@@ -3,7 +3,7 @@
     "extends": [
         "config:recommended"
     ],
-    "baseBranches": [
+    "baseBranchPatterns": [
         "dev"
     ],
     "binarySource": "install",
@@ -18,9 +18,9 @@
     },
     "rebaseWhen": "conflicted",
     "pip_requirements": {
-        "fileMatch": [
-            "mkdocs_requirements.txt",
-            "backend/poetry_requirements.txt"
+        "managerFilePatterns": [
+            "/mkdocs_requirements.txt/",
+            "/backend/poetry_requirements.txt/"
         ]
     },
     "packageRules": [
@@ -28,7 +28,7 @@
             "matchPackageNames": [
                 "python"
             ],
-            "allowedVersions": "<3.13"
+            "allowedVersions": "<3.14"
         },
         {
             "matchPackageNames": [

@@ -3,7 +3,7 @@ from unittest.mock import patch
 from rest_framework.serializers import ValidationError
 
 from application.access_control.models import Authorization_Group
-from application.access_control.services.roles_permissions import Permissions, Roles
+from application.authorization.services.roles_permissions import Permissions, Roles
 from application.core.api.serializers_product import (
     BranchSerializer,
     ProductAuthorizationGroupMemberSerializer,

@@ -1,6 +1,7 @@
 from datetime import date
 from typing import Optional
 
+from django.core.validators import MaxValueValidator, MinValueValidator
 from rest_framework.serializers import (
     CharField,
     IntegerField,
@@ -15,9 +16,9 @@ from application.access_control.api.serializers import (
     NestedAuthorizationGroupSerializer,
     UserListSerializer,
 )
-from application.access_control.services.authorization import get_highest_user_role
 from application.access_control.services.current_user import get_current_user
-from application.access_control.services.roles_permissions import (
+from application.authorization.services.authorization import get_highest_user_role
+from application.authorization.services.roles_permissions import (
     Permissions,
     Roles,
     get_permissions_for_role,
@@ -249,6 +250,7 @@ class ProductSerializer(ProductCoreSerializer):  # pylint: disable=too-many-publ
     has_branch_purls = SerializerMethodField()
     has_branch_cpe23s = SerializerMethodField()
     has_branch_osv_linux_distribution = SerializerMethodField()
+    has_concluded_comments = SerializerMethodField()
 
     class Meta:
         model = Product
@@ -343,6 +345,9 @@ class ProductSerializer(ProductCoreSerializer):  # pylint: disable=too-many-publ
 
     def get_has_branch_osv_linux_distribution(self, obj: Product) -> bool:
         return Branch.objects.filter(product=obj).exclude(osv_linux_distribution="").exists()
+
+    def get_has_concluded_comments(self, obj: Product) -> bool:
+        return License_Component.objects.filter(product=obj).exclude(manual_concluded_comment="").exists()
 
     def validate(self, attrs: dict) -> dict:  # pylint: disable=too-many-branches
         # There are quite a lot of branches, but at least they are not nested too much
@@ -545,6 +550,11 @@ class ProductAuthorizationGroupMemberSerializer(ModelSerializer):
                 raise ValidationError("You are not permitted to change the Owner role")
 
         return attrs
+
+
+class ProductApiTokenSerializer(Serializer):
+    id = IntegerField(validators=[MinValueValidator(0)])
+    role = IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
 
 
 class BranchSerializer(ModelSerializer):

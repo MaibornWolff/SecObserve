@@ -57,7 +57,8 @@ class TestImportObservations(BaseTestCase):
         self.branch_main = Branch.objects.get(product=self.product, name="db_branch_internal_main")
         self.branch_dev = Branch.objects.get(product=self.product, name="db_branch_internal_dev")
 
-        self.service = Service.objects.get(product=self.product, name="db_service_internal_frontend")
+        self.service_frontend = Service.objects.get(product=self.product, name="db_service_internal_frontend")
+        self.service_backend = Service.objects.get(product=self.product, name="db_service_internal_backend")
 
     @patch("application.import_observations.scanners.osv_scanner.scan_license_components")
     def test_scan_product_no_branch_no_service(
@@ -72,15 +73,15 @@ class TestImportObservations(BaseTestCase):
         scan_product(self.product)
 
         expected_calls = [
-            call([self.license_component], self.product, None, ""),
-            call([], self.product, self.branch_dev, ""),
-            call([], self.product, self.branch_main, ""),
-            call([], self.product, None, "db_service_internal_backend"),
-            call([], self.product, self.branch_dev, "db_service_internal_backend"),
-            call([], self.product, self.branch_main, "db_service_internal_backend"),
-            call([], self.product, None, "db_service_internal_frontend"),
-            call([], self.product, self.branch_dev, "db_service_internal_frontend"),
-            call([], self.product, self.branch_main, "db_service_internal_frontend"),
+            call([self.license_component], self.product, None, None),
+            call([], self.product, self.branch_dev, None),
+            call([], self.product, self.branch_main, None),
+            call([], self.product, None, self.service_backend),
+            call([], self.product, self.branch_dev, self.service_backend),
+            call([], self.product, self.branch_main, self.service_backend),
+            call([], self.product, None, self.service_frontend),
+            call([], self.product, self.branch_dev, self.service_frontend),
+            call([], self.product, self.branch_main, self.service_frontend),
         ]
         mock_scan_license_components.assert_has_calls(expected_calls)
 
@@ -97,15 +98,15 @@ class TestImportObservations(BaseTestCase):
         scan_product(self.product)
 
         expected_calls = [
-            call([], self.product, None, ""),
-            call([self.license_component], self.product, self.branch_dev, ""),
-            call([], self.product, self.branch_main, ""),
-            call([], self.product, None, "db_service_internal_backend"),
-            call([], self.product, self.branch_dev, "db_service_internal_backend"),
-            call([], self.product, self.branch_main, "db_service_internal_backend"),
-            call([], self.product, None, "db_service_internal_frontend"),
-            call([], self.product, self.branch_dev, "db_service_internal_frontend"),
-            call([], self.product, self.branch_main, "db_service_internal_frontend"),
+            call([], self.product, None, None),
+            call([self.license_component], self.product, self.branch_dev, None),
+            call([], self.product, self.branch_main, None),
+            call([], self.product, None, self.service_backend),
+            call([], self.product, self.branch_dev, self.service_backend),
+            call([], self.product, self.branch_main, self.service_backend),
+            call([], self.product, None, self.service_frontend),
+            call([], self.product, self.branch_dev, self.service_frontend),
+            call([], self.product, self.branch_main, self.service_frontend),
         ]
         mock_scan_license_components.assert_has_calls(expected_calls)
 
@@ -115,22 +116,22 @@ class TestImportObservations(BaseTestCase):
         mock_scan_license_components,
     ):
         self.license_component.branch = None
-        self.license_component.origin_service = self.service
+        self.license_component.origin_service = self.service_frontend
         self.license_component.save()
 
         mock_scan_license_components.return_value = (0, 0, 0)
         scan_product(self.product)
 
         expected_calls = [
-            call([], self.product, None, ""),
-            call([], self.product, self.branch_dev, ""),
-            call([], self.product, self.branch_main, ""),
-            call([], self.product, None, "db_service_internal_backend"),
-            call([], self.product, self.branch_dev, "db_service_internal_backend"),
-            call([], self.product, self.branch_main, "db_service_internal_backend"),
-            call([self.license_component], self.product, None, "db_service_internal_frontend"),
-            call([], self.product, self.branch_dev, "db_service_internal_frontend"),
-            call([], self.product, self.branch_main, "db_service_internal_frontend"),
+            call([], self.product, None, None),
+            call([], self.product, self.branch_dev, None),
+            call([], self.product, self.branch_main, None),
+            call([], self.product, None, self.service_backend),
+            call([], self.product, self.branch_dev, self.service_backend),
+            call([], self.product, self.branch_main, self.service_backend),
+            call([self.license_component], self.product, None, self.service_frontend),
+            call([], self.product, self.branch_dev, self.service_frontend),
+            call([], self.product, self.branch_main, self.service_frontend),
         ]
         mock_scan_license_components.assert_has_calls(expected_calls)
 
@@ -140,22 +141,22 @@ class TestImportObservations(BaseTestCase):
         mock_scan_license_components,
     ):
         self.license_component.branch = self.branch_main
-        self.license_component.origin_service = self.service
+        self.license_component.origin_service = self.service_frontend
         self.license_component.save()
 
         mock_scan_license_components.return_value = (0, 0, 0)
         scan_product(self.product)
 
         expected_calls = [
-            call([], self.product, None, ""),
-            call([], self.product, self.branch_dev, ""),
-            call([], self.product, self.branch_main, ""),
-            call([], self.product, None, "db_service_internal_backend"),
-            call([], self.product, self.branch_dev, "db_service_internal_backend"),
-            call([], self.product, self.branch_main, "db_service_internal_backend"),
-            call([], self.product, None, "db_service_internal_frontend"),
-            call([], self.product, self.branch_dev, "db_service_internal_frontend"),
-            call([self.license_component], self.product, self.branch_main, "db_service_internal_frontend"),
+            call([], self.product, None, None),
+            call([], self.product, self.branch_dev, None),
+            call([], self.product, self.branch_main, None),
+            call([], self.product, None, self.service_backend),
+            call([], self.product, self.branch_dev, self.service_backend),
+            call([], self.product, self.branch_main, self.service_backend),
+            call([], self.product, None, self.service_frontend),
+            call([], self.product, self.branch_dev, self.service_frontend),
+            call([self.license_component], self.product, self.branch_main, self.service_frontend),
         ]
         mock_scan_license_components.assert_has_calls(expected_calls)
 
@@ -165,16 +166,16 @@ class TestImportObservations(BaseTestCase):
         mock_scan_license_components,
     ):
         self.license_component.branch = self.branch_main
-        self.license_component.origin_service = self.service
+        self.license_component.origin_service = self.service_frontend
         self.license_component.save()
 
         mock_scan_license_components.return_value = (0, 0, 0)
         scan_branch(self.branch_main)
 
         expected_calls = [
-            call([], self.product, self.branch_main, ""),
-            call([], self.product, self.branch_main, "db_service_internal_backend"),
-            call([self.license_component], self.product, self.branch_main, "db_service_internal_frontend"),
+            call([], self.product, self.branch_main, None),
+            call([], self.product, self.branch_main, self.service_backend),
+            call([self.license_component], self.product, self.branch_main, self.service_frontend),
         ]
         mock_scan_license_components.assert_has_calls(expected_calls)
 
@@ -293,7 +294,7 @@ class TestImportObservations(BaseTestCase):
         mock_process_data.return_value = (1, 2, 3)
         mock_get_observations.return_value = [observation], "OSV (Open Source Vulnerabilities)"
 
-        numbers = scan_license_components(license_components, product, branch, service.name)
+        numbers = scan_license_components(license_components, product, branch, service)
 
         self.assertEqual((1, 2, 3), numbers)
 
@@ -333,10 +334,10 @@ class TestImportObservations(BaseTestCase):
             ImportParameters(
                 product=product,
                 branch=branch,
+                service=service,
                 parser=Parser.objects.get(name="OSV (Open Source Vulnerabilities)"),
                 filename="",
                 api_configuration_name="",
-                service=service.name,
                 docker_image_name_tag="",
                 endpoint_url="",
                 kubernetes_cluster="",
@@ -347,6 +348,7 @@ class TestImportObservations(BaseTestCase):
         mock_vulnerability_check.assert_called_with(
             product=product,
             branch=branch,
+            service=service,
             filename="",
             api_configuration_name="",
             defaults={

@@ -204,7 +204,7 @@ const ObservationsReviewList = ({ product }: ObservationsReviewListProps) => {
                             )
                         }
                         resource="observations"
-                        expand={<ObservationExpand />}
+                        expand={<ObservationExpand showComponent={true} />}
                         expandSingle
                     >
                         {!product && <TextField source="product_data.name" label="Product" />}
@@ -241,7 +241,11 @@ const ObservationsReviewList = ({ product }: ObservationsReviewListProps) => {
                             />
                         )}
                         {(!product || product?.has_source) && (
-                            <TextField source="origin_source_file" label="Source" sx={{ wordBreak: "break-word" }} />
+                            <TextField
+                                source="origin_source_file_short"
+                                label="Source"
+                                sx={{ wordBreak: "break-word" }}
+                            />
                         )}
                         {(!product || product?.has_cloud_resource) && (
                             <TextField

@@ -29,86 +29,85 @@ const FileUploadObservations = () => {
     const observationUpdate = async (data: any) => {
         setLoading(true);
 
-        const formData = new FormData();
-        formData.append("file", data.file.rawFile, data.file.title);
-        formData.append("product", data.id);
-        if (data.branch) {
-            formData.append("branch", data.branch);
-        }
-        if (data.service) {
-            formData.append("service", data.service);
-        }
-        if (data.docker_image_name_tag) {
-            formData.append("docker_image_name_tag", data.docker_image_name_tag);
-        }
-        if (data.endpoint_url) {
-            formData.append("endpoint_url", data.endpoint_url);
-        }
-        if (data.kubernetes_cluster) {
-            formData.append("kubernetes_cluster", data.kubernetes_cluster);
-        }
-        formData.append("suppress_licenses", "true");
+        let new_observations = 0;
+        let updated_observations = 0;
+        let resolved_observations = 0;
 
-        httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/import/file_upload_observations_by_id/", {
-            method: "POST",
-            body: formData,
-        })
-            .then((result) => {
-                const observations =
-                    result.json.observations_new +
-                        result.json.observations_updated +
-                        result.json.observations_resolved >
-                    0;
-                const license_components =
-                    result.json.license_components_new +
-                        result.json.license_components_updated +
-                        result.json.license_components_deleted >
-                    0;
-                let message = "";
-                if (observations || !license_components)
-                    message +=
-                        result.json.observations_new +
-                        " new observations\n" +
-                        result.json.observations_updated +
-                        " updated observations\n" +
-                        result.json.observations_resolved +
-                        " resolved observations";
-                if (observations && license_components) message += "\n";
-                if (license_components) {
-                    message +=
-                        result.json.license_components_new +
-                        " new license components\n" +
-                        result.json.license_components_updated +
-                        " updated license components\n" +
-                        result.json.license_components_deleted +
-                        " deleted license components";
-                }
-                refresh();
-                setLoading(false);
-                setOpen(false);
-                notify(message, {
-                    type: "success",
-                    multiLine: true,
-                });
+        let upload_error = false;
+        let error_message = "";
+        let error_sbom = "";
+
+        for (const file of data.file) {
+            const formData = new FormData();
+            formData.append("file", file.rawFile, file.title);
+            formData.append("product", data.id);
+            if (data.branch) {
+                formData.append("branch", data.branch);
+            }
+            if (data.service) {
+                formData.append("service", data.service);
+            }
+            if (data.docker_image_name_tag) {
+                formData.append("docker_image_name_tag", data.docker_image_name_tag);
+            }
+            if (data.endpoint_url) {
+                formData.append("endpoint_url", data.endpoint_url);
+            }
+            if (data.kubernetes_cluster) {
+                formData.append("kubernetes_cluster", data.kubernetes_cluster);
+            }
+            formData.append("suppress_licenses", "true");
+
+            await httpClient(window.__RUNTIME_CONFIG__.API_BASE_URL + "/import/file_upload_observations_by_id/", {
+                method: "POST",
+                body: formData,
             })
-            .catch((error) => {
-                setLoading(false);
-                setOpen(false);
-                notify(error.message, {
-                    type: "warning",
+                .then((result) => {
+                    new_observations += result.json.observations_new;
+                    updated_observations += result.json.observations_updated;
+                    resolved_observations += result.json.observations_resolved;
+                })
+                .catch((error) => {
+                    upload_error = true;
+                    error_message = error.message;
+                    error_sbom = file.title;
                 });
+
+            if (upload_error) {
+                break;
+            }
+        }
+
+        setLoading(false);
+        setOpen(false);
+        refresh();
+
+        if (upload_error) {
+            notify("Error '" + error_message + "' while processing '" + error_sbom + "'", { type: "warning" });
+        } else {
+            const message =
+                new_observations +
+                " new observations\n" +
+                updated_observations +
+                " updated observations\n" +
+                resolved_observations +
+                " resolved observations";
+            notify(message, {
+                type: "success",
+                multiLine: true,
             });
+        }
     };
 
     return (
         <Fragment>
             <MenuButton
-                title="Upload observations from file"
+                title="Upload observations from files"
                 onClick={handleOpen}
                 icon={<UploadIcon sx={{ color: getIconAndFontColor() }} />}
             />
             <Dialog open={open && !loading} onClose={handleClose}>
-                <DialogTitle>Upload observations from file</DialogTitle>
+                <DialogTitle>Upload observations from files</DialogTitle>
                 <DialogContent>
                     <SimpleForm
                         onSubmit={observationUpdate}
@@ -122,9 +121,12 @@ const FileUploadObservations = () => {
                     >
                         <FileInput
                             source="file"
-                            label="Scan report"
+                            label="Scan reports  (max 10 files)"
                             accept={{ "application/octet-stream": [".csv, .json, .sarif"] }}
                             validate={validate_required}
+                            multiple={true}
+                            options={{ maxFiles: 10 }}
+                            placeholder={<p>Drop some files to upload, or click to select some.</p>}
                         >
                             <FileField source="src" title="title" />
                         </FileInput>

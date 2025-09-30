@@ -9,7 +9,7 @@ from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError
 from rest_framework.filters import SearchFilter
-from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
+from rest_framework.mixins import DestroyModelMixin, ListModelMixin, RetrieveModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -17,13 +17,18 @@ from rest_framework.serializers import BaseSerializer
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
-from application.access_control.services.authorization import user_has_permission_or_403
 from application.access_control.services.current_user import get_current_user
-from application.access_control.services.roles_permissions import Permissions
+from application.authorization.services.authorization import (
+    user_has_permission,
+    user_has_permission_or_403,
+)
+from application.authorization.services.roles_permissions import Permissions
 from application.core.models import Branch, Product
 from application.core.queries.branch import get_branch_by_id
+from application.core.queries.component import get_component_by_id
 from application.core.queries.product import get_product_by_id
 from application.licenses.api.filters import (
+    ConcludedLicenseFilter,
     LicenseComponentEvidenceFilter,
     LicenseComponentFilter,
     LicenseFilter,
@@ -36,6 +41,7 @@ from application.licenses.api.filters import (
     LicensePolicyMemberFilter,
 )
 from application.licenses.api.permissions import (
+    UserHasConcludedLicensePermission,
     UserHasLicenseGroupAuthenticationGroupMemberPermission,
     UserHasLicenseGroupMemberPermission,
     UserHasLicenseGroupPermission,
@@ -44,6 +50,9 @@ from application.licenses.api.permissions import (
     UserHasLicensePolicyPermission,
 )
 from application.licenses.api.serializers import (
+    ConcludedLicenseCreateUpdateSerializer,
+    ConcludedLicenseListSerializer,
+    ConcludedLicenseSerializer,
     LicenseComponentEvidenceSerializer,
     LicenseComponentIdSerializer,
     LicenseComponentListSerializer,
@@ -62,6 +71,7 @@ from application.licenses.api.serializers import (
     LicenseSerializer,
 )
 from application.licenses.models import (
+    Concluded_License,
     License,
     License_Component,
     License_Component_Evidence,
@@ -73,8 +83,10 @@ from application.licenses.models import (
     License_Policy_Item,
     License_Policy_Member,
 )
+from application.licenses.queries.concluded_license import get_concluded_licenses
 from application.licenses.queries.license import get_license
 from application.licenses.queries.license_component import (
+    get_license_component,
     get_license_component_licenses,
     get_license_components,
 )
@@ -105,6 +117,7 @@ from application.licenses.services.export_license_policy_secobserve import (
     export_license_policy_secobserve_json,
     export_license_policy_secobserve_yaml,
 )
+from application.licenses.services.license_component import save_concluded_license
 from application.licenses.services.license_group import (
     copy_license_group,
     import_scancode_licensedb,
@@ -114,13 +127,14 @@ from application.licenses.services.license_policy import (
     apply_license_policy_product,
     copy_license_policy,
 )
+from application.licenses.types import NO_LICENSE_INFORMATION
 
 
 @dataclass
 class LicenseComponentOverviewElement:
     branch_name: Optional[str]
-    license_name: str
-    type: str
+    effective_license_name: str
+    effective_license_type: str
     evaluation_result: str
     num_components: int
 
@@ -129,6 +143,24 @@ class LicenseComponentOverviewElement:
 class LicenseComponentOverview:
     count: int
     results: list[LicenseComponentOverviewElement]
+
+
+class ConcludedLicenseViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin, DestroyModelMixin):
+    serializer_class = ConcludedLicenseSerializer
+    filterset_class = ConcludedLicenseFilter
+    queryset = Concluded_License.objects.all()
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    permission_classes = [IsAuthenticated, UserHasConcludedLicensePermission]
+
+    def get_serializer_class(
+        self,
+    ) -> type[ConcludedLicenseListSerializer] | type[BaseSerializer]:
+        if self.action == "list":
+            return ConcludedLicenseListSerializer
+        return super().get_serializer_class()
+
+    def get_queryset(self) -> QuerySet[Concluded_License]:
+        return get_concluded_licenses().select_related("product").select_related("user")
 
 
 class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
@@ -145,7 +177,74 @@ class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
         return super().get_serializer_class()
 
     def get_queryset(self) -> QuerySet[License_Component]:
-        return get_license_components().select_related("branch").select_related("license")
+        return get_license_components().select_related("branch").select_related("origin_service")
+
+    @extend_schema(
+        methods=["GET"],
+        responses={200: LicenseComponentListSerializer},
+        parameters=[
+            OpenApiParameter(name="component", type=str, required=True),
+        ],
+    )
+    @action(detail=False, methods=["get"])
+    def for_component(self, request: Request) -> Response:
+        component_id = request.query_params.get("component")
+        if not component_id:
+            raise ValidationError("No component id provided")
+        component = get_component_by_id(component_id)
+        if not component or not user_has_permission(component.product, Permissions.Product_View):
+            raise NotFound("No Component matches the given query.")
+        license_component = License_Component.objects.filter(
+            product=component.product,
+            branch=component.branch,
+            origin_service=component.origin_service,
+            component_name_version=component.component_name_version,
+            component_purl_type=component.component_purl_type,
+        ).first()
+
+        if license_component:
+            response_serializer = LicenseComponentListSerializer(license_component)
+            return Response(
+                status=HTTP_200_OK,
+                data=response_serializer.data,
+            )
+
+        return Response(status=HTTP_204_NO_CONTENT)
+
+    @extend_schema(
+        methods=["PATCH"],
+        request=ConcludedLicenseCreateUpdateSerializer,
+        responses={200: None},
+    )
+    @action(detail=True, methods=["patch"])
+    def concluded_license(self, request: Request, pk: int) -> Response:
+        request_serializer = ConcludedLicenseCreateUpdateSerializer(data=request.data)
+        if not request_serializer.is_valid():
+            raise ValidationError(request_serializer.errors)
+
+        license_component = get_license_component(pk)
+        if not license_component:
+            raise NotFound(f"License component {pk} not found.")
+
+        user_has_permission_or_403(license_component, Permissions.License_Component_Edit)
+
+        manual_concluded_spdx_license_id = request_serializer.validated_data.get("manual_concluded_spdx_license")
+        if manual_concluded_spdx_license_id:
+            license_component.manual_concluded_spdx_license = get_license(manual_concluded_spdx_license_id)
+            if not license_component.manual_concluded_spdx_license:
+                raise ValidationError(f"SPDX license {manual_concluded_spdx_license_id} not found.")
+        else:
+            license_component.manual_concluded_spdx_license = None
+        license_component.manual_concluded_non_spdx_license = request_serializer.validated_data.get(
+            "manual_concluded_non_spdx_license", ""
+        )
+        license_component.manual_concluded_license_expression = request_serializer.validated_data.get(
+            "manual_concluded_license_expression", ""
+        )
+
+        save_concluded_license(license_component)
+
+        return Response()
 
     @extend_schema(
         methods=["GET"],
@@ -180,25 +279,25 @@ class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
 
         results = []
         for element in license_overview_elements:
-            if element["license__spdx_id"]:
-                license_name = element["license__spdx_id"]
+            if element["effective_spdx_license__spdx_id"]:
+                effective_license_name = element["effective_spdx_license__spdx_id"]
                 element_type = "SPDX"
-            elif element["license_expression"]:
-                license_name = element["license_expression"]
+            elif element["effective_license_expression"]:
+                effective_license_name = element["effective_license_expression"]
                 element_type = "Expression"
-            elif element["non_spdx_license"]:
-                license_name = element["non_spdx_license"]
+            elif element["effective_non_spdx_license"]:
+                effective_license_name = element["effective_non_spdx_license"]
                 element_type = "Non-SPDX"
-            elif element["multiple_licenses"]:
-                license_name = element["multiple_licenses"]
+            elif element["effective_multiple_licenses"]:
+                effective_license_name = element["effective_multiple_licenses"]
                 element_type = "Multiple"
             else:
-                license_name = "No license information"
+                effective_license_name = NO_LICENSE_INFORMATION
                 element_type = ""
             license_component_overview_element = LicenseComponentOverviewElement(
                 branch_name=element["branch__name"],
-                license_name=license_name,
-                type=element_type,
+                effective_license_name=effective_license_name,
+                effective_license_type=element_type,
                 evaluation_result=element["evaluation_result"],
                 num_components=element["id__count"],
             )
@@ -218,24 +317,26 @@ class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
 
     def _get_ordering(self, ordering: Optional[str]) -> Tuple[str, str, str]:
         if ordering and ordering == "-branch_name":
-            return "-branch__name", "-license_name", "-numerical_evaluation_result"
+            return "-branch__name", "-effective_license_name", "-numerical_evaluation_result"
         if ordering and ordering == "branch_name":
-            return "branch__name", "license_name", "numerical_evaluation_result"
+            return "branch__name", "effective_license_name", "numerical_evaluation_result"
 
-        if ordering and ordering == "-license_name":
-            return "-license_name", "-numerical_evaluation_result", "-branch__name"
-        if ordering and ordering == "license_name":
-            return "license_name", "numerical_evaluation_result", "branch__name"
+        if ordering and ordering == "-effective_license_name":
+            return "-effective_license_name", "-numerical_evaluation_result", "-branch__name"
+        if ordering and ordering == "effective_license_name":
+            return "effective_license_name", "numerical_evaluation_result", "branch__name"
 
         if ordering and ordering == "-evaluation_result":
-            return "-numerical_evaluation_result", "-license_name", "-branch__name"
+            return "-numerical_evaluation_result", "-effective_license_name", "-branch__name"
 
-        return "numerical_evaluation_result", "license_name", "branch__name"
+        return "numerical_evaluation_result", "effective_license_name", "branch__name"
 
     def _filter_data(self, request: Request, license_overview_elements: QuerySet) -> QuerySet:
-        filter_license_name = request.query_params.get("license_name")
-        if filter_license_name:
-            license_overview_elements = license_overview_elements.filter(license_name__icontains=filter_license_name)
+        filter_effective_license_name = request.query_params.get("effective_license_name")
+        if filter_effective_license_name:
+            license_overview_elements = license_overview_elements.filter(
+                effective_license_name__icontains=filter_effective_license_name
+            )
 
         filter_evaluation_result = request.query_params.get("evaluation_result")
         if filter_evaluation_result:

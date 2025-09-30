@@ -20,3 +20,6 @@ class License_Policy_Evaluation_Result:
         RESULT_ALLOWED: 4,
         RESULT_IGNORED: 5,
     }
+
+
+NO_LICENSE_INFORMATION = "No license information"

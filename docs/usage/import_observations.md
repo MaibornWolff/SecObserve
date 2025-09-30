@@ -29,7 +29,7 @@ Before importing observations from an API, an [API configuration](../integration
 The import algorithm has to decide, if an observation already exists and needs to be updated or it is new and needs to be created. But how does the import algorithm identifies an observation to make this decision? Two terms help to understand how that works:
 
 * **Identity hash**: The `identity hash` is a SHA256 hash code of the concatenation of the observation's title and all its origins ^[1]^. Two observations with the same `identity hash` are defined as identical.
-* **Vulnerability check**: An import for one product, one branch / version and one file name resp. one API configuration is a so-called vulnerability check.
+* **Vulnerability check**: An import for one product, one branch / version, one service and one file name resp. one API configuration is a so-called vulnerability check.
 
 A flowchart visualizes the import algorithm:
 

@@ -1,4 +1,4 @@
-from application.access_control.services.roles_permissions import (
+from application.authorization.services.roles_permissions import (
     Permissions,
     Roles,
     get_permissions_for_role,
@@ -22,5 +22,6 @@ class TestRolesPermissions(BaseTestCase):
             Permissions.Api_Configuration_View,
             Permissions.Service_View,
             Permissions.VEX_View,
+            Permissions.Concluded_License_View,
         }
         self.assertEqual(permissions, get_permissions_for_role(Roles.Reader))

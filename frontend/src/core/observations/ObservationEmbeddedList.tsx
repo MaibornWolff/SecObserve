@@ -193,7 +193,7 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
                             )
                         }
                         resource="observations"
-                        expand={<ObservationExpand />}
+                        expand={<ObservationExpand showComponent={true} />}
                         expandSingle
                     >
                         {product?.has_branches && <TextField source="branch_name" label="Branch / Version" />}
@@ -224,7 +224,11 @@ const ObservationsEmbeddedList = ({ product }: ObservationsEmbeddedListProps) =>
                             />
                         )}
                         {product?.has_source && (
-                            <TextField source="origin_source_file" label="Source" sx={{ wordBreak: "break-word" }} />
+                            <TextField
+                                source="origin_source_file_short"
+                                label="Source"
+                                sx={{ wordBreak: "break-word" }}
+                            />
                         )}
                         {product?.has_cloud_resource && (
                             <TextField

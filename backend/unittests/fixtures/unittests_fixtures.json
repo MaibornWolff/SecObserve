@@ -1039,6 +1039,70 @@
         }
     },
     {
+        "model": "vex.cyclonedx",
+        "pk": 1,
+        "fields": {
+            "user": 4,
+            "product": 1,
+            "document_id_prefix": "cyclonedx_prefix",
+            "document_base_id": "2024_0001",
+            "version": 1,
+            "content_hash": "abcdef123456",
+            "author": "author",
+            "manufacturer": "manufacturer",
+            "first_issued": "2022-12-15T16:10:35.513Z",
+            "last_updated": "2022-12-16T16:13:18.282Z"
+        }
+    },
+    {
+        "model": "vex.cyclonedx",
+        "pk": 2,
+        "fields": {
+            "user": 4,
+            "product": null,
+            "document_id_prefix": "cyclonedx_prefix",
+            "document_base_id": "2024_0002",
+            "version": 1,
+            "content_hash": "abcdef123456",
+            "author": "author",
+            "manufacturer": "manufacturer",
+            "first_issued": "2022-12-15T16:10:35.513Z",
+            "last_updated": "2022-12-16T16:13:18.282Z"
+        }
+    },
+    {
+        "model": "vex.cyclonedx_branch",
+        "pk": 1,
+        "fields": {
+            "cyclonedx": 1,
+            "branch": 1
+        }
+    },
+    {
+        "model": "vex.cyclonedx_branch",
+        "pk": 2,
+        "fields": {
+            "cyclonedx": 2,
+            "branch": 2
+        }
+    },
+    {
+        "model": "vex.cyclonedx_vulnerability",
+        "pk": 1,
+        "fields": {
+            "cyclonedx": 2,
+            "name": "CVE_vulnerability"
+        }
+    },
+    {
+        "model": "vex.cyclonedx_vulnerability",
+        "pk": 2,
+        "fields": {
+            "cyclonedx": 1,
+            "name": "CVE_vulnerability_1"
+        }
+    },
+    {
         "model": "vex.vex_counter",
         "pk": 1,
         "fields": {
@@ -1046,6 +1110,28 @@
             "year": 2024,
             "counter": 2
 
+        }
+    },
+    {
+        "model": "background_tasks.periodic_task",
+        "pk": 1,
+        "fields": {
+            "task": "Calculate product metrics",
+            "start_time": "2022-12-15T16:10:35.513Z",
+            "duration": 1234,
+            "status": "Success",
+            "message": "Task completed successfully"
+        }
+    },
+    {
+        "model": "background_tasks.periodic_task",
+        "pk": 2,
+        "fields": {
+            "task": "Calculate product metrics",
+            "start_time": "2022-12-16T16:10:35.513Z",
+            "duration": 5678,
+            "status": "Failure",
+            "message": "Exception has occurred"
         }
     }
 ]

@@ -57,14 +57,29 @@ const SettingsShowComponent = () => {
                                     <Labeled label="VEX">
                                         <BooleanField source="feature_vex" />
                                     </Labeled>
+                                </Stack>
+                            </Grid>
+                            <Grid size={3}>
+                                <Stack spacing={2}>
+                                    {settings.feature_vex && (
+                                        <Labeled label="VEX justification style">
+                                            <TextField source="vex_justification_style" />
+                                        </Labeled>
+                                    )}
+                                </Stack>
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={2} width={"100%"} sx={{ marginBottom: 2 }}>
+                            <Grid size={3}>
+                                <Stack spacing={2}>
                                     <Labeled label="Disable user login">
                                         <BooleanField source="feature_disable_user_login" />
                                     </Labeled>
                                     <Labeled label="General rules need approval">
                                         <BooleanField source="feature_general_rules_need_approval" />
                                     </Labeled>
-                                    <Labeled label="Enable exploit enrichment from cvss-bt">
-                                        <BooleanField source="feature_exploit_information" />
+                                    <Labeled label="Enable license management">
+                                        <BooleanField source="feature_license_management" />
                                     </Labeled>
                                 </Stack>
                             </Grid>
@@ -76,9 +91,19 @@ const SettingsShowComponent = () => {
                                     <Labeled label="Enable automatic OSV scanning">
                                         <BooleanField source="feature_automatic_osv_scanning" />
                                     </Labeled>
-                                    <Labeled label="Enable license management">
-                                        <BooleanField source="feature_license_management" />
+                                </Stack>
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={2} width={"100%"} sx={{ marginBottom: 2 }}>
+                            <Grid size={3}>
+                                <Stack spacing={2}>
+                                    <Labeled label="Enable exploit enrichment from cvss-bt">
+                                        <BooleanField source="feature_exploit_information" />
                                     </Labeled>
+                                </Stack>
+                            </Grid>
+                            <Grid size={3}>
+                                <Stack spacing={2}>
                                     {settings.feature_exploit_information && (
                                         <Labeled label="Maximum age of CVEs for enrichment in years">
                                             <NumberField source="exploit_information_max_age_years" />
@@ -253,6 +278,9 @@ const SettingsShowComponent = () => {
                                             <NumberField source="api_import_crontab_hour" />
                                         </Labeled>
                                     )}
+                                    <Labeled label="Number of entries of Periodic Task to keep per task">
+                                        <NumberField source="periodic_task_max_entries" />
+                                    </Labeled>
                                 </Stack>
                             </Grid>
                             <Grid size={3}>

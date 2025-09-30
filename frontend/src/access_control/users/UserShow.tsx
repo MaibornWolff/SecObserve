@@ -155,6 +155,11 @@ const UserComponent = () => {
                                                 <TextField source="setting_list_size" />
                                             </Labeled>
                                         )}
+                                        {user.setting_package_info_preference && (
+                                            <Labeled label="Package information preference">
+                                                <TextField source="setting_package_info_preference" />
+                                            </Labeled>
+                                        )}
                                     </Stack>
                                 </Paper>
                             </Stack>

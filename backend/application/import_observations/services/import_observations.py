@@ -7,7 +7,10 @@ from django.utils import timezone
 from rest_framework.exceptions import ValidationError
 
 from application.commons.models import Settings
-from application.commons.services.functions import clip_fields
+from application.commons.services.functions import (
+    clip_fields,
+    get_comma_separated_as_list,
+)
 from application.core.models import (
     Branch,
     Evidence,
@@ -52,7 +55,17 @@ from application.import_observations.services.parser_detector import (
 from application.issue_tracker.services.issue_tracker import (
     push_observations_to_issue_tracker,
 )
-from application.licenses.services.license_component import process_license_components
+from application.licenses.models import License_Component, License_Component_Evidence
+from application.licenses.services.concluded_license import apply_concluded_license
+from application.licenses.services.license_component import (
+    prepare_license_component,
+    set_effective_license,
+)
+from application.licenses.services.license_policy import (
+    apply_license_policy_to_component,
+    get_license_evaluation_results_for_product,
+)
+from application.licenses.types import NO_LICENSE_INFORMATION
 from application.rules.services.rule_engine import Rule_Engine
 from application.vex.services.vex_engine import VEX_Engine
 
@@ -61,10 +74,10 @@ from application.vex.services.vex_engine import VEX_Engine
 class ImportParameters:
     product: Product
     branch: Optional[Branch]
+    service: Optional[Service]
     parser: Parser
     filename: str
     api_configuration_name: str
-    service: str
     docker_image_name_tag: str
     endpoint_url: str
     kubernetes_cluster: str
@@ -109,6 +122,12 @@ def file_upload_observations(
 
     scanner = ""
 
+    service = None
+    if file_upload_parameters.service:
+        service = Service.objects.get_or_create(
+            product=file_upload_parameters.product, name=file_upload_parameters.service
+        )[0]
+
     if not file_upload_parameters.sbom:
         imported_observations, scanner = parser_instance.get_observations(
             data, file_upload_parameters.product, file_upload_parameters.branch
@@ -117,10 +136,10 @@ def file_upload_observations(
         import_parameters = ImportParameters(
             product=file_upload_parameters.product,
             branch=file_upload_parameters.branch,
+            service=service,
             parser=parser,
             filename=filename,
             api_configuration_name="",
-            service=file_upload_parameters.service,
             docker_image_name_tag=file_upload_parameters.docker_image_name_tag,
             endpoint_url=file_upload_parameters.endpoint_url,
             kubernetes_cluster=file_upload_parameters.kubernetes_cluster,
@@ -138,6 +157,7 @@ def file_upload_observations(
     vulnerability_check, _ = Vulnerability_Check.objects.update_or_create(
         product=file_upload_parameters.product,
         branch=file_upload_parameters.branch,
+        service=service,
         filename=filename,
         api_configuration_name="",
         defaults={
@@ -157,7 +177,7 @@ def file_upload_observations(
     ):
         imported_license_components, scanner = parser_instance.get_license_components(data)
         numbers_license_components = process_license_components(
-            imported_license_components, scanner, vulnerability_check, file_upload_parameters.service
+            imported_license_components, scanner, vulnerability_check
         )
 
     return (
@@ -188,13 +208,19 @@ def api_import_observations(
         api_import_parameters.branch,
     )
 
+    service = None
+    if api_import_parameters.service:
+        service = Service.objects.get_or_create(
+            product=api_import_parameters.api_configuration.product, name=api_import_parameters.service
+        )[0]
+
     import_parameters = ImportParameters(
         product=api_import_parameters.api_configuration.product,
         branch=api_import_parameters.branch,
+        service=service,
         parser=api_import_parameters.api_configuration.parser,
         filename="",
         api_configuration_name=api_import_parameters.api_configuration.name,
-        service=api_import_parameters.service,
         docker_image_name_tag=api_import_parameters.docker_image_name_tag,
         endpoint_url=api_import_parameters.endpoint_url,
         kubernetes_cluster=api_import_parameters.kubernetes_cluster,
@@ -206,6 +232,7 @@ def api_import_observations(
     Vulnerability_Check.objects.update_or_create(
         product=import_parameters.product,
         branch=import_parameters.branch,
+        service=service,
         filename="",
         api_configuration_name=import_parameters.api_configuration_name,
         defaults={
@@ -244,9 +271,9 @@ def _process_data(import_parameters: ImportParameters, settings: Settings) -> Tu
     for observation_before_for_dict in get_observations_for_vulnerability_check(
         import_parameters.product,
         import_parameters.branch,
+        import_parameters.service,
         import_parameters.filename,
         import_parameters.api_configuration_name,
-        import_parameters.service,
     ):
         observations_before[observation_before_for_dict.identity_hash] = observation_before_for_dict
 
@@ -307,6 +334,161 @@ def _process_data(import_parameters: ImportParameters, settings: Settings) -> Tu
     return observations_new, observations_updated, len(observations_resolved)
 
 
+def process_license_components(  # pylint: disable=too-many-statements
+    license_components: list[License_Component],
+    scanner: str,
+    vulnerability_check: Vulnerability_Check,
+) -> Tuple[int, int, int]:
+    existing_components = License_Component.objects.filter(
+        product=vulnerability_check.product,
+        branch=vulnerability_check.branch,
+        upload_filename=vulnerability_check.filename,
+    )
+    existing_component: Optional[License_Component] = None
+    existing_components_dict: dict[str, License_Component] = {}
+    for existing_component in existing_components:
+        existing_components_dict[existing_component.identity_hash] = existing_component
+
+    license_evaluation_results = get_license_evaluation_results_for_product(vulnerability_check.product)
+
+    components_new = 0
+    components_updated = 0
+
+    license_policy = vulnerability_check.product.license_policy
+    ignore_component_types = (
+        get_comma_separated_as_list(license_policy.ignore_component_types) if license_policy else []
+    )
+
+    product_group_products = []
+    if vulnerability_check.product.product_group:
+        product_group_products = list(
+            Product.objects.filter(product_group=vulnerability_check.product.product_group).exclude(
+                pk=vulnerability_check.product.pk
+            )
+        )
+
+    for unsaved_component in license_components:
+        prepare_license_component(unsaved_component)
+        existing_component = existing_components_dict.get(unsaved_component.identity_hash)
+        if existing_component:
+            effective_spdx_license_before = existing_component.effective_spdx_license
+            effective_non_spdx_license_before = existing_component.effective_non_spdx_license
+            effective_license_expression_before = existing_component.effective_license_expression
+            effective_multiple_licenses_before = existing_component.effective_multiple_licenses
+            evaluation_result_before = existing_component.evaluation_result
+            existing_component.component_name = unsaved_component.component_name
+            existing_component.component_version = unsaved_component.component_version
+            existing_component.component_purl = unsaved_component.component_purl
+            existing_component.component_purl_type = unsaved_component.component_purl_type
+            existing_component.component_cpe = unsaved_component.component_cpe
+            existing_component.component_dependencies = unsaved_component.component_dependencies
+            existing_component.imported_declared_license_name = unsaved_component.imported_declared_license_name
+            existing_component.imported_declared_spdx_license = unsaved_component.imported_declared_spdx_license
+            existing_component.imported_declared_non_spdx_license = unsaved_component.imported_declared_non_spdx_license
+            existing_component.imported_declared_license_expression = (
+                unsaved_component.imported_declared_license_expression
+            )
+            existing_component.imported_declared_multiple_licenses = (
+                unsaved_component.imported_declared_multiple_licenses
+            )
+            existing_component.imported_concluded_license_name = unsaved_component.imported_concluded_license_name
+            existing_component.imported_concluded_spdx_license = unsaved_component.imported_concluded_spdx_license
+            existing_component.imported_concluded_non_spdx_license = (
+                unsaved_component.imported_concluded_non_spdx_license
+            )
+            existing_component.imported_concluded_license_expression = (
+                unsaved_component.imported_concluded_license_expression
+            )
+            existing_component.imported_concluded_multiple_licenses = (
+                unsaved_component.imported_concluded_multiple_licenses
+            )
+            set_effective_license(existing_component)
+            if (
+                not existing_component.manual_concluded_license_name
+                or existing_component.manual_concluded_license_name == NO_LICENSE_INFORMATION
+            ):
+                apply_concluded_license(existing_component, product_group_products)
+                set_effective_license(existing_component)
+            existing_component.origin_service = vulnerability_check.service
+            apply_license_policy_to_component(
+                existing_component,
+                license_evaluation_results,
+                ignore_component_types,
+            )
+            existing_component.import_last_seen = timezone.now()
+            if (
+                effective_spdx_license_before != existing_component.effective_spdx_license
+                or effective_non_spdx_license_before != existing_component.effective_non_spdx_license
+                or effective_license_expression_before != existing_component.effective_license_expression
+                or effective_multiple_licenses_before != existing_component.effective_multiple_licenses
+                or evaluation_result_before != existing_component.evaluation_result
+            ):
+                existing_component.last_change = timezone.now()
+            clip_fields("licenses", "License_Component", existing_component)
+            existing_component.save()
+
+            existing_component.evidences.all().delete()
+            _process_license_evidences(unsaved_component, existing_component)
+
+            existing_components_dict.pop(unsaved_component.identity_hash)
+            components_updated += 1
+        else:
+            unsaved_component.product = vulnerability_check.product
+            unsaved_component.branch = vulnerability_check.branch
+            unsaved_component.origin_service = vulnerability_check.service
+            unsaved_component.upload_filename = vulnerability_check.filename
+
+            set_effective_license(unsaved_component)
+            apply_concluded_license(unsaved_component, product_group_products)
+            set_effective_license(unsaved_component)
+
+            apply_license_policy_to_component(
+                unsaved_component,
+                license_evaluation_results,
+                ignore_component_types,
+            )
+
+            unsaved_component.import_last_seen = timezone.now()
+            unsaved_component.last_change = timezone.now()
+            clip_fields("licenses", "License_Component", unsaved_component)
+            unsaved_component.save()
+
+            _process_license_evidences(unsaved_component, unsaved_component)
+
+            components_new += 1
+
+    components_deleted = len(existing_components_dict)
+    for existing_component in existing_components_dict.values():
+        existing_component.delete()
+
+    if components_new == 0 and components_updated == 0 and components_deleted == 0:
+        vulnerability_check.last_import_licenses_new = None
+        vulnerability_check.last_import_licenses_updated = None
+        vulnerability_check.last_import_licenses_deleted = None
+    else:
+        vulnerability_check.last_import_licenses_new = components_new
+        vulnerability_check.last_import_licenses_updated = components_updated
+        vulnerability_check.last_import_licenses_deleted = components_deleted
+
+    if scanner:
+        vulnerability_check.scanner = scanner
+    vulnerability_check.save()
+
+    return components_new, components_updated, components_deleted
+
+
+def _process_license_evidences(source_component: License_Component, target_component: License_Component) -> None:
+    if source_component.unsaved_evidences:
+        for unsaved_evidence in source_component.unsaved_evidences:
+            evidence = License_Component_Evidence(
+                license_component=target_component,
+                name=unsaved_evidence[0],
+                evidence=unsaved_evidence[1],
+            )
+            clip_fields("licenses", "License_Component_Evidence", evidence)
+            evidence.save()
+
+
 def _prepare_imported_observation(import_parameters: ImportParameters, imported_observation: Observation) -> None:
     imported_observation.product = import_parameters.product
     imported_observation.branch = import_parameters.branch
@@ -316,10 +498,9 @@ def _prepare_imported_observation(import_parameters: ImportParameters, imported_
     imported_observation.upload_filename = import_parameters.filename
     imported_observation.api_configuration_name = import_parameters.api_configuration_name
     imported_observation.import_last_seen = timezone.now()
+    imported_observation.origin_service = import_parameters.service
     if import_parameters.service:
-        imported_observation.origin_service_name = import_parameters.service
-        service = Service.objects.get_or_create(product=import_parameters.product, name=import_parameters.service)[0]
-        imported_observation.origin_service = service
+        imported_observation.origin_service_name = import_parameters.service.name
     if import_parameters.docker_image_name_tag:
         imported_observation.origin_docker_image_name_tag = import_parameters.docker_image_name_tag
     if import_parameters.endpoint_url:

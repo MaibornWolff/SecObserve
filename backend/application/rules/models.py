@@ -16,7 +16,7 @@ from application.access_control.models import User
 from application.access_control.services.current_user import get_current_user
 from application.commons.models import Settings
 from application.core.models import Product
-from application.core.types import Severity, Status, VexJustification
+from application.core.types import Severity, Status, VEX_Justification
 from application.rules.types import Rule_Status
 
 
@@ -37,7 +37,7 @@ class Rule(Model):
     origin_kubernetes_qualified_resource = CharField(max_length=255, blank=True)
     new_severity = CharField(max_length=12, choices=Severity.SEVERITY_CHOICES, blank=True)
     new_status = CharField(max_length=16, choices=Status.STATUS_CHOICES, blank=True)
-    new_vex_justification = CharField(max_length=64, choices=VexJustification.VEX_JUSTIFICATION_CHOICES, blank=True)
+    new_vex_justification = CharField(max_length=64, choices=VEX_Justification.VEX_JUSTIFICATION_CHOICES, blank=True)
     enabled = BooleanField(default=True)
     user = ForeignKey(
         User,

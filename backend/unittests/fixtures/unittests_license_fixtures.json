@@ -1,5 +1,36 @@
 [
     {
+        "model": "licenses.concluded_license",
+        "pk": 1,
+        "fields": {
+            "product": 1,
+            "component_purl_type": "npm",
+            "component_name": "internal_component",
+            "component_version": "1.0.0",
+            "manual_concluded_spdx_license": null,
+            "manual_concluded_license_expression": "expression",
+            "manual_concluded_non_spdx_license": "",
+            "user": 1,
+            "last_updated": "2022-12-15T16:10:35.513Z"
+        }
+    },
+    {
+        "model": "licenses.concluded_license",
+        "pk": 2,
+        "fields": {
+            "product": 2,
+            "component_purl_type": "pypi",
+            "component_name": "external_component",
+            "component_version": "2.0.0",
+            "manual_concluded_spdx_license": null,
+            "manual_concluded_license_expression": "",
+            "manual_concluded_non_spdx_license": "non spdx",
+            "user": 1,
+            "last_updated": "2022-12-15T16:10:35.513Z"
+
+        }
+    },
+    {
         "model": "licenses.license_component",
         "pk": 1,
         "fields": {
@@ -13,8 +44,8 @@
             "component_purl_type": "",
             "component_cpe": "",
             "component_dependencies": "",
-            "license_name": "internal license",
-            "non_spdx_license": "internal license",
+            "imported_declared_license_name": "internal license",
+            "imported_declared_non_spdx_license": "internal license",
             "evaluation_result": "Allowed",
             "numerical_evaluation_result": 1,
             "created": "2022-12-15T16:10:35.513Z",
@@ -36,8 +67,8 @@
             "component_purl_type": "",
             "component_cpe": "",
             "component_dependencies": "",
-            "license_name": "external license",
-            "non_spdx_license": "external license",
+            "imported_declared_license_name": "external license",
+            "imported_declared_non_spdx_license": "external license",
             "evaluation_result": "Review required",
             "numerical_evaluation_result": 2,
             "created": "2022-12-15T16:10:35.513Z",

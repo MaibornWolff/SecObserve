@@ -84,7 +84,7 @@ else:
         if env("MYSQL_AZURE", default="false") == "single":
             DATABASES["default"]["OPTIONS"]["ssl"] = {"ca": "/app/BaltimoreCyberTrustRoot_combined.crt.pem"}
         if env("MYSQL_AZURE", default="false") == "flexible":
-            DATABASES["default"]["OPTIONS"]["ssl"] = {"ca": "/app/DigiCertGlobalRootCA.crt.pem"}
+            DATABASES["default"]["OPTIONS"]["ssl"] = {"ca": "/app/combined-ca-certificates.pem"}
 
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -117,6 +117,7 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "application.access_control",
+    "application.background_tasks",
     "application.commons",
     "application.constance",
     "application.core",

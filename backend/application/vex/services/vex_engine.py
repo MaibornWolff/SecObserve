@@ -44,12 +44,24 @@ class VEX_Engine:
         observation.vex_statement = None
 
         vex_statement_found = False
-        for vex_statement in self.vex_statements:
-            vex_statement_found = apply_vex_statement_for_observation(
-                vex_statement, observation, previous_vex_statement
+        if observation.origin_component_cyclonedx_bom_link:
+            bom_vex_statements = VEX_Statement.objects.filter(
+                component_cyclonedx_bom_link=observation.origin_component_cyclonedx_bom_link
             )
-            if vex_statement_found:
-                break
+            for bom_vex_statement in bom_vex_statements:
+                vex_statement_found = apply_vex_statement_for_observation(
+                    bom_vex_statement, observation, previous_vex_statement
+                )
+                if vex_statement_found:
+                    break
+
+        if not vex_statement_found:
+            for vex_statement in self.vex_statements:
+                vex_statement_found = apply_vex_statement_for_observation(
+                    vex_statement, observation, previous_vex_statement
+                )
+                if vex_statement_found:
+                    break
 
         # Write observation and observation log if no vex_statement was found but there was one before
         if not vex_statement_found and (previous_vex_statement != observation.vex_statement or observation.vex_status):
@@ -61,7 +73,10 @@ def apply_vex_statement_for_observation(
     observation: Observation,
     previous_vex_statement: Optional[VEX_Statement],
 ) -> bool:
-    if vex_statement.vulnerability_id == observation.vulnerability_id and _match_purls(vex_statement, observation):
+    if vex_statement.vulnerability_id == observation.vulnerability_id and (
+        (vex_statement.component_purl and _match_purls(vex_statement, observation))
+        or (vex_statement.component_cyclonedx_bom_link and _match_cyclonedx_bom_links(vex_statement, observation))
+    ):
         previous_current_status = observation.current_status
         previous_vex_status = observation.vex_status
         observation.vex_status = _get_secobserve_status(vex_statement.status)
@@ -83,9 +98,9 @@ def apply_vex_statement_for_observation(
                 or previous_vex_vex_justification != observation.vex_vex_justification
                 or previous_current_vex_justification != observation.current_vex_justification
             )
-            and not previous_vex_status == Status.STATUS_OPEN
-            and not observation.vex_status == Status.STATUS_OPEN
-            and not observation.current_status == Status.STATUS_OPEN
+            and previous_vex_status != Status.STATUS_OPEN
+            and observation.vex_status != Status.STATUS_OPEN
+            and observation.current_status != Status.STATUS_OPEN
         ):
             _write_observation_log(
                 observation,
@@ -136,6 +151,13 @@ def _match_purl(vex_purl_str: Optional[str], observation_purl_str: Optional[str]
     return True
 
 
+def _match_cyclonedx_bom_links(vex_statement: VEX_Statement, observation: Observation) -> bool:
+    if not vex_statement.component_cyclonedx_bom_link or not observation.origin_component_cyclonedx_bom_link:
+        return False
+
+    return vex_statement.component_cyclonedx_bom_link == observation.origin_component_cyclonedx_bom_link
+
+
 def _check_qualifiers(vex_qualifiers: Optional[str | dict], observation_qualifiers: Optional[str | dict]) -> bool:
     if not vex_qualifiers and not observation_qualifiers:
         return True
@@ -165,6 +187,8 @@ def _get_secobserve_status(vex_status: str) -> str:
         return Status.STATUS_RESOLVED
     if vex_status == VEX_Status.VEX_STATUS_UNDER_INVESTIGATION:
         return Status.STATUS_IN_REVIEW
+    if vex_status == VEX_Status.VEX_STATUS_FALSE_POSITIVE:
+        return Status.STATUS_FALSE_POSITIVE
     return Status.STATUS_OPEN
 
 
@@ -246,6 +270,7 @@ def write_observation_log_no_vex_statement(
 
 
 def apply_vex_statements_after_import(product_purls: set[str], vex_statements: set[VEX_Statement]) -> None:
+    # Alternative 1, apply VEX statements with PURLs
     for product_purl in product_purls:
         try:
             purl = PackageURL.from_string(product_purl)
@@ -264,3 +289,17 @@ def apply_vex_statements_after_import(product_purls: set[str], vex_statements: s
             for observation in observations:
                 for vex_statement in vex_statements:
                     apply_vex_statement_for_observation(vex_statement, observation, observation.vex_statement)
+
+    # Alternative 2, apply VEX statements with BOM-Links
+    bom_links: dict[str, list[VEX_Statement]] = {}
+    for vex_statement in vex_statements:
+        if vex_statement.component_cyclonedx_bom_link:
+            if bom_links.get(vex_statement.component_cyclonedx_bom_link):
+                bom_links.get(vex_statement.component_cyclonedx_bom_link, []).append(vex_statement)
+            else:
+                bom_links[vex_statement.component_cyclonedx_bom_link] = [vex_statement]
+
+    observations = Observation.objects.filter(origin_component_cyclonedx_bom_link__in=bom_links)
+    for observation in observations:
+        for vex_statement in bom_links.get(observation.origin_component_cyclonedx_bom_link, []):
+            apply_vex_statement_for_observation(vex_statement, observation, observation.vex_statement)

@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
-import { Fragment, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { CreateBase, SimpleForm, useCreate, useNotify, useRefresh } from "react-admin";
 
 import AddButton from "../../commons/custom_fields/AddButton";
@@ -12,6 +12,8 @@ export type ProductRuleCreateProps = {
 };
 
 const ProductRuleCreate = ({ product }: ProductRuleCreateProps) => {
+    const dialogRef = useRef<HTMLDivElement>(null);
+    const [description, setDescription] = useState("");
     const [open, setOpen] = useState(false);
     const refresh = useRefresh();
     const notify = useNotify();
@@ -26,7 +28,7 @@ const ProductRuleCreate = ({ product }: ProductRuleCreateProps) => {
 
     const create_product_rule = (data: any) => {
         data.product = product.id;
-        data = non_duplicate_transform(data);
+        data = non_duplicate_transform(data, description);
 
         create(
             "product_rules",
@@ -47,7 +49,7 @@ const ProductRuleCreate = ({ product }: ProductRuleCreateProps) => {
     return (
         <Fragment>
             <AddButton title="Add product rule" onClick={handleOpen} />
-            <Dialog open={open} onClose={handleClose}>
+            <Dialog ref={dialogRef} open={open} onClose={handleClose} maxWidth={"lg"}>
                 <DialogTitle>Add product rule</DialogTitle>
                 <DialogContent>
                     <CreateBase resource="product_rules">
@@ -56,7 +58,13 @@ const ProductRuleCreate = ({ product }: ProductRuleCreateProps) => {
                             toolbar={<ToolbarCancelSave onClick={handleCancel} />}
                             validate={validateRuleForm}
                         >
-                            <RuleCreateEditComponent product={product} initialStatus={OBSERVATION_STATUS_OPEN} />
+                            <RuleCreateEditComponent
+                                product={product}
+                                initialStatus={OBSERVATION_STATUS_OPEN}
+                                initialDescription=""
+                                setDescription={setDescription}
+                                dialogRef={dialogRef}
+                            />
                         </SimpleForm>
                     </CreateBase>
                 </DialogContent>

@@ -10,7 +10,7 @@ from rest_framework.serializers import (
     ValidationError,
 )
 
-from application.access_control.services.roles_permissions import Permissions
+from application.authorization.services.roles_permissions import Permissions
 from application.core.api.serializers_product import NestedProductSerializer
 from application.core.models import Branch
 from application.import_observations.models import (
@@ -177,6 +177,7 @@ class ApiConfigurationSerializer(ModelSerializer):
 
 class VulnerabilityCheckSerializer(ModelSerializer):
     branch_name = SerializerMethodField()
+    service_name = SerializerMethodField()
     scanner_name = SerializerMethodField()
 
     def get_branch_name(self, vulnerability_check: Vulnerability_Check) -> str:
@@ -184,6 +185,12 @@ class VulnerabilityCheckSerializer(ModelSerializer):
             return ""
 
         return vulnerability_check.branch.name
+
+    def get_service_name(self, vulnerability_check: Vulnerability_Check) -> str:
+        if not vulnerability_check.service:
+            return ""
+
+        return vulnerability_check.service.name
 
     def get_scanner_name(self, vulnerability_check: Vulnerability_Check) -> str:
         if not vulnerability_check.scanner:

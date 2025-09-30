@@ -88,7 +88,7 @@ const ScanOSV = ({ product }: ScanOSVProps) => {
                             />
                         }
                     >
-                        <TextInputWide source="name" defaultValue={product.name} disabled />
+                        <TextInputWide source="name" label="Product name" defaultValue={product.name} disabled />
                         <WithRecord
                             render={(product) => (
                                 <Fragment>

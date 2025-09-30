@@ -4,8 +4,10 @@ from rest_framework.serializers import ValidationError
 
 from application.access_control.api.serializers import (
     AuthorizationGroupMemberSerializer,
+    _get_user_permissions,
 )
 from application.access_control.models import Authorization_Group
+from application.authorization.services.roles_permissions import Permissions
 from unittests.base_test_case import BaseTestCase
 
 
@@ -79,3 +81,16 @@ class TestAuthorizationGroupMemberSerializer(BaseTestCase):
 
         self.assertEqual(new_attrs, attrs)
         mock_authorization_group_member.assert_called_with(self.authorization_group_1, self.user_external)
+
+
+class TestUserListSerializer(BaseTestCase):
+    def test_get_user_permission_internal(self):
+        permissions = _get_user_permissions(self.user_internal)
+        self.assertEqual([Permissions.Product_Create, Permissions.Product_Group_Create], permissions)
+
+    @patch("application.access_control.api.serializers.get_current_user")
+    def test_get_user_permission_external(self, mock):
+        mock.return_value = self.user_external
+
+        permissions = _get_user_permissions()
+        self.assertEqual([], permissions)

@@ -16,7 +16,7 @@ jobs:
     steps:
       -
         name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           ref: 'v${{ github.event.inputs.release }}'
       -
@@ -24,10 +24,10 @@ jobs:
         uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392 # v3.6.0
       -
         name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3.10.0
+        uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3.11.1
       -
         name: Login to Docker Hub
-        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3.4.0
+        uses: docker/login-action@184bdaa0721073962dff0199f1fb9940f07167d1 # v3.5.0
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -54,7 +54,7 @@ jobs:
     steps:
       -
         name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           ref: 'v${{ github.event.inputs.release }}'
       -
@@ -62,10 +62,10 @@ jobs:
         uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392 # v3.6.0
       -
         name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3.10.0
+        uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3.11.1
       -
         name: Login to Docker Hub
-        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3.4.0
+        uses: docker/login-action@184bdaa0721073962dff0199f1fb9940f07167d1 # v3.5.0
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -93,18 +93,18 @@ jobs:
     steps:
       -
         name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           ref: 'v${{ github.event.inputs.release }}'
       - 
         name: Run vulnerability scanners for images
-        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@03881bede1d05a40887bf26d8dfd7a1a37be892d # main
+        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@98e82c999fbd5fc4d01efb078078fc5e9705c687 # main
         with:
           so_configuration: 'so_configuration_sca_current.yml'
           SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
       - 
         name: Run vulnerability scanners for endpoints
-        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@03881bede1d05a40887bf26d8dfd7a1a37be892d # main
+        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@98e82c999fbd5fc4d01efb078078fc5e9705c687 # main
         with:
           so_configuration: 'so_configuration_endpoints.yml'
           SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
@@ -115,12 +115,12 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
-          node-version: 20
+          node-version: 24
       -
         name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           ref: 'v${{ github.event.inputs.release }}'
       - 
@@ -214,47 +214,47 @@ jobs:
           commit_message: "chore: generate SBOMs for release ${{ github.event.inputs.release }}"
           branch: "chore/sboms_release_${{ github.event.inputs.release }}"
           file_pattern: "sbom/sbom*.json"
-      -
-        name: Merge SBOM branch into main and delete branch
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-        env:
-          VERSION: ${{ github.event.inputs.release }}
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const sbomBranch = `chore/sboms_release_${process.env.VERSION}`;
-            const targetBranch = 'main';
+      # -
+      #   name: Merge SBOM branch into main and delete branch
+      #   uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      #   env:
+      #     VERSION: ${{ github.event.inputs.release }}
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     script: |
+      #       const sbomBranch = `chore/sboms_release_${process.env.VERSION}`;
+      #       const targetBranch = 'main';
             
-            console.log(`Merging branch ${sbomBranch} into ${targetBranch}`);
+      #       console.log(`Merging branch ${sbomBranch} into ${targetBranch}`);
             
-            try {
-              // Merge the SBOM branch into main
-              await github.rest.repos.merge({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                base: targetBranch,
-                head: sbomBranch,
-                commit_message: `chore: merge SBOM files for release ${process.env.VERSION}`
-              });
+      #       try {
+      #         // Merge the SBOM branch into main
+      #         await github.rest.repos.merge({
+      #           owner: context.repo.owner,
+      #           repo: context.repo.repo,
+      #           base: targetBranch,
+      #           head: sbomBranch,
+      #           commit_message: `chore: merge SBOM files for release ${process.env.VERSION}`
+      #         });
               
-              console.log(`Successfully merged ${sbomBranch} into ${targetBranch}`);
+      #         console.log(`Successfully merged ${sbomBranch} into ${targetBranch}`);
               
-              // Delete the SBOM branch after successful merge
-              console.log(`Deleting branch ${sbomBranch}`);
-              await github.rest.git.deleteRef({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                ref: `heads/${sbomBranch}`
-              });
+      #         // Delete the SBOM branch after successful merge
+      #         console.log(`Deleting branch ${sbomBranch}`);
+      #         await github.rest.git.deleteRef({
+      #           owner: context.repo.owner,
+      #           repo: context.repo.repo,
+      #           ref: `heads/${sbomBranch}`
+      #         });
               
-              console.log(`Successfully deleted branch ${sbomBranch}`);
-            } catch (error) {
-              console.error(`Error during merge or branch deletion: ${error.message}`);
-              core.setFailed(error.message);
-            }
+      #         console.log(`Successfully deleted branch ${sbomBranch}`);
+      #       } catch (error) {
+      #         console.error(`Error during merge or branch deletion: ${error.message}`);
+      #         core.setFailed(error.message);
+      #       }
       -
         name: Add SBOMs to GitHub Release
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         env:
           VERSION: ${{ github.event.inputs.release }}
         with:

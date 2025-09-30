@@ -32,10 +32,23 @@ class User(AbstractUser):
         (LIST_SIZE_MEDIUM, LIST_SIZE_MEDIUM),
     ]
 
+    PACKAGE_INFO_PREFERENCE_DEPS_DEV = "open/source/insights"
+    PACKAGE_INFO_PREFERENCE_ECOSYSTE_MS = "ecosyste.ms"
+
+    PACKAGE_INFO_PREFERENCE_CHOICES = [
+        (PACKAGE_INFO_PREFERENCE_DEPS_DEV, PACKAGE_INFO_PREFERENCE_DEPS_DEV),
+        (PACKAGE_INFO_PREFERENCE_ECOSYSTE_MS, PACKAGE_INFO_PREFERENCE_ECOSYSTE_MS),
+    ]
+
     full_name = CharField(max_length=301, blank=True)
     is_external = BooleanField(default=False)
     setting_theme = CharField(max_length=5, choices=THEME_CHOICES, default=THEME_LIGHT)
     setting_list_size = CharField(max_length=6, choices=LIST_SIZE_CHOICES, default=LIST_SIZE_MEDIUM)
+    setting_package_info_preference = CharField(
+        max_length=20,
+        choices=PACKAGE_INFO_PREFERENCE_CHOICES,
+        default=PACKAGE_INFO_PREFERENCE_DEPS_DEV,
+    )
     setting_list_properties = TextField(max_length=2048, blank=True)
     oidc_groups_hash = CharField(max_length=64, blank=True)
     is_oidc_user = BooleanField(default=False)

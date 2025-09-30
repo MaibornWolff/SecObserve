@@ -3,7 +3,7 @@ from unittest.mock import patch
 from django.http.request import HttpRequest
 from rest_framework.exceptions import ValidationError
 
-from application.access_control.services.roles_permissions import Roles
+from application.authorization.services.roles_permissions import Roles
 from application.core.api.permissions import UserHasProductMemberPermission
 from application.core.models import Product_Member
 from unittests.base_test_case import BaseTestCase

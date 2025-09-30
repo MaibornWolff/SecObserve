@@ -11,7 +11,14 @@ import {
 } from "@mui/material";
 import { Title, useTheme } from "react-admin";
 
-import { getSettingListSize, getSettingTheme, saveSettingListSize, saveSettingTheme } from "./functions";
+import {
+    getSettingListSize,
+    getSettingPackageInfoPreference,
+    getSettingTheme,
+    saveSettingListSize,
+    saveSettingPackageInfoPreference,
+    saveSettingTheme,
+} from "./functions";
 
 const UserSettings = () => {
     const [, setTheme] = useTheme();
@@ -68,6 +75,30 @@ const UserSettings = () => {
                                 control={<Radio />}
                                 label="Medium"
                                 onClick={() => saveSettingListSize("medium")}
+                            />
+                        </RadioGroup>
+                    </FormControl>
+
+                    <Typography variant="subtitle1" sx={{ marginTop: 2 }}>
+                        Package information preference
+                    </Typography>
+                    <FormControl>
+                        <RadioGroup
+                            defaultValue={getSettingPackageInfoPreference()}
+                            name="radio-buttons-group-list-size"
+                            row
+                        >
+                            <FormControlLabel
+                                value="open/source/insights"
+                                control={<Radio />}
+                                label="open/source/insights"
+                                onClick={() => saveSettingPackageInfoPreference("open/source/insights")}
+                            />
+                            <FormControlLabel
+                                value="ecosyste.ms"
+                                control={<Radio />}
+                                label="ecosyste.ms"
+                                onClick={() => saveSettingPackageInfoPreference("ecosyste.ms")}
                             />
                         </RadioGroup>
                     </FormControl>

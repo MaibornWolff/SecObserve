@@ -144,7 +144,7 @@ const ObservationList = () => {
                     size={getSettingListSize()}
                     rowClick="show"
                     bulkActionButtons={<BulkActionButtons />}
-                    expand={<ObservationExpand />}
+                    expand={<ObservationExpand showComponent={true} />}
                     expandSingle
                 >
                     <TextField source="product_data.name" label="Product" />
@@ -162,7 +162,7 @@ const ObservationList = () => {
                         sx={{ wordBreak: "break-word" }}
                     />
                     <TextField source="origin_endpoint_hostname" label="Host" sx={{ wordBreak: "break-word" }} />
-                    <TextField source="origin_source_file" label="Source" sx={{ wordBreak: "break-word" }} />
+                    <TextField source="origin_source_file_short" label="Source" sx={{ wordBreak: "break-word" }} />
                     <TextField
                         source="origin_cloud_qualified_resource"
                         label="Cloud res."

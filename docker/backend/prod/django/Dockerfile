@@ -1,4 +1,4 @@
-FROM python:3.12-alpine@sha256:c610e4a94a0e8b888b4b225bfc0e6b59dee607b1e61fb63ff3926083ff617216 AS python-base
+FROM python:3.13-alpine@sha256:9ba6d8cbebf0fb6546ae71f2a1c14f6ffd2fdab83af7fa5669734ef30ad48844 AS python-base
 
 # Python build stage
 FROM python-base AS python-build-stage
@@ -76,7 +76,7 @@ COPY ./backend/config/settings/prod.py ${APP_HOME}/config/settings/dist.py
 # single server
 COPY ./docker/backend/prod/database/BaltimoreCyberTrustRoot_combined.crt.pem ${APP_HOME}/BaltimoreCyberTrustRoot_combined.crt.pem
 # flexible server
-COPY ./docker/backend/prod/database/DigiCertGlobalRootCA.crt.pem ${APP_HOME}/DigiCertGlobalRootCA.crt.pem
+COPY ./docker/backend/prod/database/combined-ca-certificates.pem ${APP_HOME}/combined-ca-certificates.pem
 
 # kics-scan ignore-block
 # versions of dependencies from distribution are ok

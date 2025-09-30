@@ -13,7 +13,7 @@ from django.db.models import (
 )
 from encrypted_model_fields.fields import EncryptedCharField
 
-from application.core.models import Branch, Product
+from application.core.models import Branch, Product, Service
 from application.import_observations.types import Parser_Source, Parser_Type
 
 
@@ -69,6 +69,7 @@ class Api_Configuration(Model):
 class Vulnerability_Check(Model):
     product = ForeignKey(Product, on_delete=CASCADE)
     branch = ForeignKey(Branch, on_delete=CASCADE, null=True)
+    service = ForeignKey(Service, on_delete=CASCADE, null=True)
     filename = CharField(max_length=255, blank=True)
     api_configuration_name = CharField(max_length=255, blank=True)
     scanner = CharField(max_length=255, blank=True)
@@ -89,6 +90,7 @@ class Vulnerability_Check(Model):
         unique_together = (
             "product",
             "branch",
+            "service",
             "filename",
             "api_configuration_name",
         )

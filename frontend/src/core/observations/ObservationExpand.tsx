@@ -5,7 +5,11 @@ import { getElevation } from "../../metrics/functions";
 import ObservationShowDescriptionRecommendation from "./ObservationShowDescriptionRecommendation";
 import ObservationShowOrigins from "./ObservationShowOrigins";
 
-const ObservationExpand = () => {
+type ObservationExpandProps = {
+    showComponent: boolean;
+};
+
+const ObservationExpand = ({ showComponent }: ObservationExpandProps) => {
     const observation = useRecordContext();
     return (
         <SimpleShowLayout>
@@ -17,7 +21,7 @@ const ObservationExpand = () => {
                     <ObservationShowDescriptionRecommendation />
                 </Paper>
             )}
-            <ObservationShowOrigins showDependencies={false} elevated={false} />
+            {showComponent && <ObservationShowOrigins showDependencies={false} elevated={false} />}
         </SimpleShowLayout>
     );
 };

@@ -2,6 +2,9 @@ dev_addr: 127.0.0.1:9000
 
 site_name: SecObserve
 
+exclude_docs: |
+  /mkdocs_plugins/
+
 theme:
   name: material
   logo: assets/images/secobserve_white_icon.svg
@@ -12,6 +15,7 @@ theme:
     - navigation.tabs
     - navigation.tabs.top
     - navigation.footer
+    - content.code.copy
   custom_dir: docs/overrides
   palette:
     accent: light blue
@@ -35,20 +39,23 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
+        - name: include
+          class: highlight
+          format: !!python/name:include.include_file_format
+          validator: !!python/name:include.include_file_validate
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
   - pymdownx.inlinehilite
   - pymdownx.snippets
-  - pymdownx.superfences
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
 repo_url: https://github.com/MaibornWolff/SecObserve
 repo_name: maibornwolff/secobserve
 
-copyright: Copyright &copy; 2023 MaibornWolff GmbH
+copyright: Copyright &copy; 2025 MaibornWolff GmbH / Stefan Fleckenstein
 
 # Page tree
 nav:
@@ -62,6 +69,7 @@ nav:
     - Installation: getting_started/installation.md
     - Configuration: getting_started/configuration.md
     - Upgrading: getting_started/upgrading.md
+    - Acknowledgements: getting_started/acknowledgements.md
   - Usage:
     - Import observations: usage/import_observations.md
     - Upload SBOMs: usage/upload_sbom.md

@@ -1,8 +1,9 @@
 import { Divider, Stack, Typography } from "@mui/material";
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import {
     BooleanInput,
     FormDataConsumer,
+    Identifier,
     NullableBooleanInput,
     NumberInput,
     ReferenceInput,
@@ -10,21 +11,16 @@ import {
 } from "react-admin";
 
 import products from ".";
+import MarkdownEdit from "../../commons/custom_fields/MarkdownEdit";
 import OSVLinuxDistributionInput from "../../commons/custom_fields/OSVLinuxDistributionInput";
-import { validate_0_999999, validate_255, validate_2048, validate_required_255 } from "../../commons/custom_validators";
+import { validate_0_999999, validate_255, validate_required_255 } from "../../commons/custom_validators";
 import { feature_automatic_osv_scanning, feature_email, feature_license_management } from "../../commons/functions";
 import { AutocompleteInputMedium, AutocompleteInputWide, TextInputWide } from "../../commons/layout/themes";
 import { transform_product_group_and_product } from "../functions";
 import { ISSUE_TRACKER_TYPE_CHOICES, OBSERVATION_SEVERITY_CHOICES } from "../types";
 
-const RichTextInput = React.lazy(() =>
-    import("ra-input-rich-text").then((module) => ({
-        default: module.RichTextInput,
-    }))
-);
-
-export const transform = (data: any) => {
-    data = transform_product_group_and_product(data);
+export const transform = (data: any, description: string) => {
+    data = transform_product_group_and_product(data, description);
 
     data.purl ??= "";
     data.cpe23 ??= "";
@@ -53,9 +49,17 @@ export const transform = (data: any) => {
 
 export type ProductCreateEditComponentProps = {
     edit: boolean;
+    initialDescription: string;
+    setDescription: (value: string) => void;
+    productGroupId?: Identifier;
 };
 
-export const ProductCreateEditComponent = ({ edit }: ProductCreateEditComponentProps) => {
+export const ProductCreateEditComponent = ({
+    edit,
+    initialDescription,
+    setDescription,
+    productGroupId,
+}: ProductCreateEditComponentProps) => {
     return (
         <Fragment>
             <Typography variant="h6" alignItems="center" display={"flex"} sx={{ marginBottom: 1 }}>
@@ -63,15 +67,32 @@ export const ProductCreateEditComponent = ({ edit }: ProductCreateEditComponentP
                 &nbsp;&nbsp;Product
             </Typography>
             <TextInputWide autoFocus source="name" validate={validate_required_255} />
-            <RichTextInput source="description" validate={validate_2048} />
-            <ReferenceInput
-                source="product_group"
-                reference="product_groups"
-                queryOptions={{ meta: { api_resource: "product_group_names" } }}
-                sort={{ field: "name", order: "ASC" }}
-            >
-                <AutocompleteInputWide optionText="name" />
-            </ReferenceInput>
+            <MarkdownEdit
+                initialValue={initialDescription}
+                setValue={setDescription}
+                label="Description"
+                maxLength={2048}
+            />
+            {!productGroupId && (
+                <ReferenceInput
+                    source="product_group"
+                    reference="product_groups"
+                    queryOptions={{ meta: { api_resource: "product_group_names" } }}
+                    sort={{ field: "name", order: "ASC" }}
+                >
+                    <AutocompleteInputWide optionText="name" />
+                </ReferenceInput>
+            )}
+            {productGroupId && (
+                <ReferenceInput
+                    source="product_group"
+                    reference="product_groups"
+                    queryOptions={{ meta: { api_resource: "product_group_names" } }}
+                    sort={{ field: "name", order: "ASC" }}
+                >
+                    <AutocompleteInputWide optionText="name" defaultValue={productGroupId} disabled={true} />
+                </ReferenceInput>
+            )}
             <Stack direction="row" spacing={4}>
                 <TextInputWide source="purl" validate={validate_255} label="PURL" />
                 <TextInputWide source="cpe23" validate={validate_255} label="CPE 2.3" />

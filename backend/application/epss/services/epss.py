@@ -10,7 +10,7 @@ from application.core.types import Status
 from application.epss.models import EPSS_Score, EPSS_Status
 
 
-def import_epss() -> None:
+def import_epss() -> str:
     response = requests.get(
         "https://epss.cyentia.com/epss_scores-current.csv.gz",
         timeout=60,
@@ -23,6 +23,7 @@ def import_epss() -> None:
 
     counter = 0
     scores = []
+    num_epss_scores = 0
     for line in extracted_data.split(b"\n"):
         decoded_line = line.decode()
 
@@ -43,6 +44,7 @@ def import_epss() -> None:
                         epss_percentile=elements[2],
                     )
                 )
+                num_epss_scores += 1
                 counter += 1
             if counter == 1000:
                 EPSS_Score.objects.bulk_create(scores)
@@ -51,8 +53,12 @@ def import_epss() -> None:
     if scores:
         EPSS_Score.objects.bulk_create(scores)
 
+    return f"Imported {num_epss_scores} EPSS scores."
 
-def epss_apply_observations() -> None:
+
+def epss_apply_observations() -> str:
+    num_observations = 0
+
     observations = (
         Observation.objects.filter(vulnerability_id__startswith="CVE-")
         .exclude(current_status=Status.STATUS_RESOLVED)
@@ -68,8 +74,11 @@ def epss_apply_observations() -> None:
         for observation in page.object_list:
             if apply_epss(observation):
                 updates.append(observation)
+                num_observations += 1
 
         Observation.objects.bulk_update(updates, ["epss_score", "epss_percentile"])
+
+    return f"Applied EPSS scores to {num_observations} observations."
 
 
 def apply_epss(observation: Observation) -> bool:

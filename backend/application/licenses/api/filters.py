@@ -16,6 +16,7 @@ from django_filters import (
 from application.commons.api.extended_ordering_filter import ExtendedOrderingFilter
 from application.commons.types import Age_Choices
 from application.licenses.models import (
+    Concluded_License,
     License,
     License_Component,
     License_Component_Evidence,
@@ -30,15 +31,67 @@ from application.licenses.models import (
 from application.licenses.queries.license_group import get_license_groups
 
 
+class ConcludedLicenseFilter(FilterSet):
+    component_name = CharFilter(field_name="component_name", lookup_expr="icontains")
+    component_version = CharFilter(field_name="component_version", lookup_expr="icontains")
+    manual_concluded_license_expression = CharFilter(
+        field_name="manual_concluded_license_expression", lookup_expr="icontains"
+    )
+    manual_concluded_non_spdx_license = CharFilter(
+        field_name="manual_concluded_non_spdx_license", lookup_expr="icontains"
+    )
+    age = ChoiceFilter(field_name="age", method="get_age", choices=Age_Choices.AGE_CHOICES)
+
+    def get_age(
+        self,
+        queryset: QuerySet,
+        name: Any,  # pylint: disable=unused-argument
+        value: Any,
+    ) -> QuerySet:
+        days = Age_Choices.get_days_from_age(value)
+
+        if days is None:
+            return queryset
+
+        today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        time_threshold = today - timedelta(days=int(days))
+        return queryset.filter(last_updated__gte=time_threshold)
+
+    ordering = ExtendedOrderingFilter(
+        # tuple-mapping retains order
+        fields=(
+            ("product__name", "product_data.name"),
+            (
+                (
+                    "component_name",
+                    "component_version",
+                    "component_purl_type",
+                ),
+                "component_name_version",
+            ),
+            ("manual_concluded_spdx_license__spdx_id", "manual_concluded_spdx_license_id"),
+            ("manual_concluded_license_expression", "manual_concluded_license_expression"),
+            ("manual_concluded_non_spdx_license", "manual_concluded_non_spdx_license"),
+            ("user__full_name", "user_data.full_name"),
+            ("last_updated", "last_updated"),
+        ),
+    )
+
+    class Meta:
+        model = Concluded_License
+        fields = "__all__"
+
+
 class LicenseComponentFilter(FilterSet):
     component_name_version = CharFilter(field_name="component_name_version", lookup_expr="icontains")
-    license_name = CharFilter(field_name="license_name", lookup_expr="icontains")
-    license_name_exact = CharFilter(field_name="license_name")
-    license_spdx_id = CharFilter(field_name="license__spdx_id", lookup_expr="icontains")
-    license_expression = CharFilter(field_name="license_expression", lookup_expr="icontains")
-    non_spdx_license = CharFilter(field_name="non_spdx_license", lookup_expr="icontains")
+    effective_license_name = CharFilter(field_name="effective_license_name", lookup_expr="icontains")
+    effective_license_name_exact = CharFilter(field_name="effective_license_name")
+    effective_license_spdx_id = CharFilter(field_name="effective_spdx_license__spdx_id", lookup_expr="icontains")
+    effective_license_expression = CharFilter(field_name="effective_license_expression", lookup_expr="icontains")
+    effective_non_spdx_license = CharFilter(field_name="effective_non_spdx_license", lookup_expr="icontains")
     age = ChoiceFilter(field_name="age", method="get_age", choices=Age_Choices.AGE_CHOICES)
     branch_name_exact = CharFilter(field_name="branch__name")
+    concluded_comment = CharFilter(field_name="concluded_comment", lookup_expr="icontains")
 
     def get_age(
         self,
@@ -58,21 +111,21 @@ class LicenseComponentFilter(FilterSet):
     ordering = ExtendedOrderingFilter(
         # tuple-mapping retains order
         fields=(
-            ("license__spdx_id", "license_data.spdx_id"),
-            ("license_expression", "license_expression"),
-            ("non_spdx_license", "non_spdx_license"),
+            ("effective_spdx_license__spdx_id", "license_data.spdx_id"),
+            ("effective_license_expression", "effective_license_expression"),
+            ("effective_non_spdx_license", "effective_non_spdx_license"),
             (
                 (
-                    "license_name",
+                    "effective_license_name",
                     "numerical_evaluation_result",
                     "component_name_version",
                 ),
-                "license_name",
+                "effective_license_name",
             ),
             (
                 (
                     "numerical_evaluation_result",
-                    "license_name",
+                    "effective_license_name",
                     "component_name_version",
                 ),
                 "evaluation_result",
@@ -80,7 +133,7 @@ class LicenseComponentFilter(FilterSet):
             (
                 (
                     "branch__name",
-                    "license_name",
+                    "effective_license_name",
                     "numerical_evaluation_result",
                     "component_name_version",
                 ),
@@ -92,7 +145,7 @@ class LicenseComponentFilter(FilterSet):
                 (
                     "component_purl_type",
                     "numerical_evaluation_result",
-                    "license_name",
+                    "effective_license_name",
                     "component_name_version",
                 ),
                 "component_purl_type",
@@ -100,11 +153,20 @@ class LicenseComponentFilter(FilterSet):
             (
                 (
                     "origin_service__name",
-                    "license_name",
+                    "effective_license_name",
                     "numerical_evaluation_result",
                     "component_name_version",
                 ),
                 "origin_service_name",
+            ),
+            (
+                (
+                    "concluded_comment",
+                    "effective_license_name",
+                    "numerical_evaluation_result",
+                    "component_name_version",
+                ),
+                "concluded_comment",
             ),
             ("last_change", "last_change"),
         ),
@@ -115,10 +177,10 @@ class LicenseComponentFilter(FilterSet):
         fields = [
             "product",
             "branch",
-            "license_name",
-            "license_spdx_id",
-            "license_expression",
-            "non_spdx_license",
+            "effective_license_name",
+            "effective_license_spdx_id",
+            "effective_license_expression",
+            "effective_non_spdx_license",
             "evaluation_result",
             "component_name_version",
             "component_purl_type",

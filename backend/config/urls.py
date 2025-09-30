@@ -41,6 +41,8 @@ from application.metrics.api.views import (
 from application.vex.api.views import (
     CSAFDocumentCreateView,
     CSAFDocumentUpdateView,
+    CycloneDXDocumentCreateView,
+    CycloneDXDocumentUpdateView,
     OpenVEXDocumentCreateView,
     OpenVEXDocumentUpdateView,
     VEXImportView,
@@ -137,6 +139,11 @@ urlpatterns += [
     path(
         "api/vex/openvex_document/update/<str:document_id_prefix>/<str:document_base_id>/",
         OpenVEXDocumentUpdateView.as_view(),
+    ),
+    path("api/vex/cyclonedx_document/create/", CycloneDXDocumentCreateView.as_view()),
+    path(
+        "api/vex/cyclonedx_document/update/<str:document_id_prefix>/<str:document_base_id>/",
+        CycloneDXDocumentUpdateView.as_view(),
     ),
     path("api/vex/vex_import/", VEXImportView.as_view()),
 ]

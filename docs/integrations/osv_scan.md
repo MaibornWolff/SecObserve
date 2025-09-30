@@ -4,7 +4,7 @@ The components of a product can be scanned for vulnerabilities using the OSV dat
 
 There are 2 preconditions for a product to be met before using the OSV database for vulnerability scanning:
 
-* License information has to be imported, only then all components are available for scanning.
+* License/Component information has to be imported, only then all components are available for scanning.
 * The flag `OSV scanning enabled` in the product settings has to be activated.
 
 ![OSV scanning settings](../assets/images/screenshot_osv_scanning_settings_1.png)

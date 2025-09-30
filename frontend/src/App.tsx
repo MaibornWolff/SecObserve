@@ -8,6 +8,7 @@ import { oidcConfig, updateRefreshToken } from "./access_control/auth_provider/o
 import authorization_groups from "./access_control/authorization_groups";
 import { Login } from "./access_control/login";
 import users from "./access_control/users";
+import periodic_tasks from "./background_tasks/periodic_tasks";
 import { Layout } from "./commons/layout";
 import { darkTheme, lightTheme } from "./commons/layout/themes";
 import { queryClient } from "./commons/queryClient";
@@ -15,6 +16,7 @@ import drfProvider from "./commons/ra-data-django-rest-framework";
 import settings from "./commons/settings";
 import UserSettings from "./commons/user_settings/UserSettings";
 import { getTheme } from "./commons/user_settings/functions";
+import components from "./core/components";
 import evidences from "./core/evidences";
 import observation_logs from "./core/observation_logs";
 import observations from "./core/observations";
@@ -23,6 +25,7 @@ import products from "./core/products";
 import Reviews from "./core/reviews/Reviews";
 import { Dashboard } from "./dashboard";
 import parsers from "./import_observations/parsers";
+import concluded_licenses from "./licenses/concluded_licenses";
 import LicenseAdministration from "./licenses/license_administration/LicenseAdministration";
 import license_component_evidences from "./licenses/license_component_evidences";
 import license_components from "./licenses/license_components";
@@ -33,6 +36,7 @@ import notifications from "./notifications";
 import general_rules from "./rules/general_rules";
 import product_rules from "./rules/product_rules";
 import csaf from "./vex/csaf";
+import cyclonedx from "./vex/cyclonedx";
 import openvex from "./vex/openvex";
 import vex_counters from "./vex/vex_counters";
 import vex_documents from "./vex/vex_documents";
@@ -65,6 +69,7 @@ const App = () => {
                     <Route path="/license/licenses" element={<LicenseAdministration />} />
                     <Route path="/license/license_groups" element={<LicenseAdministration />} />
                     <Route path="/license/license_policies" element={<LicenseAdministration />} />
+                    <Route path="/license/concluded_licenses" element={<LicenseAdministration />} />
                     <Route path="/reviews" element={<Reviews />} />
                     <Route path="/reviews/observation_reviews" element={<Reviews />} />
                     <Route path="/reviews/observation_log_approvals" element={<Reviews />} />
@@ -145,11 +150,25 @@ const App = () => {
                     name="vex/csaf"
                     {...csaf} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
                     // nosemgrep because the props are well defined in the import
+                    recordRepresentation={(record) =>
+                        `${trim_string(record.document_id_prefix + " / " + record.document_base_id)}`
+                    }
                 />
                 <Resource
                     name="vex/openvex"
                     {...openvex} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
                     // nosemgrep because the props are well defined in the import
+                    recordRepresentation={(record) =>
+                        `${trim_string(record.document_id_prefix + " / " + record.document_base_id)}`
+                    }
+                />
+                <Resource
+                    name="vex/cyclonedx"
+                    {...cyclonedx} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                    // nosemgrep because the props are well defined in the import
+                    recordRepresentation={(record) =>
+                        `${trim_string(record.document_id_prefix + " / " + record.document_base_id)}`
+                    }
                 />
                 <Resource
                     name="vex/vex_counters"
@@ -192,6 +211,24 @@ const App = () => {
                     name="license_policies"
                     {...license_policies} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
                     // nosemgrep because the props are well defined in the import
+                />
+                <Resource
+                    name="concluded_licenses"
+                    {...concluded_licenses} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                    // nosemgrep because the props are well defined in the import
+                />
+                <Resource
+                    name="periodic_tasks"
+                    {...periodic_tasks} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                    // nosemgrep because the props are well defined in the import
+                />
+                <Resource
+                    name="components"
+                    {...components} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                    // nosemgrep because the props are well defined in the import
+                    recordRepresentation={(record) =>
+                        `${trim_string(record.product_name + " / " + record.component_name_version)}`
+                    }
                 />
             </Admin>
         </AuthProvider>

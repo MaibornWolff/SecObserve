@@ -2,14 +2,14 @@ from os import path
 from unittest import TestCase
 
 from application.core.models import Observation, Product
-from application.core.types import Status
+from application.core.types import Status, VEX_Justification
 from application.import_observations.services.import_observations import (
     FileUploadParameters,
     file_upload_observations,
 )
 from application.licenses.models import License_Component
 from application.vex.models import VEX_Document, VEX_Statement
-from application.vex.types import VEX_Document_Type, VEX_Justification, VEX_Status
+from application.vex.types import VEX_Document_Type, VEX_Status
 
 
 class BaseTestVEXImport(TestCase):
@@ -45,25 +45,19 @@ class BaseTestVEXImport(TestCase):
     def check_vex_document(self, vex_document: VEX_Document, document_type: str, short: bool = False) -> None:
         self.assertEqual(document_type, vex_document.type)
         self.assertEqual("1", vex_document.version)
-        self.assertEqual("vendor", vex_document.role)
+
         if document_type == VEX_Document_Type.VEX_DOCUMENT_TYPE_CSAF:
-            self.assertEqual(
-                "2024-07-14T11:12:19.671904+00:00",
-                vex_document.initial_release_date.isoformat(),
-            )
-            self.assertEqual(
-                "2024-07-14T11:12:19.671919+00:00",
-                vex_document.current_release_date.isoformat(),
-            )
-        else:
-            self.assertEqual(
-                "2024-07-14T11:17:57.668593+00:00",
-                vex_document.initial_release_date.isoformat(),
-            )
-            self.assertEqual(
-                "2024-07-14T11:17:57.668609+00:00",
-                vex_document.current_release_date.isoformat(),
-            )
+            self.assertEqual("vendor", vex_document.role)
+            self.assertEqual("2024-07-14T11:12:19.671904+00:00", vex_document.initial_release_date.isoformat())
+            self.assertEqual("2024-07-14T11:12:19.671919+00:00", vex_document.current_release_date.isoformat())
+        elif document_type == VEX_Document_Type.VEX_DOCUMENT_TYPE_OPENVEX:
+            self.assertEqual("vendor", vex_document.role)
+            self.assertEqual("2024-07-14T11:17:57.668593+00:00", vex_document.initial_release_date.isoformat())
+            self.assertEqual("2024-07-14T11:17:57.668609+00:00", vex_document.current_release_date.isoformat())
+        elif document_type == VEX_Document_Type.VEX_DOCUMENT_TYPE_CYCLONEDX:
+            self.assertEqual("", vex_document.role)
+            self.assertEqual("2024-07-14T11:17:57.668593+00:00", vex_document.initial_release_date.isoformat())
+            self.assertEqual("2024-07-14T11:17:57.668593+00:00", vex_document.current_release_date.isoformat())
 
         vex_statements = VEX_Statement.objects.filter(document=vex_document)
         self.assertEqual(13, len(vex_statements))
@@ -77,7 +71,17 @@ class BaseTestVEXImport(TestCase):
         purl_sqlparse = "pkg:pypi/sqlparse" if short else "pkg:pypi/sqlparse@0.4.4"
 
         for vex_statement in vex_statements:
-            if vex_statement.vulnerability_id == "CVE-2023-49083" and vex_statement.component_purl == purl_cryptography:
+            if vex_statement.vulnerability_id == "CVE-2023-49083" and (
+                (
+                    vex_statement.component_purl
+                    and vex_statement.component_purl == purl_cryptography
+                    or (
+                        vex_statement.component_cyclonedx_bom_link
+                        and vex_statement.component_cyclonedx_bom_link
+                        == "urn:cdx:aebccdfe-fab4-4210-acce-bac771d4842d/1#pkg:pypi/cryptography@41.0.5"
+                    )
+                )
+            ):
                 found_49083 = True
                 self.assertTrue(
                     vex_statement.description.startswith(
@@ -85,9 +89,12 @@ class BaseTestVEXImport(TestCase):
                     )
                 )
                 self.assertEqual(VEX_Status.VEX_STATUS_NOT_AFFECTED, vex_statement.status)
-                self.assertEqual(
-                    VEX_Justification.STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,
+                self.assertIn(
                     vex_statement.justification,
+                    [
+                        VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,
+                        VEX_Justification.JUSTIFICATION_CYCLONEDX_REQUIRES_CONFIGURATION,
+                    ],
                 )
                 if document_type == VEX_Document_Type.VEX_DOCUMENT_TYPE_CSAF:
                     self.assertEqual("", vex_statement.impact)
@@ -95,12 +102,22 @@ class BaseTestVEXImport(TestCase):
                     self.assertEqual("Not affected for VEX test case", vex_statement.impact)
 
                 self.assertEqual("", vex_statement.remediation)
-                self.assertEqual(
-                    purl_vex_test,
-                    vex_statement.product_purl,
-                )
+                if vex_statement.component_cyclonedx_bom_link:
+                    self.assertEqual("", vex_statement.product_purl)
+                else:
+                    self.assertEqual(
+                        purl_vex_test,
+                        vex_statement.product_purl,
+                    )
 
-            if vex_statement.vulnerability_id == "CVE-2024-0727" and vex_statement.component_purl == purl_cryptography:
+            if vex_statement.vulnerability_id == "CVE-2024-0727" and (
+                (vex_statement.component_purl and vex_statement.component_purl == purl_cryptography)
+                or (
+                    vex_statement.component_cyclonedx_bom_link
+                    and vex_statement.component_cyclonedx_bom_link
+                    == "urn:cdx:aebccdfe-fab4-4210-acce-bac771d4842d/1#pkg:pypi/cryptography@41.0.5"
+                )
+            ):
                 found_0727 = True
                 self.assertTrue(
                     vex_statement.description.startswith(
@@ -114,12 +131,22 @@ class BaseTestVEXImport(TestCase):
                 )
                 self.assertEqual("", vex_statement.impact)
                 self.assertEqual("Upgrade cryptography to version 42.0.2", vex_statement.remediation)
-                self.assertEqual(
-                    purl_vex_test,
-                    vex_statement.product_purl,
-                )
+                if vex_statement.component_cyclonedx_bom_link:
+                    self.assertEqual("", vex_statement.product_purl)
+                else:
+                    self.assertEqual(
+                        purl_vex_test,
+                        vex_statement.product_purl,
+                    )
 
-            if vex_statement.vulnerability_id == "CVE-2024-4340" and vex_statement.component_purl == purl_sqlparse:
+            if vex_statement.vulnerability_id == "CVE-2024-4340" and (
+                (vex_statement.component_purl and vex_statement.component_purl == purl_sqlparse)
+                or (
+                    vex_statement.component_cyclonedx_bom_link
+                    and vex_statement.component_cyclonedx_bom_link
+                    == "urn:cdx:aebccdfe-fab4-4210-acce-bac771d4842d/1#pkg:pypi/sqlparse@0.4.4"
+                )
+            ):
                 found_4340 = True
                 self.assertTrue(
                     vex_statement.description.startswith("Passing a heavily nested list to sqlparse.parse()")
@@ -131,10 +158,13 @@ class BaseTestVEXImport(TestCase):
                 )
                 self.assertEqual("", vex_statement.impact)
                 self.assertEqual("", vex_statement.remediation)
-                self.assertEqual(
-                    purl_vex_test,
-                    vex_statement.product_purl,
-                )
+                if vex_statement.component_cyclonedx_bom_link:
+                    self.assertEqual("", vex_statement.product_purl)
+                else:
+                    self.assertEqual(
+                        purl_vex_test,
+                        vex_statement.product_purl,
+                    )
 
         self.assertTrue(found_49083)
         self.assertTrue(found_0727)
@@ -156,13 +186,19 @@ class BaseTestVEXImport(TestCase):
         )
         self.assertEqual(Status.STATUS_NOT_AFFECTED, observation.current_status)
         self.assertEqual(Status.STATUS_NOT_AFFECTED, observation.vex_status)
-        self.assertEqual(
-            VEX_Justification.STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,
+        self.assertIn(
             observation.current_vex_justification,
+            [
+                VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,
+                VEX_Justification.JUSTIFICATION_CYCLONEDX_REQUIRES_CONFIGURATION,
+            ],
         )
-        self.assertEqual(
-            VEX_Justification.STATUS_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,
+        self.assertIn(
             observation.vex_vex_justification,
+            [
+                VEX_Justification.JUSTIFICATION_VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY,
+                VEX_Justification.JUSTIFICATION_CYCLONEDX_REQUIRES_CONFIGURATION,
+            ],
         )
 
         observation = Observation.objects.get(
