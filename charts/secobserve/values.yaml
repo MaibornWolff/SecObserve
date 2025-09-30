@@ -102,10 +102,10 @@ backend:
     port: 5000
 
 # Defines the secobserve http service
-# service:
-# Defines how to expose the secobserve master service
-# Use node port for ALB
-#   type: NodePort
+service:
+  type: ClusterIP
+  # If you want to use a NodePort service for ALB, uncomment the following line
+  #type: NodePort
 
 ingress:
   # If true, a Kubernetes Ingress resource will be created to the http port of the secobserve Service
