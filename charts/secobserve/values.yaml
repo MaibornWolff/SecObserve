@@ -111,23 +111,21 @@ ingress:
   # If true, a Kubernetes Ingress resource will be created to the http port of the secobserve Service
   enabled: true
   hostname: "secobserve.dev"
-  ingressClassName: alb
-  annotations:
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
-    alb.ingress.kubernetes.io/ssl-policy: 'ELBSecurityPolicy-TLS13-1-2-FIPS-2023-04'
-    alb.ingress.kubernetes.io/healthcheck-path: /
-  # Example configuration for using an NGINX ingress controller
-  # ingressClassName: nginx
+  # ingressClassName: alb
   # annotations:
-  #   # Use the NGINX ingress class
-  #   kubernetes.io/ingress.class: nginx
-  #   # Enable SSL redirect for HTTPS
-  #   nginx.ingress.kubernetes.io/ssl-redirect: "true"
-  #   # Configure a custom timeout for the proxy
-  #   nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
-  #   nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
-  # # Define the hostname for the ingress
-  # hostname: secobserve.dev
+  #   alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
+  #   alb.ingress.kubernetes.io/ssl-policy: 'ELBSecurityPolicy-TLS13-1-2-FIPS-2023-04'
+  #   alb.ingress.kubernetes.io/healthcheck-path: /
+  # Example configuration for using an NGINX ingress controller
+  ingressClassName: nginx
+  annotations:
+    # Use the NGINX ingress class
+    kubernetes.io/ingress.class: nginx
+    # Enable SSL redirect for HTTPS
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # Configure a custom timeout for the proxy
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
   # # TLS configuration for HTTPS
   # tls:
   #   secretName: secobserve-tls
