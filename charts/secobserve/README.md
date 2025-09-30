@@ -76,7 +76,7 @@ A Helm chart to deploy SecObserve, an open-source vulnerability and license mana
 | backend.image.pullPolicy | string | `"IfNotPresent"` |  |
 | backend.image.registry | string | `"docker.io"` |  |
 | backend.image.repository | string | `"maibornwolff/secobserve-backend"` |  |
-| backend.image.tag | string | `"1.30.1"` |  |
+| backend.image.tag | string | `"1.38.0"` |  |
 | backend.resources.limits.cpu | string | `"1000m"` |  |
 | backend.resources.limits.memory | string | `"1500Mi"` |  |
 | backend.resources.requests.cpu | string | `"1000m"` |  |
@@ -111,18 +111,19 @@ A Helm chart to deploy SecObserve, an open-source vulnerability and license mana
 | frontend.image.pullPolicy | string | `"IfNotPresent"` |  |
 | frontend.image.registry | string | `"docker.io"` |  |
 | frontend.image.repository | string | `"maibornwolff/secobserve-frontend"` |  |
-| frontend.image.tag | string | `"1.30.1"` |  |
+| frontend.image.tag | string | `"1.38.0"` |  |
 | frontend.resources.limits.cpu | string | `"500m"` |  |
 | frontend.resources.limits.memory | string | `"1000Mi"` |  |
 | frontend.resources.requests.cpu | string | `"500m"` |  |
 | frontend.resources.requests.memory | string | `"1000Mi"` |  |
 | frontend.service.port | int | `3000` |  |
-| ingress.annotations."alb.ingress.kubernetes.io/healthcheck-path" | string | `"/"` |  |
-| ingress.annotations."alb.ingress.kubernetes.io/listen-ports" | string | `"[{\"HTTPS\": 443}]"` |  |
-| ingress.annotations."alb.ingress.kubernetes.io/ssl-policy" | string | `"ELBSecurityPolicy-TLS13-1-2-FIPS-2023-04"` |  |
+| ingress.annotations."kubernetes.io/ingress.class" | string | `"nginx"` |  |
+| ingress.annotations."nginx.ingress.kubernetes.io/proxy-read-timeout" | string | `"600"` |  |
+| ingress.annotations."nginx.ingress.kubernetes.io/proxy-send-timeout" | string | `"60"` |  |
+| ingress.annotations."nginx.ingress.kubernetes.io/ssl-redirect" | string | `"true"` |  |
 | ingress.enabled | bool | `true` |  |
 | ingress.hostname | string | `"secobserve.dev"` |  |
-| ingress.ingressClassName | string | `"alb"` |  |
+| ingress.ingressClassName | string | `"nginx"` |  |
 | nodeSelector | object | `{}` |  |
 | postgresql.architecture | string | `"standalone"` |  |
 | postgresql.auth.database | string | `"secobserve"` |  |
@@ -132,8 +133,11 @@ A Helm chart to deploy SecObserve, an open-source vulnerability and license mana
 | postgresql.auth.secretKeys.userPasswordKey | string | `"password"` |  |
 | postgresql.auth.username | string | `"secobserve"` |  |
 | postgresql.enabled | bool | `true` |  |
+| postgresql.image.repository | string | `"bitnamilegacy/postgresql"` |  |
+| postgresql.metrics.image.repository | string | `"bitnamilegacy/postgres-exporter"` |  |
+| postgresql.volumePermissions.image.repository | string | `"bitnamilegacy/os-shell"` |  |
 | replicaCount | int | `1` |  |
-| service.type | string | `"NodePort"` |  |
+| service.type | string | `"ClusterIP"` |  |
 | tolerations | object | `{}` |  |
 
 ----------------------------------------------
