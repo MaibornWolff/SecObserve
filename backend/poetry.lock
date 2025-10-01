@@ -933,28 +933,28 @@ django = ">=4.2"
 
 [[package]]
 name = "djangorestframework-stubs"
-version = "3.16.3"
+version = "3.16.4"
 description = "PEP-484 stubs for django-rest-framework"
 optional = true
 python-versions = ">=3.10"
 groups = ["main"]
 markers = "extra == \"code-quality\""
 files = [
-    {file = "djangorestframework_stubs-3.16.3-py3-none-any.whl", hash = "sha256:d6e77922c2489aa6b5716d321b592b8aab047d5fd7ae9293a52c5cf1640e62c6"},
-    {file = "djangorestframework_stubs-3.16.3.tar.gz", hash = "sha256:200c620192da20a50a85b3e7d35cc7ec795aa9a58371a7f91368d4023e1b78f7"},
+    {file = "djangorestframework_stubs-3.16.4-py3-none-any.whl", hash = "sha256:3b27353fa797876f55da87eceafe4c2f265a93924fa7763d257e509d865df1b2"},
+    {file = "djangorestframework_stubs-3.16.4.tar.gz", hash = "sha256:f43136bfbef568dd0e10848427c01bd9ef759dd328195949f6f7f9a2292a34f6"},
 ]
 
 [package.dependencies]
 django-stubs = ">=5.2.5"
 requests = ">=2.0"
-types-PyYAML = "*"
+types-pyyaml = "*"
 types-requests = "*"
 typing-extensions = ">=4.0"
 
 [package.extras]
 compatible-mypy = ["django-stubs[compatible-mypy]", "mypy (>=1.13,<1.19)"]
 coreapi = ["coreapi (>=2.0.0)"]
-markdown = ["types-Markdown (>=0.1.5)"]
+markdown = ["types-markdown (>=0.1.5)"]
 
 [[package]]
 name = "dnspython"
@@ -2350,6 +2350,13 @@ optional = false
 python-versions = ">=3.8"
 groups = ["main"]
 files = [
+    {file = "PyYAML-6.0.3-cp38-cp38-macosx_10_13_x86_64.whl", hash = "sha256:c2514fceb77bc5e7a2f7adfaa1feb2fb311607c9cb518dbc378688ec73d8292f"},
+    {file = "PyYAML-6.0.3-cp38-cp38-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:9c57bb8c96f6d1808c030b1687b9b5fb476abaa47f0db9c0101f5e9f394e97f4"},
+    {file = "PyYAML-6.0.3-cp38-cp38-manylinux2014_s390x.manylinux_2_17_s390x.manylinux_2_28_s390x.whl", hash = "sha256:efd7b85f94a6f21e4932043973a7ba2613b059c4a000551892ac9f1d11f5baf3"},
+    {file = "PyYAML-6.0.3-cp38-cp38-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:22ba7cfcad58ef3ecddc7ed1db3409af68d023b7f940da23c6c2a1890976eda6"},
+    {file = "PyYAML-6.0.3-cp38-cp38-musllinux_1_2_x86_64.whl", hash = "sha256:6344df0d5755a2c9a276d4473ae6b90647e216ab4757f8426893b5dd2ac3f369"},
+    {file = "PyYAML-6.0.3-cp38-cp38-win32.whl", hash = "sha256:3ff07ec89bae51176c0549bc4c63aa6202991da2d9a6129d7aef7f1407d3f295"},
+    {file = "PyYAML-6.0.3-cp38-cp38-win_amd64.whl", hash = "sha256:5cf4e27da7e3fbed4d6c3d8e797387aaad68102272f8f9752883bc32d61cb87b"},
     {file = "pyyaml-6.0.3-cp310-cp310-macosx_10_13_x86_64.whl", hash = "sha256:214ed4befebe12df36bcc8bc2b64b396ca31be9304b8f59e25c11cf94a4c033b"},
     {file = "pyyaml-6.0.3-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:02ea2dfa234451bbb8772601d7b8e426c2bfa197136796224e50e35a78777956"},
     {file = "pyyaml-6.0.3-cp310-cp310-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:b30236e45cf30d2b8e7b3e85881719e98507abed1011bf463a8fa23e9c3e98a8"},
@@ -3091,4 +3098,4 @@ unittests = ["coverage", "django-coverage-plugin", "django-extensions"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">= 3.10, < 3.14"
-content-hash = "8ec87e68857cc54750f0085c989d475bef576a110e658598868ab4d99e4f28d0"
+content-hash = "488437e534505a7287b24ee880aef34505e699f0f5773c83d35389402090d57f"
