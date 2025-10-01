@@ -51,6 +51,8 @@ The PostgreSQL database is provided by Bitnami's Helm chart. Bitnami doesn't pro
 
 This is ok to test the Kubernetes installation, but not suitable for production use. A productive environment has to use an update-to-date database, e.g. installed as an operator like [CloudNativePG](https://cloudnative-pg.io/) or a managed service of a cloud provider.
 
+If the provided database is used and the chart is installed with a release name different from `secobserve`, all occurrences of `secobserve-postgresql` in the chart have to be changed to `<release_name>-postgresql`.
+
 #### Secrets
 
 Three values are read from a secret, which has to be set up manually before installing the chart:
