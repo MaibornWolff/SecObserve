@@ -63,7 +63,7 @@
         "@vitejs/plugin-react": "5.0.4",
         "eslint": "9.36.0",
         "eslint-plugin-react": "7.37.5",
-        "eslint-plugin-react-hooks": "5.2.0",
+        "eslint-plugin-react-hooks": "6.1.0",
         "eslint-plugin-security": "3.0.1",
         "globals": "16.4.0",
         "prettier": "3.6.2",
