@@ -9,8 +9,8 @@ frontend:
   securityContext:
     enabled: true
     allowPrivilegeEscalation: false
-    runAsUser: 101
-    runAsGroup: 101
+    runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
   env:
     - name: API_BASE_URL
@@ -199,8 +199,8 @@ dbchecker:
   # SecurityContext for the dbchecker container
   securityContext:
     allowPrivilegeEscalation: false
-    runAsUser: 1000
-    runAsGroup: 1000
+    runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
   # Resource requests and limits for the dbchecker container
   resources:
