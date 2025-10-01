@@ -1,0 +1,198 @@
+replicaCount: 1
+
+frontend:
+  image:
+    registry: docker.io
+    repository: maibornwolff/secobserve-frontend
+    tag: 1.38.0
+    pullPolicy: IfNotPresent
+  env:
+    - name: API_BASE_URL
+      value: https://secobserve.dev/api
+    - name: OIDC_ENABLED
+      value: "true"
+    - name: OIDC_AUTHORITY
+      value: https://oidc.secobserve.dev
+    - name: OIDC_CLIENT_ID
+      value: secobserve
+    - name: OIDC_REDIRECT_URI
+      value: https://secobserve.dev/
+    - name: OIDC_POST_LOGOUT_REDIRECT_URI
+      value: https://secobserve.dev/
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1000Mi
+    requests:
+      cpu: 500m
+      memory: 1000Mi
+  service:
+    port: 3000
+
+backend:
+  image:
+    registry: docker.io
+    repository: maibornwolff/secobserve-backend
+    tag: 1.38.0
+    pullPolicy: IfNotPresent
+  env:
+    - name: ADMIN_USER
+      value: admin
+      # This secret is not managed by the chart
+    - name: ADMIN_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: secobserve-secrets
+          key: password
+    - name: ADMIN_EMAIL
+      value: admin@admin.com
+    - name: DATABASE_ENGINE
+      value: "django.db.backends.postgresql"
+    - name: DATABASE_HOST
+      value: release-name-postgresql
+    - name: DATABASE_PORT
+      value: "5432"
+    - name: DATABASE_DB
+      value: secobserve
+    - name: DATABASE_USER
+      value: secobserve
+    - name: DATABASE_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: release-name-postgresql
+          key: password
+    - name: ALLOWED_HOSTS
+      value: "*" # For production, set this to your frontend domain, e.g. secobserve.dev
+    - name: CORS_ALLOWED_ORIGINS
+      value: https://secobserve.dev
+    - name: DJANGO_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: secobserve-secrets
+          key: django_secret_key
+    - name: FIELD_ENCRYPTION_KEY
+      valueFrom:
+        secretKeyRef:
+          name: secobserve-secrets
+          key: field_encryption_key
+    - name: OIDC_AUTHORITY
+      value: https://oidc.secobserve.dev
+    - name: OIDC_CLIENT_ID
+      value: secobserve
+    - name: OIDC_USERNAME
+      value: preferred_username
+    - name: OIDC_FIRST_NAME
+      value: given_name
+    - name: OIDC_LAST_NAME
+      value: family_name
+    - name: OIDC_FULL_NAME
+      value: preferred_username
+    - name: OIDC_EMAIL
+      value: email
+    - name: OIDC_GROUPS
+      value: groups
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1500Mi
+    requests:
+      cpu: 1000m
+      memory: 1500Mi
+  service:
+    port: 5000
+
+# Defines the secobserve http service
+service:
+  type: ClusterIP
+  # If you want to use a NodePort service for ALB, uncomment the following line
+  #type: NodePort
+
+ingress:
+  # If true, a Kubernetes Ingress resource will be created to the http port of the secobserve Service
+  enabled: true
+  hostname: "secobserve.dev"
+  # ingressClassName: alb
+  # annotations:
+  #   alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
+  #   alb.ingress.kubernetes.io/ssl-policy: 'ELBSecurityPolicy-TLS13-1-2-FIPS-2023-04'
+  #   alb.ingress.kubernetes.io/healthcheck-path: /
+  # Example configuration for using an NGINX ingress controller
+  ingressClassName: nginx
+  annotations:
+    # Use the NGINX ingress class
+    kubernetes.io/ingress.class: nginx
+    # Enable SSL redirect for HTTPS
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # Configure a custom timeout for the proxy
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
+  # # TLS configuration for HTTPS
+  # tls:
+  #   secretName: secobserve-tls
+
+# Node labels for secobserve pod assignment
+nodeSelector: {}
+
+# Toleration labels for pod assignment
+tolerations: {}
+
+# Sets the affinity for the secobserve pod
+# For more information on affinity, see https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity
+affinity: {}
+
+## PostgreSQL chart configuration
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
+## @param postgresql.enabled Switch to enable or disable the PostgreSQL helm chart
+## @param postgresql.auth.postgresPassword Password for the "postgres" admin user. Ignored if `auth.existingSecret` with key `postgres-password` is provided
+## @param postgresql.auth.username Name for a custom user to create
+## @param postgresql.auth.password Password for the custom user to create
+## @param postgresql.auth.database Name for a custom database to create
+## @param postgresql.auth.existingSecret Name of existing secret to use for PostgreSQL credentials
+## @param postgresql.auth.secretKeys.userPasswordKey Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.
+## @param postgresql.architecture PostgreSQL architecture (`standalone` or `replication`)
+##
+postgresql:
+  enabled: true
+  image:
+    repository: bitnamilegacy/postgresql
+  volumePermissions:
+    image:
+      repository: bitnamilegacy/os-shell
+  metrics:
+    image:
+      repository: bitnamilegacy/postgres-exporter
+  auth:
+    postgresPassword: ""
+    username: secobserve
+    password: ""
+    database: secobserve
+    existingSecret: ""
+    secretKeys:
+      userPasswordKey: password
+  architecture: standalone
+
+dbchecker:
+  enabled: true
+  hostname: release-name-postgresql
+  port: 5432
+  image:
+    # Docker image used to check Database readiness at startup
+    repository: busybox
+    # Image tag for the dbchecker image
+    tag: latest
+    # Image pull policy for the dbchecker image
+    pullPolicy: IfNotPresent
+  # SecurityContext for the dbchecker container
+  securityContext:
+    allowPrivilegeEscalation: false
+    runAsUser: 1000
+    runAsGroup: 1000
+    runAsNonRoot: true
+  # Resource requests and limits for the dbchecker container
+  resources:
+    requests:
+      cpu: "20m"
+      memory: "32Mi"
+    limits:
+      cpu: "20m"
+      memory: "32Mi"

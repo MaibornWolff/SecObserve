@@ -1,0 +1,139 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "secobserve.fullname" . }}-sts
+  namespace: "{{ .Release.Namespace }}"
+  labels:
+    {{- include "secobserve.labels" . | nindent 4 }}
+spec:
+  serviceName: {{ include "secobserve.fullname" . }}-svc
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "secobserve.selectorLabels" . | nindent 6 }}
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        {{- with .Values.podAnnotations }}
+        {{ toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- with .Values.labels }}
+        {{ toYaml . | nindent 8 }}
+        {{- end }}
+        {{- include "secobserve.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- if or .Values.dbchecker.enabled .Values.extraInitContainers }}
+      initContainers:
+        {{- if and .Values.dbchecker.enabled }}
+        - name: dbchecker
+          image: "{{ .Values.dbchecker.image.repository }}{{- if (.Values.dbchecker.image.digest) -}}@{{ .Values.dbchecker.image.digest }}{{- else -}}:{{ .Values.dbchecker.image.tag }} {{- end }}"
+          imagePullPolicy: {{ .Values.dbchecker.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.dbchecker.securityContext | nindent 12 }}
+          command:
+            - sh
+            - -c
+            - |
+              echo 'Waiting for Database to become ready...'
+
+              until printf "." && nc -z -w 2 {{ required ".Values.dbchecker.hostname is required if dbchecker is enabled!" .Values.dbchecker.hostname }} {{ required ".Values.database.port is required if dbchecker is enabled!" .Values.dbchecker.port }}; do
+                  sleep 2;
+              done;
+
+              echo 'Database OK ✓'
+          resources:
+            {{- toYaml .Values.dbchecker.resources | nindent 12 }}
+      {{- end }}
+      {{- with .Values.extraInitContainers }}
+        {{- tpl . $ | nindent 8 }}
+      {{- end }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.securityContext }}
+      securityContext:
+        {{ toYaml .Values.securityContext | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: frontend
+          image: "{{ .Values.frontend.image.registry }}/{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
+          {{- with .Values.frontend.env }}
+          env:
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: frontend-http
+              containerPort: 3000
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 300
+            timeoutSeconds: 5
+            failureThreshold: 12
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 12
+          resources:
+            {{- toYaml .Values.frontend.resources | nindent 12 }}
+          volumeMounts:
+            {{- if .Values.frontend.volumeMounts }}
+            {{ toYaml .Values.frontend.volumeMounts | indent 12 }}
+            {{- end }}
+
+        - name: backend
+          image: "{{ .Values.backend.image.registry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
+          {{- with .Values.backend.env }}
+          env:
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: backend-http
+              containerPort: 5000
+          livenessProbe:
+            httpGet:
+              path: /api/status/health/
+              port: 5000
+            initialDelaySeconds: 300
+            timeoutSeconds: 5
+            failureThreshold: 12
+          readinessProbe:
+            httpGet:
+              path: /api/status/health/
+              port: 5000
+            initialDelaySeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 12
+          resources:
+            {{- toYaml .Values.backend.resources | nindent 12 }}
+          volumeMounts:
+            {{- if .Values.backend.volumeMounts }}
+            {{ toYaml .Values.backend.volumeMounts | indent 12 }}
+            {{- end }}
+
+      volumes:
+        {{- if .Values.frontend.volumes }}
+        {{ toYaml .Values.frontend.volumes | indent 8 }}
+        {{- end }}
+        {{- if .Values.backend.volumes }}
+        {{ toYaml .Values.backend.volumes | indent 8 }}
+        {{- end }}
