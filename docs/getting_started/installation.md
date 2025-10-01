@@ -1,5 +1,10 @@
 # Installation
 
+!!! warning
+
+    Both provided installation options serve as templates for productive use only. Even though they can run *out of the box*, they will need proper configuration for the requirements of the environment they will be installed in. This includes additional hardening and security measures.
+
+
 ## Docker Compose
 
 SecObserve provides 2 Docker Compose files as templates for productive use: `docker-compose-prod-mysql.yml` and `docker-compose-prod-postgres.yml`. Both start [Traefik](https://doc.traefik.io/traefik/v3.0/) as an edge router as well as the SecObserve frontend and backend plus a database (either MySQL or PostgreSQL).
@@ -35,3 +40,33 @@ Some values should be changed for productive use, to avoid using the default val
 
 * The database structure is initialized with the first start of the backend container.
 * The URLs for frontend and backend are available after approximately 30 seconds, after the healthcheck of the containers has been running for the first time.
+
+## Kubernetes
+
+SecObserve provides a Helm chart as a template for productive use. The default values will work if the release name is `secobserve` and the frontend will be accessible with [https://secobserve.dev/](https://secobserve.dev/).
+
+#### Database
+
+The PostgreSQL database is provided by Bitnami's Helm chart. Bitnami doesn't provide updates for their free tier anymore, see [Upcoming changes to the Bitnami Catalog](https://github.com/bitnami/charts?tab=readme-ov-file#%EF%B8%8F-important-notice-upcoming-changes-to-the-bitnami-catalog) and the Docker image is pulled from the `bitnamilegacy` repository. 
+
+This is ok to test the Kubernetes installation, but not suitable for production use. A productive environment has to use an update-to-date database, e.g. installed as an operator like [CloudNativePG](https://cloudnative-pg.io/) or a managed service of a cloud provider.
+
+#### Secrets
+
+Three values are read from a secret, which has to be set up manually before installing the chart:
+
+* `ADMIN_PASSWORD`
+* `DJANGO_SECRET_KEY`
+* `FIELD_ENCRYPTION_KEY`
+
+The command to setup the secret can look like this:
+
+```
+kubectl create secret generic secobserve-secrets \
+    --namespace ... \
+    --from-literal=password='...' \
+    --from-literal=django_secret_key='...' \
+    --from-literal=field_encryption_key='...'
+```
+
+See [Configuration](configuration.md#backend) for more information how to set these values.
