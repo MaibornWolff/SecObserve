@@ -6,6 +6,12 @@ frontend:
     repository: maibornwolff/secobserve-frontend
     tag: 1.38.0
     pullPolicy: IfNotPresent
+  securityContext:
+    enabled: true
+    allowPrivilegeEscalation: false
+    runAsUser: 101
+    runAsGroup: 101
+    runAsNonRoot: true
   env:
     - name: API_BASE_URL
       value: https://secobserve.dev/api
@@ -35,6 +41,12 @@ backend:
     repository: maibornwolff/secobserve-backend
     tag: 1.38.0
     pullPolicy: IfNotPresent
+  securityContext:
+    enabled: true
+    allowPrivilegeEscalation: false
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
   env:
     - name: ADMIN_USER
       value: admin

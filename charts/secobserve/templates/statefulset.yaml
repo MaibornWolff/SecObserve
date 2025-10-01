@@ -98,6 +98,10 @@ spec:
             {{- if .Values.frontend.volumeMounts }}
             {{ toYaml .Values.frontend.volumeMounts | indent 12 }}
             {{- end }}
+          {{- if .Values.frontend.securityContext.enabled }}
+          securityContext:
+            {{ toYaml .Values.frontend.securityContext | nindent 12 }}
+          {{- end }}
 
         - name: backend
           image: "{{ .Values.backend.image.registry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag | default .Chart.AppVersion }}"
@@ -129,6 +133,10 @@ spec:
             {{- if .Values.backend.volumeMounts }}
             {{ toYaml .Values.backend.volumeMounts | indent 12 }}
             {{- end }}
+          {{- if .Values.backend.securityContext.enabled }}
+          securityContext:
+            {{ toYaml .Values.backend.securityContext | nindent 12 }}
+          {{- end }}
 
       volumes:
         {{- if .Values.frontend.volumes }}
