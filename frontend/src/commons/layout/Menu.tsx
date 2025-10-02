@@ -7,6 +7,7 @@ import { DashboardMenuItem, MenuItemLink, MenuProps, useSidebarState } from "rea
 
 import administration from "../../access_control/access_control_administration";
 import periodic_tasks from "../../background_tasks/periodic_tasks";
+import components from "../../core/components";
 import observations from "../../core/observations";
 import product_groups from "../../core/product_groups";
 import products from "../../core/products";
@@ -79,6 +80,13 @@ const Menu = ({ dense = false }: MenuProps) => {
                     state={{ _scrollToTop: true }}
                     primaryText="Observations"
                     leftIcon={<observations.icon />}
+                    dense={dense}
+                />
+                <MenuItemLink
+                    to="/components"
+                    state={{ _scrollToTop: true }}
+                    primaryText="Components"
+                    leftIcon={<components.icon />}
                     dense={dense}
                 />
                 <MenuItemLink

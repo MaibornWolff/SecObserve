@@ -269,6 +269,9 @@ class TestAuthentication(BaseTestCase):
 
         self._check_authentication(["get"], "/api/evidences/1/")
 
+        self._check_authentication(["get"], "/api/components/")
+        self._check_authentication(["get"], "/api/components/1/")
+
         self._check_authentication(["get"], "/api/status/version/")
 
         self._check_authentication(["get", "post"], "/api/product_api_tokens/")

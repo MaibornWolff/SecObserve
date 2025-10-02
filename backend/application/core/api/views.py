@@ -36,6 +36,7 @@ from application.authorization.services.roles_permissions import Permissions
 from application.commons.services.log_message import format_log_message
 from application.core.api.filters import (
     BranchFilter,
+    ComponentFilter,
     EvidenceFilter,
     ObservationFilter,
     ObservationLogFilter,
@@ -54,6 +55,10 @@ from application.core.api.permissions import (
     UserHasProductMemberPermission,
     UserHasProductPermission,
     UserHasServicePermission,
+)
+from application.core.api.serializers_component import (
+    ComponentNameSerializer,
+    ComponentSerializer,
 )
 from application.core.api.serializers_observation import (
     CountSerializer,
@@ -91,6 +96,7 @@ from application.core.api.serializers_product import (
 )
 from application.core.models import (
     Branch,
+    Component,
     Evidence,
     Observation,
     Observation_Log,
@@ -101,6 +107,7 @@ from application.core.models import (
     Service,
 )
 from application.core.queries.branch import get_branches
+from application.core.queries.component import get_components
 from application.core.queries.observation import (
     get_current_observation_log,
     get_evidences,
@@ -869,6 +876,36 @@ class ProductApiTokenViewset(ViewSet):
         response = Response(status=HTTP_204_NO_CONTENT)
         logger.info(format_log_message(message="Product API token revoked", response=response))
         return response
+
+
+class ComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
+    serializer_class = ComponentSerializer
+    filterset_class = ComponentFilter
+    permission_classes = (IsAuthenticated,)
+    queryset = Component.objects.none()
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ["component_name_version"]
+
+    def get_queryset(self) -> QuerySet[Component]:
+        return (
+            get_components()
+            .select_related("product")
+            .select_related("product__product_group")
+            .select_related("branch")
+            .select_related("origin_service")
+        )
+
+
+class ComponentNameViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
+    serializer_class = ComponentNameSerializer
+    filterset_class = ComponentFilter
+    permission_classes = (IsAuthenticated,)
+    queryset = Component.objects.none()
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ["component_name_version"]
+
+    def get_queryset(self) -> QuerySet[Component]:
+        return get_components()
 
 
 def _get_product(product_id: int) -> Product:

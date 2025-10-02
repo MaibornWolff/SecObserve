@@ -40,8 +40,8 @@ COPY ./frontend/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY ./frontend/nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY ./frontend/robots.txt /usr/share/nginx/html/robots.txt
 
-ARG user=nginx
-ARG group=nginx
+ARG user=so_nginx
+ARG group=so_nginx
 ARG VERSION=unknown
 ARG CREATED
 ARG REVISION
@@ -61,10 +61,12 @@ LABEL org.opencontainers.image.url="https://github.com/MaibornWolff/SecObserve"
 LABEL org.opencontainers.image.vendor="MaibornWolff GmbH"
 LABEL org.opencontainers.image.version=${VERSION}
 
-RUN chown -R ${user}:${group} /usr/share/nginx/html && \
-        chmod -R 777 /usr/share/nginx/html && \
-        chown -R ${user}:${group} /var/log/nginx && \
-        chown -R ${user}:${group} /etc/nginx/conf.d
+RUN addgroup -g 1001 -S ${group} && \
+    adduser -u 1001 -S ${user} -G ${group} && \
+    chown -R ${user}:${group} /usr/share/nginx/html && \
+    chmod -R 777 /usr/share/nginx/html && \
+    chown -R ${user}:${group} /var/log/nginx && \
+    chown -R ${user}:${group} /etc/nginx/conf.d
 
 HEALTHCHECK --interval=30s --timeout=30s --start-period=10s --retries=3 \
     CMD wget -nv -t1 --spider 'http://127.0.0.1:3000/#/login' || exit 1

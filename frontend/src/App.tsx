@@ -16,6 +16,7 @@ import drfProvider from "./commons/ra-data-django-rest-framework";
 import settings from "./commons/settings";
 import UserSettings from "./commons/user_settings/UserSettings";
 import { getTheme } from "./commons/user_settings/functions";
+import components from "./core/components";
 import evidences from "./core/evidences";
 import observation_logs from "./core/observation_logs";
 import observations from "./core/observations";
@@ -220,6 +221,14 @@ const App = () => {
                     name="periodic_tasks"
                     {...periodic_tasks} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
                     // nosemgrep because the props are well defined in the import
+                />
+                <Resource
+                    name="components"
+                    {...components} // nosemgrep: typescript.react.best-practice.react-props-spreading.react-props-spreading
+                    // nosemgrep because the props are well defined in the import
+                    recordRepresentation={(record) =>
+                        `${trim_string(record.product_name + " / " + record.component_name_version)}`
+                    }
                 />
             </Admin>
         </AuthProvider>

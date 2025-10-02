@@ -91,27 +91,27 @@ class OSVParser(BaseParser):
                     logger.error("Invalid PURL %s: %s", osv_component.license_component.component_purl, str(e))
                     continue
 
-                affected = self._get_affected(parsed_purl, osv_vulnerability, product, branch)
+                affected_ecosystems = self._get_affected_ecosystems(parsed_purl, osv_vulnerability, product, branch)
 
                 component_in_versions = None
                 component_in_ranges = None
                 recommendation = ""
                 events = []
 
-                for affected_item in affected:
+                for affected_ecosystem in affected_ecosystems:
                     component_in_versions = self._is_version_in_affected(
-                        osv_component.license_component.component_version, affected_item
+                        osv_component.license_component.component_version, affected_ecosystem
                     )
                     component_in_ranges, fixed_version, affected_events = self._is_version_in_ranges(
                         parsed_purl,
                         osv_component.license_component.component_version,
-                        affected_item,
+                        affected_ecosystem,
                     )
 
                     events.extend(affected_events)
 
                     if component_in_versions or component_in_ranges:
-                        affected_cvss3_vector, affected_cvss4_vector = self._get_affected_cvss(affected_item)
+                        affected_cvss3_vector, affected_cvss4_vector = self._get_affected_cvss(affected_ecosystem)
                         if affected_cvss3_vector:
                             osv_cvss3_vector = affected_cvss3_vector
                         if affected_cvss4_vector:
@@ -122,7 +122,7 @@ class OSVParser(BaseParser):
 
                         break
 
-                if (
+                if affected_ecosystems and (
                     (component_in_versions is None and component_in_ranges is None)
                     or component_in_versions is True
                     or component_in_ranges is not False
@@ -218,7 +218,7 @@ class OSVParser(BaseParser):
             references.append(reference.get("url"))
         return references
 
-    def _get_affected(
+    def _get_affected_ecosystems(
         self,
         parsed_purl: PackageURL,
         osv_vulnerability: dict,
@@ -249,7 +249,13 @@ class OSVParser(BaseParser):
             package = affected_item.get("package", {})
             affected_ecosystem = package.get("ecosystem")
             affected_name = package.get("name")
-            if package_osv_ecosystem == affected_ecosystem and package_name == affected_name:
+
+            if (
+                affected_ecosystem
+                and package_osv_ecosystem
+                and affected_ecosystem.startswith(package_osv_ecosystem)
+                and package_name == affected_name
+            ):
                 affected.append(affected_item)
 
         return affected

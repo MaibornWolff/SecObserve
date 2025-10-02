@@ -5,6 +5,7 @@ from django.apps import apps
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import (
     CASCADE,
+    DO_NOTHING,
     PROTECT,
     SET_NULL,
     BooleanField,
@@ -662,3 +663,23 @@ class Potential_Duplicate(Model):
             "observation",
             "potential_duplicate_observation",
         )
+
+
+class Component(Model):
+    id = CharField(max_length=32, primary_key=True)
+    product = ForeignKey(Product, related_name="components", on_delete=DO_NOTHING)
+    branch = ForeignKey(Branch, related_name="components", on_delete=DO_NOTHING, null=True)
+    origin_service = ForeignKey(Service, on_delete=DO_NOTHING, null=True)
+    component_name = CharField(max_length=255)
+    component_version = CharField(max_length=255, blank=True)
+    component_name_version = CharField(max_length=513, blank=True)
+    component_purl = CharField(max_length=255, blank=True)
+    component_purl_type = CharField(max_length=16, blank=True)
+    component_cpe = CharField(max_length=255, blank=True)
+    component_dependencies = TextField(max_length=32768, blank=True)
+    component_cyclonedx_bom_link = CharField(max_length=512, blank=True)
+    has_observations = BooleanField()
+
+    class Meta:
+        db_table = "core_component"
+        managed = False

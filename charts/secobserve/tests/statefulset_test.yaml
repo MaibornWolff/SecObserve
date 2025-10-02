@@ -1,0 +1,88 @@
+suite: Test secobserve StatefulSet
+
+templates:
+  - templates/statefulset.yaml
+
+tests:
+  - it: should set correct StatefulSet name
+    set:
+      nameOverride: secobserve
+    asserts:
+      - equal:
+          path: metadata.name
+          value: secobserve-sts
+
+  - it: should set the correct serviceName
+    set:
+      nameOverride: secobserve
+    asserts:
+      - equal:
+          path: spec.serviceName
+          value: secobserve-svc
+
+  - it: should set the correct number of replicas
+    set:
+      replicaCount: 2
+    asserts:
+      - equal:
+          path: spec.replicas
+          value: 2
+
+  - it: should render nodeSelector if provided
+    set:
+      nodeSelector:
+        disktype: ssd
+    asserts:
+    - matchSnapshot: {}
+
+  - it: should include affinity if specified
+    set:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/e2e-az-name
+                    operator: In
+                    values:
+                      - e2e-az1
+                      - e2e-az2
+    asserts:
+    - matchSnapshot: {}
+
+  - it: should render frontend and backend containers
+    set:
+      frontend:
+        image:
+          registry: docker.io
+          repository: secobserve/frontend
+          tag: v1.2.3
+          pullPolicy: Always
+      backend:
+        image:
+          registry: docker.io
+          repository: secobserve/backend
+          tag: v1.2.3
+          pullPolicy: Always
+    asserts:
+    - matchSnapshot: {}
+
+  - it: should include initContainer dbchecker if enabled
+    set:
+      dbchecker:
+        enabled: true
+        hostname: "localhost"
+        port: 5432
+        image:
+          repository: "busybox"
+          tag: "latest"
+          pullPolicy: "IfNotPresent"
+    asserts:
+    - matchSnapshot: {}
+
+  - it: should exclude initContainer dbchecker if disabled
+    set:
+      dbchecker:
+        enabled: false
+    asserts:
+    - matchSnapshot: {}

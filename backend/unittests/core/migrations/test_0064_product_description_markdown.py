@@ -18,6 +18,7 @@ Heading 2
 * *italics*
 * underscore
 * ~~strikethrough~~
+
 1. line 1
 2. line 2
 

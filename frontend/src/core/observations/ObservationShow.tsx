@@ -32,6 +32,7 @@ import ObservationShowHeader from "./ObservationShowHeader";
 import ObservationShowOrigins from "./ObservationShowOrigins";
 import PotentialDuplicatesList from "./PotentialDuplicatesList";
 import {
+    IDENTIFIER_OBSERVATION_COMPONENT_LIST,
     IDENTIFIER_OBSERVATION_DASHBOARD_LIST,
     IDENTIFIER_OBSERVATION_EMBEDDED_LIST,
     IDENTIFIER_OBSERVATION_LIST,
@@ -64,6 +65,16 @@ const ShowActions = () => {
     } else if (localStorage.getItem(IDENTIFIER_OBSERVATION_REVIEW_LIST) === "true") {
         filter = { current_status: OBSERVATION_STATUS_IN_REVIEW };
         storeKey = "observations.review";
+    } else if (observation && localStorage.getItem(IDENTIFIER_OBSERVATION_COMPONENT_LIST) === "true") {
+        filter = {
+            product: observation.product,
+            branch: observation.branch,
+            origin_service: observation.origin_service,
+            origin_component_name_version: observation.origin_component_name_version,
+            origin_component_purl_type: observation.origin_component_purl_type,
+            current_status: OBSERVATION_STATUS_OPEN,
+        };
+        storeKey = "observations.component";
     }
 
     return (

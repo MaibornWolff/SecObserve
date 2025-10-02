@@ -204,7 +204,7 @@ const ObservationsReviewList = ({ product }: ObservationsReviewListProps) => {
                             )
                         }
                         resource="observations"
-                        expand={<ObservationExpand />}
+                        expand={<ObservationExpand showComponent={true} />}
                         expandSingle
                     >
                         {!product && <TextField source="product_data.name" label="Product" />}

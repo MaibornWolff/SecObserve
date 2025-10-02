@@ -144,7 +144,7 @@ const ObservationList = () => {
                     size={getSettingListSize()}
                     rowClick="show"
                     bulkActionButtons={<BulkActionButtons />}
-                    expand={<ObservationExpand />}
+                    expand={<ObservationExpand showComponent={true} />}
                     expandSingle
                 >
                     <TextField source="product_data.name" label="Product" />
