@@ -4,7 +4,7 @@ frontend:
   image:
     registry: docker.io
     repository: maibornwolff/secobserve-frontend
-    tag: 1.38.0
+    tag: 1.39.0
     pullPolicy: IfNotPresent
   securityContext:
     enabled: true
@@ -39,7 +39,7 @@ backend:
   image:
     registry: docker.io
     repository: maibornwolff/secobserve-backend
-    tag: 1.38.0
+    tag: 1.39.0
     pullPolicy: IfNotPresent
   securityContext:
     enabled: true
