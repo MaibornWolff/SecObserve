@@ -56,7 +56,7 @@ const listFilters = [
         alwaysOn
     >
         <AutocompleteInputWide label="Service" optionText="name_with_product" />
-        <NullableBooleanInput source="has_observations" label="Observations" alwaysOn />
+        <NullableBooleanInput source="has_observations" label="Open observations" alwaysOn />
     </ReferenceInput>,
 ];
 
@@ -79,7 +79,7 @@ const ComponentList = () => {
                     <TextField source="product_group_name" label="Group" />
                     <TextField source="branch_name" label="Branch / Version" />
                     <TextField source="origin_service_name" label="Service" />
-                    <BooleanField source="has_observations" label="Observations" />
+                    <BooleanField source="has_observations" label="Open observations" />
                 </Datagrid>
             </List>
         </Fragment>
