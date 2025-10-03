@@ -199,7 +199,10 @@ class LicenseComponentViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin
             branch=component.branch,
             origin_service=component.origin_service,
             component_name_version=component.component_name_version,
-            component_purl_type=component.component_purl_type,
+            component_purl=component.component_purl,
+            component_cpe=component.component_cpe,
+            component_dependencies=component.component_dependencies,
+            component_cyclonedx_bom_link=component.component_cyclonedx_bom_link,
         ).first()
 
         if license_component:

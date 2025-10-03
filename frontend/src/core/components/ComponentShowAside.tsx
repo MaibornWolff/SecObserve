@@ -26,9 +26,12 @@ const ComponentShowAside = () => {
             .then((result) => {
                 if (result.status === 200) {
                     setLicenseComponent(result.json);
+                } else {
+                    setLicenseComponent(undefined);
                 }
             })
             .catch((error) => {
+                setLicenseComponent(undefined);
                 if (error !== undefined) {
                     notify(error.message, {
                         type: "warning",
