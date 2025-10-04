@@ -40,6 +40,24 @@ import {
 
 function listFilters(product: Product) {
     const filters = [];
+    if (product?.has_branches) {
+        filters.push(
+            <ReferenceInput
+                source="branch"
+                reference="branches"
+                queryOptions={{ meta: { api_resource: "branch_names" } }}
+                sort={{ field: "name", order: "ASC" }}
+                filter={{ product: product.id }}
+                alwaysOn
+            >
+                <AutocompleteInputMedium optionText="name" label="Branch / Version" />
+            </ReferenceInput>
+        );
+    }
+    filters.push(
+        <TextInput source="title" alwaysOn />,
+        <AutocompleteInput source="current_severity" label="Severity" choices={OBSERVATION_SEVERITY_CHOICES} alwaysOn />
+    );
     if (!product) {
         filters.push(
             <ReferenceInput
@@ -71,24 +89,6 @@ function listFilters(product: Product) {
             </ReferenceInput>
         );
     }
-    if (product?.has_branches) {
-        filters.push(
-            <ReferenceInput
-                source="branch"
-                reference="branches"
-                queryOptions={{ meta: { api_resource: "branch_names" } }}
-                sort={{ field: "name", order: "ASC" }}
-                filter={{ product: product.id }}
-                alwaysOn
-            >
-                <AutocompleteInputMedium optionText="name" label="Branch / Version" />
-            </ReferenceInput>
-        );
-    }
-    filters.push(
-        <TextInput source="title" alwaysOn />,
-        <AutocompleteInput source="current_severity" label="Severity" choices={OBSERVATION_SEVERITY_CHOICES} alwaysOn />
-    );
     if (product?.has_services) {
         filters.push(
             <ReferenceInput
@@ -207,15 +207,15 @@ const ObservationsReviewList = ({ product }: ObservationsReviewListProps) => {
                         expand={<ObservationExpand showComponent={true} />}
                         expandSingle
                     >
+                        <TextField source="title" />
+                        <SeverityField label="Severity" source="current_severity" />
+                        <ChipField source="current_status" label="Status" />
+                        {(!product || product?.has_component) && <NumberField source="epss_score" label="EPSS" />}
                         {!product && <TextField source="product_data.name" label="Product" />}
                         {!product && <TextField source="product_data.product_group_name" label="Group" />}
                         {(!product || product?.has_branches) && (
                             <TextField source="branch_name" label="Branch / Version" />
                         )}
-                        <TextField source="title" />
-                        <SeverityField label="Severity" source="current_severity" />
-                        {(!product || product?.has_component) && <NumberField source="epss_score" label="EPSS" />}
-                        <ChipField source="current_status" label="Status" />
                         {(!product || product?.has_services) && (
                             <TextField source="origin_service_name" label="Service" />
                         )}
