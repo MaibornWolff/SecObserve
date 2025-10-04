@@ -88,8 +88,8 @@ services:
   keycloak:
     image: keycloak/keycloak:26.4.0
     environment:
-      - KEYCLOAK_ADMIN=admin
-      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
       - KC_HTTPS_ENABLED=false
       - KC_HOSTNAME_STRICT_HTTPS=false
       - KC_DB_USERNAME=sa
