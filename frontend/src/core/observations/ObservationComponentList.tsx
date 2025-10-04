@@ -63,7 +63,6 @@ const ObservationsComponentList = ({ component }: ObservationsComponentListProps
             origin_component_name_version: component.component_name_version,
             origin_component_purl: component.component_purl,
             origin_component_cpe: component.component_cpe,
-            origin_component_dependencies: component.component_dependencies,
             origin_component_cyclonedx_bom_link: component.component_cyclonedx_bom_link,
         },
         perPage: 25,
