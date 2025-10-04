@@ -271,7 +271,6 @@ class ObservationFilter(FilterSet):
             "origin_component_purl_type",
             "origin_component_purl",
             "origin_component_cpe",
-            "origin_component_dependencies",
             "origin_component_cyclonedx_bom_link",
         ]
 
