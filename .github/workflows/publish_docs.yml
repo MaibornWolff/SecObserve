@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - chore/doc_1.37.0
+      - chore/documentation_process_logo
 
 permissions: read-all
 
