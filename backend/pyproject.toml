@@ -15,7 +15,7 @@ python = ">= 3.10, < 3.14"
 gunicorn = "23.0.0"  # https://github.com/benoitc/gunicorn
 django = "5.2.7"  # https://www.djangoproject.com/
 django-environ = "0.12.0"  # https://github.com/joke2k/django-environ
-django-filter = "25.1"  # https://github.com/carltongibson/django-filter 
+django-filter = "25.2"  # https://github.com/carltongibson/django-filter 
 django-csp = "4.0"  # https://github.com/mozilla/django-csp
 django-picklefield = "3.3"  # https://github.com/gintas/django-picklefield 
 django-encrypted-model-fields = "0.6.5"  # https://gitlab.com/lansharkconsulting/django/django-encrypted-model-fields
