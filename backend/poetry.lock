@@ -773,19 +773,20 @@ django = ">=4.2"
 
 [[package]]
 name = "django-coverage-plugin"
-version = "3.1.1"
+version = "3.2.0"
 description = "Django template coverage.py plugin"
 optional = true
-python-versions = ">=3.9"
+python-versions = ">=3.10"
 groups = ["main"]
 markers = "extra == \"unittests\""
 files = [
-    {file = "django_coverage_plugin-3.1.1-py3-none-any.whl", hash = "sha256:5e6437f24aef66e36edb912f5992954cef9f8088b75227bcb73270128a7069fc"},
-    {file = "django_coverage_plugin-3.1.1.tar.gz", hash = "sha256:d30334c3cb00ab65449ce779ed7c4cd1263331becf4440e03f8b287203a81d41"},
+    {file = "django_coverage_plugin-3.2.0-py3-none-any.whl", hash = "sha256:a4a9400c784c86f1ba53a73c336508e07316c92345b34a0eb0b22b3b14cdbdd6"},
+    {file = "django_coverage_plugin-3.2.0.tar.gz", hash = "sha256:0e1460294ecd4b192bd09788ab9ad9380d9b8c9b45925b408ce6c620ac352585"},
 ]
 
 [package.dependencies]
 coverage = "*"
+Django = "*"
 
 [[package]]
 name = "django-csp"
@@ -3150,4 +3151,4 @@ unittests = ["coverage", "django-coverage-plugin", "django-extensions"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">= 3.10, < 3.14"
-content-hash = "a854cca10dd4c915c3166600f0e5099bbeebd576e66ab5705fc45c54c02a37d3"
+content-hash = "f8d6fc88c4fb50c452ebff2bdbff03ba6adf0c9e6a07183074be2a3896a1abd5"
