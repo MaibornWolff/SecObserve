@@ -92,10 +92,8 @@ services:
       - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
       - KC_HTTPS_ENABLED=false
       - KC_HOSTNAME_STRICT_HTTPS=false
-      - KC_DB_USERNAME=sa
-      - KC_DB_PASSWORD=password
     volumes:
-      - ./keycloak:/opt/keycloak/data/
+      - ./keycloak:/opt/keycloak/data/import
     ports:
       - 8080:8080
-    command: start-dev
+    command: start-dev --import-realm
