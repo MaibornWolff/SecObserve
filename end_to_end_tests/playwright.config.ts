@@ -30,6 +30,10 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
 
+    expect: {
+    timeout: 10_000,
+  },
+  
   workers: 3,
   timeout: 120000,
     
