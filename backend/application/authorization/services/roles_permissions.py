@@ -49,7 +49,9 @@ class Permissions(IntEnum):
     Branch_Create = 1404
 
     Service_View = 1501
+    Serice_Edit = 1502
     Service_Delete = 1503
+    Service_Create = 1504
 
     Product_Authorization_Group_Member_View = 1601
     Product_Authorization_Group_Member_Edit = 1602
@@ -158,7 +160,9 @@ class Permissions(IntEnum):
     def get_service_permissions(cls) -> set["Permissions"]:
         return {
             Permissions.Service_View,
+            Permissions.Serice_Edit,
             Permissions.Service_Delete,
+            Permissions.Service_Create,
         }
 
     @classmethod
@@ -268,7 +272,9 @@ def get_roles_with_permissions() -> dict[Roles, set[Permissions]]:
             Permissions.Branch_Delete,
             Permissions.Branch_Create,
             Permissions.Service_View,
+            Permissions.Serice_Edit,
             Permissions.Service_Delete,
+            Permissions.Service_Create,
             Permissions.Observation_View,
             Permissions.Observation_Edit,
             Permissions.Observation_Create,
@@ -317,7 +323,9 @@ def get_roles_with_permissions() -> dict[Roles, set[Permissions]]:
             Permissions.Branch_Delete,
             Permissions.Branch_Create,
             Permissions.Service_View,
+            Permissions.Serice_Edit,
             Permissions.Service_Delete,
+            Permissions.Service_Create,
             Permissions.Observation_View,
             Permissions.Observation_Edit,
             Permissions.Observation_Create,

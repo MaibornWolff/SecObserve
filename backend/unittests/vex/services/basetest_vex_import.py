@@ -26,7 +26,7 @@ class BaseTestVEXImport(TestCase):
                 product=product,
                 branch=None,
                 file=testfile,
-                service="",
+                service_name="",
                 docker_image_name_tag="",
                 endpoint_url="",
                 kubernetes_cluster="",

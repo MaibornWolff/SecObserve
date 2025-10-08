@@ -168,7 +168,16 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
                     >
                         <AutocompleteInputWide optionText="name" label="Branch / Version" />
                     </ReferenceInput>
-                    <TextInputWide label="Service" source="automatic_import_service" validate={validate_255} />
+                    <ReferenceInput
+                        source="automatic_import_service"
+                        reference="services"
+                        queryOptions={{ meta: { api_resource: "service_names" } }}
+                        sort={{ field: "name", order: "ASC" }}
+                        filter={{ product: id }}
+                        alwaysOn
+                    >
+                        <AutocompleteInputWide optionText="name" label="Service" />
+                    </ReferenceInput>
                     <TextInputWide
                         source="automatic_import_docker_image_name_tag"
                         label="Docker image name:tag"
@@ -217,7 +226,6 @@ const ApiConfigurationCreate = ({ id }: ApiConfigurationCreateProps) => {
                             {feature_automatic_api_import() && (
                                 <Fragment>
                                     <BooleanInput source="automatic_import_enabled" defaultValue={false} />
-
                                     <AutomaticImportInput />
                                 </Fragment>
                             )}

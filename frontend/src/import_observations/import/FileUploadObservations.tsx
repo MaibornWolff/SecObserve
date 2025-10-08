@@ -44,8 +44,8 @@ const FileUploadObservations = () => {
             if (data.branch) {
                 formData.append("branch", data.branch);
             }
-            if (data.service) {
-                formData.append("service", data.service);
+            if (data.service_id) {
+                formData.append("service_id", data.service_id);
             }
             if (data.docker_image_name_tag) {
                 formData.append("docker_image_name_tag", data.docker_image_name_tag);
@@ -149,10 +149,21 @@ const FileUploadObservations = () => {
                                             />
                                         </ReferenceInput>
                                     )}
+                                    {product.has_services && (
+                                        <ReferenceInput
+                                            source="service_id"
+                                            reference="services"
+                                            sort={{ field: "name", order: "ASC" }}
+                                            queryOptions={{ meta: { api_resource: "service_names" } }}
+                                            filter={{ product: product.id }}
+                                            alwaysOn
+                                        >
+                                            <AutocompleteInputWide optionText="name" label="Service" />
+                                        </ReferenceInput>
+                                    )}
                                 </Fragment>
                             )}
                         />
-                        <TextInputWide source="service" validate={validate_255} />
                         <TextInputWide
                             source="docker_image_name_tag"
                             label="Docker image name:tag"

@@ -89,7 +89,7 @@ class FileUploadParameters:
     product: Product
     branch: Optional[Branch]
     file: File
-    service: str
+    service_name: str
     docker_image_name_tag: str
     endpoint_url: str
     kubernetes_cluster: str
@@ -101,7 +101,7 @@ class FileUploadParameters:
 class ApiImportParameters:
     api_configuration: Api_Configuration
     branch: Optional[Branch]
-    service: str
+    service_name: str
     docker_image_name_tag: str
     endpoint_url: str
     kubernetes_cluster: str
@@ -123,9 +123,9 @@ def file_upload_observations(
     scanner = ""
 
     service = None
-    if file_upload_parameters.service:
+    if file_upload_parameters.service_name:
         service = Service.objects.get_or_create(
-            product=file_upload_parameters.product, name=file_upload_parameters.service
+            product=file_upload_parameters.product, name=file_upload_parameters.service_name
         )[0]
 
     if not file_upload_parameters.sbom:
@@ -209,9 +209,9 @@ def api_import_observations(
     )
 
     service = None
-    if api_import_parameters.service:
+    if api_import_parameters.service_name:
         service = Service.objects.get_or_create(
-            product=api_import_parameters.api_configuration.product, name=api_import_parameters.service
+            product=api_import_parameters.api_configuration.product, name=api_import_parameters.service_name
         )[0]
 
     import_parameters = ImportParameters(
