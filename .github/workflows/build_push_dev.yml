@@ -67,6 +67,7 @@ jobs:
         with:
           context: .
           file: ./docker/frontend/prod/Dockerfile
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: maibornwolff/secobserve-frontend:dev
           build-args: |
