@@ -10,7 +10,7 @@ from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.filters import SearchFilter
-from rest_framework.mixins import DestroyModelMixin, ListModelMixin, RetrieveModelMixin
+from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -484,7 +484,7 @@ class BranchNameViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
         return get_branches().select_related("product")
 
 
-class ServiceViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin, DestroyModelMixin):
+class ServiceViewSet(ModelViewSet):
     serializer_class = ServiceSerializer
     filterset_class = ServiceFilter
     permission_classes = (IsAuthenticated, UserHasServicePermission)

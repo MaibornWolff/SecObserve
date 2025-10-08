@@ -191,7 +191,16 @@ const ApiConfigurationEdit = () => {
                             >
                                 <AutocompleteInputWide optionText="name" label="Branch / Version" />
                             </ReferenceInput>
-                            <TextInputWide label="Service" source="automatic_import_service" validate={validate_255} />
+                            <ReferenceInput
+                                source="automatic_import_service"
+                                reference="services"
+                                queryOptions={{ meta: { api_resource: "service_names" } }}
+                                sort={{ field: "name", order: "ASC" }}
+                                filter={{ product: api_configuration.product }}
+                                alwaysOn
+                            >
+                                <AutocompleteInputWide optionText="name" label="Service" />
+                            </ReferenceInput>
                             <TextInputWide
                                 source="automatic_import_docker_image_name_tag"
                                 label="Docker image name:tag"

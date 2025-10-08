@@ -7,7 +7,7 @@ from django.core.management import call_command
 from rest_framework.test import APIClient
 
 from application.access_control.models import User
-from application.core.models import Branch, Product
+from application.core.models import Branch, Product, Service
 from application.import_observations.services.import_observations import (
     FileUploadParameters,
 )
@@ -70,13 +70,18 @@ class TestImport(BaseTestCase):
                     branch = Branch.objects.get(id=data.post_data.get("branch"))
                 else:
                     branch = Branch.objects.get(product=product.pk, name=data.post_data.get("branch_name"))
+                service_name = ""
+                if data.post_data.get("service_id"):
+                    service_name = Service.objects.get(id=data.post_data.get("service_id")).name
+                elif data.post_data.get("service"):
+                    service_name = data.post_data.get("service")
                 sbom = "sbom" in data.url
                 mock_file_upload_observations.assert_called_once_with(
                     FileUploadParameters(
                         product=product,
                         branch=branch,
                         file=ANY,
-                        service=data.post_data.get("service", None),
+                        service_name=service_name,
                         docker_image_name_tag=data.post_data.get("docker_image_name_tag", ""),
                         endpoint_url=data.post_data.get("endpoint_url", ""),
                         kubernetes_cluster=data.post_data.get("kubernetes_cluster", ""),
@@ -132,7 +137,20 @@ class TestImport(BaseTestCase):
         )
         self._test_api(data)
 
-    def test_file_upload_observations_by_id_successful(self):
+    def test_file_upload_observations_by_id_service_not_found(self):
+        data = APITest(
+            username="db_internal_write",
+            url="/api/import/file_upload_observations_by_id/",
+            post_data={
+                "product": 1,
+                "service_id": 3,
+            },
+            expected_status_code=400,
+            expected_data={"message": "Service 3 does not exist for product db_product_internal"},
+        )
+        self._test_api(data)
+
+    def test_file_upload_observations_by_id_service_name_successful(self):
         data = APITest(
             username="db_internal_write",
             url="/api/import/file_upload_observations_by_id/",
@@ -140,6 +158,31 @@ class TestImport(BaseTestCase):
                 "product": 1,
                 "branch": 1,
                 "service": "service_name",
+                "docker_image_name_tag": "docker_image_name_tag",
+                "endpoint_url": "endpoint_url",
+                "kubernetes_cluster": "kubernetes_cluster",
+                "suppress_licenses": True,
+            },
+            expected_status_code=200,
+            expected_data={
+                "license_components_deleted": 6,
+                "license_components_new": 4,
+                "license_components_updated": 5,
+                "observations_new": 1,
+                "observations_resolved": 3,
+                "observations_updated": 2,
+            },
+        )
+        self._test_api(data)
+
+    def test_file_upload_observations_by_id_service_id_successful(self):
+        data = APITest(
+            username="db_internal_write",
+            url="/api/import/file_upload_observations_by_id/",
+            post_data={
+                "product": 1,
+                "branch": 1,
+                "service_id": 1,
                 "docker_image_name_tag": "docker_image_name_tag",
                 "endpoint_url": "endpoint_url",
                 "kubernetes_cluster": "kubernetes_cluster",
@@ -291,14 +334,42 @@ class TestImport(BaseTestCase):
         )
         self._test_api(data)
 
-    def test_file_upload_sbom_by_id_successful(self):
+    def test_file_upload_sbom_by_id_service_not_found(self):
+        data = APITest(
+            username="db_internal_write",
+            url="/api/import/file_upload_sbom_by_id/",
+            post_data={
+                "product": 1,
+                "service_id": 3,
+            },
+            expected_status_code=400,
+            expected_data={"message": "Service 3 does not exist for product db_product_internal"},
+        )
+        self._test_api(data)
+
+    def test_file_upload_sbom_by_id_service_name_successful(self):
         data = APITest(
             username="db_internal_write",
             url="/api/import/file_upload_sbom_by_id/",
             post_data={
                 "product": 1,
                 "branch": 1,
+                "service": "service_name",
             },
+            expected_status_code=200,
+            expected_data={
+                "license_components_deleted": 6,
+                "license_components_new": 4,
+                "license_components_updated": 5,
+            },
+        )
+        self._test_api(data)
+
+    def test_file_upload_sbom_by_id_service_id_successful(self):
+        data = APITest(
+            username="db_internal_write",
+            url="/api/import/file_upload_sbom_by_id/",
+            post_data={"product": 1, "branch": 1, "service_id": 1},
             expected_status_code=200,
             expected_data={
                 "license_components_deleted": 6,

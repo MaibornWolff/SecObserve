@@ -40,10 +40,15 @@ def task_api_import() -> str:
         for api_configuration in api_configurations:
             product_set.add(api_configuration.product)
             try:
+                service_name = (
+                    api_configuration.automatic_import_service.name
+                    if api_configuration.automatic_import_service
+                    else ""
+                )
                 api_import_parameters = ApiImportParameters(
                     api_configuration=api_configuration,
                     branch=api_configuration.automatic_import_branch,
-                    service=api_configuration.automatic_import_service,
+                    service_name=service_name,
                     docker_image_name_tag=api_configuration.automatic_import_docker_image_name_tag,
                     endpoint_url=api_configuration.automatic_import_endpoint_url,
                     kubernetes_cluster=api_configuration.automatic_import_kubernetes_cluster,

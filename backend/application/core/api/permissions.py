@@ -119,12 +119,15 @@ class UserHasBranchPermission(BasePermission):
 
 
 class UserHasServicePermission(BasePermission):
+    def has_permission(self, request: Request, view: APIView) -> bool:
+        return check_post_permission(request, Product, "product", Permissions.Service_Create)
+
     def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool:
         return check_object_permission(
             request=request,
             object_to_check=obj,
             get_permission=Permissions.Service_View,
-            put_permission=None,
+            put_permission=Permissions.Serice_Edit,
             delete_permission=Permissions.Service_Delete,
         )
 

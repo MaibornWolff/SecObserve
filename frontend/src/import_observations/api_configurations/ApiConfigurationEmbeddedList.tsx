@@ -21,7 +21,13 @@ import ApiConfigurationEdit from "./ApiConfigurationEdit";
 
 const listFilters = [
     <TextInput source="name" alwaysOn />,
-    <ReferenceInput source="parser" reference="parsers" sort={{ field: "name", order: "ASC" }} alwaysOn>
+    <ReferenceInput
+        source="parser"
+        reference="parsers"
+        filter={{ source: "API" }}
+        sort={{ field: "name", order: "ASC" }}
+        alwaysOn
+    >
         <AutocompleteInputMedium optionText="name" />
     </ReferenceInput>,
 ];
