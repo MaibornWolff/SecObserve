@@ -40,6 +40,7 @@ jobs:
         with:
           context: .
           file: ./docker/backend/prod/django/Dockerfile
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: |
             maibornwolff/secobserve-backend:${{ github.event.inputs.release }}
@@ -78,6 +79,7 @@ jobs:
         with:
           context: .
           file: ./docker/frontend/prod/Dockerfile
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: |
             maibornwolff/secobserve-frontend:${{ github.event.inputs.release }}
