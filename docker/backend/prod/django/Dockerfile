@@ -1,4 +1,4 @@
-FROM python:3.13-alpine@sha256:cbec402ae64582d007ae7e2050f2c977a51491c4ef466f52569786686a79142a AS python-base
+FROM python:3.13-alpine@sha256:7466fcadc01effec6ae9b26f147673090a9828a16ecd7cfa5898855e3bbf12db AS python-base
 
 # Python build stage
 FROM python-base AS python-build-stage
