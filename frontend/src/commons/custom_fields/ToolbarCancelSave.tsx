@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { SaveButton } from "react-admin";
 
 import CancelButton from "../../commons/custom_fields/CancelButton";
@@ -6,7 +7,7 @@ import Toolbar from "../../commons/custom_fields/Toolbar";
 interface ToolbarCancelSaveProps {
     onClick: () => void;
     saveButtonLabel?: string;
-    saveButtonIcon?: React.ReactNode;
+    saveButtonIcon?: ReactNode;
     alwaysEnable?: boolean;
 }
 

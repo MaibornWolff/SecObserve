@@ -350,10 +350,11 @@ export const feature_exploit_information = () => {
 
 export const justificationIsEnabledForStatus = (status: string) => {
     const vex_enabled = feature_vex_enabled();
-    const justification_recommended_for_status =
-        [OBSERVATION_STATUS_NOT_AFFECTED, OBSERVATION_STATUS_NOT_SECURITY, OBSERVATION_STATUS_FALSE_POSITIVE].indexOf(
-            status
-        ) >= 0;
+    const justification_recommended_for_status = [
+        OBSERVATION_STATUS_NOT_AFFECTED,
+        OBSERVATION_STATUS_NOT_SECURITY,
+        OBSERVATION_STATUS_FALSE_POSITIVE,
+    ].includes(status);
     return vex_enabled && justification_recommended_for_status;
 };
 
