@@ -85,13 +85,13 @@ const Login = () => {
                 notify(
                     typeof error === "string"
                         ? error
-                        : typeof error === "undefined" || !error.message
+                        : typeof error === "undefined" || !error.message // eslint-disable-line @typescript-eslint/prefer-optional-chain
                           ? "ra.auth.sign_in_error"
                           : error.message,
                     {
                         type: "warning",
                         messageArgs: {
-                            _: typeof error === "string" ? error : error && error.message ? error.message : undefined,
+                            _: typeof error === "string" ? error : error?.message ? error.message : undefined,
                         },
                     }
                 );

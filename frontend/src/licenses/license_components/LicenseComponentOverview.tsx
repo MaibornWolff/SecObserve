@@ -128,10 +128,10 @@ const LicenseComponentOverview = ({ product }: LicenseComponentOverviewProps) =>
             component_purl_type: listContext.filterValues.component_purl_type,
             origin_service: listContext.filterValues.origin_service,
         };
-        filterStorage["filter"] = filter;
+        filterStorage.filter = filter;
         if (listContext.sort.field) {
-            filterStorage["sort"] = listContext.sort.field;
-            filterStorage["order"] = listContext.sort.order;
+            filterStorage.sort = listContext.sort.field;
+            filterStorage.order = listContext.sort.order;
         }
         localStorage.setItem("RaStore.license_components.overview", JSON.stringify(filterStorage));
         localStorage.setItem("RaStore.license_components.embedded", JSON.stringify(filterStorage));

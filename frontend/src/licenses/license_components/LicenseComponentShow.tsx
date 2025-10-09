@@ -15,19 +15,19 @@ const ShowActions = () => {
         // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
         const filter: { [key: string]: any } = {};
         if (license_component) {
-            filter["product"] = Number(license_component.product);
+            filter.product = Number(license_component.product);
         }
         const license_component_expand_filters = localStorage.getItem("license_component_expand_filters");
         const storedFilters = license_component_expand_filters ? JSON.parse(license_component_expand_filters) : {};
         if (storedFilters.storedFilters) {
             if (storedFilters.storedFilters.branch_name) {
-                filter["branch_name_exact"] = storedFilters.storedFilters.branch_name;
+                filter.branch_name_exact = storedFilters.storedFilters.branch_name;
             }
             if (storedFilters.storedFilters.effective_license_name) {
-                filter["effective_license_name_exact"] = storedFilters.storedFilters.effective_license_name;
+                filter.effective_license_name_exact = storedFilters.storedFilters.effective_license_name;
             }
             if (storedFilters.storedFilters.evaluation_result) {
-                filter["evaluation_result"] = storedFilters.storedFilters.evaluation_result;
+                filter.evaluation_result = storedFilters.storedFilters.evaluation_result;
             }
         } else {
             if (
@@ -37,7 +37,7 @@ const ShowActions = () => {
                 license_component.branch_name !== undefined &&
                 license_component.branch_name !== ""
             ) {
-                filter["branch_name_exact"] = license_component.branch_name;
+                filter.branch_name_exact = license_component.branch_name;
             }
         }
         return filter;

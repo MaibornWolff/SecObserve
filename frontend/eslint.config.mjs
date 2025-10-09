@@ -54,12 +54,8 @@ export default [
             
             // Custom overrides
             "@typescript-eslint/consistent-type-definitions": "off",
-            "@typescript-eslint/dot-notation": "off",
             "@typescript-eslint/no-explicit-any": "off",
-            "@typescript-eslint/prefer-includes": "off",
             "@typescript-eslint/prefer-nullish-coalescing": "off",
-            "@typescript-eslint/prefer-optional-chain": "off",
-            "no-undef": "off",
             "react/display-name": "off",
             "react/jsx-key": "off",
             "react-hooks/immutability": "off",
