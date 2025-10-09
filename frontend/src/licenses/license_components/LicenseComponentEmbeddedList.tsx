@@ -104,7 +104,7 @@ const LicenseComponentEmbeddedList = ({
             );
         }
         if (product?.has_concluded_comments) {
-            filters.push(<TextInput source="concluded_comment" alwaysOn />);
+            filters.push(<TextInput source="manual_concluded_comment" alwaysOn />);
         }
         return filters;
     }
@@ -205,7 +205,7 @@ const LicenseComponentEmbeddedList = ({
                         )}
                         <TextField source="component_name_version_type" label="Component" />
                         {product?.has_services && <TextField source="origin_service_name" label="Service" />}
-                        {product?.has_concluded_comments && <TextField source="concluded_comment" />}
+                        {product?.has_concluded_comments && <TextField source="manual_concluded_comment" />}
                     </Datagrid>
                     <WithListContext
                         render={({ total }) => (
