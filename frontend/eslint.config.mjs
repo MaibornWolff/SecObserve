@@ -62,6 +62,12 @@ export default [
             "no-undef": "off",
             "react/display-name": "off",
             "react/jsx-key": "off",
+            "react-hooks/immutability": "off",
+            "react-hooks/purity": "off",
+            "react-hooks/refs": "off",
+            "react-hooks/purity": "off",
+            "react-hooks/set-state-in-effect": "off",
+            "react-hooks/static-components": "off",
         },
     }
 ];
