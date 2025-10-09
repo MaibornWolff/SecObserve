@@ -206,7 +206,7 @@ function get_purl_url_ecosyste_ms(
         component_purl_url = "https://packages.ecosyste.ms/registries/" + ecosystems_type + "/packages/";
         if (
             component_purl_namespace !== null &&
-            !(component_purl_type === "golang" && component_name.startsWith(component_purl_namespace))
+            !(["composer", "golang"].includes(component_purl_type) && component_name.startsWith(component_purl_namespace))
         ) {
             component_purl_url =
                 component_purl_url +
