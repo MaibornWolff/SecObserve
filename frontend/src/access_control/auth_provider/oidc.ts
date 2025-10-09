@@ -1,6 +1,6 @@
 import { User, UserManager, WebStorageStateStore } from "oidc-client-ts";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-invalid-void-type
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const onSigninCallback = (_user: User | void): void => {
     const user_manager = new UserManager(oidcConfig);
     user_manager.clearStaleState();
@@ -42,7 +42,7 @@ export function oidc_signed_in(): boolean {
 
 export function get_oidc_id_token(): string | null {
     if (oidcStorageUser()) {
-        const user = User.fromStorageString(oidcStorageUser()!); // eslint-disable-line @typescript-eslint/no-non-null-assertion
+        const user = User.fromStorageString(oidcStorageUser()!);
         // We have checked before that user is not null
         if (user?.id_token) {
             return user.id_token;
