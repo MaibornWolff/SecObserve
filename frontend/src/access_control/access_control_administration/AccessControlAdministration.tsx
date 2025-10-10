@@ -1,5 +1,6 @@
 import { Box, Divider, Paper, Tab, Tabs } from "@mui/material";
 import { Fragment } from "react";
+import { ReactNode } from "react";
 import { Link, matchPath, useLocation } from "react-router-dom";
 
 import administration from ".";
@@ -25,7 +26,7 @@ function useRouteMatch(patterns: readonly string[]) {
 }
 
 interface TabPanelProps {
-    children?: React.ReactNode;
+    children?: ReactNode;
     index: number;
     value: number;
 }

@@ -36,8 +36,8 @@ const ApiImportObservations = (product: any) => {
         if (data.branch) {
             formData.branch = data.branch;
         }
-        if (data.service) {
-            formData.service = data.service;
+        if (data.service_id) {
+            formData.service_id = data.service_id;
         }
         if (data.docker_image_name_tag) {
             formData.docker_image_name_tag = data.docker_image_name_tag;
@@ -125,7 +125,18 @@ const ApiImportObservations = (product: any) => {
                                 />
                             </ReferenceInput>
                         )}
-                        <TextInputWide source="service" validate={validate_255} />
+                        {product.product.has_services && (
+                            <ReferenceInput
+                                source="service_id"
+                                reference="services"
+                                sort={{ field: "name", order: "ASC" }}
+                                queryOptions={{ meta: { api_resource: "service_names" } }}
+                                filter={{ product: product.id }}
+                                alwaysOn
+                            >
+                                <AutocompleteInputWide optionText="name" label="Service" />
+                            </ReferenceInput>
+                        )}
                         <TextInputWide
                             source="docker_image_name_tag"
                             label="Docker image name:tag"

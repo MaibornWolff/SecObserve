@@ -1,5 +1,6 @@
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import { Badge, Box, Divider, Paper, Tab, Tabs } from "@mui/material";
+import { ReactNode } from "react";
 import { Fragment, useEffect, useState } from "react";
 import { useNotify } from "react-admin";
 import { Link, matchPath, useLocation } from "react-router-dom";
@@ -24,7 +25,7 @@ function useRouteMatch(patterns: readonly string[]) {
 }
 
 interface TabPanelProps {
-    children?: React.ReactNode;
+    children?: ReactNode;
     index: number;
     value: number;
 }

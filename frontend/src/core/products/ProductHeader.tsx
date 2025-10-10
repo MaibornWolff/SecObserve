@@ -16,14 +16,14 @@ const ProductHeader = () => {
     const { classes } = useStyles();
 
     function get_open_observations_label(product: Product | undefined) {
-        if (!product || product.repository_default_branch == null) {
+        if (product?.repository_default_branch == null) {
             return "Open observations";
         }
         return "Open observations (" + product.repository_default_branch_name + ")";
     }
 
     function get_licenses_label(product: Product | undefined) {
-        if (!product || product.repository_default_branch == null) {
+        if (product?.repository_default_branch == null) {
             return "Licenses / Components";
         }
         return "Licenses / Components (" + product.repository_default_branch_name + ")";

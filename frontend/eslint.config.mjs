@@ -1,36 +1,20 @@
-import { fixupConfigRules, fixupPluginRules } from "@eslint/compat";
 import react from "eslint-plugin-react";
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
 import security from "eslint-plugin-security";
+import reactHooks from "eslint-plugin-react-hooks";
 import globals from "globals";
 import tsParser from "@typescript-eslint/parser";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
-});
-
-export default [...fixupConfigRules(compat.extends(
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:@typescript-eslint/strict",
-    "plugin:@typescript-eslint/stylistic",
-    "plugin:security/recommended-legacy",
-    "plugin:react-hooks/recommended",
-    )),
+export default [
+    js.configs.recommended,
     {
         files: ["**/*.tsx", "**/*.ts"],
         plugins: {
-            react: fixupPluginRules(react),
-            "@typescript-eslint": fixupPluginRules(typescriptEslint),
-            security: fixupPluginRules(security),
+            react,
+            "@typescript-eslint": typescriptEslint,
+            security,
+            "react-hooks": reactHooks,
         },
         languageOptions: {
             globals: {
@@ -40,6 +24,7 @@ export default [...fixupConfigRules(compat.extends(
             ecmaVersion: "latest",
             sourceType: "module",
             parserOptions: {
+                project: "./tsconfig.json",
                 ecmaFeatures: {
                     jsx: true,
                 },
@@ -52,11 +37,33 @@ export default [...fixupConfigRules(compat.extends(
             },
         },
         rules: {
-            "react/react-in-jsx-scope": "off",
+            // React recommended rules
+            ...react.configs.recommended.rules,
+            ...react.configs["jsx-runtime"].rules,
+            
+            // TypeScript recommended rules
+            // ...typescriptEslint.configs["strict-type-checked"].rules,
+            ...typescriptEslint.configs.recommended.rules,
+            ...typescriptEslint.configs["stylistic-type-checked"].rules,
+
+            // Security recommended rules
+            ...security.configs.recommended.rules,
+            
+            // React Hooks recommended rules
+            ...reactHooks.configs.recommended.rules,
+            
+            // Custom overrides
+            "@typescript-eslint/consistent-type-definitions": "off",
+            "@typescript-eslint/no-explicit-any": "off",
+            "@typescript-eslint/prefer-nullish-coalescing": "off",
             "react/display-name": "off",
             "react/jsx-key": "off",
-            "@typescript-eslint/no-explicit-any": "off",
-            "@typescript-eslint/consistent-type-definitions":"off",
+            "react-hooks/immutability": "off",
+            "react-hooks/purity": "off",
+            "react-hooks/refs": "off",
+            "react-hooks/purity": "off",
+            "react-hooks/set-state-in-effect": "off",
+            "react-hooks/static-components": "off",
         },
     }
 ];

@@ -1,7 +1,7 @@
 import { Stack } from "@mui/material";
 import { Datagrid, ListContextProvider, ResourceContextProvider, WithRecord, useListController } from "react-admin";
 
-import { PERMISSION_SERVICE_DELETE } from "../../access_control/types";
+import { PERMISSION_SERVICE_DELETE, PERMISSION_SERVICE_EDIT } from "../../access_control/types";
 import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
 import LicensesCountField from "../../commons/custom_fields/LicensesCountField";
 import ObservationsCountField from "../../commons/custom_fields/ObservationsCountField";
@@ -9,6 +9,7 @@ import TextUrlField from "../../commons/custom_fields/TextUrlField";
 import { feature_license_management } from "../../commons/functions";
 import { getSettingListSize } from "../../commons/user_settings/functions";
 import ServiceDelete from "./ServiceDelete";
+import ServiceEdit from "./ServiceEdit";
 
 type ServiceEmbeddedListProps = {
     product: any;
@@ -71,6 +72,7 @@ const ServiceEmbeddedList = ({ product }: ServiceEmbeddedListProps) => {
                         <WithRecord
                             render={(service) => (
                                 <Stack direction="row" spacing={4}>
+                                    {product?.permissions.includes(PERMISSION_SERVICE_EDIT) && <ServiceEdit />}
                                     {product?.permissions.includes(PERMISSION_SERVICE_DELETE) &&
                                         !service.is_default_service && <ServiceDelete service={service} />}
                                 </Stack>

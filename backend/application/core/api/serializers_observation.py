@@ -2,7 +2,6 @@ from typing import Optional
 from urllib.parse import urlparse
 
 from django.utils import timezone
-from packageurl import PackageURL
 from rest_framework.serializers import (
     CharField,
     ChoiceField,
@@ -88,7 +87,6 @@ class ObservationSerializer(ModelSerializer):
     references = NestedReferenceSerializer(many=True)
     evidences = NestedEvidenceSerializer(many=True)
     origin_source_file_url = SerializerMethodField()
-    origin_component_purl_namespace = SerializerMethodField()
     issue_tracker_issue_url = SerializerMethodField()
     assessment_needs_approval = SerializerMethodField()
     vulnerability_id_aliases = SerializerMethodField()
@@ -108,9 +106,6 @@ class ObservationSerializer(ModelSerializer):
 
     def get_origin_source_file_url(self, observation: Observation) -> Optional[str]:
         return _get_origin_source_file_url(observation)
-
-    def get_origin_component_purl_namespace(self, observation: Observation) -> Optional[str]:
-        return _get_origin_component_purl_namespace(observation)
 
     def get_issue_tracker_issue_url(self, observation: Observation) -> Optional[str]:
         issue_url = None
@@ -157,7 +152,6 @@ class ObservationListSerializer(ModelSerializer):
     origin_component_name_version = SerializerMethodField()
     origin_source_file_short = SerializerMethodField()
     origin_source_file_url = SerializerMethodField()
-    origin_component_purl_namespace = SerializerMethodField()
     vulnerability_id_aliases = SerializerMethodField()
     cve_found_in = SerializerMethodField()
 
@@ -188,9 +182,6 @@ class ObservationListSerializer(ModelSerializer):
 
     def get_origin_source_file_url(self, observation: Observation) -> Optional[str]:
         return _get_origin_source_file_url(observation)
-
-    def get_origin_component_purl_namespace(self, observation: Observation) -> Optional[str]:
-        return _get_origin_component_purl_namespace(observation)
 
     def get_vulnerability_id_aliases(self, observation: Observation) -> list[dict[str, str]]:
         return _get_vulnerability_id_aliases(observation)
@@ -250,16 +241,6 @@ def _create_common_url(observation: Observation, origin_source_file_url: str) ->
             origin_source_file_url += "-L" + str(observation.origin_source_line_end)
 
     return origin_source_file_url
-
-
-def _get_origin_component_purl_namespace(observation: Observation) -> Optional[str]:
-    if observation.origin_component_purl:
-        try:
-            purl = PackageURL.from_string(observation.origin_component_purl)
-            return purl.namespace
-        except ValueError:
-            return ""
-    return ""
 
 
 def _get_vulnerability_id_aliases(observation: Observation) -> list[dict[str, str]]:

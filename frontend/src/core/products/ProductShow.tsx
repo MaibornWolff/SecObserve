@@ -35,6 +35,7 @@ import {
     PERMISSION_PRODUCT_MEMBER_CREATE,
     PERMISSION_PRODUCT_RULE_APPLY,
     PERMISSION_PRODUCT_RULE_CREATE,
+    PERMISSION_SERVICE_CREATE,
 } from "../../access_control/types";
 import { feature_license_management } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
@@ -62,6 +63,7 @@ import ProductAuthorizationGroupMemberAdd from "../product_authorization_group_m
 import ProductAuthorizationGroupMemberEmbeddedList from "../product_authorization_group_members/ProductAuthorizationGroupMemberEmbeddedList";
 import ProductMemberAdd from "../product_members/ProductMemberAdd";
 import ProductMemberEmbeddedList from "../product_members/ProductMemberEmbeddedList";
+import ServiceCreate from "../services/ServiceCreate";
 import ServiceEmbeddedList from "../services/ServiceEmbeddedList";
 import ExportMenu from "./ExportMenu";
 import ProductHeader from "./ProductHeader";
@@ -233,6 +235,9 @@ const ProductShow = () => {
                                     icon={<ConstructionIcon />}
                                     onClick={hideSettingsTabs}
                                 >
+                                    {product?.permissions.includes(PERMISSION_SERVICE_CREATE) && (
+                                        <ServiceCreate product={product} />
+                                    )}
                                     <ServiceEmbeddedList product={product} />
                                 </Tab>
                             )}

@@ -2,7 +2,6 @@ from typing import Optional
 
 from django.core.validators import MinValueValidator
 from license_expression import get_spdx_licensing
-from packageurl import PackageURL
 from rest_framework.serializers import (
     CharField,
     IntegerField,
@@ -100,7 +99,6 @@ class NestedLicenseComponentEvidenceSerializer(ModelSerializer):
 
 class LicenseComponentSerializer(ModelSerializer):
     component_name_version_type = SerializerMethodField()
-    component_purl_namespace = SerializerMethodField()
     branch_name = SerializerMethodField()
     origin_service_name = SerializerMethodField()
     license_policy_name: Optional[SerializerMethodField] = SerializerMethodField()
@@ -120,16 +118,6 @@ class LicenseComponentSerializer(ModelSerializer):
             if obj.component_purl_type:
                 component_name_version_type += f" ({obj.component_purl_type})"
             return component_name_version_type
-
-        return ""
-
-    def get_component_purl_namespace(self, obj: License_Component) -> Optional[str]:
-        if obj.component_purl:
-            try:
-                purl = PackageURL.from_string(obj.component_purl)
-                return purl.namespace
-            except ValueError:
-                return ""
 
         return ""
 

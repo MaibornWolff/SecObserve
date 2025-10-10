@@ -91,7 +91,7 @@ class LicenseComponentFilter(FilterSet):
     effective_non_spdx_license = CharFilter(field_name="effective_non_spdx_license", lookup_expr="icontains")
     age = ChoiceFilter(field_name="age", method="get_age", choices=Age_Choices.AGE_CHOICES)
     branch_name_exact = CharFilter(field_name="branch__name")
-    concluded_comment = CharFilter(field_name="concluded_comment", lookup_expr="icontains")
+    manual_concluded_comment = CharFilter(field_name="manual_concluded_comment", lookup_expr="icontains")
 
     def get_age(
         self,
@@ -161,12 +161,12 @@ class LicenseComponentFilter(FilterSet):
             ),
             (
                 (
-                    "concluded_comment",
+                    "manual_concluded_comment",
                     "effective_license_name",
                     "numerical_evaluation_result",
                     "component_name_version",
                 ),
-                "concluded_comment",
+                "manual_concluded_comment",
             ),
             ("last_change", "last_change"),
         ),
@@ -185,6 +185,7 @@ class LicenseComponentFilter(FilterSet):
             "component_name_version",
             "component_purl_type",
             "origin_service",
+            "manual_concluded_comment",
         ]
 
 

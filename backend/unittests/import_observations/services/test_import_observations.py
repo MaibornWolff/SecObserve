@@ -126,7 +126,7 @@ class TestFileUploadObservations(BaseTestCase):
             product=Product.objects.get(id=1),
             branch=branch,
             file=File(open("unittests/fixtures/data_1/bandit.sarif", "r")),
-            service=service_name,
+            service_name=service_name,
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
@@ -232,7 +232,7 @@ class TestFileUploadObservations(BaseTestCase):
             product=Product.objects.get(id=1),
             branch=branch,
             file=File(open("unittests/fixtures/data_2/bandit.sarif", "r")),
-            service=service_name,
+            service_name=service_name,
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
@@ -448,7 +448,7 @@ class TestFileUploadObservations(BaseTestCase):
                     "r",
                 )
             ),
-            service=service,
+            service_name=service,
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
@@ -491,7 +491,7 @@ class TestFileUploadObservations(BaseTestCase):
             )
             self.assertEqual(license_components[1].component_purl_type, "pypi")
             self.assertEqual(license_components[1].component_cpe, "")
-            dependencies = """SecObserve:1.39.2 --> argon2-cffi:23.1.0
+            dependencies = """SecObserve:1.40.0 --> argon2-cffi:23.1.0
 argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
             self.assertEqual(license_components[1].component_dependencies, dependencies)
             self.assertEqual(license_components[1].effective_spdx_license, License.objects.get(spdx_id="MIT"))
@@ -594,7 +594,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                     "r",
                 )
             ),
-            service=service,
+            service_name=service,
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
@@ -829,7 +829,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                     "r",
                 )
             ),
-            service=service,
+            service_name=service,
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
@@ -1012,7 +1012,7 @@ argon2-cffi:23.1.0 --> argon2-cffi-bindings:21.2.0"""
                     "r",
                 )
             ),
-            service=service,
+            service_name=service,
             docker_image_name_tag=docker_image_name_tag,
             endpoint_url=endpoint_url,
             kubernetes_cluster=kubernetes_cluster,
@@ -1100,7 +1100,7 @@ class APIImportObservation(BaseTestCase):
         parameters = ApiImportParameters(
             api_configuration=api_configuration,
             branch=None,
-            service="",
+            service_name="",
             docker_image_name_tag="",
             endpoint_url="",
             kubernetes_cluster="",
@@ -1132,7 +1132,7 @@ class APIImportObservation(BaseTestCase):
         parameters = ApiImportParameters(
             api_configuration=api_configuration,
             branch=self.branch_1,
-            service=None,
+            service_name=None,
             docker_image_name_tag="",
             endpoint_url="",
             kubernetes_cluster="",

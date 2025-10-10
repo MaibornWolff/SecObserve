@@ -40,6 +40,19 @@ import { IDENTIFIER_OBSERVATION_LIST, setListIdentifier } from "./functions";
 function listFilters() {
     const filters = [];
     filters.push(
+        <TextInput source="title" alwaysOn />,
+        <AutocompleteInput
+            source="current_severity"
+            label="Severity"
+            choices={OBSERVATION_SEVERITY_CHOICES}
+            alwaysOn
+        />,
+        <AutocompleteInput source="current_status" label="Status" choices={OBSERVATION_STATUS_CHOICES} alwaysOn />
+    );
+    if (feature_exploit_information()) {
+        filters.push(<NullableBooleanInput source="cve_known_exploited" label="CVE exploited" alwaysOn />);
+    }
+    filters.push(
         <ReferenceInput
             source="product"
             reference="products"
@@ -67,14 +80,6 @@ function listFilters() {
         >
             <AutocompleteInputWide optionText="name_with_product" label="Branch / Version" />
         </ReferenceInput>,
-        <TextInput source="title" alwaysOn />,
-        <AutocompleteInput
-            source="current_severity"
-            label="Severity"
-            choices={OBSERVATION_SEVERITY_CHOICES}
-            alwaysOn
-        />,
-        <AutocompleteInput source="current_status" label="Status" choices={OBSERVATION_STATUS_CHOICES} alwaysOn />,
         <ReferenceInput
             label="Service"
             source="origin_service"
@@ -84,12 +89,7 @@ function listFilters() {
         >
             <AutocompleteInputWide label="Service" optionText="name_with_product" />
         </ReferenceInput>,
-        <TextInput source="origin_component_name_version" label="Component" />
-    );
-    if (feature_exploit_information()) {
-        filters.push(<NullableBooleanInput source="cve_known_exploited" label="CVE exploited" alwaysOn />);
-    }
-    filters.push(
+        <TextInput source="origin_component_name_version" label="Component" />,
         <TextInput source="origin_docker_image_name_tag_short" label="Container" />,
         <TextInput source="origin_endpoint_hostname" label="Host" />,
         <TextInput source="origin_source_file" label="Source" />,
@@ -147,13 +147,13 @@ const ObservationList = () => {
                     expand={<ObservationExpand showComponent={true} />}
                     expandSingle
                 >
-                    <TextField source="product_data.name" label="Product" />
-                    <TextField source="product_data.product_group_name" label="Group" />
-                    <TextField source="branch_name" label="Branch / Version" />
                     <TextField source="title" />
                     <SeverityField label="Severity" source="current_severity" />
                     <ChipField source="current_status" label="Status" />
                     <NumberField source="epss_score" label="EPSS" />
+                    <TextField source="product_data.name" label="Product" />
+                    <TextField source="product_data.product_group_name" label="Group" />
+                    <TextField source="branch_name" label="Branch / Version" />
                     <TextField source="origin_service_name" label="Service" />
                     <TextField source="origin_component_name_version" label="Comp." sx={{ wordBreak: "break-word" }} />
                     <TextField

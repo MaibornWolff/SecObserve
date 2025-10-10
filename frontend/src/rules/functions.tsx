@@ -1,4 +1,5 @@
 import { Box, Divider, Paper, Stack, Typography } from "@mui/material";
+import { RefObject } from "react";
 import { Fragment, useState } from "react";
 import {
     BooleanField,
@@ -283,7 +284,7 @@ interface RuleCreateEditComponentProps {
     initialStatus: string;
     initialDescription: string;
     setDescription: (value: string) => void;
-    dialogRef?: React.RefObject<HTMLDivElement | null> | null;
+    dialogRef?: RefObject<HTMLDivElement | null> | null;
 }
 
 export const RuleCreateEditComponent = ({
