@@ -10,6 +10,12 @@
 
 * There will be specific upgrade instructions if necessary, e.g. when there are new configuration parameters.
 
+## Release 1.40.0
+
+**Breaking changes**
+
+* The field `[origin_]component_purl_namespace` has been removed from the APIs for `observations` and `license_components`. Users of the API shall parse the `[origin_]component_purl` if they need any of its attributes.
+
 ## Release 1.38.0
 
 **Noteable change**
