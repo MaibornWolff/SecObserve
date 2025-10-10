@@ -1,6 +1,3 @@
-from typing import Optional
-
-from packageurl import PackageURL
 from rest_framework.serializers import (
     ModelSerializer,
     SerializerMethodField,
@@ -14,7 +11,6 @@ class ComponentSerializer(ModelSerializer):
     product_group_name = SerializerMethodField()
     branch_name = SerializerMethodField()
     component_name_version_type = SerializerMethodField()
-    component_purl_namespace = SerializerMethodField()
     origin_service_name = SerializerMethodField()
 
     def get_product_name(self, obj: Component) -> str:
@@ -36,16 +32,6 @@ class ComponentSerializer(ModelSerializer):
             if obj.component_purl_type:
                 component_name_version_type += f" ({obj.component_purl_type})"
             return component_name_version_type
-        return ""
-
-    def get_component_purl_namespace(self, obj: Component) -> Optional[str]:
-        if obj.component_purl:
-            try:
-                purl = PackageURL.from_string(obj.component_purl)
-                return purl.namespace
-            except ValueError:
-                return ""
-
         return ""
 
     def get_origin_service_name(self, obj: Component) -> str:

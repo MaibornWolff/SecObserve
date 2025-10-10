@@ -1,3 +1,5 @@
+import { PackageURL } from "packageurl-js";
+
 import { httpClient } from "../commons/ra-data-django-rest-framework";
 import {
     OBSERVATION_SEVERITY_CRITICAL,
@@ -18,6 +20,11 @@ import {
     EVALUATION_RESULT_UNKNOWN,
 } from "../licenses/types";
 import { getSettingPackageInfoPreference, getSettingTheme } from "./user_settings/functions";
+
+export function getErrorMessage(error: unknown) {
+    if (error instanceof Error) return error.message;
+    return String(error);
+}
 
 export function getIconAndFontColor() {
     if (getSettingTheme() == "dark") {
@@ -102,88 +109,83 @@ export function get_cvss4_url(cvss_vector: string): string {
     return "";
 }
 
-export function get_component_purl_url(
-    component_name: string,
-    component_version: string | null,
-    component_purl_type: string | null,
-    component_purl_namespace: string | null
-): string | null {
-    if (component_purl_type === null) {
+export function get_component_purl_url(component_purl: string): string | null {
+    if (component_purl === "") {
         return null;
     }
 
-    let package_info_preference = getSettingPackageInfoPreference();
-    package_info_preference ??= "open/source/insights";
+    try {
+        const purl = PackageURL.fromString(component_purl);
 
-    let namespace_separator = "/";
-    if (component_purl_type === "maven") {
-        namespace_separator = ":";
+        if (purl.type === undefined || purl.name === undefined) {
+            return null;
+        }
+
+        let package_info_preference = getSettingPackageInfoPreference();
+        package_info_preference ??= "open/source/insights";
+
+        let namespace_separator = "/";
+        if (purl.type === "maven") {
+            namespace_separator = ":";
+        }
+
+        let component_purl_url: string | null = null;
+
+        if (package_info_preference === "open/source/insights") {
+            component_purl_url = get_purl_url_deps_dev(
+                purl.type,
+                purl.namespace,
+                purl.name,
+                purl.version,
+                namespace_separator
+            );
+        }
+
+        component_purl_url ??= get_purl_url_ecosyste_ms(purl.type, purl.namespace, purl.name, namespace_separator);
+
+        return component_purl_url;
+    } catch (e: unknown) {
+        console.log("PURL " + component_purl + " is not valid: " + getErrorMessage(e));
+        return null;
     }
-
-    let component_purl_url: string | null = null;
-
-    if (package_info_preference === "open/source/insights") {
-        component_purl_url = get_purl_url_deps_dev(
-            component_name,
-            component_version,
-            component_purl_type,
-            component_purl_namespace,
-            namespace_separator
-        );
-    }
-
-    component_purl_url ??= get_purl_url_ecosyste_ms(
-        component_name,
-        component_purl_type,
-        component_purl_namespace,
-        namespace_separator
-    );
-
-    return component_purl_url;
 }
 
 function get_purl_url_deps_dev(
-    component_name: string,
-    component_version: string | null,
-    component_purl_type: string | null,
-    component_purl_namespace: string | null,
+    purl_type: string,
+    purl_namespace: string | undefined,
+    purl_name: string,
+    purl_version: string | undefined,
     namespace_separator: string
 ): string | null {
-    let component_purl_url: string | null = null;
+    let purl_url: string | null = null;
 
     const typeArray: string[] = ["cargo", "golang", "maven", "npm", "nuget", "pypi"];
-    if (component_purl_type !== null && typeArray.includes(component_purl_type)) {
-        let deps_dev_type = component_purl_type;
-        if (component_purl_type === "golang") {
+    if (purl_type !== null && purl_name !== null && typeArray.includes(purl_type)) {
+        let deps_dev_type = purl_type;
+        if (purl_type === "golang") {
             deps_dev_type = "go";
         }
 
-        component_purl_url = "https://deps.dev/" + deps_dev_type + "/";
-        if (
-            component_purl_namespace !== null &&
-            !(component_purl_type === "golang" && component_name.startsWith(component_purl_namespace))
-        ) {
-            component_purl_url =
-                component_purl_url +
-                encodeURIComponent(component_purl_namespace) +
-                encodeURIComponent(namespace_separator);
+        purl_url = "https://deps.dev/" + deps_dev_type + "/";
+        if (purl_namespace !== undefined) {
+            purl_url += encodeURIComponent(purl_namespace) + encodeURIComponent(namespace_separator);
         }
-        component_purl_url = component_purl_url + encodeURIComponent(component_name);
-        if (component_version !== null) {
-            component_purl_url = component_purl_url + "/" + component_version;
+        purl_url += encodeURIComponent(purl_name);
+        if (purl_version !== undefined) {
+            purl_url += "/" + purl_version;
         }
     }
 
-    return component_purl_url;
+    return purl_url;
 }
 
 function get_purl_url_ecosyste_ms(
-    component_name: string,
-    component_purl_type: string | null,
-    component_purl_namespace: string | null,
+    purl_type: string,
+    purl_namespace: string | undefined,
+    purl_name: string,
     namespace_separator: string
 ): string | null {
-    let component_purl_url: string | null = null;
+    let purl_url: string | null = null;
 
     const types: Record<string, string> = {
         npm: "npmjs.org",
@@ -200,26 +202,17 @@ function get_purl_url_ecosyste_ms(
         hackage: "hackage.haskell.org",
     };
 
-    if (component_purl_type !== null && Object.keys(types).includes(component_purl_type)) {
-        const ecosystems_type = types[component_purl_type]; // eslint-disable-line security/detect-object-injection
+    if (Object.keys(types).includes(purl_type)) {
+        const ecosystems_type = types[purl_type]; // eslint-disable-line security/detect-object-injection
 
-        component_purl_url = "https://packages.ecosyste.ms/registries/" + ecosystems_type + "/packages/";
-        if (
-            component_purl_namespace !== null &&
-            !(
-                ["composer", "golang"].includes(component_purl_type) &&
-                component_name.startsWith(component_purl_namespace)
-            )
-        ) {
-            component_purl_url =
-                component_purl_url +
-                encodeURIComponent(component_purl_namespace) +
-                encodeURIComponent(namespace_separator);
+        purl_url = "https://packages.ecosyste.ms/registries/" + ecosystems_type + "/packages/";
+        if (purl_namespace !== undefined) {
+            purl_url += encodeURIComponent(purl_namespace) + encodeURIComponent(namespace_separator);
         }
-        component_purl_url = component_purl_url + encodeURIComponent(component_name);
+        purl_url += encodeURIComponent(purl_name);
     }
 
-    return component_purl_url;
+    return purl_url;
 }
 
 const rtf = new Intl.RelativeTimeFormat("en", {

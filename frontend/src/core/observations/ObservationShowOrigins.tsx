@@ -57,36 +57,21 @@ const ObservationShowOrigins = ({ observation, showDependencies, elevated }: Obs
                                             <TextField source="origin_component_version" label="Component version" />
                                         </Labeled>
                                     )}
-                                    {observation.origin_component_purl != "" &&
-                                        get_component_purl_url(
-                                            observation.origin_component_name,
-                                            observation.origin_component_version,
-                                            observation.origin_component_purl_type,
-                                            observation.origin_component_purl_namespace
-                                        ) == null && (
+                                    {observation.origin_component_purl !== "" &&
+                                        get_component_purl_url(observation.origin_component_purl) === null && (
                                             <Labeled>
                                                 <TextField source="origin_component_purl" label="Component PURL" />
                                             </Labeled>
                                         )}
-                                    {observation.origin_component_purl != "" &&
-                                        get_component_purl_url(
-                                            observation.origin_component_name,
-                                            observation.origin_component_version,
-                                            observation.origin_component_purl_type,
-                                            observation.origin_component_purl_namespace
-                                        ) != null && (
+                                    {observation.origin_component_purl !== "" &&
+                                        get_component_purl_url(observation.origin_component_purl) !== null && (
                                             <Labeled>
                                                 <TextUrlField
                                                     label="Component PURL"
                                                     text={observation.origin_component_purl}
                                                     url={
                                                         observation.origin_component_purl &&
-                                                        get_component_purl_url(
-                                                            observation.origin_component_name,
-                                                            observation.origin_component_version,
-                                                            observation.origin_component_purl_type,
-                                                            observation.origin_component_purl_namespace
-                                                        )
+                                                        get_component_purl_url(observation.origin_component_purl)
                                                     }
                                                     new_tab={true}
                                                 />

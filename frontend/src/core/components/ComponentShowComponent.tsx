@@ -38,41 +38,21 @@ const ComponentShowComponent = ({ component, icon }: ComponentShowComponentProps
                             </Labeled>
                         )}
                     </Stack>
-                    {component.component_purl != "" &&
-                        get_component_purl_url(
-                            component.component_name,
-                            component.component_version,
-                            component.component_purl_type,
-                            component.component_purl_namespace
-                        ) == null && (
-                            <Labeled>
-                                <TextField source="component_purl" label="Component PURL" />
-                            </Labeled>
-                        )}
-                    {component.component_purl != "" &&
-                        get_component_purl_url(
-                            component.component_name,
-                            component.component_version,
-                            component.component_purl_type,
-                            component.component_purl_namespace
-                        ) != null && (
-                            <Labeled>
-                                <TextUrlField
-                                    label="PURL"
-                                    text={component.component_purl}
-                                    url={
-                                        component.component_purl &&
-                                        get_component_purl_url(
-                                            component.component_name,
-                                            component.component_version,
-                                            component.component_purl_type,
-                                            component.component_purl_namespace
-                                        )
-                                    }
-                                    new_tab={true}
-                                />
-                            </Labeled>
-                        )}
+                    {component.component_purl !== "" && get_component_purl_url(component.component_purl) === null && (
+                        <Labeled>
+                            <TextField source="component_purl" label="Component PURL" />
+                        </Labeled>
+                    )}
+                    {component.component_purl !== "" && get_component_purl_url(component.component_purl) !== null && (
+                        <Labeled>
+                            <TextUrlField
+                                label="PURL"
+                                text={component.component_purl}
+                                url={component.component_purl && get_component_purl_url(component.component_purl)}
+                                new_tab={true}
+                            />
+                        </Labeled>
+                    )}
                     {component.component_cpe != "" && (
                         <Labeled>
                             <TextField source="component_cpe" label="CPE" />
