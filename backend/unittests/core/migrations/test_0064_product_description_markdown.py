@@ -15,17 +15,20 @@ Heading 2
 ---------
 
 * **bold**
+
 * *italics*
+
 * underscore
+
 * ~~strikethrough~~
 
 1. line 1
+
 2. line 2
 
 `code`
 
 [MaibornWolff](https://www.maibornwolff.de)
-
 """,
             description,
         )
