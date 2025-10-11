@@ -82,7 +82,7 @@ COPY ./docker/backend/prod/database/combined-ca-certificates.pem ${APP_HOME}/com
 # versions of dependencies from distribution are ok
 RUN addgroup -g 1001 -S ${group} \
     && adduser -u 1001 -S ${user} -G ${group} \
-    # Install binaries and libs for PostgreSQL
+    # Install binaries and libs for PostgreSQL and MySQL
     && apk add --no-cache --virtual postgresql-libs postgresql-client mariadb-dev mysql-client bash \
     # make startup scripts executable
     && chmod +x /entrypoint \

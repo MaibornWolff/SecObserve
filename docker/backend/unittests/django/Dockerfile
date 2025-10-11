@@ -54,7 +54,11 @@ COPY ./backend ${APP_HOME}
 # use prod settings
 COPY ./backend/config/settings/unittests.py ${APP_HOME}/config/settings/dist.py
 
+# kics-scan ignore-block
+# versions of dependencies from distribution are ok
 RUN chmod +x /entrypoint \
+    # Install Alpine packages to make unittests environment similar to productive setup
+    && apk add --no-cache --virtual postgresql-libs postgresql-client mariadb-dev mysql-client bash \
     # insert commit id for status endpoint
     && sed -i 's/version_unknown/'"${VERSION}"'/g' ${APP_HOME}/application/commons/api/views.py \
     # make staticfiles writeable

@@ -43,11 +43,6 @@ WORKDIR ${APP_HOME}
 ARG user=django
 ARG group=django
 
-# Install binaries and libs for PostgreSQL
-# kics-scan ignore-block
-# versions of dependencies from distribution are ok
-RUN apk add --no-cache --virtual postgresql-libs postgresql-client mariadb-dev mysql-client bash
-
 # copy dependencies from build stage
 ENV VIRTUAL_ENV=/.venv \
     PATH="/.venv/bin:$PATH"
@@ -62,8 +57,12 @@ COPY ./backend ${APP_HOME}
 # use dev settings
 COPY ./backend/config/settings/dev.py ${APP_HOME}/config/settings/dist.py
 
+# kics-scan ignore-block
+# versions of dependencies from distribution are ok
 RUN addgroup -g 1001 -S ${group} \
     && adduser -u 1001 -S ${user} -G ${group} \
+    # Install binaries and libs for PostgreSQL and MySQL
+    && apk add --no-cache --virtual postgresql-libs postgresql-client mariadb-dev mysql-client bash \
     # make startup scripts executable
     && chmod +x /entrypoint \
     && chmod +x /wait-for-it.sh \
