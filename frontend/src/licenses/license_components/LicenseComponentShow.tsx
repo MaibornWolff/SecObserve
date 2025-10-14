@@ -32,10 +32,9 @@ const ShowActions = () => {
         } else {
             if (
                 localStorage.getItem("RaStore.license_components.embedded") === null &&
-                license_component &&
-                license_component.branch_name !== null &&
-                license_component.branch_name !== undefined &&
-                license_component.branch_name !== ""
+                license_component?.branch_name !== null &&
+                license_component?.branch_name !== undefined &&
+                license_component?.branch_name !== ""
             ) {
                 filter.branch_name_exact = license_component.branch_name;
             }
