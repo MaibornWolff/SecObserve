@@ -228,19 +228,17 @@ const ProductShow = () => {
                                 )}
                                 <BranchEmbeddedList product={product} />
                             </Tab>
-                            {product.has_services && (
-                                <Tab
-                                    label="Services"
-                                    path="services"
-                                    icon={<ConstructionIcon />}
-                                    onClick={hideSettingsTabs}
-                                >
-                                    {product?.permissions.includes(PERMISSION_SERVICE_CREATE) && (
-                                        <ServiceCreate product={product} />
-                                    )}
-                                    <ServiceEmbeddedList product={product} />
-                                </Tab>
-                            )}
+                            <Tab
+                                label="Services"
+                                path="services"
+                                icon={<ConstructionIcon />}
+                                onClick={hideSettingsTabs}
+                            >
+                                {product?.permissions.includes(PERMISSION_SERVICE_CREATE) && (
+                                    <ServiceCreate product={product} />
+                                )}
+                                <ServiceEmbeddedList product={product} />
+                            </Tab>
                             {feature_license_management() && product.has_licenses && (
                                 <Tab
                                     label={
