@@ -1,4 +1,5 @@
 from unittest.mock import patch
+
 from application.licenses.models import License_Group, License_Policy
 from unittests.authorization.api.test_authorization import (
     APITest,
