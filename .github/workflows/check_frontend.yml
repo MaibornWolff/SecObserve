@@ -42,7 +42,7 @@ jobs:
           docker compose -f docker-compose-playwright.yml up --abort-on-container-exit --exit-code-from playwright
 
   check_code_sonarqube_frontend:
-    if: github.repository == 'MaibornWolff/SecObserve'
+    if: github.repository == "MaibornWolff/SecObserve" && (github.ref == "refs/heads/dev" || github.event_name == "pull_request")
     runs-on: ubuntu-latest
     steps:
       - 

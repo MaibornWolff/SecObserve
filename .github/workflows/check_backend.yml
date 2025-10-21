@@ -75,7 +75,7 @@ jobs:
           retention-days: 1
 
   check_code_sonarqube_backend:
-    if: github.repository == 'MaibornWolff/SecObserve'
+    if: github.repository == "MaibornWolff/SecObserve" && (github.ref == "refs/heads/dev" || github.event_name == "pull_request")
     needs: [unittests]
     runs-on: ubuntu-latest
     steps:
@@ -90,6 +90,6 @@ jobs:
       - name: Run SonarQube scan for backend
         uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602 # v6.0.0
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_BACKEND }}
         with:
           projectBaseDir: backend
