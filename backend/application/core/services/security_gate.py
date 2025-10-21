@@ -37,7 +37,7 @@ def check_security_gate(product: Product) -> None:
         send_product_security_gate_notification(product)
 
 
-def check_security_gate_observation(observation: Observation):
+def check_security_gate_observation(observation: Observation) -> None:
     if observation.branch == observation.product.repository_default_branch:
         check_security_gate(observation.product)
 
