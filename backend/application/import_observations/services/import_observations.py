@@ -323,7 +323,8 @@ def _process_data(import_parameters: ImportParameters, settings: Settings) -> Tu
 
     observations_resolved = _resolve_unimported_observations(observations_before)
     vulnerability_check_observations.update(observations_resolved)
-    check_security_gate(import_parameters.product)
+    if import_parameters.branch == import_parameters.product.repository_default_branch:
+        check_security_gate(import_parameters.product)
     set_repository_default_branch(import_parameters.product)
     if import_parameters.branch:
         import_parameters.branch.last_import = timezone.now()

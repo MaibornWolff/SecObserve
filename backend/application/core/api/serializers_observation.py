@@ -41,7 +41,7 @@ from application.core.models import (
 )
 from application.core.queries.observation import get_current_observation_log
 from application.core.services.observation_log import create_observation_log
-from application.core.services.security_gate import check_security_gate
+from application.core.services.security_gate import check_security_gate_observation
 from application.core.types import (
     Assessment_Status,
     Severity,
@@ -337,7 +337,7 @@ class ObservationUpdateSerializer(ModelSerializer):
                 risk_acceptance_expiry_date=log_risk_acceptance_expiry_date,
             )
 
-        check_security_gate(observation.product)
+        check_security_gate_observation(observation)
         push_observation_to_issue_tracker(observation, get_current_user())
         if observation.branch:
             observation.branch.last_import = timezone.now()
@@ -429,7 +429,7 @@ class ObservationCreateSerializer(ModelSerializer):
             risk_acceptance_expiry_date=observation.risk_acceptance_expiry_date,
         )
 
-        check_security_gate(observation.product)
+        check_security_gate_observation(observation)
         push_observation_to_issue_tracker(observation, get_current_user())
         if observation.branch:
             observation.branch.last_import = timezone.now()

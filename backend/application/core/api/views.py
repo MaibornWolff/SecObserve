@@ -540,8 +540,10 @@ class ObservationViewSet(ModelViewSet):
     def perform_destroy(self, instance: Observation) -> None:
         product = instance.product
         issue_id = instance.issue_tracker_issue_id
+        observation_branch = instance.branch
         super().perform_destroy(instance)
-        check_security_gate(product)
+        if observation_branch == product.repository_default_branch:
+            check_security_gate(product)
         push_deleted_observation_to_issue_tracker(product, issue_id, get_current_user())
         product.last_observation_change = timezone.now()
         product.save()

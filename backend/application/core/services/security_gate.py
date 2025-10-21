@@ -1,7 +1,7 @@
 from typing import Optional
 
 from application.commons.models import Settings
-from application.core.models import Product
+from application.core.models import Observation, Product
 from application.core.services.product import get_product_observation_count
 from application.core.types import Severity
 from application.notifications.services.send_notifications import (
@@ -35,6 +35,11 @@ def check_security_gate(product: Product) -> None:
         product.security_gate_passed = new_security_gate_passed
         product.save()
         send_product_security_gate_notification(product)
+
+
+def check_security_gate_observation(observation: Observation) -> None:
+    if observation.branch == observation.product.repository_default_branch:
+        check_security_gate(observation.product)
 
 
 def _calculate_active_product_security_gate(product: Product) -> bool:
