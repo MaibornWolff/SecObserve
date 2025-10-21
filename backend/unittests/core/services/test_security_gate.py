@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 from application.commons.models import Settings
 from application.core.models import Product
-from application.core.services.security_gate import check_security_gate
+from application.core.services.security_gate import check_security_gate, check_security_gate_observation
 from unittests.base_test_case import BaseTestCase
 
 
@@ -394,3 +394,27 @@ class TestSecurityGate(BaseTestCase):
         )
         check_security_gate(product)
         self.assertTrue(product.security_gate_passed)
+
+    @patch("application.core.services.security_gate.check_security_gate")
+    def test_check_security_gate_observation_same_branch(self, mock):
+        self.product_1.repository_default_branch = self.branch_1
+        self.observation_1.branch = self.branch_1
+
+        check_security_gate_observation(self.observation_1)
+        mock.assert_called_with(self.product_1)
+
+    @patch("application.core.services.security_gate.check_security_gate")
+    def test_check_security_gate_observation_no_branch(self, mock):
+        self.product_1.repository_default_branch = None
+        self.observation_1.branch = None
+
+        check_security_gate_observation(self.observation_1)
+        mock.assert_called_with(self.product_1)
+
+    @patch("application.core.services.security_gate.check_security_gate")
+    def test_check_security_gate_observation_same_branch(self, mock):
+        self.product_1.repository_default_branch = self.branch_1
+        self.observation_1.branch = self.branch_2
+
+        check_security_gate_observation(self.observation_1)
+        mock.assert_not_called()
