@@ -2,7 +2,10 @@ from unittest.mock import patch
 
 from application.commons.models import Settings
 from application.core.models import Product
-from application.core.services.security_gate import check_security_gate, check_security_gate_observation
+from application.core.services.security_gate import (
+    check_security_gate,
+    check_security_gate_observation,
+)
 from unittests.base_test_case import BaseTestCase
 
 
