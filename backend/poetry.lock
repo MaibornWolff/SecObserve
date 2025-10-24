@@ -1119,16 +1119,16 @@ tornado = ["tornado (>=0.2)"]
 
 [[package]]
 name = "html-to-markdown"
-version = "2.4.1"
+version = "2.5.0"
 description = "High-performance HTML to Markdown converter powered by Rust with a clean Python API"
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "html_to_markdown-2.4.1-cp310-abi3-macosx_11_0_arm64.whl", hash = "sha256:1886182a3276ed58f5aa30eede33955ca67161398617175d6f38c614c8b27ec6"},
-    {file = "html_to_markdown-2.4.1-cp310-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:91aeda6ea57585e31a0b645051c755bd3d66659f36e37df1f9fb4c4ae216def7"},
-    {file = "html_to_markdown-2.4.1-cp310-abi3-win_amd64.whl", hash = "sha256:3ab0f5d4881e2779317ce2f1c6cd37f7688f750941009680c94da51d42651771"},
-    {file = "html_to_markdown-2.4.1.tar.gz", hash = "sha256:a5284d6a839bbf6aa337b5c2b54edfb2beda91ba098c146a600d220c95dc21f8"},
+    {file = "html_to_markdown-2.5.0-cp310-abi3-macosx_11_0_arm64.whl", hash = "sha256:a81c5f7f0d16c390091acc0a8459e24c4c22e1156a7f34569daecdf58a584169"},
+    {file = "html_to_markdown-2.5.0-cp310-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:d13c9195cbaa2e54c1e86b77c8b41a1cd300261021926d399f1ca15847dc7aa6"},
+    {file = "html_to_markdown-2.5.0-cp310-abi3-win_amd64.whl", hash = "sha256:0842b5b2cae259f8db0a6f2aa8adeb8ce155af398aba6370ff1e4de6ad6d3342"},
+    {file = "html_to_markdown-2.5.0.tar.gz", hash = "sha256:7fdf702fe713849e96dd532604c5fed80e54446986b50f9c98a5aa27f247a849"},
 ]
 
 [[package]]
@@ -1139,6 +1139,7 @@ optional = false
 python-versions = "*"
 groups = ["main"]
 files = [
+    {file = "huey-2.5.4-py3-none-any.whl", hash = "sha256:0eac1fb2711f6366a1db003629354a0cea470a3db720d5bab0d140c28e993f9c"},
     {file = "huey-2.5.4.tar.gz", hash = "sha256:4b7fb217b640fbb46efc4f4681b446b40726593522f093e8ef27c4a8fcb6cfbb"},
 ]
 
@@ -3078,4 +3079,4 @@ unittests = ["coverage", "django-coverage-plugin", "django-extensions"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">= 3.10, < 3.14"
-content-hash = "4e4e0783051e336db0d9c6ce423102d9dbc30b3f28194cb9c6919c829e160332"
+content-hash = "111c5468de4365b0335b92fff4a7f7407a421b648dc27a41539d21d5fa31d0b0"
