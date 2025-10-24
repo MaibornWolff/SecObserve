@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2020 Bojan Mihelac under the MIT License
  * See https://github.com/bmihelac/ra-data-django-rest-framework
- * Copied to make it compatible with React-Admin 4 and DefectDojo
+ * Copied to make it compatible with React-Admin 4 and SecObserve
  */
 import queryString from "query-string";
 import { DataProvider, Identifier, fetchUtils } from "react-admin";
@@ -67,12 +67,12 @@ export async function httpClient(url: string, options?: fetchUtils.Options | und
                 return fetchUtils.fetchJson(url, Object.assign(createOptionsFromTokenOIDC(), options));
             })
             .catch((error: Error) => {
-                return Promise.reject(error);
+                throw error;
             });
     } else if (jwt_signed_in()) {
         return fetchUtils.fetchJson(url, Object.assign(createOptionsFromTokenJWT(), options));
     } else {
-        return Promise.reject(Error("Not authenticated"));
+        throw new Error("Not authenticated");
     }
 }
 
