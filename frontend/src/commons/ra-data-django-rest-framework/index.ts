@@ -67,12 +67,12 @@ export async function httpClient(url: string, options?: fetchUtils.Options | und
                 return fetchUtils.fetchJson(url, Object.assign(createOptionsFromTokenOIDC(), options));
             })
             .catch((error: Error) => {
-                throw(error);
+                throw error;
             });
     } else if (jwt_signed_in()) {
         return fetchUtils.fetchJson(url, Object.assign(createOptionsFromTokenJWT(), options));
     } else {
-        throw(new Error("Not authenticated"));
+        throw new Error("Not authenticated");
     }
 }
 
