@@ -145,7 +145,7 @@ export function get_component_purl_url(component_purl: string): string | null {
 
         return component_purl_url;
     } catch (e: unknown) {
-        console.log("PURL " + component_purl + " is not valid: " + getErrorMessage(e));
+        console.warn("PURL " + component_purl + " is not valid: " + getErrorMessage(e));
         return null;
     }
 }

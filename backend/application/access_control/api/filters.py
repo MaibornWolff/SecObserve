@@ -195,9 +195,9 @@ class ApiTokenFilter(FilterSet):
 
     ordering = OrderingFilter(
         # tuple-mapping retains order
-        fields=(("user__username", "name"),),
+        fields=(("user__username", "name"), ("user", "user")),
     )
 
     class Meta:
         model = API_Token
-        fields = ["name"]
+        fields = ["name", "user"]

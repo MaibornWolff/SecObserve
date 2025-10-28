@@ -21,7 +21,7 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.filters import SearchFilter
 from rest_framework.mixins import ListModelMixin
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import BaseSerializer
@@ -60,6 +60,7 @@ from application.access_control.models import (
     JWT_Secret,
     User,
 )
+from application.access_control.queries.api_token import get_api_tokens
 from application.access_control.queries.authorization_group import (
     get_authorization_groups,
 )
@@ -249,8 +250,11 @@ class AuthorizationGroupMemberViewSet(ModelViewSet):
 class ApiTokenViewSet(ListModelMixin, GenericViewSet):
     serializer_class = ApiTokenSerializer
     filterset_class = ApiTokenFilter
-    permission_classes = (IsAuthenticated, IsAdminUser)
-    queryset = API_Token.objects.all()
+    permission_classes = (IsAuthenticated,)
+    queryset = API_Token.objects.none()
+
+    def get_queryset(self) -> QuerySet[API_Token]:
+        return get_api_tokens()
 
 
 class CreateUserAPITokenView(APIView):

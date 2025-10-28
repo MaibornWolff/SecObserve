@@ -22,8 +22,8 @@ import {
 } from "react-admin";
 import { useLocation } from "react-router";
 
-import CreateProductApiToken from "../../access_control/product_api_token/ProductApiTokenCreate";
-import ProductApiTokenEmbeddedList from "../../access_control/product_api_token/ProductApiTokenEmbeddedList";
+import ApiTokenCreate from "../../access_control/api_tokens/ApiTokenCreate";
+import ApiTokenEmbeddedList from "../../access_control/api_tokens/ApiTokenEmbeddedList";
 import {
     PERMISSION_API_CONFIGURATION_CREATE,
     PERMISSION_BRANCH_CREATE,
@@ -308,9 +308,9 @@ const ProductShow = () => {
                             {settingsTabsShow && (
                                 <Tab label="API Token" path="api_token" icon={<TokenIcon />}>
                                     {product?.permissions.includes(PERMISSION_PRODUCT_API_TOKEN_CREATE) && (
-                                        <CreateProductApiToken product={product} />
+                                        <ApiTokenCreate type="product" product={product} />
                                     )}
-                                    <ProductApiTokenEmbeddedList product={product} />
+                                    <ApiTokenEmbeddedList type="product" product={product} />
                                 </Tab>
                             )}
                         </TabbedShowLayout>

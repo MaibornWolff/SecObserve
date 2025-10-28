@@ -17,6 +17,8 @@ import users from ".";
 import { is_superuser } from "../../commons/functions";
 import { useStyles } from "../../commons/layout/themes";
 import UserProductMemberEmbeddedList from "../../core/product_members/UserProductMemberEmbeddedList";
+import ApiTokenCreate from "../api_tokens/ApiTokenCreate";
+import ApiTokenEmbeddedList from "../api_tokens/ApiTokenEmbeddedList";
 import AuthorizationGroupEmbeddedList from "../authorization_groups/AuthorizationGroupEmbeddedList";
 import UserChangePassword from "./UserChangePassword";
 
@@ -62,9 +64,10 @@ const ShowActions = () => {
 const UserComponent = () => {
     const { classes } = useStyles();
     const current_user = localStorage.getItem("user");
+    const current_user_id = current_user ? JSON.parse(current_user).id : 0;
 
     const showFullInformation = (user: any) => {
-        return is_superuser() || (current_user && JSON.parse(current_user).id == user.id);
+        return is_superuser() || current_user_id == user.id;
     };
 
     const userWidth = (user: any) => {
@@ -165,6 +168,19 @@ const UserComponent = () => {
                             </Stack>
                         )}
                     </Stack>
+                    {showFullInformation(user) && (user.has_api_tokens || current_user_id === user.id) && (
+                        <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
+                            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+                                API Token
+                            </Typography>
+                            {current_user_id === user.id && (
+                                <Box sx={{ marginBottom: 2 }}>
+                                    <ApiTokenCreate type="user" user={user} />
+                                </Box>
+                            )}
+                            <ApiTokenEmbeddedList type="user" user={user} />
+                        </Paper>
+                    )}
                     {showFullInformation(user) && user.has_authorization_groups && (
                         <Paper sx={{ marginBottom: 2, padding: 2, width: "100%" }}>
                             <Typography variant="h6" sx={{ marginBottom: 1 }}>

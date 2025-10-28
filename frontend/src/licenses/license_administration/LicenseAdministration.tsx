@@ -63,8 +63,6 @@ export default function LicenseAdministration() {
         "/license/concluded_licenses",
     ]);
     function currentTab(): number {
-        console.log(routeMatch?.pattern?.path);
-
         switch (routeMatch?.pattern?.path) {
             case "/license/licenses": {
                 return 0;
@@ -76,8 +74,6 @@ export default function LicenseAdministration() {
                 return 2;
             }
             case "/license/concluded_licenses": {
-                console.log("3");
-
                 return 3;
             }
             default: {
