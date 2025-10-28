@@ -72,7 +72,7 @@ const ApiTokenCreate = ({ type, product, user }: ApiTokenCreateProps) => {
             .then((result) => {
                 setApiToken(result.json.token);
                 handleApiTokenOpen();
-                notify("Product API token created", {
+                notify("API token created", {
                     type: "success",
                 });
                 setRoleOpen(false);
