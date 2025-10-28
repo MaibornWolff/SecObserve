@@ -1,31 +1,38 @@
 import {
     Datagrid,
-    FilterForm,
     ListContextProvider,
-    ReferenceField,
     ResourceContextProvider,
+    SelectField,
+    SortPayload,
     TextField,
-    TextInput,
     WithRecord,
     useListController,
 } from "react-admin";
 import { Fragment } from "react/jsx-runtime";
 
-import { CustomPagination } from "../../commons/custom_fields/CustomPagination";
+import { PERMISSION_PRODUCT_API_TOKEN_REVOKE, ROLE_CHOICES } from "../../access_control/types";
 import { getSettingListSize } from "../../commons/user_settings/functions";
+import ApiTokenRevoke from "./ApiTokenRevoke";
 
-function listFilters() {
-    return [<TextInput source="name" id="api_token_name" alwaysOn />];
-}
+type ApiTokenEmbeddedListProps = {
+    type: "user" | "product";
+    product?: any;
+    user?: any;
+};
 
-const ApiTokenEmbeddedList = () => {
+const ApiTokenEmbeddedList = ({ type, product, user }: ApiTokenEmbeddedListProps) => {
+    const filter = type === "product" ? { product: Number(product.id) } : { user: Number(user.id) };
+    const sort: SortPayload = type === "product" ? { field: "role", order: "ASC" } : { field: "user", order: "ASC" };
+    const resource = type === "product" ? "product_api_tokens" : "api_tokens";
+    const current_user = localStorage.getItem("user");
+    const username = current_user ? JSON.parse(current_user).username : "";
+
     const listContext = useListController({
-        filter: {},
+        filter: filter,
         perPage: 25,
-        resource: "api_tokens",
-        sort: { field: "name", order: "ASC" },
-        filterDefaultValues: {},
-        disableSyncWithLocation: false,
+        resource: resource,
+        sort: sort,
+        disableSyncWithLocation: true,
         storeKey: "api_tokens.embedded",
     });
 
@@ -34,55 +41,29 @@ const ApiTokenEmbeddedList = () => {
     }
 
     return (
-        <ResourceContextProvider value="api_tokens">
+        <ResourceContextProvider value={resource}>
             <ListContextProvider value={listContext}>
                 <div style={{ width: "100%" }}>
-                    <FilterForm filters={listFilters()} />
                     <Datagrid
                         size={getSettingListSize()}
-                        rowClick={false}
+                        sx={{ width: "100%" }}
                         bulkActionButtons={false}
-                        resource="api_tokens"
+                        rowClick={false}
                     >
-                        <TextField source="name" />
+                        {type === "product" && <SelectField source="role" choices={ROLE_CHOICES} />}
+                        {type === "user" && <TextField label="Username" source="name" />}
                         <WithRecord
-                            label="Product"
                             render={(api_token) => (
                                 <Fragment>
-                                    {api_token.product && (
-                                        <ReferenceField
-                                            source="product"
-                                            reference="products"
-                                            queryOptions={{ meta: { api_resource: "product_names" } }}
-                                            link={(record: any, reference: any) =>
-                                                `../../${reference}/${record.id}/show/api_token`
-                                            }
-                                            sx={{ "& a": { textDecoration: "none" } }}
-                                        />
-                                    )}
-                                </Fragment>
-                            )}
-                        />
-                        <WithRecord
-                            label="Product Group"
-                            render={(api_token) => (
-                                <Fragment>
-                                    {api_token.product_group && (
-                                        <ReferenceField
-                                            source="product_group"
-                                            reference="product_groups"
-                                            queryOptions={{ meta: { api_resource: "product_group_names" } }}
-                                            link={(record: any, reference: any) =>
-                                                `../../${reference}/${record.id}/show/api_token`
-                                            }
-                                            sx={{ "& a": { textDecoration: "none" } }}
-                                        />
+                                    {((type === "product" &&
+                                        product?.permissions.includes(PERMISSION_PRODUCT_API_TOKEN_REVOKE)) ||
+                                        (type === "user" && api_token.name === username)) && (
+                                        <ApiTokenRevoke type={type} product={product} user={user} />
                                     )}
                                 </Fragment>
                             )}
                         />
                     </Datagrid>
-                    <CustomPagination />
                 </div>
             </ListContextProvider>
         </ResourceContextProvider>
