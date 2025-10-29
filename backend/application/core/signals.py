@@ -6,6 +6,7 @@ from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
 from huey.contrib.djhuey import db_task, lock_task
 
+from application.access_control.models import API_Token, User
 from application.access_control.services.current_user import get_current_user
 from application.authorization.services.roles_permissions import Roles
 from application.commons.models import Settings
@@ -27,6 +28,18 @@ def observation_pre_save(sender: Any, instance: Observation, **kwargs: Any) -> N
     normalize_observation_fields(instance)
     instance.identity_hash = get_identity_hash(instance)
     set_product_flags(instance)
+
+
+@receiver(post_delete, sender=Product)
+def product_post_delete(sender: Any, instance: Product, **kwargs: Any) -> None:  # pylint: disable=unused-argument
+    # sender is needed according to Django documentation
+    try:
+        user = User.objects.get(username=f"-product-{instance.pk}-api_token-")
+        api_token = API_Token.objects.get(user=user)
+        api_token.delete()
+        user.delete()
+    except (User.DoesNotExist, API_Token.DoesNotExist):
+        pass
 
 
 @receiver(post_save, sender=Product)
