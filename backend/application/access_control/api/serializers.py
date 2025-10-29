@@ -305,14 +305,14 @@ class ApiTokenSerializer(ModelSerializer):
         return obj.user.username
 
     def get_product(self, obj: API_Token) -> Optional[int]:
-        if re.match("-product-\\d-api_token-", obj.user.username):
+        if re.match("-product-\\d*-api_token-", obj.user.username):
             product_member = Product_Member.objects.filter(user=obj.user, product__is_product_group=False).first()
             if product_member:
                 return product_member.product.pk
         return None
 
     def get_product_group(self, obj: API_Token) -> Optional[int]:
-        if re.match("-product-\\d-api_token-", obj.user.username):
+        if re.match("-product-\\d*-api_token-", obj.user.username):
             product_member = Product_Member.objects.filter(user=obj.user, product__is_product_group=True).first()
             if product_member:
                 return product_member.product.pk

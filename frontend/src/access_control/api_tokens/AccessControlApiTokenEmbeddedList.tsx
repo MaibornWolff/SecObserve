@@ -44,7 +44,24 @@ const AccessControlApiTokenEmbeddedList = () => {
                         bulkActionButtons={false}
                         resource="api_tokens"
                     >
-                        <TextField source="name" />
+                        <WithRecord
+                            label="Name"
+                            render={(api_token) => (
+                                <Fragment>
+                                    {(api_token.product || api_token.product_group) && <TextField source="name" />}
+                                    {!api_token.product && !api_token.product_group && (
+                                        <ReferenceField
+                                            source="id"
+                                            reference="users"
+                                            link={(record: any, reference: any) =>
+                                                `../../${reference}/${record.id}/show`
+                                            }
+                                            sx={{ "& a": { textDecoration: "none" } }}
+                                        />
+                                    )}
+                                </Fragment>
+                            )}
+                        />
                         <WithRecord
                             label="Product"
                             render={(api_token) => (
