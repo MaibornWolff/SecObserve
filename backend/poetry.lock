@@ -615,14 +615,14 @@ files = [
 
 [[package]]
 name = "cyclonedx-python-lib"
-version = "11.4.0"
+version = "11.5.0"
 description = "Python library for CycloneDX"
 optional = false
 python-versions = "<4.0,>=3.9"
 groups = ["main"]
 files = [
-    {file = "cyclonedx_python_lib-11.4.0-py3-none-any.whl", hash = "sha256:98a2b05da0f203379bd169b8d369075db7b3b5d5c812c05c1b5ebe40ad0305bc"},
-    {file = "cyclonedx_python_lib-11.4.0.tar.gz", hash = "sha256:1de90231a600340cc6a7bacb35fbe97c75241b39788beaa33a0f49bf4afd4e6c"},
+    {file = "cyclonedx_python_lib-11.5.0-py3-none-any.whl", hash = "sha256:5cca5b444421d39a83b45fcab24ed3e90cafaca97b89fc45cb10d2516bd2d79d"},
+    {file = "cyclonedx_python_lib-11.5.0.tar.gz", hash = "sha256:175819663ae5a3c9930462ebcbddd6abb3ad5f237e12a503dbd0af320a9c5b96"},
 ]
 
 [package.dependencies]
@@ -3079,4 +3079,4 @@ unittests = ["coverage", "django-coverage-plugin", "django-extensions"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">= 3.10, < 3.14"
-content-hash = "2e9fff54aa6030fb6a160d2eb64ec5a6a1aa3e06d804b926786cc67ac35bb90b"
+content-hash = "1cbd32dcac0e39401221370bf40fd0698675589ac56175d27be4045ebfaae49d"
