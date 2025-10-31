@@ -1,4 +1,4 @@
-FROM python:3.13-alpine@sha256:070342a0cc1011532c0e69972cce2bbc6cc633eba294bae1d12abea8bd05303b AS python-base
+FROM python:3.13-alpine@sha256:e5fa639e49b85986c4481e28faa2564b45aa8021413f31026c3856e5911618b1 AS python-base
 
 # Python build stage
 FROM python-base AS python-build-stage
@@ -82,7 +82,7 @@ COPY ./docker/backend/prod/database/combined-ca-certificates.pem ${APP_HOME}/com
 # versions of dependencies from distribution are ok
 RUN addgroup -g 1001 -S ${group} \
     && adduser -u 1001 -S ${user} -G ${group} \
-    # Install binaries and libs for PostgreSQL
+    # Install binaries and libs for PostgreSQL and MySQL
     && apk add --no-cache --virtual postgresql-libs postgresql-client mariadb-dev mysql-client bash \
     # make startup scripts executable
     && chmod +x /entrypoint \

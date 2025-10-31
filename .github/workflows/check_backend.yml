@@ -68,14 +68,14 @@ jobs:
             --env-file docker/backend/unittests/envs/sqlite \
             secobserve_backend_unittests:latest
       - name: "Upload coverage report"
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: coverage-report
           path: backend/coverage.xml
           retention-days: 1
 
   check_code_sonarqube_backend:
-    if: github.repository == 'MaibornWolff/SecObserve'
+    if: github.repository == 'MaibornWolff/SecObserve' && (github.ref == 'refs/heads/dev' || github.event_name == 'pull_request')
     needs: [unittests]
     runs-on: ubuntu-latest
     steps:
@@ -84,12 +84,12 @@ jobs:
         with:
           fetch-depth: 0  
       - name: Download a single artifact
-        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
         with:
           name: coverage-report
       - name: Run SonarQube scan for backend
         uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602 # v6.0.0
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_BACKEND }}
         with:
           projectBaseDir: backend

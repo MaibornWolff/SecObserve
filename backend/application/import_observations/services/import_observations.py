@@ -323,7 +323,8 @@ def _process_data(import_parameters: ImportParameters, settings: Settings) -> Tu
 
     observations_resolved = _resolve_unimported_observations(observations_before)
     vulnerability_check_observations.update(observations_resolved)
-    check_security_gate(import_parameters.product)
+    if import_parameters.branch == import_parameters.product.repository_default_branch:
+        check_security_gate(import_parameters.product)
     set_repository_default_branch(import_parameters.product)
     if import_parameters.branch:
         import_parameters.branch.last_import = timezone.now()
@@ -580,9 +581,8 @@ def _process_current_observation(
             # Write observation log if status or severity has been changed
     if previous_status != observation_before.current_status or previous_severity != observation_before.current_severity:
         status = observation_before.current_status if previous_status != observation_before.current_status else ""
-
         severity = (
-            imported_observation.current_severity if previous_severity != observation_before.current_severity else ""
+            observation_before.current_severity if previous_severity != observation_before.current_severity else ""
         )
 
         create_observation_log(

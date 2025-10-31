@@ -6,16 +6,18 @@ import { SimpleForm, useNotify, useRefresh } from "react-admin";
 import AddButton from "../../commons/custom_fields/AddButton";
 import CopyToClipboardButton from "../../commons/custom_fields/CopyToClipboardButton";
 import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
-import { validate_required } from "../../commons/custom_validators";
-import { AutocompleteInputWide } from "../../commons/layout/themes";
+import { validate_required, validate_required_255 } from "../../commons/custom_validators";
+import { AutocompleteInputWide, PasswordInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 import { ROLE_CHOICES } from "../types";
 
-type CreateProductApiTokenProps = {
-    product: any;
+type ApiTokenCreateProps = {
+    type: "user" | "product";
+    product?: any;
+    user?: any;
 };
 
-const CreateProductApiToken = (props: CreateProductApiTokenProps) => {
+const ApiTokenCreate = ({ type, product, user }: ApiTokenCreateProps) => {
     const refresh = useRefresh();
     const notify = useNotify();
 
@@ -43,11 +45,25 @@ const CreateProductApiToken = (props: CreateProductApiTokenProps) => {
     };
 
     const handleApiTokenCreate = async (data: any) => {
-        const url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/product_api_tokens/";
-        const create_data = {
-            id: props.product.id,
-            role: data.role,
-        };
+        let url = "";
+        let create_data = undefined;
+        if (type === "product") {
+            url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/product_api_tokens/";
+            create_data = {
+                id: product.id,
+                role: data.role,
+            };
+        } else if (type === "user") {
+            url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/authentication/create_user_api_token/";
+            create_data = {
+                username: user.username,
+                password: data.password,
+            };
+        } else {
+            notify("Type is not product or user", { type: "error" });
+            setRoleOpen(false);
+            return;
+        }
 
         httpClient(url, {
             method: "POST",
@@ -56,24 +72,23 @@ const CreateProductApiToken = (props: CreateProductApiTokenProps) => {
             .then((result) => {
                 setApiToken(result.json.token);
                 handleApiTokenOpen();
-                notify("Product API token created", {
+                notify("API token created", {
                     type: "success",
                 });
+                setRoleOpen(false);
             })
             .catch((error) => {
                 notify(error.message, {
                     type: "warning",
                 });
             });
-
-        setRoleOpen(false);
     };
 
     return (
         <>
             <AddButton title="Create API token" onClick={handleRoleOpen} />
             <Dialog open={roleOpen} onClose={handleRoleClose}>
-                <DialogTitle>Create product API token</DialogTitle>
+                <DialogTitle>Create {type} API token</DialogTitle>
                 <DialogContent>
                     <SimpleForm
                         onSubmit={handleApiTokenCreate}
@@ -85,12 +100,17 @@ const CreateProductApiToken = (props: CreateProductApiTokenProps) => {
                             />
                         }
                     >
-                        <AutocompleteInputWide source="role" choices={ROLE_CHOICES} validate={validate_required} />
+                        {type === "product" && (
+                            <AutocompleteInputWide source="role" choices={ROLE_CHOICES} validate={validate_required} />
+                        )}
+                        {type === "user" && (
+                            <PasswordInputWide source="password" label="Password" validate={validate_required_255} />
+                        )}
                     </SimpleForm>
                 </DialogContent>
             </Dialog>
             <Dialog open={showApiTokenOpen} onClose={handleApiTokenClose}>
-                <DialogTitle>Create product API token</DialogTitle>
+                <DialogTitle>Create {type} API token</DialogTitle>
                 <DialogContent>
                     <Stack
                         direction="row"
@@ -114,4 +134,4 @@ const CreateProductApiToken = (props: CreateProductApiTokenProps) => {
     );
 };
 
-export default CreateProductApiToken;
+export default ApiTokenCreate;

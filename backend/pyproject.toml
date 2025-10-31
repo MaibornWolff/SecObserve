@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "SecObserve"
-version = "1.40.0"
+version = "1.41.0"
 description = "SecObserve is an open source vulnerability management system for software development and cloud environments."
 license = "BSD-3-Clause"
 authors = [
@@ -38,7 +38,7 @@ requests = "2.32.5"  # https://github.com/psf/requests
 # Database
 # ------------------------------------------------------------------------------
 pymysql = "1.1.2"  # https://github.com/PyMySQL/PyMySQL
-psycopg = { version = "3.2.10", extras = ["binary"] }  # https://github.com/psycopg/psycopg
+psycopg = { version = "3.2.12", extras = ["binary"] }  # https://github.com/psycopg/psycopg
 # Dataformats
 # ------------------------------------------------------------------------------
 defusedcsv = "3.0.0"  # https://github.com/raphaelm/defusedcsv
@@ -53,7 +53,7 @@ semver = "3.0.4"  # https://github.com/python-semver/python-semver
 license-expression = "30.4.4"  # https://github.com/aboutcode-org/license-expression
 # Task queue
 # ------------------------------------------------------------------------------
-huey = "2.5.3"  # https://github.com/coleifer/huey
+huey = "2.5.4"  # https://github.com/coleifer/huey
 # Issue tracker
 # ------------------------------------------------------------------------------
 jira = "3.10.5"  # https://github.com/pycontribs/jira
@@ -63,8 +63,8 @@ inflect = "7.5.0"  # https://github.com/jaraco/inflect
 validators = "0.35.0"  # https://github.com/python-validators/validators
 py-ocsf-models = "0.7.1"  # https://github.com/prowler-cloud/py-ocsf-models
 spdx-tools = "0.8.3"  # https://github.com/spdx/tools-python
-html-to-markdown = "1.16.0"  # https://github.com/Goldziher/html-to-markdown
-cyclonedx-python-lib = "11.1.0"  # https://github.com/CycloneDX/cyclonedx-python-lib
+html-to-markdown = "2.5.6"  # https://github.com/Goldziher/html-to-markdown
+cyclonedx-python-lib = "11.5.0"  # https://github.com/CycloneDX/cyclonedx-python-lib
 
 # Development dependencies
 # ------------------------------------------------------------------------------
@@ -76,19 +76,19 @@ django-extensions = { version = "4.1", optional = true }  # https://github.com/d
 
 # Unittest dependencies
 # ------------------------------------------------------------------------------
-coverage = { version = "7.10.7", optional = true }  # https://github.com/nedbat/coveragepy
+coverage = { version = "7.11.0", optional = true }  # https://github.com/nedbat/coveragepy
 django-coverage-plugin = { version = "3.2.0", optional = true }  # https://github.com/nedbat/django_coverage_plugin
 
 # Code quality dependencies
 # ------------------------------------------------------------------------------
 flake8 = { version = "7.3.0", optional = true }  # https://github.com/PyCQA/flake8
-flake8-isort = { version = "6.1.2", optional = true }  # https://github.com/gforcada/flake8-isort
+flake8-isort = { version = "7.0.0", optional = true }  # https://github.com/gforcada/flake8-isort
 black = { version = "25.9.0", optional = true }  # https://github.com/psf/black
 pylint = { version = "3.3.9", optional = true }  # https://github.com/pylint-dev/pylint
 pylint-django = { version = "2.6.1", optional = true }  # https://github.com/PyCQA/pylint-django
 mypy = { version = "1.18.2", optional = true }  # https://github.com/python/mypy
 django-stubs = { version = "5.2.7", optional = true }  # https://github.com/typeddjango/django-stubs
-djangorestframework-stubs = { version = "3.16.4", optional = true }  # https://github.com/typeddjango/djangorestframework-stubs
+djangorestframework-stubs = { version = "3.16.5", optional = true }  # https://github.com/typeddjango/djangorestframework-stubs
 types-PyMySQL = { version = "1.1.0.20250916", optional = true }  # https://github.com/python/typeshed
 # import-linter = "2.0"  # https://github.com/seddonym/import-linter --> Cannot be build with Docker
 

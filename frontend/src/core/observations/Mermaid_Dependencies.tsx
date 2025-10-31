@@ -75,7 +75,7 @@ const createMermaidGraph = (dependencies_str: string) => {
 
     // Sort components in descending order to make replaceAll more robust
     const arrayFromSet = Array.from(components);
-    const sortedArray = arrayFromSet.sort((a, b) => b.localeCompare(a));
+    const sortedArray = arrayFromSet.toSorted((a, b) => b.localeCompare(a));
     const sortedComponents = new Set(sortedArray);
 
     let i = 1;
@@ -117,14 +117,14 @@ const MermaidDependencies = ({ dependencies }: ComponentShowProps) => {
                 <Fragment>
                     <Labeled sx={{ width: "100%", marginTop: 2 }}>
                         <WrapperField label="Component dependency graph">
-                            <div
+                            <a
+                                href="javasrcipt:void(0);"
                                 id="mermaid-dependencies"
                                 className="mermaid"
                                 onClick={handleOpen}
-                                style={{ cursor: "pointer" }}
                             >
                                 {createMermaidGraph(dependencies)}
-                            </div>
+                            </a>
                         </WrapperField>
                     </Labeled>
                     <Dialog open={open} onClose={handleClose} fullScreen={true}>

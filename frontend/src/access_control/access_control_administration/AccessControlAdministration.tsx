@@ -7,7 +7,7 @@ import administration from ".";
 import { is_superuser } from "../../commons/functions";
 import ListHeader from "../../commons/layout/ListHeader";
 import api_tokens from "../api_tokens";
-import ApiTokenEmbeddedList from "../api_tokens/ApiTokenEmbeddedList";
+import AccessControlApiTokenEmbeddedList from "../api_tokens/AccessControlApiTokenEmbeddedList";
 import authorization_groups from "../authorization_groups";
 import AuthorizationGroupEmbeddedList from "../authorization_groups/AuthorizationGroupEmbeddedList";
 import users from "../users";
@@ -117,7 +117,7 @@ export default function AccessControlAdministration() {
                     <AuthorizationGroupEmbeddedList user={null} />
                 </CustomTabPanel>
                 <CustomTabPanel value={currentTab()} index={2}>
-                    <ApiTokenEmbeddedList />
+                    <AccessControlApiTokenEmbeddedList />
                 </CustomTabPanel>
             </Paper>
         </Fragment>

@@ -22,8 +22,8 @@ import {
     useRecordContext,
 } from "react-admin";
 
-import CreateProductApiToken from "../../access_control/product_api_token/ProductApiTokenCreate";
-import ProductApiTokenEmbeddedList from "../../access_control/product_api_token/ProductApiTokenEmbeddedList";
+import ApiTokenCreate from "../../access_control/api_tokens/ApiTokenCreate";
+import ApiTokenEmbeddedList from "../../access_control/api_tokens/ApiTokenEmbeddedList";
 import {
     PERMISSION_PRODUCT_API_TOKEN_CREATE,
     PERMISSION_PRODUCT_AUTHORIZATION_GROUP_MEMBER_CREATE,
@@ -327,9 +327,9 @@ const ProductGroupShow = () => {
                             </Tab>
                             <Tab label="API Token" path="api_token" icon={<TokenIcon />}>
                                 {product_group?.permissions.includes(PERMISSION_PRODUCT_API_TOKEN_CREATE) && (
-                                    <CreateProductApiToken product={product_group} />
+                                    <ApiTokenCreate type="product" product={product_group} />
                                 )}
-                                <ProductApiTokenEmbeddedList product={product_group} />
+                                <ApiTokenEmbeddedList type="product" product={product_group} />
                             </Tab>
                         </TabbedShowLayout>
                     )}

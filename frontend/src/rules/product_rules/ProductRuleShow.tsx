@@ -32,11 +32,10 @@ const ShowActions = () => {
                 {rule && filter && sort && storeKey && (
                     <PrevNextButtons filter={filter} linkType="show" sort={sort} storeKey={storeKey} />
                 )}
-                {rule &&
-                    rule.approval_status == RULE_STATUS_NEEDS_APPROVAL &&
-                    (rule.product_data.product_rules_need_approval ||
-                        rule.product_data.product_group_product_rules_need_approval) &&
-                    rule.product_data.permissions.includes(PERMISSION_PRODUCT_RULE_APPROVAL) && (
+                {rule?.approval_status == RULE_STATUS_NEEDS_APPROVAL &&
+                    (rule?.product_data.product_rules_need_approval ||
+                        rule?.product_data.product_group_product_rules_need_approval) &&
+                    rule?.product_data.permissions.includes(PERMISSION_PRODUCT_RULE_APPROVAL) && (
                         <RuleApproval rule_id={rule.id} class="product_rules" />
                     )}
                 {rule?.product_data.permissions.includes(PERMISSION_PRODUCT_RULE_EDIT) && <EditButton />}

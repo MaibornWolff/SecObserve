@@ -1,3 +1,4 @@
+import re
 from typing import Any, Optional
 
 from rest_framework.serializers import (
@@ -14,6 +15,7 @@ from application.access_control.models import (
     Authorization_Group_Member,
     User,
 )
+from application.access_control.queries.api_token import get_api_tokens_for_user
 from application.access_control.queries.authorization_group_member import (
     get_authorization_group_member,
 )
@@ -111,6 +113,7 @@ class UserSerializer(UserListSerializer):
     has_authorization_groups = SerializerMethodField()
     has_product_group_members = SerializerMethodField()
     has_product_members = SerializerMethodField()
+    has_api_tokens = SerializerMethodField()
 
     class Meta:
         model = User
@@ -136,6 +139,7 @@ class UserSerializer(UserListSerializer):
             "has_authorization_groups",
             "has_product_group_members",
             "has_product_members",
+            "has_api_tokens",
         ]
 
     def to_representation(self, instance: User) -> dict[str, Any]:
@@ -146,6 +150,7 @@ class UserSerializer(UserListSerializer):
             data.pop("has_authorization_groups")
             data.pop("has_product_group_members")
             data.pop("has_product_members")
+            data.pop("has_api_tokens")
 
         return data
 
@@ -160,6 +165,9 @@ class UserSerializer(UserListSerializer):
 
     def get_has_product_members(self, obj: User) -> bool:
         return Product_Member.objects.filter(user=obj, product__is_product_group=False).exists()
+
+    def get_has_api_tokens(self, obj: User) -> bool:
+        return get_api_tokens_for_user(obj).exists()
 
 
 class UserUpdateSerializer(ModelSerializer):
@@ -297,15 +305,17 @@ class ApiTokenSerializer(ModelSerializer):
         return obj.user.username
 
     def get_product(self, obj: API_Token) -> Optional[int]:
-        product_member = Product_Member.objects.filter(user=obj.user, product__is_product_group=False).first()
-        if product_member:
-            return product_member.product.pk
+        if re.match("-product-\\d*-api_token-", obj.user.username):
+            product_member = Product_Member.objects.filter(user=obj.user, product__is_product_group=False).first()
+            if product_member:
+                return product_member.product.pk
         return None
 
     def get_product_group(self, obj: API_Token) -> Optional[int]:
-        product_member = Product_Member.objects.filter(user=obj.user, product__is_product_group=True).first()
-        if product_member:
-            return product_member.product.pk
+        if re.match("-product-\\d*-api_token-", obj.user.username):
+            product_member = Product_Member.objects.filter(user=obj.user, product__is_product_group=True).first()
+            if product_member:
+                return product_member.product.pk
         return None
 
 

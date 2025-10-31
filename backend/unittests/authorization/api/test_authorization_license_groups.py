@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from application.licenses.models import License_Group, License_Policy
 from unittests.authorization.api.test_authorization import (
     APITest,
@@ -6,7 +8,8 @@ from unittests.authorization.api.test_authorization import (
 
 
 class TestAuthorizationLicenseGroups(TestAuthorizationBase):
-    def test_authorization_license_groups(self):
+    @patch("application.licenses.api.views.import_scancode_licensedb")
+    def test_authorization_license_groups(self, mock_import_scancode_licensedb):
         License_Policy.objects.all().delete()
         License_Group.objects.filter(pk__lt=1000).delete()
 

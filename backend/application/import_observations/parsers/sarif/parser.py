@@ -236,7 +236,7 @@ class SARIFParser(BaseParser, BaseFileParser):
     ) -> str:
         description = ""
 
-        sarif_message_text = result.get("message", {}).get("text")
+        sarif_message_text = result.get("message", {}).get("text", "")
         if sarif_message_text and not sarif_scanner.lower().startswith("trivy"):
             # Message text of Trivy has only redundant information
             description += f"{sarif_message_text}\n\n"
