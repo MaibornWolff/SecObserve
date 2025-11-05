@@ -7,7 +7,7 @@ Docker Compose is a tool for defining and running multi-container Docker applica
 * [`docker-compose-dev-keycloak.yml`](https://github.com/SecObserve/SecObserve/blob/dev/docker-compose-dev-keycloak.yml)
     - Starts the PostgreSQL database, the SecObserve backend, Keycloak and Mailhog
     - The frontend is only started, when the parameter `--profile frontend` is given
-    - A predefined realm calles `secobserve` is imported on start-up. There is an administrator configured (username: `admin`, password: `admin`) and a regular user for Secobserve (username: `keycloak_user`, password: `keycloak`).
+    - A predefined realm calles `secobserve` is imported on start-up. There is an administrator configured (username: `admin`, password: `admin`) and a regular user for SecObserve (username: `keycloak_user`, password: `keycloak`).
 * [`docker-compose-dev-mysql.yml`](https://github.com/SecObserve/SecObserve/blob/dev/docker-compose-dev-mysql.yml)
     - Starts the MySQL database, as well as SecObserve's backend and frontend
     - Backend and frontend are build automatically if necessary and are started in development mode with hot reloading

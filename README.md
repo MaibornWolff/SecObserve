@@ -35,7 +35,7 @@ The aim of SecObserve is to make vulnerability scanning and vulnerability manage
 
 ## Documentation
 
-The full documentation how to install and use Secobserve can be found here: [https://secobserve.github.io/SecObserve/](https://secobserve.github.io/SecObserve/)
+The full documentation how to install and use SecObserve can be found here: [https://secobserve.github.io/SecObserve/](https://secobserve.github.io/SecObserve/)
 
 ## Code of Conduct
 
