@@ -132,7 +132,7 @@
             "annotator": "Tool: trivy-0.58.0",
             "annotationDate": "2024-12-21T15:02:40Z",
             "annotationType": "OTHER",
-            "comment": "Labels:org.opencontainers.image.documentation: https://maibornwolff.github.io/SecObserve"
+            "comment": "Labels:org.opencontainers.image.documentation: https://secobserve.github.io/SecObserve"
           },
           {
             "annotator": "Tool: trivy-0.58.0",
@@ -150,7 +150,7 @@
             "annotator": "Tool: trivy-0.58.0",
             "annotationDate": "2024-12-21T15:02:40Z",
             "annotationType": "OTHER",
-            "comment": "Labels:org.opencontainers.image.source: https://github.com/MaibornWolff/SecObserve"
+            "comment": "Labels:org.opencontainers.image.source: https://github.com/SecObserve/SecObserve"
           },
           {
             "annotator": "Tool: trivy-0.58.0",
@@ -162,13 +162,13 @@
             "annotator": "Tool: trivy-0.58.0",
             "annotationDate": "2024-12-21T15:02:40Z",
             "annotationType": "OTHER",
-            "comment": "Labels:org.opencontainers.image.url: https://github.com/MaibornWolff/SecObserve"
+            "comment": "Labels:org.opencontainers.image.url: https://github.com/SecObserve/SecObserve"
           },
           {
             "annotator": "Tool: trivy-0.58.0",
             "annotationDate": "2024-12-21T15:02:40Z",
             "annotationType": "OTHER",
-            "comment": "Labels:org.opencontainers.image.vendor: MaibornWolff GmbH"
+            "comment": "Labels:org.opencontainers.image.vendor: SecObserve"
           },
           {
             "annotator": "Tool: trivy-0.58.0",

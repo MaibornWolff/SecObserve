@@ -10,9 +10,9 @@
             "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
             "products": [
                 {
-                    "@id": "pkg:github/MaibornWolff/VEX_Test@v1.7.0",
+                    "@id": "pkg:github/SecObserve/VEX_Test@v1.7.0",
                     "identifiers": {
-                        "purl": "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+                        "purl": "pkg:github/SecObserve/VEX_Test@v1.7.0"
                     },
                     "subcomponents": [
                         {
@@ -32,9 +32,9 @@
             "action_statement": "Upgrade cryptography to version 42.0.0",
             "products": [
                 {
-                    "@id": "pkg:github/MaibornWolff/VEX_Test@v1.7.0",
+                    "@id": "pkg:github/SecObserve/VEX_Test@v1.7.0",
                     "identifiers": {
-                        "purl": "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+                        "purl": "pkg:github/SecObserve/VEX_Test@v1.7.0"
                     },
                     "subcomponents": [
                         {
@@ -54,9 +54,9 @@
             "action_statement": "Upgrade cryptography to version 42.0.2",
             "products": [
                 {
-                    "@id": "pkg:github/MaibornWolff/VEX_Test@v1.7.0",
+                    "@id": "pkg:github/SecObserve/VEX_Test@v1.7.0",
                     "identifiers": {
-                        "purl": "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+                        "purl": "pkg:github/SecObserve/VEX_Test@v1.7.0"
                     },
                     "subcomponents": [
                         {
@@ -76,9 +76,9 @@
             "action_statement": "Upgrade gunicorn to version 22.0.0",
             "products": [
                 {
-                    "@id": "pkg:github/MaibornWolff/VEX_Test@v1.7.0",
+                    "@id": "pkg:github/SecObserve/VEX_Test@v1.7.0",
                     "identifiers": {
-                        "purl": "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+                        "purl": "pkg:github/SecObserve/VEX_Test@v1.7.0"
                     },
                     "subcomponents": [
                         {
@@ -98,9 +98,9 @@
             "action_statement": "Upgrade black to version 24.3.0",
             "products": [
                 {
-                    "@id": "pkg:github/MaibornWolff/VEX_Test@v1.7.0",
+                    "@id": "pkg:github/SecObserve/VEX_Test@v1.7.0",
                     "identifiers": {
-                        "purl": "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+                        "purl": "pkg:github/SecObserve/VEX_Test@v1.7.0"
                     },
                     "subcomponents": [
                         {
@@ -120,9 +120,9 @@
             "action_statement": "Upgrade django to version 3.2.24, 4.2.10, 5.0.2",
             "products": [
                 {
-                    "@id": "pkg:github/MaibornWolff/VEX_Test@v1.7.0",
+                    "@id": "pkg:github/SecObserve/VEX_Test@v1.7.0",
                     "identifiers": {
-                        "purl": "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+                        "purl": "pkg:github/SecObserve/VEX_Test@v1.7.0"
                     },
                     "subcomponents": [
                         {
@@ -142,9 +142,9 @@
             "action_statement": "Upgrade cryptography to version 42.0.4",
             "products": [
                 {
-                    "@id": "pkg:github/MaibornWolff/VEX_Test@v1.7.0",
+                    "@id": "pkg:github/SecObserve/VEX_Test@v1.7.0",
                     "identifiers": {
-                        "purl": "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+                        "purl": "pkg:github/SecObserve/VEX_Test@v1.7.0"
                     },
                     "subcomponents": [
                         {
@@ -164,9 +164,9 @@
             "action_statement": "Upgrade django to version 3.2.25, 4.2.11, 5.0.3",
             "products": [
                 {
-                    "@id": "pkg:github/MaibornWolff/VEX_Test@v1.7.0",
+                    "@id": "pkg:github/SecObserve/VEX_Test@v1.7.0",
                     "identifiers": {
-                        "purl": "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+                        "purl": "pkg:github/SecObserve/VEX_Test@v1.7.0"
                     },
                     "subcomponents": [
                         {
@@ -186,9 +186,9 @@
             "action_statement": "Upgrade werkzeug to version 3.0.3",
             "products": [
                 {
-                    "@id": "pkg:github/MaibornWolff/VEX_Test@v1.7.0",
+                    "@id": "pkg:github/SecObserve/VEX_Test@v1.7.0",
                     "identifiers": {
-                        "purl": "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+                        "purl": "pkg:github/SecObserve/VEX_Test@v1.7.0"
                     },
                     "subcomponents": [
                         {
@@ -208,9 +208,9 @@
             "action_statement": "Upgrade requests to version 2.32.0",
             "products": [
                 {
-                    "@id": "pkg:github/MaibornWolff/VEX_Test@v1.7.0",
+                    "@id": "pkg:github/SecObserve/VEX_Test@v1.7.0",
                     "identifiers": {
-                        "purl": "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+                        "purl": "pkg:github/SecObserve/VEX_Test@v1.7.0"
                     },
                     "subcomponents": [
                         {
@@ -230,9 +230,9 @@
             "action_statement": "Upgrade idna to version 3.7",
             "products": [
                 {
-                    "@id": "pkg:github/MaibornWolff/VEX_Test@v1.7.0",
+                    "@id": "pkg:github/SecObserve/VEX_Test@v1.7.0",
                     "identifiers": {
-                        "purl": "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+                        "purl": "pkg:github/SecObserve/VEX_Test@v1.7.0"
                     },
                     "subcomponents": [
                         {
@@ -252,9 +252,9 @@
             "action_statement": "Upgrade urllib3 to version 1.26.19, 2.2.2",
             "products": [
                 {
-                    "@id": "pkg:github/MaibornWolff/VEX_Test@v1.7.0",
+                    "@id": "pkg:github/SecObserve/VEX_Test@v1.7.0",
                     "identifiers": {
-                        "purl": "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+                        "purl": "pkg:github/SecObserve/VEX_Test@v1.7.0"
                     },
                     "subcomponents": [
                         {
@@ -273,9 +273,9 @@
         {
             "products": [
                 {
-                    "@id": "pkg:github/MaibornWolff/VEX_Test@v1.7.0",
+                    "@id": "pkg:github/SecObserve/VEX_Test@v1.7.0",
                     "identifiers": {
-                        "purl": "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+                        "purl": "pkg:github/SecObserve/VEX_Test@v1.7.0"
                     },
                     "subcomponents": [
                         {

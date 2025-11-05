@@ -7,7 +7,7 @@
     {
         "op": "add",
         "path": "/metadata/component/purl",
-        "value": "pkg:github/MaibornWolff/SecObserve@vREPLACE_VERSION"
+        "value": "pkg:github/SecObserve/SecObserve@vREPLACE_VERSION"
     },
     {
         "op": "add",

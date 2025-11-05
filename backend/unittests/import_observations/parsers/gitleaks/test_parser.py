@@ -76,7 +76,7 @@ class TestGitleaksParser(TestCase):
             self.assertEqual(42, observation.origin_source_line_start)
             self.assertEqual(43, observation.origin_source_line_end)
             self.assertEqual(
-                "https://github.com/MaibornWolff/SecObserve/blob/b718aa975b79d141225d928ba2822ea010b74d2b/docker-compose-playwright.yml#L42",
+                "https://github.com/SecObserve/SecObserve/blob/b718aa975b79d141225d928ba2822ea010b74d2b/docker-compose-playwright.yml#L42",
                 observation.origin_source_file_link,
             )
 

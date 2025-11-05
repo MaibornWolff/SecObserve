@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://github.com/MaibornWolff/SecObserve/secobserve_license_policy_schema_1.0.0.json",
+    "$id": "https://github.com/SecObserve/SecObserve/secobserve_license_policy_schema_1.0.0.json",
     "title": "SecObserve License Policy Schema",
     "description": "The SecObserve License Policy Schema specifies the format of license policies exported in the JSON format.",
     "type": "object",

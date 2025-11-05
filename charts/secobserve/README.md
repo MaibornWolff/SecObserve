@@ -4,7 +4,7 @@
 
 A Helm chart to deploy SecObserve, an open-source vulnerability and license management system designed for software development teams and cloud-native environments. SecObserve helps teams identify, manage, and remediate security vulnerabilities and license compliance issues across their software projects, enhancing visibility and improving DevSecOps workflows.
 
-**Homepage:** <https://github.com/MaibornWolff/SecObserve>
+**Homepage:** <https://github.com/SecObserve/SecObserve>
 
 ## Maintainers
 
@@ -14,7 +14,7 @@ A Helm chart to deploy SecObserve, an open-source vulnerability and license mana
 
 ## Source Code
 
-* <https://github.com/MaibornWolff/SecObserve>
+* <https://github.com/SecObserve/SecObserve>
 
 ## Requirements
 

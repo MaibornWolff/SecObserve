@@ -14,7 +14,7 @@ from application.vex.types import VEX_Document_Type, VEX_Status
 
 class BaseTestVEXImport(TestCase):
     def load_vex_test(self, short: bool = False) -> None:
-        purl_vex_test = "pkg:github/MaibornWolff/VEX_Test" if short else "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+        purl_vex_test = "pkg:github/SecObserve/VEX_Test" if short else "pkg:github/SecObserve/VEX_Test@v1.7.0"
         product = Product.objects.create(
             purl=purl_vex_test,
             name="VEX_Test",
@@ -66,7 +66,7 @@ class BaseTestVEXImport(TestCase):
         found_0727 = False
         found_4340 = False
 
-        purl_vex_test = "pkg:github/MaibornWolff/VEX_Test" if short else "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+        purl_vex_test = "pkg:github/SecObserve/VEX_Test" if short else "pkg:github/SecObserve/VEX_Test@v1.7.0"
         purl_cryptography = "pkg:pypi/cryptography" if short else "pkg:pypi/cryptography@41.0.5"
         purl_sqlparse = "pkg:pypi/sqlparse" if short else "pkg:pypi/sqlparse@0.4.4"
 
@@ -171,7 +171,7 @@ class BaseTestVEXImport(TestCase):
         self.assertTrue(found_4340)
 
     def check_product(self, short: bool = False) -> None:
-        purl_vex_test = "pkg:github/MaibornWolff/VEX_Test" if short else "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+        purl_vex_test = "pkg:github/SecObserve/VEX_Test" if short else "pkg:github/SecObserve/VEX_Test@v1.7.0"
         purl_cryptography = "pkg:pypi/cryptography" if short else "pkg:pypi/cryptography@41.0.5"
         purl_sqlparse = "pkg:pypi/sqlparse" if short else "pkg:pypi/sqlparse@0.4.4"
 
