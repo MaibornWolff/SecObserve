@@ -23,7 +23,7 @@ The parameters for the issue tracker integration are set in the product:
 | **Type**            | Either **GitHub** or **GitLab** or **Jira** |
 | **Base URL**        | The base URL of the issue tracker. For **GitHub** it is `https://api.github.com`, for a self hosted **GitLab** it will be something like `https://gitlab.example.com`, for **Jira** it is `https:\\{organization_name}.atlassian.net`. |
 | **API key**          | An API key must be created in the issue tracker, having the permissions to create and update issues. |
-| **Project id**       | The path of the repository in its URL in **GitHub** or **GitLab**, e.g. `MaibornWolff/SecObserve`. For **Jira** it is the key of the project. |
+| **Project id**       | The path of the repository in its URL in **GitHub** or **GitLab**, e.g. `SecObserve/SecObserve`. For **Jira** it is the key of the project. |
 | **Labels**           | A comma separated list of labels, that will be set for the issue. Additional labels can be set in the issue tracker, they will be preserved when the issue is updated. |
 | **Minimum severity** | *(optional)* Issues will only be exported for observations with a severity that is higher or the same. |
 | **Username**         | *(only for Jira)* The REST API of Jira needs an authentication with username and API key. |

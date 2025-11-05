@@ -17,7 +17,7 @@
     {
         "op": "replace",
         "path": "/metadata/component/purl",
-        "value": "pkg:github/MaibornWolff/SecObserve@vREPLACE_VERSION#backend"
+        "value": "pkg:github/SecObserve/SecObserve@vREPLACE_VERSION#backend"
     },
     {
         "op": "add",

@@ -1,8 +1,12 @@
+> [!IMPORTANT]
+> The SecObserve repositories have been moved from the MaibornWolff organization to their own SecObserve organization. Even though all links to the previous repository location are automatically redirected to the new location, we strongly recommend updating any existing links to the new repository URL.
+
+
 ![SecObserve](frontend/public/secobserve.svg)
 
 # SecObserve
 
-[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8388/badge)](https://www.bestpractices.dev/projects/8388) [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/MaibornWolff/SecObserve/badge)](https://securityscorecards.dev/viewer/?uri=github.com/MaibornWolff/SecObserve)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8388/badge)](https://www.bestpractices.dev/projects/8388) [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/SecObserve/SecObserve/badge)](https://securityscorecards.dev/viewer/?uri=github.com/SecObserve/SecObserve)
 
 
 SecObserve is an open source vulnerability and license management system for software development teams and cloud environments. It supports a variety of open source vulnerability scanners and integrates easily into CI/CD pipelines. Results about potential security flaws from various vulnerability scanning tools are made available for assessment and reporting.
@@ -21,7 +25,7 @@ The aim of SecObserve is to make vulnerability scanning and vulnerability manage
 
     All templates run the scanner, upload the results into SecObserve and make the results of the scans available for download as artefacts in JSON format.
 
-    The sources of the GitHub actions and GitLab CI templates can be found in [https://github.com/MaibornWolff/secobserve_actions_templates](https://github.com/MaibornWolff/secobserve_actions_templates).
+    The sources of the GitHub actions and GitLab CI templates can be found in [https://github.com/SecObserve/secobserve_actions_templates](https://github.com/SecObserve/secobserve_actions_templates).
 
 ![Overview](docs/assets/images/secobserve_process.svg)
 
@@ -31,7 +35,7 @@ The aim of SecObserve is to make vulnerability scanning and vulnerability manage
 
 ## Documentation
 
-The full documentation how to install and use Secobserve can be found here: [https://maibornwolff.github.io/SecObserve/](https://maibornwolff.github.io/SecObserve/)
+The full documentation how to install and use Secobserve can be found here: [https://secobserve.github.io/SecObserve/](https://secobserve.github.io/SecObserve/)
 
 ## Code of Conduct
 

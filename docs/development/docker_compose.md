@@ -4,29 +4,29 @@ Docker Compose is a tool for defining and running multi-container Docker applica
 
 ## Development
 
-* [`docker-compose-dev-keycloak.yml`](https://github.com/MaibornWolff/SecObserve/blob/dev/docker-compose-dev-keycloak.yml)
+* [`docker-compose-dev-keycloak.yml`](https://github.com/SecObserve/SecObserve/blob/dev/docker-compose-dev-keycloak.yml)
     - Starts the PostgreSQL database, the SecObserve backend, Keycloak and Mailhog
     - The frontend is only started, when the parameter `--profile frontend` is given
     - A predefined realm calles `secobserve` is imported on start-up. There is an administrator configured (username: `admin`, password: `admin`) and a regular user for Secobserve (username: `keycloak_user`, password: `keycloak`).
-* [`docker-compose-dev-mysql.yml`](https://github.com/MaibornWolff/SecObserve/blob/dev/docker-compose-dev-mysql.yml)
+* [`docker-compose-dev-mysql.yml`](https://github.com/SecObserve/SecObserve/blob/dev/docker-compose-dev-mysql.yml)
     - Starts the MySQL database, as well as SecObserve's backend and frontend
     - Backend and frontend are build automatically if necessary and are started in development mode with hot reloading
-* [`docker-compose-dev.yml`](https://github.com/MaibornWolff/SecObserve/blob/dev/docker-compose-dev.yml)
+* [`docker-compose-dev.yml`](https://github.com/SecObserve/SecObserve/blob/dev/docker-compose-dev.yml)
     - Starts the PostgreSQL database, as well as SecObserve's backend and frontend
     - Backend and frontend are build automatically if necessary and are started in development mode with hot reloading
-* [`docker-compose-playwright.yml`](https://github.com/MaibornWolff/SecObserve/blob/dev/docker-compose-playwright.yml)
+* [`docker-compose-playwright.yml`](https://github.com/SecObserve/SecObserve/blob/dev/docker-compose-playwright.yml)
     - Starts the end-to-end tests with Playwright
-* [`docker-compose-prod-test.yml`](https://github.com/MaibornWolff/SecObserve/blob/dev/docker-compose-prod-test.yml)
+* [`docker-compose-prod-test.yml`](https://github.com/SecObserve/SecObserve/blob/dev/docker-compose-prod-test.yml)
     - Starts the PostgreSQL database, as well as SecObserve's backend and frontend
     - Backend and frontend are build automatically if necessary with the production Dockerfiles
-* [`docker-compose-unittests.yml`](https://github.com/MaibornWolff/SecObserve/blob/dev/docker-compose-unittests.yml)
+* [`docker-compose-unittests.yml`](https://github.com/SecObserve/SecObserve/blob/dev/docker-compose-unittests.yml)
     - Starts the unit tests for the backend
-* [`docker-compose.yml`](https://github.com/MaibornWolff/SecObserve/blob/dev/docker-compose.yml)
+* [`docker-compose.yml`](https://github.com/SecObserve/SecObserve/blob/dev/docker-compose.yml)
     - This is a link to `docker-compose-dev.yml` and is used as a default for the `docker compose` command
 
 ## Production
 
 See the [installation](../getting_started/installation.md) guide how to use the productive Docker Compose files.
 
-* [`docker-compose-prod-mysql.yml`](https://github.com/MaibornWolff/SecObserve/blob/main/docker-compose-prod-mysql.yml)
-* [`docker-compose-prod-postgres.yml`](https://github.com/MaibornWolff/SecObserve/blob/main/docker-compose-prod-postgres.yml)
+* [`docker-compose-prod-mysql.yml`](https://github.com/SecObserve/SecObserve/blob/main/docker-compose-prod-mysql.yml)
+* [`docker-compose-prod-postgres.yml`](https://github.com/SecObserve/SecObserve/blob/main/docker-compose-prod-postgres.yml)

@@ -37,12 +37,12 @@ A well-written bug report helps the developers understand and reproduce the prob
 
 ## Security vulnerabilities
 
-If you find a security vulnerability, please act responsibly and report it to us. Please do not create a public issue. Instead, use the ["Report a vulnerability"](https://github.com/MaibornWolff/SecObserve/security/advisories/new) button in the GitHub repository (under the "Security" tab) to report the vulnerability.
+If you find a security vulnerability, please act responsibly and report it to us. Please do not create a public issue. Instead, use the ["Report a vulnerability"](https://github.com/SecObserve/SecObserve/security/advisories/new) button in the GitHub repository (under the "Security" tab) to report the vulnerability.
 
 
 ## Code contributions
 
-Before you start working on a new feature, please have a discussion with the maintainers on the [GitHub discussions page](https://github.com/MaibornWolff/SecObserve/discussions). This helps to ensure that your work is aligned with the project's goals and that you are not duplicating efforts. It also gives you the opportunity to get feedback and guidance from the maintainers.
+Before you start working on a new feature, please have a discussion with the maintainers on the [GitHub discussions page](https://github.com/SecObserve/SecObserve/discussions). This helps to ensure that your work is aligned with the project's goals and that you are not duplicating efforts. It also gives you the opportunity to get feedback and guidance from the maintainers.
 
 
 ### Development process

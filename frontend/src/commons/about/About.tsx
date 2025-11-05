@@ -91,21 +91,14 @@ const About = () => {
                             <Typography>Copyright:</Typography>
                         </Grid>
                         <Grid size={8}>
-                            <Link
-                                href="https://www.maibornwolff.de"
-                                target="_blank"
-                                rel="noreferrer"
-                                sx={{ textDecoration: "none" }}
-                            >
-                                MaibornWolff GmbH
-                            </Link>
+                            <Typography>Stefan Fleckenstein</Typography>
                         </Grid>
                         <Grid size={4}>
                             <Typography>License:</Typography>
                         </Grid>
                         <Grid size={8}>
                             <Link
-                                href="https://github.com/MaibornWolff/SecObserve/blob/dev/LICENSE.txt"
+                                href="https://github.com/SecObserve/SecObserve/blob/dev/LICENSE.txt"
                                 target="_blank"
                                 rel="noreferrer"
                                 sx={{ textDecoration: "none" }}
@@ -118,12 +111,12 @@ const About = () => {
                         </Grid>
                         <Grid size={8}>
                             <Link
-                                href="https://github.com/MaibornWolff/SecObserve"
+                                href="https://github.com/SecObserve/SecObserve"
                                 target="_blank"
                                 rel="noreferrer"
                                 sx={{ textDecoration: "none" }}
                             >
-                                https://github.com/MaibornWolff/SecObserve
+                                https://github.com/SecObserve/SecObserve
                             </Link>
                         </Grid>
                     </Grid>

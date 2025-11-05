@@ -20,7 +20,7 @@ const DocumentationMenu = forwardRef(() => {
     return (
         <MenuItem
             component="a"
-            href="https://maibornwolff.github.io/SecObserve/"
+            href="https://secobserve.github.io/SecObserve/"
             target="_blank"
             rel="noreferrer"
             onClick={() => {

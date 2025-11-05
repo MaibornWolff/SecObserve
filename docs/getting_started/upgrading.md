@@ -26,7 +26,7 @@
 
 **Breaking changes**
 
-* The API for `license_components` has been changed, due to the rename of the existing license fields to `imported_declared_license_...` in [https://github.com/MaibornWolff/SecObserve/pull/3229](https://github.com/MaibornWolff/SecObserve/pull/3229).
+* The API for `license_components` has been changed, due to the rename of the existing license fields to `imported_declared_license_...` in [https://github.com/SecObserve/SecObserve/pull/3229](https://github.com/SecObserve/SecObserve/pull/3229).
 
 ## Release 1.30.0
 

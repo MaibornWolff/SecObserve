@@ -4,7 +4,7 @@ Integrating vulnerability scanners in a CI/CD pipeline can be cumbersome. Every 
 
 All actions and templates run the scanner, import the results into SecObserve and make the report available as an artifact.
 
- The actions and the templates are stored in the repository [https://github.com/MaibornWolff/secobserve_actions_templates](https://github.com/MaibornWolff/secobserve_actions_templates).
+ The actions and the templates are stored in the repository [https://github.com/SecObserve/secobserve_actions_templates](https://github.com/SecObserve/secobserve_actions_templates).
 
 ## Variables
 
@@ -88,7 +88,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run Bandit
-        uses: MaibornWolff/secobserve_actions_templates/actions/SAST/bandit@main
+        uses: SecObserve/secobserve_actions_templates/actions/SAST/bandit@main
         with:
           target: 'backend'
           report_name: 'backend_bandit.sarif'
@@ -97,7 +97,7 @@ jobs:
           so_product_name: ${{ vars.SO_PRODUCT_NAME }}
 
       - name: Run Semgrep
-        uses: MaibornWolff/secobserve_actions_templates/actions/SAST/semgrep@main
+        uses: SecObserve/secobserve_actions_templates/actions/SAST/semgrep@main
         with:
           target: 'backend'
           report_name: 'backend_semgrep.json'
@@ -107,7 +107,7 @@ jobs:
           so_product_name: ${{ vars.SO_PRODUCT_NAME }}
 
       - name: Run KICS
-        uses: MaibornWolff/secobserve_actions_templates/actions/SAST/kics@main
+        uses: SecObserve/secobserve_actions_templates/actions/SAST/kics@main
         with:
           target: '.'
           report_name: 'backend_kics.sarif'
@@ -116,7 +116,7 @@ jobs:
           so_product_name: ${{ vars.SO_PRODUCT_NAME }}
 
       - name: Run Checkov
-        uses: MaibornWolff/secobserve_actions_templates/actions/SAST/checkov@main
+        uses: SecObserve/secobserve_actions_templates/actions/SAST/checkov@main
         with:
           target: '.'
           report_name: 'backend_checkov.sarif'
@@ -125,7 +125,7 @@ jobs:
           so_product_name: ${{ vars.SO_PRODUCT_NAME }}
 
       - name: Run Trivy image
-        uses: MaibornWolff/secobserve_actions_templates/actions/SCA/trivy_image@main
+        uses: SecObserve/secobserve_actions_templates/actions/SCA/trivy_image@main
         with:
           target: 'maibornwolff/secobserve-backend:latest'
           report_name: 'backend_trivy_image.json'
@@ -134,7 +134,7 @@ jobs:
           so_product_name: ${{ vars.SO_PRODUCT_NAME }}
 
       - name: Run Grype image
-        uses: MaibornWolff/secobserve_actions_templates/actions/SCA/grype_image@main
+        uses: SecObserve/secobserve_actions_templates/actions/SCA/grype_image@main
         with:
           target: 'maibornwolff/secobserve-backend:latest'
           report_name: 'backend_grype_image.json'
@@ -143,7 +143,7 @@ jobs:
           so_product_name: ${{ vars.SO_PRODUCT_NAME }}
 
       - name: Run Gitleaks
-        uses: MaibornWolff/secobserve_actions_templates/actions/secrets/gitleaks@main
+        uses: SecObserve/secobserve_actions_templates/actions/secrets/gitleaks@main
         with:
           report_name: 'backend_gitleaks.sarif'
           so_api_base_url: ${{ vars.SO_API_BASE_URL }}
@@ -171,17 +171,17 @@ jobs:
 
 ```yaml
 include:
-  - "https://raw.githubusercontent.com/MaibornWolff/secobserve_actions_templates/main/templates/DAST/drheader.yml"
-  - "https://raw.githubusercontent.com/MaibornWolff/secobserve_actions_templates/main/templates/DAST/cryptolyzer.yml"
-  - "https://raw.githubusercontent.com/MaibornWolff/secobserve_actions_templates/main/templates/SAST/bandit.yml"
-  - "https://raw.githubusercontent.com/MaibornWolff/secobserve_actions_templates/main/templates/SAST/checkov.yml"
-  - "https://raw.githubusercontent.com/MaibornWolff/secobserve_actions_templates/main/templates/SAST/eslint.yml"
-  - "https://raw.githubusercontent.com/MaibornWolff/secobserve_actions_templates/main/templates/SAST/kics.yml"
-  - "https://raw.githubusercontent.com/MaibornWolff/secobserve_actions_templates/main/templates/SAST/semgrep.yml"
-  - "https://raw.githubusercontent.com/MaibornWolff/secobserve_actions_templates/main/templates/SCA/grype_image.yml"
-  - "https://raw.githubusercontent.com/MaibornWolff/secobserve_actions_templates/main/templates/SCA/trivy_filesystem.yml"
-  - "https://raw.githubusercontent.com/MaibornWolff/secobserve_actions_templates/main/templates/SCA/trivy_image.yml"
-  - "https://raw.githubusercontent.com/MaibornWolff/secobserve_actions_templates/main/templates/secrets/gitleaks.yml"
+  - "https://raw.githubusercontent.com/SecObserve/secobserve_actions_templates/main/templates/DAST/drheader.yml"
+  - "https://raw.githubusercontent.com/SecObserve/secobserve_actions_templates/main/templates/DAST/cryptolyzer.yml"
+  - "https://raw.githubusercontent.com/SecObserve/secobserve_actions_templates/main/templates/SAST/bandit.yml"
+  - "https://raw.githubusercontent.com/SecObserve/secobserve_actions_templates/main/templates/SAST/checkov.yml"
+  - "https://raw.githubusercontent.com/SecObserve/secobserve_actions_templates/main/templates/SAST/eslint.yml"
+  - "https://raw.githubusercontent.com/SecObserve/secobserve_actions_templates/main/templates/SAST/kics.yml"
+  - "https://raw.githubusercontent.com/SecObserve/secobserve_actions_templates/main/templates/SAST/semgrep.yml"
+  - "https://raw.githubusercontent.com/SecObserve/secobserve_actions_templates/main/templates/SCA/grype_image.yml"
+  - "https://raw.githubusercontent.com/SecObserve/secobserve_actions_templates/main/templates/SCA/trivy_filesystem.yml"
+  - "https://raw.githubusercontent.com/SecObserve/secobserve_actions_templates/main/templates/SCA/trivy_image.yml"
+  - "https://raw.githubusercontent.com/SecObserve/secobserve_actions_templates/main/templates/secrets/gitleaks.yml"
 
 grype_image_backend:
   extends: .grype_image
@@ -314,7 +314,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run vulnerability scanners
-        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@main
+        uses: SecObserve/secobserve_actions_templates/actions/vulnerability_scanner@main
         with:
           so_configuration: 'so_configuration.yml'
           SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
@@ -324,7 +324,7 @@ jobs:
 
 ```yaml	
 include:
-  - "https://raw.githubusercontent.com/MaibornWolff/secobserve_actions_templates/main/templates/vulnerability_scanner.yml"
+  - "https://raw.githubusercontent.com/SecObserve/secobserve_actions_templates/main/templates/vulnerability_scanner.yml"
 
 vulnerability_scans:
   stage: test
@@ -409,6 +409,6 @@ importer:
 
 Some real life examples can be found in the SecObserve GitHub repository:
 
-* [so_configuration_code.yml](https://github.com/MaibornWolff/SecObserve/blob/main/so_configuration_code.yml) used in pipeline [check_vulnerabilities.yml](https://github.com/MaibornWolff/SecObserve/blob/main/.github/workflows/check_vulnerabilities.yml)
-* [so_configuration_sca_dev.yml](https://github.com/MaibornWolff/SecObserve/blob/main/so_configuration_sca_dev.yml) used in pipeline [build_push_dev.yml](https://github.com/MaibornWolff/SecObserve/blob/main/.github/workflows/build_push_dev.yml#L53-L58)
-* [so_configuration_endpoints.yml](https://github.com/MaibornWolff/SecObserve/blob/main/so_configuration_endpoints.yml) used in pipeline [build_push_release.yml](https://github.com/MaibornWolff/SecObserve/blob/main/.github/workflows/build_push_release.yml#L71-L76)
+* [so_configuration_code.yml](https://github.com/SecObserve/SecObserve/blob/main/so_configuration_code.yml) used in pipeline [check_vulnerabilities.yml](https://github.com/SecObserve/SecObserve/blob/main/.github/workflows/check_vulnerabilities.yml)
+* [so_configuration_sca_dev.yml](https://github.com/SecObserve/SecObserve/blob/main/so_configuration_sca_dev.yml) used in pipeline [build_push_dev.yml](https://github.com/SecObserve/SecObserve/blob/main/.github/workflows/build_push_dev.yml#L53-L58)
+* [so_configuration_endpoints.yml](https://github.com/SecObserve/SecObserve/blob/main/so_configuration_endpoints.yml) used in pipeline [build_push_release.yml](https://github.com/SecObserve/SecObserve/blob/main/.github/workflows/build_push_release.yml#L71-L76)

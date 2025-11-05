@@ -4,7 +4,7 @@ version = "1.41.0"
 description = "SecObserve is an open source vulnerability management system for software development and cloud environments."
 license = "BSD-3-Clause"
 authors = [
-    "Stefan Fleckenstein <stefan.fleckenstein@maibornwolff.de>",
+    { name = "Stefan Fleckenstein" },
 ]
 package-mode = false
 

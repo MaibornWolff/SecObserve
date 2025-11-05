@@ -53,8 +53,8 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
-repo_url: https://github.com/MaibornWolff/SecObserve
-repo_name: maibornwolff/secobserve
+repo_url: https://github.com/SecObserve/SecObserve
+repo_name: SecObserve/secobserve
 
 copyright: Copyright &copy; 2025 MaibornWolff GmbH / Stefan Fleckenstein
 
