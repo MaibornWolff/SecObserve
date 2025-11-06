@@ -53,17 +53,3 @@ jobs:
           so_branch_name: 'dev'
           so_api_base_url: "https://secobserve-backend.maibornwolff.de"
           so_api_token: ${{ secrets.SO_API_TOKEN }}
-      - 
-        name: Check licenses for backend application
-        uses: SecObserve/purl-patrol@fe0da8d7c02235dfdf3c52ec936873e57e37203d # v1.6.2
-        with:
-          SBOM_PATH: 'sbom_backend_application.json'
-          LICENSE_POLICY_PATH: 'sbom/configuration/license_policy.json'
-          BREAK_ENABLED: false
-      - 
-        name: Check licenses for frontend application
-        uses: SecObserve/purl-patrol@fe0da8d7c02235dfdf3c52ec936873e57e37203d # v1.6.2
-        with:
-          SBOM_PATH: 'sbom_frontend_application.json'
-          LICENSE_POLICY_PATH: 'sbom/configuration/license_policy.json'
-          BREAK_ENABLED: false
