@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - chore/doc_integration
+      - chore/purl_patrol
 
 permissions: read-all
 
