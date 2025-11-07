@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       -
         name: Set up QEMU
-        uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392 # v3.6.0
+        uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3.7.0
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3.11.1
@@ -48,7 +48,7 @@ jobs:
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       -
         name: Set up QEMU
-        uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392 # v3.6.0
+        uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3.7.0
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3.11.1
@@ -76,7 +76,7 @@ jobs:
             VERSION=dev
 
   sca_dev:
-    if: github.repository == 'MaibornWolff/SecObserve'
+    if: github.repository == 'SecObserve/SecObserve'
     runs-on: ubuntu-latest
     needs: [docker_backend_dev, docker_frontend_dev]
     steps:
@@ -85,7 +85,7 @@ jobs:
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - 
         name: Run SCA vulnerability scanners
-        uses: MaibornWolff/secobserve_actions_templates/actions/vulnerability_scanner@936a764a4e82cc89772941e082ba24c371c6ef90 # main
+        uses: SecObserve/secobserve_actions_templates/actions/vulnerability_scanner@936a764a4e82cc89772941e082ba24c371c6ef90 # main
         with:
           so_configuration: 'so_configuration_sca_dev.yml'
           SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}

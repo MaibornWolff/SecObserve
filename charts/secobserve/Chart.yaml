@@ -2,9 +2,9 @@ apiVersion: v2
 name: secobserve
 description: A Helm chart to deploy SecObserve, an open-source vulnerability and license management system designed for software development teams and cloud-native environments. SecObserve helps teams identify, manage, and remediate security vulnerabilities and license compliance issues across their software projects, enhancing visibility and improving DevSecOps workflows.
 
-home: https://github.com/MaibornWolff/SecObserve
+home: https://github.com/SecObserve/SecObserve
 sources:
-  - https://github.com/MaibornWolff/SecObserve
+  - https://github.com/SecObserve/SecObserve
 maintainers:
   - name: SecObserve community
 
@@ -21,12 +21,12 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 1.0.4
+version: 1.0.5
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
-appVersion: 1.41.0
+appVersion: 1.41.1
 
 dependencies:
 - condition: postgresql.enabled

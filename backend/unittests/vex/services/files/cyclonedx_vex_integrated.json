@@ -13,9 +13,9 @@
         "component": {
             "bom-ref": "product",
             "type": "application",
-            "group": "MaibornWolff",
+            "group": "SecObserve",
             "name": "VEX_Test",
-            "purl": "pkg:github/MaibornWolff/VEX_Test@v1.7.0"
+            "purl": "pkg:github/SecObserve/VEX_Test@v1.7.0"
         }
     },
     "components": [

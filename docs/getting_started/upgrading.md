@@ -10,7 +10,7 @@
 
 * There will be specific upgrade instructions if necessary, e.g. when there are new configuration parameters.
 
-## Release 1.41.0
+## Release 1.41.1
 
 **Breaking changes**
 
@@ -26,7 +26,7 @@
 
 **Breaking changes**
 
-* The API for `license_components` has been changed, due to the rename of the existing license fields to `imported_declared_license_...` in [https://github.com/MaibornWolff/SecObserve/pull/3229](https://github.com/MaibornWolff/SecObserve/pull/3229).
+* The API for `license_components` has been changed, due to the rename of the existing license fields to `imported_declared_license_...` in [https://github.com/SecObserve/SecObserve/pull/3229](https://github.com/SecObserve/SecObserve/pull/3229).
 
 ## Release 1.30.0
 

@@ -17,7 +17,7 @@ The aim of SecObserve is to make vulnerability scanning and vulnerability manage
 
     All actions and templates run the scanner, upload the results into SecObserve and make the results of the scans available for download as artefacts in JSON format.
 
-    The sources of the GitHub actions and GitLab CI templates can be found in [https://github.com/MaibornWolff/secobserve_actions_templates](https://github.com/MaibornWolff/secobserve_actions_templates).
+    The sources of the GitHub actions and GitLab CI templates can be found in [https://github.com/SecObserve/secobserve_actions_templates](https://github.com/SecObserve/secobserve_actions_templates).
 
 ![How it works](../assets/images/secobserve_process.svg){ width="700" style="display: block; margin: 0 auto" }
 

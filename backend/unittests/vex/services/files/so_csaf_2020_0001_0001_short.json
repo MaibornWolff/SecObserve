@@ -18,7 +18,7 @@
             "generator": {
                 "engine": {
                     "name": "SecObserve",
-                    "version": "1.41.0"
+                    "version": "1.41.1"
                 }
             },
             "id": "so_2020_0001_0001",
@@ -43,9 +43,9 @@
                         "name": "VEX Test",
                         "product": {
                             "name": "VEX Test",
-                            "product_id": "pkg:github/MaibornWolff/VEX_Test",
+                            "product_id": "pkg:github/SecObserve/VEX_Test",
                             "product_identification_helper": {
-                                "purl": "pkg:github/MaibornWolff/VEX_Test"
+                                "purl": "pkg:github/SecObserve/VEX_Test"
                             }
                         }
                     }
@@ -167,7 +167,7 @@
                     "product_id": "cryptography:41.0.5@VEX Test"
                 },
                 "product_reference": "pkg:pypi/cryptography",
-                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test"
+                "relates_to_product_reference": "pkg:github/SecObserve/VEX_Test"
             },
             {
                 "category": "default_component_of",
@@ -176,7 +176,7 @@
                     "product_id": "gunicorn:21.2.0@VEX Test"
                 },
                 "product_reference": "pkg:pypi/gunicorn",
-                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test"
+                "relates_to_product_reference": "pkg:github/SecObserve/VEX_Test"
             },
             {
                 "category": "default_component_of",
@@ -185,7 +185,7 @@
                     "product_id": "black:23.11.0@VEX Test"
                 },
                 "product_reference": "pkg:pypi/black",
-                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test"
+                "relates_to_product_reference": "pkg:github/SecObserve/VEX_Test"
             },
             {
                 "category": "default_component_of",
@@ -194,7 +194,7 @@
                     "product_id": "django:4.2.8@VEX Test"
                 },
                 "product_reference": "pkg:pypi/django",
-                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test"
+                "relates_to_product_reference": "pkg:github/SecObserve/VEX_Test"
             },
             {
                 "category": "default_component_of",
@@ -203,7 +203,7 @@
                     "product_id": "werkzeug:3.0.1@VEX Test"
                 },
                 "product_reference": "pkg:pypi/werkzeug",
-                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test"
+                "relates_to_product_reference": "pkg:github/SecObserve/VEX_Test"
             },
             {
                 "category": "default_component_of",
@@ -212,7 +212,7 @@
                     "product_id": "requests:2.31.0@VEX Test"
                 },
                 "product_reference": "pkg:pypi/requests",
-                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test"
+                "relates_to_product_reference": "pkg:github/SecObserve/VEX_Test"
             },
             {
                 "category": "default_component_of",
@@ -221,7 +221,7 @@
                     "product_id": "idna:3.6@VEX Test"
                 },
                 "product_reference": "pkg:pypi/idna",
-                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test"
+                "relates_to_product_reference": "pkg:github/SecObserve/VEX_Test"
             },
             {
                 "category": "default_component_of",
@@ -230,7 +230,7 @@
                     "product_id": "urllib3:2.1.0@VEX Test"
                 },
                 "product_reference": "pkg:pypi/urllib3",
-                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test"
+                "relates_to_product_reference": "pkg:github/SecObserve/VEX_Test"
             },
             {
                 "category": "default_component_of",
@@ -239,7 +239,7 @@
                     "product_id": "sqlparse:0.4.4@VEX Test"
                 },
                 "product_reference": "pkg:pypi/sqlparse",
-                "relates_to_product_reference": "pkg:github/MaibornWolff/VEX_Test"
+                "relates_to_product_reference": "pkg:github/SecObserve/VEX_Test"
             }
         ]
     },

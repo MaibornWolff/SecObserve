@@ -2,7 +2,7 @@ import ChecklistIcon from "@mui/icons-material/Checklist";
 import SecurityIcon from "@mui/icons-material/Security";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { Badge, Box } from "@mui/material";
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { DashboardMenuItem, MenuItemLink, MenuProps, useSidebarState } from "react-admin";
 
 import administration from "../../access_control/access_control_administration";
@@ -47,188 +47,171 @@ const Menu = ({ dense = false }: MenuProps) => {
     }, []);
 
     return (
-        <Fragment>
-            <Box
-                sx={{
-                    width: open ? 220 : 50,
-                    marginTop: 1,
-                    marginBottom: 1,
-                    transition: (theme) =>
-                        theme.transitions.create("width", {
-                            easing: theme.transitions.easing.sharp,
-                            duration: theme.transitions.duration.leavingScreen,
-                        }),
-                }}
+        <Box
+            sx={{
+                width: open ? 220 : 50,
+                marginTop: 1,
+                marginBottom: 1,
+                transition: (theme) =>
+                    theme.transitions.create("width", {
+                        easing: theme.transitions.easing.sharp,
+                        duration: theme.transitions.duration.leavingScreen,
+                    }),
+            }}
+        >
+            <DashboardMenuItem />
+            <MenuItemLink
+                to="/product_groups"
+                state={{ _scrollToTop: true }}
+                primaryText="Product Groups"
+                leftIcon={<product_groups.icon />}
+                dense={dense}
+            />
+            <MenuItemLink
+                to="/products"
+                state={{ _scrollToTop: true }}
+                primaryText="Products"
+                leftIcon={<products.icon />}
+                dense={dense}
+            />
+            <MenuItemLink
+                to="/observations"
+                state={{ _scrollToTop: true }}
+                primaryText="Observations"
+                leftIcon={<observations.icon />}
+                dense={dense}
+            />
+            <MenuItemLink
+                to="/components"
+                state={{ _scrollToTop: true }}
+                primaryText="Components"
+                leftIcon={<components.icon />}
+                dense={dense}
+            />
+            <MenuItemLink
+                to="/reviews"
+                state={{ _scrollToTop: true }}
+                primaryText="Reviews"
+                leftIcon={<ChecklistIcon />}
+                dense={dense}
+            />
+            <MenuItemLink
+                to="/notifications"
+                state={{ _scrollToTop: true }}
+                leftIcon={<notifications.icon />}
+                dense={dense}
             >
-                <DashboardMenuItem />
-                <MenuItemLink
-                    to="/product_groups"
-                    state={{ _scrollToTop: true }}
-                    primaryText="Product Groups"
-                    leftIcon={<product_groups.icon />}
-                    dense={dense}
-                />
-                <MenuItemLink
-                    to="/products"
-                    state={{ _scrollToTop: true }}
-                    primaryText="Products"
-                    leftIcon={<products.icon />}
-                    dense={dense}
-                />
-                <MenuItemLink
-                    to="/observations"
-                    state={{ _scrollToTop: true }}
-                    primaryText="Observations"
-                    leftIcon={<observations.icon />}
-                    dense={dense}
-                />
-                <MenuItemLink
-                    to="/components"
-                    state={{ _scrollToTop: true }}
-                    primaryText="Components"
-                    leftIcon={<components.icon />}
-                    dense={dense}
-                />
-                <MenuItemLink
-                    to="/reviews"
-                    state={{ _scrollToTop: true }}
-                    primaryText="Reviews"
-                    leftIcon={<ChecklistIcon />}
-                    dense={dense}
-                />
-                <MenuItemLink
-                    to="/notifications"
-                    state={{ _scrollToTop: true }}
-                    leftIcon={<notifications.icon />}
-                    dense={dense}
-                >
-                    Notifications
-                    {get_notification_count() && get_notification_count() != "0" && (
-                        <Badge badgeContent={get_notification_count()} color="secondary" sx={{ marginLeft: 3 }} />
-                    )}
-                </MenuItemLink>
-                {feature_vex_enabled() && (
-                    <SubMenu
-                        handleToggle={() => handleToggle("menuVEX")}
-                        isOpen={state.menuVEX}
-                        name="VEX"
-                        icon={<SecurityIcon />}
-                        dense={dense}
-                    >
-                        <MenuItemLink
-                            to="/vex/csaf"
-                            state={{ _scrollToTop: true }}
-                            primaryText="CSAF"
-                            leftIcon={<csaf.icon />}
-                            dense={dense}
-                        />
-                        <MenuItemLink
-                            to="/vex/cyclonedx"
-                            state={{ _scrollToTop: true }}
-                            primaryText="CycloneDX"
-                            leftIcon={<cyclonedx.icon />}
-                            dense={dense}
-                        />
-                        <MenuItemLink
-                            to="/vex/openvex"
-                            state={{ _scrollToTop: true }}
-                            primaryText="OpenVEX"
-                            leftIcon={<openvex.icon />}
-                            dense={dense}
-                        />
-                        {is_superuser() && (
-                            <MenuItemLink
-                                to="/vex/vex_documents"
-                                state={{ _scrollToTop: true }}
-                                primaryText="VEX documents"
-                                leftIcon={<vex_documents.icon />}
-                                dense={dense}
-                            />
-                        )}
-                    </SubMenu>
+                Notifications
+                {get_notification_count() && get_notification_count() != "0" && (
+                    <Badge badgeContent={get_notification_count()} color="secondary" sx={{ marginLeft: 3 }} />
                 )}
+            </MenuItemLink>
+            {feature_vex_enabled() && (
                 <SubMenu
-                    handleToggle={() => handleToggle("menuSettings")}
-                    isOpen={state.menuSettings}
-                    name="Administration"
-                    icon={<SettingsIcon />}
+                    handleToggle={() => handleToggle("menuVEX")}
+                    isOpen={state.menuVEX}
+                    name="VEX"
+                    icon={<SecurityIcon />}
                     dense={dense}
                 >
-                    {feature_license_management() && (
-                        <MenuItemLink
-                            to="/license/licenses"
-                            state={{ _scrollToTop: true }}
-                            primaryText="Licenses"
-                            leftIcon={<licenses.icon />}
-                            dense={dense}
-                        />
-                    )}
                     <MenuItemLink
-                        to="/access_control/users"
+                        to="/vex/csaf"
                         state={{ _scrollToTop: true }}
-                        primaryText="Access Control"
-                        leftIcon={<administration.icon />}
+                        primaryText="CSAF"
+                        leftIcon={<csaf.icon />}
+                        dense={dense}
+                    />
+                    <MenuItemLink
+                        to="/vex/cyclonedx"
+                        state={{ _scrollToTop: true }}
+                        primaryText="CycloneDX"
+                        leftIcon={<cyclonedx.icon />}
+                        dense={dense}
+                    />
+                    <MenuItemLink
+                        to="/vex/openvex"
+                        state={{ _scrollToTop: true }}
+                        primaryText="OpenVEX"
+                        leftIcon={<openvex.icon />}
                         dense={dense}
                     />
                     {is_superuser() && (
                         <MenuItemLink
-                            to="/settings/1/show"
+                            to="/vex/vex_documents"
                             state={{ _scrollToTop: true }}
-                            primaryText="Settings"
-                            leftIcon={<settings.icon />}
-                            dense={dense}
-                        />
-                    )}
-                    {is_superuser() && (
-                        <MenuItemLink
-                            to="/periodic_tasks"
-                            state={{ _scrollToTop: true }}
-                            primaryText="Periodic Tasks"
-                            leftIcon={<periodic_tasks.icon />}
-                            dense={dense}
-                        />
-                    )}
-                    <MenuItemLink
-                        to="/parsers"
-                        state={{ _scrollToTop: true }}
-                        primaryText="Parsers"
-                        leftIcon={<parsers.icon />}
-                        dense={dense}
-                    />
-                    <MenuItemLink
-                        to="/general_rules"
-                        state={{ _scrollToTop: true }}
-                        primaryText="General Rules"
-                        leftIcon={<general_rules.icon />}
-                        dense={dense}
-                    />
-                    {feature_vex_enabled() && (
-                        <MenuItemLink
-                            to="/vex/vex_counters"
-                            state={{ _scrollToTop: true }}
-                            primaryText="VEX Counters"
-                            leftIcon={<vex_counters.icon />}
+                            primaryText="VEX documents"
+                            leftIcon={<vex_documents.icon />}
                             dense={dense}
                         />
                     )}
                 </SubMenu>
-            </Box>
-            <Box
-                style={{
-                    position: "fixed",
-                    right: 0,
-                    bottom: 0,
-                    left: 0,
-                    zIndex: 100,
-                    paddingLeft: 16,
-                    paddingBottom: 14,
-                }}
+            )}
+            <SubMenu
+                handleToggle={() => handleToggle("menuSettings")}
+                isOpen={state.menuSettings}
+                name="Administration"
+                icon={<SettingsIcon />}
+                dense={dense}
             >
-                <a href="https://www.maibornwolff.de" target="_blank" rel="noreferrer">
-                    <img src="maibornwolff.svg" alt="MaibornWolff logo" height={"24px"} />
-                </a>
-            </Box>
-        </Fragment>
+                {feature_license_management() && (
+                    <MenuItemLink
+                        to="/license/licenses"
+                        state={{ _scrollToTop: true }}
+                        primaryText="Licenses"
+                        leftIcon={<licenses.icon />}
+                        dense={dense}
+                    />
+                )}
+                <MenuItemLink
+                    to="/access_control/users"
+                    state={{ _scrollToTop: true }}
+                    primaryText="Access Control"
+                    leftIcon={<administration.icon />}
+                    dense={dense}
+                />
+                {is_superuser() && (
+                    <MenuItemLink
+                        to="/settings/1/show"
+                        state={{ _scrollToTop: true }}
+                        primaryText="Settings"
+                        leftIcon={<settings.icon />}
+                        dense={dense}
+                    />
+                )}
+                {is_superuser() && (
+                    <MenuItemLink
+                        to="/periodic_tasks"
+                        state={{ _scrollToTop: true }}
+                        primaryText="Periodic Tasks"
+                        leftIcon={<periodic_tasks.icon />}
+                        dense={dense}
+                    />
+                )}
+                <MenuItemLink
+                    to="/parsers"
+                    state={{ _scrollToTop: true }}
+                    primaryText="Parsers"
+                    leftIcon={<parsers.icon />}
+                    dense={dense}
+                />
+                <MenuItemLink
+                    to="/general_rules"
+                    state={{ _scrollToTop: true }}
+                    primaryText="General Rules"
+                    leftIcon={<general_rules.icon />}
+                    dense={dense}
+                />
+                {feature_vex_enabled() && (
+                    <MenuItemLink
+                        to="/vex/vex_counters"
+                        state={{ _scrollToTop: true }}
+                        primaryText="VEX Counters"
+                        leftIcon={<vex_counters.icon />}
+                        dense={dense}
+                    />
+                )}
+            </SubMenu>
+        </Box>
     );
 };
 
