@@ -4,6 +4,7 @@ from rest_framework.serializers import ValidationError
 
 from application.access_control.models import Authorization_Group
 from application.authorization.services.roles_permissions import Permissions, Roles
+from application.commons.models import Settings
 from application.core.api.serializers_product import (
     BranchSerializer,
     ProductAuthorizationGroupMemberSerializer,
@@ -123,12 +124,13 @@ class TestBranchSerializer(BaseTestCase):
         product_serializer = ProductSerializer(product)
         data = product_serializer.validate(product_serializer.data)
 
-        self.assertEqual(0, data["security_gate_threshold_critical"])
-        self.assertEqual(0, data["security_gate_threshold_high"])
-        self.assertEqual(0, data["security_gate_threshold_medium"])
-        self.assertEqual(0, data["security_gate_threshold_low"])
-        self.assertEqual(0, data["security_gate_threshold_none"])
-        self.assertEqual(0, data["security_gate_threshold_unknown"])
+        settings = Settings.load()
+        self.assertEqual(settings.security_gate_threshold_critical, data["security_gate_threshold_critical"])
+        self.assertEqual(settings.security_gate_threshold_high, data["security_gate_threshold_high"])
+        self.assertEqual(settings.security_gate_threshold_medium, data["security_gate_threshold_medium"])
+        self.assertEqual(settings.security_gate_threshold_low, data["security_gate_threshold_low"])
+        self.assertEqual(settings.security_gate_threshold_none, data["security_gate_threshold_none"])
+        self.assertEqual(settings.security_gate_threshold_unknown, data["security_gate_threshold_unknown"])
 
     @patch("application.core.api.serializers_product.get_product_member")
     def test_validate_security_gate_active_full(self, mock_product_member):
