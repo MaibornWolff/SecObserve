@@ -2,7 +2,11 @@ name: Build and push dev images
 
 on: workflow_dispatch
 
-permissions: read-all
+permissions:
+  contents: read
+  packages: write
+  attestations: write
+  id-token: write
 
 jobs:
   docker_backend_dev:
