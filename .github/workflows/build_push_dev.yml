@@ -2,7 +2,11 @@ name: Build and push dev images
 
 on: workflow_dispatch
 
-permissions: read-all
+permissions:
+  contents: read
+  packages: write
+  attestations: write
+  id-token: write
 
 jobs:
   docker_backend_dev:
@@ -18,11 +22,12 @@ jobs:
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3.11.1
       -
-        name: Login to Docker Hub
+        name: Login to GitHub Container Registry
         uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       -
         name: Set current date as env variable
         run: echo "CREATED=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
@@ -34,7 +39,7 @@ jobs:
           file: ./docker/backend/prod/django/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: maibornwolff/secobserve-backend:dev
+          tags: ghcr.io/secobserve/secobserve-backend:dev
           build-args: |
             CREATED=${{ env.CREATED }}
             REVISION=${{ github.sha }}
@@ -53,11 +58,12 @@ jobs:
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3.11.1
       -
-        name: Login to Docker Hub
+        name: Login to GitHub Container Registry
         uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       -
         name: Set current date as env variable
         run: echo "CREATED=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
@@ -69,7 +75,7 @@ jobs:
           file: ./docker/frontend/prod/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: maibornwolff/secobserve-frontend:dev
+          tags: ghcr.io/secobserve/secobserve-frontend:dev
           build-args: |
             CREATED=${{ env.CREATED }}
             REVISION=${{ github.sha }}
