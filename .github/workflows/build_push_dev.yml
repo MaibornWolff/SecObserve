@@ -2,15 +2,16 @@ name: Build and push dev images
 
 on: workflow_dispatch
 
-permissions:
-  contents: read
-  packages: write
-  attestations: write
-  id-token: write
+permissions: read-all
 
 jobs:
   docker_backend_dev:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
     steps:
       -
         name: Checkout
@@ -47,6 +48,11 @@ jobs:
 
   docker_frontend_dev:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
     steps:
       -
         name: Checkout
