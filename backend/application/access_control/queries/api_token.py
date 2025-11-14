@@ -1,7 +1,16 @@
+from typing import Optional
+
 from django.db.models.query import QuerySet
 
 from application.access_control.models import API_Token, User
 from application.access_control.services.current_user import get_current_user
+
+
+def get_api_token_by_id(pk: int) -> Optional[API_Token]:
+    try:
+        return API_Token.objects.get(pk=pk)
+    except API_Token.DoesNotExist:
+        return None
 
 
 def get_api_tokens() -> QuerySet[API_Token]:

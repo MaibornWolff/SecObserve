@@ -40,12 +40,14 @@ from application.access_control.api.permissions import (
     UserHasSuperuserPermission,
 )
 from application.access_control.api.serializers import (
+    ApiTokenCreateRequestSerializer,
+    ApiTokenCreateResponseSerializer,
+    ApiTokenRevokeRequestSerializer,
     ApiTokenSerializer,
     AuthenticationRequestSerializer,
     AuthenticationResponseSerializer,
     AuthorizationGroupMemberSerializer,
     AuthorizationGroupSerializer,
-    CreateApiTokenResponseSerializer,
     UserListSerializer,
     UserPasswordSerializer,
     UserPasswortRulesSerializer,
@@ -257,18 +259,25 @@ class ApiTokenViewSet(ListModelMixin, GenericViewSet):
         return get_api_tokens()
 
 
-class CreateUserAPITokenView(APIView):
+class UserAPITokenCreateView(APIView):
     authentication_classes = []
     permission_classes = []
 
     @extend_schema(
-        request=AuthenticationRequestSerializer,
-        responses={status.HTTP_201_CREATED: CreateApiTokenResponseSerializer},
+        request=ApiTokenCreateRequestSerializer,
+        responses={status.HTTP_201_CREATED: ApiTokenCreateResponseSerializer},
     )
     def post(self, request: Request) -> Response:
-        user = _get_authenticated_user(request.data)
+        request_serializer = ApiTokenCreateRequestSerializer(data=request.data)
+        if not request_serializer.is_valid():
+            raise ValidationError(request_serializer.errors)
+
+        user = _get_authenticated_user(request_serializer.validated_data)
+        name = request_serializer.validated_data.get("name")
+        expiration_date = request_serializer.validated_data.get("expiration_date")
+
         try:
-            token = create_user_api_token(user)
+            token = create_user_api_token(user, name, expiration_date)
         except ValidationError as e:
             response = Response(status=status.HTTP_400_BAD_REQUEST)
             logger.warning(format_log_message(message=str(e), username=user.username, response=response))
@@ -279,17 +288,24 @@ class CreateUserAPITokenView(APIView):
         return response
 
 
-class RevokeUserAPITokenView(APIView):
+class UserAPITokenRevokeView(APIView):
     authentication_classes = []
     permission_classes = []
 
     @extend_schema(
-        request=AuthenticationRequestSerializer,
+        request=ApiTokenRevokeRequestSerializer,
         responses={status.HTTP_204_NO_CONTENT: None},
     )
     def post(self, request: Request) -> Response:
-        user = _get_authenticated_user(request.data)
-        revoke_user_api_token(user)
+        request_serializer = ApiTokenRevokeRequestSerializer(data=request.data)
+        if not request_serializer.is_valid():
+            raise ValidationError(request_serializer.errors)
+
+        user = _get_authenticated_user(request_serializer.validated_data)
+        name = request_serializer.validated_data.get("name")
+
+        revoke_user_api_token(user, name)
+
         response = Response(status=status.HTTP_204_NO_CONTENT)
         logger.info(format_log_message(message="API token revoked", username=user.username, response=response))
         return response
@@ -328,12 +344,8 @@ class JWTSecretResetView(APIView):
 
 
 def _get_authenticated_user(data: dict) -> User:
-    request_serializer = AuthenticationRequestSerializer(data=data)
-    if not request_serializer.is_valid():
-        raise ValidationError(request_serializer.errors)
-
-    username = request_serializer.validated_data.get("username")
-    password = request_serializer.validated_data.get("password")
+    username = data.get("username")
+    password = data.get("password")
 
     user: User = django_authenticate(username=username, password=password)  # type: ignore[assignment]
     # We always get a User from our model

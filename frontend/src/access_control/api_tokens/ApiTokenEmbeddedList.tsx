@@ -1,5 +1,6 @@
 import {
     Datagrid,
+    DateField,
     ListContextProvider,
     ResourceContextProvider,
     SelectField,
@@ -51,14 +52,20 @@ const ApiTokenEmbeddedList = ({ type, product, user }: ApiTokenEmbeddedListProps
                         rowClick={false}
                     >
                         {type === "product" && <SelectField source="role" choices={ROLE_CHOICES} />}
-                        {type === "user" && <TextField label="Username" source="name" />}
+                        <TextField source="name" />
+                        <DateField source="expiration_date" />
                         <WithRecord
                             render={(api_token) => (
                                 <Fragment>
                                     {((type === "product" &&
                                         product?.permissions.includes(PERMISSION_PRODUCT_API_TOKEN_REVOKE)) ||
-                                        (type === "user" && api_token.name === username)) && (
-                                        <ApiTokenRevoke type={type} product={product} user={user} />
+                                        (type === "user" && api_token.username === username)) && (
+                                        <ApiTokenRevoke
+                                            type={type}
+                                            api_token_id={api_token.id}
+                                            user={user}
+                                            name={api_token.name}
+                                        />
                                     )}
                                 </Fragment>
                             )}

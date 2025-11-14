@@ -1,13 +1,13 @@
 import AddIcon from "@mui/icons-material/Add";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField } from "@mui/material";
 import { useState } from "react";
-import { SimpleForm, useNotify, useRefresh } from "react-admin";
+import { DateInput, SimpleForm, useNotify, useRefresh } from "react-admin";
 
 import AddButton from "../../commons/custom_fields/AddButton";
 import CopyToClipboardButton from "../../commons/custom_fields/CopyToClipboardButton";
 import { ToolbarCancelSave } from "../../commons/custom_fields/ToolbarCancelSave";
-import { validate_required, validate_required_255 } from "../../commons/custom_validators";
-import { AutocompleteInputWide, PasswordInputWide } from "../../commons/layout/themes";
+import { validate_required, validate_required_32, validate_required_255 } from "../../commons/custom_validators";
+import { AutocompleteInputWide, PasswordInputWide, TextInputWide } from "../../commons/layout/themes";
 import { httpClient } from "../../commons/ra-data-django-rest-framework";
 import { ROLE_CHOICES } from "../types";
 
@@ -50,14 +50,18 @@ const ApiTokenCreate = ({ type, product, user }: ApiTokenCreateProps) => {
         if (type === "product") {
             url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/product_api_tokens/";
             create_data = {
-                id: product.id,
+                product: product.id,
                 role: data.role,
+                name: data.api_token_name,
+                expiration_date: data.expiration_date,
             };
         } else if (type === "user") {
             url = window.__RUNTIME_CONFIG__.API_BASE_URL + "/authentication/create_user_api_token/";
             create_data = {
                 username: user.username,
                 password: data.password,
+                name: data.api_token_name,
+                expiration_date: data.expiration_date,
             };
         } else {
             notify("Type is not product or user", { type: "error" });
@@ -106,6 +110,8 @@ const ApiTokenCreate = ({ type, product, user }: ApiTokenCreateProps) => {
                         {type === "user" && (
                             <PasswordInputWide source="password" label="Password" validate={validate_required_255} />
                         )}
+                        <TextInputWide label="API token name" source="api_token_name" validate={validate_required_32} />
+                        <DateInput source="expiration_date" />
                     </SimpleForm>
                 </DialogContent>
             </Dialog>

@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Optional
 
 from argon2 import PasswordHasher
@@ -30,25 +31,28 @@ class APITokenAuthentication(BaseAuthentication):
             # Authorization header is possibly for another backend
             return None
 
-        user = self._validate_api_token(auth_token)
-        if not user:
+        api_token = self._validate_api_token(auth_token)
+        if not api_token:
             raise AuthenticationFailed("Invalid API token.")
 
-        if not user.is_active:
+        if not api_token.user.is_active:
             raise AuthenticationFailed("User is deactivated.")
 
-        return (user, None)
+        if api_token.expiration_date and api_token.expiration_date < date.today():
+            raise AuthenticationFailed("API token has expired")
+
+        return (api_token.user, None)
 
     def authenticate_header(self, request: Request) -> str:
         return API_TOKEN_PREFIX
 
-    def _validate_api_token(self, api_token: str) -> Optional[User]:
+    def _validate_api_token(self, api_token: str) -> Optional[API_Token]:
         ph = PasswordHasher()
         api_tokens = API_Token.objects.all()
         for api_token_data in api_tokens:
             try:
                 ph.verify(api_token_data.api_token_hash, api_token)
-                return api_token_data.user
+                return api_token_data
             except Exception:  # nosec B110
                 # all token need to be checked if a valid one can be found
                 pass
