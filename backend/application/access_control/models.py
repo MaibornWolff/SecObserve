@@ -5,11 +5,11 @@ from django.db.models import (
     CASCADE,
     BooleanField,
     CharField,
+    DateField,
     ForeignKey,
     Index,
     ManyToManyField,
     Model,
-    OneToOneField,
     TextField,
 )
 from encrypted_model_fields.fields import EncryptedCharField
@@ -130,9 +130,15 @@ class JWT_Secret(Model):
 
 
 class API_Token(Model):
-    user = OneToOneField(User, on_delete=CASCADE, primary_key=True)
+    user = ForeignKey(User, on_delete=CASCADE)
+    name = CharField(max_length=32, default="default")
     api_token_hash = CharField(max_length=255)
+    expiration_date = DateField(null=True)
 
     class Meta:
         verbose_name = "API token"
         verbose_name_plural = "API token"
+        unique_together = (
+            "user",
+            "name",
+        )

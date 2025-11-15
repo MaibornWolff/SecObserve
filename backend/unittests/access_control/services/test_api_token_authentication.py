@@ -1,4 +1,4 @@
-from itertools import chain
+from datetime import date
 from unittest.mock import patch
 
 from argon2 import PasswordHasher
@@ -25,8 +25,8 @@ class TestAPITokenAuthentication(BaseTestCase):
         ph = PasswordHasher.from_parameters(RFC_9106_LOW_MEMORY)
         api_token_hash = ph.hash(self.api_token)
 
-        api_token_object = API_Token(user=self.user_internal, api_token_hash=api_token_hash)
-        self.api_tokens = [api_token_object]
+        self.api_token_object = API_Token(user=self.user_internal, api_token_hash=api_token_hash)
+        self.api_tokens = [self.api_token_object]
 
     # --- authenticate_header ---
 
@@ -49,8 +49,8 @@ class TestAPITokenAuthentication(BaseTestCase):
         mock.return_value = self.api_tokens
 
         api_token_authentication = APITokenAuthentication()
-        user = api_token_authentication._validate_api_token(self.api_token)
-        self.assertEqual(self.user_internal, user)
+        api_token = api_token_authentication._validate_api_token(self.api_token)
+        self.assertEqual(self.api_token_object, api_token)
 
     # --- authenticate ---
 
@@ -104,8 +104,8 @@ class TestAPITokenAuthentication(BaseTestCase):
 
     @patch("application.access_control.services.api_token_authentication.APITokenAuthentication._validate_api_token")
     def test_authenticate_user_deactivated(self, mock):
-        mock.return_value = self.user_internal
         self.user_internal.is_active = False
+        mock.return_value = API_Token(user=self.user_internal)
 
         with self.assertRaises(AuthenticationFailed) as e:
             request = HttpRequest()
@@ -116,8 +116,20 @@ class TestAPITokenAuthentication(BaseTestCase):
         self.assertEqual("User is deactivated.", str(e.exception))
 
     @patch("application.access_control.services.api_token_authentication.APITokenAuthentication._validate_api_token")
+    def test_authenticate_expired_token(self, mock):
+        mock.return_value = API_Token(user=self.user_internal, expiration_date=date(2020, 1, 1))
+
+        with self.assertRaises(AuthenticationFailed) as e:
+            request = HttpRequest()
+            request.META["HTTP_AUTHORIZATION"] = b"APIToken token"
+            api_token_authentication = APITokenAuthentication()
+            api_token_authentication.authenticate(request)
+
+        self.assertEqual("API token has expired.", str(e.exception))
+
+    @patch("application.access_control.services.api_token_authentication.APITokenAuthentication._validate_api_token")
     def test_authenticate_successful(self, mock):
-        mock.return_value = self.user_internal
+        mock.return_value = self.api_token_object
 
         request = HttpRequest()
         request.META["HTTP_AUTHORIZATION"] = b"APIToken token"

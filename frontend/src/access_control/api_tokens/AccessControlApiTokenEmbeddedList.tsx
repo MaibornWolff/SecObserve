@@ -1,5 +1,6 @@
 import {
     Datagrid,
+    DateField,
     FilterForm,
     ListContextProvider,
     ReferenceField,
@@ -23,7 +24,7 @@ const AccessControlApiTokenEmbeddedList = () => {
         filter: {},
         perPage: 25,
         resource: "api_tokens",
-        sort: { field: "name", order: "ASC" },
+        sort: { field: "username", order: "ASC" },
         filterDefaultValues: {},
         disableSyncWithLocation: false,
         storeKey: "api_tokens.embedded",
@@ -45,13 +46,13 @@ const AccessControlApiTokenEmbeddedList = () => {
                         resource="api_tokens"
                     >
                         <WithRecord
-                            label="Name"
+                            label="Username"
                             render={(api_token) => (
                                 <Fragment>
-                                    {(api_token.product || api_token.product_group) && <TextField source="name" />}
+                                    {(api_token.product || api_token.product_group) && <TextField source="username" />}
                                     {!api_token.product && !api_token.product_group && (
                                         <ReferenceField
-                                            source="id"
+                                            source="user"
                                             reference="users"
                                             link={(record: any, reference: any) =>
                                                 `../../${reference}/${record.id}/show`
@@ -98,6 +99,8 @@ const AccessControlApiTokenEmbeddedList = () => {
                                 </Fragment>
                             )}
                         />
+                        <TextField source="name" />
+                        <DateField source="expiration_date" />
                     </Datagrid>
                     <CustomPagination />
                 </div>

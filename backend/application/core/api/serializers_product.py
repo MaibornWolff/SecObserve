@@ -4,6 +4,7 @@ from typing import Optional
 from django.core.validators import MaxValueValidator, MinValueValidator
 from rest_framework.serializers import (
     CharField,
+    DateField,
     IntegerField,
     ListField,
     ModelSerializer,
@@ -560,8 +561,11 @@ class ProductAuthorizationGroupMemberSerializer(ModelSerializer):
 
 
 class ProductApiTokenSerializer(Serializer):
-    id = IntegerField(validators=[MinValueValidator(0)])
+    id = IntegerField(read_only=True)
+    product = IntegerField(validators=[MinValueValidator(1)])
     role = IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    name = CharField(max_length=32)
+    expiration_date = DateField(required=False, allow_null=True)
 
 
 class BranchSerializer(ModelSerializer):
