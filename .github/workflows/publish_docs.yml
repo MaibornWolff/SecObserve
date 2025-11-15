@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - fix/documentation_upgrade_notes
+      - chore/docs_release_notes
 
 permissions: read-all
 
