@@ -1,5 +1,10 @@
 > [!IMPORTANT]
 > The SecObserve repositories have been moved from the MaibornWolff organization to their own SecObserve organization. Even though all links to the previous repository location are automatically redirected to the new location, we strongly recommend updating any existing links to the new repository URL.
+>
+> The location of the Docker images has been changed with release 1.42.0, they are now stored in a GitHub container registry:
+>
+> * ghcr.io/secobserve/secobserve-backend (see https://github.com/SecObserve/SecObserve/pkgs/container/secobserve-backend)
+> * ghcr.io/secobserve/secobserve-frontend (see https://github.com/SecObserve/SecObserve/pkgs/container/secobserve-frontend)
 
 
 ![SecObserve](frontend/public/secobserve.svg)
