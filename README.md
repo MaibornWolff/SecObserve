@@ -3,9 +3,10 @@
 >
 > The location of the Docker images has been changed with release 1.42.0, they are now stored in a GitHub container registry:
 >
-> * ghcr.io/secobserve/secobserve-backend (see https://github.com/SecObserve/SecObserve/pkgs/container/secobserve-backend)
-> * ghcr.io/secobserve/secobserve-frontend (see https://github.com/SecObserve/SecObserve/pkgs/container/secobserve-frontend)
-
+> * **ghcr.io/secobserve/secobserve-backend** (see https://github.com/SecObserve/SecObserve/pkgs/container/secobserve-backend)
+> * **ghcr.io/secobserve/secobserve-frontend** (see https://github.com/SecObserve/SecObserve/pkgs/container/secobserve-frontend)
+>
+> Please adjust your pull statements accordingly.
 
 ![SecObserve](frontend/public/secobserve.svg)
 
