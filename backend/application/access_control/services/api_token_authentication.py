@@ -39,7 +39,7 @@ class APITokenAuthentication(BaseAuthentication):
             raise AuthenticationFailed("User is deactivated.")
 
         if api_token.expiration_date and api_token.expiration_date < date.today():
-            raise AuthenticationFailed("API token has expired")
+            raise AuthenticationFailed("API token has expired.")
 
         return (api_token.user, None)
 

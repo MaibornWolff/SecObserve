@@ -125,7 +125,7 @@ class TestAPITokenAuthentication(BaseTestCase):
             api_token_authentication = APITokenAuthentication()
             api_token_authentication.authenticate(request)
 
-        self.assertEqual("API token has expired", str(e.exception))
+        self.assertEqual("API token has expired.", str(e.exception))
 
     @patch("application.access_control.services.api_token_authentication.APITokenAuthentication._validate_api_token")
     def test_authenticate_successful(self, mock):
