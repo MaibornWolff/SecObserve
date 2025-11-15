@@ -1,3 +1,4 @@
+from datetime import date
 from unittest.mock import patch
 
 from django.core.exceptions import ValidationError as DjangoValidationError
@@ -17,7 +18,7 @@ class TestAPIToken(BaseTestCase):
         mock.side_effect = PermissionDenied("Invalid credentials")
 
         api_client = APIClient()
-        request_data = {"username": "user@example.com", "password": "not-so-secret"}
+        request_data = {"username": "user@example.com", "password": "not-so-secret", "name": "api_token_name"}
         response = api_client.post(reverse("create_user_api_token"), request_data, "json")
 
         self.assertEqual(403, response.status_code)
@@ -31,13 +32,36 @@ class TestAPIToken(BaseTestCase):
         user_mock.return_value = self.user_internal
 
         api_client = APIClient()
-        request_data = {"username": "user@example.com", "password": "not-so-secret"}
+        request_data = {
+            "username": "user@example.com",
+            "password": "not-so-secret",
+            "name": "api_token_name",
+            "expiration_date": date.today(),
+        }
         response = api_client.post(reverse("create_user_api_token"), request_data, "json")
 
         self.assertEqual(400, response.status_code)
         self.assertEqual("Only one API token per user is allowed.", response.data["message"])
         user_mock.assert_called_with(request_data)
-        api_mock.assert_called_with(self.user_internal)
+        api_mock.assert_called_with(self.user_internal, "api_token_name", date.today())
+
+    @patch("application.access_control.api.views._get_authenticated_user")
+    @patch("application.access_control.api.views.create_user_api_token")
+    def test_create_api_token_view_expiration_date_past(self, api_mock, user_mock):
+        api_mock.side_effect = ValidationError("Only one API token per user is allowed.")
+        user_mock.return_value = self.user_internal
+
+        api_client = APIClient()
+        request_data = {
+            "username": "user@example.com",
+            "password": "not-so-secret",
+            "name": "api_token_name",
+            "expiration_date": date(2022, 2, 2),
+        }
+        response = api_client.post(reverse("create_user_api_token"), request_data, "json")
+
+        self.assertEqual(400, response.status_code)
+        self.assertEqual("Expiration date: Expiration date cannot be in the past", response.data["message"])
 
     @patch("application.access_control.api.views._get_authenticated_user")
     @patch("application.access_control.api.views.create_user_api_token")
@@ -46,12 +70,12 @@ class TestAPIToken(BaseTestCase):
         user_mock.return_value = self.user_internal
 
         api_client = APIClient()
-        request_data = {"username": "user@example.com", "password": "not-so-secret"}
+        request_data = {"username": "user@example.com", "password": "not-so-secret", "name": "api_token_name"}
         response = api_client.post(reverse("create_user_api_token"), request_data, "json")
         self.assertEqual(201, response.status_code)
         self.assertEqual("api_token", response.data["token"])
         user_mock.assert_called_with(request_data)
-        api_mock.assert_called_with(self.user_internal)
+        api_mock.assert_called_with(self.user_internal, "api_token_name", None)
 
     # --- revoke_user_api_token ---
 
@@ -60,7 +84,7 @@ class TestAPIToken(BaseTestCase):
         mock.side_effect = PermissionDenied("Invalid credentials")
 
         api_client = APIClient()
-        request_data = {"username": "user@example.com", "password": "not-so-secret"}
+        request_data = {"username": "user@example.com", "password": "not-so-secret", "name": "api_token_name"}
         response = api_client.post(reverse("revoke_user_api_token"), request_data, "json")
 
         self.assertEqual(403, response.status_code)
@@ -69,16 +93,16 @@ class TestAPIToken(BaseTestCase):
 
     @patch("application.access_control.api.views._get_authenticated_user")
     @patch("application.access_control.api.views.revoke_user_api_token")
-    def test_revoke_api_token_view_successful(self, api_mock, user_mock):
+    def test_revoke_api_token_view_successful(self, revoke_mock, user_mock):
         user_mock.return_value = self.user_internal
 
         api_client = APIClient()
-        request_data = {"username": "user@example.com", "password": "not-so-secret"}
+        request_data = {"username": "user@example.com", "password": "not-so-secret", "name": "api_token_name"}
         response = api_client.post(reverse("revoke_user_api_token"), request_data, "json")
 
         self.assertEqual(204, response.status_code)
         user_mock.assert_called_with(request_data)
-        api_mock.assert_called_with(self.user_internal)
+        revoke_mock.assert_called_with(self.user_internal, "api_token_name")
 
 
 class TestAuthenticate(BaseTestCase):
@@ -112,16 +136,6 @@ class TestAuthenticate(BaseTestCase):
 
 
 class TestGetAuthenticatedUser(BaseTestCase):
-    def test_get_authenticated_user_no_user(self):
-        data = {"password": "not_so_secret"}
-        with self.assertRaises(ValidationError):
-            _get_authenticated_user(data)
-
-    def test_get_authenticated_user_no_password(self):
-        data = {"username": "user@example.com"}
-        with self.assertRaises(ValidationError):
-            _get_authenticated_user(data)
-
     @patch("application.access_control.api.views.django_authenticate")
     def test_get_authenticated_user_not_authenticated(self, mock):
         mock.return_value = None

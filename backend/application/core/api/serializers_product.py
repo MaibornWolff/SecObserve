@@ -4,6 +4,7 @@ from typing import Optional
 from django.core.validators import MaxValueValidator, MinValueValidator
 from rest_framework.serializers import (
     CharField,
+    DateField,
     IntegerField,
     ListField,
     ModelSerializer,
@@ -23,6 +24,7 @@ from application.authorization.services.roles_permissions import (
     Roles,
     get_permissions_for_role,
 )
+from application.commons.models import Settings
 from application.core.api.serializers_helpers import (
     validate_cpe23,
     validate_purl,
@@ -68,27 +70,33 @@ class ProductCoreSerializer(ModelSerializer):
         fields = "__all__"
 
     def validate(self, attrs: dict) -> dict:
-        if attrs.get("repository_branch_housekeeping_active"):
+        settings = Settings.load()
+
+        if attrs.get("repository_branch_housekeeping_active") is True:
             if not attrs.get("repository_branch_housekeeping_keep_inactive_days"):
-                attrs["repository_branch_housekeeping_keep_inactive_days"] = 1
-        else:
+                attrs["repository_branch_housekeeping_keep_inactive_days"] = (
+                    settings.branch_housekeeping_keep_inactive_days
+                )
+
+        if attrs.get("repository_branch_housekeeping_active") is False:
             attrs["repository_branch_housekeeping_keep_inactive_days"] = None
             attrs["repository_branch_housekeeping_exempt_branches"] = ""
 
-        if attrs.get("security_gate_active"):
+        if attrs.get("security_gate_active") is True:
             if not attrs.get("security_gate_threshold_critical"):
-                attrs["security_gate_threshold_critical"] = 0
+                attrs["security_gate_threshold_critical"] = settings.security_gate_threshold_critical
             if not attrs.get("security_gate_threshold_high"):
-                attrs["security_gate_threshold_high"] = 0
+                attrs["security_gate_threshold_high"] = settings.security_gate_threshold_high
             if not attrs.get("security_gate_threshold_medium"):
-                attrs["security_gate_threshold_medium"] = 0
+                attrs["security_gate_threshold_medium"] = settings.security_gate_threshold_medium
             if not attrs.get("security_gate_threshold_low"):
-                attrs["security_gate_threshold_low"] = 0
+                attrs["security_gate_threshold_low"] = settings.security_gate_threshold_low
             if not attrs.get("security_gate_threshold_none"):
-                attrs["security_gate_threshold_none"] = 0
+                attrs["security_gate_threshold_none"] = settings.security_gate_threshold_none
             if not attrs.get("security_gate_threshold_unknown"):
-                attrs["security_gate_threshold_unknown"] = 0
-        else:
+                attrs["security_gate_threshold_unknown"] = settings.security_gate_threshold_unknown
+
+        if attrs.get("security_gate_active") is False:
             attrs["security_gate_threshold_critical"] = None
             attrs["security_gate_threshold_high"] = None
             attrs["security_gate_threshold_medium"] = None
@@ -553,8 +561,11 @@ class ProductAuthorizationGroupMemberSerializer(ModelSerializer):
 
 
 class ProductApiTokenSerializer(Serializer):
-    id = IntegerField(validators=[MinValueValidator(0)])
+    id = IntegerField(read_only=True)
+    product = IntegerField(validators=[MinValueValidator(1)])
     role = IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    name = CharField(max_length=32)
+    expiration_date = DateField(required=False, allow_null=True)
 
 
 class BranchSerializer(ModelSerializer):

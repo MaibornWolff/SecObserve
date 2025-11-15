@@ -1,8 +1,10 @@
 import re
+from datetime import date
 from typing import Any, Optional
 
 from rest_framework.serializers import (
     CharField,
+    DateField,
     ModelSerializer,
     Serializer,
     SerializerMethodField,
@@ -289,35 +291,49 @@ class AuthenticationResponseSerializer(Serializer):
 
 
 class ApiTokenSerializer(ModelSerializer):
-    id = SerializerMethodField()
-    name = SerializerMethodField()
+    username = SerializerMethodField()
     product = SerializerMethodField()
     product_group = SerializerMethodField()
 
     class Meta:
         model = API_Token
-        fields = ["id", "name", "product", "product_group"]
+        fields = ["id", "name", "username", "product", "product_group", "expiration_date"]
 
-    def get_id(self, obj: API_Token) -> int:
-        return obj.pk
-
-    def get_name(self, obj: API_Token) -> str:
+    def get_username(self, obj: API_Token) -> str:
         return obj.user.username
 
     def get_product(self, obj: API_Token) -> Optional[int]:
-        if re.match("-product-\\d*-api_token-", obj.user.username):
+        if re.match("-product-(\\d)*(-.*)?-api_token-", obj.user.username):
             product_member = Product_Member.objects.filter(user=obj.user, product__is_product_group=False).first()
             if product_member:
                 return product_member.product.pk
         return None
 
     def get_product_group(self, obj: API_Token) -> Optional[int]:
-        if re.match("-product-\\d*-api_token-", obj.user.username):
+        if re.match("-product-(\\d)*(-.*)?-api_token-", obj.user.username):
             product_member = Product_Member.objects.filter(user=obj.user, product__is_product_group=True).first()
             if product_member:
                 return product_member.product.pk
         return None
 
 
-class CreateApiTokenResponseSerializer(Serializer):
+class ApiTokenCreateRequestSerializer(Serializer):
+    username = CharField(max_length=150, required=True)
+    password = CharField(max_length=128, required=True)
+    name = CharField(max_length=255, required=True)
+    expiration_date = DateField(required=False, allow_null=True)
+
+    def validate_expiration_date(self, expiration_date: Optional[date]) -> Optional[date]:
+        if expiration_date and expiration_date < date.today():
+            raise ValidationError("Expiration date cannot be in the past")
+        return expiration_date
+
+
+class ApiTokenCreateResponseSerializer(Serializer):
     token = CharField()
+
+
+class ApiTokenRevokeRequestSerializer(Serializer):
+    username = CharField(max_length=150, required=True)
+    password = CharField(max_length=128, required=True)
+    name = CharField(max_length=255, required=True)

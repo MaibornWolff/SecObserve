@@ -8,9 +8,9 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerSplitVie
 
 from application.access_control.api.views import (
     AuthenticateView,
-    CreateUserAPITokenView,
     JWTSecretResetView,
-    RevokeUserAPITokenView,
+    UserAPITokenCreateView,
+    UserAPITokenRevokeView,
 )
 from application.commons.api.views import (
     HealthView,
@@ -78,12 +78,12 @@ urlpatterns += [
     ),
     path(
         "api/authentication/create_user_api_token/",
-        CreateUserAPITokenView.as_view(),
+        UserAPITokenCreateView.as_view(),
         name="create_user_api_token",
     ),
     path(
         "api/authentication/revoke_user_api_token/",
-        RevokeUserAPITokenView.as_view(),
+        UserAPITokenRevokeView.as_view(),
         name="revoke_user_api_token",
     ),
     path("api/purl_types/<str:purl_type_id>/", PURLTypeOneView.as_view()),

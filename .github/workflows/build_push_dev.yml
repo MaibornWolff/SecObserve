@@ -7,6 +7,11 @@ permissions: read-all
 jobs:
   docker_backend_dev:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
     steps:
       -
         name: Checkout
@@ -18,11 +23,12 @@ jobs:
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3.11.1
       -
-        name: Login to Docker Hub
+        name: Login to GitHub Container Registry
         uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       -
         name: Set current date as env variable
         run: echo "CREATED=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
@@ -34,7 +40,7 @@ jobs:
           file: ./docker/backend/prod/django/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: maibornwolff/secobserve-backend:dev
+          tags: ghcr.io/secobserve/secobserve-backend:dev
           build-args: |
             CREATED=${{ env.CREATED }}
             REVISION=${{ github.sha }}
@@ -42,6 +48,11 @@ jobs:
 
   docker_frontend_dev:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
     steps:
       -
         name: Checkout
@@ -53,11 +64,12 @@ jobs:
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3.11.1
       -
-        name: Login to Docker Hub
+        name: Login to GitHub Container Registry
         uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       -
         name: Set current date as env variable
         run: echo "CREATED=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
@@ -69,7 +81,7 @@ jobs:
           file: ./docker/frontend/prod/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: maibornwolff/secobserve-frontend:dev
+          tags: ghcr.io/secobserve/secobserve-frontend:dev
           build-args: |
             CREATED=${{ env.CREATED }}
             REVISION=${{ github.sha }}
@@ -85,7 +97,7 @@ jobs:
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - 
         name: Run SCA vulnerability scanners
-        uses: SecObserve/secobserve_actions_templates/actions/vulnerability_scanner@936a764a4e82cc89772941e082ba24c371c6ef90 # main
+        uses: SecObserve/secobserve_actions_templates/actions/vulnerability_scanner@74c3daa2d89be5c6b1f9033a245e0ab45affe258 # main
         with:
           so_configuration: 'so_configuration_sca_dev.yml'
           SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}

@@ -1,4 +1,4 @@
-from itertools import chain
+from datetime import date
 from unittest.mock import patch
 
 from rest_framework.exceptions import ValidationError
@@ -17,30 +17,26 @@ class TestUserApiToken(BaseTestCase):
         mock.return_value = API_Token()
 
         with self.assertRaises(ValidationError):
-            create_user_api_token(self.user_internal)
-            mock.assert_called_with(self.user_internal)
+            create_user_api_token(self.user_internal, "api_token_name", date.today())
+            mock.assert_called_with(self.user_internal, name="api_token_name")
 
     @patch("application.access_control.models.API_Token.objects.get")
     @patch("application.access_control.models.API_Token.save")
     def test_create_api_token_new(self, save_mock, get_mock):
         get_mock.side_effect = API_Token.DoesNotExist()
 
-        api_token = create_user_api_token(self.user_internal)
+        api_token = create_user_api_token(self.user_internal, "api_token_name", date.today())
 
         self.assertEqual(42, len(api_token))
-        get_mock.assert_called_with(user=self.user_internal)
+        get_mock.assert_called_with(user=self.user_internal, name="api_token_name")
         save_mock.assert_called()
 
-    @patch("application.access_control.models.API_Token.objects.filter")
+    @patch("application.access_control.models.API_Token.objects.get")
     @patch("application.access_control.models.API_Token.delete")
-    def test_revoke_api_token(self, delete_mock, filter_mock):
-        none_qs = API_Token.objects.none()
-        api_token_1 = API_Token()
-        api_token_2 = API_Token()
-        qs = list(chain(none_qs, [api_token_1, api_token_2]))
-        filter_mock.return_value = qs
+    def test_revoke_api_token(self, delete_mock, get_mock):
+        get_mock.return_value = API_Token()
 
-        revoke_user_api_token(self.user_internal)
+        revoke_user_api_token(self.user_internal, "api_token_name")
 
-        filter_mock.assert_called_with(user=self.user_internal)
-        self.assertEqual(2, delete_mock.call_count)
+        get_mock.assert_called_with(user=self.user_internal, name="api_token_name")
+        self.assertEqual(1, delete_mock.call_count)

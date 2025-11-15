@@ -127,7 +127,7 @@ jobs:
       - name: Run Trivy image
         uses: SecObserve/secobserve_actions_templates/actions/SCA/trivy_image@main
         with:
-          target: 'maibornwolff/secobserve-backend:latest'
+          target: 'ghcr.io/secobserve/secobserve-backend:latest'
           report_name: 'backend_trivy_image.json'
           so_api_base_url: ${{ vars.SO_API_BASE_URL }}
           so_api_token: ${{ secrets.SO_API_TOKEN }}
@@ -136,7 +136,7 @@ jobs:
       - name: Run Grype image
         uses: SecObserve/secobserve_actions_templates/actions/SCA/grype_image@main
         with:
-          target: 'maibornwolff/secobserve-backend:latest'
+          target: 'ghcr.io/secobserve/secobserve-backend:latest'
           report_name: 'backend_grype_image.json'
           so_api_base_url: ${{ vars.SO_API_BASE_URL }}
           so_api_token: ${{ secrets.SO_API_TOKEN }}

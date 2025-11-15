@@ -1,4 +1,6 @@
 from dataclasses import dataclass
+from datetime import date
+from typing import Optional
 
 from rest_framework.exceptions import ValidationError
 
@@ -10,14 +12,13 @@ from application.core.models import Product, Product_Member
 from application.core.queries.product_member import get_product_member
 
 
-def create_product_api_token(product: Product, role: Roles) -> str:
-    product_user_name = _get_product_user_name(product)
+def create_product_api_token(product: Product, role: Roles, name: str, expiration_date: Optional[date]) -> str:
+    product_user_name = _get_product_user_name(product, name)
     user = get_user_by_username(product_user_name)
     if user:
         try:
-            user.api_token  # pylint: disable=pointless-statement
-            # This statement raises an exception if the user has no API token.
-            raise ValidationError("Only one API token per product is allowed.")
+            API_Token.objects.get(user=user)
+            raise ValidationError("API token with this name already exists.")
         except API_Token.DoesNotExist:
             pass
 
@@ -31,22 +32,14 @@ def create_product_api_token(product: Product, role: Roles) -> str:
     user.save()
 
     Product_Member(product=product, user=user, role=role).save()
-    API_Token(user=user, api_token_hash=api_token_hash).save()
+    API_Token(user=user, api_token_hash=api_token_hash, name=name, expiration_date=expiration_date).save()
 
     return api_token
 
 
-def revoke_product_api_token(product: Product) -> None:
-    product_user_name = _get_product_user_name(product)
-    user = get_user_by_username(product_user_name)
-    if not user:
-        return
-
-    try:
-        api_token = user.api_token
-        api_token.delete()
-    except API_Token.DoesNotExist:
-        pass
+def revoke_product_api_token(product: Product, api_token: API_Token) -> None:
+    user = api_token.user
+    api_token.delete()
 
     product_member = get_product_member(product, user)
     if product_member:
@@ -59,21 +52,39 @@ def revoke_product_api_token(product: Product) -> None:
 @dataclass
 class ProductAPIToken:
     id: int
+    product: int
     role: int
+    name: str
+    expiration_date: Optional[date]
 
 
 def get_product_api_tokens(product: Product) -> list[ProductAPIToken]:
-    product_user_name = _get_product_user_name(product)
-    user = get_user_by_username(product_user_name)
-    if not user:
+    users = User.objects.filter(username__startswith=f"-product-{product.pk}-")
+    if not users:
         return []
 
-    product_member = get_product_member(product, user)
-    if not product_member:
-        return []
+    product_api_tokens = []
+    for user in users:
+        product_member = get_product_member(product, user)
+        if product_member:
+            try:
+                api_token = API_Token.objects.get(user=user)
+                product_api_tokens.append(
+                    ProductAPIToken(
+                        id=api_token.pk,
+                        product=product.pk,
+                        role=product_member.role,
+                        name=api_token.name,
+                        expiration_date=api_token.expiration_date,
+                    )
+                )
+            except API_Token.DoesNotExist:
+                continue
+            except API_Token.MultipleObjectsReturned:
+                continue
 
-    return [ProductAPIToken(id=product.pk, role=product_member.role)]
+    return product_api_tokens
 
 
-def _get_product_user_name(product: Product) -> str:
-    return f"-product-{product.id}-api_token-"
+def _get_product_user_name(product: Product, name: str) -> str:
+    return f"-product-{product.pk}-{name}-api_token-"

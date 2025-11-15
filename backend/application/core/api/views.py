@@ -1,4 +1,5 @@
 import logging
+import re
 from tempfile import NamedTemporaryFile
 from typing import Any
 
@@ -25,8 +26,9 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ModelViewSet, ViewSet
 
 from application.access_control.api.serializers import (
-    CreateApiTokenResponseSerializer,
+    ApiTokenCreateResponseSerializer,
 )
+from application.access_control.queries.api_token import get_api_token_by_id
 from application.access_control.services.current_user import get_current_user
 from application.authorization.services.authorization import (
     user_has_permission,
@@ -849,18 +851,23 @@ class ProductApiTokenViewset(ViewSet):
 
     @extend_schema(
         request=ProductApiTokenSerializer,
-        responses={HTTP_200_OK: CreateApiTokenResponseSerializer},
+        responses={HTTP_200_OK: ApiTokenCreateResponseSerializer},
     )
     def create(self, request: Request) -> Response:
         request_serializer = ProductApiTokenSerializer(data=request.data)
         if not request_serializer.is_valid():
             raise ValidationError(request_serializer.errors)
 
-        product = _get_product(request_serializer.validated_data.get("id"))
+        product = _get_product(request_serializer.validated_data.get("product"))
 
         user_has_permission_or_403(product, Permissions.Product_Api_Token_Create)
 
-        token = create_product_api_token(product, request_serializer.validated_data.get("role"))
+        token = create_product_api_token(
+            product,
+            request_serializer.validated_data.get("role"),
+            request_serializer.validated_data.get("name"),
+            request_serializer.validated_data.get("expiration_date"),
+        )
 
         response = Response({"token": token}, status=HTTP_201_CREATED)
         logger.info(format_log_message(message="Product API token created", response=response))
@@ -870,10 +877,23 @@ class ProductApiTokenViewset(ViewSet):
         responses={HTTP_204_NO_CONTENT: None},
     )
     def destroy(self, request: Request, pk: int) -> Response:
-        product = _get_product(pk)
+        API_TOKEN_NOT_VALID = "API token not valid"
+
+        api_token = get_api_token_by_id(pk)
+        if not api_token:
+            raise ValidationError(API_TOKEN_NOT_VALID)
+
+        if not re.match("-product-(\\d)*(-.*)?-api_token-", api_token.user.username):
+            raise ValidationError(API_TOKEN_NOT_VALID)
+
+        product_member = Product_Member.objects.filter(user=api_token.user).first()
+        if not product_member:
+            raise ValidationError(API_TOKEN_NOT_VALID)
+
+        product = _get_product(product_member.product.pk)
         user_has_permission_or_403(product, Permissions.Product_Api_Token_Revoke)
 
-        revoke_product_api_token(product)
+        revoke_product_api_token(product, api_token)
 
         response = Response(status=HTTP_204_NO_CONTENT)
         logger.info(format_log_message(message="Product API token revoked", response=response))

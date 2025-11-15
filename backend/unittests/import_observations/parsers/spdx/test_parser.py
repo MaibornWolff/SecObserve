@@ -45,7 +45,7 @@ class TestSPDXParser(TestCase):
                 license_component.component_purl,
             )
             dependencies = """alpine:3.20.3 --> .python-rundeps:20241001.223602
-maibornwolff/secobserve-backend:1.20.0 --> alpine:3.20.3"""
+ghcr.io/secobserve/secobserve-backend:1.20.0 --> alpine:3.20.3"""
             self.assertEqual(dependencies, license_component.component_dependencies)
             self.assertEqual(1, len(license_component.unsaved_evidences))
             self.assertEqual("Package", license_component.unsaved_evidences[0][0])
@@ -63,7 +63,7 @@ maibornwolff/secobserve-backend:1.20.0 --> alpine:3.20.3"""
                 "pkg:pypi/django@5.1.2",
                 license_component.component_purl,
             )
-            dependencies = """maibornwolff/secobserve-backend:1.20.0 --> Django"""
+            dependencies = """ghcr.io/secobserve/secobserve-backend:1.20.0 --> Django"""
             self.assertEqual(dependencies, license_component.component_dependencies)
             self.assertEqual(1, len(license_component.unsaved_evidences))
             self.assertEqual("Package", license_component.unsaved_evidences[0][0])
@@ -103,7 +103,7 @@ maibornwolff/secobserve-backend:1.20.0 --> alpine:3.20.3"""
 alpine:3.20.3 --> mysql-client:10.11.8-r0
 alpine:3.20.3 --> perl:5.38.2-r0
 alpine:3.20.3 --> postgresql-libs:20241014.093848
-maibornwolff/secobserve-backend:1.20.0 --> alpine:3.20.3
+ghcr.io/secobserve/secobserve-backend:1.20.0 --> alpine:3.20.3
 mariadb-client:10.11.8-r0 --> perl:5.38.2-r0
 mysql-client:10.11.8-r0 --> mariadb-client:10.11.8-r0
 postgresql-libs:20241014.093848 --> mysql-client:10.11.8-r0"""

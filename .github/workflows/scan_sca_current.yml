@@ -16,16 +16,16 @@ jobs:
         name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
-          ref: 'v1.41.1'
+          ref: 'v1.42.0'
       -
         name: Run SCA vulnerability scanners
-        uses: SecObserve/secobserve_actions_templates/actions/vulnerability_scanner@936a764a4e82cc89772941e082ba24c371c6ef90 # main
+        uses: SecObserve/secobserve_actions_templates/actions/vulnerability_scanner@74c3daa2d89be5c6b1f9033a245e0ab45affe258 # main
         with:
           so_configuration: 'so_configuration_sca_current.yml'
           SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
       - 
         name: Run endpoint vulnerability scanners
-        uses: SecObserve/secobserve_actions_templates/actions/vulnerability_scanner@936a764a4e82cc89772941e082ba24c371c6ef90 # main
+        uses: SecObserve/secobserve_actions_templates/actions/vulnerability_scanner@74c3daa2d89be5c6b1f9033a245e0ab45affe258 # main
         with:
           so_configuration: 'so_configuration_endpoints.yml'
           SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
