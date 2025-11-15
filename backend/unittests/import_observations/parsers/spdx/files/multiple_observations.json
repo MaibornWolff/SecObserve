@@ -2,8 +2,8 @@
     "spdxVersion": "SPDX-2.3",
     "dataLicense": "CC0-1.0",
     "SPDXID": "SPDXRef-DOCUMENT",
-    "name": "maibornwolff/secobserve-backend:1.20.0",
-    "documentNamespace": "http://aquasecurity.github.io/trivy/container_image/maibornwolff/secobserve-backend:1.20.0-b3fdfb29-cea7-4576-875b-9cd70d2552ba",
+    "name": "ghcr.io/secobserve/secobserve-backend:1.20.0",
+    "documentNamespace": "http://aquasecurity.github.io/trivy/container_image/ghcr.io/secobserve/secobserve-backend:1.20.0-b3fdfb29-cea7-4576-875b-9cd70d2552ba",
     "creationInfo": {
       "creators": [
         "Organization: aquasecurity",
@@ -13,7 +13,7 @@
     },
     "packages": [
       {
-        "name": "maibornwolff/secobserve-backend:1.20.0",
+        "name": "ghcr.io/secobserve/secobserve-backend:1.20.0",
         "SPDXID": "SPDXRef-ContainerImage-82bc9d1b632a36cd",
         "downloadLocation": "NONE",
         "filesAnalyzed": false,
@@ -21,7 +21,7 @@
           {
             "referenceCategory": "PACKAGE-MANAGER",
             "referenceType": "purl",
-            "referenceLocator": "pkg:oci/secobserve-backend@sha256%3Ace5416f0ca293e258ac5c7d8500eb41198064904379c6b033416772e07c3cf36?arch=amd64\u0026repository_url=index.docker.io%2Fmaibornwolff%2Fsecobserve-backend"
+            "referenceLocator": "pkg:oci/secobserve-backend@sha256%3Ace5416f0ca293e258ac5c7d8500eb41198064904379c6b033416772e07c3cf36?arch=amd64\u0026repository_url=index.docker.io%secoberve%2Fsecobserve-backend"
           }
         ],
         "primaryPackagePurpose": "CONTAINER",
@@ -114,12 +114,6 @@
             "annotator": "Tool: trivy-0.58.0",
             "annotationDate": "2024-12-21T15:02:40Z",
             "annotationType": "OTHER",
-            "comment": "Labels:org.opencontainers.image.authors: stefan.fleckenstein@maibornwolff.de"
-          },
-          {
-            "annotator": "Tool: trivy-0.58.0",
-            "annotationDate": "2024-12-21T15:02:40Z",
-            "annotationType": "OTHER",
             "comment": "Labels:org.opencontainers.image.created: 2024-10-14T09:38:23"
           },
           {
@@ -180,13 +174,13 @@
             "annotator": "Tool: trivy-0.58.0",
             "annotationDate": "2024-12-21T15:02:40Z",
             "annotationType": "OTHER",
-            "comment": "RepoDigest: maibornwolff/secobserve-backend@sha256:ce5416f0ca293e258ac5c7d8500eb41198064904379c6b033416772e07c3cf36"
+            "comment": "RepoDigest: ghcr.io/secobserve/secobserve-backend@sha256:ce5416f0ca293e258ac5c7d8500eb41198064904379c6b033416772e07c3cf36"
           },
           {
             "annotator": "Tool: trivy-0.58.0",
             "annotationDate": "2024-12-21T15:02:40Z",
             "annotationType": "OTHER",
-            "comment": "RepoTag: maibornwolff/secobserve-backend:1.20.0"
+            "comment": "RepoTag: ghcr.io/secobserve/secobserve-backend:1.20.0"
           },
           {
             "annotator": "Tool: trivy-0.58.0",

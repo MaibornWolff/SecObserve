@@ -75,7 +75,7 @@ A Helm chart to deploy SecObserve, an open-source vulnerability and license mana
 | backend.env[9].value | string | `"secobserve.dev"` |  |
 | backend.image.pullPolicy | string | `"IfNotPresent"` |  |
 | backend.image.registry | string | `"docker.io"` |  |
-| backend.image.repository | string | `"maibornwolff/secobserve-backend"` |  |
+| backend.image.repository | string | `"ghcr.io/secobserve/secobserve-backend"` |  |
 | backend.image.tag | string | `"1.41.1"` |  |
 | backend.resources.limits.cpu | string | `"1000m"` |  |
 | backend.resources.limits.memory | string | `"1500Mi"` |  |
@@ -115,7 +115,7 @@ A Helm chart to deploy SecObserve, an open-source vulnerability and license mana
 | frontend.env[5].value | string | `"https://secobserve.dev/"` |  |
 | frontend.image.pullPolicy | string | `"IfNotPresent"` |  |
 | frontend.image.registry | string | `"docker.io"` |  |
-| frontend.image.repository | string | `"maibornwolff/secobserve-frontend"` |  |
+| frontend.image.repository | string | `"ghcr.io/secobserve/secobserve-frontend"` |  |
 | frontend.image.tag | string | `"1.41.1"` |  |
 | frontend.resources.limits.cpu | string | `"500m"` |  |
 | frontend.resources.limits.memory | string | `"1000Mi"` |  |

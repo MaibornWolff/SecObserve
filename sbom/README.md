@@ -4,8 +4,8 @@ This directory contains the CycloneDX SBOMs for the project of the last 3 releas
 
 * `sbom_backend_application_RELEASE.json` - Python libraries of the backend application, derived from [../backend/poetry.lock](../backend/poetry.lock)
 * `sbom_frontend_application_RELEASE.json` - NPM libraries of the frontend application, derived from [../frontend/package-lock.json](../frontend/package-lock.json)
-* `sbom_backend_container_RELEASE.json` - Operating system components of the backend container, derived from [backend container image of the release](https://hub.docker.com/repository/docker/maibornwolff/secobserve-backend/general)
-* `sbom_frontend_container_RELEASE.json` - Operating system components of the frontend container, derived from [frontend container image of the release](https://hub.docker.com/repository/docker/maibornwolff/secobserve-frontend/general)
+* `sbom_backend_container_RELEASE.json` - Operating system components of the backend container, derived from [backend container image of the release](https://github.com/SecObserve/SecObserve/pkgs/container/secobserve-backend)
+* `sbom_frontend_container_RELEASE.json` - Operating system components of the frontend container, derived from [frontend container image of the release](https://github.com/SecObserve/SecObserve/pkgs/container/secobserve-frontend)
 * `sbom_RELEASE.json` - Combined SBOM of the backend and frontend applications and containers
 
 

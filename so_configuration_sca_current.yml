@@ -1,6 +1,6 @@
 trivy_image_backend_current:
   SCANNER: trivy_image
-  TARGET: "maibornwolff/secobserve-backend:1.41.1"
+  TARGET: "ghcr.io/secobserve/secobserve-backend:1.41.1"
   FURTHER_PARAMETERS: "--pkg-types os --db-repository public.ecr.aws/aquasecurity/trivy-db:2"
   REPORT_NAME: "trivy_backend_image.json"
   SO_ORIGIN_SERVICE: "backend"
@@ -8,7 +8,7 @@ trivy_image_backend_current:
 
 trivy_image_frontend_current:
   SCANNER: trivy_image
-  TARGET: "maibornwolff/secobserve-frontend:1.41.1"
+  TARGET: "ghcr.io/secobserve/secobserve-frontend:1.41.1"
   FURTHER_PARAMETERS: "--pkg-types os --db-repository public.ecr.aws/aquasecurity/trivy-db:2"
   REPORT_NAME: "trivy_frontend_image.json"
   SO_ORIGIN_SERVICE: "frontend"
