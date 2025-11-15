@@ -75,7 +75,7 @@ jobs:
         working-directory: ./sbom
         run: |
           sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_backend_container.json
-          trivy image --scanners license --pkg-types os --format cyclonedx --output sbom_backend_container.json maibornwolff/secobserve-backend:$VERSION
+          trivy image --scanners license --pkg-types os --format cyclonedx --output sbom_backend_container.json ghcr.io/secobserve/secobserve-backend:$VERSION
           sbom-utility trim --keys=externalReferences,properties,evidence,authors,lifecycles,services --quiet --input-file sbom_backend_container.json \
             | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_backend_container.json --quiet --input-file - --output-file sbom_backend_container_"$VERSION".json
@@ -88,7 +88,7 @@ jobs:
         working-directory: ./sbom
         run: |
           sed -i "s|REPLACE_VERSION|$VERSION|g" ./configuration/patch_frontend_container.json
-          trivy image --scanners license --pkg-types os --format cyclonedx --output sbom_frontend_container.json maibornwolff/secobserve-frontend:$VERSION
+          trivy image --scanners license --pkg-types os --format cyclonedx --output sbom_frontend_container.json ghcr.io/secobserve/secobserve-frontend:$VERSION
           sbom-utility trim --keys=externalReferences,properties,evidence,authors,lifecycles,services --quiet --input-file sbom_frontend_container.json \
             | sbom-utility patch --patch-file ./configuration/patch_supplier.json --quiet --input-file - \
             | sbom-utility patch --patch-file ./configuration/patch_frontend_container.json --quiet --input-file - --output-file sbom_frontend_container_"$VERSION".json

@@ -3,7 +3,7 @@ replicaCount: 1
 frontend:
   image:
     registry: docker.io
-    repository: maibornwolff/secobserve-frontend
+    repository: ghcr.io/secobserve/secobserve-frontend
     tag: 1.41.1
     pullPolicy: IfNotPresent
   securityContext:
@@ -38,7 +38,7 @@ frontend:
 backend:
   image:
     registry: docker.io
-    repository: maibornwolff/secobserve-backend
+    repository: ghcr.io/secobserve/secobserve-backend
     tag: 1.41.1
     pullPolicy: IfNotPresent
   securityContext:
