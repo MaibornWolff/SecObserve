@@ -32,5 +32,5 @@ trivy_filesystem_frontend_current:
 
 importer:
   SO_UPLOAD: "true"
-  SO_API_BASE_URL: "https://secobserve-backend.maibornwolff.de"
+  SO_API_BASE_URL: "https://secobserve.example.org/api"
   SO_PRODUCT_NAME: "SecObserve"

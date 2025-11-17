@@ -1,34 +1,14 @@
-cryptolyzer_backend_main:
+cryptolyzer:
   SCANNER: cryptolyzer
-  TARGET: "secobserve-backend.maibornwolff.de"
-  REPORT_NAME: "cryptolyzer_backend_main.json"
-  SO_ORIGIN_SERVICE: "backend"
-  SO_BRANCH_NAME: "maks_public"
+  TARGET: "www.example.org"
+  REPORT_NAME: "cryptolyzer.json"
 
-drheader_backend_main:
+drheader:
   SCANNER: drheader
-  TARGET: "https://secobserve-backend.maibornwolff.de"
-  REPORT_NAME: "drheader_backend_main.json"
-  SO_ORIGIN_SERVICE: "backend"
-  SO_ORIGIN_ENDPOINT_URL: "https://secobserve-backend.maibornwolff.de"
-  SO_BRANCH_NAME: "maks_public"
-
-cryptolyzer_frontend_main:
-  SCANNER: cryptolyzer
-  TARGET: "secobserve.maibornwolff.de"
-  REPORT_NAME: "cryptolyzer_frontend_main.json"
-  SO_ORIGIN_SERVICE: "frontend"
-  SO_BRANCH_NAME: "maks_public"
-
-drheader_frontend_main:
-  SCANNER: drheader
-  TARGET: "https://secobserve.maibornwolff.de"
-  REPORT_NAME: "drheader_frontend_main.json"
-  SO_ORIGIN_SERVICE: "frontend"
-  SO_ORIGIN_ENDPOINT_URL: "https://secobserve.maibornwolff.de"
-  SO_BRANCH_NAME: "maks_public"
+  TARGET: "https://www.example.org"
+  REPORT_NAME: "drheader.json"
+  SO_ORIGIN_ENDPOINT_URL: "https://www.example.org"
 
 importer:
   SO_UPLOAD: "true"
-  SO_API_BASE_URL: "https://secobserve-backend.maibornwolff.de"
-  SO_PRODUCT_NAME: "SecObserve"
+  SO_PRODUCT_NAME: "Example website"
