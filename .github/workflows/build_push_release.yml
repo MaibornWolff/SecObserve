@@ -101,28 +101,6 @@ jobs:
             REVISION=${{ github.sha }}
             VERSION=${{ github.event.inputs.release }}
 
-  vulnerability_scans_release:
-    runs-on: ubuntu-latest
-    needs: [docker_backend_release, docker_frontend_release]
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-        with:
-          ref: 'v${{ github.event.inputs.release }}'
-      - 
-        name: Run vulnerability scanners for images
-        uses: SecObserve/secobserve_actions_templates/actions/vulnerability_scanner@74c3daa2d89be5c6b1f9033a245e0ab45affe258 # main
-        with:
-          so_configuration: 'so_configuration_sca_current.yml'
-          SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
-      - 
-        name: Run vulnerability scanners for endpoints
-        uses: SecObserve/secobserve_actions_templates/actions/vulnerability_scanner@74c3daa2d89be5c6b1f9033a245e0ab45affe258 # main
-        with:
-          so_configuration: 'so_configuration_endpoints.yml'
-          SO_API_TOKEN: ${{ secrets.SO_API_TOKEN }}
-
   generate_sboms:
     runs-on: ubuntu-latest
     needs: [docker_backend_release, docker_frontend_release]

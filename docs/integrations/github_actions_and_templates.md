@@ -409,6 +409,6 @@ importer:
 
 Some real life examples can be found in the SecObserve GitHub repository:
 
-* [so_configuration_code.yml](https://github.com/SecObserve/SecObserve/blob/main/so_configuration_code.yml) used in pipeline [check_vulnerabilities.yml](https://github.com/SecObserve/SecObserve/blob/main/.github/workflows/check_vulnerabilities.yml)
-* [so_configuration_sca_dev.yml](https://github.com/SecObserve/SecObserve/blob/main/so_configuration_sca_dev.yml) used in pipeline [build_push_dev.yml](https://github.com/SecObserve/SecObserve/blob/main/.github/workflows/build_push_dev.yml#L53-L58)
-* [so_configuration_endpoints.yml](https://github.com/SecObserve/SecObserve/blob/main/so_configuration_endpoints.yml) used in pipeline [build_push_release.yml](https://github.com/SecObserve/SecObserve/blob/main/.github/workflows/build_push_release.yml#L71-L76)
+* [so_configuration_code.yml](https://github.com/SecObserve/SecObserve/blob/main/so_configuration_code.yml)
+* [so_configuration_sca_dev.yml](https://github.com/SecObserve/SecObserve/blob/main/so_configuration_sca_dev.yml)
+* [so_configuration_endpoints.yml](https://github.com/SecObserve/SecObserve/blob/main/so_configuration_endpoints.yml)
