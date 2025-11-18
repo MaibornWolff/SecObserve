@@ -72,7 +72,7 @@ class TestOCSFParser(TestCase):
             )
             self.assertEqual("OCSF Finding", observation.unsaved_evidences[0][0])
             self.assertIn(
-                '"uid": "prowler-azure-aks_clusters_created_with_private_nodes-6c63340e-8a77-447a-9a9f-6c8277e6bc83-westeurope-aks-dev"',
+                '"uid":"prowler-azure-aks_clusters_created_with_private_nodes-6c63340e-8a77-447a-9a9f-6c8277e6bc83-westeurope-aks-dev"',
                 observation.unsaved_evidences[0][1],
             )
 
@@ -110,6 +110,6 @@ class TestOCSFParser(TestCase):
             self.assertEqual(2, len(observation.unsaved_references))
             self.assertEqual("OCSF Finding", observation.unsaved_evidences[0][0])
             self.assertIn(
-                '"uid": "prowler-azure-aks_clusters_public_access_disabled-6c63340e-8a77-447a-9a9f-6c8277e6bc83-westeurope-aks-prod"',
+                '"uid":"prowler-azure-aks_clusters_public_access_disabled-6c63340e-8a77-447a-9a9f-6c8277e6bc83-westeurope-aks-prod"',
                 observation.unsaved_evidences[0][1],
             )
