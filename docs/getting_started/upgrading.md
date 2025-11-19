@@ -12,9 +12,13 @@
 
 ## Release 1.42.0
 
+!!! warning
+    The database migration of release 1.42.0 didn't run on some installations with MySQL databases and broke up with an error message. MySQL users should skip this release and update directly to 1.43.0.
+
+
 **Breaking changes**
 
-!!! warning
+!!! info
     The location of the Docker images has been changed with release 1.42.0, they are now stored in a GitHub container registry:
 
     * **ghcr.io/secobserve/secobserve-backend**
