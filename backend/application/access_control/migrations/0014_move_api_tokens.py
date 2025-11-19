@@ -17,10 +17,6 @@ def copy_api_tokens(apps, schema_editor):
         creates = []
 
         for legacy_api_token in page.object_list:
-
-            print(vars(legacy_api_token))
-            print("-----------------------------------")
-
             creates.append(
                 API_Token_Multiple(
                     user=legacy_api_token.user,
@@ -34,6 +30,7 @@ def copy_api_tokens(apps, schema_editor):
 
         API_Token_Multiple.objects.bulk_create(creates)
 
+    API_Token_Legacy.objects.all().delete()
 
 class Migration(migrations.Migration):
     dependencies = [

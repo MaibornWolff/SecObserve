@@ -12,10 +12,6 @@ def _get_operations() -> list:
         )
         rows = cursor.fetchall()
 
-    print("---------------------------------------")
-    print(rows)
-    print("---------------------------------------")
-
     if rows:
         return [
             migrations.AlterField(

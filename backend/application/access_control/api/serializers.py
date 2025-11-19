@@ -12,7 +12,7 @@ from rest_framework.serializers import (
 )
 
 from application.access_control.models import (
-    API_Token,
+    API_Token_Multiple,
     Authorization_Group,
     Authorization_Group_Member,
     User,
@@ -296,20 +296,20 @@ class ApiTokenSerializer(ModelSerializer):
     product_group = SerializerMethodField()
 
     class Meta:
-        model = API_Token
+        model = API_Token_Multiple
         fields = ["id", "name", "username", "product", "product_group", "expiration_date"]
 
-    def get_username(self, obj: API_Token) -> str:
+    def get_username(self, obj: API_Token_Multiple) -> str:
         return obj.user.username
 
-    def get_product(self, obj: API_Token) -> Optional[int]:
+    def get_product(self, obj: API_Token_Multiple) -> Optional[int]:
         if re.match("-product-(\\d)*(-.*)?-api_token-", obj.user.username):
             product_member = Product_Member.objects.filter(user=obj.user, product__is_product_group=False).first()
             if product_member:
                 return product_member.product.pk
         return None
 
-    def get_product_group(self, obj: API_Token) -> Optional[int]:
+    def get_product_group(self, obj: API_Token_Multiple) -> Optional[int]:
         if re.match("-product-(\\d)*(-.*)?-api_token-", obj.user.username):
             product_member = Product_Member.objects.filter(user=obj.user, product__is_product_group=True).first()
             if product_member:
