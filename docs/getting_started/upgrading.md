@@ -13,7 +13,7 @@
 ## Release 1.42.0
 
 !!! warning
-    The database migration of release 1.42.0 didn't run on some installations with MySQL databases and broke up with an error message. MySQL users should skip this release and update directly to 1.43.0.
+    The database migration in version 1.42.0 did not work on some installations with MySQL databases and aborted with an error message. MySQL users should skip this version and update directly to 1.43.0.
 
 
 **Breaking changes**
