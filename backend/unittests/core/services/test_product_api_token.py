@@ -174,7 +174,9 @@ class TestProductApiToken(BaseTestCase):
         user_mock.return_value = [user]
         product_member_mock.return_value = Product_Member(role=Roles.Upload)
         expiration_date = date(2025, 11, 14)
-        api_token = API_Token_Multiple(user=user, name="api_token_name", api_token_hash="hash", expiration_date=expiration_date)
+        api_token = API_Token_Multiple(
+            user=user, name="api_token_name", api_token_hash="hash", expiration_date=expiration_date
+        )
         api_token_mock.return_value = api_token
 
         product_api_tokens = get_product_api_tokens(self.product_1)
