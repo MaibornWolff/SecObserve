@@ -297,7 +297,7 @@ class ApiTokenSerializer(ModelSerializer):
 
     class Meta:
         model = API_Token_Multiple
-        fields = ["id", "name", "username", "product", "product_group", "expiration_date"]
+        fields = ["id", "name", "user", "username", "product", "product_group", "expiration_date"]
 
     def get_username(self, obj: API_Token_Multiple) -> str:
         return obj.user.username
