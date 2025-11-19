@@ -13,7 +13,7 @@
         "severity": "High",
         "status": "New",
         "status_code": "FAIL",
-        "status_detail": "Public access to nodes is enabled for cluster 'aks-dev' in subscription 'SecObserve - MAKS II'",
+        "status_detail": "Public access to nodes is enabled for cluster 'aks-dev' in subscription 'SecObserve'",
         "status_id": 1,
         "unmapped": {
             "check_type": "",
@@ -60,14 +60,14 @@
         "class_uid": 2002,
         "cloud": {
             "account": {
-                "name": "SecObserve - MAKS II",
+                "name": "SecObserve",
                 "type": "Azure_AD_Account",
                 "type_id": 6,
                 "uid": "7c8df2de-ec2f-441a-b9be-1a8852acc9dd",
                 "labels": []
             },
             "org": {
-                "name": "maiborn.net",
+                "name": "example.net",
                 "uid": "b8d7ad48-53f4-4c29-a71c-0717f0d3a5d0"
             },
             "provider": "azure",

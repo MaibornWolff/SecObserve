@@ -56,7 +56,7 @@ from application.access_control.api.serializers import (
     UserUpdateSerializer,
 )
 from application.access_control.models import (
-    API_Token,
+    API_Token_Multiple,
     Authorization_Group,
     Authorization_Group_Member,
     JWT_Secret,
@@ -253,9 +253,9 @@ class ApiTokenViewSet(ListModelMixin, GenericViewSet):
     serializer_class = ApiTokenSerializer
     filterset_class = ApiTokenFilter
     permission_classes = (IsAuthenticated,)
-    queryset = API_Token.objects.none()
+    queryset = API_Token_Multiple.objects.none()
 
-    def get_queryset(self) -> QuerySet[API_Token]:
+    def get_queryset(self) -> QuerySet[API_Token_Multiple]:
         return get_api_tokens()
 
 

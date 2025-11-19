@@ -2,7 +2,49 @@
 
 import django.db.models.deletion
 from django.conf import settings
-from django.db import migrations, models
+from django.db import connection, migrations, models
+
+
+def _get_operations() -> list:
+    # For some installations using MySQL the database migration of release 1.42.0 caused problems.
+    # Now there are installations where the migration has already run, and for others it hasn't run.
+    # This is why we need to deal with both situations here.
+    if "django_migrations" in connection.introspection.table_names():
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT * FROM django_migrations WHERE app = 'access_control' and name = '0012_api_token_expiration_date_api_token_id_and_more'"
+            )
+            rows = cursor.fetchall()
+
+        if rows:
+            return [
+                migrations.AlterField(
+                    model_name="api_token",
+                    name="user",
+                    field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+                ),
+                migrations.AddField(
+                    model_name="api_token",
+                    name="expiration_date",
+                    field=models.DateField(null=True),
+                ),
+                migrations.AddField(
+                    model_name="api_token",
+                    name="id",
+                    field=models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID"),
+                ),
+                migrations.AddField(
+                    model_name="api_token",
+                    name="name",
+                    field=models.CharField(default="default", max_length=32),
+                ),
+                migrations.AlterUniqueTogether(
+                    name="api_token",
+                    unique_together={("user", "name")},
+                ),
+            ]
+
+    return []
 
 
 class Migration(migrations.Migration):
@@ -11,29 +53,4 @@ class Migration(migrations.Migration):
         ("access_control", "0011_user_setting_package_info_preference"),
     ]
 
-    operations = [
-        migrations.AlterField(
-            model_name="api_token",
-            name="user",
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
-        ),
-        migrations.AddField(
-            model_name="api_token",
-            name="expiration_date",
-            field=models.DateField(null=True),
-        ),
-        migrations.AddField(
-            model_name="api_token",
-            name="id",
-            field=models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID"),
-        ),
-        migrations.AddField(
-            model_name="api_token",
-            name="name",
-            field=models.CharField(default="default", max_length=32),
-        ),
-        migrations.AlterUniqueTogether(
-            name="api_token",
-            unique_together={("user", "name")},
-        ),
-    ]
+    operations = _get_operations()

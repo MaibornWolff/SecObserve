@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 from rest_framework.exceptions import ValidationError
 
-from application.access_control.models import API_Token, User
+from application.access_control.models import API_Token_Multiple, User
 from application.authorization.services.roles_permissions import Roles
 from application.core.models import Product_Member
 from application.core.services.product_api_token import (
@@ -16,7 +16,7 @@ from unittests.base_test_case import BaseTestCase
 
 class TestProductApiToken(BaseTestCase):
     @patch("application.core.services.product_api_token.get_user_by_username")
-    @patch("application.access_control.models.API_Token.objects.get")
+    @patch("application.access_control.models.API_Token_Multiple.objects.get")
     def test_create_product_api_token_exists(self, api_token_get_mock, user_mock):
         user = User()
         user_mock.return_value = user
@@ -29,8 +29,8 @@ class TestProductApiToken(BaseTestCase):
             self.assertEqual("API token with this name already exists.", str(e))
 
     @patch("application.core.services.product_api_token.get_user_by_username")
-    @patch("application.access_control.models.API_Token.objects.get")
-    @patch("application.access_control.models.API_Token.save")
+    @patch("application.access_control.models.API_Token_Multiple.objects.get")
+    @patch("application.access_control.models.API_Token_Multiple.save")
     @patch("application.access_control.models.User.save")
     @patch("application.core.models.Product_Member.save")
     @patch("application.access_control.models.User.set_unusable_password")
@@ -45,7 +45,7 @@ class TestProductApiToken(BaseTestCase):
     ):
         user = User()
         user_mock.return_value = user
-        api_token_get_mock.side_effect = API_Token.DoesNotExist()
+        api_token_get_mock.side_effect = API_Token_Multiple.DoesNotExist()
 
         api_token = create_product_api_token(self.product_1, Roles.Upload, "api_token_name", date.today())
 
@@ -59,7 +59,7 @@ class TestProductApiToken(BaseTestCase):
         set_unusable_password_mock.assert_called()
 
     @patch("application.core.services.product_api_token.get_user_by_username")
-    @patch("application.access_control.models.API_Token.save")
+    @patch("application.access_control.models.API_Token_Multiple.save")
     @patch("application.access_control.models.User.save")
     @patch("application.core.models.Product_Member.save")
     @patch("application.access_control.models.User.set_unusable_password")
@@ -83,7 +83,7 @@ class TestProductApiToken(BaseTestCase):
         product_member_save_mock.assert_called()
         set_unusable_password_mock.assert_called()
 
-    @patch("application.access_control.models.API_Token.delete")
+    @patch("application.access_control.models.API_Token_Multiple.delete")
     @patch("application.access_control.models.User.save")
     @patch("application.core.models.Product_Member.delete")
     @patch("application.core.services.product_api_token.get_product_member")
@@ -95,7 +95,7 @@ class TestProductApiToken(BaseTestCase):
         api_token_delete_mock,
     ):
         user = User(username="username", full_name="full_name")
-        api_token = API_Token(user=user, api_token_hash="hash")
+        api_token = API_Token_Multiple(user=user, api_token_hash="hash")
         get_product_member_mock.return_value = None
 
         revoke_product_api_token(self.product_1, api_token)
@@ -105,7 +105,7 @@ class TestProductApiToken(BaseTestCase):
         product_member_delete_mock.assert_not_called()
         user_save_mock.assert_called()
 
-    @patch("application.access_control.models.API_Token.delete")
+    @patch("application.access_control.models.API_Token_Multiple.delete")
     @patch("application.access_control.models.User.save")
     @patch("application.core.models.Product_Member.delete")
     @patch("application.core.services.product_api_token.get_product_member")
@@ -117,7 +117,7 @@ class TestProductApiToken(BaseTestCase):
         api_token_delete_mock,
     ):
         user = User(username="username", full_name="full_name")
-        api_token = API_Token(user=user, api_token_hash="hash")
+        api_token = API_Token_Multiple(user=user, api_token_hash="hash")
         get_product_member_mock.return_value = Product_Member()
 
         revoke_product_api_token(self.product_1, api_token)
@@ -152,12 +152,12 @@ class TestProductApiToken(BaseTestCase):
 
     @patch("application.access_control.models.User.objects.filter")
     @patch("application.core.services.product_api_token.get_product_member")
-    @patch("application.access_control.models.API_Token.objects.get")
+    @patch("application.access_control.models.API_Token_Multiple.objects.get")
     def test_get_product_api_tokens_no_api_token(self, api_token_mock, product_member_mock, user_mock):
         user = User()
         user_mock.return_value = [user]
         product_member_mock.return_value = Product_Member(role=Roles.Upload)
-        api_token_mock.side_effect = API_Token.DoesNotExist()
+        api_token_mock.side_effect = API_Token_Multiple.DoesNotExist()
 
         product_api_tokens = get_product_api_tokens(self.product_1)
 
@@ -168,13 +168,15 @@ class TestProductApiToken(BaseTestCase):
 
     @patch("application.access_control.models.User.objects.filter")
     @patch("application.core.services.product_api_token.get_product_member")
-    @patch("application.access_control.models.API_Token.objects.get")
+    @patch("application.access_control.models.API_Token_Multiple.objects.get")
     def test_get_product_api_tokens_success(self, api_token_mock, product_member_mock, user_mock):
         user = User()
         user_mock.return_value = [user]
         product_member_mock.return_value = Product_Member(role=Roles.Upload)
         expiration_date = date(2025, 11, 14)
-        api_token = API_Token(user=user, name="api_token_name", api_token_hash="hash", expiration_date=expiration_date)
+        api_token = API_Token_Multiple(
+            user=user, name="api_token_name", api_token_hash="hash", expiration_date=expiration_date
+        )
         api_token_mock.return_value = api_token
 
         product_api_tokens = get_product_api_tokens(self.product_1)
