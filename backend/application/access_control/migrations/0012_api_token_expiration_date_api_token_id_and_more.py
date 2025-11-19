@@ -8,7 +8,7 @@ from django.db import connection, migrations, models
 def _get_operations() -> list:
     # For some installations using MySQL the database migration of release 1.42.0 caused problems.
     # Now there are installations where the migration has already run, and for others it hasn't run.
-    # This is why we need to deal with both situations here.  
+    # This is why we need to deal with both situations here.
     if "django_migrations" in connection.introspection.table_names():
         with connection.cursor() as cursor:
             cursor.execute(

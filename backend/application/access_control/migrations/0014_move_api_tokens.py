@@ -32,6 +32,7 @@ def copy_api_tokens(apps, schema_editor):
 
     API_Token_Legacy.objects.all().delete()
 
+
 class Migration(migrations.Migration):
     dependencies = [
         (
