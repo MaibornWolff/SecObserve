@@ -64,7 +64,10 @@ files = [
 ]
 
 [package.dependencies]
-cffi = {version = ">=1.0.1", markers = "python_version < \"3.14\""}
+cffi = [
+    {version = ">=1.0.1", markers = "python_version < \"3.14\""},
+    {version = ">=2.0.0b1", markers = "python_version >= \"3.14\""},
+]
 
 [[package]]
 name = "asgiref"
@@ -3088,5 +3091,5 @@ unittests = ["coverage", "django-coverage-plugin", "django-extensions"]
 
 [metadata]
 lock-version = "2.1"
-python-versions = ">= 3.10, < 3.14"
-content-hash = "58f6a7d40ebbe19b0bb0dc56ac5fa7d6428eec1cf74cf0e9a22b1c572c532d94"
+python-versions = ">= 3.10, < 3.15"
+content-hash = "6ad7e6abb3aa4ad222fe14f6d9f3888289069344e6fb1435bc3b2e0b3e9026c1"
