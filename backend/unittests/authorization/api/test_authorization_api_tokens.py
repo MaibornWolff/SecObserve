@@ -1,4 +1,4 @@
-from application.access_control.models import API_Token, User
+from application.access_control.models import API_Token_Multiple, User
 from unittests.authorization.api.test_authorization import (
     APITest,
     TestAuthorizationBase,
@@ -7,7 +7,7 @@ from unittests.authorization.api.test_authorization import (
 
 class TestAuthorizationApiTokens(TestAuthorizationBase):
     def test_authorization_api_tokens(self):
-        expected_data = "{'count': 1, 'next': None, 'previous': None, 'results': [{'id': 1, 'name': 'default', 'username': '-product-2-api_token-', 'product': 2, 'product_group': None, 'expiration_date': None}]}"
+        expected_data = "{'count': 1, 'next': None, 'previous': None, 'results': [{'id': 1, 'name': 'default', 'user': 5, 'username': '-product-2-api_token-', 'product': 2, 'product_group': None, 'expiration_date': None}]}"
         self._test_api(
             APITest(
                 "db_admin",
@@ -20,9 +20,9 @@ class TestAuthorizationApiTokens(TestAuthorizationBase):
         )
 
         db_internal_write = User.objects.get(username="db_internal_write")
-        API_Token(user=db_internal_write, api_token_hash="hash").save()
+        API_Token_Multiple(user=db_internal_write, api_token_hash="hash").save()
 
-        expected_data = "{'count': 1, 'next': None, 'previous': None, 'results': [{'id': 2, 'name': 'default', 'username': 'db_internal_write', 'product': None, 'product_group': None, 'expiration_date': None}]}"
+        expected_data = "{'count': 1, 'next': None, 'previous': None, 'results': [{'id': 2, 'name': 'default', 'user': 2, 'username': 'db_internal_write', 'product': None, 'product_group': None, 'expiration_date': None}]}"
         self._test_api(
             APITest(
                 "db_internal_write",

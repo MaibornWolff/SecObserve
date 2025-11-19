@@ -5,7 +5,7 @@ from django_filters import CharFilter, FilterSet, NumberFilter, OrderingFilter
 from rest_framework.request import Request
 
 from application.access_control.models import (
-    API_Token,
+    API_Token_Multiple,
     Authorization_Group,
     Authorization_Group_Member,
     User,
@@ -204,5 +204,5 @@ class ApiTokenFilter(FilterSet):
     )
 
     class Meta:
-        model = API_Token
+        model = API_Token_Multiple
         fields = ["username", "user"]

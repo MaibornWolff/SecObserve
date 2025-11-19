@@ -4,9 +4,9 @@ from unittest.mock import patch
 from argon2 import PasswordHasher
 from argon2.profiles import RFC_9106_LOW_MEMORY
 from django.http import HttpRequest
-from rest_framework.exceptions import AuthenticationFailed, ValidationError
+from rest_framework.exceptions import AuthenticationFailed
 
-from application.access_control.models import API_Token
+from application.access_control.models import API_Token_Multiple
 from application.access_control.services.api_token_authentication import (
     APITokenAuthentication,
 )
@@ -25,7 +25,7 @@ class TestAPITokenAuthentication(BaseTestCase):
         ph = PasswordHasher.from_parameters(RFC_9106_LOW_MEMORY)
         api_token_hash = ph.hash(self.api_token)
 
-        self.api_token_object = API_Token(user=self.user_internal, api_token_hash=api_token_hash)
+        self.api_token_object = API_Token_Multiple(user=self.user_internal, api_token_hash=api_token_hash)
         self.api_tokens = [self.api_token_object]
 
     # --- authenticate_header ---
@@ -36,7 +36,7 @@ class TestAPITokenAuthentication(BaseTestCase):
 
     # --- validate_api_token ---
 
-    @patch("application.access_control.models.API_Token.objects.all")
+    @patch("application.access_control.models.API_Token_Multiple.objects.all")
     def test_validate_api_token_none(self, mock):
         mock.return_value = self.api_tokens
 
@@ -44,7 +44,7 @@ class TestAPITokenAuthentication(BaseTestCase):
         user = api_token_authentication._validate_api_token("sss")
         self.assertIsNone(user)
 
-    @patch("application.access_control.models.API_Token.objects.all")
+    @patch("application.access_control.models.API_Token_Multiple.objects.all")
     def test_validate_api_token_found(self, mock):
         mock.return_value = self.api_tokens
 
@@ -105,7 +105,7 @@ class TestAPITokenAuthentication(BaseTestCase):
     @patch("application.access_control.services.api_token_authentication.APITokenAuthentication._validate_api_token")
     def test_authenticate_user_deactivated(self, mock):
         self.user_internal.is_active = False
-        mock.return_value = API_Token(user=self.user_internal)
+        mock.return_value = API_Token_Multiple(user=self.user_internal)
 
         with self.assertRaises(AuthenticationFailed) as e:
             request = HttpRequest()
@@ -117,7 +117,7 @@ class TestAPITokenAuthentication(BaseTestCase):
 
     @patch("application.access_control.services.api_token_authentication.APITokenAuthentication._validate_api_token")
     def test_authenticate_expired_token(self, mock):
-        mock.return_value = API_Token(user=self.user_internal, expiration_date=date(2020, 1, 1))
+        mock.return_value = API_Token_Multiple(user=self.user_internal, expiration_date=date(2020, 1, 1))
 
         with self.assertRaises(AuthenticationFailed) as e:
             request = HttpRequest()

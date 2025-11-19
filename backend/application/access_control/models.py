@@ -142,3 +142,18 @@ class API_Token(Model):
             "user",
             "name",
         )
+
+
+class API_Token_Multiple(Model):
+    user = ForeignKey(User, on_delete=CASCADE)
+    name = CharField(max_length=32, default="default")
+    api_token_hash = CharField(max_length=255)
+    expiration_date = DateField(null=True)
+
+    class Meta:
+        verbose_name = "API token"
+        verbose_name_plural = "API token"
+        unique_together = (
+            "user",
+            "name",
+        )
