@@ -9,7 +9,7 @@ logger = logging.getLogger("secobserve.migration")
 def copy_api_tokens(apps, schema_editor):
     API_Token_Legacy = apps.get_model("access_control", "API_Token")
     API_Token_Multiple = apps.get_model("access_control", "API_Token_Multiple")
-    legacy_api_tokens = API_Token_Legacy.objects.all()
+    legacy_api_tokens = API_Token_Legacy.objects.all().order_by("pk")
 
     paginator = Paginator(legacy_api_tokens, 1000)
     for page_number in paginator.page_range:
